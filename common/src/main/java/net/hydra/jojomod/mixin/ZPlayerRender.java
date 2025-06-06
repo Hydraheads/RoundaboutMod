@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.client.models.layers.BigBubbleLayer;
@@ -130,11 +131,25 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
     }
 
 
+    /**Render external layers like soft and wet shooting mode out of context*/
+    @Inject(method = "renderHand", at = @At(value = "TAIL"))
+    private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderHandLayers(PoseStack stack, MultiBufferSource buffer, int integer,
+                                                                                                AbstractClientPlayer acl, ModelPart $$4, ModelPart $$5,
+                                                                                                CallbackInfo ci) {
+        //PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity,
+        // float var5, float var6, float var7, float partialTicks, float var9, float var10)
+        ShootingArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,acl.tickCount+ ClientUtil.getFrameTime(),
+                0,0,$$4);
+    }
+
     @Inject(method = "renderRightHand", at = @At(value = "HEAD"), cancellable = true)
     private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderRightHandX(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, CallbackInfo ci) {
         if (roundabout$renderHandX($$0,$$1,$$2,$$3,true)){
             ci.cancel();
         }
+
+        //render here
+        //
     }
 
 
@@ -226,13 +241,13 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
         return null;
     }
     @Unique
-    private <T extends LivingEntity, M extends EntityModel<T>>boolean roundabout$renderHandX(PoseStack $$0,
-                                                                                          MultiBufferSource $$1,
-                                                                                          int $$2,
-                                                                                          AbstractClientPlayer $$3,
+    private <T extends LivingEntity, M extends EntityModel<T>>boolean roundabout$renderHandX(PoseStack stack,
+                                                                                          MultiBufferSource buffer,
+                                                                                          int packedLight,
+                                                                                          AbstractClientPlayer acl,
                                                                                           boolean right) {
-        IPlayerEntity ipe = ((IPlayerEntity) $$3);
-        StandUser standUser = ((StandUser) $$3);
+        IPlayerEntity ipe = ((IPlayerEntity) acl);
+        StandUser standUser = ((StandUser) acl);
         StandPowers sp = standUser.roundabout$getStandPowers();
 
 
@@ -250,172 +265,174 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                     sauce = StandIcons.EERIE_SKIN;
                 }
                 if (right) {
-                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, this.model.rightArm, null, this.model, sauce);
+                    roundabout$renderOtherHand(stack, buffer, packedLight, acl, this.model.rightArm, null, this.model, sauce);
                 } else {
-                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, this.model.leftArm, null, this.model, sauce);
+                    roundabout$renderOtherHand(stack, buffer, packedLight, acl, this.model.leftArm, null, this.model, sauce);
                 }
                 return true;
             } else {
             if (shift == ShapeShifts.ZOMBIE) {
-                if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$3) instanceof Zombie))) {
-                    roundabout$setShapeShift($$3,EntityType.ZOMBIE.create(Minecraft.getInstance().level));
+                if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift(acl) instanceof Zombie))) {
+                    roundabout$setShapeShift(acl,EntityType.ZOMBIE.create(Minecraft.getInstance().level));
                 }
             } else if (shift == ShapeShifts.VILLAGER) {
-                if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$3) instanceof Villager))) {
-                    roundabout$setShapeShift($$3,roundabout$getVillager(Minecraft.getInstance().level,ipe));
+                if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift(acl) instanceof Villager))) {
+                    roundabout$setShapeShift(acl,roundabout$getVillager(Minecraft.getInstance().level,ipe));
                 }
             } else if (shift == ShapeShifts.SKELETON) {
-                if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$3) instanceof Skeleton))) {
-                    roundabout$setShapeShift($$3,roundabout$getSkeleton(Minecraft.getInstance().level,ipe));
+                if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift(acl) instanceof Skeleton))) {
+                    roundabout$setShapeShift(acl,roundabout$getSkeleton(Minecraft.getInstance().level,ipe));
                 }
             } else if (shift == ShapeShifts.WITHER_SKELETON) {
-                if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$3) instanceof WitherSkeleton))) {
-                    roundabout$setShapeShift($$3,roundabout$getWither(Minecraft.getInstance().level,ipe));
+                if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift(acl) instanceof WitherSkeleton))) {
+                    roundabout$setShapeShift(acl,roundabout$getWither(Minecraft.getInstance().level,ipe));
                 }
             } else if (shift == ShapeShifts.STRAY) {
-                if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$3) instanceof Stray))) {
-                    roundabout$setShapeShift($$3,roundabout$getStray(Minecraft.getInstance().level,ipe));
+                if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift(acl) instanceof Stray))) {
+                    roundabout$setShapeShift(acl,roundabout$getStray(Minecraft.getInstance().level,ipe));
                 }
             } else if (shift == ShapeShifts.OVA) {
-                if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$3) instanceof OVAEnyaNPC))) {
-                    roundabout$setShapeShift($$3,ModEntities.OVA_ENYA.create(Minecraft.getInstance().level));
+                if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift(acl) instanceof OVAEnyaNPC))) {
+                    roundabout$setShapeShift(acl,ModEntities.OVA_ENYA.create(Minecraft.getInstance().level));
                 }
             }
-            if (roundabout$getShapeShift($$3) != null) {
+            if (roundabout$getShapeShift(acl) != null) {
                 EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
-                EntityRenderer<? super T> ER = $$7.getRenderer(roundabout$getShapeShift($$3));
+                EntityRenderer<? super T> ER = $$7.getRenderer(roundabout$getShapeShift(acl));
                 if (ER instanceof LivingEntityRenderer) {
                     Model ml = ((LivingEntityRenderer<?, ?>) ER).getModel();
 
                     if (shift == ShapeShifts.ZOMBIE) {
                         if (ml instanceof ZombieModel<?> zm) {
-                            if (ER instanceof ZombieRenderer zr && roundabout$getShapeShift($$3) instanceof Zombie zmb) {
-                                this.setModelProperties($$3);
+                            if (ER instanceof ZombieRenderer zr && roundabout$getShapeShift(acl) instanceof Zombie zmb) {
+                                this.setModelProperties(acl);
                                 zm.attackTime = 0.0F;
                                 zm.crouching = false;
                                 zm.swimAmount = 0.0F;
                                 if (right) {
-                                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, zm.rightArm, null, ml, zr.getTextureLocation(zmb));
+                                    roundabout$renderOtherHand(stack, buffer, packedLight, acl, zm.rightArm, null, ml, zr.getTextureLocation(zmb));
                                 } else {
-                                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, zm.leftArm, null, ml, zr.getTextureLocation(zmb));
+                                    roundabout$renderOtherHand(stack, buffer, packedLight, acl, zm.leftArm, null, ml, zr.getTextureLocation(zmb));
                                 }
                             }
                         }
                     } else if (shift == ShapeShifts.VILLAGER) {
                         if (ml instanceof VillagerModel<?> zm) {
-                            if (ER instanceof VillagerRenderer zr && roundabout$getShapeShift($$3) instanceof Villager zmb) {
-                                this.setModelProperties($$3);
+                            if (ER instanceof VillagerRenderer zr && roundabout$getShapeShift(acl) instanceof Villager zmb) {
+                                this.setModelProperties(acl);
                                 zm.attackTime = 0.0F;
                             }
                         }
                     } else if (shift == ShapeShifts.SKELETON) {
                         if (ml instanceof SkeletonModel<?> sm) {
-                            if (ER instanceof SkeletonRenderer zr && roundabout$getShapeShift($$3) instanceof Skeleton skl) {
-                                this.setModelProperties($$3);
+                            if (ER instanceof SkeletonRenderer zr && roundabout$getShapeShift(acl) instanceof Skeleton skl) {
+                                this.setModelProperties(acl);
                                 sm.attackTime = 0.0F;
                                 sm.crouching = false;
                                 sm.swimAmount = 0.0F;
                                 if (right) {
-                                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.rightArm, null, ml, zr.getTextureLocation(skl));
+                                    roundabout$renderOtherHand(stack, buffer, packedLight, acl, sm.rightArm, null, ml, zr.getTextureLocation(skl));
                                 } else {
-                                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.leftArm, null, ml, zr.getTextureLocation(skl));
+                                    roundabout$renderOtherHand(stack, buffer, packedLight, acl, sm.leftArm, null, ml, zr.getTextureLocation(skl));
                                 }
                             }
                         }
                     } else if (shift == ShapeShifts.WITHER_SKELETON) {
                         if (ml instanceof SkeletonModel<?> sm) {
-                            if (ER instanceof WitherSkeletonRenderer zr && roundabout$getShapeShift($$3) instanceof WitherSkeleton skl) {
-                                this.setModelProperties($$3);
+                            if (ER instanceof WitherSkeletonRenderer zr && roundabout$getShapeShift(acl) instanceof WitherSkeleton skl) {
+                                this.setModelProperties(acl);
                                 sm.attackTime = 0.0F;
                                 sm.crouching = false;
                                 sm.swimAmount = 0.0F;
                                 if (right) {
-                                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.rightArm, null, ml, zr.getTextureLocation(skl));
+                                    roundabout$renderOtherHand(stack, buffer, packedLight, acl, sm.rightArm, null, ml, zr.getTextureLocation(skl));
                                 } else {
-                                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.leftArm, null, ml, zr.getTextureLocation(skl));
+                                    roundabout$renderOtherHand(stack, buffer, packedLight, acl, sm.leftArm, null, ml, zr.getTextureLocation(skl));
                                 }
                             }
                         }
                     } else if (shift == ShapeShifts.STRAY) {
                         if (ml instanceof SkeletonModel<?> sm) {
-                            if (ER instanceof StrayRenderer zr && roundabout$getShapeShift($$3) instanceof Stray skl) {
-                                this.setModelProperties($$3);
+                            if (ER instanceof StrayRenderer zr && roundabout$getShapeShift(acl) instanceof Stray skl) {
+                                this.setModelProperties(acl);
                                 sm.attackTime = 0.0F;
                                 sm.crouching = false;
                                 sm.swimAmount = 0.0F;
                                 if (right) {
-                                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.rightArm, null, ml, zr.getTextureLocation(skl));
+                                    roundabout$renderOtherHand(stack, buffer, packedLight, acl, sm.rightArm, null, ml, zr.getTextureLocation(skl));
                                 } else {
-                                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.leftArm, null, ml, zr.getTextureLocation(skl));
+                                    roundabout$renderOtherHand(stack, buffer, packedLight, acl, sm.leftArm, null, ml, zr.getTextureLocation(skl));
                                 }
                             }
                         }
                     } else if (shift == ShapeShifts.OVA) {
                         if (ml instanceof OVAEnyaModel<?> sm) {
-                            if (ER instanceof OVAEnyaRenderer<?> zr && roundabout$getShapeShift($$3) instanceof OVAEnyaNPC skl) {
-                                this.setModelProperties($$3);
+                            if (ER instanceof OVAEnyaRenderer<?> zr && roundabout$getShapeShift(acl) instanceof OVAEnyaNPC skl) {
+                                this.setModelProperties(acl);
                                 sm.attackTime = 0.0F;
                                 sm.crouching = false;
                                 sm.swimAmount = 0.0F;
                                 sm.setupAnim2(skl, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
                                 float $$5 = right ? 1.0F : -1.0F;
-                                $$0.translate($$5 * -0.3F, 0F, 0F);
+                                stack.translate($$5 * -0.3F, 0F, 0F);
                                 if (right) {
-                                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.rightArm, sm.rightSleeve, ml, zr.getTextureLocation(skl));
+                                    roundabout$renderOtherHand(stack, buffer, packedLight, acl, sm.rightArm, sm.rightSleeve, ml, zr.getTextureLocation(skl));
                                 } else {
-                                    roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.leftArm, sm.leftSleeve, ml, zr.getTextureLocation(skl));
+                                    roundabout$renderOtherHand(stack, buffer, packedLight, acl, sm.leftArm, sm.leftSleeve, ml, zr.getTextureLocation(skl));
                                 }
                             }
                         }
                     }
+
+
                     return true;
                 }
             }
             }
         } else {
             ItemStack visage = ipe.roundabout$getMaskSlot();
-            roundabout$initializeVisageModel(visage, $$3);
-            if (roundabout$getSwappedModel($$3) != null){
+            roundabout$initializeVisageModel(visage, acl);
+            if (roundabout$getSwappedModel(acl) != null){
                 EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
-                EntityRenderer<? super T> ER = $$7.getRenderer(roundabout$getSwappedModel($$3));
+                EntityRenderer<? super T> ER = $$7.getRenderer(roundabout$getSwappedModel(acl));
                 if (ER instanceof LivingEntityRenderer) {
                     Model ml = ((LivingEntityRenderer<?, ?>) ER).getModel();
                     if (ml instanceof PlayerLikeModel<?> sm) {
-                        if (ER instanceof PlayerLikeRenderer<?> zr && roundabout$getSwappedModel($$3) instanceof JojoNPC skl) {
-                            this.setModelProperties($$3);
+                        if (ER instanceof PlayerLikeRenderer<?> zr && roundabout$getSwappedModel(acl) instanceof JojoNPC skl) {
+                            this.setModelProperties(acl);
                             sm.attackTime = 0.0F;
                             sm.crouching = false;
                             sm.swimAmount = 0.0F;
-                            skl.host = $$3;
+                            skl.host = acl;
                             sm.setupAnim2(skl, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
                             float $$5 = right ? 1.0F : -1.0F;
-                            $$0.translate($$5 * -0.3F, 0F, 0F);
+                            stack.translate($$5 * -0.3F, 0F, 0F);
                             if (right) {
-                                roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.rightArm, sm.rightSleeve, ml, zr.getTextureLocation(skl));
+                                roundabout$renderOtherHand(stack, buffer, packedLight, acl, sm.rightArm, sm.rightSleeve, ml, zr.getTextureLocation(skl));
 
-                                byte curse = ((StandUser) $$3).roundabout$getLocacacaCurse();
+                                byte curse = ((StandUser) acl).roundabout$getLocacacaCurse();
                                 if (curse == LocacacaCurseIndex.MAIN_HAND) {
                                     sm.rightSleeve.xScale += 0.04F;
                                     sm.rightSleeve.zScale += 0.04F;
                                     if (skl.isSimple()){
-                                        sm.rightSleeve.render($$0, $$1.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_RIGHT_ARM)), $$2, OverlayTexture.NO_OVERLAY);
+                                        sm.rightSleeve.render(stack, buffer.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_RIGHT_ARM)), packedLight, OverlayTexture.NO_OVERLAY);
                                     } else {
-                                        sm.rightSleeve.render($$0, $$1.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_RIGHT_ARM_JOJO)), $$2, OverlayTexture.NO_OVERLAY);
+                                        sm.rightSleeve.render(stack, buffer.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_RIGHT_ARM_JOJO)), packedLight, OverlayTexture.NO_OVERLAY);
                                     }
                                     sm.rightSleeve.xScale -= 0.04F;
                                     sm.rightSleeve.zScale -= 0.04F;
                                 }
                             } else {
-                                roundabout$renderOtherHand($$0, $$1, $$2, $$3, sm.leftArm, sm.leftSleeve, ml, zr.getTextureLocation(skl));
+                                roundabout$renderOtherHand(stack, buffer, packedLight, acl, sm.leftArm, sm.leftSleeve, ml, zr.getTextureLocation(skl));
 
-                                byte curse = ((StandUser) $$3).roundabout$getLocacacaCurse();
+                                byte curse = ((StandUser) acl).roundabout$getLocacacaCurse();
                                 if (curse == LocacacaCurseIndex.OFF_HAND) {
                                     sm.leftSleeve.xScale += 0.04F;
                                     sm.leftSleeve.zScale += 0.04F;
                                     if (skl.isSimple()){
-                                        sm.leftSleeve.render($$0, $$1.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_LEFT_ARM)), $$2, OverlayTexture.NO_OVERLAY);
+                                        sm.leftSleeve.render(stack, buffer.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_LEFT_ARM)), packedLight, OverlayTexture.NO_OVERLAY);
                                     } else {
-                                        sm.leftSleeve.render($$0, $$1.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_LEFT_ARM_JOJO)), $$2, OverlayTexture.NO_OVERLAY);
+                                        sm.leftSleeve.render(stack, buffer.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_LEFT_ARM_JOJO)), packedLight, OverlayTexture.NO_OVERLAY);
                                     }
                                     sm.leftSleeve.xScale -= 0.04F;
                                     sm.leftSleeve.zScale -= 0.04F;
@@ -431,16 +448,22 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
     }
 
         @Unique
-    private void roundabout$renderOtherHand(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3,
+    private void roundabout$renderOtherHand(PoseStack stack, MultiBufferSource buffer, int $$2, AbstractClientPlayer acl,
                                             ModelPart $$4, @Nullable ModelPart $$5, Model ML, ResourceLocation texture){
 
         if ($$4 != null && texture != null) {
             $$4.xRot = 0.0F;
-            $$4.render($$0, $$1.getBuffer(RenderType.entitySolid(texture)), $$2, OverlayTexture.NO_OVERLAY);
+            $$4.render(stack, buffer.getBuffer(RenderType.entitySolid(texture)), $$2, OverlayTexture.NO_OVERLAY);
+
+            ShootingArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,acl.tickCount+ ClientUtil.getFrameTime(),
+                    0,0,$$5);
         }
         if ($$5 != null && texture != null) {
             $$5.xRot = 0.0F;
-            $$5.render($$0, $$1.getBuffer(RenderType.entityTranslucent(texture)), $$2, OverlayTexture.NO_OVERLAY);
+            $$5.render(stack, buffer.getBuffer(RenderType.entityTranslucent(texture)), $$2, OverlayTexture.NO_OVERLAY);
+
+            ShootingArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,acl.tickCount+ ClientUtil.getFrameTime(),
+                    0,0,$$5);
         }
     }
 
