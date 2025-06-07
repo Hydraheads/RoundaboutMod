@@ -14,6 +14,7 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.PrimedTnt;
@@ -97,7 +98,7 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
                         this.level().setBlock($$0.getBlockPos(), Blocks.AIR.defaultBlockState(), 3);
                         wasExploded(this.level(),$$0.getBlockPos());
                 } else if (bs.getBlock() instanceof AbstractGlassBlock || bs.getBlock() instanceof StainedGlassPaneBlock
-                        || bs.getBlock().defaultBlockState().is(Blocks.GLASS_PANE)){
+                        || bs.getBlock().defaultBlockState().is(Blocks.GLASS_PANE) || bs.is(BlockTags.LEAVES)){
                     this.level().setBlock($$0.getBlockPos(), Blocks.AIR.defaultBlockState(), 3);
                     blockBreakParticles(bs.getBlock(),
                             new Vec3($$0.getBlockPos().getX()+0.5,
