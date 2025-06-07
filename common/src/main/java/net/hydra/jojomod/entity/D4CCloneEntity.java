@@ -1,13 +1,11 @@
 package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
-import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersD4C;
-import net.hydra.jojomod.mixin.PlayerEntity;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -23,8 +21,6 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import org.joml.Vector3f;
 
@@ -61,17 +57,17 @@ public class D4CCloneEntity extends CloneEntity implements NeutralMob {
 
             }
 
-            Minecraft client = Minecraft.getInstance();
+            Player player = ClientUtil.getPlayer();
 
-            if (client.player == null)
+            if (player == null)
                 return;
 
-            StandUser localPlayer = ((StandUser)client.player);
-            if (localPlayer.roundabout$getStand() instanceof D4CEntity)
+            StandUser standUserPlayer = ((StandUser)player);
+            if (standUserPlayer.roundabout$getStand() instanceof D4CEntity)
             {
-                if (this.player == client.player)
+                if (this.player == player)
                 {
-                    PowersD4C powers = (PowersD4C) localPlayer.roundabout$getStandPowers();
+                    PowersD4C powers = (PowersD4C) standUserPlayer.roundabout$getStandPowers();
                     this.setSelected(powers.targetingClone == this);
                 }
             }

@@ -1,16 +1,11 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.advancement.criteria.ModCriteria;
 import net.hydra.jojomod.block.D4CLightBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
-import net.hydra.jojomod.client.shader.RPostShaderRegistry;
-import net.hydra.jojomod.client.shader.RRenderUtil;
-import net.hydra.jojomod.client.shader.callback.IRendererCallback;
-import net.hydra.jojomod.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.D4CEntity;
@@ -25,32 +20,21 @@ import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
 import net.hydra.jojomod.item.InterdimensionalKeyItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
-import net.hydra.jojomod.util.ClientConfig;
-import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.world.DynamicWorld;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.RelativeMovement;
@@ -61,7 +45,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -139,7 +122,7 @@ public class PowersD4C extends PunchingStand {
             else
                 setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP_KEY, PowerIndex.SKILL_EXTRA_2);
 
-        fx.roundabout$onGUI(context);
+        ClientUtil.fx.roundabout$onGUI(context);
     }
 
     private boolean held1 = false;
@@ -525,100 +508,6 @@ public class PowersD4C extends PunchingStand {
         }
         else if (!keyIsDown)
             held4 = false;
-    }
-
-    private static class ShaderFx implements IRendererCallback {
-        public boolean isDimensionTraveling = false;
-        public boolean shouldShowDimensionFx = false;
-
-        @Override
-        public void roundabout$LEVEL_RENDER_FINISH(float partialTick) {
-            Minecraft client = Minecraft.getInstance();
-            LocalPlayer player = client.player;
-
-            if (player == null) return;
-            if (!(((StandUser)player).roundabout$getStandPowers() instanceof PowersD4C))
-                return;
-
-            if (((StandUser)player).roundabout$isParallelRunning())
-            {
-                if (RPostShaderRegistry.DESATURATE != null)
-                    RPostShaderRegistry.DESATURATE.roundabout$process(partialTick);
-
-                if (RPostShaderRegistry.DECONVERGE != null)
-                    RPostShaderRegistry.DECONVERGE.roundabout$process(partialTick);
-
-                if (RPostShaderRegistry.PHOSPHOR != null)
-                    RPostShaderRegistry.PHOSPHOR.roundabout$process(partialTick);
-            }
-
-            Level level = player.level();
-
-            shouldShowDimensionFx = (DynamicWorld.isWorldDynamic(level) && ((StandUser)player).roundabout$getStandPowers() instanceof PowersD4C);
-
-            if (RRenderUtil.isUsingFabulous())
-                return;
-
-            ClientConfig clientConfig = ConfigManager.getClientConfig();
-            if (shouldShowDimensionFx && clientConfig.experiments.d4cShouldUseColorShader)
-            {
-                if (RPostShaderRegistry.D4C_ALT_DIMENSION != null)
-                {
-                    RPostShaderRegistry.D4C_ALT_DIMENSION.roundabout$process(partialTick);
-                }
-            }
-        }
-
-        @Override
-        public void roundabout$GAME_RENDERER_FINISH(float tickDelta) {
-            if (Minecraft.getInstance().player == null)
-                return;
-
-            if (((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers() instanceof PowersD4C d4c)
-            {
-                if (((StandUser)Minecraft.getInstance().player).roundabout$isParallelRunning())
-                    d4c.pRunningFrames++;
-                else
-                    d4c.pRunningFrames = 0;
-            }
-        }
-
-        public void roundabout$onGUI(GuiGraphics graphics) {
-            if (Minecraft.getInstance().player == null)
-                return;
-
-            if (((StandUser) Minecraft.getInstance().player).roundabout$getStandPowers() instanceof PowersD4C d4c) {
-                if (((StandUser) Minecraft.getInstance().player).roundabout$isParallelRunning()) {
-                    int whiteFlashFrameCount = 8;
-                    if (d4c.pRunningFrames < whiteFlashFrameCount) {
-                        float alpha = 1.0f - (d4c.pRunningFrames / (float) whiteFlashFrameCount);
-                        int alphaInt = (int) (alpha * 255);
-                        int color = (alphaInt << 24) | 0xFFFFFF;
-
-                        graphics.fill(0, 0,
-                                Minecraft.getInstance().getWindow().getWidth(),
-                                Minecraft.getInstance().getWindow().getHeight(),
-                                color
-                        );
-                    }
-                }
-            }
-        }
-
-        @Override
-        public void roundabout$bootstrap() {
-
-        }
-
-        public ShaderFx()
-        {}
-    }
-
-    private static ShaderFx fx;
-
-    static {
-        fx = new ShaderFx();
-        RenderCallbackRegistry.register(fx);
     }
 
     private void yoinkCurrency() {

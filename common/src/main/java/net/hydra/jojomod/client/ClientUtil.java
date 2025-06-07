@@ -1,12 +1,14 @@
 package net.hydra.jojomod.client;
 
-import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ICamera;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.gui.*;
+import net.hydra.jojomod.client.shader.ShaderFx;
+import net.hydra.jojomod.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
@@ -18,35 +20,36 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.stand.PowersD4C;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
 import net.hydra.jojomod.item.BodyBagItem;
-import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.networking.packet.impl.ModNetworking;
+import net.hydra.jojomod.networking.packet.impl.packet.AckDynamicWorldP;
 import net.hydra.jojomod.util.ClientConfig;
 import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
-import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -376,6 +379,53 @@ public class ClientUtil {
     public static float getDelta() {
         Minecraft mc = Minecraft.getInstance();
         return mc.getDeltaFrameTime();
+    }
+
+    /**Dynamic Worlds packet, removing local player calls so servers don't crash on startup*/
+    public static boolean packetLocPlayCheck(){
+        LocalPlayer localPlayer = Minecraft.getInstance().player;
+        if (localPlayer == null)
+        {
+            Roundabout.LOGGER.error("Errored while synchronizing Dynamic World: \"player\" is null!");
+            return false;
+        }
+
+        return true;
+    }
+    public static void dimensionSynchForge(ResourceKey<Level> LEVEL_KEY){
+        LocalPlayer localPlayer = Minecraft.getInstance().player;
+        if (localPlayer != null) {
+            localPlayer.connection.levels().add(LEVEL_KEY);
+            ModPacketHandler.PACKET_ACCESS.ackRegisterWorld();
+        } else {
+            packetLocPlayCheck();
+        }
+    }
+    public static void dimensionSynchFabric(Minecraft client, ResourceKey<Level> LEVEL_KEY) {
+        LocalPlayer player = client.player;
+        player.connection.levels().add(LEVEL_KEY);
+        //ModPacketHandler.PACKET_ACCESS.ackRegisterWorld();
+        ModNetworking.send(new AckDynamicWorldP());
+    }
+
+    public static void d4cEjectParralelRunningForge(){
+        Minecraft client = Minecraft.getInstance();
+
+        if (client.player != null)
+        {
+            if (((StandUser)client.player).roundabout$getStandPowers() instanceof PowersD4C d4c)
+            {
+                d4c.ejectParallelRunning();
+            }
+        }
+    }
+
+
+    public static ShaderFx fx;
+
+    static {
+        fx = new ShaderFx();
+        RenderCallbackRegistry.register(fx);
     }
     public static float getFrameTime() {
         Minecraft mc = Minecraft.getInstance();

@@ -1,8 +1,8 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersD4C;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -41,7 +41,7 @@ public class D4CLightBlock extends BaseEntityBlock {
         if (level instanceof ServerLevel serverLevel) {
             return serverLevel.getServer().getPlayerList().getPlayer(ownerUUID);
         } else if (level.isClientSide) {
-            Player clientPlayer = Minecraft.getInstance().player;
+            Player clientPlayer = ClientUtil.getPlayer();
             if (clientPlayer != null && clientPlayer.getUUID().equals(ownerUUID)) {
                 return clientPlayer;
             }

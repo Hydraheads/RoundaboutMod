@@ -1,18 +1,12 @@
 package net.hydra.jojomod.networking.s2c;
 
-import com.google.gson.Gson;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.networking.ModPacketHandler;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
+import net.hydra.jojomod.client.ClientUtil;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -36,15 +30,9 @@ public class ForgeDynamicWorldSync {
             ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(serial));
             Roundabout.LOGGER.info("Got packet for dimension {}", LEVEL_KEY.toString());
 
-            LocalPlayer localPlayer = Minecraft.getInstance().player;
-            if (localPlayer == null)
-            {
-                Roundabout.LOGGER.error("Errored while synchronizing Dynamic World: \"player\" is null!");
-                return;
+            if (ClientUtil.packetLocPlayCheck()) {
+                ClientUtil.dimensionSynchForge(LEVEL_KEY);
             }
-
-            localPlayer.connection.levels().add(LEVEL_KEY);
-            ModPacketHandler.PACKET_ACCESS.ackRegisterWorld();
         });
 
         return true;
