@@ -35,8 +35,7 @@ public class SoftAndWetShootingArmModel extends PsuedoHierarchicalModel {
 
         PartDefinition arm_addon1 = arm_addon.addOrReplaceChild("arm_addon1", CubeListBuilder.create().texOffs(0, 0).addBox(-3.0F, -3.0F, -3.0F, 6.0F, 6.0F, 6.0F, new CubeDeformation(-0.2F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition arm_addon2 = arm_addon.addOrReplaceChild("arm_addon2", CubeListBuilder.create().texOffs(0, 12).addBox(-3.0F, -3.0F, -3.0F, 6.0F, 6.0F, 6.0F, new CubeDeformation(-0.5F)), PartPose.offset(0.0F, 0.0F, 0.0F));
-
+        PartDefinition arm_addon2 = arm_addon.addOrReplaceChild("arm_addon2", CubeListBuilder.create().texOffs(0, 12).addBox(-3.0F, -3.0F, -3.0F, 6.0F, 6.0F, 6.0F, new CubeDeformation(-0.7F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         this.Root = LayerDefinition.create(mesh, 32, 32).bakeRoot();
         this.armAddon = Root.getChild("arm_addon");
@@ -74,7 +73,7 @@ public class SoftAndWetShootingArmModel extends PsuedoHierarchicalModel {
                 partialTicks = 0;
             }
             StandUser user = ((StandUser) LE);
-            VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(context)));
+            VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
             user.roundabout$getHandLayerAnimation().startIfStopped(context.tickCount);
             this.animate(user.roundabout$getHandLayerAnimation(), LayerAnimations.SpinningBubble, partialTicks, 0.7f);
             //The number at the end is inversely proportional so 2 is half speed

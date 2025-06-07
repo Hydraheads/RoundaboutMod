@@ -21,7 +21,7 @@ public class StarParticle extends SimpleAnimatedParticle {
         this.quadSize *= 1.7f;
         this.sprites = $$7;
         this.gravity = 0;
-        this.scale(0.9F);
+        this.scale(0.2F);
         this.setSpriteFromAge($$7);
     }
 

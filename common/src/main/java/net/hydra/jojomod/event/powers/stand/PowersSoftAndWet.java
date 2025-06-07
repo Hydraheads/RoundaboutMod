@@ -366,8 +366,10 @@ public class PowersSoftAndWet extends PunchingStand {
             if (inShootingMode()){
                 if (keyIsDown) {
                     if (!hold1) {
-                        if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+                        if (goBeyondCharged()) {
                             hold1 = true;
+                            this.tryPower(PowerIndex.SPECIAL_TRACKER, true);
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SPECIAL_TRACKER);
                         }
                     }
                 } else {
@@ -554,6 +556,38 @@ public class PowersSoftAndWet extends PunchingStand {
             }
         }
 
+        return true;
+    }
+    public boolean goBeyond(){
+        if (!this.self.level().isClientSide()){
+            //Vec3 vector = this.self.
+            for (int i = 0; i < 10; ++i) {
+                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PURPLE_STAR,
+                        this.getSelf().getX(), this.getSelf().getY() + this.self.getEyeHeight()*0.7F, this.getSelf().getZ(),
+                        30, 1, 0.05, 1, 0.4);
+            }
+        }
+        /**
+        SoftAndWetPlunderBubbleEntity bubble = getPlunderBubble();
+
+        if (bubble != null){
+            this.setCooldown(PowerIndex.SKILL_2, 20);
+
+            this.poseStand(OffsetIndex.FOLLOW);
+            this.setAttackTimeDuring(-10);
+            this.setActivePower(PowerIndex.POWER_2);
+            bubble.setPlunderType(bubbleType);
+            bubble.setSingular(true);
+            shootBubbleSpeed(bubble,getBubbleSpeed());
+            bubbleListInit();
+            this.bubbleList.add(bubble);
+            this.getSelf().level().addFreshEntity(bubble);
+
+            if (bubbleType != PlunderTypes.SOUND.id) {
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+            }
+        }
+         **/
         return true;
     }
     public boolean bubbleShot(){
@@ -868,6 +902,8 @@ public class PowersSoftAndWet extends PunchingStand {
             return this.setPowerSuperHit();
         } else if (move == PowerIndex.EXTRA_2) {
             return this.clusterBubblePop();
+        } else if (move == PowerIndex.SPECIAL_TRACKER){
+            return this.goBeyond();
         }
         return super.setPowerOther(move,lastMove);
     }
