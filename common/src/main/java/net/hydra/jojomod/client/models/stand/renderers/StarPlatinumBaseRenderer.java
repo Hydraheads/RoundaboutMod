@@ -20,6 +20,7 @@ public class StarPlatinumBaseRenderer<T extends StandEntity> extends StandRender
 
     public static final ResourceLocation OVA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/ova.png");
     public static final ResourceLocation GREEN_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/green.png");
+    public static final ResourceLocation GREEN_2 = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/green_2.png");
     public static final ResourceLocation BASEBALL_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/baseball.png");
     public static final ResourceLocation PART_4_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/part_4.png");
     public static final ResourceLocation PART_6_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/part_6.png");
@@ -47,6 +48,8 @@ public class StarPlatinumBaseRenderer<T extends StandEntity> extends StandRender
             return OVA_SKIN;
         } else if (BT == StarPlatinumEntity.GREEN_SKIN){
             return GREEN_SKIN;
+        } else if (BT == StarPlatinumEntity.GREEN_2){
+            return GREEN_2;
         } else if (BT == StarPlatinumEntity.BASEBALL_SKIN){
             return BASEBALL_SKIN;
         } else if (BT == StarPlatinumEntity.PART_4_SKIN){
