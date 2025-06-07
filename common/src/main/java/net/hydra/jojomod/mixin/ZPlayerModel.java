@@ -98,13 +98,23 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             IPlayerEntity ipe = ((IPlayerEntity) $$0);
             StandUser SE = ((StandUser) $$0);
             if (SE.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && SE.roundabout$getEffectiveCombatMode()) {
-                ipe.roundabout$getBubbleAim().startIfStopped($$0.tickCount); change = true;
-                this.roundabout$animate(ipe.roundabout$getBubbleAim(), FirstPersonLayerAnimations.bubble_aim, yes, 1f);
+                if (ipe.roundabout$getBubbleShotAimPoints() > 0){
+                    ipe.roundabout$getBubbleShotAim().startIfStopped($$0.tickCount); change = true;
+                    this.roundabout$animate(ipe.roundabout$getBubbleShotAim(), FirstPersonLayerAnimations.bubble_aim_recoil, yes, 1f);
+                    ipe.roundabout$getBubbleAim().stop();
+                } else {
+                    ipe.roundabout$getBubbleAim().startIfStopped($$0.tickCount); change = true;
+                    this.roundabout$animate(ipe.roundabout$getBubbleAim(), FirstPersonLayerAnimations.bubble_aim, yes, 1f);
+                    ipe.roundabout$getBubbleShotAim().stop();
+                }
             } else {
                 ipe.roundabout$getBubbleAim().stop();
+                ipe.roundabout$getBubbleShotAim().stop();
             }
 
             if (change){
+                ipe.roundabout$getOffsetCorrect().startIfStopped($$0.tickCount);
+                this.roundabout$animate(ipe.roundabout$getOffsetCorrect(), FirstPersonLayerAnimations.offsetCorrect, yes, 1f);
                 this.rightSleeve.copyFrom(this.rightArm);
                 this.leftSleeve.copyFrom(this.leftArm);
                 one.render(ps, mb.getBuffer(RenderType.entitySolid($$0.getSkinTextureLocation())), packedLight, OverlayTexture.NO_OVERLAY);

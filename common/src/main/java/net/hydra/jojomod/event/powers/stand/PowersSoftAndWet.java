@@ -2,6 +2,7 @@ package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.BubbleScaffoldBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -275,6 +276,11 @@ public class PowersSoftAndWet extends PunchingStand {
                         if (!holdDownClick){
                             if (!this.onCooldown(PowerIndex.SKILL_4)) {
                                 if (getInExplosiveSpinMode() || confirmShot(getUseTicks())) {
+                                    if (this.self instanceof Player PE){
+                                        IPlayerEntity ipe = ((IPlayerEntity)PE);
+                                        ipe.roundabout$getBubbleShotAim().stop();
+                                        ipe.roundabout$setBubbleShotAimPoints(10);
+                                    }
                                     this.tryPower(PowerIndex.POWER_4_EXTRA, true);
                                     if (getInExplosiveSpinMode()){
                                         ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_BONUS);
@@ -1295,6 +1301,19 @@ public class PowersSoftAndWet extends PunchingStand {
     public void tickPower(){
         unloadBubbles();
         /**Burn through ticks*/
+
+        /**tick down the shooting animtation*/
+        if (this.self.level().isClientSide()){
+            if (this.self instanceof Player PE) {
+                IPlayerEntity ipe = ((IPlayerEntity) PE);
+                int pt = ipe.roundabout$getBubbleShotAimPoints();
+                if (pt > 0){
+                    pt--;
+                    ipe.roundabout$setBubbleShotAimPoints(pt);
+                }
+            }
+        }
+
         if (this.self instanceof Player PE && PE.isCreative()) {
             setShootTicks(0);
         } else if (getPauseGrowthTicks() > 0){

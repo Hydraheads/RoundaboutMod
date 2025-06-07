@@ -623,6 +623,32 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         return roundabout$BubbleAim;
     }
     @Unique
+    public final AnimationState roundabout$OffsetCorrect = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getOffsetCorrect(){
+        return roundabout$OffsetCorrect;
+    }
+    @Unique
+    public final AnimationState roundabout$BubbleShotAim = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getBubbleShotAim(){
+        return roundabout$BubbleShotAim;
+    }
+    @Unique
+    public int roundabout$BubbleShotAimPoints = 0;
+    @Unique
+    @Override
+    public int roundabout$getBubbleShotAimPoints(){
+        return roundabout$BubbleShotAimPoints;
+    }
+    @Unique
+    @Override
+    public void roundabout$setBubbleShotAimPoints(int shotPoints){
+        roundabout$BubbleShotAimPoints = shotPoints;
+    }
+    @Unique
     public final AnimationState roundabout$GIORNO = new AnimationState();
 
     @Unique

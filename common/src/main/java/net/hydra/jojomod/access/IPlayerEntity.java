@@ -74,6 +74,10 @@ public interface IPlayerEntity {
     void roundabout$setIdleYOffset(float enemyOpacity);
     void roundabout$setLastVisage(ItemStack stack);
     AnimationState roundabout$getBubbleAim();
+    int roundabout$getBubbleShotAimPoints();
+    void roundabout$setBubbleShotAimPoints(int shotPoints);
+    AnimationState roundabout$getBubbleShotAim();
+    AnimationState roundabout$getOffsetCorrect();
     AnimationState getWry();
     AnimationState getGiorno();
     AnimationState getKoichi();
