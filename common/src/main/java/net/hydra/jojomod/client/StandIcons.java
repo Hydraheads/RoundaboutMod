@@ -111,6 +111,8 @@ public class StandIcons {
             "textures/gui/icons/soft_and_wet/plunder_selection.png");
     public static final ResourceLocation PLUNDER_BUBBLE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/soft_and_wet/plunder_bubble.png");
+    public static final ResourceLocation ITEM_BUBBLE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/soft_and_wet/item_bubble.png");
     public static final ResourceLocation PLUNDER_BUBBLE_CONTROL = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/soft_and_wet/plunder_bubble_control.png");
     public static final ResourceLocation GO_BEYOND = new ResourceLocation(Roundabout.MOD_ID,

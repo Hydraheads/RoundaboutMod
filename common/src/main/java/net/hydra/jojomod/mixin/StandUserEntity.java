@@ -2739,6 +2739,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         || stack.getItem() instanceof HarpoonItem
                         || stack.getItem() instanceof TridentItem
                         || stack.getItem() instanceof ShearsItem
+                        || stack.getItem() instanceof PickaxeItem
+                        || stack.getItem() instanceof ArrowItem
                         || (stack.getItem() instanceof BlockItem BI && (BI.getBlock() instanceof CactusBlock
                 || BI.getBlock() instanceof GoddessStatueBlock || BI.getBlock() instanceof SweetBerryBushBlock || BI.getBlock() instanceof BarbedWireBlock))) {
                     roundabout$setBubbleEncased((byte) 0);

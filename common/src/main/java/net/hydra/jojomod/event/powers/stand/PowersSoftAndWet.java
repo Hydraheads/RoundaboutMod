@@ -170,12 +170,20 @@ public class PowersSoftAndWet extends PunchingStand {
         return false;
     }
     public boolean isAttackIneptVisually(byte activeP, int slot) {
-        if (slot == 2 && ((inShootingMode() && !goBeyondCharged()) || (!canDoBubbleRedirect() && isGuarding()))) {
-            return true;
+        if (inShootingMode()){
+            if (slot == 1 && !goBeyondCharged() && !(this.self instanceof Player PE && PE.isCreative())){
+                return true;
+            }
+        } else {
+            if (slot == 1 && (!canDoBubbleClusterRedirect() && isGuarding())) {
+                return true;
+            }
+
+            if (slot == 2 && ((!canDoBubbleRedirect() && isGuarding()))) {
+                return true;
+            }
         }
-        if (slot == 1 && (inShootingMode() || (!canDoBubbleClusterRedirect() && isGuarding()))) {
-            return true;
-        }
+
         if (slot == 3 && (!canVault() && !canFallBrace() && !isGuarding() && isHoldingSneak()) && !canBridge()){
             return true;
         }
@@ -188,7 +196,9 @@ public class PowersSoftAndWet extends PunchingStand {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
 
-        if (isGuarding()) {
+        if (inShootingMode()) {
+            setSkillIcon(context, x, y, 1, StandIcons.GO_BEYOND, PowerIndex.SKILL_EXTRA_2);
+        } else if (isGuarding()) {
             setSkillIcon(context, x, y, 1, StandIcons.PLUNDER_BUBBLE_FILL_CONTROL, PowerIndex.SKILL_EXTRA_2);
         } else if (isHoldingSneak()){
             if (canDoBubbleClusterPop()){
@@ -202,7 +212,11 @@ public class PowersSoftAndWet extends PunchingStand {
 
 
         if (inShootingMode()) {
-            setSkillIcon(context, x, y, 2, StandIcons.GO_BEYOND, PowerIndex.SKILL_EXTRA_2);
+            if (isHoldingSneak()){
+                setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE_POP, PowerIndex.SKILL_2_SNEAK);
+            } else {
+                setSkillIcon(context, x, y, 2, StandIcons.ITEM_BUBBLE, PowerIndex.SKILL_2);
+            }
         } else if (isGuarding()){
             setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE_CONTROL, PowerIndex.SKILL_EXTRA_2);
         } else if (isHoldingSneak()){
@@ -348,8 +362,18 @@ public class PowersSoftAndWet extends PunchingStand {
 
     @Override
     public void buttonInput1(boolean keyIsDown, Options options) {
-        if (this.getSelf().level().isClientSide && !inShootingMode()) {
-            if (isGuarding()) {
+        if (this.getSelf().level().isClientSide) {
+            if (inShootingMode()){
+                if (keyIsDown) {
+                    if (!hold1) {
+                        if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+                            hold1 = true;
+                        }
+                    }
+                } else {
+                    hold1 = false;
+                }
+            } else if (isGuarding()) {
                 if (keyIsDown) {
                     if (!hold1) {
                         if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
@@ -1343,8 +1367,7 @@ public class PowersSoftAndWet extends PunchingStand {
     @Override
     public void buttonInput2(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide) {
-            if (inShootingMode()) {
-            } else if (isGuarding()) {
+            if (isGuarding() && !inShootingMode()) {
 
                 if (keyIsDown) {
                     if (!hold2) {
@@ -1382,18 +1405,22 @@ public class PowersSoftAndWet extends PunchingStand {
             } else {
                 if (keyIsDown) {
                     if (!hold2) {
-                        if (!this.onCooldown(PowerIndex.SKILL_2)){
-                            hold2 = true;
+                        hold2 = true;
+                        if (!inShootingMode()) {
+                            if (!this.onCooldown(PowerIndex.SKILL_2)) {
 
-                            int bubbleType = 1;
-                            ClientConfig clientConfig = ConfigManager.getClientConfig();
-                            if (clientConfig != null && clientConfig.dynamicSettings != null) {
-                                bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
+                                int bubbleType = 1;
+                                ClientConfig clientConfig = ConfigManager.getClientConfig();
+                                if (clientConfig != null && clientConfig.dynamicSettings != null) {
+                                    bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
+                                }
+
+                                this.tryChargedPower(PowerIndex.POWER_2, true, bubbleType);
+                                ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2, bubbleType);
+                                //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
                             }
+                        } else {
 
-                            this.tryChargedPower(PowerIndex.POWER_2, true, bubbleType);
-                            ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2, bubbleType);
-                            //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
                         }
                     }
                 } else {
