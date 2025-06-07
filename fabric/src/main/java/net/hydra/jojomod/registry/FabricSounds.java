@@ -87,6 +87,8 @@ public class FabricSounds {
         addSound(ModSounds.CACKLE_ID, ModSounds.CACKLE_EVENT);
         addSound(ModSounds.AIR_BUBBLE_ID, ModSounds.AIR_BUBBLE_EVENT);
         addSound(ModSounds.BUBBLE_HOVERED_OVER_ID, ModSounds.BUBBLE_HOVERED_OVER_EVENT);
+        addSound(ModSounds.GO_BEYOND_HIT_ID, ModSounds.GO_BEYOND_HIT_EVENT);
+        addSound(ModSounds.GO_BEYOND_LAUNCH_ID, ModSounds.GO_BEYOND_LAUNCH_EVENT);
         addSound(ModSounds.BUBBLE_POP_ID, ModSounds.BUBBLE_POP_EVENT);
 
         addSound(ModSounds.EXPLOSIVE_BUBBLE_POP_ID, ModSounds.EXPLOSIVE_BUBBLE_POP_EVENT);

@@ -16,6 +16,8 @@ public class FabricParticles {
     public static final SimpleParticleType BLUE_BLOOD = FabricParticleTypes.simple();
     public static final SimpleParticleType ENDER_BLOOD = FabricParticleTypes.simple();
     public static final SimpleParticleType AIR_CRACKLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType STAR = FabricParticleTypes.simple();
+    public static final SimpleParticleType PURPLE_STAR = FabricParticleTypes.simple();
     public static final SimpleParticleType MENACING = FabricParticleTypes.simple();
     public static final SimpleParticleType VACUUM = FabricParticleTypes.simple();
     public static final SimpleParticleType ORANGE_FLAME = FabricParticleTypes.simple();
@@ -38,6 +40,8 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "blood"), BLOOD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "pointer"), POINTER);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "pointer_soft"), POINTER_SOFT);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "star"), STAR);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "purple_star"), PURPLE_STAR);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "blue_blood"), BLUE_BLOOD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "ender_blood"), ENDER_BLOOD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "air_crackle"), AIR_CRACKLE);
@@ -66,6 +70,8 @@ public class FabricParticles {
         ModParticles.AIR_CRACKLE = AIR_CRACKLE;
         ModParticles.MENACING = MENACING;
         ModParticles.VACUUM = VACUUM;
+        ModParticles.STAR = STAR;
+        ModParticles.PURPLE_STAR = PURPLE_STAR;
         ModParticles.FOG_CHAIN = FOG_CHAIN;
         ModParticles.BUBBLE_TRAIL = BUBBLE_TRAIL;
         ModParticles.WARDEN_CLOCK = WARDEN_CLOCK;

@@ -68,6 +68,14 @@ public class ForgeParticles {
             "fog_chain",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> STAR = PARTICLES.register(
+            "star",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> PURPLE_STAR = PARTICLES.register(
+            "purple_star",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> BUBBLE_TRAIL = PARTICLES.register(
             "bubble_trail",
             () -> new SimpleParticleType(true)

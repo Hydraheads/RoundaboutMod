@@ -17,6 +17,18 @@
       "roundabout:firestorm"
     ]
   },
+  "go_beyond_hit": {
+    "subtitle": "sounds.roundabout.go_beyond_hit",
+    "sounds": [
+      "roundabout:go_beyond_hit"
+    ]
+  },
+  "go_beyond_launch": {
+    "subtitle": "sounds.roundabout.go_beyond_launch",
+    "sounds": [
+      "roundabout:go_beyond_launch"
+    ]
+  },
   "sign_hit": {
     "subtitle": "sounds.roundabout.sign_hit",
     "sounds": [

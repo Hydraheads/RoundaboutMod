@@ -45,6 +45,10 @@ public class ForgeSounds {
             register(ModSounds.AIR_BUBBLE, ModSounds.AIR_BUBBLE_ID);
     public static final RegistryObject<SoundEvent> BUBBLE_HOVERED_OVER_EVENT =
             register(ModSounds.BUBBLE_HOVERED_OVER, ModSounds.BUBBLE_HOVERED_OVER_ID);
+    public static final RegistryObject<SoundEvent> GO_BEYOND_LAUNCH_EVENT =
+            register(ModSounds.GO_BEYOND_LAUNCH, ModSounds.GO_BEYOND_LAUNCH_ID);
+    public static final RegistryObject<SoundEvent> GO_BEYOND_HIT_EVENT =
+            register(ModSounds.GO_BEYOND_HIT, ModSounds.GO_BEYOND_HIT_ID);
     public static final RegistryObject<SoundEvent> BUBBLE_CREATE_EVENT =
             register(ModSounds.BUBBLE_CREATE, ModSounds.BUBBLE_CREATE_ID);
     public static final RegistryObject<SoundEvent> BIG_BUBBLE_CREATE_EVENT =

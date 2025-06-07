@@ -141,6 +141,12 @@ public class ModSounds {
     public static final ResourceLocation BUBBLE_HOVERED_OVER_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BUBBLE_HOVERED_OVER);
     public static SoundEvent BUBBLE_HOVERED_OVER_EVENT = SoundEvent.createVariableRangeEvent(BUBBLE_HOVERED_OVER_ID);
 
+    public static final String GO_BEYOND_LAUNCH = "go_beyond_launch";
+    public static final ResourceLocation GO_BEYOND_LAUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GO_BEYOND_LAUNCH);
+    public static SoundEvent GO_BEYOND_LAUNCH_EVENT = SoundEvent.createVariableRangeEvent(GO_BEYOND_LAUNCH_ID);
+    public static final String GO_BEYOND_HIT = "go_beyond_hit";
+    public static final ResourceLocation GO_BEYOND_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GO_BEYOND_HIT);
+    public static SoundEvent GO_BEYOND_HIT_EVENT = SoundEvent.createVariableRangeEvent(GO_BEYOND_HIT_ID);
 
     public static final String AIR_BUBBLE = "air_bubble";
     public static final ResourceLocation AIR_BUBBLE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+AIR_BUBBLE);
