@@ -66,7 +66,7 @@
   "item.roundabout.justice_disc.desc": "Justice",
   "item.roundabout.cinderella_disc.desc": "Cinderella",
   "item.roundabout.none_disc.desc": "Немає",
-  
+
   "item.roundabout.light_bulb": "Лампочка",
 
   "item.roundabout.blank_mask": "Скляна Маска",
@@ -167,7 +167,7 @@
   "entity.roundabout.visage_display": "Плаваюче обличчя",
   "entity.roundabout.plunder_bubble": "Мильна бульбашка пландер",
   "entity.roundabout.encasement_bubble": "Бульбашка-оболонка",
-  
+
   "block.roundabout.meteor_block": "Блок метеорита",
   "block.roundabout.regal_wall": "Королівська стіна",
   "block.roundabout.regal_floor": "Королівська підлога",
@@ -368,7 +368,7 @@
   "sounds.roundabout.air_bubble": "Кисень",
   "sounds.roundabout.soft_and_wet_barrage": "ОРА",
   "sounds.roundabout.soft_and_wet_barrage_2": "ОРА",
-  
+
   "sounds.roundabout.snap": "Хруст",
   "sounds.roundabout.star_finger_silent": "Зірковий Палець",
   "sounds.roundabout.fire_blast": "Вогняний спалах",
@@ -452,7 +452,7 @@
   "sounds.roundabout.harpoon_ground": "Гарпун приземляється",
   "sounds.roundabout.harpoon_return": "Гарпун повертається",
   "sounds.roundabout.harpoon_throw": "Гарпун кинуто",
-  
+
   "sounds.roundabout.glaive_charge": "Заряд глаїви",
   "sounds.roundabout.glaive_attack": "Атака глаївою",
   "sounds.roundabout.block_grab": "Силове хапання",
@@ -582,7 +582,7 @@
   "ability.roundabout.guard": "Блок",
   "ability.roundabout.guard.desc": "Блокує спереду, як щит. Якщо фіолетова шкала отримує забагато шкоди, блок спадає.",
   "ability.roundabout.barrage": "Шквал ударів",
-  
+
   "ability.roundabout.kick_barrage": "Шквал ударів ногою",
   "ability.roundabout.kick_barrage.desc": "Швидкий шквал, що не перешкоджає атакам супротивника.",
   "ability.roundabout.forward_barrage": "Шквал уперед",
@@ -590,12 +590,12 @@
   "ability.roundabout.impale": "Пронизування",
   "ability.roundabout.impale.desc": "Підготовка до смертоносної атаки з шансом нанести 3-й рівень кровотечі. Потрібно бути впритул.",
   "ability.roundabout.block_grab": "Силове хапання (блоки)",
- 
+
   "ability.roundabout.item_grab": "Силове хапання (предмети)",
   "ability.roundabout.item_grab.desc": "Хапає предмет з інвентаря для кидка. У багатьох є унікальні властивості.",
   "ability.roundabout.mob_grab": "Силове хапання (сущності)",
   "ability.roundabout.mob_grab.desc": "Хапає сутність перед тобою, якщо вона близько та може бути схоплена. Можна кинути, перенести або обережно покласти. Якщо пригнувся — атакує.",
-  
+
   "ability.roundabout.phase_grab": "Фазове хапання",
   "ability.roundabout.phase_grab.desc": "Стенд просувається вперед, проходячи крізь деякі блоки (ґрати, плити), хапає предмети на землі або взаємодіє з важелями й дверима.",
   "ability.roundabout.dodge": "Ривок",
@@ -628,8 +628,8 @@
   "ability.roundabout.air_tanks.desc": "Балони на спині The World дають додаткове повітря для довшого плавання.",
   "ability.roundabout.fog_sword": "Підсилення туманом",
   "ability.roundabout.fog_sword.desc": "Атаки зброєю заряджаються швидше, а копання швидше під час активності Justice.",
-  
-  
+
+
   "ability.roundabout.fog_morph_2": "Маскування: Селянин",
   "ability.roundabout.fog_morph_2.desc": "Інші бачать тебе як селянина. Має пристойні обміни, големи поважають.",
   "ability.roundabout.fog_morph_3": "Маскування: Зомбі",
@@ -651,10 +651,10 @@
 
 
   "ability.roundabout.barrage.desc": "Захоплює ворога серією ударів, відкидаючи його наприкінці.",
-  
+
   "ability.roundabout.block_grab.desc": "Хапає блок перед вами. Атакуйте, щоб кинути, або блокуйте, щоб покласти в інвентар. Чим твердіший блок, тим сильніший кидок. Корисно для виживання.",
-  
-  
+
+
   "ability.roundabout.air_tanks": "Кисневі балони",
 
   "ability.roundabout.cast_fog": "Поле туману",
