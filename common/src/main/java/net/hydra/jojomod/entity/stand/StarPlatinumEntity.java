@@ -37,7 +37,8 @@ public class StarPlatinumEntity extends StandEntity {
             BETA = 12,
             ARCADE = 13,
             FOUR_DEE = 14,
-            GREEN_2 = 15;
+            GREEN_2 = 15,
+            JOJOVELLER = 16;
 
     @Override
     public Component getSkinName(byte skinId) {
@@ -74,6 +75,8 @@ public class StarPlatinumEntity extends StandEntity {
             return Component.translatable(  "skins.roundabout.star_platinum.arcade");
         } else if (skinId == FOUR_DEE){
             return Component.translatable(  "skins.roundabout.star_platinum.four_dee");
+        } else if (skinId == JOJOVELLER){
+            return Component.translatable(  "skins.roundabout.star_platinum.jojoveller");
         }
         return Component.translatable(  "skins.roundabout.star_platinum.base");
     }

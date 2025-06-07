@@ -30,6 +30,7 @@ public class StarPlatinumBaseRenderer<T extends StandEntity> extends StandRender
     public static final ResourceLocation BETA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/beta.png");
     public static final ResourceLocation ARCADE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/arcade.png");
     public static final ResourceLocation FOUR_DEE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/4d.png");
+    public static final ResourceLocation JOJOVELLER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/jojoveller.png");
     public StarPlatinumBaseRenderer(EntityRendererProvider.Context context, StandModel<StarPlatinumEntity> entityModel, float f) {
         super(context, entityModel,f);
         this.addLayer(new StarPlatinumEyeLayer<>(this));
@@ -68,6 +69,8 @@ public class StarPlatinumBaseRenderer<T extends StandEntity> extends StandRender
             return ARCADE_SKIN;
         } else if (BT == StarPlatinumEntity.FOUR_DEE){
             return FOUR_DEE_SKIN;
+        } else if (BT == StarPlatinumEntity.JOJOVELLER){
+            return JOJOVELLER;
         }
         return PART_3_SKIN;
     }

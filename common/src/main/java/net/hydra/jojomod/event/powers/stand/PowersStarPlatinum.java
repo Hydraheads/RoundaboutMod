@@ -965,9 +965,10 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass){
                 $$1.add(StarPlatinumEntity.MANGA_SKIN);
-            } if (Level > 2 || bypass){
                 $$1.add(StarPlatinumEntity.OVA_SKIN);
+            } if (Level > 2 || bypass){
                 $$1.add(StarPlatinumEntity.FOUR_DEE);
+                $$1.add(StarPlatinumEntity.JOJOVELLER);
             } if (Level > 3 || bypass){
                 $$1.add(StarPlatinumEntity.GREEN_SKIN);
                 $$1.add(StarPlatinumEntity.GREEN_2);
