@@ -1,17 +1,17 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
-import net.hydra.jojomod.client.models.layers.BigBubbleLayer;
 import net.hydra.jojomod.client.models.layers.ShootingArmLayer;
+import net.hydra.jojomod.client.models.visages.OVAEnyaModel;
+import net.hydra.jojomod.client.models.visages.renderers.OVAEnyaRenderer;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.client.StoneLayer;
+import net.hydra.jojomod.client.models.layers.StoneLayer;
 import net.hydra.jojomod.client.models.layers.KnifeLayer;
 import net.hydra.jojomod.entity.visages.JojoNPC;
-import net.hydra.jojomod.entity.visages.PlayerLikeModel;
-import net.hydra.jojomod.entity.visages.PlayerLikeRenderer;
+import net.hydra.jojomod.client.models.visages.PlayerLikeModel;
+import net.hydra.jojomod.client.models.visages.renderers.PlayerLikeRenderer;
 import net.hydra.jojomod.entity.visages.mobs.*;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.Poses;

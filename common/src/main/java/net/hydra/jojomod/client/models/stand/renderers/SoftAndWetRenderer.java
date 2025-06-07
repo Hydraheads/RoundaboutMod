@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import net.hydra.jojomod.client.models.stand.SoftAndWetModel;
-import net.hydra.jojomod.entity.client.ModEntityRendererClient;
+import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 

@@ -8,6 +8,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Dynamic;
 import net.hydra.jojomod.access.IMob;
+import net.hydra.jojomod.entity.goals.JojoNPCGoalPackages;
 import net.hydra.jojomod.event.index.Poses;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
