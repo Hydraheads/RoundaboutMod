@@ -181,12 +181,22 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 }
 
                 try {
-                    if (((BlockItem)this.getItem().getItem()).place(new DirectionalPlaceContext(this.level(),
-                            pos,
-                            direction, this.getItem(),
-                            direction)) != InteractionResult.FAIL){
-                        this.tempDirection = direction;
-                        return true;
+                    if (getOwner() instanceof Player PE){
+                        if (((BlockItem)this.getItem().getItem()).place(new SafePlaceContext(this.level(), PE,
+                                pos,
+                                direction, this.getItem(),
+                                direction)) != InteractionResult.FAIL){
+                            this.tempDirection = direction;
+                            return true;
+                        }
+                    } else {
+                        if (((BlockItem)this.getItem().getItem()).place(new DirectionalPlaceContext(this.level(),
+                                pos,
+                                direction, this.getItem(),
+                                direction)) != InteractionResult.FAIL){
+                            this.tempDirection = direction;
+                            return true;
+                        }
                     }
                 } catch(Exception e) {
                     //put shader debug stuff here
