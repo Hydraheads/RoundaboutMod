@@ -5,17 +5,23 @@
  * Exported for Minecraft version 1.19 or later with Mojang mappings
  * @author hydra
  */
-public class soft_and_wet_bubble_armAnimation {
-	public static final AnimationDefinition SpinningBubble = AnimationDefinition.Builder.withLength(0.5F).looping()
-		.addAnimation("arm_addon2", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
-			new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-			new Keyframe(0.25F, KeyframeAnimations.degreeVec(0.0F, 180.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-			new Keyframe(0.5F, KeyframeAnimations.degreeVec(0.0F, 360.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+public class actualPlayerArmsAnimation {
+	public static final AnimationDefinition bubble_aim = AnimationDefinition.Builder.withLength(0.0417F).looping()
+		.addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
+			new Keyframe(0.0F, KeyframeAnimations.degreeVec(-4.5497F, -16.0F, -31.0F), AnimationChannel.Interpolations.LINEAR)
 		))
-		.addAnimation("arm_addon1", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
-			new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-			new Keyframe(0.25F, KeyframeAnimations.degreeVec(0.0F, -180.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-			new Keyframe(0.5F, KeyframeAnimations.degreeVec(0.0F, -360.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+		.addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.POSITION, 
+			new Keyframe(0.0F, KeyframeAnimations.posVec(-4.0F, -0.5F, -1.45F), AnimationChannel.Interpolations.LINEAR)
 		))
+		.addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
+			new Keyframe(0.0F, KeyframeAnimations.degreeVec(-4.5F, 16.0F, 31.0F), AnimationChannel.Interpolations.LINEAR)
+		))
+		.addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.POSITION, 
+			new Keyframe(0.0F, KeyframeAnimations.posVec(3.5F, -0.5F, -1.45F), AnimationChannel.Interpolations.LINEAR)
+		))
+		.build();
+
+	public static final AnimationDefinition animation = AnimationDefinition.Builder.withLength(0.0F)
+		
 		.build();
 }

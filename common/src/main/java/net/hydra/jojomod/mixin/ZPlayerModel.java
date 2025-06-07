@@ -1,9 +1,15 @@
 package net.hydra.jojomod.mixin;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
+import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.models.layers.animations.FirstPersonLayerAnimations;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
 import net.minecraft.client.animation.AnimationChannel;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.animation.Keyframe;
@@ -11,6 +17,10 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -43,6 +53,10 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
     @Shadow @Final private ModelPart cloak;
 
+    @Shadow @Final public ModelPart rightSleeve;
+
+    @Shadow @Final public ModelPart leftSleeve;
+
     public ZPlayerModel(ModelPart $$0) {
         super($$0);
     }
@@ -65,6 +79,40 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
         this.rightArm.resetPose();
         this.leftArm.resetPose();
         this.cloak.resetPose();
+    }
+
+    @Unique
+    @Override
+    public boolean roundabout$setupFirstPersonAnimations(AbstractClientPlayer $$0, float $$1, float $$2, float $$3, float $$4, float $$5,
+                                                         ModelPart one, ModelPart two, MultiBufferSource mb,
+                                                         int packedLight, PoseStack ps) {
+        if ($$0 != null) {
+
+            one.xRot = 0.0F;
+            two.xRot = 0.0F;
+            boolean change = false;
+            float yes = $$0.tickCount;
+            if (!ClientUtil.checkIfGamePaused() && !((TimeStop)$$0.level()).CanTimeStopEntity($$0)){
+                yes+=ClientUtil.getFrameTime();
+            }
+            IPlayerEntity ipe = ((IPlayerEntity) $$0);
+            StandUser SE = ((StandUser) $$0);
+            if (SE.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && SE.roundabout$getEffectiveCombatMode()) {
+                ipe.roundabout$getBubbleAim().startIfStopped($$0.tickCount); change = true;
+                this.roundabout$animate(ipe.roundabout$getBubbleAim(), FirstPersonLayerAnimations.bubble_aim, yes, 1f);
+            } else {
+                ipe.roundabout$getBubbleAim().stop();
+            }
+
+            if (change){
+                this.rightSleeve.copyFrom(this.rightArm);
+                this.leftSleeve.copyFrom(this.leftArm);
+                one.render(ps, mb.getBuffer(RenderType.entitySolid($$0.getSkinTextureLocation())), packedLight, OverlayTexture.NO_OVERLAY);
+                two.render(ps, mb.getBuffer(RenderType.entityTranslucent($$0.getSkinTextureLocation())), packedLight, OverlayTexture.NO_OVERLAY);
+                return true;
+            }
+        }
+        return false;
     }
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/geom/ModelPart;copyFrom(Lnet/minecraft/client/model/geom/ModelPart;)V", shift = At.Shift.BEFORE, ordinal = 0))
     public void roundabout$SetupAnim2(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {

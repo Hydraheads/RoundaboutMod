@@ -237,9 +237,6 @@ public class StandPowers {
         this.interruptCD = interruptCD;
     }
 
-    public boolean canBeTimeStopped(){
-        return ((TimeStop) this.self.level()).inTimeStopRange(this.self);
-    }
 
     /**Override this to set the special move key press conditions*/
     public void buttonInput4(boolean keyIsDown, Options options){

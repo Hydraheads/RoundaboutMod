@@ -18,6 +18,7 @@ import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
@@ -138,8 +139,26 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                                                                                                 CallbackInfo ci) {
         //PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity,
         // float var5, float var6, float var7, float partialTicks, float var9, float var10)
+        roundabout$renderHandLayers2(stack,buffer,integer,acl,$$4,$$5);
+    }
+    /**Apply hand animations to make the hand rotate*/
+    @Inject(method = "renderHand", at = @At(value = "INVOKE",target = "Lnet/minecraft/client/model/PlayerModel;setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V",shift = At.Shift.AFTER), cancellable = true)
+    private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderHandAnimations(PoseStack stack, MultiBufferSource buffer, int integer,
+                                                                                                AbstractClientPlayer acl, ModelPart $$4, ModelPart $$5,
+                                                                                                CallbackInfo ci) {
+        PlayerModel<AbstractClientPlayer> $$6 = this.getModel();
+        if (((IPlayerModel)$$6).roundabout$setupFirstPersonAnimations(acl, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F,$$4,$$5,
+                buffer,integer,stack)){
+            ci.cancel();
+            roundabout$renderHandLayers2(stack,buffer,integer,acl,$$4,$$5);
+        }
+    }
+
+    @Unique
+    private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderHandLayers2(PoseStack stack, MultiBufferSource buffer, int integer,
+                                                                                                 AbstractClientPlayer acl, ModelPart $$4, ModelPart $$5) {
         float yes = acl.tickCount;
-        if (!ClientUtil.checkIfGamePaused()){
+        if (!ClientUtil.checkIfGamePaused() && !((TimeStop)acl.level()).CanTimeStopEntity(acl)){
             yes+=ClientUtil.getFrameTime();
         }
         ShootingArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,yes,
@@ -467,9 +486,10 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
 
 
             float yes = acl.tickCount;
-            if (!ClientUtil.checkIfGamePaused()){
+            if (!ClientUtil.checkIfGamePaused() && !((TimeStop)acl.level()).CanTimeStopEntity(acl)){
                 yes+=ClientUtil.getFrameTime();
             }
+
             ShootingArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,yes,
                     0,0,$$5);
     }
