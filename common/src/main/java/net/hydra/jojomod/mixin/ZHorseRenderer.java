@@ -20,6 +20,8 @@ public class ZHorseRenderer {
     ResourceLocation roundabout$valkyrieTexture = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/valkyrie.png");
     @Unique
     ResourceLocation roundabout$silverBulletTexture = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/silver_bullet.png");
+    @Unique
+    ResourceLocation roundabout$getsUpTexture = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/gets_up.png");
     @Inject(method = "getTextureLocation(Lnet/minecraft/world/entity/animal/horse/Horse;)Lnet/minecraft/resources/ResourceLocation;", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$getTextureLocation(Horse $$0, CallbackInfoReturnable<ResourceLocation> cir) {
         String s = ChatFormatting.stripFormatting($$0.getName().getString());
@@ -29,6 +31,8 @@ public class ZHorseRenderer {
             cir.setReturnValue(roundabout$valkyrieTexture);
         } else if ("Silver Bullet".equals(s)) {
             cir.setReturnValue(roundabout$silverBulletTexture);
+        } else if ("Gets Up".equals(s) || "Brown".equals(s)) {
+            cir.setReturnValue(roundabout$getsUpTexture);
         }
 
     }

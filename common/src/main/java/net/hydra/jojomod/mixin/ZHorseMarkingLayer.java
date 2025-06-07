@@ -21,6 +21,8 @@ public class ZHorseMarkingLayer {
             ci.cancel();
         } else if ("Silver Bullet".equals(s)) {
             ci.cancel();
+        } else if ("Gets Up".equals(s) || "Brown".equals(s)) {
+            ci.cancel();
         }
 
     }
