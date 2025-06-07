@@ -23,11 +23,11 @@ public class ZHorseRenderer {
     @Inject(method = "getTextureLocation(Lnet/minecraft/world/entity/animal/horse/Horse;)Lnet/minecraft/resources/ResourceLocation;", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$getTextureLocation(Horse $$0, CallbackInfoReturnable<ResourceLocation> cir) {
         String s = ChatFormatting.stripFormatting($$0.getName().getString());
-        if ("Slow Dancer".equals(s) || "Surō Dansā".equals(s) || "スロー・ダンサー".equals(s)) {
+        if ("Slow Dancer".equals(s) || "スロー・ダンサー".equals(s)) {
             cir.setReturnValue(roundabout$slowDancerTexture);
-        } else if ("Valkyrie".equals(s) || "Varukirī".equals(s) || "ヴァルキリー".equals(s)) {
+        } else if ("Valkyrie".equals(s) ||  "ヴァルキリー".equals(s)) {
             cir.setReturnValue(roundabout$valkyrieTexture);
-        } else if ("Silver Bullet".equals(s) || "Shirubā Baretto".equals(s) || "シルバーバレット".equals(s)) {
+        } else if ("Silver Bullet".equals(s)) {
             cir.setReturnValue(roundabout$silverBulletTexture);
         }
 

@@ -15,11 +15,11 @@ public class ZHorseMarkingLayer {
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/animal/horse/Horse;FFFFFF)V", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$render(PoseStack $$0, MultiBufferSource $$1, int $$2, Horse $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
         String s = ChatFormatting.stripFormatting($$3.getName().getString());
-        if ("Slow Dancer".equals(s) || "Surō Dansā".equals(s) || "スロー・ダンサー".equals(s)) {
+        if ("Slow Dancer".equals(s) || "スロー・ダンサー".equals(s)) {
             ci.cancel();
-        } else if ("Valkyrie".equals(s) || "Varukirī".equals(s) || "ヴァルキリー".equals(s)) {
+        } else if ("Valkyrie".equals(s) || "ヴァルキリー".equals(s)) {
             ci.cancel();
-        } else if ("Silver Bullet".equals(s) || "Shirubā Baretto".equals(s) || "シルバーバレット".equals(s)) {
+        } else if ("Silver Bullet".equals(s)) {
             ci.cancel();
         }
 

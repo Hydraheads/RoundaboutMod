@@ -10,6 +10,6 @@ public abstract class AbstractBaseS2CPacket {
     /** Forge compatibility */
     public abstract void toBytes(FriendlyByteBuf buf);
 
-    /** Main method of the packet (Forge & Fabric) */
+    /** Main method of the packet (Forge + Fabric) */
     public abstract void handle(PacketArgsS2C args);
 }
