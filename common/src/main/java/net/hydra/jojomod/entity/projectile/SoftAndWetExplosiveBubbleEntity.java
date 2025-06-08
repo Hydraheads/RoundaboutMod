@@ -190,8 +190,8 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
                         if (!(ent instanceof SoftAndWetBubbleEntity)) {
                             if (((StandUser) LE).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
                                 if (!(MainUtil.isMobOrItsMounts(ent, getOwner())) && !MainUtil.isCreativeOrInvincible(ent)) {
-                                    float degrees = MainUtil.getLookAtEntityYawWithAngle(ent.position(), ent);
-                                    MainUtil.takeKnockbackWithY(ent, 1.0F,
+                                    float degrees = MainUtil.getLookAtEntityYawWithAngle(this.position(), ent);
+                                    MainUtil.takeKnockbackWithY(ent, 1.3F,
                                             Mth.sin(degrees * ((float) Math.PI / 180)),
                                             Mth.sin(-17 * ((float) Math.PI / 180)),
                                             -Mth.cos(degrees * ((float) Math.PI / 180)));
