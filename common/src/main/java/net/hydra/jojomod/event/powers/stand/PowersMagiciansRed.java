@@ -2943,6 +2943,10 @@ public class PowersMagiciansRed extends PunchingStand {
                  ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
                  }
                  **/
+        } else {
+            if (hasHurricane()){
+                clearAllHurricanes();
+            }
         }
     }
 
