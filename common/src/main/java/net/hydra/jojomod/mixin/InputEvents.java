@@ -23,6 +23,7 @@ import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
+import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
 import net.hydra.jojomod.item.FogBlockItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.ClientConfig;
@@ -113,7 +114,10 @@ public abstract class InputEvents implements IInputEvents {
                 }
             }
 
-            if (powers.isPiloting()) {
+            if (powers.getGoBeyondTarget() != null && powers.getGoBeyondTarget().is($$0)) {
+                ci.setReturnValue(true);
+                return;
+            } else if (powers.isPiloting()) {
                 LivingEntity ent = powers.getPilotingStand();
                 if (ent != null && powers instanceof PowersJustice){
                     if (Minecraft.getInstance().options.getCameraType().isFirstPerson()) {

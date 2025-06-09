@@ -194,6 +194,19 @@ public class StandPowers {
 
     public int storedInt = 0;
 
+    /**This is not in powerssoftandwet because I believe if someone is using paisley or other stands they may be able
+     * to redirect it in the future*/
+    public Entity goBeyondTarget = null;
+    public Entity getGoBeyondTarget(){
+        return this.goBeyondTarget;
+    }
+    public void setGoBeyondTarget(Entity goBeyondTarget){
+        this.goBeyondTarget = goBeyondTarget;
+    }
+    public void updateGoBeyondTarget(){
+        goBeyondTarget = null;
+    }
+
     public int getChargedTSTicks(){
         return this.chargedTSTicks;
     }
@@ -804,6 +817,7 @@ public class StandPowers {
             ((StandUser) this.getSelf()).roundabout$setActive(false);
         }
         if (this.self.isAlive() && !this.self.isRemoved()) {
+            updateGoBeyondTarget();
             if (this.self.level().isClientSide && !this.kickStarted && this.getAttackTimeDuring() <= -1){
                 this.kickStarted = true;
             }

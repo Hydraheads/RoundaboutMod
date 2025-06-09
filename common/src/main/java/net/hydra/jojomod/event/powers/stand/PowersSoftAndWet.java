@@ -517,6 +517,21 @@ public class PowersSoftAndWet extends PunchingStand {
             setInExplosiveSpinMode(true);
         }
     }
+
+    /**Similar to Justice selecting of mobs**/
+    @Override
+    public void updateGoBeyondTarget(){
+        if (inShootingMode() && getInExplosiveSpinMode()){
+            Roundabout.LOGGER.info("2");
+            Entity TE = MainUtil.getTargetEntity(this.self,30,15);
+            if (TE != null && !TE.is(this.self) && !(TE instanceof StandEntity && !TE.isAttackable())) {
+                Roundabout.LOGGER.info("3");
+                this.setGoBeyondTarget(TE);
+            }
+        } else {
+            this.goBeyondTarget = null;
+        }
+    }
     public int getMaxShootTicks(){
         return 10000;
     }
@@ -588,7 +603,7 @@ public class PowersSoftAndWet extends PunchingStand {
                     this.self.level().playSound(bubble, bubble.blockPosition(), ModSounds.GO_BEYOND_LAUNCH_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
                 }
 
-                Vec3 vector = Vec3.directionFromRotation(new Vec2(-54, this.self.getYRot()-90));
+                Vec3 vector = Vec3.directionFromRotation(new Vec2(-52, this.self.yBodyRot-90));
 
                 for (int i = 0; i < 10; ++i) {
                     double randomX = (Math.random()*0.5) - 0.25;

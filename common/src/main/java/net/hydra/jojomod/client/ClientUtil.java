@@ -23,6 +23,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.PowersD4C;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
+import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
 import net.hydra.jojomod.item.BodyBagItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.networking.packet.impl.ModNetworking;
@@ -167,7 +168,9 @@ public class ClientUtil {
         if (player != null) {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
-            if (powers.isPiloting()) {
+            if (powers.getGoBeyondTarget() != null && powers.getGoBeyondTarget().is(entity)) {
+                return 10978493;
+            } else if (powers.isPiloting()) {
                 LivingEntity ent = powers.getPilotingStand();
                 if (ent != null && powers instanceof PowersJustice) {
                     Entity TE = MainUtil.getTargetEntity(ent,100,10);

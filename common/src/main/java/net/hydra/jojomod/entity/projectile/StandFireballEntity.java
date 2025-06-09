@@ -28,6 +28,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -213,7 +214,7 @@ public class StandFireballEntity extends AbstractHurtingProjectile implements Un
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
             Entity $$1 = $$0.getEntity();
-            if (getUserID() != $$1.getId() && !($$1 instanceof MagiciansRedEntity)) {
+            if (getUserID() != $$1.getId() && !($$1 instanceof MagiciansRedEntity) && !($$1 instanceof Projectile)) {
                     radialExplosion($$1);
                 this.discard();
             }
