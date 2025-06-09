@@ -36,6 +36,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
@@ -405,7 +406,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         int crossno = this.getCrossNumber();
         if (crossno <= 0 || crossno == 7){
             Entity $$1 = $$0.getEntity();
-            if (!MainUtil.isMobOrItsMounts($$1,getUser()) && !($$1 instanceof MagiciansRedEntity)) {
+            if (!MainUtil.isMobOrItsMounts($$1,getUser()) && !($$1 instanceof MagiciansRedEntity) && !($$1 instanceof Projectile)) {
                 if ($$1 instanceof LivingEntity LE){
                     radialExplosion(LE);
                 } else {
