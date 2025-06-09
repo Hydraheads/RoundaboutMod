@@ -173,7 +173,7 @@ public class PowersSoftAndWet extends PunchingStand {
     }
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         if (inShootingMode()){
-            if (slot == 1 && !goBeyondCharged()){
+            if (slot == 1 && (!goBeyondCharged() || getGoBeyondTarget() == null)){
                 return true;
             }
         } else {
@@ -368,10 +368,10 @@ public class PowersSoftAndWet extends PunchingStand {
             if (inShootingMode()){
                 if (keyIsDown) {
                     if (!hold1) {
-                        if (goBeyondCharged()) {
+                        if (goBeyondCharged() && getGoBeyondTarget() != null) {
                             hold1 = true;
-                            this.tryPower(PowerIndex.SPECIAL_TRACKER, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SPECIAL_TRACKER);
+                            this.tryChargedPower(PowerIndex.SPECIAL_TRACKER, true, getGoBeyondTarget().getId());
+                            ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_TRACKER, getGoBeyondTarget().getId());
                         }
                     }
                 } else {
@@ -458,7 +458,7 @@ public class PowersSoftAndWet extends PunchingStand {
         bubble.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
         bubble.setUser(this.self);
         bubble.setOwner(this.self);
-        bubble.lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.primaryPlunderBubbleLifespanInTicks;
+        bubble.lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.goBeyondLifespanInTicks;
         return bubble;
     }
 
@@ -522,14 +522,12 @@ public class PowersSoftAndWet extends PunchingStand {
     @Override
     public void updateGoBeyondTarget(){
         if (inShootingMode() && getInExplosiveSpinMode()){
-            Roundabout.LOGGER.info("2");
             Entity TE = MainUtil.getTargetEntity(this.self,30,15);
             if (TE != null && !TE.is(this.self) && !(TE instanceof StandEntity && !TE.isAttackable())) {
-                Roundabout.LOGGER.info("3");
                 this.setGoBeyondTarget(TE);
             }
         } else {
-            this.goBeyondTarget = null;
+            this.setGoBeyondTarget(null);
         }
     }
     public int getMaxShootTicks(){
@@ -594,7 +592,8 @@ public class PowersSoftAndWet extends PunchingStand {
                 this.poseStand(OffsetIndex.FOLLOW);
                 this.setAttackTimeDuring(-10);
                 this.setActivePower(PowerIndex.POWER_2);
-                shootBubbleSpeed(bubble,getBubbleSpeed());
+                /**Go beyond's speed*/
+                shootBubbleSpeed(bubble,0.17F);
                 bubbleListInit();
                 this.bubbleList.add(bubble);
                 this.getSelf().level().addFreshEntity(bubble);

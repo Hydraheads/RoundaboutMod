@@ -814,9 +814,11 @@ public class StandPowers {
             ((StandUser) this.getSelf()).roundabout$setActive(false);
         }
         if (this.self.isAlive() && !this.self.isRemoved()) {
-            updateGoBeyondTarget();
-            if (this.self.level().isClientSide && !this.kickStarted && this.getAttackTimeDuring() <= -1){
-                this.kickStarted = true;
+            if (this.self.level().isClientSide){
+                updateGoBeyondTarget();
+                if (!this.kickStarted && this.getAttackTimeDuring() <= -1){
+                    this.kickStarted = true;
+                }
             }
             if (this.isClashing()) {
                 if (this.attackTimeDuring != -1) {
