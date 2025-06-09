@@ -4,6 +4,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class Networking {
     private static MinecraftServer server;
@@ -28,5 +29,9 @@ public abstract class Networking {
     public static boolean isDedicated() {
         if (server == null) return false;
         return server.isDedicatedServer();
+    }
+
+    public static @Nullable MinecraftServer getServer() {
+        return server;
     }
 }

@@ -174,28 +174,9 @@ public class DashPreset extends StandPowers {
                 }
 
                 int degrees = (int) (this.getSelf().getYRot() % 360);
-                if (storedInt == 1) {
-                    degrees -= 90;
-                    degrees = degrees % 360;
-                } else if (storedInt == 2) {
-                    degrees -= 45;
-                    degrees = degrees % 360;
-                } else if (storedInt == -1) {
-                    degrees -= 135;
-                    degrees = degrees % 360;
-                } else if (storedInt == 3) {
-                    degrees += 90;
-                    degrees = degrees % 360;
-                } else if (storedInt == 4) {
-                    degrees += 45;
-                    degrees = degrees % 360;
-                } else if (storedInt == -2) {
-                    degrees += 135;
-                    degrees = degrees % 360;
-                } else if (storedInt == -3) {
-                    degrees += 180;
-                    degrees = degrees % 360;
-                }
+                int offset = switch (storedInt) { case 1 -> -90; case 2 -> -45; case -1 -> -135; case 3 -> 90; case 4 -> 45; case -2 -> 135; case -3 -> 180; default -> 0; };
+                degrees = (degrees + offset) % 360;
+
                 for (int i = 0; i < 3; i++){
                     float j = 0.1F;
                     if (i == 1){
