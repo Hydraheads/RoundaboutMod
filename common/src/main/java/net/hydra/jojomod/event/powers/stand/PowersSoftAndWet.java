@@ -588,12 +588,16 @@ public class PowersSoftAndWet extends PunchingStand {
                     this.self.level().playSound(bubble, bubble.blockPosition(), ModSounds.GO_BEYOND_LAUNCH_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
                 }
 
-                Vec3 vector = Vec3.directionFromRotation(new Vec2(0, this.self.getYRot()-90));
+                Vec3 vector = Vec3.directionFromRotation(new Vec2(-54, this.self.getYRot()-90));
 
                 for (int i = 0; i < 10; ++i) {
+                    double randomX = (Math.random()*0.5) - 0.25;
+                    double randomY = (Math.random()*0.5) - 0.25;
+                    double randomZ = (Math.random()*0.5) - 0.25;
+                    Vec3 xvec = vector.add(randomX,randomY,randomZ);
                     ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PURPLE_STAR,
                             this.getSelf().getX(), this.getSelf().getY() + this.self.getEyeHeight()*0.7F, this.getSelf().getZ(),
-                            0, vector.x, vector.y, vector.z, 0.1);
+                            0, xvec.x, xvec.y, xvec.z, 0.12);
                 }
             }
         }

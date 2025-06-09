@@ -13,15 +13,15 @@ public class StarParticle extends SimpleAnimatedParticle {
     protected StarParticle(ClientLevel $$0, double $$1, double $$2, double $$3, double $$4, double $$5, double $$6, SpriteSet $$7) {
         super($$0, $$1, $$2, $$3, $$7, 1f);
         this.age = 0;
-        this.lifetime = 6+ this.random.nextInt(2);
-        this.friction = 0.96F;
+        this.lifetime = 14+ this.random.nextInt(2);
         this.xd = this.xd * 0.01F + $$4;
         this.yd = this.yd * 0.01F + $$5;
         this.zd = this.zd * 0.01F + $$6;
         this.quadSize *= 1.7f;
         this.sprites = $$7;
         this.gravity = 0;
-        this.scale(0.2F);
+        this.scale(0.25F);
+        //this.setFadeColor(15916745);
         this.setSpriteFromAge($$7);
     }
 
