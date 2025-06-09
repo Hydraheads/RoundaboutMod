@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.projectile.GoBeyondEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetExplosiveBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
@@ -45,6 +46,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -167,11 +169,11 @@ public class PowersSoftAndWet extends PunchingStand {
     }
 
     public boolean goBeyondCharged(){
-        return false;
+        return getInExplosiveSpinMode() || (this.self instanceof Player PE && PE.isCreative());
     }
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         if (inShootingMode()){
-            if (slot == 1 && !goBeyondCharged() && !(this.self instanceof Player PE && PE.isCreative())){
+            if (slot == 1 && !goBeyondCharged()){
                 return true;
             }
         } else {
@@ -451,6 +453,14 @@ public class PowersSoftAndWet extends PunchingStand {
         bubble.lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.explosiveBubbleLifespanInTicks;
         return bubble;
     }
+    public GoBeyondEntity getGoBeyondBubble(){
+        GoBeyondEntity bubble = new GoBeyondEntity(this.self,this.self.level());
+        bubble.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
+        bubble.setUser(this.self);
+        bubble.setOwner(this.self);
+        bubble.lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.primaryPlunderBubbleLifespanInTicks;
+        return bubble;
+    }
 
     public boolean canShootExplosive(int useTicks){
         if ((shootTicks+useTicks) <= getMaxShootTicks()){
@@ -559,35 +569,34 @@ public class PowersSoftAndWet extends PunchingStand {
         return true;
     }
     public boolean goBeyond(){
-        if (!this.self.level().isClientSide()){
             //Vec3 vector = this.self.
-            for (int i = 0; i < 10; ++i) {
-                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PURPLE_STAR,
-                        this.getSelf().getX(), this.getSelf().getY() + this.self.getEyeHeight()*0.7F, this.getSelf().getZ(),
-                        30, 1, 0.05, 1, 0.4);
+        GoBeyondEntity bubble = getGoBeyondBubble();
+
+        if (!this.self.level().isClientSide()){
+            if (bubble != null){
+                this.setCooldown(PowerIndex.SKILL_2, 20);
+
+                this.poseStand(OffsetIndex.FOLLOW);
+                this.setAttackTimeDuring(-10);
+                this.setActivePower(PowerIndex.POWER_2);
+                shootBubbleSpeed(bubble,getBubbleSpeed());
+                bubbleListInit();
+                this.bubbleList.add(bubble);
+                this.getSelf().level().addFreshEntity(bubble);
+
+                if (bubbleType != PlunderTypes.SOUND.id) {
+                    this.self.level().playSound(bubble, bubble.blockPosition(), ModSounds.GO_BEYOND_LAUNCH_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+                }
+
+                Vec3 vector = Vec3.directionFromRotation(new Vec2(0, this.self.getYRot()-90));
+
+                for (int i = 0; i < 10; ++i) {
+                    ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PURPLE_STAR,
+                            this.getSelf().getX(), this.getSelf().getY() + this.self.getEyeHeight()*0.7F, this.getSelf().getZ(),
+                            0, vector.x, vector.y, vector.z, 0.1);
+                }
             }
         }
-        /**
-        SoftAndWetPlunderBubbleEntity bubble = getPlunderBubble();
-
-        if (bubble != null){
-            this.setCooldown(PowerIndex.SKILL_2, 20);
-
-            this.poseStand(OffsetIndex.FOLLOW);
-            this.setAttackTimeDuring(-10);
-            this.setActivePower(PowerIndex.POWER_2);
-            bubble.setPlunderType(bubbleType);
-            bubble.setSingular(true);
-            shootBubbleSpeed(bubble,getBubbleSpeed());
-            bubbleListInit();
-            this.bubbleList.add(bubble);
-            this.getSelf().level().addFreshEntity(bubble);
-
-            if (bubbleType != PlunderTypes.SOUND.id) {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
-            }
-        }
-         **/
         return true;
     }
     public boolean bubbleShot(){

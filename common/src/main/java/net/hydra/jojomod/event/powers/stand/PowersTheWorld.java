@@ -417,11 +417,13 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 this.maxChargeTSTime = ClientNetworking.getAppropriateConfig().timeStopSettings.additionalTimeStopTicksForFullyChargedTheWorld +
                 ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld;
                 this.setChargedTSTicks(this.maxChargeTSTime);
-                return 80;
+                return ClientNetworking.getAppropriateConfig().timeStopSettings.additionalTimeStopTicksForFullyChargedTheWorld;
             } else {
                 this.maxChargeTSTime = ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld;
                 this.setChargedTSTicks(this.maxChargeTSTime);
             }
+        } else if (chargedTSSeconds == ClientNetworking.getAppropriateConfig().timeStopSettings.impulseTimeStopLength) {
+            this.maxChargeTSTime = ClientNetworking.getAppropriateConfig().timeStopSettings.impulseTimeStopLength;
         } else if (chargedTSSeconds == (Math.min(ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld *0.2,
                 ClientNetworking.getAppropriateConfig().timeStopSettings.impulseTimeStopLength))) {
             this.maxChargeTSTime = (int) (Math.min(ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld *0.2,
