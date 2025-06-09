@@ -95,7 +95,6 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         bubbleSoundsInit();
         bubbleSounds.add(new StoredSoundInstance(soundEvent,soundSource,pitch,volum));
     }
-    public int lifeSpan = 0;
 
     public SoftAndWetPlunderBubbleEntity(LivingEntity $$1, Level $$2) {
         super(ModEntities.PLUNDER_BUBBLE, $$1.getX(), $$1.getEyeY() - 0.1F, $$1.getZ(), $$2);

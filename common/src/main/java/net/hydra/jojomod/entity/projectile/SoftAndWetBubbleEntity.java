@@ -32,6 +32,7 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
         super($$0, $$1);
     }
 
+    public int lifeSpan = 0;
     public LivingEntity standUser;
     public UUID standUserUUID;
     private static final EntityDataAccessor<Boolean> ACTIVATED = SynchedEntityData.defineId(SoftAndWetBubbleEntity.class, EntityDataSerializers.BOOLEAN);

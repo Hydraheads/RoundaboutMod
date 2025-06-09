@@ -35,6 +35,10 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
         super($$0, $$1);
     }
 
+    public SoftAndWetExplosiveBubbleEntity(LivingEntity $$1, Level $$2) {
+        super(ModEntities.EXPLOSIVE_BUBBLE, $$1.getX(), $$1.getEyeY() - 0.1F, $$1.getZ(), $$2);
+        this.setOwner($$1);
+    }
     public void tick(){
         if (!this.level().isClientSide()) {
             lifeSpan--;
@@ -69,10 +73,6 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
         }
     }
 
-    public SoftAndWetExplosiveBubbleEntity(LivingEntity $$1, Level $$2) {
-        super(ModEntities.EXPLOSIVE_BUBBLE, $$1.getX(), $$1.getEyeY() - 0.1F, $$1.getZ(), $$2);
-        this.setOwner($$1);
-    }
 
     public void popBubble(){
 
@@ -127,7 +127,6 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
             $$0.addFreshEntity($$3);
         }
     }
-    public int lifeSpan = 0;
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
         if (!this.level().isClientSide()) {
@@ -191,7 +190,7 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
                             if (((StandUser) LE).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
                                 if (!(MainUtil.isMobOrItsMounts(ent, getOwner())) && !MainUtil.isCreativeOrInvincible(ent)) {
                                     float degrees = MainUtil.getLookAtEntityYawWithAngle(this.position(), ent);
-                                    MainUtil.takeKnockbackWithY(ent, 1.3F,
+                                    MainUtil.takeKnockbackWithY(ent, 1.05F,
                                             Mth.sin(degrees * ((float) Math.PI / 180)),
                                             Mth.sin(-17 * ((float) Math.PI / 180)),
                                             -Mth.cos(degrees * ((float) Math.PI / 180)));
