@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
@@ -84,6 +85,7 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
             this.discard();
         }
     }
+    @SuppressWarnings("deprecation")
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
         if (!this.level().isClientSide()) {
@@ -93,6 +95,8 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
 
             BlockState bs = this.level().getBlockState($$0.getBlockPos());
             if (MainUtil.getIsGamemodeApproriateForGrief(this.getOwner())){
+                BlockPos relativePos = $$0.getBlockPos().relative($$0.getDirection());
+                BlockState bs2 = this.level().getBlockState(relativePos);
                 if (bs.getBlock() instanceof TntBlock tnt){
                         this.level().setBlock($$0.getBlockPos(), Blocks.AIR.defaultBlockState(), 3);
                         wasExploded(this.level(),$$0.getBlockPos());
@@ -104,6 +108,20 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
                                     $$0.getBlockPos().getY()+0.5,
                                     $$0.getBlockPos().getZ()+0.5));
                     this.playSound(bs.getBlock().defaultBlockState().getSoundType().getBreakSound(), 1.0F, 0.9F);
+                } else if (bs.canBeReplaced() && !(bs.getBlock() instanceof FogBlock) && !bs.liquid()){
+                    this.level().setBlock($$0.getBlockPos(), Blocks.AIR.defaultBlockState(), 3);
+                    blockBreakParticles(bs.getBlock(),
+                            new Vec3(relativePos.getX()+0.5,
+                                    relativePos.getY()+0.5,
+                                    relativePos.getZ()+0.5));
+                    this.playSound(bs.getBlock().defaultBlockState().getSoundType().getBreakSound(), 1.0F, 0.9F);
+                } else if (bs2.canBeReplaced() && !(bs2.getBlock() instanceof FogBlock) && !bs2.liquid()){
+                    this.level().setBlock(relativePos, Blocks.AIR.defaultBlockState(), 3);
+                    blockBreakParticles(bs2.getBlock(),
+                            new Vec3(relativePos.getX()+0.5,
+                                    relativePos.getY()+0.5,
+                                    relativePos.getZ()+0.5));
+                    this.playSound(bs2.getBlock().defaultBlockState().getSoundType().getBreakSound(), 1.0F, 0.9F);
                 }
             }
         }

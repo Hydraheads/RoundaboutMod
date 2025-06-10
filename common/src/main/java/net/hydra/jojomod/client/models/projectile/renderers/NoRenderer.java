@@ -16,7 +16,6 @@ public class NoRenderer extends EntityRenderer<Entity> {
     }
 
     public void render(Entity $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
-            super.render($$0, $$1, $$2, $$3, $$4, $$5);
     }
 
     @Override
