@@ -525,7 +525,7 @@ public class PowersSoftAndWet extends PunchingStand {
     public void updateGoBeyondTarget(){
         if (inShootingMode() && goBeyondCharged()){
             Entity TE = MainUtil.getTargetEntity(this.self,30,15);
-            if (TE != null && !TE.is(this.self) && !(TE instanceof StandEntity && !TE.isAttackable()) && canActuallyHit(TE)) {
+            if (TE != null && !TE.is(this.self) && !(TE instanceof StandEntity && !TE.isAttackable()) && canActuallyHit(TE) && MainUtil.isActuallyALivingEntityNoCap(TE)) {
                 this.setGoBeyondTarget(TE);
             }
         } else {
