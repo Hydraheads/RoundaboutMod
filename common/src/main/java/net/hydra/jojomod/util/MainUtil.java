@@ -744,6 +744,13 @@ public class MainUtil {
                 - vec3d2.z);
         entity.hasImpulse = true;
     }
+    public static void takeLiteralUnresistableKnockbackWithY(Entity entity,  double x, double y, double z) {
+        entity.hurtMarked = true;
+        entity.setDeltaMovement(x,
+                y,
+               z);
+        entity.hasImpulse = true;
+    }
     public static void takeUnresistableKnockbackWithYBias(Entity entity, double strength, double x, double y, double z, float yBias) {
         entity.hurtMarked = true;
         Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
@@ -1099,6 +1106,7 @@ public class MainUtil {
     public static boolean isStandDamage(DamageSource sauce){
         if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.PENETRATING_STAND) || sauce.is(ModDamageTypes.STAR_FINGER)
                 || sauce.is(ModDamageTypes.STAND_RUSH)|| sauce.is(ModDamageTypes.CROSSFIRE)|| sauce.is(ModDamageTypes.EXPLOSIVE_STAND)
+                || sauce.is(ModDamageTypes.GO_BEYOND)
                 || sauce.is(ModDamageTypes.CORPSE) || sauce.is(ModDamageTypes.CORPSE_EXPLOSION) || sauce.is(ModDamageTypes.CORPSE_ARROW)){
             return true;
         }

@@ -18,6 +18,7 @@
     "roundabout:knife",
     "roundabout:gas_explosion",
     "roundabout:stand_virus",
-    "roundabout:stand_fire"
+    "roundabout:stand_fire",
+    "roundabout:go_beyond"
   ]
 }

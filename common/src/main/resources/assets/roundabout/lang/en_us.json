@@ -259,6 +259,8 @@
   "death.attack.stand_fire.item": "%1$s was roasted",
   "death.attack.stand_fire.player": "%1$s was roasted by %2$s",
   "death.attack.stand_fire.player.item": "%1$s was roasted by %2$s",
+  "death.attack.go_beyond": "%1$s was destroyed by explosive spin whilst fighting %2$s",
+  "death.attack.go_beyond.item": "%1$s was destroyed by explosive spin whilst fighting %2$s",
   "death.attack.crossfire": "%1$s was given hell by %2$s",
   "death.attack.crossfire.item": "%1$s was given hell by %2$s whilst using %3$s",
   "death.attack.star_finger": "%1$s was turned into sashimi whilst fighting %2$s",

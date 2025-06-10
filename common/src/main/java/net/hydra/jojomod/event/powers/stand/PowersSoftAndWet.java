@@ -374,6 +374,7 @@ public class PowersSoftAndWet extends PunchingStand {
                             ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_TRACKER, getGoBeyondTarget().getId());
                             this.setGoBeyondTarget(null);
                             this.setGoBeyondChargeTicks(0);
+                            this.setShootTicks(0);
                         }
                     }
                 } else {
@@ -1143,6 +1144,15 @@ public class PowersSoftAndWet extends PunchingStand {
                     damageMultipliers.softAndWetAttacksOnPlayers*0.01)));
         } else {
             return levelupDamageMod((float) ((float) 3* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.softAndWetAttacksOnMobs*0.01)));
+        }
+    }
+    public float getGoBeyondStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod((float) ((float) 11* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.softAndWetAttacksOnPlayers*0.01)));
+        } else {
+            return levelupDamageMod((float) ((float) 33* (ClientNetworking.getAppropriateConfig().
                     damageMultipliers.softAndWetAttacksOnMobs*0.01)));
         }
     }
