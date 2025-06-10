@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.powers.stand.*;
 import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;

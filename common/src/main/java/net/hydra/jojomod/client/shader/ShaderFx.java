@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.shader;
 
 import net.hydra.jojomod.client.shader.callback.IRendererCallback;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.stand.PowersD4C;
+import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.util.ClientConfig;
 import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.world.DynamicWorld;

@@ -2,7 +2,7 @@ package net.hydra.jojomod.networking.packet.s2c;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.stand.PowersD4C;
+import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.FriendlyByteBuf;

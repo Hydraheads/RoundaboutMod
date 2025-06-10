@@ -488,8 +488,11 @@ public class StandPowers {
     public int iconSize = 18;
     public int iconSize2 = 16;
     /**Override this to render stand icons*/
-    public void renderIcons(GuiGraphics context, int x, int y){
+    public void renderIcons(GuiGraphics context, int x, int y)
+    {
+
     }
+
     public void renderAttackHud(GuiGraphics context,  Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha){

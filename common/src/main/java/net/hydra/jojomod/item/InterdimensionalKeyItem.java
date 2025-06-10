@@ -1,8 +1,7 @@
 package net.hydra.jojomod.item;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.stand.PowersD4C;
+import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.world.DynamicWorld;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;

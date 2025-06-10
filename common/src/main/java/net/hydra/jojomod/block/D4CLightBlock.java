@@ -2,7 +2,7 @@ package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.stand.PowersD4C;
+import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;

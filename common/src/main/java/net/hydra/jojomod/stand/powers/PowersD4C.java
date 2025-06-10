@@ -1,4 +1,4 @@
-package net.hydra.jojomod.event.powers.stand;
+package net.hydra.jojomod.stand.powers;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.D4CLightBlockEntity;
@@ -16,14 +16,12 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
 import net.hydra.jojomod.item.InterdimensionalKeyItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.world.DynamicWorld;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -31,6 +29,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -56,7 +55,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class PowersD4C extends PunchingStand {
+public class PowersD4C extends NewPunchingStand {
     public PowersD4C(LivingEntity self) {
         super(self);
     }
@@ -79,6 +78,10 @@ public class PowersD4C extends PunchingStand {
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
+        ClientUtil.fx.roundabout$onGUI(context);
+
+        // code for advanced icons
+
         if (isGuarding())
             setSkillIcon(context, x, y, 1, StandIcons.D4C_GENERATE_KEY, PowerIndex.SKILL_1_SNEAK);
         else
@@ -86,24 +89,6 @@ public class PowersD4C extends PunchingStand {
                 setSkillIcon(context, x, y, 1, StandIcons.D4C_BETWEEN_VISION, PowerIndex.SKILL_1);
             else
                 setSkillIcon(context, x, y, 1, StandIcons.D4C_DIMENSION_KIDNAP, PowerIndex.SKILL_1);
-
-        if (!isHoldingSneak() && !isGuarding())
-            setSkillIcon(context, x, y, 2, StandIcons.D4C_CLONE_SUMMON, PowerIndex.SKILL_2);
-        else if (!isGuarding()) {
-            setSkillIcon(context, x, y, 2, StandIcons.D4C_CLONE_SWAP, PowerIndex.SKILL_2_SNEAK);
-        }
-        else
-        {
-            setSkillIcon(context, x, y, 2, StandIcons.D4C_CLONE_MINING, PowerIndex.SKILL_1);
-        }
-
-        if (isGuarding())
-            setSkillIcon(context, x, y, 3, StandIcons.D4C_PARALLEL_RUNNING, PowerIndex.SKILL_EXTRA);
-        else
-            if (!isHoldingSneak())
-                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
-            else
-                setSkillIcon(context, x, y, 3, StandIcons.D4C_MELT_DODGE, PowerIndex.SKILL_3);
 
         if (!InterdimensionalKeyItem.isLinked(this.getSelf().getOffhandItem()))
             if (!isInD4CWorld())
@@ -122,22 +107,54 @@ public class PowersD4C extends PunchingStand {
             else
                 setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP_KEY, PowerIndex.SKILL_EXTRA_2);
 
-        ClientUtil.fx.roundabout$onGUI(context);
+        super.renderIcons(context, x, y);
+    }
+    public void registerHUDIcons() {
+        HashSet<GuiIcon> icons = new HashSet<>();
+
+        // code for basic icons: the rest rely on criteria we have to manually implement
+        icons.add(new GuiIcon(PowerIndex.SKILL_2, StandIcons.D4C_CLONE_SUMMON));
+        icons.add(new GuiIcon(PowerIndex.SKILL_2_GUARD, StandIcons.D4C_CLONE_SWAP));
+        icons.add(new GuiIcon(PowerIndex.SKILL_2_CROUCH_GUARD, StandIcons.D4C_CLONE_MINING));
+
+        icons.add(new GuiIcon(PowerIndex.SKILL_3, StandIcons.D4C_PARALLEL_RUNNING));
+        icons.add(new GuiIcon(PowerIndex.SKILL_3_GUARD, StandIcons.D4C_PARALLEL_RUNNING));
+        icons.add(new GuiIcon(PowerIndex.SKILL_3_CROUCH_GUARD, StandIcons.D4C_MELT_DODGE));
+        icons.add(new GuiIcon(PowerIndex.SKILL_3_SNEAK, StandIcons.D4C_MELT_DODGE));
+
+        GUI_ICON_REGISTRAR = icons;
     }
 
-    private boolean held1 = false;
-    public boolean betweenVision = false;
     @Override
-    public void buttonInput1(boolean keyIsDown, Options options) {
+    public void tick() {
         if (betweenVision)
             highlightBlocksInFrustum(1500, 100);
 
-        if (keyIsDown && !held1)
-        {
-            held1 = true;
-
-            if (isGuarding())
+        if (!isPRunning) {
+            if (isHoldingSneak() && !isGuarding())
             {
+                if (MainUtil.getTargetEntity(this.getSelf(), 100, 2) instanceof D4CCloneEntity clone)
+                {
+                    targetingClone = clone;
+                }
+            }
+            else { targetingClone = null; }
+        }
+    }
+
+    @Override
+    public void powerActivate(PowerContext context) {
+        super.powerActivate(context);
+        switch (context)
+        {
+            case SKILL_1_NORMAL -> {
+                if (this.onCooldown(PowerIndex.SKILL_1))
+                    return;
+
+                betweenVision = !betweenVision;
+                this.setCooldown(PowerIndex.SKILL_1, 20);
+            }
+            case SKILL_1_GUARD -> {
                 if (isPRunning)
                     return;
 
@@ -151,21 +168,96 @@ public class PowersD4C extends PunchingStand {
                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_BLOCK);
                 this.setCooldown(PowerIndex.SKILL_1, 20);
             }
-            else
-            {
-                if (!isHoldingSneak())
+            case SKILL_2_NORMAL -> {
+                if (!(this.onCooldown(PowerIndex.SKILL_2)))
                 {
-                    if (this.onCooldown(PowerIndex.SKILL_1))
-                        return;
-
-                    betweenVision = !betweenVision;
-                    this.setCooldown(PowerIndex.SKILL_1, 20);
+                    if (isBetweenTwoThings())
+                    {
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2);
+                        this.setCooldown(PowerIndex.SKILL_2, 80);
+                    }
                 }
             }
-        } else if (!keyIsDown) {
-            held1 = false;
+            case SKILL_2_GUARD -> {
+                if (pos1 == null && miningBox != null)
+                {
+                    miningBox = null;
+                    return;
+                }
+
+                if (miningBox == null)
+                {
+                    BlockHitResult result = getGrabBlock();
+                    if (pos1 == null)
+                    {
+                        if (result != null) {
+                            pos1 = result.getBlockPos();
+                        }
+                    }
+                    else
+                    {
+                        if (result != null)
+                        {
+                            miningBox = new AABB(pos1, result.getBlockPos());
+                            pos1 = null;
+                        }
+                    }
+                }
+
+                return;
+            }
+            case SKILL_2_CROUCH -> {
+                if (!(this.onCooldown(PowerIndex.SKILL_2_SNEAK)))
+                {
+                    //Entity TE = MainUtil.getTargetEntity(this.getSelf(), 100, 10);
+                    if (targetingClone != null)
+                    {
+                        if (targetingClone.player != this.getSelf())
+                            return;
+
+                        // there isnt a data index for what i want and im too lazy to add one so here, update move, it probably fits
+                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(targetingClone.getId(), PacketDataIndex.INT_UPDATE_MOVE);
+
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_SNEAK);
+
+                        this.setCooldown(PowerIndex.SKILL_2_SNEAK, 40);
+                        this.targetingClone = null;
+                    }
+                }
+            }
+            case SKILL_3_CROUCH -> {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
+                this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.D4CMeltDodgeCooldown);
+            }
+            case SKILL_3_GUARD -> {
+                if (isPRunning || isBetweenTwoThings(this.getSelf().blockPosition()))
+                {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BLOCK, true);
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3_BLOCK);
+                    this.setCooldown(PowerIndex.SKILL_EXTRA, 20);
+                }
+            }
+            case SKILL_4_NORMAL -> {
+                if (!(this.onCooldown(PowerIndex.SKILL_4))) {
+                    if (isBetweenTwoThings()) {
+                        if (!isHoldingSneak()) {
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4);
+                        } else {
+                            this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().cooldownsInTicks.d4cDimensionKidnap);
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_SNEAK, true);
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_SNEAK);
+                        }
+                    }
+                }
+            }
         }
     }
+
+    public boolean betweenVision = false;
 
     private boolean generateKey()
     {
@@ -258,91 +350,6 @@ public class PowersD4C extends PunchingStand {
     @Nullable public AABB miningBox = null;
 
     @Nullable private BlockPos pos1 = null;
-
-    @Override
-    public void buttonInput2(boolean keyIsDown, Options options) {
-        if (isPRunning)
-            return;
-
-        if (isHoldingSneak() && !isGuarding())
-        {
-            if (MainUtil.getTargetEntity(this.getSelf(), 100, 2) instanceof D4CCloneEntity clone)
-            {
-                targetingClone = clone;
-            }
-        }
-        else { targetingClone = null; }
-
-        if (keyIsDown && !held2)
-        {
-            held2 = true;
-
-            if (isGuarding())
-            {
-                if (pos1 == null && miningBox != null)
-                {
-                    miningBox = null;
-                    return;
-                }
-
-                if (miningBox == null)
-                {
-                    BlockHitResult result = getGrabBlock();
-                    if (pos1 == null)
-                    {
-                        if (result != null) {
-                            pos1 = result.getBlockPos();
-                        }
-                    }
-                    else
-                    {
-                        if (result != null)
-                        {
-                            miningBox = new AABB(pos1, result.getBlockPos());
-                            pos1 = null;
-                        }
-                    }
-                }
-
-                return;
-            }
-
-            if (!isHoldingSneak() && !(this.onCooldown(PowerIndex.SKILL_2)))
-            {
-                if (isBetweenTwoThings())
-                {
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
-                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2);
-                    this.setCooldown(PowerIndex.SKILL_2, 80);
-                }
-            }
-            else
-            {
-                if (!(this.onCooldown(PowerIndex.SKILL_2_SNEAK)))
-                {
-                    //Entity TE = MainUtil.getTargetEntity(this.getSelf(), 100, 10);
-                    if (targetingClone != null)
-                    {
-                        if (targetingClone.player != this.getSelf())
-                            return;
-
-                        // there isnt a data index for what i want and im too lazy to add one so here, update move, it probably fits
-                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(targetingClone.getId(), PacketDataIndex.INT_UPDATE_MOVE);
-
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
-                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_SNEAK);
-
-                        this.setCooldown(PowerIndex.SKILL_2_SNEAK, 40);
-                        this.targetingClone = null;
-                    }
-                }
-            }
-        }
-        else if (!keyIsDown)
-        {
-            held2 = false;
-        }
-    }
 
     private BlockHitResult getGrabBlock(){
         Vec3 vec3d = this.getSelf().getEyePosition(0);
@@ -444,71 +451,6 @@ public class PowersD4C extends PunchingStand {
     public static int pRunningTimeLimit = 10;
     private volatile boolean isPRunning = false;
     public int pRunningFrames = 0;
-    private boolean held3 = false;
-    @Override
-    public void buttonInput3(boolean keyIsDown, Options options) {
-        if (keyIsDown) {
-            if (!inputDash) {
-                if (isHoldingSneak()) {
-                    if (!this.onCooldown(PowerIndex.SKILL_3) && isBetweenTwoThings()) {
-                        if (isPRunning)
-                            return;
-
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
-                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
-
-                        this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.D4CMeltDodgeCooldown);
-                    }
-                    inputDash = true;
-                } else {
-                    if (isGuarding())
-                    {
-                        if (!this.onCooldown(PowerIndex.SKILL_EXTRA))
-                            if (isPRunning || isBetweenTwoThings(this.getSelf().blockPosition()))
-                            {
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BLOCK, true);
-                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3_BLOCK);
-                                this.setCooldown(PowerIndex.SKILL_EXTRA, 20);
-                            }
-                    }
-                    else
-                        super.buttonInput3(keyIsDown, options);
-                }
-            }
-        } else {
-            inputDash = false;
-        }
-    }
-
-    private boolean held4 = false;
-    @Override
-    public void buttonInput4(boolean keyIsDown, Options options) {
-        if (isPRunning)
-            return;
-
-        if (keyIsDown && !held4 && !(this.onCooldown(PowerIndex.SKILL_4)))
-        {
-            held4 = true;
-
-            if (isBetweenTwoThings())
-            {
-                if (!isHoldingSneak())
-                {
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
-                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4);
-                }
-                else {
-                    this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().cooldownsInTicks.d4cDimensionKidnap);
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_SNEAK, true);
-                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_SNEAK);
-                }
-
-                //ModPacketHandler.PACKET_ACCESS.registerNewWorld();
-            }
-        }
-        else if (!keyIsDown)
-            held4 = false;
-    }
 
     private void yoinkCurrency() {
         if (this.getSelf() instanceof Player pe) {

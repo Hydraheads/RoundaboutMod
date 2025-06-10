@@ -1,8 +1,5 @@
 package net.hydra.jojomod.entity.stand;
 
-import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.stand.PowersD4C;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;

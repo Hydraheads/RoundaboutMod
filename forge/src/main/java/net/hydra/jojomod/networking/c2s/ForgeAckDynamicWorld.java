@@ -3,14 +3,12 @@ package net.hydra.jojomod.networking.c2s;
 import net.hydra.jojomod.advancement.criteria.ModCriteria;
 import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.stand.PowersD4C;
+import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.world.DynamicWorld;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 
-import java.util.Map;
 import java.util.function.Supplier;
 
 public class ForgeAckDynamicWorld {

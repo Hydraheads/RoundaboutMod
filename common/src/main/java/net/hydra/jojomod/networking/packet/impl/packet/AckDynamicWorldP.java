@@ -3,7 +3,7 @@ package net.hydra.jojomod.networking.packet.impl.packet;
 import net.hydra.jojomod.advancement.criteria.ModCriteria;
 import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.stand.PowersD4C;
+import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.networking.packet.api.args.c2s.AbstractBaseC2SPacket;
 import net.hydra.jojomod.networking.packet.api.args.c2s.PacketArgsC2S;
 import net.hydra.jojomod.world.DynamicWorld;
