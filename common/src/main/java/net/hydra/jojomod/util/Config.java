@@ -135,8 +135,6 @@ import java.util.Set;
     @NestedOption(group = "modded")
     public GuardPoints guardPoints;
     @NestedOption(group = "modded")
-    public SoftAndWetSettings softAndWetSettings;
-    @NestedOption(group = "modded")
     public WorldGenSettings worldgenSettings;
     @NestedOption(group = "modded")
     public MiningSettings miningSettings;
@@ -146,6 +144,10 @@ import java.util.Set;
     public Durations durationsInTicks;
     @NestedOption(group = "modded")
     public Cooldowns cooldownsInTicks;
+    @NestedOption(group = "modded")
+    public SoftAndWetSettings softAndWetSettings;
+    @NestedOption(group = "modded")
+    public TheWorldSettings theWorldSettings;
     @NestedOption(group = "modded")
     public TimeStopSettings timeStopSettings;
     @NestedOption(group="modded")
@@ -304,35 +306,6 @@ import java.util.Set;
         public Boolean bypassAllNametagHidesInCreativeMode;
     }
 
-    public static class SoftAndWetSettings {
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean moistureWithStandGriefingTakesLiquidBlocks;
-        @BooleanOption(group = "inherit", value = false)
-        public Boolean frictionStopsJumping;
-        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
-        public Integer frictionStealingDurationInTicks;
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean bossesCannotLoseFriction;
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean bossesCannotLoseSight;
-        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
-        public Integer ticksBetweenSightStealsOnSameMob;
-        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
-        public Integer sightStealingDurationOnMobsInTicks;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer sightStealingDurationOnPlayersInTicks;
-        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
-        public Integer primaryPlunderBubbleLifespanInTicks;
-        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
-        public Integer goBeyondLifespanInTicks;
-        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
-        public Integer explosiveBubbleLifespanInTicks;
-        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
-        public Integer encasementBubbleFloatingLifespanInTicks;
-        @FloatOption(group = "inherit", value = 1.0F, min = 0, max = 1000F)
-        public Float sizeOfMobBubbleMobsStolen;
-    }
-
     public static class Durations {
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer D4CMeltDodgeTicks;
@@ -431,6 +404,40 @@ import java.util.Set;
         public Boolean creativeModeRefreshesCooldowns;
         @BooleanOption(group = "inherit", value = true)
         public Boolean canRechargeWhileDrowning;
+    }
+
+
+    public static class SoftAndWetSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean moistureWithStandGriefingTakesLiquidBlocks;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean frictionStopsJumping;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer frictionStealingDurationInTicks;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean bossesCannotLoseFriction;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean bossesCannotLoseSight;
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        public Integer ticksBetweenSightStealsOnSameMob;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer sightStealingDurationOnMobsInTicks;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer sightStealingDurationOnPlayersInTicks;
+        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
+        public Integer primaryPlunderBubbleLifespanInTicks;
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        public Integer goBeyondLifespanInTicks;
+        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
+        public Integer explosiveBubbleLifespanInTicks;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer encasementBubbleFloatingLifespanInTicks;
+        @FloatOption(group = "inherit", value = 1.0F, min = 0, max = 1000F)
+        public Float sizeOfMobBubbleMobsStolen;
+    }
+    public static class TheWorldSettings {
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        public Integer oxygenTankAdditionalTicks;
     }
     public static class TimeStopSettings {
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)

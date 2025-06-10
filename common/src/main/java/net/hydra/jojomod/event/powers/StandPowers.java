@@ -801,7 +801,7 @@ public class StandPowers {
         return -1;
     }
     public int getMaxAirAmount(){
-        return 300;
+        return ClientNetworking.getAppropriateConfig().theWorldSettings.oxygenTankAdditionalTicks;
     }
 
     public boolean isPiloting(){
