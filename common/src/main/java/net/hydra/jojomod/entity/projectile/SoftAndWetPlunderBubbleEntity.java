@@ -420,7 +420,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             if (this.getPlunderType() == PlunderTypes.MOISTURE.id){
                 if (!finishedUsingLiquid){
                     finishedUsingLiquid = true;
-                    if (stolenPhysicalLiquid){
+                    if (stolenPhysicalLiquid && ClientNetworking.getAppropriateConfig().softAndWetSettings.moisturePoppingPlacesLiquidsInAir){
                         if (getLiquidStolen() == 1) {
                            spawnGasSplatter();
                         } else if (getLiquidStolen() == 2) {
@@ -458,11 +458,11 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
 
         if (!this.level().isClientSide()) {
             ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.WATER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
-                    15, 0.4, 0.4, 0.25, 0.4);
+                    100,1, 1, 1, 0.4);
             SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
             this.playSound($$6, 1F, 1.5F);
             List<Entity> entities = MainUtil.hitbox(MainUtil.genHitbox(this.level(), this.getX(), this.getY(),
-                    this.getZ(), 3, 3, 3));
+                    this.getZ(), 4, 4, 4));
             if (!entities.isEmpty()) {
                 for (Entity value : entities) {
                     if (value instanceof LivingEntity) {
@@ -482,14 +482,14 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     public void splashLava(){
         if (!this.level().isClientSide()) {
             ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.LAVA.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
-                    15, 0.4, 0.4, 0.25, 0.4);
+                    100, 1, 1,1, 0.4);
             SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
             this.playSound($$6, 1F, 1.5F);
             List<Entity> entities = MainUtil.hitbox(MainUtil.genHitbox(this.level(), this.getX(), this.getY(),
-                    this.getZ(), 3, 3, 3));
+                    this.getZ(), 4, 4, 4));
             if (!entities.isEmpty()) {
                 for (Entity value : entities) {
-                        value.setRemainingFireTicks(300+value.getRemainingFireTicks());
+                        value.setRemainingFireTicks(180+value.getRemainingFireTicks());
                 }
             }
         }

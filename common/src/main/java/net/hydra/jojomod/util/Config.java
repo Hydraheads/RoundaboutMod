@@ -411,6 +411,8 @@ import java.util.Set;
         @BooleanOption(group = "inherit", value = true)
         public Boolean moistureWithStandGriefingTakesLiquidBlocks;
         @BooleanOption(group = "inherit", value = false)
+        public Boolean moisturePoppingPlacesLiquidsInAir;
+        @BooleanOption(group = "inherit", value = false)
         public Boolean frictionStopsJumping;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer frictionStealingDurationInTicks;
