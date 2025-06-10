@@ -71,6 +71,9 @@ public class GoBeyondEntity extends SoftAndWetBubbleEntity {
 
 
 
+                ((ServerLevel) this.level()).sendParticles(ModParticles.ENERGY_DISTORTION,
+                        this.getX(), this.getY(), this.getZ(),
+                        0, 0, 0, 0, 0.2F);
                 for (int i = 0; i < 100; ++i) {
                     double randomX = (Math.random() * 0.5) - 0.25;
                     double randomY = (Math.random() * 0.5) - 0.25;

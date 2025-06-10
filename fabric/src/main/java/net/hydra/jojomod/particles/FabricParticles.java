@@ -17,6 +17,7 @@ public class FabricParticles {
     public static final SimpleParticleType ENDER_BLOOD = FabricParticleTypes.simple();
     public static final SimpleParticleType AIR_CRACKLE = FabricParticleTypes.simple();
     public static final SimpleParticleType STAR = FabricParticleTypes.simple();
+    public static final SimpleParticleType ENERGY_DISTORTION = FabricParticleTypes.simple();
     public static final SimpleParticleType PURPLE_STAR = FabricParticleTypes.simple();
     public static final SimpleParticleType MENACING = FabricParticleTypes.simple();
     public static final SimpleParticleType VACUUM = FabricParticleTypes.simple();
@@ -41,6 +42,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "pointer"), POINTER);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "pointer_soft"), POINTER_SOFT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "star"), STAR);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "energy_distortion"), ENERGY_DISTORTION);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "purple_star"), PURPLE_STAR);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "blue_blood"), BLUE_BLOOD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "ender_blood"), ENDER_BLOOD);
@@ -71,6 +73,7 @@ public class FabricParticles {
         ModParticles.MENACING = MENACING;
         ModParticles.VACUUM = VACUUM;
         ModParticles.STAR = STAR;
+        ModParticles.ENERGY_DISTORTION = ENERGY_DISTORTION;
         ModParticles.PURPLE_STAR = PURPLE_STAR;
         ModParticles.FOG_CHAIN = FOG_CHAIN;
         ModParticles.BUBBLE_TRAIL = BUBBLE_TRAIL;
