@@ -47,6 +47,8 @@ public class ClientConfig {
     @NestedOption(group = "modded")
     public ClientConfig.DynamicSettings dynamicSettings;
     @NestedOption(group = "modded")
+    public ClientConfig.VanillaMCTweaks vanillaMinecraftTweaks;
+    @NestedOption(group = "modded")
     public ClientConfig.TimeStopSettings timeStopSettings;
     @NestedOption(group="modded")
     public ClientConfig.Experiments experiments;
@@ -98,6 +100,10 @@ public class ClientConfig {
         public Boolean timeStopFreezesScreen;
         @BooleanOption(group = "inherit", value = true)
         public Boolean simpleTimeStopShader;
+    }
+    public static class VanillaMCTweaks {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean namedSBRHorseSkins;
     }
 
     public static class Experiments {

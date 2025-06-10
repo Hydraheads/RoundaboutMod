@@ -50,16 +50,16 @@ public class ShootingArmLayer <T extends LivingEntity, A extends HumanoidModel<T
                             if (livent.getMainArm() == HumanoidArm.RIGHT) {
                                 getParentModel().rightArm.translateAndRotate(poseStack); // Use leftArm for off-hand
                                 // Apply additional transformations
-                                poseStack.translate(-0.05F, 0.63, 0F); //1 1
+                                poseStack.translate(-0.05F, 0.83, 0F); //1 1
                                 // The third value pushes it up (negative)
 
                             } else {
                                 getParentModel().leftArm.translateAndRotate(poseStack); // Use leftArm for off-hand
                                 // Apply additional transformations
-                                poseStack.translate(0.05F, 0.63, 0F);
+                                poseStack.translate(0.05F, 0.83, 0F);
                             }
                             // Render your model here
-                            poseStack.scale(1.0F, 1.0F, 1.0F);
+                            poseStack.scale(0.8F, 0.8F, 0.8F);
                             boolean isHurt = livent.hurtTime > 0;
                             float r = isHurt ? 1.0F : 1.0F;
                             float g = isHurt ? 0.0F : 1.0F;
@@ -88,13 +88,13 @@ public class ShootingArmLayer <T extends LivingEntity, A extends HumanoidModel<T
                             if (entity.getMainArm() == HumanoidArm.RIGHT) {
                                 // Apply additional transformations
                                 handarm.translateAndRotate(poseStack); // Use leftArm for off-hand
-                                poseStack.translate(-0.05F, 0.63, 0F); //1 1
+                                poseStack.translate(-0.05F, 0.83, 0F); //1 1
                                 // The third value pushes it up (negative)
 
                             } else {
                                 // Apply additional transformations
                                 handarm.translateAndRotate(poseStack); // Use leftArm for off-hand
-                                poseStack.translate(0.05F, 0.63, 0F);
+                                poseStack.translate(0.05F, 0.83, 0F);
                             }
                             // Render your model here
                             poseStack.scale(1.0F, 1.0F, 1.0F);
