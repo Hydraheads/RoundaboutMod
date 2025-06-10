@@ -1189,7 +1189,24 @@ public class MainUtil {
         Vec3 $$4 = $$0.position();
         return getHitResult($$4, $$0, $$1, $$2, $$3);
     }
+    public static boolean canActuallyHit(Entity self, Entity entity){
+        if (ClientNetworking.getAppropriateConfig().generalDetectionGoThroughDoorsAndCorners){
+            return true;
+        }
+        Vec3 from = new Vec3(self.getX(), self.getY(), self.getZ()); // your position
+        Vec3 to = entity.getEyePosition(1.0F); // where the entity's eyes are
 
+        BlockHitResult result = self.level().clip(new ClipContext(
+                from,
+                to,
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.NONE,
+                self
+        ));
+        boolean isBlocked = result.getType() != HitResult.Type.MISS &&
+                result.getLocation().distanceTo(from) < to.distanceTo(from);
+        return !isBlocked;
+    }
     public static boolean isStandPickable(Entity entity){
         if (entity instanceof SoftAndWetPlunderBubbleEntity sbe){
             if (entity.level().isClientSide() && ClientUtil.getPlayer() != null && ClientUtil.getPlayer().getId() == sbe.getUserID()) {
@@ -1293,8 +1310,10 @@ public class MainUtil {
                 if (!value.isInvulnerable() && value.isAlive() && value.getUUID() != User.getUUID()) {
                     float distanceTo = value.distanceTo(User);
                     if ((nearestDistance < 0 || distanceTo < nearestDistance) && distanceTo <= distance) {
-                        nearestDistance = distanceTo;
-                        nearestMob = value;
+                        if (canActuallyHit(value,User)) {
+                            nearestDistance = distanceTo;
+                            nearestMob = value;
+                        }
                     }
                 }
             }
