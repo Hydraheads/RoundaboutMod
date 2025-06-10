@@ -372,6 +372,8 @@ public class PowersSoftAndWet extends PunchingStand {
                             hold1 = true;
                             this.tryChargedPower(PowerIndex.SPECIAL_TRACKER, true, getGoBeyondTarget().getId());
                             ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_TRACKER, getGoBeyondTarget().getId());
+                            this.setGoBeyondTarget(null);
+                            this.setGoBeyondChargeTicks(0);
                         }
                     }
                 } else {
@@ -521,9 +523,9 @@ public class PowersSoftAndWet extends PunchingStand {
     /**Similar to Justice selecting of mobs**/
     @Override
     public void updateGoBeyondTarget(){
-        if (inShootingMode() && getInExplosiveSpinMode()){
+        if (inShootingMode() && goBeyondCharged()){
             Entity TE = MainUtil.getTargetEntity(this.self,30,15);
-            if (TE != null && !TE.is(this.self) && !(TE instanceof StandEntity && !TE.isAttackable())) {
+            if (TE != null && !TE.is(this.self) && !(TE instanceof StandEntity && !TE.isAttackable()) && canActuallyHit(TE)) {
                 this.setGoBeyondTarget(TE);
             }
         } else {
@@ -583,35 +585,37 @@ public class PowersSoftAndWet extends PunchingStand {
     }
     public boolean goBeyond(){
             //Vec3 vector = this.self.
-        GoBeyondEntity bubble = getGoBeyondBubble();
 
         if (!this.self.level().isClientSide()){
-            if (bubble != null){
-                this.setCooldown(PowerIndex.SKILL_2, 20);
+            if (goBeyondActiveTarget != null) {
+                GoBeyondEntity bubble = getGoBeyondBubble();
+                if (bubble != null) {
+                    this.setCooldown(PowerIndex.SKILL_2, 20);
 
-                this.poseStand(OffsetIndex.FOLLOW);
-                this.setAttackTimeDuring(-10);
-                this.setActivePower(PowerIndex.POWER_2);
-                /**Go beyond's speed*/
-                shootBubbleSpeed(bubble,0.17F);
-                bubbleListInit();
-                this.bubbleList.add(bubble);
-                this.getSelf().level().addFreshEntity(bubble);
+                    this.poseStand(OffsetIndex.FOLLOW);
+                    this.setAttackTimeDuring(-10);
+                    this.setActivePower(PowerIndex.POWER_2);
+                    bubble.setChasing(goBeyondActiveTarget);
+                    shootBubbleSpeed(bubble, 0.165F);
+                    bubbleListInit();
+                    this.bubbleList.add(bubble);
+                    this.getSelf().level().addFreshEntity(bubble);
 
-                if (bubbleType != PlunderTypes.SOUND.id) {
-                    this.self.level().playSound(bubble, bubble.blockPosition(), ModSounds.GO_BEYOND_LAUNCH_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
-                }
+                    if (bubbleType != PlunderTypes.SOUND.id) {
+                        this.self.level().playSound(bubble, bubble.blockPosition(), ModSounds.GO_BEYOND_LAUNCH_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+                    }
 
-                Vec3 vector = Vec3.directionFromRotation(new Vec2(-52, this.self.yBodyRot-90));
+                    Vec3 vector = Vec3.directionFromRotation(new Vec2(-52, this.self.yBodyRot - 90));
 
-                for (int i = 0; i < 10; ++i) {
-                    double randomX = (Math.random()*0.5) - 0.25;
-                    double randomY = (Math.random()*0.5) - 0.25;
-                    double randomZ = (Math.random()*0.5) - 0.25;
-                    Vec3 xvec = vector.add(randomX,randomY,randomZ);
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PURPLE_STAR,
-                            this.getSelf().getX(), this.getSelf().getY() + this.self.getEyeHeight()*0.7F, this.getSelf().getZ(),
-                            0, xvec.x, xvec.y, xvec.z, 0.12);
+                    for (int i = 0; i < 10; ++i) {
+                        double randomX = (Math.random() * 0.5) - 0.25;
+                        double randomY = (Math.random() * 0.5) - 0.25;
+                        double randomZ = (Math.random() * 0.5) - 0.25;
+                        Vec3 xvec = vector.add(randomX, randomY, randomZ);
+                        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PURPLE_STAR,
+                                this.getSelf().getX(), this.getSelf().getY() + this.self.getEyeHeight() * 0.7F, this.getSelf().getZ(),
+                                0, xvec.x, xvec.y, xvec.z, 0.12);
+                    }
                 }
             }
         }
@@ -969,12 +973,16 @@ public class PowersSoftAndWet extends PunchingStand {
             return BARRAGE_NOISE_2;
         }
     }
+
+    Entity goBeyondActiveTarget = null;
     @Override
     public boolean tryChargedPower(int move, boolean forced, int chargeTime){
         if (move == PowerIndex.POWER_2 || move == PowerIndex.POWER_1_SNEAK) {
             bubbleType = (byte)chargeTime;
         } else if (move == PowerIndex.SNEAK_ATTACK) {
             this.chargedFinal = chargeTime;
+        } else if (move == PowerIndex.SPECIAL_TRACKER){
+            goBeyondActiveTarget = this.self.level().getEntity(chargeTime);
         }
         return super.tryChargedPower(move, forced, chargeTime);
     }

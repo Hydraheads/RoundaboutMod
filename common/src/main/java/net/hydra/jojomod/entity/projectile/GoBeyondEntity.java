@@ -5,6 +5,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -24,6 +25,14 @@ public class GoBeyondEntity extends SoftAndWetBubbleEntity {
         this.setOwner($$1);
     }
 
+
+    public Entity chasing = null;
+    public Entity getChasing(){
+        return chasing;
+    }
+    public void setChasing(Entity chasing){
+        this.chasing = chasing;
+    }
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
     }
@@ -35,6 +44,17 @@ public class GoBeyondEntity extends SoftAndWetBubbleEntity {
                 return;
             }
         }
+
+        if (!this.level().isClientSide()) {
+            if (this.getChasing() != null){
+                this.setDeltaMovement(this.getPosition(1).subtract(this.getChasing().getEyePosition(1F)).normalize().reverse().scale(this.getSped()));
+            } else {
+                popBubble();
+                return;
+            }
+        }
+
+
         super.tick();
         if (!this.level().isClientSide()) {
             if (this.tickCount % 40 == 9) {
