@@ -127,6 +127,7 @@
     "ZBossBar",
     "ZCamera",
     "ZClientLevelData",
+    "ZClientPacketListener",
     "ZElytraModel",
     "ZEntityRenderDispatcher",
     "ZEntityRenderer",

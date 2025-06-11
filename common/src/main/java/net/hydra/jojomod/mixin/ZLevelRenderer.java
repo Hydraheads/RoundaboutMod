@@ -4,7 +4,7 @@ import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.vertex.*;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.client.shader.callback.RenderCallbackRegistry;
+import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.client.models.layers.PreRenderEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;

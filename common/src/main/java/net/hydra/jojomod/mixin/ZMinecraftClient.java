@@ -1,7 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.networking.packet.api.IClientNetworking;
+import net.zetalasis.networking.packet.api.IClientNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.Connection;

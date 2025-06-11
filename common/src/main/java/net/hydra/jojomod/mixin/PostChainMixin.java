@@ -1,7 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.shaders.Uniform;
-import net.hydra.jojomod.client.shader.IPostChainAccessor;
+import net.zetalasis.client.shader.IPostChainAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.PostChain;
 import net.minecraft.client.renderer.PostPass;

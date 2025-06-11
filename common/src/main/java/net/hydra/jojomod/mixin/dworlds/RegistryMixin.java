@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.dworlds;
 
-import net.hydra.jojomod.world.DynamicWorldAccessor;
+import net.zetalasis.world.DynamicWorldAccessor;
 import net.minecraft.core.MappedRegistry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

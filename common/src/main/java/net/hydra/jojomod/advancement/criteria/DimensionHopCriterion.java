@@ -2,15 +2,13 @@ package net.hydra.jojomod.advancement.criteria;
 
 import com.google.gson.JsonObject;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.world.DynamicWorld;
+import net.zetalasis.world.DynamicWorld;
 import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.DeserializationContext;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-
-import java.util.function.Predicate;
 
 public class DimensionHopCriterion extends SimpleCriterionTrigger<DimensionHopCriterion.Instance> {
     private static final ResourceLocation ID = Roundabout.location("dimension_hop");

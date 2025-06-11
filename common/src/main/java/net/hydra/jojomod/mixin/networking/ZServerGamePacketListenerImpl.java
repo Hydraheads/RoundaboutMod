@@ -1,10 +1,10 @@
 package net.hydra.jojomod.mixin.networking;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.networking.packet.api.IClientNetworking;
-import net.hydra.jojomod.networking.packet.api.args.c2s.AbstractBaseC2SPacket;
-import net.hydra.jojomod.networking.packet.api.args.c2s.PacketArgsC2S;
-import net.hydra.jojomod.networking.packet.impl.ModNetworking;
+import net.zetalasis.networking.packet.api.IClientNetworking;
+import net.zetalasis.networking.packet.api.args.c2s.AbstractBaseC2SPacket;
+import net.zetalasis.networking.packet.api.args.c2s.PacketArgsC2S;
+import net.zetalasis.networking.packet.impl.ModNetworking;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
@@ -19,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+// C2S Networking
 @Mixin(ServerGamePacketListenerImpl.class)
 public class ZServerGamePacketListenerImpl implements IClientNetworking {
     @Shadow @Final private Connection connection;
@@ -29,20 +30,16 @@ public class ZServerGamePacketListenerImpl implements IClientNetworking {
         if (!packet.getIdentifier().getNamespace().equals("roundabout"))
             return;
 
-        Roundabout.LOGGER.info("Got packet \"{}\"", packet.getIdentifier());
-
         AbstractBaseC2SPacket p = ModNetworking.getC2S(packet.getIdentifier());
 
         if (p != null)
         {
-            Roundabout.LOGGER.info("packet not null, handling");
-
             ServerGamePacketListenerImpl handler = (ServerGamePacketListenerImpl) (Object) this;
             ServerPlayer sender = handler.player;
             MinecraftServer server = sender.server;
 
-            PacketArgsC2S args = new PacketArgsC2S(server, sender, handler, new FriendlyByteBuf(packet.getData()));
-            p.handle(args);
+            PacketArgsC2S args = new PacketArgsC2S(server, sender, handler, ModNetworking.decodeBufferToVArgs(packet.getData()));
+            p.handle(args, packet.getData());
         }
     }
 

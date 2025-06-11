@@ -1,11 +1,11 @@
 package net.hydra.jojomod;
 
 import net.hydra.jojomod.advancement.criteria.ModCriteria;
-import net.hydra.jojomod.networking.packet.impl.ModNetworking;
+import net.zetalasis.networking.packet.impl.ModNetworking;
 import net.hydra.jojomod.platform.Services;
 import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.Networking;
-import net.hydra.jojomod.world.DynamicWorld;
+import net.zetalasis.world.DynamicWorld;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import org.slf4j.Logger;

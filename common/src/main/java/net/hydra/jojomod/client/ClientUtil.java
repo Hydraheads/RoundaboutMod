@@ -7,8 +7,8 @@ import net.hydra.jojomod.access.ICamera;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.gui.*;
-import net.hydra.jojomod.client.shader.ShaderFx;
-import net.hydra.jojomod.client.shader.callback.RenderCallbackRegistry;
+import net.zetalasis.client.shader.ShaderFx;
+import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
@@ -25,8 +25,7 @@ import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
 import net.hydra.jojomod.item.BodyBagItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
-import net.hydra.jojomod.networking.packet.impl.ModNetworking;
-import net.hydra.jojomod.networking.packet.impl.packet.AckDynamicWorldP;
+import net.zetalasis.networking.message.api.ModMessageEvents;
 import net.hydra.jojomod.util.ClientConfig;
 import net.hydra.jojomod.util.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
@@ -53,6 +52,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.zetalasis.world.DynamicWorld;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -406,8 +406,10 @@ public class ClientUtil {
     public static void dimensionSynchFabric(Minecraft client, ResourceKey<Level> LEVEL_KEY) {
         LocalPlayer player = client.player;
         player.connection.levels().add(LEVEL_KEY);
-        //ModPacketHandler.PACKET_ACCESS.ackRegisterWorld();
-        ModNetworking.send(new AckDynamicWorldP());
+
+        ModMessageEvents.sendToServer(
+                DynamicWorld.DynamicWorldNetMessages.MESSAGES.ADD_WORLD.value
+                );
     }
 
     public static void d4cEjectParralelRunningForge(){
