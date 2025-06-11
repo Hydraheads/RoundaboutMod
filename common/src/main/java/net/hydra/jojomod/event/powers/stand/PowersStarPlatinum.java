@@ -969,6 +969,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             } if (Level > 2 || bypass){
                 $$1.add(StarPlatinumEntity.FOUR_DEE);
                 $$1.add(StarPlatinumEntity.JOJOVELLER);
+                $$1.add(StarPlatinumEntity.VOLUME_39);
             } if (Level > 3 || bypass){
                 $$1.add(StarPlatinumEntity.GREEN_SKIN);
                 $$1.add(StarPlatinumEntity.GREEN_2);
@@ -978,6 +979,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             } if (Level > 5 || bypass){
                 $$1.add(StarPlatinumEntity.JOJONIUM_SKIN);
                 $$1.add(StarPlatinumEntity.PART_4_SKIN);
+                $$1.add(StarPlatinumEntity.CROP);
             } if (Level > 6 || bypass){
                 $$1.add(StarPlatinumEntity.PART_6_SKIN);
                 $$1.add(StarPlatinumEntity.MANGA_PURPLE_SKIN);
