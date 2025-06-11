@@ -262,7 +262,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DIOVoice DV) {
                 DV.forceTalkingTicks(70);
                 if (skn == TheWorldEntity.ARCADE_SKIN || skn == TheWorldEntity.ARCADE_SKIN_2){
-                    playSoundsIfNearby(BARRAGE_NOISE_7, 27, false);
+                    playSoundsIfNearby(BARRAGE_NOISE_8, 27, false);
+                    return;
                 }
                 if (skn == TheWorldEntity.OVA_SKIN){
                     playSoundsIfNearby(BARRAGE_NOISE_5, 27, false);
@@ -276,7 +277,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             } else {
 
                 if (skn == TheWorldEntity.ARCADE_SKIN || skn == TheWorldEntity.ARCADE_SKIN_2){
-                    playStandUserOnlySoundsIfNearby(BARRAGE_NOISE_7, 27, false, true);
+                    playStandUserOnlySoundsIfNearby(BARRAGE_NOISE_8, 27, false, true);
+                    return;
                 }
                 if (skn == TheWorldEntity.OVA_SKIN){
                     playStandUserOnlySoundsIfNearby(BARRAGE_NOISE_5, 27, false,true);
