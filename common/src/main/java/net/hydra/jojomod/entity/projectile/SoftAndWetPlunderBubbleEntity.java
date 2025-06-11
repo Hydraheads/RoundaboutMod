@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.block.GasolineBlock;
 import net.hydra.jojomod.block.ModBlocks;
@@ -34,6 +35,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -536,6 +538,11 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
         if (!this.level().isClientSide()) {
+
+            if ($$0.getEntity() instanceof EnderMan em) {
+                    ((IEnderMan)em).roundabout$teleport();
+                return;
+            }
             if (!($$0.getEntity() instanceof SoftAndWetBubbleEntity)) {
                 if (!getActivated() && !getFinished() && !(MainUtil.isMobOrItsMounts($$0.getEntity(),getStandUser()))
                         && !getReturning()) {

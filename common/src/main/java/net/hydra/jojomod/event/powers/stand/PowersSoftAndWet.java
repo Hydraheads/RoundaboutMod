@@ -1152,7 +1152,7 @@ public class PowersSoftAndWet extends PunchingStand {
             return levelupDamageMod((float) ((float) 11* (ClientNetworking.getAppropriateConfig().
                     damageMultipliers.softAndWetAttacksOnPlayers*0.01)));
         } else {
-            return levelupDamageMod((float) ((float) 33* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod((float) ((float) 40* (ClientNetworking.getAppropriateConfig().
                     damageMultipliers.softAndWetAttacksOnMobs*0.01)));
         }
     }

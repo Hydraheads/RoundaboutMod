@@ -21,6 +21,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class ZEnderMan extends Monster implements NeutralMob, IEnderMan {
     @Shadow protected abstract void registerGoals();
 
+    @Shadow protected abstract boolean teleport();
+
     protected ZEnderMan(EntityType<? extends Monster> $$0, Level $$1) {
         super($$0, $$1);
     }
@@ -31,6 +33,10 @@ public abstract class ZEnderMan extends Monster implements NeutralMob, IEnderMan
         this.goalSelector.removeAllGoals($$0 -> {return true;});
         this.targetSelector.removeAllGoals($$0 -> {return true;});
         registerGoals();
+    }
+    @Unique
+    public void roundabout$teleport(){
+        this.teleport();
     }
 
     @Inject(method = "isLookingAtMe(Lnet/minecraft/world/entity/player/Player;)Z", at = @At(value = "HEAD"), cancellable = true)

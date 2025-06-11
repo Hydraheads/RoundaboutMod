@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
@@ -19,6 +20,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
@@ -148,6 +150,11 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
         if (!this.level().isClientSide()) {
+
+            if ($$0.getEntity() instanceof EnderMan em) {
+                ((IEnderMan)em).roundabout$teleport();
+                return;
+            }
             Entity ent = $$0.getEntity();
             if (!(ent instanceof SoftAndWetBubbleEntity)) {
                 if (this.getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
