@@ -15,8 +15,9 @@ import java.util.Map;
 public class StandPowerRewrite extends StandPowers {
     public StandPowerRewrite(LivingEntity self) {
         super(self);
-
-        registerHUDIcons();
+        if (self != null && self.level().isClientSide()) {
+            registerHUDIcons();
+        }
     }
 
     public static HashSet<GuiIcon> GUI_ICON_REGISTRAR = new HashSet<>();
