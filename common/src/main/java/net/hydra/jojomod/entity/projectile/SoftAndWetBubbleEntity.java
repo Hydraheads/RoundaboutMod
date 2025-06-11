@@ -90,6 +90,17 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
         }
     }
 
+    public void tick() {
+        if (!this.level().isClientSide()) {
+            if (this.getOwner() == null || !this.getOwner().isAlive() || this.getOwner().isRemoved() ||
+            this.getOwner().distanceTo(this) > 30){
+                popBubble();
+                return;
+            }
+        }
+        super.tick();
+    }
+
     /**No sculker noises*/
     @Override
     public boolean getVibration(){
