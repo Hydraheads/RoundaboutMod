@@ -1212,7 +1212,8 @@ public class MainUtil {
             if (entity.level().isClientSide() && ClientUtil.getPlayer() != null && ClientUtil.getPlayer().getId() == sbe.getUserID()) {
                 return false;
             } else {
-                return sbe.getActivated() && !sbe.isPopPlunderBubbble();
+                return false;
+                //return sbe.getActivated() && !sbe.isPopPlunderBubbble();
             }
         } else if (entity instanceof EncasementBubbleEntity sbe){
             return false;

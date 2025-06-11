@@ -907,7 +907,7 @@
   "roundabout.soft_and_wet_plunder.moisture": "Moisture",
   "roundabout.soft_and_wet_plunder.moisture.desc": "Captures liquids or gasoline, so they can easily be moved around.",
   "roundabout.soft_and_wet_plunder.potion_effects": "Effects",
-  "roundabout.soft_and_wet_plunder.potion_effects.desc": "Moves potion effects so they may be transferred between mobs or disappear entirely, attack the bubble to steal the effects.",
+  "roundabout.soft_and_wet_plunder.potion_effects.desc": "Moves potion effects so they may be transferred between mobs or disappear entirely, attack the bubble without your stand to steal the effects.",
 
   "roundabout.stand_switch.main": "Main Stand",
   "roundabout.stand_switch.main.desc": "A stand with combat potential that can level up in development. Costs %s experience levels to obtain.",

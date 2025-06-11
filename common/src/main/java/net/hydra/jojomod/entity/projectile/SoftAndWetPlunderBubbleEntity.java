@@ -529,6 +529,10 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         return (getPlunderType() == PlunderTypes.FRICTION.id || getPlunderType() == PlunderTypes.SIGHT.id) && getActivated();
     }
 
+    public boolean isPopPotionBubbble(){
+        return (getPlunderType() == PlunderTypes.POTION_EFFECTS.id) && getActivated();
+    }
+
     @Override
     public double getPassengersRidingOffset() {
         return -0.5F;
