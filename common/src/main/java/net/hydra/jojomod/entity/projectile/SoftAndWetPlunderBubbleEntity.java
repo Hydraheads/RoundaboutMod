@@ -2,9 +2,7 @@ package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.access.ILevelAccess;
-import net.hydra.jojomod.block.GasolineBlock;
-import net.hydra.jojomod.block.ModBlocks;
-import net.hydra.jojomod.block.StandFireBlock;
+import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.FireProjectile;
@@ -144,6 +142,44 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                             }
                             this.setLiquidStolen(1);
                             setFloating();
+                        } else if (this.level().getBlockState($$0.getBlockPos()).getBlock() instanceof BloodBlock) {
+                            boolean ender = (this.level().getBlockState($$0.getBlockPos()).getBlock() instanceof EnderBloodBlock);
+                            boolean spider = (this.level().getBlockState($$0.getBlockPos()).is(ModBlocks.BLUE_BLOOD_SPLATTER));
+
+                                if (MainUtil.getIsGamemodeApproriateForGrief(this.standUser) &&
+                                        ClientNetworking.getAppropriateConfig().softAndWetSettings.moistureWithStandGriefingTakesLiquidBlocks) {
+                                    this.level().setBlock($$0.getBlockPos(), Blocks.AIR.defaultBlockState(), 11);
+                                    stolenPhysicalLiquid = true;
+                                }
+                                if (ender){
+                                    this.setLiquidStolen(6);
+                                } else if (spider){
+                                    this.setLiquidStolen(5);
+                                } else {
+                                    this.setLiquidStolen(4);
+                                }
+
+                                if ($$0.getDirection() == Direction.DOWN) {
+                                    setFloatingUpsideDown();
+                                    stolenPhysicalLiquid = true;
+                                } else {
+                                    setFloating();
+                                }
+                        } else if (this.level().getBlockState($$0.getBlockPos().above()).getBlock() instanceof BloodBlock) {
+                            boolean ender = (this.level().getBlockState($$0.getBlockPos().above()).getBlock() instanceof EnderBloodBlock);
+                            boolean spider = (this.level().getBlockState($$0.getBlockPos().above()).is(ModBlocks.BLUE_BLOOD_SPLATTER));
+                                if (MainUtil.getIsGamemodeApproriateForGrief(this.standUser) &&
+                                        ClientNetworking.getAppropriateConfig().softAndWetSettings.moistureWithStandGriefingTakesLiquidBlocks) {
+                                    this.level().setBlock($$0.getBlockPos().above(), Blocks.AIR.defaultBlockState(), 11);
+                                }
+                            if (ender){
+                                this.setLiquidStolen(6);
+                            } else if (spider){
+                                this.setLiquidStolen(5);
+                            } else {
+                                this.setLiquidStolen(4);
+                            }
+                                setFloating();
                         } else if (this.level().getBlockState($$0.getBlockPos()).hasProperty(BlockStateProperties.WATERLOGGED) &&
                                 this.level().getBlockState($$0.getBlockPos()).getValue(BlockStateProperties.WATERLOGGED)) {
                             if (MainUtil.getIsGamemodeApproriateForGrief(this.standUser) &&
@@ -228,6 +264,30 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                                 BlockPos bpos = $$0.getBlockPos().relative($$0.getDirection());
                                 if (MainUtil.tryPlaceBlock(this.standUser, bpos, true)) {
                                     this.level().setBlockAndUpdate(bpos, Blocks.LAVA.defaultBlockState());
+                                } else {
+                                    splashLava();
+                                }
+                                finishedUsingLiquid = true;
+                            } else if (getLiquidStolen() == 4) {
+                                BlockPos bpos = $$0.getBlockPos().relative($$0.getDirection());
+                                if (MainUtil.tryPlaceBlock(this.standUser, bpos, true)) {
+                                    this.level().setBlockAndUpdate(bpos, ModBlocks.BLOOD_SPLATTER.defaultBlockState());
+                                } else {
+                                    splashLava();
+                                }
+                                finishedUsingLiquid = true;
+                            } else if (getLiquidStolen() == 5) {
+                                BlockPos bpos = $$0.getBlockPos().relative($$0.getDirection());
+                                if (MainUtil.tryPlaceBlock(this.standUser, bpos, true)) {
+                                    this.level().setBlockAndUpdate(bpos, ModBlocks.BLUE_BLOOD_SPLATTER.defaultBlockState());
+                                } else {
+                                    splashLava();
+                                }
+                                finishedUsingLiquid = true;
+                            } else if (getLiquidStolen() == 6) {
+                                BlockPos bpos = $$0.getBlockPos().relative($$0.getDirection());
+                                if (MainUtil.tryPlaceBlock(this.standUser, bpos, true)) {
+                                    this.level().setBlockAndUpdate(bpos, ModBlocks.ENDER_BLOOD_SPLATTER.defaultBlockState());
                                 } else {
                                     splashLava();
                                 }
@@ -659,6 +719,11 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                         } else if (this.getPlunderType() == PlunderTypes.MOISTURE.id && !(MainUtil.isMobOrItsMounts($$0.getEntity(),getStandUser()))) {
                             if (getLiquidStolen() == 1) {
                                 splashGas($$0.getEntity());
+                                finishedUsingLiquid = true;
+                            } else if (getLiquidStolen() == 6) {
+                                if ($$0.getEntity() instanceof LivingEntity LE && !MainUtil.hasEnderBlood(LE)){
+                                    MainUtil.randomChorusTeleport(LE);
+                                }
                                 finishedUsingLiquid = true;
                             }
                             super.onHitEntity($$0);

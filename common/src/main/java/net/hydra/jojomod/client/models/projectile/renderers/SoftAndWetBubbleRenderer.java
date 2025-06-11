@@ -37,6 +37,9 @@ public class SoftAndWetBubbleRenderer extends EntityRenderer<SoftAndWetBubbleEnt
     private static final ResourceLocation WATER_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/water_bubble.png");
     private static final ResourceLocation LAVA_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/lava_bubble.png");
     private static final ResourceLocation FIRE_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/fire_bubble.png");
+    private static final ResourceLocation BLOOD_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/blood_bubble.png");
+    private static final ResourceLocation BLUE_BLOOD_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/hemolymph_bubble.png");
+    private static final ResourceLocation ENDER_BLOOD_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/ender_blood_bubble.png");
 
     private final float scale;
     private final ItemRenderer itemRenderer;
@@ -127,6 +130,12 @@ public class SoftAndWetBubbleRenderer extends EntityRenderer<SoftAndWetBubbleEnt
                 return WATER_BUBBLE;
             } else if (ls == 3){
                 return LAVA_BUBBLE;
+            } else if (ls == 4){
+                return BLOOD_BUBBLE;
+            } else if (ls == 5){
+                return BLUE_BLOOD_BUBBLE;
+            } else if (ls == 6){
+                return ENDER_BLOOD_BUBBLE;
             }
 
             if (sp.getActivated() && sp.getPlunderType() == PlunderTypes.OXYGEN.id){
