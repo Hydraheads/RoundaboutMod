@@ -129,6 +129,8 @@ import java.util.Set;
             )
     );
     @NestedOption(group = "modded")
+    public VanillaMCTweaks vanillaMinecraftTweaks;
+    @NestedOption(group = "modded")
     public ChargeSettings chargeSettings;
     @NestedOption(group = "modded")
     public DamageMultipliers damageMultipliers;
@@ -171,6 +173,13 @@ import java.util.Set;
         static void updateServer(Config config) {
             SERVER_INSTANCE = config;
         }
+
+
+    public static class VanillaMCTweaks {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean mountingHorsesInCreativeTamesThem;
+    }
+
     public static class ChargeSettings {
         @IntOption(group = "inherit", value = 29, min = 0, max = 72000)
         public Integer barrageWindup;
