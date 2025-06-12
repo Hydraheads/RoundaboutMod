@@ -444,6 +444,10 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                             value.soundSource, value.pitch, value.volume);
                 }
             }
+
+            if (this.getPlunderType() == PlunderTypes.SOUND.id && getLaunched()){
+                this.level().gameEvent(GameEvent.EXPLODE, this.position(), GameEvent.Context.of(this.getStandUser()));
+            }
         } else {
 
         }
@@ -480,9 +484,6 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             if (!isPopPlunderBubbble()) {
                 theatricPop();
                 popSounds();
-                if (this.getPlunderType() == PlunderTypes.SOUND.id && getLaunched()){
-                    this.level().gameEvent(GameEvent.EXPLODE, this.position(), GameEvent.Context.of(this));
-                }
             }
 
 
