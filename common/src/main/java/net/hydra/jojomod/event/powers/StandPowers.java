@@ -2107,8 +2107,8 @@ public class StandPowers {
 
 
     public BlockHitResult getAheadVec(float distOut){
-        Vec3 vec3d = this.self.getEyePosition(0);
-        Vec3 vec3d2 = this.self.getViewVector(0);
+        Vec3 vec3d = this.self.getEyePosition(1);
+        Vec3 vec3d2 = this.self.getViewVector(1);
         return this.getSelf().level().clip(new ClipContext(vec3d, vec3d.add(vec3d2.x * distOut,
                 vec3d2.y * distOut, vec3d2.z * distOut), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
                 this.getSelf()));

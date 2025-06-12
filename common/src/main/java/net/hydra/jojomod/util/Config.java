@@ -80,12 +80,6 @@ import java.util.Set;
     public Integer justiceStandUserMobMinionCount;
     @BooleanOption(group = "inherit", value = true)
     public Boolean justiceCorpsesUseOwnerTeam;
-    @IntOption(group = "inherit", value = 100, min = -1, max = 72000)
-    public Integer maxMagiciansRedFlames;
-    @IntOption(group = "inherit", value = 100, min = -1, max = 72000)
-    public Integer maxMagiciansRedFlameDistance;
-    @IntOption(group = "inherit", value = 1100, min = -1, max = 72000)
-    public Integer magiciansRedFurnaceTicks;
     @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
     public Integer d4cDimensionKidnapRadius;
     @IntOption(group = "inherit", value = 4, min = 0, max = 72000)
@@ -148,6 +142,8 @@ import java.util.Set;
     public Cooldowns cooldownsInTicks;
     @NestedOption(group = "modded")
     public SoftAndWetSettings softAndWetSettings;
+    @NestedOption(group = "modded")
+    public MagiciansRedSettings magiciansRedSettings;
     @NestedOption(group = "modded")
     public TheWorldSettings theWorldSettings;
     @NestedOption(group = "modded")
@@ -467,6 +463,16 @@ import java.util.Set;
         public Integer goBeyondLifespanInTicks;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer encasementBubbleFloatingLifespanInTicks;
+    }
+    public static class MagiciansRedSettings {
+        @IntOption(group = "inherit", value = 100, min = -1, max = 72000)
+        public Integer maxMagiciansRedFlames;
+        @IntOption(group = "inherit", value = 100, min = -1, max = 72000)
+        public Integer maxMagiciansRedFlameDistance;
+        @IntOption(group = "inherit", value = 1100, min = -1, max = 72000)
+        public Integer magiciansRedFurnaceTicks;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean lifeTrackerManualPushing;
     }
     public static class TheWorldSettings {
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)

@@ -86,8 +86,8 @@ public class StandFireBlockEntity extends BlockEntity{
                     return;
                 } else if (standUser != null && standUser.isAlive() && !standUser.isRemoved()) {
                     if (((StandUser) standUser).roundabout$getStandPowers() instanceof PowersMagiciansRed PM) {
-                        int maxFlames = ClientNetworking.getAppropriateConfig().maxMagiciansRedFlames;
-                        int maxDist = ClientNetworking.getAppropriateConfig().maxMagiciansRedFlameDistance;
+                        int maxFlames = ClientNetworking.getAppropriateConfig().magiciansRedSettings.maxMagiciansRedFlames;
+                        int maxDist = ClientNetworking.getAppropriateConfig().magiciansRedSettings.maxMagiciansRedFlameDistance;
                         if (PM.snapNumber != snapNumber) {
                             $$1.removeBlock($$2, false);
                             return;

@@ -1,11 +1,16 @@
 package net.hydra.jojomod.entity.substand;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.models.layers.PreRenderEntity;
 import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -26,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class LifeTrackerEntity extends LivingEntity {
+public class LifeTrackerEntity extends LivingEntity implements PreRenderEntity {
     public LifeTrackerEntity(EntityType<LifeTrackerEntity> $$0, Level $$1) {
         super($$0, $$1);
     }
@@ -74,10 +79,59 @@ public class LifeTrackerEntity extends LivingEntity {
             }
         }
         super.tick();
+        travelAhead();
+    }
+
+    public boolean preRender(Entity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
+        if (ent instanceof LifeTrackerEntity tracker) {
+            tracker.travelAheadRender($$4);
+        }
+        return false;
+    }
+    public void travelAhead(){
+        if (!mustBePushed() && this.getUser() != null) {
+            Vec3 junkPos = MainUtil.getAheadVec(this.getUser(), 3).getLocation();
+            if (!this.level().isClientSide()) {
+                setOldPosAndRot();
+                //Roundabout.LOGGER.info("bye");
+            }
+
+            xOld = junkPos.x;
+            yOld = junkPos.y;
+            zOld = junkPos.z;
+            if (this.level().isClientSide()) {
+                absMoveTo(junkPos.x, junkPos.y, junkPos.z);
+            } else {
+                setPos(junkPos.x, junkPos.y, junkPos.z);
+            }
+        }
+    }
+    public void travelAheadRender(float render){
+        if (!mustBePushed() && this.getUser() != null) {
+            Vec3 junkPos = MainUtil.getAheadVecRender(this.getUser(), 3, render).getLocation();
+            if (!this.level().isClientSide()) {
+                setOldPosAndRot();
+                //Roundabout.LOGGER.info("bye");
+            }
+
+            xOld = junkPos.x;
+            yOld = junkPos.y;
+            zOld = junkPos.z;
+            if (this.level().isClientSide()) {
+                absMoveTo(junkPos.x, junkPos.y, junkPos.z);
+            } else {
+                setPos(junkPos.x, junkPos.y, junkPos.z);
+            }
+        }
+    }
+
+    public boolean mustBePushed(){
+        return ClientNetworking.getAppropriateConfig().magiciansRedSettings.lifeTrackerManualPushing;
     }
 
     @Override
     public void doPush(Entity $$0) {
+        if (mustBePushed()) {
             if (!$$0.isPassengerOfSameVehicle(this)) {
                 if (!$$0.noPhysics && !this.noPhysics) {
                     double $$1 = this.getX() - $$0.getX();
@@ -103,6 +157,7 @@ public class LifeTrackerEntity extends LivingEntity {
 
                 }
             }
+        }
     }
     @Override
     public void push(Entity $$0) {
@@ -143,11 +198,7 @@ public class LifeTrackerEntity extends LivingEntity {
      * Sets stand User, the mob who "owns" the stand
      */
     public LivingEntity getUser() {
-        if (this.level().isClientSide){
-            return (LivingEntity) this.level().getEntity(this.entityData.get(USER_ID));
-        } else {
-            return this.User;
-        }
+         return (LivingEntity) this.level().getEntity(this.entityData.get(USER_ID));
     }
     public static AttributeSupplier.Builder createStandAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,

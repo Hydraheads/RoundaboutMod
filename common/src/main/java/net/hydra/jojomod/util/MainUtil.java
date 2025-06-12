@@ -1190,7 +1190,20 @@ public class MainUtil {
         return getHitResult($$4, $$0, $$1, $$2, $$3);
     }
 
-
+    public static BlockHitResult getAheadVec(Entity entity,float distOut){
+        Vec3 vec3d = entity.getEyePosition(1f);
+        Vec3 vec3d2 = entity.getViewVector(1f);
+        return entity.level().clip(new ClipContext(vec3d, vec3d.add(vec3d2.x * distOut,
+                vec3d2.y * distOut, vec3d2.z * distOut), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
+                entity));
+    }
+    public static BlockHitResult getAheadVecRender(Entity entity,float distOut, float rendertick){
+        Vec3 vec3d = entity.getEyePosition(rendertick);
+        Vec3 vec3d2 = entity.getViewVector(1f);
+        return entity.level().clip(new ClipContext(vec3d, vec3d.add(vec3d2.x * distOut,
+                vec3d2.y * distOut, vec3d2.z * distOut), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
+                entity));
+    }
 
     /**Generate pointer on block or entity position*/
     public static Vec3 getRaytracePointOnMobOrBlock(Entity source, int range){
@@ -1606,7 +1619,7 @@ public class MainUtil {
                     Container ct = ((IAbstractFurnaceMenu)fm).roundabout$getContainer();
                     if (ct instanceof AbstractFurnaceBlockEntity fbe){
 
-                        int it = ClientNetworking.getAppropriateConfig().magiciansRedFurnaceTicks;
+                        int it = ClientNetworking.getAppropriateConfig().magiciansRedSettings.magiciansRedFurnaceTicks;
                         if (it > 0) {
                             ((IAbstractFurnaceBlockEntity) fbe).roundabout$setFurnaceHeatingTime(it);
                         }

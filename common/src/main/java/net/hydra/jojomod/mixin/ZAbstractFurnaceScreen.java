@@ -65,7 +65,7 @@ public abstract class ZAbstractFurnaceScreen<T extends AbstractFurnaceMenu> exte
             StandPowers powers = user.roundabout$getStandPowers();
 
             if (powers.canLightFurnace()){
-                int it = ClientNetworking.getAppropriateConfig().magiciansRedFurnaceTicks;
+                int it = ClientNetworking.getAppropriateConfig().magiciansRedSettings.magiciansRedFurnaceTicks;
                 if (it > 0) {
                     int leftGearPos = i + 80;
                     int topGearPos = j + 55;
