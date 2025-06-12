@@ -46,6 +46,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.*;
 import org.spongepowered.asm.mixin.Unique;
 
@@ -479,6 +480,9 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             if (!isPopPlunderBubbble()) {
                 theatricPop();
                 popSounds();
+                if (this.getPlunderType() == PlunderTypes.SOUND.id && getLaunched()){
+                    this.level().gameEvent(GameEvent.EXPLODE, this.position(), GameEvent.Context.of(this));
+                }
             }
 
 
