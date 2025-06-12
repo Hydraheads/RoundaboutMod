@@ -23,6 +23,7 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
+import net.hydra.jojomod.networking.ClientToServerPackets;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.ClientConfig;
@@ -48,6 +49,8 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import net.zetalasis.networking.message.api.ModMessageEvents;
+import net.zetalasis.world.DynamicWorld;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -1457,7 +1460,12 @@ public class PowersSoftAndWet extends PunchingStand {
 
 
                             this.tryPower(PowerIndex.POWER_2_EXTRA, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_EXTRA);
+
+                            ModMessageEvents.sendToServer(
+                                    ClientToServerPackets.StandPowerPackets.MESSAGES.TryPower.value,
+                                    PowerIndex.POWER_2_EXTRA
+                            );
+
                             //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
                         }
                     }

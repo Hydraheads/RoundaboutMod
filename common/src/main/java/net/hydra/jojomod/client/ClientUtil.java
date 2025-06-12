@@ -767,4 +767,14 @@ public class ClientUtil {
         }
         return new Vec3(0.969F,0.569F,0.102F);
     }
+
+
+
+
+    public static void sendPositionalDataToServer(Minecraft client) {
+
+        ModMessageEvents.sendToServer(
+                DynamicWorld.DynamicWorldNetMessages.MESSAGES.ADD_WORLD.value
+        );
+    }
 }

@@ -1,6 +1,7 @@
 package net.zetalasis.networking.message.api;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.networking.ClientToServerPackets;
 import net.minecraft.server.MinecraftServer;
 import net.zetalasis.networking.message.impl.IMessageEvent;
 import net.hydra.jojomod.util.Networking;
@@ -20,6 +21,7 @@ public class ModMessageEvents {
     public static void bootstrap()
     {
         register(new DynamicWorld.DynamicWorldNetMessages());
+        register(new ClientToServerPackets.StandPowerPackets());
     }
 
     private static <T extends IMessageEvent> void register(T event)
