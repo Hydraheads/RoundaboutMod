@@ -2425,6 +2425,14 @@ public class StandPowers {
         }
     }
 
+    public float multiplyPowerByStandConfigPlayers(float power){
+        return power;
+    }
+
+    public float multiplyPowerByStandConfigMobs(float power){
+        return power;
+    }
+
 
     public boolean canSummonStand(){
         return false;

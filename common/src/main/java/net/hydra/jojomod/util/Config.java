@@ -437,14 +437,16 @@ import java.util.Set;
         public Integer sightStealingDurationOnPlayersInTicks;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         public Integer primaryPlunderBubbleLifespanInTicks;
-        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
-        public Integer goBeyondLifespanInTicks;
-        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
-        public Integer explosiveBubbleLifespanInTicks;
-        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
-        public Integer encasementBubbleFloatingLifespanInTicks;
         @FloatOption(group = "inherit", value = 1.0F, min = 0, max = 1000F)
         public Float sizeOfMobBubbleMobsStolen;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer explosiveBubbleShootSpeedMultiplier;
+        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
+        public Integer explosiveBubbleLifespanInTicks;
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        public Integer goBeyondLifespanInTicks;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer encasementBubbleFloatingLifespanInTicks;
     }
     public static class TheWorldSettings {
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)

@@ -543,9 +543,11 @@ public class PowersSoftAndWet extends PunchingStand {
 
     public float getExplosiveSpeed(){
         if (getInExplosiveSpinMode()){
-            return 0.8F;
+            return (float) (0.8F*(ClientNetworking.getAppropriateConfig().
+                                softAndWetSettings.explosiveBubbleShootSpeedMultiplier*0.01));
         }
-        return 0.54F;
+        return (float) (0.54F*(ClientNetworking.getAppropriateConfig().
+                softAndWetSettings.explosiveBubbleShootSpeedMultiplier*0.01));
     }
 
     public boolean inShootingMode(){
@@ -1116,46 +1118,49 @@ public class PowersSoftAndWet extends PunchingStand {
         }
     }
 
+    @Override
+    public float multiplyPowerByStandConfigPlayers(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                        damageMultipliers.softAndWetAttacksOnPlayers*0.01));
+    }
+
+    @Override
+    public float multiplyPowerByStandConfigMobs(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                damageMultipliers.softAndWetAttacksOnMobs*0.01));
+    }
 
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 1.65* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.softAndWetAttacksOnPlayers*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.65F));
         } else {
-            return levelupDamageMod((float) ((float) 4.7* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.softAndWetAttacksOnMobs*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(4.7F));
         }
     }
 
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 2.35* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.softAndWetAttacksOnPlayers*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.35F));
         } else {
-            return levelupDamageMod((float) ((float) 5.7* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.softAndWetAttacksOnMobs*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(5.7F));
         }
     }
 
 
     public float getExplosiveBubbleStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 1.1* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.softAndWetAttacksOnPlayers*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.1F));
         } else {
-            return levelupDamageMod((float) ((float) 3* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.softAndWetAttacksOnMobs*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(3F));
         }
     }
     public float getGoBeyondStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 11* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.softAndWetAttacksOnPlayers*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(11F));
         } else {
-            return levelupDamageMod((float) ((float) 40* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.softAndWetAttacksOnMobs*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(40F));
         }
     }
 
