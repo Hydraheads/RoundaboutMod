@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IAreaOfEffectCloud;
 import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.access.ILevelAccess;
@@ -38,6 +39,8 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -611,7 +614,12 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     protected void onHitEntity(EntityHitResult $$0) {
         if (!this.level().isClientSide()) {
 
-            if ($$0.getEntity() instanceof AreaEffectCloud ac) {
+            if ($$0.getEntity() instanceof AbstractArrow ac && this.getPlunderType() == PlunderTypes.ITEM.id) {
+                this.setHeldItem(((IAbstractArrowAccess)ac).roundabout$GetPickupItem().copyAndClear());
+                startReturning();
+                ac.discard();
+                return;
+            } else if ($$0.getEntity() instanceof AreaEffectCloud ac) {
                 Collection<MobEffectInstance> effects = new ArrayList<>(((IAreaOfEffectCloud)ac).roundabout$getEffects());
                 if (!effects.isEmpty()) {
                     Collection<MobEffectInstance> effects2 = new ArrayList<>();
@@ -1054,6 +1062,11 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
 
     @Override
     protected boolean canHitEntity(Entity $$0x) {
+        if ($$0x instanceof AbstractArrow aw && aw.pickup.equals(AbstractArrow.Pickup.ALLOWED) && ((IAbstractArrowAccess)aw).roundaboutGetInGround()){
+            if (getPlunderType() == PlunderTypes.ITEM.id){
+                return true;
+            }
+        }
         if ($$0x instanceof AreaEffectCloud){
             if (getPlunderType() == PlunderTypes.POTION_EFFECTS.id){
                 return true;
