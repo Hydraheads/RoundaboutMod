@@ -282,7 +282,11 @@ public class PowersSoftAndWet extends PunchingStand {
                     if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
                         int atd = this.getAttackTimeDuring();
                         this.tryIntPower(PowerIndex.SNEAK_ATTACK, true, atd);
-                        ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SNEAK_ATTACK, atd);
+                        ModMessageEvents.sendToServer(
+                                ClientToServerPackets.StandPowerPackets.MESSAGES.TryIntPower.value,
+                                PowerIndex.SNEAK_ATTACK,
+                                atd
+                        );
                     }
                     holdDownClick = false;
                 }
@@ -371,7 +375,11 @@ public class PowersSoftAndWet extends PunchingStand {
                         if (goBeyondCharged() && getGoBeyondTarget() != null) {
                             hold1 = true;
                             this.tryIntPower(PowerIndex.SPECIAL_TRACKER, true, getGoBeyondTarget().getId());
-                            ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_TRACKER, getGoBeyondTarget().getId());
+                            ModMessageEvents.sendToServer(
+                                    ClientToServerPackets.StandPowerPackets.MESSAGES.TryIntPower.value,
+                                    PowerIndex.SPECIAL_TRACKER,
+                                    getGoBeyondTarget().getId()
+                            );
                             this.setGoBeyondTarget(null);
                             this.setGoBeyondChargeTicks(0);
                             this.setShootTicks(0);
@@ -407,7 +415,11 @@ public class PowersSoftAndWet extends PunchingStand {
                                 }
 
                                 this.tryIntPower(PowerIndex.POWER_1_SNEAK, true, bubbleType);
-                                ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_1_SNEAK, bubbleType);
+                                ModMessageEvents.sendToServer(
+                                        ClientToServerPackets.StandPowerPackets.MESSAGES.TryIntPower.value,
+                                        PowerIndex.POWER_1_SNEAK,
+                                        bubbleType
+                                );
                             } else {
                                 if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
                                     hold1 = true;
@@ -1303,7 +1315,11 @@ public class PowersSoftAndWet extends PunchingStand {
                 int atd = this.getAttackTimeDuring();
                 ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.SNEAK_ATTACK, true,maxSuperHitTime);
                 if (this.self.level().isClientSide()){
-                    ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SNEAK_ATTACK, atd);
+                    ModMessageEvents.sendToServer(
+                            ClientToServerPackets.StandPowerPackets.MESSAGES.TryIntPower.value,
+                            PowerIndex.SNEAK_ATTACK,
+                            atd
+                    );
                 }
             }
         }
