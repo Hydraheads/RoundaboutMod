@@ -42,6 +42,12 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
         super(ModEntities.EXPLOSIVE_BUBBLE, $$1.getX(), $$1.getEyeY() - 0.1F, $$1.getZ(), $$2);
         this.setOwner($$1);
     }
+
+    @Override
+    public int getDistanceUntilPopping(){
+        return ClientNetworking.getAppropriateConfig().softAndWetSettings.maxExplosiveBubbleTravelDistanceBeforePopping;
+    }
+
     public void tick(){
         if (!this.level().isClientSide()) {
             lifeSpan--;

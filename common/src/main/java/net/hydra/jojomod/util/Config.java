@@ -417,6 +417,8 @@ import java.util.Set;
 
 
     public static class SoftAndWetSettings {
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer maxPlunderBubbleTravelDistanceBeforePopping;
         @BooleanOption(group = "inherit", value = true)
         public Boolean moistureWithStandGriefingTakesLiquidBlocks;
         @BooleanOption(group = "inherit", value = false)
@@ -439,10 +441,24 @@ import java.util.Set;
         public Integer primaryPlunderBubbleLifespanInTicks;
         @FloatOption(group = "inherit", value = 1.0F, min = 0, max = 1000F)
         public Float sizeOfMobBubbleMobsStolen;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
+        public Integer maxExplosiveBubbleTravelDistanceBeforePopping;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer explosiveBubbleShootSpeedMultiplier;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         public Integer explosiveBubbleLifespanInTicks;
+        @IntOption(group = "inherit", value = 2499, min = 0, max = 72000)
+        public Integer heatGainedPerShot;
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
+        public Integer heatTickDownRate;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer heatTickDownPauseLength;
+        @IntOption(group = "inherit", value = 800, min = 0, max = 72000)
+        public Integer explosiveSpinMeterGainedPerShot;
+        @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
+        public Integer explosiveSpinMeterTickDownRate;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer explosiveSpinModeTickDownRate;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer goBeyondLifespanInTicks;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)

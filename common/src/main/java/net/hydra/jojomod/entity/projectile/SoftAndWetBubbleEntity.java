@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.access.NoVibrationEntity;
 import net.hydra.jojomod.access.PenetratableWithProjectile;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.sound.ModSounds;
@@ -93,12 +94,19 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
     public void tick() {
         if (!this.level().isClientSide()) {
             if (this.getOwner() == null || !this.getOwner().isAlive() || this.getOwner().isRemoved() ||
-            this.getOwner().distanceTo(this) > 30){
+            this.getOwner().distanceTo(this) > getDistanceUntilPopping() && distancePops()){
                 popBubble();
                 return;
             }
         }
         super.tick();
+    }
+
+    public boolean distancePops(){
+        return true;
+    }
+    public int getDistanceUntilPopping(){
+        return ClientNetworking.getAppropriateConfig().softAndWetSettings.maxPlunderBubbleTravelDistanceBeforePopping;
     }
 
     /**No sculker noises*/

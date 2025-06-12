@@ -107,6 +107,10 @@ public class GoBeyondEntity extends SoftAndWetBubbleEntity implements NoHitboxRe
     }
 
     @Override
+    public boolean distancePops(){
+        return false;
+    }
+    @Override
     protected void onHitBlock(BlockHitResult $$0) {
     }
     public void tick() {

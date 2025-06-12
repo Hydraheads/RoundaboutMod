@@ -21,7 +21,6 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
-import net.hydra.jojomod.networking.ClientToServerPackets;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.ClientConfig;
@@ -43,8 +42,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
@@ -265,10 +262,10 @@ public class PowersSoftAndWet extends PunchingStand {
     public boolean holdDownClick = false;
 
     public int getUseTicks(){
-        return 2499;
+        return ClientNetworking.getAppropriateConfig().softAndWetSettings.heatGainedPerShot;
     }
     public int getGoBeyondUseTicks(){
-        return 800;
+        return ClientNetworking.getAppropriateConfig().softAndWetSettings.explosiveSpinMeterGainedPerShot;
 
 }
     @Override
@@ -474,7 +471,7 @@ public class PowersSoftAndWet extends PunchingStand {
     }
 
     public int pauseTicks(){
-        return 20;
+        return ClientNetworking.getAppropriateConfig().softAndWetSettings.heatTickDownPauseLength;
     }
     public int getPauseGrowthTicks(){
         return pauseGrowthTicks;
@@ -1395,13 +1392,13 @@ public class PowersSoftAndWet extends PunchingStand {
     }
 
     public int getLowerTicks(){
-        return 50;
+        return ClientNetworking.getAppropriateConfig().softAndWetSettings.heatTickDownRate;
     }
     public int getLowerGoBeyondTicks(){
-        return 5;
+        return ClientNetworking.getAppropriateConfig().softAndWetSettings.explosiveSpinMeterTickDownRate;
     }
     public int getLowerExplosiveSpinTicks(){
-        return 100;
+        return ClientNetworking.getAppropriateConfig().softAndWetSettings.explosiveSpinModeTickDownRate;
     }
     @Override
     public void tickPower(){
