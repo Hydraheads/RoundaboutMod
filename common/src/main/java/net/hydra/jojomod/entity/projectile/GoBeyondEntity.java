@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.access.NoHitboxRendering;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -20,7 +21,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
-public class GoBeyondEntity extends SoftAndWetBubbleEntity {
+public class GoBeyondEntity extends SoftAndWetBubbleEntity implements NoHitboxRendering {
     public GoBeyondEntity(EntityType<? extends SoftAndWetBubbleEntity> $$0, Level $$1) {
         super($$0, $$1);
     }

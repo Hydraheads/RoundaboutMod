@@ -1,5 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IAreaOfEffectCloud;
 import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.block.*;
@@ -39,6 +41,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -603,6 +606,46 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     protected void onHitEntity(EntityHitResult $$0) {
         if (!this.level().isClientSide()) {
 
+            if ($$0.getEntity() instanceof AreaEffectCloud ac) {
+                Collection<MobEffectInstance> effects = new ArrayList<>(((IAreaOfEffectCloud)ac).roundabout$getEffects());
+                if (!effects.isEmpty()) {
+                    Collection<MobEffectInstance> effects2 = new ArrayList<>();
+                    for (MobEffectInstance value : effects) {
+                        if (!MainUtil.isSpecialEffect(value) && !value.isInfiniteDuration()) {
+                            effects2.add(new MobEffectInstance(value));
+                        }
+                    }
+                    if (!effects2.isEmpty()) {
+                        mobEffects = effects2;
+                        setFloating();
+                    }
+                }
+                Potion potion = ((IAreaOfEffectCloud)ac).roundabout$getPotions();
+                if (potion != null) {
+                    Collection<MobEffectInstance> effects3 = new ArrayList<>(potion.getEffects());
+                    if (!effects3.isEmpty()) {
+                        Collection<MobEffectInstance> effects4;
+                        if (mobEffects != null && !mobEffects.isEmpty()) {
+                           effects4 = new ArrayList<>(mobEffects);
+                        } else {
+                            effects4 = new ArrayList<>();
+                        }
+                        for (MobEffectInstance value : effects3) {
+                            if (!MainUtil.isSpecialEffect(value) && !value.isInfiniteDuration()) {
+                                effects4.add(new MobEffectInstance(value));
+                            }
+                        }
+                        if (!effects4.isEmpty()) {
+                            mobEffects = effects4;
+                            if (!getActivated()) {
+                                setFloating();
+                            }
+                        }
+                    }
+                }
+                ac.discard();
+                return;
+            }
             if ($$0.getEntity() instanceof EnderMan em) {
                     ((IEnderMan)em).roundabout$teleport();
                 return;
@@ -1003,6 +1046,18 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             }
         }
     }
+
+    @Override
+    protected boolean canHitEntity(Entity $$0x) {
+        if ($$0x instanceof AreaEffectCloud){
+            if (getPlunderType() == PlunderTypes.POTION_EFFECTS.id){
+                return true;
+            }
+        }
+
+        return super.canHitEntity($$0x);
+    }
+
     @Override
     public boolean fireImmune() {
         return true;
