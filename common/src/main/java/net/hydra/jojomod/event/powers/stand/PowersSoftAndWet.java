@@ -795,50 +795,49 @@ public class PowersSoftAndWet extends PunchingStand {
             if (canDoBubbleRedirect()) {
                 this.setCooldown(PowerIndex.SKILL_EXTRA_2, 3);
 
-                Vec3 vec3d = this.self.getEyePosition(0);
-                Vec3 vec3d2 = this.self.getViewVector(0);
-                Vec3 vec3d3 = vec3d.add(vec3d2.x * 30, vec3d2.y * 30, vec3d2.z * 30);
-                BlockHitResult blockHit = this.self.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
-
                 if (!this.self.level().isClientSide()) {
-                    List<SoftAndWetBubbleEntity> bubbleList3 = new ArrayList<>(bubbleList) {
-                    };
-                    if (!bubbleList3.isEmpty()) {
-                        int totalnumber = bubbleList3.size();
-                        for (SoftAndWetBubbleEntity value : bubbleList3) {
-                            if (value.getActivated() && !(value instanceof SoftAndWetPlunderBubbleEntity PBE && (PBE.getPlunderType()==PlunderTypes.SIGHT.id ||
-                                    PBE.getPlunderType()==PlunderTypes.FRICTION.id))) {
-                                Vec3 vector = new Vec3((blockHit.getLocation().x() - value.getX()),
-                                        (blockHit.getLocation().y() - value.getY()),
-                                        (blockHit.getLocation().z() - value.getZ())).normalize().scale(value.getSped());
-                                if (totalnumber > 1){
-                                    vector = new Vec3(
-                                            vector.x()+(((Math.random()-0.5)*totalnumber)*value.getSped()*0.03),
-                                            vector.y(),
-                                            vector.z()+(((Math.random()-0.5)*totalnumber)*value.getSped()*0.03)
-                                    ).normalize().scale(value.getSped());
-                                }
-                                value.setDeltaMovement(vector);
-                                value.hurtMarked = true;
-                                value.hasImpulse = true;
-                                if (!value.getLaunched()){
-                                    value.setLaunched(true);
+                    if (savedPos != null) {
+                        List<SoftAndWetBubbleEntity> bubbleList3 = new ArrayList<>(bubbleList) {
+                        };
+                        if (!bubbleList3.isEmpty()) {
+                            int totalnumber = bubbleList3.size();
+                            for (SoftAndWetBubbleEntity value : bubbleList3) {
+                                if (value.getActivated() && !(value instanceof SoftAndWetPlunderBubbleEntity PBE && (PBE.getPlunderType() == PlunderTypes.SIGHT.id ||
+                                        PBE.getPlunderType() == PlunderTypes.FRICTION.id))) {
+                                    Vec3 vector = new Vec3((savedPos.x() - value.getX()),
+                                            (savedPos.y() - value.getY()),
+                                            (savedPos.z() - value.getZ())).normalize().scale(value.getSped());
+                                    if (totalnumber > 1) {
+                                        vector = new Vec3(
+                                                vector.x() + (((Math.random() - 0.5) * totalnumber) * value.getSped() * 0.03),
+                                                vector.y(),
+                                                vector.z() + (((Math.random() - 0.5) * totalnumber) * value.getSped() * 0.03)
+                                        ).normalize().scale(value.getSped());
+                                    }
+                                    value.setDeltaMovement(vector);
+                                    value.hurtMarked = true;
+                                    value.hasImpulse = true;
+                                    if (!value.getLaunched()) {
+                                        value.setLaunched(true);
+                                    }
                                 }
                             }
                         }
                     }
                 } else {
-                    this.self.playSound(ModSounds.BUBBLE_HOVERED_OVER_EVENT, 0.2F, (float) (0.95F+Math.random()*0.1F));
-                    this.self.level()
-                            .addParticle(
-                                    ModParticles.POINTER_SOFT,
-                                    blockHit.getLocation().x(),
-                                    blockHit.getLocation().y() + 0.5,
-                                    blockHit.getLocation().z(),
-                                    0,
-                                    0,
-                                    0
-                            );
+                    if (savedPos != null){
+                        this.self.playSound(ModSounds.BUBBLE_HOVERED_OVER_EVENT, 0.2F, (float) (0.95F+Math.random()*0.1F));
+                        this.self.level()
+                                .addParticle(
+                                        ModParticles.POINTER_SOFT,
+                                        savedPos.x(),
+                                        savedPos.y() + 0.5,
+                                        savedPos.z(),
+                                        0,
+                                        0,
+                                        0
+                                );
+                    }
                 }
             }
             /**
@@ -1027,6 +1026,11 @@ public class PowersSoftAndWet extends PunchingStand {
     }
     @Override
     public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos) {
+        return tryPower(move, forced);
+    }
+    @Override
+    public boolean tryPosPower(int move, boolean forced, Vec3 pos) {
+        savedPos = pos;
         return tryPower(move, forced);
     }
     public int bubbleNumber = 0;
@@ -1448,9 +1452,12 @@ public class PowersSoftAndWet extends PunchingStand {
                             hold2 = true;
 
 
-                            this.tryPower(PowerIndex.POWER_2_EXTRA, true);
 
-                            tryPowerPacket(PowerIndex.POWER_2_EXTRA);
+                            Vec3 pos = MainUtil.getRaytracePointOnMobOrBlock(this.self,30);
+
+                            this.tryPosPower(PowerIndex.POWER_2_EXTRA, true, pos);
+
+                            tryPosPowerPacket(PowerIndex.POWER_2_EXTRA,pos);
 
                             //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
                         }

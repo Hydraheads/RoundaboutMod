@@ -2,6 +2,7 @@ package net.zetalasis.networking.packet.impl;
 
 import io.netty.buffer.Unpooled;
 import net.hydra.jojomod.Roundabout;
+import net.minecraft.world.phys.Vec3;
 import net.zetalasis.networking.packet.api.IClientNetworking;
 import net.zetalasis.networking.packet.api.args.c2s.AbstractBaseC2SPacket;
 import net.zetalasis.networking.packet.api.args.s2c.AbstractBaseS2CPacket;
@@ -17,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.zetalasis.networking.packet.impl.packet.MessageC2S;
 import net.zetalasis.networking.packet.impl.packet.MessageS2C;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -45,6 +47,7 @@ public class ModNetworking {
         DECODERS.put(UUID.class, FriendlyByteBuf::readUUID);
         DECODERS.put(ResourceLocation.class, FriendlyByteBuf::readResourceLocation);
         DECODERS.put(BlockPos.class, FriendlyByteBuf::readBlockPos);
+        DECODERS.put(Vector3f.class, FriendlyByteBuf::readVector3f);
         DECODERS.put(ItemStack.class, FriendlyByteBuf::readItem);
 
         ENCODERS.put(Integer.class, (buf, o) -> buf.writeInt((Integer) o));
@@ -68,6 +71,7 @@ public class ModNetworking {
         ENCODERS.put(ResourceLocation.class, (buf, o) -> buf.writeResourceLocation((ResourceLocation) o));
         ENCODERS.put(BlockPos.class, (buf, o) -> buf.writeBlockPos((BlockPos) o));
         ENCODERS.put(ItemStack.class, (buf, o) -> buf.writeItem((ItemStack) o));
+        ENCODERS.put(Vector3f.class, (buf, o) -> buf.writeVector3f((Vector3f)o));
     }
 
     public static @Nullable Connection getC2SConnection()

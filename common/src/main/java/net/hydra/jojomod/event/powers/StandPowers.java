@@ -56,6 +56,7 @@ import net.minecraft.world.phys.*;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -2413,12 +2414,13 @@ public class StandPowers {
             );
         }
     }
-    public void tryPosPower(byte packet, Vec3 pos){
+    public Vec3 savedPos;
+    public void tryPosPowerPacket(byte packet, Vec3 pos){
         if (this.self.level().isClientSide()) {
             ModMessageEvents.sendToServer(
                     ClientToServerPackets.StandPowerPackets.MESSAGES.TryPosPower.value,
                     packet,
-                    pos
+                    pos.toVector3f()
             );
         }
     }

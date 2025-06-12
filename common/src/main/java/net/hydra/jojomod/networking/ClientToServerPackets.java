@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 import net.zetalasis.networking.message.impl.IMessageEvent;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 public class ClientToServerPackets {
     public static class StandPowerPackets implements IMessageEvent {
@@ -50,8 +51,8 @@ public class ClientToServerPackets {
                 server.execute(()->{
                     StandUser powers = basicChecks(sender);
                         byte b = (byte)vargs[0];
-                        Vec3 c = (Vec3)vargs[1];
-                        powers.roundabout$tryPosPower(b,true,c);
+                        Vector3f c = (Vector3f)vargs[1];
+                        powers.roundabout$tryPosPower(b,true,new Vec3(c.x,c.y,c.z));
                 });
             }
             /**Try Block Pos Power Packet*/

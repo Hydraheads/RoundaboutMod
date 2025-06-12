@@ -1189,6 +1189,24 @@ public class MainUtil {
         Vec3 $$4 = $$0.position();
         return getHitResult($$4, $$0, $$1, $$2, $$3);
     }
+
+
+
+    /**Generate pointer on block or entity position*/
+    public static Vec3 getRaytracePointOnMobOrBlock(Entity source, int range){
+        EntityHitResult targetEntity = rayCastEntityHitResult(source,range);
+        if (targetEntity != null){
+            return targetEntity.getLocation();
+        }
+
+        Vec3 vec3d = source.getEyePosition(0);
+        Vec3 vec3d2 = source.getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+        BlockHitResult blockHit = source.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,source));
+        return blockHit.getLocation();
+
+    }
+
     public static boolean canActuallyHit(Entity self, Entity entity){
         if (ClientNetworking.getAppropriateConfig().generalDetectionGoThroughDoorsAndCorners){
             return true;
@@ -1338,6 +1356,27 @@ public class MainUtil {
             Entity hitResult = entityHitResult.getEntity();
             if (hitResult.isAlive() && !hitResult.isRemoved()) {
                 return hitResult;
+            }
+        }
+        return null;
+    }
+    public static EntityHitResult rayCastEntityHitResult(Entity entityX, float reach){
+        float tickDelta = 0;
+        if (entityX.level().isClientSide()) {
+            tickDelta = ClientUtil.getDelta();
+        }
+        Vec3 vec3d = entityX.getEyePosition(tickDelta);
+
+        Vec3 vec3d2 = entityX.getViewVector(1.0f);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * reach, vec3d2.y * reach, vec3d2.z * reach);
+        float f = 1.0f;
+        AABB box = new AABB(vec3d.x+reach, vec3d.y+reach, vec3d.z+reach, vec3d.x-reach, vec3d.y-reach, vec3d.z-reach);
+
+        EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(entityX, vec3d, vec3d3, box, entity -> !entity.isSpectator() && entity.isPickable() && !entity.isInvulnerable(), reach*reach);
+        if (entityHitResult != null){
+            Entity hitResult = entityHitResult.getEntity();
+            if (hitResult.isAlive() && !hitResult.isRemoved()) {
+                return entityHitResult;
             }
         }
         return null;
