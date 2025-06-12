@@ -43,7 +43,6 @@ public class ClientToServerPackets {
                 server.execute(()->{
                     StandUser powers = basicChecks(sender);
                     byte b = (byte)vargs[0];
-                    Roundabout.LOGGER.info("b+"+b);
                     powers.roundabout$tryPower(b,true);
                 });
             }
