@@ -1097,7 +1097,7 @@ public class PowersJustice extends DashPreset {
                 }
         }
     }
-    public boolean tryPosPower(int move, boolean forced, BlockPos blockPos){
+    public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos){
         if (move == PowerIndex.POWER_2) {
             this.bpos = blockPos;
             return tryPower(move, forced);

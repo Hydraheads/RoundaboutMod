@@ -31,7 +31,7 @@ public class ForgeChargedPowerPacket {
             ServerPlayer player = context.getSender();
             if (player != null) {
                 ServerLevel level = (ServerLevel) player.level();
-                ((StandUser) player).roundabout$tryChargedPower(power, true, chargedTime);
+                ((StandUser) player).roundabout$tryIntPower(power, true, chargedTime);
             }
         });
         return true;

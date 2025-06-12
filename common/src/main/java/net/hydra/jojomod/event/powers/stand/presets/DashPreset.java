@@ -20,7 +20,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -30,12 +29,12 @@ public class DashPreset extends StandPowers {
         super(self);
     }
     @Override
-    public boolean tryChargedPower(int move, boolean forced, int chargeTime){
+    public boolean tryIntPower(int move, boolean forced, int chargeTime){
         if (this.canChangePower(move, forced)) {
             if (move == PowerIndex.MOVEMENT) {
                 this.storedInt = chargeTime;
             }
-            return super.tryChargedPower(move, forced, chargeTime);
+            return super.tryIntPower(move, forced, chargeTime);
         }
         return false;
     }

@@ -7,9 +7,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
-import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.entity.visages.mobs.DIONPC;
 import net.hydra.jojomod.entity.visages.mobs.DiegoNPC;
@@ -615,7 +613,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
                             if (this.getActivePower() == PowerIndex.POWER_1_BONUS) {
                                 if (post <= 2){
-                                    ((StandUser) this.getSelf()).roundabout$tryPosPower(PowerIndex.POWER_2,
+                                    ((StandUser) this.getSelf()).roundabout$tryBlockPosPower(PowerIndex.POWER_2,
                                             true, blockHit.getBlockPos());
                                     return;
                                 }

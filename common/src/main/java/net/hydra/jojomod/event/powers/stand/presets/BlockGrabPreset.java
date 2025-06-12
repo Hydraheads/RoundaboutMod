@@ -1,6 +1,5 @@
 package net.hydra.jojomod.event.powers.stand.presets;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IBoatItemAccess;
 import net.hydra.jojomod.access.IEntityAndData;
@@ -31,7 +30,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -245,7 +243,7 @@ public class BlockGrabPreset extends PunchingStand{
     }
 
     /**Charge up Time Stop*/
-    public boolean tryPosPower(int move, boolean forced, BlockPos blockPos){
+    public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos){
         if (this.canChangePower(move, forced)){
             if (move == PowerIndex.POWER_2 || move == PowerIndex.POWER_2_BONUS) {
                 this.grabBlock = blockPos;
@@ -556,13 +554,13 @@ public class BlockGrabPreset extends PunchingStand{
     }
     /**Charge up Time Stop*/
     @Override
-    public boolean tryChargedPower(int move, boolean forced, int chargeTime){
+    public boolean tryIntPower(int move, boolean forced, int chargeTime){
             if (move == PowerIndex.POWER_2_EXTRA){
                 this.grabEntity = chargeTime;
             } else if (move == PowerIndex.POWER_2_SNEAK_EXTRA) {
                 this.grabInventorySlot = chargeTime;
             }
-            return super.tryChargedPower(move, forced, chargeTime);
+            return super.tryIntPower(move, forced, chargeTime);
     }
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
@@ -717,7 +715,7 @@ public class BlockGrabPreset extends PunchingStand{
                                 } else {
                                     ItemStack stack = this.getSelf().getMainHandItem();
                                     if (!stack.isEmpty()) {
-                                        ((StandUser) this.getSelf()).roundabout$tryChargedPower(PowerIndex.POWER_2_SNEAK_EXTRA, true,
+                                        ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.POWER_2_SNEAK_EXTRA, true,
                                                 ((Player) this.getSelf()).getInventory().selected);
                                         ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_SNEAK_EXTRA,
                                                 ((Player) this.getSelf()).getInventory().selected);

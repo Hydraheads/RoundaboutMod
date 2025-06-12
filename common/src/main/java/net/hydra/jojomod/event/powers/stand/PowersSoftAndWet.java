@@ -1,7 +1,6 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.BubbleScaffoldBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
@@ -15,7 +14,6 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetExplosiveBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
@@ -50,7 +48,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.zetalasis.networking.message.api.ModMessageEvents;
-import net.zetalasis.world.DynamicWorld;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -284,7 +281,7 @@ public class PowersSoftAndWet extends PunchingStand {
                 } else {
                     if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
                         int atd = this.getAttackTimeDuring();
-                        this.tryChargedPower(PowerIndex.SNEAK_ATTACK, true, atd);
+                        this.tryIntPower(PowerIndex.SNEAK_ATTACK, true, atd);
                         ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SNEAK_ATTACK, atd);
                     }
                     holdDownClick = false;
@@ -373,7 +370,7 @@ public class PowersSoftAndWet extends PunchingStand {
                     if (!hold1) {
                         if (goBeyondCharged() && getGoBeyondTarget() != null) {
                             hold1 = true;
-                            this.tryChargedPower(PowerIndex.SPECIAL_TRACKER, true, getGoBeyondTarget().getId());
+                            this.tryIntPower(PowerIndex.SPECIAL_TRACKER, true, getGoBeyondTarget().getId());
                             ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_TRACKER, getGoBeyondTarget().getId());
                             this.setGoBeyondTarget(null);
                             this.setGoBeyondChargeTicks(0);
@@ -409,7 +406,7 @@ public class PowersSoftAndWet extends PunchingStand {
                                     bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
                                 }
 
-                                this.tryChargedPower(PowerIndex.POWER_1_SNEAK, true, bubbleType);
+                                this.tryIntPower(PowerIndex.POWER_1_SNEAK, true, bubbleType);
                                 ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_1_SNEAK, bubbleType);
                             } else {
                                 if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
@@ -980,7 +977,7 @@ public class PowersSoftAndWet extends PunchingStand {
 
     Entity goBeyondActiveTarget = null;
     @Override
-    public boolean tryChargedPower(int move, boolean forced, int chargeTime){
+    public boolean tryIntPower(int move, boolean forced, int chargeTime){
         if (move == PowerIndex.POWER_2 || move == PowerIndex.POWER_1_SNEAK) {
             bubbleType = (byte)chargeTime;
         } else if (move == PowerIndex.SNEAK_ATTACK) {
@@ -988,7 +985,7 @@ public class PowersSoftAndWet extends PunchingStand {
         } else if (move == PowerIndex.SPECIAL_TRACKER){
             goBeyondActiveTarget = this.self.level().getEntity(chargeTime);
         }
-        return super.tryChargedPower(move, forced, chargeTime);
+        return super.tryIntPower(move, forced, chargeTime);
     }
     @Override
     public boolean cancelSprintJump(){
@@ -1028,7 +1025,7 @@ public class PowersSoftAndWet extends PunchingStand {
         return ClientNetworking.getAppropriateConfig().guardPoints.softAndWetDefend;
     }
     @Override
-    public boolean tryPosPower(int move, boolean forced, BlockPos blockPos) {
+    public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos) {
 
         if (move == PowerIndex.POWER_3_EXTRA) {
             if (blockPos.getX() > 35){
@@ -1304,7 +1301,7 @@ public class PowersSoftAndWet extends PunchingStand {
             if (this.attackTimeDuring >= maxSuperHitTime &&
                     (!(this.getSelf() instanceof Player) || (this.self.level().isClientSide() && isPacketPlayer()))){
                 int atd = this.getAttackTimeDuring();
-                ((StandUser) this.getSelf()).roundabout$tryChargedPower(PowerIndex.SNEAK_ATTACK, true,maxSuperHitTime);
+                ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.SNEAK_ATTACK, true,maxSuperHitTime);
                 if (this.self.level().isClientSide()){
                     ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SNEAK_ATTACK, atd);
                 }
@@ -1504,7 +1501,7 @@ public class PowersSoftAndWet extends PunchingStand {
                                     bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
                                 }
 
-                                this.tryChargedPower(PowerIndex.POWER_2, true, bubbleType);
+                                this.tryIntPower(PowerIndex.POWER_2, true, bubbleType);
                                 ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2, bubbleType);
                                 //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
                             }

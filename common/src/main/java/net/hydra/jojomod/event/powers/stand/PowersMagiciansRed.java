@@ -903,7 +903,7 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     public BlockPos grabBlock = null;
     public BlockPos grabBlock2 = null;
-    public boolean tryPosPower(int move, boolean forced, BlockPos blockPos){
+    public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos){
         if (move == PowerIndex.POWER_1_SNEAK) {
             this.grabBlock = blockPos;
             return tryPower(move, forced);
@@ -1375,7 +1375,7 @@ public class PowersMagiciansRed extends PunchingStand {
             if (this.attackTimeDuring >= maxSuperHitTime &&
                     (!(this.getSelf() instanceof Player) || (this.self.level().isClientSide() && isPacketPlayer()))){
                 int atd = this.getAttackTimeDuring();
-                ((StandUser) this.getSelf()).roundabout$tryChargedPower(PowerIndex.SNEAK_ATTACK, true,maxSuperHitTime);
+                ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.SNEAK_ATTACK, true,maxSuperHitTime);
                 if (this.self.level().isClientSide()){
                     ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SNEAK_ATTACK, atd);
                 }
@@ -1838,11 +1838,11 @@ public class PowersMagiciansRed extends PunchingStand {
     }
 
     @Override
-    public boolean tryChargedPower(int move, boolean forced, int chargeTime){
+    public boolean tryIntPower(int move, boolean forced, int chargeTime){
         if (move == PowerIndex.SNEAK_ATTACK) {
             this.chargedFinal = chargeTime;
         }
-        return super.tryChargedPower(move, forced, chargeTime);
+        return super.tryIntPower(move, forced, chargeTime);
     }
     public int chargedFinal;
     public boolean setPowerKickAttack() {
@@ -1946,7 +1946,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 } else {
                     if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
                         int atd = this.getAttackTimeDuring();
-                        this.tryChargedPower(PowerIndex.SNEAK_ATTACK, true, atd);
+                        this.tryIntPower(PowerIndex.SNEAK_ATTACK, true, atd);
                         ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SNEAK_ATTACK, atd);
                     }
                     holdDownClick = false;

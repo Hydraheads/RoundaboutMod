@@ -1854,21 +1854,34 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$tryPower(int move, boolean forced){
         if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
             this.roundabout$getStandPowers().tryPower(move, forced);
-            this.roundabout$getStandPowers().syncCooldowns();
-            if (this.level().isClientSide) {
-                this.roundabout$getStandPowers().kickStarted = false;
-            }
+            tryPowerStuff();
         }
     }
-    public void roundabout$tryChargedPower(int move, boolean forced, int chargeTime){
-         this.roundabout$getStandPowers().tryChargedPower(move, forced, chargeTime);
-        this.roundabout$getStandPowers().syncCooldowns();
-        if (this.level().isClientSide) {
-            this.roundabout$getStandPowers().kickStarted = false;
+    @Unique
+    @Override
+    public void roundabout$tryIntPower(int move, boolean forced, int chargeTime){
+        if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
+            this.roundabout$getStandPowers().tryIntPower(move, forced, chargeTime);
+            tryPowerStuff();
         }
     }
-    public void roundabout$tryPosPower(int move, boolean forced, BlockPos blockPos){
-        this.roundabout$getStandPowers().tryPosPower(move, forced, blockPos);
+    @Unique
+    @Override
+    public void roundabout$tryBlockPosPower(int move, boolean forced, BlockPos blockPos){
+        if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
+            this.roundabout$getStandPowers().tryBlockPosPower(move, forced, blockPos);
+            tryPowerStuff();
+        }
+    }
+    @Unique
+    @Override
+    public void roundabout$tryPosPower(int move, boolean forced, Vec3 pos){
+        if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
+            this.roundabout$getStandPowers().tryPosPower(move, forced, pos);
+            tryPowerStuff();
+        }
+    }
+    public void tryPowerStuff(){
         this.roundabout$getStandPowers().syncCooldowns();
         if (this.level().isClientSide) {
             this.roundabout$getStandPowers().kickStarted = false;

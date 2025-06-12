@@ -32,7 +32,7 @@ public class StandAbilityPacket {
         byte power = buf.readByte();
         BlockPos blockPos = buf.readBlockPos();
         server.execute(() -> {
-            ((StandUser) player).roundabout$tryPosPower(power, true, blockPos);
+            ((StandUser) player).roundabout$tryBlockPosPower(power, true, blockPos);
         });
     }
     public static void switchChargedPower(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
@@ -40,7 +40,7 @@ public class StandAbilityPacket {
         byte power = buf.readByte();
         int charge = buf.readInt();
         server.execute(() -> {
-            ((StandUser) player).roundabout$tryChargedPower(power, true, charge);
+            ((StandUser) player).roundabout$tryIntPower(power, true, charge);
         });
     }
 

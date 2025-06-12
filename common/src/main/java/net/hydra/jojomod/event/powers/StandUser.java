@@ -126,8 +126,9 @@ public interface StandUser {
     void roundabout$setDazeTime(byte dazeTime);
 
     void roundabout$tryPower(int move, boolean forced);
-    void roundabout$tryChargedPower(int move, boolean forced, int chargeTime);
-    void roundabout$tryPosPower(int move, boolean forced, BlockPos blockPos);
+    void roundabout$tryIntPower(int move, boolean forced, int chargeTime);
+    void roundabout$tryBlockPosPower(int move, boolean forced, BlockPos blockPos);
+    void roundabout$tryPosPower(int move, boolean forced, Vec3 blockPos);
     void roundabout$addFollower(StandEntity $$0);
     void roundabout$removeFollower(StandEntity $$0);
 

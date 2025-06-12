@@ -1,16 +1,11 @@
 package net.hydra.jojomod.networking;
 
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.advancement.criteria.ModCriteria;
-import net.hydra.jojomod.entity.stand.D4CEntity;
-import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.Vec3;
 import net.zetalasis.networking.message.impl.IMessageEvent;
-import net.zetalasis.world.DynamicWorld;
 import org.jetbrains.annotations.Nullable;
 
 public class ClientToServerPackets {
@@ -18,7 +13,8 @@ public class ClientToServerPackets {
         public enum MESSAGES {
             TryPower("try_power"),
             TryPosPower("try_pos_power"),
-            TryBlockPosPower("try_block_pos_power");
+            TryBlockPosPower("try_block_pos_power"),
+            TryIntPower("try_int_power");
 
             public final String value;
 
@@ -56,11 +52,12 @@ public class ClientToServerPackets {
                     for (Object v : vargs)
                     {
                         byte b = (byte)vargs[0];
-                        powers.roundabout$tryPower(b,true);
+                        Vec3 c = (Vec3)vargs[1];
+                        powers.roundabout$tryPosPower(b,true,c);
                     }
                 });
             }
-            /**Try Power Packet*/
+            /**Try Block Pos Power Packet*/
             if (message.equals(MESSAGES.TryBlockPosPower.value))
             {
                 MinecraftServer server = sender.server;
@@ -70,8 +67,23 @@ public class ClientToServerPackets {
                     for (Object v : vargs)
                     {
                         byte b = (byte)vargs[0];
-                        BlockPos c = (BlockPos)vargs[0];
-                        powers.roundabout$tryPosPower(b,true, c);
+                        BlockPos c = (BlockPos)vargs[1];
+                        powers.roundabout$tryBlockPosPower(b,true, c);
+                    }
+                });
+            }
+            /**Try Power Packet*/
+            if (message.equals(MESSAGES.TryIntPower.value))
+            {
+                MinecraftServer server = sender.server;
+
+                server.execute(()->{
+                    StandUser powers = basicChecks(sender);
+                    for (Object v : vargs)
+                    {
+                        byte b = (byte)vargs[0];
+                        int c = (int)vargs[1];
+                        powers.roundabout$tryIntPower(b,true,c);
                     }
                 });
             }

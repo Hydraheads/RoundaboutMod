@@ -320,7 +320,7 @@ public class PowersKillerQueen extends PunchingStand {
     }
 
     @Override
-    public boolean tryPosPower(int move, boolean forced, BlockPos blockPos){
+    public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos){
         if (move == PowerIndex.POWER_1) {
 
         }

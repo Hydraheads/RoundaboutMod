@@ -5,13 +5,10 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.stand.powers.PowerContext;
-import net.hydra.jojomod.stand.powers.StandPowerRewrite;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -23,7 +20,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -113,12 +109,12 @@ public class NewDashPreset extends StandPowerRewrite {
     }
 
     @Override
-    public boolean tryChargedPower(int move, boolean forced, int chargeTime){
+    public boolean tryIntPower(int move, boolean forced, int chargeTime){
         if (this.canChangePower(move, forced)) {
             if (move == PowerIndex.MOVEMENT) {
                 this.storedInt = chargeTime;
             }
-            return super.tryChargedPower(move, forced, chargeTime);
+            return super.tryIntPower(move, forced, chargeTime);
         }
         return false;
     }

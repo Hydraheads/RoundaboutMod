@@ -27,7 +27,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -404,7 +403,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 } else {
                     if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
                         int atd = this.getAttackTimeDuring();
-                        this.tryChargedPower(PowerIndex.SNEAK_ATTACK, true, atd);
+                        this.tryIntPower(PowerIndex.SNEAK_ATTACK, true, atd);
                         ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SNEAK_ATTACK, atd);
                     }
                     holdDownClick = false;
@@ -945,7 +944,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
                 }
             } else if (this.attackTimeDuring >= maxSuperHitTime && !(this.getSelf() instanceof Player)){
-                ((StandUser) this.getSelf()).roundabout$tryChargedPower(PowerIndex.SNEAK_ATTACK, true,maxSuperHitTime);
+                ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.SNEAK_ATTACK, true,maxSuperHitTime);
             }
         }
     }
@@ -1284,7 +1283,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     /**Charge up Time Stop*/
     @Override
-    public boolean tryChargedPower(int move, boolean forced, int chargeTime){
+    public boolean tryIntPower(int move, boolean forced, int chargeTime){
         if (this.canChangePower(move, forced) && this.getActivePower() != PowerIndex.POWER_2
                 && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0)  && !hasBlock()) {
             if (move == PowerIndex.SPECIAL_CHARGED) {
@@ -1292,13 +1291,13 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         !((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
                     this.setChargedTSTicks(chargeTime);
                 }
-                super.tryChargedPower(move, forced, chargeTime);
+                super.tryIntPower(move, forced, chargeTime);
             } else if (move == PowerIndex.SPECIAL_FINISH) {
                 /*If the server is behind on the client TS time, update it to lower*/
             }else if (move == PowerIndex.SNEAK_ATTACK) {
                 this.chargedFinal = chargeTime;
             }
-            return super.tryChargedPower(move, forced, chargeTime);
+            return super.tryIntPower(move, forced, chargeTime);
         }
         return false;
     }

@@ -2,7 +2,6 @@ package net.hydra.jojomod.event.powers;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -11,9 +10,7 @@ import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
-import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.*;
@@ -30,7 +27,6 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -44,7 +40,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.boss.EnderDragonPart;
-import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
@@ -2374,12 +2369,17 @@ public class StandPowers {
         return false;
     }
 
-    public boolean tryPosPower(int move, boolean forced, BlockPos blockPos){
+    public boolean tryPosPower(int move, boolean forced, Vec3 pos){
         tryPower(move, forced);
         /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
         return true;
     }
-    public boolean tryChargedPower(int move, boolean forced, int chargeTime){
+    public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos){
+        tryPower(move, forced);
+        /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
+        return true;
+    }
+    public boolean tryIntPower(int move, boolean forced, int chargeTime){
         tryPower(move, forced);
         /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
         return true;
