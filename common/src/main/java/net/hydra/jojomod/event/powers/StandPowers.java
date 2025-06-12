@@ -18,6 +18,7 @@ import net.hydra.jojomod.event.powers.stand.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.networking.ClientToServerPackets;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -52,6 +53,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.IceBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
+import net.zetalasis.networking.message.api.ModMessageEvents;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
@@ -2383,6 +2385,42 @@ public class StandPowers {
         tryPower(move, forced);
         /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
         return true;
+    }
+
+    public void tryPowerPacket(byte packet){
+        if (this.self.level().isClientSide()) {
+            ModMessageEvents.sendToServer(
+                    ClientToServerPackets.StandPowerPackets.MESSAGES.TryPower.value,
+                    packet
+            );
+        }
+    }
+    public void tryIntPowerPacket(byte packet, int integer){
+        if (this.self.level().isClientSide()) {
+            ModMessageEvents.sendToServer(
+                    ClientToServerPackets.StandPowerPackets.MESSAGES.TryIntPower.value,
+                    packet,
+                    integer
+            );
+        }
+    }
+    public void tryBlockPosPowerPacket(byte packet, BlockPos pos){
+        if (this.self.level().isClientSide()) {
+            ModMessageEvents.sendToServer(
+                    ClientToServerPackets.StandPowerPackets.MESSAGES.TryBlockPosPower.value,
+                    packet,
+                    pos
+            );
+        }
+    }
+    public void tryPosPower(byte packet, Vec3 pos){
+        if (this.self.level().isClientSide()) {
+            ModMessageEvents.sendToServer(
+                    ClientToServerPackets.StandPowerPackets.MESSAGES.TryPosPower.value,
+                    packet,
+                    pos
+            );
+        }
     }
 
 
