@@ -11,6 +11,8 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -30,7 +32,12 @@ public class GoBeyondEntity extends SoftAndWetBubbleEntity implements NoHitboxRe
         super(ModEntities.GO_BEYOND, $$1.getX(), $$1.getEyeY() - 0.1F, $$1.getZ(), $$2);
         this.setOwner($$1);
     }
-
+    public boolean hurt(DamageSource $$0, float $$1) {
+        if ($$0.is(DamageTypes.GENERIC_KILL)){
+            return super.hurt($$0,$$1);
+        }
+        return false;
+    }
 
     public Entity chasing = null;
     public Entity getChasing(){

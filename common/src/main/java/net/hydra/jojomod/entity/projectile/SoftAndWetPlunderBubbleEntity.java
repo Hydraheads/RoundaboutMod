@@ -936,6 +936,10 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     public void tick() {
 
         if (!this.level().isClientSide()){
+            if (isPopPlunderBubbble()){
+                this.setDeltaMovement(Vec3.ZERO);
+            }
+
             lifeSpan--;
             if (lifeSpan <= 0 || (this.standUser == null || !(((StandUser)this.standUser).roundabout$getStandPowers() instanceof PowersSoftAndWet))){
                 popBubble();
