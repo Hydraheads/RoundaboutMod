@@ -216,6 +216,10 @@ import java.util.Set;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer softAndWetAttacksOnMobs;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer softAndWetShootingModePower;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer softAndWetGoBeyondPower;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer standFireOnMobs;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer standFireOnPlayers;

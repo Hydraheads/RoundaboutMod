@@ -1127,6 +1127,14 @@ public class PowersSoftAndWet extends PunchingStand {
                 damageMultipliers.softAndWetAttacksOnMobs*0.01));
     }
 
+    public float multiplyPowerByStandConfigShooting(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                damageMultipliers.softAndWetShootingModePower*0.01));
+    }
+    public float multiplyPowerByStandConfigGoBeyond(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                damageMultipliers.softAndWetGoBeyondPower*0.01));
+    }
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
@@ -1148,16 +1156,16 @@ public class PowersSoftAndWet extends PunchingStand {
 
     public float getExplosiveBubbleStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.1F));
+            return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigPlayers(1.1F)));
         } else {
-            return levelupDamageMod(multiplyPowerByStandConfigMobs(3F));
+            return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigMobs(3F)));
         }
     }
     public float getGoBeyondStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(11F));
+            return levelupDamageMod(multiplyPowerByStandConfigGoBeyond(multiplyPowerByStandConfigPlayers(11F)));
         } else {
-            return levelupDamageMod(multiplyPowerByStandConfigMobs(40F));
+            return levelupDamageMod(multiplyPowerByStandConfigGoBeyond(multiplyPowerByStandConfigMobs(40F)));
         }
     }
 
