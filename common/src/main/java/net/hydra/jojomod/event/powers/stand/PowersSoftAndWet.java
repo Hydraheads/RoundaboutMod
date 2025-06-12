@@ -1480,7 +1480,10 @@ public class PowersSoftAndWet extends PunchingStand {
 
 
                             this.tryPower(PowerIndex.POWER_2_SNEAK, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_SNEAK);
+                            ModMessageEvents.sendToServer(
+                                    ClientToServerPackets.StandPowerPackets.MESSAGES.TryPower.value,
+                                    PowerIndex.POWER_2_SNEAK
+                            );
                             //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
                         }
                     }
@@ -1502,7 +1505,12 @@ public class PowersSoftAndWet extends PunchingStand {
                                 }
 
                                 this.tryIntPower(PowerIndex.POWER_2, true, bubbleType);
-                                ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2, bubbleType);
+
+                                ModMessageEvents.sendToServer(
+                                        ClientToServerPackets.StandPowerPackets.MESSAGES.TryIntPower.value,
+                                        PowerIndex.POWER_2,
+                                        bubbleType
+                                );
                                 //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
                             }
                         } else {

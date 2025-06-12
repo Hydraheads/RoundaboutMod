@@ -49,12 +49,9 @@ public class ClientToServerPackets {
 
                 server.execute(()->{
                     StandUser powers = basicChecks(sender);
-                    for (Object v : vargs)
-                    {
                         byte b = (byte)vargs[0];
                         Vec3 c = (Vec3)vargs[1];
                         powers.roundabout$tryPosPower(b,true,c);
-                    }
                 });
             }
             /**Try Block Pos Power Packet*/
@@ -64,12 +61,9 @@ public class ClientToServerPackets {
 
                 server.execute(()->{
                     StandUser powers = basicChecks(sender);
-                    for (Object v : vargs)
-                    {
                         byte b = (byte)vargs[0];
                         BlockPos c = (BlockPos)vargs[1];
                         powers.roundabout$tryBlockPosPower(b,true, c);
-                    }
                 });
             }
             /**Try Power Packet*/
@@ -79,12 +73,9 @@ public class ClientToServerPackets {
 
                 server.execute(()->{
                     StandUser powers = basicChecks(sender);
-                    for (Object v : vargs)
-                    {
                         byte b = (byte)vargs[0];
                         int c = (int)vargs[1];
                         powers.roundabout$tryIntPower(b,true,c);
-                    }
                 });
             }
         }
