@@ -64,6 +64,9 @@ public class EncasementBubbleRenderer extends EntityRenderer<EncasementBubbleEnt
                 Vector3f coursecorrect = new Vector3f(0.577f, 0.577f, 0.577f);
                 if (normal.y > 0) {
                     coursecorrect = new Vector3f(0.01f, 1f, 0.01f);
+                    if (normal.y > 0.95) {
+                        coursecorrect = new Vector3f(-0.577f, -0.577f, -0.577f);
+                    }
                 }
 
                 float scaleIt = 0.23f;
