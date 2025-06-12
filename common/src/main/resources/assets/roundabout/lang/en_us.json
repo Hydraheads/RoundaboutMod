@@ -905,7 +905,7 @@
   "roundabout.soft_and_wet_plunder.oxygen": "Oxygen",
   "roundabout.soft_and_wet_plunder.oxygen.desc": "Takes air out of the lungs of a mob, such that if they are underwater, they begin to drown. Also can drag oxygen from the air or magma blocks into the water to restore your own oxygen. Can also be used to put out fires, and take fires away from mobs, putting them elsewhere.",
   "roundabout.soft_and_wet_plunder.moisture": "Moisture",
-  "roundabout.soft_and_wet_plunder.moisture.desc": "Captures liquids or gasoline, so they can easily be moved around. Can also move around blood.",
+  "roundabout.soft_and_wet_plunder.moisture.desc": "Captures liquids or gasoline, so they can easily be moved around. Can also move around blood that is on the ground.",
   "roundabout.soft_and_wet_plunder.potion_effects": "Effects",
   "roundabout.soft_and_wet_plunder.potion_effects.desc": "Moves potion effects so they may be transferred between mobs or disappear entirely, attack the bubble without your stand to steal the effects.",
 
