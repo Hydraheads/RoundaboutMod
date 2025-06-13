@@ -347,6 +347,7 @@ public class ForgeEvents {
         ModEntities.GROUND_HURRICANE = ForgeEntities.GROUND_HURRICANE.get();
         ModEntities.PLUNDER_BUBBLE = ForgeEntities.PLUNDER_BUBBLE.get();
         ModEntities.EXPLOSIVE_BUBBLE = ForgeEntities.EXPLOSIVE_BUBBLE.get();
+        ModEntities.ITEM_LAUNCHING_BUBBLE_ENTITY = ForgeEntities.ITEM_LAUNCHING_BUBBLE_ENTITY.get();
         ModEntities.GO_BEYOND = ForgeEntities.GO_BEYOND.get();
         ModEntities.ENCASEMENT_BUBBLE = ForgeEntities.ENCASEMENT_BUBBLE.get();
         ModEntities.CINDERELLA_VISAGE_DISPLAY = ForgeEntities.CINDERELLA_VISAGE_DISPLAY.get();

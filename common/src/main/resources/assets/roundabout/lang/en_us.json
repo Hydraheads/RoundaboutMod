@@ -170,6 +170,7 @@
   "entity.roundabout.plunder_bubble": "Plunder Soap Bubble",
   "entity.roundabout.encasement_bubble": "Encasement Bubble",
   "entity.roundabout.explosive_bubble": "Explosive Soap Bubble",
+  "entity.roundabout.item_launching_bubble": "Item Launching Bubble",
   "entity.roundabout.go_beyond": "Go Beyond",
 
   "block.roundabout.meteor_block": "Meteorite Block",

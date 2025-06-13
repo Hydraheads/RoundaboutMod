@@ -56,6 +56,8 @@ public class ModEntities {
     public static EntityType<GroundHurricaneEntity> GROUND_HURRICANE;
     public static EntityType<SoftAndWetPlunderBubbleEntity> PLUNDER_BUBBLE;
     public static EntityType<SoftAndWetExplosiveBubbleEntity> EXPLOSIVE_BUBBLE;
+    public static EntityType<SoftAndWetItemLaunchingBubbleEntity> ITEM_LAUNCHING_BUBBLE_ENTITY;
+
     public static EntityType<GoBeyondEntity> GO_BEYOND;
     public static EntityType<EncasementBubbleEntity> ENCASEMENT_BUBBLE;
     public static EntityType<OVAEnyaNPC> OVA_ENYA;

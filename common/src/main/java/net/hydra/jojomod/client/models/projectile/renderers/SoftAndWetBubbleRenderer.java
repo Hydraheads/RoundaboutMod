@@ -7,6 +7,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetExplosiveBubbleEntity;
+import net.hydra.jojomod.entity.projectile.SoftAndWetItemLaunchingBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.event.index.PlunderTypes;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -31,6 +32,10 @@ public class SoftAndWetBubbleRenderer extends EntityRenderer<SoftAndWetBubbleEnt
     private static final ResourceLocation SHOOTING_2 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/shooting_bubble_2.png");
     private static final ResourceLocation SHOOTING_3 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/shooting_bubble_3.png");
     private static final ResourceLocation SHOOTING_4 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/shooting_bubble_4.png");
+    private static final ResourceLocation ITEM_1 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/explosive_item_bubble_1.png");
+    private static final ResourceLocation ITEM_2 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/explosive_item_bubble_2.png");
+    private static final ResourceLocation ITEM_3 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/explosive_item_bubble_3.png");
+    private static final ResourceLocation ITEM_4 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/explosive_item_bubble_4.png");
     private static final ResourceLocation MOB = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/bubble_plunder_mob.png");
     private static final ResourceLocation BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/bubble.png");
     private static final ResourceLocation GAS_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/gasoline_bubble.png");
@@ -117,6 +122,9 @@ public class SoftAndWetBubbleRenderer extends EntityRenderer<SoftAndWetBubbleEnt
                 if (entity instanceof SoftAndWetPlunderBubbleEntity plunder && !plunder.getHeldItem().isEmpty()) {
                     poseStack.translate(0, -0.12, 0);
                     this.itemRenderer.renderStatic(plunder.getHeldItem(), ItemDisplayContext.GROUND, packedLight, OverlayTexture.NO_OVERLAY, poseStack, buffer, ((Entity) entity).level(), ((Entity) entity).getId());
+                } if (entity instanceof SoftAndWetItemLaunchingBubbleEntity launch && !launch.getHeldItem().isEmpty()) {
+                    poseStack.translate(0, -0.12, 0);
+                    this.itemRenderer.renderStatic(launch.getHeldItem(), ItemDisplayContext.GROUND, packedLight, OverlayTexture.NO_OVERLAY, poseStack, buffer, ((Entity) entity).level(), ((Entity) entity).getId());
                 }
 
                 poseStack.popPose();
@@ -150,6 +158,14 @@ public class SoftAndWetBubbleRenderer extends EntityRenderer<SoftAndWetBubbleEnt
                 return MOB;
             }
             return TEXTURE;
+        } else if (entity instanceof SoftAndWetItemLaunchingBubbleEntity seb){
+            int div = seb.tickCount % 4;
+            return switch (div) {
+                case 1 -> ITEM_1;
+                case 2 -> ITEM_2;
+                case 3 -> ITEM_3;
+                default -> ITEM_4;
+            };
         } else if (entity instanceof SoftAndWetExplosiveBubbleEntity seb){
             int div = seb.tickCount % 4;
             return switch (div) {

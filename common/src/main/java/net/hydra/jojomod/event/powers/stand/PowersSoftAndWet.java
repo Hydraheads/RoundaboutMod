@@ -8,10 +8,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.projectile.GoBeyondEntity;
-import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
-import net.hydra.jojomod.entity.projectile.SoftAndWetExplosiveBubbleEntity;
-import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
+import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
@@ -446,6 +443,14 @@ public class PowersSoftAndWet extends PunchingStand {
         bubble.lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.primaryPlunderBubbleLifespanInTicks;
         return bubble;
     }
+    public SoftAndWetItemLaunchingBubbleEntity getItemLaunchingBubble(){
+        SoftAndWetItemLaunchingBubbleEntity bubble = new SoftAndWetItemLaunchingBubbleEntity(this.self,this.self.level());
+        bubble.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
+        bubble.setUser(this.self);
+        bubble.setOwner(this.self);
+        bubble.lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.primaryPlunderBubbleLifespanInTicks;
+        return bubble;
+    }
     public SoftAndWetExplosiveBubbleEntity getExplosiveBubble(){
         SoftAndWetExplosiveBubbleEntity bubble = new SoftAndWetExplosiveBubbleEntity(this.self,this.self.level());
         bubble.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
@@ -618,6 +623,26 @@ public class PowersSoftAndWet extends PunchingStand {
                                 0, xvec.x, xvec.y, xvec.z, 0.12);
                     }
                 }
+            }
+        }
+        return true;
+    }
+    /**Explosive Item Bubble Shooting*/
+    public boolean itemBubbleShot(){
+        if (!this.self.level().isClientSide()) {
+            SoftAndWetItemLaunchingBubbleEntity bubble = getItemLaunchingBubble();
+
+            if (bubble != null) {
+                this.setCooldown(PowerIndex.SKILL_2, 20);
+
+                this.poseStand(OffsetIndex.FOLLOW);
+                this.setAttackTimeDuring(-10);
+                this.setActivePower(PowerIndex.POWER_2_BONUS);
+                shootExplosiveItemBubbleSpeed(bubble, getExplosiveItemBubbleSpeed());
+                bubbleListInit();
+                this.bubbleList.add(bubble);
+                this.getSelf().level().addFreshEntity(bubble);
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXPLOSIVE_BUBBLE_SHOT_EVENT, SoundSource.PLAYERS, 0.7F, (float) (1.2 + (Math.random() * 0.04)));
             }
         }
         return true;
@@ -866,6 +891,9 @@ public class PowersSoftAndWet extends PunchingStand {
         }
         return 0.17F;
     }
+    public float getExplosiveItemBubbleSpeed(){
+        return 0.17F;
+    }
 
     public void shootBubble(SoftAndWetBubbleEntity ankh){
         shootBubbleSpeed(ankh, 1.01F);
@@ -876,9 +904,15 @@ public class PowersSoftAndWet extends PunchingStand {
         ankh.setPos(pos.x(), pos.y(), pos.z());
         ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, speed, 0);
     }
+    public void shootExplosiveItemBubbleSpeed(SoftAndWetBubbleEntity ankh, float speed){
+        ankh.setSped(speed);
+        Vec3 pos = this.self.getPosition(1).add(0,this.self.getEyeHeight()*0.8F,0).add(this.self.getForward().scale(this.self.getBbWidth()*1));
+        ankh.setPos(pos.x(), pos.y(), pos.z());
+        ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, speed, 0);
+    }
     public void shootBubbleSpeed(SoftAndWetBubbleEntity ankh, float speed){
         ankh.setSped(speed);
-        ankh.setPos(this.self.getX(), this.self.getY()+(this.self.getEyeHeight()*0.62), this.self.getZ());
+        ankh.setPos(this.self.getX(), this.self.getY()+(this.self.getEyeHeight()*0.68), this.self.getZ());
         ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, speed, 0);
     }
     public void shootBubbleSpeed2(SoftAndWetBubbleEntity ankh, float speed){
@@ -893,6 +927,8 @@ public class PowersSoftAndWet extends PunchingStand {
     public boolean setPowerOther(int move, int lastMove) {
         if (move == PowerIndex.POWER_2) {
             return this.bubbleShot();
+        } else if (move == PowerIndex.POWER_2_BONUS) {
+            return this.itemBubbleShot();
         } else if (move == PowerIndex.POWER_2_EXTRA) {
             return this.bubbleRedirect();
         } else if (move == PowerIndex.POWER_2_SNEAK) {
@@ -1513,7 +1549,19 @@ public class PowersSoftAndWet extends PunchingStand {
                                 //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
                             }
                         } else {
+                            if (!this.onCooldown(PowerIndex.SKILL_2)) {
 
+                                int bubbleType = 1;
+                                ClientConfig clientConfig = ConfigManager.getClientConfig();
+                                if (clientConfig != null && clientConfig.dynamicSettings != null) {
+                                    bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
+                                }
+
+                                this.tryIntPower(PowerIndex.POWER_2_BONUS, true, bubbleType);
+
+                                tryIntPowerPacket(PowerIndex.POWER_2_BONUS,bubbleType);
+                                //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
+                            }
                         }
                     }
                 } else {

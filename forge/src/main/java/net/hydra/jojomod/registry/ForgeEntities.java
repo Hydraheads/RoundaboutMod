@@ -341,6 +341,13 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "explosive_bubble").toString())
             );
+    public static final RegistryObject<EntityType<SoftAndWetItemLaunchingBubbleEntity>> ITEM_LAUNCHING_BUBBLE_ENTITY =
+            ENTITY_TYPES.register("item_launching_bubble", () ->
+                    EntityType.Builder.<SoftAndWetItemLaunchingBubbleEntity>of(SoftAndWetItemLaunchingBubbleEntity::new, MobCategory.MISC).
+                            sized(SoftAndWetBubbleEntity.eWidth, SoftAndWetBubbleEntity.eHeight).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "item_launching_bubble").toString())
+            );
     public static final RegistryObject<EntityType<GoBeyondEntity>> GO_BEYOND =
             ENTITY_TYPES.register("go_beyond", () ->
                     EntityType.Builder.<GoBeyondEntity>of(GoBeyondEntity::new, MobCategory.MISC).
