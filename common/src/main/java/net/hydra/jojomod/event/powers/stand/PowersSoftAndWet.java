@@ -640,7 +640,7 @@ public class PowersSoftAndWet extends PunchingStand {
         ItemStack stack = ((Player) this.getSelf()).getInventory().getItem(this.grabInventorySlot);
         if (!stack.isEmpty() && !(stack.getItem() instanceof BlockItem &&
                 ((BlockItem) stack.getItem()).getBlock() instanceof ShulkerBoxBlock)) {
-            this.setCooldown(PowerIndex.SKILL_2, 20);
+            this.setCooldown(PowerIndex.SKILL_2, 60);
             if (!this.self.level().isClientSide()) {
 
                 SoftAndWetItemLaunchingBubbleEntity bubble = getItemLaunchingBubble();
@@ -784,7 +784,7 @@ public class PowersSoftAndWet extends PunchingStand {
             bubbleNumber++;
         }
         if (!bubbleList.isEmpty()) {
-            this.setCooldown(PowerIndex.SKILL_2_SNEAK, 10);
+            this.setCooldown(PowerIndex.SKILL_2_SNEAK, 20);
             if (!this.self.level().isClientSide()) {
                 List<SoftAndWetBubbleEntity> bubbleList2 = new ArrayList<>(bubbleList) {
                 };
@@ -800,7 +800,7 @@ public class PowersSoftAndWet extends PunchingStand {
                         } else if (value instanceof SoftAndWetExplosiveBubbleEntity SBE){
                             SBE.popWithForce();
                         } else if (value instanceof SoftAndWetItemLaunchingBubbleEntity GBE){
-                            GBE.popWithForce();
+                            GBE.popWithForce(savedPos);
                         }
                     }
                 }
@@ -1539,9 +1539,10 @@ public class PowersSoftAndWet extends PunchingStand {
                         if (!this.onCooldown(PowerIndex.SKILL_2_SNEAK)){
                             hold2 = true;
 
+                            Vec3 pos = MainUtil.getRaytracePointOnMobOrBlock(this.self,30);
 
-                            this.tryPower(PowerIndex.POWER_2_SNEAK, true);
-                            tryPowerPacket(PowerIndex.POWER_2_SNEAK);
+                            this.tryPosPower(PowerIndex.POWER_2_SNEAK, true, pos);
+                            tryPosPowerPacket(PowerIndex.POWER_2_SNEAK,pos);
                             //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
                         }
                     }

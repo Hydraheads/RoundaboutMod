@@ -37,10 +37,7 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 
 import java.util.List;
 
@@ -279,7 +276,7 @@ public class SoftAndWetItemLaunchingBubbleEntity extends SoftAndWetBubbleEntity{
     }
 
     public float getPopAccuracy(){
-        return 100;
+        return 0;
     }
     public float getBundleAccuracy(){
         return 0.5F;
@@ -298,13 +295,14 @@ public class SoftAndWetItemLaunchingBubbleEntity extends SoftAndWetBubbleEntity{
                 && !(self instanceof Player PE2 && ((ServerPlayer) PE2).gameMode.getGameModeForPlayer() == GameType.ADVENTURE)
                 && self.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING);
     }
-    public void popWithForce() {
+    public void popWithForce(Vec3 launch2) {
         if (!this.level().isClientSide()) {
             Entity user = this.getOwner();
-            if (user instanceof LivingEntity LE) {
+            if (user instanceof LivingEntity LE && launch2 != null) {
                 if (!getHeldItem().isEmpty()) {
-                    float xRot = this.getXRot();
-                    float yRot = this.getYRot();
+                    Vec2 yes = MainUtil.getRotationsBetween(this.position(),launch2);
+                    float xRot = yes.x;
+                    float yRot = yes.y;
                     if (ThrownObjectEntity.throwAnObject(LE, false, getHeldItem(), getPopAccuracy(), getBundleAccuracy(), getThrowAngle(),
                             getThrowAngle2(), getThrowAngle3(), getCanPlace(LE), false, xRot, yRot,
                             new Vec3(this.getX(), this.getEyeY() - 0.1F, this.getZ()),false)){

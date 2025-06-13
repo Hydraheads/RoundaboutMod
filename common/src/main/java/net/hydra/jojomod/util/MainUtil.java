@@ -1128,6 +1128,19 @@ public class MainUtil {
         double g = Math.sqrt(d * d + e * e);
         return (float)(-(Mth.atan2(f, g) * 57.2957763671875));
     }
+    public static Vec2 getRotationsBetween(Vec3 from, Vec3 to) {
+        Vec3 delta = to.subtract(from);
+        double dx = delta.x;
+        double dy = delta.y;
+        double dz = delta.z;
+
+        double horizontalDistance = Math.sqrt(dx * dx + dz * dz);
+
+        float yRot = (float) (Math.toDegrees(Math.atan2(-dx, dz)));
+        float xRot = (float) (Math.toDegrees(-Math.atan2(dy, horizontalDistance)));
+
+        return new Vec2(xRot, yRot); // Vec2 is (xRot, yRot)
+    }
 
     /**Returns the horizontal angle between two mobs*/
     public static float getLookAtEntityYaw(Entity user, Entity targetEntity) {
@@ -1138,6 +1151,11 @@ public class MainUtil {
     public static float getLookAtEntityYawWithAngle(Vec3 user, Entity targetEntity) {
         double d = targetEntity.getX() - user.x();
         double e = targetEntity.getZ() - user.z();
+        return (float)(Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
+    }
+    public static float getLookAtEntityYawWithAngles(Vec3 user, Vec3 target) {
+        double d = target.x() - user.x();
+        double e = target.z() - user.z();
         return (float)(Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
     }
     public static float getLookAtEntityEyeYawWithAngle(Vec3 user, Entity targetEntity) {
