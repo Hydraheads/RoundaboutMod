@@ -63,152 +63,19 @@ public class BlockGrabPreset extends PunchingStand{
     public int grabEntity = -1;
     public int freezeAttackInput = -1;
 
-    public void throwObject(ItemStack item){
+    public boolean throwObject(ItemStack item){
         int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.objectThrow;
         ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, cdr);
         this.setCooldown(PowerIndex.SKILL_2, cdr);
-        if (item.getItem() instanceof ThrowablePotionItem) {
-            ThrownPotion $$4 = new ThrownPotion(this.getSelf().level(), this.getSelf());
-            $$4.setItem(item);
-            $$4.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 1.4F, getShotAccuracy());
-            this.getSelf().level().addFreshEntity($$4);
-            this.getSelf().level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-        } else if (item.getItem() instanceof SnowballItem){
-            Snowball $$4 = new Snowball(this.getSelf().level(), this.getSelf());
-            $$4.setItem(item);
-            $$4.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 2F, getShotAccuracy());
-            this.getSelf().level().addFreshEntity($$4);
-            this.getSelf().level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-        } else if (item.is(ModItems.KNIFE)){
-            KnifeEntity $$7 = new KnifeEntity(this.getSelf().level(), this.getSelf(), item);
-            $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), getThrowAngle3(), 2.4F, getShotAccuracy());
+        /***/
+        return ThrownObjectEntity.throwAnObject(this.self,canSnipe(),item,getShotAccuracy(),getBundleAccuracy(),getThrowAngle(),
+                getThrowAngle2(),getThrowAngle3(),getCanPlace(),bigBlocks());
 
-            if (this.canSnipe()){
-                ((IAbstractArrowAccess)$$7).roundabout$starThrowInit();
-            }
-            this.getSelf().level().addFreshEntity($$7);
-            this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-        } else if (item.is(ModItems.KNIFE_BUNDLE)){
-            for (int i = 0; i< 4; i++) {
-                KnifeEntity $$7 = new KnifeEntity(this.getSelf().level(), this.getSelf(), item);
-                $$7.shootFromRotationWithVariance(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 2.4F, getBundleAccuracy());
-
-                this.getSelf().level().addFreshEntity($$7);
-                if (i ==0) {
-                    this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-                }
-            }
-        } else if (item.is(ModItems.GASOLINE_CAN)){
-            GasolineCanEntity $$7 = new GasolineCanEntity(this.getSelf(),this.getSelf().level());
-            $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 1.5F, getShotAccuracy());
-            if (this.canSnipe()) {
-                $$7.starThrowInit();
-            }
-            this.getSelf().level().addFreshEntity($$7);
-            this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-        } else if (item.is(ModItems.MATCH)){
-            MatchEntity $$7 = new MatchEntity(this.getSelf(),this.getSelf().level());
-            $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), getThrowAngle3(), 2.5F, getShotAccuracy());
-            if (this.canSnipe()) {
-                $$7.starThrowInit();
-            }
-            this.getSelf().level().addFreshEntity($$7);
-            this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-        } else if (item.is(ModItems.MATCH_BUNDLE)){
-            for (int i = 0; i< 4; i++) {
-                MatchEntity $$7 = new MatchEntity(this.getSelf(),this.getSelf().level());
-                $$7.shootFromRotationWithVariance(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 2.5F, getBundleAccuracy());
-                this.getSelf().level().addFreshEntity($$7);
-                if (i ==0) {
-                    this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-                }
-            }
-        } else if ((item.getItem() instanceof StandArrowItem && !(item.getDamageValue() >= item.getMaxDamage())) ||
-                item.getItem() instanceof WorthyArrowItem){
-            StandArrowEntity $$4 = new StandArrowEntity(this.getSelf().level(), this.getSelf(), item);
-            $$4.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0F, 3F, getShotAccuracy());
-            this.getSelf().level().addFreshEntity($$4);
-            this.getSelf().level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-        } else if (item.getItem() instanceof EggItem){
-            ThrownEgg $$4 = new ThrownEgg(this.getSelf().level(), this.getSelf());
-            $$4.setItem(item);
-            $$4.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 2F, getShotAccuracy());
-            this.getSelf().level().addFreshEntity($$4);
-            this.getSelf().level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-        } else if (item.getItem() instanceof ExperienceBottleItem){
-            ThrownExperienceBottle $$4 = new ThrownExperienceBottle(this.getSelf().level(), this.getSelf());
-            $$4.setItem(item);
-            $$4.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -3.0F, 2F, getShotAccuracy());
-            this.getSelf().level().addFreshEntity($$4);
-            this.getSelf().level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-        } else if (item.getItem() instanceof EnderpearlItem){
-            ThrownEnderpearl $$4 = new ThrownEnderpearl(this.getSelf().level(), this.getSelf());
-            if (this.getSelf() instanceof Player PE && ((Player) this.getSelf()).getCooldowns().isOnCooldown(item.getItem())){
-                StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
-                if (standEntity != null) {
-                    addItemLight(standEntity);
-                }
-            } else {
-                if (this.getSelf() instanceof Player PE) {
-                    PE.getCooldowns().addCooldown(item.getItem(), 20);
-                }
-                $$4.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0F, 1.8F, getShotAccuracy());
-                this.getSelf().level().addFreshEntity($$4);
-                this.getSelf().level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-            }
-        } else if (item.getItem() instanceof ArrowItem && !(item.getItem() instanceof RoundaboutArrowItem)){
-            ArrowItem $$10 = (ArrowItem) item.getItem();
-            AbstractArrow $$11 = $$10.createArrow(this.getSelf().level(), item, this.getSelf());
-            $$11.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0.0F, 3.0F, getShotAccuracy());
-            $$11.setCritArrow(true);
-            StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
-            if (standEntity != null) {
-                if (!standEntity.canAcquireHeldItem){
-                    $$11.pickup = AbstractArrow.Pickup.DISALLOWED;
-                }
-            }
-            if (this.canSnipe()){
-                ((IAbstractArrowAccess)$$11).roundabout$starThrowInit();
-            }
-            this.getSelf().level().addFreshEntity($$11);
-            this.getSelf().level().playSound(null, $$11, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-        } else if (item.is(Items.TRIDENT)){
-            if (!item.hurt(1,this.getSelf().level().getRandom(),null)){
-                ThrownTrident $$7 = new ThrownTrident(this.getSelf().level(), this.getSelf(), item);
-                $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0.0F, 3.0F, getShotAccuracy());
-                if (this.canSnipe()){
-                    ((IAbstractArrowAccess)$$7).roundabout$starThrowInit2();
-                }
-                this.getSelf().level().addFreshEntity($$7);
-                this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-            }
-        } else if (item.getItem() instanceof HarpoonItem){
-            if (!item.hurt(1,this.getSelf().level().getRandom(),null)){
-                HarpoonEntity $$7 = new HarpoonEntity(this.getSelf().level(), this.getSelf(), item);
-                $$7.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 0.0F, 3.0F, getShotAccuracy());
-                if (this.canSnipe()){
-                    ((IAbstractArrowAccess)$$7).roundabout$starThrowInit2();
-                }
-                this.getSelf().level().addFreshEntity($$7);
-                this.getSelf().level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-            }
-        } else {
-            boolean canPlace = getCanPlace();
-            ThrownObjectEntity thrownBlockOrItem = new ThrownObjectEntity(this.getSelf(), this.getSelf().level(), item, canPlace);
-            thrownBlockOrItem.shootFromRotation(this.getSelf(), this.getSelf().getXRot(),
-                    this.getSelf().getYRot(), getThrowAngle(), 1.7F, getThrowAngle2());
-            if (this.canSnipe()){
-                thrownBlockOrItem.starThrowInit();
-            }
-            this.getSelf().level().addFreshEntity(thrownBlockOrItem);
-            if (item.is(Items.IRON_NUGGET) || item.is(Items.GOLD_NUGGET) || item.is(Items.DIAMOND)|| item.is(Items.FLINT)) {
-                this.getSelf().level().playSound(null, thrownBlockOrItem, ModSounds.BALL_BEARING_SHOT_EVENT, SoundSource.PLAYERS, 1.0F, 1F);
-            } else {
-                this.getSelf().level().playSound(null, thrownBlockOrItem, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-            }
-        }
     }
 
+    public boolean bigBlocks(){
+        return true;
+    }
     public boolean canSnipe(){
         return false;
     }
@@ -380,21 +247,22 @@ public class BlockGrabPreset extends PunchingStand{
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
                 if (!standEntity.getHeldItem().isEmpty()) {
                     if (!this.getSelf().level().isClientSide) {
-                        throwObject(standEntity.getHeldItem());
-                        if (MainUtil.isThrownBlockItem(standEntity.getHeldItem().getItem())){
-                            animateStand((byte) 33);
-                        } else {
-                            animateStand((byte) 35);
-                        }
-                        poseStand(OffsetIndex.FOLLOW);
-                        standEntity.setHeldItem(ItemStack.EMPTY);
-                        if (this.getSelf() instanceof Player){
-                            ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
-                                    PacketDataIndex.S2C_INT_ATD, -10);
-                        }
-                        this.setAttackTimeDuring(-10);
+                        if (throwObject(standEntity.getHeldItem())) {
+                            if (MainUtil.isThrownBlockItem(standEntity.getHeldItem().getItem())) {
+                                animateStand((byte) 33);
+                            } else {
+                                animateStand((byte) 35);
+                            }
+                            poseStand(OffsetIndex.FOLLOW);
+                            standEntity.setHeldItem(ItemStack.EMPTY);
+                            if (this.getSelf() instanceof Player) {
+                                ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+                                        PacketDataIndex.S2C_INT_ATD, -10);
+                            }
+                            this.setAttackTimeDuring(-10);
 
-                        return true;
+                            return true;
+                        }
                     }
                     return false;
                 } else if (standEntity.getFirstPassenger() != null){
