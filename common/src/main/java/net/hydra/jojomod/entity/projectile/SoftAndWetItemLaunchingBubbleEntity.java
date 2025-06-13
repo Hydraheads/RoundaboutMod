@@ -51,6 +51,10 @@ public class SoftAndWetItemLaunchingBubbleEntity extends SoftAndWetBubbleEntity{
     }
 
     @Override
+    protected float getInertia() {
+        return 0.97F;
+    }
+    @Override
     public int getDistanceUntilPopping(){
         return ClientNetworking.getAppropriateConfig().softAndWetSettings.maxExplosiveBubbleTravelDistanceBeforePopping;
     }

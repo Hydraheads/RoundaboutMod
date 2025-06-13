@@ -892,7 +892,7 @@ public class PowersSoftAndWet extends PunchingStand {
         return 0.17F;
     }
     public float getExplosiveItemBubbleSpeed(){
-        return 0.17F;
+        return 0.18F;
     }
 
     public void shootBubble(SoftAndWetBubbleEntity ankh){
@@ -912,7 +912,7 @@ public class PowersSoftAndWet extends PunchingStand {
     }
     public void shootBubbleSpeed(SoftAndWetBubbleEntity ankh, float speed){
         ankh.setSped(speed);
-        ankh.setPos(this.self.getX(), this.self.getY()+(this.self.getEyeHeight()*0.68), this.self.getZ());
+        ankh.setPos(this.self.getX(), this.self.getY()+(this.self.getEyeHeight()*0.71), this.self.getZ());
         ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, speed, 0);
     }
     public void shootBubbleSpeed2(SoftAndWetBubbleEntity ankh, float speed){
