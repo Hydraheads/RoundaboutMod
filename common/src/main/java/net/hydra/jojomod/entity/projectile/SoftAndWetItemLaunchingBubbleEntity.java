@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -19,6 +20,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
@@ -31,6 +33,7 @@ import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -275,10 +278,39 @@ public class SoftAndWetItemLaunchingBubbleEntity extends SoftAndWetBubbleEntity{
         }
     }
 
+    public float getPopAccuracy(){
+        return 100;
+    }
+    public float getBundleAccuracy(){
+        return 0.5F;
+    }
+    public float getThrowAngle(){
+        return -0.5F;
+    }
+    public float getThrowAngle2(){
+        return 0.8F;
+    }
+    public float getThrowAngle3(){
+        return -3.0F;
+    }
+    public boolean getCanPlace(LivingEntity self){
+        return !(self instanceof Player PE && ((ServerPlayer) PE).gameMode.getGameModeForPlayer() == GameType.SPECTATOR)
+                && !(self instanceof Player PE2 && ((ServerPlayer) PE2).gameMode.getGameModeForPlayer() == GameType.ADVENTURE)
+                && self.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING);
+    }
     public void popWithForce() {
         if (!this.level().isClientSide()) {
             Entity user = this.getOwner();
             if (user instanceof LivingEntity LE) {
+                if (!getHeldItem().isEmpty()) {
+                    float xRot = this.getXRot();
+                    float yRot = this.getYRot();
+                    if (ThrownObjectEntity.throwAnObject(LE, false, getHeldItem(), getPopAccuracy(), getBundleAccuracy(), getThrowAngle(),
+                            getThrowAngle2(), getThrowAngle3(), getCanPlace(LE), false, xRot, yRot,
+                            new Vec3(this.getX(), this.getEyeY() - 0.1F, this.getZ()),false)){
+                        hasDitchedItem = true;
+                    }
+                }
             }
             popBubble();
         }
