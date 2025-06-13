@@ -107,6 +107,8 @@ public class SoftAndWetBubbleRenderer extends EntityRenderer<SoftAndWetBubbleEnt
                     if (sp.getEntityStolen() > 0 && sp.getPlunderType() == PlunderTypes.MOBS.id) {
                         scaleIt = 1.0f;
                     }
+                } else if (entity instanceof SoftAndWetItemLaunchingBubbleEntity itemn){
+                    scaleIt = 0.33f;
                 }
 
 

@@ -14,6 +14,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -50,6 +51,23 @@ public class SoftAndWetItemLaunchingBubbleEntity extends SoftAndWetBubbleEntity{
         this.setOwner($$1);
     }
 
+    @Override
+    public void addAdditionalSaveData(CompoundTag $$0){
+        CompoundTag compoundtag = new CompoundTag();
+        $$0.put("roundabout.HeldItem",this.getHeldItem().save(compoundtag));
+        $$0.putBoolean("roundabout.ditchedItem",hasDitchedItem);
+        $$0.putFloat("roundabout.speed",getSped());
+        super.addAdditionalSaveData($$0);
+    }
+    @Override
+    public void readAdditionalSaveData(CompoundTag $$0){
+        CompoundTag compoundtag = $$0.getCompound("roundabout.HeldItem");
+        ItemStack itemstack = ItemStack.of(compoundtag);
+        hasDitchedItem = $$0.getBoolean("roundabout.ditchedItem");
+        setSped($$0.getFloat("roundabout.speed"));
+        this.setHeldItem(itemstack);
+        super.readAdditionalSaveData($$0);
+    }
     @Override
     protected float getInertia() {
         return 0.97F;

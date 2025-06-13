@@ -38,7 +38,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
@@ -167,6 +170,9 @@ public class PowersSoftAndWet extends PunchingStand {
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         if (inShootingMode()){
             if (slot == 1 && (!goBeyondCharged() || getGoBeyondTarget() == null)){
+                return true;
+            }
+            if (slot == 2 && !canDoBubbleItemLaunch() && !isHoldingSneak()){
                 return true;
             }
         } else {
@@ -627,22 +633,31 @@ public class PowersSoftAndWet extends PunchingStand {
         }
         return true;
     }
+
+    public int grabInventorySlot=1;
     /**Explosive Item Bubble Shooting*/
-    public boolean itemBubbleShot(){
-        if (!this.self.level().isClientSide()) {
-            SoftAndWetItemLaunchingBubbleEntity bubble = getItemLaunchingBubble();
+    public boolean itemBubbleShot() {
+        ItemStack stack = ((Player) this.getSelf()).getInventory().getItem(this.grabInventorySlot);
+        if (!stack.isEmpty() && !(stack.getItem() instanceof BlockItem &&
+                ((BlockItem) stack.getItem()).getBlock() instanceof ShulkerBoxBlock)) {
+            this.setCooldown(PowerIndex.SKILL_2, 20);
+            if (!this.self.level().isClientSide()) {
 
-            if (bubble != null) {
-                this.setCooldown(PowerIndex.SKILL_2, 20);
+                SoftAndWetItemLaunchingBubbleEntity bubble = getItemLaunchingBubble();
 
-                this.poseStand(OffsetIndex.FOLLOW);
-                this.setAttackTimeDuring(-10);
-                this.setActivePower(PowerIndex.POWER_2_BONUS);
-                shootExplosiveItemBubbleSpeed(bubble, getExplosiveItemBubbleSpeed());
-                bubbleListInit();
-                this.bubbleList.add(bubble);
-                this.getSelf().level().addFreshEntity(bubble);
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXPLOSIVE_BUBBLE_SHOT_EVENT, SoundSource.PLAYERS, 0.7F, (float) (1.2 + (Math.random() * 0.04)));
+                if (bubble != null) {
+
+                    bubble.setHeldItem(stack.copyWithCount(1));
+                    stack.shrink(1);
+                    this.poseStand(OffsetIndex.FOLLOW);
+                    this.setAttackTimeDuring(-10);
+                    this.setActivePower(PowerIndex.POWER_2_BONUS);
+                    shootExplosiveItemBubbleSpeed(bubble, getExplosiveItemBubbleSpeed());
+                    bubbleListInit();
+                    this.bubbleList.add(bubble);
+                    this.getSelf().level().addFreshEntity(bubble);
+                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXPLOSIVE_BUBBLE_SHOT_EVENT, SoundSource.PLAYERS, 0.7F, (float) (1.2 + (Math.random() * 0.04)));
+                }
             }
         }
         return true;
@@ -892,7 +907,7 @@ public class PowersSoftAndWet extends PunchingStand {
         return 0.17F;
     }
     public float getExplosiveItemBubbleSpeed(){
-        return 0.18F;
+        return 0.25F;
     }
 
     public void shootBubble(SoftAndWetBubbleEntity ankh){
@@ -1019,6 +1034,8 @@ public class PowersSoftAndWet extends PunchingStand {
             this.chargedFinal = chargeTime;
         } else if (move == PowerIndex.SPECIAL_TRACKER){
             goBeyondActiveTarget = this.self.level().getEntity(chargeTime);
+        } else if (move == PowerIndex.POWER_2_BONUS){
+            this.grabInventorySlot = chargeTime;
         }
         return super.tryIntPower(move, forced, chargeTime);
     }
@@ -1550,17 +1567,13 @@ public class PowersSoftAndWet extends PunchingStand {
                             }
                         } else {
                             if (!this.onCooldown(PowerIndex.SKILL_2)) {
+                                if (canDoBubbleItemLaunch()) {
 
-                                int bubbleType = 1;
-                                ClientConfig clientConfig = ConfigManager.getClientConfig();
-                                if (clientConfig != null && clientConfig.dynamicSettings != null) {
-                                    bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
+                                    this.tryIntPower(PowerIndex.POWER_2_BONUS, true, ((Player) this.getSelf()).getInventory().selected);
+
+                                    tryIntPowerPacket(PowerIndex.POWER_2_BONUS, ((Player) this.getSelf()).getInventory().selected);
+                                    //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
                                 }
-
-                                this.tryIntPower(PowerIndex.POWER_2_BONUS, true, bubbleType);
-
-                                tryIntPowerPacket(PowerIndex.POWER_2_BONUS,bubbleType);
-                                //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
                             }
                         }
                     }
@@ -1570,6 +1583,11 @@ public class PowersSoftAndWet extends PunchingStand {
             }
         }
         super.buttonInput1(keyIsDown, options);
+    }
+
+    public boolean canDoBubbleItemLaunch(){
+        ItemStack stack = this.getSelf().getMainHandItem();
+        return !stack.isEmpty();
     }
 
     @Override
