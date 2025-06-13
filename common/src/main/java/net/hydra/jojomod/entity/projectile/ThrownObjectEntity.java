@@ -59,6 +59,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
    public boolean places;
 
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$SUPER_THROWN = SynchedEntityData.defineId(ThrownObjectEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$STYLE = SynchedEntityData.defineId(ThrownObjectEntity.class, EntityDataSerializers.BYTE);
 
     private int superThrowTicks = -1;
 
@@ -125,11 +126,14 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             }
         }
     }
+    public static final byte
+            SPTWTHROW = 1,
+            SOFTTHROW = 2;
 
     public static boolean throwAnObject(LivingEntity thrower, boolean canSnipe, ItemStack item, float getShotAccuracy,
                                      float getBundleAccuracy,
                                      float getThrowAngle1, float getThrowAngle2, float getThrowAngle3,
-                                     boolean getCanPlace, boolean bigBlocks, float xRot, float yRot,Vec3 pos,
+                                     boolean getCanPlace, byte styleType, float xRot, float yRot,Vec3 pos,
                                         boolean playSounds){
         if (item.getItem() instanceof ThrowablePotionItem) {
             ThrownPotion $$4 = new ThrownPotion(thrower.level(), thrower);
@@ -307,6 +311,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             if (canSnipe){
                 thrownBlockOrItem.starThrowInit();
             }
+            thrownBlockOrItem.setStyle(styleType);
             thrower.level().addFreshEntity(thrownBlockOrItem);
 
             if (playSounds) {
@@ -324,6 +329,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
     @Override
     public void addAdditionalSaveData(CompoundTag $$0){
         $$0.putBoolean("roundabout.AcquireHeldItem",places);
+        $$0.putByte("roundabout.style",getStyle());
         CompoundTag compoundtag = new CompoundTag();
         $$0.put("roundabout.HeldItem",this.getItem().save(compoundtag));
         super.addAdditionalSaveData($$0);
@@ -331,6 +337,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
     @Override
     public void readAdditionalSaveData(CompoundTag $$0){
         this.places = $$0.getBoolean("roundabout.AcquireHeldItem");
+        setStyle($$0.getByte("roundabout.style"));
         CompoundTag compoundtag = $$0.getCompound("roundabout.HeldItem");
         ItemStack itemstack = ItemStack.of(compoundtag);
         this.setItem(itemstack);
@@ -340,10 +347,19 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.getEntityData().define(ROUNDABOUT$SUPER_THROWN, false);
+        if (!this.getEntityData().hasItem(ROUNDABOUT$SUPER_THROWN)) {
+            this.getEntityData().define(ROUNDABOUT$SUPER_THROWN, false);
+            this.getEntityData().define(ROUNDABOUT$STYLE, (byte)0);
+        }
     }
     public boolean getSuperThrow() {
         return this.getEntityData().get(ROUNDABOUT$SUPER_THROWN);
+    }
+    public byte getStyle() {
+        return this.getEntityData().get(ROUNDABOUT$STYLE);
+    }
+    public void setStyle(byte style) {
+        this.getEntityData().set(ROUNDABOUT$STYLE,style);
     }
     @Override
     protected Item getDefaultItem() {
@@ -584,7 +600,12 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 }
             }
         }
-        damage*= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.thrownBlocks*0.01);
+        if (getStyle() == SOFTTHROW){
+            damage*= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.bubbleLaunchedBlocks*0.01);
+            damage*= 0.75F;
+        } else if (getStyle() == SPTWTHROW){
+            damage*= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.thrownBlocks*0.01);
+        }
         return damage;
     }
 

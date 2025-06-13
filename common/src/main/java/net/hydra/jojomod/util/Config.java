@@ -222,6 +222,8 @@ import java.util.Set;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer thrownBlocks;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer bubbleLaunchedBlocks;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer corpseDamageOnMobs;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer corpseDamageOnPlayers;

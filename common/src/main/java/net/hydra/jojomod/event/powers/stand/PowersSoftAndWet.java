@@ -640,7 +640,7 @@ public class PowersSoftAndWet extends PunchingStand {
         ItemStack stack = ((Player) this.getSelf()).getInventory().getItem(this.grabInventorySlot);
         if (!stack.isEmpty() && !(stack.getItem() instanceof BlockItem &&
                 ((BlockItem) stack.getItem()).getBlock() instanceof ShulkerBoxBlock)) {
-            this.setCooldown(PowerIndex.SKILL_2, 60);
+            this.setCooldown(PowerIndex.SKILL_2, 50);
             if (!this.self.level().isClientSide()) {
 
                 SoftAndWetItemLaunchingBubbleEntity bubble = getItemLaunchingBubble();

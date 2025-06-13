@@ -69,14 +69,11 @@ public class BlockGrabPreset extends PunchingStand{
         this.setCooldown(PowerIndex.SKILL_2, cdr);
         /***/
         return ThrownObjectEntity.throwAnObject(this.self,canSnipe(),item,getShotAccuracy(),getBundleAccuracy(),getThrowAngle(),
-                getThrowAngle2(),getThrowAngle3(),getCanPlace(),bigBlocks(),this.self.getXRot(),this.self.getYRot(),
+                getThrowAngle2(),getThrowAngle3(),getCanPlace(),ThrownObjectEntity.SPTWTHROW,this.self.getXRot(),this.self.getYRot(),
                 new Vec3(this.self.getX(), this.self.getEyeY() - 0.1F, this.self.getZ()),true);
 
     }
 
-    public boolean bigBlocks(){
-        return true;
-    }
     public boolean canSnipe(){
         return false;
     }
