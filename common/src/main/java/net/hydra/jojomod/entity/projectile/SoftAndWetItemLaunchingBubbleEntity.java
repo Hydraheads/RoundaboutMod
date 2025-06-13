@@ -279,23 +279,6 @@ public class SoftAndWetItemLaunchingBubbleEntity extends SoftAndWetBubbleEntity{
         if (!this.level().isClientSide()) {
             Entity user = this.getOwner();
             if (user instanceof LivingEntity LE) {
-                List<Entity> entityList = DamageHandler.genHitbox(LE, this.getX(), this.getY(),
-                        this.getZ(), 5, 5, 5);
-                if (!entityList.isEmpty()) {
-                    for (Entity ent : entityList) {
-                        if (!(ent instanceof SoftAndWetBubbleEntity)) {
-                            if (((StandUser) LE).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
-                                if (!(MainUtil.isMobOrItsMounts(ent, getOwner())) && !MainUtil.isCreativeOrInvincible(ent)) {
-                                    float degrees = MainUtil.getLookAtEntityYawWithAngle(this.position(), ent);
-                                    MainUtil.takeKnockbackWithY(ent, 1.05F,
-                                            Mth.sin(degrees * ((float) Math.PI / 180)),
-                                            Mth.sin(-17 * ((float) Math.PI / 180)),
-                                            -Mth.cos(degrees * ((float) Math.PI / 180)));
-                                }
-                            }
-                        }
-                    }
-                }
             }
             popBubble();
         }

@@ -799,6 +799,8 @@ public class PowersSoftAndWet extends PunchingStand {
                             }
                         } else if (value instanceof SoftAndWetExplosiveBubbleEntity SBE){
                             SBE.popWithForce();
+                        } else if (value instanceof SoftAndWetItemLaunchingBubbleEntity GBE){
+                            GBE.popWithForce();
                         }
                     }
                 }
