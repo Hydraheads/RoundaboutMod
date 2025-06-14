@@ -38,6 +38,8 @@ public class HarpoonEntity extends AbstractArrow {
         private static final EntityDataAccessor<Boolean> ID_FOIL = SynchedEntityData.defineId(HarpoonEntity.class, EntityDataSerializers.BOOLEAN);
         private ItemStack harpoonItem = new ItemStack(ModItems.HARPOON);
         private boolean dealtDamage;
+
+        public boolean isThrown = false;
         public int clientSideReturnTridentTickCount;
 
     public HarpoonEntity(EntityType<? extends HarpoonEntity> $$0, Level $$1) {
@@ -163,7 +165,7 @@ public class HarpoonEntity extends AbstractArrow {
         @Override
         protected void onHitEntity(EntityHitResult $$0) {
             Entity $$1 = $$0.getEntity();
-            float $$2 = 6.0F;
+            float $$2 = 7.0F;
             if ($$1 instanceof LivingEntity $$3) {
                 int f = EnchantmentHelper.getEnchantmentLevel(Enchantments.PROJECTILE_PROTECTION, $$3);
                 $$2 = (float) ($$2 * (1-(f*0.03)));
@@ -176,6 +178,11 @@ public class HarpoonEntity extends AbstractArrow {
 
             skyHit = false;
             $$2 = addSkyDamage($$1,$$2);
+
+            /**Harpoon Buff*/
+            if (isThrown){
+                $$2*=2F;
+            }
 
             if ($$1.hurt($$5, $$2)) {
                 if ($$1.getType() == EntityType.ENDERMAN) {

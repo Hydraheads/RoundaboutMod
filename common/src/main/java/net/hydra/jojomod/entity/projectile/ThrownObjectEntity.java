@@ -297,6 +297,9 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 if (canSnipe){
                     ((IAbstractArrowAccess)$$7).roundabout$starThrowInit2();
                 }
+                if (styleType == SPTWTHROW) {
+                    $$7.isThrown = true;
+                }
                 thrower.level().addFreshEntity($$7);
                 if (playSounds){
                     thrower.level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
