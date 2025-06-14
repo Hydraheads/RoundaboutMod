@@ -8,6 +8,7 @@ import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.GasolineSplatterEntity;
+import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
@@ -317,7 +318,7 @@ public class StandFireBlock extends BaseEntityBlock {
                     ($$3 instanceof TamableAnimal TA && TA.getOwner() != null && TA.getOwner().is(fb.standUser)))){
                 $$1.removeBlock($$2, false);
             } else {
-                if ($$3 instanceof LivingEntity LE) {
+                if ($$3 instanceof LivingEntity LE && !($$3 instanceof LifeTrackerEntity)) {
                     StandUser user = ((StandUser) $$3);
                     user.roundabout$setRemainingStandFireTicks(user.roundabout$getRemainingFireTicks() + 1);
                     if (user.roundabout$getRemainingFireTicks() == 0) {

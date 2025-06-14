@@ -227,6 +227,10 @@ public class LifeTrackerEntity extends LivingEntity implements PreRenderEntity {
         return false;
     }
     @Override
+    public boolean isInvulnerable() {
+        return true;
+    }
+    @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(USER_ID, -1);
