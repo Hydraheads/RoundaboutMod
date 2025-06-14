@@ -1229,6 +1229,11 @@ public class PowersSoftAndWet extends PunchingStand {
     }
     public float getKickAttackStrength(Entity entity){
         float punchD = this.getPunchStrength(entity)*1.8F+this.getHeavyPunchStrength(entity);
+        /**Full charge does much less damage because it's more for moving mobs*/
+
+        if (this.chargedFinal >= maxSuperHitTime){
+            punchD*=0.5F;
+        }
         if (this.getReducedDamage(entity)){
             return (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD);
         } else {
