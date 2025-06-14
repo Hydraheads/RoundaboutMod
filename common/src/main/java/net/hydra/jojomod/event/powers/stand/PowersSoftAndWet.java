@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.BubbleScaffoldBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
@@ -11,6 +12,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
@@ -39,6 +41,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -53,6 +58,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PowersSoftAndWet extends PunchingStand {
     public PowersSoftAndWet(LivingEntity self) {
@@ -207,6 +213,21 @@ public class PowersSoftAndWet extends PunchingStand {
         return super.isAttackIneptVisually(activeP,slot);
     }
 
+    public int waterShieldTicks = 0;
+    public boolean hasWaterShield(){
+        return waterShieldTicks > 0;
+    }
+    public void setWaterShieldTicks(int ticks){
+        waterShieldTicks = ticks;
+    }
+    public int getWaterShieldTicks(){
+        return waterShieldTicks;
+    }
+    public void tickWaterShield(){
+        if (waterShieldTicks > 0){
+            waterShieldTicks--;
+        }
+    }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
 
@@ -629,7 +650,8 @@ public class PowersSoftAndWet extends PunchingStand {
                 this.self.getX(),
                 this.self.getY() +(this.self.getBbHeight()*0.5),
                 this.self.getZ(),
-                80,width, height, width, 0.4);
+                120,width, height, width, 0.4);
+        this.setWaterShieldTicks(8);
     }
     public boolean switchModes(){
         if (getStandUserSelf().roundabout$getCombatMode()){
@@ -1526,6 +1548,8 @@ public class PowersSoftAndWet extends PunchingStand {
         unloadBubbles();
         /**Burn through ticks*/
 
+        tickWaterShield();
+
         /**tick down the shooting animtation*/
         if (this.self.level().isClientSide()){
             if (this.self instanceof Player PE) {
@@ -1564,6 +1588,55 @@ public class PowersSoftAndWet extends PunchingStand {
 
         super.tickPower();
     }
+
+    @Override
+    public boolean dealWithProjectile(Entity ent){
+        if (!ent.level().isClientSide()) {
+            if (hasWaterShield()) {
+                boolean success = false;
+                if (ent instanceof AbstractArrow AA) {
+                    ItemStack ii = ((IAbstractArrowAccess)ent).roundabout$GetPickupItem();
+                    if (!ii.isEmpty()) {
+                        success = true;
+                        if (AA.pickup.equals(AbstractArrow.Pickup.ALLOWED)) {
+                        } else {
+                        }
+                        //SE.setHeldItem(ii.copyAndClear());
+                    }
+                } else if (ent instanceof ThrownObjectEntity TO) {
+                    ItemStack ii = TO.getItem();
+                    if (!ii.isEmpty()) {
+                        success = true;
+                        if (TO.places) {
+                        } else {
+                        }
+                        //SE.setHeldItem(ii.copyAndClear());
+                    }
+                } else if (ent instanceof ThrownPotion TP) {
+                    ItemStack ii = TP.getItem();
+                    if (!ii.isEmpty()) {
+                        success = true;
+                        if (TP.getOwner() == null || TP.getOwner() instanceof Player) {
+                        } else {
+                        }
+                        //SE.setHeldItem(ii.copyAndClear());
+                    }
+                }
+
+                if (success){
+                    //this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.ITEM_CATCH_EVENT, SoundSource.PLAYERS, 1.7F, 1.2F);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean waterShieldBlockProjectile(Projectile projectile)
+    {
+        return true;
+    }
+
     @Override
     public void buttonInput2(boolean keyIsDown, Options options) {
         if (this.getSelf().level().isClientSide) {

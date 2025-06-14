@@ -8,6 +8,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
 import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -18,6 +19,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -159,6 +161,7 @@ public abstract class ZAbstractArrow extends Entity implements IAbstractArrowAcc
             if (user.roundabout$isParallelRunning())
             {
                 ci.cancel();
+                return;
             }
 
             StandPowers entityPowers = user.roundabout$getStandPowers();
@@ -168,12 +171,14 @@ public abstract class ZAbstractArrow extends Entity implements IAbstractArrowAcc
                 {
                     d4cPowers.meltDodge((AbstractArrow)(Object)this);
                     ci.cancel();
+                    return;
                 }
             }
 
             if (entityPowers.dealWithProjectile(this)){
                 ci.cancel();
                 this.discard();
+                return;
             }
         }
 
