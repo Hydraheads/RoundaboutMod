@@ -1266,7 +1266,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public float roundabout$getBonusJumpHeight(){
         float TOT = 0;
-        if (roundabout$isBubbleEncased()){
+        if (roundabout$getBubbleEncased() == 1){
             TOT+=4;
         }
         return TOT;
@@ -2743,7 +2743,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "swing(Lnet/minecraft/world/InteractionHand;Z)V", at = @At(value = "HEAD"), cancellable = true)
     protected void rooundabout$swing(InteractionHand $$0, boolean $$1, CallbackInfo ci) {
         if (!this.level().isClientSide()){
-            if (roundabout$getBubbleEncased() == 1) {
+            if (roundabout$isBubbleEncased()) {
                 ItemStack stack = this.getItemInHand($$0);
                 if (stack.getItem() instanceof ScissorItem || stack.getItem() instanceof SwordItem
                         || stack.getItem() instanceof KnifeItem || stack.getItem() instanceof AxeItem
