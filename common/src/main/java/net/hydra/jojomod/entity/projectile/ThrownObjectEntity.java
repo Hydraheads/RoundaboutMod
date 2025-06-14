@@ -134,7 +134,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                                      float getBundleAccuracy,
                                      float getThrowAngle1, float getThrowAngle2, float getThrowAngle3,
                                      boolean getCanPlace, byte styleType, float xRot, float yRot,Vec3 pos,
-                                        boolean playSounds, float mult){
+                                        boolean playSounds, float mult, boolean canGiveYouItem){
         if (item.getItem() instanceof ThrowablePotionItem) {
             ThrownPotion $$4 = new ThrownPotion(thrower.level(), thrower);
             $$4.setPos(pos);
@@ -269,6 +269,11 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     $$11.pickup = AbstractArrow.Pickup.DISALLOWED;
                 }
             }
+
+            if (!canGiveYouItem){
+                $$11.pickup = AbstractArrow.Pickup.DISALLOWED;
+            }
+
             if (canSnipe){
                 ((IAbstractArrowAccess)$$11).roundabout$starThrowInit();
             }
@@ -627,7 +632,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
     protected void onHitEntity(EntityHitResult $$0) {
         Entity $$1 = $$0.getEntity();
         if ($$1 instanceof LivingEntity LE){
-            if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectile(this)){
+            if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectile(this,$$0)){
                 this.discard();
                 return;
             }

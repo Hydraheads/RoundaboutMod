@@ -175,7 +175,7 @@ public abstract class ZAbstractArrow extends Entity implements IAbstractArrowAcc
                 }
             }
 
-            if (entityPowers.dealWithProjectile(this)){
+            if (entityPowers.dealWithProjectile(this,$$0)){
                 ci.cancel();
                 this.discard();
                 return;

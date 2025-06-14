@@ -2762,7 +2762,7 @@ public class StandPowers {
         }
         return this.getSelf().isCrouching();
     }
-    public boolean dealWithProjectile(Entity ent){
+    public boolean dealWithProjectile(Entity ent, HitResult res){
         return false;
     }
     public boolean getIsGamemodeApproriateForGrief(){

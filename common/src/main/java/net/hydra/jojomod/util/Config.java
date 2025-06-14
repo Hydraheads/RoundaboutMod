@@ -405,6 +405,18 @@ import java.util.Set;
         public Integer d4cDimensionHopToOldDimension;
         @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
         public Integer D4CMeltDodgeCooldown;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer softAndWetKickMinimum;
+        @IntOption(group = "inherit", value = 240, min = 0, max = 72000)
+        public Integer softAndWetBubbleScaffolding;
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        public Integer softAndWetWaterShield;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer softAndWetItemBubbleShot;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer softAndWetBasicBubbleShot;
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        public Integer softAndWetEncasementBubbleCreate;
         @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
         public Integer cinderellaDefaceAttack;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
