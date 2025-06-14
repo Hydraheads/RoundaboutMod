@@ -305,7 +305,7 @@ public class SoftAndWetItemLaunchingBubbleEntity extends SoftAndWetBubbleEntity{
                     float yRot = yes.y;
                     if (ThrownObjectEntity.throwAnObject(LE, false, getHeldItem(), getPopAccuracy(), getBundleAccuracy(), getThrowAngle(),
                             getThrowAngle2(), getThrowAngle3(), getCanPlace(LE), ThrownObjectEntity.SOFTTHROW, xRot, yRot,
-                            new Vec3(this.getX(), this.getEyeY() - 0.1F, this.getZ()),false)){
+                            new Vec3(this.getX(), this.getEyeY() - 0.1F, this.getZ()),false, 0.85F)){
                         hasDitchedItem = true;
                     }
                 }

@@ -134,12 +134,12 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                                      float getBundleAccuracy,
                                      float getThrowAngle1, float getThrowAngle2, float getThrowAngle3,
                                      boolean getCanPlace, byte styleType, float xRot, float yRot,Vec3 pos,
-                                        boolean playSounds){
+                                        boolean playSounds, float mult){
         if (item.getItem() instanceof ThrowablePotionItem) {
             ThrownPotion $$4 = new ThrownPotion(thrower.level(), thrower);
             $$4.setPos(pos);
             $$4.setItem(item);
-            $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.4F, getShotAccuracy);
+            $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.4F*mult, getShotAccuracy);
             thrower.level().addFreshEntity($$4);
             if (playSounds){
                 thrower.level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
@@ -148,7 +148,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             Snowball $$4 = new Snowball(thrower.level(), thrower);
             $$4.setPos(pos);
             $$4.setItem(item);
-            $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F, getShotAccuracy);
+            $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
             thrower.level().addFreshEntity($$4);
             if (playSounds){
                 thrower.level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
@@ -156,7 +156,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         } else if (item.is(ModItems.KNIFE)){
             KnifeEntity $$7 = new KnifeEntity(thrower.level(), thrower, item);
             $$7.setPos(pos);
-            $$7.shootFromRotation(thrower, xRot, yRot, getThrowAngle3, 2.4F, getShotAccuracy);
+            $$7.shootFromRotation(thrower, xRot, yRot, getThrowAngle3, 2.4F*mult, getShotAccuracy);
 
             if (canSnipe){
                 ((IAbstractArrowAccess)$$7).roundabout$starThrowInit();
@@ -168,7 +168,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         } else if (item.is(ModItems.KNIFE_BUNDLE)){
             for (int i = 0; i< 4; i++) {
                 KnifeEntity $$7 = new KnifeEntity(thrower.level(), thrower, item);
-                $$7.shootFromRotationWithVariance(thrower, xRot, yRot, -3.0F, 2.4F, getBundleAccuracy);
+                $$7.shootFromRotationWithVariance(thrower, xRot, yRot, -3.0F, 2.4F*mult, getBundleAccuracy);
                 $$7.setPos(pos);
                 thrower.level().addFreshEntity($$7);
                 if (i ==0) {
@@ -182,7 +182,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 return false;
             } else {
                 GasolineCanEntity $$7 = new GasolineCanEntity(thrower, thrower.level());
-                $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.5F, getShotAccuracy);
+                $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.5F*mult, getShotAccuracy);
                 $$7.setPos(pos);
                 if (canSnipe) {
                     $$7.starThrowInit();
@@ -194,7 +194,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             }
         } else if (item.is(ModItems.MATCH)){
                 MatchEntity $$7 = new MatchEntity(thrower, thrower.level());
-                $$7.shootFromRotation(thrower, xRot, yRot, getThrowAngle3, 2.5F, getShotAccuracy);
+                $$7.shootFromRotation(thrower, xRot, yRot, getThrowAngle3, 2.5F*mult, getShotAccuracy);
             $$7.setPos(pos);
                 if (canSnipe) {
                     $$7.starThrowInit();
@@ -206,7 +206,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         } else if (item.is(ModItems.MATCH_BUNDLE)){
                 for (int i = 0; i < 4; i++) {
                     MatchEntity $$7 = new MatchEntity(thrower, thrower.level());
-                    $$7.shootFromRotationWithVariance(thrower, xRot, yRot, -3.0F, 2.5F, getShotAccuracy);
+                    $$7.shootFromRotationWithVariance(thrower, xRot, yRot, -3.0F, 2.5F*mult, getShotAccuracy);
                     $$7.setPos(pos);
                     thrower.level().addFreshEntity($$7);
                     if (i == 0) {
@@ -219,7 +219,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 item.getItem() instanceof WorthyArrowItem){
             StandArrowEntity $$4 = new StandArrowEntity(thrower.level(), thrower, item);
             $$4.setPos(pos);
-            $$4.shootFromRotation(thrower, xRot, yRot, 0F, 3F, getShotAccuracy);
+            $$4.shootFromRotation(thrower, xRot, yRot, 0F, 3F*mult, getShotAccuracy);
             thrower.level().addFreshEntity($$4);
             if (playSounds){
                 thrower.level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
@@ -228,7 +228,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             ThrownEgg $$4 = new ThrownEgg(thrower.level(), thrower);
             $$4.setPos(pos);
             $$4.setItem(item);
-            $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F, getShotAccuracy);
+            $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
             thrower.level().addFreshEntity($$4);
             if (playSounds){
                 thrower.level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
@@ -237,7 +237,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             ThrownExperienceBottle $$4 = new ThrownExperienceBottle(thrower.level(), thrower);
             $$4.setPos(pos);
             $$4.setItem(item);
-            $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F, getShotAccuracy);
+            $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
             thrower.level().addFreshEntity($$4);
             if (playSounds){
                 thrower.level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
@@ -251,7 +251,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 if (thrower instanceof Player PE) {
                     PE.getCooldowns().addCooldown(item.getItem(), 20);
                 }
-                $$4.shootFromRotation(thrower, xRot, yRot, -0F, 1.8F, getShotAccuracy);
+                $$4.shootFromRotation(thrower, xRot, yRot, -0F, 1.8F*mult, getShotAccuracy);
                 thrower.level().addFreshEntity($$4);
                 if (playSounds){
                     thrower.level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
@@ -261,7 +261,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             ArrowItem $$10 = (ArrowItem) item.getItem();
             AbstractArrow $$11 = $$10.createArrow(thrower.level(), item, thrower);
             $$11.setPos(pos);
-            $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F, getShotAccuracy);
+            $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F*mult, getShotAccuracy);
             $$11.setCritArrow(true);
             StandEntity standEntity = ((StandUser) thrower).roundabout$getStand();
             if (standEntity != null && styleType == SPTWTHROW) {
@@ -280,7 +280,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             if (!item.hurt(1,thrower.level().getRandom(),null)){
                 ThrownTrident $$7 = new ThrownTrident(thrower.level(), thrower, item);
                 $$7.setPos(pos);
-                $$7.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F, getShotAccuracy);
+                $$7.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F*mult, getShotAccuracy);
                 if (canSnipe){
                     ((IAbstractArrowAccess)$$7).roundabout$starThrowInit2();
                 }
@@ -293,7 +293,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             if (!item.hurt(1,thrower.level().getRandom(),null)){
                 HarpoonEntity $$7 = new HarpoonEntity(thrower.level(), thrower, item);
                 $$7.setPos(pos);
-                $$7.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F, getShotAccuracy);
+                $$7.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F*mult, getShotAccuracy);
                 if (canSnipe){
                     ((IAbstractArrowAccess)$$7).roundabout$starThrowInit2();
                 }
@@ -309,8 +309,9 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             boolean canPlace = getCanPlace;
             ThrownObjectEntity thrownBlockOrItem = new ThrownObjectEntity(thrower, thrower.level(), item, canPlace);
             thrownBlockOrItem.setPos(pos);
+
             thrownBlockOrItem.shootFromRotation(thrower, xRot,
-                    yRot, getThrowAngle1, 1.7F, getThrowAngle2);
+                    yRot, getThrowAngle1, 1.7F*mult, getThrowAngle2);
             if (canSnipe){
                 thrownBlockOrItem.starThrowInit();
             }
