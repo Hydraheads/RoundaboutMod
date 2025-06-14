@@ -264,7 +264,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F, getShotAccuracy);
             $$11.setCritArrow(true);
             StandEntity standEntity = ((StandUser) thrower).roundabout$getStand();
-            if (standEntity != null) {
+            if (standEntity != null && styleType == SPTWTHROW) {
                 if (!standEntity.canAcquireHeldItem){
                     $$11.pickup = AbstractArrow.Pickup.DISALLOWED;
                 }
@@ -297,10 +297,10 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 if (canSnipe){
                     ((IAbstractArrowAccess)$$7).roundabout$starThrowInit2();
                 }
+                thrower.level().addFreshEntity($$7);
                 if (playSounds){
                     thrower.level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                 }
-                thrower.level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
             }
         } else {
             boolean canPlace = getCanPlace;

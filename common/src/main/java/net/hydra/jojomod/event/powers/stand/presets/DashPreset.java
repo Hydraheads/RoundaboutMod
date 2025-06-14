@@ -71,16 +71,19 @@ public class DashPreset extends StandPowers {
 
     @SuppressWarnings("deprecation")
     public boolean canVault(){
-        Vec3 vec3d = this.getSelf().getEyePosition(0);
-        Vec3 vec3d2 = this.getSelf().getViewVector(0);
-        Vec3 vec3d3 = vec3d.add(vec3d2.x * 2, vec3d2.y * 2, vec3d2.z * 2);
-        BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
-        if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && (blockHit.getBlockPos().getY()+1) > this.getSelf().getY()
-                && !this.getSelf().level().getBlockState(blockHit.getBlockPos().above()).isSolid()){
-            return true;
-        } else {
-            return false;
+        if (!this.self.onGround()) {
+            Vec3 vec3d = this.getSelf().getEyePosition(0);
+            Vec3 vec3d2 = this.getSelf().getViewVector(0);
+            Vec3 vec3d3 = vec3d.add(vec3d2.x * 2, vec3d2.y * 2, vec3d2.z * 2);
+            BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
+            if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && (blockHit.getBlockPos().getY() + 1) > this.getSelf().getY()
+                    && !this.getSelf().level().getBlockState(blockHit.getBlockPos().above()).isSolid()) {
+                return true;
+            } else {
+                return false;
+            }
         }
+        return false;
     }
 
     public boolean fallBraceInit() {
