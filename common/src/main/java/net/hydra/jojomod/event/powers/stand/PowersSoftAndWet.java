@@ -40,6 +40,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.PotionItem;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.phys.Vec2;
@@ -191,6 +194,12 @@ public class PowersSoftAndWet extends PunchingStand {
         if (slot == 3 && (!canVault() && !canFallBrace() && isGuarding() && !canBigBubble())){
             return false;
         }
+
+        if (slot == 4 && isHoldingSneak()){
+            if (!canUseWaterShield()){
+                return false;
+            }
+        }
         return super.isAttackIneptVisually(activeP,slot);
     }
 
@@ -238,10 +247,8 @@ public class PowersSoftAndWet extends PunchingStand {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
         }
 
-        if (isGuarding()){
-            setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.NO_CD);
-        } else if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.NO_CD);
+        if (isHoldingSneak()){
+            setSkillIcon(context, x, y, 4, StandIcons.WATER_SHIELD, PowerIndex.SKILL_4_SNEAK);
         } else {
             if (inShootingMode()) {
                 setSkillIcon(context, x, y, 4, StandIcons.SOFT_SHOOTING_MODE_EXIT, PowerIndex.SKILL_4);
@@ -250,6 +257,13 @@ public class PowersSoftAndWet extends PunchingStand {
             }
         }
 
+    }
+
+    public boolean canUseWaterShield(){
+        ItemStack stack = this.getSelf().getMainHandItem();
+        ItemStack stack2 = this.getSelf().getOffhandItem();
+        return ((!stack.isEmpty() && stack.getItem() instanceof PotionItem PI && PotionUtils.getPotion(stack) == Potions.WATER)
+        || (!stack2.isEmpty() && stack2.getItem() instanceof PotionItem PI2 && PotionUtils.getPotion(stack2) == Potions.WATER));
     }
 
     /**For mob ai, change the bubbleType before trypower to set what kind of plunder it has*/

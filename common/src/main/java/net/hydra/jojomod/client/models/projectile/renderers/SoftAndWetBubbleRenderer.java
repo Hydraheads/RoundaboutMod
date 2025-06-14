@@ -21,6 +21,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.ItemSupplier;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
@@ -125,7 +126,11 @@ public class SoftAndWetBubbleRenderer extends EntityRenderer<SoftAndWetBubbleEnt
                     poseStack.translate(0, -0.12, 0);
                     this.itemRenderer.renderStatic(plunder.getHeldItem(), ItemDisplayContext.GROUND, packedLight, OverlayTexture.NO_OVERLAY, poseStack, buffer, ((Entity) entity).level(), ((Entity) entity).getId());
                 } if (entity instanceof SoftAndWetItemLaunchingBubbleEntity launch && !launch.getHeldItem().isEmpty()) {
-                    poseStack.translate(0, -0.19, 0);
+                    if (launch.getHeldItem().getItem() instanceof BlockItem){
+                        poseStack.translate(0, -0.19, 0);
+                    } else {
+                        poseStack.translate(0, -0.12, 0);
+                    }
                     this.itemRenderer.renderStatic(launch.getHeldItem(), ItemDisplayContext.GROUND, packedLight, OverlayTexture.NO_OVERLAY, poseStack, buffer, ((Entity) entity).level(), ((Entity) entity).getId());
                 }
 

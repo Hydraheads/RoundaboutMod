@@ -79,7 +79,7 @@ public class StarPlatinumBaseRenderer<T extends StandEntity> extends StandRender
         } else if (BT == StarPlatinumEntity.VOLUME_39){
             return VOLUME_39;
         } else if (BT == StarPlatinumEntity.JUMP_13){
-            return VOLUME_39;
+            return JUMP_13;
         }
         return PART_3_SKIN;
     }
