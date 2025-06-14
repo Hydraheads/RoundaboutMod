@@ -28,6 +28,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -40,10 +41,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -186,6 +189,12 @@ public class PowersSoftAndWet extends PunchingStand {
             if (slot == 2 && ((!canDoBubbleRedirect() && isGuarding()))) {
                 return true;
             }
+
+            if (slot == 4 && isHoldingSneak()){
+                if (!canUseWaterShield()){
+                    return true;
+                }
+            }
         }
 
         if (slot == 3 && (!canVault() && !canFallBrace() && !isGuarding() && isHoldingSneak()) && !canBridge()){
@@ -195,11 +204,6 @@ public class PowersSoftAndWet extends PunchingStand {
             return false;
         }
 
-        if (slot == 4 && isHoldingSneak()){
-            if (!canUseWaterShield()){
-                return false;
-            }
-        }
         return super.isAttackIneptVisually(activeP,slot);
     }
 
@@ -247,11 +251,11 @@ public class PowersSoftAndWet extends PunchingStand {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
         }
 
-        if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 4, StandIcons.WATER_SHIELD, PowerIndex.SKILL_4_SNEAK);
+        if (inShootingMode()) {
+            setSkillIcon(context, x, y, 4, StandIcons.SOFT_SHOOTING_MODE_EXIT, PowerIndex.SKILL_4);
         } else {
-            if (inShootingMode()) {
-                setSkillIcon(context, x, y, 4, StandIcons.SOFT_SHOOTING_MODE_EXIT, PowerIndex.SKILL_4);
+            if (isHoldingSneak()) {
+                setSkillIcon(context, x, y, 4, StandIcons.WATER_SHIELD, PowerIndex.SKILL_4_SNEAK);
             } else {
                 setSkillIcon(context, x, y, 4, StandIcons.SOFT_SHOOTING_MODE, PowerIndex.SKILL_4);
             }
@@ -593,6 +597,39 @@ public class PowersSoftAndWet extends PunchingStand {
 
         }
         return true;
+    }
+    public boolean useWaterShield(){
+        if (this.self instanceof Player PL && !PL.level().isClientSide()) {
+            ItemStack stack = this.getSelf().getMainHandItem();
+            if ((!stack.isEmpty() && stack.getItem() instanceof PotionItem PI && PotionUtils.getPotion(stack) == Potions.WATER)) {
+                if (!PL.getAbilities().instabuild) {
+                    stack.shrink(1);
+                    PL.getInventory().add(new ItemStack(Items.GLASS_BOTTLE));
+                }
+                splashWaterShield();
+                return true;
+            }
+            ItemStack stack2 = this.getSelf().getOffhandItem();
+            if ((!stack2.isEmpty() && stack2.getItem() instanceof PotionItem PI2 && PotionUtils.getPotion(stack2) == Potions.WATER)) {
+                if (!PL.getAbilities().instabuild) {
+                    stack2.shrink(1);
+                    PL.getInventory().add(new ItemStack(Items.GLASS_BOTTLE));
+                }
+                splashWaterShield();
+            }
+        }
+
+        return true;
+    }
+    public void splashWaterShield(){
+        float width = this.self.getBbWidth()*0.5F;
+        float height = this.self.getBbHeight()*0.5F;
+        ((ServerLevel) this.self.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
+                        Blocks.WATER.defaultBlockState()),
+                this.self.getX(),
+                this.self.getY() +(this.self.getBbHeight()*0.5),
+                this.self.getZ(),
+                80,width, height, width, 0.4);
     }
     public boolean switchModes(){
         if (getStandUserSelf().roundabout$getCombatMode()){
@@ -972,6 +1009,8 @@ public class PowersSoftAndWet extends PunchingStand {
             return this.vault();
         } else if (move == PowerIndex.POWER_4){
             return this.switchModes();
+        } else if (move == PowerIndex.POWER_4_SNEAK){
+            return this.useWaterShield();
         } else if (move == PowerIndex.POWER_4_EXTRA){
             if (!this.self.level().isClientSide()) {
                 this.setInExplosiveSpinMode(false);
@@ -1699,11 +1738,15 @@ public class PowersSoftAndWet extends PunchingStand {
                 } else {
                     hold4 = false;
                 }
-            } else if (isHoldingSneak()) {
+            } else if (isHoldingSneak() && !inShootingMode()) {
                 if (keyIsDown) {
-                    if (!this.onCooldown(PowerIndex.SKILL_3)) {
+                    if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
                         if (!hold4) {
                            hold4 = true;
+                           if (canUseWaterShield()) {
+                               this.tryPower(PowerIndex.POWER_4_SNEAK, true);
+                               tryPowerPacket(PowerIndex.POWER_4_SNEAK);
+                           }
                         }
                     }
                 } else {

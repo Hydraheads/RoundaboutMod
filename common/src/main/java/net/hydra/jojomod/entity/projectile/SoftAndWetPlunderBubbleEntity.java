@@ -531,7 +531,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
 
         if (!this.level().isClientSide()) {
             ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.WATER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
-                    100,1, 1, 1, 0.4);
+                    80,1, 1, 1, 0.4);
             SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
             this.playSound($$6, 1F, 1.5F);
             List<Entity> entities = MainUtil.hitbox(MainUtil.genHitbox(this.level(), this.getX(), this.getY(),
@@ -555,7 +555,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     public void splashLava(){
         if (!this.level().isClientSide()) {
             ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.LAVA.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
-                    100, 1, 1,1, 0.4);
+                    80, 1, 1,1, 0.4);
             SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
             this.playSound($$6, 1F, 1.5F);
             List<Entity> entities = MainUtil.hitbox(MainUtil.genHitbox(this.level(), this.getX(), this.getY(),
