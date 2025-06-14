@@ -641,7 +641,7 @@ public class PowersSoftAndWet extends PunchingStand {
             }
         }
 
-        this.setCooldown(PowerIndex.SKILL_4_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.softAndWetWaterShield);
+        this.setCooldown(PowerIndex.SKILL_4_SNEAK, 80);
 
         return true;
     }
@@ -717,7 +717,7 @@ public class PowersSoftAndWet extends PunchingStand {
         ItemStack stack = ((Player) this.getSelf()).getInventory().getItem(this.grabInventorySlot);
         if (!stack.isEmpty() && !(stack.getItem() instanceof BlockItem &&
                 ((BlockItem) stack.getItem()).getBlock() instanceof ShulkerBoxBlock)) {
-            this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().cooldownsInTicks.softAndWetItemBubbleShot);
+            this.setCooldown(PowerIndex.SKILL_2, 60);
             if (!this.self.level().isClientSide()) {
 
                 SoftAndWetItemLaunchingBubbleEntity bubble = getItemLaunchingBubble();
@@ -743,7 +743,7 @@ public class PowersSoftAndWet extends PunchingStand {
         SoftAndWetPlunderBubbleEntity bubble = getPlunderBubble();
 
         if (bubble != null){
-            this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().cooldownsInTicks.softAndWetBasicBubbleShot);
+            this.setCooldown(PowerIndex.SKILL_2, 20);
 
             this.poseStand(OffsetIndex.FOLLOW);
             this.setAttackTimeDuring(-10);
@@ -1169,7 +1169,7 @@ public class PowersSoftAndWet extends PunchingStand {
     public int bubbleNumber = 0;
 
     public boolean bigEncasementBubbleCreate() {
-        this.setCooldown(PowerIndex.SKILL_EXTRA, ClientNetworking.getAppropriateConfig().cooldownsInTicks.softAndWetEncasementBubbleCreate);
+        this.setCooldown(PowerIndex.SKILL_EXTRA, 80);
         if (!this.self.level().isClientSide()) {
             EncasementBubbleEntity encasement = ModEntities.ENCASEMENT_BUBBLE.create(this.getSelf().level());
             if (encasement != null){
@@ -1428,9 +1428,9 @@ public class PowersSoftAndWet extends PunchingStand {
     public void encasementKick(){
 
         if (chargedFinal >= maxSuperHitTime) {
-            this.setAttackTimeMax((int) (ClientNetworking.getAppropriateConfig().cooldownsInTicks.softAndWetKickMinimum + chargedFinal * 1.5));
+            this.setAttackTimeMax((int) (ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianKickMinimum + chargedFinal * 1.5));
         } else {
-            this.setAttackTimeMax((int) (ClientNetworking.getAppropriateConfig().cooldownsInTicks.softAndWetKickMinimum + chargedFinal));
+            this.setAttackTimeMax((int) (ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianKickMinimum + chargedFinal));
         }
         this.setAttackTime(0);
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
@@ -1470,7 +1470,7 @@ public class PowersSoftAndWet extends PunchingStand {
 
                     tryPowerPacket(PowerIndex.POWER_3_EXTRA);
                     bubbleScaffoldCount++;
-                    this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.softAndWetBubbleScaffolding);
+                    this.setCooldown(PowerIndex.SKILL_3, 240);
                     if (bubbleScaffoldCount >= 10){
                         this.tryPower(PowerIndex.NONE, true);
                         tryPowerPacket(PowerIndex.NONE);
