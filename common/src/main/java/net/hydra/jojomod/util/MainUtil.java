@@ -1403,7 +1403,7 @@ public class MainUtil {
         float f = 1.0f;
         AABB box = new AABB(vec3d.x+reach, vec3d.y+reach, vec3d.z+reach, vec3d.x-reach, vec3d.y-reach, vec3d.z-reach);
 
-        EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(entityX, vec3d, vec3d3, box, entity -> !entity.isSpectator() && entity.isPickable() && !entity.isInvulnerable(), reach*reach);
+        EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(entityX, vec3d, vec3d3, box, entity -> !entity.isSpectator() && entity.isPickable() && !entity.isInvulnerable() && !(entityX instanceof SoftAndWetBubbleEntity), reach*reach);
         if (entityHitResult != null){
             Entity hitResult = entityHitResult.getEntity();
             if (hitResult.isAlive() && !hitResult.isRemoved()) {
