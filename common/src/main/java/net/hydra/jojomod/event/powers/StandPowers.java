@@ -1082,7 +1082,7 @@ public class StandPowers {
 
     public boolean preCanInterruptPower(Entity interrupter, boolean isStandDamage){
         boolean interrupt = false;
-        if (interrupter instanceof LivingEntity){
+        if (interrupter != null){
             if (this.isBarraging() && ClientNetworking.getAppropriateConfig().chargeSettings.barragesAreAlwaysInterruptable) {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                 return true;
