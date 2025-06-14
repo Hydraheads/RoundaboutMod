@@ -70,7 +70,7 @@ public class BlockGrabPreset extends PunchingStand{
         /***/
         return ThrownObjectEntity.throwAnObject(this.self,canSnipe(),item,getShotAccuracy(),getBundleAccuracy(),getThrowAngle(),
                 getThrowAngle2(),getThrowAngle3(),getCanPlace(),ThrownObjectEntity.SPTWTHROW,this.self.getXRot(),this.self.getYRot(),
-                new Vec3(this.self.getX(), this.self.getEyeY() - 0.1F, this.self.getZ()),true,1);
+                new Vec3(this.self.getX(), this.self.getEyeY() - 0.1F, this.self.getZ()),true,1, true);
 
     }
 

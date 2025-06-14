@@ -56,6 +56,7 @@ public class SoftAndWetItemLaunchingBubbleEntity extends SoftAndWetBubbleEntity{
         CompoundTag compoundtag = new CompoundTag();
         $$0.put("roundabout.HeldItem",this.getHeldItem().save(compoundtag));
         $$0.putBoolean("roundabout.ditchedItem",hasDitchedItem);
+        $$0.putBoolean("roundabout.canGiveYouItem",canGiveYouItem);
         $$0.putFloat("roundabout.speed",getSped());
         super.addAdditionalSaveData($$0);
     }
@@ -64,10 +65,12 @@ public class SoftAndWetItemLaunchingBubbleEntity extends SoftAndWetBubbleEntity{
         CompoundTag compoundtag = $$0.getCompound("roundabout.HeldItem");
         ItemStack itemstack = ItemStack.of(compoundtag);
         hasDitchedItem = $$0.getBoolean("roundabout.ditchedItem");
+        canGiveYouItem = $$0.getBoolean("roundabout.canGiveYouItem");
         setSped($$0.getFloat("roundabout.speed"));
         this.setHeldItem(itemstack);
         super.readAdditionalSaveData($$0);
     }
+    public boolean canGiveYouItem = true;
     @Override
     protected float getInertia() {
         return 0.97F;
@@ -125,20 +128,22 @@ public class SoftAndWetItemLaunchingBubbleEntity extends SoftAndWetBubbleEntity{
 
     public boolean hasDitchedItem = false;
     public void addItemLight(){
-        if (!hasDitchedItem) {
-            if (standUser instanceof Player PE) {
+        if (canGiveYouItem) {
+            if (!hasDitchedItem) {
+                if (standUser instanceof Player PE) {
                     ItemEntity $$4 = new ItemEntity(this.level(), this.getX(),
                             this.getY() + this.getEyeHeight(), this.getZ(),
                             getHeldItem());
                     $$4.setPickUpDelay(40);
                     $$4.setThrower(this.standUser.getUUID());
                     standUser.level().addFreshEntity($$4);
-            } else {
-                ItemEntity $$4 = new ItemEntity(this.level(), this.getX(),
-                        this.getY() + this.getEyeHeight(), this.getZ(),
-                        getHeldItem());
-                $$4.setPickUpDelay(40);
-                this.level().addFreshEntity($$4);
+                } else {
+                    ItemEntity $$4 = new ItemEntity(this.level(), this.getX(),
+                            this.getY() + this.getEyeHeight(), this.getZ(),
+                            getHeldItem());
+                    $$4.setPickUpDelay(40);
+                    this.level().addFreshEntity($$4);
+                }
             }
         }
     }
@@ -305,7 +310,7 @@ public class SoftAndWetItemLaunchingBubbleEntity extends SoftAndWetBubbleEntity{
                     float yRot = yes.y;
                     if (ThrownObjectEntity.throwAnObject(LE, false, getHeldItem(), getPopAccuracy(), getBundleAccuracy(), getThrowAngle(),
                             getThrowAngle2(), getThrowAngle3(), getCanPlace(LE), ThrownObjectEntity.SOFTTHROW, xRot, yRot,
-                            new Vec3(this.getX(), this.getEyeY() - 0.1F, this.getZ()),false, 0.85F)){
+                            new Vec3(this.getX(), this.getEyeY() - 0.1F, this.getZ()),false, 0.85F, canGiveYouItem)){
                         hasDitchedItem = true;
                     }
                 }

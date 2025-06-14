@@ -53,6 +53,7 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
@@ -640,11 +641,14 @@ public class PowersSoftAndWet extends PunchingStand {
             }
         }
 
+        this.setCooldown(PowerIndex.SKILL_4_SNEAK, 80);
+
         return true;
     }
     public void splashWaterShield(){
         float width = this.self.getBbWidth()*0.5F;
         float height = this.self.getBbHeight()*0.5F;
+        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.WATER_ENCASE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5 + (Math.random() * 0.04)));
         ((ServerLevel) this.self.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
                         Blocks.WATER.defaultBlockState()),
                 this.self.getX(),
@@ -1589,42 +1593,74 @@ public class PowersSoftAndWet extends PunchingStand {
         super.tickPower();
     }
 
+    public Vec3 BubbleRandomPos(){
+
+        float r1 = (float) (Math.random()*1-0.5F);
+        float r2= (float) (Math.random()*0.4-0.2F);
+        float r3 = (float) (Math.random()*1-0.5F);
+        return this.self.getEyePosition().add(r1,r2,r3);
+    }
+
     @Override
-    public boolean dealWithProjectile(Entity ent){
+    public boolean dealWithProjectile(Entity ent, HitResult res){
         if (!ent.level().isClientSide()) {
             if (hasWaterShield()) {
                 boolean success = false;
                 if (ent instanceof AbstractArrow AA) {
                     ItemStack ii = ((IAbstractArrowAccess)ent).roundabout$GetPickupItem();
-                    if (!ii.isEmpty()) {
-                        success = true;
-                        if (AA.pickup.equals(AbstractArrow.Pickup.ALLOWED)) {
-                        } else {
-                        }
+                    if (!ii.isEmpty() && !ii.isDamageableItem()) {
+                        SoftAndWetItemLaunchingBubbleEntity bubble = getItemLaunchingBubble();
+                        if (bubble != null){
+
+                            success = true;
+                            if (!AA.pickup.equals(AbstractArrow.Pickup.ALLOWED)) {
+                                bubble.canGiveYouItem = false;
+                            }
                         //SE.setHeldItem(ii.copyAndClear());
+                            bubble.setHeldItem(ii.copyAndClear());
+                            bubble.setPos(BubbleRandomPos());
+                            bubbleListInit();
+                            this.bubbleList.add(bubble);
+                            this.getSelf().level().addFreshEntity(bubble);
+                        }
                     }
                 } else if (ent instanceof ThrownObjectEntity TO) {
                     ItemStack ii = TO.getItem();
                     if (!ii.isEmpty()) {
-                        success = true;
-                        if (TO.places) {
-                        } else {
+                        SoftAndWetItemLaunchingBubbleEntity bubble = getItemLaunchingBubble();
+                        if (bubble != null) {
+                            success = true;
+                            if (!TO.places) {
+                                bubble.canGiveYouItem = false;
+                            }
+                            bubble.setHeldItem(ii.copyAndClear());
+                            bubble.setPos(BubbleRandomPos());
+                            bubbleListInit();
+                            this.bubbleList.add(bubble);
+                            this.getSelf().level().addFreshEntity(bubble);
                         }
-                        //SE.setHeldItem(ii.copyAndClear());
                     }
                 } else if (ent instanceof ThrownPotion TP) {
                     ItemStack ii = TP.getItem();
                     if (!ii.isEmpty()) {
-                        success = true;
-                        if (TP.getOwner() == null || TP.getOwner() instanceof Player) {
-                        } else {
+                        SoftAndWetItemLaunchingBubbleEntity bubble = getItemLaunchingBubble();
+                        if (bubble != null) {
+                            success = true;
+                            if (!(TP.getOwner() == null || TP.getOwner() instanceof Player)) {
+                                bubble.canGiveYouItem = false;
+                            }
+                            //SE.setHeldItem(ii.copyAndClear());
+                            bubble.setHeldItem(ii.copyAndClear());
+                            bubble.setPos(BubbleRandomPos());
+                            bubbleListInit();
+                            this.bubbleList.add(bubble);
+                            this.getSelf().level().addFreshEntity(bubble);
                         }
-                        //SE.setHeldItem(ii.copyAndClear());
                     }
                 }
 
                 if (success){
-                    //this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.ITEM_CATCH_EVENT, SoundSource.PLAYERS, 1.7F, 1.2F);
+                    this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BUBBLE_PLUNDER_EVENT, SoundSource.PLAYERS, 1.7F, 1.8F);
                     return true;
                 }
             }

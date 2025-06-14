@@ -64,6 +64,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -610,7 +612,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         }
     }
     @Override
-    public boolean dealWithProjectile(Entity ent){
+    public boolean dealWithProjectile(Entity ent, HitResult res){
         if (!ent.level().isClientSide()) {
             StandEntity stand = getStandEntity(this.self);
             if (Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE && this.self instanceof ServerPlayer PE) {
@@ -620,7 +622,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                         boolean success = false;
                         if (ent instanceof AbstractArrow AA) {
                             ItemStack ii = ((IAbstractArrowAccess)ent).roundabout$GetPickupItem();
-                            if (!ii.isEmpty()) {
+                            if (!ii.isEmpty() && !ii.isDamageableItem()) {
                                 success = true;
                                 ModPacketHandler.PACKET_ACCESS.sendSimpleByte(PE,
                                         PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK);

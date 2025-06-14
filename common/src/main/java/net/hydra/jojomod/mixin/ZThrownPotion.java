@@ -28,7 +28,7 @@ public abstract class ZThrownPotion extends ThrowableItemProjectile implements I
         if ($$1 == HitResult.Type.ENTITY) {
             Entity $$2 = ((EntityHitResult)$$0).getEntity();
             if ($$2 instanceof LivingEntity LE){
-                if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectile(this)){
+                if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectile(this,$$0)){
                     ci.cancel();
                     this.discard();
                 }
