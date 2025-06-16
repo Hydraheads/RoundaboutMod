@@ -172,7 +172,11 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
             BROKEN_GUARD = 15,
             MINING_BARRAGE = 16,
             LEAP = 17,
-            LEAP_END = 18;
+            LEAP_END = 18,
+            KICK_BARRAGE_WINDUP = 42,
+            KICK_BARRAGE_END = 43,
+            IMPALE = 81,
+            KICK_BARRAGE = 80;
 
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState idleAnimationState2 = new AnimationState();

@@ -112,23 +112,26 @@ public class StarPlatinumEntity extends StandEntity {
     public final AnimationState finalPunch = new AnimationState();
     public final AnimationState finalPunchWindup = new AnimationState();
     public final AnimationState phaseGrab = new AnimationState();
+    public static final byte
+            STAR_FINGER = 82,
+            STAR_FINGER_2 = 83;
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
         if (this.getUser() != null) {
-            if (this.getAnimation() != 12) {
+            if (this.getAnimation() != BARRAGE) {
                 this.hideFists.startIfStopped(this.tickCount);
             } else {
                 this.hideFists.stop();
             }
-            if (this.getAnimation() != 80) {
+            if (this.getAnimation() != KICK_BARRAGE) {
                 this.hideLeg.startIfStopped(this.tickCount);
                 this.kick_barrage.stop();
             } else {
                 this.hideLeg.stop();
                 this.kick_barrage.startIfStopped(this.tickCount);
             }
-            if (this.getAnimation() == 10) {
+            if (this.getAnimation() == BLOCK) {
                 this.blockLoinAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.blockLoinAnimationState.stop();
@@ -183,30 +186,30 @@ public class StarPlatinumEntity extends StandEntity {
             }
 
 
-            if (this.getAnimation() == 42) {
+            if (this.getAnimation() == KICK_BARRAGE_WINDUP) {
                 this.kick_barrage_windup.startIfStopped(this.tickCount);
             } else {
                 this.kick_barrage_windup.stop();
             }
 
-            if (this.getAnimation() == 43) {
+            if (this.getAnimation() == KICK_BARRAGE_END) {
                 this.kick_barrage_end.startIfStopped(this.tickCount);
             } else {
                 this.kick_barrage_end.stop();
             }
 
-            if (this.getAnimation() == 81) {
+            if (this.getAnimation() == StandEntity.IMPALE) {
                 this.impale.startIfStopped(this.tickCount);
             } else {
                 this.impale.stop();
             }
 
-            if (this.getAnimation() == 82) {
+            if (this.getAnimation() == STAR_FINGER) {
                 this.starFinger.startIfStopped(this.tickCount);
             } else {
                 this.starFinger.stop();
             }
-            if (this.getAnimation() == 83) {
+            if (this.getAnimation() == STAR_FINGER_2) {
                 this.starFinger2.startIfStopped(this.tickCount);
             } else {
                 this.starFinger2.stop();

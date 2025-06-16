@@ -30,16 +30,20 @@ public class CinderellaEntity extends StandEntity {
     }
     public final AnimationState deface = new AnimationState();
     public final AnimationState visages = new AnimationState();
+
+    public static final byte
+            DEFACE = 81,
+            VISAGES = 82;
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
         if (this.getUser() != null) {
-            if (this.getAnimation() == 81) {
+            if (this.getAnimation() == DEFACE) {
                 this.deface.startIfStopped(this.tickCount);
             } else {
                 this.deface.stop();
             }
-            if (this.getAnimation() == 82) {
+            if (this.getAnimation() == VISAGES) {
                 this.visages.startIfStopped(this.tickCount);
             } else {
                 this.visages.stop();

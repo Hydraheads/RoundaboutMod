@@ -1111,7 +1111,7 @@ public class PowersSoftAndWet extends PunchingStand {
         this.poseStand(OffsetIndex.ATTACK);
         this.setAttackTimeMax(this.getBubbleBarrageRecoilTime());
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
-        animateStand((byte) 80);
+        animateStand(StandEntity.KICK_BARRAGE);
         return true;
     }
     @Override
@@ -1242,7 +1242,7 @@ public class PowersSoftAndWet extends PunchingStand {
         }
     }
     public boolean setPowerBubbleBarrageCharge() {
-        animateStand((byte) 42);
+        animateStand(StandEntity.BARRAGE_CHARGE);
         this.attackTimeDuring = 0;
         playBubbleBarrageChargeSound();
         this.setActivePower(PowerIndex.BARRAGE_CHARGE_2);

@@ -103,7 +103,7 @@ public class TheWorldEntity extends StandEntity {
             } else {
                 this.hideFists.stop();
             }
-            if (animation == 81) {
+            if (animation == IMPALE) {
                 this.impale.startIfStopped(this.tickCount);
             } else {
                 this.impale.stop();
@@ -115,7 +115,7 @@ public class TheWorldEntity extends StandEntity {
             } else {
                 this.hideLegEntirely.stop();
             }
-            if (animation != 80) {
+            if (animation != KICK_BARRAGE) {
                 this.hideLeg.startIfStopped(this.tickCount);
                 this.kick_barrage.stop();
             } else {
@@ -177,12 +177,12 @@ public class TheWorldEntity extends StandEntity {
             } else {
                 this.assault_punch.stop();
             }
-            if (animation == 42) {
+            if (animation == KICK_BARRAGE_WINDUP) {
                 this.kick_barrage_windup.startIfStopped(this.tickCount);
             } else {
                 this.kick_barrage_windup.stop();
             }
-            if (animation == 43) {
+            if (animation == KICK_BARRAGE_END) {
                 this.kick_barrage_end.startIfStopped(this.tickCount);
             } else {
                 this.kick_barrage_end.stop();

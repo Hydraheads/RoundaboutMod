@@ -364,7 +364,7 @@ public class PowersCinderella extends DashPreset {
         if (Objects.nonNull(stand)){
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_1);
-            this.animateStand((byte)82);
+            this.animateStand(CinderellaEntity.VISAGES);
             playStandUserOnlySoundsIfNearby(VISAGE_NOISE, 27, false,false);
             this.poseStand(OffsetIndex.GUARD);
 
@@ -388,7 +388,7 @@ public class PowersCinderella extends DashPreset {
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_2);
             playStandUserOnlySoundsIfNearby(IMPALE_NOISE, 27, false,false);
-            this.animateStand((byte)81);
+            this.animateStand(CinderellaEntity.DEFACE);
             this.poseStand(OffsetIndex.ATTACK);
 
             return true;

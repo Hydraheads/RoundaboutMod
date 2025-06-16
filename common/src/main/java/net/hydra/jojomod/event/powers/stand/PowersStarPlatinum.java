@@ -383,7 +383,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         stopSoundsIfNearby(STAR_FINGER_3, 100, false);
         stopSoundsIfNearby(STAR_FINGER_SILENT, 100, false);
         if (this.getActivePower() == PowerIndex.POWER_1) {
-            this.animateStand((byte) 83);
+            this.animateStand(StarPlatinumEntity.STAR_FINGER_2);
         }
         this.self.level().playSound(null, this.self.blockPosition(), ModSounds.DSP_SUMMON_EVENT, SoundSource.PLAYERS,
                 0.5F, (float) (1.5 + (Math.random() * 0.04)));
@@ -398,7 +398,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             if (keyIsDown && ticksForFinger == 100) {
                 holdDownClick = true;
                 ticksForFinger = 101;
-                animateStand((byte) 83);
+                animateStand(StarPlatinumEntity.STAR_FINGER_2);
                 ModPacketHandler.PACKET_ACCESS.intToServerPacket(attackTimeDuring, PacketDataIndex.INT_UPDATE_MOVE);
                 this.attackTimeDuring = 26;
             }
@@ -1394,7 +1394,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 }
 
             }
-            this.animateStand((byte)82);
+            this.animateStand(StarPlatinumEntity.STAR_FINGER);
             this.poseStand(OffsetIndex.GUARD_AND_TRACE);
             //stand.setYRot(this.getSelf().getYHeadRot() % 360);
             //stand.setXRot(this.getSelf().getXRot());

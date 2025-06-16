@@ -1122,7 +1122,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 }
 
                 if (lastHit) {
-                    animateStand((byte) 43);
+                    animateStand(StandEntity.KICK_BARRAGE_END);
                     this.attackTimeDuring = -10;
                 }
             } else {
@@ -1353,7 +1353,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         return false;
     }
     public boolean setPowerKickBarrageCharge() {
-        animateStand((byte) 42);
+        animateStand(StandEntity.KICK_BARRAGE_WINDUP);
         this.attackTimeDuring = 0;
         playKickBarrageChargeSound();
         this.setActivePower(PowerIndex.BARRAGE_CHARGE_2);
@@ -1440,7 +1440,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         playKickBarrageCrySound();
         this.setAttackTimeMax(this.getKickBarrageRecoilTime());
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
-        animateStand((byte) 80);
+        animateStand(StandEntity.KICK_BARRAGE);
         return true;
     }
     public int getKickBarrageLength(){
@@ -1466,7 +1466,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_1_SNEAK);
             playSoundsIfNearby(IMPALE_NOISE, 27, false);
-            this.animateStand((byte)81);
+            this.animateStand(StandEntity.IMPALE);
             this.poseStand(OffsetIndex.GUARD);
 
             return true;
