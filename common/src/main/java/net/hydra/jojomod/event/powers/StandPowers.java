@@ -2729,7 +2729,7 @@ public class StandPowers {
     public void tickMobAI(LivingEntity attackTarget){
     }
     public int getKickBarrageWindup(){
-        return ClientNetworking.getAppropriateConfig().cooldownsInTicks.finalPunchAndKickMinimum;
+        return ClientNetworking.getAppropriateConfig().chargeSettings.kickBarrageWindup;
     }
     public int getBarrageWindup(){
         return ClientNetworking.getAppropriateConfig().chargeSettings.barrageWindup;

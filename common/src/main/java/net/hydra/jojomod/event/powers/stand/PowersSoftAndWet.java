@@ -374,6 +374,12 @@ public class PowersSoftAndWet extends PunchingStand {
         if (keyIsDown) {
             if (!inShootingMode()) {
                 super.buttonInputBarrage(keyIsDown, options);
+            } else {
+                if (this.getAttackTime() >= this.getAttackTimeMax() ||
+                        (this.getActivePowerPhase() != this.getActivePowerPhaseMax())) {
+                    this.tryPower(PowerIndex.BARRAGE_CHARGE_2, true);
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.BARRAGE_CHARGE_2);
+                }
             }
         }
     }
@@ -394,12 +400,33 @@ public class PowersSoftAndWet extends PunchingStand {
             int ClashTime = Math.min(15, Math.round(((float) attackTimeDuring / maxSuperHitTime) * 15));
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
-
+        } else if (standOn && this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
+            int ClashTime = Math.round(((float) attackTimeDuring / this.getKickBarrageWindup()) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
         } else {
             super.renderAttackHud(context,playerEntity,
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
         }
     }
+
+    @Override
+    public boolean cancelItemUse() {
+        return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2);
+    }
+    @Override
+    public boolean canInterruptPower(){
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
+            return true;
+        } else {
+            return super.canInterruptPower();
+        }
+    }
+    @Override
+    public boolean clickRelease(){
+        return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2 || this.getActivePower() == PowerIndex.POWER_2_BLOCK);
+    }
+
 
     @Override
     public void buttonInput1(boolean keyIsDown, Options options) {
@@ -1124,7 +1151,10 @@ public class PowersSoftAndWet extends PunchingStand {
     public boolean cancelSprintJump(){
        if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
             return true;
-        }
+       } else if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2
+                || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
+            return true;
+       }
         return super.cancelSprintJump();
     }
 
