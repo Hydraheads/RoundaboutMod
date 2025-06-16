@@ -107,6 +107,7 @@ public class ClientConfig {
     }
 
     public static class Experiments {
+        @CommentedOption(comment = "Should use the hue shift shader to symbolize being in an alternate world?")
         @BooleanOption(group = "inherit", value = false)
         public Boolean d4cShouldUseColorShader;
     }
