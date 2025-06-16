@@ -256,7 +256,7 @@ public class NewPunchingStand extends NewDashPreset {
         this.poseStand(OffsetIndex.ATTACK);
         this.setAttackTimeMax(this.getBarrageRecoilTime());
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
-        animateStand((byte) 12);
+        animateStand(StandEntity.BARRAGE);
         playBarrageCrySound();
         return true;
     }

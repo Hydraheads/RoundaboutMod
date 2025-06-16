@@ -1396,7 +1396,7 @@ public class StandPowers {
         }
         if (dazeTime > 0){
             ((StandUser) entity).roundabout$tryPower(PowerIndex.NONE,true);
-            ((StandUser) entity).roundabout$getStandPowers().animateStand((byte) 14);
+            ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.HURT_BY_BARRAGE);
         } else {
             ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.IDLE);
         }
@@ -1405,7 +1405,7 @@ public class StandPowers {
     public void setDazedSafely(LivingEntity entity, byte dazeTime){
         if (dazeTime > 0){
             ((StandUser) entity).roundabout$tryPower(PowerIndex.NONE,true);
-            ((StandUser) entity).roundabout$getStandPowers().animateStand((byte) 14);
+            ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.HURT_BY_BARRAGE);
         } else {
             ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.IDLE);
         }
@@ -2695,7 +2695,7 @@ public class StandPowers {
         this.setClashProgress(0f);
         this.clashIncrement = 0;
         this.clashMod = (int) (Math.round(Math.random()*8));
-        animateStand((byte) 12);
+        animateStand(StandEntity.BARRAGE);
 
         if (this.self instanceof Player && !this.self.level().isClientSide) {
             ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.barrage_clash"), true);

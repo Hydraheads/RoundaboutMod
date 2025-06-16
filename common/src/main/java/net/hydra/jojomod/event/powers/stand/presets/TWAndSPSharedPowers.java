@@ -736,7 +736,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         this.setAttackTimeDuring(-1);
         this.setActivePower(PowerIndex.NONE);
         poseStand(OffsetIndex.FOLLOW);
-        animateStand((byte) 17);
+        animateStand(StandEntity.LEAP);
         if (this.getSelf() instanceof Player) {
             cancelConsumableItem(this.getSelf());
         }
@@ -811,8 +811,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
             if (this.getSelf().onGround()){
                 if (((StandUser)this.getSelf()).roundabout$getLeapTicks() <= -1) {
-                    if (this.getAnimation() == 17) {
-                        animateStand((byte) 18);
+                    if (this.getAnimation() == StandEntity.LEAP) {
+                        animateStand(StandEntity.LEAP_END);
                     }
                 }
             }
