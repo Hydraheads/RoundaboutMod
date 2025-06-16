@@ -728,7 +728,7 @@ public class PowersSoftAndWet extends PunchingStand {
             }
         }
 
-        this.setCooldown(PowerIndex.SKILL_4_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.softAndWetWaterShield);
+        this.setCooldown(PowerIndex.SKILL_4_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.softAndWetWaterShieldCD);
 
         return true;
     }
@@ -742,7 +742,7 @@ public class PowersSoftAndWet extends PunchingStand {
                 this.self.getY() +(this.self.getBbHeight()*0.5),
                 this.self.getZ(),
                 120,width, height, width, 0.4);
-        this.setWaterShieldTicks(8);
+        this.setWaterShieldTicks(ClientNetworking.getAppropriateConfig().softAndWetSettings.waterShieldDurationInTicks);
     }
     public boolean switchModes(){
         if (getStandUserSelf().roundabout$getCombatMode()){

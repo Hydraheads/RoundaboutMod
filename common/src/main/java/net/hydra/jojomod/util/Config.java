@@ -411,8 +411,8 @@ import java.util.Set;
         public Integer softAndWetKickMinimum;
         @IntOption(group = "inherit", value = 240, min = 0, max = 72000)
         public Integer softAndWetBubbleScaffolding;
-        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
-        public Integer softAndWetWaterShield;
+        @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
+        public Integer softAndWetWaterShieldCD;
         @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
         public Integer softAndWetItemBubbleShot;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
@@ -479,6 +479,8 @@ import java.util.Set;
         public Integer goBeyondLifespanInTicks;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer encasementBubbleFloatingLifespanInTicks;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer waterShieldDurationInTicks;
     }
     public static class MagiciansRedSettings {
         @IntOption(group = "inherit", value = 100, min = -1, max = 72000)
