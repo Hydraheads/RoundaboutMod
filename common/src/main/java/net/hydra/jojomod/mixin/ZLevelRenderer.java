@@ -2,8 +2,10 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.vertex.*;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
+import net.zetalasis.client.shader.RPostShaderRegistry;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.client.models.layers.PreRenderEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -167,6 +169,19 @@ public abstract class ZLevelRenderer {
         {
             cir.setReturnValue(null);
             cir.cancel();
+        }
+    }
+
+    @Inject(method = "renderChunkLayer", at = @At("HEAD"))
+    private void roundabout$renderChunkLayer(RenderType renderType, PoseStack matrices, double cameraX, double cameraY, double cameraZ, Matrix4f positionMatrix, CallbackInfo ci)
+    {
+        if (renderType == RenderType.solid())
+        {
+            RPostShaderRegistry.InverseProjectionMatrix.identity();
+            RPostShaderRegistry.InverseProjectionMatrix.mul(positionMatrix);
+            RPostShaderRegistry.InverseProjectionMatrix.mul(matrices.last().pose());
+            RPostShaderRegistry.InverseProjectionMatrix.invert();
+            Roundabout.LOGGER.info("Set InverseProjectionMatrix");
         }
     }
 }

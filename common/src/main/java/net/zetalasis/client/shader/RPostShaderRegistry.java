@@ -7,11 +7,13 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4f;
 
 import java.io.IOException;
 import java.util.HashMap;
 
 public class RPostShaderRegistry {
+    public static Matrix4f InverseProjectionMatrix = new Matrix4f();
     private static HashMap<String, IPostChainAccessor> shaders = new HashMap<>();
 
     public static IPostChainAccessor D4C_DIMENSION_TRANSITION = null;
