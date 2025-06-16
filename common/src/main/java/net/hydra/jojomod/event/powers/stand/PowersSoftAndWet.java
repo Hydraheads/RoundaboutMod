@@ -1160,7 +1160,9 @@ public class PowersSoftAndWet extends PunchingStand {
 
     @Override
     public float inputSpeedModifiers(float basis){
-        if (this.activePower == PowerIndex.POWER_1_SNEAK){
+        if (this.activePower == PowerIndex.BARRAGE_CHARGE_2) {
+            basis*=0.5f;
+        } else if (this.activePower == PowerIndex.POWER_1_SNEAK){
             basis *= 0.2f;
         } else if (this.activePower == PowerIndex.SNEAK_ATTACK_CHARGE){
             if (this.getSelf().isCrouching()) {
@@ -1198,6 +1200,15 @@ public class PowersSoftAndWet extends PunchingStand {
     }
     public int bubbleNumber = 0;
 
+    @Override
+    public boolean tryPower(int move, boolean forced) {
+        if (!this.self.level().isClientSide &&
+                (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2)
+                && (move != PowerIndex.BARRAGE_2 && move != PowerIndex.BARRAGE_CHARGE_2 && move != PowerIndex.GUARD)){
+            this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
+        }
+        return super.tryPower(move,forced);
+    }
     public boolean bigEncasementBubbleCreate() {
         this.setCooldown(PowerIndex.SKILL_EXTRA, ClientNetworking.getAppropriateConfig().cooldownsInTicks.softAndWetEncasementBubbleCreate);
         if (!this.self.level().isClientSide()) {
