@@ -717,7 +717,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
         this.setActivePower(PowerIndex.SPECIAL);
         poseStand(OffsetIndex.GUARD);
-        animateStand((byte) 30);
+        animateStand(StandEntity.TIME_STOP);
         if (!(((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) && this.getMaxChargeTSTime() >= 100) {
             playTSVoiceSound();
         }
@@ -1338,7 +1338,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public boolean phaseGrab() {
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)) {
-            animateStand((byte) 87);
+            animateStand(StandEntity.PHASE_GRAB);
             this.attackTimeDuring = 0;
             stand.setFadePercent(50);
             this.setActivePower(PowerIndex.POWER_2_BLOCK);

@@ -136,12 +136,12 @@ public class StarPlatinumEntity extends StandEntity {
             } else {
                 this.blockLoinAnimationState.stop();
             }
-            if (this.getAnimation() == 30) {
+            if (this.getAnimation() == TIME_STOP) {
                 this.timeStopAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.timeStopAnimationState.stop();
             }
-            if (this.getAnimation() == 31) {
+            if (this.getAnimation() == TIME_STOP_RELEASE) {
                 this.timeStopReleaseAnimation.startIfStopped(this.tickCount);
             } else {
                 this.timeStopReleaseAnimation.stop();
@@ -226,7 +226,7 @@ public class StarPlatinumEntity extends StandEntity {
             } else {
                 this.finalPunch.stop();
             }
-            if (this.getAnimation() == 87) {
+            if (this.getAnimation() == PHASE_GRAB) {
                 this.phaseGrab.startIfStopped(this.tickCount);
             } else {
                 this.phaseGrab.stop();

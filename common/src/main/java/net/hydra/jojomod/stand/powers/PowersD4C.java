@@ -486,14 +486,14 @@ public class PowersD4C extends NewPunchingStand {
         {
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_4_EXTRA);
-            this.animateStand((byte) 30);
+            this.animateStand(StandEntity.TIME_STOP);
             this.poseStand(OffsetIndex.GUARD);
         }
         else
         {
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_4);
-            this.animateStand((byte) 30);
+            this.animateStand(StandEntity.TIME_STOP);
             this.poseStand(OffsetIndex.GUARD);
         }
 

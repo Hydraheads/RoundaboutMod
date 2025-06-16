@@ -143,6 +143,10 @@ public class MagiciansRedEntity extends StandEntity {
             JOJONIUM = 20,
             JOJONIUM_ABLAZE = 21,
             DEBUT_SKIN = 22;
+
+    public static final byte
+            RED_BIND = 49,
+            FIRE_CRASH = 60;
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
@@ -204,15 +208,10 @@ public class MagiciansRedEntity extends StandEntity {
             } else {
                 this.fireball_shoot.stop();
             }
-            if (this.getAnimation() == 49) {
+            if (this.getAnimation() == RED_BIND) {
                 this.red_bind.startIfStopped(this.tickCount);
             } else {
                 this.red_bind.stop();
-            }
-            if (this.getAnimation() == 50) {
-                this.fire_crash.startIfStopped(this.tickCount);
-            } else {
-                this.fire_crash.stop();
             }
             if (this.getAnimation() == 51) {
                 this.life_detector.startIfStopped(this.tickCount);
@@ -220,6 +219,11 @@ public class MagiciansRedEntity extends StandEntity {
                 this.life_detector.stop();
             }
 
+            if (this.getAnimation() == FIRE_CRASH) {
+                this.fire_crash.startIfStopped(this.tickCount);
+            } else {
+                this.fire_crash.stop();
+            }
             if (this.getAnimation() == 85) {
                 this.finalKickWindup.startIfStopped(this.tickCount);
             } else {
@@ -230,7 +234,7 @@ public class MagiciansRedEntity extends StandEntity {
             } else {
                 this.finalKick.stop();
             }
-            if (this.getAnimation() == 87) {
+            if (this.getAnimation() == 89) {
                 this.finalPunch.startIfStopped(this.tickCount);
             } else {
                 this.finalPunch.stop();

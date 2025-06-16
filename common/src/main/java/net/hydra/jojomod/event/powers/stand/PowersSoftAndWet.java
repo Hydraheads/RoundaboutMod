@@ -1180,7 +1180,7 @@ public class PowersSoftAndWet extends PunchingStand {
         if (chargedFinal >= maxSuperHitTime){
             this.animateStand((byte) 32);
         } else {
-            this.animateStand((byte) 30);
+            this.animateStand(StandEntity.TIME_STOP);
         }
         //playBarrageCrySound();
         return true;
@@ -1188,7 +1188,7 @@ public class PowersSoftAndWet extends PunchingStand {
     public boolean setPowerKickAttack() {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.SNEAK_ATTACK_CHARGE);
-        this.animateStand((byte) 31);
+        this.animateStand((byte) 39);
         this.poseStand(OffsetIndex.GUARD);
         return true;
     }

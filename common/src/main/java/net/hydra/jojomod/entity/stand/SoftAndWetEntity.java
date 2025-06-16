@@ -65,17 +65,17 @@ public class SoftAndWetEntity extends StandEntity {
             } else {
                 this.kick.stop();
             }
-            if (this.getAnimation() == 31) {
-                this.kick_charge.startIfStopped(this.tickCount);
-            } else {
-                this.kick_charge.stop();
-            }
             if (this.getAnimation() == 32) {
                 this.encasement_punch.startIfStopped(this.tickCount);
             } else {
                 this.encasement_punch.stop();
             }
 
+            if (this.getAnimation() == 39) {
+                this.kick_charge.startIfStopped(this.tickCount);
+            } else {
+                this.kick_charge.stop();
+            }
             if (this.getAnimation() == 42) {
                 this.kick_barrage_windup.startIfStopped(this.tickCount);
             } else {

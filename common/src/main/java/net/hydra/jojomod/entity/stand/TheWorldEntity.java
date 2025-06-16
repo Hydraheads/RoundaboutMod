@@ -109,7 +109,7 @@ public class TheWorldEntity extends StandEntity {
                 this.impale.stop();
             }
             if (((this.getSkin() == TheWorldEntity.HERITAGE_SKIN) || (this.getSkin() == TheWorldEntity.ARCADE_SKIN))
-                    && animation != 80 && animation != 42 && animation != 43
+                    && animation != KICK_BARRAGE && animation != KICK_BARRAGE_WINDUP && animation != KICK_BARRAGE_END
             &&  animation != 86 &&  animation != 85 && idle != 4) {
                 this.hideLegEntirely.startIfStopped(this.tickCount);
             } else {
@@ -122,12 +122,12 @@ public class TheWorldEntity extends StandEntity {
                 this.hideLeg.stop();
                 this.kick_barrage.startIfStopped(this.tickCount);
             }
-            if (animation == 30) {
+            if (animation == TIME_STOP) {
                 this.timeStopAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.timeStopAnimationState.stop();
             }
-            if (animation == 31) {
+            if (animation == TIME_STOP_RELEASE) {
                 this.timeStopReleaseAnimation.startIfStopped(this.tickCount);
             } else {
                  this.timeStopReleaseAnimation.stop();
@@ -198,7 +198,7 @@ public class TheWorldEntity extends StandEntity {
             } else {
                 this.finalKick.stop();
             }
-            if (animation == 87) {
+            if (animation == PHASE_GRAB) {
                 this.phaseGrab.startIfStopped(this.tickCount);
             } else {
                 this.phaseGrab.stop();

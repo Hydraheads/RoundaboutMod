@@ -1138,7 +1138,7 @@ public class PowersMagiciansRed extends PunchingStand {
             ((StandUser)leaded).roundabout$dropString();
             leaded = null;
         } else {
-            this.animateStand((byte) 49);
+            this.animateStand(MagiciansRedEntity.RED_BIND);
             this.poseStand(OffsetIndex.GUARD);
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_1);
@@ -1246,7 +1246,7 @@ public class PowersMagiciansRed extends PunchingStand {
         return true;
     }
     public boolean kamikaze(){
-        this.animateStand((byte) 50);
+        this.animateStand(MagiciansRedEntity.FIRE_CRASH);
         this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
         this.setAttackTimeDuring(0);
         this.setActivePower(PowerIndex.POWER_4);
@@ -1833,7 +1833,7 @@ public class PowersMagiciansRed extends PunchingStand {
         if (chargedFinal >= maxSuperHitTime) {
             animateStand((byte) 86);
         } else {
-            animateStand((byte) 87);
+            animateStand((byte) 89);
         }
     }
 
