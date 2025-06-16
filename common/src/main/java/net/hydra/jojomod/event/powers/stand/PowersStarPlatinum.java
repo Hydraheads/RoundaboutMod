@@ -674,9 +674,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 0.5F);
                             poseStand(OffsetIndex.FOLLOW_NOLEAN);
                             if (MainUtil.isThrownBlockItem(SE.getHeldItem().getItem())) {
-                                animateStand((byte) 32);
+                                animateStand(StandEntity.BLOCK_GRAB);
                             } else {
-                                animateStand((byte) 34);
+                                animateStand(StandEntity.ITEM_GRAB);
                             }
 
                             ((ServerLevel) this.self.level()).sendParticles(ModParticles.AIR_CRACKLE,

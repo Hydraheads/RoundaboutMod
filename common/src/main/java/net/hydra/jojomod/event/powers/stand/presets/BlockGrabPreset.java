@@ -1,6 +1,5 @@
 package net.hydra.jojomod.event.powers.stand.presets;
 
-import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IBoatItemAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMinecartItemAccess;
@@ -14,7 +13,6 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -152,10 +150,10 @@ public class BlockGrabPreset extends PunchingStand{
                             this.addItem(standEntity);
                         }
 
-                        if (this.getAnimation() == 34) {
-                            animateStand((byte) 37);
+                        if (this.getAnimation() == StandEntity.ITEM_GRAB) {
+                            animateStand(StandEntity.ITEM_RETRACT);
                         } else {
-                            animateStand((byte) 36);
+                            animateStand(StandEntity.BLOCK_RETRACT);
                         }
 
                         standEntity.setHeldItem(ItemStack.EMPTY);
@@ -171,7 +169,7 @@ public class BlockGrabPreset extends PunchingStand{
                     return false;
                 } else if (standEntity.getFirstPassenger() != null){
                     MainUtil.ejectInFront(standEntity);
-                    animateStand((byte) 36);
+                    animateStand(StandEntity.BLOCK_RETRACT);
 
                     if (this.getSelf() instanceof Player) {
                         if (!this.getSelf().level().isClientSide) {
@@ -199,7 +197,7 @@ public class BlockGrabPreset extends PunchingStand{
                 if (standEntity != null && this.getActivePower() == PowerIndex.POWER_2_EXTRA &&
                         standEntity.getFirstPassenger() == null && this.getAttackTimeDuring() > -1){
                     ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                    animateStand((byte) 36);
+                    animateStand(StandEntity.BLOCK_RETRACT);
                 } else if (standEntity != null &&
                         (this.getActivePower() == PowerIndex.POWER_2_EXTRA ||
                                 this.getActivePower() == PowerIndex.POWER_2 ||
@@ -212,7 +210,7 @@ public class BlockGrabPreset extends PunchingStand{
                     animateStand(StandEntity.IDLE);
                 }
             }
-            if (this.getAnimation() == 36 || this.getAnimation() == 37) {
+            if (this.getAnimation() == StandEntity.BLOCK_RETRACT || this.getAnimation() == StandEntity.ITEM_RETRACT) {
                 retractEndTIcks++;
                 if (retractEndTIcks > 8) {
                     animateStand(StandEntity.IDLE);
@@ -247,9 +245,9 @@ public class BlockGrabPreset extends PunchingStand{
                     if (!this.getSelf().level().isClientSide) {
                         if (throwObject(standEntity.getHeldItem())) {
                             if (MainUtil.isThrownBlockItem(standEntity.getHeldItem().getItem())) {
-                                animateStand((byte) 33);
+                                animateStand(StandEntity.BLOCK_THROW);
                             } else {
-                                animateStand((byte) 35);
+                                animateStand(StandEntity.ITEM_THROW);
                             }
                             poseStand(OffsetIndex.FOLLOW);
                             standEntity.setHeldItem(ItemStack.EMPTY);
@@ -353,7 +351,7 @@ public class BlockGrabPreset extends PunchingStand{
                                 this.setAttackTimeDuring(-15);
                                 this.getSelf().level().playSound(null, ent, ModSounds.PUNCH_4_SOUND_EVENT, SoundSource.PLAYERS, 1.0F, 1.18F);
                             } else {
-                                animateStand((byte) 33);
+                                animateStand(StandEntity.BLOCK_THROW);
                                 poseStand(OffsetIndex.FOLLOW);
                                 if (this.getSelf() instanceof Player){
                                     ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
@@ -388,7 +386,7 @@ public class BlockGrabPreset extends PunchingStand{
                                         -Mth.cos((degrees * ((float) Math.PI / 180))),
                                         ybias);
                             }
-                            animateStand((byte) 33);
+                            animateStand(StandEntity.BLOCK_THROW);
                             poseStand(OffsetIndex.FOLLOW);
                             if (this.getSelf() instanceof Player) {
                                 ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
@@ -543,7 +541,7 @@ public class BlockGrabPreset extends PunchingStand{
         this.setAttackTimeDuring(-1);
         this.setActivePower(PowerIndex.NONE);
         poseStand(OffsetIndex.FOLLOW);
-        if (this.getAnimation() != 32 && this.getAnimation() != 34 && this.getAnimation() != 38) {
+        if (this.getAnimation() != StandEntity.BLOCK_GRAB && this.getAnimation() != StandEntity.ITEM_GRAB && this.getAnimation() != StandEntity.ENTITY_GRAB) {
             animateStand(StandEntity.IDLE);
         }
         return true;
@@ -624,9 +622,9 @@ public class BlockGrabPreset extends PunchingStand{
                     if (!standEntity.getHeldItem().isEmpty() && move != PowerIndex.POWER_2 && move != PowerIndex.POWER_2_SNEAK
                             && move != PowerIndex.POWER_2_SNEAK_EXTRA) {
                         if (!MainUtil.isThrownBlockItem(standEntity.getHeldItem().getItem())) {
-                            animateStand((byte) 37);
+                            animateStand(StandEntity.ITEM_RETRACT);
                         } else {
-                            animateStand((byte) 36);
+                            animateStand(StandEntity.BLOCK_RETRACT);
                         }
                         if (standEntity.canAcquireHeldItem) {
                             if ((this.getActivePower() == PowerIndex.POWER_2 || this.getActivePower() == PowerIndex.POWER_2_SNEAK || this.getActivePower() == PowerIndex.POWER_2_SNEAK_EXTRA)
@@ -639,7 +637,7 @@ public class BlockGrabPreset extends PunchingStand{
                     } else if (standEntity.getFirstPassenger() != null && move != PowerIndex.POWER_2 && move != PowerIndex.POWER_2_SNEAK
                             && move != PowerIndex.POWER_2_SNEAK_EXTRA && move != PowerIndex.POWER_2_EXTRA){
                         MainUtil.ejectInFront(standEntity);
-                        animateStand((byte) 36);
+                        animateStand(StandEntity.BLOCK_RETRACT);
                     }
                 }
             }
@@ -684,7 +682,7 @@ public class BlockGrabPreset extends PunchingStand{
                 if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
                     if (standEntity.getFirstPassenger() != null) {
                         MainUtil.ejectInFront(standEntity);
-                        animateStand((byte) 36);
+                        animateStand(StandEntity.BLOCK_RETRACT);
                         if (this.getSelf() instanceof Player) {
                             ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
                                     PacketDataIndex.S2C_INT_ATD, -10);
@@ -716,7 +714,7 @@ public class BlockGrabPreset extends PunchingStand{
                                         standEntity.setHeldItem(ItemStack.EMPTY);
 
                                         ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                                        animateStand((byte) 36);
+                                        animateStand(StandEntity.BLOCK_RETRACT);
                                         ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 10);
                                         this.setCooldown(PowerIndex.SKILL_2, 10);
                                         return true;
@@ -770,7 +768,7 @@ public class BlockGrabPreset extends PunchingStand{
                         this.setActivePower(PowerIndex.POWER_2_EXTRA);
                         this.setAttackTimeDuring(0);
                         poseStand(OffsetIndex.FOLLOW_NOLEAN);
-                        animateStand((byte) 38);
+                        animateStand(StandEntity.ENTITY_GRAB);
                         return true;
                     }
                 }
@@ -846,7 +844,7 @@ public class BlockGrabPreset extends PunchingStand{
                         this.setActivePower(PowerIndex.POWER_2_SNEAK);
                         this.setAttackTimeDuring(0);
                         poseStand(OffsetIndex.FOLLOW_NOLEAN);
-                        animateStand((byte) 32);
+                        animateStand(StandEntity.BLOCK_GRAB);
                         if (state.is(Blocks.GRASS_BLOCK) || (this.getSelf().level().getBlockState(this.grabBlock.above()).is(state.getBlock()) ||
                                 this.getSelf().level().getBlockState(this.grabBlock.below()).is(state.getBlock()) ||
                                 this.getSelf().level().getBlockState(this.grabBlock.north()).is(state.getBlock()) ||
@@ -906,7 +904,7 @@ public class BlockGrabPreset extends PunchingStand{
                             this.setActivePower(PowerIndex.POWER_2_EXTRA);
                             this.setAttackTimeDuring(0);
                             poseStand(OffsetIndex.FOLLOW_NOLEAN);
-                            animateStand((byte) 38);
+                            animateStand(StandEntity.ENTITY_GRAB);
                         }
                         /**Minecart Throw*/
                     } else if (stack.getItem() instanceof MinecartItem ME
@@ -929,7 +927,7 @@ public class BlockGrabPreset extends PunchingStand{
                             this.setActivePower(PowerIndex.POWER_2_EXTRA);
                             this.setAttackTimeDuring(0);
                             poseStand(OffsetIndex.FOLLOW_NOLEAN);
-                            animateStand((byte) 38);
+                            animateStand(StandEntity.ENTITY_GRAB);
                         }
                             /**Minecart Throw*/
                     } else {
@@ -941,9 +939,9 @@ public class BlockGrabPreset extends PunchingStand{
                         this.setAttackTimeDuring(0);
                         poseStand(OffsetIndex.FOLLOW_NOLEAN);
                         if (MainUtil.isThrownBlockItem(stack.getItem())) {
-                            animateStand((byte) 32);
+                            animateStand(StandEntity.BLOCK_GRAB);
                         } else {
-                            animateStand((byte) 34);
+                            animateStand(StandEntity.ITEM_GRAB);
                         }
                     }
                     stack.shrink(1);

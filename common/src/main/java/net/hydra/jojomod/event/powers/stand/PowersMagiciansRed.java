@@ -1826,12 +1826,12 @@ public class PowersMagiciansRed extends PunchingStand {
     }
 
     public void animateFinalAttack(){
-        animateStand((byte) 85);
+        animateStand(StandEntity.FINAL_ATTACK_WINDUP);
     }
 
     public void animateKickAttackHit(){
         if (chargedFinal >= maxSuperHitTime) {
-            animateStand((byte) 86);
+            animateStand(StandEntity.FINAL_ATTACK);
         } else {
             animateStand((byte) 89);
         }

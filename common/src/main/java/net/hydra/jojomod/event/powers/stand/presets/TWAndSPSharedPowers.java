@@ -360,9 +360,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         this.setAttackTimeDuring(0);
                         poseStand(OffsetIndex.FOLLOW_NOLEAN);
                         if (MainUtil.isThrownBlockItem(IE.getItem().getItem())) {
-                            animateStand((byte) 32);
+                            animateStand(StandEntity.BLOCK_GRAB);
                         } else {
-                            animateStand((byte) 34);
+                            animateStand(StandEntity.ITEM_GRAB);
                         }
 
                         IE.getItem().shrink(1);
@@ -1685,7 +1685,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
 
     public void animateFinalAttack(){
-        animateStand((byte) 85);
+        animateStand(StandEntity.FINAL_ATTACK_WINDUP);
     }
 
     public void animateFinalAttackHit(){

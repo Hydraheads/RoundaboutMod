@@ -132,37 +132,37 @@ public class TheWorldEntity extends StandEntity {
             } else {
                  this.timeStopReleaseAnimation.stop();
             }
-            if (animation == 32) {
+            if (animation == BLOCK_GRAB) {
                 this.blockGrabAnimation.startIfStopped(this.tickCount);
             } else {
                 this.blockGrabAnimation.stop();
             }
-            if (animation == 33) {
+            if (animation == BLOCK_THROW) {
                 this.blockThrowAnimation.startIfStopped(this.tickCount);
             } else {
                 this.blockThrowAnimation.stop();
             }
-            if (animation == 34) {
+            if (animation == ITEM_GRAB) {
                 this.itemGrabAnimation.startIfStopped(this.tickCount);
             } else {
                 this.itemGrabAnimation.stop();
             }
-            if (animation == 35) {
+            if (animation == ITEM_THROW) {
                 this.itemThrowAnimation.startIfStopped(this.tickCount);
             } else {
                 this.itemThrowAnimation.stop();
             }
-            if (animation == 36) {
+            if (animation == BLOCK_RETRACT) {
                 this.blockRetractAnimation.startIfStopped(this.tickCount);
             } else {
                 this.blockRetractAnimation.stop();
             }
-            if (animation == 37) {
+            if (animation == ITEM_RETRACT) {
                 this.itemRetractAnimation.startIfStopped(this.tickCount);
             } else {
                 this.itemRetractAnimation.stop();
             }
-            if (animation == 38) {
+            if (animation == ENTITY_GRAB) {
                 this.entityGrabAnimation.startIfStopped(this.tickCount);
             } else {
                 this.entityGrabAnimation.stop();
@@ -188,12 +188,12 @@ public class TheWorldEntity extends StandEntity {
                 this.kick_barrage_end.stop();
             }
 
-            if (animation == 85) {
+            if (animation == FINAL_ATTACK_WINDUP) {
                 this.finalKickWindup.startIfStopped(this.tickCount);
             } else {
                 this.finalKickWindup.stop();
             }
-            if (animation == 86) {
+            if (animation == FINAL_ATTACK) {
                 this.finalKick.startIfStopped(this.tickCount);
             } else {
                 this.finalKick.stop();

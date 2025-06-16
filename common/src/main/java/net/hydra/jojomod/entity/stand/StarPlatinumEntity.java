@@ -146,40 +146,40 @@ public class StarPlatinumEntity extends StandEntity {
             } else {
                 this.timeStopReleaseAnimation.stop();
             }
-            if (this.getAnimation() == 32) {
+            if (this.getAnimation() == BLOCK_GRAB) {
                 this.blockGrabAnimation.startIfStopped(this.tickCount);
             } else {
                 this.blockGrabAnimation.stop();
             }
-            if (this.getAnimation() == 33) {
+            if (this.getAnimation() == BLOCK_THROW) {
                 this.blockThrowAnimation.startIfStopped(this.tickCount);
             } else {
                 this.blockThrowAnimation.stop();
             }
-            if (this.getAnimation() == 34) {
+            if (this.getAnimation() == ITEM_GRAB) {
                 this.itemGrabAnimation.startIfStopped(this.tickCount);
             } else {
                 this.itemGrabAnimation.stop();
             }
-            if (this.getAnimation() == 35) {
+            if (this.getAnimation() == ITEM_THROW) {
                 this.itemThrowAnimation.startIfStopped(this.tickCount);
             } else {
                 this.itemThrowAnimation.stop();
             }
 
-            if (this.getAnimation() == 36) {
+            if (this.getAnimation() == BLOCK_RETRACT) {
                 this.blockRetractAnimation.startIfStopped(this.tickCount);
             } else {
                 this.blockRetractAnimation.stop();
             }
 
-            if (this.getAnimation() == 37) {
+            if (this.getAnimation() == ITEM_RETRACT) {
                 this.itemRetractAnimation.startIfStopped(this.tickCount);
             } else {
                 this.itemRetractAnimation.stop();
             }
 
-            if (this.getAnimation() == 38) {
+            if (this.getAnimation() == ENTITY_GRAB) {
                 this.entityGrabAnimation.startIfStopped(this.tickCount);
             } else {
                 this.entityGrabAnimation.stop();
@@ -216,12 +216,12 @@ public class StarPlatinumEntity extends StandEntity {
             }
 
 
-            if (this.getAnimation() == 85) {
+            if (this.getAnimation() == FINAL_ATTACK_WINDUP) {
                 this.finalPunchWindup.startIfStopped(this.tickCount);
             } else {
                 this.finalPunchWindup.stop();
             }
-            if (this.getAnimation() == 86) {
+            if (this.getAnimation() == FINAL_ATTACK) {
                 this.finalPunch.startIfStopped(this.tickCount);
             } else {
                 this.finalPunch.stop();

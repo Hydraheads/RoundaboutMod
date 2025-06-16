@@ -175,10 +175,19 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
             LEAP_END = 18,
             TIME_STOP = 30,
             TIME_STOP_RELEASE = 31,
+            BLOCK_GRAB = 32,
+            BLOCK_THROW = 33,
+            ITEM_GRAB = 34,
+            ITEM_THROW = 35,
+            BLOCK_RETRACT = 36,
+            ITEM_RETRACT = 37,
+            ENTITY_GRAB = 38,
             KICK_BARRAGE_WINDUP = 42,
             KICK_BARRAGE_END = 43,
             IMPALE = 81,
             KICK_BARRAGE = 80,
+            FINAL_ATTACK_WINDUP = 85,
+            FINAL_ATTACK = 86,
             PHASE_GRAB = 87;
 
     public final AnimationState idleAnimationState = new AnimationState();

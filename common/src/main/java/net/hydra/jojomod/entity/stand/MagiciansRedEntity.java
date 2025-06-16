@@ -224,12 +224,12 @@ public class MagiciansRedEntity extends StandEntity {
             } else {
                 this.fire_crash.stop();
             }
-            if (this.getAnimation() == 85) {
+            if (this.getAnimation() == FINAL_ATTACK_WINDUP) {
                 this.finalKickWindup.startIfStopped(this.tickCount);
             } else {
                 this.finalKickWindup.stop();
             }
-            if (this.getAnimation() == 86) {
+            if (this.getAnimation() == FINAL_ATTACK) {
                 this.finalKick.startIfStopped(this.tickCount);
             } else {
                 this.finalKick.stop();
