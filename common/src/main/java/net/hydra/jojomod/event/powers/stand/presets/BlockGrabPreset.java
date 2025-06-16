@@ -343,7 +343,7 @@ public class BlockGrabPreset extends PunchingStand{
                                             -Mth.cos((degrees * ((float) Math.PI / 180))),
                                             ybias);
                                 }
-                                animateStand((byte) 3);
+                                animateStand(StandEntity.THIRD_PUNCH);
 
                                 if (this.getSelf() instanceof Player){
                                     ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),

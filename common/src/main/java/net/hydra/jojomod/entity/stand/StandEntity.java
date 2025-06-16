@@ -161,6 +161,9 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
 
     public static final byte
             IDLE = 0,
+            FIRST_PUNCH = 1,
+            SECOND_PUNCH = 2,
+            THIRD_PUNCH = 3,
             BLOCK = 10,
             BARRAGE_CHARGE = 11,
             BARRAGE = 12,
@@ -228,73 +231,66 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                 this.armlessAnimationIdle.stop();
                 this.armlessAnimation.stop();
             }
-            if (animation == 1) {
+
+            if (animation == FIRST_PUNCH)
                 this.punchState1.startIfStopped(this.tickCount);
-            } else {
+            else
                 this.punchState1.stop();
-            }
-            if (animation == 2) {
+
+            if (animation == SECOND_PUNCH)
                 this.punchState2.startIfStopped(this.tickCount);
-            } else {
+            else
                 this.punchState2.stop();
-            }
-            if (animation == 3) {
+
+            if (animation == THIRD_PUNCH)
                 this.punchState3.startIfStopped(this.tickCount);
-            } else {
+            else
                 this.punchState3.stop();
-            }
 
-            if (animation == BLOCK) {
+            if (animation == BLOCK)
                 this.blockAnimationState.startIfStopped(this.tickCount);
-            } else {
+            else
                 this.blockAnimationState.stop();
-            }
-            if (animation == BARRAGE_CHARGE) {
+
+            if (animation == BARRAGE_CHARGE)
               this.barrageChargeAnimationState.startIfStopped(this.tickCount);
-            } else {
+            else
                 this.barrageChargeAnimationState.stop();
-            }
-            if (animation == BARRAGE) {
+
+            if (animation == BARRAGE)
                 this.barrageAnimationState.startIfStopped(this.tickCount);
-            } else {
+            else
                 this.barrageAnimationState.stop();
-            }
 
-            if (animation == BARRAGE_FINISHER) {
+            if (animation == BARRAGE_FINISHER)
                 this.barrageEndAnimationState.startIfStopped(this.tickCount);
-            } else {
+            else
                 this.barrageEndAnimationState.stop();
-            }
 
-            if (animation == HURT_BY_BARRAGE) {
+            if (animation == HURT_BY_BARRAGE)
                 this.barrageHurtAnimationState.startIfStopped(this.tickCount);
-            } else {
+            else
                 this.barrageHurtAnimationState.stop();
-            }
 
-            if (animation == BROKEN_GUARD) {
+            if (animation == BROKEN_GUARD)
                 this.brokenBlockAnimationState.startIfStopped(this.tickCount);
-            } else {
+            else
                 this.brokenBlockAnimationState.stop();
-            }
 
-            if (animation == MINING_BARRAGE) {
+            if (animation == MINING_BARRAGE)
                 this.miningBarrageAnimationState.startIfStopped(this.tickCount);
-            } else {
+            else
                 this.miningBarrageAnimationState.stop();
-            }
 
-            if (animation == LEAP) {
+            if (animation == LEAP)
                 this.standLeapAnimationState.startIfStopped(this.tickCount);
-            } else {
+            else
                 this.standLeapAnimationState.stop();
-            }
 
-            if (animation == LEAP_END) {
+            if (animation == LEAP_END)
                 this.standLeapEndAnimationState.startIfStopped(this.tickCount);
-            } else {
+            else
                 this.standLeapEndAnimationState.stop();
-            }
         }
     }
 

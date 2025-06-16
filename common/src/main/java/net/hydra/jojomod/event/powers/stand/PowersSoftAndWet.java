@@ -1354,7 +1354,7 @@ public class PowersSoftAndWet extends PunchingStand {
         this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
         this.attackTimeDuring = 0;
         bubbleScaffoldCount = 0;
-        animateStand((byte) 1);
+        animateStand((byte) StandEntity.FIRST_PUNCH);
         buildingBubbleScaffoldPos = this.self.blockPosition();
         return true;
     }
