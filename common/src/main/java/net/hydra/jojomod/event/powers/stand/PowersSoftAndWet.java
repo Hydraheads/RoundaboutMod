@@ -129,7 +129,9 @@ public class PowersSoftAndWet extends PunchingStand {
     }
     @Override
     public byte getSoundCancelingGroupByte(byte soundChoice) {
-        if (soundChoice >= BARRAGE_NOISE && soundChoice <= BARRAGE_NOISE_2) {
+        if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1){
+            return SoundIndex.BARRAGE_SOUND_GROUP;
+        } else if (soundChoice >= BARRAGE_NOISE && soundChoice <= BARRAGE_NOISE_2) {
             return SoundIndex.BARRAGE_SOUND_GROUP;
         }
         return super.getSoundCancelingGroupByte(soundChoice);
@@ -148,6 +150,8 @@ public class PowersSoftAndWet extends PunchingStand {
             return ModSounds.SUMMON_SOFT_AND_WET_EVENT;
         } else if (soundChoice == BARRAGE_NOISE) {
             return ModSounds.SOFT_AND_WET_BARRAGE_EVENT;
+        } else if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
+            return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
         } else if (soundChoice == BARRAGE_NOISE_2) {
             return ModSounds.SOFT_AND_WET_BARRAGE_2_EVENT;
         }
@@ -329,7 +333,7 @@ public class PowersSoftAndWet extends PunchingStand {
                 if (keyIsDown) {
                     if (inShootingMode()){
                         if (!holdDownClick){
-                            if (!this.onCooldown(PowerIndex.SKILL_4)) {
+                            if (!this.onCooldown(PowerIndex.SKILL_4) && getActivePower() == PowerIndex.NONE) {
                                 if (getInExplosiveSpinMode() || confirmShot(getUseTicks())) {
                                     if (this.self instanceof Player PE){
                                         IPlayerEntity ipe = ((IPlayerEntity)PE);
@@ -384,7 +388,47 @@ public class PowersSoftAndWet extends PunchingStand {
         }
     }
 
+    public int getBubbleBarrageWindup(){
+        return ClientNetworking.getAppropriateConfig().chargeSettings.barrageWindup;
+    }
+
+    public float getBubbleBarrageChargePitch(){
+        return 1/((float) this.getBubbleBarrageWindup() /20);
+    }
+    public float getSoundPitchFromByte(byte soundChoice){
+        if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1){
+            return this.getBubbleBarrageChargePitch();
+        } else {
+            return super.getSoundPitchFromByte(soundChoice);
+        }
+    }
     public static int maxSuperHitTime = 25;
+
+
+    public int getBubbleBarrageRecoilTime(){
+        return ClientNetworking.getAppropriateConfig().
+                cooldownsInTicks.bubbleBarrageRecoil;
+    }
+    public void updateBubbleBarrage(){
+        if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
+        } else {
+            if (this.attackTimeDuring > this.getBubbleBarrageLength()) {
+                this.attackTimeDuring = -20;
+            } else {
+                if (this.attackTimeDuring > 0) {
+                    this.setAttackTime((getBubbleBarrageRecoilTime() - 1) -
+                            Math.round(((float) this.attackTimeDuring / this.getBubbleBarrageLength())
+                                    * (getBubbleBarrageRecoilTime() - 1)));
+
+
+                }
+            }
+        }
+    }
+    public int getBubbleBarrageLength(){
+        return 20;
+    }
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
@@ -396,12 +440,16 @@ public class PowersSoftAndWet extends PunchingStand {
         boolean standOn = standUser.roundabout$getActive();
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
-        if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+        if (standOn && this.getActivePower() == PowerIndex.BARRAGE_2 && attackTimeDuring > -1) {
+            int ClashTime = 15 - Math.round(((float) attackTimeDuring / this.getBubbleBarrageLength()) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+        } else if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
             int ClashTime = Math.min(15, Math.round(((float) attackTimeDuring / maxSuperHitTime) * 15));
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
         } else if (standOn && this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
-            int ClashTime = Math.round(((float) attackTimeDuring / this.getKickBarrageWindup()) * 15);
+            int ClashTime = Math.round(((float) attackTimeDuring / this.getBubbleBarrageWindup()) * 15);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
         } else {
@@ -1044,16 +1092,30 @@ public class PowersSoftAndWet extends PunchingStand {
         ankh.setPos(this.self.getX(), this.self.getY()+(this.self.getEyeHeight()*0.2), this.self.getZ());
         ankh.shootFromRotationDeltaAgnostic(this.getSelf(),-1*(float)(Math.random()*50), (float)(Math.random()*360), 1.0F, 0.25F, 0);
     }
+
+    public boolean setPowerBubbleBarrage() {
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.BARRAGE_2);
+        this.poseStand(OffsetIndex.ATTACK);
+        this.setAttackTimeMax(this.getBubbleBarrageRecoilTime());
+        this.setActivePowerPhase(this.getActivePowerPhaseMax());
+        animateStand((byte) 80);
+        return true;
+    }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         if (move == PowerIndex.POWER_2) {
             return this.bubbleShot();
         } else if (move == PowerIndex.POWER_2_BONUS) {
             return this.itemBubbleShot();
+        } else if (move == PowerIndex.BARRAGE_CHARGE_2) {
+            return this.setPowerBubbleBarrageCharge();
         } else if (move == PowerIndex.POWER_2_EXTRA) {
             return this.bubbleRedirect();
         } else if (move == PowerIndex.POWER_2_SNEAK) {
             return this.bubblePop();
+        } else if (move == PowerIndex.BARRAGE_2) {
+            return this.setPowerBubbleBarrage();
         } else if (move == PowerIndex.EXTRA){
             return this.fallBraceInit();
         } else if (move == PowerIndex.FALL_BRACE_FINISH){
@@ -1158,6 +1220,23 @@ public class PowersSoftAndWet extends PunchingStand {
         return super.cancelSprintJump();
     }
 
+
+    public void playBubbleBarrageChargeSound(){
+        if (!this.self.level().isClientSide()) {
+            SoundEvent barrageChargeSound = this.getBarrageChargeSound();
+            if (barrageChargeSound != null) {
+                playSoundsIfNearby(SoundIndex.ALT_CHARGE_SOUND_1, 27, false);
+            }
+        }
+    }
+    public boolean setPowerBubbleBarrageCharge() {
+        animateStand((byte) 42);
+        this.attackTimeDuring = 0;
+        playBubbleBarrageChargeSound();
+        this.setActivePower(PowerIndex.BARRAGE_CHARGE_2);
+        this.poseStand(OffsetIndex.ATTACK);
+        return true;
+    }
     @Override
     public float inputSpeedModifiers(float basis){
         if (this.activePower == PowerIndex.BARRAGE_CHARGE_2) {
@@ -1272,6 +1351,10 @@ public class PowersSoftAndWet extends PunchingStand {
         /*Tick through Time Stop Charge*/
         if (this.getActivePower() == PowerIndex.POWER_1_SNEAK) {
             this.updateBubbleCluster();
+        } else if (this.getActivePower() == PowerIndex.BARRAGE_2) {
+            updateBubbleBarrage();
+        } else if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
+            updateBubbleBarrageCharge();
         } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
             updateKickAttackCharge();
         } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK){
@@ -1282,6 +1365,11 @@ public class PowersSoftAndWet extends PunchingStand {
         super.updateUniqueMoves();
     }
 
+    public void updateBubbleBarrageCharge(){
+        if (this.attackTimeDuring >= this.getBubbleBarrageWindup()) {
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.BARRAGE_2, true);
+        }
+    }
     public void updateKickAttack(){
         if (this.attackTimeDuring > -1) {
             if (this.attackTimeDuring == 5) {

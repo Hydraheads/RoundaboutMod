@@ -728,7 +728,7 @@ public class StandPowers {
     public byte chooseBarrageSound(){
         return 0;
     }
-    private float getBarrageChargePitch(){
+    public float getBarrageChargePitch(){
         return 1/((float) this.getBarrageWindup() /20);
     }
     /**Realistically, you only need to override this if you're canceling sounds*/
