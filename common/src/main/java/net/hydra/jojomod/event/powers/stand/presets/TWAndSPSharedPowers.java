@@ -1028,15 +1028,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             }
         }
 
-            float halfReach = (float) (getReach()*0.5);
-            Vec3 pointVec = DamageHandler.getRayPoint(this.self, halfReach);
-            List<Entity> arrows = arrowGrabHitbox(this.self,DamageHandler.genHitbox(this.self, pointVec.x, pointVec.y,
-                    pointVec.z, halfReach, halfReach, halfReach), getReach());
-            if (!arrows.isEmpty() && ClientNetworking.getAppropriateConfig().barrageDeflectsArrrows) {
-                for (int i = 0; i < arrows.size(); i++) {
-                    deflectArrowsAndBullets(arrows.get(i));
-                }
-            }
+        findDeflectables();
     }
     @Override
     public void barrageImpact(Entity entity, int hitNumber){

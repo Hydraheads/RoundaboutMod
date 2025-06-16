@@ -56,7 +56,6 @@ import net.minecraft.world.phys.*;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
-import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -1358,15 +1357,7 @@ public class StandPowers {
 
         }
 
-            float halfReach = (float) (getReach()*0.5);
-            Vec3 pointVec = DamageHandler.getRayPoint(this.self, halfReach);
-            List<Entity> arrows = arrowGrabHitbox(this.self,DamageHandler.genHitbox(this.self, pointVec.x, pointVec.y,
-                    pointVec.z, halfReach, halfReach, halfReach), getReach());
-            if (!arrows.isEmpty() && ClientNetworking.getAppropriateConfig().barrageDeflectsArrrows) {
-                for (int i = 0; i < arrows.size(); i++) {
-                    deflectArrowsAndBullets(arrows.get(i));
-                }
-            }
+        findDeflectables();
     }
 
     public void deflectArrowsAndBullets(Entity ent){
@@ -2373,6 +2364,19 @@ public class StandPowers {
 
         }
         return false;
+    }
+
+    public void findDeflectables(){
+
+        float halfReach = (float) (getReach()*0.5);
+        Vec3 pointVec = DamageHandler.getRayPoint(this.self, halfReach);
+        List<Entity> arrows = arrowGrabHitbox(this.self,DamageHandler.genHitbox(this.self, pointVec.x, pointVec.y,
+                pointVec.z, halfReach, halfReach, halfReach), getReach());
+        if (!arrows.isEmpty() && ClientNetworking.getAppropriateConfig().barrageDeflectsArrrows) {
+            for (int i = 0; i < arrows.size(); i++) {
+                deflectArrowsAndBullets(arrows.get(i));
+            }
+        }
     }
 
     public boolean tryPosPower(int move, boolean forced, Vec3 pos){

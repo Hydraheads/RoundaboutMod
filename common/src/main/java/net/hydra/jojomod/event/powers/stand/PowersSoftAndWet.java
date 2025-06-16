@@ -12,7 +12,6 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
@@ -333,7 +332,8 @@ public class PowersSoftAndWet extends PunchingStand {
                 if (keyIsDown) {
                     if (inShootingMode()){
                         if (!holdDownClick){
-                            if (!this.onCooldown(PowerIndex.SKILL_4) && getActivePower() == PowerIndex.NONE) {
+                            if (!this.onCooldown(PowerIndex.SKILL_4) && (getActivePower() == PowerIndex.NONE)
+                            || getActivePower() == PowerIndex.POWER_4_EXTRA) {
                                 if (getInExplosiveSpinMode() || confirmShot(getUseTicks())) {
                                     if (this.self instanceof Player PE){
                                         IPlayerEntity ipe = ((IPlayerEntity)PE);
@@ -420,11 +420,23 @@ public class PowersSoftAndWet extends PunchingStand {
                     this.setAttackTime((getBubbleBarrageRecoilTime() - 1) -
                             Math.round(((float) this.attackTimeDuring / this.getBubbleBarrageLength())
                                     * (getBubbleBarrageRecoilTime() - 1)));
-
+                    bubbleBarrageTick();
 
                 }
             }
         }
+    }
+
+
+    public void bubbleBarrageTick(){
+        StandEntity stand = getStandEntity(this.self);
+        playBarrageMissNoise(this.attackTimeDuring);
+        if (this.activePower == PowerIndex.BARRAGE_2 && this.attackTimeDuring == this.getBubbleBarrageLength()){
+            this.attackTimeDuring = -10;
+        } else if (this.isBarraging() && this.attackTimeDuring == this.getBarrageLength()){
+            this.attackTimeDuring = -10;
+        }
+        findDeflectables();
     }
     public int getBubbleBarrageLength(){
         return 20;
