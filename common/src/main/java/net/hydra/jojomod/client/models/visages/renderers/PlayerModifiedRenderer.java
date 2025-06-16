@@ -11,7 +11,7 @@ import net.hydra.jojomod.client.models.visages.PlayerLikeModel;
 import net.hydra.jojomod.client.models.visages.PlayerModifiedModel;
 import net.hydra.jojomod.entity.visages.mobs.PlayerModifiedNPC;
 import net.hydra.jojomod.item.ModificationMaskItem;
-import net.hydra.jojomod.util.ConfigManager;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.model.HumanoidArmorModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.player.AbstractClientPlayer;

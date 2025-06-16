@@ -1,13 +1,13 @@
-package net.hydra.jojomod.util;
+package net.hydra.jojomod.util.config;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.mojang.authlib.minecraft.client.ObjectMapper;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.util.Networking;
 import net.hydra.jojomod.util.annotation.BooleanOption;
 import net.hydra.jojomod.util.annotation.FloatOption;
 import net.hydra.jojomod.util.annotation.IntOption;
@@ -22,7 +22,6 @@ import net.zetalasis.hjson.JsonValue;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.stream.Collectors;
 
 public abstract class ConfigManager {
     private static final Gson GSON = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -280,7 +279,8 @@ public abstract class ConfigManager {
     }
     private static void saveClient(ClientConfig config, Path path) {
         try {
-            Files.write(path, GSON.toJson(config).getBytes());
+            String parsed = String.join(System.lineSeparator(), ConfigParser.parse(config));
+            Files.write(path, parsed.getBytes());
         } catch (IOException e) {
             Roundabout.LOGGER.error("Failed to save config", e);
         }

@@ -1,4 +1,4 @@
-package net.hydra.jojomod.util;
+package net.hydra.jojomod.util.config;
 
 import net.hydra.jojomod.util.annotation.*;
 

@@ -1,46 +1,31 @@
 package net.hydra.jojomod.entity.stand;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
-import net.hydra.jojomod.util.ConfigManager;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Position;
-import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.scores.Team;
 
 public class JusticeEntity extends StandEntity {
     public JusticeEntity(EntityType<? extends Mob> entityType, Level world) {

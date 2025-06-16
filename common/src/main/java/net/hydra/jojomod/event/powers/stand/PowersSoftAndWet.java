@@ -21,8 +21,8 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.util.ClientConfig;
-import net.hydra.jojomod.util.ConfigManager;
+import net.hydra.jojomod.util.config.ClientConfig;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -58,7 +58,6 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class PowersSoftAndWet extends PunchingStand {
     public PowersSoftAndWet(LivingEntity self) {

@@ -13,7 +13,7 @@ import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
-import net.hydra.jojomod.util.ConfigManager;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.MultiBufferSource;

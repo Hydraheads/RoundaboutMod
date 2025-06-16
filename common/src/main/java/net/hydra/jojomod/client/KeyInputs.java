@@ -5,7 +5,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
-import net.hydra.jojomod.util.ConfigManager;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.PlayerMaskSlots;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;

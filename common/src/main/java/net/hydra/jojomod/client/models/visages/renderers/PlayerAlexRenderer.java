@@ -7,7 +7,7 @@ import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
 import net.hydra.jojomod.client.models.visages.PlayerAlexModel;
-import net.hydra.jojomod.util.ConfigManager;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.model.HumanoidArmorModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.player.AbstractClientPlayer;

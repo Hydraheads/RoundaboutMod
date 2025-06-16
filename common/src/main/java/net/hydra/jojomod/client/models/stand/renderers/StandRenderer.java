@@ -9,7 +9,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaskItem;
-import net.hydra.jojomod.util.ConfigManager;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;

@@ -1,22 +1,15 @@
 package net.hydra.jojomod.block;
 
-import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.ILivingEntityRenderer;
-import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IRenderSystem;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.corpses.FallenMob;
-import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
-import net.hydra.jojomod.networking.ModPacketHandler;
-import net.hydra.jojomod.util.ClientConfig;
-import net.hydra.jojomod.util.ConfigManager;
+import net.hydra.jojomod.util.config.ClientConfig;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
@@ -33,22 +26,17 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.npc.AbstractVillager;
-import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityModel<T>> implements BlockEntityRenderer<MirrorBlockEntity> {
 
