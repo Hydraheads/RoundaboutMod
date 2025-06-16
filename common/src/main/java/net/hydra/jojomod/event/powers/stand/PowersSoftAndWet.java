@@ -433,7 +433,7 @@ public class PowersSoftAndWet extends PunchingStand {
         if (!this.self.level().isClientSide()) {
             playBarrageMissNoise(this.attackTimeDuring);
 
-            if (this.attackTimeDuring % 4 == 1){
+            if (this.attackTimeDuring % 5 == 1){
                 generateGroundBubble();
             }
 
@@ -741,6 +741,7 @@ public class PowersSoftAndWet extends PunchingStand {
     public void splashWaterShield(){
         float width = this.self.getBbWidth()*0.5F;
         float height = this.self.getBbHeight()*0.5F;
+        this.self.extinguishFire();
         this.self.level().playSound(null, this.self.blockPosition(), ModSounds.WATER_ENCASE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5 + (Math.random() * 0.04)));
         ((ServerLevel) this.self.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
                         Blocks.WATER.defaultBlockState()),

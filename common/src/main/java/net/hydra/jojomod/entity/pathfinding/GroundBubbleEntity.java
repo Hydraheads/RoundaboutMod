@@ -83,6 +83,7 @@ public class GroundBubbleEntity extends GroundPathfindingStandAttackEntity {
                     if (bubble != null){
                         bubble.setSped(PWW.getExplosiveSpeed());
                         bubble.setPos(this.position().add(0,0.1F,0));
+                        bubble.setMadeWithBarrage(true);
                         bubble.setDeltaMovement(targ.getEyePosition().subtract(bubble.position()).normalize().scale(PWW.getExplosiveSpeed()));
                         PWW.bubbleListInit();
                         PWW.bubbleList.add(bubble);
