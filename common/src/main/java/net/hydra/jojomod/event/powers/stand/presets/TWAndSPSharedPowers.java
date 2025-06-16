@@ -1011,7 +1011,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             /*Caps how far out the barrage hit goes*/
             Entity targetEntity;
             if (forwardBarrage && Objects.nonNull(stand)) {
-                targetEntity = getTargetEntityGenerous(stand,2.7F,50);
+                targetEntity = getTargetEntity(stand,2.7F,50);
                 barrageImpact(targetEntity, this.attackTimeDuring);
             } else {
                 List<Entity> listE = getTargetEntityList(this.self,-1);

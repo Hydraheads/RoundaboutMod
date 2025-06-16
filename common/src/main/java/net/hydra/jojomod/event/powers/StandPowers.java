@@ -2117,7 +2117,9 @@ public class StandPowers {
     public Entity rayCastEntity(LivingEntity User, float reach){
         Entity entityHitResult = MainUtil.raytraceEntityStand(User.level(),User,reach);
         if (entityHitResult != null){
-            if (entityHitResult.isAlive() && !entityHitResult.isRemoved() && !entityHitResult.is(User)) {
+            if (entityHitResult.isAlive() && !entityHitResult.isRemoved() && !entityHitResult.is(User) &&
+                    !(User instanceof StandEntity SE2 && SE2.getUser() != null &&  SE2.getUser().isPassenger() &&
+                            SE2.getUser().getVehicle().getUUID() == entityHitResult.getUUID())) {
                     return entityHitResult;
             }
         }
@@ -2134,7 +2136,8 @@ public class StandPowers {
                 if (!value.showVehicleHealth() || (!MainUtil.isStandPickable(value) && !(value instanceof StandEntity)) || (!value.isAttackable() && !(value instanceof StandEntity)) || value.isInvulnerable() || !value.isAlive()
                         || (User.isPassenger() && User.getVehicle().getUUID() == value.getUUID())
                 || value.is(User) || (((StandUser)User).roundabout$getStand() != null &&
-                        ((StandUser)User).roundabout$getStand().is(User)) || (User instanceof StandEntity SE && SE.getUser() !=null && SE.getUser().is(value))){
+                        ((StandUser)User).roundabout$getStand().is(User)) || (User instanceof StandEntity SE && SE.getUser() !=null && SE.getUser().is(value)) ||
+                (User instanceof StandEntity SE2 && SE2.getUser() != null &&  SE2.getUser().isPassenger() && SE2.getUser().getVehicle().getUUID() == value.getUUID())){
                     hitEntities.remove(value);
                 } else {
                     if (!(angleDistance(getLookAtEntityYaw(User, value), (User.getYHeadRot()%360f)) <= angle && angleDistance(getLookAtEntityPitch(User, value), User.getXRot()) <= angle)){

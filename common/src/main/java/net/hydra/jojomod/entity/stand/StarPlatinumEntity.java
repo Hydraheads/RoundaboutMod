@@ -85,7 +85,7 @@ public class StarPlatinumEntity extends StandEntity {
         } else if (skinId == VOLUME_39){
             return Component.translatable(  "skins.roundabout.star_platinum.volume_39");
         } else if (skinId == JUMP_13){
-            return Component.translatable(  "skins.roundabout.star_platinum.volume_39");
+            return Component.translatable(  "skins.roundabout.star_platinum.jump_13");
         }
         return Component.translatable(  "skins.roundabout.star_platinum.base");
     }

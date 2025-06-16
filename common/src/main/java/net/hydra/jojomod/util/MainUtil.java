@@ -1078,7 +1078,8 @@ public class MainUtil {
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
         for (Entity value : entities) {
-            if (!value.showVehicleHealth() || value.isInvulnerable() || !value.isAlive() || (User.isPassenger() && User.getVehicle().getUUID() == value.getUUID())){
+            if (!value.showVehicleHealth() || value.isInvulnerable() || !value.isAlive() || (User.isPassenger() && User.getVehicle().getUUID() == value.getUUID())
+            || (User instanceof StandEntity SE && SE.getUser() != null &&  SE.getUser().isPassenger() && SE.getUser().getVehicle().getUUID() == value.getUUID())){
                 hitEntities.remove(value);
             } else {
                 if (!(angleDistance(getLookAtEntityYaw(User, value), (User.getYHeadRot()%360f)) <= angle && angleDistance(getLookAtEntityPitch(User, value), User.getXRot()) <= angle)){
