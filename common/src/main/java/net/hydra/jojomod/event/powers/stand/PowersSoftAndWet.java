@@ -429,14 +429,14 @@ public class PowersSoftAndWet extends PunchingStand {
 
 
     public void bubbleBarrageTick(){
-        StandEntity stand = getStandEntity(this.self);
-        playBarrageMissNoise(this.attackTimeDuring);
-        if (this.activePower == PowerIndex.BARRAGE_2 && this.attackTimeDuring == this.getBubbleBarrageLength()){
-            this.attackTimeDuring = -10;
-        } else if (this.isBarraging() && this.attackTimeDuring == this.getBarrageLength()){
-            this.attackTimeDuring = -10;
+        if (!this.self.level().isClientSide()) {
+            playBarrageMissNoise(this.attackTimeDuring);
+            if (this.activePower == PowerIndex.BARRAGE_2 && this.attackTimeDuring == this.getBubbleBarrageLength()) {
+                this.attackTimeDuring = -10;
+                animateStand(StandEntity.BARRAGE_FINISHER);
+            }
+            findDeflectables();
         }
-        findDeflectables();
     }
     public int getBubbleBarrageLength(){
         return 20;
@@ -1273,7 +1273,7 @@ public class PowersSoftAndWet extends PunchingStand {
         setActivePower(PowerIndex.POWER_1_SNEAK);
         this.poseStand(OffsetIndex.FOLLOW);
         this.attackTimeDuring = 0;
-        animateStand((byte) 0);
+        animateStand(StandEntity.IDLE);
         return true;
     }
     @Override

@@ -1039,7 +1039,7 @@ public class StandPowers {
             ((StandUser)loser).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
             ((StandUser)winner).roundabout$getStandPowers().playBarrageEndNoise(0, loser);
             this.takeDeterminedKnockbackWithY(winner, loser, this.getBarrageFinisherKnockback());
-            ((StandUser)winner).roundabout$getStandPowers().animateStand((byte) 13);
+            ((StandUser)winner).roundabout$getStandPowers().animateStand(StandEntity.BARRAGE_FINISHER);
             ((StandUser)loser).roundabout$tryPower(PowerIndex.NONE,true);
         }
     }
@@ -1398,7 +1398,7 @@ public class StandPowers {
             ((StandUser) entity).roundabout$tryPower(PowerIndex.NONE,true);
             ((StandUser) entity).roundabout$getStandPowers().animateStand((byte) 14);
         } else {
-            ((StandUser) entity).roundabout$getStandPowers().animateStand((byte) 0);
+            ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.IDLE);
         }
         this.getUserData(entity).roundabout$setDazed(dazeTime);
     }
@@ -1407,7 +1407,7 @@ public class StandPowers {
             ((StandUser) entity).roundabout$tryPower(PowerIndex.NONE,true);
             ((StandUser) entity).roundabout$getStandPowers().animateStand((byte) 14);
         } else {
-            ((StandUser) entity).roundabout$getStandPowers().animateStand((byte) 0);
+            ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.IDLE);
         }
         this.getUserData(entity).roundabout$setDazed(dazeTime);
     }
@@ -1667,7 +1667,7 @@ public class StandPowers {
                 }
 
                 if (lastHit) {
-                    animateStand((byte) 13);
+                    animateStand(StandEntity.BARRAGE_FINISHER);
                     this.attackTimeDuring = -10;
                 }
             } else {
@@ -2569,7 +2569,7 @@ public class StandPowers {
         this.attackTimeDuring = -1;
         this.setActivePower(PowerIndex.NONE);
         poseStand(OffsetIndex.FOLLOW);
-        animateStand((byte) 0);
+        animateStand(StandEntity.IDLE);
         return true;
     }
 

@@ -209,13 +209,13 @@ public class BlockGrabPreset extends PunchingStand{
                         ) && !hasEntity() && !hasBlock() && this.getAttackTimeDuring() >= 0
                 ) {
                     ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                    animateStand((byte) 0);
+                    animateStand(StandEntity.IDLE);
                 }
             }
             if (this.getAnimation() == 36 || this.getAnimation() == 37) {
                 retractEndTIcks++;
                 if (retractEndTIcks > 8) {
-                    animateStand((byte) 0);
+                    animateStand(StandEntity.IDLE);
                     retractEndTIcks = -1;
                 }
             } else {
@@ -544,7 +544,7 @@ public class BlockGrabPreset extends PunchingStand{
         this.setActivePower(PowerIndex.NONE);
         poseStand(OffsetIndex.FOLLOW);
         if (this.getAnimation() != 32 && this.getAnimation() != 34 && this.getAnimation() != 38) {
-            animateStand((byte) 0);
+            animateStand(StandEntity.IDLE);
         }
         return true;
     }

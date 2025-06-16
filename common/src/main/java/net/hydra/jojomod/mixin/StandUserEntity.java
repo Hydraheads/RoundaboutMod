@@ -1809,7 +1809,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 ((LivingEntity)(Object)this).stopUsingItem();
                 roundabout$dazeTime--;
                 if (roundabout$dazeTime <= 0){
-                    this.roundabout$getStandPowers().animateStand((byte) 0);
+                    this.roundabout$getStandPowers().animateStand(StandEntity.IDLE);
                     this.roundabout$syncDaze();
                 }
             }

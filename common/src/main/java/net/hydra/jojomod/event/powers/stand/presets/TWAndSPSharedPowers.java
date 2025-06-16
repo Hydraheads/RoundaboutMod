@@ -801,7 +801,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             if (this.getAnimation() == 18) {
                 leapEndTicks++;
                 if (leapEndTicks > 4) {
-                    animateStand((byte) 0);
+                    animateStand(StandEntity.IDLE);
                     leapEndTicks = -1;
                 }
             } else {

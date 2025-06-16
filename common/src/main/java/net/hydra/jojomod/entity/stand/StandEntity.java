@@ -159,6 +159,10 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         this.entityData.set(FOLLOWING_ID, standSetId);
     }
 
+    public static final byte
+            IDLE = 0,
+            BARRAGE_FINISHER = 13;
+
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState idleAnimationState2 = new AnimationState();
     public final AnimationState idleAnimationState3 = new AnimationState();
@@ -248,7 +252,7 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                 this.barrageAnimationState.stop();
             }
 
-            if (animation == 13) {
+            if (animation == BARRAGE_FINISHER) {
                 this.barrageEndAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.barrageEndAnimationState.stop();
