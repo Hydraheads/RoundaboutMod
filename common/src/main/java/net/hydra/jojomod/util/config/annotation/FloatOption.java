@@ -1,4 +1,4 @@
-package net.hydra.jojomod.util.annotation;
+package net.hydra.jojomod.util.config.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,6 +7,12 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface CommentedOption {
-    public String comment() default "";
+public @interface FloatOption {
+    String group() default "default";
+
+    float value();
+
+    float min() default 0f;
+
+    float max() default 100f;
 }

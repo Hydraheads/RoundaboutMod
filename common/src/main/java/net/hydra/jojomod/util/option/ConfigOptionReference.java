@@ -1,12 +1,11 @@
 package net.hydra.jojomod.util.option;
-import net.hydra.jojomod.util.annotation.BooleanOption;
-import net.hydra.jojomod.util.annotation.FloatOption;
-import net.hydra.jojomod.util.annotation.IntOption;
-import net.hydra.jojomod.util.annotation.NestedOption;
+import net.hydra.jojomod.util.config.annotation.BooleanOption;
+import net.hydra.jojomod.util.config.annotation.FloatOption;
+import net.hydra.jojomod.util.config.annotation.IntOption;
+import net.hydra.jojomod.util.config.annotation.NestedOption;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
 

@@ -1,6 +1,9 @@
 package net.hydra.jojomod.util.config;
 
-import net.hydra.jojomod.util.annotation.CommentedOption;
+import net.hydra.jojomod.util.config.annotation.BooleanOption;
+import net.hydra.jojomod.util.config.annotation.CommentedOption;
+import net.hydra.jojomod.util.config.annotation.FloatOption;
+import net.hydra.jojomod.util.config.annotation.IntOption;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -59,6 +62,9 @@ public class ConfigParser {
                 /* Primitive types are types like boolean, string, int, etc...
                 * We check this so we can support class recursion to create better grouped configs */
                 if (isPrimitiveLike(fieldType)) {
+                    /* Add field info */
+                    parsed.add(baseIndent + getAnnotationTypeComment(field));
+
                     // ternary for removing trailing commas
                     parsed.add(baseIndent + "\"" + fieldName + "\": " + formatPrimitive(value) + ((fieldIndex == fields.length - 1) ? "" : ","));
                 } else {
@@ -101,5 +107,23 @@ public class ConfigParser {
 
     private static String indent(int level) {
         return "    ".repeat(level);
+    }
+
+    /* Get the comment for min/max & default values */
+    private static String getAnnotationTypeComment(Field field)
+    {
+        BooleanOption booleanOption = field.getAnnotation(BooleanOption.class);
+        FloatOption floatOption = field.getAnnotation(FloatOption.class);
+        IntOption intOption = field.getAnnotation(IntOption.class);
+
+        if (booleanOption == null && floatOption == null && intOption == null)
+            return "/* -- error reading type info -- */";
+
+        if (booleanOption != null)
+            return String.format("/* Default Value: %s */", booleanOption.value());
+        if (floatOption != null)
+            return String.format("/* Minimum Value: %s | Maximum Value: %s | Default Value: %s */", floatOption.min(), floatOption.max(), floatOption.value());
+        // we can ensure intOption is the last one remaining
+        return String.format("/* Minimum Value: %s | Maximum Value: %s | Default Value: %s */", intOption.min(), intOption.max(), intOption.value());
     }
 }

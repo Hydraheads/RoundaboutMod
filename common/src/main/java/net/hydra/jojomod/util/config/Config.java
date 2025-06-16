@@ -1,6 +1,6 @@
 package net.hydra.jojomod.util.config;
 
-import net.hydra.jojomod.util.annotation.*;
+import net.hydra.jojomod.util.config.annotation.*;
 
 import java.util.Arrays;
 import java.util.HashSet;
