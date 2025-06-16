@@ -1,5 +1,5 @@
 package net.hydra.jojomod.util.option;
-import net.hydra.jojomod.util.Config;
+import net.hydra.jojomod.util.config.Config;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

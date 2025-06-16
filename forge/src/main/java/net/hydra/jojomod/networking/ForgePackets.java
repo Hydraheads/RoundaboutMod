@@ -6,7 +6,7 @@ import com.google.gson.GsonBuilder;
 import net.hydra.jojomod.access.IPacketAccess;
 import net.hydra.jojomod.networking.c2s.*;
 import net.hydra.jojomod.networking.s2c.*;
-import net.hydra.jojomod.util.ConfigManager;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.Networking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;

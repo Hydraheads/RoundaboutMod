@@ -3,7 +3,7 @@ package net.hydra.jojomod;
 import net.hydra.jojomod.advancement.criteria.ModCriteria;
 import net.zetalasis.networking.packet.impl.ModNetworking;
 import net.hydra.jojomod.platform.Services;
-import net.hydra.jojomod.util.ConfigManager;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.Networking;
 import net.zetalasis.world.DynamicWorld;
 import net.minecraft.resources.ResourceLocation;

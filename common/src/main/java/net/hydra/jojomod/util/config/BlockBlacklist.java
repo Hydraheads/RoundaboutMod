@@ -1,4 +1,4 @@
-package net.hydra.jojomod.util;
+package net.hydra.jojomod.util.config;
 
 import com.google.gson.Gson;
 import net.hydra.jojomod.Roundabout;
