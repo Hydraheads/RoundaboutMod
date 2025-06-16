@@ -4,6 +4,7 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.mojang.authlib.minecraft.client.ObjectMapper;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
@@ -16,10 +17,12 @@ import net.hydra.jojomod.util.option.Reflection;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.zetalasis.hjson.JsonValue;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.stream.Collectors;
 
 public abstract class ConfigManager {
     private static final Gson GSON = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -216,7 +219,11 @@ public abstract class ConfigManager {
                 return defaultConfig;
             }
             try {
-                return GSON.fromJson(Files.newBufferedReader(path), Config.class);
+                String fileContent = String.join(System.lineSeparator(), Files.readAllLines(path));
+
+                return GSON.fromJson(
+                        JsonValue.readHjson(fileContent).toString(),
+                        Config.class);
             } catch (JsonSyntaxException e) {
                 Roundabout.LOGGER.error("Failed to parse defaultConfig file, using default config");
             }
@@ -235,7 +242,11 @@ public abstract class ConfigManager {
                 return defaultConfig;
             }
             try {
-                return GSON.fromJson(Files.newBufferedReader(path), ClientConfig.class);
+                String fileContent = String.join(System.lineSeparator(), Files.readAllLines(path));
+
+                return GSON.fromJson(
+                        JsonValue.readHjson(fileContent).toString(),
+                        ClientConfig.class);
             } catch (JsonSyntaxException e) {
                 Roundabout.LOGGER.error("Failed to parse defaultConfig file, using default config");
             }

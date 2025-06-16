@@ -1,0 +1,1 @@
+# All code in this package is from https://github.com/hjson/hjson-java ! I do not own any of it.
