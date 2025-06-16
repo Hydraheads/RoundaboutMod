@@ -43,16 +43,22 @@ public class SoftAndWetEntity extends StandEntity {
     public final AnimationState kick = new AnimationState();
     public final AnimationState kick_charge = new AnimationState();
     public final AnimationState encasement_punch = new AnimationState();
+
+
+    public static final byte
+            KICK = 25,
+            ENCASEMENT_STRIKE = 26,
+            KICK_CHARGE = 27;
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
         if (this.getUser() != null) {
-            if (this.getAnimation() != 12) {
+            if (this.getAnimation() != BARRAGE) {
                 this.hideFists.startIfStopped(this.tickCount);
             } else {
                 this.hideFists.stop();
             }
-            if (this.getAnimation() != 80) {
+            if (this.getAnimation() != KICK_BARRAGE) {
                 this.hideLeg.startIfStopped(this.tickCount);
                 this.kick_barrage.stop();
             } else {
@@ -60,29 +66,29 @@ public class SoftAndWetEntity extends StandEntity {
                 this.kick_barrage.startIfStopped(this.tickCount);
             }
 
-            if (this.getAnimation() == 30) {
+            if (this.getAnimation() == KICK) {
                 this.kick.startIfStopped(this.tickCount);
             } else {
                 this.kick.stop();
             }
-            if (this.getAnimation() == 32) {
+            if (this.getAnimation() == ENCASEMENT_STRIKE) {
                 this.encasement_punch.startIfStopped(this.tickCount);
             } else {
                 this.encasement_punch.stop();
             }
 
-            if (this.getAnimation() == 39) {
+            if (this.getAnimation() == KICK_CHARGE) {
                 this.kick_charge.startIfStopped(this.tickCount);
             } else {
                 this.kick_charge.stop();
             }
-            if (this.getAnimation() == 42) {
+            if (this.getAnimation() == KICK_BARRAGE_WINDUP) {
                 this.kick_barrage_windup.startIfStopped(this.tickCount);
             } else {
                 this.kick_barrage_windup.stop();
             }
 
-            if (this.getAnimation() == 43) {
+            if (this.getAnimation() == KICK_BARRAGE_END) {
                 this.kick_barrage_end.startIfStopped(this.tickCount);
             } else {
                 this.kick_barrage_end.stop();
