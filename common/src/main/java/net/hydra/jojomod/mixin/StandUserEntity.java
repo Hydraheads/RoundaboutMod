@@ -1734,7 +1734,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$breakGuard() {
         this.roundabout$GuardBroken = true;
         if (!this.level().isClientSide && this.roundabout$getStandPowers().isGuarding()) {
-            this.roundabout$getStandPowers().animateStand((byte) 15);
+            this.roundabout$getStandPowers().animateStand(StandEntity.BROKEN_GUARD);
         }
         this.roundabout$syncGuard();
     }
@@ -1743,9 +1743,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.roundabout$GuardBroken = guardBroken;
         if (!this.level().isClientSide) {
             if (guardBroken && this.roundabout$getStandPowers().isGuarding()){
-                this.roundabout$getStandPowers().animateStand((byte) 15);
+                this.roundabout$getStandPowers().animateStand(StandEntity.BROKEN_GUARD);
             } else if (!guardBroken && this.roundabout$getStandPowers().isGuarding()){
-                this.roundabout$getStandPowers().animateStand((byte) 15);
+                this.roundabout$getStandPowers().animateStand(StandEntity.BROKEN_GUARD);
             }
         }
     }
@@ -1768,7 +1768,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.roundabout$GuardPoints = this.roundabout$getMaxGuardPoints();
         this.roundabout$GuardBroken = false;
         if (!this.level().isClientSide && this.roundabout$getStandPowers().isGuarding()) {
-            this.roundabout$getStandPowers().animateStand((byte) 10);
+            this.roundabout$getStandPowers().animateStand(StandEntity.BLOCK);
         }
         this.roundabout$syncGuard();
     }

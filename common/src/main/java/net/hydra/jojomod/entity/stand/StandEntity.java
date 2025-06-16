@@ -161,7 +161,11 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
 
     public static final byte
             IDLE = 0,
-            BARRAGE_FINISHER = 13;
+            BLOCK = 10,
+            BARRAGE_CHARGE = 11,
+            BARRAGE_FINISHER = 13,
+            BROKEN_GUARD = 15,
+            MINING_BARRAGE = 16;
 
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState idleAnimationState2 = new AnimationState();
@@ -236,12 +240,12 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                 this.punchState3.stop();
             }
 
-            if (animation == 10) {
+            if (animation == BLOCK) {
                 this.blockAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.blockAnimationState.stop();
             }
-            if (animation == 11) {
+            if (animation == BARRAGE_CHARGE) {
               this.barrageChargeAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.barrageChargeAnimationState.stop();
@@ -264,13 +268,13 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                 this.barrageHurtAnimationState.stop();
             }
 
-            if (animation == 15) {
+            if (animation == BROKEN_GUARD) {
                 this.brokenBlockAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.brokenBlockAnimationState.stop();
             }
 
-            if (animation == 16) {
+            if (animation == MINING_BARRAGE) {
                 this.miningBarrageAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.miningBarrageAnimationState.stop();

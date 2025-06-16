@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
@@ -223,7 +224,7 @@ public class NewPunchingStand extends NewDashPreset {
             return false;
         }
 
-        animateStand((byte) 11);
+        animateStand(StandEntity.BARRAGE_CHARGE);
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE_CHARGE);
         this.poseStand(OffsetIndex.ATTACK);

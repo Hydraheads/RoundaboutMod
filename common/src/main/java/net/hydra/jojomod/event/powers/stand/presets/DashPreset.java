@@ -2,6 +2,7 @@ package net.hydra.jojomod.event.powers.stand.presets;
 
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -94,7 +95,7 @@ public class DashPreset extends StandPowers {
         impactBrace = true;
         impactAirTime = 15;
 
-        animateStand((byte) 10);
+        animateStand(StandEntity.BLOCK);
         this.setAttackTimeDuring(0);
         this.setActivePower(PowerIndex.EXTRA);
         this.poseStand(OffsetIndex.BENEATH);
@@ -146,7 +147,7 @@ public class DashPreset extends StandPowers {
         return this.getSelf().fallDistance > 3 && impactSlowdown <= -1 && !((StandUser)this.self).roundabout$isBubbleEncased();
     }
     public boolean vault() {
-        animateStand((byte) 15);
+        animateStand(StandEntity.BROKEN_GUARD);
         this.poseStand(OffsetIndex.GUARD);
         cancelConsumableItem(this.getSelf());
         this.setAttackTimeDuring(-7);

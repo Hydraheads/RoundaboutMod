@@ -221,7 +221,7 @@ public class PowersKillerQueen extends PunchingStand {
 
     @Override
     public boolean setPowerBarrageCharge() {
-        animateStand((byte) 11);
+        animateStand(StandEntity.BARRAGE_CHARGE);
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE_CHARGE);
         this.poseStand(OffsetIndex.ATTACK);

@@ -2599,9 +2599,9 @@ public class StandPowers {
     }
     public boolean setPowerGuard() {
         if (((StandUser)this.self).roundabout$getGuardBroken()) {
-            animateStand((byte) 15);
+            animateStand(StandEntity.BROKEN_GUARD);
         } else {
-            animateStand((byte) 10);
+            animateStand(StandEntity.BLOCK);
         }
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.GUARD);
@@ -2637,7 +2637,7 @@ public class StandPowers {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.MINING);
         this.poseStand(OffsetIndex.FIXED_STYLE);
-        animateStand((byte) 16);
+        animateStand(StandEntity.MINING_BARRAGE);
         return true;
     }
 

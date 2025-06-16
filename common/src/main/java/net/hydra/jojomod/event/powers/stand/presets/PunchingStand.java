@@ -225,7 +225,7 @@ public class PunchingStand extends DashPreset {
             return false;
         }
 
-        animateStand((byte) 11);
+        animateStand(StandEntity.BARRAGE_CHARGE);
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE_CHARGE);
         this.poseStand(OffsetIndex.ATTACK);

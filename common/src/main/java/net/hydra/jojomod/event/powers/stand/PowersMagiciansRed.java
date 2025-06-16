@@ -1219,7 +1219,7 @@ public class PowersMagiciansRed extends PunchingStand {
     public LivingEntity leaded;
     public CrossfireHurricaneEntity kamikaze;
     public boolean kamikazeCharge(){
-        this.animateStand((byte) 15);
+        this.animateStand(StandEntity.BROKEN_GUARD);
         this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
         this.setAttackTimeDuring(0);
         this.setActivePower(PowerIndex.POWER_4_BONUS);
@@ -2272,7 +2272,7 @@ public class PowersMagiciansRed extends PunchingStand {
     public boolean buryCrossfire(){
         boolean hasSingle =isChargingCrossfireSingle() || hasHurricaneSingle();
         if (hasSingle) {
-            this.animateStand((byte) 15);
+            this.animateStand(StandEntity.BROKEN_GUARD);
             this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
             this.setAttackTimeDuring(-15);
             this.setActivePower(PowerIndex.POWER_3_BONUS);
@@ -2302,7 +2302,7 @@ public class PowersMagiciansRed extends PunchingStand {
 
     public boolean crossfireBlock(){
         if (canShootConcealedCrossfire()){
-            this.animateStand((byte) 15);
+            this.animateStand(StandEntity.BROKEN_GUARD);
             this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
             this.setAttackTimeDuring(-15);
             this.setActivePower(PowerIndex.POWER_1_BONUS);
@@ -2327,7 +2327,7 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     public boolean crossfire(){
         if (!hasHurricaneSingle()) {
-            this.animateStand((byte) 15);
+            this.animateStand(StandEntity.BROKEN_GUARD);
             this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_2);
