@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumBaseballEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -1501,7 +1502,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public void animateFinalAttack(){
         if (((StandUser)this.getSelf()).roundabout$getStandSkin() == StarPlatinumEntity.BASEBALL_SKIN){
-            animateStand((byte) 50);
+            animateStand(StarPlatinumBaseballEntity.BASEBALL_CHARGE);
         } else {
             super.animateFinalAttack();
         }
@@ -1509,7 +1510,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public void animateFinalAttackHit(){
         if (((StandUser)this.getSelf()).roundabout$getStandSkin() == StarPlatinumEntity.BASEBALL_SKIN){
-            animateStand((byte) 51);
+            animateStand(StarPlatinumBaseballEntity.BASEBALL_SWING);
         } else {
             super.animateFinalAttackHit();
         }

@@ -1177,7 +1177,7 @@ public class PowersMagiciansRed extends PunchingStand {
         }
     }
     public boolean toggleLifeTracker() {
-        this.animateStand((byte) 51);
+        this.animateStand(MagiciansRedEntity.LIFE_DETECTOR);
         this.poseStand(OffsetIndex.GUARD);
         this.setAttackTimeDuring(-15);
         this.setActivePower(PowerIndex.POWER_1_BLOCK);
@@ -1321,7 +1321,7 @@ public class PowersMagiciansRed extends PunchingStand {
         addEXP(2);
         this.setAttackTimeMax(this.getRangedBarrageRecoilTime());
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
-        animateStand((byte) 48);
+        animateStand(MagiciansRedEntity.FIREBALL_SHOOT);
         return true;
     }
     public boolean setPowerRangedBarrage2() {
@@ -1331,7 +1331,7 @@ public class PowersMagiciansRed extends PunchingStand {
         playFlamethrowerSound();
         this.setAttackTimeMax(this.getRangedBarrage2RecoilTime());
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
-        animateStand((byte) 46);
+        animateStand(MagiciansRedEntity.FLAMETHROWER_SHOOT);
         return true;
     }
     public int getRangedBarrageRecoilTime(){
@@ -1833,7 +1833,7 @@ public class PowersMagiciansRed extends PunchingStand {
         if (chargedFinal >= maxSuperHitTime) {
             animateStand(StandEntity.FINAL_ATTACK);
         } else {
-            animateStand((byte) 89);
+            animateStand(MagiciansRedEntity.CHARGED_PUNCH);
         }
     }
 
@@ -2790,7 +2790,7 @@ public class PowersMagiciansRed extends PunchingStand {
         return true;
     }
     public boolean setPowerRangedBarrageCharge() {
-        animateStand((byte) 47);
+        animateStand(MagiciansRedEntity.FIREBALL_CHARGE);
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.RANGED_BARRAGE_CHARGE);
         this.poseStand(OffsetIndex.ATTACK);
@@ -2804,7 +2804,7 @@ public class PowersMagiciansRed extends PunchingStand {
         this.poseStand(OffsetIndex.ATTACK);
         this.clashDone = false;
         playRangedBarrageChargeSound2();
-        animateStand((byte) 45);
+        animateStand(MagiciansRedEntity.FLAMETHROWER_CHARGE);
         return true;
     }
     public void playRangedBarrageChargeSound(){

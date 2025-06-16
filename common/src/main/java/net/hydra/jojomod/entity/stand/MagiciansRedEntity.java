@@ -145,8 +145,17 @@ public class MagiciansRedEntity extends StandEntity {
             DEBUT_SKIN = 22;
 
     public static final byte
+            FLAMETHROWER_LASH_1 = 41,
+            FLAMETHROWER_LASH_2 = 42,
+            FLAMETHROWER_LASH_3 = 43,
+            FLAMETHROWER_CHARGE = 45,
+            FLAMETHROWER_SHOOT = 46,
+            FIREBALL_CHARGE = 47,
+            FIREBALL_SHOOT = 48,
             RED_BIND = 49,
-            FIRE_CRASH = 60;
+            LIFE_DETECTOR = 51,
+            FIRE_CRASH = 60,
+            CHARGED_PUNCH = 89;
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
@@ -161,19 +170,19 @@ public class MagiciansRedEntity extends StandEntity {
             }
 
             byte animation = this.getAnimation();
-            if (animation > 40 && animation < 44) {
+            if (animation >= FLAMETHROWER_LASH_1 && animation <= FLAMETHROWER_LASH_3) {
                 this.hideLash.stop();
-                if (animation == 41) {
+                if (animation == FLAMETHROWER_LASH_1) {
                     this.lash1.startIfStopped(this.tickCount);
                 } else {
                     this.lash1.stop();
                 }
-                if (animation == 42) {
+                if (animation == FLAMETHROWER_LASH_2) {
                     this.lash2.startIfStopped(this.tickCount);
                 } else {
                     this.lash2.stop();
                 }
-                if (animation == 43) {
+                if (animation == FLAMETHROWER_LASH_3) {
                     this.lash3.startIfStopped(this.tickCount);
                 } else {
                     this.lash3.stop();
@@ -185,25 +194,25 @@ public class MagiciansRedEntity extends StandEntity {
                 this.lash3.stop();
             }
 
-            if (this.getAnimation() == 45) {
+            if (this.getAnimation() == FLAMETHROWER_CHARGE) {
                 this.flamethrower_charge.startIfStopped(this.tickCount);
             } else {
                 this.flamethrower_charge.stop();
             }
 
-            if (this.getAnimation() == 46) {
+            if (this.getAnimation() == FLAMETHROWER_SHOOT) {
                 this.flamethrower_shoot.startIfStopped(this.tickCount);
             } else {
                 this.flamethrower_shoot.stop();
             }
 
-            if (this.getAnimation() == 47) {
+            if (this.getAnimation() == FIREBALL_CHARGE) {
                 this.fireball_charge.startIfStopped(this.tickCount);
             } else {
                 this.fireball_charge.stop();
             }
 
-            if (this.getAnimation() == 48) {
+            if (this.getAnimation() == FIREBALL_SHOOT) {
                 this.fireball_shoot.startIfStopped(this.tickCount);
             } else {
                 this.fireball_shoot.stop();
@@ -213,7 +222,7 @@ public class MagiciansRedEntity extends StandEntity {
             } else {
                 this.red_bind.stop();
             }
-            if (this.getAnimation() == 51) {
+            if (this.getAnimation() == LIFE_DETECTOR) {
                 this.life_detector.startIfStopped(this.tickCount);
             } else {
                 this.life_detector.stop();
@@ -234,7 +243,7 @@ public class MagiciansRedEntity extends StandEntity {
             } else {
                 this.finalKick.stop();
             }
-            if (this.getAnimation() == 89) {
+            if (this.getAnimation() == CHARGED_PUNCH) {
                 this.finalPunch.startIfStopped(this.tickCount);
             } else {
                 this.finalPunch.stop();

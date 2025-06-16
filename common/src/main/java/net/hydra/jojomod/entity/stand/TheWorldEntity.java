@@ -92,6 +92,10 @@ public class TheWorldEntity extends StandEntity {
     public final AnimationState finalKick = new AnimationState();
     public final AnimationState finalKickWindup = new AnimationState();
     public final AnimationState phaseGrab = new AnimationState();
+
+    public static final byte
+            ASSAULT = 39,
+            ASSAULT_PUNCH = 40;
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
@@ -110,7 +114,7 @@ public class TheWorldEntity extends StandEntity {
             }
             if (((this.getSkin() == TheWorldEntity.HERITAGE_SKIN) || (this.getSkin() == TheWorldEntity.ARCADE_SKIN))
                     && animation != KICK_BARRAGE && animation != KICK_BARRAGE_WINDUP && animation != KICK_BARRAGE_END
-            &&  animation != 86 &&  animation != 85 && idle != 4) {
+            &&  animation != FINAL_ATTACK &&  animation != FINAL_ATTACK_WINDUP && idle != 4) {
                 this.hideLegEntirely.startIfStopped(this.tickCount);
             } else {
                 this.hideLegEntirely.stop();
@@ -167,12 +171,12 @@ public class TheWorldEntity extends StandEntity {
             } else {
                 this.entityGrabAnimation.stop();
             }
-            if (animation == 39) {
+            if (animation == ASSAULT) {
                 this.assault.startIfStopped(this.tickCount);
             } else {
                 this.assault.stop();
             }
-            if (animation == 40) {
+            if (animation == ASSAULT_PUNCH) {
                 this.assault_punch.startIfStopped(this.tickCount);
             } else {
                 this.assault_punch.stop();

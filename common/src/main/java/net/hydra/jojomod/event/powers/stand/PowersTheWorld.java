@@ -506,7 +506,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_1);
             playSoundsIfNearby(ASSAULT_NOISE, 27, false);
-            this.animateStand((byte)39);
+            this.animateStand(TheWorldEntity.ASSAULT);
             this.poseStand(OffsetIndex.LOOSE);
             stand.setYRot(this.getSelf().getYHeadRot() % 360);
             stand.setXRot(this.getSelf().getXRot());
@@ -823,7 +823,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                     }
                     this.setCooldown(PowerIndex.SKILL_1, cdr);
                     this.setAttackTimeDuring(-12);
-                    animateStand((byte) 40);
+                    animateStand(TheWorldEntity.ASSAULT_PUNCH);
                     return true;
                 }
             }
