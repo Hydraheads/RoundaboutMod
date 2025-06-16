@@ -219,10 +219,9 @@ public abstract class ConfigManager {
             }
             try {
                 String fileContent = String.join(System.lineSeparator(), Files.readAllLines(path));
+                JsonValue hjson = JsonValue.readHjson(fileContent);
 
-                return GSON.fromJson(
-                        JsonValue.readHjson(fileContent).toString(),
-                        Config.class);
+                return GSON.fromJson(hjson.toString(), Config.class);
             } catch (Exception e) {
                 Roundabout.LOGGER.error("Failed to parse defaultConfig file, using default config");
             }
@@ -242,10 +241,9 @@ public abstract class ConfigManager {
             }
             try {
                 String fileContent = String.join(System.lineSeparator(), Files.readAllLines(path));
+                JsonValue hjson = JsonValue.readHjson(fileContent);
 
-                return GSON.fromJson(
-                        JsonValue.readHjson(fileContent).toString(),
-                        ClientConfig.class);
+                return GSON.fromJson(hjson.toString(), ClientConfig.class);
             } catch (Exception e) {
                 Roundabout.LOGGER.error("Failed to parse client config file, using default config");
             }

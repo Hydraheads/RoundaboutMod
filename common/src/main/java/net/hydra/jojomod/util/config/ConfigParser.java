@@ -63,8 +63,9 @@ public class ConfigParser {
 
                 if (field.get(object) instanceof HashSet<?> hashSet) {
                     /* Add field info */
-                    parsed.add(baseIndent + getAnnotationTypeComment(field));
-                    parsed.add(baseIndent + "\"" + fieldName + "\": [");
+                    // TODO: add support for HashSet<String> to getAnnotationTypeComment, preferably by adding a ListOption annotation?
+                    //parsed.add(baseIndent + getAnnotationTypeComment(field));
+                    parsed.add(baseIndent + "\"" + toSnakeCase(fieldName) + "\": [");
 
                     Object[] elements = hashSet.toArray();
                     for (int objIndex = 0; objIndex < elements.length; objIndex++) {
@@ -86,9 +87,9 @@ public class ConfigParser {
                     parsed.add(baseIndent + getAnnotationTypeComment(field));
 
                     // ternary for removing trailing commas
-                    parsed.add(baseIndent + "\"" + fieldName + "\": " + formatPrimitive(value) + ((fieldIndex == fields.length - 1) ? "" : ","));
+                    parsed.add(baseIndent + "\"" + toSnakeCase(fieldName) + "\": " + formatPrimitive(value) + ((fieldIndex == fields.length - 1) ? "" : ","));
                 } else {
-                    parsed.add(baseIndent + "\"" + fieldName + "\": {");
+                    parsed.add(baseIndent + "\"" + toSnakeCase(fieldName) + "\": {");
                     List<String> nestedParsed = parse(value, tabLevel + 1, visited);
 
                     // remove first and last curly braces to inline the nested object
@@ -145,5 +146,13 @@ public class ConfigParser {
             return String.format("/* Minimum Value: %s | Maximum Value: %s | Default Value: %s */", floatOption.min(), floatOption.max(), floatOption.value());
         // we can ensure intOption is the last one remaining
         return String.format("/* Minimum Value: %s | Maximum Value: %s | Default Value: %s */", intOption.min(), intOption.max(), intOption.value());
+    }
+
+    /* Camel case is like testTestTest, Snake Case is what the config expects to validate (i.e. test_test_test) */
+    public static String toSnakeCase(String input) {
+        return input
+                .replaceAll("([a-z])([A-Z]+)", "$1_$2")
+                .replaceAll("([A-Z])([A-Z][a-z])", "$1_$2")
+                .toLowerCase();
     }
 }
