@@ -223,7 +223,7 @@ public abstract class ConfigManager {
                 return GSON.fromJson(
                         JsonValue.readHjson(fileContent).toString(),
                         Config.class);
-            } catch (JsonSyntaxException e) {
+            } catch (Exception e) {
                 Roundabout.LOGGER.error("Failed to parse defaultConfig file, using default config");
             }
         } catch (IOException e) {
@@ -246,8 +246,8 @@ public abstract class ConfigManager {
                 return GSON.fromJson(
                         JsonValue.readHjson(fileContent).toString(),
                         ClientConfig.class);
-            } catch (JsonSyntaxException e) {
-                Roundabout.LOGGER.error("Failed to parse defaultConfig file, using default config");
+            } catch (Exception e) {
+                Roundabout.LOGGER.error("Failed to parse client config file, using default config");
             }
         } catch (IOException e) {
             Roundabout.LOGGER.error("Failed to load config", e);
@@ -272,7 +272,8 @@ public abstract class ConfigManager {
 
     private static void save(Config config, Path path) {
         try {
-            Files.write(path, GSON.toJson(config).getBytes());
+            String parsed = String.join(System.lineSeparator(), ConfigParser.parse(config));
+            Files.write(path, parsed.getBytes());
         } catch (IOException e) {
             Roundabout.LOGGER.error("Failed to save config", e);
         }

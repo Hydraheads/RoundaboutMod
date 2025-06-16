@@ -59,6 +59,26 @@ public class ConfigParser {
 
                 Class<?> fieldType = field.getType();
 
+                String closeNested = baseIndent + "}" + ((fieldIndex == fields.length - 1) ? "" : ",");
+
+                if (field.get(object) instanceof HashSet<?> hashSet) {
+                    /* Add field info */
+                    parsed.add(baseIndent + getAnnotationTypeComment(field));
+                    parsed.add(baseIndent + "\"" + fieldName + "\": [");
+
+                    Object[] elements = hashSet.toArray();
+                    for (int objIndex = 0; objIndex < elements.length; objIndex++) {
+                        parsed.add(baseIndent + indent(1) + "\"" + elements[objIndex].toString() + "\"" +
+                                // handle entry commas as well
+                                (objIndex == elements.length - 1 ? "" : ","));
+                    }
+
+                    // close up the array
+                    parsed.add(baseIndent + "]" + (fieldIndex == fields.length - 1 ? "" : ","));
+                    // Cave Johnson. We're done here.
+                    continue;
+                }
+
                 /* Primitive types are types like boolean, string, int, etc...
                 * We check this so we can support class recursion to create better grouped configs */
                 if (isPrimitiveLike(fieldType)) {
@@ -75,7 +95,7 @@ public class ConfigParser {
                     if (nestedParsed.size() >= 2) {
                         parsed.addAll(nestedParsed.subList(1, nestedParsed.size() - 1));
                         // ternary for removing trailing commas
-                        parsed.add(baseIndent + "}" + ((fieldIndex == fields.length - 1) ? "" : ","));
+                        parsed.add(closeNested);
                     } else {
                         parsed.addAll(nestedParsed);
                     }
