@@ -8,6 +8,7 @@ import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
+import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
@@ -326,6 +327,12 @@ public class ForgeEntities {
                     EntityType.Builder.<GroundHurricaneEntity>of(GroundHurricaneEntity::new, MobCategory.MISC).sized(0.2f, 0.2f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "ground_hurricane").toString())
+            );
+    public static final RegistryObject<EntityType<GroundBubbleEntity>> GROUND_BUBBLE =
+            ENTITY_TYPES.register("ground_bubble", () ->
+                    EntityType.Builder.<GroundBubbleEntity>of(GroundBubbleEntity::new, MobCategory.MISC).sized(0.2f, 0.2f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "ground_bubble").toString())
             );
     public static final RegistryObject<EntityType<SoftAndWetPlunderBubbleEntity>> PLUNDER_BUBBLE =
             ENTITY_TYPES.register("plunder_bubble", () ->

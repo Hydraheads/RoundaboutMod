@@ -168,6 +168,9 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity{
 
                         if (ent.hurt(ModDamageTypes.of(ent.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getOwner()),
                                 PW.getExplosiveBubbleStrength(ent))) {
+                            if (ent instanceof LivingEntity LIVE) {
+                                LE.setLastHurtMob(LIVE);
+                            }
                             //You don't need to hurt them to launch them
                         }
 

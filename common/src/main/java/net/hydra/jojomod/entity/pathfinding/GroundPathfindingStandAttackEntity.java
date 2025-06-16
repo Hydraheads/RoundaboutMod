@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.pathfinding;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -13,6 +14,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
@@ -22,6 +24,16 @@ public class GroundPathfindingStandAttackEntity extends PathfinderMob {
         super($$0, $$1);
     }
     int lifeSpan = 300;
+
+    @Override
+    protected void checkFallDamage(double $$0, boolean $$1, BlockState $$2, BlockPos $$3) {
+    }
+    public int getLifeSpan(){
+        return lifeSpan;
+    }
+    public void setLifeSpan(int lifeSpan){
+        this.lifeSpan = lifeSpan;
+    }
 
     public static AttributeSupplier.Builder createStandAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,

@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
+import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
@@ -386,6 +387,13 @@ public class FabricEntities {
                         EntityType.Builder.<GroundHurricaneEntity>of(GroundHurricaneEntity::new, MobCategory.MISC).
                                 sized(0.2f, 0.2f).clientTrackingRange(10).build(Roundabout.MOD_ID+":ground_hurricane")
                 );
+        public static final EntityType<GroundBubbleEntity> GROUND_BUBBLE =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "ground_bubble"),
+                        EntityType.Builder.<GroundBubbleEntity>of(GroundBubbleEntity::new, MobCategory.MISC).
+                                sized(0.2f, 0.2f).clientTrackingRange(10).build(Roundabout.MOD_ID+":ground_bubble")
+                );
         public static final EntityType<SoftAndWetPlunderBubbleEntity> PLUNDER_BUBBLE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -459,6 +467,7 @@ public class FabricEntities {
                 ModEntities.THROWN_OBJECT = THROWN_OBJECT;
                 ModEntities.CONCEALED_FLAME_OBJECT = CONCEALED_FLAME_OBJECT;
                 ModEntities.GROUND_HURRICANE = GROUND_HURRICANE;
+                ModEntities.GROUND_BUBBLE = GROUND_BUBBLE;
                 ModEntities.PLUNDER_BUBBLE = PLUNDER_BUBBLE;
                 ModEntities.EXPLOSIVE_BUBBLE = EXPLOSIVE_BUBBLE;
                 ModEntities.ITEM_LAUNCHING_BUBBLE_ENTITY = ITEM_LAUNCHING_BUBBLE_ENTITY;
@@ -534,6 +543,7 @@ public class FabricEntities {
 
 
                 FabricDefaultAttributeRegistry.register(GROUND_HURRICANE, GroundHurricaneEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(GROUND_BUBBLE, GroundHurricaneEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(LIFE_TRACKER, LifeTrackerEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(D4C_CLONE, D4CCloneEntity.createAttributes());
 

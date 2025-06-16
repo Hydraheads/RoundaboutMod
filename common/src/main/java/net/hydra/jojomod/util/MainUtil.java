@@ -1225,7 +1225,7 @@ public class MainUtil {
     }
 
     /**Generate pointer on block or entity position*/
-    public static Vec3 getRaytracePointOnMobOrBlock(Entity source, int range){
+    public static Vec3 getRaytracePointOnMobOrBlock(Entity source, float range){
         EntityHitResult targetEntity = rayCastEntityHitResult(source,range);
         if (targetEntity != null){
             return targetEntity.getLocation();

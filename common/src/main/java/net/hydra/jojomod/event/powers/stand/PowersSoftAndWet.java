@@ -9,6 +9,8 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
+import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -430,6 +432,11 @@ public class PowersSoftAndWet extends PunchingStand {
     public void bubbleBarrageTick(){
         if (!this.self.level().isClientSide()) {
             playBarrageMissNoise(this.attackTimeDuring);
+
+            if (this.attackTimeDuring % 4 == 1){
+                generateGroundBubble();
+            }
+
             if (this.activePower == PowerIndex.BARRAGE_2 && this.attackTimeDuring == this.getBubbleBarrageLength()) {
                 this.attackTimeDuring = -10;
                 animateStand(StandEntity.BARRAGE_FINISHER);
@@ -1074,6 +1081,17 @@ public class PowersSoftAndWet extends PunchingStand {
     public float getExplosiveItemBubbleSpeed(){
         return 0.25F;
     }
+
+    public void generateGroundBubble(){
+        GroundBubbleEntity groundent = new GroundBubbleEntity(this.getSelf().level(), this.self);
+        Vec3 pos = MainUtil.getRaytracePointOnMobOrBlock(this.self,2.5F);
+        groundent.setPos(pos);
+        groundent.setLifeSpan(120);
+        float rando = (float) (Math.random()* 0.05F)-0.025F;
+        groundent.setSpeed(groundent.getSpeed()+rando);
+        this.getSelf().level().addFreshEntity(groundent);
+    }
+
 
     public void shootBubble(SoftAndWetBubbleEntity ankh){
         shootBubbleSpeed(ankh, 1.01F);

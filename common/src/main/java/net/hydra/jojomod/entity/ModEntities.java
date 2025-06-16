@@ -6,6 +6,7 @@ import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
+import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
@@ -54,6 +55,7 @@ public class ModEntities {
     public static EntityType<CinderellaVisageDisplayEntity> CINDERELLA_VISAGE_DISPLAY;
     public static EntityType<ConcealedFlameObjectEntity> CONCEALED_FLAME_OBJECT;
     public static EntityType<GroundHurricaneEntity> GROUND_HURRICANE;
+    public static EntityType<GroundBubbleEntity> GROUND_BUBBLE;
     public static EntityType<SoftAndWetPlunderBubbleEntity> PLUNDER_BUBBLE;
     public static EntityType<SoftAndWetExplosiveBubbleEntity> EXPLOSIVE_BUBBLE;
     public static EntityType<SoftAndWetItemLaunchingBubbleEntity> ITEM_LAUNCHING_BUBBLE_ENTITY;

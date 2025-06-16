@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
+import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
@@ -77,6 +78,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.FALLEN_VILLAGER.get(), FallenVillager.createAttributes().build());
         event.put(ForgeEntities.FALLEN_CREEPER.get(), FallenCreeper.createAttributes().build());
         event.put(ForgeEntities.GROUND_HURRICANE.get(), GroundHurricaneEntity.createStandAttributes().build());
+        event.put(ForgeEntities.GROUND_BUBBLE.get(), GroundBubbleEntity.createStandAttributes().build());
         event.put(ForgeEntities.LIFE_TRACKER.get(), LifeTrackerEntity.createStandAttributes().build());
         event.put(ForgeEntities.D4C_CLONE.get(), D4CCloneEntity.createAttributes().build());
     }
@@ -345,6 +347,7 @@ public class ForgeEvents {
         ModEntities.THROWN_OBJECT = ForgeEntities.THROWN_OBJECT.get();
         ModEntities.CONCEALED_FLAME_OBJECT = ForgeEntities.CONCEALED_FLAME_OBJECT.get();
         ModEntities.GROUND_HURRICANE = ForgeEntities.GROUND_HURRICANE.get();
+        ModEntities.GROUND_BUBBLE = ForgeEntities.GROUND_BUBBLE.get();
         ModEntities.PLUNDER_BUBBLE = ForgeEntities.PLUNDER_BUBBLE.get();
         ModEntities.EXPLOSIVE_BUBBLE = ForgeEntities.EXPLOSIVE_BUBBLE.get();
         ModEntities.ITEM_LAUNCHING_BUBBLE_ENTITY = ForgeEntities.ITEM_LAUNCHING_BUBBLE_ENTITY.get();
