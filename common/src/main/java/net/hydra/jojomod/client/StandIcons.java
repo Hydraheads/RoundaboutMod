@@ -283,6 +283,17 @@ public class StandIcons {
     public static final ResourceLocation D4C_GENERATE_KEY = Roundabout.location("textures/gui/icons/d4c/key_generation.png");
     public static final ResourceLocation D4C_PARALLEL_RUNNING = Roundabout.location("textures/gui/icons/d4c/parallel_running.png");
 
+    public static final ResourceLocation SOFT_AND_WET_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/soft_and_wet/barrage.png");
+
+    public static final ResourceLocation SOFT_AND_WET_GUARD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/soft_and_wet/guard.png");
+    public static final ResourceLocation SOFT_AND_WET_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/soft_and_wet/punch.png");
+    public static final ResourceLocation ENCASEMENT_STRIKE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/soft_and_wet/encasement_strike.png");
+    public static final ResourceLocation BUBBLE_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/soft_and_wet/bubble_barrage.png");
 
     public static final ResourceLocation EERIE_SKIN = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/eerie_shift.png");
