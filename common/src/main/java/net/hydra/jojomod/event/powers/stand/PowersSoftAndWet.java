@@ -332,8 +332,8 @@ public class PowersSoftAndWet extends PunchingStand {
                 if (keyIsDown) {
                     if (inShootingMode()){
                         if (!holdDownClick){
-                            if (!this.onCooldown(PowerIndex.SKILL_4) && (getActivePower() == PowerIndex.NONE)
-                            || getActivePower() == PowerIndex.POWER_4_EXTRA) {
+                            if (!this.onCooldown(PowerIndex.SKILL_4) && ((getActivePower() == PowerIndex.NONE)
+                            || getActivePower() == PowerIndex.POWER_4_EXTRA)) {
                                 if (getInExplosiveSpinMode() || confirmShot(getUseTicks())) {
                                     if (this.self instanceof Player PE){
                                         IPlayerEntity ipe = ((IPlayerEntity)PE);
@@ -696,7 +696,7 @@ public class PowersSoftAndWet extends PunchingStand {
 
             this.poseStand(OffsetIndex.FOLLOW);
             this.setAttackTimeDuring(-10);
-            this.setActivePower(PowerIndex.POWER_2);
+            this.setActivePower(PowerIndex.POWER_4_EXTRA);
             shootExplosiveBubbleSpeed(bubble,getExplosiveSpeed());
             bubbleListInit();
             this.bubbleList.add(bubble);
@@ -1111,7 +1111,7 @@ public class PowersSoftAndWet extends PunchingStand {
         this.poseStand(OffsetIndex.ATTACK);
         this.setAttackTimeMax(this.getBubbleBarrageRecoilTime());
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
-        animateStand(StandEntity.KICK_BARRAGE);
+        animateStand(StandEntity.BARRAGE);
         return true;
     }
     @Override
