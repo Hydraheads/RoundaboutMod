@@ -181,7 +181,6 @@ public abstract class ZLevelRenderer {
             RPostShaderRegistry.InverseProjectionMatrix.mul(positionMatrix);
             RPostShaderRegistry.InverseProjectionMatrix.mul(matrices.last().pose());
             RPostShaderRegistry.InverseProjectionMatrix.invert();
-            Roundabout.LOGGER.info("Set InverseProjectionMatrix");
         }
     }
 }
