@@ -132,6 +132,9 @@ public class PowersSoftAndWet extends PunchingStand {
     }
     @Override
     public boolean canSummonStand(){
+        if (this.getSelf() instanceof Creeper){
+            return false;
+        }
         return true;
     }
     @Override
@@ -747,6 +750,27 @@ public class PowersSoftAndWet extends PunchingStand {
                         this.self.level().playSound(null, this.self.blockPosition(), ModSounds.WATER_ENCASE_EVENT, SoundSource.PLAYERS, 1F, 1);
                         MainUtil.takeLiteralUnresistableKnockbackWithY(this.self, storedVec.x, storedVec.y, storedVec.z);
                     }
+            }
+        }
+    }
+    public void creeperSpawnBubble(){
+        bubbleType = PlunderTypes.SOUND.id;
+        SoftAndWetPlunderBubbleEntity bubble = getPlunderBubble();
+        if (!onCooldown(PowerIndex.SKILL_2)) {
+            if (bubble != null) {
+                this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().cooldownsInTicks.softAndWetBasicBubbleShot);
+
+                this.poseStand(OffsetIndex.FOLLOW);
+                this.setAttackTimeDuring(-10);
+                this.setActivePower(PowerIndex.POWER_2);
+                bubble.setPlunderType(bubbleType);
+                bubble.setSingular(true);
+                shootBubbleSpeed(bubble, 0);
+                bubbleListInit();
+                this.bubbleList.add(bubble);
+                this.getSelf().level().addFreshEntity(bubble);
+                bubble.setBlockPos(this.self.blockPosition());
+                bubble.setFloating();
             }
         }
     }
