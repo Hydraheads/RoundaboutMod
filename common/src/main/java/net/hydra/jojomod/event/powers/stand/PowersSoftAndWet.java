@@ -11,9 +11,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.projectile.*;
-import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
@@ -23,6 +21,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.config.ClientConfig;
@@ -54,6 +53,7 @@ import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -1400,7 +1400,30 @@ public class PowersSoftAndWet extends PunchingStand {
         return super.cancelSprintJump();
     }
 
-
+public void unlockSkin(){
+    Level lv = this.getSelf().level();
+    if ((this.getSelf()) instanceof Player PE){
+        StandUser user = ((StandUser)PE);
+        ItemStack stack = user.roundabout$getStandDisc();
+        if (!stack.isEmpty() && stack.is(ModItems.STAND_DISC_SOFT_AND_WET)){
+            IPlayerEntity ipe = ((IPlayerEntity) PE);
+            if (!ipe.roundabout$getUnlockedBonusSkin()){
+                if (!lv.isClientSide()) {
+                    ipe.roundabout$setUnlockedBonusSkin(true);
+                    lv.playSound(null, PE.getX(), PE.getY(),
+                            PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
+                    ((ServerLevel) lv).sendParticles(ModParticles.HEART_ATTACK_MINI, PE.getX(),
+                            PE.getY()+PE.getEyeHeight(), PE.getZ(),
+                            10, 0.5, 0.5, 0.5, 0.2);
+                    user.roundabout$setStandSkin(SoftAndWetEntity.KIRA);
+                    user.roundabout$summonStand(this.getSelf().level(), true, false);
+                    ((ServerPlayer) ipe).displayClientMessage(
+                            Component.translatable("unlock_skin.roundabout.soft_and_wet.kira"), true);
+                }
+            }
+        }
+    }
+}
     public void playBubbleBarrageChargeSound(){
         if (!this.self.level().isClientSide()) {
             SoundEvent barrageChargeSound = this.getBarrageChargeSound();

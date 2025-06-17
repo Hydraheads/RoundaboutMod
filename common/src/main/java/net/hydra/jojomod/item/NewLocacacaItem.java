@@ -5,6 +5,7 @@ import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.particles.ItemParticleOption;
@@ -16,6 +17,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -106,12 +108,22 @@ public class NewLocacacaItem extends Item {
                                 ent.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 1200, 0), entity);
                             }
                         }
+
+
                         ((StandUser) entity).roundabout$setLocacacaCurse((byte) -1);
                     }
 
                     SoundEvent $$6 = ModSounds.LOCACACA_FUSION_EVENT;
                     level.playSound(null,entity,$$6, SoundSource.PLAYERS, 1.0F, 1F);
                 } else {
+                    if (ent instanceof Cat){
+                        if (entity instanceof Player PL){
+                            StandUser user = ((StandUser) PL);
+                            if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW){
+                                PW.unlockSkin();
+                            }
+                        }
+                    }
                     if (entCurse > -1){
                         ((StandUser) entity).roundabout$setLocacacaCurse(entCurse);
                         ((StandUser) ent).roundabout$setLocacacaCurse((byte) -1);
