@@ -3,6 +3,7 @@ package net.hydra.jojomod.event.powers.stand;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.BubbleScaffoldBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
@@ -14,6 +15,7 @@ import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
+import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.mobs.AvdolNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
@@ -44,7 +46,9 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.FlyingMob;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
@@ -52,7 +56,6 @@ import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
-import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -747,14 +750,62 @@ public class PowersSoftAndWet extends PunchingStand {
             }
         }
     }
+
+    int bubbleMax = 0;
+    int bubbleCd = 20;
     @Override
     public void tickMobAI(LivingEntity attackTarget){
+
+        if (this.attackTimeDuring <= -1) {
+            if (this.getSelf().fallDistance > 4 && !(this.self instanceof FlyingMob) && !this.getSelf().isNoGravity()
+                    && !(this.getSelf().noPhysics) && !(this.self instanceof EnderDragon) && !(this.self instanceof WitherBoss)) {
+                /**Fall Brace AI*/
+                if (!((StandUser) this.getSelf()).roundabout$isBubbleEncased()) {
+                    if (!this.onCooldown(PowerIndex.SKILL_EXTRA)) {
+                        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BIG_BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+                        ((StandUser) this.getSelf()).roundabout$setBubbleEncased((byte) 1);
+                        this.setCooldown(PowerIndex.SKILL_EXTRA, ClientNetworking.getAppropriateConfig().cooldownsInTicks.softAndWetEncasementBubbleCreate);
+                        return;
+                    }
+                }
+            }
+        }
         if (attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf())) {
+
             double dist = attackTarget.distanceTo(this.getSelf());
             boolean isCreeper = this.getSelf() instanceof Creeper;
             if (isCreeper) {
             } else {
                 boolean isBasicMob = (this.self instanceof Zombie || this.self instanceof Spider || this.self instanceof Skeleton);
+
+
+                if (this.self instanceof JojoNPC || this.self instanceof Villager || this.self instanceof Raider){
+                    if (Math.random() > 0.5F){
+                        bubbleType = PlunderTypes.SIGHT.id;
+                    } else {
+                        bubbleType = PlunderTypes.FRICTION.id;
+                    }
+                } else {
+                    if (isBasicMob){
+                        bubbleType = PlunderTypes.SIGHT.id;
+                    } else {
+                        bubbleType = PlunderTypes.FRICTION.id;
+                    }
+                }
+                if (bubbleMax < 10) {
+                    if (dist <= 20 && (activePower == PowerIndex.NONE)) {
+                        if (!this.onCooldown(PowerIndex.SKILL_2)) {
+                            ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.POWER_2, true, bubbleType);
+                            bubbleMax++;
+                            bubbleCd = 300;
+                        }
+                    }
+                } else {
+                    bubbleCd--;
+                    if (bubbleCd <= 0){
+                        bubbleMax = 0;
+                    }
+                }
 
 
                 if (dist <= 6 &&  (activePower == PowerIndex.NONE || activePower == PowerIndex.ATTACK)){
