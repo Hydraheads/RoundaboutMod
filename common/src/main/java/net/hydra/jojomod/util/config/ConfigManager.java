@@ -142,7 +142,7 @@ public abstract class ConfigManager {
         Roundabout.LOGGER.info("Loaded server config");
     }
 
-    private static void validateFields(Object instance) {
+    public static void validateFields(Object instance) {
         validateFloatFields(instance);
         validateIntFields(instance);
         validateBooleanFields(instance);
@@ -261,6 +261,7 @@ public abstract class ConfigManager {
         saveClient(ClientConfig.getLocalInstance(), clientConfigPath);
     }
     public static void saveLocalConfig() {
+        validateFields(Config.getLocalInstance());
         save(Config.getLocalInstance(), localConfigPath);
     }
 
