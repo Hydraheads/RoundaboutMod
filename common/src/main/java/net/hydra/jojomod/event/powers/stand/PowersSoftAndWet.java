@@ -857,9 +857,13 @@ public class PowersSoftAndWet extends PunchingStand {
         return true;
     }
     public void splashWaterShield(){
-        float width = this.self.getBbWidth()*0.5F;
-        float height = this.self.getBbHeight()*0.5F;
-        this.self.extinguishFire();
+        float width = self.getBbWidth()*0.5F;
+        float height = self.getBbHeight()*0.5F;
+        if (((StandUser) self).roundabout$isOnStandFire()){
+            ((StandUser) self).roundabout$setRemainingStandFireTicks(0);
+        }
+        ((StandUser) self).roundabout$setGasolineTime(-1);
+        self.extinguishFire();
         this.self.level().playSound(null, this.self.blockPosition(), ModSounds.WATER_ENCASE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5 + (Math.random() * 0.04)));
         ((ServerLevel) this.self.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
                         Blocks.WATER.defaultBlockState()),
