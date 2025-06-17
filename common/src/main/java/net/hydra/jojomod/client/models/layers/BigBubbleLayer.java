@@ -42,12 +42,6 @@ public class BigBubbleLayer<T extends LivingEntity, A extends EntityModel<T>> ex
         if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
             if (((StandUser)entity).roundabout$isBubbleEncased() && ((IEntityAndData)entity).roundabout$getExclusiveLayers()) {
 
-                if (Minecraft.getInstance().screen != null && !(Minecraft.getInstance().screen instanceof NoCancelInputScreen)
-                        && !(Minecraft.getInstance().screen instanceof PoseSwitcherScreen)){
-                    if (ClientUtil.getPlayer() != null && ClientUtil.getPlayer().is(entity)){
-                        return;
-                    }
-                }
                 poseStack.pushPose();
                 float height = entity.getDimensions(Pose.STANDING).height;
                 float width = entity.getDimensions(Pose.STANDING).width;

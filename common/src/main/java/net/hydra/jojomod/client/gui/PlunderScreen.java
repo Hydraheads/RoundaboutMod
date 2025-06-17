@@ -90,7 +90,8 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
             this.minecraft.setScreen(null);
             this.minecraft.options.keyUse.setDown(false);
         }
-        return super.keyReleased($$0, $$1, $$2);
+        return false;
+        //return super.keyReleased($$0, $$1, $$2);
     }
     @Override
     public boolean mouseReleased(double $$0, double $$1, int $$2) {
@@ -225,9 +226,21 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
         Options options = Minecraft.getInstance().options;
         return false;
     }
+
+    public void tick() {
+        /**Forge force freezes all inputs regardless of settings in a secreen so it needs to be evaporated*/
+        super.tick();
+        /***
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player != null && !mc.isPaused()) {
+            mc.player.aiStep();
+        }
+         **/
+    }
     @Override
     public boolean keyPressed(int i, int j, int k) {
-        return super.keyPressed(i, j, k);
+        return false;
+        //return super.keyPressed(i, j, k);
     }
 
     @Override

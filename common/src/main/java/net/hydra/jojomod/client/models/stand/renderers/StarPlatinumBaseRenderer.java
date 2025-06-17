@@ -29,6 +29,7 @@ public class StarPlatinumBaseRenderer<T extends StandEntity> extends StandRender
     public static final ResourceLocation JOJONIUM_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/jojonium.png");
     public static final ResourceLocation BETA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/beta.png");
     public static final ResourceLocation ARCADE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/arcade.png");
+    public static final ResourceLocation ARCADE_SKIN_2 = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/arcade_2.png");
     public static final ResourceLocation FOUR_DEE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/4d.png");
     public static final ResourceLocation JOJOVELLER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/jojoveller.png");
     public static final ResourceLocation CROP = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/crop.png");
@@ -80,6 +81,8 @@ public class StarPlatinumBaseRenderer<T extends StandEntity> extends StandRender
             return VOLUME_39;
         } else if (BT == StarPlatinumEntity.JUMP_13){
             return JUMP_13;
+        } else if (BT == StarPlatinumEntity.ARCADE_2){
+            return ARCADE_SKIN_2;
         }
         return PART_3_SKIN;
     }

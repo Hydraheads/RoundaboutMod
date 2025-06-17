@@ -154,7 +154,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 return LAST_HIT_6_NOISE;
             }
 
-        } else if (skn == StarPlatinumEntity.ARCADE){
+        } else if (isArcade(skn)){
             if (rand > 0.66) {
                 return LAST_HIT_10_NOISE;
             } else if (rand > 0.33) {
@@ -293,12 +293,17 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             if (skn == StarPlatinumEntity.OVA_SKIN) {
                 playStandUserOnlySoundsIfNearby(BARRAGE_NOISE_3, 27, false,true);
                 return;
-            } if (skn == StarPlatinumEntity.ARCADE) {
+            } if (isArcade(skn)) {
                 playStandUserOnlySoundsIfNearby(BARRAGE_NOISE_8, 27, false,true);
                 return;
             }
             playStandUserOnlySoundsIfNearby(BARRAGE_NOISE, 27, false,true);
         }
+    }
+
+
+    public boolean isArcade(byte bt){
+        return (bt == StarPlatinumEntity.ARCADE || bt == StarPlatinumEntity.ARCADE_2);
     }
     @Override
     public void playSPandTWTSSounds(){
@@ -306,7 +311,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (bt == StarPlatinumEntity.OVA_SKIN) {
             playSoundsIfNearby(TIME_STOP_NOISE_8, 100, true);
-        } else if (bt == StarPlatinumEntity.ARCADE) {
+        } else if (isArcade(bt)) {
             playSoundsIfNearby(TIME_STOP_NOISE_11, 100, true);
         } else {
             playSoundsIfNearby(TIME_STOP_NOISE, 100, true);
@@ -978,6 +983,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 $$1.add(StarPlatinumEntity.GREEN_2);
                 $$1.add(StarPlatinumEntity.ARCADE);
             } if (Level > 4 || bypass){
+                $$1.add(StarPlatinumEntity.ARCADE_2);
                 $$1.add(StarPlatinumEntity.BASEBALL_SKIN);
                 $$1.add(StarPlatinumEntity.JUMP_13);
             } if (Level > 5 || bypass){
@@ -1373,7 +1379,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                     this.getSelf() instanceof Player PE &&
                     ((IPlayerEntity)PE).roundabout$getMaskInventory().getItem(1).is(ModItems.BLANK_MASK)) {
                 playStandUserOnlySoundsIfNearby(STAR_FINGER_SILENT, 32, false, false);
-            } else if (skn == StarPlatinumEntity.ARCADE){
+            } else if (isArcade(skn)){
                 playStandUserOnlySoundsIfNearby(STAR_FINGER_3, 32, false, true);
             } else{
 
@@ -1476,7 +1482,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (skn == StarPlatinumEntity.OVA_SKIN) {
             return BARRAGE_NOISE_3;
-        } else if (skn == StarPlatinumEntity.ARCADE) {
+        } else if (isArcade(skn)) {
                 return BARRAGE_NOISE_8;
         } else {
             if (rand > 0.5) {
@@ -1529,7 +1535,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (bt == StarPlatinumEntity.OVA_SKIN ) {
             return TIME_STOP_NOISE_9;
-        } if (bt == StarPlatinumEntity.ARCADE) {
+        } if (isArcade(bt)) {
             return TIME_STOP_NOISE_12;
         }
         return TIME_STOP_NOISE_2;
@@ -1587,7 +1593,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         } else if (soundChoice == TIME_STOP_VOICE){
             if (((StandUser)this.getSelf()).roundabout$getStandSkin() == StarPlatinumEntity.OVA_SKIN) {
                 return ModSounds.OVA_PLATINUM_ORA_4_EVENT;
-            } else if (((StandUser)this.getSelf()).roundabout$getStandSkin() == StarPlatinumEntity.ARCADE){
+            } else if (isArcade(((StandUser)this.getSelf()).roundabout$getStandSkin())){
                     return ModSounds.ARCADE_STAR_PLATINUM_TIME_STOP_EVENT;
             } else {
                 return ModSounds.STAR_PLATINUM_TIMESTOP_SOUND_EVENT;
@@ -1595,7 +1601,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         } else if (soundChoice == TIME_STOP_VOICE_2){
             if (((StandUser)this.getSelf()).roundabout$getStandSkin() == StarPlatinumEntity.OVA_SKIN){
                 return ModSounds.OVA_PLATINUM_ORA_4_EVENT;
-            } else if (((StandUser)this.getSelf()).roundabout$getStandSkin() == StarPlatinumEntity.ARCADE){
+            } else if (isArcade(((StandUser)this.getSelf()).roundabout$getStandSkin())){
                 return ModSounds.ARCADE_STAR_PLATINUM_TIME_STOP_EVENT;
             } else {
                 return ModSounds.STAR_PLATINUM_TIMESTOP_2_SOUND_EVENT;
@@ -1629,7 +1635,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public SoundEvent getImpaleSound(){
 
         byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-        if (bt == StarPlatinumEntity.ARCADE){
+        if (isArcade(bt)){
             return ModSounds.ARCADE_IMPALE_EVENT;
         }
         return super.getImpaleSound();
