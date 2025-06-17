@@ -13,6 +13,7 @@ import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
@@ -21,6 +22,7 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
+import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.config.ClientConfig;
@@ -167,17 +169,31 @@ public class PowersSoftAndWet extends PunchingStand {
     }
 
     @Override
-    public List<Byte> getSkinList() {
+    public List<Byte> getSkinList(){
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add(SoftAndWetEntity.LIGHT_SKIN);
-        $$1.add(SoftAndWetEntity.MANGA_SKIN);
-        $$1.add(SoftAndWetEntity.DEBUT);
-        $$1.add(SoftAndWetEntity.STRIPED);
-        $$1.add(SoftAndWetEntity.FIGURE_SKIN);
-        $$1.add(SoftAndWetEntity.DROWNED_SKIN);
-        $$1.add(SoftAndWetEntity.DROWNED_SKIN_2);
-        $$1.add(SoftAndWetEntity.KING_SKIN);
-        $$1.add(SoftAndWetEntity.BETA_SKIN);
+        if (this.getSelf() instanceof Player PE){
+            byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
+            ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
+            boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+            if (Level > 1 || bypass){
+                $$1.add(SoftAndWetEntity.MANGA_SKIN);
+            } if (Level > 2 || bypass){
+                $$1.add(SoftAndWetEntity.DEBUT);
+            } if (Level > 3 || bypass){
+                $$1.add(SoftAndWetEntity.STRIPED);
+            } if (Level > 4 || bypass){
+                $$1.add(SoftAndWetEntity.FIGURE_SKIN);
+            } if (Level > 5 || bypass){
+                $$1.add(SoftAndWetEntity.DROWNED_SKIN);
+                $$1.add(SoftAndWetEntity.DROWNED_SKIN_2);
+            } if (Level > 6 || bypass){
+                $$1.add(SoftAndWetEntity.KING_SKIN);
+                $$1.add(SoftAndWetEntity.BETA_SKIN);
+            } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
+                $$1.add(SoftAndWetEntity.KIRA);
+            }
+        }
         return $$1;
     }
 
