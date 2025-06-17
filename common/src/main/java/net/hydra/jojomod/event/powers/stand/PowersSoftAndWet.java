@@ -14,6 +14,7 @@ import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
+import net.hydra.jojomod.entity.visages.mobs.AvdolNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
@@ -44,10 +45,20 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.hoglin.Hoglin;
+import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.monster.piglin.PiglinBrute;
+import net.minecraft.world.entity.monster.warden.Warden;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrownPotion;
+import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -734,6 +745,46 @@ public class PowersSoftAndWet extends PunchingStand {
                         MainUtil.takeLiteralUnresistableKnockbackWithY(this.self, storedVec.x, storedVec.y, storedVec.z);
                     }
             }
+        }
+    }
+    @Override
+    public void tickMobAI(LivingEntity attackTarget){
+        if (attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf())) {
+            double dist = attackTarget.distanceTo(this.getSelf());
+            boolean isCreeper = this.getSelf() instanceof Creeper;
+            if (isCreeper) {
+            } else {
+                boolean isBasicMob = (this.self instanceof Zombie || this.self instanceof Spider || this.self instanceof Skeleton);
+
+
+                if (dist <= 6 &&  (activePower == PowerIndex.NONE || activePower == PowerIndex.ATTACK)){
+                    Entity targetEntity = getTargetEntity(this.self, -1);
+                    if (targetEntity != null && targetEntity.is(attackTarget)) {
+                        if (this.attackTimeDuring <= -1) {
+                            double RNG = Math.random();
+                            if ((this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) &&
+                                    (this.activePower == PowerIndex.NONE || this.activePower == PowerIndex.ATTACK)) {
+                                if (RNG < 0.5 && (this.self instanceof IronGolem ||
+                                        this.self instanceof Ravager || this.self instanceof Piglin || this.self instanceof AvdolNPC ||
+                                        this.self instanceof ZombifiedPiglin ||this.self instanceof Hoglin ||
+                                        this.self instanceof PiglinBrute)){
+                                    wentForCharge = false;
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
+                                } else {
+                                    wentForCharge = false;
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.ATTACK, true);
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+            /**
+             if (dist <= 8 && (hurricaneSpecial == null || hurricaneSpecial.isEmpty())) {
+             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
+             }
+             **/
         }
     }
     public boolean hold2 = false;
