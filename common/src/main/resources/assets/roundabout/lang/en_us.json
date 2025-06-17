@@ -736,7 +736,7 @@
   "ability.roundabout.go_beyond": "Go Beyond",
   "ability.roundabout.go_beyond.desc": "Ends explosive spin mode to launch an imaginary bubble. It does not exist in this world, passing through mobs, blocks, time stop, shields, logic itself, and other things. It seeks out the target you are hovering over when you launch it, and cannot be stopped. It does massive damage and knockback, inflicting high bleed.",
   "ability.roundabout.bubble_spread": "Bubble Spread",
-  "ability.roundabout.bubble_spread.desc": "Spreads many plunder bubbles around you, taking away things on contact.",
+  "ability.roundabout.bubble_spread.desc": "Spreads many plunder bubbles around you, taking away things on contact. If the spread exists, this ability instead pops the entire spread.",
   "ability.roundabout.bubble_spread_redirect": "Bubble Spread Redirect",
   "ability.roundabout.bubble_spread_redirect.desc": "Redirects bubbles created from bubble spread towards the block or entity you are facing. Only applies to bubbles that have not yet taken things away.",
   "ability.roundabout.plunder_bubble": "Plunder Bubble",

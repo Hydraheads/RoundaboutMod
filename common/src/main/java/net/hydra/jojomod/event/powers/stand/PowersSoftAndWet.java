@@ -245,15 +245,15 @@ public class PowersSoftAndWet extends PunchingStand {
                 "instruction.roundabout.hold_attack_crouch", StandIcons.ENCASEMENT_STRIKE,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.barrage",
                 "instruction.roundabout.barrage", StandIcons.SOFT_AND_WET_BARRAGE,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.bubble_barrage",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,getShootingModeLevel(), "ability.roundabout.bubble_barrage",
                 "instruction.roundabout.shooting_barrage", StandIcons.BUBBLE_BARRAGE,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.bubble_selection",
                 "instruction.roundabout.press_skill", StandIcons.PLUNDER_SELECTION,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80, 0, "ability.roundabout.go_beyond",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80, getGoBeyondLevel(), "ability.roundabout.go_beyond",
                 "instruction.roundabout.press_skill_explosive_spin_mode", StandIcons.GO_BEYOND,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99, 0, "ability.roundabout.bubble_spread",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99, getSpreadLevel(), "ability.roundabout.bubble_spread",
                 "instruction.roundabout.press_skill_crouch", StandIcons.PLUNDER_BUBBLE_FILL,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.bubble_spread_redirect",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,getSpreadLevel(), "ability.roundabout.bubble_spread_redirect",
                 "instruction.roundabout.press_skill_block", StandIcons.PLUNDER_BUBBLE_FILL_CONTROL,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.roundabout.plunder_bubble",
                 "instruction.roundabout.press_skill", StandIcons.PLUNDER_BUBBLE,2,level,bypas));
@@ -261,7 +261,7 @@ public class PowersSoftAndWet extends PunchingStand {
                 "instruction.roundabout.press_skill_crouch", StandIcons.PLUNDER_BUBBLE_POP,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,0, "ability.roundabout.bubble_redirect",
                 "instruction.roundabout.press_skill_block", StandIcons.PLUNDER_BUBBLE_CONTROL,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,0, "ability.roundabout.item_launching_bubble",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,getItemShootingLevel(), "ability.roundabout.item_launching_bubble",
                 "instruction.roundabout.press_skill_shooting_mode", StandIcons.ITEM_BUBBLE,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
@@ -269,28 +269,59 @@ public class PowersSoftAndWet extends PunchingStand {
                 "instruction.roundabout.press_skill_falling", StandIcons.SOFT_AND_WET_FALL_CATCH,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+80,0, "ability.roundabout.vault",
                 "instruction.roundabout.press_skill_air", StandIcons.SOFT_AND_WET_VAULT,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99,0, "ability.roundabout.bubble_scaffold",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99,getScaffoldLevel(), "ability.roundabout.bubble_scaffold",
                 "instruction.roundabout.press_skill_crouch", StandIcons.SOFT_AND_WET_BUBBLE_SCAFFOLD,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+118,0, "ability.roundabout.encasement_bubble",
                 "instruction.roundabout.press_skill_block", StandIcons.SOFT_AND_WET_BUBBLE_ENCASEMENT,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+80,0, "ability.roundabout.shooting_mode",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+80,getShootingModeLevel(), "ability.roundabout.shooting_mode",
                 "instruction.roundabout.press_skill", StandIcons.SOFT_SHOOTING_MODE,4,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99,6, "ability.roundabout.water_shield",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99,getWaterShieldLevel(), "ability.roundabout.water_shield",
                 "instruction.roundabout.press_skill_crouch", StandIcons.WATER_SHIELD,4,level,bypas));
         return $$1;
+    }
+
+    public int getGoBeyondLevel(){
+        return 7;
+    }
+    public int getWaterShieldLevel(){
+        return 6;
+    }
+    public int getItemShootingLevel(){
+        return 5;
+    }
+    public int getShootingModeLevel(){
+        return 4;
+    }
+    public int getScaffoldLevel(){
+        return 3;
+    }
+    public int getSpreadLevel(){
+        return 2;
     }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
 
         if (inShootingMode()) {
-            setSkillIcon(context, x, y, 1, StandIcons.GO_BEYOND, PowerIndex.SKILL_EXTRA_2);
-        } else if (isGuarding()) {
-            setSkillIcon(context, x, y, 1, StandIcons.PLUNDER_BUBBLE_FILL_CONTROL, PowerIndex.SKILL_EXTRA_2);
-        } else if (isHoldingSneak()){
-            if (canDoBubbleClusterPop()){
-                setSkillIcon(context, x, y, 1, StandIcons.PLUNDER_BUBBLE_FILL_POP, PowerIndex.SKILL_2_SNEAK);
+            if (canExecuteMoveWithLevel(getGoBeyondLevel())) {
+                setSkillIcon(context, x, y, 1, StandIcons.GO_BEYOND, PowerIndex.SKILL_EXTRA_2);
             } else {
-                setSkillIcon(context, x, y, 1, StandIcons.PLUNDER_BUBBLE_FILL, PowerIndex.SKILL_1_SNEAK);
+                setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+            }
+        } else if (isGuarding()) {
+            if (canExecuteMoveWithLevel(getSpreadLevel())) {
+                setSkillIcon(context, x, y, 1, StandIcons.PLUNDER_BUBBLE_FILL_CONTROL, PowerIndex.SKILL_EXTRA_2);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+            }
+        } else if (isHoldingSneak()){
+            if (canExecuteMoveWithLevel(getSpreadLevel())){
+                if (canDoBubbleClusterPop()){
+                    setSkillIcon(context, x, y, 1, StandIcons.PLUNDER_BUBBLE_FILL_POP, PowerIndex.SKILL_2_SNEAK);
+                } else {
+                    setSkillIcon(context, x, y, 1, StandIcons.PLUNDER_BUBBLE_FILL, PowerIndex.SKILL_1_SNEAK);
+                }
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD,true);
             }
         } else {
             setSkillIcon(context, x, y, 1, StandIcons.PLUNDER_SELECTION, PowerIndex.NO_CD);
@@ -301,7 +332,11 @@ public class PowersSoftAndWet extends PunchingStand {
             if (isHoldingSneak()){
                 setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE_POP, PowerIndex.SKILL_2_SNEAK);
             } else {
-                setSkillIcon(context, x, y, 2, StandIcons.ITEM_BUBBLE, PowerIndex.SKILL_2);
+                if (canExecuteMoveWithLevel(getItemShootingLevel())) {
+                    setSkillIcon(context, x, y, 2, StandIcons.ITEM_BUBBLE, PowerIndex.SKILL_2);
+                } else {
+                    setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                }
             }
         } else if (isGuarding()){
             setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE_CONTROL, PowerIndex.SKILL_EXTRA_2);
@@ -318,7 +353,11 @@ public class PowersSoftAndWet extends PunchingStand {
         } else if (isGuarding()) {
             setSkillIcon(context, x, y, 3, StandIcons.SOFT_AND_WET_BUBBLE_ENCASEMENT, PowerIndex.SKILL_EXTRA);
         } else if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 3, StandIcons.SOFT_AND_WET_BUBBLE_SCAFFOLD, PowerIndex.SKILL_3);
+            if (canExecuteMoveWithLevel(getScaffoldLevel())) {
+                setSkillIcon(context, x, y, 3, StandIcons.SOFT_AND_WET_BUBBLE_SCAFFOLD, PowerIndex.SKILL_3);
+            } else {
+                setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+            }
         } else {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
         }
@@ -327,14 +366,37 @@ public class PowersSoftAndWet extends PunchingStand {
             setSkillIcon(context, x, y, 4, StandIcons.SOFT_SHOOTING_MODE_EXIT, PowerIndex.SKILL_4);
         } else {
             if (isHoldingSneak()) {
-                setSkillIcon(context, x, y, 4, StandIcons.WATER_SHIELD, PowerIndex.SKILL_4_SNEAK);
+                if (canExecuteMoveWithLevel(getWaterShieldLevel())) {
+                    setSkillIcon(context, x, y, 4, StandIcons.WATER_SHIELD, PowerIndex.SKILL_4_SNEAK);
+                } else {
+                    setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                }
             } else {
-                setSkillIcon(context, x, y, 4, StandIcons.SOFT_SHOOTING_MODE, PowerIndex.SKILL_4);
+                if (canExecuteMoveWithLevel(getShootingModeLevel())) {
+                    setSkillIcon(context, x, y, 4, StandIcons.SOFT_SHOOTING_MODE, PowerIndex.SKILL_4);
+                } else {
+                    setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                }
             }
         }
 
     }
 
+    @Override
+    public byte getMaxLevel(){
+        return 7;
+    }
+    @Override
+    public int getExpForLevelUp(int currentLevel){
+        int amt;
+        if (currentLevel == 1){
+            amt = 100;
+        } else {
+            amt = (100+((currentLevel-1)*55));
+        }
+        amt= (int) (amt*(ClientNetworking.getAppropriateConfig().standExperienceNeededForLevelupMultiplier *0.01));
+        return amt;
+    }
     public boolean canUseWaterShield(){
         ItemStack stack = this.getSelf().getMainHandItem();
         ItemStack stack2 = this.getSelf().getOffhandItem();
@@ -546,13 +608,15 @@ public class PowersSoftAndWet extends PunchingStand {
             if (inShootingMode()){
                 if (keyIsDown) {
                     if (!hold1) {
-                        if (goBeyondCharged() && getGoBeyondTarget() != null) {
-                            hold1 = true;
-                            this.tryIntPower(PowerIndex.SPECIAL_TRACKER, true, getGoBeyondTarget().getId());
-                            tryIntPowerPacket(PowerIndex.SPECIAL_TRACKER,getGoBeyondTarget().getId());
-                            this.setGoBeyondTarget(null);
-                            this.setGoBeyondChargeTicks(0);
-                            this.setShootTicks(0);
+                        if (canExecuteMoveWithLevel(getGoBeyondLevel())) {
+                            if (goBeyondCharged() && getGoBeyondTarget() != null) {
+                                hold1 = true;
+                                this.tryIntPower(PowerIndex.SPECIAL_TRACKER, true, getGoBeyondTarget().getId());
+                                tryIntPowerPacket(PowerIndex.SPECIAL_TRACKER, getGoBeyondTarget().getId());
+                                this.setGoBeyondTarget(null);
+                                this.setGoBeyondChargeTicks(0);
+                                this.setShootTicks(0);
+                            }
                         }
                     }
                 } else {
@@ -561,12 +625,14 @@ public class PowersSoftAndWet extends PunchingStand {
             } else if (isGuarding()) {
                 if (keyIsDown) {
                     if (!hold1) {
-                        if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
-                            hold1 = true;
+                        if (canExecuteMoveWithLevel(getSpreadLevel())) {
+                            if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+                                hold1 = true;
 
-                            this.tryPower(PowerIndex.POWER_1_BONUS, true);
+                                this.tryPower(PowerIndex.POWER_1_BONUS, true);
 
-                            tryPowerPacket(PowerIndex.POWER_1_BONUS);
+                                tryPowerPacket(PowerIndex.POWER_1_BONUS);
+                            }
                         }
                     }
                 } else {
@@ -575,31 +641,33 @@ public class PowersSoftAndWet extends PunchingStand {
             } else if (isHoldingSneak()) {
                 if (keyIsDown) {
                     if (!hold1) {
-                        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
-                            if (this.activePower != PowerIndex.POWER_1_SNEAK && !canDoBubbleClusterPop()) {
-                                hold1 = true;
+                        if (canExecuteMoveWithLevel(getSpreadLevel())) {
+                            if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+                                if (this.activePower != PowerIndex.POWER_1_SNEAK && !canDoBubbleClusterPop()) {
+                                    hold1 = true;
 
-                                int bubbleType = 1;
-                                ClientConfig clientConfig = ConfigManager.getClientConfig();
-                                if (clientConfig != null && clientConfig.dynamicSettings != null) {
-                                    bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
+                                    int bubbleType = 1;
+                                    ClientConfig clientConfig = ConfigManager.getClientConfig();
+                                    if (clientConfig != null && clientConfig.dynamicSettings != null) {
+                                        bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
+                                    }
+
+                                    this.tryIntPower(PowerIndex.POWER_1_SNEAK, true, bubbleType);
+                                    tryIntPowerPacket(PowerIndex.POWER_1_SNEAK, bubbleType);
+
+                                } else {
+                                    if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+                                        hold1 = true;
+                                        this.tryPower(PowerIndex.EXTRA_2, true);
+                                        tryPowerPacket(PowerIndex.EXTRA_2);
+                                    }
                                 }
-
-                                this.tryIntPower(PowerIndex.POWER_1_SNEAK, true, bubbleType);
-                                tryIntPowerPacket(PowerIndex.POWER_1_SNEAK, bubbleType);
-
-                            } else {
+                            } else if (this.activePower == PowerIndex.POWER_1_SNEAK || this.canDoBubbleClusterRedirect()) {
                                 if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
                                     hold1 = true;
                                     this.tryPower(PowerIndex.EXTRA_2, true);
                                     tryPowerPacket(PowerIndex.EXTRA_2);
                                 }
-                            }
-                        } else if (this.activePower == PowerIndex.POWER_1_SNEAK || this.canDoBubbleClusterRedirect()) {
-                            if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
-                                hold1 = true;
-                                this.tryPower(PowerIndex.EXTRA_2, true);
-                                tryPowerPacket(PowerIndex.EXTRA_2);
                             }
                         }
                     }
@@ -712,10 +780,14 @@ public class PowersSoftAndWet extends PunchingStand {
     /**Similar to Justice selecting of mobs**/
     @Override
     public void updateGoBeyondTarget(){
-        if (inShootingMode() && goBeyondCharged()){
-            Entity TE = MainUtil.getTargetEntity(this.self,30,15);
-            if (TE != null && !TE.is(this.self) && !(TE instanceof StandEntity && !TE.isAttackable()) && MainUtil.isActuallyALivingEntityNoCap(TE)) {
-                this.setGoBeyondTarget(TE);
+        if (canExecuteMoveWithLevel(getGoBeyondLevel())) {
+            if (inShootingMode() && goBeyondCharged()) {
+                Entity TE = MainUtil.getTargetEntity(this.self, 30, 15);
+                if (TE != null && !TE.is(this.self) && !(TE instanceof StandEntity && !TE.isAttackable()) && MainUtil.isActuallyALivingEntityNoCap(TE)) {
+                    this.setGoBeyondTarget(TE);
+                }
+            } else {
+                this.setGoBeyondTarget(null);
             }
         } else {
             this.setGoBeyondTarget(null);
@@ -1941,13 +2013,15 @@ public class PowersSoftAndWet extends PunchingStand {
                                 //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
                             }
                         } else {
-                            if (!this.onCooldown(PowerIndex.SKILL_2)) {
-                                if (canDoBubbleItemLaunch()) {
+                            if (canExecuteMoveWithLevel(getItemShootingLevel())) {
+                                if (!this.onCooldown(PowerIndex.SKILL_2)) {
+                                    if (canDoBubbleItemLaunch()) {
 
-                                    this.tryIntPower(PowerIndex.POWER_2_BONUS, true, ((Player) this.getSelf()).getInventory().selected);
+                                        this.tryIntPower(PowerIndex.POWER_2_BONUS, true, ((Player) this.getSelf()).getInventory().selected);
 
-                                    tryIntPowerPacket(PowerIndex.POWER_2_BONUS, ((Player) this.getSelf()).getInventory().selected);
-                                    //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
+                                        tryIntPowerPacket(PowerIndex.POWER_2_BONUS, ((Player) this.getSelf()).getInventory().selected);
+                                        //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
+                                    }
                                 }
                             }
                         }
@@ -2018,12 +2092,14 @@ public class PowersSoftAndWet extends PunchingStand {
                     }
                 } else if (isHoldingSneak()) {
                     if (keyIsDown) {
-                        if (!this.onCooldown(PowerIndex.SKILL_3)) {
-                            if (!hold3) {
-                                if (canBridge()) {
-                                    hold3 = true;
-                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
-                                    tryPowerPacket(PowerIndex.POWER_3);
+                        if (canExecuteMoveWithLevel(getScaffoldLevel())) {
+                            if (!this.onCooldown(PowerIndex.SKILL_3)) {
+                                if (!hold3) {
+                                    if (canBridge()) {
+                                        hold3 = true;
+                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+                                        tryPowerPacket(PowerIndex.POWER_3);
+                                    }
                                 }
                             }
                         }
@@ -2055,12 +2131,14 @@ public class PowersSoftAndWet extends PunchingStand {
             } else if (isHoldingSneak() && !inShootingMode()) {
                 if (keyIsDown) {
                     if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
-                        if (!hold4) {
-                           hold4 = true;
-                           if (canUseWaterShield()) {
-                               this.tryPower(PowerIndex.POWER_4_SNEAK, true);
-                               tryPowerPacket(PowerIndex.POWER_4_SNEAK);
-                           }
+                        if (canExecuteMoveWithLevel(getWaterShieldLevel())) {
+                            if (!hold4) {
+                                hold4 = true;
+                                if (canUseWaterShield()) {
+                                    this.tryPower(PowerIndex.POWER_4_SNEAK, true);
+                                    tryPowerPacket(PowerIndex.POWER_4_SNEAK);
+                                }
+                            }
                         }
                     }
                 } else {
@@ -2068,15 +2146,17 @@ public class PowersSoftAndWet extends PunchingStand {
                 }
             } else {
                 if (keyIsDown) {
-                    if (!hold4) {
-                        hold4 = true;
+                    if (canExecuteMoveWithLevel(getShootingModeLevel())) {
+                        if (!hold4) {
+                            hold4 = true;
 
-                        this.tryPower(PowerIndex.POWER_4, true);
-                        tryPowerPacket(PowerIndex.POWER_4);
+                            this.tryPower(PowerIndex.POWER_4, true);
+                            tryPowerPacket(PowerIndex.POWER_4);
 
-                        getStandUserSelf().roundabout$getStandPowers().tryPower(PowerIndex.NONE, true);
-                        tryPowerPacket(PowerIndex.NONE);
-                        ClientUtil.stopDestroyingBlock();
+                            getStandUserSelf().roundabout$getStandPowers().tryPower(PowerIndex.NONE, true);
+                            tryPowerPacket(PowerIndex.NONE);
+                            ClientUtil.stopDestroyingBlock();
+                        }
                     }
                 } else {
                     hold4 = false;
