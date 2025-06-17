@@ -176,6 +176,7 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity {
                                 str)) {
                             if (ent instanceof LivingEntity LIVE) {
                                 LE.setLastHurtMob(LIVE);
+                                PW.addEXP(1);
                             }
                             //You don't need to hurt them to launch them
                         }

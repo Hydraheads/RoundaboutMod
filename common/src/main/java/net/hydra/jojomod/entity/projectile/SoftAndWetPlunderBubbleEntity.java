@@ -610,6 +610,18 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     }
     public int airSupply = 0;
     Collection<MobEffectInstance> mobEffects;
+
+    public void addExp(int exp, Entity ent){
+        if (ent instanceof LivingEntity LE) {
+            if (this.standUser != null && ((StandUser) this.standUser).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
+                PW.addEXP(exp, LE);
+            }
+        } else {
+            if (this.standUser != null && ((StandUser) this.standUser).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
+                PW.addEXP(exp);
+            }
+        }
+    }
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
         if (!this.level().isClientSide()) {
@@ -630,6 +642,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                     }
                     if (!effects2.isEmpty()) {
                         mobEffects = effects2;
+                        addExp(1,null);
                         setFloating();
                     }
                 }
@@ -652,6 +665,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                             mobEffects = effects4;
                             if (!getActivated()) {
                                 setFloating();
+                                addExp(1,null);
                             }
                         }
                     }
@@ -669,6 +683,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                     if (this.getPlunderType() == PlunderTypes.SOUND.id) {
                         if (!((ILevelAccess) this.level()).roundabout$isSoundPlunderedEntity($$0.getEntity())) {
                             this.setEntityStolen($$0.getEntity().getId());
+                            addExp(1,$$0.getEntity());
                             setFloating();
                         } else {
                             super.onHitEntity($$0);
@@ -696,6 +711,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                                 MainUtil.canHaveFrictionTaken(LE)) {
                             if (!((ILevelAccess) this.level()).roundabout$isFrictionPlunderedEntity($$0.getEntity())) {
                                 this.setEntityStolen($$0.getEntity().getId());
+                                addExp(1,$$0.getEntity());
                                 setFloating();
                             }
                         } else {
@@ -714,6 +730,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                                 }
                                 if (!effects2.isEmpty()) {
                                     mobEffects = effects2;
+                                    addExp(1,$$0.getEntity());
                                     setFloating();
                                 } else {
                                     super.onHitEntity($$0);
@@ -728,6 +745,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                         if ($$0.getEntity() instanceof LivingEntity LE && ((StandUser) LE).roundabout$getEyeSightTaken() == null &&
                                 MainUtil.canHaveSightTaken(LE)) {
                             this.setEntityStolen($$0.getEntity().getId());
+                            addExp(1,$$0.getEntity());
                             if (!this.level().isClientSide()) {
                                 ((StandUser) LE).roundabout$deeplyRemoveAttackTarget();
                                 ((StandUser) LE).roundabout$setEyeSightTaken(this);

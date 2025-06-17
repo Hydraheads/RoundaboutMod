@@ -941,6 +941,7 @@ public class PowersSoftAndWet extends PunchingStand {
                     this.poseStand(OffsetIndex.FOLLOW);
                     this.setAttackTimeDuring(-10);
                     this.setActivePower(PowerIndex.POWER_2_BONUS);
+                    addEXP(1);
                     shootExplosiveItemBubbleSpeed(bubble, getExplosiveItemBubbleSpeed());
                     bubbleListInit();
                     this.bubbleList.add(bubble);
@@ -1448,6 +1449,7 @@ public class PowersSoftAndWet extends PunchingStand {
                 encasement.setUser(this.self);
                 encasement.lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.encasementBubbleFloatingLifespanInTicks;
                 this.getSelf().level().addFreshEntity(encasement);
+                addEXP(1);
 
                 //((StandUser)this.self).roundabout$setAdjustedGravity(30);
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BIG_BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
@@ -1488,6 +1490,7 @@ public class PowersSoftAndWet extends PunchingStand {
     public boolean bubbleLadder(){
         setActivePower(PowerIndex.POWER_3);
         this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
+        addEXP(1);
         this.attackTimeDuring = 0;
         bubbleScaffoldCount = 0;
         animateStand((byte) StandEntity.FIRST_PUNCH);
@@ -1608,6 +1611,8 @@ public class PowersSoftAndWet extends PunchingStand {
                 if (entity instanceof LivingEntity LE) {
                     if (chargedFinal >= maxSuperHitTime) {
                         addEXP(5, LE);
+                    } else {
+                        addEXP(1, LE);
                     }
                 }
                 this.takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
