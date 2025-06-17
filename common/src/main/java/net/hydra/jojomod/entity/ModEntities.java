@@ -34,6 +34,7 @@ public class ModEntities {
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET_KING;
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET_DROWNED;
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET_DEBUT;
+    public static EntityType<SoftAndWetEntity> SOFT_AND_WET_KILLER_QUEEN;
     public static EntityType<KillerQueenEntity> KILLER_QUEEN;
     public static EntityType<CinderellaEntity> CINDERELLA;
     public static EntityType<JusticePirateEntity> JUSTICE_PIRATE;

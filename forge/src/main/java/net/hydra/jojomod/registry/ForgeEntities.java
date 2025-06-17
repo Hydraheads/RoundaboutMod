@@ -214,6 +214,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "soft_and_wet_debut").toString())
             );
+    public static final RegistryObject<EntityType<SoftAndWetEntity>> SOFT_AND_WET_KILLER_QUEEN =
+            ENTITY_TYPES.register("soft_and_wet_killer_queen", () ->
+                    EntityType.Builder.of(SoftAndWetEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "soft_and_wet_killer_queen").toString())
+            );
     public static final RegistryObject<EntityType<SoftAndWetEntity>> SOFT_AND_WET_KING =
             ENTITY_TYPES.register("soft_and_wet_king", () ->
                     EntityType.Builder.of(SoftAndWetEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).

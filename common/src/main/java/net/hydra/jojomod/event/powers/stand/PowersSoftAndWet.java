@@ -79,6 +79,8 @@ public class PowersSoftAndWet extends PunchingStand {
         } else if (sk == SoftAndWetEntity.DROWNED_SKIN
         || sk == SoftAndWetEntity.DROWNED_SKIN_2){
             return ModEntities.SOFT_AND_WET_DROWNED.create(this.getSelf().level());
+        } else if (sk == SoftAndWetEntity.KIRA){
+            return ModEntities.SOFT_AND_WET_KILLER_QUEEN.create(this.getSelf().level());
         }
         return ModEntities.SOFT_AND_WET.create(this.getSelf().level());
     }

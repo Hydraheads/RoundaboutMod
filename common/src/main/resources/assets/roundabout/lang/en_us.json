@@ -137,6 +137,7 @@
   "entity.roundabout.soft_and_wet_debut": "Soft And Wet",
   "entity.roundabout.soft_and_wet_king": "Soft And Wet",
   "entity.roundabout.soft_and_wet_drowned": "Soft And Wet",
+  "entity.roundabout.soft_and_wet_killer_queen": "Killer Queen",
   "entity.roundabout.harpoon": "Harpoon",
   "entity.roundabout.match": "Match",
   "entity.roundabout.knife": "Knife",
@@ -172,6 +173,7 @@
   "entity.roundabout.explosive_bubble": "Explosive Soap Bubble",
   "entity.roundabout.item_launching_bubble": "Item Launching Bubble",
   "entity.roundabout.go_beyond": "Go Beyond",
+  "entity.roundabout.ground_bubble": "Underground Bubble",
 
   "block.roundabout.meteor_block": "Meteorite Block",
   "block.roundabout.regal_wall": "Regal Wall",
@@ -885,6 +887,7 @@
   "skins.roundabout.soft_and_wet.beta": "Beta",
   "skins.roundabout.soft_and_wet.debut": "Debut",
   "skins.roundabout.soft_and_wet.striped": "Striped",
+  "skins.roundabout.soft_and_wet.kira": "Kira",
 
   "skins.roundabout.d4c.base": "Manga",
   "skins.roundabout.d4c.wonder_festival": "JOJOVELLER",

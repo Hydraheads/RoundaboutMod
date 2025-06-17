@@ -32,6 +32,7 @@ public class SoftAndWetEntity extends StandEntity {
             case FIGURE_SKIN -> Component.translatable("skins.roundabout.soft_and_wet.figure");
             case STRIPED -> Component.translatable("skins.roundabout.soft_and_wet.striped");
             case DEBUT -> Component.translatable("skins.roundabout.soft_and_wet.debut");
+            case KIRA -> Component.translatable("skins.roundabout.soft_and_wet.kira");
             default -> Component.translatable("skins.roundabout.soft_and_wet.light");
         };
     }

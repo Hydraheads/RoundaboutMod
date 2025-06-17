@@ -53,6 +53,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.SOFT_AND_WET.get(), SoftAndWetRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SOFT_AND_WET_DROWNED.get(), SoftAndWetDrownedRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SOFT_AND_WET_DEBUT.get(), SoftAndWetDebutRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.SOFT_AND_WET_KILLER_QUEEN.get(), SoftAndWetKillerQueenRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SOFT_AND_WET_KING.get(), SoftAndWetKingRenderer::new);
         event.registerEntityRenderer(ForgeEntities.KILLER_QUEEN.get(), KillerQueenRenderer::new);
         event.registerEntityRenderer(ForgeEntities.CINDERELLA.get(), CinderellaRenderer::new);
@@ -122,6 +123,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.SOFT_AND_WET_DEBUT_LAYER, SoftAndWetDebutModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.SOFT_AND_WET_KING_LAYER, SoftAndWetKingModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.KILLER_QUEEN_LAYER, KillerQueenModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.SOFT_AND_WET_KILLER_QUEEN_LAYER, SoftAndWetKillerQueenModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.CINDERELLA_LAYER, CinderellaModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.DARK_MIRAGE_LAYER, DarkMirageModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.KNIFE_LAYER, KnifeModel::createBodyLayer);

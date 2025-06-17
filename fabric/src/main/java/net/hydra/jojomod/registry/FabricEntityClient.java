@@ -56,6 +56,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.D4C, D4CRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SOFT_AND_WET, SoftAndWetRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SOFT_AND_WET_KING, SoftAndWetKingRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.SOFT_AND_WET_KILLER_QUEEN, SoftAndWetKillerQueenRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SOFT_AND_WET_DROWNED, SoftAndWetDrownedRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SOFT_AND_WET_DEBUT, SoftAndWetDebutRenderer::new);
         EntityRendererRegistry.register(FabricEntities.KILLER_QUEEN, KillerQueenRenderer::new);
@@ -117,6 +118,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SOFT_AND_WET_DROWNED_LAYER, SoftAndWetDrownedModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SOFT_AND_WET_DEBUT_LAYER, SoftAndWetDebutModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KILLER_QUEEN_LAYER, KillerQueenModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SOFT_AND_WET_KILLER_QUEEN_LAYER, SoftAndWetKillerQueenModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CINDERELLA_LAYER, CinderellaModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DARK_MIRAGE_LAYER, DarkMirageModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.HARPOON_LAYER, HarpoonModel::createBodyLayer);
