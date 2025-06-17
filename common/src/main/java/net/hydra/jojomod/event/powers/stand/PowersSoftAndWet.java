@@ -145,7 +145,11 @@ public class PowersSoftAndWet extends PunchingStand {
     @Override
     public void playBarrageClashSound(){
         if (!this.self.level().isClientSide()) {
-            playStandUserOnlySoundsIfNearby(BARRAGE_NOISE, 27, false,true);
+            byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+            if (skn == SoftAndWetEntity.KIRA){
+            } else {
+                playStandUserOnlySoundsIfNearby(BARRAGE_NOISE, 27, false, true);
+            }
         }
     }
     @Override
@@ -1366,12 +1370,16 @@ public class PowersSoftAndWet extends PunchingStand {
     public static final byte BARRAGE_NOISE_3 = BARRAGE_NOISE+2;
     @Override
     public byte chooseBarrageSound(){
-        double rand = Math.random();
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-       if (rand > 0.5) {
-            return BARRAGE_NOISE;
+        if (skn == SoftAndWetEntity.KIRA){
+            return 0;
         } else {
-            return BARRAGE_NOISE_2;
+            double rand = Math.random();
+            if (rand > 0.5) {
+                return BARRAGE_NOISE;
+            } else {
+                return BARRAGE_NOISE_2;
+            }
         }
     }
 
