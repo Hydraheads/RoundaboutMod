@@ -24,6 +24,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 
 public class BubbleScaffoldBlockEntityRenderer implements BlockEntityRenderer<BubbleScaffoldBlockEntity> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/bubble_plunder.png");
+    private static final ResourceLocation HEART_ATTACK_MINI = new ResourceLocation(Roundabout.MOD_ID, "textures/particle/heart_attack_mini.png");
     public BubbleScaffoldBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
         super();
         this.scale = 0.55f;
@@ -71,7 +73,7 @@ public class BubbleScaffoldBlockEntityRenderer implements BlockEntityRenderer<Bu
                 poseStack.translate(0, SoftAndWetPlunderBubbleEntity.eHeight / 2, 0);
 
                 // Draw flat quad here
-                VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(getBubbleTextureLocation()));
+                VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(getBubbleTextureLocation(bubbleScaffoldBlockEntity)));
                 Matrix4f matrix = poseStack.last().pose();
                 Vector3f normal = Minecraft.getInstance().gameRenderer.getMainCamera().getLookVector();
                 normal.normalize();
@@ -99,7 +101,13 @@ public class BubbleScaffoldBlockEntityRenderer implements BlockEntityRenderer<Bu
     }
 
 
-    public ResourceLocation getBubbleTextureLocation() {
+    public ResourceLocation getBubbleTextureLocation(BubbleScaffoldBlockEntity bubbleScaffoldBlockEntity) {
+        BlockState bs = bubbleScaffoldBlockEntity.getBlockState();
+        if (bs.hasProperty(BlockStateProperties.TRIGGERED)){
+            if (bs.getValue(BlockStateProperties.TRIGGERED)){
+                return HEART_ATTACK_MINI;
+            }
+        }
        return TEXTURE;
     }
 }

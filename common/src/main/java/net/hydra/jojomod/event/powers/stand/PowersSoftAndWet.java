@@ -56,6 +56,7 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -935,9 +936,16 @@ public class PowersSoftAndWet extends PunchingStand {
                         double randomY = (Math.random() * 0.5) - 0.25;
                         double randomZ = (Math.random() * 0.5) - 0.25;
                         Vec3 xvec = vector.add(randomX, randomY, randomZ);
-                        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PURPLE_STAR,
-                                this.getSelf().getX(), this.getSelf().getY() + this.self.getEyeHeight() * 0.7F, this.getSelf().getZ(),
-                                0, xvec.x, xvec.y, xvec.z, 0.12);
+                        byte sk = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+                        if (sk == SoftAndWetEntity.KIRA) {
+                            ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.HEART_ATTACK_MINI,
+                                    this.getSelf().getX(), this.getSelf().getY() + this.self.getEyeHeight() * 0.7F, this.getSelf().getZ(),
+                                    0, xvec.x, xvec.y, xvec.z, 0.12);
+                        } else {
+                            ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PURPLE_STAR,
+                                    this.getSelf().getX(), this.getSelf().getY() + this.self.getEyeHeight() * 0.7F, this.getSelf().getZ(),
+                                    0, xvec.x, xvec.y, xvec.z, 0.12);
+                        }
                     }
                 }
             }
@@ -1493,7 +1501,8 @@ public class PowersSoftAndWet extends PunchingStand {
                 buildingBubbleScaffoldPos = buildingBubbleScaffoldPos.relative(Direction.fromYRot(this.self.getYHeadRot()));
             }
             if (MainUtil.tryPlaceBlock(this.self,buildingBubbleScaffoldPos,false)){
-                this.self.level().setBlockAndUpdate(buildingBubbleScaffoldPos, ModBlocks.BUBBLE_SCAFFOLD.defaultBlockState());
+                boolean heartAttackState = ((StandUser)this.getSelf()).roundabout$getStandSkin() == SoftAndWetEntity.KIRA;
+                this.self.level().setBlockAndUpdate(buildingBubbleScaffoldPos, ModBlocks.BUBBLE_SCAFFOLD.defaultBlockState().setValue(BlockStateProperties.TRIGGERED,heartAttackState));
                 if (this.self.level().getBlockEntity(buildingBubbleScaffoldPos) instanceof BubbleScaffoldBlockEntity SBE) {
                     SBE.standuser = this.self;
                     SBE.bubbleNo = bubbleNumber;
