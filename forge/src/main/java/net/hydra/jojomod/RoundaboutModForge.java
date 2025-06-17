@@ -49,7 +49,6 @@ public class RoundaboutModForge {
         bus.addListener(this::commonSetup);
         bus.addListener(this::loadComplete);
         MinecraftForge.EVENT_BUS.addListener(this::entityLifeCycle);
-        MinecraftForge.EVENT_BUS.addListener(this::entityLifeCycle);
 
 
         Roundabout.LOGGER.info("Hello Forge world!");

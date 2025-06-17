@@ -844,8 +844,6 @@ public abstract class InputEvents implements IInputEvents {
         }
     }
 
-
-
     @Inject(method = "handleKeybinds", at = @At("HEAD"), cancellable = true)
     public void roundabout$Input(CallbackInfo ci){
         if (player != null) {

@@ -238,9 +238,18 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
          **/
     }
     @Override
-    public boolean keyPressed(int i, int j, int k) {
-        return false;
-        //return super.keyPressed(i, j, k);
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        // Prevent the screen from handling WASD, space, shift, etc.
+        if (Minecraft.getInstance().options.keyUp.matches(keyCode, scanCode) ||
+                Minecraft.getInstance().options.keyDown.matches(keyCode, scanCode) ||
+                Minecraft.getInstance().options.keyLeft.matches(keyCode, scanCode) ||
+                Minecraft.getInstance().options.keyRight.matches(keyCode, scanCode) ||
+                Minecraft.getInstance().options.keyJump.matches(keyCode, scanCode) ||
+                Minecraft.getInstance().options.keyShift.matches(keyCode, scanCode)) {
+            return false; // Let these go through to the player
+        }
+
+        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override
