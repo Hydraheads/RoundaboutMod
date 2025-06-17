@@ -9,6 +9,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.event.index.PlunderTypes;
 import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -88,7 +89,14 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
         if (this.minecraft != null && !roundabout$sameKeyOne(KeyInputRegistry.abilityOneKey)) {
             this.switchToHoveredGameMode();
             this.minecraft.setScreen(null);
-            this.minecraft.options.keyUse.setDown(false);
+            if (this.minecraft.player != null){
+                StandUser SU = ((StandUser) this.minecraft.player);
+                if (SU.roundabout$getStandPowers().isBarraging()){
+                    //This prevents barrage canceling
+                } else {
+                    this.minecraft.options.keyUse.setDown(false);
+                }
+            }
         }
         return false;
         //return super.keyReleased($$0, $$1, $$2);
