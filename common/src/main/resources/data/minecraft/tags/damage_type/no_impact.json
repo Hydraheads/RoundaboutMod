@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "roundabout:stand_fire"
+    "roundabout:stand_fire",
+    "roundabout:stand_virus"
   ]
 }

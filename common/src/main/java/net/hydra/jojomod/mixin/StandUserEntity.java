@@ -3218,7 +3218,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (roundabout$encasedTimer > 0){
                 roundabout$encasedTimer--;
                 Vec3 storedVec = roundabout$getStoredVelocity();
-                MainUtil.takeUnresistableKnockbackWithY(this,0.13f,storedVec.x,storedVec.y,storedVec.z);
+                MainUtil.takeLiteralUnresistableKnockbackWithY(((LivingEntity)(Object)this),storedVec.x,storedVec.y,storedVec.z);
             }
             if (roundabout$encasedTimer <= 0) {
                 roundabout$setBubbleEncased((byte) 0);

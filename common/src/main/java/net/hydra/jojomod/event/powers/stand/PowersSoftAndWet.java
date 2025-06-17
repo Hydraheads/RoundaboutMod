@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.BubbleScaffoldBlockEntity;
@@ -40,6 +41,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -709,6 +711,30 @@ public class PowersSoftAndWet extends PunchingStand {
             }
         }
         super.buttonInput1(keyIsDown, options);
+    }
+
+    @Override
+    public void tickStandRejection(MobEffectInstance effect){
+        if (!this.getSelf().level().isClientSide()) {
+            if (effect.getDuration() == 50) {
+                    StandUser SE = ((StandUser) this.self);
+                    if (!SE.roundabout$isLaunchBubbleEncased()) {
+                        SE.roundabout$setStoredVelocity(
+                                new Vec3(0, 0.1, 0)
+                        );
+                        if (this.self.isAlive()) {
+                            SE.roundabout$setBubbleLaunchEncased();
+                        }
+
+                        if (SE instanceof Player && !this.self.level().isClientSide) {
+                            ((ServerPlayer) SE).displayClientMessage(Component.translatable("text.roundabout.launch_bubble_encased"), true);
+                        }
+                        Vec3 storedVec = SE.roundabout$getStoredVelocity();
+                        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.WATER_ENCASE_EVENT, SoundSource.PLAYERS, 1F, 1);
+                        MainUtil.takeLiteralUnresistableKnockbackWithY(this.self, storedVec.x, storedVec.y, storedVec.z);
+                    }
+            }
+        }
     }
     public boolean hold2 = false;
     public SoftAndWetPlunderBubbleEntity getPlunderBubble(){
@@ -1692,11 +1718,7 @@ public void unlockSkin(){
                     if (!SE.roundabout$isLaunchBubbleEncased()) {
                         float xRot = this.self.getXRot();
                         SE.roundabout$setStoredVelocity(
-                                new Vec3(
-                                        Mth.sin(this.self.getYRot() * ((float) Math.PI / 180)),
-                                        Mth.sin((xRot - 20) * ((float) Math.PI / 180)),
-                                        -Mth.cos(this.self.getYRot() * ((float) Math.PI / 180))
-                                )
+                                this.self.getForward().normalize().scale(0.13).add(0,0.033f,0)
                         );
                         if (LE.isAlive()) {
                             SE.roundabout$setBubbleLaunchEncased();
@@ -1719,7 +1741,7 @@ public void unlockSkin(){
                             ((ServerPlayer) SE).displayClientMessage(Component.translatable("text.roundabout.launch_bubble_encased"), true);
                         }
                         Vec3 storedVec = SE.roundabout$getStoredVelocity();
-                        MainUtil.takeUnresistableKnockbackWithY(LE, 0.13f, storedVec.x, storedVec.y, storedVec.z);
+                        MainUtil.takeLiteralUnresistableKnockbackWithY(LE, storedVec.x, storedVec.y, storedVec.z);
                     }
                 }
             }
