@@ -1208,6 +1208,7 @@ public class PowersSoftAndWet extends PunchingStand {
 
     public void generateGroundBubble(){
         GroundBubbleEntity groundent = new GroundBubbleEntity(this.getSelf().level(), this.self);
+        groundent.bubbleNo = bubbleNumber;
         Vec3 pos = MainUtil.getRaytracePointOnMobOrBlock(this.self,2.5F);
         groundent.setPos(pos);
         groundent.setLifeSpan(120);

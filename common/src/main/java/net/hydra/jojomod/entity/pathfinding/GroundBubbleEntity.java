@@ -25,6 +25,7 @@ public class GroundBubbleEntity extends GroundPathfindingStandAttackEntity {
         super($$0, $$1);
     }
 
+    public int bubbleNo = 0;
     public GroundBubbleEntity(EntityType<? extends GroundPathfindingStandAttackEntity> $$0, Level $$1, LivingEntity user) {
         super($$0, $$1);
         this.setUser(user);
@@ -70,6 +71,12 @@ public class GroundBubbleEntity extends GroundPathfindingStandAttackEntity {
         LivingEntity $$0 = this.getUser();
         super.tick();
         if (!client) {
+            if ($$0 != null && ((StandUser) $$0).roundabout$getStandPowers() instanceof PowersSoftAndWet PWW) {
+                if (PWW.bubbleNumber != bubbleNo){
+                    this.discard();
+                    return;
+                }
+            }
             Entity targ = this.getTarget();
             if (targ != null && this.getTarget().distanceTo(this) < 5) {
                 if ($$0 != null && ((StandUser) $$0).roundabout$getStandPowers() instanceof PowersSoftAndWet PWW) {
