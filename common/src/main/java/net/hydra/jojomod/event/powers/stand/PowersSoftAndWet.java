@@ -1668,6 +1668,14 @@ public void unlockSkin(){
         return false;
     }
 
+
+    public void updateMovesFromPacket(byte activePower){
+        if (activePower == PowerIndex.BARRAGE_2){
+            this.setActivePowerPhase(this.activePowerPhaseMax);
+        }
+        super.updateMovesFromPacket(activePower);
+    }
+
     /**Bubble Scaffolding, build a ladder overtime somewhat like the Builder blocks in Twilight*/
     public boolean bubbleLadderPlace(){
         if (!this.self.level().isClientSide()){
