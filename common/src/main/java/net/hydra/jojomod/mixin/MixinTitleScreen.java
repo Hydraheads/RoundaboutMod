@@ -23,8 +23,8 @@ public class MixinTitleScreen {
         ResourceLocation BUTTON_ICON = new ResourceLocation(Roundabout.MOD_ID, "textures/item/stand_arrow.png");
         ResourceLocation BUTTON_BACKGROUND = new ResourceLocation(Roundabout.MOD_ID, "textures/gui/blank_button.png");
 
-        int iconX = (drawContext.guiWidth() / 2) + 124 + 4;
-        int iconY = ((drawContext.guiHeight() / 4) + 48) + 50 + 12 + 22;
+        int iconX = (drawContext.guiWidth() / 2) + 124 -20;
+        int iconY = ((drawContext.guiHeight() / 4) + 48) + 50 + 12 - 14;
 
         roundabout$configButtonSelected = false;
 
