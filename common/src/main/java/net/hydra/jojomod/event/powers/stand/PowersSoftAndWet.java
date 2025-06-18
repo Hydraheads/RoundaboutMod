@@ -449,6 +449,9 @@ public class PowersSoftAndWet extends PunchingStand {
 
     @Override
     public boolean canGuard(){
+        if (isBubbleBarraging()){
+            return false;
+        }
         return super.canGuard();
     }
 
@@ -521,16 +524,21 @@ public class PowersSoftAndWet extends PunchingStand {
         }
     }
 
+    public boolean isBubbleBarraging(){
+        return this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2;
+    }
     @Override
     public void buttonInputBarrage(boolean keyIsDown, Options options){
         if (keyIsDown) {
-            if (!inShootingMode()) {
-                super.buttonInputBarrage(keyIsDown, options);
-            } else {
-                if (this.getAttackTime() >= this.getAttackTimeMax() ||
-                        (this.getActivePowerPhase() != this.getActivePowerPhaseMax())) {
-                    this.tryPower(PowerIndex.BARRAGE_CHARGE_2, true);
-                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.BARRAGE_CHARGE_2);
+            if (!isBubbleBarraging()) {
+                if (!inShootingMode()) {
+                    super.buttonInputBarrage(keyIsDown, options);
+                } else {
+                    if (this.getAttackTime() >= this.getAttackTimeMax() ||
+                            (this.getActivePowerPhase() != this.getActivePowerPhaseMax())) {
+                        this.tryPower(PowerIndex.BARRAGE_CHARGE_2, true);
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.BARRAGE_CHARGE_2);
+                    }
                 }
             }
         }
@@ -1592,9 +1600,9 @@ public void unlockSkin(){
     public boolean setPowerBubbleBarrageCharge() {
         animateStand(StandEntity.BARRAGE_CHARGE);
         this.attackTimeDuring = 0;
-        playBubbleBarrageChargeSound();
         this.setActivePower(PowerIndex.BARRAGE_CHARGE_2);
         this.poseStand(OffsetIndex.ATTACK);
+        playBubbleBarrageChargeSound();
         return true;
     }
     @Override
