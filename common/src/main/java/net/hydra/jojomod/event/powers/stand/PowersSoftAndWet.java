@@ -144,10 +144,6 @@ public class PowersSoftAndWet extends PunchingStand {
 
 
     @Override
-    public boolean isWip(){
-        return true;
-    }
-    @Override
     protected Byte getSummonSound() {
         return SoundIndex.SUMMON_SOUND;
     }
