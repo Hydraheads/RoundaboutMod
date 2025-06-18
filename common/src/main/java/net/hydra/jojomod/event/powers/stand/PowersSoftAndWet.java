@@ -1739,7 +1739,20 @@ public void unlockSkin(){
             }
         }
     }
-
+    @Override
+    public float getBarrageHitStrength(Entity entity){
+        float str = super.getBarrageHitStrength(entity);
+        if (str > 0.005F) {
+            if (getReducedDamage(entity)) {
+                str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                        damageMultipliers.softAndWetAttacksOnPlayers * 0.01)));
+            } else {
+                str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                        damageMultipliers.softAndWetAttacksOnMobs * 0.01)));
+            }
+        }
+        return str;
+    }
     @Override
     public float multiplyPowerByStandConfigPlayers(float power){
         return (float) (power*(ClientNetworking.getAppropriateConfig().
