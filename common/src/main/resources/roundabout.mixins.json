@@ -113,6 +113,7 @@
     "GeckolibCompatAttempt",
     "HudRendering",
     "InputEvents",
+    "MixinTitleScreen",
     "PlayerEntityAbstractClient",
     "PlayerEntityClient",
     "PostChainMixin",

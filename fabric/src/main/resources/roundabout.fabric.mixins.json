@@ -10,8 +10,7 @@
   ],
   "client": [
     "DimensionResourceKeyD4CFabric",
-    "FabricFireBlock",
-    "MixinTitleScreen"
+    "FabricFireBlock"
   ],
   "server": [
   ],
