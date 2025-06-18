@@ -1764,6 +1764,15 @@ public void unlockSkin(){
         }
     }
     @Override
+    public float getBarrageDamagePlayer(){
+        return 8;
+    }
+
+    @Override
+    public float getBarrageDamageMob(){
+        return 18;
+    }
+    @Override
     public float getBarrageHitStrength(Entity entity){
         float str = super.getBarrageHitStrength(entity);
         if (str > 0.005F) {

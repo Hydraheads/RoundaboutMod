@@ -1507,13 +1507,20 @@ public class StandPowers {
         }
     }
 
+    public float getBarrageDamagePlayer(){
+        return 9;
+    }
+
+    public float getBarrageDamageMob(){
+        return 20;
+    }
     public float getBarrageHitStrength(Entity entity){
         float barrageLength = this.getBarrageLength();
         float power;
         if (this.getReducedDamage(entity)){
-            power = 9/barrageLength;
+            power = getBarrageDamagePlayer()/barrageLength;
         } else {
-            power = 20/barrageLength;
+            power = getBarrageDamageMob()/barrageLength;
         }
         /*Barrage hits are incapable of killing their target until the last hit.*/
         if (entity instanceof LivingEntity){
