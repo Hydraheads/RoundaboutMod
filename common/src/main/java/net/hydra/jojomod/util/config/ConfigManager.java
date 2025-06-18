@@ -3,7 +3,6 @@ package net.hydra.jojomod.util.config;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
@@ -53,11 +52,11 @@ public abstract class ConfigManager {
 
     public static void loadStandArrowPool()
     {
-        if (getConfig().standArrowPoolv1 != null)
+        if (getConfig().standArrowPoolv2 != null)
         {
             ModItems.STAND_ARROW_POOL.clear();
 
-            for (String disc : getConfig().standArrowPoolv1)
+            for (String disc : getConfig().standArrowPoolv2)
             {
                 String[] split = disc.split(":");
 
@@ -74,11 +73,11 @@ public abstract class ConfigManager {
                 ModItems.STAND_ARROW_POOL.add((StandDiscItem) i);
             }
         }
-        if (getConfig().naturalStandUserMobPoolv2 != null)
+        if (getConfig().naturalStandUserMobPoolv3 != null)
         {
             ModItems.STAND_ARROW_POOL_FOR_MOBS.clear();
 
-            for (String disc : getConfig().naturalStandUserMobPoolv2)
+            for (String disc : getConfig().naturalStandUserMobPoolv3)
             {
                 String[] split = disc.split(":");
 

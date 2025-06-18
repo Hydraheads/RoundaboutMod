@@ -100,12 +100,13 @@ import java.util.Set;
     public Integer cinderellaEmeraldCostCharacterVisage;
     @IntOption(group = "inherit", value = 15, min = 0, max = 365)
     public Integer basePunchAngle;
-    public Set<String> standArrowPoolv1 = new HashSet<>(
+    public Set<String> standArrowPoolv2 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
                     "roundabout:justice_disc",
-                    "roundabout:magicians_red_disc"
+                    "roundabout:magicians_red_disc",
+                    "roundabout:soft_and_wet_disc"
             )
     );
     public Set<String> standArrowSecondaryPoolv1 = new HashSet<>(
@@ -113,13 +114,14 @@ import java.util.Set;
                     "roundabout:cinderella_disc"
             )
     );
-    public Set<String> naturalStandUserMobPoolv2 = new HashSet<>(
+    public Set<String> naturalStandUserMobPoolv3 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
                     "roundabout:justice_disc",
                     "roundabout:magicians_red_disc",
-                    "roundabout:cinderella_disc"
+                    "roundabout:cinderella_disc",
+                    "roundabout:soft_and_wet_disc"
             )
     );
     @NestedOption(group = "modded")
