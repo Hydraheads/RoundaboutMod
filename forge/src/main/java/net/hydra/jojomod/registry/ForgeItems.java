@@ -5,6 +5,7 @@ import net.hydra.jojomod.event.powers.stand.*;
 import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.stand.powers.PowersD4C;
+import net.hydra.jojomod.stand.powers.PowersHeyYa;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
@@ -408,16 +409,18 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null)));
     public static final RegistryObject<Item> MAX_STAND_DISC_KILLER_QUEEN = ITEMS.register("max_killer_queen_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null)));
-    public static final RegistryObject<Item> STAND_DISC_D4C = addToDiscTab(ITEMS.register("d4c_disc",
-            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null))));
-    public static final RegistryObject<Item> MAX_STAND_DISC_D4C = addToDiscTab(ITEMS.register("max_d4c_disc",
-            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null))));
     public static final RegistryObject<Item> STAND_DISC_SOFT_AND_WET = addToDiscTab(ITEMS.register("soft_and_wet_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSoftAndWet(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_SOFT_AND_WET = addToDiscTab(ITEMS.register("max_soft_and_wet_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersSoftAndWet(null))));
     public static final RegistryObject<Item> STAND_DISC_CINDERELLA = addToDiscTab(ITEMS.register("cinderella_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null))));
+    public static final RegistryObject<Item> STAND_DISC_HEY_YA = addToWIPTab(ITEMS.register("hey_ya_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersHeyYa(null))));
+    public static final RegistryObject<Item> STAND_DISC_D4C = addToWIPTab(ITEMS.register("d4c_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null))));
+    public static final RegistryObject<Item> MAX_STAND_DISC_D4C = addToWIPTab(ITEMS.register("max_d4c_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null))));
     public static final RegistryObject<Item> WORTHY_ARROW = addToTab(ITEMS.register("worthy_arrow",
             () -> new WorthyArrowItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> LUCKY_LIPSTICK = addToTab(ITEMS.register("lucky_lipstick",

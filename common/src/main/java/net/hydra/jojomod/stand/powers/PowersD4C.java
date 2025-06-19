@@ -20,6 +20,7 @@ import net.hydra.jojomod.item.InterdimensionalKeyItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.ChatFormatting;
 import net.zetalasis.world.DynamicWorld;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -807,11 +808,6 @@ public class PowersD4C extends NewPunchingStand {
     }
 
     @Override
-    public boolean isWip(){
-        return true;
-    }
-
-    @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 D4CEntity.MANGA_SKIN,
@@ -867,5 +863,20 @@ public class PowersD4C extends NewPunchingStand {
             updateTeleport();
 
         super.updateUniqueMoves();
+    }
+
+
+    @Override
+    public boolean isWip(){
+        return true;
+    }
+
+    @Override
+    public Component ifWipListDevStatus(){
+        return Component.translatable(  "roundabout.dev_status.paused").withStyle(ChatFormatting.AQUA);
+    }
+    @Override
+    public Component ifWipListDev(){
+        return Component.literal(  "Zeta").withStyle(ChatFormatting.YELLOW);
     }
 }

@@ -93,6 +93,12 @@ public class StandDiscItem extends Item {
         if(this.standPowers.isWip()){
             $$2.add(Component.translatable("leveling.roundabout.disc_wip").withStyle(ChatFormatting.RED));
             $$2.add(Component.translatable("leveling.roundabout.disc_wip_2").withStyle(ChatFormatting.RED));
+            $$2.add(Component.translatable("roundabout.dev_status.dev_status").withStyle(ChatFormatting.WHITE)
+                    .append(" ")
+                    .append(this.standPowers.ifWipListDevStatus()));
+            $$2.add(Component.translatable("roundabout.dev_status.dev_name").withStyle(ChatFormatting.WHITE)
+                    .append(" ")
+                    .append(this.standPowers.ifWipListDev()));
         }
     }
 

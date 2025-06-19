@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersD4C;
+import net.hydra.jojomod.stand.powers.PowersHeyYa;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -56,6 +57,8 @@ public class FabricItems {
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null)));
     public static Item STAND_DISC_CINDERELLA = registerItem("cinderella_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null)));
+    public static Item STAND_DISC_HEY_YA = registerItem("hey_ya_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersHeyYa(null)));
     public static Item LUCK_UPGRADE = registerItem("luck_upgrade",
         new SmithingTemplateItem(SmithingTemplates.LUCK_UPGRADE_APPLIES_TO, SmithingTemplates.LUCK_UPGRADE_INGREDIENTS, SmithingTemplates.LUCK_UPGRADE, SmithingTemplates.LUCK_UPGRADE_BASE_SLOT_DESCRIPTION, SmithingTemplates.LUCK_UPGRADE_ADDITIONS_SLOT_DESCRIPTION, SmithingTemplates.createLuckUpgradeIconList(), SmithingTemplates.createLuckMatIconList())
     );
@@ -301,11 +304,21 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_JUSTICE);
                         entries.accept(STAND_DISC_MAGICIANS_RED);
                         entries.accept(MAX_STAND_DISC_MAGICIANS_RED);
-                        entries.accept(STAND_DISC_D4C);
-                        entries.accept(MAX_STAND_DISC_D4C);
                         entries.accept(STAND_DISC_SOFT_AND_WET);
                         entries.accept(MAX_STAND_DISC_SOFT_AND_WET);
                         entries.accept(STAND_DISC_CINDERELLA);
+
+                    }).build());
+
+    public static final CreativeModeTab WIP_FEATURE = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
+            new ResourceLocation(Roundabout.MOD_ID, "jojo_wip_features"),
+            FabricItemGroup.builder().title(Component.translatable("itemgroup.jojo_wip_features"))
+                    .icon(() -> new ItemStack(LIGHT_BULB)).displayItems((displayContext, entries) -> {
+                        //Add all items from the Jojo mod tab here
+
+                        entries.accept(STAND_DISC_HEY_YA);
+                        entries.accept(STAND_DISC_D4C);
+                        entries.accept(MAX_STAND_DISC_D4C);
 
                     }).build());
     public static final CreativeModeTab FOG_BLOCK_ITEMS = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
@@ -359,6 +372,7 @@ public class FabricItems {
 
                     }).build());
 
+
     public static void register(){
         /*Common Code Bridge*/
         ModItems.STAND_ARROW = STAND_ARROW;
@@ -386,6 +400,7 @@ public class FabricItems {
         ((MaxStandDiscItem)MAX_STAND_DISC_KILLER_QUEEN).baseDisc = ((StandDiscItem)STAND_DISC_KILLER_QUEEN);
         ModItems.MAX_STAND_DISC_KILLER_QUEEN = MAX_STAND_DISC_KILLER_QUEEN;
         ModItems.STAND_DISC_CINDERELLA = STAND_DISC_CINDERELLA;
+        ModItems.STAND_DISC_HEY_YA = STAND_DISC_HEY_YA;
         ModItems.LUCK_UPGRADE = LUCK_UPGRADE;
         ModItems.EXECUTION_UPGRADE = EXECUTION_UPGRADE;
         ModItems.LUCK_SWORD = LUCK_SWORD;

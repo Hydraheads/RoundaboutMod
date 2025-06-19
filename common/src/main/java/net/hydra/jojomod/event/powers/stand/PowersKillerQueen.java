@@ -66,10 +66,6 @@ public class PowersKillerQueen extends PunchingStand {
         );
     }
     @Override
-    public boolean isWip(){
-        return true;
-    }
-    @Override
     public Component getSkinName(byte skinId){
         return KillerQueenEntity.getSkinNameT(skinId);
     }
@@ -417,5 +413,18 @@ public class PowersKillerQueen extends PunchingStand {
                 }
             }
         }
+    }
+    @Override
+    public boolean isWip(){
+        return true;
+    }
+
+    @Override
+    public Component ifWipListDevStatus(){
+        return Component.translatable(  "roundabout.dev_status.paused").withStyle(ChatFormatting.AQUA);
+    }
+    @Override
+    public Component ifWipListDev(){
+        return Component.literal(  "Ashley").withStyle(ChatFormatting.YELLOW);
     }
 }

@@ -50,6 +50,7 @@
   "item.roundabout.d4c_disc": "Stand Disc",
   "item.roundabout.soft_and_wet_disc": "Stand Disc",
   "item.roundabout.cinderella_disc": "Stand Disc",
+  "item.roundabout.hey_ya_disc": "Stand Disc",
   "item.roundabout.max_star_platinum_disc": "Stand Disc+",
   "item.roundabout.magicians_red_disc": "Stand Disc",
   "item.roundabout.killer_queen_disc": "Stand Disc",
@@ -67,6 +68,7 @@
   "item.roundabout.the_world_disc.desc": "The World",
   "item.roundabout.justice_disc.desc": "Justice",
   "item.roundabout.cinderella_disc.desc": "Cinderella",
+  "item.roundabout.hey_ya_disc.desc": "Hey Ya!",
   "item.roundabout.none_disc.desc": "None",
 
   "item.roundabout.light_bulb": "Light Bulb",
@@ -213,7 +215,13 @@
 
   "itemgroup.jojo": "Roundabout",
   "itemgroup.jojo_discs": "Stand Discs",
+  "itemgroup.jojo_wip_features": "Roundabout Development",
   "itemgroup.justice_fog_items": "Justice Illusion Blocks",
+  "roundabout.dev_status.dev_status": "Dev Status:",
+  "roundabout.dev_status.active": "ACTIVE",
+  "roundabout.dev_status.paused": "PAUSED",
+  "roundabout.dev_status.dropped": "DROPPED",
+  "roundabout.dev_status.dev_name": "Developer:",
 
   "key.roundabout.summon.stand": "Summon Stand",
   "key.roundabout.ability.one": "Skill 1",
@@ -773,7 +781,7 @@
   "leveling.roundabout.levelup.max.moves": "Max Development: New Ability!",
   "leveling.roundabout.levelup.max.both": "Max Development: New Ability & Skin!",
   "leveling.roundabout.disc_wip": "Work in Progress, Not Obtainable",
-  "leveling.roundabout.disc_wip_2": "That means the moves are not complete",
+  "leveling.roundabout.disc_wip_2": "Abilities are not complete or ready",
 
   "gamerule.roundaboutStandGriefing": "Stand Griefing",
   "gamerule.roundaboutStandGriefing.description": "Controls whether or not stands can mess with blocks",

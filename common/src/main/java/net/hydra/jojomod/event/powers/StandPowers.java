@@ -132,6 +132,12 @@ public class StandPowers {
     public boolean hasShootingModeVisually(){
         return false;
     }
+    public Component ifWipListDevStatus(){
+        return null;
+    }
+    public Component ifWipListDev(){
+        return null;
+    }
 
     public void setAttackTime(int attackTime){
         this.attackTime = attackTime;

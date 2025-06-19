@@ -20,6 +20,7 @@ import net.hydra.jojomod.item.InterdimensionalKeyItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -28,6 +29,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -106,10 +108,6 @@ public class PowersHeyYa extends NewDashPreset {
         super.tickPower();
     }
 
-    @Override
-    public boolean isWip(){
-        return true;
-    }
 
     @Override
     public List<Byte> getSkinList() {
@@ -138,5 +136,19 @@ public class PowersHeyYa extends NewDashPreset {
     @Override
     public void updateUniqueMoves() {
         super.updateUniqueMoves();
+    }
+
+
+    @Override
+    public boolean isWip(){
+        return true;
+    }
+    @Override
+    public Component ifWipListDevStatus(){
+        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
+    }
+    @Override
+    public Component ifWipListDev(){
+        return Component.literal(  "Hydra").withStyle(ChatFormatting.YELLOW);
     }
 }

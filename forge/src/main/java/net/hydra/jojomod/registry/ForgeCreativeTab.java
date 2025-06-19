@@ -25,6 +25,7 @@ public class ForgeCreativeTab {
 
     public static final List<Supplier<? extends ItemLike>> EXAMPLE_TAB_ITEMS = new ArrayList<>();
     public static final List<Supplier<? extends ItemLike>> DISC_TAB_ITEMS = new ArrayList<>();
+    public static final List<Supplier<? extends ItemLike>> WIP_TAB_ITEMS = new ArrayList<>();
     public static final List<Supplier<? extends ItemLike>> FOG_TAB_ITEMS = new ArrayList<>();
 
     public static final RegistryObject<CreativeModeTab> JOJO_GROUP = TABS.register("jojo",
@@ -45,6 +46,15 @@ public class ForgeCreativeTab {
                     .withSearchBar()
                     .build()
     );
+    public static final RegistryObject<CreativeModeTab> WIP_GROUP = TABS.register("jojo_wip_features",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemgroup.jojo_wip_features")).hideTitle()
+                    .icon(ForgeItems.LIGHT_BULB.get()::getDefaultInstance)
+                    .displayItems((displayParams, output) ->
+                            WIP_TAB_ITEMS.forEach(itemLike -> output.accept(itemLike.get())))
+                    .withSearchBar()
+                    .build()
+    );
     public static final RegistryObject<CreativeModeTab> FOG_GROUP = TABS.register("justice_fog_items",
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemgroup.justice_fog_items")).hideTitle()
@@ -62,6 +72,11 @@ public class ForgeCreativeTab {
 
     public static <T extends Item> RegistryObject<T> addToDiscTab(RegistryObject<T> itemLike) {
         DISC_TAB_ITEMS.add(itemLike);
+        return itemLike;
+    }
+
+    public static <T extends Item> RegistryObject<T> addToWIPTab(RegistryObject<T> itemLike) {
+        WIP_TAB_ITEMS.add(itemLike);
         return itemLike;
     }
 
