@@ -1701,6 +1701,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Unique
+    public AnimationState roundabout$heyYaAnimation2 = new AnimationState();
+
+    @Unique
+    @Override
+    public AnimationState roundabout$getHeyYaAnimation2(){
+        return roundabout$heyYaAnimation2;
+    }
+    @Unique
     public AnimationState roundabout$heyYaAnimation = new AnimationState();
 
     @Unique
