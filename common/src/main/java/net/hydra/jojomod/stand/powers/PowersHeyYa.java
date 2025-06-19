@@ -1,0 +1,142 @@
+package net.hydra.jojomod.stand.powers;
+
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.block.D4CLightBlockEntity;
+import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.D4CCloneEntity;
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.stand.D4CEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.OffsetIndex;
+import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.InterdimensionalKeyItem;
+import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.RelativeMovement;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.zetalasis.world.DynamicWorld;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.*;
+
+public class PowersHeyYa extends NewDashPreset {
+    public PowersHeyYa(LivingEntity self) {
+        super(self);
+    }
+
+    @Override
+    public StandPowers generateStandPowers(LivingEntity entity) {
+        return new PowersHeyYa(entity);
+    }
+
+
+    @Override
+    public void renderIcons(GuiGraphics context, int x, int y) {
+        // code for advanced icons
+
+        super.renderIcons(context, x, y);
+    }
+    public void registerHUDIcons() {
+        HashSet<GuiIcon> icons = new HashSet<>();
+
+        // code for basic icons: the rest rely on criteria we have to manually implement
+
+        GUI_ICON_REGISTRAR = icons;
+    }
+
+    @Override
+    public void tick() {
+    }
+
+    @Override
+    public void powerActivate(PowerContext context) {
+        super.powerActivate(context);
+    }
+
+    @Override
+    public boolean tryPower(int move, boolean forced) {
+        return super.tryPower(move, forced);
+    }
+
+    @Override
+    public boolean isAttackIneptVisually(byte activeP, int slot) {
+        return super.isAttackIneptVisually(activeP, slot);
+    }
+
+    /** if = -1, not melt dodging */
+    public int meltDodgeTicks = -1;
+
+    @Override
+    public void tickPower() {
+        super.tickPower();
+    }
+
+    @Override
+    public boolean isWip(){
+        return true;
+    }
+
+    @Override
+    public List<Byte> getSkinList() {
+        return Arrays.asList(
+                D4CEntity.MANGA_SKIN,
+                D4CEntity.WONDER_FESTIVAL,
+                D4CEntity.PROMO,
+                D4CEntity.PROMO_L,
+                D4CEntity.SPECIAL,
+                D4CEntity.GRAND
+        );
+    }
+
+    @Override
+    public boolean setPowerOther(int move, int lastMove) {
+
+        return super.setPowerOther(move, lastMove);
+    }
+
+    @Override
+    public void updateIntMove(int in) {
+
+        super.updateIntMove(in);
+    }
+
+    @Override
+    public void updateUniqueMoves() {
+        super.updateUniqueMoves();
+    }
+}
