@@ -11,6 +11,7 @@ import net.hydra.jojomod.client.models.stand.*;
 import net.hydra.jojomod.client.models.stand.renderers.*;
 import net.hydra.jojomod.client.models.visages.*;
 import net.hydra.jojomod.client.models.visages.renderers.*;
+import net.hydra.jojomod.client.models.worn_stand.HeyYaModel;
 import net.hydra.jojomod.client.models.worn_stand.SoftAndWetShootingArmModel;
 import net.hydra.jojomod.client.models.substand.renderers.D4CCloneRenderer;
 import net.hydra.jojomod.client.models.substand.renderers.FogCloneRenderer;
@@ -149,5 +150,6 @@ public class FabricEntityClient {
         BlockEntityRenderers.register(ModBlocks.D4C_LIGHT_BLOCK_ENTITY, D4CLightBlockEntityRenderer::new);
 
         ModStrayModels.SHOOTING_ARM = new SoftAndWetShootingArmModel();
+        ModStrayModels.HEY_YA = new HeyYaModel();
     }
 }

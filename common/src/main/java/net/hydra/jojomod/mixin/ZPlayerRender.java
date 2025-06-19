@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
+import net.hydra.jojomod.client.models.layers.HeyYaLayer;
 import net.hydra.jojomod.client.models.layers.ShootingArmLayer;
 import net.hydra.jojomod.client.models.visages.OVAEnyaModel;
 import net.hydra.jojomod.client.models.visages.renderers.OVAEnyaRenderer;
@@ -73,6 +74,7 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
         this.addLayer(new StoneLayer<>($$0, this));
         this.addLayer(new FacelessLayer<>($$0, this));
         this.addLayer(new ShootingArmLayer<>($$0, this));
+        this.addLayer(new HeyYaLayer<>($$0, this));
     }
 
     private static AbstractClientPlayer ACP;

@@ -15,6 +15,7 @@ import net.hydra.jojomod.client.models.stand.*;
 import net.hydra.jojomod.client.models.stand.renderers.*;
 import net.hydra.jojomod.client.models.visages.*;
 import net.hydra.jojomod.client.models.visages.renderers.*;
+import net.hydra.jojomod.client.models.worn_stand.HeyYaModel;
 import net.hydra.jojomod.client.models.worn_stand.SoftAndWetShootingArmModel;
 import net.hydra.jojomod.client.models.substand.renderers.D4CCloneRenderer;
 import net.hydra.jojomod.client.models.substand.renderers.FogCloneRenderer;
@@ -155,6 +156,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.STAND_FIRE_LAYER, StandFireRenderer::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.MR_SPIN_LAYER, MagiciansRedSpinEffectLayer::createLayer);
         ModStrayModels.SHOOTING_ARM = new SoftAndWetShootingArmModel();
+        ModStrayModels.HEY_YA = new HeyYaModel();
         //BlockEntityRenderers.register(ModBlocks.STAND_FIRE_BLOCK_ENTITY, StandFireRenderer::new);
     }
     @SubscribeEvent
