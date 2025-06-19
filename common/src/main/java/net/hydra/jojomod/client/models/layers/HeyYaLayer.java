@@ -47,9 +47,10 @@ public class HeyYaLayer<T extends LivingEntity, A extends HumanoidModel<T>> exte
                         // Translate to the right/left hand
                             getParentModel().body.translateAndRotate(poseStack); // Use leftArm for off-hand
                             // Apply additional transformations
-                            poseStack.translate(-0.27F, -0.3, 0.2F); //1 1
+                            poseStack.translate(-0.27F, -0.25, 0.19F); //1 1
                             // The first value goes to the right (negative) and left (positive)
                             // The second value is correlated with up (negative) and down (positive)
+                        // the third is further and closer, positive to head towards bakc negative for away
                         // Render your model here
                         poseStack.scale(0.6F, 0.6F, 0.6F);
                         boolean isHurt = livent.hurtTime > 0;
