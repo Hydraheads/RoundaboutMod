@@ -848,15 +848,12 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         super.tickPower();
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
             if (this.getSelf().getAirSupply() < this.getSelf().getMaxAirSupply() && ((StandUser) this.getSelf()).roundabout$getActive()){
-                if (this.getAirAmount() > 0) {
-                    //this.getSelf().setAirSupply(((StandUser) this.getSelf()).roundabout$increaseAirSupply(this.getSelf().getAirSupply()));
-                    this.setAirAmount(Math.max(0, Math.min(this.getAirAmount() - 4, this.getMaxAirAmount())));
-                }
             } else {
                 if (this.getSelf().isEyeInFluid(FluidTags.WATER)
                         && !this.getSelf().level().getBlockState(BlockPos.containing(
                         this.getSelf().getX(), this.getSelf().getEyeY(),
                         this.getSelf().getZ())).is(Blocks.BUBBLE_COLUMN)) {
+                    /***Removed weird code*/
                 } else {
                     if (((StandUser) this.getSelf()).roundabout$getActive()) {
                             this.setAirAmount(Math.min(this.getAirAmount() + 4, this.getMaxAirAmount()));
