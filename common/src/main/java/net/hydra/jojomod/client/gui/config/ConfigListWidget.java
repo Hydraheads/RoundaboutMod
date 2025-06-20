@@ -1,5 +1,6 @@
 package net.hydra.jojomod.client.gui.config;
 
+import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.Config;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Minecraft;
@@ -17,14 +18,31 @@ import java.util.List;
 public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWidget.Entry> {
     private final ConfigScreen parent;
     private final HashMap<String, Object> configFields = new HashMap<>();
+    private final ConfigType configType;
 
-    public ConfigListWidget(ConfigScreen parent, Minecraft client) {
-        super(client, parent.width + 45, parent.height, 20, parent.height, 32);
+    public ConfigListWidget(ConfigScreen parent, Minecraft client, ConfigType selectedType) {
+        super(client, 240, parent.height, 20, parent.height - 40, 32);
+        this.setLeftPos((parent.width - 240) / 2);
         this.parent = parent;
-        this.addEntry(new CommentEntry("Common Config"));
+        this.configType = selectedType;
 
-        Config instance = Config.getLocalInstance();
-        Class<? extends Config> clazz = instance.getClass();
+        switch (selectedType)
+        {
+            case COMMON -> this.addEntry(new CommentEntry("Common Config"));
+            case CLIENT -> this.addEntry(new CommentEntry("Client Config"));
+            case SERVER -> this.addEntry(new CommentEntry("Server Config"));
+        }
+
+        Object instance = null;
+
+        switch (selectedType)
+        {
+            case COMMON -> instance = Config.getLocalInstance();
+            case CLIENT -> instance = ClientConfig.getLocalInstance();
+            case SERVER -> instance = Config.getServerInstance();
+        }
+
+        Class<?> clazz = instance.getClass();
 
         Field[] fields = clazz.getFields();
         for (Field field : fields) {
@@ -43,6 +61,10 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                     Object nestedObject = field.get(instance);
                     this.addEntry(new CommentEntry(field.getName()));
 
+                    if (nestedObject == null) {
+                        continue;
+                    }
+
                     for (Field clazzField : nestedObject.getClass().getFields()) {
                         clazzField.setAccessible(true);
                         Object clazzValue = clazzField.get(nestedObject);
@@ -59,6 +81,16 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                 throw new RuntimeException("Failed to parse configFields", e);
             }
         }
+    }
+
+    @Override
+    public int getRowWidth() {
+        return 200;
+    }
+
+    @Override
+    protected int getScrollbarPosition() {
+        return this.getRowLeft() + 20 + getRowWidth() - 6;
     }
 
     public abstract static class Entry extends ContainerObjectSelectionList.Entry<Entry> {
@@ -86,7 +118,12 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                             Boolean newVal = !(Boolean) field.get(instance);
                             field.set(instance, newVal);
 
-                            ConfigManager.saveLocalConfig();
+                            switch (configType)
+                            {
+                                case COMMON -> ConfigManager.saveLocalConfig();
+                                case CLIENT -> ConfigManager.saveClientConfig();
+                                case SERVER -> ConfigManager.saveServerConfig();
+                            }
 
                             btn.setMessage(Component.literal(field.getName() + ": " + newVal));
                         } catch (IllegalAccessException e) {
@@ -97,7 +134,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
 
         @Override
         public void render(GuiGraphics drawContext, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float delta) {
-            toggleButton.setX(x + 10);
+            toggleButton.setX(x);
             toggleButton.setY(y);
             toggleButton.render(drawContext, mouseX, mouseY, delta);
         }
@@ -124,7 +161,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
 
             String display = getFieldDisplay();
             editButton = Button.builder(Component.literal(display), btn -> {
-                Minecraft.getInstance().setScreen(new EditValueScreen(ConfigListWidget.this.parent, field, instance));
+                Minecraft.getInstance().setScreen(new EditValueScreen(ConfigListWidget.this.parent, field, instance, configType));
             }).size(200, 20).build();
         }
 
@@ -138,7 +175,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
 
         @Override
         public void render(GuiGraphics drawContext, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
-            editButton.setX(x+10);
+            editButton.setX(x);
             editButton.setY(y);
             editButton.setMessage(Component.literal(getFieldDisplay()));
             editButton.render(drawContext, mouseX, mouseY, partialTick);

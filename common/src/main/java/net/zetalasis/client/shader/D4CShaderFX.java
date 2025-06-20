@@ -11,7 +11,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.level.Level;
 
-public class ShaderFx implements IRendererCallback {
+public class D4CShaderFX implements IRendererCallback {
     public boolean isDimensionTraveling = false;
     public boolean shouldShowDimensionFx = false;
 
@@ -95,6 +95,6 @@ public class ShaderFx implements IRendererCallback {
 
     }
 
-    public ShaderFx()
+    public D4CShaderFX()
     {}
 }

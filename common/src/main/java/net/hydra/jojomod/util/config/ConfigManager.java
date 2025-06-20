@@ -23,7 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public abstract class ConfigManager {
-    private static final Gson GSON = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+    public static final Gson GSON = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .setPrettyPrinting()
             .create();
     private static Path clientConfigPath;
@@ -175,10 +175,11 @@ public abstract class ConfigManager {
 
     private static void validateNestedFields(Object instance) {
         Reflection.forEachFieldByAnnotation(instance, NestedOption.class, (field, annotation) -> {
-            ConfigOptionReference reference = ConfigOptionReference.of(instance, field);
-            setIfNull(reference, Reflection.newInstance(field.getType()));
-
             Object nestedOption = Reflection.accessField(field, instance, Object.class);
+            if (nestedOption == null) {
+                nestedOption = Reflection.newInstance(field.getType());
+                Reflection.setField(field, instance, nestedOption);
+            }
             validateFields(nestedOption);
         });
     }
@@ -198,15 +199,41 @@ public abstract class ConfigManager {
         saveServerConfig();
     }
 
+    private static ClientConfig DEFAULT_CLIENT_CONFIG;
+    private static Config DEFAULT_LOCAL_CONFIG;
+    private static Config DEFAULT_SERVER_CONFIG;
+
     private static ClientConfig loadClient() {
-        return loadClient(ClientConfig.getLocalInstance(), clientConfigPath);
+        ClientConfig loaded = loadClient(new ClientConfig(), clientConfigPath);
+        validateFields(loaded);
+        ClientConfig.updateLocal(loaded);
+
+        DEFAULT_CLIENT_CONFIG = loaded.clone();
+
+        saveClientConfig();
+        return loaded;
     }
+
     private static Config loadLocal() {
-        return load(Config.getLocalInstance(), localConfigPath);
+        Config loaded = load(new Config(), localConfigPath);
+        validateFields(loaded);
+        Config.updateLocal(loaded);
+
+        DEFAULT_LOCAL_CONFIG = loaded.clone();
+
+        saveLocalConfig();
+        return loaded;
     }
 
     private static Config loadServer() {
-        return load(Config.getServerInstance(), serverConfigPath);
+        Config loaded = load(new Config(), serverConfigPath);
+        validateFields(loaded);
+        Config.updateServer(loaded);
+
+        DEFAULT_SERVER_CONFIG = loaded.clone();
+
+        saveServerConfig();
+        return loaded;
     }
 
     private static Config load(Config defaultConfig, Path path) {
@@ -283,5 +310,20 @@ public abstract class ConfigManager {
         } catch (IOException e) {
             Roundabout.LOGGER.error("Failed to save config", e);
         }
+    }
+
+    public static void resetLocal()
+    {
+        Config.updateLocal(DEFAULT_LOCAL_CONFIG.clone());
+    }
+
+    public static void resetClient()
+    {
+        ClientConfig.updateLocal(DEFAULT_CLIENT_CONFIG.clone());
+    }
+
+    public static void resetServer()
+    {
+        Config.updateServer(DEFAULT_SERVER_CONFIG.clone());
     }
 }

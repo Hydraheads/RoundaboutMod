@@ -227,7 +227,7 @@ public class PowersD4C extends NewPunchingStand {
                     }
                 }
             }
-            case SKILL_3_CROUCH -> {
+            case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
                 this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.D4CMeltDodgeCooldown);

@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.gui.config.ConfigScreen;
+import net.hydra.jojomod.client.gui.config.ConfigType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.TitleScreen;
@@ -57,7 +58,7 @@ public class MixinTitleScreen {
         if (mouseButton == 0 && roundabout$configButtonSelected)
         {
             Minecraft client = Minecraft.getInstance();
-            client.setScreen(new ConfigScreen());
+            client.setScreen(new ConfigScreen(ConfigType.COMMON));
 
             cir.setReturnValue(true);
             cir.cancel();

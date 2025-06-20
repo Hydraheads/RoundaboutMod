@@ -9,8 +9,13 @@ import net.hydra.jojomod.util.config.annotation.*;
         "modded"
 })
 
-public class ClientConfig {
+public class ClientConfig implements Cloneable {
     private static ClientConfig LOCAL_INSTANCE = new ClientConfig();
+
+    @Override
+    public ClientConfig clone() {
+        return ConfigManager.GSON.fromJson(ConfigManager.GSON.toJson(this), ClientConfig.class);
+    }
 
     @BooleanOption(group = "inherit", value = true)
     public Boolean onlyStandUsersCanSeeStands;
@@ -53,7 +58,7 @@ public class ClientConfig {
     @NestedOption(group="modded")
     public ClientConfig.Experiments experiments;
 
-    private ClientConfig() {
+    public ClientConfig() {
     }
 
     public static ClientConfig getLocalInstance() {

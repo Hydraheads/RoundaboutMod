@@ -7,7 +7,7 @@ import net.hydra.jojomod.access.ICamera;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.gui.*;
-import net.zetalasis.client.shader.ShaderFx;
+import net.zetalasis.client.shader.D4CShaderFX;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
@@ -425,10 +425,10 @@ public class ClientUtil {
     }
 
 
-    public static ShaderFx fx;
+    public static D4CShaderFX fx;
 
     static {
-        fx = new ShaderFx();
+        fx = new D4CShaderFX();
         RenderCallbackRegistry.register(fx);
     }
     public static float getFrameTime() {

@@ -16,12 +16,14 @@ public class EditValueScreen extends Screen {
     private final Object instance;
     private EditBox inputBox;
     private Button doneButton;
+    private final ConfigType configType;
 
-    public EditValueScreen(Screen parent, Field field, Object instance) {
+    public EditValueScreen(Screen parent, Field field, Object instance, ConfigType configType) {
         super(Component.literal("Edit Value"));
         this.parent = parent;
         this.field = field;
         this.instance = instance;
+        this.configType = configType;
     }
 
     @Override
@@ -47,7 +49,12 @@ public class EditValueScreen extends Screen {
                     throw new RuntimeException("Unsupported type caught while creating EditValueScreen!");
                 }
 
-                ConfigManager.saveLocalConfig();
+                switch (configType)
+                {
+                    case COMMON -> ConfigManager.saveLocalConfig();
+                    case CLIENT -> ConfigManager.saveClientConfig();
+                    case SERVER -> ConfigManager.saveServerConfig();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

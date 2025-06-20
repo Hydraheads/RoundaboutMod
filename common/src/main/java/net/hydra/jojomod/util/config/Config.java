@@ -13,10 +13,33 @@ import java.util.Set;
         "modded"
 })
 
-    public class Config {
-        private static Config LOCAL_INSTANCE = new Config();
-        private static Config SERVER_INSTANCE = new Config();
+public class Config implements Cloneable {
+    private static Config LOCAL_INSTANCE = new Config();
+    private static Config SERVER_INSTANCE = new Config();
 
+    public Config() {
+    }
+
+    public static Config getLocalInstance() {
+        return LOCAL_INSTANCE;
+    }
+
+    public static Config getServerInstance() {
+        return SERVER_INSTANCE;
+    }
+
+    static void updateLocal(Config config) {
+        LOCAL_INSTANCE = config;
+    }
+
+    @Override
+    public Config clone() {
+        return ConfigManager.GSON.fromJson(ConfigManager.GSON.toJson(this), Config.class);
+    }
+
+    static void updateServer(Config config) {
+        SERVER_INSTANCE = config;
+    }
 
     @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
     public Integer levelsToGetStand;
@@ -152,26 +175,6 @@ import java.util.Set;
     public TimeStopSettings timeStopSettings;
     @NestedOption(group="modded")
     public Experiments experiments;
-
-        private Config() {
-        }
-
-        public static Config getLocalInstance() {
-            return LOCAL_INSTANCE;
-        }
-
-        public static Config getServerInstance() {
-            return SERVER_INSTANCE;
-        }
-
-        static void updateLocal(Config config) {
-            LOCAL_INSTANCE = config;
-        }
-
-        static void updateServer(Config config) {
-            SERVER_INSTANCE = config;
-        }
-
 
     public static class VanillaMCTweaks {
         @BooleanOption(group = "inherit", value = true)
