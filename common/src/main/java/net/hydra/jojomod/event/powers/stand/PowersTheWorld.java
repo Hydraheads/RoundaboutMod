@@ -854,11 +854,20 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                         this.getSelf().getX(), this.getSelf().getEyeY(),
                         this.getSelf().getZ())).is(Blocks.BUBBLE_COLUMN)) {
                     /***Removed weird code*/
+
                 } else {
                     if (((StandUser) this.getSelf()).roundabout$getActive()) {
                             this.setAirAmount(Math.min(this.getAirAmount() + 4, this.getMaxAirAmount()));
                     }
                 }
+            }
+        }
+
+
+        if (((StandUser) this.getSelf()).roundabout$getActive()) {
+            if (this.getAirAmount() > 0 && this.getSelf().getAirSupply() < this.getSelf().getMaxAirSupply()) {
+                this.getSelf().setAirSupply(Math.max(0, Math.min(this.getSelf().getAirSupply() + 4, this.getSelf().getMaxAirSupply())));
+                this.setAirAmount(Math.max(0, Math.min(this.getAirAmount() - 4, this.getMaxAirAmount())));
             }
         }
     }
