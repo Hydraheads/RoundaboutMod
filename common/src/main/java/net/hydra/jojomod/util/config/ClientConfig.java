@@ -116,4 +116,16 @@ public class ClientConfig implements Cloneable {
         @BooleanOption(group = "inherit", value = false)
         public Boolean d4cShouldUseColorShader;
     }
+
+    @CommentedOption(comment = "Offset of the Config Button (stand arrow button) in X coordinates")
+    @IntOption(group = "inherit", value = 0, min = -1024, max = 1024)
+    public Integer configButtonOffsetX;
+
+    @CommentedOption(comment = "Offset of the Config Button (stand arrow button) in Y coordinates")
+    @IntOption(group = "inherit", value = 0, min = -1024, max = 1024)
+    public Integer configButtonOffsetY;
+
+    @CommentedOption(comment = "Should Roundabout render the Config Button (stand arrow button) on the main menu?")
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean shouldShowConfigButton;
 }

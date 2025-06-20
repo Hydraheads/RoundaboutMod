@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.gui.config.ConfigScreen;
 import net.hydra.jojomod.client.gui.config.ConfigType;
+import net.hydra.jojomod.util.config.ClientConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.TitleScreen;
@@ -21,11 +22,17 @@ public class MixinTitleScreen {
     @Inject(method = "render", at = @At("TAIL"))
     private void roundabout$finishRender(GuiGraphics drawContext, int mouseX, int mouseY, float tickDelta, CallbackInfo ci)
     {
+        if (!ClientConfig.getLocalInstance().shouldShowConfigButton)
+            return;
+
         ResourceLocation BUTTON_ICON = new ResourceLocation(Roundabout.MOD_ID, "textures/item/stand_arrow.png");
         ResourceLocation BUTTON_BACKGROUND = new ResourceLocation(Roundabout.MOD_ID, "textures/gui/blank_button.png");
 
         int iconX = (drawContext.guiWidth() / 2) + 124 -20;
         int iconY = ((drawContext.guiHeight() / 4) + 48) + 50 + 12 - 14;
+
+        iconX += ClientConfig.getLocalInstance().configButtonOffsetX;
+        iconY += ClientConfig.getLocalInstance().configButtonOffsetY;
 
         roundabout$configButtonSelected = false;
 
@@ -55,6 +62,9 @@ public class MixinTitleScreen {
     @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
     private void roundabout$mouseClicked(double mouseX, double mouseY, int mouseButton, CallbackInfoReturnable<Boolean> cir)
     {
+        if (!ClientConfig.getLocalInstance().shouldShowConfigButton)
+            return;
+
         if (mouseButton == 0 && roundabout$configButtonSelected)
         {
             Minecraft client = Minecraft.getInstance();
