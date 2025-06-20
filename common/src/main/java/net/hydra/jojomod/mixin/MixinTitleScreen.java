@@ -1,14 +1,19 @@
 package net.hydra.jojomod.mixin;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.gui.config.ConfigScreen;
 import net.hydra.jojomod.client.gui.config.ConfigType;
 import net.hydra.jojomod.util.config.ClientConfig;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,6 +22,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(TitleScreen.class)
 public class MixinTitleScreen {
+    @Shadow @Final private boolean fading;
+    @Shadow private long fadeInStart;
     @Unique private boolean roundabout$configButtonSelected = false;
 
     @Inject(method = "render", at = @At("TAIL"))
@@ -43,6 +50,12 @@ public class MixinTitleScreen {
                 roundabout$configButtonSelected = true;
             }
         }
+
+        float fadeTransparency = fading ? (float)(Util.getMillis() - fadeInStart) / 1000.0F : 1.0F;
+        float fadeAlpha = this.fading ? Mth.clamp(fadeTransparency - 1.0F, 0.0F, 1.0F) : 1.0F;
+
+        RenderSystem.enableBlend();
+        drawContext.setColor(1.0f, 1.0f, 1.0f, fadeAlpha);
 
         drawContext.blit(BUTTON_BACKGROUND,
                 iconX, // x
