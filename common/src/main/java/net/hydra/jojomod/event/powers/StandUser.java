@@ -88,6 +88,8 @@ public interface StandUser {
     AnimationState roundabout$getHeyYaAnimation();
     void roundabout$setHeyYaAnimation(AnimationState layer);
     AnimationState roundabout$getHeyYaAnimation2();
+    int roundabout$getHeyYaVanishTicks();
+    void roundabout$setHeyYaVanishTicks(int set);
 
     boolean roundabout$getActive();
     boolean roundabout$getMainhandOverride();

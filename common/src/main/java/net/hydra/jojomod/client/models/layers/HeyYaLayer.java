@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
 import net.minecraft.client.model.HumanoidModel;
@@ -41,7 +42,23 @@ public class HeyYaLayer<T extends LivingEntity, A extends HumanoidModel<T>> exte
                         livent = jnp.host;
                     }
                     StandUser user = ((StandUser) livent);
-                    if (user.roundabout$getStandPowers() instanceof PowersHeyYa PH) {
+                    int heyTicks = user.roundabout$getHeyYaVanishTicks();
+                    boolean hasHeyYaOut = (user.roundabout$getActive() && user.roundabout$getStandPowers() instanceof PowersHeyYa);
+
+
+                    if (heyTicks > 0 || hasHeyYaOut) {
+                        float heyFull = 0;
+                        float fixedPartial = partialTicks - (int) partialTicks;
+                        if (((TimeStop)entity.level()).CanTimeStopEntity(entity)){
+                            fixedPartial = 0;
+                        }
+                        if (hasHeyYaOut){
+                            heyFull = heyTicks+fixedPartial;
+                            heyFull = Math.min(heyFull/10,1f);
+                        } else {
+                            heyFull = heyTicks-fixedPartial;
+                            heyFull = Math.max(heyFull/10,0);
+                        }
                         poseStack.pushPose();
 
                         // Translate to the right/left hand
@@ -57,7 +74,7 @@ public class HeyYaLayer<T extends LivingEntity, A extends HumanoidModel<T>> exte
                         float r = isHurt ? 1.0F : 1.0F;
                         float g = isHurt ? 0.0F : 1.0F;
                         float b = isHurt ? 0.0F : 1.0F;
-                        ModStrayModels.HEY_YA.render(livent, partialTicks, poseStack, bufferSource, packedLight, r, g, b, 1F);
+                        ModStrayModels.HEY_YA.render(livent, partialTicks, poseStack, bufferSource, packedLight, r, g, b, heyFull);
                         poseStack.popPose();
                     }
                 }

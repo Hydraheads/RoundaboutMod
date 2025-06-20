@@ -25,6 +25,7 @@ import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersHeyYa;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -1701,6 +1702,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Unique
+    public int roundabout$heyYaVanishTicks = 0;
+
+    @Unique
+    @Override
+    public int roundabout$getHeyYaVanishTicks(){
+        return roundabout$heyYaVanishTicks;
+    }
+    @Unique
+    @Override
+    public void roundabout$setHeyYaVanishTicks(int set){
+        roundabout$heyYaVanishTicks = Mth.clamp(set,0,10);
+    }
+
+    @Unique
     public AnimationState roundabout$heyYaAnimation2 = new AnimationState();
 
     @Unique
@@ -3232,6 +3247,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.HEART), 1.0F);
                 }
             }
+        }
+        /**hey ya fade ticks*/
+        if (roundabout$getActive() && roundabout$getStandPowers() instanceof PowersHeyYa){
+            roundabout$setHeyYaVanishTicks(roundabout$getHeyYaVanishTicks()+1);
+        } else {
+            roundabout$setHeyYaVanishTicks(roundabout$getHeyYaVanishTicks()-1);
         }
 
 
