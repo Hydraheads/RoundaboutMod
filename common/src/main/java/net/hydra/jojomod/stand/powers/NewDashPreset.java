@@ -35,71 +35,72 @@ public class NewDashPreset extends StandPowerRewrite {
         switch (context)
         {
             case SKILL_3_NORMAL -> {
-                Options options = Minecraft.getInstance().options;
+                dash();
+            }
+        }
+    }
+    public void dash(){
+        Options options = Minecraft.getInstance().options;
 
-                inputDash = true;
-                if (this.getSelf().level().isClientSide && !this.isClashing()) {
-                    if (!((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
-                        if (!isHoldingSneak()) {
-                            if (this.getSelf().onGround() && !this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
-                                byte forward = 0;
-                                byte strafe = 0;
-                                if (options.keyUp.isDown()) forward++;
-                                if (options.keyDown.isDown()) forward--;
-                                if (options.keyLeft.isDown()) strafe++;
-                                if (options.keyRight.isDown()) strafe--;
-                                int degrees = (int) (this.getSelf().getYRot() % 360);
-                                int backwards = 0;
+        inputDash = true;
+        if (this.getSelf().level().isClientSide && !this.isClashing()) {
+            if (!((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+                    if (this.getSelf().onGround() && !this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
+                        byte forward = 0;
+                        byte strafe = 0;
+                        if (options.keyUp.isDown()) forward++;
+                        if (options.keyDown.isDown()) forward--;
+                        if (options.keyLeft.isDown()) strafe++;
+                        if (options.keyRight.isDown()) strafe--;
+                        int degrees = (int) (this.getSelf().getYRot() % 360);
+                        int backwards = 0;
 
-                                if (strafe > 0 && forward == 0) {
-                                    degrees -= 90;
-                                    degrees = degrees % 360;
-                                    backwards = 1;
-                                } else if (strafe > 0 && forward > 0) {
-                                    degrees -= 45;
-                                    degrees = degrees % 360;
-                                    backwards = 2;
-                                } else if (strafe > 0) {
-                                    degrees -= 135;
-                                    degrees = degrees % 360;
-                                    backwards = -1;
-                                } else if (strafe < 0 && forward == 0) {
-                                    degrees += 90;
-                                    degrees = degrees % 360;
-                                    backwards = 3;
-                                } else if (strafe < 0 && forward > 0) {
-                                    degrees += 45;
-                                    degrees = degrees % 360;
-                                    backwards = 4;
-                                } else if (strafe < 0) {
-                                    degrees += 135;
-                                    degrees = degrees % 360;
-                                    backwards = -2;
-                                } else if (forward < 0) {
-                                    degrees += 180;
-                                    degrees = degrees % 360;
-                                    backwards = -3;
-                                }
+                        if (strafe > 0 && forward == 0) {
+                            degrees -= 90;
+                            degrees = degrees % 360;
+                            backwards = 1;
+                        } else if (strafe > 0 && forward > 0) {
+                            degrees -= 45;
+                            degrees = degrees % 360;
+                            backwards = 2;
+                        } else if (strafe > 0) {
+                            degrees -= 135;
+                            degrees = degrees % 360;
+                            backwards = -1;
+                        } else if (strafe < 0 && forward == 0) {
+                            degrees += 90;
+                            degrees = degrees % 360;
+                            backwards = 3;
+                        } else if (strafe < 0 && forward > 0) {
+                            degrees += 45;
+                            degrees = degrees % 360;
+                            backwards = 4;
+                        } else if (strafe < 0) {
+                            degrees += 135;
+                            degrees = degrees % 360;
+                            backwards = -2;
+                        } else if (forward < 0) {
+                            degrees += 180;
+                            degrees = degrees % 360;
+                            backwards = -3;
+                        }
 
-                                int cdTime = ClientNetworking.getAppropriateConfig().cooldownsInTicks.dash;
-                                if (this.getSelf() instanceof Player) {
-                                    ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(0);
-                                    if (options.keyJump.isDown()) {
-                                        cdTime = ClientNetworking.getAppropriateConfig().cooldownsInTicks.jumpingDash;
-                                    }
-                                }
-                                this.setCooldown(PowerIndex.SKILL_3_SNEAK, cdTime);
-                                MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.91F,
-                                        Mth.sin(degrees * ((float) Math.PI / 180)),
-                                        Mth.sin(-20 * ((float) Math.PI / 180)),
-                                        -Mth.cos(degrees * ((float) Math.PI / 180)));
-
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.MOVEMENT, true);
-                                ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.MOVEMENT, backwards);
+                        int cdTime = ClientNetworking.getAppropriateConfig().cooldownsInTicks.dash;
+                        if (this.getSelf() instanceof Player) {
+                            ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(0);
+                            if (options.keyJump.isDown()) {
+                                cdTime = ClientNetworking.getAppropriateConfig().cooldownsInTicks.jumpingDash;
                             }
                         }
+                        this.setCooldown(PowerIndex.SKILL_3_SNEAK, cdTime);
+                        MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.91F,
+                                Mth.sin(degrees * ((float) Math.PI / 180)),
+                                Mth.sin(-20 * ((float) Math.PI / 180)),
+                                -Mth.cos(degrees * ((float) Math.PI / 180)));
+
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.MOVEMENT, true);
+                        ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.MOVEMENT, backwards);
                     }
-                }
             }
         }
     }

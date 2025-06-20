@@ -294,6 +294,16 @@ public class StandIcons {
             "textures/gui/icons/soft_and_wet/encasement_strike.png");
     public static final ResourceLocation BUBBLE_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/soft_and_wet/bubble_barrage.png");
+    public static final ResourceLocation DANGER_YAP = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/hey_ya/danger_yap.png");
+    public static final ResourceLocation DANGER_YAP_DISABLE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/hey_ya/danger_yap_disable.png");
+    public static final ResourceLocation MINING_YAP = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/hey_ya/mining_yap.png");
+    public static final ResourceLocation MINING_YAP_DISABLE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/hey_ya/mining_yap_disable.png");
+    public static final ResourceLocation YAP_YAP = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/hey_ya/yap_yap.png");
 
     public static final ResourceLocation EERIE_SKIN = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/eerie_shift.png");

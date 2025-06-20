@@ -67,9 +67,28 @@ public class PowersHeyYa extends NewDashPreset {
     }
 
 
+    public boolean dangerYappingOn(){
+        return false;
+    }
+    public boolean canSummonStandAsEntity(){
+        return false;
+    }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
+        ClientUtil.fx.roundabout$onGUI(context);
+
         // code for advanced icons
+
+        if (dangerYappingOn())
+            setSkillIcon(context, x, y, 1, StandIcons.DANGER_YAP_DISABLE, PowerIndex.SKILL_1);
+        else
+            setSkillIcon(context, x, y, 1, StandIcons.DANGER_YAP, PowerIndex.SKILL_1);
+
+        /**It is sneak because all stands share this cooldown and SP/TW
+         * shared it between dash and stand leap*/
+        setSkillIcon(context, x, y, 2, StandIcons.MINING_YAP, PowerIndex.SKILL_2);
+        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
+        setSkillIcon(context, x, y, 4, StandIcons.YAP_YAP, PowerIndex.SKILL_4);
 
         super.renderIcons(context, x, y);
     }
@@ -87,7 +106,14 @@ public class PowersHeyYa extends NewDashPreset {
 
     @Override
     public void powerActivate(PowerContext context) {
-        super.powerActivate(context);
+        /**Making dash usable on both key presses*/
+        switch (context)
+        {
+            case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
+                Roundabout.LOGGER.info("dash");
+                dash();
+            }
+        }
     }
 
     @Override

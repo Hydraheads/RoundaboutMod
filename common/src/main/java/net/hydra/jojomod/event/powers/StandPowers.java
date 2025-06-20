@@ -2453,9 +2453,11 @@ public class StandPowers {
         return power;
     }
 
-
     public boolean canSummonStand(){
-        return false;
+        return true;
+    }
+    public boolean canSummonStandAsEntity(){
+        return true;
     }
     public StandEntity getNewStandEntity(){
         return null;

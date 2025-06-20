@@ -19,15 +19,16 @@ public class KeyInputs {
     public static int roundaboutClickCount = 0;
 
     public static void summonKey(Player player, Minecraft client){
-        if (((StandUser) player).roundabout$getStandPowers().canSummonStand() && ((StandUser) player).roundabout$getSealedTicks() <= -1) {
+        StandUser user = ((StandUser) player);
+        if (user.roundabout$getStandPowers().canSummonStand() && user.roundabout$getSealedTicks() <= -1) {
             if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0) {
-                if (((StandUser) player).roundabout$getActive()) {
-                    ((StandUser) player).roundabout$setSummonCD(8);
-                    ((StandUser) player).roundabout$setActive(false);
-                    ((StandUser) player).roundabout$tryPower(PowerIndex.NONE, true);
+                if (user.roundabout$getActive()) {
+                    user.roundabout$setSummonCD(8);
+                    user.roundabout$setActive(false);
+                    user.roundabout$tryPower(PowerIndex.NONE, true);
                 } else {
-                    ((StandUser) player).roundabout$setActive(true);
-                    ((StandUser) player).roundabout$setSummonCD(2);
+                    user.roundabout$setActive(true);
+                    user.roundabout$setSummonCD(2);
                 }
                 ModPacketHandler.PACKET_ACCESS.standSummonPacket();
             }

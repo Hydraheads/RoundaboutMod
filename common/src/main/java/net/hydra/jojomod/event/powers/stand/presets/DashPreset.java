@@ -280,7 +280,6 @@ public class DashPreset extends StandPowers {
                 inputDash = true;
                 if (this.getSelf().level().isClientSide && !this.isClashing()) {
                     if (!((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
-                        if (!isHoldingSneak()) {
                             if (this.getSelf().onGround() && !this.onCooldown(powerIndex)) {
                                 byte forward = 0;
                                 byte strafe = 0;
@@ -337,7 +336,6 @@ public class DashPreset extends StandPowers {
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.MOVEMENT, true);
                                 ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.MOVEMENT, backwards);
                             }
-                        }
                     }
                 }
             }
