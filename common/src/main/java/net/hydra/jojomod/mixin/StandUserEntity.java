@@ -2112,50 +2112,59 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             //world.getEntity
             StandPowers thispowers = this.roundabout$getStandPowers();
             if (thispowers.canSummonStand()) {
-                StandEntity stand = thispowers.getNewStandEntity();
                 thispowers.playSummonEffects(forced);
-                if (stand != null) {
-                    InteractionHand hand = roundabout$User.getUsedItemHand();
-                    if (hand == InteractionHand.OFF_HAND) {
-                        ItemStack itemStack = roundabout$User.getUseItem();
-                        Item item = itemStack.getItem();
-                        if (item.getUseAnimation(itemStack) == UseAnim.BLOCK) {
-                            roundabout$User.releaseUsingItem();
+
+                if (thispowers.canSummonStandAsEntity()) {
+
+                    StandEntity stand = thispowers.getNewStandEntity();
+                    if (stand != null) {
+                        InteractionHand hand = roundabout$User.getUsedItemHand();
+                        if (hand == InteractionHand.OFF_HAND) {
+                            ItemStack itemStack = roundabout$User.getUseItem();
+                            Item item = itemStack.getItem();
+                            if (item.getUseAnimation(itemStack) == UseAnim.BLOCK) {
+                                roundabout$User.releaseUsingItem();
+                            }
                         }
-                    }
-                    Vec3 spos = stand.getStandOffsetVector(roundabout$User);
-                    stand.absMoveTo(spos.x(), spos.y(), spos.z());
+                        Vec3 spos = stand.getStandOffsetVector(roundabout$User);
+                        stand.absMoveTo(spos.x(), spos.y(), spos.z());
 
-                    stand.setSkin(roundabout$getStandSkin());
-                    stand.setIdleAnimation(roundabout$getIdlePos());
+                        stand.setSkin(roundabout$getStandSkin());
+                        stand.setIdleAnimation(roundabout$getIdlePos());
 
-                    if (((LivingEntity)(Object)this) instanceof Player PE){
-                        stand.playerSetProperties(PE);
-                        stand.setDistanceOut(((IPlayerEntity) PE).roundabout$getDistanceOut());
-                        stand.setAnchorPlace(((IPlayerEntity) PE).roundabout$getAnchorPlace());
-                        stand.setAnchorPlaceAttack(((IPlayerEntity) PE).roundabout$getAnchorPlaceAttack());
-                        stand.setSizePercent(((IPlayerEntity) PE).roundabout$getSizePercent());
-                        stand.setIdleRotation(((IPlayerEntity) PE).roundabout$getIdleRotation());
-                        stand.setIdleYOffset(((IPlayerEntity) PE).roundabout$getIdleYOffset());
-                        if (!this.level().isClientSide()) {
-                            IPlayerEntity ipe = ((IPlayerEntity) this);
-                            ModPacketHandler.PACKET_ACCESS.s2cPowerInventorySettings(
-                                    ((ServerPlayer) ((Player) (Object) this)), ipe.roundabout$getAnchorPlace(),
-                                    ipe.roundabout$getDistanceOut(),
-                                    ipe.roundabout$getSizePercent(),
-                                    ipe.roundabout$getIdleRotation(),
-                                    ipe.roundabout$getIdleYOffset(),
-                                    ipe.roundabout$getAnchorPlaceAttack());
+                        if (((LivingEntity) (Object) this) instanceof Player PE) {
+                            stand.playerSetProperties(PE);
+                            stand.setDistanceOut(((IPlayerEntity) PE).roundabout$getDistanceOut());
+                            stand.setAnchorPlace(((IPlayerEntity) PE).roundabout$getAnchorPlace());
+                            stand.setAnchorPlaceAttack(((IPlayerEntity) PE).roundabout$getAnchorPlaceAttack());
+                            stand.setSizePercent(((IPlayerEntity) PE).roundabout$getSizePercent());
+                            stand.setIdleRotation(((IPlayerEntity) PE).roundabout$getIdleRotation());
+                            stand.setIdleYOffset(((IPlayerEntity) PE).roundabout$getIdleYOffset());
+                            if (!this.level().isClientSide()) {
+                                IPlayerEntity ipe = ((IPlayerEntity) this);
+                                ModPacketHandler.PACKET_ACCESS.s2cPowerInventorySettings(
+                                        ((ServerPlayer) ((Player) (Object) this)), ipe.roundabout$getAnchorPlace(),
+                                        ipe.roundabout$getDistanceOut(),
+                                        ipe.roundabout$getSizePercent(),
+                                        ipe.roundabout$getIdleRotation(),
+                                        ipe.roundabout$getIdleYOffset(),
+                                        ipe.roundabout$getAnchorPlaceAttack());
+                            }
                         }
+
+                        theWorld.addFreshEntity(stand);
+
+                        if (sound && !((TimeStop) this.level()).CanTimeStopEntity(this)) {
+                            thispowers.playSummonSound();
+                        }
+
+                        this.roundabout$standMount(stand);
                     }
+                } else {
 
-                    theWorld.addFreshEntity(stand);
-
-                    if (sound && !((TimeStop)this.level()).CanTimeStopEntity(this)) {
+                    if (sound && !((TimeStop) this.level()).CanTimeStopEntity(this)) {
                         thispowers.playSummonSound();
                     }
-
-                    this.roundabout$standMount(stand);
                 }
                 active=true;
             } else {

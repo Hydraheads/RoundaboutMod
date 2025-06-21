@@ -71,6 +71,12 @@
       "roundabout:hey_ya_7"
     ]
   },
+  "hey_ya_summon": {
+    "subtitle": "sounds.roundabout.hey_ya_summon",
+    "sounds": [
+      "roundabout:hey_ya_summon"
+    ]
+  },
   "sign_hit": {
     "subtitle": "sounds.roundabout.sign_hit",
     "sounds": [
