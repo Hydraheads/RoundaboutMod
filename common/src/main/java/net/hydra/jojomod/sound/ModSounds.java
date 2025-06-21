@@ -660,6 +660,29 @@ public class ModSounds {
 
 
 
+    public static final String HEY_YA_1 = "hey_ya_1";
+    public static final ResourceLocation HEY_YA_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HEY_YA_1);
+    public static SoundEvent HEY_YA_1_EVENT = SoundEvent.createVariableRangeEvent(HEY_YA_1_ID);
+    public static final String HEY_YA_2 = "hey_ya_2";
+    public static final ResourceLocation HEY_YA_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HEY_YA_2);
+    public static SoundEvent HEY_YA_2_EVENT = SoundEvent.createVariableRangeEvent(HEY_YA_2_ID);
+    public static final String HEY_YA_3 = "hey_ya_3";
+    public static final ResourceLocation HEY_YA_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HEY_YA_3);
+    public static SoundEvent HEY_YA_3_EVENT = SoundEvent.createVariableRangeEvent(HEY_YA_3_ID);
+    public static final String HEY_YA_4 = "hey_ya_4";
+    public static final ResourceLocation HEY_YA_4_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HEY_YA_4);
+    public static SoundEvent HEY_YA_4_EVENT = SoundEvent.createVariableRangeEvent(HEY_YA_4_ID);
+    public static final String HEY_YA_5 = "hey_ya_5";
+    public static final ResourceLocation HEY_YA_5_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HEY_YA_5);
+    public static SoundEvent HEY_YA_5_EVENT = SoundEvent.createVariableRangeEvent(HEY_YA_5_ID);
+    public static final String HEY_YA_6 = "hey_ya_6";
+    public static final ResourceLocation HEY_YA_6_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HEY_YA_6);
+    public static SoundEvent HEY_YA_6_EVENT = SoundEvent.createVariableRangeEvent(HEY_YA_6_ID);
+    public static final String HEY_YA_7 = "hey_ya_7";
+    public static final ResourceLocation HEY_YA_7_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HEY_YA_7);
+    public static SoundEvent HEY_YA_7_EVENT = SoundEvent.createVariableRangeEvent(HEY_YA_7_ID);
+
+
 
     public static final String DIO_HOHO = "dio_hoho";
     public static final ResourceLocation DIO_HOHO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_HOHO);

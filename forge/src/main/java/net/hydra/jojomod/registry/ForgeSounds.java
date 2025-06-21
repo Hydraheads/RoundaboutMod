@@ -385,6 +385,20 @@ public class ForgeSounds {
             register(ModSounds.ITEM_CATCH, ModSounds.ITEM_CATCH_ID);
     public static final RegistryObject<SoundEvent> BALL_BEARING_SHOT =
             register(ModSounds.BALL_BEARING_SHOT, ModSounds.BALL_BEARING_SHOT_ID);
+    public static final RegistryObject<SoundEvent> HEY_YA_1 =
+            register(ModSounds.HEY_YA_1, ModSounds.HEY_YA_1_ID);
+    public static final RegistryObject<SoundEvent> HEY_YA_2 =
+            register(ModSounds.HEY_YA_2, ModSounds.HEY_YA_2_ID);
+    public static final RegistryObject<SoundEvent> HEY_YA_3 =
+            register(ModSounds.HEY_YA_3, ModSounds.HEY_YA_3_ID);
+    public static final RegistryObject<SoundEvent> HEY_YA_4 =
+            register(ModSounds.HEY_YA_4, ModSounds.HEY_YA_4_ID);
+    public static final RegistryObject<SoundEvent> HEY_YA_5 =
+            register(ModSounds.HEY_YA_5, ModSounds.HEY_YA_5_ID);
+    public static final RegistryObject<SoundEvent> HEY_YA_6 =
+            register(ModSounds.HEY_YA_6, ModSounds.HEY_YA_6_ID);
+    public static final RegistryObject<SoundEvent> HEY_YA_7 =
+            register(ModSounds.HEY_YA_7, ModSounds.HEY_YA_7_ID);
     public static final RegistryObject<SoundEvent> DIO_HOHO =
             register(ModSounds.DIO_HOHO, ModSounds.DIO_HOHO_ID);
     public static final RegistryObject<SoundEvent> DIO_DEATH =

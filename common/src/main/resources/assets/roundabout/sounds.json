@@ -29,6 +29,48 @@
       "roundabout:go_beyond_launch"
     ]
   },
+  "hey_ya_1": {
+    "subtitle": "sounds.roundabout.hey_ya_1",
+    "sounds": [
+      "roundabout:hey_ya_1"
+    ]
+  },
+  "hey_ya_2": {
+    "subtitle": "sounds.roundabout.hey_ya_2",
+    "sounds": [
+      "roundabout:hey_ya_2"
+    ]
+  },
+  "hey_ya_3": {
+    "subtitle": "sounds.roundabout.hey_ya_3",
+    "sounds": [
+      "roundabout:hey_ya_3"
+    ]
+  },
+  "hey_ya_4": {
+    "subtitle": "sounds.roundabout.hey_ya_4",
+    "sounds": [
+      "roundabout:hey_ya_4"
+    ]
+  },
+  "hey_ya_5": {
+    "subtitle": "sounds.roundabout.hey_ya_5",
+    "sounds": [
+      "roundabout:hey_ya_5"
+    ]
+  },
+  "hey_ya_6": {
+    "subtitle": "sounds.roundabout.hey_ya_6",
+    "sounds": [
+      "roundabout:hey_ya_6"
+    ]
+  },
+  "hey_ya_7": {
+    "subtitle": "sounds.roundabout.hey_ya_7",
+    "sounds": [
+      "roundabout:hey_ya_7"
+    ]
+  },
   "sign_hit": {
     "subtitle": "sounds.roundabout.sign_hit",
     "sounds": [
