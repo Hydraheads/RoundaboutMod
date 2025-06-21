@@ -1211,7 +1211,7 @@ public class MainUtil {
         Vec3 $$4 = $$0.position();
         return getHitResult($$4, $$0, $$1, $$2, $$3);
     }
-f
+
     public static BlockHitResult getAheadVec(Entity entity,float distOut){
         Vec3 vec3d = entity.getEyePosition(1f);
         Vec3 vec3d2 = entity.getViewVector(1f);
