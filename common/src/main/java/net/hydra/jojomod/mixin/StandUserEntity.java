@@ -1159,6 +1159,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT$STAND_SKIN = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.BYTE);
+
+    private byte roundabout$lastSkin = 0;
     @Override
     @Unique
     public byte roundabout$getStandSkin(){
@@ -1167,6 +1169,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         return 0;
     }
+
+    @Override
+    @Unique
+    public byte roundabout$getLastStandSkin(){
+        return roundabout$lastSkin;
+    }
+    @Override
+    @Unique
+    public void roundabout$setLastStandSkin(byte skn){
+        roundabout$lastSkin = skn;
+    }
+
 
     @Override
     @Unique

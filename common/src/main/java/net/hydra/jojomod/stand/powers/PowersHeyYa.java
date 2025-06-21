@@ -174,19 +174,25 @@ public class PowersHeyYa extends NewDashPreset {
 
     public static final byte
             MANGA = 1,
-            GOTHIC = 2;
+            GOTHIC = 2,
+            VOLUME_2 = 3,
+            CHAPTER_24 = 4;
 
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 MANGA,
-                GOTHIC
+                GOTHIC,
+                VOLUME_2,
+                CHAPTER_24
         );
     }
     @Override public Component getSkinName(byte skinId) {
         return switch (skinId)
         {
             case GOTHIC -> Component.translatable("skins.roundabout.hey_ya.gothic");
+            case VOLUME_2 -> Component.translatable("skins.roundabout.hey_ya.volume_2");
+            case CHAPTER_24 -> Component.translatable("skins.roundabout.hey_ya.chapter_24");
             default -> Component.translatable("skins.roundabout.hey_ya.manga");
         };
     }

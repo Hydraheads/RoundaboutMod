@@ -47,6 +47,13 @@ public class HeyYaLayer<T extends LivingEntity, A extends HumanoidModel<T>> exte
 
 
                     if (heyTicks > 0 || hasHeyYaOut) {
+                        byte skin = user.roundabout$getStandSkin();
+                        if (user.roundabout$getLastStandSkin() != skin){
+                            user.roundabout$setLastStandSkin(skin);
+                            heyTicks = 0;
+                            user.roundabout$setHeyYaVanishTicks(0);
+                        }
+
                         float heyFull = 0;
                         float fixedPartial = partialTicks - (int) partialTicks;
                         if (((TimeStop)entity.level()).CanTimeStopEntity(entity)){
@@ -74,7 +81,8 @@ public class HeyYaLayer<T extends LivingEntity, A extends HumanoidModel<T>> exte
                         float r = isHurt ? 1.0F : 1.0F;
                         float g = isHurt ? 0.0F : 1.0F;
                         float b = isHurt ? 0.0F : 1.0F;
-                        ModStrayModels.HEY_YA.render(livent, partialTicks, poseStack, bufferSource, packedLight, r, g, b, heyFull);
+                        ModStrayModels.HEY_YA.render(livent, partialTicks, poseStack, bufferSource, packedLight,
+                                r, g, b, heyFull, skin);
                         poseStack.popPose();
                     }
                 }

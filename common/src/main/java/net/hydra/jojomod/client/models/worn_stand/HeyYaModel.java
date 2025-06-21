@@ -7,8 +7,10 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.HeyYaAnimations;
 import net.hydra.jojomod.client.models.layers.animations.LayerAnimations;
+import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersHeyYa;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -16,6 +18,7 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -93,25 +96,38 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
     public void setupAnim(Entity var1, float pAgeInTicks) {
 
     }
-    public static ResourceLocation rl = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation base = new ResourceLocation(Roundabout.MOD_ID,
             "textures/stand/hey_ya/base.png");
+    public static ResourceLocation goth = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/hey_ya/goth.png");
+    public static ResourceLocation volume_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/hey_ya/volume_2.png");
+    public static ResourceLocation chapter_24 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/hey_ya/chapter_24.png");
 
-    public ResourceLocation getTextureLocation(Entity context){
-        return rl;
+    public ResourceLocation getTextureLocation(Entity context, byte skin){
+        switch (skin)
+        {
+            case PowersHeyYa.GOTHIC -> {return goth;}
+            case PowersHeyYa.VOLUME_2 -> {return volume_2;}
+            case PowersHeyYa.CHAPTER_24 -> {return chapter_24;}
+            default -> {return base;}
+        }
     }
 
     public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light) {
-        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(context)));
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(context, (byte)0)));
         root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
     }
-    public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int light, float r, float g, float b, float alpha) {
+    public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
+                       int light, float r, float g, float b, float alpha, byte skin) {
         if (context instanceof LivingEntity LE) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
             if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
                 partialTicks = 0;
             }
             StandUser user = ((StandUser) LE);
-            VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
+            VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
             user.roundabout$getHeyYaAnimation().startIfStopped(context.tickCount);
             this.animate(user.roundabout$getHeyYaAnimation(), HeyYaAnimations.hangin_on, partialTicks, 1f);
             this.animate(user.roundabout$getHeyYaAnimation(), HeyYaAnimations.idle_normal, partialTicks, 1f);
