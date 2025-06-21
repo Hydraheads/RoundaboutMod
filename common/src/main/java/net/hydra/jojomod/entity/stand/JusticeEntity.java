@@ -80,42 +80,6 @@ public class JusticeEntity extends StandEntity {
             DARK_MIRAGE = 13,
             JOJONIUM = 14;
 
-    @Override
-    public Component getSkinName(byte skinId) {
-        return getSkinNameT(skinId);
-    }
-    public static Component getSkinNameT(byte skinId){
-        if (skinId == PART_3_SKIN){
-            return Component.translatable(  "skins.roundabout.justice.base");
-        } else if (skinId == MANGA_SKIN){
-            return Component.translatable(  "skins.roundabout.justice.manga");
-        } else if (skinId == SKELETON_SKIN){
-            return Component.translatable(  "skins.roundabout.justice.skeleton");
-        } else if (skinId == OVA_SKIN){
-            return Component.translatable(  "skins.roundabout.justice.ova");
-        } else if (skinId == STRAY_SKIN){
-            return Component.translatable(  "skins.roundabout.justice.stray");
-        } else if (skinId == BOGGED){
-            return Component.translatable(  "skins.roundabout.justice.bogged");
-        } else if (skinId == TAROT){
-            return Component.translatable(  "skins.roundabout.justice.tarot");
-        } else if (skinId == WITHER){
-            return Component.translatable(  "skins.roundabout.justice.wither");
-        } else if (skinId == FLAMED){
-            return Component.translatable(  "skins.roundabout.justice.flamed");
-        } else if (skinId == BLUE_FLAMED){
-            return Component.translatable(  "skins.roundabout.justice.flamed_blue");
-        } else if (skinId == TWILIGHT){
-            return Component.translatable(  "skins.roundabout.justice.twilight");
-        } else if (skinId == PIRATE){
-            return Component.translatable(  "skins.roundabout.justice.pirate");
-        } else if (skinId == DARK_MIRAGE){
-            return Component.translatable(  "skins.roundabout.justice.dark_mirage");
-        } else if (skinId == JOJONIUM){
-            return Component.translatable(  "skins.roundabout.justice.jojonium");
-        }
-        return Component.translatable(  "skins.roundabout.justice.base");
-    }
     public final AnimationState idleAnimation = new AnimationState();
     public final AnimationState idleAnimation2 = new AnimationState();
     public final AnimationState cackleAnimation = new AnimationState();
@@ -142,14 +106,7 @@ public class JusticeEntity extends StandEntity {
     public boolean isInvulnerable() {
         return true;
     }
-    @Override
-    public Component getPosName(byte posID){
-        if (posID == 1){
-            return Component.translatable(  "idle.roundabout.battle_justice");
-        } else {
-            return Component.translatable(  "idle.roundabout.passive_justice");
-        }
-    }
+
 
     public void inhaleTick() {
         int perc = getJusticeSize()-2;

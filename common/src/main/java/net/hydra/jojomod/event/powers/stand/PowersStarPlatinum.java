@@ -925,11 +925,6 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         }
     }
 
-
-    @Override
-    public Component getSkinName(byte skinId){
-        return StarPlatinumEntity.getSkinNameT(skinId);
-    }
     @Override
     public boolean canInterruptPower(){
         if (this.getActivePower() == PowerIndex.POWER_1 && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
@@ -1650,4 +1645,54 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public static final byte LAST_HIT_10_NOISE = 119;
     public static final byte LAST_HIT_11_NOISE = 118;
     public static final byte LAST_HIT_12_NOISE = 117;
+
+    @Override
+    public Component getSkinName(byte skinId) {
+        return getSkinNameT(skinId);
+    }
+    public static Component getSkinNameT(byte skinId){
+        if (skinId == StarPlatinumEntity.PART_3_SKIN){
+            return Component.translatable(  "skins.roundabout.star_platinum.base");
+        } else if (skinId == StarPlatinumEntity.MANGA_SKIN){
+            return Component.translatable(  "skins.roundabout.star_platinum.manga");
+        } else if (skinId == StarPlatinumEntity.MANGA_PURPLE_SKIN){
+            return Component.translatable(  "skins.roundabout.star_platinum.manga_purple");
+        } else if (skinId == StarPlatinumEntity.FIRST_SKIN){
+            return Component.translatable(  "skins.roundabout.star_platinum.first_summon");
+        } else if (skinId == StarPlatinumEntity.OVA_SKIN){
+            return Component.translatable(  "skins.roundabout.star_platinum.ova");
+        } else if (skinId == StarPlatinumEntity.GREEN_SKIN){
+            return Component.translatable(  "skins.roundabout.star_platinum.green");
+        } else if (skinId == StarPlatinumEntity.GREEN_2){
+            return Component.translatable(  "skins.roundabout.star_platinum.green_2");
+        } else if (skinId == StarPlatinumEntity.BASEBALL_SKIN){
+            return Component.translatable(  "skins.roundabout.star_platinum.baseball");
+        } else if (skinId == StarPlatinumEntity.PART_4_SKIN){
+            return Component.translatable(  "skins.roundabout.star_platinum.part_4");
+        } else if (skinId == StarPlatinumEntity.PART_6_SKIN){
+            return Component.translatable(  "skins.roundabout.star_platinum.part_6");
+        } else if (skinId == StarPlatinumEntity.ATOMIC_SKIN){
+            return Component.translatable(  "skins.roundabout.star_platinum.atomic");
+        } else if (skinId == StarPlatinumEntity.JOJONIUM_SKIN){
+            return Component.translatable(  "skins.roundabout.star_platinum.jojonium");
+        } else if (skinId == StarPlatinumEntity.BETA){
+            return Component.translatable(  "skins.roundabout.star_platinum.beta");
+        } else if (skinId == StarPlatinumEntity.ARCADE){
+            return Component.translatable(  "skins.roundabout.star_platinum.arcade");
+        } else if (skinId == StarPlatinumEntity.FOUR_DEE){
+            return Component.translatable(  "skins.roundabout.star_platinum.four_dee");
+        } else if (skinId == StarPlatinumEntity.JOJOVELLER){
+            return Component.translatable(  "skins.roundabout.star_platinum.jojoveller");
+        } else if (skinId == StarPlatinumEntity.CROP){
+            return Component.translatable(  "skins.roundabout.star_platinum.crop");
+        } else if (skinId == StarPlatinumEntity.VOLUME_39){
+            return Component.translatable(  "skins.roundabout.star_platinum.volume_39");
+        } else if (skinId == StarPlatinumEntity.JUMP_13){
+            return Component.translatable(  "skins.roundabout.star_platinum.jump_13");
+        } else if (skinId == StarPlatinumEntity.ARCADE_2){
+            return Component.translatable(  "skins.roundabout.star_platinum.arcade_2");
+        }
+        return Component.translatable(  "skins.roundabout.star_platinum.base");
+    }
+
 }

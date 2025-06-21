@@ -30,50 +30,6 @@ public class TheWorldEntity extends StandEntity {
             ULTIMATE_KARS_SKIN = 17,
             SCARLET = 18;
 
-    @Override
-    public Component getSkinName(byte skinId) {
-        return getSkinNameT(skinId);
-    }
-    public static Component getSkinNameT(byte skinId){
-        if (skinId == PART_3_SKIN){
-            return Component.translatable(  "skins.roundabout.the_world.base");
-        } else if (skinId == MANGA_SKIN){
-            return Component.translatable(  "skins.roundabout.the_world.manga");
-        } else if (skinId == HERITAGE_SKIN){
-            return Component.translatable(  "skins.roundabout.the_world.heritage");
-        } else if (skinId == OVA_SKIN){
-            return Component.translatable(  "skins.roundabout.the_world.ova");
-        } else if (skinId == PART_7_SKIN){
-            return Component.translatable(  "skins.roundabout.the_world.part_7");
-        } else if (skinId == BLACK_SKIN){
-            return Component.translatable(  "skins.roundabout.the_world.black");
-        } else if (skinId == PART_7_BLUE){
-            return Component.translatable(  "skins.roundabout.the_world.blue_part_7");
-        } else if (skinId == OVER_HEAVEN){
-            return Component.translatable(  "skins.roundabout.the_world.over_heaven");
-        } else if (skinId == DARK_SKIN){
-            return Component.translatable(  "skins.roundabout.the_world.dark");
-        } else if (skinId == AQUA_SKIN){
-            return Component.translatable(  "skins.roundabout.the_world.aqua");
-        } else if (skinId == ARCADE_SKIN){
-            return Component.translatable(  "skins.roundabout.the_world.arcade");
-        } else if (skinId == AGOGO_SKIN){
-            return Component.translatable(  "skins.roundabout.the_world.agogo");
-        } else if (skinId == BETA){
-            return Component.translatable(  "skins.roundabout.the_world.beta");
-        } else if (skinId == ARCADE_SKIN_2){
-            return Component.translatable(  "skins.roundabout.the_world.arcade_2");
-        } else if (skinId == FOUR_DEE_EXPERIENCE){
-            return Component.translatable(  "skins.roundabout.the_world.four_dee");
-        } else if (skinId == ULTIMATE_SKIN){
-            return Component.translatable(  "skins.roundabout.the_world.ultimate");
-        } else if (skinId == ULTIMATE_KARS_SKIN){
-            return Component.translatable(  "skins.roundabout.the_world.ultimate_kars");
-        } else if (skinId == SCARLET){
-            return Component.translatable(  "skins.roundabout.the_world.scarlet");
-        }
-        return Component.translatable(  "skins.roundabout.the_world.base");
-    }
     public final AnimationState timeStopAnimationState = new AnimationState();
     public final AnimationState timeStopReleaseAnimation = new AnimationState();
     public final AnimationState blockGrabAnimation = new AnimationState();

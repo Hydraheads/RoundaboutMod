@@ -3,6 +3,7 @@ package net.hydra.jojomod.client.gui;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -14,6 +15,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.ChatFormatting;
@@ -88,21 +90,31 @@ public class PowerInventoryScreen
 
 
         if (pl != null) {
-        StandUser standUser = ((StandUser)pl);
+            StandUser standUser = ((StandUser) pl);
+            if (!standUser.roundabout$getStandDisc().isEmpty() && !standUser.roundabout$getStandDisc().getItem().equals(ModItems.STAND_DISC)) {
 
-            stand = standUser.roundabout$getStand();
-            if (stand != null) {
                 StandPowers sp = standUser.roundabout$getStandPowers();
-                renderStandEntityInInventoryFollowsMouse(context, i + 51, j + 75 - sp.getDisplayPowerInventoryYOffset(), sp.getDisplayPowerInventoryScale(),
-                        (float) (i + 51) - this.xMouse, (float) (j + 75 - 50) - this.yMouse, stand,pl);
-                  context.drawString(this.font, stand.getSkinName(((IPlayerEntity)pl).roundabout$getStandSkin()), this.titleLabelX+11+leftPos, this.titleLabelY+18+topPos, 16777215, false);
-                context.drawString(this.font, stand.getPosName(stand.getIdleAnimation()), this.titleLabelX+11+leftPos, this.titleLabelY+36+topPos, 16777215, false);
-                int lefXPos = leftPos+77;
-                int rightXPos = leftPos+164;
-                int topYPos = topPos+22;
-                int bottomYPos = topPos+40;
+                if (sp.rendersPlayer()) {
 
-                if (sp.hasMoreThanOneSkin()){
+                    renderEntityInInventoryFollowsMouse2(
+                            context, i + 51, j + 75, 30, (float) (i + 51) - this.xMouse, (float) (j + 75 - 50) - this.yMouse, this.minecraft.player
+                    );
+                } else {
+                    stand = standUser.roundabout$getStand();
+                    if (stand != null) {
+                        renderStandEntityInInventoryFollowsMouse(context, i + 51, j + 75 - sp.getDisplayPowerInventoryYOffset(), sp.getDisplayPowerInventoryScale(),
+                                (float) (i + 51) - this.xMouse, (float) (j + 75 - 50) - this.yMouse, stand, pl);
+
+                    }
+                }
+                context.drawString(this.font, sp.getSkinName(((IPlayerEntity) pl).roundabout$getStandSkin()), this.titleLabelX + 11 + leftPos, this.titleLabelY + 18 + topPos, 16777215, false);
+                context.drawString(this.font, sp.getPosName(standUser.roundabout$getIdlePos()), this.titleLabelX + 11 + leftPos, this.titleLabelY + 36 + topPos, 16777215, false);
+                int lefXPos = leftPos + 77;
+                int rightXPos = leftPos + 164;
+                int topYPos = topPos + 22;
+                int bottomYPos = topPos + 40;
+
+                if (sp.hasMoreThanOneSkin()) {
                     if (isSurelyHovering(rightXPos, topYPos, 7, 13, mouseX, mouseY)) {
                         context.blit(POWER_INVENTORY_LOCATION, rightXPos, topYPos, 177, 31, 7, 11);
                     } else {
@@ -128,37 +140,81 @@ public class PowerInventoryScreen
                     context.blit(POWER_INVENTORY_LOCATION, lefXPos, bottomYPos, 185, 19, 7, 11);
                 }
 
-                int leftGearPos = leftPos+5;
-                int topGearPos = topPos+60;
+                int leftGearPos = leftPos + 5;
+                int topGearPos = topPos + 60;
                 if (isSurelyHovering(leftGearPos, topGearPos, 19, 18, mouseX, mouseY)) {
                     context.blit(POWER_INVENTORY_LOCATION, leftGearPos, topGearPos, 198, 0, 19, 18);
                 } else {
                     context.blit(POWER_INVENTORY_LOCATION, leftGearPos, topGearPos, 178, 0, 19, 18);
                 }
 
-                int ss = this.leftPos+78;
-                int sss = this.topPos+57;
-                byte level = ((IPlayerEntity)pl).roundabout$getStandLevel();
-                int exp = ((IPlayerEntity)pl).roundabout$getStandExp();
+                int ss = this.leftPos + 78;
+                int sss = this.topPos + 57;
+                byte level = ((IPlayerEntity) pl).roundabout$getStandLevel();
+                int exp = ((IPlayerEntity) pl).roundabout$getStandExp();
                 int maxXP = standUser.roundabout$getStandPowers().getExpForLevelUp(level);
                 Component display;
                 if (level == standUser.roundabout$getStandPowers().getMaxLevel() ||
                         (!standUser.roundabout$getStandDisc().isEmpty() && standUser.roundabout$getStandDisc().getItem()
-                        instanceof MaxStandDiscItem)){
+                                instanceof MaxStandDiscItem)) {
                     exp = maxXP;
-                    display = Component.translatable(  "leveling.roundabout.disc_maxed");
+                    display = Component.translatable("leveling.roundabout.disc_maxed");
                 } else {
-                    display = Component.translatable(  "leveling.roundabout.disc_development_potential_level",
+                    display = Component.translatable("leveling.roundabout.disc_development_potential_level",
                             level);
                 }
-                context.drawString(this.font, display, this.titleLabelX+ss-78, this.titleLabelY+sss+2, 4210752, false);
-                int blt = (int) Math.floor(((double) 92 /maxXP)*(exp));
+                context.drawString(this.font, display, this.titleLabelX + ss - 78, this.titleLabelY + sss + 2, 4210752, false);
+                int blt = (int) Math.floor(((double) 92 / maxXP) * (exp));
                 context.blit(POWER_INVENTORY_LOCATION, ss, sss, 10, 244, 92, 4);
                 context.blit(POWER_INVENTORY_LOCATION, ss, sss, 10, 240, blt, 4);
             }
         }
 
         $$2.set($$3);
+    }
+
+    public static void renderEntityInInventoryFollowsMouse2(GuiGraphics $$0, int $$1, int $$2, int $$3, float $$4, float $$5, LivingEntity $$6) {
+        float $$7 = (float)Math.atan((double)($$4 / 40.0F));
+        float $$8 = (float)Math.atan((double)($$5 / 40.0F));
+        Quaternionf $$9 = new Quaternionf().rotateZ((float) Math.PI);
+        Quaternionf $$10 = new Quaternionf().rotateX($$8 * 20.0F * (float) (Math.PI / 180.0));
+        $$9.mul($$10);
+        float $$11 = $$6.yBodyRot;
+        float $$12 = $$6.getYRot();
+        float $$13 = $$6.getXRot();
+        float $$14 = $$6.yHeadRotO;
+        float $$15 = $$6.yHeadRot;
+        $$6.yBodyRot = 180.0F + $$7 * 20.0F;
+        $$6.setYRot(180.0F + $$7 * 40.0F);
+        $$6.setXRot(-$$8 * 20.0F);
+        $$6.yHeadRot = $$6.getYRot();
+        $$6.yHeadRotO = $$6.getYRot();
+        renderEntityInInventory2($$0, $$1, $$2, $$3, $$9, $$10, $$6);
+        $$6.yBodyRot = $$11;
+        $$6.setYRot($$12);
+        $$6.setXRot($$13);
+        $$6.yHeadRotO = $$14;
+        $$6.yHeadRot = $$15;
+    }
+
+    public static void renderEntityInInventory2(GuiGraphics $$0, int $$1, int $$2, int $$3, Quaternionf $$4, @Nullable Quaternionf $$5, LivingEntity $$6) {
+        $$0.pose().pushPose();
+        $$0.pose().translate((double)$$1, (double)$$2, 50.0);
+        $$0.pose().mulPoseMatrix(new Matrix4f().scaling((float)$$3, (float)$$3, (float)(-$$3)));
+        $$0.pose().mulPose($$4);
+        Lighting.setupForEntityInInventory();
+        EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
+        if ($$5 != null) {
+            $$5.conjugate();
+            $$7.overrideCameraOrientation($$5);
+        }
+
+        $$7.setRenderShadow(false);
+        RenderSystem.runAsFancy(() -> $$7.render($$6, 0.0, 0.0, 0.0, 0.0F, 1.0F, $$0.pose(), $$0.bufferSource(), 15728880));
+        $$0.flush();
+        $$7.setRenderShadow(true);
+        $$0.pose().popPose();
+        Lighting.setupFor3DItems();
     }
 
     public String[] splitIntoLine(String input, int maxCharInLine){

@@ -20,17 +20,7 @@ public class D4CEntity extends StandEntity {
         SPECIAL = 4,
         GRAND = 5;
 
-    @Override public Component getSkinName(byte skinId) {
-        switch (skinId)
-        {
-            case WONDER_FESTIVAL -> {return Component.translatable("skins.roundabout.d4c.wonder_festival");}
-            case PROMO -> {return Component.translatable("skins.roundabout.d4c.promo");}
-            case PROMO_L -> {return Component.translatable("skins.roundabout.d4c.promo_l");}
-            case SPECIAL -> {return Component.translatable("skins.roundabout.d4c.special");}
-            case GRAND -> {return Component.translatable("skins.roundabout.d4c.grand");}
-            default -> {return Component.translatable("skins.roundabout.d4c.base");}
-        }
-    }
+
 
     public final AnimationState parallelWorldWindupAnimationState = new AnimationState();
     public final AnimationState hideFists = new AnimationState();

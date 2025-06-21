@@ -65,10 +65,6 @@ public class PowersKillerQueen extends PunchingStand {
                 KillerQueenEntity.PART_4
         );
     }
-    @Override
-    public Component getSkinName(byte skinId){
-        return KillerQueenEntity.getSkinNameT(skinId);
-    }
     public float standReach = 5;
     public PowersKillerQueen(LivingEntity self) {super(self);}
     @Override
@@ -426,5 +422,13 @@ public class PowersKillerQueen extends PunchingStand {
     @Override
     public Component ifWipListDev(){
         return Component.literal(  "Ashley").withStyle(ChatFormatting.YELLOW);
+    }
+
+    @Override public Component getSkinName(byte skinId) {
+        switch (skinId)
+        {
+            case KillerQueenEntity.PART_4 -> {return Component.translatable("skins.roundabout.killer_queen.base");}
+        }
+        return Component.translatable("skins.roundabout.killer_queen.base");
     }
 }

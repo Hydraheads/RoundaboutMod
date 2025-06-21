@@ -28,6 +28,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -109,6 +110,21 @@ public class PowersCinderella extends DashPreset {
                 transformFloatingVisages(value, totalnumber, this.self.getX(), this.self.getY(), this.self.getZ(),value.getSize());
             }
         }
+    }
+
+
+    @Override
+    public Component getSkinName(byte skinId) {
+        return getSkinNameT(skinId);
+    }
+
+    public static Component getSkinNameT(byte skinId){
+        if (skinId == CinderellaEntity.MANGA_SKIN) {
+            return Component.translatable("skins.roundabout.cinderella.manga");
+        } if (skinId == CinderellaEntity.ZOMBIE_SKIN) {
+            return Component.translatable("skins.roundabout.cinderella.zombie");
+        }
+        return Component.translatable("skins.roundabout.cinderella.base");
     }
 
     public void addFloatingVisage(CinderellaVisageDisplayEntity che){

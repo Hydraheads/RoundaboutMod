@@ -105,12 +105,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     private static final EntityDataAccessor<Byte> ROUNDABOUT$STAND_LEVEL = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.BYTE);
     @Unique
-    private static final EntityDataAccessor<Byte> ROUNDABOUT$STAND_SKIN = SynchedEntityData.defineId(Player.class,
-            EntityDataSerializers.BYTE);
-    @Unique
-    private static final EntityDataAccessor<Byte> ROUNDABOUT$IDLE_POS = SynchedEntityData.defineId(Player.class,
-            EntityDataSerializers.BYTE);
-    @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT$SHAPE_SHIFT = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.BYTE);
     @Unique
@@ -368,16 +362,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     @Override
     @Unique
-    public void roundabout$setStandSkin(byte level){
-        ((Player) (Object) this).getEntityData().set(ROUNDABOUT$STAND_SKIN, level);
-    }
-    @Override
-    @Unique
-    public void roundabout$setIdlePos(byte level){
-        ((Player) (Object) this).getEntityData().set(ROUNDABOUT$IDLE_POS, level);
-    }
-    @Override
-    @Unique
     public void roundabout$setShapeShift(byte level){
         ((Player) (Object) this).getEntityData().set(ROUNDABOUT$SHAPE_SHIFT, level);
     }
@@ -418,11 +402,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     @Override
     @Unique
-    public byte roundabout$getStandSkin(){
-        return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$STAND_SKIN);
-    }
-    @Override
-    @Unique
     public byte roundabout$getShapeShift(){
         return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$SHAPE_SHIFT);
     }
@@ -430,11 +409,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     public byte roundabout$getShapeShiftExtraData(){
         return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$SHAPE_SHIFT_EXTRA);
-    }
-    @Override
-    @Unique
-    public byte roundabout$getIdlePos(){
-        return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$IDLE_POS);
     }
     @Override
     @Unique
@@ -1177,8 +1151,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$MASK_SLOT, ItemStack.EMPTY);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$MASK_VOICE_SLOT, ItemStack.EMPTY);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_LEVEL, (byte) 0);
-            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_SKIN, (byte) 0);
-            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IDLE_POS, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$SHAPE_SHIFT, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$SHAPE_SHIFT_EXTRA, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_EXP, 0);

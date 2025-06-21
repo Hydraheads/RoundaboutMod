@@ -21,21 +21,6 @@ public class SoftAndWetEntity extends StandEntity {
             DEBUT = 9,
             KIRA = 10;
 
-    @Override public Component getSkinName(byte skinId) {
-        return switch (skinId)
-        {
-            case MANGA_SKIN -> Component.translatable("skins.roundabout.soft_and_wet.base");
-            case BETA_SKIN -> Component.translatable("skins.roundabout.soft_and_wet.beta");
-            case KING_SKIN -> Component.translatable("skins.roundabout.soft_and_wet.king");
-            case DROWNED_SKIN -> Component.translatable("skins.roundabout.soft_and_wet.drowned");
-            case DROWNED_SKIN_2 -> Component.translatable("skins.roundabout.soft_and_wet.drowned_2");
-            case FIGURE_SKIN -> Component.translatable("skins.roundabout.soft_and_wet.figure");
-            case STRIPED -> Component.translatable("skins.roundabout.soft_and_wet.striped");
-            case DEBUT -> Component.translatable("skins.roundabout.soft_and_wet.debut");
-            case KIRA -> Component.translatable("skins.roundabout.soft_and_wet.kira");
-            default -> Component.translatable("skins.roundabout.soft_and_wet.light");
-        };
-    }
 
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState hideLeg = new AnimationState();

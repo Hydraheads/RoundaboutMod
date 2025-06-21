@@ -15,19 +15,6 @@ public class CinderellaEntity extends StandEntity {
             MANGA_SKIN = 2,
             ZOMBIE_SKIN = 3;
 
-    @Override
-    public Component getSkinName(byte skinId) {
-        return getSkinNameT(skinId);
-    }
-
-    public static Component getSkinNameT(byte skinId){
-        if (skinId == MANGA_SKIN) {
-            return Component.translatable("skins.roundabout.cinderella.manga");
-        } if (skinId == ZOMBIE_SKIN) {
-            return Component.translatable("skins.roundabout.cinderella.zombie");
-        }
-        return Component.translatable("skins.roundabout.cinderella.base");
-    }
     public final AnimationState deface = new AnimationState();
     public final AnimationState visages = new AnimationState();
 

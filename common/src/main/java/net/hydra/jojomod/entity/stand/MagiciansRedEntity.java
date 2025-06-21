@@ -14,58 +14,7 @@ public class MagiciansRedEntity extends StandEntity {
     public MagiciansRedEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
     }
-    @Override
-    public Component getSkinName(byte skinId) {
-        return getSkinNameT(skinId);
-    }
-    public static Component getSkinNameT(byte skinId){
-        if (skinId == PART_3_SKIN){
-            return Component.translatable(  "skins.roundabout.magicians_red.base");
-        } else if (skinId == BLUE_SKIN){
-            return Component.translatable(  "skins.roundabout.magicians_red.blue");
-        } else if (skinId == PURPLE_SKIN){
-            return Component.translatable(  "skins.roundabout.magicians_red.purple");
-        } else if (skinId == GREEN_SKIN){
-            return Component.translatable(  "skins.roundabout.magicians_red.green");
-        } else if (skinId == DREAD_SKIN){
-            return Component.translatable(  "skins.roundabout.magicians_red.dread");
-        } else if (skinId == BLUE_ACE_SKIN){
-            return Component.translatable(  "skins.roundabout.magicians_red.blue_ace");
-        } else if (skinId == DREAD_BEAST_SKIN){
-            return Component.translatable(  "skins.roundabout.magicians_red.chagaroth");
-        } else if (skinId == MAGMA_SKIN){
-            return Component.translatable(  "skins.roundabout.magicians_red.magma");
-        } else if (skinId == LIGHTER_SKIN){
-            return Component.translatable(  "skins.roundabout.magicians_red.lighter");
-        } else if (skinId == MANGA_SKIN){
-            return Component.translatable(  "skins.roundabout.magicians_red.manga");
-        } else if (skinId == OVA_SKIN){
-            return Component.translatable(  "skins.roundabout.magicians_red.ova");
-        } else if (skinId == ABLAZE){
-            return Component.translatable(  "skins.roundabout.magicians_red.ablaze");
-        } else if (skinId == LIGHTER_ABLAZE){
-            return Component.translatable(  "skins.roundabout.magicians_red.lighter_ablaze");
-        } else if (skinId == BLUE_ABLAZE){
-            return Component.translatable(  "skins.roundabout.magicians_red.blue_ablaze");
-        } else if (skinId == PURPLE_ABLAZE){
-            return Component.translatable(  "skins.roundabout.magicians_red.purple_ablaze");
-        } else if (skinId == GREEN_ABLAZE){
-            return Component.translatable(  "skins.roundabout.magicians_red.green_ablaze");
-        } else if (skinId == DREAD_ABLAZE){
-            return Component.translatable(  "skins.roundabout.magicians_red.dread_ablaze");
-        } else if (skinId == SIDEKICK){
-            return Component.translatable(  "skins.roundabout.magicians_red.sidekick");
-        } else if (skinId == BETA){
-            return Component.translatable(  "skins.roundabout.magicians_red.beta");
-        } else if (skinId == JOJONIUM){
-            return Component.translatable(  "skins.roundabout.magicians_red.jojonium");
-        } else if (skinId == JOJONIUM_ABLAZE){
-            return Component.translatable(  "skins.roundabout.magicians_red.jojonium_ablaze");
-        } else if (skinId == DEBUT_SKIN){
-            return Component.translatable(  "skins.roundabout.magicians_red.debut");
-        }
-        return Component.translatable(  "skins.roundabout.magicians_red.base");
-    }
+
     public final AnimationState finalKick = new AnimationState();
     public final AnimationState finalPunch = new AnimationState();
     public final AnimationState finalKickWindup = new AnimationState();

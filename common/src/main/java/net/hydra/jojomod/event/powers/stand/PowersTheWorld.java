@@ -475,12 +475,6 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
 
     @Override
-    public Component getSkinName(byte skinId){
-        return TheWorldEntity.getSkinNameT(skinId);
-    }
-
-
-    @Override
     public boolean canSeeThroughFog(){
         return this.scopeLevel > 0;
     }
@@ -886,6 +880,50 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         super.buttonInput2(keyIsDown,options);
     }
 
+    @Override
+    public Component getSkinName(byte skinId) {
+        return getSkinNameT(skinId);
+    }
+    public static Component getSkinNameT(byte skinId){
+        if (skinId == TheWorldEntity.PART_3_SKIN){
+            return Component.translatable(  "skins.roundabout.the_world.base");
+        } else if (skinId == TheWorldEntity.MANGA_SKIN){
+            return Component.translatable(  "skins.roundabout.the_world.manga");
+        } else if (skinId == TheWorldEntity.HERITAGE_SKIN){
+            return Component.translatable(  "skins.roundabout.the_world.heritage");
+        } else if (skinId == TheWorldEntity.OVA_SKIN){
+            return Component.translatable(  "skins.roundabout.the_world.ova");
+        } else if (skinId == TheWorldEntity.PART_7_SKIN){
+            return Component.translatable(  "skins.roundabout.the_world.part_7");
+        } else if (skinId == TheWorldEntity.BLACK_SKIN){
+            return Component.translatable(  "skins.roundabout.the_world.black");
+        } else if (skinId == TheWorldEntity.PART_7_BLUE){
+            return Component.translatable(  "skins.roundabout.the_world.blue_part_7");
+        } else if (skinId == TheWorldEntity.OVER_HEAVEN){
+            return Component.translatable(  "skins.roundabout.the_world.over_heaven");
+        } else if (skinId == TheWorldEntity.DARK_SKIN){
+            return Component.translatable(  "skins.roundabout.the_world.dark");
+        } else if (skinId == TheWorldEntity.AQUA_SKIN){
+            return Component.translatable(  "skins.roundabout.the_world.aqua");
+        } else if (skinId == TheWorldEntity.ARCADE_SKIN){
+            return Component.translatable(  "skins.roundabout.the_world.arcade");
+        } else if (skinId == TheWorldEntity.AGOGO_SKIN){
+            return Component.translatable(  "skins.roundabout.the_world.agogo");
+        } else if (skinId == TheWorldEntity.BETA){
+            return Component.translatable(  "skins.roundabout.the_world.beta");
+        } else if (skinId == TheWorldEntity.ARCADE_SKIN_2){
+            return Component.translatable(  "skins.roundabout.the_world.arcade_2");
+        } else if (skinId == TheWorldEntity.FOUR_DEE_EXPERIENCE){
+            return Component.translatable(  "skins.roundabout.the_world.four_dee");
+        } else if (skinId == TheWorldEntity.ULTIMATE_SKIN){
+            return Component.translatable(  "skins.roundabout.the_world.ultimate");
+        } else if (skinId == TheWorldEntity.ULTIMATE_KARS_SKIN){
+            return Component.translatable(  "skins.roundabout.the_world.ultimate_kars");
+        } else if (skinId == TheWorldEntity.SCARLET){
+            return Component.translatable(  "skins.roundabout.the_world.scarlet");
+        }
+        return Component.translatable(  "skins.roundabout.the_world.base");
+    }
     @Override
     public boolean canInterruptPower(){
         if (this.getActivePower() == PowerIndex.POWER_1 || this.getActivePower() == PowerIndex.POWER_1_BONUS){

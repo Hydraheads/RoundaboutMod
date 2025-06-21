@@ -12,7 +12,7 @@ public class DimensionResourceKeyD4C {
     // Moved to forge and fabric mixins individually
 
     /***
-    @Redirect(method = "getGameInformation", at= @At(value = "INVOKE", target = "Lnet/minecraft/resources/ResourceKey;location()Lnet/minecraft/resources/ResourceLocation;"))
+    @ Redirect(method = "getGameInformation", at= @At(value = "INVOKE", target = "Lnet/minecraft/resources/ResourceKey;location()Lnet/minecraft/resources/ResourceLocation;"))
     private ResourceLocation roundabout$spoofDimensionName(ResourceKey instance)
     {
         if (instance.location().toString().startsWith("roundabout:d4c-"))

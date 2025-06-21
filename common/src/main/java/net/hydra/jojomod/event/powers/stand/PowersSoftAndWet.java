@@ -2439,5 +2439,22 @@ public void unlockSkin(){
     public boolean canBigBubble(){
         return ((this.self.onGround() || this.self.isInWater()) || this.self.onClimbable() || (this.self instanceof Player PE && PE.isCreative()));
     }
+
+
+    @Override public Component getSkinName(byte skinId) {
+        return switch (skinId)
+        {
+            case SoftAndWetEntity.MANGA_SKIN -> Component.translatable("skins.roundabout.soft_and_wet.base");
+            case SoftAndWetEntity.BETA_SKIN -> Component.translatable("skins.roundabout.soft_and_wet.beta");
+            case SoftAndWetEntity.KING_SKIN -> Component.translatable("skins.roundabout.soft_and_wet.king");
+            case SoftAndWetEntity.DROWNED_SKIN -> Component.translatable("skins.roundabout.soft_and_wet.drowned");
+            case SoftAndWetEntity.DROWNED_SKIN_2 -> Component.translatable("skins.roundabout.soft_and_wet.drowned_2");
+            case SoftAndWetEntity.FIGURE_SKIN -> Component.translatable("skins.roundabout.soft_and_wet.figure");
+            case SoftAndWetEntity.STRIPED -> Component.translatable("skins.roundabout.soft_and_wet.striped");
+            case SoftAndWetEntity.DEBUT -> Component.translatable("skins.roundabout.soft_and_wet.debut");
+            case SoftAndWetEntity.KIRA -> Component.translatable("skins.roundabout.soft_and_wet.kira");
+            default -> Component.translatable("skins.roundabout.soft_and_wet.light");
+        };
+    }
 }
 

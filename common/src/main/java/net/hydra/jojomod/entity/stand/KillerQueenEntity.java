@@ -24,13 +24,7 @@ public class KillerQueenEntity extends StandEntity {
 
     public static final byte
             PART_4 = 0;
-    @Override public Component getSkinName(byte skinId) {
-        switch (skinId)
-        {
-            case PART_4 -> {return Component.translatable("skins.roundabout.killer_queen.base");}
-        }
-        return Component.translatable("skins.roundabout.killer_queen.base");
-    }
+
     public final AnimationState lid_open = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState hideLeg = new AnimationState();

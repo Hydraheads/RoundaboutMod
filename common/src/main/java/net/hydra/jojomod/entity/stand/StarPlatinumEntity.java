@@ -44,54 +44,6 @@ public class StarPlatinumEntity extends StandEntity {
             JUMP_13 = 19,
             ARCADE_2 = 20;
 
-    @Override
-    public Component getSkinName(byte skinId) {
-        return getSkinNameT(skinId);
-    }
-    public static Component getSkinNameT(byte skinId){
-        if (skinId == PART_3_SKIN){
-            return Component.translatable(  "skins.roundabout.star_platinum.base");
-        } else if (skinId == MANGA_SKIN){
-            return Component.translatable(  "skins.roundabout.star_platinum.manga");
-        } else if (skinId == MANGA_PURPLE_SKIN){
-            return Component.translatable(  "skins.roundabout.star_platinum.manga_purple");
-        } else if (skinId == FIRST_SKIN){
-            return Component.translatable(  "skins.roundabout.star_platinum.first_summon");
-        } else if (skinId == OVA_SKIN){
-            return Component.translatable(  "skins.roundabout.star_platinum.ova");
-        } else if (skinId == GREEN_SKIN){
-            return Component.translatable(  "skins.roundabout.star_platinum.green");
-        } else if (skinId == GREEN_2){
-            return Component.translatable(  "skins.roundabout.star_platinum.green_2");
-        } else if (skinId == BASEBALL_SKIN){
-            return Component.translatable(  "skins.roundabout.star_platinum.baseball");
-        } else if (skinId == PART_4_SKIN){
-            return Component.translatable(  "skins.roundabout.star_platinum.part_4");
-        } else if (skinId == PART_6_SKIN){
-            return Component.translatable(  "skins.roundabout.star_platinum.part_6");
-        } else if (skinId == ATOMIC_SKIN){
-            return Component.translatable(  "skins.roundabout.star_platinum.atomic");
-        } else if (skinId == JOJONIUM_SKIN){
-            return Component.translatable(  "skins.roundabout.star_platinum.jojonium");
-        } else if (skinId == BETA){
-            return Component.translatable(  "skins.roundabout.star_platinum.beta");
-        } else if (skinId == ARCADE){
-            return Component.translatable(  "skins.roundabout.star_platinum.arcade");
-        } else if (skinId == FOUR_DEE){
-            return Component.translatable(  "skins.roundabout.star_platinum.four_dee");
-        } else if (skinId == JOJOVELLER){
-            return Component.translatable(  "skins.roundabout.star_platinum.jojoveller");
-        } else if (skinId == CROP){
-            return Component.translatable(  "skins.roundabout.star_platinum.crop");
-        } else if (skinId == VOLUME_39){
-            return Component.translatable(  "skins.roundabout.star_platinum.volume_39");
-        } else if (skinId == JUMP_13){
-            return Component.translatable(  "skins.roundabout.star_platinum.jump_13");
-        } else if (skinId == ARCADE_2){
-            return Component.translatable(  "skins.roundabout.star_platinum.arcade_2");
-        }
-        return Component.translatable(  "skins.roundabout.star_platinum.base");
-    }
 
 
 

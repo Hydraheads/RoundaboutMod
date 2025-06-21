@@ -879,4 +879,15 @@ public class PowersD4C extends NewPunchingStand {
     public Component ifWipListDev(){
         return Component.literal(  "Zeta").withStyle(ChatFormatting.YELLOW);
     }
+    @Override public Component getSkinName(byte skinId) {
+        switch (skinId)
+        {
+            case D4CEntity.WONDER_FESTIVAL -> {return Component.translatable("skins.roundabout.d4c.wonder_festival");}
+            case D4CEntity.PROMO -> {return Component.translatable("skins.roundabout.d4c.promo");}
+            case D4CEntity.PROMO_L -> {return Component.translatable("skins.roundabout.d4c.promo_l");}
+            case D4CEntity.SPECIAL -> {return Component.translatable("skins.roundabout.d4c.special");}
+            case D4CEntity.GRAND -> {return Component.translatable("skins.roundabout.d4c.grand");}
+            default -> {return Component.translatable("skins.roundabout.d4c.base");}
+        }
+    }
 }

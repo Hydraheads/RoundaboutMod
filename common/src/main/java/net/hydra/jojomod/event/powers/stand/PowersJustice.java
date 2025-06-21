@@ -98,6 +98,51 @@ public class PowersJustice extends DashPreset {
         return true;
     }
     @Override
+    public Component getPosName(byte posID){
+        if (posID == 1){
+            return Component.translatable(  "idle.roundabout.battle_justice");
+        } else {
+            return Component.translatable(  "idle.roundabout.passive_justice");
+        }
+    }
+
+    @Override
+    public Component getSkinName(byte skinId) {
+        return getSkinNameT(skinId);
+    }
+    public static Component getSkinNameT(byte skinId){
+        if (skinId == JusticeEntity.PART_3_SKIN){
+            return Component.translatable(  "skins.roundabout.justice.base");
+        } else if (skinId == JusticeEntity.MANGA_SKIN){
+            return Component.translatable(  "skins.roundabout.justice.manga");
+        } else if (skinId == JusticeEntity.SKELETON_SKIN){
+            return Component.translatable(  "skins.roundabout.justice.skeleton");
+        } else if (skinId == JusticeEntity.OVA_SKIN){
+            return Component.translatable(  "skins.roundabout.justice.ova");
+        } else if (skinId == JusticeEntity.STRAY_SKIN){
+            return Component.translatable(  "skins.roundabout.justice.stray");
+        } else if (skinId == JusticeEntity.BOGGED){
+            return Component.translatable(  "skins.roundabout.justice.bogged");
+        } else if (skinId == JusticeEntity.TAROT){
+            return Component.translatable(  "skins.roundabout.justice.tarot");
+        } else if (skinId == JusticeEntity.WITHER){
+            return Component.translatable(  "skins.roundabout.justice.wither");
+        } else if (skinId == JusticeEntity.FLAMED){
+            return Component.translatable(  "skins.roundabout.justice.flamed");
+        } else if (skinId == JusticeEntity.BLUE_FLAMED){
+            return Component.translatable(  "skins.roundabout.justice.flamed_blue");
+        } else if (skinId == JusticeEntity.TWILIGHT){
+            return Component.translatable(  "skins.roundabout.justice.twilight");
+        } else if (skinId == JusticeEntity.PIRATE){
+            return Component.translatable(  "skins.roundabout.justice.pirate");
+        } else if (skinId == JusticeEntity.DARK_MIRAGE){
+            return Component.translatable(  "skins.roundabout.justice.dark_mirage");
+        } else if (skinId == JusticeEntity.JOJONIUM){
+            return Component.translatable(  "skins.roundabout.justice.jojonium");
+        }
+        return Component.translatable(  "skins.roundabout.justice.base");
+    }
+    @Override
     public boolean interceptAttack(){
         return false;
     }
@@ -1198,10 +1243,6 @@ public class PowersJustice extends DashPreset {
         return true;
     }
 
-    @Override
-    public Component getSkinName(byte skinId){
-        return JusticeEntity.getSkinNameT(skinId);
-    }
     @Override
     public boolean onCreateProjectile(Projectile proj){
         if (clone1 != null && clone1.isAlive()){

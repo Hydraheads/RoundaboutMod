@@ -342,23 +342,7 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         this.entityData.set(SKIN, skin);
     }
 
-    public Component getSkinName(byte skinId){
-        return Component.empty();
-    }
 
-    public Component getPosName(byte posID){
-        if (posID == 1){
-            return Component.translatable(  "idle.roundabout.battle");
-        } else if (posID == 2){
-            return Component.translatable(  "idle.roundabout.floaty");
-        } else if (posID == 3){
-            return Component.translatable(  "idle.roundabout.star_platinum");
-        } else if (posID == 4){
-            return Component.translatable(  "idle.roundabout.arms_only");
-        } else {
-            return Component.translatable(  "idle.roundabout.passive");
-        }
-    }
     public boolean dismountOnHit(){
         return true;
     }

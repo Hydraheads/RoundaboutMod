@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.D4CEntity;
+import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -74,6 +75,10 @@ public class PowersHeyYa extends NewDashPreset {
         return false;
     }
     @Override
+    public boolean rendersPlayer(){
+        return true;
+    }
+    @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         ClientUtil.fx.roundabout$onGUI(context);
 
@@ -135,17 +140,6 @@ public class PowersHeyYa extends NewDashPreset {
     }
 
 
-    @Override
-    public List<Byte> getSkinList() {
-        return Arrays.asList(
-                D4CEntity.MANGA_SKIN,
-                D4CEntity.WONDER_FESTIVAL,
-                D4CEntity.PROMO,
-                D4CEntity.PROMO_L,
-                D4CEntity.SPECIAL,
-                D4CEntity.GRAND
-        );
-    }
 
     @Override
     public boolean setPowerOther(int move, int lastMove) {
@@ -176,5 +170,24 @@ public class PowersHeyYa extends NewDashPreset {
     @Override
     public Component ifWipListDev(){
         return Component.literal(  "Hydra").withStyle(ChatFormatting.YELLOW);
+    }
+
+    public static final byte
+            MANGA = 1,
+            GOTHIC = 2;
+
+    @Override
+    public List<Byte> getSkinList() {
+        return Arrays.asList(
+                MANGA,
+                GOTHIC
+        );
+    }
+    @Override public Component getSkinName(byte skinId) {
+        return switch (skinId)
+        {
+            case GOTHIC -> Component.translatable("skins.roundabout.hey_ya.gothic");
+            default -> Component.translatable("skins.roundabout.hey_ya.manga");
+        };
     }
 }

@@ -125,6 +125,59 @@ public class PowersMagiciansRed extends PunchingStand {
     }
 
     @Override
+    public Component getSkinName(byte skinId) {
+        return getSkinNameT(skinId);
+    }
+    public static Component getSkinNameT(byte skinId){
+        if (skinId == MagiciansRedEntity.PART_3_SKIN){
+            return Component.translatable(  "skins.roundabout.magicians_red.base");
+        } else if (skinId == MagiciansRedEntity.BLUE_SKIN){
+            return Component.translatable(  "skins.roundabout.magicians_red.blue");
+        } else if (skinId == MagiciansRedEntity.PURPLE_SKIN){
+            return Component.translatable(  "skins.roundabout.magicians_red.purple");
+        } else if (skinId == MagiciansRedEntity.GREEN_SKIN){
+            return Component.translatable(  "skins.roundabout.magicians_red.green");
+        } else if (skinId == MagiciansRedEntity.DREAD_SKIN){
+            return Component.translatable(  "skins.roundabout.magicians_red.dread");
+        } else if (skinId == MagiciansRedEntity.BLUE_ACE_SKIN){
+            return Component.translatable(  "skins.roundabout.magicians_red.blue_ace");
+        } else if (skinId == MagiciansRedEntity.DREAD_BEAST_SKIN){
+            return Component.translatable(  "skins.roundabout.magicians_red.chagaroth");
+        } else if (skinId == MagiciansRedEntity.MAGMA_SKIN){
+            return Component.translatable(  "skins.roundabout.magicians_red.magma");
+        } else if (skinId == MagiciansRedEntity.LIGHTER_SKIN){
+            return Component.translatable(  "skins.roundabout.magicians_red.lighter");
+        } else if (skinId == MagiciansRedEntity.MANGA_SKIN){
+            return Component.translatable(  "skins.roundabout.magicians_red.manga");
+        } else if (skinId == MagiciansRedEntity.OVA_SKIN){
+            return Component.translatable(  "skins.roundabout.magicians_red.ova");
+        } else if (skinId == MagiciansRedEntity.ABLAZE){
+            return Component.translatable(  "skins.roundabout.magicians_red.ablaze");
+        } else if (skinId == MagiciansRedEntity.LIGHTER_ABLAZE){
+            return Component.translatable(  "skins.roundabout.magicians_red.lighter_ablaze");
+        } else if (skinId == MagiciansRedEntity.BLUE_ABLAZE){
+            return Component.translatable(  "skins.roundabout.magicians_red.blue_ablaze");
+        } else if (skinId == MagiciansRedEntity.PURPLE_ABLAZE){
+            return Component.translatable(  "skins.roundabout.magicians_red.purple_ablaze");
+        } else if (skinId == MagiciansRedEntity.GREEN_ABLAZE){
+            return Component.translatable(  "skins.roundabout.magicians_red.green_ablaze");
+        } else if (skinId == MagiciansRedEntity.DREAD_ABLAZE){
+            return Component.translatable(  "skins.roundabout.magicians_red.dread_ablaze");
+        } else if (skinId == MagiciansRedEntity.SIDEKICK){
+            return Component.translatable(  "skins.roundabout.magicians_red.sidekick");
+        } else if (skinId == MagiciansRedEntity.BETA){
+            return Component.translatable(  "skins.roundabout.magicians_red.beta");
+        } else if (skinId == MagiciansRedEntity.JOJONIUM){
+            return Component.translatable(  "skins.roundabout.magicians_red.jojonium");
+        } else if (skinId == MagiciansRedEntity.JOJONIUM_ABLAZE){
+            return Component.translatable(  "skins.roundabout.magicians_red.jojonium_ablaze");
+        } else if (skinId == MagiciansRedEntity.DEBUT_SKIN){
+            return Component.translatable(  "skins.roundabout.magicians_red.debut");
+        }
+        return Component.translatable(  "skins.roundabout.magicians_red.base");
+    }
+
+    @Override
     public int getMaxGuardPoints(){
         return ClientNetworking.getAppropriateConfig().guardPoints.magiciansRedDefend;
     }
@@ -668,10 +721,6 @@ public class PowersMagiciansRed extends PunchingStand {
             return ModEntities.MAGICIANS_RED_OVA.create(this.getSelf().level());
         }
         return ModEntities.MAGICIANS_RED.create(this.getSelf().level());
-    }
-    @Override
-    public Component getSkinName(byte skinId){
-        return MagiciansRedEntity.getSkinNameT(skinId);
     }
     @Override
     public List<Byte> getSkinList(){
