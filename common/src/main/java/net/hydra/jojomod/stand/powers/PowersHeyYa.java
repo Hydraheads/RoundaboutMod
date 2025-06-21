@@ -1,59 +1,16 @@
 package net.hydra.jojomod.stand.powers;
 
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.block.D4CLightBlockEntity;
-import net.hydra.jojomod.block.ModBlocks;
-import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
-import net.hydra.jojomod.entity.D4CCloneEntity;
-import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.stand.D4CEntity;
-import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.OffsetIndex;
-import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.item.InterdimensionalKeyItem;
-import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.networking.ModPacketHandler;
-import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Vec3i;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.RelativeMovement;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
-import net.zetalasis.world.DynamicWorld;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -114,10 +71,30 @@ public class PowersHeyYa extends NewDashPreset {
         /**Making dash usable on both key presses*/
         switch (context)
         {
+            case SKILL_1_NORMAL, SKILL_1_CROUCH -> {
+                toggleDangerYapClient();
+            }
+            case SKILL_2_NORMAL, SKILL_2_CROUCH -> {
+                miningYapClient();
+            }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
-                Roundabout.LOGGER.info("dash");
                 dash();
             }
+            case SKILL_4_NORMAL, SKILL_4_CROUCH -> {
+                yapClient();
+            }
+        }
+    }
+
+    public void toggleDangerYapClient(){
+    }
+    public void miningYapClient(){
+
+    }
+    public void yapClient(){
+        if (!this.onCooldown(PowerIndex.SKILL_4)) {
+            this.tryPower(PowerIndex.POWER_4, true);
+            tryPowerPacket(PowerIndex.POWER_4);
         }
     }
 
@@ -195,5 +172,16 @@ public class PowersHeyYa extends NewDashPreset {
             case CHAPTER_24 -> Component.translatable("skins.roundabout.hey_ya.chapter_24");
             default -> Component.translatable("skins.roundabout.hey_ya.manga");
         };
+    }
+
+    protected Byte getSummonSound() {
+        return SoundIndex.SUMMON_SOUND;
+    }
+    @Override
+    public SoundEvent getSoundFromByte(byte soundChoice){
+        if (soundChoice == SoundIndex.SUMMON_SOUND) {
+            return ModSounds.HEY_YA_SUMMON_EVENT;
+        }
+        return super.getSoundFromByte(soundChoice);
     }
 }

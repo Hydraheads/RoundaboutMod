@@ -232,6 +232,7 @@ public class FabricSounds {
         addSound(ModSounds.HEY_YA_5_ID, ModSounds.HEY_YA_5_EVENT);
         addSound(ModSounds.HEY_YA_6_ID, ModSounds.HEY_YA_6_EVENT);
         addSound(ModSounds.HEY_YA_7_ID, ModSounds.HEY_YA_7_EVENT);
+        addSound(ModSounds.HEY_YA_SUMMON_ID, ModSounds.HEY_YA_SUMMON_EVENT);
 
         addSound(ModSounds.DIO_HOHO_ID, ModSounds.DIO_HOHO_EVENT);
         addSound(ModSounds.DIO_HOHO_2_ID, ModSounds.DIO_HOHO_2_EVENT);

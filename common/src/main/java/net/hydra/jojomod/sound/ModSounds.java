@@ -682,6 +682,10 @@ public class ModSounds {
     public static final ResourceLocation HEY_YA_7_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HEY_YA_7);
     public static SoundEvent HEY_YA_7_EVENT = SoundEvent.createVariableRangeEvent(HEY_YA_7_ID);
 
+    public static final String HEY_YA_SUMMON = "hey_ya_summon";
+    public static final ResourceLocation HEY_YA_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HEY_YA_SUMMON);
+    public static SoundEvent HEY_YA_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(HEY_YA_SUMMON_ID);
+
 
 
     public static final String DIO_HOHO = "dio_hoho";
