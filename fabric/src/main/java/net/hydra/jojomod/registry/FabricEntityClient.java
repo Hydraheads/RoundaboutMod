@@ -55,6 +55,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.MAGICIANS_RED, MagiciansRedRenderer::new);
         EntityRendererRegistry.register(FabricEntities.MAGICIANS_RED_OVA, MagiciansRedOVARenderer::new);
         EntityRendererRegistry.register(FabricEntities.D4C, D4CRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.GREEN_DAY, GreenDayRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SOFT_AND_WET, SoftAndWetRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SOFT_AND_WET_KING, SoftAndWetKingRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SOFT_AND_WET_KILLER_QUEEN, SoftAndWetKillerQueenRenderer::new);
@@ -114,6 +115,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.MAGICIANS_RED_OVA_LAYER, MagiciansRedOVAModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.JUSTICE_PIRATE_LAYER, JusticePirateModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.D4C_LAYER, D4CModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GREEN_DAY_LAYER, GreenDayModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SOFT_AND_WET_LAYER, SoftAndWetModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SOFT_AND_WET_KING_LAYER, SoftAndWetKingModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SOFT_AND_WET_DROWNED_LAYER, SoftAndWetDrownedModel::getTexturedModelData);

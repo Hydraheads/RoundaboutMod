@@ -48,6 +48,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation MODIFIED_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_modified"), "main");
     public static final ModelLayerLocation STAND_FIRE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "stand_fire"), "main");
     public static final ModelLayerLocation MR_SPIN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "magiicans_red_spin"), "main");
+    public static final ModelLayerLocation GREEN_DAY_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "green_day"), "main");
 
 
 }

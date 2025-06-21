@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersD4C;
+import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -47,6 +48,10 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
     public static Item MAX_STAND_DISC_D4C = registerItem("max_d4c_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
+    public static Item STAND_DISC_GREEN_DAY = registerItem("green_day_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersGreenDay(null)));
+    public static Item MAX_STAND_DISC_GREEN_DAY = registerItem("max_green_day_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersGreenDay(null)));
     public static Item STAND_DISC_SOFT_AND_WET = registerItem("soft_and_wet_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSoftAndWet(null)));
     public static Item MAX_STAND_DISC_SOFT_AND_WET = registerItem("max_soft_and_wet_disc",
@@ -319,6 +324,10 @@ public class FabricItems {
                         entries.accept(STAND_DISC_HEY_YA);
                         entries.accept(STAND_DISC_D4C);
                         entries.accept(MAX_STAND_DISC_D4C);
+                        entries.accept(STAND_DISC_GREEN_DAY);
+                        entries.accept(MAX_STAND_DISC_GREEN_DAY);
+
+
 
                     }).build());
     public static final CreativeModeTab FOG_BLOCK_ITEMS = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
@@ -393,6 +402,9 @@ public class FabricItems {
         ((MaxStandDiscItem)MAX_STAND_DISC_D4C).baseDisc = ((StandDiscItem)STAND_DISC_D4C);
         ModItems.MAX_STAND_DISC_D4C = MAX_STAND_DISC_D4C;
         ModItems.STAND_DISC_D4C = STAND_DISC_D4C;
+        ModItems.MAX_STAND_DISC_GREEN_DAY = MAX_STAND_DISC_GREEN_DAY;
+        ModItems.STAND_DISC_GREEN_DAY = STAND_DISC_GREEN_DAY;
+        ((MaxStandDiscItem)MAX_STAND_DISC_GREEN_DAY).baseDisc = ((StandDiscItem)STAND_DISC_GREEN_DAY);
         ModItems.STAND_DISC_SOFT_AND_WET = STAND_DISC_SOFT_AND_WET;
         ModItems.MAX_STAND_DISC_SOFT_AND_WET = MAX_STAND_DISC_SOFT_AND_WET;
         ((MaxStandDiscItem)MAX_STAND_DISC_SOFT_AND_WET).baseDisc = ((StandDiscItem)STAND_DISC_SOFT_AND_WET);

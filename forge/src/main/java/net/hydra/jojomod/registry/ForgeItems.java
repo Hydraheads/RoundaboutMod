@@ -5,6 +5,7 @@ import net.hydra.jojomod.event.powers.stand.*;
 import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.stand.powers.PowersD4C;
+import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.*;
@@ -421,6 +422,10 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_D4C = addToWIPTab(ITEMS.register("max_d4c_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null))));
+    public static final RegistryObject<Item> STAND_DISC_GREEN_DAY = addToWIPTab(ITEMS.register("green_day_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersGreenDay(null))));
+    public static final RegistryObject<Item> MAX_STAND_DISC_GREEN_DAY = addToWIPTab(ITEMS.register("max_green_day_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersGreenDay(null))));
     public static final RegistryObject<Item> WORTHY_ARROW = addToTab(ITEMS.register("worthy_arrow",
             () -> new WorthyArrowItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> LUCKY_LIPSTICK = addToTab(ITEMS.register("lucky_lipstick",

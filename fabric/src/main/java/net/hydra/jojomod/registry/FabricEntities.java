@@ -240,12 +240,20 @@ public class FabricEntities {
                         EntityType.Builder.of(D4CEntity::new, MobCategory.MISC).
                                 sized(0.75f, 2.05f).clientTrackingRange(12).build(Roundabout.MOD_ID+":d4c")
                 );
+
         public static final EntityType<SoftAndWetEntity> SOFT_AND_WET =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         Roundabout.location("soft_and_wet"),
                         EntityType.Builder.of(SoftAndWetEntity::new, MobCategory.MISC).
                                 sized(0.75f, 2.05f).clientTrackingRange(12).build(Roundabout.MOD_ID+":soft_and_wet")
+                );
+        public static final EntityType<GreenDayEntity> GREEN_DAY =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        Roundabout.location("green_day"),
+                        EntityType.Builder.of(GreenDayEntity::new, MobCategory.MISC).
+                                sized(0.75f, 2.05f).clientTrackingRange(12).build(Roundabout.MOD_ID+":green_day")
                 );
         public static final EntityType<SoftAndWetEntity> SOFT_AND_WET_DROWNED =
                 Registry.register(
@@ -453,6 +461,7 @@ public class FabricEntities {
                 ModEntities.MAGICIANS_RED = MAGICIANS_RED;
                 ModEntities.MAGICIANS_RED_OVA = MAGICIANS_RED_OVA;
                 ModEntities.D4C = D4C;
+                ModEntities.GREEN_DAY = GREEN_DAY;
                 ModEntities.SOFT_AND_WET = SOFT_AND_WET;
                 ModEntities.SOFT_AND_WET_DROWNED = SOFT_AND_WET_DROWNED;
                 ModEntities.SOFT_AND_WET_DEBUT = SOFT_AND_WET_DEBUT;
@@ -539,6 +548,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(MAGICIANS_RED, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(MAGICIANS_RED_OVA, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(D4C, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(GREEN_DAY, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SOFT_AND_WET, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SOFT_AND_WET_DROWNED, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SOFT_AND_WET_DEBUT, StandEntity.createStandAttributes());
