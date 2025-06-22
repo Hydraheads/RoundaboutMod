@@ -156,6 +156,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.MODIFIED_LAYER, PlayerModifiedModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STAND_FIRE_LAYER, StandFireRenderer::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.MR_SPIN_LAYER, MagiciansRedSpinEffectLayer::createLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.GREEN_DAY_LAYER, GreenDayModel::getTexturedModelData);
         ModStrayModels.SHOOTING_ARM = new SoftAndWetShootingArmModel();
         ModStrayModels.HEY_YA = new HeyYaModel();
         //BlockEntityRenderers.register(ModBlocks.STAND_FIRE_BLOCK_ENTITY, StandFireRenderer::new);

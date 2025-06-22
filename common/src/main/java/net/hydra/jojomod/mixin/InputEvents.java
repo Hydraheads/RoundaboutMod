@@ -831,6 +831,16 @@ public abstract class InputEvents implements IInputEvents {
         }
     }
 
+    @Inject(method = "pickBlock", at = @At("HEAD"), cancellable = true)
+    public void roundabout$pickBlock(CallbackInfo ci){
+        if (player != null){
+        StandUser standComp = ((StandUser) player);
+            if (standComp.roundabout$getCombatMode()){
+                ci.cancel();
+            }
+        }
+    }
+
     @Inject(method = "getDeltaFrameTime", at = @At("HEAD"), cancellable = true)
     public void roundabout$getDeltaFrameTime(CallbackInfoReturnable<Float> cir){
         ClientConfig clientConfig = ConfigManager.getClientConfig();
