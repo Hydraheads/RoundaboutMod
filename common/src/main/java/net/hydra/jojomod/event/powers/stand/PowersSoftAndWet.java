@@ -205,6 +205,7 @@ public class PowersSoftAndWet extends PunchingStand {
                 $$1.add(SoftAndWetEntity.DEBUT);
             } if (Level > 3 || bypass){
                 $$1.add(SoftAndWetEntity.STRIPED);
+                $$1.add(SoftAndWetEntity.COLORS);
             } if (Level > 4 || bypass){
                 $$1.add(SoftAndWetEntity.FIGURE_SKIN);
             } if (Level > 5 || bypass){
@@ -2452,7 +2453,7 @@ public void unlockSkin(){
             case SoftAndWetEntity.FIGURE_SKIN -> Component.translatable("skins.roundabout.soft_and_wet.figure");
             case SoftAndWetEntity.STRIPED -> Component.translatable("skins.roundabout.soft_and_wet.striped");
             case SoftAndWetEntity.DEBUT -> Component.translatable("skins.roundabout.soft_and_wet.debut");
-            case SoftAndWetEntity.KIRA -> Component.translatable("skins.roundabout.soft_and_wet.kira");
+            case SoftAndWetEntity.COLORS -> Component.translatable("skins.roundabout.soft_and_wet.colors");
             default -> Component.translatable("skins.roundabout.soft_and_wet.light");
         };
     }

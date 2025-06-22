@@ -22,6 +22,7 @@ public class SoftAndWetBaseRenderer<M extends StandEntity> extends StandRenderer
     private static final ResourceLocation STRIPED_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/striped.png");
     private static final ResourceLocation DEBUT_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/debut.png");
     private static final ResourceLocation KIRA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/killer_queen.png");
+    private static final ResourceLocation COLORS = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/colors.png");
 
     public SoftAndWetBaseRenderer(EntityRendererProvider.Context context, StandModel root) {
         super(context, root,0f);
@@ -38,6 +39,7 @@ public class SoftAndWetBaseRenderer<M extends StandEntity> extends StandRenderer
             case (SoftAndWetEntity.STRIPED) -> STRIPED_SKIN;
             case (SoftAndWetEntity.DEBUT) -> DEBUT_SKIN;
             case (SoftAndWetEntity.KIRA) -> KIRA;
+            case (SoftAndWetEntity.COLORS) -> COLORS;
             default -> LIGHT_SKIN;
         };
     }
