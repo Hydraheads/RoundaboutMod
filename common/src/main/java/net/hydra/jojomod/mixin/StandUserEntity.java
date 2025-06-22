@@ -1055,12 +1055,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
         }
-        if (roundabout$sealedTicks > -1){
-            roundabout$sealedTicks--;
+        if (roundabout$isSealed()){
+            roundabout$setSealedTicks(roundabout$sealedTicks - 1);
             if (((LivingEntity)(Object)this) instanceof Player PE && PE.isCreative()){
-                roundabout$sealedTicks = -1;
+                roundabout$setSealedTicks(-1);
             }
-            if (roundabout$sealedTicks <= -1){
+            if (!roundabout$isSealed()){
                 this.roundabout$setDrowning(false);
             }
         }
@@ -2085,6 +2085,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     @Unique
     public void roundabout$setSealedTicks(int ticks){
+        if (roundabout$getActive()){
+            roundabout$setSummonCD(8);
+            roundabout$setActive(false);
+            roundabout$tryPower(PowerIndex.NONE, true);
+            ModPacketHandler.PACKET_ACCESS.standSummonPacket();
+        }
         roundabout$sealedTicks = ticks;
     }
     @Override
