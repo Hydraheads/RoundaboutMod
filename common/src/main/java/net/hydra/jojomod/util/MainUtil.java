@@ -324,19 +324,21 @@ public class MainUtil {
     }
 
     public static void handleSetCreativeModeSlot(Player player, int integer, ItemStack stack, byte context) {
-        StandUser user = ((StandUser) player);
-        ServerPlayer sp = ((ServerPlayer) player);
-
-        if (!(user.roundabout$getStandPowers() instanceof PowersJustice) || !BuiltInRegistries.ITEM.getKey(stack.getItem()).toString().startsWith("roundabout:fog_"))
-        {
-            sp.connection.disconnect(Component.literal("Exploit Detected"));
-            return;
-        }
-
         if (context == PacketDataIndex.ADD_FOG_ITEM) {
+            StandUser user = ((StandUser) player);
+            ServerPlayer sp = ((ServerPlayer) player);
+
             boolean flag = integer < 0;
             ItemStack itemstack = stack;
             if (!itemstack.isItemEnabled(player.level().enabledFeatures())) {
+                return;
+            }
+
+            if (!(user.roundabout$getStandPowers() instanceof PowersJustice) ||
+                    (!BuiltInRegistries.ITEM.getKey(stack.getItem()).getNamespace().equals(Roundabout.MOD_ID)) && !stack.is(Items.AIR))
+            {
+                Roundabout.LOGGER.warn("Attempted to give player {} item {}, but they failed the check!", BuiltInRegistries.ITEM.getKey(stack.getItem()), user.roundabout$getStandPowers().getClass().getName());
+                sp.connection.disconnect(Component.literal("Exploit Detected"));
                 return;
             }
 
