@@ -200,7 +200,10 @@ public class PowersHeyYa extends NewDashPreset {
             GREENER = 5,
             WORLD = 6,
             FIRE_AND_ICE = 7,
-            WARDEN = 8;
+            WARDEN = 8,
+            ICE_COLD = 9,
+            VILLAGER = 10,
+            GEEZER = 11;
 
     public static final byte
             YAP_1 = 61,
@@ -219,7 +222,10 @@ public class PowersHeyYa extends NewDashPreset {
                 GOTHIC,
                 GREENER,
                 FIRE_AND_ICE,
+                ICE_COLD,
+                GEEZER,
                 WORLD,
+                VILLAGER,
                 WARDEN
         );
     }
@@ -233,6 +239,9 @@ public class PowersHeyYa extends NewDashPreset {
             case WORLD -> Component.translatable("skins.roundabout.hey_ya.world");
             case WARDEN -> Component.translatable("skins.roundabout.hey_ya.warden");
             case FIRE_AND_ICE -> Component.translatable("skins.roundabout.hey_ya.fire_and_ice");
+            case ICE_COLD -> Component.translatable("skins.roundabout.hey_ya.ice_cold");
+            case VILLAGER -> Component.translatable("skins.roundabout.hey_ya.villager");
+            case GEEZER -> Component.translatable("skins.roundabout.hey_ya.geezer");
             default -> Component.translatable("skins.roundabout.hey_ya.manga");
         };
     }

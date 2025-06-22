@@ -52,7 +52,8 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
         PartDefinition cube_r1 = jaw.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(0, 14).addBox(-3.5F, 0.9914F, -5.5F, 7.0F, 1.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -1.2439F, -1.7218F, 0.0873F, 0.0F, 0.0F));
 
         PartDefinition upper_head = head2.addOrReplaceChild("upper_head", CubeListBuilder.create().texOffs(0, 0).addBox(-3.3772F, -7.2F, -6.925F, 7.0F, 7.0F, 7.0F, new CubeDeformation(-0.01F))
-                .texOffs(0, 22).addBox(0.1228F, -9.2F, -2.925F, 0.0F, 8.0F, 8.0F, new CubeDeformation(-0.01F)), PartPose.offsetAndRotation(-0.1228F, -0.775F, 3.325F, -0.0873F, 0.0F, 0.0F));
+                .texOffs(0, 22).addBox(0.1228F, -9.2F, -2.925F, 0.0F, 8.0F, 8.0F, new CubeDeformation(-0.01F))
+                .texOffs(29, 1).addBox(-0.8772F, -2.0F, -7.9F, 2.0F, 3.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.1228F, -0.775F, 3.325F, -0.0873F, 0.0F, 0.0F));
 
         PartDefinition cube_r2 = upper_head.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(28, 0).addBox(0.5F, -6.0F, -0.5F, 0.0F, 8.0F, 8.0F, new CubeDeformation(-0.01F)), PartPose.offsetAndRotation(0.0F, -3.2F, -2.2286F, 0.0F, 0.6109F, 0.0F));
 
@@ -64,9 +65,10 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
 
         PartDefinition torso = body2.addOrReplaceChild("torso", CubeListBuilder.create().texOffs(32, 29).addBox(-1.6617F, -9.0804F, -0.5F, 4.0F, 10.0F, 2.0F, new CubeDeformation(0.0F))
                 .texOffs(32, 23).addBox(-3.1617F, -0.3052F, -1.5F, 7.0F, 2.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(42, 54).addBox(-3.1617F, -6.1052F, -1.5F, 7.0F, 6.0F, 4.0F, new CubeDeformation(-0.1F))
                 .texOffs(32, 16).addBox(-3.6617F, -8.0804F, -1.5F, 8.0F, 3.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-0.3383F, 9.0804F, -0.5F));
 
-        PartDefinition left_arm = torso.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(0, 38).addBox(-0.0655F, -1.0F, -0.9128F, 2.0F, 10.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.4F, -7.0F, 0.5F, 0.0F, 0.0873F, 0.0F));
+        PartDefinition left_arm = torso.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(0, 38).addBox(-0.0656F, -1.0F, -0.9128F, 2.0F, 10.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.4F, -7.0F, 0.5F, 0.0F, 0.0873F, 0.0F));
 
         PartDefinition right_arm = torso.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.offset(-3.6F, -7.0F, 0.45F));
 
@@ -112,6 +114,12 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
             "textures/stand/hey_ya/fire_and_ice.png");
     public static ResourceLocation world = new ResourceLocation(Roundabout.MOD_ID,
             "textures/stand/hey_ya/world.png");
+    public static ResourceLocation ice_cold = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/hey_ya/ice_cold.png");
+    public static ResourceLocation villager = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/hey_ya/villager.png");
+    public static ResourceLocation geezer = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/hey_ya/geezer.png");
 
     public ResourceLocation getTextureLocation(Entity context, byte skin){
         switch (skin)
@@ -123,6 +131,9 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
             case PowersHeyYa.WARDEN -> {return warden;}
             case PowersHeyYa.WORLD -> {return world;}
             case PowersHeyYa.FIRE_AND_ICE -> {return fire_and_ice;}
+            case PowersHeyYa.VILLAGER -> {return villager;}
+            case PowersHeyYa.ICE_COLD -> {return ice_cold;}
+            case PowersHeyYa.GEEZER -> {return geezer;}
             default -> {return base;}
         }
     }
