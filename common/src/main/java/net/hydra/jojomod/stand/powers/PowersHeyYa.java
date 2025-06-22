@@ -11,6 +11,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.*;
@@ -103,6 +104,7 @@ public class PowersHeyYa extends NewDashPreset {
         if (!isClient()){
             setYapTime(40);
             getStandUserSelf().roundabout$setStandAnimation(YAP);
+            playStandUserOnlySoundsIfNearby((byte) (61 + Mth.floor(Math.random() * 7)), 100, false, true);
         }
         return true;
     }
@@ -196,6 +198,14 @@ public class PowersHeyYa extends NewDashPreset {
             VOLUME_2 = 3,
             CHAPTER_24 = 4;
 
+    public static final byte
+            YAP_1 = 61,
+            YAP_2 = 62,
+            YAP_3 = 63,
+            YAP_4 = 64,
+            YAP_5 = 65,
+            YAP_6 = 66,
+            YAP_7 = 67;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
@@ -220,8 +230,32 @@ public class PowersHeyYa extends NewDashPreset {
     }
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice){
-        if (soundChoice == SoundIndex.SUMMON_SOUND) {
-            return ModSounds.HEY_YA_SUMMON_EVENT;
+        switch (soundChoice)
+        {
+            case SoundIndex.SUMMON_SOUND -> {
+                return ModSounds.HEY_YA_SUMMON_EVENT;
+            }
+            case YAP_1 -> {
+                return ModSounds.HEY_YA_1_EVENT;
+            }
+            case YAP_2 -> {
+                return ModSounds.HEY_YA_2_EVENT;
+            }
+            case YAP_3 -> {
+                return ModSounds.HEY_YA_3_EVENT;
+            }
+            case YAP_4 -> {
+                return ModSounds.HEY_YA_4_EVENT;
+            }
+            case YAP_5 -> {
+                return ModSounds.HEY_YA_5_EVENT;
+            }
+            case YAP_6 -> {
+                return ModSounds.HEY_YA_6_EVENT;
+            }
+            case YAP_7 -> {
+                return ModSounds.HEY_YA_7_EVENT;
+            }
         }
         return super.getSoundFromByte(soundChoice);
     }
