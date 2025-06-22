@@ -337,7 +337,7 @@ public class MainUtil {
             if (!(user.roundabout$getStandPowers() instanceof PowersJustice) ||
                     (!BuiltInRegistries.ITEM.getKey(stack.getItem()).getNamespace().equals(Roundabout.MOD_ID)) && !stack.is(Items.AIR))
             {
-                Roundabout.LOGGER.warn("Attempted to give player {} item {}, but they failed the check!", BuiltInRegistries.ITEM.getKey(stack.getItem()), user.roundabout$getStandPowers().getClass().getName());
+                Roundabout.LOGGER.warn("Attempted to give player {} item {}, but they failed the check!", player.getName().getString(), BuiltInRegistries.ITEM.getKey(stack.getItem()));
                 sp.connection.disconnect(Component.literal("Exploit Detected"));
                 return;
             }
