@@ -886,7 +886,13 @@ public class StandPowers {
         if (((StandUser)this.self).roundabout$getStandDisc().isEmpty()){
             ((StandUser)this.self).roundabout$setStandPowers(new StandPowers(this.self));
         }
+        if (!hasStandActive(this.self)) {
+            getStandUserSelf().roundabout$setStandAnimation(NONE);
+        }
     }
+
+    public static final byte
+            NONE = 0;
 
     public void tickMobAi(){
 
@@ -980,6 +986,10 @@ public class StandPowers {
             }
         }
         return false;
+    }
+
+    public boolean isClient(){
+        return this.getSelf().level().isClientSide();
     }
 
     /**The manner in which your powers tick when you are being timestopped. Override this if the stand acts differently.

@@ -1159,6 +1159,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT$STAND_SKIN = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.BYTE);
+    @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$STAND_ANIMATION = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.BYTE);
 
     private byte roundabout$lastSkin = 0;
     @Override
@@ -1169,6 +1172,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         return 0;
     }
+    @Override
+    @Unique
+    public byte roundabout$getStandAnimation(){
+        if (this.getEntityData().hasItem(ROUNDABOUT$STAND_ANIMATION)) {
+            return this.getEntityData().get(ROUNDABOUT$STAND_ANIMATION);
+        }
+        return 0;
+    }
+
+    @Override
+    @Unique
+    public void roundabout$setStandAnimation(byte anim){
+        this.getEntityData().set(ROUNDABOUT$STAND_ANIMATION, anim);
+    }
+
 
     @Override
     @Unique
@@ -2282,6 +2300,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_ACTIVE, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IDLE_POS, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_SKIN, (byte) 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_ANIMATION, (byte) 0);
         }
     }
 

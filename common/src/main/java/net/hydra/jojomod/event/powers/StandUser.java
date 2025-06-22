@@ -220,6 +220,8 @@ public interface StandUser {
     byte roundabout$getStandSkin();
     byte roundabout$getLastStandSkin();
     void roundabout$setLastStandSkin(byte lastStandSkin);
+    byte roundabout$getStandAnimation();
+    void roundabout$setStandAnimation(byte anim);
     byte roundabout$getIdlePos();
     void roundabout$setIdlePosX(byte pos);
     void roundabout$setStandSkin(byte skin);

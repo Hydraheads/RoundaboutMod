@@ -1,5 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -97,6 +98,24 @@ public class PowersHeyYa extends NewDashPreset {
             tryPowerPacket(PowerIndex.POWER_4);
         }
     }
+    public boolean doYap(){
+        this.setCooldown(PowerIndex.SKILL_4,42);
+        if (!isClient()){
+            setYapTime(40);
+            getStandUserSelf().roundabout$setStandAnimation(YAP);
+        }
+        return true;
+    }
+    @Override
+    public boolean setPowerOther(int move, int lastMove) {
+        switch (move)
+        {
+            case PowerIndex.POWER_4 -> {
+                return doYap();
+            }
+        }
+        return super.setPowerOther(move,lastMove);
+    }
 
     @Override
     public boolean tryPower(int move, boolean forced) {
@@ -113,16 +132,18 @@ public class PowersHeyYa extends NewDashPreset {
 
     @Override
     public void tickPower() {
+        if (!isClient()) {
+            if (isYapping()) {
+                getStandUserSelf().roundabout$setStandAnimation(YAP);
+            } else {
+                getStandUserSelf().roundabout$setStandAnimation(NONE);
+            }
+            tickYapping();
+        }
+        /**Yap animation based on using power*/
         super.tickPower();
     }
 
-
-
-    @Override
-    public boolean setPowerOther(int move, int lastMove) {
-
-        return super.setPowerOther(move, lastMove);
-    }
 
     @Override
     public void updateIntMove(int in) {
@@ -148,6 +169,26 @@ public class PowersHeyYa extends NewDashPreset {
     public Component ifWipListDev(){
         return Component.literal(  "Hydra").withStyle(ChatFormatting.YELLOW);
     }
+
+    public int yapTime = 0;
+    public boolean isYapping(){
+        return yapTime > 0;
+    }
+    public int getYapTime(){
+        return yapTime;
+    }
+    public void setYapTime(int yapTime){
+        this.yapTime = yapTime;
+    }
+    public void tickYapping(){
+        if (this.yapTime > 0){
+
+            this.yapTime--;
+        }
+    }
+
+    public static final byte
+            YAP = 1;
 
     public static final byte
             MANGA = 1,
