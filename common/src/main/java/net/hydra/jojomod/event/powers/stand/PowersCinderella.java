@@ -467,10 +467,6 @@ public class PowersCinderella extends DashPreset {
         return $$1;
     }
 
-    @Override
-    public boolean hasMoreThanOneSkin(){
-        return true;
-    }
     public void standImpale(){
         if (this.self instanceof Player){
             if (isPacketPlayer()){

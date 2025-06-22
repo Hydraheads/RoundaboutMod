@@ -698,10 +698,6 @@ public class PowersJustice extends DashPreset {
         return 4;
     }
     @Override
-    public boolean hasMoreThanOneSkin(){
-        return true;
-    }
-    @Override
     public float getBonusPassiveMiningSpeed(){
         return 1.3F;
     }

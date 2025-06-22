@@ -1664,6 +1664,13 @@ public class MainUtil {
                     }
                  }
             }
+        } else if (context == PacketDataIndex.SINGLE_BYTE_DESUMMON) {
+            if (player != null) {
+                StandUser user = ((StandUser) player);
+                if (user.roundabout$getActive()){
+                    user.roundabout$summonStand(player.level(), false, false);
+                }
+            }
         }
     }
 

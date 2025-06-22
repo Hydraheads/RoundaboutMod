@@ -2089,7 +2089,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setSummonCD(8);
             roundabout$setActive(false);
             roundabout$tryPower(PowerIndex.NONE, true);
-            ModPacketHandler.PACKET_ACCESS.standSummonPacket();
+            ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_DESUMMON);
         }
         roundabout$sealedTicks = ticks;
     }

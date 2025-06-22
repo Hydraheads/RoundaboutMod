@@ -3110,11 +3110,6 @@ public class PowersMagiciansRed extends PunchingStand {
         return super.isAttackIneptVisually(activeP,slot);
     }
 
-
-    @Override
-    public boolean hasMoreThanOneSkin(){
-        return true;
-    }
     public boolean isInRain() {
         BlockPos $$0 = this.self.blockPosition();
         return this.self.level().isRainingAt($$0)
