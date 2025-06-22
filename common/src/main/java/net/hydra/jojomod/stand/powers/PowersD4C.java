@@ -120,7 +120,7 @@ public class PowersD4C extends NewPunchingStand {
         icons.add(new GuiIcon(PowerIndex.SKILL_3, StandIcons.D4C_PARALLEL_RUNNING));
         icons.add(new GuiIcon(PowerIndex.SKILL_3_GUARD, StandIcons.D4C_PARALLEL_RUNNING));
         icons.add(new GuiIcon(PowerIndex.SKILL_3_CROUCH_GUARD, StandIcons.D4C_MELT_DODGE));
-        icons.add(new GuiIcon(PowerIndex.SKILL_3_SNEAK, StandIcons.D4C_MELT_DODGE));
+        icons.add(new GuiIcon(PowerIndex.GLOBAL_DASH, StandIcons.D4C_MELT_DODGE));
 
         GUI_ICON_REGISTRAR = icons;
     }

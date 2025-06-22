@@ -4,13 +4,9 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 
 public class StandPowerRewrite extends StandPowers {
     public StandPowerRewrite(LivingEntity self) {
@@ -66,7 +62,7 @@ public class StandPowerRewrite extends StandPowers {
                     if (!getSelf().isCrouching() && !isGuarding())
                         setSkillIcon(context, x, y, 3, icon.iconLocation, icon.index);
                 }
-                case PowerIndex.SKILL_3_SNEAK -> {
+                case PowerIndex.GLOBAL_DASH -> {
                     if (getSelf().isCrouching() && !isGuarding())
                         setSkillIcon(context, x, y, 3, icon.iconLocation, icon.index);
                 }

@@ -108,7 +108,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                             /*Stand leap rebounds*/
                             standRebound();
                         } else {
-                            if (this.getSelf().onGround() && !this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
+                            if (this.getSelf().onGround() && !this.onCooldown(PowerIndex.GLOBAL_DASH)) {
                                 byte forward = 0;
                                 byte strafe = 0;
                                 if (options.keyUp.isDown()) forward++;
@@ -156,7 +156,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                                         cdTime = ClientNetworking.getAppropriateConfig().cooldownsInTicks.jumpingDash;
                                     }
                                 }
-                                this.setCooldown(PowerIndex.SKILL_3_SNEAK, cdTime);
+                                this.setCooldown(PowerIndex.GLOBAL_DASH, cdTime);
                                 MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.91F,
                                         Mth.sin(degrees * ((float) Math.PI / 180)),
                                         Mth.sin(-20 * ((float) Math.PI / 180)),
@@ -178,12 +178,12 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         if (this.getSelf().onGround()) {
                             boolean jojoveinLikeKeys = !ClientNetworking.getAppropriateConfig().cooldownsInTicks.standJumpAndDashShareCooldown;
                             if ((jojoveinLikeKeys && !this.onCooldown(PowerIndex.SKILL_3)) ||
-                                    (!jojoveinLikeKeys && !this.onCooldown(PowerIndex.SKILL_3_SNEAK))) {
+                                    (!jojoveinLikeKeys && !this.onCooldown(PowerIndex.GLOBAL_DASH))) {
                                 if (canExecuteMoveWithLevel(getLeapLevel())) {
                                     if (jojoveinLikeKeys) {
                                         this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.standJump);
                                     } else {
-                                        this.setCooldown(PowerIndex.SKILL_3_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.standJump);
+                                        this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().cooldownsInTicks.standJump);
                                     }
                                     bonusLeapCount = 3;
                                     bigLeap(this.getSelf(), 20, 1);

@@ -544,7 +544,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 }
 
                 if (!this.getSelf().onGround() && canVault()){
-                    setSkillIcon(context, x, y, 3, StandIcons.MAGICIANS_RED_LEDGE_GRAB, PowerIndex.SKILL_3_SNEAK);
+                    setSkillIcon(context, x, y, 3, StandIcons.MAGICIANS_RED_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
                 } else if (this.isGuarding()) {
                     if (canExecuteMoveWithLevel(2)) {
                         setSkillIcon(context, x, y, 3, StandIcons.PROJECTILE_BURN, PowerIndex.SKILL_EXTRA);
@@ -589,7 +589,7 @@ public class PowersMagiciansRed extends PunchingStand {
                 }
 
                 if (!this.getSelf().onGround() && canVault()){
-                    setSkillIcon(context, x, y, 3, StandIcons.MAGICIANS_RED_LEDGE_GRAB, PowerIndex.SKILL_3_SNEAK);
+                    setSkillIcon(context, x, y, 3, StandIcons.MAGICIANS_RED_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
                 } else if (this.isGuarding()){
                     if (canExecuteMoveWithLevel(2)) {
                         setSkillIcon(context, x, y, 3, StandIcons.PROJECTILE_BURN, PowerIndex.SKILL_EXTRA);
@@ -603,7 +603,7 @@ public class PowersMagiciansRed extends PunchingStand {
                         setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                     }
                 } else {
-                    setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
+                    setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
                 }
 
                 if (canExecuteMoveWithLevel(7)) {

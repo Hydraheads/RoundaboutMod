@@ -65,7 +65,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -1072,9 +1071,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             || this.getSelf() instanceof Rabbit || this.getSelf() instanceof AbstractVillager
                             || this.getSelf() instanceof Piglin || this.getSelf() instanceof Vindicator) &&
                             this.getSelf().onGround() && dist <= 19 && dist >= 5) {
-                        if (!onCooldown(PowerIndex.SKILL_3_SNEAK)){
-                            if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
-                                    this.setCooldown(PowerIndex.SKILL_3_SNEAK, 300);
+                        if (!onCooldown(PowerIndex.GLOBAL_DASH)){
+                            if (!this.onCooldown(PowerIndex.GLOBAL_DASH)) {
+                                    this.setCooldown(PowerIndex.GLOBAL_DASH, 300);
                                     bonusLeapCount = 3;
                                     this.getSelf().setXRot(getLookAtEntityPitch(this.getSelf(), attackTarget));
                                     float yrot = getLookAtEntityYaw(this.getSelf(), attackTarget);
@@ -1219,7 +1218,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                     if (!this.getSelf().onGround() && canStandRebound()) {
                         done = true;
                             if (canExecuteMoveWithLevel(getLeapLevel())) {
-                                setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM, PowerIndex.SKILL_3_SNEAK);
+                                setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM, PowerIndex.GLOBAL_DASH);
                             } else {
                                 setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                             }
@@ -1228,7 +1227,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                     if (!this.getSelf().onGround()) {
                         if (canVault()) {
                             done = true;
-                            setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_LEDGE_GRAB, PowerIndex.SKILL_3_SNEAK);
+                            setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
                         } else if (this.getSelf().fallDistance > 3) {
                             done = true;
                             setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_FALL_CATCH, PowerIndex.SKILL_EXTRA);
@@ -1241,7 +1240,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                         if (jojoveinLikeKeys){
                             setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_STAR_PLATINUM, PowerIndex.SKILL_3);
                         } else {
-                            setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_STAR_PLATINUM, PowerIndex.SKILL_3_SNEAK);
+                            setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_STAR_PLATINUM, PowerIndex.GLOBAL_DASH);
                         }
                     } else {
                         setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
@@ -1274,14 +1273,14 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             } else {
                if (((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1 && !this.getSelf().onGround() && canStandRebound()) {
 
-                   setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM, PowerIndex.SKILL_3_SNEAK);
+                   setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM, PowerIndex.GLOBAL_DASH);
                } else {
                    if (!(((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1) && !this.getSelf().onGround() && canVault()) {
-                       setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_LEDGE_GRAB, PowerIndex.SKILL_3_SNEAK);
+                       setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
                    } else if (!this.getSelf().onGround() && this.getSelf().fallDistance > 3) {
                        setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_FALL_CATCH, PowerIndex.SKILL_EXTRA);
                    } else {
-                       setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
+                       setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
                    }
                }
            }

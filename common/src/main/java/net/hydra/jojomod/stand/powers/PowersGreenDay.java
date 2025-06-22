@@ -5,11 +5,9 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.stand.GreenDayEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.item.InterdimensionalKeyItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -63,7 +61,7 @@ public class PowersGreenDay extends NewPunchingStand{
         icons.add(new GuiIcon(PowerIndex.SKILL_3, StandIcons.DODGE));
         icons.add(new GuiIcon(PowerIndex.SKILL_3_GUARD, StandIcons.DODGE));
         icons.add(new GuiIcon(PowerIndex.SKILL_3_CROUCH_GUARD, StandIcons.GREEN_DAY_MOLD_LEAP));
-        icons.add(new GuiIcon(PowerIndex.SKILL_3_SNEAK, StandIcons.GREEN_DAY_MOLD_LEAP));
+        icons.add(new GuiIcon(PowerIndex.GLOBAL_DASH, StandIcons.GREEN_DAY_MOLD_LEAP));
 
         icons.add(new GuiIcon(PowerIndex.SKILL_4, StandIcons.GREEN_DAY_MOLD_FIELD));
         icons.add(new GuiIcon(PowerIndex.SKILL_4_GUARD, StandIcons.GREEN_DAY_MOLD_FIELD));

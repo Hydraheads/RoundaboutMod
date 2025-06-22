@@ -64,7 +64,7 @@ public class PowerIndex {
     public static final byte SKILL_4 = 3;
     public static final byte SKILL_1_SNEAK = 4;
     public static final byte SKILL_2_SNEAK = 5;
-    public static final byte SKILL_3_SNEAK = 6;
+    public static final byte GLOBAL_DASH = 6;
     public static final byte SKILL_4_SNEAK = 7;
     public static final byte SKILL_EXTRA = 8;
     public static final byte SKILL_EXTRA_2 = 9;

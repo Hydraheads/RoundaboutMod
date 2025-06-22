@@ -45,7 +45,7 @@ public class NewDashPreset extends StandPowerRewrite {
         inputDash = true;
         if (this.getSelf().level().isClientSide && !this.isClashing()) {
             if (!((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
-                    if (this.getSelf().onGround() && !this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
+                    if (this.getSelf().onGround() && !this.onCooldown(PowerIndex.GLOBAL_DASH)) {
                         byte forward = 0;
                         byte strafe = 0;
                         if (options.keyUp.isDown()) forward++;
@@ -92,7 +92,7 @@ public class NewDashPreset extends StandPowerRewrite {
                                 cdTime = ClientNetworking.getAppropriateConfig().cooldownsInTicks.jumpingDash;
                             }
                         }
-                        this.setCooldown(PowerIndex.SKILL_3_SNEAK, cdTime);
+                        this.setCooldown(PowerIndex.GLOBAL_DASH, cdTime);
                         MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.91F,
                                 Mth.sin(degrees * ((float) Math.PI / 180)),
                                 Mth.sin(-20 * ((float) Math.PI / 180)),
@@ -131,9 +131,9 @@ public class NewDashPreset extends StandPowerRewrite {
             BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
             if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && (blockHit.getBlockPos().getY() + 1) > this.getSelf().getY()
                     && !this.getSelf().level().getBlockState(blockHit.getBlockPos().above()).isSolid()) {
-                if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
+                if (!this.onCooldown(PowerIndex.GLOBAL_DASH)) {
                     /*Stand vaulting*/
-                    this.setCooldown(PowerIndex.SKILL_3_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.vaulting);
+                    this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().cooldownsInTicks.vaulting);
                     double mag = this.getSelf().getPosition(0).distanceTo(
                             new Vec3(blockHit.getLocation().x, blockHit.getLocation().y, blockHit.getLocation().z)) * 1.68 + 1;
                     MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),

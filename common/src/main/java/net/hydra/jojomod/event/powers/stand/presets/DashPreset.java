@@ -50,9 +50,9 @@ public class DashPreset extends StandPowers {
             BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
             if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && (blockHit.getBlockPos().getY() + 1) > this.getSelf().getY()
                     && !this.getSelf().level().getBlockState(blockHit.getBlockPos().above()).isSolid()) {
-                if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
+                if (!this.onCooldown(PowerIndex.GLOBAL_DASH)) {
                     /*Stand vaulting*/
-                    this.setCooldown(PowerIndex.SKILL_3_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.vaulting);
+                    this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().cooldownsInTicks.vaulting);
                     double mag = this.getSelf().getPosition(0).distanceTo(
                             new Vec3(blockHit.getLocation().x, blockHit.getLocation().y, blockHit.getLocation().z)) * 1.68 + 1;
                     MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
@@ -210,7 +210,7 @@ public class DashPreset extends StandPowers {
     public boolean inputDash = false;
     @Override
     public void buttonInput3(boolean keyIsDown, Options options) {
-        this.buttonInput3(keyIsDown, options, PowerIndex.SKILL_3_SNEAK);
+        this.buttonInput3(keyIsDown, options, PowerIndex.GLOBAL_DASH);
     }
 
 

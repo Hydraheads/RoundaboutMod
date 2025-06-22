@@ -1133,9 +1133,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                                 || this.getSelf() instanceof Rabbit || this.getSelf() instanceof AbstractVillager
                                 || this.getSelf() instanceof Piglin || this.getSelf() instanceof Vindicator) &&
                                 this.getSelf().onGround() && dist <= 19 && dist >= 5) {
-                            if (!onCooldown(PowerIndex.SKILL_3_SNEAK)) {
-                                if (!this.onCooldown(PowerIndex.SKILL_3_SNEAK)) {
-                                    this.setCooldown(PowerIndex.SKILL_3_SNEAK, 300);
+                            if (!onCooldown(PowerIndex.GLOBAL_DASH)) {
+                                if (!this.onCooldown(PowerIndex.GLOBAL_DASH)) {
+                                    this.setCooldown(PowerIndex.GLOBAL_DASH, 300);
                                     bonusLeapCount = 3;
                                     this.getSelf().setXRot(getLookAtEntityPitch(this.getSelf(), attackTarget));
                                     float yrot = getLookAtEntityYaw(this.getSelf(), attackTarget);
@@ -1512,7 +1512,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
                 if (!this.getSelf().onGround() && canStandRebound()) {
                         done=true;
-                        setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_WORLD, PowerIndex.SKILL_3_SNEAK);
+                        setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_WORLD, PowerIndex.GLOBAL_DASH);
                 }
 
             } else {
@@ -1520,7 +1520,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 if (!this.getSelf().onGround()){
                     if (canVault()){
                         done=true;
-                        setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_LEDGE_GRAB, PowerIndex.SKILL_3_SNEAK);
+                        setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
                     } else if (this.getSelf().fallDistance > 3){
                         done=true;
                         setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_FALL_CATCH, PowerIndex.SKILL_EXTRA);
@@ -1533,7 +1533,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                     if (jojoveinLikeKeys){
                         setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_WORLD, PowerIndex.SKILL_3);
                     } else {
-                        setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_WORLD, PowerIndex.SKILL_3_SNEAK);
+                        setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_WORLD, PowerIndex.GLOBAL_DASH);
                     }
                 } else {
                     setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
@@ -1565,14 +1565,14 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
 
             if (((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1 && !this.getSelf().onGround() && canStandRebound()) {
-                setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_WORLD, PowerIndex.SKILL_3_SNEAK);
+                setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_WORLD, PowerIndex.GLOBAL_DASH);
             } else {
                 if (!(((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1) && !this.getSelf().onGround() && canVault()) {
-                    setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_LEDGE_GRAB, PowerIndex.SKILL_3_SNEAK);
+                    setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
                 } else if (!this.getSelf().onGround() && this.getSelf().fallDistance > 3){
                     setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_FALL_CATCH, PowerIndex.SKILL_EXTRA);
                 } else {
-                    setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_SNEAK);
+                    setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
                 }
             }
         }
