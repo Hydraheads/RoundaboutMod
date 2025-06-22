@@ -43,43 +43,32 @@ public class PowersGreenDay extends NewPunchingStand{
     public void renderIcons(GuiGraphics context, int x, int y) {
         ClientUtil.fx.roundabout$onGUI(context);
 
-        // code for advanced icons
-
-        if (isGuarding())
-            setSkillIcon(context, x, y, 1, StandIcons.NONE, PowerIndex.SKILL_1_SNEAK);
-        else
-        if (!isHoldingSneak())
-            setSkillIcon(context, x, y, 1, StandIcons.NONE, PowerIndex.SKILL_1);
-        else
-            setSkillIcon(context, x, y, 1, StandIcons.NONE, PowerIndex.SKILL_1);
-
-        if (!InterdimensionalKeyItem.isLinked(this.getSelf().getOffhandItem()))
-            if (!isHoldingSneak())
-                setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.SKILL_4);
-            else
-                setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.SKILL_4);
-        else
-        if (!isHoldingSneak())
-            setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.SKILL_EXTRA_2);
-        else
-            setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP_KEY, PowerIndex.SKILL_EXTRA_2);
-
         super.renderIcons(context, x, y);
     }
 
     @Override
     public void registerHUDIcons() {
         HashSet<GuiIcon> icons = new HashSet<>();
+        icons.add(new GuiIcon(PowerIndex.SKILL_1, StandIcons.GREEN_DAY_MOLD_PUNCH_LEFT));
+        icons.add(new GuiIcon(PowerIndex.SKILL_1_GUARD, StandIcons.GREEN_DAY_MOLD_SPIN_LEFT));
+        icons.add(new GuiIcon(PowerIndex.SKILL_1_CROUCH_GUARD, StandIcons.GREEN_DAY_ARM_RETURN_LEFT));
+        icons.add(new GuiIcon(PowerIndex.SKILL_1_SNEAK, StandIcons.GREEN_DAY_ARM_RETURN_LEFT));
 
         // code for basic icons: the rest rely on criteria we have to manually implement
-        icons.add(new GuiIcon(PowerIndex.SKILL_2, StandIcons.NONE));
-        icons.add(new GuiIcon(PowerIndex.SKILL_2_GUARD, StandIcons.NONE));
-        icons.add(new GuiIcon(PowerIndex.SKILL_2_CROUCH_GUARD, StandIcons.NONE));
+        icons.add(new GuiIcon(PowerIndex.SKILL_2, StandIcons.GREEN_DAY_MOLD_PUNCH_RIGHT));
+        icons.add(new GuiIcon(PowerIndex.SKILL_2_GUARD, StandIcons.GREEN_DAY_MOLD_SPIN_RIGHT));
+        icons.add(new GuiIcon(PowerIndex.SKILL_2_CROUCH_GUARD, StandIcons.GREEN_DAY_ARM_RETURN_RIGHT));
+        icons.add(new GuiIcon(PowerIndex.SKILL_2_SNEAK, StandIcons.GREEN_DAY_ARM_RETURN_RIGHT));
 
         icons.add(new GuiIcon(PowerIndex.SKILL_3, StandIcons.DODGE));
         icons.add(new GuiIcon(PowerIndex.SKILL_3_GUARD, StandIcons.DODGE));
-        icons.add(new GuiIcon(PowerIndex.SKILL_3_CROUCH_GUARD, StandIcons.DODGE));
-        icons.add(new GuiIcon(PowerIndex.SKILL_3_SNEAK, StandIcons.DODGE));
+        icons.add(new GuiIcon(PowerIndex.SKILL_3_CROUCH_GUARD, StandIcons.GREEN_DAY_MOLD_LEAP));
+        icons.add(new GuiIcon(PowerIndex.SKILL_3_SNEAK, StandIcons.GREEN_DAY_MOLD_LEAP));
+
+        icons.add(new GuiIcon(PowerIndex.SKILL_4, StandIcons.GREEN_DAY_MOLD_FIELD));
+        icons.add(new GuiIcon(PowerIndex.SKILL_4_GUARD, StandIcons.GREEN_DAY_MOLD_FIELD));
+        icons.add(new GuiIcon(PowerIndex.SKILL_4_CROUCH_GUARD, StandIcons.GREEN_DAY_STITCH));
+        icons.add(new GuiIcon(PowerIndex.SKILL_4_SNEAK, StandIcons.GREEN_DAY_STITCH));
 
         GUI_ICON_REGISTRAR = icons;
     }
