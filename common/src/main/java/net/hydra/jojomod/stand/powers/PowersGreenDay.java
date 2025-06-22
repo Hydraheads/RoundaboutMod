@@ -5,12 +5,17 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+
 import net.minecraft.network.chat.Component;
+
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.Arrays;
@@ -84,7 +89,33 @@ public class PowersGreenDay extends NewPunchingStand{
                 Roundabout.LOGGER.info("dash");
                 dash();
             }
+
+            case SKILL_4_CROUCH, SKILL_4_CROUCH_GUARD -> {
+                if (this.onCooldown(PowerIndex.SKILL_4_SNEAK))
+                    return;
+                Roundabout.LOGGER.info("Stitch");
+                Stitch();
+                this.setCooldown(PowerIndex.SKILL_4_SNEAK, 80);
+                this.setCooldown(PowerIndex.SKILL_4_CROUCH_GUARD, 80);
+            }
         }
+    }
+
+    public void Stitch() {
+
+        float maxhp = this.getStandUserSelf().roundabout$getPowerUser().getMaxHealth();
+        float currenthp = this.getStandUserSelf().roundabout$getPowerUser().getHealth();
+
+        if(currenthp < maxhp){
+            this.getStandUserSelf().roundabout$getPowerUser().setHealth(currenthp + 1.0f);
+            if(this.getStandUserSelf().roundabout$getPowerUser().hasEffect(ModEffects.BLEED)){
+                int level = this.getStandUserSelf().roundabout$getPowerUser().getEffect(ModEffects.BLEED).getAmplifier();
+                int duration = this.getStandUserSelf().roundabout$getPowerUser().getEffect(ModEffects.BLEED).getDuration();
+                this.getStandUserSelf().roundabout$getPowerUser().removeEffect(this.getStandUserSelf().roundabout$getPowerUser().getEffect(ModEffects.BLEED).getEffect());
+            }
+
+        }
+
     }
 
     @Override
