@@ -204,7 +204,11 @@ public class PowersHeyYa extends NewDashPreset {
             WARDEN = 8,
             ICE_COLD = 9,
             VILLAGER = 10,
-            GEEZER = 11;
+            GEEZER = 11,
+            SKELETON = 12,
+            WITHER = 13,
+            TUSK = 14,
+            DEVIL = 15;
 
     public static final byte
             YAP_1 = 61,
@@ -226,8 +230,12 @@ public class PowersHeyYa extends NewDashPreset {
                 ICE_COLD,
                 GEEZER,
                 WORLD,
+                TUSK,
                 VILLAGER,
-                WARDEN
+                SKELETON,
+                WITHER,
+                WARDEN,
+                DEVIL
         );
     }
     @Override public Component getSkinName(byte skinId) {
@@ -243,6 +251,10 @@ public class PowersHeyYa extends NewDashPreset {
             case ICE_COLD -> Component.translatable("skins.roundabout.hey_ya.ice_cold");
             case VILLAGER -> Component.translatable("skins.roundabout.hey_ya.villager");
             case GEEZER -> Component.translatable("skins.roundabout.hey_ya.geezer");
+            case DEVIL -> Component.translatable("skins.roundabout.hey_ya.devil");
+            case TUSK -> Component.translatable("skins.roundabout.hey_ya.tusk");
+            case SKELETON -> Component.translatable("skins.roundabout.hey_ya.skeleton");
+            case WITHER -> Component.translatable("skins.roundabout.hey_ya.wither");
             default -> Component.translatable("skins.roundabout.hey_ya.manga");
         };
     }

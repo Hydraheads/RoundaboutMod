@@ -120,6 +120,14 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
             "textures/stand/hey_ya/villager.png");
     public static ResourceLocation geezer = new ResourceLocation(Roundabout.MOD_ID,
             "textures/stand/hey_ya/geezer.png");
+    public static ResourceLocation skeleton = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/hey_ya/skeleton.png");
+    public static ResourceLocation wither = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/hey_ya/wither.png");
+    public static ResourceLocation tusk = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/hey_ya/tusk.png");
+    public static ResourceLocation devil = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/hey_ya/devil.png");
 
     public ResourceLocation getTextureLocation(Entity context, byte skin){
         switch (skin)
@@ -134,6 +142,10 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
             case PowersHeyYa.VILLAGER -> {return villager;}
             case PowersHeyYa.ICE_COLD -> {return ice_cold;}
             case PowersHeyYa.GEEZER -> {return geezer;}
+            case PowersHeyYa.WITHER -> {return wither;}
+            case PowersHeyYa.TUSK -> {return tusk;}
+            case PowersHeyYa.SKELETON -> {return skeleton;}
+            case PowersHeyYa.DEVIL -> {return devil;}
             default -> {return base;}
         }
     }

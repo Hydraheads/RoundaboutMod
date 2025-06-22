@@ -935,6 +935,10 @@
   "skins.roundabout.hey_ya.ice_cold": "Ice Cold",
   "skins.roundabout.hey_ya.villager": "Villager",
   "skins.roundabout.hey_ya.geezer": "Geezer",
+  "skins.roundabout.hey_ya.skeleton": "Skeleton",
+  "skins.roundabout.hey_ya.wither": "Wither",
+  "skins.roundabout.hey_ya.tusk": "Tusk",
+  "skins.roundabout.hey_ya.devil": "Devil",
 
   "skins.roundabout.killer_queen.base": "Part 4",
 
@@ -1082,5 +1086,16 @@
   "text.roundabout.hey_ya_messaging.no_32": "Life can be tough, but you are tougher, you are a winner!",
   "text.roundabout.hey_ya_messaging.no_33": "Always remember to love yourself, you matter!",
   "text.roundabout.hey_ya_messaging.no_34": "Keep that fire burning, and make it burn hotter!",
-  "text.roundabout.hey_ya_messaging.no_35": "You are a shooting star!"
+  "text.roundabout.hey_ya_messaging.no_35": "You are a shooting star!",
+
+  "text.roundabout.hey_ya_messaging.evil.no_1": "You're bad.",
+  "text.roundabout.hey_ya_messaging.evil.no_2": "What are you looking at, loser?",
+  "text.roundabout.hey_ya_messaging.evil.no_3": "Why are you talking to your own stand? Get some friends.",
+  "text.roundabout.hey_ya_messaging.evil.no_4": "I'm not your therapist.",
+  "text.roundabout.hey_ya_messaging.evil.no_5": "Life is hard, get used to it pal.",
+  "text.roundabout.hey_ya_messaging.evil.no_6": "You want advice? Don't get yourself killed, dumb dumb.",
+  "text.roundabout.hey_ya_messaging.evil.no_7": "Can you put me away already?",
+  "text.roundabout.hey_ya_messaging.evil.no_8": "What do I look like, a wizard? Do it yourself.",
+  "text.roundabout.hey_ya_messaging.evil.no_9": "You're stuck with me, pal. Get used to it.",
+  "text.roundabout.hey_ya_messaging.evil.no_10": "You know, talking to me isn't going to accomplish anything."
 }
