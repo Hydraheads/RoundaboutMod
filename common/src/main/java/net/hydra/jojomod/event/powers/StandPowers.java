@@ -1925,7 +1925,7 @@ public class StandPowers {
         return !stack.isEmpty() && stack.getItem() instanceof MaxStandDiscItem;
     }
 
-    public void getSkinInDirection(boolean right){
+    public void getSkinInDirection(boolean right, boolean sealed){
         StandUser SE = ((StandUser)this.getSelf());
         byte currentSkin = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         List<Byte> skins = getSkinList();
@@ -1949,7 +1949,9 @@ public class StandPowers {
                 }
                 SE.roundabout$setStandSkin((skins.get(skinind)));
             }
-            SE.roundabout$summonStand(this.getSelf().level(), true, false);
+            if (!sealed) {
+                SE.roundabout$summonStand(this.getSelf().level(), true, false);
+            }
         }
     }
 

@@ -20,7 +20,7 @@ public class KeyInputs {
 
     public static void summonKey(Player player, Minecraft client){
         StandUser user = ((StandUser) player);
-        if (user.roundabout$getStandPowers().canSummonStand() && user.roundabout$getSealedTicks() <= -1) {
+        if (user.roundabout$getStandPowers().canSummonStand() && !user.roundabout$isSealed()) {
             if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0) {
                 if (user.roundabout$getActive()) {
                     user.roundabout$setSummonCD(8);
@@ -57,7 +57,7 @@ public class KeyInputs {
     public static void forceSummon(Player player,boolean keyIsDown){
         if (keyIsDown) {
             if (!((StandUser) player).roundabout$getStandDisc().isEmpty() && !((StandUser) player).roundabout$getActive()) {
-                if (((StandUser) player).roundabout$getStandPowers().canSummonStand() && ((StandUser) player).roundabout$getSealedTicks() <= -1) {
+                if (!((StandUser) player).roundabout$getStandPowers().canSummonStand() && ((StandUser) player).roundabout$isSealed()) {
                     if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0 &&
                             ConfigManager.getClientConfig().pressingAbilityKeysSummonsStands) {
                         ((StandUser) player).roundabout$setActive(true);

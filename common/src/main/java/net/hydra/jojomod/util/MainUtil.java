@@ -1575,10 +1575,16 @@ public class MainUtil {
 
         } else if (context == PacketDataIndex.SINGLE_BYTE_SKIN_LEFT) {
                 StandUser user = ((StandUser) player);
-                user.roundabout$getStandPowers().getSkinInDirection(false);
+                user.roundabout$getStandPowers().getSkinInDirection(false,false);
         } else if (context == PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT) {
             StandUser user = ((StandUser) player);
-            user.roundabout$getStandPowers().getSkinInDirection(true);
+            user.roundabout$getStandPowers().getSkinInDirection(true,false);
+        } else if (context == PacketDataIndex.SINGLE_BYTE_SKIN_LEFT_SEALED) {
+            StandUser user = ((StandUser) player);
+            user.roundabout$getStandPowers().getSkinInDirection(false,true);
+        } else if (context == PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT_SEALED) {
+            StandUser user = ((StandUser) player);
+            user.roundabout$getStandPowers().getSkinInDirection(true,true);
         } else if (context == PacketDataIndex.SINGLE_BYTE_IDLE_LEFT) {
             StandUser user = ((StandUser) player);
             user.roundabout$getStandPowers().getPoseInDirection(false);

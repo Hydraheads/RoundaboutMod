@@ -791,7 +791,12 @@ public class PowerInventoryScreen
                     if (isSurelyHovering(rightXPos, topYPos, 7, 13, $$0, $$1)) {
                         if (menuTicks <= -1) {
                             scp.roundabout$setMenuTicks(5);
-                            ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT);
+                            scp.roundabout$setMenuTicks(5);
+                            if (standUser.roundabout$isSealed()){
+                                ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT_SEALED);
+                            } else {
+                                ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT);
+                            }
                         }
                         return true;
                     }
@@ -799,7 +804,11 @@ public class PowerInventoryScreen
                     if (isSurelyHovering(lefXPos, topYPos, 7, 13, $$0, $$1)) {
                         if (menuTicks <= -1) {
                             scp.roundabout$setMenuTicks(5);
-                            ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SKIN_LEFT);
+                            if (standUser.roundabout$isSealed()){
+                                ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SKIN_LEFT_SEALED);
+                            } else {
+                                ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SKIN_LEFT);
+                            }
                         }
                         return true;
                     }

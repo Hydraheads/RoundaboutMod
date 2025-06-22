@@ -599,7 +599,7 @@ public class ClientUtil {
             ((StandUser) player).roundabout$setGasolineTime(context);
         } else if (context == PacketDataIndex.S2C_SIMPLE_FREEZE_STAND) {
             if (((StandUser)player).roundabout$getStandPowers().hasCooldowns() ||
-                    ((StandUser)player).roundabout$getSealedTicks() > -1) {
+                    ((StandUser)player).roundabout$isSealed()) {
                 int punishTicks = ClientNetworking.getAppropriateConfig().cooldownsInTicks.switchStandDiscWhileOnCooldowns;
                 if (punishTicks > 0){
                     ((StandUser) player).roundabout$setMaxSealedTicks(punishTicks);

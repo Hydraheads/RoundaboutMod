@@ -472,7 +472,7 @@ public class PowersJustice extends DashPreset {
     }
     public void tickPower() {
         if  (!this.self.level().isClientSide()){
-            if (((StandUser)this.self).roundabout$getSealedTicks() >= 0){
+            if (((StandUser)this.self).roundabout$isSealed()){
                 if (this.isCastingFog()){
                     this.castFog();
                 }

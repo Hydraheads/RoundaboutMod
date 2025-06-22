@@ -318,7 +318,7 @@ public abstract class HudRendering implements IHudAccess {
 
                 StandHudRender.renderGrabbedHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
                 return true;
-            } else if (((StandUser)minecraft.player).roundabout$getSealedTicks() > -1){
+            } else if (((StandUser)minecraft.player).roundabout$isSealed()){
 
                 StandHudRender.renderSealedDiscHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
                 return true;

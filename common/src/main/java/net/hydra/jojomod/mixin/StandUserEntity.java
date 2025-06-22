@@ -2099,6 +2099,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Override
     @Unique
+    public boolean roundabout$isSealed(){
+        return roundabout$sealedTicks > -1;
+    }
+    @Override
+    @Unique
     public int roundabout$getMaxSealedTicks(){
         return roundabout$maxSealedTicks;
     }

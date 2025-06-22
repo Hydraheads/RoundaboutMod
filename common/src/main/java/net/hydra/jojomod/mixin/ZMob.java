@@ -505,7 +505,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
                 Mob mb = ((Mob) (Object) this);
                 if (this.getTarget() != null && !this.roundabout$getFightOrFlight()){
                     if (!((StandUser) this).roundabout$getActive() &&
-                            ((StandUser)this).roundabout$getSealedTicks() <= -1){
+                            !((StandUser)this).roundabout$isSealed()){
                         ((StandUser)this).roundabout$summonStand(this.level(),true,true);
                     }
                     if (roundabout$retractTicks != 100) {
