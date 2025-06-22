@@ -79,20 +79,28 @@ public class KeyInputs {
         ((IPlayerEntity) player).roundabout$showExp(keyIsDown);
     }
     public static void MoveKey4(Player player, Minecraft client, boolean keyIsDown, Options option){
-        forceSummon(player,keyIsDown);
-        ((StandUser) player).roundabout$getStandPowers().preButtonInput4(keyIsDown, option);
+        if (!((StandUser) player).roundabout$isSealed()){
+            forceSummon(player,keyIsDown);
+            ((StandUser) player).roundabout$getStandPowers().preButtonInput4(keyIsDown, option);
+        }
     }
     public static void MoveKey3(Player player, Minecraft client, boolean keyIsDown, Options option){
-        forceSummon(player,keyIsDown);
-        ((StandUser) player).roundabout$getStandPowers().preButtonInput3(keyIsDown, option);
+        if (!((StandUser) player).roundabout$isSealed()) {
+            forceSummon(player, keyIsDown);
+            ((StandUser) player).roundabout$getStandPowers().preButtonInput3(keyIsDown, option);
+        }
     }
     public static void MoveKey2(Player player, Minecraft client, boolean keyIsDown, Options option){
-        forceSummon(player,keyIsDown);
-        ((StandUser) player).roundabout$getStandPowers().preButtonInput2(keyIsDown, option);
+        if (!((StandUser) player).roundabout$isSealed()) {
+            forceSummon(player, keyIsDown);
+            ((StandUser) player).roundabout$getStandPowers().preButtonInput2(keyIsDown, option);
+        }
     }
     public static void MoveKey1(Player player, Minecraft client, boolean keyIsDown, Options option){
-        forceSummon(player,keyIsDown);
-        ((StandUser) player).roundabout$getStandPowers().preButtonInput1(keyIsDown, option);
+        if (!((StandUser) player).roundabout$isSealed()) {
+            forceSummon(player, keyIsDown);
+            ((StandUser) player).roundabout$getStandPowers().preButtonInput1(keyIsDown, option);
+        }
     }
 
 
