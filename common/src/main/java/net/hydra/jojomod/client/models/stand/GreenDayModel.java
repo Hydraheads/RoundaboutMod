@@ -218,7 +218,6 @@ public class GreenDayModel<T extends GreenDayEntity> extends StandModel<T> {
 	}
 
 	StandPowers Power = new PowersGreenDay(null);
-
 	@Override
 	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
 		super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
@@ -231,9 +230,8 @@ public class GreenDayModel<T extends GreenDayEntity> extends StandModel<T> {
 		this.animate(pEntity.kick_barrage_end, StandAnimations.KICK_BARRAGE_END, pAgeInTicks, 1f);
 
 	}
-
 	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		stand.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+	public ModelPart root() {
+		return stand;
 	}
 }
