@@ -31,6 +31,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -323,6 +324,15 @@ public class MainUtil {
     }
 
     public static void handleSetCreativeModeSlot(Player player, int integer, ItemStack stack, byte context) {
+        StandUser user = ((StandUser) player);
+        ServerPlayer sp = ((ServerPlayer) player);
+
+        if (!(user.roundabout$getStandPowers() instanceof PowersJustice) || !BuiltInRegistries.ITEM.getKey(stack.getItem()).toString().startsWith("roundabout:fog_"))
+        {
+            sp.connection.disconnect(Component.literal("Exploit Detected"));
+            return;
+        }
+
         if (context == PacketDataIndex.ADD_FOG_ITEM) {
             boolean flag = integer < 0;
             ItemStack itemstack = stack;

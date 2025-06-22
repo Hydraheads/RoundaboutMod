@@ -101,9 +101,8 @@ public class UtilC2S {
         server.execute(() -> {
             MainUtil.handleSetCreativeModeSlot(player,slot,context,bt);
         });
-
-
     }
+
     public static void itemChange(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
                                        FriendlyByteBuf buf, PacketSender responseSender){
         //Everything here is server only!
