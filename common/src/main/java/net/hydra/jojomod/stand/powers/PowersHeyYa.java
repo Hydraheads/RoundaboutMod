@@ -9,6 +9,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -102,6 +103,7 @@ public class PowersHeyYa extends NewDashPreset {
         this.setCooldown(PowerIndex.SKILL_4,42);
         if (!isClient()){
             setYapTime(40);
+            ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.no_"+(Mth.floor(Math.random() * 35)+1)).withStyle(ChatFormatting.GOLD), true);
             getStandUserSelf().roundabout$setStandAnimation(YAP);
             playStandUserOnlySoundsIfNearby((byte) (61 + Mth.floor(Math.random() * 7)), 100, false, true);
         }
