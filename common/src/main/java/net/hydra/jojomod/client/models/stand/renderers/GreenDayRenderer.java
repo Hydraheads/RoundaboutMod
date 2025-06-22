@@ -32,10 +32,6 @@ public class GreenDayRenderer extends StandRenderer<GreenDayEntity> {
 
     @Override
     public void render(GreenDayEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
-        if (mobEntity.getUser() != null)
-            if (((StandUser)mobEntity.getUser()).roundabout$isParallelRunning())
-                if (mobEntity.getUser() != Minecraft.getInstance().player)
-                    return;
 
         float factor = 0.5F + (mobEntity.getSizePercent()/2);
         if (mobEntity.isBaby()) {
@@ -51,6 +47,7 @@ public class GreenDayRenderer extends StandRenderer<GreenDayEntity> {
     protected RenderType getRenderType(GreenDayEntity entity, boolean showBody, boolean translucent, boolean showOutline) {
         return super.getRenderType(entity, showBody, true, showOutline);
     }
+
 
     @Override
     public float getStandOpacity(GreenDayEntity entity) {
