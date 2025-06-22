@@ -106,6 +106,12 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
             "textures/stand/hey_ya/chapter_24.png");
     public static ResourceLocation greener = new ResourceLocation(Roundabout.MOD_ID,
             "textures/stand/hey_ya/greener.png");
+    public static ResourceLocation warden = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/hey_ya/warden.png");
+    public static ResourceLocation fire_and_ice = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/hey_ya/fire_and_ice.png");
+    public static ResourceLocation world = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/hey_ya/world.png");
 
     public ResourceLocation getTextureLocation(Entity context, byte skin){
         switch (skin)
@@ -114,6 +120,9 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
             case PowersHeyYa.VOLUME_2 -> {return volume_2;}
             case PowersHeyYa.CHAPTER_24 -> {return chapter_24;}
             case PowersHeyYa.GREENER -> {return greener;}
+            case PowersHeyYa.WARDEN -> {return warden;}
+            case PowersHeyYa.WORLD -> {return world;}
+            case PowersHeyYa.FIRE_AND_ICE -> {return fire_and_ice;}
             default -> {return base;}
         }
     }

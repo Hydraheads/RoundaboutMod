@@ -197,7 +197,10 @@ public class PowersHeyYa extends NewDashPreset {
             GOTHIC = 2,
             VOLUME_2 = 3,
             CHAPTER_24 = 4,
-            GREENER = 5;
+            GREENER = 5,
+            WORLD = 6,
+            FIRE_AND_ICE = 7,
+            WARDEN = 8;
 
     public static final byte
             YAP_1 = 61,
@@ -214,7 +217,10 @@ public class PowersHeyYa extends NewDashPreset {
                 VOLUME_2,
                 CHAPTER_24,
                 GOTHIC,
-                GREENER
+                GREENER,
+                FIRE_AND_ICE,
+                WORLD,
+                WARDEN
         );
     }
     @Override public Component getSkinName(byte skinId) {
@@ -224,10 +230,17 @@ public class PowersHeyYa extends NewDashPreset {
             case VOLUME_2 -> Component.translatable("skins.roundabout.hey_ya.volume_2");
             case CHAPTER_24 -> Component.translatable("skins.roundabout.hey_ya.chapter_24");
             case GREENER -> Component.translatable("skins.roundabout.hey_ya.greener");
+            case WORLD -> Component.translatable("skins.roundabout.hey_ya.world");
+            case WARDEN -> Component.translatable("skins.roundabout.hey_ya.warden");
+            case FIRE_AND_ICE -> Component.translatable("skins.roundabout.hey_ya.fire_and_ice");
             default -> Component.translatable("skins.roundabout.hey_ya.manga");
         };
     }
 
+    @Override
+    public boolean isSecondaryStand(){
+        return true;
+    }
     protected Byte getSummonSound() {
         return SoundIndex.SUMMON_SOUND;
     }
