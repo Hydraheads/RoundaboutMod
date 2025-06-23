@@ -214,7 +214,8 @@ public class PowersHeyYa extends NewDashPreset {
             WITHER = 13,
             TUSK = 14,
             DEVIL = 15,
-            HELL_NAH = 16;
+            HELL_NAH = 16,
+            ALIEN = 17;
 
     public static final byte
             YAP_1 = 61,
@@ -235,6 +236,7 @@ public class PowersHeyYa extends NewDashPreset {
                 FIRE_AND_ICE,
                 ICE_COLD,
                 GEEZER,
+                ALIEN,
                 WORLD,
                 TUSK,
                 VILLAGER,
@@ -272,6 +274,7 @@ public class PowersHeyYa extends NewDashPreset {
             case SKELETON -> Component.translatable("skins.roundabout.hey_ya.skeleton");
             case WITHER -> Component.translatable("skins.roundabout.hey_ya.wither");
             case HELL_NAH -> Component.translatable("skins.roundabout.hey_ya.hell_nah");
+            case ALIEN -> Component.translatable("skins.roundabout.hey_ya.alien");
             default -> Component.translatable("skins.roundabout.hey_ya.manga");
         };
     }

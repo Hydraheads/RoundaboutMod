@@ -130,6 +130,8 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
             "textures/stand/hey_ya/devil.png");
     public static ResourceLocation hell_nah = new ResourceLocation(Roundabout.MOD_ID,
             "textures/stand/hey_ya/hell_nah.png");
+    public static ResourceLocation alien = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/hey_ya/alien.png");
 
     public ResourceLocation getTextureLocation(Entity context, byte skin){
         switch (skin)
@@ -149,6 +151,7 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
             case PowersHeyYa.SKELETON -> {return skeleton;}
             case PowersHeyYa.DEVIL -> {return devil;}
             case PowersHeyYa.HELL_NAH -> {return hell_nah;}
+            case PowersHeyYa.ALIEN -> {return alien;}
             default -> {return base;}
         }
     }
