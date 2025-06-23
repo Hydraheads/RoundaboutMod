@@ -1,10 +1,11 @@
 {
   "type": "forge:add_spawns",
-  "biomes": "#minecraft:taiga",
-  "spawners": {
-    "type": "roundabout:terrier",
-    "weight": 2,
-    "minCount": 1,
-    "maxCount": 3
-  }
+  "biomes": "#minecraft:is_taiga",
+  "spawners":
+    {
+      "type": "roundabout:terrier",
+      "weight": 2,
+      "minCount": 1,
+      "maxCount": 3
+    }
 }
