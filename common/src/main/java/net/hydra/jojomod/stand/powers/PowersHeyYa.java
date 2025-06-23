@@ -1,5 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -103,7 +104,11 @@ public class PowersHeyYa extends NewDashPreset {
         this.setCooldown(PowerIndex.SKILL_4,42);
         if (!isClient()){
             setYapTime(40);
-            ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.no_"+(Mth.floor(Math.random() * 35)+1)).withStyle(ChatFormatting.GOLD), true);
+            if (isEvilYapper()){
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.evil.no_"+(Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfEvilYapLines)+1)).withStyle(ChatFormatting.GOLD), true);
+            } else {
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.no_"+(Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfYapLines)+1)).withStyle(ChatFormatting.GOLD), true);
+            }
             getStandUserSelf().roundabout$setStandAnimation(YAP);
             playStandUserOnlySoundsIfNearby((byte) (61 + Mth.floor(Math.random() * 7)), 100, false, true);
         }
@@ -208,7 +213,8 @@ public class PowersHeyYa extends NewDashPreset {
             SKELETON = 12,
             WITHER = 13,
             TUSK = 14,
-            DEVIL = 15;
+            DEVIL = 15,
+            HELL_NAH = 16;
 
     public static final byte
             YAP_1 = 61,
@@ -235,8 +241,18 @@ public class PowersHeyYa extends NewDashPreset {
                 SKELETON,
                 WITHER,
                 WARDEN,
-                DEVIL
+                DEVIL,
+                HELL_NAH
         );
+    }
+
+    public boolean isEvilYapper(){
+        switch (getStandUserSelf().roundabout$getStandSkin())
+        {
+            case PowersHeyYa.DEVIL,PowersHeyYa.HELL_NAH,
+                    PowersHeyYa.WORLD, PowersHeyYa.WARDEN -> {return true;}
+            default -> {return false;}
+        }
     }
     @Override public Component getSkinName(byte skinId) {
         return switch (skinId)
@@ -255,6 +271,7 @@ public class PowersHeyYa extends NewDashPreset {
             case TUSK -> Component.translatable("skins.roundabout.hey_ya.tusk");
             case SKELETON -> Component.translatable("skins.roundabout.hey_ya.skeleton");
             case WITHER -> Component.translatable("skins.roundabout.hey_ya.wither");
+            case HELL_NAH -> Component.translatable("skins.roundabout.hey_ya.hell_nah");
             default -> Component.translatable("skins.roundabout.hey_ya.manga");
         };
     }
