@@ -58,6 +58,7 @@ public class ModBlocks {
     public static Block MIRROR;
     public static Block STEREO;
 
+    public static Block MINING_ALERT_BLOCK;
     public static Block BUBBLE_SCAFFOLD;
 
     public static Block STAND_FIRE;
@@ -342,6 +343,12 @@ public class ModBlocks {
 
             BlockBehaviour.Properties.of().mapColor(MapColor.RAW_IRON).
                     instrument(NoteBlockInstrument.BASS).strength(1.0F, 6.0F));
+    public static MiningAlertBlock MINING_ALERT_BLOCK_PROPERTIES = new MiningAlertBlock(
+
+            BlockBehaviour.Properties.of().mapColor(MapColor.RAW_IRON).pushReaction(PushReaction.DESTROY).lightLevel((p_152607_) -> {
+                        return 15;
+                    }).noParticlesOnBreak().
+                    instrument(NoteBlockInstrument.BASS).strength(0, 0));
     public static BubbleScaffoldBlock BUBBLE_SCAFFOLD_BLOCK_PROPERTIES = new BubbleScaffoldBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).noCollission().dynamicShape().speedFactor(0.7F).replaceable().instabreak().lightLevel((p_152607_) -> {
                 return 1;

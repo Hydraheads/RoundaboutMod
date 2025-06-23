@@ -128,6 +128,7 @@ public class ForgeEvents {
         ModBlocks.WALL_STREET_SIGN_DANGER = ForgeBlocks.WALL_STREET_SIGN_DANGER.get();
         ModBlocks.CEILING_LIGHT = ForgeBlocks.CEILING_LIGHT.get();
         ModBlocks.MIRROR = ForgeBlocks.MIRROR.get();
+        ModBlocks.MINING_ALERT_BLOCK = ForgeBlocks.MINING_ALERT_BLOCK.get();
         ModBlocks.FOG_DIRT = ForgeBlocks.FOG_DIRT.get();
         ModBlocks.FOG_DIRT_COATING = ForgeBlocks.FOG_DIRT_COATING.get();
         ModBlocks.FOG_CLAY = ForgeBlocks.FOG_CLAY.get();
@@ -313,6 +314,7 @@ public class ForgeEvents {
         ModParticles.BUBBLE_POP = ForgeParticles.BUBBLE_POP.get();
         ModParticles.PLUNDER = ForgeParticles.PLUNDER.get();
         ModParticles.FRICTIONLESS = ForgeParticles.FRICTIONLESS.get();
+        ModParticles.EXCLAMATION = ForgeParticles.EXCLAMATION.get();
         ModParticles.D4C_LINES = ForgeParticles.D4C_LINES.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;

@@ -77,6 +77,8 @@ public class ForgeBlocks {
             () -> ModBlocks.CEILING_LIGHT_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> MIRROR = BLOCKS.register("mirror",
             ModBlocks::getMirrorBlockProperties);
+    public static final RegistryObject<Block> MINING_ALERT_BLOCK = BLOCKS.register("mining_alert_block",
+            () -> ModBlocks.MINING_ALERT_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> FOG_DIRT = BLOCKS.register("fog_dirt",
             ModBlocks::getFogBlock);
     public static final RegistryObject<Block> FOG_DIRT_COATING = BLOCKS.register("fog_dirt_coating",

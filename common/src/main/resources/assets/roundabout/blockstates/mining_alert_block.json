@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "roundabout:block/mining_alert_block"
+    }
+  }
+}
