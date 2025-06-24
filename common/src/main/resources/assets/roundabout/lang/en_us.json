@@ -777,6 +777,13 @@
   "ability.roundabout.water_shield": "Water Shield",
   "ability.roundabout.water_shield.desc": "Uses up water in a held water bottle to shield you from many projectile types for a short while. If they make contact, they instead turn into explosive item bubbles which you can pop to launch back at foes. Also puts out fires on you.",
 
+  "ability.roundabout.danger_yap": "Lookout Mode",
+  "ability.roundabout.danger_yap.desc": "Hey Ya will watch out for mobs that target you, and bring them to your attention.",
+  "ability.roundabout.mining_yap": "Ore Searching",
+  "ability.roundabout.mining_yap.desc": "Hey Ya will look for ores around you, and bring them to your attention.",
+  "ability.roundabout.yap_yap": "Encouragement",
+  "ability.roundabout.yap_yap.desc": "Hey Ya will cheer you on and make your day better!",
+
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Locked",

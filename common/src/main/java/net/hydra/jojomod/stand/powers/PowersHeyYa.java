@@ -1,10 +1,12 @@
 package net.hydra.jojomod.stand.powers;
 
+import com.google.common.collect.Lists;
 import net.hydra.jojomod.block.MiningAlertBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -445,5 +447,18 @@ public class PowersHeyYa extends NewDashPreset {
             }
         }
         return super.getSoundFromByte(soundChoice);
+    }
+
+    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
+        List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.danger_yap",
+                "instruction.roundabout.press_skill", StandIcons.DANGER_YAP, 1, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.mining_yap",
+                "instruction.roundabout.press_skill", StandIcons.MINING_YAP,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
+                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.yap_yap",
+                "instruction.roundabout.press_skill", StandIcons.YAP_YAP,4,level,bypass));
+        return $$1;
     }
 }
