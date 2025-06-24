@@ -101,8 +101,9 @@ public class PowersHeyYa extends NewDashPreset {
     public void toggleDangerYapClient(){
     }
     public void miningYapClient(){
-        if (!this.onCooldown(PowerIndex.SKILL_4)) {
+        if (!this.onCooldown(PowerIndex.SKILL_2)) {
             this.tryPower(PowerIndex.POWER_2, true);
+            tryPowerPacket(PowerIndex.POWER_2);
         }
     }
     public void yapClient(){
@@ -114,7 +115,7 @@ public class PowersHeyYa extends NewDashPreset {
     /**Let the client brunt the task of mass scanning blocks so it doesn't lag server TPS
      * also instill block limits so the packet count is sane*/
     public boolean scoutForOresOnClient(){
-        this.setCooldown(PowerIndex.SKILL_2,42);
+        this.setCooldown(PowerIndex.SKILL_2,ClientNetworking.getAppropriateConfig().heyYaSettings.oreDetectionCooldown);
         if (isClient()){
             int range = ClientNetworking.getAppropriateConfig().heyYaSettings.oreDetectionRadius;
             int oremaxout = 0;
@@ -137,8 +138,24 @@ public class PowersHeyYa extends NewDashPreset {
                     }
                 }
             }
+        } else {
+            yapSounds();
+                if (isEvilYapper()){
+                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.mining.evil.no_"+(Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfEvilMiningYapLines)+1)).withStyle(ChatFormatting.GOLD), true);
+                } else {
+                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.mining.no_"+(Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfMiningYapLines)+1)).withStyle(ChatFormatting.GOLD), true);
+                }
         }
         return true;
+    }
+
+    public void yapSounds(){
+
+        if (!isYapping()){
+            setYapTime(40);
+            getStandUserSelf().roundabout$setStandAnimation(YAP);
+            playStandUserOnlySoundsIfNearby((byte) (61 + Mth.floor(Math.random() * 7)), 100, false, true);
+        }
     }
 
     /**if the block is legal to replace, send packet to server which will confirm if it is*/
@@ -165,16 +182,14 @@ public class PowersHeyYa extends NewDashPreset {
     }
 
     public boolean doYap(){
-        this.setCooldown(PowerIndex.SKILL_4,42);
+        this.setCooldown(PowerIndex.SKILL_4,ClientNetworking.getAppropriateConfig().heyYaSettings.yapCooldown);
         if (!isClient()){
-            setYapTime(40);
+            yapSounds();
             if (isEvilYapper()){
                 ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.evil.no_"+(Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfEvilYapLines)+1)).withStyle(ChatFormatting.GOLD), true);
             } else {
                 ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.no_"+(Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfYapLines)+1)).withStyle(ChatFormatting.GOLD), true);
             }
-            getStandUserSelf().roundabout$setStandAnimation(YAP);
-            playStandUserOnlySoundsIfNearby((byte) (61 + Mth.floor(Math.random() * 7)), 100, false, true);
         }
         return true;
     }

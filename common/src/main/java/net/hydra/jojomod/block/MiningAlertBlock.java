@@ -1,6 +1,7 @@
 package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.access.IPermaCasting;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.ModParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -87,7 +88,7 @@ public class MiningAlertBlock extends Block implements SimpleWaterloggedBlock {
     @Override
     public void onPlace(BlockState $$0, Level $$1, BlockPos $$2, BlockState $$3, boolean $$4) {
         super.onPlace($$0, $$1, $$2, $$3, $$4);
-        $$1.scheduleTick($$2, this, 200);
+        $$1.scheduleTick($$2, this, ClientNetworking.getAppropriateConfig().heyYaSettings.detectedOreLightDuration);
     }
     @Override
     public void animateTick(BlockState $$0, Level $$1, BlockPos $$2, RandomSource $$3) {
