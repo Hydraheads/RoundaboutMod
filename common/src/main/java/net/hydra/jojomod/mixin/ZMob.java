@@ -226,11 +226,11 @@ public abstract class ZMob extends LivingEntity implements IMob {
     private void roundabout$finalizeSpawn(ServerLevelAccessor $$0, DifficultyInstance $$1, MobSpawnType $$2, SpawnGroupData $$3, CompoundTag $$4, CallbackInfoReturnable<SpawnGroupData> cir) {
         RandomSource $$5 = $$0.getRandom();
         if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_USER_MOB_SPAWNS) && $$5.nextFloat() < MainUtil.getStandUserOdds(((Mob)(Object)this))
-        && !ModItems.STAND_ARROW_POOL_FOR_MOBS.isEmpty()) {
+        && !ModItems.getPoolForMob(this).isEmpty()) {
             this.roundabout$setWorthy(true);
             this.roundabout$setIsNaturalStandUser(true);
-            int index = (int) (Math.floor(Math.random()* ModItems.STAND_ARROW_POOL_FOR_MOBS.size()));
-            ItemStack stack = ModItems.STAND_ARROW_POOL_FOR_MOBS.get(index).getDefaultInstance();
+            int index = (int) (Math.floor(Math.random()* ModItems.getPoolForMob(this).size()));
+            ItemStack stack = ModItems.getPoolForMob(this).get(index).getDefaultInstance();
             if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem SD){
                 ((StandUser)this).roundabout$setStandDisc(stack);
                 SD.generateStandPowers(((LivingEntity) (Object) this));

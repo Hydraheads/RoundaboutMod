@@ -94,6 +94,31 @@ public abstract class ConfigManager {
                 ModItems.STAND_ARROW_POOL_FOR_MOBS.add((StandDiscItem) i);
             }
         }
+        if (getConfig().humanoidOnlyStandUserMobPoolv1 != null)
+        {
+            ModItems.STAND_ARROW_POOL_FOR_HUMANOID_MOBS.clear();
+
+            if (ModItems.STAND_ARROW_POOL_FOR_MOBS != null && !ModItems.STAND_ARROW_POOL_FOR_MOBS.isEmpty()){
+                ModItems.STAND_ARROW_POOL_FOR_HUMANOID_MOBS.addAll(ModItems.STAND_ARROW_POOL_FOR_MOBS);
+            }
+
+            for (String disc : getConfig().humanoidOnlyStandUserMobPoolv1)
+            {
+                String[] split = disc.split(":");
+
+                if (split.length != 2)
+                    continue;
+
+                ResourceLocation identifier = new ResourceLocation(split[0], split[1]);
+
+                Item i = BuiltInRegistries.ITEM.get(identifier);
+
+                if (i.getClass() != StandDiscItem.class)
+                    continue;
+
+                ModItems.STAND_ARROW_POOL_FOR_HUMANOID_MOBS.add((StandDiscItem) i);
+            }
+        }
 
         if (getConfig().standArrowSecondaryPoolv2 != null)
         {

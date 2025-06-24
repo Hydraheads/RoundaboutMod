@@ -48,11 +48,11 @@ public class ZVillagerMakeLove {
                         UserOdds += MainUtil.getStandUserBreedBonus(villager);
                     }
                     RandomSource $$5 = $$0.getRandom();
-                    if ($$5.nextFloat() < UserOdds && !ModItems.STAND_ARROW_POOL_FOR_MOBS.isEmpty()) {
+                    if ($$5.nextFloat() < UserOdds && !ModItems.getPoolForMob(villager).isEmpty()) {
                         ((IMob) villager).roundabout$setWorthy(true);
                         ((IMob) villager).roundabout$setIsNaturalStandUser(true);
-                        int index = (int) (Math.floor(Math.random() * ModItems.STAND_ARROW_POOL_FOR_MOBS.size()));
-                        ItemStack stack = ModItems.STAND_ARROW_POOL_FOR_MOBS.get(index).getDefaultInstance();
+                        int index = (int) (Math.floor(Math.random() * ModItems.getPoolForMob(villager).size()));
+                        ItemStack stack = ModItems.getPoolForMob(villager).get(index).getDefaultInstance();
                         if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem SD) {
                             ((StandUser) villager).roundabout$setStandDisc(stack);
                             SD.generateStandPowers(villager);

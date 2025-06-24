@@ -148,6 +148,11 @@ public class Config implements Cloneable {
                     "roundabout:soft_and_wet_disc"
             )
     );
+    public Set<String> humanoidOnlyStandUserMobPoolv1 = new HashSet<>(
+            Arrays.asList(
+                    "roundabout:hey_ya_disc"
+            )
+    );
     @NestedOption(group = "modded")
     public VanillaMCTweaks vanillaMinecraftTweaks;
     @NestedOption(group = "modded")
