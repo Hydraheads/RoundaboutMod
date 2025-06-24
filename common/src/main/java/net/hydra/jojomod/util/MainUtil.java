@@ -61,6 +61,7 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
+import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.npc.*;
 import net.minecraft.world.entity.player.Player;
@@ -198,6 +199,12 @@ public class MainUtil {
             return ClientNetworking.getAppropriateConfig().userAndWorthyBreedingOddsBonus *ClientNetworking.getAppropriateConfig().multiplyAboveForVillagerBreeding;
         }
         return ClientNetworking.getAppropriateConfig().userAndWorthyBreedingOddsBonus;
+    }
+    public static boolean isHumanoid(LivingEntity LE){
+        return (LE instanceof Zombie || LE instanceof AbstractSkeleton
+        || LE instanceof EnderMan || LE instanceof Player || LE instanceof Piglin
+                || LE instanceof JojoNPC);
+
     }
     public static LivingEntity homeOnWorthy(Level level, Vec3 vec3, double range) {
         List<Entity> EntitiesInRange = genHitbox(level, vec3.x, vec3.y,

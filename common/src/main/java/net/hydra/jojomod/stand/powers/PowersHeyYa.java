@@ -449,6 +449,10 @@ public class PowersHeyYa extends NewDashPreset {
         return super.getSoundFromByte(soundChoice);
     }
 
+    public byte worthinessType(){
+        return HUMANOID_WORTHY;
+    }
+
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.danger_yap",

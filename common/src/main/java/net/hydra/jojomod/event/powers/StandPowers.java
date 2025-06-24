@@ -892,6 +892,23 @@ public class StandPowers {
     }
 
     public static final byte
+            ALL_WORTHY = 1,
+            HUMANOID_WORTHY = 2;
+
+
+    public byte worthinessType(){
+        return ALL_WORTHY;
+    }
+
+    public boolean isWorthinessType(LivingEntity LE){
+        if (worthinessType() == HUMANOID_WORTHY){
+            return MainUtil.isHumanoid(LE);
+        }
+        return true;
+    }
+
+
+    public static final byte
             NONE = 0;
 
     public void tickMobAi(){

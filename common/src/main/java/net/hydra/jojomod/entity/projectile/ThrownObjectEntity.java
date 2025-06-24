@@ -668,7 +668,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 this.dropItem($$1.getOnPos());
             }
         } else if (this.getItem().getItem() instanceof StandDiscItem SD) {
-            if (this.places && $$1 instanceof LivingEntity LE && MainUtil.canGrantStand(LE)){
+            if (this.places && $$1 instanceof LivingEntity LE && MainUtil.canGrantStand(LE) &&
+            SD.standPowers.isWorthinessType(LE)){
                 ((StandUser) LE).roundabout$setStandDisc(this.getItem());
                 SD.generateStandPowers(LE);
                 ((StandUser) LE).roundabout$summonStand($$1.level(),true,true);
