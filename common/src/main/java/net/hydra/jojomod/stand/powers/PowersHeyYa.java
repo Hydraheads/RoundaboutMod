@@ -342,7 +342,8 @@ public class PowersHeyYa extends NewDashPreset {
             HELL_NAH = 16,
             ALIEN = 17,
             AMERICA = 18,
-            ZOMBIE = 19;
+            ZOMBIE = 19,
+            ANTI = 20;
 
     public static final byte
             YAP_1 = 61,
@@ -373,6 +374,7 @@ public class PowersHeyYa extends NewDashPreset {
                 WITHER,
                 WARDEN,
                 DEVIL,
+                ANTI,
                 HELL_NAH
         );
     }
@@ -380,7 +382,7 @@ public class PowersHeyYa extends NewDashPreset {
     public boolean isEvilYapper(){
         switch (getStandUserSelf().roundabout$getStandSkin())
         {
-            case PowersHeyYa.DEVIL,PowersHeyYa.HELL_NAH,
+            case PowersHeyYa.DEVIL,PowersHeyYa.HELL_NAH, PowersHeyYa.ANTI,
                     PowersHeyYa.WORLD, PowersHeyYa.WARDEN -> {return true;}
             default -> {return false;}
         }
@@ -406,6 +408,7 @@ public class PowersHeyYa extends NewDashPreset {
             case ALIEN -> Component.translatable("skins.roundabout.hey_ya.alien");
             case AMERICA -> Component.translatable("skins.roundabout.hey_ya.america");
             case ZOMBIE -> Component.translatable("skins.roundabout.hey_ya.zombie");
+            case ANTI -> Component.translatable("skins.roundabout.hey_ya.anti");
             default -> Component.translatable("skins.roundabout.hey_ya.manga");
         };
     }
