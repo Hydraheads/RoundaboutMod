@@ -132,9 +132,10 @@ public class Config implements Cloneable {
                     "roundabout:soft_and_wet_disc"
             )
     );
-    public Set<String> standArrowSecondaryPoolv1 = new HashSet<>(
+    public Set<String> standArrowSecondaryPoolv2 = new HashSet<>(
             Arrays.asList(
-                    "roundabout:cinderella_disc"
+                    "roundabout:cinderella_disc",
+                    "roundabout:hey_ya_disc"
             )
     );
     public Set<String> naturalStandUserMobPoolv3 = new HashSet<>(
@@ -145,6 +146,11 @@ public class Config implements Cloneable {
                     "roundabout:magicians_red_disc",
                     "roundabout:cinderella_disc",
                     "roundabout:soft_and_wet_disc"
+            )
+    );
+    public Set<String> humanoidOnlyStandUserMobPoolv1 = new HashSet<>(
+            Arrays.asList(
+                    "roundabout:hey_ya_disc"
             )
     );
     @NestedOption(group = "modded")
@@ -510,6 +516,10 @@ public class Config implements Cloneable {
         public Integer numberOfMiningYapLines;
         @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
         public Integer numberOfEvilMiningYapLines;
+        @IntOption(group = "inherit", value = 4, min = 0, max = 72000)
+        public Integer numberOfDangerYapLines;
+        @IntOption(group = "inherit", value = 4, min = 0, max = 72000)
+        public Integer numberOfEvilDangerYapLines;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer detectedOreLightDuration;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)

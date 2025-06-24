@@ -3,6 +3,8 @@ package net.hydra.jojomod.item;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.powers.VisageStoreEntry;
+import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -100,8 +102,15 @@ public class ModItems {
     public static ArrayList<StandDiscItem> STAND_ARROW_POOL = Lists.newArrayList();
     public static ArrayList<StandDiscItem> STAND_ARROW_SECONDARY_STAND_POOL = Lists.newArrayList();
     public static ArrayList<StandDiscItem> STAND_ARROW_POOL_FOR_MOBS = Lists.newArrayList();
+    public static ArrayList<StandDiscItem> STAND_ARROW_POOL_FOR_HUMANOID_MOBS = Lists.newArrayList();
     public static ArrayList<VisageStoreEntry> VISAGE_STORE_ENTRIES = Lists.newArrayList();
 
+
+    public static ArrayList<StandDiscItem> getPoolForMob(LivingEntity LE){
+        if (MainUtil.isHumanoid(LE))
+            return STAND_ARROW_POOL_FOR_HUMANOID_MOBS;
+        return STAND_ARROW_POOL_FOR_MOBS;
+    }
 
     public static ArrayList<VisageStoreEntry> getVisageStore(){
         if (VISAGE_STORE_ENTRIES == null){

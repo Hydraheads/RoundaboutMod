@@ -56,9 +56,9 @@ public class StandArrowEntity extends AbstractArrow {
 
     @Override
     public void tick() {
-        if (this.getArrow().getItem() instanceof StandArrowItem) {
+        if (this.getArrow().getItem() instanceof StandArrowItem SD) {
             LivingEntity targetMob = MainUtil.homeOnWorthy(this.level(), this.position(), 5);
-            if (targetMob != null) {
+            if (targetMob != null && SD.isWorthinessType(this.getArrow(),targetMob)) {
                 this.setDeltaMovement(
                         targetMob.position().add(0, targetMob.getEyeHeight(), 0).subtract(this.position()).normalize().scale(this.getDeltaMovement().length())
                 );
@@ -108,15 +108,17 @@ public class StandArrowEntity extends AbstractArrow {
         }
         boolean worthy = false;
         float X = $$3;
-        if (this.getArrow().getItem() instanceof StandArrowItem) {
+        if (this.getArrow().getItem() instanceof StandArrowItem SI) {
             if (($$1 instanceof Mob mob && MainUtil.canGrantStand(mob)) || ($$1 instanceof Player PE && MainUtil.canGrantStand(PE))) {
-                worthy = true;
-                X = 0.2F;
-                StandArrowItem.grantMobStand(this.getArrow(), this.level(), (LivingEntity) $$1);
-                if (this.pickup == Pickup.ALLOWED) {
-                    this.getArrow().hurt(1, this.level().getRandom(), null);
+                if (SI.isWorthinessType(this.getArrow(),((LivingEntity) $$1))) {
+                    worthy = true;
+                    X = 0.2F;
+                    StandArrowItem.grantMobStand(this.getArrow(), this.level(), (LivingEntity) $$1);
+                    if (this.pickup == Pickup.ALLOWED) {
+                        this.getArrow().hurt(1, this.level().getRandom(), null);
+                    }
+                    this.discard();
                 }
-                this.discard();
             }
         }
         if (this.getArrow().getItem() instanceof WorthyArrowItem WI && ($$1 instanceof Mob || $$1 instanceof Player)) {

@@ -1,6 +1,8 @@
 package net.hydra.jojomod.mixin.networking;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.zetalasis.networking.packet.api.IClientNetworking;
 import net.zetalasis.networking.packet.api.args.c2s.AbstractBaseC2SPacket;
 import net.zetalasis.networking.packet.api.args.c2s.PacketArgsC2S;
@@ -23,7 +25,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ServerGamePacketListenerImpl.class)
 public class ZServerGamePacketListenerImpl implements IClientNetworking {
     @Shadow @Final private Connection connection;
+    @Shadow public ServerPlayer player;
 
+    @Inject(method = "handlePlayerAction", at = @At("HEAD"), cancellable = true)
+    private void roundabout$handlePlayerAction(ServerboundPlayerActionPacket $$0, CallbackInfo ci) {
+        ServerboundPlayerActionPacket.Action serverboundplayeractionpacket$action = $$0.getAction();
+        switch (serverboundplayeractionpacket$action) {
+            case SWAP_ITEM_WITH_OFFHAND:
+                if (((StandUser)this.player).roundabout$getEffectiveCombatMode()){
+                    ci.cancel();
+                }
+        }
+    }
     @Inject(method = "handleCustomPayload", at = @At("HEAD"))
     private void roundabout$handlePayload(ServerboundCustomPayloadPacket packet, CallbackInfo ci)
     {

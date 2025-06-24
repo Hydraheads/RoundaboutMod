@@ -20,7 +20,8 @@ public class SoftAndWetEntity extends StandEntity {
             STRIPED = 8,
             DEBUT = 9,
             KIRA = 10,
-            COLORS = 11;
+            COLORS = 11,
+            GREEN = 12;
 
 
     public final AnimationState hideFists = new AnimationState();

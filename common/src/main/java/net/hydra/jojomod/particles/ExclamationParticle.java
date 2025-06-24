@@ -10,7 +10,7 @@ public class ExclamationParticle extends TextureSheetParticle {
         this.friction = 0.96F;
         this.gravity = 0;
         this.quadSize = 0.45f;
-        this.lifetime = 30;
+        this.lifetime = 60;
         this.setSpriteFromAge(spriteSet);
     }
 

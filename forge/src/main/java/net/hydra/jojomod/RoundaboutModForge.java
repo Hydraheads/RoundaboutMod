@@ -26,10 +26,12 @@ public class RoundaboutModForge {
         //ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ForgeCommonConfig.SPEC, "roundabout-client.toml");
         //ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ForgeCommonConfig.SPEC, "roundabout-common.toml");
 
+        /**
         BlockBlacklist.load(
                 FMLPaths.CONFIGDIR.get(),
                 "roundabout-block_blacklist"
         );
+         **/
 
         ForgeEffects.POTION_EFFECTS.register(bus);
         ForgeEntities.ENTITY_TYPES.register(bus);

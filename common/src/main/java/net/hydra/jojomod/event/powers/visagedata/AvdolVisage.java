@@ -25,4 +25,7 @@ public class AvdolVisage extends VisageData {
     public float getNametagHeight(){
         return 0.54f;
     }
+    public String getSkinPath(){
+        return "avdol";
+    }
 }
