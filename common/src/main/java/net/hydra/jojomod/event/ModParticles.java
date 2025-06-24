@@ -35,4 +35,5 @@ public class ModParticles {
     public static SimpleParticleType BUBBLE_POP;
     public static SimpleParticleType PLUNDER;
     public static SimpleParticleType FRICTIONLESS;
+    public static SimpleParticleType EXCLAMATION;
 }

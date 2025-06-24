@@ -172,6 +172,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public TheWorldSettings theWorldSettings;
     @NestedOption(group = "modded")
+    public HeyYaSettings heyYaSettings;
+    @NestedOption(group = "modded")
     public TimeStopSettings timeStopSettings;
     @NestedOption(group="modded")
     public Experiments experiments;
@@ -498,6 +500,26 @@ public class Config implements Cloneable {
         public Integer magiciansRedFurnaceTicks;
         @BooleanOption(group = "inherit", value = false)
         public Boolean lifeTrackerManualPushing;
+    }
+    public static class HeyYaSettings {
+        @IntOption(group = "inherit", value = 35, min = 0, max = 72000)
+        public Integer numberOfYapLines;
+        @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
+        public Integer numberOfEvilYapLines;
+        @IntOption(group = "inherit", value = 8, min = 0, max = 72000)
+        public Integer numberOfMiningYapLines;
+        @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
+        public Integer numberOfEvilMiningYapLines;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer detectedOreLightDuration;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer oreDetectionRadius;
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer oreDetectionMaximum;
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        public Integer oreDetectionCooldown;
+        @IntOption(group = "inherit", value = 42, min = 0, max = 72000)
+        public Integer yapCooldown;
     }
     public static class TheWorldSettings {
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)

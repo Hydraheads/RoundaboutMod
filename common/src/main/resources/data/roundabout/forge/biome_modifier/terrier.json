@@ -1,10 +1,11 @@
 {
   "type": "forge:add_spawns",
-  "biomes": "#minecraft:desert",
-  "spawners": {
-    "type": "roundabout:terrier",
-    "weight": 1,
-    "minCount": 1,
-    "maxCount": 1
-  }
+  "biomes": "minecraft:desert",
+  "spawners":
+    {
+      "type": "roundabout:terrier",
+      "weight": 1,
+      "minCount": 1,
+      "maxCount": 1
+    }
 }

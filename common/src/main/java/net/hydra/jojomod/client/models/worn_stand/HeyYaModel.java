@@ -128,6 +128,14 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
             "textures/stand/hey_ya/tusk.png");
     public static ResourceLocation devil = new ResourceLocation(Roundabout.MOD_ID,
             "textures/stand/hey_ya/devil.png");
+    public static ResourceLocation hell_nah = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/hey_ya/hell_nah.png");
+    public static ResourceLocation alien = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/hey_ya/alien.png");
+    public static ResourceLocation america = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/hey_ya/america.png");
+    public static ResourceLocation zombie = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/hey_ya/zombie.png");
 
     public ResourceLocation getTextureLocation(Entity context, byte skin){
         switch (skin)
@@ -146,9 +154,14 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
             case PowersHeyYa.TUSK -> {return tusk;}
             case PowersHeyYa.SKELETON -> {return skeleton;}
             case PowersHeyYa.DEVIL -> {return devil;}
+            case PowersHeyYa.HELL_NAH -> {return hell_nah;}
+            case PowersHeyYa.ALIEN -> {return alien;}
+            case PowersHeyYa.AMERICA -> {return america;}
+            case PowersHeyYa.ZOMBIE -> {return zombie;}
             default -> {return base;}
         }
     }
+
 
     public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light) {
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(context, (byte)0)));

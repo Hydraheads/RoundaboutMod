@@ -946,6 +946,10 @@
   "skins.roundabout.hey_ya.wither": "Wither",
   "skins.roundabout.hey_ya.tusk": "Tusk",
   "skins.roundabout.hey_ya.devil": "Devil",
+  "skins.roundabout.hey_ya.hell_nah": "Hell Nah",
+  "skins.roundabout.hey_ya.alien": "Alien",
+  "skins.roundabout.hey_ya.america": "America",
+  "skins.roundabout.hey_ya.zombie": "Jockey",
 
   "skins.roundabout.killer_queen.base": "Part 4",
 
@@ -1104,5 +1108,30 @@
   "text.roundabout.hey_ya_messaging.evil.no_7": "Can you put me away already?",
   "text.roundabout.hey_ya_messaging.evil.no_8": "What do I look like, a wizard? Do it yourself.",
   "text.roundabout.hey_ya_messaging.evil.no_9": "You're stuck with me, pal. Get used to it.",
-  "text.roundabout.hey_ya_messaging.evil.no_10": "You know, talking to me isn't going to accomplish anything."
+  "text.roundabout.hey_ya_messaging.evil.no_10": "You know, talking to me isn't going to accomplish anything.",
+
+  "text.roundabout.hey_ya_messaging.mining.no_1": "Let me have a look!",
+  "text.roundabout.hey_ya_messaging.mining.no_2": "It's mining time!",
+  "text.roundabout.hey_ya_messaging.mining.no_3": "What do we have here?",
+  "text.roundabout.hey_ya_messaging.mining.no_4": "You're gonna be rich, I just know it!",
+  "text.roundabout.hey_ya_messaging.mining.no_5": "Believe in your fortune!",
+  "text.roundabout.hey_ya_messaging.mining.no_6": "I'll help you look for ores!",
+  "text.roundabout.hey_ya_messaging.mining.no_7": "What treasures can we find today?",
+  "text.roundabout.hey_ya_messaging.mining.no_8": "I have a good feeling about this!",
+
+  "text.roundabout.hey_ya_messaging.mining.evil.no_1": "Fine. I guess I'll look.",
+  "text.roundabout.hey_ya_messaging.mining.evil.no_2": "Are you blind?",
+  "text.roundabout.hey_ya_messaging.mining.evil.no_3": "Let's get this over with.",
+  "text.roundabout.hey_ya_messaging.mining.evil.no_4": "Why not check it yourself? Hmph. Fine.",
+  "text.roundabout.hey_ya_messaging.mining.evil.no_5": "Feeling lazy today?",
+
+  "text.roundabout.hey_ya_messaging.danger.no_1": "%1$s, look out!",
+  "text.roundabout.hey_ya_messaging.danger.no_2": "%1$s spotted, on guard!",
+  "text.roundabout.hey_ya_messaging.danger.no_3": "%1$s is nearby!",
+  "text.roundabout.hey_ya_messaging.danger.no_4": "%1$s is attacking!",
+
+  "text.roundabout.hey_ya_messaging.danger.evil.no_1": "%1$s, dumbass.",
+  "text.roundabout.hey_ya_messaging.danger.evil.no_2": "%1$s alert, use your brain.",
+  "text.roundabout.hey_ya_messaging.danger.evil.no_3": "%1$s is nearby, can't you tell?",
+  "text.roundabout.hey_ya_messaging.danger.evil.no_4": "%1$s is gonna get us, idiot!"
 }

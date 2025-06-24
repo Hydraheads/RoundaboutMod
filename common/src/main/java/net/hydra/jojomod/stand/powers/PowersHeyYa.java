@@ -1,18 +1,28 @@
 package net.hydra.jojomod.stand.powers;
 
+import net.hydra.jojomod.block.MiningAlertBlock;
+import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.WaterFluid;
 
 import java.util.*;
 
@@ -91,7 +101,10 @@ public class PowersHeyYa extends NewDashPreset {
     public void toggleDangerYapClient(){
     }
     public void miningYapClient(){
-
+        if (!this.onCooldown(PowerIndex.SKILL_2)) {
+            this.tryPower(PowerIndex.POWER_2, true);
+            tryPowerPacket(PowerIndex.POWER_2);
+        }
     }
     public void yapClient(){
         if (!this.onCooldown(PowerIndex.SKILL_4)) {
@@ -99,13 +112,84 @@ public class PowersHeyYa extends NewDashPreset {
             tryPowerPacket(PowerIndex.POWER_4);
         }
     }
-    public boolean doYap(){
-        this.setCooldown(PowerIndex.SKILL_4,42);
-        if (!isClient()){
+    /**Let the client brunt the task of mass scanning blocks so it doesn't lag server TPS
+     * also instill block limits so the packet count is sane*/
+    public boolean scoutForOresOnClient(){
+        this.setCooldown(PowerIndex.SKILL_2,ClientNetworking.getAppropriateConfig().heyYaSettings.oreDetectionCooldown);
+        if (isClient()){
+            int range = ClientNetworking.getAppropriateConfig().heyYaSettings.oreDetectionRadius;
+            int oremaxout = 0;
+            int oremaxoutMax = ClientNetworking.getAppropriateConfig().heyYaSettings.oreDetectionMaximum;
+            for (int x = -range; x < range; x++){
+                for (int y = -range; y < range; y++){
+                    for (int z = -range; z < range; z++){
+                        BlockPos pos = this.self.blockPosition().offset(new BlockPos(x,y,z));
+                        BlockState blk = this.self.level().getBlockState(pos);
+                        if (blk.is(ModPacketHandler.PLATFORM_ACCESS.getOreTag())){
+                            if (confirmSpace(pos.below()) || confirmSpace(pos.east()) ||
+                                    confirmSpace(pos.west()) || confirmSpace(pos.north()) ||
+                                    confirmSpace(pos.south()) || confirmSpace(pos.above())){
+                                oremaxout++;
+                                if (oremaxout >= oremaxoutMax){
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            yapSounds();
+                if (isEvilYapper()){
+                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.mining.evil.no_"+(Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfEvilMiningYapLines)+1)).withStyle(ChatFormatting.GOLD), true);
+                } else {
+                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.mining.no_"+(Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfMiningYapLines)+1)).withStyle(ChatFormatting.GOLD), true);
+                }
+        }
+        return true;
+    }
+
+    public void yapSounds(){
+
+        if (!isYapping()){
             setYapTime(40);
-            ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.no_"+(Mth.floor(Math.random() * 35)+1)).withStyle(ChatFormatting.GOLD), true);
             getStandUserSelf().roundabout$setStandAnimation(YAP);
             playStandUserOnlySoundsIfNearby((byte) (61 + Mth.floor(Math.random() * 7)), 100, false, true);
+        }
+    }
+
+    /**if the block is legal to replace, send packet to server which will confirm if it is*/
+    public boolean confirmSpace(BlockPos pos){
+        BlockState state = this.self.level().getBlockState(pos);
+        if (state.isAir() || state.is(Blocks.WATER)
+        ){
+            tryBlockPosPowerPacket(PowerIndex.POWER_4_BONUS,pos);
+
+            return true;
+        }
+        return false;
+    }
+
+
+    public void tryHighlightOre(BlockPos pos){
+        BlockState state = this.self.level().getBlockState(pos);
+        if (state.isAir()
+        ){
+            this.self.level().setBlockAndUpdate(pos, ModBlocks.MINING_ALERT_BLOCK.defaultBlockState().setValue(MiningAlertBlock.WATERLOGGED, Boolean.valueOf(false)));
+        } else if ( state.is(Blocks.WATER)){
+            this.self.level().setBlockAndUpdate(pos, ModBlocks.MINING_ALERT_BLOCK.defaultBlockState().setValue(MiningAlertBlock.WATERLOGGED, Boolean.valueOf(true)));
+        }
+    }
+
+    public boolean doYap(){
+        this.setCooldown(PowerIndex.SKILL_4,ClientNetworking.getAppropriateConfig().heyYaSettings.yapCooldown);
+        if (!isClient()){
+            yapSounds();
+            if (isEvilYapper()){
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.evil.no_"+(Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfEvilYapLines)+1)).withStyle(ChatFormatting.GOLD), true);
+            } else {
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.no_"+(Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfYapLines)+1)).withStyle(ChatFormatting.GOLD), true);
+            }
         }
         return true;
     }
@@ -116,10 +200,24 @@ public class PowersHeyYa extends NewDashPreset {
             case PowerIndex.POWER_4 -> {
                 return doYap();
             }
+            case PowerIndex.POWER_2 -> {
+                return scoutForOresOnClient();
+            }
         }
         return super.setPowerOther(move,lastMove);
     }
 
+    @Override
+    public boolean tryBlockPosPower(int move, boolean forced,  BlockPos Pos) {
+        switch (move) {
+            case PowerIndex.POWER_4_BONUS -> {
+                /**The server accepts the block pos of the ore the client detected*/
+                tryHighlightOre(Pos);
+                return true;
+            }
+        }
+        return super.tryPower(move, forced);
+    }
     @Override
     public boolean tryPower(int move, boolean forced) {
         return super.tryPower(move, forced);
@@ -208,7 +306,11 @@ public class PowersHeyYa extends NewDashPreset {
             SKELETON = 12,
             WITHER = 13,
             TUSK = 14,
-            DEVIL = 15;
+            DEVIL = 15,
+            HELL_NAH = 16,
+            ALIEN = 17,
+            AMERICA = 18,
+            ZOMBIE = 19;
 
     public static final byte
             YAP_1 = 61,
@@ -229,14 +331,27 @@ public class PowersHeyYa extends NewDashPreset {
                 FIRE_AND_ICE,
                 ICE_COLD,
                 GEEZER,
+                ALIEN,
+                AMERICA,
                 WORLD,
                 TUSK,
                 VILLAGER,
+                ZOMBIE,
                 SKELETON,
                 WITHER,
                 WARDEN,
-                DEVIL
+                DEVIL,
+                HELL_NAH
         );
+    }
+
+    public boolean isEvilYapper(){
+        switch (getStandUserSelf().roundabout$getStandSkin())
+        {
+            case PowersHeyYa.DEVIL,PowersHeyYa.HELL_NAH,
+                    PowersHeyYa.WORLD, PowersHeyYa.WARDEN -> {return true;}
+            default -> {return false;}
+        }
     }
     @Override public Component getSkinName(byte skinId) {
         return switch (skinId)
@@ -255,6 +370,10 @@ public class PowersHeyYa extends NewDashPreset {
             case TUSK -> Component.translatable("skins.roundabout.hey_ya.tusk");
             case SKELETON -> Component.translatable("skins.roundabout.hey_ya.skeleton");
             case WITHER -> Component.translatable("skins.roundabout.hey_ya.wither");
+            case HELL_NAH -> Component.translatable("skins.roundabout.hey_ya.hell_nah");
+            case ALIEN -> Component.translatable("skins.roundabout.hey_ya.alien");
+            case AMERICA -> Component.translatable("skins.roundabout.hey_ya.america");
+            case ZOMBIE -> Component.translatable("skins.roundabout.hey_ya.zombie");
             default -> Component.translatable("skins.roundabout.hey_ya.manga");
         };
     }
