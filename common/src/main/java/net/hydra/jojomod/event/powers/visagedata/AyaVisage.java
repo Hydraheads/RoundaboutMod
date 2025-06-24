@@ -6,6 +6,7 @@ import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 public class AyaVisage extends VisageData {
     public AyaVisage(Player self) {
@@ -21,6 +22,11 @@ public class AyaVisage extends VisageData {
     @Override
     public Vec3 sizeModifier(){
         return new Vec3(0.95F,0.95F,0.95F);
+    }
+
+    @Override
+    public Vector3f scale(){
+        return new Vector3f(0.8F, 0.839F, 0.8F);
     }
     @Override
     public float getNametagHeight(){

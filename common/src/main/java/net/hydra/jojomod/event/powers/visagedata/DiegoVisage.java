@@ -4,6 +4,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 public class DiegoVisage extends VisageData {
     public DiegoVisage(Player self) {
@@ -21,6 +22,10 @@ public class DiegoVisage extends VisageData {
         return new Vec3(0.98F,0.98F,0.98F);
     }
 
+    @Override
+    public Vector3f scale(){
+        return new Vector3f(0.915F, 0.915F, 0.915F);
+    }
     @Override
     public float getNametagHeight(){
         return 0.49f;

@@ -11,6 +11,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 public class VisageData {
 
@@ -26,6 +27,9 @@ public class VisageData {
     }
     public Vec3 sizeModifier(){
         return new Vec3(1.0F,1.0F,1.0F);
+    }
+    public Vector3f scale(){
+        return new Vector3f(0.9375F, 0.9375F, 0.9375F);
     }
     public float getNametagHeight(){
         return 0.5f;

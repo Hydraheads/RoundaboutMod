@@ -4,6 +4,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 public class AvdolVisage extends VisageData {
     public AvdolVisage(Player self) {
@@ -19,6 +20,10 @@ public class AvdolVisage extends VisageData {
     @Override
     public Vec3 sizeModifier(){
         return new Vec3(1.0675F,1.0675F,1.0675F);
+    }
+    @Override
+    public Vector3f scale(){
+        return new Vector3f(0.969F, 0.96F, 0.96F);
     }
 
     @Override

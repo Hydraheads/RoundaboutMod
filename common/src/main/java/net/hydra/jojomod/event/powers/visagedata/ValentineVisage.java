@@ -4,6 +4,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 public class ValentineVisage extends VisageData {
     public ValentineVisage(Player self) {
@@ -19,6 +20,11 @@ public class ValentineVisage extends VisageData {
     @Override
     public Vec3 sizeModifier(){
         return new Vec3(1.0F,1.0F,1.0F);
+    }
+
+    @Override
+    public Vector3f scale(){
+        return new Vector3f(0.939F, 0.939F, 0.939F);
     }
 
     public String getSkinPath(){

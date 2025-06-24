@@ -6,6 +6,7 @@ import net.hydra.jojomod.event.powers.visagedata.voicedata.DIOVoice;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 public class DIOVisage extends VisageData {
     public DIOVisage(Player self) {
@@ -21,6 +22,11 @@ public class DIOVisage extends VisageData {
     @Override
     public Vec3 sizeModifier(){
         return new Vec3(1.09F,1.09F,1.09F);
+    }
+
+    @Override
+    public Vector3f scale(){
+        return new Vector3f(0.975F, 0.975F, 0.975F);
     }
     @Override
     public float getNametagHeight(){

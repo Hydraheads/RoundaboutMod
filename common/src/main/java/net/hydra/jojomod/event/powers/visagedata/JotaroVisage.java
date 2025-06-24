@@ -8,6 +8,7 @@ import net.hydra.jojomod.event.powers.visagedata.voicedata.JotaroVoice;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 public class JotaroVisage extends VisageData {
     public JotaroVisage(Player self) {
@@ -34,6 +35,11 @@ public class JotaroVisage extends VisageData {
     }
     public String getSkinPath(){
         return "jotaro";
+    }
+
+    @Override
+    public Vector3f scale(){
+        return new Vector3f(0.975F, 0.975F, 0.975F);
     }
     @Override
     public VoiceData voiceData(Player slef){

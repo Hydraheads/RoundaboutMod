@@ -51,6 +51,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -872,6 +873,19 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
         $$7.setRenderShadow(true);
         $$7.setRenderHitBoxes(hb);
         $$3.popPose();
+    }
+    @Inject(method = "scale(Lnet/minecraft/client/player/AbstractClientPlayer;Lcom/mojang/blaze3d/vertex/PoseStack;F)V",
+            at = @At(value = "HEAD"), cancellable = true)
+    public void roundabout$scale(AbstractClientPlayer $$0, PoseStack $$1, float $$2, CallbackInfo ci) {
+        IPlayerEntity ple = ((IPlayerEntity) $$0);
+        ItemStack visage = ple.roundabout$getMaskSlot();
+        if (visage != null && !visage.isEmpty()) {
+            if (visage.getItem() instanceof MaskItem MI) {
+                Vector3f scale = MI.visageData.scale();
+                $$1.scale(scale.x, scale.y, scale.z);
+                ci.cancel();
+            }
+        }
     }
     @Inject(method = "getTextureLocation(Lnet/minecraft/client/player/AbstractClientPlayer;)Lnet/minecraft/resources/ResourceLocation;",
             at = @At(value = "HEAD"), cancellable = true)
