@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.BarbedWireBlock;
 import net.hydra.jojomod.block.FogBlock;
@@ -32,10 +33,12 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -285,9 +288,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$ONLY_BLEEDING = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.BOOLEAN);
+
     @Unique
-    private static final EntityDataAccessor<ItemStack> ROUNDABOUT$STAND_DISC = SynchedEntityData.defineId(LivingEntity.class,
-            EntityDataSerializers.ITEM_STACK);
+    private static final EntityDataAccessor<String> ROUNDABOUT$STAND_DISC = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.STRING);
+
+    public ItemStack roundabout$standDisc = ItemStack.EMPTY;
     @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$COMBAT_MODE = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.BOOLEAN);
@@ -1531,17 +1537,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     @Override
     public ItemStack roundabout$getStandDisc() {
-        if (getEntityData().hasItem(ROUNDABOUT$STAND_DISC)) {
-            return this.getEntityData().get(ROUNDABOUT$STAND_DISC);
-        } else {
-            return ItemStack.EMPTY;
-        }
+        return roundabout$standDisc;
     }
     @Unique
     @Override
     public void roundabout$setStandDisc(ItemStack stack) {
         if (!(this.level().isClientSide)) {
-            this.getEntityData().set(ROUNDABOUT$STAND_DISC, stack);
+            roundabout$standDisc = stack;
+            this.getEntityData().set(ROUNDABOUT$STAND_DISC, BuiltInRegistries.ITEM.getKey(stack.getItem()).toString());
             if (stack.getItem() instanceof StandDiscItem SD){
                 MainUtil.extractDiscData(((LivingEntity)(Object)this), SD, stack);
             }
@@ -1622,6 +1625,24 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         $$0.put("roundabout",compoundtag);
 
         return $$0;
+    }
+
+    @Inject(method = "onSyncedDataUpdated", at = @At(value = "TAIL"), cancellable = true)
+    public void roundabout$onSyncedDataUpdated(EntityDataAccessor<?> $$0, CallbackInfo ci){
+        if ($$0.equals(ROUNDABOUT$STAND_DISC)){
+            String updateString = this.entityData.get(ROUNDABOUT$STAND_DISC);
+            if (!updateString.isEmpty()){
+                if (ResourceLocation.isValidResourceLocation(updateString)) {
+                    ResourceLocation rl = new ResourceLocation(updateString);
+                    if (rl != null) {
+                        Item tem = BuiltInRegistries.ITEM.get(rl);
+                        if (tem != null) {
+                            roundabout$standDisc = tem.getDefaultInstance();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**The items that shoot and brawl mode are allowed to use*/
@@ -2307,7 +2328,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ADJUSTED_GRAVITY, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ONLY_BLEEDING, true);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$COMBAT_MODE, false);
-            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_DISC, ItemStack.EMPTY);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_DISC, "");
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_ACTIVE, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IDLE_POS, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_SKIN, (byte) 0);
