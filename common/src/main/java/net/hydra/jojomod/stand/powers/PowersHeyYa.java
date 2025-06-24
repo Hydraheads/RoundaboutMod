@@ -315,20 +315,6 @@ public class PowersHeyYa extends NewDashPreset {
         }
     }
 
-
-    @Override
-    public boolean isWip(){
-        return true;
-    }
-    @Override
-    public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
-    }
-    @Override
-    public Component ifWipListDev(){
-        return Component.literal(  "Hydra").withStyle(ChatFormatting.YELLOW);
-    }
-
     public int yapTime = 0;
     public boolean isYapping(){
         return yapTime > 0;
@@ -369,7 +355,8 @@ public class PowersHeyYa extends NewDashPreset {
             ALIEN = 17,
             AMERICA = 18,
             ZOMBIE = 19,
-            ANTI = 20;
+            ANTI = 20,
+            GREY_YA = 21;
 
     public static final byte
             YAP_1 = 61,
@@ -399,6 +386,7 @@ public class PowersHeyYa extends NewDashPreset {
                 SKELETON,
                 WITHER,
                 WARDEN,
+                GREY_YA,
                 DEVIL,
                 ANTI,
                 HELL_NAH
@@ -435,6 +423,7 @@ public class PowersHeyYa extends NewDashPreset {
             case AMERICA -> Component.translatable("skins.roundabout.hey_ya.america");
             case ZOMBIE -> Component.translatable("skins.roundabout.hey_ya.zombie");
             case ANTI -> Component.translatable("skins.roundabout.hey_ya.anti");
+            case GREY_YA -> Component.translatable("skins.roundabout.hey_ya.grey_ya");
             default -> Component.translatable("skins.roundabout.hey_ya.manga");
         };
     }
