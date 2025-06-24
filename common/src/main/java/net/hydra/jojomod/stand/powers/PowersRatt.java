@@ -71,6 +71,8 @@ public class PowersRatt extends NewDashPreset {
     }
 
 
+    @Override
+    public boolean canSummonStandAsEntity() {return false;}
 
     @Override
     public StandEntity getNewStandEntity(){return ModEntities.RATT.create(this.getSelf().level());}
