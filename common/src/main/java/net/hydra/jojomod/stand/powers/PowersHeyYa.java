@@ -452,6 +452,13 @@ public class PowersHeyYa extends NewDashPreset {
     public byte worthinessType(){
         return HUMANOID_WORTHY;
     }
+    public Component getPosName(byte posID) {
+        if (posID == 1) {
+            return Component.translatable("idle.roundabout.hey_ya_2");
+        } else {
+            return Component.translatable("idle.roundabout.hey_ya_1");
+        }
+    }
 
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
