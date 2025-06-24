@@ -1116,5 +1116,15 @@
   "text.roundabout.hey_ya_messaging.mining.evil.no_2": "Are you blind?",
   "text.roundabout.hey_ya_messaging.mining.evil.no_3": "Let's get this over with.",
   "text.roundabout.hey_ya_messaging.mining.evil.no_4": "Why not check it yourself? Hmph. Fine.",
-  "text.roundabout.hey_ya_messaging.mining.evil.no_5": "Feeling lazy today?"
+  "text.roundabout.hey_ya_messaging.mining.evil.no_5": "Feeling lazy today?",
+
+  "text.roundabout.hey_ya_messaging.danger.no_1": "%s, look out!",
+  "text.roundabout.hey_ya_messaging.danger.no_2": "%s spotted, on guard!",
+  "text.roundabout.hey_ya_messaging.danger.no_3": "%s is nearby!",
+  "text.roundabout.hey_ya_messaging.danger.no_4": "%s is attacking!",
+
+  "text.roundabout.hey_ya_messaging.danger.evil.no_1": "%s, dumbass.",
+  "text.roundabout.hey_ya_messaging.danger.evil.no_2": "%s alert, use your brain.",
+  "text.roundabout.hey_ya_messaging.danger.evil.no_3": "%s is nearby, can't you tell?",
+  "text.roundabout.hey_ya_messaging.danger.evil.no_4": "%s is gonna get us, idiot!"
 }
