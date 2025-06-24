@@ -25,4 +25,7 @@ public class DiegoVisage extends VisageData {
     public float getNametagHeight(){
         return 0.49f;
     }
+    public String getSkinPath(){
+        return "diego";
+    }
 }

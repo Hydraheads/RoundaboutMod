@@ -20,4 +20,8 @@ public class ValentineVisage extends VisageData {
     public Vec3 sizeModifier(){
         return new Vec3(1.0F,1.0F,1.0F);
     }
+
+    public String getSkinPath(){
+        return "valentine";
+    }
 }

@@ -25,4 +25,8 @@ public class EnyaVisage extends VisageData {
     public float getNametagHeight(){
         return -0.2F;
     }
+
+    public String getSkinPath(){
+        return "enya";
+    }
 }
