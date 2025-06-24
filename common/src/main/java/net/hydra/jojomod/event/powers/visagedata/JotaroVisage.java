@@ -32,6 +32,9 @@ public class JotaroVisage extends VisageData {
     public boolean hasVoices(){
         return true;
     }
+    public String getSkinPath(){
+        return "jotaro";
+    }
     @Override
     public VoiceData voiceData(Player slef){
         return new JotaroVoice(slef);

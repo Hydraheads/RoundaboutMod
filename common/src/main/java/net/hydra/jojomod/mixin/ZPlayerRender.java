@@ -1,10 +1,12 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.client.models.layers.HeyYaLayer;
 import net.hydra.jojomod.client.models.layers.ShootingArmLayer;
+import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
 import net.hydra.jojomod.client.models.visages.OVAEnyaModel;
 import net.hydra.jojomod.client.models.visages.renderers.OVAEnyaRenderer;
 import net.hydra.jojomod.entity.ModEntities;
@@ -25,6 +27,7 @@ import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.*;
+import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -60,7 +63,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 
 @Mixin(PlayerRenderer.class)
-public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> implements IPlayerRenderer {
+public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> extends LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> implements IPlayerRenderer {
 
 
     public ZPlayerRender(EntityRendererProvider.Context $$0, PlayerModel<AbstractClientPlayer> $$1, float $$2) {
@@ -75,7 +78,15 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
         this.addLayer(new FacelessLayer<>($$0, this));
         this.addLayer(new ShootingArmLayer<>($$0, this));
         this.addLayer(new HeyYaLayer<>($$0, this));
+        this.addLayer(new VisagePartLayer<>($$0, this));
+        /**Access to slim and not slim models simultaneously*/
+        roundabout$otherModel = new PlayerModel<>($$0.bakeLayer($$1 ? ModelLayers.PLAYER : ModelLayers.PLAYER_SLIM), $$1);
+        roundabout$mainModel = this.model;
     }
+    @Unique
+    protected PlayerModel roundabout$otherModel;
+    @Unique
+    protected PlayerModel roundabout$mainModel;
 
     private static AbstractClientPlayer ACP;
     private static InteractionHand IH;
@@ -169,6 +180,12 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
 
     @Inject(method = "renderRightHand", at = @At(value = "HEAD"), cancellable = true)
     private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderRightHandX(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, CallbackInfo ci) {
+
+        /**Access to slim and not slim models simultaneously*/
+        IPlayerEntity ipe = ((IPlayerEntity) $$3);
+        ItemStack visage = ipe.roundabout$getMaskSlot();
+        roundabout$changeTheModel(visage);
+
         if (roundabout$renderHandX($$0,$$1,$$2,$$3,true)){
             ci.cancel();
         }
@@ -180,6 +197,11 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
 
     @Inject(method = "renderLeftHand", at = @At(value = "HEAD"), cancellable = true)
     private <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderLeftHandX(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, CallbackInfo ci) {
+        /**Access to slim and not slim models simultaneously*/
+        IPlayerEntity ipe = ((IPlayerEntity) $$3);
+        ItemStack visage = ipe.roundabout$getMaskSlot();
+        roundabout$changeTheModel(visage);
+
         if (roundabout$renderHandX($$0,$$1,$$2,$$3,false)){
             ci.cancel();
         }
@@ -415,8 +437,6 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
             }
             }
         } else {
-            ItemStack visage = ipe.roundabout$getMaskSlot();
-            roundabout$initializeVisageModel(visage, acl);
             if (roundabout$getSwappedModel(acl) != null){
                 EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
                 EntityRenderer<? super T> ER = $$7.getRenderer(roundabout$getSwappedModel(acl));
@@ -514,11 +534,29 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
             }
         }
     }
+    public void roundabout$changeTheModel(ItemStack visage){
+        if (visage != null && !visage.isEmpty()) {
+            if (visage.getItem() instanceof MaskItem MI) {
+                if (MI.visageData.isCharacterVisage()) {
+                    if (((IPlayerModel)this.model).roundabout$getSlim() != MI.visageData.isSlim()){
+                        model = roundabout$otherModel;
+                        return;
+                    }
+                }
+            }
+        }
+        model = roundabout$mainModel;
+    }
     @Inject(method = "render(Lnet/minecraft/client/player/AbstractClientPlayer;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(value = "HEAD"), cancellable = true)
     public<T extends LivingEntity, M extends EntityModel<T>> void roundabout$render(AbstractClientPlayer $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
+
+        /**Access to slim and not slim models simultaneously*/
+        IPlayerEntity ipe = ((IPlayerEntity) $$0);
+        ItemStack visage = ipe.roundabout$getMaskSlot();
+        roundabout$changeTheModel(visage);
+
         if (!ClientUtil.checkIfIsFirstPerson($$0)) {
-            IPlayerEntity ipe = ((IPlayerEntity) $$0);
             ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
             Poses pose = Poses.getPosFromByte(ipe.roundabout$GetPoseEmote());
             if (shift != ShapeShifts.PLAYER && shift != ShapeShifts.EERIE) {
@@ -602,32 +640,10 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                     }
                 }
             } else if (shift != ShapeShifts.EERIE) {
-                ItemStack visage = ipe.roundabout$getMaskSlot();
-                roundabout$initializeVisageModel(visage, $$0);
-                ItemStack lv = roundabout$getLastVisage($$0);
-                if (lv == null || lv.isEmpty() || lv.is(ModItems.BLANK_MASK)) {
-                    if (roundabout$getSwappedModel($$0) != null) {
-                        if (roundabout$getSwappedModel($$0) instanceof JojoNPC swp) {
-                            swp.standPos = pose;
-                            swp.setupAnimationStates();
-                        }
-                    }
-                    if (pose == Poses.NONE) {
-                        roundabout$setSwappedModel($$0, null);
-                    }
-                }
 
-                if (roundabout$getSwappedModel($$0) != null) {
-                    if (roundabout$getSwappedModel($$0) instanceof JojoNPC ve) {
-                        if (roundabout$getVisageData($$0) != null) {
-                            ve.standPos = pose;
-                            ve.setupAnimationStates();
-                            ve.host = $$0;
-                        }
-                        assertOnPlayerLike(ve, $$0, $$1, $$2, $$3, $$4, $$5,
-                                roundabout$getSwappedModel($$0));
-                        ci.cancel();
+               roundabout$setSwappedModel($$0, null);
 
+                /*** REPAIR THIS CODE ON THE NAMETAG SECTION
                         boolean characterType = true;
                         if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
                             characterType = ME.visageData.isCharacterVisage();
@@ -645,17 +661,16 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                                     if (this.shouldShowName($$0)) {
 
                                         Component comp = $$0.getDisplayName();
-                                        if (ClientNetworking.getAppropriateConfig().nameTagSettings.renderActualCharactersNameUsingVisages) {
-                                            comp = ve.getDisplayName();
+                                        if (ClientNetworking.getAppropriateConfig().nameTagSettings.renderActualCharactersNameUsingVisages
+                                        && visage != null && !visage.isEmpty()) {
+                                            comp = visage.getDisplayName();
                                         }
 
                                         this.renderNameTag($$0, comp, $$3, $$4, $$5);
                                     }
                                 }
                             }
-                        }
-                    }
-                }
+                 ***/
             }
         }
 
@@ -682,25 +697,6 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
 
     @Unique
     boolean roundabout$wasJustCreated;
-    @Unique
-    public void roundabout$initializeVisageModel(ItemStack visage, Player $$0){
-
-        if (visage != roundabout$getLastVisage($$0)){
-            roundabout$setLastVisage($$0,visage);
-            if (visage.getItem() instanceof MaskItem mi){
-                roundabout$setVisageData($$0,mi.visageData.generateVisageData($$0));
-                roundabout$setSwappedModel($$0, roundabout$getVisageData($$0).getModelNPC($$0));
-            } else {
-                roundabout$setVisageData($$0,null);
-                roundabout$setSwappedModel($$0,null);
-            }
-        }
-        if (roundabout$getSwappedModel($$0) == null){
-            if (roundabout$getVisageData($$0) != null){
-                roundabout$setSwappedModel($$0, roundabout$getVisageData($$0).getModelNPC($$0));
-            }
-        }
-    }
 
     public void assertOnPlayerLike(JojoNPC ve, Player $$0,float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4,
                                    int $$5, LivingEntity entityeah){
@@ -893,6 +889,17 @@ public class ZPlayerRender extends LivingEntityRenderer<AbstractClientPlayer, Pl
                 sauce = StandIcons.EERIE_SKIN;
             }
             cir.setReturnValue(sauce);
+        } else if (shift == ShapeShifts.OVA){
+            cir.setReturnValue(StandIcons.OVA_ENYA_SKIN);
+        } else {
+            ItemStack visage = ple.roundabout$getMaskSlot();
+            if (visage != null && !visage.isEmpty()) {
+                if (visage.getItem() instanceof MaskItem MI) {
+                    if (MI.visageData.isCharacterVisage()) {
+                        cir.setReturnValue(new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/"+MI.visageData.getSkinPath()+".png"));
+                    }
+                }
+            }
         }
     }
     @Shadow

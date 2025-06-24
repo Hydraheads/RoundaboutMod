@@ -54,11 +54,11 @@ public abstract class ZAnimal extends AgeableMob {
                     }
 
                     RandomSource $$5 = $$0.getRandom();
-                    if ($$5.nextFloat() < UserOdds && !ModItems.STAND_ARROW_POOL_FOR_MOBS.isEmpty()) {
+                    if ($$5.nextFloat() < UserOdds && !(ModItems.getPoolForMob($$2)).isEmpty()) {
                         ((IMob)$$2).roundabout$setWorthy(true);
                         ((IMob)$$2).roundabout$setIsNaturalStandUser(true);
-                        int index = (int) (Math.floor(Math.random()* ModItems.STAND_ARROW_POOL_FOR_MOBS.size()));
-                        ItemStack stack = ModItems.STAND_ARROW_POOL_FOR_MOBS.get(index).getDefaultInstance();
+                        int index = (int) (Math.floor(Math.random()* ModItems.getPoolForMob($$2).size()));
+                        ItemStack stack = ModItems.getPoolForMob($$2).get(index).getDefaultInstance();
                         if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem SD){
                             ((StandUser)$$2).roundabout$setStandDisc(stack);
                             SD.generateStandPowers($$2);

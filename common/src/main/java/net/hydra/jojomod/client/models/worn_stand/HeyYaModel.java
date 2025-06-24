@@ -20,6 +20,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -136,6 +137,10 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
             "textures/stand/hey_ya/america.png");
     public static ResourceLocation zombie = new ResourceLocation(Roundabout.MOD_ID,
             "textures/stand/hey_ya/zombie.png");
+    public static ResourceLocation anti = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/hey_ya/anti.png");
+    public static ResourceLocation grey_ya = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/hey_ya/grey_ya.png");
 
     public ResourceLocation getTextureLocation(Entity context, byte skin){
         switch (skin)
@@ -158,10 +163,24 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
             case PowersHeyYa.ALIEN -> {return alien;}
             case PowersHeyYa.AMERICA -> {return america;}
             case PowersHeyYa.ZOMBIE -> {return zombie;}
+            case PowersHeyYa.ANTI ->  {return anti;}
+            case PowersHeyYa.GREY_YA ->  {return grey_ya;}
             default -> {return base;}
         }
     }
 
+    /**Idle 1 (byte 0) = head straight, idle 2 (byte 1) = head follow*/
+    public void rotateHead(Entity context, float partialTicks, StandUser user){
+        if (this.root().getChild("stand").getChild("stand2").hasChild("head")) {
+            ModelPart head = this.root().getChild("stand").getChild("stand2").getChild("head");
+            if (user.roundabout$getIdlePos() == 1) {
+                head.setRotation((((context.getViewXRot(partialTicks)) * Mth.DEG_TO_RAD)), 0, 0);
+            } else {
+                head.setRotation(0, 0, 0);
+            }
+
+        }
+    }
 
     public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light) {
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(context, (byte)0)));
@@ -182,6 +201,7 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
             } else {
                 user.roundabout$getHeyYaAnimation2().stop();
             }
+            rotateHead(context,partialTicks,user);
             this.animate(user.roundabout$getHeyYaAnimation(), HeyYaAnimations.hangin_on, partialTicks, 1f);
             this.animate(user.roundabout$getHeyYaAnimation(), HeyYaAnimations.idle_normal, partialTicks, 1f);
             this.animate(user.roundabout$getHeyYaAnimation2(), HeyYaAnimations.talk, partialTicks, 1f);

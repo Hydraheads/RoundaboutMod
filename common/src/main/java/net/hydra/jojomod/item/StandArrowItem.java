@@ -1,9 +1,7 @@
 package net.hydra.jojomod.item;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.entity.projectile.StandArrowEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -22,8 +20,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 
@@ -68,7 +64,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
                 if ($$1.isCrouching()) {
                     int reroll = ClientNetworking.getAppropriateConfig().levelsToRerollStand;
                     if ($$1.experienceLevel >= reroll || $$1.isCreative()) {
-                        if (ClientNetworking.getAppropriateConfig().standArrowSecondaryPoolv1.isEmpty()) {
+                        if (ClientNetworking.getAppropriateConfig().standArrowSecondaryPoolv2.isEmpty()) {
                              if (!$$1.isCreative()) {
                              $$1.giveExperienceLevels(-reroll);
                              }
@@ -91,7 +87,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
                     return InteractionResultHolder.consume($$3);
                 }
             } else {
-                if (!$$1.isCrouching() || ClientNetworking.getAppropriateConfig().standArrowSecondaryPoolv1.isEmpty()) {
+                if (!$$1.isCrouching() || ClientNetworking.getAppropriateConfig().standArrowSecondaryPoolv2.isEmpty()) {
                     if (!$$0.isClientSide) {
                         rollStand($$0, $$1, $$3, true);
                         return InteractionResultHolder.consume($$3);
@@ -127,6 +123,22 @@ public class StandArrowItem extends RoundaboutArrowItem {
                 player.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.rerollOutcome").withStyle(ChatFormatting.WHITE).append(SD.getDisplayName2()).withStyle(ChatFormatting.AQUA), true);
             }
         }
+    }
+
+    public boolean isWorthinessType(ItemStack itemStack, LivingEntity LE){
+        CompoundTag tag = itemStack.isEmpty() ? null : itemStack.getTagElement("StandDisc");
+        CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
+        if (tag2 != null) {
+            ItemStack itemstack = ItemStack.of(tag2);
+            if (itemstack.getItem() instanceof StandDiscItem de) {
+                if (de.standPowers.isWorthinessType(LE)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     @Override

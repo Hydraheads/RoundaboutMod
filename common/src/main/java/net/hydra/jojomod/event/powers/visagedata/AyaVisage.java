@@ -1,7 +1,9 @@
 package net.hydra.jojomod.event.powers.visagedata;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
@@ -23,5 +25,14 @@ public class AyaVisage extends VisageData {
     @Override
     public float getNametagHeight(){
         return 0.25f;
+    }
+    public String getSkinPath(){
+        return "aya";
+    }
+    public boolean isSlim(){
+        return true;
+    }
+    public boolean rendersBreast(){
+        return true;
     }
 }

@@ -33,10 +33,12 @@ public class RoundaboutFabric implements ModInitializer {
                         .getConfigDir()
                         .resolve(Roundabout.MOD_ID + "-clientOnly.json"));
 
+        /**
         BlockBlacklist.load(
                 FabricLoader.getInstance().getConfigDir(),
                 "roundabout-block_blacklist"
         );
+         **/
 
         FabricLootTables.modifyLootTables();
 

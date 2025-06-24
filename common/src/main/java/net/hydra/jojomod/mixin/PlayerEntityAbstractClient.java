@@ -1,12 +1,22 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerEntityAbstractClient;
+import net.hydra.jojomod.access.IPlayerModel;
+import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
+import net.hydra.jojomod.item.MaskItem;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AbstractClientPlayer.class)
 public class PlayerEntityAbstractClient implements IPlayerEntityAbstractClient {
@@ -61,5 +71,24 @@ public class PlayerEntityAbstractClient implements IPlayerEntityAbstractClient {
     @Override
     public ItemStack roundabout$getLastVisage(){
         return roundabout$lastVisage;
+    }
+    @Inject(method = "getSkinTextureLocation",
+            at = @At(value = "HEAD"), cancellable = true)
+    public void roundabout$getTextureLocation(CallbackInfoReturnable<ResourceLocation> cir) {
+        IPlayerEntity ple = ((IPlayerEntity) this);
+        byte shape = ple.roundabout$getShapeShift();
+        ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
+        if (shift == ShapeShifts.OVA){
+            cir.setReturnValue(StandIcons.OVA_ENYA_SKIN);
+        } else {
+            ItemStack visage = ple.roundabout$getMaskSlot();
+            if (visage != null && !visage.isEmpty()) {
+                if (visage.getItem() instanceof MaskItem MI) {
+                    if (MI.visageData.isCharacterVisage()) {
+                        cir.setReturnValue(new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/"+MI.visageData.getSkinPath()+".png"));
+                    }
+                }
+            }
+        }
     }
 }

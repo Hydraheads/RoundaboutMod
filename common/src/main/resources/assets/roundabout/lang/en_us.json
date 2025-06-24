@@ -781,6 +781,13 @@
   "ability.roundabout.water_shield": "Water Shield",
   "ability.roundabout.water_shield.desc": "Uses up water in a held water bottle to shield you from many projectile types for a short while. If they make contact, they instead turn into explosive item bubbles which you can pop to launch back at foes. Also puts out fires on you.",
 
+  "ability.roundabout.danger_yap": "Lookout Mode",
+  "ability.roundabout.danger_yap.desc": "Hey Ya will watch out for mobs that target you, and bring them to your attention.",
+  "ability.roundabout.mining_yap": "Ore Searching",
+  "ability.roundabout.mining_yap.desc": "Hey Ya will look for ores around you, and bring them to your attention.",
+  "ability.roundabout.yap_yap": "Encouragement",
+  "ability.roundabout.yap_yap.desc": "Hey Ya will cheer you on and make your day better!",
+
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Locked",
@@ -824,6 +831,9 @@
 
   "idle.roundabout.passive_justice": "Idle Pose",
   "idle.roundabout.battle_justice": "Menace",
+
+  "idle.roundabout.hey_ya_1": "Forward",
+  "idle.roundabout.hey_ya_2": "Facing",
 
   "skins.roundabout.star_platinum.base": "Part 3",
   "skins.roundabout.star_platinum.manga": "Manga",
@@ -914,6 +924,7 @@
   "skins.roundabout.soft_and_wet.striped": "Striped",
   "skins.roundabout.soft_and_wet.kira": "Kira",
   "skins.roundabout.soft_and_wet.colors": "Colors",
+  "skins.roundabout.soft_and_wet.green": "Green",
 
   "skins.roundabout.d4c.base": "Manga",
   "skins.roundabout.d4c.wonder_festival": "JOJOVELLER",
@@ -950,6 +961,8 @@
   "skins.roundabout.hey_ya.alien": "Alien",
   "skins.roundabout.hey_ya.america": "America",
   "skins.roundabout.hey_ya.zombie": "Jockey",
+  "skins.roundabout.hey_ya.anti": "Anti",
+  "skins.roundabout.hey_ya.grey_ya": "Grey Ya",
 
   "skins.roundabout.killer_queen.base": "Part 4",
 
@@ -1130,7 +1143,7 @@
   "text.roundabout.hey_ya_messaging.danger.no_3": "%1$s is nearby!",
   "text.roundabout.hey_ya_messaging.danger.no_4": "%1$s is attacking!",
 
-  "text.roundabout.hey_ya_messaging.danger.evil.no_1": "%1$s, dumbass.",
+  "text.roundabout.hey_ya_messaging.danger.evil.no_1": "%1$s, dummy.",
   "text.roundabout.hey_ya_messaging.danger.evil.no_2": "%1$s alert, use your brain.",
   "text.roundabout.hey_ya_messaging.danger.evil.no_3": "%1$s is nearby, can't you tell?",
   "text.roundabout.hey_ya_messaging.danger.evil.no_4": "%1$s is gonna get us, idiot!"

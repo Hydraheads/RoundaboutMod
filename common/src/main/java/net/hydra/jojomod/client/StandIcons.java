@@ -319,4 +319,7 @@ public class StandIcons {
             "textures/entity/eerie_shift.png");
     public static final ResourceLocation EERIE_SKIN_ALEX = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/eerie_shift_alex.png");
+
+    public static final ResourceLocation OVA_ENYA_SKIN = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/visage/player_skins/enya_ova.png");
 }

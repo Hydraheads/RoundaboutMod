@@ -308,9 +308,9 @@ public abstract class ZItemInHandRenderer {
                     poseStack.popPose();
                 }
             } else {
-                if (itemStack.getItem() instanceof StandArrowItem){
+                if (itemStack.getItem() instanceof StandArrowItem SI){
                     LivingEntity ME =  MainUtil.homeOnWorthy(abstractClientPlayer.level(),abstractClientPlayer.position(),5);
-                    if (ME != null) {
+                    if (ME != null && SI.isWorthinessType(itemStack,ME)) {
                         float homingMod = (5-Math.min(5,ME.distanceTo(abstractClientPlayer)))/5;
                         boolean bl = interactionHand == InteractionHand.MAIN_HAND;
                         HumanoidArm humanoidArm = bl ? abstractClientPlayer.getMainArm() : abstractClientPlayer.getMainArm().getOpposite();

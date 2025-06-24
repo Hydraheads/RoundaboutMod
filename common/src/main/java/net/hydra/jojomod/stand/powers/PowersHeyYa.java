@@ -1,10 +1,13 @@
 package net.hydra.jojomod.stand.powers;
 
+import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.block.MiningAlertBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -19,7 +22,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.WaterFluid;
@@ -37,8 +42,9 @@ public class PowersHeyYa extends NewDashPreset {
     }
 
 
+    public boolean dangerYapping = false;
     public boolean dangerYappingOn(){
-        return false;
+        return dangerYapping;
     }
     public boolean canSummonStandAsEntity(){
         return false;
@@ -98,7 +104,26 @@ public class PowersHeyYa extends NewDashPreset {
         }
     }
 
+    @Override
+    public boolean setPowerOther(int move, int lastMove) {
+        switch (move)
+        {
+            case PowerIndex.POWER_1 -> {
+                return switchDangerMode();
+            }
+            case PowerIndex.POWER_4 -> {
+                return doYap();
+            }
+            case PowerIndex.POWER_2 -> {
+                return scoutForOresOnClient();
+            }
+        }
+        return super.setPowerOther(move,lastMove);
+    }
+
     public void toggleDangerYapClient(){
+        this.tryPower(PowerIndex.POWER_1, true);
+        tryPowerPacket(PowerIndex.POWER_1);
     }
     public void miningYapClient(){
         if (!this.onCooldown(PowerIndex.SKILL_2)) {
@@ -171,6 +196,30 @@ public class PowersHeyYa extends NewDashPreset {
     }
 
 
+    int ticksSinceLastYap = 0;
+    int maxTicksSinceLastYap = 400;
+
+    @Override
+    public void tickStandRejection(MobEffectInstance effect) {
+        if (!this.getSelf().level().isClientSide()) {
+            if (effect.getDuration() == 50) {
+                yapSounds();
+            }
+        }
+    }
+    @Override
+    public void tickMobAI(LivingEntity attackTarget){
+        ticksSinceLastYap--;
+        if (ticksSinceLastYap <= 0){
+            if (!hasStandActive(this.self)){
+                ((IMob)this.self).roundabout$setRetractTicks(500);
+                getStandUserSelf().roundabout$summonStand(this.self.level(),true,false);
+            }
+            yapSounds();
+            ticksSinceLastYap = maxTicksSinceLastYap;
+        }
+    }
+
     public void tryHighlightOre(BlockPos pos){
         BlockState state = this.self.level().getBlockState(pos);
         if (state.isAir()
@@ -181,6 +230,10 @@ public class PowersHeyYa extends NewDashPreset {
         }
     }
 
+    public boolean switchDangerMode(){
+        dangerYapping = !dangerYapping;
+        return true;
+    }
     public boolean doYap(){
         this.setCooldown(PowerIndex.SKILL_4,ClientNetworking.getAppropriateConfig().heyYaSettings.yapCooldown);
         if (!isClient()){
@@ -192,19 +245,6 @@ public class PowersHeyYa extends NewDashPreset {
             }
         }
         return true;
-    }
-    @Override
-    public boolean setPowerOther(int move, int lastMove) {
-        switch (move)
-        {
-            case PowerIndex.POWER_4 -> {
-                return doYap();
-            }
-            case PowerIndex.POWER_2 -> {
-                return scoutForOresOnClient();
-            }
-        }
-        return super.setPowerOther(move,lastMove);
     }
 
     @Override
@@ -257,18 +297,22 @@ public class PowersHeyYa extends NewDashPreset {
         super.updateUniqueMoves();
     }
 
-
     @Override
-    public boolean isWip(){
-        return true;
-    }
-    @Override
-    public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
-    }
-    @Override
-    public Component ifWipListDev(){
-        return Component.literal(  "Hydra").withStyle(ChatFormatting.YELLOW);
+    public void reactToAggro(Mob mob){
+        if (dangerYappingOn()) {
+            /**If a mob tries to set its attack target to you again, does not repeat yapping*/
+            if (!(mob.getTarget() != null && mob.getTarget().is(this.self)) && !(mob.getLastHurtByMob() != null && mob.getLastHurtByMob().is(this.self))) {
+                /**This function assures the aggro isn't passive mob aggro like animals running*/
+                if (MainUtil.getIfMobIsAttacking(mob)) {
+                    yapSounds();
+                    if (isEvilYapper()){
+                        ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.danger.evil.no_"+(Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfEvilDangerYapLines)+1), mob.getDisplayName()).withStyle(ChatFormatting.RED), true);
+                    } else {
+                        ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.danger.no_"+(Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfDangerYapLines)+1), mob.getDisplayName()).withStyle(ChatFormatting.RED), true);
+                    }
+                }
+            }
+        }
     }
 
     public int yapTime = 0;
@@ -310,7 +354,9 @@ public class PowersHeyYa extends NewDashPreset {
             HELL_NAH = 16,
             ALIEN = 17,
             AMERICA = 18,
-            ZOMBIE = 19;
+            ZOMBIE = 19,
+            ANTI = 20,
+            GREY_YA = 21;
 
     public static final byte
             YAP_1 = 61,
@@ -340,7 +386,9 @@ public class PowersHeyYa extends NewDashPreset {
                 SKELETON,
                 WITHER,
                 WARDEN,
+                GREY_YA,
                 DEVIL,
+                ANTI,
                 HELL_NAH
         );
     }
@@ -348,7 +396,7 @@ public class PowersHeyYa extends NewDashPreset {
     public boolean isEvilYapper(){
         switch (getStandUserSelf().roundabout$getStandSkin())
         {
-            case PowersHeyYa.DEVIL,PowersHeyYa.HELL_NAH,
+            case PowersHeyYa.DEVIL,PowersHeyYa.HELL_NAH, PowersHeyYa.ANTI,
                     PowersHeyYa.WORLD, PowersHeyYa.WARDEN -> {return true;}
             default -> {return false;}
         }
@@ -374,6 +422,8 @@ public class PowersHeyYa extends NewDashPreset {
             case ALIEN -> Component.translatable("skins.roundabout.hey_ya.alien");
             case AMERICA -> Component.translatable("skins.roundabout.hey_ya.america");
             case ZOMBIE -> Component.translatable("skins.roundabout.hey_ya.zombie");
+            case ANTI -> Component.translatable("skins.roundabout.hey_ya.anti");
+            case GREY_YA -> Component.translatable("skins.roundabout.hey_ya.grey_ya");
             default -> Component.translatable("skins.roundabout.hey_ya.manga");
         };
     }
@@ -415,5 +465,29 @@ public class PowersHeyYa extends NewDashPreset {
             }
         }
         return super.getSoundFromByte(soundChoice);
+    }
+
+    public byte worthinessType(){
+        return HUMANOID_WORTHY;
+    }
+    public Component getPosName(byte posID) {
+        if (posID == 1) {
+            return Component.translatable("idle.roundabout.hey_ya_2");
+        } else {
+            return Component.translatable("idle.roundabout.hey_ya_1");
+        }
+    }
+
+    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
+        List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.danger_yap",
+                "instruction.roundabout.press_skill", StandIcons.DANGER_YAP, 1, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.mining_yap",
+                "instruction.roundabout.press_skill", StandIcons.MINING_YAP,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
+                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.yap_yap",
+                "instruction.roundabout.press_skill", StandIcons.YAP_YAP,4,level,bypass));
+        return $$1;
     }
 }

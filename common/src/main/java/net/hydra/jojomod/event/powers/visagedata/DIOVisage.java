@@ -33,4 +33,8 @@ public class DIOVisage extends VisageData {
     public VoiceData voiceData(Player slef){
         return new DIOVoice(slef);
     }
+
+    public String getSkinPath(){
+        return "dio";
+    }
 }

@@ -16,4 +16,9 @@ public class JosukePartEightVisage extends VisageData {
     public JojoNPC getModelNPC(Player pl){
         return ModEntities.JOSUKE_PART_EIGHT.create(pl.level());
     }
+
+
+    public String getSkinPath(){
+        return "josuke_part_eight";
+    }
 }
