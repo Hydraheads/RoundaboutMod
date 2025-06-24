@@ -3564,28 +3564,5 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
 
-    @Override
-    public void roundabout$Stitch(float hp) {
 
-            ((ServerLevel)this.level()).explode((Entity) this,1.0,1.0,1.0, 1.0F, Level.ExplosionInteraction.BLOCK);
-
-            LivingEntity entity = ((LivingEntity) (Object) this);
-
-            float maxhp = entity.getMaxHealth();
-            float currenthp = entity.getHealth();
-
-            if (currenthp < maxhp) {
-                entity.setHealth(currenthp + 1.0f);
-            }
-            if (entity.hasEffect(ModEffects.BLEED)) {
-                int level = entity.getEffect(ModEffects.BLEED).getAmplifier();
-                int duration = entity.getEffect(ModEffects.BLEED).getDuration();
-                entity.removeEffect(entity.getEffect(ModEffects.BLEED).getEffect());
-                if (level > 0) {
-                    entity.addEffect(new MobEffectInstance(ModEffects.BLEED, duration, level - 1));
-                }
-
-            }
-
-    }
 }

@@ -16,6 +16,8 @@ import net.hydra.jojomod.mixin.StandUserEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
 
 import net.minecraft.resources.ResourceKey;
@@ -28,6 +30,8 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -107,17 +111,54 @@ public class PowersGreenDay extends NewPunchingStand{
             }
 
             case SKILL_4_CROUCH, SKILL_4_CROUCH_GUARD -> {
-                if (this.onCooldown(PowerIndex.SKILL_4_SNEAK))
-                    return;
-                Roundabout.LOGGER.info("Stitch");
-                ((StandUser) this.getSelf()).roundabout$Stitch(1.0f);
-                this.tryPower(PowerIndex.POWER_4, true);
-                tryPowerPacket(PowerIndex.POWER_4);
-                this.setCooldown(PowerIndex.SKILL_4_SNEAK, 80);
-                this.setCooldown(PowerIndex.SKILL_4_CROUCH_GUARD, 80);
-
+                Stitch();
             }
         }
+    }
+
+    @Override
+    public boolean setPowerOther(int move, int lastMove) {
+        switch (move)
+        {
+
+            case PowerIndex.POWER_4_SNEAK -> {
+                return StitchHeal(1.0f,this.getSelf());
+            }
+
+        }
+        return super.setPowerOther(move,lastMove);
+    }
+
+    public void Stitch(){
+        if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
+            this.setCooldown(PowerIndex.SKILL_4_SNEAK, 800);
+            this.setCooldown(PowerIndex.SKILL_4_CROUCH_GUARD, 800);
+            this.tryPower(PowerIndex.POWER_4_SNEAK, true);
+            tryPowerPacket(PowerIndex.POWER_4_SNEAK);
+        }
+    }
+
+    public boolean StitchHeal(float hp, LivingEntity entity) {
+        if(!isClient()) {
+
+            float maxhp = entity.getMaxHealth();
+            float currenthp = entity.getHealth();
+
+            if (currenthp < maxhp) {
+                entity.setHealth(currenthp + 1.0f);
+            }
+            if (entity.hasEffect(ModEffects.BLEED)) {
+                int level = entity.getEffect(ModEffects.BLEED).getAmplifier();
+                int duration = entity.getEffect(ModEffects.BLEED).getDuration();
+                entity.removeEffect(entity.getEffect(ModEffects.BLEED).getEffect());
+                if (level > 0) {
+                    entity.addEffect(new MobEffectInstance(ModEffects.BLEED, duration, level - 1));
+                }
+
+            }
+
+        }
+        return true;
     }
 
 

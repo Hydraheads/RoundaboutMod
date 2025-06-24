@@ -255,5 +255,4 @@ public interface StandUser {
 
     /** Green Day stuff**/
 
-    void roundabout$Stitch(float hp);
 }
