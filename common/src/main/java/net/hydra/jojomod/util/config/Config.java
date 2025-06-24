@@ -506,7 +506,7 @@ public class Config implements Cloneable {
         public Integer numberOfYapLines;
         @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
         public Integer numberOfEvilYapLines;
-        @IntOption(group = "inherit", value = 7, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 8, min = 0, max = 72000)
         public Integer numberOfMiningYapLines;
         @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
         public Integer numberOfEvilMiningYapLines;
