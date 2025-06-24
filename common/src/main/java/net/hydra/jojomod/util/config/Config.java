@@ -506,6 +506,10 @@ public class Config implements Cloneable {
         public Integer numberOfYapLines;
         @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
         public Integer numberOfEvilYapLines;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer oreDetectionRadius;
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer oreDetectionMaximum;
     }
     public static class TheWorldSettings {
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)

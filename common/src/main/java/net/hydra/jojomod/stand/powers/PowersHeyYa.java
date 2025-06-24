@@ -1,19 +1,28 @@
 package net.hydra.jojomod.stand.powers;
 
+import net.hydra.jojomod.block.MiningAlertBlock;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.WaterFluid;
 
 import java.util.*;
 
@@ -92,7 +101,9 @@ public class PowersHeyYa extends NewDashPreset {
     public void toggleDangerYapClient(){
     }
     public void miningYapClient(){
-
+        if (!this.onCooldown(PowerIndex.SKILL_4)) {
+            this.tryPower(PowerIndex.POWER_2, true);
+        }
     }
     public void yapClient(){
         if (!this.onCooldown(PowerIndex.SKILL_4)) {
@@ -100,6 +111,59 @@ public class PowersHeyYa extends NewDashPreset {
             tryPowerPacket(PowerIndex.POWER_4);
         }
     }
+    /**Let the client brunt the task of mass scanning blocks so it doesn't lag server TPS
+     * also instill block limits so the packet count is sane*/
+    public boolean scoutForOresOnClient(){
+        this.setCooldown(PowerIndex.SKILL_2,42);
+        if (isClient()){
+            int range = ClientNetworking.getAppropriateConfig().heyYaSettings.oreDetectionRadius;
+            int oremaxout = 0;
+            int oremaxoutMax = ClientNetworking.getAppropriateConfig().heyYaSettings.oreDetectionMaximum;
+            for (int x = -range; x < range; x++){
+                for (int y = -range; y < range; y++){
+                    for (int z = -range; z < range; z++){
+                        BlockPos pos = this.self.blockPosition().offset(new BlockPos(x,y,z));
+                        BlockState blk = this.self.level().getBlockState(pos);
+                        if (blk.is(ModPacketHandler.PLATFORM_ACCESS.getOreTag())){
+                            if (confirmSpace(pos.below()) || confirmSpace(pos.east()) ||
+                                    confirmSpace(pos.west()) || confirmSpace(pos.north()) ||
+                                    confirmSpace(pos.south()) || confirmSpace(pos.above())){
+                                oremaxout++;
+                                if (oremaxout >= oremaxoutMax){
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    /**if the block is legal to replace, send packet to server which will confirm if it is*/
+    public boolean confirmSpace(BlockPos pos){
+        BlockState state = this.self.level().getBlockState(pos);
+        if (state.isAir() || state.is(Blocks.WATER)
+        ){
+            tryBlockPosPowerPacket(PowerIndex.POWER_4_BONUS,pos);
+
+            return true;
+        }
+        return false;
+    }
+
+
+    public void tryHighlightOre(BlockPos pos){
+        BlockState state = this.self.level().getBlockState(pos);
+        if (state.isAir()
+        ){
+            this.self.level().setBlockAndUpdate(pos, ModBlocks.MINING_ALERT_BLOCK.defaultBlockState().setValue(MiningAlertBlock.WATERLOGGED, Boolean.valueOf(false)));
+        } else if ( state.is(Blocks.WATER)){
+            this.self.level().setBlockAndUpdate(pos, ModBlocks.MINING_ALERT_BLOCK.defaultBlockState().setValue(MiningAlertBlock.WATERLOGGED, Boolean.valueOf(true)));
+        }
+    }
+
     public boolean doYap(){
         this.setCooldown(PowerIndex.SKILL_4,42);
         if (!isClient()){
@@ -121,10 +185,24 @@ public class PowersHeyYa extends NewDashPreset {
             case PowerIndex.POWER_4 -> {
                 return doYap();
             }
+            case PowerIndex.POWER_2 -> {
+                return scoutForOresOnClient();
+            }
         }
         return super.setPowerOther(move,lastMove);
     }
 
+    @Override
+    public boolean tryBlockPosPower(int move, boolean forced,  BlockPos Pos) {
+        switch (move) {
+            case PowerIndex.POWER_4_BONUS -> {
+                /**The server accepts the block pos of the ore the client detected*/
+                tryHighlightOre(Pos);
+                return true;
+            }
+        }
+        return super.tryPower(move, forced);
+    }
     @Override
     public boolean tryPower(int move, boolean forced) {
         return super.tryPower(move, forced);
