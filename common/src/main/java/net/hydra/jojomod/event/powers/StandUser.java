@@ -252,4 +252,8 @@ public interface StandUser {
     /** D4C */
     void roundabout$setParallelRunning(boolean value);
     boolean roundabout$isParallelRunning();
+
+    /** Green Day stuff**/
+
+    void roundabout$Stitch(float hp);
 }

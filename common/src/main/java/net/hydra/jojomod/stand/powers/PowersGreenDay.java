@@ -11,19 +11,35 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.mixin.StandUserEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 
 import net.minecraft.network.chat.Component;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerEntity;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 public class PowersGreenDay extends NewPunchingStand{
     public PowersGreenDay(LivingEntity self) {super(self);}
+
+    public boolean tryPower(int move, boolean forced) {
+        return super.tryPower(move, forced);
+    }
 
     @Override
     public int getMaxGuardPoints(){
@@ -94,29 +110,17 @@ public class PowersGreenDay extends NewPunchingStand{
                 if (this.onCooldown(PowerIndex.SKILL_4_SNEAK))
                     return;
                 Roundabout.LOGGER.info("Stitch");
-                Stitch();
+                ((StandUser) this.getSelf()).roundabout$Stitch(1.0f);
+                this.tryPower(PowerIndex.POWER_4, true);
+                tryPowerPacket(PowerIndex.POWER_4);
                 this.setCooldown(PowerIndex.SKILL_4_SNEAK, 80);
                 this.setCooldown(PowerIndex.SKILL_4_CROUCH_GUARD, 80);
+
             }
         }
     }
 
-    public void Stitch() {
 
-        float maxhp = this.getStandUserSelf().roundabout$getPowerUser().getMaxHealth();
-        float currenthp = this.getStandUserSelf().roundabout$getPowerUser().getHealth();
-
-        if(currenthp < maxhp){
-            this.getStandUserSelf().roundabout$getPowerUser().setHealth(currenthp + 1.0f);
-            if(this.getStandUserSelf().roundabout$getPowerUser().hasEffect(ModEffects.BLEED)){
-                int level = this.getStandUserSelf().roundabout$getPowerUser().getEffect(ModEffects.BLEED).getAmplifier();
-                int duration = this.getStandUserSelf().roundabout$getPowerUser().getEffect(ModEffects.BLEED).getDuration();
-                this.getStandUserSelf().roundabout$getPowerUser().removeEffect(this.getStandUserSelf().roundabout$getPowerUser().getEffect(ModEffects.BLEED).getEffect());
-            }
-
-        }
-
-    }
 
     @Override
     public boolean isWip(){
