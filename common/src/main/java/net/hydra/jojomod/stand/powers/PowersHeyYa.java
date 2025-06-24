@@ -20,6 +20,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.WaterFluid;
@@ -37,8 +38,9 @@ public class PowersHeyYa extends NewDashPreset {
     }
 
 
+    public boolean dangerYapping = false;
     public boolean dangerYappingOn(){
-        return false;
+        return dangerYapping;
     }
     public boolean canSummonStandAsEntity(){
         return false;
@@ -98,7 +100,26 @@ public class PowersHeyYa extends NewDashPreset {
         }
     }
 
+    @Override
+    public boolean setPowerOther(int move, int lastMove) {
+        switch (move)
+        {
+            case PowerIndex.POWER_1 -> {
+                return switchDangerMode();
+            }
+            case PowerIndex.POWER_4 -> {
+                return doYap();
+            }
+            case PowerIndex.POWER_2 -> {
+                return scoutForOresOnClient();
+            }
+        }
+        return super.setPowerOther(move,lastMove);
+    }
+
     public void toggleDangerYapClient(){
+        this.tryPower(PowerIndex.POWER_1, true);
+        tryPowerPacket(PowerIndex.POWER_1);
     }
     public void miningYapClient(){
         if (!this.onCooldown(PowerIndex.SKILL_2)) {
@@ -181,6 +202,10 @@ public class PowersHeyYa extends NewDashPreset {
         }
     }
 
+    public boolean switchDangerMode(){
+        dangerYapping = !dangerYapping;
+        return true;
+    }
     public boolean doYap(){
         this.setCooldown(PowerIndex.SKILL_4,ClientNetworking.getAppropriateConfig().heyYaSettings.yapCooldown);
         if (!isClient()){
@@ -192,19 +217,6 @@ public class PowersHeyYa extends NewDashPreset {
             }
         }
         return true;
-    }
-    @Override
-    public boolean setPowerOther(int move, int lastMove) {
-        switch (move)
-        {
-            case PowerIndex.POWER_4 -> {
-                return doYap();
-            }
-            case PowerIndex.POWER_2 -> {
-                return scoutForOresOnClient();
-            }
-        }
-        return super.setPowerOther(move,lastMove);
     }
 
     @Override
@@ -255,6 +267,24 @@ public class PowersHeyYa extends NewDashPreset {
     @Override
     public void updateUniqueMoves() {
         super.updateUniqueMoves();
+    }
+
+    @Override
+    public void reactToAggro(Mob mob){
+        if (dangerYappingOn()) {
+            /**If a mob tries to set its attack target to you again, does not repeat yapping*/
+            if (!(mob.getTarget() != null && mob.getTarget().is(this.self)) && !(mob.getLastHurtByMob() != null && mob.getLastHurtByMob().is(this.self))) {
+                /**This function assures the aggro isn't passive mob aggro like animals running*/
+                if (MainUtil.getIfMobIsAttacking(mob)) {
+                    yapSounds();
+                    if (isEvilYapper()){
+                        ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.danger.evil.no_"+(Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfEvilDangerYapLines)+1), mob.getDisplayName()).withStyle(ChatFormatting.RED), true);
+                    } else {
+                        ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.danger.no_"+(Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfDangerYapLines)+1), mob.getDisplayName()).withStyle(ChatFormatting.RED), true);
+                    }
+                }
+            }
+        }
     }
 
 

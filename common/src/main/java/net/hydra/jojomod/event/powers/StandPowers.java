@@ -2808,6 +2808,12 @@ public class StandPowers {
     }
 
 
+    /**Stands that react to aggro like hey ya and wonder of u*/
+    public void reactToAggro(Mob mob){
+
+    }
+
+
     /**If the powers inventory should render the player instead*/
     public boolean rendersPlayer(){
         return false;

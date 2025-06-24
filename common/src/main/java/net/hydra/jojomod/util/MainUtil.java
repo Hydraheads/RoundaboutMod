@@ -46,6 +46,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.animal.*;
@@ -160,6 +162,20 @@ public class MainUtil {
             return 0;
         }
         return ClientNetworking.getAppropriateConfig().worthyMobOdds;
+    }
+    public static boolean getIfMobIsAttacking(Mob mb){
+        for (WrappedGoal wrappedGoal : ((IMob)mb).roundabout$getGoalSelector().getAvailableGoals()) {
+            Goal goal = wrappedGoal.getGoal();
+
+            // Check if it's a melee or ranged attack goal
+            if (goal instanceof PanicGoal) {
+                // Make sure the goal is running
+                if (wrappedGoal.isRunning()) {
+                    return false; // Mob is actively trying to attack the player
+                }
+            }
+        }
+        return true;
     }
     public static double getStandUserOdds(Mob mob) {
         if ((isBossMob(mob) && !ClientNetworking.getAppropriateConfig().bossMobsCanNaturallyHaveStands)

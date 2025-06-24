@@ -615,6 +615,14 @@ public abstract class ZMob extends LivingEntity implements IMob {
         }
     }
 
+    /**Stands that react to aggro like hey ya and wonder of u*/
+    @Inject(method = "setTarget",
+            at = @At(value = "HEAD"))
+    private <T extends Mob> void roundabout$setTarget(LivingEntity $$0, CallbackInfo ci) {
+        if ($$0 != null) {
+            ((StandUser)$$0).roundabout$getStandPowers().reactToAggro(((Mob) (Object)this));
+        }
+    }
     @Unique
     Mob roundabout$Mob;
 
