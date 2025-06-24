@@ -52,6 +52,8 @@
   "item.roundabout.soft_and_wet_disc": "Stand Disc",
   "item.roundabout.cinderella_disc": "Stand Disc",
   "item.roundabout.hey_ya_disc": "Stand Disc",
+  "item.roundabout.ratt_disc": "Stand Disc",
+  "item.roundabout.max_ratt_disc": "Stand Disc+",
   "item.roundabout.max_star_platinum_disc": "Stand Disc+",
   "item.roundabout.magicians_red_disc": "Stand Disc",
   "item.roundabout.killer_queen_disc": "Stand Disc",
@@ -71,6 +73,8 @@
   "item.roundabout.the_world_disc.desc": "The World",
   "item.roundabout.justice_disc.desc": "Justice",
   "item.roundabout.cinderella_disc.desc": "Cinderella",
+  "item.roundabout.max_ratt_disc.desc": "Ratt",
+  "item.roundabout.ratt_disc.desc": "Ratt",
   "item.roundabout.hey_ya_disc.desc": "Hey Ya!",
   "item.roundabout.none_disc.desc": "None",
 
@@ -923,6 +927,9 @@
   "skins.roundabout.cinderella.base": "Part 4",
   "skins.roundabout.cinderella.manga": "Manga",
   "skins.roundabout.cinderella.zombie": "Infected",
+
+  "skins.roundabout.ratt.anime" : "Anime",
+  "skins.roundabout.ratt.manga" : "Manga",
 
   "skins.roundabout.hey_ya.manga": "Manga",
   "skins.roundabout.hey_ya.gothic": "Gothic",

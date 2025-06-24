@@ -30,6 +30,7 @@ public class ModEntities {
     public static EntityType<MagiciansRedEntity> MAGICIANS_RED;
     public static EntityType<MagiciansRedEntity> MAGICIANS_RED_OVA;
     public static EntityType<D4CEntity> D4C;
+    public static EntityType<RattEntity> RATT;
     public static EntityType<GreenDayEntity> GREEN_DAY;
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET;
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET_KING;

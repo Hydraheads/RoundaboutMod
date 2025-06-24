@@ -13,6 +13,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
+import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -48,6 +49,10 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
     public static Item MAX_STAND_DISC_D4C = registerItem("max_d4c_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
+    public static Item STAND_DISC_RATT = registerItem("ratt_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersRatt(null)));
+    public static Item MAX_STAND_DISC_RATT = registerItem("max_ratt_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersRatt(null)));
     public static Item STAND_DISC_GREEN_DAY = registerItem("green_day_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersGreenDay(null)));
     public static Item MAX_STAND_DISC_GREEN_DAY = registerItem("max_green_day_disc",
@@ -402,6 +407,9 @@ public class FabricItems {
         ((MaxStandDiscItem)MAX_STAND_DISC_D4C).baseDisc = ((StandDiscItem)STAND_DISC_D4C);
         ModItems.MAX_STAND_DISC_D4C = MAX_STAND_DISC_D4C;
         ModItems.STAND_DISC_D4C = STAND_DISC_D4C;
+        ModItems.STAND_DISC_RATT = STAND_DISC_RATT;
+        ModItems.MAX_STAND_DISC_RATT = MAX_STAND_DISC_RATT;
+        ((MaxStandDiscItem)MAX_STAND_DISC_RATT).baseDisc = ((StandDiscItem)STAND_DISC_RATT);
         ModItems.MAX_STAND_DISC_GREEN_DAY = MAX_STAND_DISC_GREEN_DAY;
         ModItems.STAND_DISC_GREEN_DAY = STAND_DISC_GREEN_DAY;
         ((MaxStandDiscItem)MAX_STAND_DISC_GREEN_DAY).baseDisc = ((StandDiscItem)STAND_DISC_GREEN_DAY);
