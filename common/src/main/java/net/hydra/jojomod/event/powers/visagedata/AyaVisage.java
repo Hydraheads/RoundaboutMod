@@ -35,6 +35,9 @@ public class AyaVisage extends VisageData {
     public String getSkinPath(){
         return "aya";
     }
+    public boolean rendersPonytail(){
+        return true;
+    }
     public boolean isSlim(){
         return true;
     }

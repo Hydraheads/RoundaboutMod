@@ -37,20 +37,33 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
             ItemStack visage = pl.roundabout$getMaskSlot();
             if (visage != null && !visage.isEmpty()) {
                 if (visage.getItem() instanceof MaskItem MI) {
+                    boolean isHurt = entity.hurtTime > 0;
+                    float r = isHurt ? 1.0F : 1.0F;
+                    float g = isHurt ? 0.6F : 1.0F;
+                    float b = isHurt ? 0.6F : 1.0F;
+                    String path = MI.visageData.getSkinPath();
                     if (MI.visageData.rendersBreast()){
-                        renderNormalBreast(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks,MI.visageData.getSkinPath());
+                        renderNormalBreast(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                r,g,b);
+                    }
+                    if (MI.visageData.rendersPonytail()){
+                        renderPonytail(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                r,g,b);
                     }
                 }
             }
         }
     }
-    public void renderNormalBreast(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path) {
+    public void renderNormalBreast(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                   float r, float g, float b) {
 
-        boolean isHurt = entity.hurtTime > 0;
-        float r = isHurt ? 1.0F : 1.0F;
-        float g = isHurt ? 0.6F : 1.0F;
-        float b = isHurt ? 0.6F : 1.0F;
         ModStrayModels.ChestPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+    }
+    public void renderPonytail(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                   float r, float g, float b) {
+
+        ModStrayModels.PonytailPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
     }
 }

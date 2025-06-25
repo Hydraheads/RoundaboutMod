@@ -16,37 +16,36 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
-public class ChestPart extends PsuedoHierarchicalModel {
+public class PonytailPart extends PsuedoHierarchicalModel {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-   private final ModelPart breast;
+   private final ModelPart ponytail;
     private final ModelPart Root;
 
-    public ChestPart() {
+    public PonytailPart() {
         super(RenderType::entityTranslucent);
 
         this.Root = createBodyLayer().bakeRoot();
-        this.breast = Root.getChild("breast");
+        this.ponytail = Root.getChild("ponytail");
     }
 
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition breast = partdefinition.addOrReplaceChild("breast", CubeListBuilder.create(), PartPose.offset(0.0F, 12.0F, 0.0F));
+        PartDefinition ponytail = partdefinition.addOrReplaceChild("ponytail", CubeListBuilder.create(), PartPose.offset(0.0F, 12.0F, 0.0F));
 
-        PartDefinition shirt_chest_r1 = breast.addOrReplaceChild("shirt_chest_r1", CubeListBuilder.create().texOffs(0, 9).addBox(-4.0F, 0.0F, 0.0F, 8.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -11.4F, -2.0F, -0.6109F, 0.0F, 0.0F));
+        PartDefinition cube_r1 = ponytail.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-2.0F, -3.0F, -1.0F, 4.0F, 10.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -9.15F, 2.175F, 3.0761F, 0.0F, 3.1416F));
 
-        PartDefinition chest_r1 = breast.addOrReplaceChild("chest_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, 0.0F, 0.0F, 8.0F, 4.0F, 4.0F, new CubeDeformation(-0.15F)), PartPose.offsetAndRotation(0.0F, -11.4F, -2.0F, -0.4363F, 0.0F, 0.0F));
+        PartDefinition cube_r2 = ponytail.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(0, 0).addBox(-2.0F, -3.0F, -1.0F, 4.0F, 10.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -9.15F, 2.225F, 0.0654F, 0.0F, 0.0F));
 
-        return LayerDefinition.create(meshdefinition, 32, 32);
+        return LayerDefinition.create(meshdefinition, 16, 16);
     }
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        breast.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        ponytail.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
     @Override
@@ -63,7 +62,7 @@ public class ChestPart extends PsuedoHierarchicalModel {
 
 
     public ResourceLocation getTextureLocation(String path){
-        return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_breasts/"+path+".png");
+        return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_ponytails/"+path+".png");
     }
 
     public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light, String path) {

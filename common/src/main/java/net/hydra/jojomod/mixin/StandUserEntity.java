@@ -3113,10 +3113,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         if (((TimeStop)entity.level()).CanTimeStopEntity(entity) && !(damageSource.is(DamageTypes.GENERIC_KILL))){
             if (this.roundabout$TSHurtTime <= 0 || damageSource.is(DamageTypeTags.BYPASSES_COOLDOWN)) {
-
                 float dmg = roundabout$getStoredDamage();
                 float max = roundaboutGetMaxStoredDamage();
-
 
                 if (((LivingEntity)(Object) this).isInvulnerableTo(damageSource)) {
                     ci.setReturnValue(false);

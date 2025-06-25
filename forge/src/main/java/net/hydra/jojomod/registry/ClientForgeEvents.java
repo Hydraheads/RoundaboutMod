@@ -15,6 +15,7 @@ import net.hydra.jojomod.client.models.stand.*;
 import net.hydra.jojomod.client.models.stand.renderers.*;
 import net.hydra.jojomod.client.models.visages.*;
 import net.hydra.jojomod.client.models.visages.parts.ChestPart;
+import net.hydra.jojomod.client.models.visages.parts.PonytailPart;
 import net.hydra.jojomod.client.models.visages.renderers.*;
 import net.hydra.jojomod.client.models.worn_stand.HeyYaModel;
 import net.hydra.jojomod.client.models.worn_stand.SoftAndWetShootingArmModel;
@@ -161,6 +162,7 @@ public class ClientForgeEvents {
         ModStrayModels.SHOOTING_ARM = new SoftAndWetShootingArmModel();
         ModStrayModels.HEY_YA = new HeyYaModel();
         ModStrayModels.ChestPart = new ChestPart();
+        ModStrayModels.PonytailPart = new PonytailPart();
         //BlockEntityRenderers.register(ModBlocks.STAND_FIRE_BLOCK_ENTITY, StandFireRenderer::new);
     }
     @SubscribeEvent

@@ -61,6 +61,9 @@ public class VisageData {
     public boolean rendersBreast(){
         return false;
     }
+    public boolean rendersPonytail(){
+        return false;
+    }
     public boolean rendersSmallBreast(){
         return false;
     }
