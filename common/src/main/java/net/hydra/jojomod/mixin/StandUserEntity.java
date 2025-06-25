@@ -27,6 +27,7 @@ import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
+import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -1773,6 +1774,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Unique
+    public int roundabout$RattShoulderVanishTicks = 0;
+
+    @Unique
+    @Override
+    public int roundabout$getRattShoulderVanishTicks(){
+        return roundabout$RattShoulderVanishTicks;
+    }
+    @Unique
+    @Override
+    public void roundabout$setRattShoulderVanishTicks(int set){
+        roundabout$RattShoulderVanishTicks = Mth.clamp(set,0,10);
+    }
+
+
+
+    @Unique
     public AnimationState roundabout$heyYaAnimation2 = new AnimationState();
 
     @Unique
@@ -3333,6 +3350,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setHeyYaVanishTicks(roundabout$getHeyYaVanishTicks()+1);
         } else {
             roundabout$setHeyYaVanishTicks(roundabout$getHeyYaVanishTicks()-1);
+        }
+        /** RattShoulder fade ticks*/
+        if (roundabout$getActive() && roundabout$getStandPowers() instanceof PowersRatt){
+            roundabout$setRattShoulderVanishTicks(roundabout$getRattShoulderVanishTicks()+1);
+        } else {
+            roundabout$setRattShoulderVanishTicks(roundabout$getRattShoulderVanishTicks()-1);
         }
 
 

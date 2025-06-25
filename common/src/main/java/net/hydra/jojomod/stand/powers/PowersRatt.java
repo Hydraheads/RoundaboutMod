@@ -232,6 +232,14 @@ public class PowersRatt extends NewDashPreset {
 
 
 
+    public Component getPosName(byte posID) {
+        if (posID == 1) {
+            return Component.translatable("idle.roundabout.ratt_1");
+        } else {
+            return Component.translatable("idle.roundabout.ratt_2");
+        }
+    }
+
     @Override
     public boolean isWip(){
         return true;

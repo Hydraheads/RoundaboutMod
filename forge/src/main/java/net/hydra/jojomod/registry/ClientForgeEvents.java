@@ -16,6 +16,7 @@ import net.hydra.jojomod.client.models.stand.renderers.*;
 import net.hydra.jojomod.client.models.visages.*;
 import net.hydra.jojomod.client.models.visages.renderers.*;
 import net.hydra.jojomod.client.models.worn_stand.HeyYaModel;
+import net.hydra.jojomod.client.models.worn_stand.RattShoulderModel;
 import net.hydra.jojomod.client.models.worn_stand.SoftAndWetShootingArmModel;
 import net.hydra.jojomod.client.models.substand.renderers.D4CCloneRenderer;
 import net.hydra.jojomod.client.models.substand.renderers.FogCloneRenderer;
@@ -161,6 +162,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.RATT_LAYER, RattModel::getTexturedModelData);
         ModStrayModels.SHOOTING_ARM = new SoftAndWetShootingArmModel();
         ModStrayModels.HEY_YA = new HeyYaModel();
+        ModStrayModels.RATT_SHOULDER = new RattShoulderModel();
         //BlockEntityRenderers.register(ModBlocks.STAND_FIRE_BLOCK_ENTITY, StandFireRenderer::new);
     }
     @SubscribeEvent
