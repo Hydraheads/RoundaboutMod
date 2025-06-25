@@ -32,6 +32,9 @@ public class EnyaVisage extends VisageData {
     public boolean rendersBigHair(){
         return true;
     }
+    public boolean rendersSmallBreast(){
+        return true;
+    }
     @Override
     public float getNametagHeight(){
         return -0.2F;

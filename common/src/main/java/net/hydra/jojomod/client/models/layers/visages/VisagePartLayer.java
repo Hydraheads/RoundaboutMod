@@ -43,19 +43,32 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     float b = isHurt ? 0.6F : 1.0F;
                     String path = MI.visageData.getSkinPath();
                     if (MI.visageData.rendersBreast()){
+                        poseStack.pushPose();
                         getParentModel().body.translateAndRotate(poseStack);
                         renderNormalBreast(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                 r,g,b);
+                        poseStack.popPose();
+                    }
+                    if (MI.visageData.rendersSmallBreast()){
+                        poseStack.pushPose();
+                        getParentModel().body.translateAndRotate(poseStack);
+                        renderSmallBreast(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                r,g,b);
+                        poseStack.popPose();
                     }
                     if (MI.visageData.rendersPonytail()){
+                        poseStack.pushPose();
                         getParentModel().body.translateAndRotate(poseStack);
                         renderPonytail(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                 r,g,b);
+                        poseStack.popPose();
                     }
                     if (MI.visageData.rendersBigHair()){
+                        poseStack.pushPose();
                         getParentModel().head.translateAndRotate(poseStack);
                         renderBigHair(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                 r,g,b);
+                        poseStack.popPose();
                     }
                 }
             }
@@ -63,8 +76,13 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
     }
     public void renderNormalBreast(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                                    float r, float g, float b) {
-
         ModStrayModels.ChestPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+    }
+    public void renderSmallBreast(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                   float r, float g, float b) {
+
+        ModStrayModels.SmallChestPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
     }
     public void renderPonytail(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
