@@ -43,11 +43,18 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     float b = isHurt ? 0.6F : 1.0F;
                     String path = MI.visageData.getSkinPath();
                     if (MI.visageData.rendersBreast()){
+                        getParentModel().body.translateAndRotate(poseStack);
                         renderNormalBreast(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                 r,g,b);
                     }
                     if (MI.visageData.rendersPonytail()){
+                        getParentModel().body.translateAndRotate(poseStack);
                         renderPonytail(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                r,g,b);
+                    }
+                    if (MI.visageData.rendersBigHair()){
+                        getParentModel().head.translateAndRotate(poseStack);
+                        renderBigHair(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                 r,g,b);
                     }
                 }
@@ -64,6 +71,12 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                    float r, float g, float b) {
 
         ModStrayModels.PonytailPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+    }
+    public void renderBigHair(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                               float r, float g, float b) {
+
+        ModStrayModels.BigHairPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
     }
 }

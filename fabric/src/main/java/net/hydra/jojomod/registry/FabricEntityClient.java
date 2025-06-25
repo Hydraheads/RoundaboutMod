@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.models.projectile.renderers.*;
 import net.hydra.jojomod.client.models.stand.*;
 import net.hydra.jojomod.client.models.stand.renderers.*;
 import net.hydra.jojomod.client.models.visages.*;
+import net.hydra.jojomod.client.models.visages.parts.BigHairPart;
 import net.hydra.jojomod.client.models.visages.parts.ChestPart;
 import net.hydra.jojomod.client.models.visages.parts.PonytailPart;
 import net.hydra.jojomod.client.models.visages.renderers.*;
@@ -157,5 +158,6 @@ public class FabricEntityClient {
         ModStrayModels.HEY_YA = new HeyYaModel();
         ModStrayModels.ChestPart = new ChestPart();
         ModStrayModels.PonytailPart = new PonytailPart();
+        ModStrayModels.BigHairPart = new BigHairPart();
     }
 }
