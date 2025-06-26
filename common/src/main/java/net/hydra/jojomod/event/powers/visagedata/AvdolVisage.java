@@ -26,6 +26,10 @@ public class AvdolVisage extends VisageData {
         return new Vector3f(0.969F, 0.96F, 0.96F);
     }
 
+    public boolean rendersPonytail(){
+        return true;
+    }
+
     @Override
     public float getNametagHeight(){
         return 0.54f;

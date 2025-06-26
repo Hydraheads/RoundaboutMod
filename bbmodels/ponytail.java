@@ -18,11 +18,11 @@ public class ponytail<T extends Entity> extends EntityModel<T> {
 
 		PartDefinition ponytail = partdefinition.addOrReplaceChild("ponytail", CubeListBuilder.create(), PartPose.offset(0.0F, 12.0F, 0.0F));
 
-		PartDefinition cube_r1 = ponytail.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-2.0F, -3.0F, -1.0F, 4.0F, 10.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -9.15F, 2.175F, 3.0761F, 0.0F, 3.1416F));
+		PartDefinition cube_r1 = ponytail.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(10, 0).addBox(-2.0F, -3.0F, -1.0F, 4.0F, 10.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -9.025F, 2.35F, 0.1091F, 0.0F, 0.0F));
 
-		PartDefinition cube_r2 = ponytail.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(0, 0).addBox(-2.0F, -3.0F, -1.0F, 4.0F, 10.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -9.15F, 2.225F, 0.0654F, 0.0F, 0.0F));
+		PartDefinition cube_r2 = ponytail.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(0, 0).addBox(-2.0F, -3.0F, -1.0F, 4.0F, 10.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -9.025F, 2.3F, 3.0325F, 0.0F, 3.1416F));
 
-		return LayerDefinition.create(meshdefinition, 16, 16);
+		return LayerDefinition.create(meshdefinition, 32, 32);
 	}
 
 	@Override
