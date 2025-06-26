@@ -27,6 +27,10 @@ public class ValentineVisage extends VisageData {
         return new Vector3f(0.939F, 0.939F, 0.939F);
     }
 
+
+    public boolean rendersLegCloakPart(){
+        return true;
+    }
     public String getSkinPath(){
         return "valentine";
     }

@@ -78,6 +78,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         renderTasselHat(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                 r,g,b);
                     }
+                    if (MI.visageData.rendersLegCloakPart()){
+                        renderLegCloakPart(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                r,g,b);
+                    }
                 }
             }
         }
@@ -158,6 +162,15 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.TasselHatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
+        poseStack.popPose();
+    }
+    public void renderLegCloakPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                   float r, float g, float b) {
+
+        poseStack.pushPose();
+        getParentModel().body.translateAndRotate(poseStack);
+        ModStrayModels.LegCloakPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path,-1*(Math.min(getParentModel().leftLeg.xRot,getParentModel().rightLeg.xRot)));
         poseStack.popPose();
     }
 }

@@ -164,6 +164,7 @@ public class ClientForgeEvents {
         ModStrayModels.SpikeyHairPart = new SpikeyHairPart();
         ModStrayModels.JosukeDecalsPart = new JosukeDecalsPart();
         ModStrayModels.TasselHatPart = new TasselHatPart();
+        ModStrayModels.LegCloakPart = new LegCloakPart();
         //BlockEntityRenderers.register(ModBlocks.STAND_FIRE_BLOCK_ENTITY, StandFireRenderer::new);
     }
     @SubscribeEvent

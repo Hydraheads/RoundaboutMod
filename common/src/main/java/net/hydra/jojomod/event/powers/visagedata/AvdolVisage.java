@@ -26,6 +26,9 @@ public class AvdolVisage extends VisageData {
         return new Vector3f(0.969F, 0.96F, 0.96F);
     }
 
+    public boolean rendersLegCloakPart(){
+        return true;
+    }
     public boolean rendersPonytail(){
         return true;
     }
