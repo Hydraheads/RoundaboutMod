@@ -24,6 +24,9 @@ public class DIOVisage extends VisageData {
         return new Vec3(1.09F,1.09F,1.09F);
     }
 
+    public boolean rendersSpikeyHair(){
+        return true;
+    }
     @Override
     public Vector3f scale(){
         return new Vector3f(0.975F, 0.975F, 0.975F);

@@ -66,6 +66,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         renderBasicHat(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                 r,g,b);
                     }
+                    if (MI.visageData.rendersSpikeyHair()){
+                        renderSpikeyHair(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                r,g,b);
+                    }
                 }
             }
         }
@@ -118,6 +122,15 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         poseStack.pushPose();
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.BasicHatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        poseStack.popPose();
+    }
+    public void renderSpikeyHair(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                               float r, float g, float b) {
+
+        poseStack.pushPose();
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.SpikeyHairPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
         poseStack.popPose();
     }
