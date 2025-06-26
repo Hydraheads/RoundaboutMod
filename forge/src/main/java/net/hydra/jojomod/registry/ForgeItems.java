@@ -440,6 +440,8 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new DIOVisage(null))));
     public static final RegistryObject<Item> ENYA_MASK = addToTab(ITEMS.register("enya_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new EnyaVisage(null))));
+    public static final RegistryObject<Item> ENYA_OVA_MASK = ITEMS.register("enya_ova_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new EnyaOVAVisage(null)));
     public static final RegistryObject<Item> AVDOL_MASK = addToTab(ITEMS.register("avdol_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AvdolVisage(null))));
     public static final RegistryObject<Item> DIEGO_MASK = addToTab(ITEMS.register("diego_mask",

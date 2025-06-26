@@ -84,6 +84,7 @@ public class ModItems {
     public static Item JOTARO_MASK;
     public static Item DIO_MASK;
     public static Item ENYA_MASK;
+    public static Item ENYA_OVA_MASK;
     public static Item AVDOL_MASK;
     public static Item DIEGO_MASK;
     public static Item VALENTINE_MASK;
