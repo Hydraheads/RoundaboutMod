@@ -76,6 +76,9 @@ public class VisageData {
     public boolean rendersLegCloakPart(){
         return false;
     }
+    public boolean rendersAvdolHairPart(){
+        return false;
+    }
     public boolean rendersDiegoHat(){
         return false;
     }

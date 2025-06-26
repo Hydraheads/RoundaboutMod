@@ -29,6 +29,9 @@ public class AvdolVisage extends VisageData {
     public boolean rendersLegCloakPart(){
         return true;
     }
+    public boolean rendersAvdolHairPart(){
+        return true;
+    }
     public boolean rendersPonytail(){
         return true;
     }
