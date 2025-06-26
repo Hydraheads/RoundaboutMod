@@ -29,4 +29,11 @@ public class JosukePartEightVisage extends VisageData {
     public String getSkinPath(){
         return "josuke_part_eight";
     }
+
+    public boolean rendersJosukeDecals(){
+        return true;
+    }
+    public boolean rendersTasselHat(){
+        return true;
+    }
 }

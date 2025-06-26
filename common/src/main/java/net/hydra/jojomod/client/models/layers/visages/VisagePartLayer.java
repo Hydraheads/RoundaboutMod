@@ -70,6 +70,14 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         renderSpikeyHair(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                 r,g,b);
                     }
+                    if (MI.visageData.rendersJosukeDecals()){
+                        renderJosukeDecals(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                r,g,b);
+                    }
+                    if (MI.visageData.rendersTasselHat()){
+                        renderTasselHat(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                r,g,b);
+                    }
                 }
             }
         }
@@ -131,6 +139,24 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         poseStack.pushPose();
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.SpikeyHairPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        poseStack.popPose();
+    }
+    public void renderJosukeDecals(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                 float r, float g, float b) {
+
+        poseStack.pushPose();
+        getParentModel().body.translateAndRotate(poseStack);
+        ModStrayModels.JosukeDecalsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        poseStack.popPose();
+    }
+    public void renderTasselHat(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                 float r, float g, float b) {
+
+        poseStack.pushPose();
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.TasselHatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
         poseStack.popPose();
     }

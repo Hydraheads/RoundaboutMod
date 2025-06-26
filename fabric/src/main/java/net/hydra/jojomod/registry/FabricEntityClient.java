@@ -161,5 +161,7 @@ public class FabricEntityClient {
         ModStrayModels.DiegoHatPart = new DiegoHatPart();
         ModStrayModels.BasicHatPart = new BasicHatPart();
         ModStrayModels.SpikeyHairPart = new SpikeyHairPart();
+        ModStrayModels.JosukeDecalsPart = new JosukeDecalsPart();
+        ModStrayModels.TasselHatPart = new TasselHatPart();
     }
 }

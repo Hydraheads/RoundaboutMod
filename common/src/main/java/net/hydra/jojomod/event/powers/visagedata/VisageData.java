@@ -67,6 +67,12 @@ public class VisageData {
     public boolean rendersBigHair(){
         return false;
     }
+    public boolean rendersJosukeDecals(){
+        return false;
+    }
+    public boolean rendersTasselHat(){
+        return false;
+    }
     public boolean rendersDiegoHat(){
         return false;
     }
