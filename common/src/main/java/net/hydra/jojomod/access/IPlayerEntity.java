@@ -11,6 +11,8 @@ import net.minecraft.world.item.ItemStack;
 public interface IPlayerEntity {
     Inventory roundabout$GetInventory();
     boolean roundabout$getBlinded();
+    byte roundabout$getModChest();
+    void roundabout$setModChest(byte chestType);
     void roundabout$setBlinded(boolean blinded);
     void roundabout$SetPos(byte Pos);
     int roundabout$getAirTime();

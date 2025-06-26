@@ -1,13 +1,13 @@
 package net.hydra.jojomod.event.powers.visagedata;
 
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 
 public class NonCharacterVisage extends VisageData{
     @Override
-    public VisageData generateVisageData(Player entity){
+    public VisageData generateVisageData(LivingEntity entity){
         return new NonCharacterVisage(entity);
     }
-    public NonCharacterVisage(Player self) {
+    public NonCharacterVisage(LivingEntity self) {
         super(self);
     }
 

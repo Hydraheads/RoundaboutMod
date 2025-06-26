@@ -166,6 +166,7 @@ public class ClientForgeEvents {
         ModStrayModels.JosukeDecalsPart = new JosukeDecalsPart();
         ModStrayModels.TasselHatPart = new TasselHatPart();
         ModStrayModels.LegCloakPart = new LegCloakPart();
+        ModStrayModels.PlayerChestPart = new PlayerChestPart();
         //BlockEntityRenderers.register(ModBlocks.STAND_FIRE_BLOCK_ENTITY, StandFireRenderer::new);
     }
     @SubscribeEvent

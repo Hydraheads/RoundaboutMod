@@ -16,7 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class DIOVoice extends VoiceData{
-    public DIOVoice(Player self) {
+    public DIOVoice(LivingEntity self) {
         super(self);
         addVoiceLine(new VoiceLine(26, ModSounds.DIO_HOHO_EVENT, VoiceLine.SOUND_CATEGORIES.IDLE));
         addVoiceLine(new VoiceLine(18, ModSounds.DIO_HOHO_2_EVENT, VoiceLine.SOUND_CATEGORIES.IDLE));

@@ -4,6 +4,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.DIOVoice;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
@@ -16,7 +17,7 @@ public class DIOVisage extends VisageData {
         return new DIOVisage(entity);
     }
     @Override
-    public JojoNPC getModelNPC(Player pl){
+    public JojoNPC getModelNPC(LivingEntity pl){
         return ModEntities.DIO.create(pl.level());
     }
     @Override
@@ -39,7 +40,7 @@ public class DIOVisage extends VisageData {
         return true;
     }
     @Override
-    public VoiceData voiceData(Player slef){
+    public VoiceData voiceData(LivingEntity slef){
         return new DIOVoice(slef);
     }
 

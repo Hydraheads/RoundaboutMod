@@ -15,14 +15,14 @@ import org.joml.Vector3f;
 
 public class VisageData {
 
-    public final Player self;
-    public VisageData(Player self) {
+    public final LivingEntity self;
+    public VisageData(LivingEntity self) {
         this.self = self;
     }
-    public VisageData generateVisageData(Player entity){
+    public VisageData generateVisageData(LivingEntity entity){
         return new VisageData(entity);
     }
-    public JojoNPC getModelNPC(Player pl){
+    public JojoNPC getModelNPC(LivingEntity pl){
         return null;
     }
     public Vec3 sizeModifier(){
@@ -41,7 +41,7 @@ public class VisageData {
         return false;
     }
 
-    public VoiceData voiceData(Player realSelf){
+    public VoiceData voiceData(LivingEntity realSelf){
         return new VoiceData(realSelf);
     }
 
@@ -77,6 +77,9 @@ public class VisageData {
         return false;
     }
     public boolean rendersAvdolHairPart(){
+        return false;
+    }
+    public boolean rendersPlayerBreastPart(){
         return false;
     }
     public boolean rendersDiegoHat(){

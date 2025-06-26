@@ -1,15 +1,11 @@
 package net.hydra.jojomod.event.powers.visagedata.voicedata;
 
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.VoiceLine;
-import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +13,7 @@ import java.util.Random;
 
 public class VoiceData {
 
-    public final Player self;
+    public final LivingEntity self;
 
     public int talkingTicks = -1;
     public int idleCooldown = -1;
@@ -34,7 +30,7 @@ public class VoiceData {
     public List<VoiceLine> killLines = new ArrayList<>();
     public List<VoiceLine> attackLines = new ArrayList<>();
     public List<VoiceLine> summonLines = new ArrayList<>();
-    public VoiceData(Player self) {
+    public VoiceData(LivingEntity self) {
         this.self = self;
     }
 

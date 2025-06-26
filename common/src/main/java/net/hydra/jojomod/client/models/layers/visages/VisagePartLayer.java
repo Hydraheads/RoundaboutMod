@@ -6,6 +6,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.client.model.HumanoidModel;
@@ -44,53 +45,58 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
             if (visage != null && !visage.isEmpty()) {
                 if (visage.getItem() instanceof MaskItem MI) {
+                    VisageData vd = MI.visageData.generateVisageData(entity);
                     boolean isHurt = entity.hurtTime > 0;
                     float r = isHurt ? 1.0F : 1.0F;
                     float g = isHurt ? 0.6F : 1.0F;
                     float b = isHurt ? 0.6F : 1.0F;
                     String path = MI.visageData.getSkinPath();
-                    if (MI.visageData.rendersBreast()){
+                    if (vd.rendersBreast()){
                         renderNormalBreast(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                 r,g,b);
                     }
-                    if (MI.visageData.rendersSmallBreast()){
+                    if (vd.rendersSmallBreast()){
                         renderSmallBreast(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                 r,g,b);
                     }
-                    if (MI.visageData.rendersPonytail()){
+                    if (vd.rendersPonytail()){
                         renderPonytail(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                 r,g,b);
                     }
-                    if (MI.visageData.rendersBigHair()){
+                    if (vd.rendersBigHair()){
                         renderBigHair(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                 r,g,b);
                     }
-                    if (MI.visageData.rendersDiegoHat()){
+                    if (vd.rendersDiegoHat()){
                         renderDiegoHat(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                 r,g,b);
                     }
-                    if (MI.visageData.rendersBasicHat()){
+                    if (vd.rendersBasicHat()){
                         renderBasicHat(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                 r,g,b);
                     }
-                    if (MI.visageData.rendersSpikeyHair()){
+                    if (vd.rendersSpikeyHair()){
                         renderSpikeyHair(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                 r,g,b);
                     }
-                    if (MI.visageData.rendersJosukeDecals()){
+                    if (vd.rendersJosukeDecals()){
                         renderJosukeDecals(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                 r,g,b);
                     }
-                    if (MI.visageData.rendersTasselHat()){
+                    if (vd.rendersTasselHat()){
                         renderTasselHat(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                 r,g,b);
                     }
-                    if (MI.visageData.rendersLegCloakPart()){
+                    if (vd.rendersLegCloakPart()){
                         renderLegCloakPart(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                 r,g,b);
                     }
-                    if (MI.visageData.rendersAvdolHairPart()){
+                    if (vd.rendersAvdolHairPart()){
                         renderAvdolHair(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                r,g,b);
+                    }
+                    if (vd.rendersPlayerBreastPart()){
+                        renderPlayerBreastPart(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
                                 r,g,b);
                     }
                 }
@@ -191,6 +197,15 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         getParentModel().body.translateAndRotate(poseStack);
         ModStrayModels.LegCloakPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path,-1*(Math.min(getParentModel().leftLeg.xRot,getParentModel().rightLeg.xRot)));
+        poseStack.popPose();
+    }
+    public void renderPlayerBreastPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                                   float r, float g, float b) {
+
+        poseStack.pushPose();
+        getParentModel().body.translateAndRotate(poseStack);
+        ModStrayModels.PlayerChestPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1);
         poseStack.popPose();
     }
 }

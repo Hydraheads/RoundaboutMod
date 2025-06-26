@@ -6,6 +6,7 @@ import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.DIOVoice;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.JotaroVoice;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
@@ -18,7 +19,7 @@ public class JotaroVisage extends VisageData {
         return new JotaroVisage(entity);
     }
     @Override
-    public JojoNPC getModelNPC(Player pl){
+    public JojoNPC getModelNPC(LivingEntity pl){
         return ModEntities.JOTARO.create(pl.level());
     }
     @Override
@@ -45,7 +46,7 @@ public class JotaroVisage extends VisageData {
         return new Vector3f(0.975F, 0.975F, 0.975F);
     }
     @Override
-    public VoiceData voiceData(Player slef){
+    public VoiceData voiceData(LivingEntity slef){
         return new JotaroVoice(slef);
     }
 }

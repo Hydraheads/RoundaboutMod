@@ -2,19 +2,20 @@ package net.hydra.jojomod.event.powers.visagedata;
 
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
 public class ValentineVisage extends VisageData {
-    public ValentineVisage(Player self) {
+    public ValentineVisage(LivingEntity self) {
         super(self);
     }
-    public VisageData generateVisageData(Player entity){
+    public VisageData generateVisageData(LivingEntity entity){
         return new ValentineVisage(entity);
     }
     @Override
-    public JojoNPC getModelNPC(Player pl){
+    public JojoNPC getModelNPC(LivingEntity pl){
         return ModEntities.VALENTINE.create(pl.level());
     }
     @Override
