@@ -54,7 +54,8 @@ public class ZHumanoidArmorLayer<T extends LivingEntity, M extends HumanoidModel
         roundabout$ArmorPhase = 0;
         if ($$3 instanceof Player PE) {
             IPlayerEntity ipe = ((IPlayerEntity) PE);
-            if (ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift()) == ShapeShifts.EERIE){
+            if (ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift()) == ShapeShifts.EERIE ||
+                    ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift()) == ShapeShifts.OVA){
                 ci.cancel();
                 return;
             }
@@ -93,7 +94,8 @@ public class ZHumanoidArmorLayer<T extends LivingEntity, M extends HumanoidModel
             }
 
             if (!((IPlayerEntity)PE).roundabout$getMaskSlot().isEmpty()
-                    && ((IPlayerEntity)PE).roundabout$getMaskSlot().getItem() instanceof MaskItem){
+                    && ((IPlayerEntity)PE).roundabout$getMaskSlot().getItem() instanceof MaskItem ME
+            && !ME.visageData.rendersArmor()){
                 ci.cancel();
             }
 

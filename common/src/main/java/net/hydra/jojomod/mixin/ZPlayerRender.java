@@ -185,7 +185,8 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
         /**Access to slim and not slim models simultaneously*/
         IPlayerEntity ipe = ((IPlayerEntity) $$3);
         ItemStack visage = ipe.roundabout$getMaskSlot();
-        roundabout$changeTheModel(visage);
+        ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
+        roundabout$changeTheModel(visage,shift);
 
         if (roundabout$renderHandX($$0,$$1,$$2,$$3,true)){
             ci.cancel();
@@ -201,7 +202,8 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
         /**Access to slim and not slim models simultaneously*/
         IPlayerEntity ipe = ((IPlayerEntity) $$3);
         ItemStack visage = ipe.roundabout$getMaskSlot();
-        roundabout$changeTheModel(visage);
+        ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
+        roundabout$changeTheModel(visage,shift);
 
         if (roundabout$renderHandX($$0,$$1,$$2,$$3,false)){
             ci.cancel();
@@ -303,22 +305,7 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
         ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
 
 
-        if (shift != ShapeShifts.PLAYER) {
-            if (shift == ShapeShifts.EERIE) {
-                ResourceLocation sauce;
-
-                if (((IPlayerModel)this.model).roundabout$getSlim()){
-                    sauce = StandIcons.EERIE_SKIN_ALEX;
-                } else {
-                    sauce = StandIcons.EERIE_SKIN;
-                }
-                if (right) {
-                    roundabout$renderOtherHand(stack, buffer, packedLight, acl, this.model.rightArm, null, this.model, sauce);
-                } else {
-                    roundabout$renderOtherHand(stack, buffer, packedLight, acl, this.model.leftArm, null, this.model, sauce);
-                }
-                return true;
-            } else {
+        if (shift != ShapeShifts.PLAYER && shift != ShapeShifts.EERIE && shift != ShapeShifts.OVA) {
             if (shift == ShapeShifts.ZOMBIE) {
                 if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift(acl) instanceof Zombie))) {
                     roundabout$setShapeShift(acl,EntityType.ZOMBIE.create(Minecraft.getInstance().level));
@@ -338,10 +325,6 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
             } else if (shift == ShapeShifts.STRAY) {
                 if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift(acl) instanceof Stray))) {
                     roundabout$setShapeShift(acl,roundabout$getStray(Minecraft.getInstance().level,ipe));
-                }
-            } else if (shift == ShapeShifts.OVA) {
-                if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift(acl) instanceof OVAEnyaNPC))) {
-                    roundabout$setShapeShift(acl,ModEntities.OVA_ENYA.create(Minecraft.getInstance().level));
                 }
             }
             if (roundabout$getShapeShift(acl) != null) {
@@ -435,7 +418,6 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
 
                     return true;
                 }
-            }
             }
         } else {
             if (roundabout$getSwappedModel(acl) != null){
@@ -535,7 +517,18 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
             }
         }
     }
-    public void roundabout$changeTheModel(ItemStack visage){
+    public void roundabout$changeTheModel(ItemStack visage, ShapeShifts shifts){
+        if (shifts == ShapeShifts.EERIE)
+            if (((IPlayerModel)this.model).roundabout$getSlim()){
+                model = roundabout$otherModel;
+                return;
+            }
+        if (shifts == ShapeShifts.OVA)
+            if (!((IPlayerModel)this.model).roundabout$getSlim()){
+                model = roundabout$otherModel;
+                return;
+            }
+
         if (visage != null && !visage.isEmpty()) {
             if (visage.getItem() instanceof MaskItem MI) {
                 if (MI.visageData.isCharacterVisage()) {
@@ -555,12 +548,12 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
         /**Access to slim and not slim models simultaneously*/
         IPlayerEntity ipe = ((IPlayerEntity) $$0);
         ItemStack visage = ipe.roundabout$getMaskSlot();
-        roundabout$changeTheModel(visage);
+        ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
+        roundabout$changeTheModel(visage,shift);
 
         if (!ClientUtil.checkIfIsFirstPerson($$0)) {
-            ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
             Poses pose = Poses.getPosFromByte(ipe.roundabout$GetPoseEmote());
-            if (shift != ShapeShifts.PLAYER && shift != ShapeShifts.EERIE) {
+            if (shift != ShapeShifts.PLAYER && shift != ShapeShifts.EERIE && shift != ShapeShifts.OVA) {
                 if (shift == ShapeShifts.ZOMBIE) {
                     if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof Zombie))) {
                         roundabout$setShapeShift($$0, EntityType.ZOMBIE.create(Minecraft.getInstance().level));
@@ -640,7 +633,7 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
                         }
                     }
                 }
-            } else if (shift != ShapeShifts.EERIE) {
+            } else {
 
                roundabout$setSwappedModel($$0, null);
 
@@ -890,31 +883,6 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
     @Inject(method = "getTextureLocation(Lnet/minecraft/client/player/AbstractClientPlayer;)Lnet/minecraft/resources/ResourceLocation;",
             at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$getTextureLocation(AbstractClientPlayer $$0, CallbackInfoReturnable<ResourceLocation> cir) {
-        IPlayerEntity ple = ((IPlayerEntity) $$0);
-        byte shape = ple.roundabout$getShapeShift();
-        ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
-        if (shift == ShapeShifts.EERIE) {
-
-            ResourceLocation sauce;
-
-            if (((IPlayerModel)this.model).roundabout$getSlim()){
-                sauce = StandIcons.EERIE_SKIN_ALEX;
-            } else {
-                sauce = StandIcons.EERIE_SKIN;
-            }
-            cir.setReturnValue(sauce);
-        } else if (shift == ShapeShifts.OVA){
-            cir.setReturnValue(StandIcons.OVA_ENYA_SKIN);
-        } else {
-            ItemStack visage = ple.roundabout$getMaskSlot();
-            if (visage != null && !visage.isEmpty()) {
-                if (visage.getItem() instanceof MaskItem MI) {
-                    if (MI.visageData.isCharacterVisage()) {
-                        cir.setReturnValue(new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/"+MI.visageData.getSkinPath()+".png"));
-                    }
-                }
-            }
-        }
     }
     @Shadow
     public ResourceLocation getTextureLocation(AbstractClientPlayer var1) {

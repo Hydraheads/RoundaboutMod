@@ -78,8 +78,10 @@ public class PlayerEntityAbstractClient implements IPlayerEntityAbstractClient {
         IPlayerEntity ple = ((IPlayerEntity) this);
         byte shape = ple.roundabout$getShapeShift();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
-        if (shift == ShapeShifts.OVA){
+        if (shift == ShapeShifts.OVA) {
             cir.setReturnValue(StandIcons.OVA_ENYA_SKIN);
+        } else if (shift == ShapeShifts.EERIE){
+            cir.setReturnValue(StandIcons.EERIE_SKIN);
         } else {
             ItemStack visage = ple.roundabout$getMaskSlot();
             if (visage != null && !visage.isEmpty()) {

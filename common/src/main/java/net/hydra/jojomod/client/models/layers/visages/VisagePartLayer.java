@@ -5,7 +5,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.item.ModItems;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -35,6 +37,11 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         if (entity instanceof Player play){
             IPlayerEntity pl = ((IPlayerEntity) play);
             ItemStack visage = pl.roundabout$getMaskSlot();
+            ShapeShifts shift = ShapeShifts.getShiftFromByte(pl.roundabout$getShapeShift());
+            if (shift == ShapeShifts.OVA){
+                visage = ModItems.ENYA_OVA_MASK.getDefaultInstance();
+            }
+
             if (visage != null && !visage.isEmpty()) {
                 if (visage.getItem() instanceof MaskItem MI) {
                     boolean isHurt = entity.hurtTime > 0;
