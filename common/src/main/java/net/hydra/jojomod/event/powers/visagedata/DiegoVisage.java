@@ -33,4 +33,8 @@ public class DiegoVisage extends VisageData {
     public String getSkinPath(){
         return "diego";
     }
+
+    public boolean rendersDiegoHat(){
+        return true;
+    }
 }

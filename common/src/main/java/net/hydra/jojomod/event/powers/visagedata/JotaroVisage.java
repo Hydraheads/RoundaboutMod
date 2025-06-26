@@ -33,6 +33,9 @@ public class JotaroVisage extends VisageData {
     public boolean hasVoices(){
         return true;
     }
+    public boolean rendersBasicHat(){
+        return true;
+    }
     public String getSkinPath(){
         return "jotaro";
     }

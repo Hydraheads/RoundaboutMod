@@ -10,10 +10,7 @@ import net.hydra.jojomod.client.models.projectile.renderers.*;
 import net.hydra.jojomod.client.models.stand.*;
 import net.hydra.jojomod.client.models.stand.renderers.*;
 import net.hydra.jojomod.client.models.visages.*;
-import net.hydra.jojomod.client.models.visages.parts.BigHairPart;
-import net.hydra.jojomod.client.models.visages.parts.ChestPart;
-import net.hydra.jojomod.client.models.visages.parts.PonytailPart;
-import net.hydra.jojomod.client.models.visages.parts.SmallChestPart;
+import net.hydra.jojomod.client.models.visages.parts.*;
 import net.hydra.jojomod.client.models.visages.renderers.*;
 import net.hydra.jojomod.client.models.worn_stand.HeyYaModel;
 import net.hydra.jojomod.client.models.worn_stand.SoftAndWetShootingArmModel;
@@ -161,5 +158,7 @@ public class FabricEntityClient {
         ModStrayModels.SmallChestPart = new SmallChestPart();
         ModStrayModels.PonytailPart = new PonytailPart();
         ModStrayModels.BigHairPart = new BigHairPart();
+        ModStrayModels.DiegoHatPart = new DiegoHatPart();
+        ModStrayModels.BasicHatPart = new BasicHatPart();
     }
 }
