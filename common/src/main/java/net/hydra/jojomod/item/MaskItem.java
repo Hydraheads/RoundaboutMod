@@ -22,6 +22,9 @@ public class MaskItem extends Item {
     public MutableComponent getDisplayName2() {
         return Component.translatable(this.getDescriptionId() + ".desc");
     }
+    public MutableComponent getDisplayNameTag() {
+        return Component.translatable(this.getDescriptionId() + ".tag");
+    }
     @Override
     public void appendHoverText(ItemStack $$0, @Nullable Level $$1, List<Component> $$2, TooltipFlag $$3) {
         super.appendHoverText($$0,$$1,$$2,$$3);

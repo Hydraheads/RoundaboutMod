@@ -37,6 +37,7 @@ import net.minecraft.client.renderer.entity.*;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
@@ -50,6 +51,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.scores.Objective;
+import net.minecraft.world.scores.Score;
+import net.minecraft.world.scores.Scoreboard;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
@@ -209,7 +213,24 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
             ci.cancel();
         }
     }
+    protected void roundabout$renderNameTagSpecial(AbstractClientPlayer $$0, Component $$1, PoseStack $$2, MultiBufferSource $$3, int $$4) {
+        double $$5 = this.entityRenderDispatcher.distanceToSqr($$0);
+        $$2.pushPose();
+        if ($$5 < 100.0) {
+            Scoreboard $$6 = $$0.getScoreboard();
+            Objective $$7 = $$6.getDisplayObjective(2);
+            if ($$7 != null) {
+                Score $$8 = $$6.getOrCreatePlayerScore($$0.getScoreboardName(), $$7);
+                super.renderNameTag(
+                        $$0, Component.literal(Integer.toString($$8.getScore())).append(CommonComponents.SPACE).append($$7.getDisplayName()), $$2, $$3, $$4
+                );
+                $$2.translate(0.0F, 9.0F * 1.15F * 0.025F, 0.0F);
+            }
+        }
 
+        super.renderNameTag($$0, $$1, $$2, $$3, $$4);
+        $$2.popPose();
+    }
     @Inject(method = "renderNameTag(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$renderNameTag(AbstractClientPlayer $$0, Component $$1, PoseStack $$2, MultiBufferSource $$3, int $$4, CallbackInfo ci) {
         IPlayerEntity ple = ((IPlayerEntity) $$0);
@@ -218,21 +239,54 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
         if (shift != ShapeShifts.PLAYER) {
             if (ClientNetworking.getAppropriateConfig() != null && ClientNetworking.getAppropriateConfig().nameTagSettings != null
                     && !ClientNetworking.getAppropriateConfig().nameTagSettings.renderNameTagsWhenJusticeMorphed) {
-                if (!(Minecraft.getInstance().player !=null && Minecraft.getInstance().player.isCreative() &&
+                if (!(Minecraft.getInstance().player != null && Minecraft.getInstance().player.isCreative() &&
                         ClientNetworking.getAppropriateConfig().nameTagSettings.bypassAllNametagHidesInCreativeMode)) {
                     ci.cancel();
                     return;
                 }
             }
         }
-        if (Minecraft.getInstance().player !=null && !((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers().canSeeThroughFog()
-                && ((IPermaCasting)$$0.level()).roundabout$inPermaCastFogRange($$0)){
+        if (Minecraft.getInstance().player != null && !((StandUser) Minecraft.getInstance().player).roundabout$getStandPowers().canSeeThroughFog()
+                && ((IPermaCasting) $$0.level()).roundabout$inPermaCastFogRange($$0)) {
             if (ClientNetworking.getAppropriateConfig() != null && ClientNetworking.getAppropriateConfig().nameTagSettings != null
-            && !ClientNetworking.getAppropriateConfig().nameTagSettings.renderNameTagsInJusticeFog) {
-                if (!(Minecraft.getInstance().player !=null && Minecraft.getInstance().player.isCreative() &&
+                    && !ClientNetworking.getAppropriateConfig().nameTagSettings.renderNameTagsInJusticeFog) {
+                if (!(Minecraft.getInstance().player != null && Minecraft.getInstance().player.isCreative() &&
                         ClientNetworking.getAppropriateConfig().nameTagSettings.bypassAllNametagHidesInCreativeMode)) {
                     ci.cancel();
                     return;
+                }
+            }
+        }
+
+
+        ItemStack visage = ple.roundabout$getMaskSlot();
+        boolean characterType = true;
+        if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
+            characterType = ME.visageData.isCharacterVisage();
+
+            if (ClientNetworking.getAppropriateConfig() != null  && ClientNetworking.getAppropriateConfig().nameTagSettings != null) {
+                if (characterType) {
+                    /**Do character visages hide nametags*/
+                    if (!ClientNetworking.getAppropriateConfig().nameTagSettings.renderNameTagOnCharacterVisages) {
+                        ci.cancel();
+                        return;
+                    }
+
+                    /**Setting for visage showing character name instead*/
+                    if (ClientNetworking.getAppropriateConfig().nameTagSettings.renderActualCharactersNameUsingVisages) {
+                        if (this.shouldShowName($$0)) {
+                            Component comp = ME.getDisplayNameTag();
+                            this.roundabout$renderNameTagSpecial($$0, comp, $$2, $$3, $$4);
+                            ci.cancel();
+                            return;
+                        }
+                    }
+                } else {
+                    /**Does glass visage hide nametags*/
+                    if (!ClientNetworking.getAppropriateConfig().nameTagSettings.renderNameTagOnPlayerVisages) {
+                        ci.cancel();
+                        return;
+                    }
                 }
             }
         }
