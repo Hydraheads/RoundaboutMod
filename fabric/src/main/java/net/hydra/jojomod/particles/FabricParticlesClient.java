@@ -34,5 +34,6 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PLUNDER, PlunderParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.FRICTIONLESS, PlunderParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.EXCLAMATION, ExclamationParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.STITCH, StitchParticle.Provider::new);
     }
 }

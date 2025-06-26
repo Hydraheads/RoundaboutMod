@@ -120,4 +120,8 @@ public class ForgeParticles {
             "d4c_lines",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> STITCH = PARTICLES.register(
+            "stitch",
+            () -> new SimpleParticleType(true)
+    );
 }

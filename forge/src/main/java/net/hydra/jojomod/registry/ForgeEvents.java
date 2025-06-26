@@ -317,6 +317,7 @@ public class ForgeEvents {
         ModParticles.FRICTIONLESS = ForgeParticles.FRICTIONLESS.get();
         ModParticles.EXCLAMATION = ForgeParticles.EXCLAMATION.get();
         ModParticles.D4C_LINES = ForgeParticles.D4C_LINES.get();
+        ModParticles.STITCH = ForgeParticles.STITCH.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
