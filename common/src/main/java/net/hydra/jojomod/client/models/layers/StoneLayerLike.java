@@ -39,53 +39,6 @@ public class StoneLayerLike<T extends JojoNPC, M extends PlayerLikeModel<T>> ext
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int integ, T var4,
                        float var5, float var6, float var7, float var8, float var9, float var10) {
 
-        byte curse = ((StandUser)var4).roundabout$getLocacacaCurse();
-        if (var4.host != null){
-            curse = ((StandUser)var4.host).roundabout$getLocacacaCurse();
-        }
-        if (curse > -1) {
-            ResourceLocation rl = null;
-            if (var4.isSimple()) {
-                if (curse == LocacacaCurseIndex.LEFT_LEG) {
-                    rl = StandIcons.STONE_LEFT_LEG;
-                } else if (curse == LocacacaCurseIndex.RIGHT_LEG) {
-                    rl = StandIcons.STONE_RIGHT_LEG;
-                } else if (curse == LocacacaCurseIndex.OFF_HAND) {
-                    rl = StandIcons.STONE_LEFT_ARM;
-                } else if (curse == LocacacaCurseIndex.MAIN_HAND) {
-                    rl = StandIcons.STONE_RIGHT_ARM;
-                } else if (curse == LocacacaCurseIndex.CHEST) {
-                    rl = StandIcons.STONE_CHEST;
-                } else if (curse == LocacacaCurseIndex.HEAD) {
-                    rl = StandIcons.STONE_HEAD;
-                } else if (curse == LocacacaCurseIndex.HEART) {
-                    rl = StandIcons.STONE_HEART;
-                }
-            } else {
-
-                if (curse == LocacacaCurseIndex.LEFT_LEG) {
-                    rl = StandIcons.STONE_LEFT_LEG_JOJO;
-                } else if (curse == LocacacaCurseIndex.RIGHT_LEG) {
-                    rl = StandIcons.STONE_RIGHT_LEG_JOJO;
-                } else if (curse == LocacacaCurseIndex.OFF_HAND) {
-                    rl = StandIcons.STONE_LEFT_ARM_JOJO;
-                } else if (curse == LocacacaCurseIndex.MAIN_HAND) {
-                    rl = StandIcons.STONE_RIGHT_ARM_JOJO;
-                } else if (curse == LocacacaCurseIndex.CHEST) {
-                    rl = StandIcons.STONE_CHEST_JOJO;
-                } else if (curse == LocacacaCurseIndex.HEAD) {
-                    if (var4 instanceof JosukePartEightNPC){
-                        rl = StandIcons.STONE_HEAD_JOSUKE;
-                    } else {
-                        rl = StandIcons.STONE_HEAD_JOJO;
-                    }
-                } else if (curse == LocacacaCurseIndex.HEART) {
-                    rl = StandIcons.STONE_HEART_JOJO;
-                }
-            }
-            renderPart(poseStack,multiBufferSource,integ,this.transformedModel,1,1,1,null,
-                    rl);
-        }
     }
 
     private void renderPart(

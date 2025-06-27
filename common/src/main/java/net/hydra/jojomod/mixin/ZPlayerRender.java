@@ -479,51 +479,6 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
                 EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
                 EntityRenderer<? super T> ER = $$7.getRenderer(roundabout$getSwappedModel(acl));
                 if (ER instanceof LivingEntityRenderer) {
-                    Model ml = ((LivingEntityRenderer<?, ?>) ER).getModel();
-                    if (ml instanceof PlayerLikeModel<?> sm) {
-                        if (ER instanceof PlayerLikeRenderer<?> zr && roundabout$getSwappedModel(acl) instanceof JojoNPC skl) {
-                            this.setModelProperties(acl);
-                            sm.attackTime = 0.0F;
-                            sm.crouching = false;
-                            sm.swimAmount = 0.0F;
-                            skl.host = acl;
-                            sm.setupAnim2(skl, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-                            float $$5 = right ? 1.0F : -1.0F;
-                            stack.translate($$5 * -0.3F, 0F, 0F);
-                            if (right) {
-                                roundabout$renderOtherHand(stack, buffer, packedLight, acl, sm.rightArm, sm.rightSleeve, ml, zr.getTextureLocation(skl));
-
-                                byte curse = ((StandUser) acl).roundabout$getLocacacaCurse();
-                                if (curse == LocacacaCurseIndex.MAIN_HAND) {
-                                    sm.rightSleeve.xScale += 0.04F;
-                                    sm.rightSleeve.zScale += 0.04F;
-                                    if (skl.isSimple()){
-                                        sm.rightSleeve.render(stack, buffer.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_RIGHT_ARM)), packedLight, OverlayTexture.NO_OVERLAY);
-                                    } else {
-                                        sm.rightSleeve.render(stack, buffer.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_RIGHT_ARM_JOJO)), packedLight, OverlayTexture.NO_OVERLAY);
-                                    }
-                                    sm.rightSleeve.xScale -= 0.04F;
-                                    sm.rightSleeve.zScale -= 0.04F;
-                                }
-                            } else {
-                                roundabout$renderOtherHand(stack, buffer, packedLight, acl, sm.leftArm, sm.leftSleeve, ml, zr.getTextureLocation(skl));
-
-                                byte curse = ((StandUser) acl).roundabout$getLocacacaCurse();
-                                if (curse == LocacacaCurseIndex.OFF_HAND) {
-                                    sm.leftSleeve.xScale += 0.04F;
-                                    sm.leftSleeve.zScale += 0.04F;
-                                    if (skl.isSimple()){
-                                        sm.leftSleeve.render(stack, buffer.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_LEFT_ARM)), packedLight, OverlayTexture.NO_OVERLAY);
-                                    } else {
-                                        sm.leftSleeve.render(stack, buffer.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_LEFT_ARM_JOJO)), packedLight, OverlayTexture.NO_OVERLAY);
-                                    }
-                                    sm.leftSleeve.xScale -= 0.04F;
-                                    sm.leftSleeve.zScale -= 0.04F;
-                                }
-                            }
-                            return true;
-                        }
-                    }
                 }
             }
         }

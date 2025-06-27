@@ -49,21 +49,6 @@ public class StandIcons {
     public static final ResourceLocation STONE_LEFT_LEG = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/locacaca_layers/left_leg.png");
 
-    public static final ResourceLocation STONE_HEAD_JOJO = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/entity/locacaca_layers/head_jojo.png");
-    public static final ResourceLocation STONE_CHEST_JOJO = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/entity/locacaca_layers/chest_jojo.png");
-    public static final ResourceLocation STONE_HEART_JOJO = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/entity/locacaca_layers/heart_jojo.png");
-    public static final ResourceLocation STONE_RIGHT_ARM_JOJO = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/entity/locacaca_layers/right_arm_jojo.png");
-    public static final ResourceLocation STONE_LEFT_ARM_JOJO = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/entity/locacaca_layers/left_arm_jojo.png");
-    public static final ResourceLocation STONE_RIGHT_LEG_JOJO = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/entity/locacaca_layers/right_leg_jojo.png");
-    public static final ResourceLocation STONE_LEFT_LEG_JOJO = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/entity/locacaca_layers/left_leg_jojo.png");
-
     public static final ResourceLocation THE_WORLD_ASSAULT = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/assault.png");
     public static final ResourceLocation THE_WORLD_IMPALE = new ResourceLocation(Roundabout.MOD_ID,

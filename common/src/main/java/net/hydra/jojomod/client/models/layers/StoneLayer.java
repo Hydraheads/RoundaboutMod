@@ -3,9 +3,13 @@ package net.hydra.jojomod.client.models.layers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.access.IHumanoidModelAccess;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.visages.mobs.JosukePartEightNPC;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.visagedata.JosukePartEightVisage;
+import net.hydra.jojomod.item.ModItems;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -16,6 +20,8 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 
@@ -52,7 +58,18 @@ public class StoneLayer<T extends LivingEntity, M extends HumanoidModel<T>, A ex
             } else if (curse == LocacacaCurseIndex.CHEST){
                 rl = StandIcons.STONE_CHEST;
             } else if (curse == LocacacaCurseIndex.HEAD){
-                rl = StandIcons.STONE_HEAD;
+                if (var4 instanceof Player PL){
+                    ItemStack stack =((IPlayerEntity)PL).roundabout$getMaskSlot();
+                    if (stack !=null && stack.is(ModItems.JOSUKE_PART_EIGHT_MASK)){
+                        rl = StandIcons.STONE_HEAD_JOSUKE;
+                    } else {
+                        rl = StandIcons.STONE_HEAD;
+                    }
+                } else if (var4 instanceof JosukePartEightNPC){
+                    rl = StandIcons.STONE_HEAD_JOSUKE;
+                } else {
+                    rl = StandIcons.STONE_HEAD;
+                }
             } else if (curse == LocacacaCurseIndex.HEART){
                 rl = StandIcons.STONE_HEART;
             }
