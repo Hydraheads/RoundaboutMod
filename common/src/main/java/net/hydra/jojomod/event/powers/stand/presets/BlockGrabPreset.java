@@ -194,6 +194,11 @@ public class BlockGrabPreset extends PunchingStand{
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
             StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
             if (!this.getSelf().level().isClientSide) {
+                if (getStandUserSelf().roundabout$getTSJump() && !ClientNetworking.getAppropriateConfig().timeStopSettings.enableCarryingWhileHovering){
+                    standEntity.ejectPassengers();
+                }
+
+
                 if (standEntity != null && this.getActivePower() == PowerIndex.POWER_2_EXTRA &&
                         standEntity.getFirstPassenger() == null && this.getAttackTimeDuring() > -1){
                     ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);

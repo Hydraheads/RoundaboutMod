@@ -566,6 +566,8 @@ public class Config implements Cloneable {
         public Boolean preventsBreathing;
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableHovering;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean enableCarryingWhileHovering;
         @BooleanOption(group = "inherit", value = true)
         public Boolean mobsTeleportInsteadOfStoppingTime;
         @BooleanOption(group = "inherit", value = true)
