@@ -51,8 +51,6 @@ public class RattEntity extends StandEntity {
 
      */
 
-
-
     @Override
     public void tick() {
         super.tick();

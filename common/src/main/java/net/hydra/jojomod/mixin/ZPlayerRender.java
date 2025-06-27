@@ -22,6 +22,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -127,10 +128,18 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
         setModelProperties($$0);
     }
 
-    @Inject(method = "getArmPose", at = @At(value = "HEAD"))
+    @Inject(method = "getArmPose", at = @At(value = "HEAD"),cancellable = true)
     private static void roundabout$GetArmPose(AbstractClientPlayer $$0, InteractionHand $$1, CallbackInfoReturnable<HumanoidModel.ArmPose> ci) {
         ACP = $$0;
         IH = $$1;
+        // ratt scope spyglass hand position
+        if ($$1.equals(InteractionHand.MAIN_HAND)) {
+            if (((StandUser) (Player) $$0).roundabout$getStandPowers() instanceof PowersRatt) {
+                if (((StandUser) (Player) $$0).roundabout$getStandPowers().scopeLevel != 0) {
+                    ci.setReturnValue(HumanoidModel.ArmPose.SPYGLASS);
+                }
+            }
+        }
     }
     @ModifyVariable(method = "getArmPose", at = @At(value = "STORE"),ordinal = 0)
     private static ItemStack roundabout$GetArmPose2(ItemStack $$0) {
