@@ -1,7 +1,6 @@
 {
   "replace": false,
   "values": [
-    "roundabout:match",
     "roundabout:gas_explosion"
   ]
 }
