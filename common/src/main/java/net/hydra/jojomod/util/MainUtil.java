@@ -1151,6 +1151,14 @@ public class MainUtil {
         }
         return false;
     }
+    public static boolean isArmorBypassingButNotShieldBypassing(DamageSource sauce){
+        if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.CORPSE) || sauce.is(ModDamageTypes.EXPLOSIVE_STAND)  ||
+                sauce.is(ModDamageTypes.CORPSE_ARROW) ||  sauce.is(ModDamageTypes.STAND_RUSH) ||  sauce.is(ModDamageTypes.CROSSFIRE) ||
+                sauce.is(ModDamageTypes.CORPSE_EXPLOSION)) {
+            return true;
+        }
+        return false;
+    }
 
 
     /**Returns the vertical angle between two mobs*/
