@@ -221,8 +221,6 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         hat.xScale *= scale.x;
                         hat.yScale *= scale.y;
                         hat.zScale *= scale.z;
-
-                        Roundabout.LOGGER.info("3");
                     }
 
                 }
