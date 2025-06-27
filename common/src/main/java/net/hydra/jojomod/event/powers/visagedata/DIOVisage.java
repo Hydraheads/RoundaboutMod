@@ -10,10 +10,10 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
 public class DIOVisage extends VisageData {
-    public DIOVisage(Player self) {
+    public DIOVisage(LivingEntity self) {
         super(self);
     }
-    public VisageData generateVisageData(Player entity){
+    public VisageData generateVisageData(LivingEntity entity){
         return new DIOVisage(entity);
     }
     @Override
