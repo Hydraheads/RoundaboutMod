@@ -95,7 +95,7 @@ public class ZHumanoidArmorLayer<T extends LivingEntity, M extends HumanoidModel
 
             if (!((IPlayerEntity)PE).roundabout$getMaskSlot().isEmpty()
                     && ((IPlayerEntity)PE).roundabout$getMaskSlot().getItem() instanceof MaskItem ME
-            && !ME.visageData.rendersArmor()){
+            && !ME.visageData.generateVisageData(PE).rendersArmor()){
                 ci.cancel();
             }
 

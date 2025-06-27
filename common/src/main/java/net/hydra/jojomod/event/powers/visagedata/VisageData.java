@@ -31,6 +31,9 @@ public class VisageData {
     public Vector3f scale(){
         return new Vector3f(0.9375F, 0.9375F, 0.9375F);
     }
+    public Vector3f scaleHead(){
+        return new Vector3f(1F, 1F, 1F);
+    }
     public float getNametagHeight(){
         return 0.5f;
     }
@@ -80,6 +83,9 @@ public class VisageData {
         return false;
     }
     public boolean rendersPlayerBreastPart(){
+        return false;
+    }
+    public boolean rendersPlayerSmallBreastPart(){
         return false;
     }
     public boolean rendersDiegoHat(){

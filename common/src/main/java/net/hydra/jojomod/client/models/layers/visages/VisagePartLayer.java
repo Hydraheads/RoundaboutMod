@@ -99,6 +99,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         renderPlayerBreastPart(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
                                 r,g,b);
                     }
+                    if (vd.rendersPlayerSmallBreastPart()){
+                        renderSmallPlayerBreastPart(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
+                                r,g,b);
+                    }
                 }
             }
         }
@@ -205,6 +209,15 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         poseStack.pushPose();
         getParentModel().body.translateAndRotate(poseStack);
         ModStrayModels.PlayerChestPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1);
+        poseStack.popPose();
+    }
+    public void renderSmallPlayerBreastPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                                       float r, float g, float b) {
+
+        poseStack.pushPose();
+        getParentModel().body.translateAndRotate(poseStack);
+        ModStrayModels.PlayerSmallChestPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1);
         poseStack.popPose();
     }

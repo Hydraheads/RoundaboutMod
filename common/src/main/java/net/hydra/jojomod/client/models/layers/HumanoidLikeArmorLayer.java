@@ -107,8 +107,8 @@ public class HumanoidLikeArmorLayer<T extends JojoNPC, M extends PlayerLikeModel
             }
 
             if (!((IPlayerEntity)$$3.host).roundabout$getMaskSlot().isEmpty()
-                    && ((IPlayerEntity)$$3.host).roundabout$getMaskSlot().getItem() instanceof MaskItem){
-                return;
+                    && ((IPlayerEntity)$$3.host).roundabout$getMaskSlot().getItem() instanceof MaskItem ME
+                    && !ME.visageData.rendersArmor()){return;
             }
 
         } else {

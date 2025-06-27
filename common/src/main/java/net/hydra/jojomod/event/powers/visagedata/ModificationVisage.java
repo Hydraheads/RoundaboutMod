@@ -27,6 +27,24 @@ public class ModificationVisage extends NonCharacterVisage {
         }
         return false;
     }
+    public boolean rendersPlayerSmallBreastPart() {
+        if (self instanceof Player pl) {
+            ItemStack stack = ((IPlayerEntity) pl).roundabout$getMaskSlot();
+            if (stack != null && !stack.isEmpty() && stack.getItem() instanceof ModificationMaskItem) {
+                return stack.getOrCreateTagElement("modifications").getInt("chest") == 1;
+            }
+        }
+        return false;
+    }
+    public boolean rendersArmor(){
+        if (self instanceof Player pl) {
+            ItemStack stack = ((IPlayerEntity) pl).roundabout$getMaskSlot();
+            if (stack != null && !stack.isEmpty() && stack.getItem() instanceof ModificationMaskItem) {
+                return stack.getOrCreateTagElement("modifications").getInt("chest") == 3;
+            }
+        }
+        return false;
+    }
 
     /**
      *     public boolean rendersPlayerBreastPart() {

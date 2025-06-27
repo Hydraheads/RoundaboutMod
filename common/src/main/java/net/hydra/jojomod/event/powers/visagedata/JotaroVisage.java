@@ -26,6 +26,10 @@ public class JotaroVisage extends VisageData {
     public Vec3 sizeModifier(){
         return new Vec3(1.09F,1.09F,1.09F);
     }
+
+    public Vector3f scaleHead(){
+        return new Vector3f(0.95F, 0.95F, 0.95F);
+    }
     @Override
     public float getNametagHeight(){
         return 0.54f;

@@ -313,6 +313,10 @@ public class ModificationVisageScreen extends Screen {
             chestType = 2;
             return true;
         }
+        if (isSurelyHovering( i+75,   j+66, 17, 17, mouseX, mouseY)) {
+            chestType = 3;
+            return true;
+        }
 
         return super.mouseClicked(mouseX, mouseY, $$2);
     }
@@ -396,6 +400,17 @@ public class ModificationVisageScreen extends Screen {
         }
         guiGraphics.drawString(this.font, Component.translatable("roundabout.cinderella.mod_visage_gui.chest_type.three").withStyle(ChatFormatting.BOLD), i+55, j + 71, 4210752, false);
 
+        if (chestType == 3) {
+            guiGraphics.blit(CORPSE_CHOOSER_LOCATION, i + 75, j + 66, 144, 74, 17, 17, 256, 256);
+        } else {
+            if (isSurelyHovering(i + 75, j + 66, 17, 17, mouseX, mouseY)) {
+                guiGraphics.blit(CORPSE_CHOOSER_LOCATION, i + 75, j + 66, 178, 74, 17, 17, 256, 256);
+            } else {
+                guiGraphics.blit(CORPSE_CHOOSER_LOCATION, i + 75, j + 66, 161, 74, 17, 17, 256, 256);
+            }
+        }
+        guiGraphics.drawString(this.font, Component.translatable("roundabout.cinderella.mod_visage_gui.chest_type.four").
+                withStyle(ChatFormatting.BOLD), i+80, j + 71, 4210752, false);
 
         k = this.width / 2 - 75;
         l = this.height / 2 +17;

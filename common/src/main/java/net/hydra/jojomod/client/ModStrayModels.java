@@ -19,4 +19,5 @@ public class ModStrayModels {
     public static TasselHatPart TasselHatPart;
     public static LegCloakPart LegCloakPart;
     public static PlayerChestPart PlayerChestPart;
+    public static PlayerSmallChestPart PlayerSmallChestPart;
 }

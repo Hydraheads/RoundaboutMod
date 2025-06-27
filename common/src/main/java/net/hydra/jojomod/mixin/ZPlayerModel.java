@@ -10,6 +10,8 @@ import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
+import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.item.ModificationMaskItem;
 import net.minecraft.client.animation.AnimationChannel;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.animation.Keyframe;
@@ -27,6 +29,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -194,6 +197,35 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 this.cloak.xRot*=-1;
                 this.cloak.x*=-1;
                 this.cloak.z*=-1;
+
+            }
+
+            IPlayerEntity ple = ((IPlayerEntity) $$0);
+            ItemStack visage = ple.roundabout$getMaskSlot();
+            if (visage != null && !visage.isEmpty()) {
+                if (visage.getItem() instanceof MaskItem MI) {
+                    if (MI instanceof ModificationMaskItem MD){
+                        int faceSize = visage.getOrCreateTagElement("modifications").getInt("head");
+                        float yeah = (float) (0.73F + (faceSize*0.002));
+                        head.xScale *=yeah;
+                        head.yScale *= yeah;
+                        head.zScale *= yeah;
+                        hat.xScale *= yeah;
+                        hat.yScale *= yeah;
+                        hat.zScale *= yeah;
+                    } else {
+                        Vector3f scale = MI.visageData.scaleHead();
+                        head.xScale *= scale.x;
+                        head.yScale *= scale.y;
+                        head.zScale *= scale.z;
+                        hat.xScale *= scale.x;
+                        hat.yScale *= scale.y;
+                        hat.zScale *= scale.z;
+
+                        Roundabout.LOGGER.info("3");
+                    }
+
+                }
             }
         }
     }

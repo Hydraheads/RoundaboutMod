@@ -25,6 +25,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.ModificationMaskItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -724,6 +725,11 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
 
     }
 
+    @Inject(method = "setModelProperties",
+            at = @At(value = "TAIL"), cancellable = true)
+    public<T extends LivingEntity, M extends EntityModel<T>> void roundabout$setModelProps(AbstractClientPlayer $$0, CallbackInfo ci) {
+
+    }
     @Inject(method = "render(Lnet/minecraft/client/player/AbstractClientPlayer;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(value = "TAIL"), cancellable = true)
     public<T extends LivingEntity, M extends EntityModel<T>> void roundabout$renderTail(AbstractClientPlayer entity, float $$1, float $$2, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, CallbackInfo ci) {
@@ -928,9 +934,16 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
         ItemStack visage = ple.roundabout$getMaskSlot();
         if (visage != null && !visage.isEmpty()) {
             if (visage.getItem() instanceof MaskItem MI) {
-                Vector3f scale = MI.visageData.scale();
-                $$1.scale(scale.x, scale.y, scale.z);
+                if (MI instanceof ModificationMaskItem MD){
+                   int height = visage.getOrCreateTagElement("modifications").getInt("height");
+                    int width = visage.getOrCreateTagElement("modifications").getInt("width");
+                    $$1.scale(0.798F + (((float) width)*0.001F), 0.7F+(((float) height)*0.001F), 0.798F+(((float) width)*0.001F));
+                } else {
+                    Vector3f scale = MI.visageData.scale();
+                    $$1.scale(scale.x, scale.y, scale.z);
+                }
                 ci.cancel();
+
             }
         }
     }

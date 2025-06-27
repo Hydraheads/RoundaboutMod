@@ -36,6 +36,10 @@ public class DIOVisage extends VisageData {
     public float getNametagHeight(){
         return 0.54f;
     }
+
+    public Vector3f scaleHead(){
+        return new Vector3f(0.95F, 0.95F, 0.95F);
+    }
     public boolean hasVoices(){
         return true;
     }
