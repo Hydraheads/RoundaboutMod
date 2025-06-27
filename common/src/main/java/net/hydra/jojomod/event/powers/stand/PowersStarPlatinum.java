@@ -204,6 +204,15 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 || (this.getSelf().isUsingItem() && this.getSelf().getUseItem().getItem() instanceof ProjectileWeaponItem);
     }
 
+    public float getGrabThrowStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod((float) ((float) 1.85* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.starPlatinumAttacksOnPlayers*0.01)));
+        } else {
+            return levelupDamageMod((float) ((float) 7.5* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.starPlatinumAttacksOnMobs*0.01)));
+        }
+    }
     public int scopeTicks = -1;
 
     @Override

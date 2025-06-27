@@ -896,6 +896,7 @@ public class PowersSoftAndWet extends PunchingStand {
         bubble.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
         bubble.setUser(this.self);
         bubble.setOwner(this.self);
+        bubble.ticksUntilDamage = ClientNetworking.getAppropriateConfig().softAndWetSettings.goBeyondTicksUntilItCanHit;
         bubble.lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.goBeyondLifespanInTicks;
         return bubble;
     }
@@ -1816,18 +1817,18 @@ public void unlockSkin(){
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.65F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.5F));
         } else {
-            return levelupDamageMod(multiplyPowerByStandConfigMobs(4.7F));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(4.5F));
         }
     }
 
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.35F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.2F));
         } else {
-            return levelupDamageMod(multiplyPowerByStandConfigMobs(5.7F));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(5.5F));
         }
     }
 

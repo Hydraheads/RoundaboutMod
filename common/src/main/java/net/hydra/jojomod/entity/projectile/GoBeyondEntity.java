@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.NoHitboxRendering;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
@@ -39,6 +40,7 @@ public class GoBeyondEntity extends SoftAndWetBubbleEntity implements NoHitboxRe
         return false;
     }
 
+    public int ticksUntilDamage = 0;
     public Entity chasing = null;
     public Entity getChasing(){
         return chasing;
@@ -51,50 +53,54 @@ public class GoBeyondEntity extends SoftAndWetBubbleEntity implements NoHitboxRe
     public boolean success = false;
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
-        Entity ent = getChasing();
-        if (ent != null && $$0.getEntity().is(ent)){
-            if (this.getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
-                if (ent.hurt(ModDamageTypes.of(ent.level(), ModDamageTypes.GO_BEYOND, this.getOwner()),
-                        PW.getGoBeyondStrength(ent))) {
-                    //You don't need to hurt them to launch them
+        if (!this.level().isClientSide()) {
+            Entity ent = getChasing();
+            if (ticksUntilDamage <= 0) {
+                if (ent != null && $$0.getEntity().is(ent)) {
+                    if (this.getOwner() instanceof LivingEntity LE && ((StandUser) LE).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
+                        if (ent.hurt(ModDamageTypes.of(ent.level(), ModDamageTypes.GO_BEYOND, this.getOwner()),
+                                PW.getGoBeyondStrength(ent))) {
+                            //You don't need to hurt them to launch them
 
-                    if (MainUtil.getMobBleed(ent)){
-                        MainUtil.makeBleed(ent,2,400, LE);
-                        MainUtil.makeMobBleed(ent);
+                            if (MainUtil.getMobBleed(ent)) {
+                                MainUtil.makeBleed(ent, 2, 400, LE);
+                                MainUtil.makeMobBleed(ent);
+                            }
+                        }
+
+                        Vec3 launchVec = this.getDeltaMovement();
+                        Vec3 vec3d2 = launchVec.normalize().scale(3F);
+                        vec3d2 = vec3d2.add(0, 0.8F, 0);
+
+                        MainUtil.takeLiteralUnresistableKnockbackWithY(ent,
+                                vec3d2.x,
+                                vec3d2.y,
+                                vec3d2.z);
+
+
+                        this.level().playSound(null, this.blockPosition(), ModSounds.GO_BEYOND_HIT_EVENT,
+                                SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+
+
+                        ((ServerLevel) this.level()).sendParticles(ModParticles.ENERGY_DISTORTION,
+                                this.getX(), this.getY(), this.getZ(),
+                                0, 0, 0, 0, 0.2F);
+                        for (int i = 0; i < 100; ++i) {
+                            double randomX = (Math.random() * 0.5) - 0.25;
+                            double randomY = (Math.random() * 0.5) - 0.25;
+                            double randomZ = (Math.random() * 0.5) - 0.25;
+                            Vec3 xvec = vec3d2.add(randomX, randomY, randomZ);
+                            ((ServerLevel) this.level()).sendParticles(ModParticles.STAR,
+                                    this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
+                                    0, xvec.x, xvec.y, xvec.z, 0.7F);
+                        }
+                        success = true;
+                        popBubble();
+                        super.onHitEntity($$0);
                     }
                 }
-
-                Vec3 launchVec = this.getDeltaMovement();
-                Vec3 vec3d2 = launchVec.normalize().scale(3F);
-                vec3d2 = vec3d2.add(0,0.8F,0);
-
-                MainUtil.takeLiteralUnresistableKnockbackWithY(ent,
-                        vec3d2.x,
-                        vec3d2.y,
-                        vec3d2.z);
-
-
-                this.level().playSound(null, this.blockPosition(), ModSounds.GO_BEYOND_HIT_EVENT,
-                        SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
-
-
-
-                ((ServerLevel) this.level()).sendParticles(ModParticles.ENERGY_DISTORTION,
-                        this.getX(), this.getY(), this.getZ(),
-                        0, 0, 0, 0, 0.2F);
-                for (int i = 0; i < 100; ++i) {
-                    double randomX = (Math.random() * 0.5) - 0.25;
-                    double randomY = (Math.random() * 0.5) - 0.25;
-                    double randomZ = (Math.random() * 0.5) - 0.25;
-                    Vec3 xvec = vec3d2.add(randomX, randomY, randomZ);
-                    ((ServerLevel) this.level()).sendParticles(ModParticles.STAR,
-                            this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
-                            0, xvec.x, xvec.y, xvec.z, 0.7F);
-                }
-                    success = true;
-                popBubble();
-                super.onHitEntity($$0);
             }
+            Roundabout.LOGGER.info("A "+ticksUntilDamage);
         }
     }
     //2.8F;
@@ -122,6 +128,10 @@ public class GoBeyondEntity extends SoftAndWetBubbleEntity implements NoHitboxRe
     }
     public void tick() {
         if (!this.level().isClientSide()) {
+            if (ticksUntilDamage >= 0){
+                ticksUntilDamage--;
+
+            }
             lifeSpan--;
             if (lifeSpan <= 0 || (this.standUser == null || !(((StandUser) this.standUser).roundabout$getStandPowers() instanceof PowersSoftAndWet))) {
                 popBubble();
@@ -162,6 +172,11 @@ public class GoBeyondEntity extends SoftAndWetBubbleEntity implements NoHitboxRe
 
                 if (entityHitResult != null) {
                     this.onHitEntity(entityHitResult);
+                }
+
+                AABB box = this.getBoundingBox().inflate(0.1); // Slight growth
+                for (Entity e : level().getEntities(this, box, this::canHitEntity)) {
+                    this.onHitEntity(new EntityHitResult(e));
                 }
             }
         }

@@ -834,6 +834,15 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                     damageMultipliers.theWorldAttacksOnMobs*0.01)));
         }
     }
+    public float getGrabThrowStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod((float) ((float) 1.85* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.theWorldAttacksOnPlayers*0.01)));
+        } else {
+            return levelupDamageMod((float) ((float) 7.5* (ClientNetworking.getAppropriateConfig().
+                    damageMultipliers.theWorldAttacksOnMobs*0.01)));
+        }
+    }
 
     @Override
     public void tickPower(){

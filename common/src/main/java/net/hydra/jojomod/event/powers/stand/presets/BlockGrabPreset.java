@@ -227,9 +227,9 @@ public class BlockGrabPreset extends PunchingStand{
     }
 
 
-    private float getGrabThrowStrength(Entity entity){
+    public float getGrabThrowStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return 3;
+            return 2;
         } else {
             return 7;
         }
