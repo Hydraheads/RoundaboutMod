@@ -715,7 +715,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                                 for (MobEffectInstance value : effects) {
                                     if (!MainUtil.isSpecialEffect(value) && !value.isInfiniteDuration()) {
                                         effects2.add(new MobEffectInstance(value));
-                                        LE.getActiveEffects().remove(value);
+                                        LE.removeEffect(value.getEffect());
                                     }
                                 }
                                 if (!effects2.isEmpty()) {

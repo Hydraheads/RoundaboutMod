@@ -48,6 +48,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.FlyingMob;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.*;
@@ -807,12 +808,14 @@ public class PowersSoftAndWet extends PunchingStand {
                 boolean isBasicMob = (this.self instanceof Zombie || this.self instanceof Spider || this.self instanceof Skeleton);
 
 
-                if (this.self instanceof JojoNPC || this.self instanceof Villager || this.self instanceof Raider){
-                    if (Math.random() > 0.5F){
+                if (this.self instanceof JojoNPC || this.self instanceof Villager || this.self instanceof Raider) {
+                    if (Math.random() > 0.5F) {
                         bubbleType = PlunderTypes.SIGHT.id;
                     } else {
                         bubbleType = PlunderTypes.FRICTION.id;
                     }
+                } else if (this.self instanceof Sheep){
+                    bubbleType = PlunderTypes.POTION_EFFECTS.id;
                 } else {
                     if (isBasicMob){
                         bubbleType = PlunderTypes.SIGHT.id;
