@@ -38,6 +38,7 @@ public class FabricParticles {
     public static final SimpleParticleType PLUNDER = FabricParticleTypes.simple();
     public static final SimpleParticleType FRICTIONLESS = FabricParticleTypes.simple();
     public static final SimpleParticleType EXCLAMATION = FabricParticleTypes.simple();
+    public static final SimpleParticleType STITCH = FabricParticleTypes.simple();
     public static void registerParticles(){
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("hit_impact"), HIT_IMPACT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("blood"), BLOOD);
@@ -68,6 +69,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("frictionless"), FRICTIONLESS);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("exclamation"), EXCLAMATION);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("d4c_lines"), D4C_LINES);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("stitch"), STITCH);
 
         ModParticles.BLOOD = BLOOD;
         ModParticles.BLUE_BLOOD = BLUE_BLOOD;
@@ -98,5 +100,6 @@ public class FabricParticles {
         ModParticles.PLUNDER = PLUNDER;
         ModParticles.FRICTIONLESS = FRICTIONLESS;
         ModParticles.EXCLAMATION = EXCLAMATION;
+        ModParticles.STITCH = STITCH;
     }
 }

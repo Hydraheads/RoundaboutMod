@@ -36,4 +36,5 @@ public class ModParticles {
     public static SimpleParticleType PLUNDER;
     public static SimpleParticleType FRICTIONLESS;
     public static SimpleParticleType EXCLAMATION;
+    public static SimpleParticleType STITCH;
 }

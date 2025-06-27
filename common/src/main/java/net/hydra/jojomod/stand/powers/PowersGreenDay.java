@@ -8,35 +8,22 @@ import net.hydra.jojomod.entity.ModEntities;
 
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 
-import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.mixin.StandUserEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
 
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 
 public class PowersGreenDay extends NewPunchingStand{
     public PowersGreenDay(LivingEntity self) {super(self);}
@@ -122,7 +109,7 @@ public class PowersGreenDay extends NewPunchingStand{
         {
 
             case PowerIndex.POWER_4_SNEAK -> {
-                return StitchHeal(1.0f,this.getSelf());
+                return StitchHeal(1.0f, this.self);
             }
 
         }
@@ -131,16 +118,16 @@ public class PowersGreenDay extends NewPunchingStand{
 
     public void Stitch(){
         if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
-            this.setCooldown(PowerIndex.SKILL_4_SNEAK, 800);
-            this.setCooldown(PowerIndex.SKILL_4_CROUCH_GUARD, 800);
+            this.setCooldown(PowerIndex.SKILL_4_SNEAK, 400);
+            this.setCooldown(PowerIndex.SKILL_4_CROUCH_GUARD, 400);
             this.tryPower(PowerIndex.POWER_4_SNEAK, true);
             tryPowerPacket(PowerIndex.POWER_4_SNEAK);
         }
     }
 
     public boolean StitchHeal(float hp, LivingEntity entity) {
-        if(!isClient()) {
 
+        if(!isClient()) {
             float maxhp = entity.getMaxHealth();
             float currenthp = entity.getHealth();
 
@@ -154,13 +141,24 @@ public class PowersGreenDay extends NewPunchingStand{
                 if (level > 0) {
                     entity.addEffect(new MobEffectInstance(ModEffects.BLEED, duration, level - 1));
                 }
-
             }
+
+            double Xangle = Math.toRadians(this.self.getLookAngle().x);
+            double Pitch = Math.toRadians(this.self.getLookAngle().y);
+            double Zangle = Math.toRadians(this.self.getLookAngle().z);
+            double diameter = 0.6d;
+            for(int i = 0; i < 11; i = i + 1) {
+                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.STITCH,
+                        this.getSelf().getX() + (diameter * Math.sin(i*4)) * Math.cos(Xangle),
+                        this.getSelf().getY() + (this.getSelf().getEyeHeight()*0.7),
+                        this.getSelf().getZ() + (diameter * Math.cos(i*4)) * Math.cos(Zangle),
+                        0,0,0,0,0);
+            }
+
 
         }
         return true;
     }
-
 
 
     @Override
