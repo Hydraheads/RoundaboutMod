@@ -466,37 +466,40 @@ public class ModificationVisageScreen extends Screen {
 
     public void renderEntityInInventoryFollowsMouse(GuiGraphics $$0, int $$1, int $$2, int $$3, float $$4, float $$5, Player user) {
 
-        Entity E = ModEntities.MODIFIED_NPC.create(user.level());
-        if (E instanceof PlayerModifiedNPC $$6) {
-            $$6.host = user;
-            $$6.faker = user;
-            $$6.height = visageHeight;
-            $$6.width = visageWidth;
-            $$6.faceSize = visageHeadSize;
-            $$6.chestType = chestType;
-            $$6.isDisplay = true;
+        if (user != null) {
+            IPlayerEntity ipe = ((IPlayerEntity)user);
+            ItemStack mask = ipe.roundabout$getMaskSlot();
+
+            ItemStack mask2 = ModItems.MODIFICATION_MASK.getDefaultInstance().copy();
+
+            mask2.getOrCreateTagElement("modifications").putInt("height", visageHeight);
+            mask2.getOrCreateTagElement("modifications").putInt("width", visageWidth);
+            mask2.getOrCreateTagElement("modifications").putInt("head", visageHeadSize);
+            mask2.getOrCreateTagElement("modifications").putInt("chest", chestType);
+            ipe.roundabout$setMaskSlot(mask2);
 
             float $$7 = (float) Math.atan((double) ($$4 / 40.0F));
             float $$8 = (float) Math.atan((double) ($$5 / 40.0F));
             Quaternionf $$9 = new Quaternionf().rotateZ((float) Math.PI);
             Quaternionf $$10 = new Quaternionf().rotateX($$8 * 20.0F * (float) (Math.PI / 180.0));
             $$9.mul($$10);
-            float $$11 = $$6.yBodyRot;
-            float $$12 = $$6.getYRot();
-            float $$13 = $$6.getXRot();
-            float $$14 = $$6.yHeadRotO;
-            float $$15 = $$6.yHeadRot;
-            $$6.yBodyRot = 180.0F + $$7 * 20.0F;
-            $$6.setYRot(180.0F + $$7 * 40.0F);
-            $$6.setXRot(-$$8 * 20.0F);
-            $$6.yHeadRot = $$6.getYRot();
-            $$6.yHeadRotO = $$6.getYRot();
-            renderEntityInInventory($$0, $$1, $$2, $$3, $$9, $$10, $$6);
-            $$6.yBodyRot = $$11;
-            $$6.setYRot($$12);
-            $$6.setXRot($$13);
-            $$6.yHeadRotO = $$14;
-            $$6.yHeadRot = $$15;
+            float $$11 = user.yBodyRot;
+            float $$12 = user.getYRot();
+            float $$13 = user.getXRot();
+            float $$14 = user.yHeadRotO;
+            float $$15 = user.yHeadRot;
+            user.yBodyRot = 180.0F + $$7 * 20.0F;
+            user.setYRot(180.0F + $$7 * 40.0F);
+            user.setXRot(-$$8 * 20.0F);
+            user.yHeadRot = user.getYRot();
+            user.yHeadRotO = user.getYRot();
+            renderEntityInInventory($$0, $$1, $$2, $$3, $$9, $$10, user);
+            user.yBodyRot = $$11;
+            user.setYRot($$12);
+            user.setXRot($$13);
+            user.yHeadRotO = $$14;
+            user.yHeadRot = $$15;
+            ipe.roundabout$setMaskSlot(mask);
         }
     }
     public static void renderEntityInInventory(GuiGraphics $$0, int $$1, int $$2, int $$3, Quaternionf $$4, @Nullable Quaternionf $$5, LivingEntity $$6) {

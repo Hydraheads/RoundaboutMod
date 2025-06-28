@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.hydra.jojomod.entity.visages.mobs.PlayerModifiedNPC;
 import net.hydra.jojomod.item.ModificationMaskItem;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -24,6 +25,8 @@ public class ModificationVisage extends NonCharacterVisage {
             if (stack != null && !stack.isEmpty() && stack.getItem() instanceof ModificationMaskItem) {
                     return stack.getOrCreateTagElement("modifications").getInt("chest") == 2;
             }
+        } else if (self instanceof PlayerModifiedNPC jn){
+            return jn.chestType == 2;
         }
         return false;
     }
@@ -33,6 +36,8 @@ public class ModificationVisage extends NonCharacterVisage {
             if (stack != null && !stack.isEmpty() && stack.getItem() instanceof ModificationMaskItem) {
                 return stack.getOrCreateTagElement("modifications").getInt("chest") == 1;
             }
+        } else if (self instanceof PlayerModifiedNPC jn){
+            return jn.chestType == 1;
         }
         return false;
     }
@@ -42,6 +47,8 @@ public class ModificationVisage extends NonCharacterVisage {
             if (stack != null && !stack.isEmpty() && stack.getItem() instanceof ModificationMaskItem) {
                 return stack.getOrCreateTagElement("modifications").getInt("chest") == 3;
             }
+        } else if (self instanceof PlayerModifiedNPC jn){
+            return jn.chestType == 3;
         }
         return false;
     }
