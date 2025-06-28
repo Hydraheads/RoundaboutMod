@@ -493,4 +493,17 @@ public class PowersMandom extends NewDashPreset {
                 "instruction.roundabout.press_skill", StandIcons.YAP_YAP,4,level,bypass));
         return $$1;
     }
+
+    @Override
+    public boolean isWip(){
+        return true;
+    }
+    @Override
+    public Component ifWipListDevStatus(){
+        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
+    }
+    @Override
+    public Component ifWipListDev(){
+        return Component.literal(  "Hydra").withStyle(ChatFormatting.YELLOW);
+    }
 }
