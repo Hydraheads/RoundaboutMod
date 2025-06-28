@@ -28,12 +28,6 @@ public class PacketDataIndex {
     public static final byte ITEM_SWITCH_SECONDARY = 5;
     public static final byte ITEM_MOD_VISAGE = 6;
 
-    public static final byte SINGLE_BYTE_SKIN_LEFT = 10;
-    public static final byte SINGLE_BYTE_SKIN_RIGHT = 11;
-    public static final byte SINGLE_BYTE_IDLE_LEFT = 12;
-    public static final byte SINGLE_BYTE_IDLE_RIGHT = 13;
-    public static final byte SINGLE_BYTE_SKIN_LEFT_SEALED = 30;
-    public static final byte SINGLE_BYTE_SKIN_RIGHT_SEALED = 31;
 
     /**Int packets*/
     public static final byte INT_GLAIVE_TARGET = 1;
@@ -59,10 +53,15 @@ public class PacketDataIndex {
     public static final byte SINGLE_BYTE_FORWARD_BARRAGE = 6;
     public static final byte SINGLE_BYTE_SILENT_SUMMON = 7;
     public static final byte SINGLE_BYTE_OPEN_POWER_INVENTORY = 9;
-    public static final byte STAND_MOVE_UPDATE = 10;
+    public static final byte SINGLE_BYTE_SKIN_LEFT = 10;
+    public static final byte SINGLE_BYTE_SKIN_RIGHT = 11;
+    public static final byte SINGLE_BYTE_IDLE_LEFT = 12;
+    public static final byte SINGLE_BYTE_IDLE_RIGHT = 13;
     public static final byte SINGLE_BYTE_OPEN_FOG_INVENTORY = 14;
     public static final byte SINGLE_BYTE_SMELT = 15;
     public static final byte SINGLE_BYTE_DESUMMON = 16;
+    public static final byte SINGLE_BYTE_SKIN_LEFT_SEALED = 30;
+    public static final byte SINGLE_BYTE_SKIN_RIGHT_SEALED = 31;
 
     /**Byte packets*/
     public static final byte BYTE_CHANGE_MORPH = 6;
