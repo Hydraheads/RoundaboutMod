@@ -1,20 +1,15 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.client.models.layers.HeyYaLayer;
 import net.hydra.jojomod.client.models.layers.ShootingArmLayer;
 import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
-import net.hydra.jojomod.client.models.visages.OVAEnyaModel;
-import net.hydra.jojomod.client.models.visages.renderers.OVAEnyaRenderer;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.client.models.layers.StoneLayer;
 import net.hydra.jojomod.client.models.layers.KnifeLayer;
 import net.hydra.jojomod.entity.visages.JojoNPC;
-import net.hydra.jojomod.client.models.visages.PlayerLikeModel;
-import net.hydra.jojomod.client.models.visages.renderers.PlayerLikeRenderer;
 import net.hydra.jojomod.entity.visages.mobs.*;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.Poses;
@@ -24,7 +19,6 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
-import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ModificationMaskItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.*;
@@ -448,23 +442,6 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
                                     roundabout$renderOtherHand(stack, buffer, packedLight, acl, sm.rightArm, null, ml, zr.getTextureLocation(skl));
                                 } else {
                                     roundabout$renderOtherHand(stack, buffer, packedLight, acl, sm.leftArm, null, ml, zr.getTextureLocation(skl));
-                                }
-                            }
-                        }
-                    } else if (shift == ShapeShifts.OVA) {
-                        if (ml instanceof OVAEnyaModel<?> sm) {
-                            if (ER instanceof OVAEnyaRenderer<?> zr && roundabout$getShapeShift(acl) instanceof OVAEnyaNPC skl) {
-                                this.setModelProperties(acl);
-                                sm.attackTime = 0.0F;
-                                sm.crouching = false;
-                                sm.swimAmount = 0.0F;
-                                sm.setupAnim2(skl, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-                                float $$5 = right ? 1.0F : -1.0F;
-                                stack.translate($$5 * -0.3F, 0F, 0F);
-                                if (right) {
-                                    roundabout$renderOtherHand(stack, buffer, packedLight, acl, sm.rightArm, sm.rightSleeve, ml, zr.getTextureLocation(skl));
-                                } else {
-                                    roundabout$renderOtherHand(stack, buffer, packedLight, acl, sm.leftArm, sm.leftSleeve, ml, zr.getTextureLocation(skl));
                                 }
                             }
                         }
