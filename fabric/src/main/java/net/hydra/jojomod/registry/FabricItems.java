@@ -8,6 +8,7 @@ import net.hydra.jojomod.block.StreetSignBlock;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.stand.*;
 import net.hydra.jojomod.event.powers.visagedata.*;
+import net.hydra.jojomod.event.powers.visagedata.aesthetician.*;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersD4C;
@@ -118,6 +119,12 @@ public class FabricItems {
     public static Item ENYA_MASK = registerItem("enya_mask", new MaskItem(new Item.Properties().stacksTo(1), new EnyaVisage(null)));
     public static Item ENYA_OVA_MASK = registerItem("enya_ova_mask", new MaskItem(new Item.Properties().stacksTo(1), new EnyaOVAVisage(null)));
     public static Item AYA_MASK = registerItem("aya_mask", new MaskItem(new Item.Properties().stacksTo(1), new AyaVisage(null)));
+    public static Item AESTHETICIAN_MASK_1 = registerItem("aesthetician_mask_1", new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisage1(null)));
+    public static Item AESTHETICIAN_MASK_2 = registerItem("aesthetician_mask_2", new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisage2(null)));
+    public static Item AESTHETICIAN_MASK_3 = registerItem("aesthetician_mask_3", new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisage3(null)));
+    public static Item AESTHETICIAN_MASK_4 = registerItem("aesthetician_mask_4", new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisage4(null)));
+    public static Item AESTHETICIAN_MASK_5 = registerItem("aesthetician_mask_5", new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisage5(null)));
+    public static Item AESTHETICIAN_MASK_ZOMBIE = registerItem("aesthetician_mask_zombie", new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisageZombie(null)));
     public static Item FOG_DIRT = registerItem("fog_dirt", (Item) new FogBlockItem(ModBlocks.FOG_DIRT, new Item.Properties(), Blocks.DIRT));
     public static Item FOG_DIRT_COATING = registerItem("fog_dirt_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_DIRT_COATING, new Item.Properties(), Blocks.DIRT));
     public static Item FOG_CLAY = registerItem("fog_clay", (Item) new FogBlockItem(ModBlocks.FOG_CLAY, new Item.Properties(), Blocks.CLAY));
@@ -279,7 +286,6 @@ public class FabricItems {
                         entries.accept(JOSUKE_PART_EIGHT_MASK);
                         entries.accept(AYA_MASK);
 
-                        entries.accept(INTERDIMENSIONAL_KEY);
 
                     }).build());
 
@@ -325,6 +331,7 @@ public class FabricItems {
 
                         entries.accept(STAND_DISC_D4C);
                         entries.accept(MAX_STAND_DISC_D4C);
+                        entries.accept(INTERDIMENSIONAL_KEY);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
 
@@ -467,6 +474,12 @@ public class FabricItems {
         ModItems.ENYA_MASK = ENYA_MASK;
         ModItems.ENYA_OVA_MASK = ENYA_OVA_MASK;
         ModItems.AYA_MASK = AYA_MASK;
+        ModItems.AESTHETICIAN_MASK_1 = AESTHETICIAN_MASK_1;
+        ModItems.AESTHETICIAN_MASK_2 = AESTHETICIAN_MASK_2;
+        ModItems.AESTHETICIAN_MASK_3 = AESTHETICIAN_MASK_3;
+        ModItems.AESTHETICIAN_MASK_4 = AESTHETICIAN_MASK_4;
+        ModItems.AESTHETICIAN_MASK_5 = AESTHETICIAN_MASK_5;
+        ModItems.AESTHETICIAN_MASK_ZOMBIE = AESTHETICIAN_MASK_ZOMBIE;
         ModItems.TERRIER_SPAWN_EGG = TERRIER_SPAWN_EGG;
         ModItems.AESTHETICIAN_SPAWN_EGG = AESTHETICIAN_SPAWN_EGG;
         ModItems.ZOMBIE_AESTHETICIAN_SPAWN_EGG = ZOMBIE_AESTHETICIAN_SPAWN_EGG;

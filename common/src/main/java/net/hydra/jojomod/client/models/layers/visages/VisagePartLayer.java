@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
@@ -47,6 +48,8 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
             }
         } else if (entity instanceof JojoNPC jnpc){
             visage = jnpc.getBasis();
+        } else if (entity instanceof ZombieAesthetician znpc){
+            visage = znpc.getBasis();
         }
 
             if (visage != null && !visage.isEmpty()) {

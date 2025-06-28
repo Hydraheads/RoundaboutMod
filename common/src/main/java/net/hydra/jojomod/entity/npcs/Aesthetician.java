@@ -107,6 +107,24 @@ public class Aesthetician extends StandUsingNPC {
         }
     }
 
+    public ItemStack getBasis(){
+        switch (getSkinNumber()) {
+            case (2) ->{
+                return ModItems.AESTHETICIAN_MASK_2.getDefaultInstance();
+            }
+            case (3) ->{
+                return ModItems.AESTHETICIAN_MASK_3.getDefaultInstance();
+            }
+            case (4) ->{
+                return ModItems.AESTHETICIAN_MASK_4.getDefaultInstance();
+            }
+            case (5) ->{
+                return ModItems.AESTHETICIAN_MASK_5.getDefaultInstance();
+            }
+        }
+        return ModItems.AESTHETICIAN_MASK_1.getDefaultInstance();
+    }
+
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor $$0, DifficultyInstance $$1, MobSpawnType $$2, @Nullable SpawnGroupData $$3, @Nullable CompoundTag $$4) {
 

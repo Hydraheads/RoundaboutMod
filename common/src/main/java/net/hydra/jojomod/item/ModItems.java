@@ -90,9 +90,12 @@ public class ModItems {
     public static Item VALENTINE_MASK;
     public static Item JOSUKE_PART_EIGHT_MASK;
     public static Item AYA_MASK;
-    public static Item SOFT_AND_WET_BUBBLE_PROP;
-    public static Item SOFT_AND_WET_EXPLOSIVE_BUBBLE_PROP;
-    public static Item SOFT_AND_WET_BEYOND_BUBBLE_PROP;
+    public static Item AESTHETICIAN_MASK_1;
+    public static Item AESTHETICIAN_MASK_2;
+    public static Item AESTHETICIAN_MASK_3;
+    public static Item AESTHETICIAN_MASK_4;
+    public static Item AESTHETICIAN_MASK_5;
+    public static Item AESTHETICIAN_MASK_ZOMBIE;
 
     public static Item INTERDIMENSIONAL_KEY;
 

@@ -118,6 +118,9 @@ public class ZombieAesthetician extends Zombie {
         }
     }
 
+    public ItemStack getBasis(){
+        return ModItems.AESTHETICIAN_MASK_ZOMBIE.getDefaultInstance();
+    }
     public StandDiscItem getDisc(){
         return ((StandDiscItem) ModItems.STAND_DISC_CINDERELLA);
     }

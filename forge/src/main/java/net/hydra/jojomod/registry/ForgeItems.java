@@ -3,6 +3,7 @@ package net.hydra.jojomod.registry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.powers.stand.*;
 import net.hydra.jojomod.event.powers.visagedata.*;
+import net.hydra.jojomod.event.powers.visagedata.aesthetician.*;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
@@ -452,7 +453,19 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new JosukePartEightVisage(null))));
     public static final RegistryObject<Item> AYA_MASK = addToTab(ITEMS.register("aya_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AyaVisage(null))));
-    public static final RegistryObject<Item> INTERDIMENSIONAL_KEY = addToTab(ITEMS.register("interdimensional_key",
+    public static final RegistryObject<Item> AESTHETICIAN_MASK_1 = ITEMS.register("aesthetician_mask_1",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisage1(null)));
+    public static final RegistryObject<Item> AESTHETICIAN_MASK_2 = ITEMS.register("aesthetician_mask_2",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisage2(null)));
+    public static final RegistryObject<Item> AESTHETICIAN_MASK_3 = ITEMS.register("aesthetician_mask_3",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisage3(null)));
+    public static final RegistryObject<Item> AESTHETICIAN_MASK_4 = ITEMS.register("aesthetician_mask_4",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisage4(null)));
+    public static final RegistryObject<Item> AESTHETICIAN_MASK_5 = ITEMS.register("aesthetician_mask_5",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisage5(null)));
+    public static final RegistryObject<Item> AESTHETICIAN_MASK_ZOMBIE = ITEMS.register("aesthetician_mask_zombie",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisageZombie(null)));
+    public static final RegistryObject<Item> INTERDIMENSIONAL_KEY = addToWIPTab(ITEMS.register("interdimensional_key",
             () -> new InterdimensionalKeyItem(new Item.Properties().stacksTo(1))));
 
     public static void assignStupidForge(){

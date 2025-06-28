@@ -93,7 +93,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.PARALLEL_DIEGO, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.JOSUKE_PART_EIGHT, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.AYA, VisageBasisRenderer::new);
-        EntityRendererRegistry.register(FabricEntities.AESTHETICIAN, AestheticianRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.AESTHETICIAN, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ZOMBIE_AESTHETICIAN, ZombieAestheticianRenderer::new);
         EntityRendererRegistry.register(FabricEntities.STEVE_NPC, PlayerNPCRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ALEX_NPC, PlayerAlexRenderer::new);
