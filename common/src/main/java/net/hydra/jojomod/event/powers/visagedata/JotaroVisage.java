@@ -46,6 +46,9 @@ public class JotaroVisage extends VisageData {
     public boolean rendersBasicHat(){
         return true;
     }
+    public boolean rendersLegCloakPart(){
+        return true;
+    }
     @Override
     public float getNametagHeight(){
         return 0.54f;

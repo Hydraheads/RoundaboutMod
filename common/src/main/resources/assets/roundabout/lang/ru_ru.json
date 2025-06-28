@@ -218,6 +218,7 @@
 
   "itemgroup.jojo": "Roundabout",
   "itemgroup.jojo_discs": "Диски со Стендами",
+  "itemgroup.jojo_wip_features": "Roundabout Development",
   "itemgroup.justice_fog_items": "Иллюзионные блоки Justice",
   "roundabout.dev_status.dev_status": "Статус разработки:",
   "roundabout.dev_status.active": "В ПРОЦЕССЕ",
@@ -535,13 +536,13 @@
   "sounds.roundabout.gasoline_explosion": "Воспламенение канистры с бензином",
   "sounds.roundabout.gas_can_throw": "Бросок канистры с бензином",
   "sounds.roundabout.match_throw": "Бросок спички",
-  "sounds.roundabout.hey_ya_1": "Stand Talking",
-  "sounds.roundabout.hey_ya_2": "Stand Talking",
-  "sounds.roundabout.hey_ya_3": "Stand Talking",
-  "sounds.roundabout.hey_ya_4": "Stand Talking",
-  "sounds.roundabout.hey_ya_5": "Stand Talking",
-  "sounds.roundabout.hey_ya_6": "Stand Talking",
-  "sounds.roundabout.hey_ya_7": "Stand Talking",
+  "sounds.roundabout.hey_ya_1": "Стенд болтает",
+  "sounds.roundabout.hey_ya_2": "Стенд болтает",
+  "sounds.roundabout.hey_ya_3": "Стенд болтает",
+  "sounds.roundabout.hey_ya_4": "Стенд болтает",
+  "sounds.roundabout.hey_ya_5": "Стенд болтает",
+  "sounds.roundabout.hey_ya_6": "Стенд болтает",
+  "sounds.roundabout.hey_ya_7": "Стенд болтает",
 
   "sounds.roundabout.levelup": "Повышение уровня Стенда!",
 
@@ -776,6 +777,13 @@
   "ability.roundabout.water_shield": "Водный щит",
   "ability.roundabout.water_shield.desc": "Использует воду из удерживаемой бутылки, чтобы создать щит, защищающий от снарядов на короткое время. Снаряды, попавшие в щит, превращаются в пузыри с предметами, которые можно взорвать, чтобы метнуть их обратно во врагов. Также тушит огонь на вас.",
 
+  "ability.roundabout.danger_yap": "На стороже",
+  "ability.roundabout.danger_yap.desc": "Hey Ya будет следить за врагами, которые собираются напасть на тебя и предупредит о них.",
+  "ability.roundabout.mining_yap": "Поиск руды",
+  "ability.roundabout.mining_yap.desc": "Hey Ya будет искать руды вокруг вас, и привлечёт ваше внимание к ним.",
+  "ability.roundabout.yap_yap": "Подбадривание",
+  "ability.roundabout.yap_yap.desc": "Hey Ya подбодрит и сделает ваш день лучше!",
+
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Недоступно",
@@ -819,6 +827,9 @@
 
   "idle.roundabout.passive_justice": "Нейтральная Поза",
   "idle.roundabout.battle_justice": "Угрожающая поза",
+
+  "idle.roundabout.hey_ya_1": "Forward",
+  "idle.roundabout.hey_ya_2": "Facing",
 
   "skins.roundabout.star_platinum.base": "Часть 3",
   "skins.roundabout.star_platinum.manga": "Манга",
@@ -909,6 +920,7 @@
   "skins.roundabout.soft_and_wet.striped": "В полоску",
   "skins.roundabout.soft_and_wet.kira": "Кира",
   "skins.roundabout.soft_and_wet.colors": "Цветной",
+  "skins.roundabout.soft_and_wet.green": "Зелёный",
 
   "skins.roundabout.d4c.base": "Манга",
   "skins.roundabout.d4c.wonder_festival": "JOJOVELLER",
@@ -934,6 +946,16 @@
   "skins.roundabout.hey_ya.ice_cold": "Ледяной Успех",
   "skins.roundabout.hey_ya.villager": "Носатый",
   "skins.roundabout.hey_ya.geezer": "Чудной",
+  "skins.roundabout.hey_ya.skeleton": "Скелетон",
+  "skins.roundabout.hey_ya.wither": "Визер",
+  "skins.roundabout.hey_ya.tusk": "Клык",
+  "skins.roundabout.hey_ya.devil": "Дьявол",
+  "skins.roundabout.hey_ya.hell_nah": "Hell Nah",
+  "skins.roundabout.hey_ya.alien": "Пришелец",
+  "skins.roundabout.hey_ya.america": "Американ",
+  "skins.roundabout.hey_ya.zombie": "Жокей",
+  "skins.roundabout.hey_ya.anti": "Anti",
+  "skins.roundabout.hey_ya.grey_ya": "Grey Ya",
 
   "skins.roundabout.killer_queen.base": "Часть 4",
 
@@ -1081,5 +1103,41 @@
   "text.roundabout.hey_ya_messaging.no_32": "Жизнь может быть сложной, но ты сильнее, ты победитель!",
   "text.roundabout.hey_ya_messaging.no_33": "Всегда помни, что нужно любить себя, ты важен!",
   "text.roundabout.hey_ya_messaging.no_34": "Продолжай разжигать этот огонь, и пусть он горит ярче!",
-  "text.roundabout.hey_ya_messaging.no_35": "Ты — настоящая звезда!"
+  "text.roundabout.hey_ya_messaging.no_35": "Ты — настоящая звезда!",
+
+  "text.roundabout.hey_ya_messaging.evil.no_1": "Ты отстой.",
+  "text.roundabout.hey_ya_messaging.evil.no_2": "Что ты пялешься на меня?",
+  "text.roundabout.hey_ya_messaging.evil.no_3": "Почему ты говоришь с собственным стандом? Найди друзей.",
+  "text.roundabout.hey_ya_messaging.evil.no_4": "Я тебе не психолог, займись делом!",
+  "text.roundabout.hey_ya_messaging.evil.no_5": "Никто не говорил что жизнь легка, живи с этим.",
+  "text.roundabout.hey_ya_messaging.evil.no_6": "Хочешь совета? Не угробь себя, дурень",
+  "text.roundabout.hey_ya_messaging.evil.no_7": "Отпусти меня уже, а?",
+  "text.roundabout.hey_ya_messaging.evil.no_8": "Я по твоему волшебник? Делай это сам.",
+  "text.roundabout.hey_ya_messaging.evil.no_9": "Ты погряз со мной, салага. Привыкай.",
+  "text.roundabout.hey_ya_messaging.evil.no_10": "Знаешь, трындеж со мной ничего тебе не даст.",
+
+  "text.roundabout.hey_ya_messaging.mining.no_1": "Что я вижу...",
+  "text.roundabout.hey_ya_messaging.mining.no_2": "Пора в шахту!",
+  "text.roundabout.hey_ya_messaging.mining.no_3": "Я уверен, там что-то есть!",
+  "text.roundabout.hey_ya_messaging.mining.no_4": "Скоро ты разбогатеешь, я точно в этом уверен!",
+  "text.roundabout.hey_ya_messaging.mining.no_5": "Верь в тётушку удачу!",
+  "text.roundabout.hey_ya_messaging.mining.no_6": "Я помогу тебе с рудой!",
+  "text.roundabout.hey_ya_messaging.mining.no_7": "Мы сегодня точно найдём какие нибудь сокровища!",
+  "text.roundabout.hey_ya_messaging.mining.no_8": "Поверь мне, у меня хорошее предчувствие об этом!",
+
+  "text.roundabout.hey_ya_messaging.mining.evil.no_1": "Ладно. Так и быть я гляну.",
+  "text.roundabout.hey_ya_messaging.mining.evil.no_2": "Ты в глаза долбишься?",
+  "text.roundabout.hey_ya_messaging.mining.evil.no_3": "Давай покончим с этим.",
+  "text.roundabout.hey_ya_messaging.mining.evil.no_4": "Тебе так лень посмотреть? Тьфу, ладно.",
+  "text.roundabout.hey_ya_messaging.mining.evil.no_5": "Ленишься, да?",
+
+  "text.roundabout.hey_ya_messaging.danger.no_1": "%1$s, вон там!",
+  "text.roundabout.hey_ya_messaging.danger.no_2": "%1$s я вижу, вижу!",
+  "text.roundabout.hey_ya_messaging.danger.no_3": "%1$s рядом!",
+  "text.roundabout.hey_ya_messaging.danger.no_4": "%1$s атакует!",
+
+  "text.roundabout.hey_ya_messaging.danger.evil.no_1": "Тут %1$s, идиот.",
+  "text.roundabout.hey_ya_messaging.danger.evil.no_2": "Не спи, тут %1$s!",
+  "text.roundabout.hey_ya_messaging.danger.evil.no_3": "%1$s рядом, ты не видишь?",
+  "text.roundabout.hey_ya_messaging.danger.evil.no_4": "%1$s прибьёт нас, идиот!"
 }

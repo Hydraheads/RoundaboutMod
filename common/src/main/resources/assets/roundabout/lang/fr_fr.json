@@ -777,6 +777,13 @@
   "ability.roundabout.water_shield": "Bouclier d'Eau",
   "ability.roundabout.water_shield.desc": "Consomme l'eau dans une fiole d'eau tenu pour vous protéger de nombreux types projectile pour un petit moment. Si ils rentrent en contacte, ils sont à la place mis dans des bulles explosive à objets que vous pouvez éclaté pour les renvoyer à vos ennemis. Eteint aussi les flammes sur vous.",
 
+  "ability.roundabout.danger_yap": "Mode Surveillance",
+  "ability.roundabout.danger_yap.desc": "Hey Ya va resté attentif pour les créatures qui vous cible, et attirer votre attention sur eux.",
+  "ability.roundabout.mining_yap": "Recherche de minerai",
+  "ability.roundabout.mining_yap.desc": "Hey Ya va resté attentif pour les minerais autour de vous, et attirer votre attention sur eux.",
+  "ability.roundabout.yap_yap": "Encouragement",
+  "ability.roundabout.yap_yap.desc": "Hey Ya vous encourage et améliore votre journée !",
+
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Non débloqué",
@@ -820,6 +827,9 @@
 
   "idle.roundabout.passive_justice": "Au repos",
   "idle.roundabout.battle_justice": "Menaçant",
+
+  "idle.roundabout.hey_ya_1": "Devant",
+  "idle.roundabout.hey_ya_2": "En face",
 
   "skins.roundabout.star_platinum.base": "Partie 3",
   "skins.roundabout.star_platinum.manga": "Manga",
@@ -910,6 +920,7 @@
   "skins.roundabout.soft_and_wet.striped": "À bande",
   "skins.roundabout.soft_and_wet.kira": "Kira",
   "skins.roundabout.soft_and_wet.colors": "Coloré",
+  "skins.roundabout.soft_and_wet.green": "Vert",
 
   "skins.roundabout.d4c.base": "Manga",
   "skins.roundabout.d4c.wonder_festival": "JOJOVELLER",
@@ -941,6 +952,10 @@
   "skins.roundabout.hey_ya.devil": "Diable",
   "skins.roundabout.hey_ya.hell_nah": "Hell Nah",
   "skins.roundabout.hey_ya.alien": "Alien",
+  "skins.roundabout.hey_ya.america": "Américain",
+  "skins.roundabout.hey_ya.zombie": "Jockey",
+  "skins.roundabout.hey_ya.anti": "Anti",
+  "skins.roundabout.hey_ya.grey_ya": "Gris Ya",
 
   "skins.roundabout.killer_queen.base": "Partie 4",
 
@@ -1099,5 +1114,30 @@
   "text.roundabout.hey_ya_messaging.evil.no_7": "Est-ce que tu peux me ranger maintenant ?",
   "text.roundabout.hey_ya_messaging.evil.no_8": "De quoi j'ai l'air, un magicien ? Fait le toi-même.",
   "text.roundabout.hey_ya_messaging.evil.no_9": "T'es coincé avec moi, poto. Habitues toi à ça.",
-  "text.roundabout.hey_ya_messaging.evil.no_10": "Tu sais, me parler ne vas pas accomplir quoique ce soit."
+  "text.roundabout.hey_ya_messaging.evil.no_10": "Tu sais, me parler ne vas pas accomplir quoique ce soit.",
+
+  "text.roundabout.hey_ya_messaging.mining.no_1": "Laisse moi jeter une coup d'oeil!",
+  "text.roundabout.hey_ya_messaging.mining.no_2": "C'est le moment de miner !",
+  "text.roundabout.hey_ya_messaging.mining.no_3": "Qu'est-ce qu'on a là ?",
+  "text.roundabout.hey_ya_messaging.mining.no_4": "Tu vas être riche, je le sais c'est tout !",
+  "text.roundabout.hey_ya_messaging.mining.no_5": "Crois en ta chance !",
+  "text.roundabout.hey_ya_messaging.mining.no_6": "Je vais t'aider à cherché des minerais!",
+  "text.roundabout.hey_ya_messaging.mining.no_7": "Quel trésors allons nous découvrir aujourd'hui ?",
+  "text.roundabout.hey_ya_messaging.mining.no_8": "J'ai un bon présentiment là !",
+
+  "text.roundabout.hey_ya_messaging.mining.evil.no_1": "Bien. Je suppose je vais jeter un coup d'oeil.",
+  "text.roundabout.hey_ya_messaging.mining.evil.no_2": "T'es aveugle ?",
+  "text.roundabout.hey_ya_messaging.mining.evil.no_3": "Finissons en avec ça.",
+  "text.roundabout.hey_ya_messaging.mining.evil.no_4": "Pourquoi tu cherches pas toi-même ? Pff. D'accord.",
+  "text.roundabout.hey_ya_messaging.mining.evil.no_5": "Faignant aujourd'hui ?",
+
+  "text.roundabout.hey_ya_messaging.danger.no_1": "%1$s, look out!",
+  "text.roundabout.hey_ya_messaging.danger.no_2": "%1$s détecté(e), en garde !",
+  "text.roundabout.hey_ya_messaging.danger.no_3": "%1$s est proche!",
+  "text.roundabout.hey_ya_messaging.danger.no_4": "%1$s attaque !",
+
+  "text.roundabout.hey_ya_messaging.danger.evil.no_1": "%1$s, idiot.",
+  "text.roundabout.hey_ya_messaging.danger.evil.no_2": "alerte %1$s, utilises ton cerveau.",
+  "text.roundabout.hey_ya_messaging.danger.evil.no_3": "%1$s est proche, tu l'vois pas ?",
+  "text.roundabout.hey_ya_messaging.danger.evil.no_4": "%1$s va nous avoir, idiot !"
 }
