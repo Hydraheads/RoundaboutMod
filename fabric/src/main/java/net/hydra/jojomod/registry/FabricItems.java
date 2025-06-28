@@ -339,9 +339,9 @@ public class FabricItems {
                         //Add all items from the Jojo mod tab here
 
                         entries.accept(STAND_DISC_MANDOM);
-                        entries.accept(STAND_DISC_D4C);
-                        entries.accept(MAX_STAND_DISC_D4C);
-                        entries.accept(INTERDIMENSIONAL_KEY);
+                        //entries.accept(STAND_DISC_D4C);
+                        //entries.accept(MAX_STAND_DISC_D4C);
+                        //entries.accept(INTERDIMENSIONAL_KEY);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
 

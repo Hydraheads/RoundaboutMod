@@ -873,7 +873,7 @@ public class PowersD4C extends NewPunchingStand {
 
     @Override
     public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.paused").withStyle(ChatFormatting.AQUA);
+        return Component.translatable(  "roundabout.dev_status.dropped").withStyle(ChatFormatting.AQUA);
     }
     @Override
     public Component ifWipListDev(){
