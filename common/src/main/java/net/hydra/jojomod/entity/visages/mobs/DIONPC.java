@@ -10,6 +10,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 public class DIONPC extends StandUsingNPC {
@@ -24,7 +25,9 @@ public class DIONPC extends StandUsingNPC {
         }
         super.tick();
     }
-
+    public ItemStack getBasis(){
+        return ModItems.DIO_MASK.getDefaultInstance();
+    }
     @Override
     public StandDiscItem getDisc(){
         return ((StandDiscItem) ModItems.STAND_DISC_THE_WORLD);

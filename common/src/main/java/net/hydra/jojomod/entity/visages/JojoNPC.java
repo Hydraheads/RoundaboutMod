@@ -10,6 +10,7 @@ import com.mojang.serialization.Dynamic;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.entity.goals.JojoNPCGoalPackages;
 import net.hydra.jojomod.event.index.Poses;
+import net.hydra.jojomod.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
@@ -163,6 +164,9 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
         } else {
             this.JOSEPH.stop();
         }
+    }
+    public ItemStack getBasis(){
+        return ModItems.BLANK_MASK.getDefaultInstance();
     }
     private static final EntityDataAccessor<Byte> ROUNDABOUT$DATA_KNIFE_COUNT_ID = SynchedEntityData.defineId(JojoNPC.class,
             EntityDataSerializers.BYTE);

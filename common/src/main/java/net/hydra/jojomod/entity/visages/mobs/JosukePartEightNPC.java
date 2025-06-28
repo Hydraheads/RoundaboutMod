@@ -5,6 +5,7 @@ import net.hydra.jojomod.entity.visages.StandUsingNPC;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 public class JosukePartEightNPC extends StandUsingNPC {
@@ -12,6 +13,9 @@ public class JosukePartEightNPC extends StandUsingNPC {
         super(p_35384_, p_35385_);
     }
 
+    public ItemStack getBasis(){
+        return ModItems.JOSUKE_PART_EIGHT_MASK.getDefaultInstance();
+    }
 
     @Override
     public StandDiscItem getDisc(){

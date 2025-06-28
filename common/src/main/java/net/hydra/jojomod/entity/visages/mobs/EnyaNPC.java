@@ -8,13 +8,16 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 public class EnyaNPC extends StandUsingNPC {
     public EnyaNPC(EntityType<? extends JojoNPC> p_35384_, Level p_35385_) {
         super(p_35384_, p_35385_);
     }
-
+    public ItemStack getBasis(){
+        return ModItems.ENYA_MASK.getDefaultInstance();
+    }
 
     @Override
     public StandDiscItem getDisc(){

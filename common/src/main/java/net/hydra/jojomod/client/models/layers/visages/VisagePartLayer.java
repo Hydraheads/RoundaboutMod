@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
@@ -35,13 +36,18 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
     private static final ResourceLocation TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/large_bubble.png");
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, float var9, float var10) {
-        if (entity instanceof Player play){
+
+        ItemStack visage = null;
+        if (entity instanceof Player play) {
             IPlayerEntity pl = ((IPlayerEntity) play);
-            ItemStack visage = pl.roundabout$getMaskSlot();
+            visage = pl.roundabout$getMaskSlot();
             ShapeShifts shift = ShapeShifts.getShiftFromByte(pl.roundabout$getShapeShift());
-            if (shift == ShapeShifts.OVA){
+            if (shift == ShapeShifts.OVA) {
                 visage = ModItems.ENYA_OVA_MASK.getDefaultInstance();
             }
+        } else if (entity instanceof JojoNPC jnpc){
+            visage = jnpc.getBasis();
+        }
 
             if (visage != null && !visage.isEmpty()) {
                 if (visage.getItem() instanceof MaskItem MI) {
@@ -105,7 +111,6 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     }
                 }
             }
-        }
     }
     public void renderNormalBreast(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                                    float r, float g, float b) {
