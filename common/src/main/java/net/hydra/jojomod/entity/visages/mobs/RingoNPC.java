@@ -15,7 +15,7 @@ public class RingoNPC extends StandUsingNPC {
 
     @Override
     public StandDiscItem getDisc(){
-        return ((StandDiscItem)ModItems.STAND_DISC_HEY_YA);
+        return ((StandDiscItem)ModItems.STAND_DISC_MANDOM);
     }
 
     public ItemStack getBasis(){

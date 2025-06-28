@@ -14,6 +14,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
+import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -65,6 +66,8 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null)));
     public static Item STAND_DISC_HEY_YA = registerItem("hey_ya_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersHeyYa(null)));
+    public static Item STAND_DISC_MANDOM = registerItem("mandom_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMandom(null)));
     public static Item LUCK_UPGRADE = registerItem("luck_upgrade",
         new SmithingTemplateItem(SmithingTemplates.LUCK_UPGRADE_APPLIES_TO, SmithingTemplates.LUCK_UPGRADE_INGREDIENTS, SmithingTemplates.LUCK_UPGRADE, SmithingTemplates.LUCK_UPGRADE_BASE_SLOT_DESCRIPTION, SmithingTemplates.LUCK_UPGRADE_ADDITIONS_SLOT_DESCRIPTION, SmithingTemplates.createLuckUpgradeIconList(), SmithingTemplates.createLuckMatIconList())
     );
@@ -335,6 +338,7 @@ public class FabricItems {
                     .icon(() -> new ItemStack(LIGHT_BULB)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
 
+                        entries.accept(STAND_DISC_MANDOM);
                         entries.accept(STAND_DISC_D4C);
                         entries.accept(MAX_STAND_DISC_D4C);
                         entries.accept(INTERDIMENSIONAL_KEY);
@@ -427,6 +431,7 @@ public class FabricItems {
         ModItems.MAX_STAND_DISC_KILLER_QUEEN = MAX_STAND_DISC_KILLER_QUEEN;
         ModItems.STAND_DISC_CINDERELLA = STAND_DISC_CINDERELLA;
         ModItems.STAND_DISC_HEY_YA = STAND_DISC_HEY_YA;
+        ModItems.STAND_DISC_MANDOM = STAND_DISC_MANDOM;
         ModItems.LUCK_UPGRADE = LUCK_UPGRADE;
         ModItems.EXECUTION_UPGRADE = EXECUTION_UPGRADE;
         ModItems.LUCK_SWORD = LUCK_SWORD;

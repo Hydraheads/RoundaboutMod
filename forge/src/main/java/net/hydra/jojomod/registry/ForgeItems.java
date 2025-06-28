@@ -8,6 +8,7 @@ import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
+import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
@@ -419,6 +420,8 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null))));
     public static final RegistryObject<Item> STAND_DISC_HEY_YA = addToDiscTab(ITEMS.register("hey_ya_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersHeyYa(null))));
+    public static final RegistryObject<Item> STAND_DISC_MANDOM = addToWIPTab(ITEMS.register("mandom_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMandom(null))));
     public static final RegistryObject<Item> STAND_DISC_D4C = addToWIPTab(ITEMS.register("d4c_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_D4C = addToWIPTab(ITEMS.register("max_d4c_disc",
