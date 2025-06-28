@@ -32,8 +32,8 @@ public class PacketDataIndex {
     public static final byte SINGLE_BYTE_SKIN_RIGHT = 11;
     public static final byte SINGLE_BYTE_IDLE_LEFT = 12;
     public static final byte SINGLE_BYTE_IDLE_RIGHT = 13;
-    public static final byte SINGLE_BYTE_SKIN_LEFT_SEALED = 14;
-    public static final byte SINGLE_BYTE_SKIN_RIGHT_SEALED = 15;
+    public static final byte SINGLE_BYTE_SKIN_LEFT_SEALED = 30;
+    public static final byte SINGLE_BYTE_SKIN_RIGHT_SEALED = 31;
 
     /**Int packets*/
     public static final byte INT_GLAIVE_TARGET = 1;
