@@ -2438,7 +2438,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (this.roundabout$gasTicks > -1) {
             if ($$0.is(DamageTypeTags.IS_FIRE) || ($$0.getDirectEntity() instanceof Projectile && $$0.getDirectEntity().isOnFire())) {
                 float power = MainUtil.gasDamageMultiplier()*17;
-                if ($$0.is(DamageTypeTags.IS_FIRE)) {
+                if ($$0.is(DamageTypeTags.IS_FIRE) || $$0.is(ModDamageTypes.MATCH)) {
                     if ($$0.getDirectEntity() instanceof Projectile) {
                         if ($$0.getDirectEntity() instanceof MatchEntity){
                             if (((MatchEntity) $$0.getDirectEntity()).isBundle){
