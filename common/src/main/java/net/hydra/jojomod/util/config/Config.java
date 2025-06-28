@@ -492,7 +492,7 @@ public class Config implements Cloneable {
         public Integer explosiveSpinModeTickDownRate;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer goBeyondLifespanInTicks;
-        @IntOption(group = "inherit", value = 24, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 26, min = 0, max = 72000)
         public Integer goBeyondTicksUntilItCanHit;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer encasementBubbleFloatingLifespanInTicks;
