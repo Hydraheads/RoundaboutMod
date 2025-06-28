@@ -366,7 +366,7 @@ public class MainUtil {
                         BuiltInRegistries.ITEM.getKey(stack.getItem()),
                         (user.roundabout$getStandPowers() instanceof PowersJustice)
                         );
-                sp.connection.disconnect(Component.literal("Exploit Detected"));
+                //sp.connection.disconnect(Component.literal("Exploit Detected"));
                 return;
             }
 
