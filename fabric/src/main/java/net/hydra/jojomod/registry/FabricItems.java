@@ -119,6 +119,10 @@ public class FabricItems {
     public static Item ENYA_MASK = registerItem("enya_mask", new MaskItem(new Item.Properties().stacksTo(1), new EnyaVisage(null)));
     public static Item ENYA_OVA_MASK = registerItem("enya_ova_mask", new MaskItem(new Item.Properties().stacksTo(1), new EnyaOVAVisage(null)));
     public static Item AYA_MASK = registerItem("aya_mask", new MaskItem(new Item.Properties().stacksTo(1), new AyaVisage(null)));
+    public static Item RINGO_MASK = registerItem("ringo_mask", new MaskItem(new Item.Properties().stacksTo(1), new RingoVisage(null)));
+    public static Item POCOLOCO_MASK = registerItem("pocoloco_mask", new MaskItem(new Item.Properties().stacksTo(1), new PocolocoVisage(null)));
+
+
     public static Item AESTHETICIAN_MASK_1 = registerItem("aesthetician_mask_1", new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisage1(null)));
     public static Item AESTHETICIAN_MASK_2 = registerItem("aesthetician_mask_2", new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisage2(null)));
     public static Item AESTHETICIAN_MASK_3 = registerItem("aesthetician_mask_3", new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisage3(null)));
@@ -285,6 +289,8 @@ public class FabricItems {
                         entries.accept(VALENTINE_MASK);
                         entries.accept(JOSUKE_PART_EIGHT_MASK);
                         entries.accept(AYA_MASK);
+                        entries.accept(POCOLOCO_MASK);
+                        entries.accept(RINGO_MASK);
 
 
                     }).build());
@@ -469,6 +475,8 @@ public class FabricItems {
         ModItems.DIO_MASK = DIO_MASK;
         ModItems.AVDOL_MASK = AVDOL_MASK;
         ModItems.DIEGO_MASK = DIEGO_MASK;
+        ModItems.POCOLOCO_MASK = POCOLOCO_MASK;
+        ModItems.RINGO_MASK = RINGO_MASK;
         ModItems.VALENTINE_MASK = VALENTINE_MASK;
         ModItems.JOSUKE_PART_EIGHT_MASK = JOSUKE_PART_EIGHT_MASK;
         ModItems.ENYA_MASK = ENYA_MASK;

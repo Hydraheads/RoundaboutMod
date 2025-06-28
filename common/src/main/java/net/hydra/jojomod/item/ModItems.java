@@ -96,7 +96,8 @@ public class ModItems {
     public static Item AESTHETICIAN_MASK_4;
     public static Item AESTHETICIAN_MASK_5;
     public static Item AESTHETICIAN_MASK_ZOMBIE;
-
+    public static Item POCOLOCO_MASK;
+    public static Item RINGO_MASK;
     public static Item INTERDIMENSIONAL_KEY;
 
     public static CreativeModeTab FOG_BLOCK_ITEMS;
@@ -138,6 +139,8 @@ public class ModItems {
         addToVisageStore(ENYA_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(AYA_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(DIEGO_MASK,1, characterCostExp, characterCostEmerald);
+        addToVisageStore(POCOLOCO_MASK,1, characterCostExp, characterCostEmerald);
+        addToVisageStore(RINGO_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(VALENTINE_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(JOSUKE_PART_EIGHT_MASK,1, characterCostExp, characterCostEmerald);
     }

@@ -95,6 +95,8 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.AYA, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.AESTHETICIAN, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ZOMBIE_AESTHETICIAN, ZombieAestheticianRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.POCOLOCO, VisageBasisRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.RINGO, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.STEVE_NPC, PlayerNPCRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ALEX_NPC, PlayerAlexRenderer::new);
         EntityRendererRegistry.register(FabricEntities.MODIFIED_NPC, PlayerModifiedRenderer::new);

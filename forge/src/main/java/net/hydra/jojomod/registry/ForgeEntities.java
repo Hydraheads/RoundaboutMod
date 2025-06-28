@@ -93,6 +93,18 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "zombie_aesthetician").toString())
             );
+    public static final RegistryObject<EntityType<PocolocoNPC>> POCOLOCO =
+            ENTITY_TYPES.register("jojo_npc_pocoloco", () ->
+                    EntityType.Builder.of(PocolocoNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_pocoloco").toString())
+            );
+    public static final RegistryObject<EntityType<RingoNPC>> RINGO =
+            ENTITY_TYPES.register("jojo_npc_ringo", () ->
+                    EntityType.Builder.of(RingoNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_ringo").toString())
+            );
     public static final RegistryObject<EntityType<ValentineNPC>> VALENTINE =
             ENTITY_TYPES.register("jojo_npc_valentine", () ->
                     EntityType.Builder.of(ValentineNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).

@@ -77,6 +77,8 @@ public class ModEntities {
     public static EntityType<AyaNPC> AYA;
     public static EntityType<Aesthetician> AESTHETICIAN;
     public static EntityType<ZombieAesthetician> ZOMBIE_AESTHETICIAN;
+    public static EntityType<PocolocoNPC> POCOLOCO;
+    public static EntityType<RingoNPC> RINGO;
     public static EntityType<PlayerSteveNPC> STEVE_NPC;
     public static EntityType<PlayerAlexNPC> ALEX_NPC;
     public static EntityType<PlayerModifiedNPC> MODIFIED_NPC;

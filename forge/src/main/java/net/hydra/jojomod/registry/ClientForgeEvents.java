@@ -92,6 +92,8 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.AYA.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.AESTHETICIAN.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ZOMBIE_AESTHETICIAN.get(), ZombieAestheticianRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.POCOLOCO.get(), VisageBasisRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.RINGO.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.VALENTINE.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STEVE_NPC.get(), PlayerNPCRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ALEX_NPC.get(), PlayerAlexRenderer::new);

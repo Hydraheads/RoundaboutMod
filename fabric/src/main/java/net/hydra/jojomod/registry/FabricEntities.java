@@ -115,6 +115,20 @@ public class FabricEntities {
                         EntityType.Builder.of(ZombieAesthetician::new, MobCategory.MISC).
                                 sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":zombie_aesthetician")
                 );
+        public static final EntityType<PocolocoNPC> POCOLOCO =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_pocoloco"),
+                        EntityType.Builder.of(PocolocoNPC::new, MobCategory.MISC).
+                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_pocoloco")
+                );
+        public static final EntityType<RingoNPC> RINGO =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_ringo"),
+                        EntityType.Builder.of(RingoNPC::new, MobCategory.MISC).
+                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_ringo")
+                );
         public static final EntityType<PlayerSteveNPC> STEVE_NPC =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -509,6 +523,8 @@ public class FabricEntities {
                 ModEntities.AYA = AYA;
                 ModEntities.AESTHETICIAN = AESTHETICIAN;
                 ModEntities.ZOMBIE_AESTHETICIAN = ZOMBIE_AESTHETICIAN;
+                ModEntities.POCOLOCO = POCOLOCO;
+                ModEntities.RINGO = RINGO;
                 ModEntities.STEVE_NPC = STEVE_NPC;
                 ModEntities.ALEX_NPC = ALEX_NPC;
                 ModEntities.MODIFIED_NPC = MODIFIED_NPC;
@@ -528,6 +544,8 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(JOSUKE_PART_EIGHT, JosukePartEightNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(AYA, AyaNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(AESTHETICIAN, Aesthetician.createAttributes());
+                FabricDefaultAttributeRegistry.register(RINGO, RingoNPC.createAttributes());
+                FabricDefaultAttributeRegistry.register(POCOLOCO, PocolocoNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(ZOMBIE_AESTHETICIAN, ZombieAesthetician.createAttributes());
                 FabricDefaultAttributeRegistry.register(STEVE_NPC, PlayerSteveNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(ALEX_NPC, PlayerAlexNPC.createAttributes());
