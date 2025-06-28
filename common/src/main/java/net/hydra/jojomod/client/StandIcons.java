@@ -277,6 +277,7 @@ public class StandIcons {
     public static final ResourceLocation GREEN_DAY_MOLD_PUNCH_RIGHT = Roundabout.location("textures/gui/icons/green_day/mold_punch_right.png");
     public static final ResourceLocation GREEN_DAY_MOLD_SPIN_LEFT = Roundabout.location("textures/gui/icons/green_day/mold_spin_left.png");
     public static final ResourceLocation GREEN_DAY_MOLD_SPIN_RIGHT = Roundabout.location("textures/gui/icons/green_day/mold_spin_right.png");
+    public static final ResourceLocation GREEN_DAY_MOLD_FIELD_OFF = Roundabout.location("textures/gui/icons/green_day/mold_field_off.png");
 
     public static final ResourceLocation SOFT_AND_WET_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/soft_and_wet/barrage.png");

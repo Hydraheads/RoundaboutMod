@@ -328,6 +328,8 @@ public class ForgeEvents {
         ModParticles.EXCLAMATION = ForgeParticles.EXCLAMATION.get();
         ModParticles.D4C_LINES = ForgeParticles.D4C_LINES.get();
         ModParticles.STITCH = ForgeParticles.STITCH.get();
+        ModParticles.MOLD_DUST = ForgeParticles.MOLD_DUST.get();
+        ModParticles.MOLD = ForgeParticles.MOLD.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
