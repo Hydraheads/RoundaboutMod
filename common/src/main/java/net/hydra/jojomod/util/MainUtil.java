@@ -13,6 +13,7 @@ import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
+import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
@@ -473,6 +474,7 @@ public class MainUtil {
             return Mob instanceof Zombie || (Mob instanceof Animal && !(Mob instanceof SkeletonHorse) && !(Mob instanceof ZombieHorse))
                     || Mob instanceof Villager || Mob instanceof WaterAnimal || Mob instanceof WanderingTrader || Mob instanceof Witch
                     || Mob instanceof AbstractIllager || Mob instanceof Creeper || Mob instanceof Player || Mob instanceof AbstractPiglin
+                    || Mob instanceof JojoNPC
                     || Mob instanceof Spider || Mob instanceof EnderDragon || Mob instanceof EnderMan;
         }
         return false;
