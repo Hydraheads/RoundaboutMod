@@ -124,4 +124,12 @@ public class ForgeParticles {
             "stitch",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> MOLD_DUST = PARTICLES.register(
+            "mold_dust",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> MOLD = PARTICLES.register(
+            "mold",
+            () -> new SimpleParticleType(true)
+    );
 }

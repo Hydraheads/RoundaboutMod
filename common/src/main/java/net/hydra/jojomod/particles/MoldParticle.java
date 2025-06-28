@@ -7,10 +7,10 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
 
-public class StitchParticle extends SimpleAnimatedParticle {
+public class MoldParticle extends SimpleAnimatedParticle {
     private final SpriteSet sprites;
 
-    protected StitchParticle(ClientLevel $$0, double $$1, double $$2, double $$3, double $$4, double $$5, double $$6, SpriteSet $$7) {
+    protected MoldParticle(ClientLevel $$0, double $$1, double $$2, double $$3, double $$4, double $$5, double $$6, SpriteSet $$7) {
         super($$0, $$1, $$2, $$3, $$7, 1f);
         this.age = 0;
         this.lifetime = 6+ this.random.nextInt(2);
@@ -34,14 +34,10 @@ public class StitchParticle extends SimpleAnimatedParticle {
 
     @Override
     public void render(VertexConsumer $$0, Camera $$1, float $$2) {
-        if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
             super.render($$0, $$1, $$2);
-        }
     }
     @Override
-    public ParticleRenderType getRenderType() {
-        return ParticleRenderType.PARTICLE_SHEET_LIT;
-    }
+    public ParticleRenderType getRenderType() {return ParticleRenderType.PARTICLE_SHEET_LIT;}
 
     @Override
     protected float getU0() {return this.sprite.getU0();}
@@ -69,12 +65,10 @@ public class StitchParticle extends SimpleAnimatedParticle {
         }
 
         public Particle createParticle(SimpleParticleType $$0, ClientLevel $$1, double $$2, double $$3, double $$4, double $$5, double $$6, double $$7) {
-            StitchParticle part = new StitchParticle($$1, $$2, $$3, $$4, $$5,$$6,$$7, this.sprites);
+            MoldParticle part = new MoldParticle($$1, $$2, $$3, $$4, $$5,$$6,$$7, this.sprites);
             part.setColor(0.9F, 0.9F, 0.9F);
             part.setAlpha(0.7F);
             return part;
         }
     }
 }
-
-

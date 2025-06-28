@@ -39,6 +39,8 @@ public class FabricParticles {
     public static final SimpleParticleType FRICTIONLESS = FabricParticleTypes.simple();
     public static final SimpleParticleType EXCLAMATION = FabricParticleTypes.simple();
     public static final SimpleParticleType STITCH = FabricParticleTypes.simple();
+    public static final SimpleParticleType MOLD_DUST = FabricParticleTypes.simple();
+    public static final SimpleParticleType MOLD = FabricParticleTypes.simple();
     public static void registerParticles(){
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("hit_impact"), HIT_IMPACT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("blood"), BLOOD);
@@ -70,6 +72,8 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("exclamation"), EXCLAMATION);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("d4c_lines"), D4C_LINES);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("stitch"), STITCH);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("mold_dust"), MOLD_DUST);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("mold"), MOLD);
 
         ModParticles.BLOOD = BLOOD;
         ModParticles.BLUE_BLOOD = BLUE_BLOOD;
@@ -101,5 +105,7 @@ public class FabricParticles {
         ModParticles.FRICTIONLESS = FRICTIONLESS;
         ModParticles.EXCLAMATION = EXCLAMATION;
         ModParticles.STITCH = STITCH;
+        ModParticles.MOLD_DUST = MOLD_DUST;
+        ModParticles.MOLD = MOLD;
     }
 }
