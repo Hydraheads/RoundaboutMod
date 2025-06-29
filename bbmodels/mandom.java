@@ -34,7 +34,7 @@ public class mandom<T extends Entity> extends EntityModel<T> {
 
 		PartDefinition head = stand2.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(-0.5F, -1.275F, -1.275F));
 
-		PartDefinition head2 = head.addOrReplaceChild("head2", CubeListBuilder.create().texOffs(0, 0).addBox(-2.5179F, -7.5351F, -4.5364F, 7.0F, 8.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.55F, 1.675F, 1.8F, 0.1809F, -0.435F, 0.2015F));
+		PartDefinition head2 = head.addOrReplaceChild("head2", CubeListBuilder.create().texOffs(0, 0).addBox(-2.5179F, -7.5351F, -4.5365F, 7.0F, 8.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.55F, 1.675F, 1.9F, 0.1809F, -0.435F, 0.2015F));
 
 		PartDefinition body = stand2.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(3.0F, 1.0F, -1.5F));
 
