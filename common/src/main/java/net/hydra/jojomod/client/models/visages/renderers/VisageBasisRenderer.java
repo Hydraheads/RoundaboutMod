@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerModel;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.FacelessLayer;
 import net.hydra.jojomod.client.models.layers.HeyYaLayer;
 import net.hydra.jojomod.client.models.layers.KnifeLayer;

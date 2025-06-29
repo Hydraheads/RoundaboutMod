@@ -13,6 +13,7 @@ import net.hydra.jojomod.client.models.visages.*;
 import net.hydra.jojomod.client.models.visages.parts.*;
 import net.hydra.jojomod.client.models.visages.renderers.*;
 import net.hydra.jojomod.client.models.worn_stand.HeyYaModel;
+import net.hydra.jojomod.client.models.worn_stand.MandomModel;
 import net.hydra.jojomod.client.models.worn_stand.SoftAndWetShootingArmModel;
 import net.hydra.jojomod.client.models.substand.renderers.D4CCloneRenderer;
 import net.hydra.jojomod.client.models.substand.renderers.FogCloneRenderer;
@@ -146,6 +147,7 @@ public class FabricEntityClient {
 
         ModStrayModels.SHOOTING_ARM = new SoftAndWetShootingArmModel();
         ModStrayModels.HEY_YA = new HeyYaModel();
+        ModStrayModels.MANDOM = new MandomModel();
         ModStrayModels.ChestPart = new ChestPart();
         ModStrayModels.SmallChestPart = new SmallChestPart();
         ModStrayModels.PonytailPart = new PonytailPart();

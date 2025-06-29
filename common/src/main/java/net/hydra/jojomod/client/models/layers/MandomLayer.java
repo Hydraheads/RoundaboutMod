@@ -19,10 +19,10 @@ import net.minecraft.world.entity.LivingEntity;
 
 import java.util.Map;
 
-public class HeyYaLayer<T extends LivingEntity, A extends HumanoidModel<T>> extends RenderLayer<T, A> {
+public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> extends RenderLayer<T, A> {
     private static final Map<String, ResourceLocation> ARMOR_LOCATION_CACHE = Maps.newHashMap();
     private final EntityRenderDispatcher dispatcher;
-    public HeyYaLayer(EntityRendererProvider.Context context, LivingEntityRenderer<T, A> livingEntityRenderer) {
+    public MandomLayer(EntityRendererProvider.Context context, LivingEntityRenderer<T, A> livingEntityRenderer) {
         super(livingEntityRenderer);
         this.dispatcher = context.getEntityRenderDispatcher();
     }
