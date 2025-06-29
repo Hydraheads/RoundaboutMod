@@ -138,17 +138,20 @@ public class PowersMandom extends NewDashPreset {
 
 
     public static final byte
-            MANGA = 1;
+            MANGA = 1,
+            PURPLE = 2;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
-                MANGA
+                MANGA,
+                PURPLE
         );
     }
     @Override public Component getSkinName(byte skinId) {
         return switch (skinId)
         {
-            default -> Component.translatable("skins.roundabout.hey_ya.manga");
+            case PowersMandom.PURPLE -> Component.translatable("skins.roundabout.mandom.purple");
+            default -> Component.translatable("skins.roundabout.mandom.manga");
         };
     }
 

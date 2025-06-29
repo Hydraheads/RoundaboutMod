@@ -10,12 +10,14 @@ import net.hydra.jojomod.client.models.layers.animations.MandomAnimations;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
+import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -83,9 +85,12 @@ public class MandomModel extends PsuedoHierarchicalModel {
     }
     public static ResourceLocation base = new ResourceLocation(Roundabout.MOD_ID,
             "textures/stand/mandom/base.png");
+    public static ResourceLocation purple = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/mandom/purple.png");
     public ResourceLocation getTextureLocation(Entity context, byte skin){
         switch (skin)
         {
+            case PowersMandom.PURPLE -> {return purple;}
             default -> {return base;}
         }
     }
