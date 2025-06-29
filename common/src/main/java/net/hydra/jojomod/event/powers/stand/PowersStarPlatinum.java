@@ -1217,7 +1217,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
             if (this.isGuarding()){
                     if (canExecuteMoveWithLevel(getInhaleLevel())) {
-                        setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_INHALE, PowerIndex.NONE);
+                        setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_INHALE, PowerIndex.NO_CD);
                     } else {
                         setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                     }
@@ -1275,7 +1275,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
             if (this.isGuarding()){
                 if (canExecuteMoveWithLevel(getInhaleLevel())) {
-                    setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_INHALE, PowerIndex.NONE);
+                    setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_INHALE, PowerIndex.NO_CD);
                 } else {
                     setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                 }
