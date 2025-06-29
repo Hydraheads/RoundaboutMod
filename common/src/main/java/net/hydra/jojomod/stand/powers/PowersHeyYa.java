@@ -55,8 +55,6 @@ public class PowersHeyYa extends NewDashPreset {
     }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        ClientUtil.fx.roundabout$onGUI(context);
-
         // code for advanced icons
 
         if (dangerYappingOn())

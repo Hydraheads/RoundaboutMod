@@ -30,13 +30,13 @@ public class mandom<T extends Entity> extends EntityModel<T> {
 
 		PartDefinition stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0F, 12.275F, 0.05F, 0.0F, 0.0F, -0.7505F));
 
-		PartDefinition stand2 = stand.addOrReplaceChild("stand2", CubeListBuilder.create(), PartPose.offset(12.3027F, 0.1353F, -2.1F));
+		PartDefinition stand2 = stand.addOrReplaceChild("stand2", CubeListBuilder.create(), PartPose.offset(3.3027F, -14.8647F, 0.9F));
 
-		PartDefinition head = stand2.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(-9.5F, -13.275F, 1.725F));
+		PartDefinition head = stand2.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(-0.5F, 1.725F, -1.275F));
 
-		PartDefinition head2 = head.addOrReplaceChild("head2", CubeListBuilder.create().texOffs(0, 0).addBox(-2.9246F, -7.5531F, -0.3295F, 7.0F, 8.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.275F, -0.5F, -2.5F, 0.1809F, -0.435F, 0.2015F));
+		PartDefinition head2 = head.addOrReplaceChild("head2", CubeListBuilder.create().texOffs(0, 0).addBox(-3.5179F, -7.5351F, -4.5365F, 7.0F, 8.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.75F, -1.5F, 1.5F, 0.1809F, -0.435F, 0.2015F));
 
-		PartDefinition body = stand2.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(-6.0F, -14.0F, 1.5F));
+		PartDefinition body = stand2.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(3.0F, 1.0F, -1.5F));
 
 		PartDefinition body2 = body.addOrReplaceChild("body2", CubeListBuilder.create(), PartPose.offsetAndRotation(0.6F, 0.0F, 1.1F, 0.0F, -0.5236F, 0.0F));
 
