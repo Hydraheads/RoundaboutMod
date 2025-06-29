@@ -3,12 +3,9 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
-import net.hydra.jojomod.client.models.layers.HeyYaLayer;
-import net.hydra.jojomod.client.models.layers.ShootingArmLayer;
+import net.hydra.jojomod.client.models.layers.*;
 import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.client.models.layers.StoneLayer;
-import net.hydra.jojomod.client.models.layers.KnifeLayer;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.mobs.*;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
@@ -78,6 +75,7 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
         this.addLayer(new FacelessLayer<>($$0, this));
         this.addLayer(new ShootingArmLayer<>($$0, this));
         this.addLayer(new HeyYaLayer<>($$0, this));
+        this.addLayer(new MandomLayer<>($$0, this));
         this.addLayer(new VisagePartLayer<>($$0, this));
         /**Access to slim and not slim models simultaneously*/
         roundabout$otherModel = new PlayerModel<>($$0.bakeLayer($$1 ? ModelLayers.PLAYER : ModelLayers.PLAYER_SLIM), $$1);

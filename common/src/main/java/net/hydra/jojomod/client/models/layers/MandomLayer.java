@@ -7,7 +7,7 @@ import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.stand.powers.PowersHeyYa;
+import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -34,20 +34,17 @@ public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
             LivingEntity livent = entity;
             if (!entity.isInvisible()) {
                 if (entity != null) {
-                    if (entity instanceof JojoNPC jnp && jnp.host != null) {
-                        livent = jnp.host;
-                    }
                     StandUser user = ((StandUser) livent);
-                    int heyTicks = user.roundabout$getHeyYaVanishTicks();
-                    boolean hasHeyYaOut = (user.roundabout$getActive() && user.roundabout$getStandPowers() instanceof PowersHeyYa);
+                    int mandomTicks = user.roundabout$getMandomVanishTicks();
+                    boolean hasMandomOut = (user.roundabout$getActive() && user.roundabout$getStandPowers() instanceof PowersMandom);
 
 
-                    if (heyTicks > 0 || hasHeyYaOut) {
+                    if (mandomTicks > 0 || hasMandomOut) {
                         byte skin = user.roundabout$getStandSkin();
                         if (user.roundabout$getLastStandSkin() != skin){
                             user.roundabout$setLastStandSkin(skin);
-                            heyTicks = 0;
-                            user.roundabout$setHeyYaVanishTicks(0);
+                            mandomTicks = 0;
+                            user.roundabout$setMandomVanishTicks(0);
                         }
 
                         float heyFull = 0;
@@ -55,11 +52,11 @@ public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                         if (((TimeStop)entity.level()).CanTimeStopEntity(entity)){
                             fixedPartial = 0;
                         }
-                        if (hasHeyYaOut){
-                            heyFull = heyTicks+fixedPartial;
+                        if (hasMandomOut){
+                            heyFull = mandomTicks+fixedPartial;
                             heyFull = Math.min(heyFull/10,1f);
                         } else {
-                            heyFull = heyTicks-fixedPartial;
+                            heyFull = mandomTicks-fixedPartial;
                             heyFull = Math.max(heyFull/10,0);
                         }
                         poseStack.pushPose();
@@ -67,17 +64,15 @@ public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                         // Translate to the right/left hand
                             getParentModel().body.translateAndRotate(poseStack); // Use leftArm for off-hand
                             // Apply additional transformations
-                            poseStack.translate(-0.27F, -0.25, 0.19F); //1 1
                             // The first value goes to the right (negative) and left (positive)
                             // The second value is correlated with up (negative) and down (positive)
                         // the third is further and closer, positive to head towards bakc negative for away
                         // Render your model here
-                        poseStack.scale(0.6F, 0.6F, 0.6F);
                         boolean isHurt = livent.hurtTime > 0;
                         float r = isHurt ? 1.0F : 1.0F;
-                        float g = isHurt ? 0.0F : 1.0F;
-                        float b = isHurt ? 0.0F : 1.0F;
-                        ModStrayModels.HEY_YA.render(livent, partialTicks, poseStack, bufferSource, packedLight,
+                        float g = isHurt ? 0.4F : 1.0F;
+                        float b = isHurt ? 0.4F : 1.0F;
+                        ModStrayModels.MANDOM.render(livent, partialTicks, poseStack, bufferSource, packedLight,
                                 r, g, b, heyFull, skin);
                         poseStack.popPose();
                     }

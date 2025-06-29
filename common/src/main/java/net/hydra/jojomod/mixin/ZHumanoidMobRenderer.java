@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.client.FacelessLayer;
 import net.hydra.jojomod.client.models.layers.HeyYaLayer;
+import net.hydra.jojomod.client.models.layers.MandomLayer;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
@@ -22,6 +23,7 @@ public abstract class ZHumanoidMobRenderer<T extends Mob, M extends HumanoidMode
     private void roundabout$renderHumanoidMobRenderer(EntityRendererProvider.Context $$0, HumanoidModel $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
         this.addLayer(new FacelessLayer<>($$0, this));
         this.addLayer(new HeyYaLayer<>($$0, this));
+        this.addLayer(new MandomLayer<>($$0, this));
     }
 
 }

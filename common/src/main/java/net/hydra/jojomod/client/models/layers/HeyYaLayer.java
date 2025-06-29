@@ -34,9 +34,6 @@ public class HeyYaLayer<T extends LivingEntity, A extends HumanoidModel<T>> exte
             LivingEntity livent = entity;
             if (!entity.isInvisible()) {
                 if (entity != null) {
-                    if (entity instanceof JojoNPC jnp && jnp.host != null) {
-                        livent = jnp.host;
-                    }
                     StandUser user = ((StandUser) livent);
                     int heyTicks = user.roundabout$getHeyYaVanishTicks();
                     boolean hasHeyYaOut = (user.roundabout$getActive() && user.roundabout$getStandPowers() instanceof PowersHeyYa);

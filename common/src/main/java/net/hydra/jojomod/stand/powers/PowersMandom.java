@@ -137,6 +137,10 @@ public class PowersMandom extends NewDashPreset {
             tryPowerPacket(PowerIndex.POWER_4);
         }
     }
+
+
+    public static final byte
+            ROTATE = 1;
     /**Let the client brunt the task of mass scanning blocks so it doesn't lag server TPS
      * also instill block limits so the packet count is sane*/
     public boolean scoutForOresOnClient(){

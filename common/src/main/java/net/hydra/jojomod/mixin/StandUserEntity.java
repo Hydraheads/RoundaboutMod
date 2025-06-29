@@ -27,6 +27,7 @@ import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
+import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -1771,6 +1772,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$setHeyYaVanishTicks(int set){
         roundabout$heyYaVanishTicks = Mth.clamp(set,0,10);
     }
+    @Unique
+    public int roundabout$mandomVanishTicks = 0;
+
+    @Unique
+    @Override
+    public int roundabout$getMandomVanishTicks(){
+        return roundabout$mandomVanishTicks;
+    }
+    @Unique
+    @Override
+    public void roundabout$setMandomVanishTicks(int set){
+        roundabout$mandomVanishTicks = Mth.clamp(set,0,10);
+    }
 
     @Unique
     public AnimationState roundabout$heyYaAnimation2 = new AnimationState();
@@ -3325,10 +3339,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         /**hey ya fade ticks*/
-        if (roundabout$getActive() && roundabout$getStandPowers() instanceof PowersHeyYa){
+        boolean active = roundabout$getActive();
+        if (roundabout$getStandPowers() instanceof PowersHeyYa && active){
             roundabout$setHeyYaVanishTicks(roundabout$getHeyYaVanishTicks()+1);
         } else {
             roundabout$setHeyYaVanishTicks(roundabout$getHeyYaVanishTicks()-1);
+        }
+
+        if (roundabout$getStandPowers() instanceof PowersMandom && active){
+            roundabout$setMandomVanishTicks(roundabout$getMandomVanishTicks()+1);
+        } else {
+            roundabout$setMandomVanishTicks(roundabout$getMandomVanishTicks()-1);
         }
 
 

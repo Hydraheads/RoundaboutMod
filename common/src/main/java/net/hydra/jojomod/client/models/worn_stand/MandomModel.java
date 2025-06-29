@@ -115,16 +115,8 @@ public class MandomModel extends PsuedoHierarchicalModel {
             }
             StandUser user = ((StandUser) LE);
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
-            user.roundabout$getHeyYaAnimation().startIfStopped(context.tickCount);
-            if (user.roundabout$getStandAnimation() == PowersHeyYa.YAP) {
-                user.roundabout$getHeyYaAnimation2().startIfStopped(context.tickCount);
-            } else {
-                user.roundabout$getHeyYaAnimation2().stop();
-            }
-            rotateHead(context,partialTicks,user);
-            this.animate(user.roundabout$getHeyYaAnimation(), HeyYaAnimations.hangin_on, partialTicks, 1f);
+            //rotateHead(context,partialTicks,user);
             this.animate(user.roundabout$getHeyYaAnimation(), HeyYaAnimations.idle_normal, partialTicks, 1f);
-            this.animate(user.roundabout$getHeyYaAnimation2(), HeyYaAnimations.talk, partialTicks, 1f);
             //The number at the end is inversely proportional so 2 is half speed
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
         }
