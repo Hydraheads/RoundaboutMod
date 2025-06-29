@@ -3,6 +3,8 @@ package net.hydra.jojomod.entity.stand;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.OffsetIndex;
+import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.mixin.StandUserEntity;
 import net.hydra.jojomod.stand.powers.PowersRatt;
@@ -29,77 +31,61 @@ public class RattEntity extends StandEntity {
         return Component.translatable("skins.roundabout.ratt.anime");
     }
 
-
-    public float DormantTime = 0;
-    public static float MaxDormantTime = 30;
-
-    public Vec3 Placement;
-    public void setPlacement(Vec3 placement) {
-        Placement = placement;
-    }
-
-    public int MotionState = 0;
-    public double MovementDelta = 0.0;
-
-    public void setMotionState(int motionState) {MotionState = motionState;}
-    public int getMotionState() {return MotionState;}
-    /*
-    0 = hovering
-    1 = deployed
-    2 = placed
-    3 = piloted
-
-     */
+    public byte MotionState = PowersRatt.SHOULDER;
+    public Vec3 Placement = null;
 
     @Override
     public void tick() {
-        super.tick();
-        switch(MotionState) {
-            case 0 -> {
-                this.setOffsetType(OffsetIndex.FOLLOW);
+
+        switch (MotionState) {
+            case PowersRatt.SHOULDER -> {
+                // I'm going to either not summon RattEntity or just send him to the shadow realm (0,-1000,0)
+                UpdateState(OffsetIndex.FOLLOW);
             }
-            case 1 -> {
-                this.setOffsetType(OffsetIndex.LOOSE);
 
-                Vec3 loc = Placement;
-                if (loc == null) {loc = this.getStandOffsetVector(this.getUser());}
-
-                setPos(getPosition(0).lerp(loc,MovementDelta));
-                MovementDelta += (double) 1/60;
-
-                if (getPosition(0).distanceTo(loc) <= 0.2 ) {
-                    if (loc == Placement) {setMotionState(2);} else {setMotionState(0);}
-                    MovementDelta = 0;
-                }
-
-
-            }
-            case 2 -> {
-                MovementDelta = 0;
-                this.setOffsetType(OffsetIndex.LOOSE);
+            case PowersRatt.MOVING -> {
+                UpdateState(OffsetIndex.LOOSE);
+                Vec3 target = getStandOffsetVector(getUser());
                 if (Placement != null) {
-                    setPos(Placement);
-                }
-                this.setStandRotationY(this.getStandRotationY()+1.0F);
-                double DormantRange = PowersRatt.DormantRange;
-                double ActiveRange = PowersRatt.ActiveRange;
-                float dist = (float) this.getUser().getPosition(0).distanceTo(getPosition(0));
-
-                if ( dist > DormantRange || DormantTime >= MaxDormantTime) {
-                    MovementDelta = 0;
-                    setMotionState(1);
-                    setPlacement(null);
-                    DormantTime = 0;
-                } else if ( dist > ActiveRange) {
-                    DormantTime += 1;
+                    target = Placement;
                 }
 
+                UpdatePos(target);
+
+
+                if (getPosition(0).distanceTo(target) < 0.2) {
+                    UpdatePos(target);
+                    if (target == Placement) {
+                        MotionState = PowersRatt.PLACED;
+                    } else {
+                        MotionState = PowersRatt.SHOULDER;
+                    }
+                }
             }
 
-
+            case PowersRatt.PLACED -> {
+                UpdateState(OffsetIndex.LOOSE);
+                if (!getPosition(0).equals(Placement)) {
+                    UpdatePos(Placement);
+                }
+            }
         }
-
+        super.tick();
     }
+
+    public void UpdatePos(Vec3 v) {
+        if (this.getUser() != null) {
+            ((StandUser) this.getUser()).roundabout$getStandPowers().tryPosPowerPacket(PowerIndex.POWER_2,v);
+        }
+    }
+    public void UpdateState(byte s) {
+        if (this.getUser() != null) {
+            ((StandUser) this.getUser()).roundabout$getStandPowers().tryIntPowerPacket(PowerIndex.POWER_2,(int) s);
+        }
+    }
+
+
+
 
     @Override
     public void setupAnimationStates() {

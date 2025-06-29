@@ -123,8 +123,10 @@ public class RattShoulderLayer<T extends LivingEntity, A extends HumanoidModel<T
                             float r = isHurt ? 1.0F : 1.0F;
                             float g = isHurt ? 0.0F : 1.0F;
                             float b = isHurt ? 0.0F : 1.0F;
-                            ModStrayModels.RATT_SHOULDER.render(livent, partialTicks, poseStack, bufferSource, packedLight,
-                                    r, g, b, heyFull, skin);
+                            if (user.roundabout$getRattShoulderVanishTicks() != 0) {
+                                ModStrayModels.RATT_SHOULDER.render(livent, partialTicks, poseStack, bufferSource, packedLight,
+                                        r, g, b, heyFull, skin);
+                            }
                             poseStack.popPose();
 
                     }
