@@ -85,7 +85,7 @@ public interface StandUser {
     void roundabout$summonStand(Level theWorld, boolean forced, boolean sound);
     AnimationState roundabout$getHandLayerAnimation();
     void roundabout$setHandLayerAnimation(AnimationState layer);
-    AnimationState roundabout$getHeyYaAnimation();
+    AnimationState roundabout$getWornStandIdleAnimation();
     void roundabout$setHeyYaAnimation(AnimationState layer);
     AnimationState roundabout$getHeyYaAnimation2();
     int roundabout$getHeyYaVanishTicks();

@@ -5,12 +5,19 @@
  * Exported for Minecraft version 1.19 or later with Mojang mappings
  * @author hydra
  */
-public class hey_yaAnimation {
-	public static final AnimationDefinition talk = AnimationDefinition.Builder.withLength(0.25F).looping()
-		.addAnimation("upper_head", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
-			new Keyframe(0.0F, KeyframeAnimations.degreeVec(5.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-			new Keyframe(0.125F, KeyframeAnimations.degreeVec(-7.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-			new Keyframe(0.25F, KeyframeAnimations.degreeVec(5.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+public class ringo_mandomAnimation {
+	public static final AnimationDefinition back = AnimationDefinition.Builder.withLength(0.0F).looping()
+		.addAnimation("stand2", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
+			new Keyframe(0.0F, KeyframeAnimations.degreeVec(-92.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+		))
+		.addAnimation("stand2", new AnimationChannel(AnimationChannel.Targets.POSITION, 
+			new Keyframe(0.0F, KeyframeAnimations.posVec(1.0F, -11.0F, 7.0F), AnimationChannel.Interpolations.LINEAR)
+		))
+		.addAnimation("head2", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
+			new Keyframe(0.0F, KeyframeAnimations.degreeVec(20.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+		))
+		.addAnimation("tentacles", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
+			new Keyframe(0.0F, KeyframeAnimations.degreeVec(-17.4375F, -1.5018F, -4.7697F), AnimationChannel.Interpolations.LINEAR)
 		))
 		.build();
 }

@@ -1799,7 +1799,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Unique
     @Override
-    public AnimationState roundabout$getHeyYaAnimation(){
+    public AnimationState roundabout$getWornStandIdleAnimation(){
         return roundabout$heyYaAnimation;
     }
 

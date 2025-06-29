@@ -206,7 +206,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         } else if (item.is(ModItems.MATCH_BUNDLE)){
                 for (int i = 0; i < 4; i++) {
                     MatchEntity $$7 = new MatchEntity(thrower, thrower.level());
-                    $$7.shootFromRotationWithVariance(thrower, xRot, yRot, -3.0F, 2.5F*mult, getShotAccuracy);
+                    $$7.shootFromRotationWithVariance(thrower, xRot, yRot, -3.0F, 2.5F*mult, getBundleAccuracy);
                     $$7.setPos(pos);
                     thrower.level().addFreshEntity($$7);
                     if (i == 0) {

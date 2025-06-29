@@ -6,19 +6,15 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.HeyYaAnimations;
-import net.hydra.jojomod.client.models.layers.animations.LayerAnimations;
-import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -198,15 +194,15 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
             }
             StandUser user = ((StandUser) LE);
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
-            user.roundabout$getHeyYaAnimation().startIfStopped(context.tickCount);
+            user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
             if (user.roundabout$getStandAnimation() == PowersHeyYa.YAP) {
                 user.roundabout$getHeyYaAnimation2().startIfStopped(context.tickCount);
             } else {
                 user.roundabout$getHeyYaAnimation2().stop();
             }
             rotateHead(context,partialTicks,user);
-            this.animate(user.roundabout$getHeyYaAnimation(), HeyYaAnimations.hangin_on, partialTicks, 1f);
-            this.animate(user.roundabout$getHeyYaAnimation(), HeyYaAnimations.idle_normal, partialTicks, 1f);
+            this.animate(user.roundabout$getWornStandIdleAnimation(), HeyYaAnimations.hangin_on, partialTicks, 1f);
+            this.animate(user.roundabout$getWornStandIdleAnimation(), HeyYaAnimations.idle_normal, partialTicks, 1f);
             this.animate(user.roundabout$getHeyYaAnimation2(), HeyYaAnimations.talk, partialTicks, 1f);
             //The number at the end is inversely proportional so 2 is half speed
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
