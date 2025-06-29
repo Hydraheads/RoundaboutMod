@@ -11,6 +11,18 @@
       "roundabout:summon_magician"
     ]
   },
+  "summon_mandom": {
+    "subtitle": "sounds.roundabout.summon_mandom",
+    "sounds": [
+      "roundabout:summon_mandom"
+    ]
+  },
+  "mandom_rewind": {
+    "subtitle": "sounds.roundabout.mandom_rewind",
+    "sounds": [
+      "roundabout:mandom_rewind"
+    ]
+  },
   "firestorm": {
     "subtitle": "sounds.roundabout.firestorm",
     "sounds": [

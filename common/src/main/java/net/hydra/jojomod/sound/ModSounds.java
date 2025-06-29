@@ -122,6 +122,14 @@ public class ModSounds {
     public static final ResourceLocation STAR_SUMMON_SOUND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+STAR_SUMMON_SOUND);
     public static SoundEvent STAR_SUMMON_SOUND_EVENT = SoundEvent.createVariableRangeEvent(STAR_SUMMON_SOUND_ID);
 
+    public static final String SUMMON_MANDOM = "summon_mandom";
+    public static final ResourceLocation SUMMON_MANDOM_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_MANDOM);
+    public static SoundEvent SUMMON_MANDOM_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_MANDOM_ID);
+
+    public static final String MANDOM_REWIND = "mandom_rewind";
+    public static final ResourceLocation MANDOM_REWIND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+MANDOM_REWIND);
+    public static SoundEvent MANDOM_REWIND_EVENT = SoundEvent.createVariableRangeEvent(MANDOM_REWIND_ID);
+
     public static final String KNIFE_THROW_SOUND = "knife_throw";
     public static final ResourceLocation KNIFE_THROW_SOUND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KNIFE_THROW_SOUND);
     public static SoundEvent KNIFE_THROW_SOUND_EVENT = SoundEvent.createVariableRangeEvent(KNIFE_THROW_SOUND_ID);

@@ -181,7 +181,7 @@ public class PowersMandom extends NewDashPreset {
         switch (soundChoice)
         {
             case SoundIndex.SUMMON_SOUND -> {
-                return ModSounds.HEY_YA_SUMMON_EVENT;
+                return ModSounds.SUMMON_MANDOM_EVENT;
             }
         }
         return super.getSoundFromByte(soundChoice);
