@@ -5,7 +5,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
@@ -15,7 +14,7 @@ public class SavedSecondPlayer extends SavedSecondLiving{
     public float saturationLevel;
     public float exhaustionLevel;
     public SavedSecondPlayer(float headYRotation, Vec2 rotationVec, Vec3 position,
-                             Map<MobEffect, MobEffectInstance> activeEffects, float health,
+                             Collection<MobEffectInstance> activeEffects, float health,
                              int foodLevel, float saturationLevel, float exhaustionLevel){
         super(headYRotation,rotationVec,position,activeEffects,health);
         this.foodLevel = foodLevel;

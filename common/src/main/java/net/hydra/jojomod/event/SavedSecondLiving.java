@@ -1,7 +1,5 @@
 package net.hydra.jojomod.event;
 
-import net.hydra.jojomod.access.IAreaOfEffectCloud;
-import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.phys.Vec2;
@@ -9,6 +7,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public class SavedSecondLiving extends SavedSecond {
@@ -17,10 +16,10 @@ public class SavedSecondLiving extends SavedSecond {
     public float health;
 
     public SavedSecondLiving(float headYRotation, Vec2 rotationVec, Vec3 position,
-                             Map<MobEffect, MobEffectInstance> activeEffects, float health){
+                             Collection<MobEffectInstance> activeEffects, float health){
         super(headYRotation,rotationVec,position);
-        Collection<MobEffectInstance> effects = activeEffects.values();
 
+        List<MobEffectInstance> effects = new ArrayList<>(activeEffects.stream().toList());
         if (!effects.isEmpty()) {
             for (MobEffectInstance value : effects) {
                 if (!value.isInfiniteDuration()) {
