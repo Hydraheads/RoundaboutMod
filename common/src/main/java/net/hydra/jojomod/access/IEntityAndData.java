@@ -1,9 +1,12 @@
 package net.hydra.jojomod.access;
 
+import net.hydra.jojomod.event.SavedSecond;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayDeque;
 
 public interface IEntityAndData {
 
@@ -62,5 +65,8 @@ public interface IEntityAndData {
     void roundabout$setQVec(Vec3 q);
     void roundabout$setQVecParams(Vec3 ec);
     void roundabout$setQVec2Params(Vec3 ec);
+
+    void roundabout$setDeltaMovementRaw(Vec3 ec);
+    ArrayDeque<SavedSecond> roundabout$getSecondQue();
 
 }

@@ -99,6 +99,12 @@ public class MandomModel extends PsuedoHierarchicalModel {
             "textures/stand/mandom/nautilus.png");
     public static ResourceLocation alien = new ResourceLocation(Roundabout.MOD_ID,
             "textures/stand/mandom/alien.png");
+    public static ResourceLocation dark = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/mandom/dark.png");
+    public static ResourceLocation jellyfish = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/mandom/jellyfish.png");
+    public static ResourceLocation happy = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/mandom/happy.png");
     public ResourceLocation getTextureLocation(Entity context, byte skin){
         switch (skin)
         {
@@ -109,6 +115,9 @@ public class MandomModel extends PsuedoHierarchicalModel {
             case PowersMandom.ROSE -> {return rose;}
             case PowersMandom.NAUTILUS -> {return nautilus;}
             case PowersMandom.ALIEN -> {return alien;}
+            case PowersMandom.DARK -> {return dark;}
+            case PowersMandom.JELLYFISH -> {return jellyfish;}
+            case PowersMandom.HAPPY -> {return happy;}
             default -> {return base;}
         }
     }

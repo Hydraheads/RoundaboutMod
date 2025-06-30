@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.ICamera;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.gui.*;
+import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.zetalasis.client.shader.D4CShaderFX;
@@ -67,6 +68,11 @@ public class ClientUtil {
     public static int checkthis = 0;
     public static int checkthisdat = 0;
 
+    /**A hacky way to make any model see through*/
+    public static boolean isMakingRenderingSeeThrough;
+    public static int lastRenderedMobTickCount;
+
+
     /**
      * A generalized packet for sending ints to the client. Context is what to do with the data int
      */
@@ -102,6 +108,15 @@ public class ClientUtil {
     public static boolean canSeeStands(Player lp){
         return !(lp != null && (((StandUser)lp).roundabout$getStandDisc().isEmpty() &&
                 !lp.isSpectator()) && ConfigManager.getClientConfig().onlyStandUsersCanSeeStands);
+    }
+    public static boolean checkIfClientCanSeePastLocations() {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersMandom PM){
+                return true;
+            }
+        }
+        return false;
     }
     public static boolean checkIfClientHoldingBag() {
         LocalPlayer player = Minecraft.getInstance().player;

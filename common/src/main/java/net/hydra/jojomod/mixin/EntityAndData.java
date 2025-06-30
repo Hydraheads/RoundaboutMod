@@ -97,6 +97,10 @@ public abstract class EntityAndData implements IEntityAndData {
         }
     }
 
+    @Unique
+    public ArrayDeque<SavedSecond> roundabout$getSecondQue(){
+        return roundabout$secondQue;
+    }
 
 
     @Unique
@@ -561,6 +565,11 @@ public abstract class EntityAndData implements IEntityAndData {
     @Override
     public void roundabout$setQVec2Params(Vec3 ec){
         roundabout$qknockback2params = ec;
+    }
+    @Unique
+    @Override
+    public void roundabout$setDeltaMovementRaw(Vec3 ec){
+        this.deltaMovement = ec;
     }
 
 

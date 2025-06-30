@@ -5,6 +5,12 @@ import com.mojang.blaze3d.vertex.*;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.SavedSecond;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.culling.Frustum;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.FastColor;
+import net.minecraft.world.entity.Pose;
 import net.zetalasis.client.shader.RPostShaderRegistry;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.client.models.layers.PreRenderEntity;
@@ -27,6 +33,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
+import org.joml.Vector3d;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -37,6 +44,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
+import java.util.ArrayDeque;
 
 @Mixin(LevelRenderer.class)
 public abstract class ZLevelRenderer {
@@ -62,19 +70,38 @@ public abstract class ZLevelRenderer {
     @Nullable
     public abstract RenderTarget entityTarget();
 
+    @Shadow protected abstract void renderEntity(Entity $$0, double $$1, double $$2, double $$3, float $$4, PoseStack $$5, MultiBufferSource $$6);
+
+    @Shadow private boolean captureFrustum;
+    @Shadow @Nullable private Frustum capturedFrustum;
+    @Shadow @Final private Vector3d frustumPos;
+    @Shadow private Frustum cullingFrustum;
+
+    @Shadow protected abstract boolean shouldShowEntityOutlines();
+
+    @Shadow public abstract boolean isChunkCompiled(BlockPos $$0);
+
+    @Unique
+    public boolean roundabout$recurse = false;
     @Inject(method = "renderEntity(Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V",
             at = @At(value = "HEAD"),
             cancellable = true)
-    private void roundabout$renderEntity(Entity $$0, double $$1, double $$2, double $$3, float $$4, PoseStack $$5, MultiBufferSource $$6, CallbackInfo ci) {
-        if ($$0 != null){
-            ((IEntityAndData)$$0).roundabout$setExclusiveLayers(true);
+    private void roundabout$renderEntity(Entity entity, double cameraX, double cameraY, double cameraZ, float partialTick, PoseStack stack, MultiBufferSource buffer, CallbackInfo ci) {
+        if (entity != null){
+            ((IEntityAndData)entity).roundabout$setExclusiveLayers(true);
         }
 
-        if ($$0 instanceof PreRenderEntity pre) {
-            if (pre.preRender($$0, $$1, $$2, $$3, $$4, $$5, $$6)) {
-                ci.cancel();
-                ((IEntityAndData)$$0).roundabout$setExclusiveLayers(false);
+        if (!roundabout$recurse) {
+
+            if (entity instanceof PreRenderEntity pre) {
+                if (pre.preRender(entity, cameraX, cameraY, cameraZ, partialTick, stack, buffer)) {
+                    ci.cancel();
+                    ((IEntityAndData) entity).roundabout$setExclusiveLayers(false);
+                }
             }
+
+
+
         }
 
     }
@@ -119,6 +146,110 @@ public abstract class ZLevelRenderer {
                 }
             }
         }
+    }
+
+
+
+    @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",
+            at = @At(value = "INVOKE",target="Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endLastBatch()V",ordinal=0,shift = At.Shift.BEFORE))
+    private void roundabout$renderLevelGhostEntities(PoseStack $$0, float $$1, long $$2, boolean $$3,
+                                            Camera $$4, GameRenderer $$5, LightTexture $$6,
+                                            Matrix4f $$7, CallbackInfo ci) {
+
+
+        /**Render phantom mandom images
+        if (ClientUtil.checkIfClientCanSeePastLocations()) {
+
+            Vec3 $$9 = $$4.getPosition();
+            double $$10 = $$9.x();
+            double $$11 = $$9.y();
+            double $$12 = $$9.z();
+
+
+            boolean $$14 = this.capturedFrustum != null;
+            Frustum $$15;
+            if ($$14) {
+                $$15 = this.capturedFrustum;
+                $$15.prepare(this.frustumPos.x, this.frustumPos.y, this.frustumPos.z);
+            } else {
+                $$15 = this.cullingFrustum;
+            }
+            boolean $$19 = false;
+            MultiBufferSource.BufferSource $$20 = this.renderBuffers.bufferSource();
+            for (Entity entity : this.level.entitiesForRendering()) {
+                if (this.entityRenderDispatcher.shouldRender(entity, $$15, $$10, $$11, $$12) || entity.hasIndirectPassenger(this.minecraft.player)) {
+                    BlockPos $$22 = entity.blockPosition();
+                    if ((this.level.isOutsideBuildHeight($$22.getY()) || this.isChunkCompiled($$22))) {
+                        if (entity.tickCount == 0) {
+                            entity.xOld = entity.getX();
+                            entity.yOld = entity.getY();
+                            entity.zOld = entity.getZ();
+                        }
+
+                        MultiBufferSource $$24;
+                            $$24 = $$20;
+
+                        if (entity != null) {
+                            ArrayDeque<SavedSecond> secondQue = ((IEntityAndData) entity).roundabout$getSecondQue();
+                            if (secondQue != null && !secondQue.isEmpty()) {
+                                SavedSecond sec = secondQue.getLast();
+
+                                float xrot = entity.getXRot();
+                                float yrot = entity.getYRot();
+                                float headrot = entity.getYHeadRot();
+                                double x = entity.getX();
+                                double y = entity.getY();
+                                double z = entity.getZ();
+                                double xOld = entity.xOld;
+                                double yOld = entity.yOld;
+                                double zOld = entity.zOld;
+                                Pose pose = entity.getPose();
+                                Vec3 deltamov = entity.getDeltaMovement();
+                                float walkdistance = entity.walkDist;
+
+                                entity.setPosRaw(sec.position.x,sec.position.y,sec.position.z);
+                                entity.xOld = sec.position.x;
+                                entity.yOld = sec.position.y;
+                                entity.zOld = sec.position.z;
+                                entity.setXRot(sec.rotationVec.x);
+                                entity.setYRot(sec.rotationVec.y);
+                                entity.setYHeadRot(sec.headYRotation);
+                                entity.setPose(Pose.STANDING);
+                                ((IEntityAndData)entity).roundabout$setDeltaMovementRaw(Vec3.ZERO);
+                                entity.walkDist = 0;
+
+                                float bodyRot = 0;
+                                if (entity instanceof LivingEntity LE){
+                                    bodyRot = LE.yBodyRot;
+                                    entity.setYBodyRot(sec.rotationVec.y);
+                                }
+
+                                ClientUtil.isMakingRenderingSeeThrough = true;
+                                ClientUtil.lastRenderedMobTickCount = entity.tickCount;
+                                renderEntity(entity, $$10,$$11,$$12, 1, $$0, $$24);
+                                ClientUtil.isMakingRenderingSeeThrough = false;
+
+
+                                entity.setPose(pose);
+                                entity.setPosRaw(x, y, z);
+                                entity.xOld = xOld;
+                                entity.yOld = yOld;
+                                entity.zOld = zOld;
+                                entity.setYRot(yrot);
+                                entity.setXRot(xrot);
+                                entity.setYHeadRot(headrot);
+                                ((IEntityAndData)entity).roundabout$setDeltaMovementRaw(deltamov);
+                                entity.walkDist = walkdistance;
+                                if (entity instanceof LivingEntity LE){
+                                    entity.setYBodyRot(bodyRot);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+         */
     }
 
     @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",

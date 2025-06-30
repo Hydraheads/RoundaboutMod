@@ -144,7 +144,10 @@ public class PowersMandom extends NewDashPreset {
             GLOW_SQUID = 5,
             ROSE = 6,
             NAUTILUS = 7,
-            ALIEN = 8;
+            ALIEN = 8,
+            DARK = 9,
+            JELLYFISH = 10,
+            HAPPY = 11;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
@@ -152,10 +155,13 @@ public class PowersMandom extends NewDashPreset {
                 PURPLE,
                 SKY,
                 ALIEN,
+                DARK,
                 SQUID,
                 GLOW_SQUID,
                 ROSE,
-                NAUTILUS
+                NAUTILUS,
+                JELLYFISH,
+                HAPPY
         );
     }
     @Override public Component getSkinName(byte skinId) {
@@ -165,9 +171,12 @@ public class PowersMandom extends NewDashPreset {
             case PowersMandom.SKY -> Component.translatable("skins.roundabout.mandom.sky");
             case PowersMandom.SQUID -> Component.translatable("skins.roundabout.mandom.squid");
             case PowersMandom.ALIEN -> Component.translatable("skins.roundabout.mandom.alien");
+            case PowersMandom.DARK -> Component.translatable("skins.roundabout.mandom.dark");
             case PowersMandom.GLOW_SQUID -> Component.translatable("skins.roundabout.mandom.glow_squid");
             case PowersMandom.ROSE -> Component.translatable("skins.roundabout.mandom.rose");
             case PowersMandom.NAUTILUS -> Component.translatable("skins.roundabout.mandom.nautilus");
+            case PowersMandom.JELLYFISH -> Component.translatable("skins.roundabout.mandom.jellyfish");
+            case PowersMandom.HAPPY -> Component.translatable("skins.roundabout.mandom.happy");
             default -> Component.translatable("skins.roundabout.mandom.manga");
         };
     }
