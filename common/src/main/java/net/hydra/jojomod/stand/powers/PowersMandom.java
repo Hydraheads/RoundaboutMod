@@ -1,31 +1,23 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.access.IMob;
-import net.hydra.jojomod.block.MiningAlertBlock;
-import net.hydra.jojomod.block.ModBlocks;
-import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.SavedSecond;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -125,8 +117,34 @@ public class PowersMandom extends NewDashPreset {
 
     @Override
     public void tickPower() {
-        /**Yap animation based on using power*/
         super.tickPower();
+
+        /**Grabs nearby entities pretty regularly to see if they can be rendered*/
+        if (!this.self.level().isClientSide()) {
+            if (this.self.tickCount % 3 == 0) {
+                List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.self.level(), this.self.blockPosition(), 50);
+                if (!mobsInRange.isEmpty()) {
+                    for (Entity ent : mobsInRange) {
+                        if (!ent.isRemoved() && ent.isAlive()) {
+                            IEntityAndData iData = (IEntityAndData) ent;
+                            SavedSecond lastSecond = iData.roundabout$getLastSavedSecond();
+                            if (lastSecond != null){
+                                if (!lastSecond.hasHadParticle){
+                                    lastSecond.hasHadParticle = true;
+                                    ((ServerLevel) this.self.level()).sendParticles(ModParticles.CLOCK,
+                                            lastSecond.position.x, lastSecond.position.y+ent.getEyeHeight(), lastSecond.position.z,
+                                            0, 0, 0, 0, 0.015);
+                                }
+                            }
+                        }
+                    }
+                    /**
+                    ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_TRAIL,
+                            this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(),
+                            0, 0, 0, 0, 0.015);**/
+                }
+            }
+        }
     }
 
 

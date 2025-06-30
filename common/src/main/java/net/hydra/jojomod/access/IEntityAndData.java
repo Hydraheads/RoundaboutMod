@@ -69,4 +69,6 @@ public interface IEntityAndData {
     void roundabout$setDeltaMovementRaw(Vec3 ec);
     ArrayDeque<SavedSecond> roundabout$getSecondQue();
 
+    SavedSecond roundabout$getLastSavedSecond();
+
 }

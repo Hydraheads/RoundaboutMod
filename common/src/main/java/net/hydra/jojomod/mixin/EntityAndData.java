@@ -88,18 +88,30 @@ public abstract class EntityAndData implements IEntityAndData {
         roundabout$secondQue.addFirst(newSecond);
         if (roundabout$secondQue.size() > 6) {
             roundabout$secondQue.removeLast();
+        } else {
+            roundabout$secondQue.getLast().hasHadParticle = false;
         }
     }
     @Unique
     public void roundabout$addSecondToQueue() {
-        if (roundabout$secondQue.isEmpty() || this.tickCount % 20 == 0) {
-            roundabout$addSecondToQueue(SavedSecond.saveEntitySecond((Entity)(Object)this));
+        if (!level.isClientSide()) {
+            if (roundabout$secondQue.isEmpty() || this.tickCount % 20 == 0) {
+                roundabout$addSecondToQueue(SavedSecond.saveEntitySecond((Entity) (Object) this));
+            }
         }
     }
 
     @Unique
     public ArrayDeque<SavedSecond> roundabout$getSecondQue(){
         return roundabout$secondQue;
+    }
+
+    @Unique
+    public SavedSecond roundabout$getLastSavedSecond(){
+        if (!roundabout$secondQue.isEmpty()){
+            return roundabout$secondQue.getLast();
+        }
+        return null;
     }
 
 

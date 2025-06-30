@@ -92,6 +92,22 @@ public class ForgeParticles {
             "warden_clock",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> CLOCK = PARTICLES.register(
+            "clock",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> RED_CLOCK = PARTICLES.register(
+            "red_clock",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> BLUE_CLOCK = PARTICLES.register(
+            "blue_clock",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> GREEN_CLOCK = PARTICLES.register(
+            "green_clock",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> CINDERELLA_GLOW = PARTICLES.register(
             "cinderella_glow",
             () -> new SimpleParticleType(true)

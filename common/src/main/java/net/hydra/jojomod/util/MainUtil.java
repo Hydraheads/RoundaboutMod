@@ -13,7 +13,6 @@ import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
-import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
@@ -48,7 +47,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.animal.*;
@@ -58,7 +56,6 @@ import net.minecraft.world.entity.animal.sniffer.Sniffer;
 import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
-import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
@@ -83,7 +80,6 @@ import net.minecraft.world.phys.*;
 import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -101,8 +97,19 @@ public class MainUtil {
         return start + (delta * (end - start))*multiplier;
     }
 
+    /**The most basic hitbox grabber in the world*/
 
+    public static List<Entity> getEntitiesInRange(Level level, BlockPos center, double range) {
+        return getEntitiesInRange(level,center,range,null);
+    }
+    public static List<Entity> getEntitiesInRange(Level level, BlockPos center, double range, @Nullable Entity exception) {
+        AABB area = new AABB(
+                center.getX() - range, center.getY() - range, center.getZ() - range,
+                center.getX() + range, center.getY() + range, center.getZ() + range
+        );
 
+        return level.getEntities(exception, area);
+    }
     public static boolean isCreativeOrInvincible(Entity ent){
         if (ent != null && (ent.isInvulnerable() || (ent instanceof Player PL && PL.isCreative()))){
             return true;

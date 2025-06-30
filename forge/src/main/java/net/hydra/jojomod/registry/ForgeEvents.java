@@ -321,6 +321,10 @@ public class ForgeEvents {
         ModParticles.PURPLE_STAR = ForgeParticles.PURPLE_STAR.get();
         ModParticles.BUBBLE_TRAIL = ForgeParticles.BUBBLE_TRAIL.get();
         ModParticles.WARDEN_CLOCK = ForgeParticles.WARDEN_CLOCK.get();
+        ModParticles.CLOCK = ForgeParticles.CLOCK.get();
+        ModParticles.RED_CLOCK = ForgeParticles.RED_CLOCK.get();
+        ModParticles.GREEN_CLOCK = ForgeParticles.GREEN_CLOCK.get();
+        ModParticles.BLUE_CLOCK = ForgeParticles.BLUE_CLOCK.get();
         ModParticles.CINDERELLA_GLOW = ForgeParticles.CINDERELLA_GLOW.get();
         ModParticles.PINK_SMOKE = ForgeParticles.PINK_SMOKE.get();
         ModParticles.BUBBLE_POP = ForgeParticles.BUBBLE_POP.get();

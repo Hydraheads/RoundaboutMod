@@ -188,6 +188,10 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.PURPLE_STAR.get(), StarParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.BUBBLE_TRAIL.get(), BubbleTrailParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.WARDEN_CLOCK.get(), WardenClockParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.CLOCK.get(), MandomClockParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.RED_CLOCK.get(), MandomClockParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.BLUE_CLOCK.get(), MandomClockParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.GREEN_CLOCK.get(), MandomClockParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.CINDERELLA_GLOW.get(), CinderellaGlowParticle.CinderellaGlowProvider::new);
         event.registerSpriteSet(ForgeParticles.PINK_SMOKE.get(), CinderellaSmokeParticle.CosyProvider::new);
         event.registerSpriteSet(ForgeParticles.BUBBLE_POP.get(), SoftBubblePopParticle.Provider::new);
