@@ -5,9 +5,11 @@ import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
+import net.hydra.jojomod.event.SavedSecond;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -41,6 +43,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
+
 @Mixin(Entity.class)
 public abstract class EntityAndData implements IEntityAndData {
 
@@ -72,6 +78,26 @@ public abstract class EntityAndData implements IEntityAndData {
     public int roundabout$noGravityTicks = 0;
     @Unique
     public boolean roundabout$renderingExclusiveLayers = false;
+
+
+    /**Mandom Time Queue, not sure if it will have any other use*/
+    @Unique
+    public ArrayDeque<SavedSecond> roundabout$secondQue = new ArrayDeque<>();
+    @Unique
+    public void roundabout$addSecondToQueue(SavedSecond newSecond) {
+        roundabout$secondQue.addFirst(newSecond);
+        if (roundabout$secondQue.size() > 6) {
+            roundabout$secondQue.removeLast();
+        }
+    }
+    @Unique
+    public void roundabout$addSecondToQueue() {
+        if (roundabout$secondQue.isEmpty() || this.tickCount % 20 == 0) {
+            roundabout$addSecondToQueue(SavedSecond.saveEntitySecond((Entity)(Object)this));
+        }
+    }
+
+
 
     @Unique
     public void roundabout$setExclusiveLayers(boolean exclusive){
@@ -444,7 +470,13 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Shadow public abstract BlockPos blockPosition();
 
-    @Inject(method = "tick", at = @At(value = "TAIL"), cancellable = true)
+    @Shadow public int tickCount;
+
+    @Inject(method = "tick", at = @At(value = "HEAD"))
+    protected void roundabout$tickH(CallbackInfo ci) {
+        roundabout$addSecondToQueue();
+    }
+    @Inject(method = "tick", at = @At(value = "TAIL"))
     protected void roundabout$tick(CallbackInfo ci) {
         roundabout$tickQVec();
     }

@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event;
 
+import com.google.common.collect.Maps;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -14,7 +15,7 @@ import java.util.Map;
 
 public class SavedSecondLiving extends SavedSecond {
 
-    public Collection<MobEffectInstance> activeEffects;
+    public Collection<MobEffectInstance> activeEffects =new ArrayList<>();
     public float health;
 
     public SavedSecondLiving(float headYRotation, Vec2 rotationVec, Vec3 position,
