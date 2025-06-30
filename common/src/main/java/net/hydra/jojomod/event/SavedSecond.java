@@ -34,4 +34,11 @@ public class SavedSecond {
         }
         return null;
     }
+
+    public void loadTime(Entity ent){
+        ent.setYHeadRot(this.headYRotation);
+        ent.setXRot(this.rotationVec.x);
+        ent.setYRot(this.rotationVec.y);
+        ent.setPos(this.position);
+    }
 }

@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.access.IFoodData;
 import net.hydra.jojomod.event.ModEffects;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.player.Player;
@@ -13,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(FoodData.class)
-public class ZFoodData {
+public class ZFoodData implements IFoodData {
     /**Bleed limits natural regen*/
     @Shadow
     private int foodLevel;
@@ -26,6 +27,21 @@ public class ZFoodData {
     @Shadow
     private int lastFoodLevel;
 
+    @Unique
+    @Override
+    public void roundabout$setFoodLevel(int food){
+        foodLevel = food;
+    }
+    @Unique
+    @Override
+    public void roundabout$setExhaustionLevel(float exhaustion){
+        exhaustionLevel = exhaustion;
+    }
+    @Unique
+    @Override
+    public void roundabout$setSaturationLevel(float saturation){
+        saturationLevel = saturation;
+    }
     @Shadow
     public void addExhaustion(float $$0) {
     }
