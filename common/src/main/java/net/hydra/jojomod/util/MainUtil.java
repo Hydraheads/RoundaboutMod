@@ -1230,6 +1230,17 @@ public class MainUtil {
         return distance;
     }
 
+    /**Creative players should only be rewound by themselves*/
+    public static boolean canRewindInTime(Entity ent, Entity rewinder){
+        if (!ent.isRemoved() && ent.isAlive()) {
+            if ((ent instanceof Player PE && PE.isCreative()) && rewinder != null && !rewinder.is(ent)){
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
     public static boolean canHaveSightTaken(LivingEntity LE){
         if (LE instanceof Sniffer || LE instanceof Bat || LE instanceof Dolphin){
             return false;

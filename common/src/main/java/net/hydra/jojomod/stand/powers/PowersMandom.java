@@ -146,7 +146,7 @@ public class PowersMandom extends NewDashPreset {
                 List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.self.level(), this.self.blockPosition(), 50);
                 if (!mobsInRange.isEmpty()) {
                     for (Entity ent : mobsInRange) {
-                        if (!ent.isRemoved() && ent.isAlive()) {
+                        if (MainUtil.canRewindInTime(ent,this.self)) {
                             IEntityAndData iData = (IEntityAndData) ent;
                             SavedSecond lastSecond = iData.roundabout$getLastSavedSecond();
                             if (lastSecond != null){
