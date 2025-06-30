@@ -18,9 +18,9 @@ public class SavedSecondLiving extends SavedSecond {
     public Collection<MobEffectInstance> activeEffects =new ArrayList<>();
     public float health;
 
-    public SavedSecondLiving(float headYRotation, Vec2 rotationVec, Vec3 position,
+    public SavedSecondLiving(float headYRotation, Vec2 rotationVec, Vec3 position, Vec3 deltaMovement,
                              Collection<MobEffectInstance> activeEffects, float health){
-        super(headYRotation,rotationVec,position);
+        super(headYRotation,rotationVec,position,deltaMovement);
 
         List<MobEffectInstance> effects = new ArrayList<>(activeEffects.stream().toList());
         if (!effects.isEmpty()) {

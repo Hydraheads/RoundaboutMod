@@ -14,25 +14,44 @@ public class SavedSecond {
     public float headYRotation;
     public Vec2 rotationVec;
     public Vec3 position;
+    public Vec3 deltaMovement;
     public boolean hasHadParticle = false;
     public Entity isTickingParticles = null;
 
 
-    public SavedSecond(float headYRotation,Vec2 rotationVec,Vec3 position){
+    public SavedSecond(float headYRotation,Vec2 rotationVec,Vec3 position, Vec3 deltaMovement){
         this.headYRotation = headYRotation;
         this.rotationVec = new Vec2(rotationVec.x,rotationVec.y);
         this.position = new Vec3(position.x,position.y,position.z);
+        this.deltaMovement = new Vec3(deltaMovement.x,deltaMovement.y,deltaMovement.z);
     }
 
     public static SavedSecond saveEntitySecond(Entity ent) {
         if (ent instanceof Player PL) {
-            return new SavedSecondPlayer(PL.getYHeadRot(), PL.getRotationVector(), PL.getPosition(1), PL.getActiveEffects(),
-                    PL.getHealth(), PL.getFoodData().getFoodLevel(), PL.getFoodData().getSaturationLevel(), PL.getFoodData().getExhaustionLevel());
+            return new SavedSecondPlayer(
+                    PL.getYHeadRot(),
+                    PL.getRotationVector(),
+                    PL.getPosition(1),
+                    PL.getDeltaMovement(),
+                    PL.getActiveEffects(),
+                    PL.getHealth(),
+                    PL.getFoodData().getFoodLevel(),
+                    PL.getFoodData().getSaturationLevel(),
+                    PL.getFoodData().getExhaustionLevel());
         } if (ent instanceof LivingEntity LE) {
-            return new SavedSecondLiving(LE.getYHeadRot(), LE.getRotationVector(), LE.getPosition(1), LE.getActiveEffects(),
+            return new SavedSecondLiving(
+                    LE.getYHeadRot(),
+                    LE.getRotationVector(),
+                    LE.getPosition(1),
+                    LE.getDeltaMovement(),
+                    LE.getActiveEffects(),
                     LE.getHealth());
         } if (ent != null){
-            return new SavedSecond(ent.getYHeadRot(), ent.getRotationVector(), ent.getPosition(1));
+            return new SavedSecond(
+                    ent.getYHeadRot(),
+                    ent.getRotationVector(),
+                    ent.getPosition(1),
+                    ent.getDeltaMovement());
         }
         return null;
     }

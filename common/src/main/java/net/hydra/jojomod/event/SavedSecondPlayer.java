@@ -15,10 +15,10 @@ public class SavedSecondPlayer extends SavedSecondLiving {
     public float saturationLevel;
     public float exhaustionLevel;
 
-    public SavedSecondPlayer(float headYRotation, Vec2 rotationVec, Vec3 position,
+    public SavedSecondPlayer(float headYRotation, Vec2 rotationVec, Vec3 position, Vec3 deltaMovement,
                              Collection<MobEffectInstance> activeEffects, float health,
                              int foodLevel, float saturationLevel, float exhaustionLevel) {
-        super(headYRotation, rotationVec, position, activeEffects, health);
+        super(headYRotation, rotationVec, position, deltaMovement, activeEffects, health);
         this.foodLevel = foodLevel;
         this.saturationLevel = saturationLevel;
         this.exhaustionLevel = exhaustionLevel;
