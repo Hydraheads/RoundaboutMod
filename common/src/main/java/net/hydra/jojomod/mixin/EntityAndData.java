@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.FogBlock;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
@@ -95,6 +96,11 @@ public abstract class EntityAndData implements IEntityAndData {
     @Unique
     public void roundabout$addSecondToQueue() {
         if (!level.isClientSide()) {
+            /**Setting for performance (just in case)*/
+            if (ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindOnlySavesAndLoadsOnPlayers &&
+                    !(((Entity)(Object)this) instanceof Player))
+                return;
+
             if (roundabout$secondQue.isEmpty() || this.tickCount % 20 == 0) {
                 roundabout$addSecondToQueue(SavedSecond.saveEntitySecond((Entity) (Object) this));
             }

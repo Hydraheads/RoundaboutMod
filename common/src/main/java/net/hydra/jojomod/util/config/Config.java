@@ -180,6 +180,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public HeyYaSettings heyYaSettings;
     @NestedOption(group = "modded")
+    public MandomSettings mandomSettings;
+    @NestedOption(group = "modded")
     public TimeStopSettings timeStopSettings;
     @NestedOption(group="modded")
     public Experiments experiments;
@@ -532,6 +534,10 @@ public class Config implements Cloneable {
         public Integer oreDetectionCooldown;
         @IntOption(group = "inherit", value = 42, min = 0, max = 72000)
         public Integer yapCooldown;
+    }
+    public static class MandomSettings {
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean timeRewindOnlySavesAndLoadsOnPlayers;
     }
     public static class TheWorldSettings {
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
