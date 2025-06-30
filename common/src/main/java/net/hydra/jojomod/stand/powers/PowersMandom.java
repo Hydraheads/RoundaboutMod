@@ -166,7 +166,7 @@ public class PowersMandom extends NewDashPreset {
                                                 forward.x,
                                                 forward.y,
                                                 forward.z,
-                                                0.15);
+                                                0.25);
                                     }
                                 }
                             }

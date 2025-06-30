@@ -30,6 +30,14 @@ public class MandomClockParticle extends SimpleAnimatedParticle {
         this.setBoundingBox(this.getBoundingBox().move(d, e, f));
         this.setLocationFromBoundingbox();
     }
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (this.age > this.lifetime / 2) {
+            this.setAlpha(0.85F - (((float)this.age - (float)(this.lifetime / 2)) / (float)this.lifetime)*0.85F);
+        }
+    }
 
     @Override
     public void render(VertexConsumer $$0, Camera $$1, float $$2) {

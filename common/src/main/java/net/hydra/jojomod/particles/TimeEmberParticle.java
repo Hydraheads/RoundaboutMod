@@ -16,7 +16,7 @@ public class TimeEmberParticle extends SimpleAnimatedParticle {
         this.xd = this.xd * 0.01F + g;
         this.yd = this.yd * 0.01F + h;
         this.zd = this.zd * 0.01F + i;
-        this.lifetime = 20;
+        this.lifetime = 8;
         this.setFadeColor(15916745);
         this.setAlpha(0.7f);
         this.setSpriteFromAge(spriteSet);

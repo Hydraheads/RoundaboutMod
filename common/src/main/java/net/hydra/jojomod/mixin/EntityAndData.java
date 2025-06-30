@@ -101,6 +101,7 @@ public abstract class EntityAndData implements IEntityAndData {
                     !(((Entity)(Object)this) instanceof Player))
                 return;
 
+            /**Every 20 ticks save a second on the entity for mandom rewinding*/
             if (roundabout$secondQue.isEmpty() || this.tickCount % 20 == 0) {
                 roundabout$addSecondToQueue(SavedSecond.saveEntitySecond((Entity) (Object) this));
             }
