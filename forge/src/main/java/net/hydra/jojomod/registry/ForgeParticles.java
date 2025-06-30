@@ -108,6 +108,14 @@ public class ForgeParticles {
             "green_clock",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> ORANGE_CLOCK = PARTICLES.register(
+            "orange_clock",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> TIME_EMBER = PARTICLES.register(
+            "time_ember",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> CINDERELLA_GLOW = PARTICLES.register(
             "cinderella_glow",
             () -> new SimpleParticleType(true)

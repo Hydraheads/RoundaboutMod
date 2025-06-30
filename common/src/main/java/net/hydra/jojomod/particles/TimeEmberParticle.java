@@ -7,10 +7,10 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
 
-public class MandomClockParticle extends SimpleAnimatedParticle {
-    MandomClockParticle(ClientLevel clientLevel, double d, double e, double f, double g, double h, double i, SpriteSet spriteSet) {
+public class TimeEmberParticle extends SimpleAnimatedParticle {
+    TimeEmberParticle(ClientLevel clientLevel, double d, double e, double f, double g, double h, double i, SpriteSet spriteSet) {
         super(clientLevel, d, e, f, spriteSet, 1f);
-        this.quadSize = 0.3f;
+        this.quadSize = 0.13f;
         this.friction = 0.96F;
         this.gravity = 0F;
         this.xd = this.xd * 0.01F + g;
@@ -46,7 +46,7 @@ public class MandomClockParticle extends SimpleAnimatedParticle {
         }
 
         public Particle createParticle(SimpleParticleType $$0, ClientLevel $$1, double $$2, double $$3, double $$4, double $$5, double $$6, double $$7) {
-            return new MandomClockParticle($$1, $$2, $$3, $$4, $$5, $$6, $$7, this.sprites);
+            return new TimeEmberParticle($$1, $$2, $$3, $$4, $$5, $$6, $$7, this.sprites);
         }
     }
 }

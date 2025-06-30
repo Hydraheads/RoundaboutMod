@@ -24,6 +24,8 @@ public class ModParticles {
     public static SimpleParticleType BLUE_CLOCK;
     public static SimpleParticleType RED_CLOCK;
     public static SimpleParticleType GREEN_CLOCK;
+    public static SimpleParticleType ORANGE_CLOCK;
+    public static SimpleParticleType TIME_EMBER;
     public static SimpleParticleType POINTER;
     public static SimpleParticleType POINTER_SOFT;
     public static SimpleParticleType ORANGE_FLAME;

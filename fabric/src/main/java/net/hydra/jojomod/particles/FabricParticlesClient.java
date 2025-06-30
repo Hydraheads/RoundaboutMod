@@ -31,6 +31,8 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.BLUE_CLOCK, MandomClockParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.GREEN_CLOCK, MandomClockParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.RED_CLOCK, MandomClockParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.ORANGE_CLOCK, MandomClockParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.TIME_EMBER, TimeEmberParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.CINDERELLA_GLOW, CinderellaGlowParticle.CinderellaGlowProvider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.D4C_LINES, D4CLinesParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PINK_SMOKE, CinderellaSmokeParticle.CosyProvider::new);

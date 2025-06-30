@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.SavedSecond;
@@ -23,6 +24,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
@@ -129,6 +131,8 @@ public class PowersMandom extends NewDashPreset {
             return ModParticles.CLOCK;
         if (ent instanceof Player)
             return ModParticles.BLUE_CLOCK;
+        if (ent instanceof Projectile)
+            return ModParticles.ORANGE_CLOCK;
         return ModParticles.GREEN_CLOCK;
     }
 
@@ -153,15 +157,17 @@ public class PowersMandom extends NewDashPreset {
                                             lastSecond.position.x, lastSecond.position.y+ent.getEyeHeight()*0.8, lastSecond.position.z,
                                             0, 0, 0, 0, 0.015);
                                 }
-                                if (lastSecond.isTickingParticles != null && lastSecond.isTickingParticles.is(this.self)){
-                                    Vec3 forward = Vec3.directionFromRotation(lastSecond.rotationVec);
-                                    ((ServerLevel) this.self.level()).sendParticles(getParticle(ent),
-                                            lastSecond.position.x, lastSecond.position.y+ent.getEyeHeight()*0.8, lastSecond.position.z,
-                                            0,
-                                            forward.x,
-                                            forward.y,
-                                            forward.z,
-                                            0.015);
+                                if (!(ent instanceof Projectile)) {
+                                    if (lastSecond.isTickingParticles != null && lastSecond.isTickingParticles.is(this.self)) {
+                                        Vec3 forward = Vec3.directionFromRotation(lastSecond.rotationVec);
+                                        ((ServerLevel) this.self.level()).sendParticles(ModParticles.TIME_EMBER,
+                                                lastSecond.position.x, lastSecond.position.y + ent.getEyeHeight() * 0.8, lastSecond.position.z,
+                                                0,
+                                                forward.x,
+                                                forward.y,
+                                                forward.z,
+                                                0.15);
+                                    }
                                 }
                             }
                         }
