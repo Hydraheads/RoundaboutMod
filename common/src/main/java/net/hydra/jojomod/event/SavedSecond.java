@@ -15,6 +15,7 @@ public class SavedSecond {
     public Vec2 rotationVec;
     public Vec3 position;
     public boolean hasHadParticle = false;
+    public Entity isTickingParticles = null;
 
 
     public SavedSecond(float headYRotation,Vec2 rotationVec,Vec3 position){

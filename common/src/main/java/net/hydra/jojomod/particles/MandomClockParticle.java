@@ -10,12 +10,12 @@ import net.minecraft.core.particles.SimpleParticleType;
 public class MandomClockParticle extends SimpleAnimatedParticle {
     MandomClockParticle(ClientLevel clientLevel, double d, double e, double f, double g, double h, double i, SpriteSet spriteSet) {
         super(clientLevel, d, e, f, spriteSet, 1f);
-        this.quadSize *= 2.8f;
+        this.quadSize = 0.4f;
         this.friction = 0.96F;
+        this.gravity = 0F;
         this.xd = this.xd * 0.01F + g;
-        this.yd = Math.abs(this.yd * 0.01F + h);
+        this.yd = this.yd * 0.01F + h;
         this.zd = this.zd * 0.01F + i;
-        this.gravity = -0.01F;
         this.lifetime = 20;
         this.setFadeColor(15916745);
         this.setAlpha(0.7f);

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -13,11 +14,17 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -115,6 +122,16 @@ public class PowersMandom extends NewDashPreset {
     /** if = -1, not melt dodging */
     public int meltDodgeTicks = -1;
 
+    public SimpleParticleType getParticle(Entity ent){
+        if (ent instanceof Monster || (ent instanceof Mob mb && mb.isAggressive()))
+            return ModParticles.RED_CLOCK;
+        if (ent !=null && ent.is(this.self))
+            return ModParticles.CLOCK;
+        if (ent instanceof Player)
+            return ModParticles.BLUE_CLOCK;
+        return ModParticles.GREEN_CLOCK;
+    }
+
     @Override
     public void tickPower() {
         super.tickPower();
@@ -131,9 +148,20 @@ public class PowersMandom extends NewDashPreset {
                             if (lastSecond != null){
                                 if (!lastSecond.hasHadParticle){
                                     lastSecond.hasHadParticle = true;
-                                    ((ServerLevel) this.self.level()).sendParticles(ModParticles.CLOCK,
-                                            lastSecond.position.x, lastSecond.position.y+ent.getEyeHeight(), lastSecond.position.z,
+                                    lastSecond.isTickingParticles = this.self;
+                                    ((ServerLevel) this.self.level()).sendParticles(getParticle(ent),
+                                            lastSecond.position.x, lastSecond.position.y+ent.getEyeHeight()*0.8, lastSecond.position.z,
                                             0, 0, 0, 0, 0.015);
+                                }
+                                if (lastSecond.isTickingParticles != null && lastSecond.isTickingParticles.is(this.self)){
+                                    Vec3 forward = Vec3.directionFromRotation(lastSecond.rotationVec);
+                                    ((ServerLevel) this.self.level()).sendParticles(getParticle(ent),
+                                            lastSecond.position.x, lastSecond.position.y+ent.getEyeHeight()*0.8, lastSecond.position.z,
+                                            0,
+                                            forward.x,
+                                            forward.y,
+                                            forward.z,
+                                            0.015);
                                 }
                             }
                         }
