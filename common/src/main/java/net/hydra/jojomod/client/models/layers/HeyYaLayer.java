@@ -61,8 +61,8 @@ public class HeyYaLayer<T extends LivingEntity, A extends HumanoidModel<T>> exte
                         }
                         poseStack.pushPose();
 
-                        // Translate to the right/left hand
-                            getParentModel().body.translateAndRotate(poseStack); // Use leftArm for off-hand
+                        // Translate to the body
+                            getParentModel().body.translateAndRotate(poseStack);
                             // Apply additional transformations
                             poseStack.translate(-0.27F, -0.25, 0.19F); //1 1
                             // The first value goes to the right (negative) and left (positive)
