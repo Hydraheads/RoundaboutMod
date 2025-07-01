@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -18,7 +19,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -43,10 +46,6 @@ public class PowersMandom extends NewDashPreset {
     }
 
 
-    public boolean dangerYapping = false;
-    public boolean dangerYappingOn(){
-        return dangerYapping;
-    }
     public boolean canSummonStandAsEntity(){
         return false;
     }
@@ -58,9 +57,21 @@ public class PowersMandom extends NewDashPreset {
     public void renderIcons(GuiGraphics context, int x, int y) {
         // code for advanced icons
 
+        if (activatedPastVision()) {
+            setSkillIcon(context, x, y, 1, StandIcons.MANDOM_VISION_ON, PowerIndex.NO_CD);
+        } else {
+            setSkillIcon(context, x, y, 1, StandIcons.MANDOM_VISION_OFF, PowerIndex.NO_CD);
+        }
+
+        setSkillIcon(context, x, y, 2, StandIcons.REWIND, PowerIndex.POWER_2);
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
 
         super.renderIcons(context, x, y);
+    }
+
+    public boolean pastVision = false;
+    public boolean activatedPastVision(){
+        return pastVision;
     }
     public void registerHUDIcons() {
         HashSet<GuiIcon> icons = new HashSet<>();
@@ -79,16 +90,26 @@ public class PowersMandom extends NewDashPreset {
         /**Making dash usable on both key presses*/
         switch (context)
         {
+
+            case SKILL_1_NORMAL, SKILL_1_CROUCH -> {
+                swapVisionModeClient();
+            }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 dash();
             }
         }
     }
-
+    public void swapVisionModeClient(){
+        this.tryPower(PowerIndex.POWER_1, true);
+        tryPowerPacket(PowerIndex.POWER_1);
+    }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         switch (move)
         {
+            case PowerIndex.POWER_1 -> {
+                return toggleVision();
+            }
             case PowerIndex.POWER_2 -> {
                 return itsRewindTime();
             }
@@ -98,14 +119,26 @@ public class PowersMandom extends NewDashPreset {
 
     public static final byte
             ROTATE = 1;
-    /**Let the client brunt the task of mass scanning blocks so it doesn't lag server TPS
-     * also instill block limits so the packet count is sane*/
+
+    public boolean toggleVision(){
+        pastVision = !pastVision;
+        if (!isClient()) {
+            if (pastVision) {
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.mandom.vision_on").withStyle(ChatFormatting.DARK_PURPLE), true);
+            } else {
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.mandom.vision_off").withStyle(ChatFormatting.DARK_PURPLE), true);
+            }
+        }
+        return true;
+    }
+
     public boolean itsRewindTime(){
         //this.setCooldown(PowerIndex.SKILL_2,ClientNetworking.getAppropriateConfig().heyYaSettings.oreDetectionCooldown);
         if (isClient()){
         }
         return true;
     }
+
 
 
     int ticksSinceLastYap = 0;
@@ -142,7 +175,7 @@ public class PowersMandom extends NewDashPreset {
 
         /**Grabs nearby entities pretty regularly to see if they can be rendered*/
         if (!this.self.level().isClientSide()) {
-            if (this.self.tickCount % 3 == 0) {
+            if (activatedPastVision() && this.self.tickCount % 3 == 0) {
                 List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.self.level(), this.self.blockPosition(), 50);
                 if (!mobsInRange.isEmpty()) {
                     for (Entity ent : mobsInRange) {

@@ -112,7 +112,7 @@ public class ClientUtil {
     public static boolean checkIfClientCanSeePastLocations() {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersMandom PM){
+            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersMandom PM && PM.pastVision){
                 return true;
             }
         }

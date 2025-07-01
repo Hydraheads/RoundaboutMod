@@ -126,6 +126,16 @@ public class StandIcons {
             "textures/gui/icons/soft_and_wet/bubble_scaffold.png");
     public static final ResourceLocation SOFT_AND_WET_BUBBLE_ENCASEMENT = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/soft_and_wet/bubble_encase.png");
+
+
+    public static final ResourceLocation MANDOM_VISION_ON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/mandom/vision_on.png");
+    public static final ResourceLocation MANDOM_VISION_OFF = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/mandom/vision_off.png");
+    public static final ResourceLocation REWIND = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/mandom/rewind.png");
+
+
     public static final ResourceLocation SNAP_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/magicians_red/fire_clear.png");
     public static final ResourceLocation FURNACE = new ResourceLocation(Roundabout.MOD_ID,
