@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -116,7 +117,7 @@ public class SavedSecond {
                 canBeRepositioned = false;
             }
         }
-        if (canBeRepositioned) {
+        if (canBeRepositioned && !(ent.getVehicle() != null && MainUtil.canRewindInTime(ent.getVehicle(),ent))) {
             ent.setYHeadRot(this.headYRotation);
             ent.setXRot(this.rotationVec.x);
             ent.setYRot(this.rotationVec.y);
