@@ -1,10 +1,12 @@
 package net.hydra.jojomod.event;
 
+import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
@@ -59,6 +61,15 @@ public class SavedSecond {
                     LE.getRemainingFireTicks(),
                     ((StandUser)LE).roundabout$getRemainingFireTicks(),
                     ((StandUser)LE).roundabout$getGasolineTime()
+            );
+        } if (ent instanceof AbstractArrow LE) {
+            return new SavedSecondAbstractArrow(
+                    LE.getYHeadRot(),
+                    LE.getRotationVector(),
+                    LE.getPosition(1),
+                    LE.getDeltaMovement(),
+                    ent.fallDistance,
+                    ((IAbstractArrowAccess)LE).roundaboutGetInGround()
             );
         } if (ent != null){
             return new SavedSecond(
