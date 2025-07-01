@@ -566,6 +566,8 @@ public class StandPowers {
         setSkillIcon(context,x,y,slot,rl,CDI,false);
     }
     public void setSkillIcon(GuiGraphics context, int x, int y, int slot, ResourceLocation rl, byte CDI, boolean locked){
+        RenderSystem.enableBlend();
+        context.setColor(1f, 1f, 1f, 1f);
         CooldownInstance cd = null;
         if (CDI >= 0 && !StandCooldowns.isEmpty() && StandCooldowns.size() >= CDI){
             cd = StandCooldowns.get(CDI);
@@ -608,7 +610,6 @@ public class StandPowers {
             if ((cd != null && (cd.time >= 0))) {
                 float blit = (20*(1-((float) (1+cd.time) /(1+cd.maxTime))));
                 int b = (int) Math.round(blit);
-                RenderSystem.enableBlend();
                 context.setColor(1f, 1f, 1f, 1f);
 
                 ResourceLocation COOLDOWN_TEX = StandIcons.COOLDOWN_ICON;
