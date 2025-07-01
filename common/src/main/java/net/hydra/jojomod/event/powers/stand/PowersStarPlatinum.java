@@ -42,6 +42,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.IronGolem;
@@ -338,6 +340,17 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 if (letServerKnowScopeCatchIsReady) {
                     ModPacketHandler.PACKET_ACCESS.byteToServerPacket(PowerIndex.SKILL_EXTRA_2, PacketDataIndex.BYTE_UPDATE_COOLDOWN);
                     letServerKnowScopeCatchIsReady = false;
+                }
+            }
+        } else {
+            StandEntity stand = getStandEntity(this.self);
+            if (!(Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE && this.self instanceof ServerPlayer PE && SE.getScoping() &&
+                    SE.level().dimensionTypeId() == this.self.level().dimensionTypeId())) {
+                if (ClientNetworking.getAppropriateConfig().starPlatinumScopeUsesPotionEffectForNightVision) {
+                    MobEffectInstance ME = this.getSelf().getEffect(MobEffects.NIGHT_VISION);
+                    if (ME != null && ME.getDuration() >= 100000 && ME.getAmplifier() > 20) {
+                        this.getSelf().removeEffect(MobEffects.NIGHT_VISION);
+                    }
                 }
             }
         }
@@ -683,6 +696,12 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
                                     PowerIndex.SKILL_EXTRA_2, cdr);
                             ((StarPlatinumEntity) stand).setScoping(false);
+                            if (ClientNetworking.getAppropriateConfig().starPlatinumScopeUsesPotionEffectForNightVision) {
+                                MobEffectInstance ME = this.getSelf().getEffect(MobEffects.NIGHT_VISION);
+                                if (ME != null && ME.getDuration() >= 100000 && ME.getAmplifier() > 20) {
+                                    this.getSelf().removeEffect(MobEffects.NIGHT_VISION);
+                                }
+                            }
                             this.setCooldown(PowerIndex.SKILL_EXTRA_2, cdr);
                             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.ITEM_CATCH_EVENT, SoundSource.PLAYERS, 1.7F, 1.2F);
                             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 0.5F);

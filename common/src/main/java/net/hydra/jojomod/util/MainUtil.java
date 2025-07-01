@@ -1683,7 +1683,7 @@ public class MainUtil {
             if (player != null && ((StandUser)player).roundabout$getStand() instanceof StarPlatinumEntity SE){
                 SE.setScoping(true);
                 if (ClientNetworking.getAppropriateConfig().starPlatinumScopeUsesPotionEffectForNightVision) {
-                    player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 1000000, 0, false, false), null);
+                    player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 1000000, 21, false, false), null);
                 }
             }
         } else if (context == PacketDataIndex.SINGLE_BYTE_SCOPE_OFF) {
@@ -1691,7 +1691,7 @@ public class MainUtil {
                 SE.setScoping(false);
                 if (ClientNetworking.getAppropriateConfig().starPlatinumScopeUsesPotionEffectForNightVision) {
                     MobEffectInstance ME = player.getEffect(MobEffects.NIGHT_VISION);
-                    if (ME != null && ME.getDuration() >= 100000) {
+                    if (ME != null && ME.getDuration() >= 100000 && ME.getDuration() >= 100000 && ME.getAmplifier() > 20) {
                         player.removeEffect(MobEffects.NIGHT_VISION);
                     }
                 }
