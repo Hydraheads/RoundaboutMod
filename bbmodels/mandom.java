@@ -46,7 +46,7 @@ public class mandom<T extends Entity> extends EntityModel<T> {
 
 		PartDefinition cube_r2 = tentacles.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(4, 21).addBox(-0.5F, 0.0F, -0.5F, 1.0F, 9.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-3.5F, 0.375F, -1.175F, -0.3647F, -0.1586F, -0.6236F));
 
-		PartDefinition cube_r3 = tentacles.addOrReplaceChild("cube_r3", CubeListBuilder.create().texOffs(4, 21).addBox(-0.5F, 0.0F, -0.5F, 1.0F, 9.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-3.425F, -1.975F, 1.75F, -0.3515F, 0.0071F, -0.3266F));
+		PartDefinition cube_r3 = tentacles.addOrReplaceChild("cube_r3", CubeListBuilder.create().texOffs(4, 21).addBox(-0.5F, 0.0F, -0.5F, 1.0F, 9.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-3.425F, -1.65F, 1.75F, -0.3515F, 0.0071F, -0.3266F));
 
 		PartDefinition cube_r4 = tentacles.addOrReplaceChild("cube_r4", CubeListBuilder.create().texOffs(4, 21).addBox(-0.5F, 0.0F, -0.5F, 1.0F, 9.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-5.425F, -0.8F, 0.4F, -0.2921F, -0.0775F, -0.4284F));
 
@@ -54,7 +54,7 @@ public class mandom<T extends Entity> extends EntityModel<T> {
 
 		PartDefinition cube_r6 = tentacles.addOrReplaceChild("cube_r6", CubeListBuilder.create().texOffs(12, 21).addBox(-0.5F, 0.0F, -0.5F, 1.0F, 7.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(5.5F, 0.525F, -0.975F, 0.086F, -0.0701F, 0.0042F));
 
-		PartDefinition cube_r7 = tentacles.addOrReplaceChild("cube_r7", CubeListBuilder.create().texOffs(0, 21).addBox(-0.5F, 0.0F, -0.5F, 1.0F, 10.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(5.5F, -1.475F, 1.025F, -0.0548F, -0.0807F, 0.135F));
+		PartDefinition cube_r7 = tentacles.addOrReplaceChild("cube_r7", CubeListBuilder.create().texOffs(0, 21).addBox(-0.5F, 0.0F, -0.5F, 1.0F, 10.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(5.5F, -1.325F, 1.025F, -0.0548F, -0.0807F, 0.135F));
 
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
