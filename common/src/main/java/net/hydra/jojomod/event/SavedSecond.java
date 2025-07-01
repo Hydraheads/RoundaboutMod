@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event;
 
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,12 +19,15 @@ public class SavedSecond {
     public boolean hasHadParticle = false;
     public Entity isTickingParticles = null;
 
+    public float fallDistance = 0;
 
-    public SavedSecond(float headYRotation,Vec2 rotationVec,Vec3 position, Vec3 deltaMovement){
+
+    public SavedSecond(float headYRotation,Vec2 rotationVec,Vec3 position, Vec3 deltaMovement, float fallDistance){
         this.headYRotation = headYRotation;
         this.rotationVec = new Vec2(rotationVec.x,rotationVec.y);
         this.position = new Vec3(position.x,position.y,position.z);
         this.deltaMovement = new Vec3(deltaMovement.x,deltaMovement.y,deltaMovement.z);
+        this.fallDistance = fallDistance;
     }
 
     public static SavedSecond saveEntitySecond(Entity ent) {
@@ -33,25 +37,37 @@ public class SavedSecond {
                     PL.getRotationVector(),
                     PL.getPosition(1),
                     PL.getDeltaMovement(),
+                    ent.fallDistance,
                     PL.getActiveEffects(),
                     PL.getHealth(),
+                    PL.getRemainingFireTicks(),
+                    ((StandUser)PL).roundabout$getRemainingFireTicks(),
+                    ((StandUser)PL).roundabout$getGasolineTime(),
                     PL.getFoodData().getFoodLevel(),
                     PL.getFoodData().getSaturationLevel(),
-                    PL.getFoodData().getExhaustionLevel());
+                    PL.getFoodData().getExhaustionLevel()
+            );
         } if (ent instanceof LivingEntity LE) {
             return new SavedSecondLiving(
                     LE.getYHeadRot(),
                     LE.getRotationVector(),
                     LE.getPosition(1),
                     LE.getDeltaMovement(),
+                    ent.fallDistance,
                     LE.getActiveEffects(),
-                    LE.getHealth());
+                    LE.getHealth(),
+                    LE.getRemainingFireTicks(),
+                    ((StandUser)LE).roundabout$getRemainingFireTicks(),
+                    ((StandUser)LE).roundabout$getGasolineTime()
+            );
         } if (ent != null){
             return new SavedSecond(
                     ent.getYHeadRot(),
                     ent.getRotationVector(),
                     ent.getPosition(1),
-                    ent.getDeltaMovement());
+                    ent.getDeltaMovement(),
+                    ent.fallDistance
+            );
         }
         return null;
     }
@@ -61,5 +77,6 @@ public class SavedSecond {
         ent.setXRot(this.rotationVec.x);
         ent.setYRot(this.rotationVec.y);
         ent.setPos(this.position);
+        ent.fallDistance = this.fallDistance;
     }
 }

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event;
 
 import com.google.common.collect.Maps;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -17,10 +18,15 @@ public class SavedSecondLiving extends SavedSecond {
 
     public Collection<MobEffectInstance> activeEffects =new ArrayList<>();
     public float health;
+    public int onFireTicks;
+    public int onStandFireTicks;
+    public int gasolineTicks;
 
-    public SavedSecondLiving(float headYRotation, Vec2 rotationVec, Vec3 position, Vec3 deltaMovement,
-                             Collection<MobEffectInstance> activeEffects, float health){
-        super(headYRotation,rotationVec,position,deltaMovement);
+
+    public SavedSecondLiving(float headYRotation, Vec2 rotationVec, Vec3 position, Vec3 deltaMovement, float fallDistance,
+                             Collection<MobEffectInstance> activeEffects, float health, int onFireTicks, int onStandFireTicks,
+                             int gasolineTicks){
+        super(headYRotation,rotationVec,position,deltaMovement,fallDistance);
 
         List<MobEffectInstance> effects = new ArrayList<>(activeEffects.stream().toList());
         if (!effects.isEmpty()) {
@@ -31,6 +37,9 @@ public class SavedSecondLiving extends SavedSecond {
             }
         }
         this.health = health;
+        this.onFireTicks = onFireTicks;
+        this.onStandFireTicks = onStandFireTicks;
+        this.gasolineTicks = gasolineTicks;
     }
     @Override
     public void loadTime(Entity ent){
@@ -57,6 +66,10 @@ public class SavedSecondLiving extends SavedSecond {
 
             LE.setHealth(this.health);
 
+            LE.setRemainingFireTicks(onFireTicks);
+            StandUser user = ((StandUser) LE);
+            user.roundabout$setRemainingStandFireTicks(onStandFireTicks);
+            user.roundabout$setGasolineTime(gasolineTicks);
 
         }
     }
