@@ -61,6 +61,8 @@ public class SavedSecond {
                     PL.getRemainingFireTicks(),
                     ((StandUser)PL).roundabout$getRemainingFireTicks(),
                     ((StandUser)PL).roundabout$getGasolineTime(),
+                    PL.getAirSupply(),
+                    ((StandUser)PL).roundabout$getLocacacaCurse(),
                     PL.getFoodData().getFoodLevel(),
                     PL.getFoodData().getSaturationLevel(),
                     PL.getFoodData().getExhaustionLevel()
@@ -77,7 +79,9 @@ public class SavedSecond {
                     LE.getHealth(),
                     LE.getRemainingFireTicks(),
                     ((StandUser)LE).roundabout$getRemainingFireTicks(),
-                    ((StandUser)LE).roundabout$getGasolineTime()
+                    ((StandUser)LE).roundabout$getGasolineTime(),
+                    LE.getAirSupply(),
+                    ((StandUser)LE).roundabout$getLocacacaCurse()
             );
         } if (ent instanceof AbstractArrow LE) {
             return new SavedSecondAbstractArrow(

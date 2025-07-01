@@ -23,12 +23,14 @@ public class SavedSecondLiving extends SavedSecond {
     public int onFireTicks;
     public int onStandFireTicks;
     public int gasolineTicks;
+    public int airtime;
+    public byte locacaca;
 
 
     public SavedSecondLiving(float headYRotation, Vec2 rotationVec, Vec3 position, Vec3 deltaMovement, float fallDistance,
                              ResourceKey<DimensionType> dimensionId,
                              Collection<MobEffectInstance> activeEffects, float health, int onFireTicks, int onStandFireTicks,
-                             int gasolineTicks){
+                             int gasolineTicks, int airtime, byte locacaca){
         super(headYRotation,rotationVec,position,deltaMovement,fallDistance,dimensionId);
 
         List<MobEffectInstance> effects = new ArrayList<>(activeEffects.stream().toList());
@@ -43,6 +45,8 @@ public class SavedSecondLiving extends SavedSecond {
         this.onFireTicks = onFireTicks;
         this.onStandFireTicks = onStandFireTicks;
         this.gasolineTicks = gasolineTicks;
+        this.airtime = airtime;
+        this.locacaca = locacaca;
     }
     @Override
     public void loadTime(Entity ent){
@@ -75,6 +79,8 @@ public class SavedSecondLiving extends SavedSecond {
             StandUser user = ((StandUser) LE);
             user.roundabout$setRemainingStandFireTicks(onStandFireTicks);
             user.roundabout$setGasolineTime(gasolineTicks);
+            LE.setAirSupply(this.airtime);
+            user.roundabout$setLocacacaCurse(this.locacaca);
 
         }
     }
