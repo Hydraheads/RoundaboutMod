@@ -113,7 +113,7 @@ public class SavedSecond {
             ent.setYHeadRot(this.headYRotation);
             ent.setXRot(this.rotationVec.x);
             ent.setYRot(this.rotationVec.y);
-            ent.setPos(this.position);
+            ent.teleportTo(this.position.x,this.position.y,this.position.z);
             ent.hurtMarked = true;
             ent.setDeltaMovement(this.deltaMovement);
             ent.hasImpulse = true;
