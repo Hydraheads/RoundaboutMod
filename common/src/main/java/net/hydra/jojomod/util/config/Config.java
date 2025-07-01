@@ -538,8 +538,8 @@ public class Config implements Cloneable {
     public static class MandomSettings {
         @BooleanOption(group = "inherit", value = false)
         public Boolean timeRewindOnlySavesAndLoadsOnPlayers;
-        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
-        public Integer timeRewindCooldown;
+        @IntOption(group = "inherit", value = 220, min = 0, max = 72000)
+        public Integer timeRewindCooldownv2;
         @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
         public Integer chronoVisionRange;
         @IntOption(group = "inherit", value = 70, min = 0, max = 72000)

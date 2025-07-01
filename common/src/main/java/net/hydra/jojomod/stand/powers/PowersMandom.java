@@ -1,16 +1,16 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
-import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.SavedSecond;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -21,7 +21,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -29,6 +28,8 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
@@ -66,8 +67,22 @@ public class PowersMandom extends NewDashPreset {
 
         setSkillIcon(context, x, y, 2, StandIcons.REWIND, PowerIndex.SKILL_2);
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        renderClock(context,x,y,4);
 
         super.renderIcons(context, x, y);
+    }
+    public void renderClock(GuiGraphics context, int x, int y, int slot){
+        RenderSystem.enableBlend();
+        context.setColor(1f, 1f, 1f, 1f);
+        CooldownInstance cd = null;
+        x += slot * 25;
+        y-=1;
+        RenderSystem.enableBlend();
+        context.blit(StandIcons.NOVELTY_ICON,x-3,y-3,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+
+        RenderSystem.enableBlend();
+        ItemStack clock = new ItemStack(Items.CLOCK);
+        context.renderItem(clock, x+1, y+1);  // Draw the item itself
     }
 
     public boolean activatedPastVision(){
@@ -169,7 +184,7 @@ public class PowersMandom extends NewDashPreset {
     }
 
     public boolean itsRewindTime(){
-        this.setCooldown(PowerIndex.SKILL_2,ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldown);
+        this.setCooldown(PowerIndex.SKILL_2,ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownv2);
         if (isClient()){
             timeRewindOverlayTicks = 0;
             this.self.playSound(ModSounds.MANDOM_REWIND_EVENT, 200F, 1.0F);

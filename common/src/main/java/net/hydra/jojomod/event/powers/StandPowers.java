@@ -561,8 +561,10 @@ public class StandPowers {
                 name,instruction,description,extra);
     }
 
-    int squareHeight = 24;
-    int squareWidth = 24;
+    public int squareHeight = 24;
+    public int squareWidth = 24;
+
+
     public void setSkillIcon(GuiGraphics context, int x, int y, int slot, ResourceLocation rl, byte CDI){
         setSkillIcon(context,x,y,slot,rl,CDI,false);
     }
