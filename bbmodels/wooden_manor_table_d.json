@@ -32,5 +32,6 @@
 				"down": {"uv": [8.5, 8.5, 15.5, 16], "texture": "#0"}
 			}
 		}
-	]
+	],
+	"render_type": "cutout_mipped"
 }

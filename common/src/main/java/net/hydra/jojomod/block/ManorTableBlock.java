@@ -24,6 +24,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class ManorTableBlock extends CrossCollisionBlock {
@@ -41,10 +42,21 @@ public class ManorTableBlock extends CrossCollisionBlock {
                         .setValue(WATERLOGGED, Boolean.valueOf(false))
         );
     }
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean useShapeForLightOcclusion(BlockState state) {
+        return true; // Ensures custom occlusion shape is used (if applicable)
+    }
 
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean skipRendering(BlockState p_53972_, BlockState p_53973_, Direction p_53974_) {
+        return false;
+    }
+    @SuppressWarnings("deprecation")
     @Override
     public VoxelShape getOcclusionShape(BlockState $$0, BlockGetter $$1, BlockPos $$2) {
-        return SHAPE;
+        return Shapes.empty();
     }
 
 
@@ -57,6 +69,7 @@ public class ManorTableBlock extends CrossCollisionBlock {
     public VoxelShape getCollisionShape(BlockState $$0, BlockGetter $$1, BlockPos $$2, CollisionContext $$3) {
         return SHAPE;
     }
+    @SuppressWarnings("deprecation")
     @Override
     public VoxelShape getVisualShape(BlockState $$0, BlockGetter $$1, BlockPos $$2, CollisionContext $$3) {
         return SHAPE;
