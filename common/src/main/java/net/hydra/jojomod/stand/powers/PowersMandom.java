@@ -249,7 +249,7 @@ public class PowersMandom extends NewDashPreset {
                                 }
                                 if (!(ent instanceof Projectile) && !(ent instanceof ItemEntity)) {
                                     if (lastSecond.isTickingParticles != null && lastSecond.isTickingParticles.is(this.self)) {
-                                        Vec3 forward = Vec3.directionFromRotation(lastSecond.rotationVec);
+                                        Vec3 forward = Vec3.directionFromRotation(new Vec2(lastSecond.rotationVec.x,lastSecond.headYRotation));
                                         ((ServerLevel) this.self.level()).sendParticles(ModParticles.TIME_EMBER,
                                                 lastSecond.position.x, lastSecond.position.y + ent.getEyeHeight() * 0.8, lastSecond.position.z,
                                                 0,

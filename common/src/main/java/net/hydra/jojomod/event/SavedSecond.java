@@ -6,9 +6,11 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.RelativeMovement;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.Level;
@@ -21,6 +23,7 @@ import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Objects;
+import java.util.Set;
 
 public class SavedSecond {
 
@@ -113,7 +116,12 @@ public class SavedSecond {
             ent.setYHeadRot(this.headYRotation);
             ent.setXRot(this.rotationVec.x);
             ent.setYRot(this.rotationVec.y);
-            ent.teleportTo(this.position.x,this.position.y,this.position.z);
+            ent.teleportTo(((ServerLevel) ent.level()),this.position.x,this.position.y,this.position.z,
+                    Set.of(
+                            RelativeMovement.X,
+                            RelativeMovement.Y,
+                            RelativeMovement.Z),
+        this.headYRotation,this.rotationVec.x);
             ent.hurtMarked = true;
             ent.setDeltaMovement(this.deltaMovement);
             ent.hasImpulse = true;
