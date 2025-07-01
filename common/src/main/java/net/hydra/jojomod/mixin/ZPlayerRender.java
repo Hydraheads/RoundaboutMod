@@ -502,15 +502,24 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
             }
         }
     }
+    boolean roundabout$switched = false;
     public void roundabout$changeTheModel(ItemStack visage, ShapeShifts shifts){
         if (shifts == ShapeShifts.EERIE)
             if (((IPlayerModel)this.model).roundabout$getSlim()){
-                model = roundabout$otherModel;
+                if (!roundabout$switched) {
+                    roundabout$mainModel = this.model;
+                    roundabout$switched = true;
+                    model = roundabout$otherModel;
+                }
                 return;
             }
         if (shifts == ShapeShifts.OVA)
             if (!((IPlayerModel)this.model).roundabout$getSlim()){
-                model = roundabout$otherModel;
+                if (!roundabout$switched) {
+                    roundabout$mainModel = this.model;
+                    roundabout$switched = true;
+                    model = roundabout$otherModel;
+                }
                 return;
             }
 
@@ -518,13 +527,20 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
             if (visage.getItem() instanceof MaskItem MI) {
                 if (MI.visageData.isCharacterVisage()) {
                     if (((IPlayerModel)this.model).roundabout$getSlim() != MI.visageData.isSlim()){
-                        model = roundabout$otherModel;
+                        if (!roundabout$switched) {
+                            roundabout$mainModel = this.model;
+                            roundabout$switched = true;
+                            model = roundabout$otherModel;
+                        }
                         return;
                     }
                 }
             }
         }
-        model = roundabout$mainModel;
+        if (roundabout$switched) {
+            roundabout$switched = false;
+            model = roundabout$mainModel;
+        }
     }
     @Inject(method = "render(Lnet/minecraft/client/player/AbstractClientPlayer;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(value = "HEAD"), cancellable = true)
