@@ -1014,7 +1014,6 @@ public class StandPowers {
                     if (serverControlledCooldwon && !this.self.level().isClientSide() && this.self instanceof Player) {
                         List<CooldownInstance> CDCopy = new ArrayList<>(StandCooldowns) {
                         };
-                        Roundabout.LOGGER.info("cin"+cin+" citime "+ci.time);
 
                         ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), cin, ci.time, ci.maxTime);
                     }

@@ -395,8 +395,7 @@ public class PowersMandom extends NewDashPreset {
 
 
     public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
-        if (num == PowerIndex.SKILL_2) {
-            Roundabout.LOGGER.info("yes sir");
+        if (num == PowerIndex.SKILL_2 && ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownUsesServerLatency) {
             return true;
         }
         return super.isServerControlledCooldown(ci, num);
