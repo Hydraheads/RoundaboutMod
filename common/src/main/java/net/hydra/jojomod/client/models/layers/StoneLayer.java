@@ -44,6 +44,7 @@ public class StoneLayer<T extends LivingEntity, M extends HumanoidModel<T>, A ex
     @Override
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int integ, T var4,
                        float var5, float var6, float var7, float var8, float var9, float var10) {
+        transformedModel = livingEntityRenderer.getModel();
         byte curse = ((StandUser)var4).roundabout$getLocacacaCurse();
         if (curse > -1) {
             ResourceLocation rl = null;
