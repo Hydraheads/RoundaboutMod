@@ -27,7 +27,7 @@ public class RRenderUtil {
 
             if (client.player != null)
             {
-                client.player.sendSystemMessage(Component.translatable("roundabout.warning.fabulous_graphics.v2"));
+                //client.player.sendSystemMessage(Component.translatable("roundabout.warning.fabulous_graphics.v2"));
             }
         }
     }
