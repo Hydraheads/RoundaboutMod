@@ -63,7 +63,7 @@ public class PowersMandom extends NewDashPreset {
             setSkillIcon(context, x, y, 1, StandIcons.MANDOM_VISION_OFF, PowerIndex.NO_CD);
         }
 
-        setSkillIcon(context, x, y, 2, StandIcons.REWIND, PowerIndex.POWER_2);
+        setSkillIcon(context, x, y, 2, StandIcons.REWIND, PowerIndex.SKILL_2);
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
 
         super.renderIcons(context, x, y);
@@ -94,9 +94,18 @@ public class PowersMandom extends NewDashPreset {
             case SKILL_1_NORMAL, SKILL_1_CROUCH -> {
                 swapVisionModeClient();
             }
+            case SKILL_2_NORMAL, SKILL_2_CROUCH -> {
+                rewindTimeClient();
+            }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 dash();
             }
+        }
+    }
+    public void rewindTimeClient(){
+        if (!this.onCooldown(PowerIndex.SKILL_2)) {
+            this.tryPower(PowerIndex.POWER_2, true);
+            tryPowerPacket(PowerIndex.POWER_2);
         }
     }
     public void swapVisionModeClient(){
@@ -132,9 +141,38 @@ public class PowersMandom extends NewDashPreset {
         return true;
     }
 
+    public int timeRewindOverlayTicks = -1;
+    float maxOverlay = 0.45f;
+
+    int zenith = 10;
+    public float getOverlayFromOverlayTicks(float delta) {
+        // Interpolated tick value with partial tick (delta)
+        float ticks = timeRewindOverlayTicks + delta;
+
+        // Compute how far from the peak (5) we are
+        float distanceFromPeak = Math.abs(ticks - ((float)zenith));
+
+        // Normalize (distance from 5 goes from 0 to 5)
+        float normalized = 1.0f - (distanceFromPeak / ((float)zenith));
+
+        // Clamp and scale to maxOverlay
+        return Math.max(0.0f, Math.min(1.0f, normalized)) * maxOverlay;
+    }
+
+    public void tickOverlayTicks(){
+        if (timeRewindOverlayTicks > -1) {
+            timeRewindOverlayTicks++;
+            if (timeRewindOverlayTicks >= (zenith*2)) {
+                timeRewindOverlayTicks = -1;
+            }
+        }
+    }
+
     public boolean itsRewindTime(){
-        //this.setCooldown(PowerIndex.SKILL_2,ClientNetworking.getAppropriateConfig().heyYaSettings.oreDetectionCooldown);
+        this.setCooldown(PowerIndex.SKILL_2,ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldown);
         if (isClient()){
+            timeRewindOverlayTicks = 0;
+            this.self.playSound(ModSounds.MANDOM_REWIND_EVENT, 200F, 1.0F);
         }
         return true;
     }
@@ -211,6 +249,8 @@ public class PowersMandom extends NewDashPreset {
                             0, 0, 0, 0, 0.015);**/
                 }
             }
+        } else {
+            tickOverlayTicks();
         }
     }
 

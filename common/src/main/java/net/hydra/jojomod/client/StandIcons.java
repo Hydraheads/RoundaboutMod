@@ -26,6 +26,8 @@ public class StandIcons {
 
     public static final ResourceLocation IN_BUBBLE_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/in_bubble.png");
+    public static final ResourceLocation TIME_REWIND = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/misc/time_rewind.png");
     public static final ResourceLocation NO_FACE_LAYER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/other_layers/faceless.png");
     public static final ResourceLocation STONE_HEAD_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,

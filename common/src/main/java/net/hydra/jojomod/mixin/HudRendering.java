@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
 import net.hydra.jojomod.event.powers.visagedata.JosukePartEightVisage;
 import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -74,11 +75,12 @@ public abstract class HudRendering implements IHudAccess {
 
 
         if (this.minecraft.player != null) {
+            StandUser user = ((StandUser) this.minecraft.player);
             boolean renderGasOverlay = ConfigManager.getClientConfig().renderGasSplatterOverlay;
             if (renderGasOverlay) {
-                int overlay = ((StandUser) this.minecraft.player).roundabout$getGasolineTime();
+                int overlay = user.roundabout$getGasolineTime();
                 if (overlay > 0) {
-                    int overlayR = ((StandUser) this.minecraft.player).roundabout$getGasolineRenderTime();
+                    int overlayR = user.roundabout$getGasolineRenderTime();
                     float overlay2 = 0;
                     if (overlay <= 40) {
                         overlay2 = 0.5F - ((float) (40 - overlay) / 40) * 0.5F;
@@ -89,7 +91,6 @@ public abstract class HudRendering implements IHudAccess {
                 }
             }
             if (this.minecraft.options.getCameraType().isFirstPerson()) {
-                StandUser user = ((StandUser) this.minecraft.player);
                 if (user.roundabout$isBubbleEncased()){
                     RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.IN_BUBBLE_OVERLAY, 0.99F);
@@ -106,6 +107,15 @@ public abstract class HudRendering implements IHudAccess {
                     }
                 }
             }
+
+            if (user.roundabout$getStandPowers() instanceof PowersMandom PM){
+                if (PM.timeRewindOverlayTicks > -1) {
+                    RenderSystem.enableBlend();
+                    this.renderTextureOverlay($$1, StandIcons.TIME_REWIND, PM.getOverlayFromOverlayTicks($$0));
+                    RenderSystem.disableBlend();
+                }
+            }
+
         }
         StandHudRender.renderStandHud($$1, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), roundabout$flashAlpha, roundabout$otherFlashAlpha);
 
