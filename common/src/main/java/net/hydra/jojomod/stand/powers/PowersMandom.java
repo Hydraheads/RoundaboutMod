@@ -69,9 +69,8 @@ public class PowersMandom extends NewDashPreset {
         super.renderIcons(context, x, y);
     }
 
-    public boolean pastVision = false;
     public boolean activatedPastVision(){
-        return pastVision;
+        return getStandUserSelf().roundabout$getUniqueStandModeToggle();
     }
     public void registerHUDIcons() {
         HashSet<GuiIcon> icons = new HashSet<>();
@@ -130,9 +129,9 @@ public class PowersMandom extends NewDashPreset {
             ROTATE = 1;
 
     public boolean toggleVision(){
-        pastVision = !pastVision;
+        getStandUserSelf().roundabout$setUniqueStandModeToggle(!activatedPastVision());
         if (!isClient()) {
-            if (pastVision) {
+            if (activatedPastVision()) {
                 ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.mandom.vision_on").withStyle(ChatFormatting.DARK_PURPLE), true);
             } else {
                 ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.mandom.vision_off").withStyle(ChatFormatting.DARK_PURPLE), true);

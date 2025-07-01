@@ -28,6 +28,8 @@ public interface StandUser {
 
     void roundabout$removeQueForTargetDeletion();
     void roundabout$onStandOutLookAround(StandEntity passenger);
+    boolean roundabout$getUniqueStandModeToggle();
+    void roundabout$setUniqueStandModeToggle(boolean mode);
     boolean roundabout$skipFriction();
     void roundabout$setEyeSightTaken(SoftAndWetPlunderBubbleEntity bubble);
     SoftAndWetPlunderBubbleEntity roundabout$getEyeSightTaken();

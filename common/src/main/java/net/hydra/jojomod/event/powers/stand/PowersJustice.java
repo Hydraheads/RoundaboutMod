@@ -229,6 +229,7 @@ public class PowersJustice extends DashPreset {
                 ipe.roundabout$setShapeShift(ShapeShifts.PLAYER.id);
             }
         }
+        super.onStandSwitch();
     }
 
     @Override

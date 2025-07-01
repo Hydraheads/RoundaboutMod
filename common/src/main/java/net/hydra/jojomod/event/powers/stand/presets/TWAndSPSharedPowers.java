@@ -73,6 +73,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     @Override
     public void onStandSwitch(){
         this.resumeTime();
+        super.onStandSwitch();
     }
 
     @Override

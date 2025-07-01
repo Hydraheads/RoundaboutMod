@@ -177,6 +177,7 @@ public class StandPowers {
         return false;
     }
     public void onStandSwitch(){
+        getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
     }
     public Component getStandName(){
         ItemStack disc = ((StandUser)this.getSelf()).roundabout$getStandDisc();

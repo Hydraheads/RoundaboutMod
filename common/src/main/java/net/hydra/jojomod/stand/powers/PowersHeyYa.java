@@ -42,9 +42,8 @@ public class PowersHeyYa extends NewDashPreset {
     }
 
 
-    public boolean dangerYapping = false;
     public boolean dangerYappingOn(){
-        return dangerYapping;
+        return getStandUserSelf().roundabout$getUniqueStandModeToggle();
     }
     public boolean canSummonStandAsEntity(){
         return false;
@@ -229,7 +228,7 @@ public class PowersHeyYa extends NewDashPreset {
     }
 
     public boolean switchDangerMode(){
-        dangerYapping = !dangerYapping;
+        getStandUserSelf().roundabout$setUniqueStandModeToggle(!dangerYappingOn());
         return true;
     }
     public boolean doYap(){
