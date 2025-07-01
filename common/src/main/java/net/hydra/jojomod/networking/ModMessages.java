@@ -25,6 +25,7 @@ public class ModMessages {
     public static final ResourceLocation NBT_SYNC_ID = new ResourceLocation(Roundabout.MOD_ID,"nbt_sync");
     public static final ResourceLocation POWER_COOLDOWN_SYNC_ID = new ResourceLocation(Roundabout.MOD_ID,"power_cooldown_sync");
     public static final ResourceLocation SKILL_COOLDOWN_SYNC_ID = new ResourceLocation(Roundabout.MOD_ID,"skill_cooldown_sync");
+    public static final ResourceLocation SKILL_COOLDOWN_SYNC_2_ID = new ResourceLocation(Roundabout.MOD_ID,"skill_cooldown_sync_2");
     public static final ResourceLocation MOVE_SYNC_ID = new ResourceLocation(Roundabout.MOD_ID,"move_sync");
     public static final ResourceLocation TIME_STOP_JUMP_ID = new ResourceLocation(Roundabout.MOD_ID,"ts_jump_sync");
     public static final ResourceLocation STAND_PILOT_ID = new ResourceLocation(Roundabout.MOD_ID,"stand_pilot_sync");

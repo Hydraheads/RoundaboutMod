@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
@@ -390,6 +391,15 @@ public class PowersMandom extends NewDashPreset {
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
         return $$1;
+    }
+
+
+    public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
+        if (num == PowerIndex.SKILL_2) {
+            Roundabout.LOGGER.info("yes sir");
+            return true;
+        }
+        return super.isServerControlledCooldown(ci, num);
     }
 
     @Override

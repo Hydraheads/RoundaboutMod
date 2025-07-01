@@ -19,6 +19,7 @@ public interface IPacketAccess {
     void syncCooldownPacket(ServerPlayer sp, int attackTime, int attackTimeMax, int attackTimeDuring,
                             byte activePower, byte activePowerPhase);
     void syncSkillCooldownPacket(ServerPlayer sp, byte moveOnCooldown, int cooldown);
+    void syncSkillCooldownPacket(ServerPlayer sp, byte moveOnCooldown, int cooldown, int maxcooldown);
     void updateClashPacket(ServerPlayer sp, int id, float clashProgress);
     void stopSoundPacket(ServerPlayer sp, int id, byte soundNo);
 

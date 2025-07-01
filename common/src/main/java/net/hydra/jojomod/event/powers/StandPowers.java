@@ -2,6 +2,7 @@ package net.hydra.jojomod.event.powers;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -474,6 +475,13 @@ public class StandPowers {
             StandCooldowns.get(power).maxTime = cooldown;
         }
     }
+    public void setCooldownMax(byte power, int cooldown, int maxCooldown){
+        if (!StandCooldowns.isEmpty() && StandCooldowns.size() >= power){
+            StandCooldowns.get(power).time = cooldown;
+            StandCooldowns.get(power).maxTime = maxCooldown;
+        }
+    }
+
 
     public CooldownInstance getCooldown(byte power){
         if (!StandCooldowns.isEmpty() && StandCooldowns.size() >= power){
@@ -979,25 +987,43 @@ public class StandPowers {
             { amt = 0; }
         }
 
+        byte cin = -1;
         for (CooldownInstance ci : StandCooldowns){
+            cin++;
             if (ci.time >= 0){
                 ci.setFrozen(isDrowning && !ClientNetworking.getAppropriateConfig().cooldownsInTicks.canRechargeWhileDrowning);
 
-                if (!ci.isFrozen())
-                { ci.time-=amt; }
+                boolean serverControlledCooldwon = isServerControlledCooldown(ci, cin);
+                if (!(this.self.level().isClientSide() && serverControlledCooldwon)) {
 
-                if (ci.time < -1){
-                    ci.time=-1;
-                }
+                    if (!ci.isFrozen()) {
+                        ci.time -= amt;
+                    }
 
-                if (this.self instanceof Player) {
-                    if ((((Player)this.self).isCreative() &&
-                            ClientNetworking.getAppropriateConfig().cooldownsInTicks.creativeModeRefreshesCooldowns) && ci.time > 2){
-                        ci.time=2;
+                    if (ci.time < -1) {
+                        ci.time = -1;
+                    }
+
+                    if (this.self instanceof Player) {
+                        if ((((Player) this.self).isCreative() &&
+                                ClientNetworking.getAppropriateConfig().cooldownsInTicks.creativeModeRefreshesCooldowns) && ci.time > 2) {
+                            ci.time = 2;
+                        }
+                    }
+
+                    if (serverControlledCooldwon && !this.self.level().isClientSide() && this.self instanceof Player) {
+                        List<CooldownInstance> CDCopy = new ArrayList<>(StandCooldowns) {
+                        };
+                        Roundabout.LOGGER.info("cin"+cin+" citime "+ci.time);
+
+                        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), cin, ci.time, ci.maxTime);
                     }
                 }
             }
         }
+    }
+    public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
+        return false;
     }
 
 

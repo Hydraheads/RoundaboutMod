@@ -487,6 +487,13 @@ public class ClientUtil {
             powers.setCooldown(power,cooldown);
         }
     }
+    public static void skillMaxCDSyncPacket(byte power, int cooldown, int maxCooldown){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            StandPowers powers = ((StandUser) player).roundabout$getStandPowers();
+            powers.setCooldownMax(power,cooldown,maxCooldown);
+        }
+    }
 
     public static void handleEntityResumeTsPacket(Vec3i vec3i){
         LocalPlayer player = Minecraft.getInstance().player;
