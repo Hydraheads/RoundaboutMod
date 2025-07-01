@@ -61,6 +61,7 @@ public class SavedSecond {
                     PL.getHealth(),
                     PL.getRemainingFireTicks(),
                     ((StandUser)PL).roundabout$getRemainingFireTicks(),
+                    ((StandUser)PL).roundabout$getOnStandFire(),
                     ((StandUser)PL).roundabout$getGasolineTime(),
                     PL.getAirSupply(),
                     ((StandUser)PL).roundabout$getLocacacaCurse(),
@@ -80,6 +81,7 @@ public class SavedSecond {
                     LE.getHealth(),
                     LE.getRemainingFireTicks(),
                     ((StandUser)LE).roundabout$getRemainingFireTicks(),
+                    ((StandUser)LE).roundabout$getOnStandFire(),
                     ((StandUser)LE).roundabout$getGasolineTime(),
                     LE.getAirSupply(),
                     ((StandUser)LE).roundabout$getLocacacaCurse()

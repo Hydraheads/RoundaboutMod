@@ -2,7 +2,6 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
@@ -113,10 +112,17 @@ public class PowersMandom extends NewDashPreset {
             case SKILL_2_NORMAL, SKILL_2_CROUCH -> {
                 rewindTimeClient();
             }
-            case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
+            case SKILL_3_NORMAL-> {
                 dash();
             }
+            case SKILL_3_CROUCH-> {
+                switchWatchClient();
+            }
         }
+    }
+    public void switchWatchClient(){
+        this.tryPower(PowerIndex.POWER_2, true);
+        tryPowerPacket(PowerIndex.POWER_2);
     }
     public void rewindTimeClient(){
         if (!this.onCooldown(PowerIndex.SKILL_2)) {

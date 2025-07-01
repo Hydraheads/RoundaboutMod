@@ -22,6 +22,7 @@ public class SavedSecondLiving extends SavedSecond {
     public float health;
     public int onFireTicks;
     public int onStandFireTicks;
+    public byte onStandFireType;
     public int gasolineTicks;
     public int airtime;
     public byte locacaca;
@@ -30,6 +31,7 @@ public class SavedSecondLiving extends SavedSecond {
     public SavedSecondLiving(float headYRotation, Vec2 rotationVec, Vec3 position, Vec3 deltaMovement, float fallDistance,
                              ResourceKey<DimensionType> dimensionId,
                              Collection<MobEffectInstance> activeEffects, float health, int onFireTicks, int onStandFireTicks,
+                             byte onStandFireType,
                              int gasolineTicks, int airtime, byte locacaca){
         super(headYRotation,rotationVec,position,deltaMovement,fallDistance,dimensionId);
 
@@ -44,6 +46,7 @@ public class SavedSecondLiving extends SavedSecond {
         this.health = health;
         this.onFireTicks = onFireTicks;
         this.onStandFireTicks = onStandFireTicks;
+        this.onStandFireType = onStandFireType;
         this.gasolineTicks = gasolineTicks;
         this.airtime = airtime;
         this.locacaca = locacaca;
@@ -78,6 +81,7 @@ public class SavedSecondLiving extends SavedSecond {
             LE.setRemainingFireTicks(onFireTicks);
             StandUser user = ((StandUser) LE);
             user.roundabout$setRemainingStandFireTicks(onStandFireTicks);
+            user.roundabout$setOnStandFire(onStandFireType);
             user.roundabout$setGasolineTime(gasolineTicks);
             LE.setAirSupply(this.airtime);
             user.roundabout$setLocacacaCurse(this.locacaca);

@@ -20,10 +20,10 @@ public class SavedSecondPlayer extends SavedSecondLiving {
     public SavedSecondPlayer(float headYRotation, Vec2 rotationVec, Vec3 position, Vec3 deltaMovement, float fallDistance,
                              ResourceKey<DimensionType> dimensionId,
                              Collection<MobEffectInstance> activeEffects, float health, int onFireTicks,
-                             int onStandFireTicks, int gasolineTicks, int airtime, byte locacaca,
+                             int onStandFireTicks, byte onStandFireType, int gasolineTicks, int airtime, byte locacaca,
                              int foodLevel, float saturationLevel, float exhaustionLevel) {
         super(headYRotation, rotationVec, position, deltaMovement, fallDistance, dimensionId, activeEffects, health, onFireTicks,
-                onStandFireTicks, gasolineTicks, airtime, locacaca);
+                onStandFireTicks, onStandFireType, gasolineTicks, airtime, locacaca);
         this.foodLevel = foodLevel;
         this.saturationLevel = saturationLevel;
         this.exhaustionLevel = exhaustionLevel;
