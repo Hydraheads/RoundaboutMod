@@ -21,6 +21,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -32,6 +33,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -104,9 +106,11 @@ public abstract class EntityAndData implements IEntityAndData {
             /**Every 20 ticks save a second on the entity for mandom rewinding*/
             if (roundabout$secondQue.isEmpty() || this.tickCount % 20 == 0) {
                 roundabout$addSecondToQueue(SavedSecond.saveEntitySecond((Entity) (Object) this));
+
             }
         }
     }
+
 
     @Unique
     public ArrayDeque<SavedSecond> roundabout$getSecondQue(){

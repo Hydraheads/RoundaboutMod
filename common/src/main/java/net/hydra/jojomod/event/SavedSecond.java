@@ -3,10 +3,12 @@ package net.hydra.jojomod.event;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
@@ -22,14 +24,16 @@ public class SavedSecond {
     public Entity isTickingParticles = null;
 
     public float fallDistance = 0;
+    public ResourceKey<DimensionType> dimensionTypeId = null;
 
-
-    public SavedSecond(float headYRotation,Vec2 rotationVec,Vec3 position, Vec3 deltaMovement, float fallDistance){
+    public SavedSecond(float headYRotation,Vec2 rotationVec,Vec3 position, Vec3 deltaMovement, float fallDistance,
+                       ResourceKey<DimensionType> dimensionId){
         this.headYRotation = headYRotation;
         this.rotationVec = new Vec2(rotationVec.x,rotationVec.y);
         this.position = new Vec3(position.x,position.y,position.z);
         this.deltaMovement = new Vec3(deltaMovement.x,deltaMovement.y,deltaMovement.z);
         this.fallDistance = fallDistance;
+        dimensionTypeId = dimensionId;
     }
 
     public static SavedSecond saveEntitySecond(Entity ent) {
@@ -40,6 +44,7 @@ public class SavedSecond {
                     PL.getPosition(1),
                     PL.getDeltaMovement(),
                     ent.fallDistance,
+                    ent.level().dimensionTypeId(),
                     PL.getActiveEffects(),
                     PL.getHealth(),
                     PL.getRemainingFireTicks(),
@@ -56,6 +61,7 @@ public class SavedSecond {
                     LE.getPosition(1),
                     LE.getDeltaMovement(),
                     ent.fallDistance,
+                    ent.level().dimensionTypeId(),
                     LE.getActiveEffects(),
                     LE.getHealth(),
                     LE.getRemainingFireTicks(),
@@ -69,6 +75,7 @@ public class SavedSecond {
                     LE.getPosition(1),
                     LE.getDeltaMovement(),
                     ent.fallDistance,
+                    ent.level().dimensionTypeId(),
                     ((IAbstractArrowAccess)LE).roundaboutGetInGround()
             );
         } if (ent != null){
@@ -77,13 +84,16 @@ public class SavedSecond {
                     ent.getRotationVector(),
                     ent.getPosition(1),
                     ent.getDeltaMovement(),
-                    ent.fallDistance
+                    ent.fallDistance,
+                    ent.level().dimensionTypeId()
             );
         }
         return null;
     }
 
     public void loadTime(Entity ent){
+        if (ent != null && dimensionTypeId != ent.level().dimensionTypeId())
+            return;
         ent.setYHeadRot(this.headYRotation);
         ent.setXRot(this.rotationVec.x);
         ent.setYRot(this.rotationVec.y);

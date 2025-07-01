@@ -2,10 +2,12 @@ package net.hydra.jojomod.event;
 
 import com.google.common.collect.Maps;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
@@ -24,9 +26,10 @@ public class SavedSecondLiving extends SavedSecond {
 
 
     public SavedSecondLiving(float headYRotation, Vec2 rotationVec, Vec3 position, Vec3 deltaMovement, float fallDistance,
+                             ResourceKey<DimensionType> dimensionId,
                              Collection<MobEffectInstance> activeEffects, float health, int onFireTicks, int onStandFireTicks,
                              int gasolineTicks){
-        super(headYRotation,rotationVec,position,deltaMovement,fallDistance);
+        super(headYRotation,rotationVec,position,deltaMovement,fallDistance,dimensionId);
 
         List<MobEffectInstance> effects = new ArrayList<>(activeEffects.stream().toList());
         if (!effects.isEmpty()) {
@@ -43,6 +46,8 @@ public class SavedSecondLiving extends SavedSecond {
     }
     @Override
     public void loadTime(Entity ent){
+        if (ent != null && dimensionTypeId != ent.level().dimensionTypeId())
+            return;
         super.loadTime(ent);
 
         if (ent instanceof LivingEntity LE) {
