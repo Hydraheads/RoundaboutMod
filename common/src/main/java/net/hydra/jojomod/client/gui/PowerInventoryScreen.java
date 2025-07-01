@@ -730,7 +730,10 @@ public class PowerInventoryScreen
     public boolean mouseClicked(double $$0, double $$1, int $$2) {
         Player pl = Minecraft.getInstance().player;
         if (pl != null) {
-
+            if (pl.isSpectator()){
+                onClose();
+                return true;
+            }
 
             if (updateClicked($$0,$$1,$$2)){
                 return true;

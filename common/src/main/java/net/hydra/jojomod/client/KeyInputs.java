@@ -37,7 +37,8 @@ public class KeyInputs {
     }
 
     public static void menuKey(Player player, Minecraft client){
-        if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0) {
+        if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0
+        && !player.isSpectator()) {
             forceSummon(player,true);
             PlayerMaskSlots ms = ((IPlayerEntity)player).roundabout$getMaskInventory();
             ItemStack stack = ms.getItem(0);
