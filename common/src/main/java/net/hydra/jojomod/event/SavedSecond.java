@@ -1,14 +1,22 @@
 package net.hydra.jojomod.event;
 
 import net.hydra.jojomod.access.IAbstractArrowAccess;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
@@ -92,12 +100,67 @@ public class SavedSecond {
     }
 
     public void loadTime(Entity ent){
-        if (ent != null && dimensionTypeId != ent.level().dimensionTypeId())
+        if (ent == null || (dimensionTypeId != ent.level().dimensionTypeId()))
             return;
-        ent.setYHeadRot(this.headYRotation);
-        ent.setXRot(this.rotationVec.x);
-        ent.setYRot(this.rotationVec.y);
-        ent.setPos(this.position);
-        ent.fallDistance = this.fallDistance;
+        boolean canBeRepositioned = true;
+        boolean suffocationBlocker = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindStopsSuffocation;
+        if (suffocationBlocker) {
+            if (!canTeleportTo(ent.level(),position,ent)){
+                canBeRepositioned = false;
+            }
+        }
+        if (canBeRepositioned) {
+            ent.setYHeadRot(this.headYRotation);
+            ent.setXRot(this.rotationVec.x);
+            ent.setYRot(this.rotationVec.y);
+            ent.setPos(this.position);
+            ent.hurtMarked = true;
+            ent.setDeltaMovement(this.deltaMovement);
+            ent.hasImpulse = true;
+            ent.fallDistance = this.fallDistance;
+        }
+    }
+
+    public static boolean canTeleportTo(Level level, Vec3 targetPos, Entity entity) {
+        // Get entity dimensions
+        double width = entity.getBbWidth();
+        double height = entity.getBbHeight();
+
+        // Construct bounding box at the target position
+        AABB targetBox = new AABB(
+                targetPos.x - width / 2.0, targetPos.y, targetPos.z - width / 2.0,
+                targetPos.x + width / 2.0, targetPos.y + height, targetPos.z + width / 2.0
+        );
+
+        // 1. Check if space is clear
+        if (!level.noCollision(entity, targetBox)) {
+            return false;
+        }
+
+
+        boolean deviousStratBlocker = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindStopsDeviousStrategies;
+
+        if (deviousStratBlocker) {
+            // 2. Check for dangerous blocks inside target box
+            for (BlockPos pos : BlockPos.betweenClosed(
+                    Mth.floor(targetBox.minX), Mth.floor(targetBox.minY), Mth.floor(targetBox.minZ),
+                    Mth.floor(targetBox.maxX), Mth.floor(targetBox.maxY), Mth.floor(targetBox.maxZ))) {
+
+                BlockState state = level.getBlockState(pos);
+                Block block = state.getBlock();
+
+                // List of bad blocks to avoid
+                if (block == Blocks.COBWEB || block == Blocks.LAVA) {
+                    return false;
+                }
+
+                // Optional: also avoid fire or cactus
+                if (block == Blocks.FIRE || block == Blocks.CACTUS) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }

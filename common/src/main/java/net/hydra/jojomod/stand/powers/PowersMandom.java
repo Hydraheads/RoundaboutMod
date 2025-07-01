@@ -172,6 +172,8 @@ public class PowersMandom extends NewDashPreset {
         if (isClient()){
             timeRewindOverlayTicks = 0;
             this.self.playSound(ModSounds.MANDOM_REWIND_EVENT, 200F, 1.0F);
+        } else {
+            rewindTimeActivation();
         }
         return true;
     }
@@ -206,6 +208,22 @@ public class PowersMandom extends NewDashPreset {
         return ModParticles.GREEN_CLOCK;
     }
 
+    public void rewindTimeActivation(){
+        List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.self.level(), this.self.blockPosition(),
+                ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindRange);
+        if (!mobsInRange.isEmpty()) {
+            for (Entity ent : mobsInRange) {
+                if (MainUtil.canRewindInTime(ent, this.self)) {
+                    IEntityAndData iData = (IEntityAndData) ent;
+                    SavedSecond lastSecond = iData.roundabout$getLastSavedSecond();
+                    if (lastSecond != null) {
+                        lastSecond.loadTime(ent);
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public void tickPower() {
         super.tickPower();
@@ -213,7 +231,8 @@ public class PowersMandom extends NewDashPreset {
         /**Grabs nearby entities pretty regularly to see if they can be rendered*/
         if (!this.self.level().isClientSide()) {
             if (activatedPastVision() && this.self.tickCount % 3 == 0) {
-                List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.self.level(), this.self.blockPosition(), 50);
+                List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.self.level(), this.self.blockPosition(),
+                        ClientNetworking.getAppropriateConfig().mandomSettings.chronoVisionRange);
                 if (!mobsInRange.isEmpty()) {
                     for (Entity ent : mobsInRange) {
                         if (MainUtil.canRewindInTime(ent,this.self)) {

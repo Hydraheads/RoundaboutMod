@@ -577,8 +577,10 @@ public class StandPowers {
         y-=1;
 
         if (locked){
+            RenderSystem.enableBlend();
             context.blit(StandIcons.LOCKED_SQUARE_ICON,x-3,y-3,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
         } else {
+            RenderSystem.enableBlend();
             context.blit(StandIcons.SQUARE_ICON,x-3,y-3,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
             Font renderer = Minecraft.getInstance().font;
             if (slot==4){
@@ -606,11 +608,13 @@ public class StandPowers {
 
 
         if ((cd != null && (cd.time >= 0)) || isAttackIneptVisually(CDI,slot)){
+            RenderSystem.enableBlend();
             context.setColor(0.62f, 0.62f, 0.62f, 0.8f);
             context.blit(rl, x, y, 0, 0, 18, 18, 18, 18);
             if ((cd != null && (cd.time >= 0))) {
                 float blit = (20*(1-((float) (1+cd.time) /(1+cd.maxTime))));
                 int b = (int) Math.round(blit);
+                RenderSystem.enableBlend();
                 context.setColor(1f, 1f, 1f, 1f);
 
                 ResourceLocation COOLDOWN_TEX = StandIcons.COOLDOWN_ICON;
