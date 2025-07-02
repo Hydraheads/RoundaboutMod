@@ -398,8 +398,16 @@ public class PowersMandom extends NewDashPreset {
     }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.chrono_vision",
+                "instruction.roundabout.press_skill", StandIcons.MANDOM_VISION_ON, 1, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.rewind_time",
+                "instruction.roundabout.press_skill", StandIcons.REWIND,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.watch_switch",
+                "instruction.roundabout.press_skill_crouch", StandIcons.WATCH,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.clock",
+                "instruction.roundabout.passive", StandIcons.CLOCK,4,level,bypass));
         return $$1;
     }
 
