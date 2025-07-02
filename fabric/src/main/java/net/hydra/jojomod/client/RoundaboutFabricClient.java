@@ -13,6 +13,7 @@ import net.hydra.jojomod.particles.FabricParticlesClient;
 import net.hydra.jojomod.registry.FabricEntityClient;
 import net.hydra.jojomod.registry.FabricItems;
 import net.hydra.jojomod.registry.FabricKeyInputs;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.item.ItemProperties;
@@ -22,6 +23,7 @@ import net.minecraft.world.entity.player.Player;
 public class RoundaboutFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
+        MainUtil.setClient();
         FabricKeyInputs.register();
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(), ModBlocks.GASOLINE_SPLATTER,
                 ModBlocks.BARBED_WIRE, ModBlocks.WIRE_TRAP, ModBlocks.BARBED_WIRE_BUNDLE,
@@ -51,6 +53,5 @@ public class RoundaboutFabricClient implements ClientModInitializer {
         FabricEntityClient.register();
         ClientPlayConnectionEvents.JOIN.register((clientPlayNetworkHandler, packetSender, minecraftClient) -> ClientNetworking.sendHandshake());
         ItemProperties.register(FabricItems.HARPOON, new ResourceLocation(Roundabout.MOD_ID,"throwing"), (itemStack, clientLevel, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0f : 0.0f);
-        Player pl = Minecraft.getInstance().player;
     }
 }

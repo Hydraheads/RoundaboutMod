@@ -87,6 +87,17 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 public class MainUtil {
+
+    public static boolean isClient = false;
+
+    public static boolean isClient(){
+        return isClient;
+    }
+    public static void setClient(){
+        isClient = true;
+    }
+
+
     /**Additional math functions for the mod.*/
 
     /** This version of interpolation accommodates speed multipliers so you can control how

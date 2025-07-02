@@ -28,6 +28,7 @@ import net.hydra.jojomod.client.models.substand.renderers.EncasementBubbleRender
 import net.hydra.jojomod.client.models.substand.LifeTrackerModel;
 import net.hydra.jojomod.client.models.substand.renderers.LifeTrackerRenderer;
 import net.hydra.jojomod.particles.*;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.particle.ExplodeParticle;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -35,10 +36,16 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @Mod.EventBusSubscriber(modid = Roundabout.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientForgeEvents {
 
+    @SubscribeEvent
+    public static void onClientSetup(FMLClientSetupEvent event) {
+        // This runs on client during mod loading (after registries)
+        MainUtil.setClient();
+    }
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ForgeEntities.TERRIER_DOG.get(), TerrierEntityRenderer::new);

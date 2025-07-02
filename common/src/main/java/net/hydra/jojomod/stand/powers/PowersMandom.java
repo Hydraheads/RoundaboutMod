@@ -256,8 +256,10 @@ public class PowersMandom extends NewDashPreset {
     public byte getWatchStyle = WATCHLESS;
 
     public void rewindTimeActivation(){
+        int rewindPacketRange = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindRange;
+        spreadRadialClientPacket(rewindPacketRange,false, "rewind");
         List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.self.level(), this.self.blockPosition(),
-                ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindRange);
+                rewindPacketRange);
         if (!mobsInRange.isEmpty()) {
             for (Entity ent : mobsInRange) {
                 if (MainUtil.canRewindInTime(ent, this.self)) {

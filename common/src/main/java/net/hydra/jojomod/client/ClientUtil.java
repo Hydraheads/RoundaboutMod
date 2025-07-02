@@ -7,9 +7,11 @@ import net.hydra.jojomod.access.ICamera;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.gui.*;
+import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.server.level.ServerPlayer;
 import net.zetalasis.client.shader.D4CShaderFX;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.D4CCloneEntity;
@@ -64,11 +66,23 @@ import org.spongepowered.asm.mixin.Unique;
 
 public class ClientUtil {
 
+
     public static Matrix4f savedPose;
     public static int checkthis = 0;
     public static int checkthisdat = 0;
     public static boolean skipInterpolation = false;
 
+
+
+    public static void handleGeneralPackets(String message, Object... vargs) {
+        Minecraft instance = Minecraft.getInstance();
+        Player player = instance.player;
+        if (player != null) {
+            if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Rewind.value)) {
+                Roundabout.LOGGER.info("It's TV TIME :)");
+            }
+        }
+    }
 
     /**
      * A generalized packet for sending ints to the client. Context is what to do with the data int
@@ -344,6 +358,7 @@ public class ClientUtil {
     }
 
     public static void handlePlaySoundPacket(int startPlayerID, byte soundQue) {
+
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
             Entity User = player.level().getEntity(startPlayerID);

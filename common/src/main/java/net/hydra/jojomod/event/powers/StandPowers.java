@@ -2617,6 +2617,28 @@ public class StandPowers {
         }
     }
 
+    public final void spreadRadialClientPacket(double range, boolean skipSelf, String packet) {
+        if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+                if (skipSelf && this.self.is(serverPlayerEntity)) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, range)) {
+                    ModMessageEvents.sendToPlayer((ServerPlayer)serverPlayerEntity, packet);
+                }
+            }
+        }
+    }
+
     public final void playSoundsIfNearby(byte soundNo, double range, boolean onSelf) {
         playSoundsIfNearby(soundNo,range,onSelf,false);
     }
