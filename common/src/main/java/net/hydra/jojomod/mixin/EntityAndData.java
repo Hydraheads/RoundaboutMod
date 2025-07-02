@@ -124,6 +124,10 @@ public abstract class EntityAndData implements IEntityAndData {
         }
         return null;
     }
+    @Unique
+    public void roundabout$resetSecondQueue(){
+         roundabout$secondQue = new ArrayDeque<>();
+    }
 
 
     @Unique

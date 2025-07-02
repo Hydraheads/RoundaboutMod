@@ -71,4 +71,6 @@ public interface IEntityAndData {
 
     SavedSecond roundabout$getLastSavedSecond();
 
+    void roundabout$resetSecondQueue();
+
 }

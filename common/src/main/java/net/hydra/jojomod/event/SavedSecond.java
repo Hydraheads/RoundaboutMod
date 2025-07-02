@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event;
 
 import net.hydra.jojomod.access.IAbstractArrowAccess;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
@@ -134,6 +135,7 @@ public class SavedSecond {
             ent.hasImpulse = true;
             ent.fallDistance = this.fallDistance;
         }
+        ((IEntityAndData)ent).roundabout$resetSecondQueue();
     }
 
     public static boolean canTeleportTo(Level level, Vec3 targetPos, Entity entity) {
