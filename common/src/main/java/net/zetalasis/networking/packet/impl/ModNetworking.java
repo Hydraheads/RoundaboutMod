@@ -179,6 +179,7 @@ public class ModNetworking {
 
     public static Object[] decodeBufferToVArgs(FriendlyByteBuf buf) {
         String sig = buf.readUtf();
+
         if (sig.equals("void")) {
             return new Object[0]; // no arguments
         }
@@ -195,6 +196,10 @@ public class ModNetworking {
                 throw new RuntimeException("Failed decoding FriendlyByteBuf to VArgs:\n" +
                         className + " was not found.\n[" + sig + "]");
             }
+        }
+
+        if (buf.readableBytes() > 0) {
+            throw new RuntimeException("Warning: extra unread bytes in buffer! Signature: " + sig);
         }
 
         return result.toArray();

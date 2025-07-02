@@ -106,6 +106,7 @@
     "dworlds.D4CStopLogger",
     "dworlds.RegistryMixin",
     "dworlds.ServerAccessorMixin",
+    "networking.ZClientGamePacketListener",
     "networking.ZServerGamePacketListenerImpl"
   ],
   "client": [

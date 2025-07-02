@@ -77,11 +77,14 @@ public class ClientUtil {
     public static void handleGeneralPackets(String message, Object... vargs) {
         Minecraft instance = Minecraft.getInstance();
         Player player = instance.player;
-        if (player != null) {
-            if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Rewind.value)) {
-                Roundabout.LOGGER.info("It's TV TIME :)");
+
+        instance.execute(() -> {
+            if (player != null) {
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Rewind.value)) {
+                    Roundabout.LOGGER.info("It's TV TIME :)");
+                }
             }
-        }
+        });
     }
 
     /**
