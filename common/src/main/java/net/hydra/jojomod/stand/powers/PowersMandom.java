@@ -14,6 +14,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
@@ -266,6 +267,16 @@ public class PowersMandom extends NewDashPreset {
                     SavedSecond lastSecond = iData.roundabout$getLastSavedSecond();
                     if (lastSecond != null) {
                         lastSecond.loadTime(ent);
+                    }
+
+                    if (!ent.is(this.self)){
+                        if (ent instanceof LivingEntity LE){
+                            StandUser user = ((StandUser)LE);
+                            StandPowers powers = user.roundabout$getStandPowers();
+                            if (powers instanceof PowersMandom PM){
+                                PM.setCooldown(PowerIndex.SKILL_2,ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownv2);
+                            }
+                        }
                     }
                 }
             }
