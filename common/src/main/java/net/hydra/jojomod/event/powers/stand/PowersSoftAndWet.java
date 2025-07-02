@@ -2457,7 +2457,7 @@ public void unlockSkin(){
             case SoftAndWetEntity.DEBUT -> Component.translatable("skins.roundabout.soft_and_wet.debut");
             case SoftAndWetEntity.COLORS -> Component.translatable("skins.roundabout.soft_and_wet.colors");
             case SoftAndWetEntity.KIRA -> Component.translatable("skins.roundabout.soft_and_wet.kira");
-            case SoftAndWetEntity.GREEN -> Component.translatable("skins.roundabout.soft_and_wet.debut");
+            case SoftAndWetEntity.GREEN -> Component.translatable("skins.roundabout.soft_and_wet.green");
             default -> Component.translatable("skins.roundabout.soft_and_wet.light");
         };
     }
