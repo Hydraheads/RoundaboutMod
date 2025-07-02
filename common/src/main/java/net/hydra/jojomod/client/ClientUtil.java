@@ -67,10 +67,7 @@ public class ClientUtil {
     public static Matrix4f savedPose;
     public static int checkthis = 0;
     public static int checkthisdat = 0;
-
-    /**A hacky way to make any model see through*/
-    public static boolean isMakingRenderingSeeThrough;
-    public static int lastRenderedMobTickCount;
+    public static boolean skipInterpolation = false;
 
 
     /**

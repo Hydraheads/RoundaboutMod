@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -108,13 +109,12 @@ public abstract class HudRendering implements IHudAccess {
                 }
             }
 
-            if (user.roundabout$getStandPowers() instanceof PowersMandom PM){
-                if (PM.timeRewindOverlayTicks > -1) {
+             StandPowers powers = user.roundabout$getStandPowers();
+                if (powers.timeRewindOverlayTicks > -1) {
                     RenderSystem.enableBlend();
-                    this.renderTextureOverlay($$1, StandIcons.TIME_REWIND, PM.getOverlayFromOverlayTicks($$0));
+                    this.renderTextureOverlay($$1, StandIcons.TIME_REWIND, powers.getOverlayFromOverlayTicks($$0));
                     RenderSystem.disableBlend();
                 }
-            }
 
         }
         StandHudRender.renderStandHud($$1, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), roundabout$flashAlpha, roundabout$otherFlashAlpha);

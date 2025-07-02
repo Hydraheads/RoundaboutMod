@@ -207,32 +207,7 @@ public class PowersMandom extends NewDashPreset {
         return true;
     }
 
-    public int timeRewindOverlayTicks = -1;
-    float maxOverlay = 0.45f;
 
-    int zenith = 10;
-    public float getOverlayFromOverlayTicks(float delta) {
-        // Interpolated tick value with partial tick (delta)
-        float ticks = timeRewindOverlayTicks + delta;
-
-        // Compute how far from the peak (5) we are
-        float distanceFromPeak = Math.abs(ticks - ((float)zenith));
-
-        // Normalize (distance from 5 goes from 0 to 5)
-        float normalized = 1.0f - (distanceFromPeak / ((float)zenith));
-
-        // Clamp and scale to maxOverlay
-        return Math.max(0.0f, Math.min(1.0f, normalized)) * maxOverlay;
-    }
-
-    public void tickOverlayTicks(){
-        if (timeRewindOverlayTicks > -1) {
-            timeRewindOverlayTicks++;
-            if (timeRewindOverlayTicks >= (zenith*2)) {
-                timeRewindOverlayTicks = -1;
-            }
-        }
-    }
 
     public boolean itsRewindTime(){
         this.setCooldown(PowerIndex.SKILL_2,ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownv2);
@@ -340,7 +315,7 @@ public class PowersMandom extends NewDashPreset {
                 }
             }
         } else {
-            tickOverlayTicks();
+
         }
     }
 

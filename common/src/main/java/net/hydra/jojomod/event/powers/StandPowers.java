@@ -831,7 +831,40 @@ public class StandPowers {
     }
     public void setPiloting(int ID){
     }
+
+    public int zenith = 10;
+    public int timeRewindOverlayTicks = -1;
+    public void tickOverlayTicks(){
+        if (timeRewindOverlayTicks > -1) {
+            timeRewindOverlayTicks++;
+            if (timeRewindOverlayTicks >= (zenith*2)) {
+                timeRewindOverlayTicks = -1;
+            }
+        }
+    }
+
+    float maxOverlay = 0.45f;
+
+    public float getOverlayFromOverlayTicks(float delta) {
+        // Interpolated tick value with partial tick (delta)
+        float ticks = timeRewindOverlayTicks + delta;
+
+        // Compute how far from the peak (5) we are
+        float distanceFromPeak = Math.abs(ticks - ((float)zenith));
+
+        // Normalize (distance from 5 goes from 0 to 5)
+        float normalized = 1.0f - (distanceFromPeak / ((float)zenith));
+
+        // Clamp and scale to maxOverlay
+        return Math.max(0.0f, Math.min(1.0f, normalized)) * maxOverlay;
+    }
     public void tickPower(){
+        if (this.self.level().isClientSide()){
+            if (this.self instanceof Player) {
+                tickOverlayTicks();
+            }
+        }
+
         if (this.self instanceof Player PE && PE.isSpectator()) {
             ((StandUser) this.getSelf()).roundabout$setActive(false);
         }
