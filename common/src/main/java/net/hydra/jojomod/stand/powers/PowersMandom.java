@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -21,6 +22,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -373,6 +375,32 @@ public class PowersMandom extends NewDashPreset {
             }
         }
         return super.getSoundFromByte(soundChoice);
+    }
+
+
+    boolean thisistheend=false;
+    @Override
+    public void tickStandRejection(MobEffectInstance effect) {
+        if (!this.getSelf().level().isClientSide() && !thisistheend) {
+            thisistheend = true;
+                itsRewindTime();
+        }
+    }
+
+    public float lastRewindHealth = -1;
+    @Override
+    public void tickMobAI(LivingEntity attackTarget){
+        if (lastRewindHealth < 0){
+            lastRewindHealth = this.self.getHealth();
+        }
+        if (this.self.getHealth() < lastRewindHealth && !onCooldown(PowerIndex.SKILL_2)){
+            itsRewindTime();
+            if (!hasStandActive(this.self)){
+                ((IMob)this.self).roundabout$setRetractTicks(500);
+                getStandUserSelf().roundabout$summonStand(this.self.level(),true,false);
+            }
+        }
+        lastRewindHealth = this.self.getHealth();
     }
 
     public byte worthinessType(){

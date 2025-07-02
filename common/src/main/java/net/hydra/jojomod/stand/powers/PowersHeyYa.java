@@ -207,11 +207,11 @@ public class PowersHeyYa extends NewDashPreset {
     @Override
     public void tickMobAI(LivingEntity attackTarget){
         ticksSinceLastYap--;
+        if (!hasStandActive(this.self)){
+            ((IMob)this.self).roundabout$setRetractTicks(500);
+            getStandUserSelf().roundabout$summonStand(this.self.level(),true,false);
+        }
         if (ticksSinceLastYap <= 0){
-            if (!hasStandActive(this.self)){
-                ((IMob)this.self).roundabout$setRetractTicks(500);
-                getStandUserSelf().roundabout$summonStand(this.self.level(),true,false);
-            }
             yapSounds();
             ticksSinceLastYap = maxTicksSinceLastYap;
         }
