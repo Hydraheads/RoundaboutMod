@@ -127,8 +127,11 @@ public class PowersMandom extends NewDashPreset {
         }
     }
     public void switchWatchClient(){
-        this.tryPower(PowerIndex.POWER_2, true);
-        tryPowerPacket(PowerIndex.POWER_2);
+        this.tryPower(PowerIndex.POWER_4, true);
+        tryPowerPacket(PowerIndex.POWER_4);
+    }
+    public boolean switchWatch(){
+        return true;
     }
     public void rewindTimeClient(){
         if (!this.onCooldown(PowerIndex.SKILL_2)) {
@@ -149,6 +152,9 @@ public class PowersMandom extends NewDashPreset {
             }
             case PowerIndex.POWER_2 -> {
                 return itsRewindTime();
+            }
+            case PowerIndex.POWER_4 -> {
+                return switchWatch();
             }
         }
         return super.setPowerOther(move,lastMove);
