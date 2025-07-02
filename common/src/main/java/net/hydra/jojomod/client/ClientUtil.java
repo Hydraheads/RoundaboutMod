@@ -9,9 +9,6 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.gui.*;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.stand.powers.PowersMandom;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.server.level.ServerPlayer;
 import net.zetalasis.client.shader.D4CShaderFX;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.D4CCloneEntity;
@@ -81,7 +78,15 @@ public class ClientUtil {
         instance.execute(() -> {
             if (player != null) {
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Rewind.value)) {
-                    Roundabout.LOGGER.info("It's TV TIME :)");
+                    StandUser user = ((StandUser)player);
+                    StandPowers powers = user.roundabout$getStandPowers();
+                    if (ConfigManager.getClientConfig().mandomRewindShowsVisualEffectsToNonMandomUsers ||
+                            powers instanceof PowersMandom){
+                        int ticks = powers.timeRewindOverlayTicks;
+                        if (ticks <= -1){
+                            powers.timeRewindOverlayTicks = 0;
+                        }
+                    }
                 }
             }
         });

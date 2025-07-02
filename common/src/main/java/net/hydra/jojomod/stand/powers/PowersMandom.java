@@ -212,7 +212,6 @@ public class PowersMandom extends NewDashPreset {
     public boolean itsRewindTime(){
         this.setCooldown(PowerIndex.SKILL_2,ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownv2);
         if (isClient()){
-            timeRewindOverlayTicks = 0;
             this.self.playSound(ModSounds.MANDOM_REWIND_EVENT, 200F, 1.0F);
         } else {
             rewindTimeActivation();

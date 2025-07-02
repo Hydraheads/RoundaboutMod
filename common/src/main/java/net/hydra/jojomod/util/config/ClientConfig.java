@@ -45,6 +45,8 @@ public class ClientConfig implements Cloneable {
     public Boolean magiciansRedLashesMakeItEmmissive;
     @BooleanOption(group = "inherit", value = true)
     public Boolean magiciansRedRenderOnFireInFirstPerson;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean mandomRewindShowsVisualEffectsToNonMandomUsers;
     @NestedOption(group = "modded")
     public ClientConfig.ParticleSettings particleSettings;
     @NestedOption(group = "modded")
