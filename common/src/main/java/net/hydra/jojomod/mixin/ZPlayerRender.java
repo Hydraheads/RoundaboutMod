@@ -78,7 +78,7 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
         this.addLayer(new MandomLayer<>($$0, this));
         this.addLayer(new VisagePartLayer<>($$0, this));
         /**Access to slim and not slim models simultaneously*/
-        roundabout$otherModel = new PlayerModel<>($$0.bakeLayer($$1 ? ModelLayers.PLAYER : ModelLayers.PLAYER_SLIM), $$1);
+        roundabout$otherModel = new PlayerModel<>($$0.bakeLayer($$1 ? ModelLayers.PLAYER : ModelLayers.PLAYER_SLIM), !$$1);
         roundabout$mainModel = this.model;
     }
     @Unique
@@ -504,24 +504,26 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
     }
     boolean roundabout$switched = false;
     public void roundabout$changeTheModel(ItemStack visage, ShapeShifts shifts){
-        if (shifts == ShapeShifts.EERIE)
-            if (((IPlayerModel)this.model).roundabout$getSlim()){
+        if (shifts == ShapeShifts.EERIE) {
+            if (((IPlayerModel) this.model).roundabout$getSlim()) {
                 if (!roundabout$switched) {
                     roundabout$mainModel = this.model;
                     roundabout$switched = true;
                     model = roundabout$otherModel;
                 }
-                return;
             }
-        if (shifts == ShapeShifts.OVA)
-            if (!((IPlayerModel)this.model).roundabout$getSlim()){
+            return;
+        }
+        if (shifts == ShapeShifts.OVA) {
+            if (!((IPlayerModel) this.model).roundabout$getSlim()) {
                 if (!roundabout$switched) {
                     roundabout$mainModel = this.model;
                     roundabout$switched = true;
                     model = roundabout$otherModel;
                 }
-                return;
             }
+            return;
+        }
 
         if (visage != null && !visage.isEmpty()) {
             if (visage.getItem() instanceof MaskItem MI) {
@@ -532,8 +534,8 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
                             roundabout$switched = true;
                             model = roundabout$otherModel;
                         }
-                        return;
                     }
+                    return;
                 }
             }
         }

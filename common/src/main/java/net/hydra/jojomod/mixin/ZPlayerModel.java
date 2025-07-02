@@ -70,6 +70,11 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
         return this.slim;
     }
 
+    @Override
+    @Unique
+    public boolean roundabout$getRealSlim(){
+        return this.slim;
+    }
     PartDefinition roundabout$partDef;
     @Unique
     private static final Vector3f roundabout$ANIMATION_VECTOR_CACHE = new Vector3f();

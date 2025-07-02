@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -91,6 +92,22 @@ public class PowersMandom extends NewDashPreset {
         context.renderItem(clock, x+1, y+1);  // Draw the item itself
     }
 
+    public byte getWatchStyle(){
+        if (this.self instanceof Player PL){
+            return ((IPlayerEntity)PL).roundabout$getWatchStyle();
+        }
+        return WATCHLESS;
+    }
+    public void swapWatchStyle(){
+        byte style = getWatchStyle();
+        style++;
+        if (style > ROLEX){
+            style = WATCHLESS;
+        }
+        if (this.self instanceof Player PL){
+            ((IPlayerEntity)PL).roundabout$setWatchStyle(style);
+        }
+    }
     public boolean activatedPastVision(){
         return getStandUserSelf().roundabout$getUniqueStandModeToggle();
     }
@@ -131,6 +148,21 @@ public class PowersMandom extends NewDashPreset {
         tryPowerPacket(PowerIndex.POWER_4);
     }
     public boolean switchWatch(){
+        swapWatchStyle();
+        if (!isClient()) {
+            switch (getWatchStyle())
+            {
+                case WATCHLESS -> {
+                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.mandom.watch_off").withStyle(ChatFormatting.GOLD), true);
+                }
+                case MAIN -> {
+                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.mandom.watch_on").withStyle(ChatFormatting.GOLD), true);
+                }
+                case ROLEX -> {
+                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.mandom.watch_on_rolex").withStyle(ChatFormatting.GOLD), true);
+                }
+            }
+        }
         return true;
     }
     public void rewindTimeClient(){
@@ -242,6 +274,11 @@ public class PowersMandom extends NewDashPreset {
             return ModParticles.ORANGE_CLOCK;
         return ModParticles.GREEN_CLOCK;
     }
+    public static final byte
+            WATCHLESS = 0,
+            MAIN = 1,
+            ROLEX = 2;
+    public byte getWatchStyle = WATCHLESS;
 
     public void rewindTimeActivation(){
         List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.self.level(), this.self.blockPosition(),

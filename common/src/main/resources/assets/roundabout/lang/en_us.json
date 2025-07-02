@@ -1210,5 +1210,8 @@
   "text.roundabout.hey_ya_messaging.danger.evil.no_4": "%1$s is gonna get us, idiot!",
 
   "text.roundabout.mandom.vision_off": "Chrono Vision Off",
-  "text.roundabout.mandom.vision_on": "Chrono Vision On"
+  "text.roundabout.mandom.vision_on": "Chrono Vision On",
+  "text.roundabout.mandom.watch_off": "Watchless",
+  "text.roundabout.mandom.watch_on": "Main Watch On",
+  "text.roundabout.mandom.watch_on_rolex": "Rolex Watch On"
 }

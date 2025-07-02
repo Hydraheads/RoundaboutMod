@@ -20,4 +20,11 @@ public class MandomAnimations {
                         new Keyframe(0.0F, KeyframeAnimations.degreeVec(-17.4375F, -1.5018F, -4.7697F), AnimationChannel.Interpolations.LINEAR)
                 ))
                 .build();
+
+        public static final AnimationDefinition tick = AnimationDefinition.Builder.withLength(60.0417F).looping()
+                .addAnimation("hand", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                        new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                        new Keyframe(60.0417F, KeyframeAnimations.degreeVec(360.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+                ))
+                .build();
 }
