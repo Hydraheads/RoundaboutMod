@@ -66,7 +66,11 @@ public class PowersMandom extends NewDashPreset {
         }
 
         setSkillIcon(context, x, y, 2, StandIcons.REWIND, PowerIndex.SKILL_2);
-        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        if (!isHoldingSneak()){
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        } else {
+            setSkillIcon(context, x, y, 3, StandIcons.WATCH, PowerIndex.NO_CD);
+        }
         renderClock(context,x,y,4);
 
         super.renderIcons(context, x, y);

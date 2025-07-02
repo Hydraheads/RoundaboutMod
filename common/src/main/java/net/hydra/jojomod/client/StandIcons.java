@@ -138,6 +138,8 @@ public class StandIcons {
             "textures/gui/icons/mandom/vision_off.png");
     public static final ResourceLocation REWIND = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/mandom/rewind.png");
+    public static final ResourceLocation WATCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/mandom/watch_cycle.png");
 
 
     public static final ResourceLocation SNAP_ICON = new ResourceLocation(Roundabout.MOD_ID,
