@@ -135,7 +135,8 @@ public class Config implements Cloneable {
     public Set<String> standArrowSecondaryPoolv2 = new HashSet<>(
             Arrays.asList(
                     "roundabout:cinderella_disc",
-                    "roundabout:hey_ya_disc"
+                    "roundabout:hey_ya_disc",
+                    "roundabout:mandom_disc"
             )
     );
     public Set<String> naturalStandUserMobPoolv3 = new HashSet<>(
@@ -150,7 +151,8 @@ public class Config implements Cloneable {
     );
     public Set<String> humanoidOnlyStandUserMobPoolv1 = new HashSet<>(
             Arrays.asList(
-                    "roundabout:hey_ya_disc"
+                    "roundabout:hey_ya_disc",
+                    "roundabout:mandom_disc"
             )
     );
     @NestedOption(group = "modded")

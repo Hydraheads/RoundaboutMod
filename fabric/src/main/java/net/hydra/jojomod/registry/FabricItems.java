@@ -329,6 +329,7 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_SOFT_AND_WET);
                         entries.accept(STAND_DISC_CINDERELLA);
                         entries.accept(STAND_DISC_HEY_YA);
+                        entries.accept(STAND_DISC_MANDOM);
 
                     }).build());
 
@@ -338,7 +339,6 @@ public class FabricItems {
                     .icon(() -> new ItemStack(LIGHT_BULB)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
 
-                        entries.accept(STAND_DISC_MANDOM);
                         //entries.accept(STAND_DISC_D4C);
                         //entries.accept(MAX_STAND_DISC_D4C);
                         //entries.accept(INTERDIMENSIONAL_KEY);

@@ -503,6 +503,7 @@ public class PowersMandom extends NewDashPreset {
         return super.isServerControlledCooldown(ci, num);
     }
 
+    /**
     @Override
     public boolean isWip(){
         return true;
@@ -515,4 +516,5 @@ public class PowersMandom extends NewDashPreset {
     public Component ifWipListDev(){
         return Component.literal(  "Hydra").withStyle(ChatFormatting.YELLOW);
     }
+     */
 }
