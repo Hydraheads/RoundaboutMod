@@ -19,6 +19,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -36,6 +37,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import net.zetalasis.networking.message.api.ModMessageEvents;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -283,7 +285,6 @@ public class PowersMandom extends NewDashPreset {
             unskipInterp = 1;
         }
     }
-
     public int unskipInterp = -1;
 
     @Override
@@ -311,9 +312,17 @@ public class PowersMandom extends NewDashPreset {
                                 if (!lastSecond.hasHadParticle){
                                     lastSecond.hasHadParticle = true;
                                     lastSecond.isTickingParticles = this.self;
-                                    ((ServerLevel) this.self.level()).sendParticles(getParticle(ent),
-                                            lastSecond.position.x, lastSecond.position.y+ent.getEyeHeight()*0.8, lastSecond.position.z,
-                                            0, 0, 0, 0, 0.015);
+                                    if (ent instanceof Player && this.self instanceof Player PE){
+                                        spreadRadialClientPacket(
+                                                ClientNetworking.getAppropriateConfig().mandomSettings.chronoVisionRange,
+                                                false,
+                                                "chrono_vision_player",
+                                                ent.getId(),lastSecond.position.x,lastSecond.position.y,lastSecond.position.z);
+                                    } else {
+                                        ((ServerLevel) this.self.level()).sendParticles(getParticle(ent),
+                                                lastSecond.position.x, lastSecond.position.y+ent.getEyeHeight()*0.8, lastSecond.position.z,
+                                                0, 0, 0, 0, 0.015);
+                                    }
                                 }
                                 if (!(ent instanceof Projectile) && !(ent instanceof ItemEntity)) {
                                     if (lastSecond.isTickingParticles != null && lastSecond.isTickingParticles.is(this.self)) {

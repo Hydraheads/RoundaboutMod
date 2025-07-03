@@ -7,9 +7,12 @@ import net.hydra.jojomod.access.ICamera;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.gui.*;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.zetalasis.client.shader.D4CShaderFX;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.D4CCloneEntity;
@@ -126,6 +129,30 @@ public class ClientUtil {
             /**Generalized packet for resuming interpolation on all mobs*/
             if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Interpolate.value)) {
                 skipInterpolation = false;
+            }
+            /**Mandom Clock Particle*/
+            if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Chrono.value)) {
+                int id = (int)vargs[0];
+                double x = (double)vargs[1];
+                double y = (double)vargs[2];
+                double z = (double)vargs[3];
+                SimpleParticleType clocktype = ModParticles.CLOCK;
+                if (player.getId() != id)
+                    clocktype = ModParticles.BLUE_CLOCK;
+                Entity ent = player.level().getEntity(id);
+                if (ent != null) {
+
+                    player.level()
+                            .addParticle(
+                                    clocktype,
+                                    x,
+                                    y+ent.getEyeHeight()*0.8,
+                                    z,
+                                    0,
+                                    0,
+                                    0
+                            );
+                }
             }
         });
     }

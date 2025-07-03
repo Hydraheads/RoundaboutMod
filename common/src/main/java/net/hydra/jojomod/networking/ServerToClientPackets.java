@@ -12,7 +12,8 @@ public class ServerToClientPackets {
     public static class S2CPackets implements IMessageEvent {
         public enum MESSAGES {
             Rewind("rewind"),
-            Interpolate("unskip_interpolation");
+            Interpolate("unskip_interpolation"),
+            Chrono("chrono_vision_player");
 
             public final String value;
 
