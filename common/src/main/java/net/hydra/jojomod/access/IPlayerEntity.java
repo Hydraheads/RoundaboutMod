@@ -91,5 +91,6 @@ public interface IPlayerEntity {
     AnimationState getWamuu();
     AnimationState getJonathan();
     AnimationState getJotaro();
+    AnimationState getWatch();
 
 }

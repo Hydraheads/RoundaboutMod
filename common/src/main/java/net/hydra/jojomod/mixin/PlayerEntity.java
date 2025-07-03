@@ -670,6 +670,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     @Unique
     @Override
+    public AnimationState getWatch(){
+        return roundabout$WATCH;
+    }
+    @Unique
+    @Override
     public AnimationState getJotaro(){
         return roundabout$JOTARO;
     }
@@ -680,6 +685,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     @Unique
     public final AnimationState roundabout$WAMUU = new AnimationState();
+    @Unique
+    public final AnimationState roundabout$WATCH = new AnimationState();
 
     @Unique
     public final AnimationState roundabout$JOTARO = new AnimationState();
@@ -733,6 +740,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             this.roundabout$JOSEPH.startIfStopped(this.tickCount);
         } else {
             this.roundabout$JOSEPH.stop();
+        }
+        if (roundabout$GetPoseEmote() == Poses.WATCH.id) {
+            this.roundabout$WATCH.startIfStopped(this.tickCount);
+        } else {
+            this.roundabout$WATCH.stop();
         }
     }
 

@@ -19,7 +19,6 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -37,7 +36,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
-import net.zetalasis.networking.message.api.ModMessageEvents;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -283,6 +281,12 @@ public class PowersMandom extends NewDashPreset {
                 }
             }
             unskipInterp = 1;
+        }
+        if (this.self instanceof Player PE){
+            IPlayerEntity ipe = ((IPlayerEntity) PE);
+            if (ipe.roundabout$getWatchStyle() > WATCHLESS){
+                ipe.roundabout$SetPoseEmote((byte) 10);
+            }
         }
     }
     public int unskipInterp = -1;
