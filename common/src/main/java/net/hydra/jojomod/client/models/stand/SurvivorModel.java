@@ -3,13 +3,14 @@ package net.hydra.jojomod.client.models.stand;
 import net.hydra.jojomod.client.models.stand.animations.SoftAndWetAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
+import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 
-public class SurvivorModel<T extends SoftAndWetEntity> extends StandModel<T> {
+public class SurvivorModel<T extends SurvivorEntity> extends StandModel<T> {
     public SurvivorModel(ModelPart root) {
         this.stand = root.getChild("stand");
     }

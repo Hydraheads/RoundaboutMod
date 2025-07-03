@@ -2,7 +2,10 @@ package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.StandModel;
+import net.hydra.jojomod.client.models.stand.StarPlatinumModel;
+import net.hydra.jojomod.client.models.stand.SurvivorModel;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
@@ -16,8 +19,9 @@ public class SurvivorRenderer<M extends StandEntity> extends StandRenderer<Survi
 
     private static final ResourceLocation BASE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/base.png");
     private static final ResourceLocation BASE_ACTIVATED = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/activated/base.png");
-    public SurvivorRenderer(EntityRendererProvider.Context context, StandModel root) {
-        super(context, root,0f);
+
+    public SurvivorRenderer(EntityRendererProvider.Context context) {
+        super(context, new SurvivorModel<>(context.bakeLayer(ModEntityRendererClient.SURVIVOR_LAYER)),0f);
     }
 
     @Override

@@ -14,7 +14,7 @@ public class SurvivorEntity extends MultipleTypeStand{
      * @param entityType
      * @param world
      */
-    protected SurvivorEntity(EntityType<? extends Mob> entityType, Level world) {
+    public SurvivorEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
     }
 

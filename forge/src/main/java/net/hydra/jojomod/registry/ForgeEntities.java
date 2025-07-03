@@ -202,6 +202,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "magicians_red_ova").toString())
             );
+    public static final RegistryObject<EntityType<SurvivorEntity>> SURVIVOR =
+            ENTITY_TYPES.register("survivor", () ->
+                    EntityType.Builder.of(SurvivorEntity::new, MobCategory.MISC).sized(0.5F, 0.3f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "survivor").toString())
+            );
     public static final RegistryObject<EntityType<D4CEntity>> D4C =
             ENTITY_TYPES.register("d4c", () ->
                     EntityType.Builder.of(D4CEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
