@@ -281,6 +281,7 @@ public class PowersMandom extends NewDashPreset {
                 }
             }
         }
+        spreadRadialClientPacket(rewindPacketRange+50,false, "rewind");
     }
 
     @Override

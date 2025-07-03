@@ -69,7 +69,33 @@ public class ClientUtil {
     public static int checkthisdat = 0;
     public static boolean skipInterpolation = false;
 
+    /**Fallback in case the client exits the range and can't be fed the packet anymore.
+     * Not a perfect solution but it should help.*/
+    public static int skipInterpolationFixAccidentTicks = -1;
 
+
+    public static void tickClientUtilStuff(){
+        if (ClientUtil.popSounds != null){
+            ClientUtil.popSounds.popSounds();
+            ClientUtil.popSounds = null;
+        }
+
+        if (ClientUtil.isInCinderellaMobUI > -1){
+            if (!ClientUtil.hasCinderellaShopUI()){
+                ModPacketHandler.PACKET_ACCESS.intToServerPacket(ClientUtil.isInCinderellaMobUI, PacketDataIndex.INT_RELLA_CANCEL);
+                ClientUtil.isInCinderellaMobUI = -1;
+            }
+        } if (ClientUtil.setScreenNull){
+            ClientUtil.setScreenNull = false;
+            Minecraft.getInstance().setScreen(null);
+        }
+        if (skipInterpolationFixAccidentTicks > -1){
+            skipInterpolationFixAccidentTicks--;
+            if (skipInterpolationFixAccidentTicks <= -1){
+                skipInterpolation = false;
+            }
+        }
+    }
 
     public static void handleGeneralPackets(String message, Object... vargs) {
         Minecraft instance = Minecraft.getInstance();
@@ -77,6 +103,7 @@ public class ClientUtil {
 
         instance.execute(() -> {
             if (player != null) {
+                /**Mandom's time rewind flashes on people and makes their screen interpolate*/
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Rewind.value)) {
                     StandUser user = ((StandUser)player);
                     StandPowers powers = user.roundabout$getStandPowers();
@@ -87,7 +114,13 @@ public class ClientUtil {
                             powers.timeRewindOverlayTicks = 0;
                         }
                     }
+                    skipInterpolation = true;
+                    skipInterpolationFixAccidentTicks = 20;
                 }
+            }
+            /**Generalized packet for resuming interpolation on all mobs, used on mandom skips*/
+            if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Interpolate.value)) {
+                skipInterpolation = false;
             }
         });
     }

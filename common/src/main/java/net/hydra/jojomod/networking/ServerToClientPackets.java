@@ -11,7 +11,8 @@ import org.jetbrains.annotations.Nullable;
 public class ServerToClientPackets {
     public static class S2CPackets implements IMessageEvent {
         public enum MESSAGES {
-            Rewind("rewind");
+            Rewind("rewind"),
+            Interpolate("unskip_interpolation");
 
             public final String value;
 
