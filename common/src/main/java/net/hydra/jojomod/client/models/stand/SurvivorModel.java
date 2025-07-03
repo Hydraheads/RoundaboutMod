@@ -35,15 +35,6 @@ public class SurvivorModel<T extends SoftAndWetEntity> extends StandModel<T> {
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
         defaultModifiers(pEntity);
-        defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
-        this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1f);
-        this.animate(pEntity.hideLeg, StandAnimations.HIDE_LEG, pAgeInTicks, 1f);
-        this.animate(pEntity.kick_barrage, StandAnimations.KICK_BARRAGE, pAgeInTicks, 1.25f);
-        this.animate(pEntity.kick_barrage_windup, StandAnimations.KICK_BARRAGE_CHARGE, pAgeInTicks, 1f);
-        this.animate(pEntity.kick_barrage_end, StandAnimations.KICK_BARRAGE_END, pAgeInTicks, 1f);
-        this.animate(pEntity.kick, SoftAndWetAnimations.Kick, pAgeInTicks, 1f);
-        this.animate(pEntity.kick_charge, SoftAndWetAnimations.ChargeKick, pAgeInTicks, 1f);
-        this.animate(pEntity.encasement_punch, SoftAndWetAnimations.ChargedPunch, pAgeInTicks, 1f);
         }
 
     @Override
