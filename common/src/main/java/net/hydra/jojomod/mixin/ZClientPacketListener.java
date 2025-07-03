@@ -5,7 +5,6 @@ import net.zetalasis.networking.packet.api.args.s2c.PacketArgsS2C;
 import net.zetalasis.networking.packet.impl.ModNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
