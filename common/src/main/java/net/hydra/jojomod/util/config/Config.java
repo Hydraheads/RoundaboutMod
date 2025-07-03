@@ -542,6 +542,8 @@ public class Config implements Cloneable {
         public Boolean timeRewindOnlySavesAndLoadsOnPlayers;
         @IntOption(group = "inherit", value = 220, min = 0, max = 72000)
         public Integer timeRewindCooldownv2;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer timeRewindCooldownExtraCondition;
         @BooleanOption(group = "inherit", value = true)
         public Boolean timeRewindCooldownUsesServerLatency;
         @IntOption(group = "inherit", value = 50, min = 0, max = 72000)

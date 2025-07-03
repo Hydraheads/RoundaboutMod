@@ -144,33 +144,43 @@ public class ClientUtil {
                         skipInterpolationFixAccidentTicks = 14;
                     }
                 }
-            }
-            /**Generalized packet for resuming interpolation on all mobs*/
-            if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Interpolate.value)) {
-                skipInterpolation = false;
-            }
-            /**Mandom Clock Particle*/
-            if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Chrono.value)) {
-                int id = (int)vargs[0];
-                double x = (double)vargs[1];
-                double y = (double)vargs[2];
-                double z = (double)vargs[3];
-                SimpleParticleType clocktype = ModParticles.CLOCK;
-                if (player.getId() != id)
-                    clocktype = ModParticles.BLUE_CLOCK;
-                Entity ent = player.level().getEntity(id);
-                if (ent != null) {
+                /**Generalized packet for resuming interpolation on all mobs*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Interpolate.value)) {
+                    skipInterpolation = false;
+                }
+                /**Mandom Clock Particle*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Chrono.value)) {
+                    int id = (int)vargs[0];
+                    double x = (double)vargs[1];
+                    double y = (double)vargs[2];
+                    double z = (double)vargs[3];
+                    SimpleParticleType clocktype = ModParticles.CLOCK;
+                    if (player.getId() != id)
+                        clocktype = ModParticles.BLUE_CLOCK;
+                    Entity ent = player.level().getEntity(id);
+                    if (ent != null) {
 
-                    player.level()
-                            .addParticle(
-                                    clocktype,
-                                    x,
-                                    y+ent.getEyeHeight()*0.8,
-                                    z,
-                                    0,
-                                    0,
-                                    0
-                            );
+                        player.level()
+                                .addParticle(
+                                        clocktype,
+                                        x,
+                                        y+ent.getEyeHeight()*0.8,
+                                        z,
+                                        0,
+                                        0,
+                                        0
+                                );
+                    }
+                }
+                /**The penalty for killing or placing blocks to distort time and raise cooldown*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.MANDOM_PENALTY.value)) {
+                    int altared = (int)vargs[0];
+                    StandUser user = ((StandUser)player);
+                    StandPowers powers = user.roundabout$getStandPowers();
+                    if (powers instanceof PowersMandom PM){
+                        Roundabout.LOGGER.info("tv time");
+                        PM.setTimeHasBeenAltered(altared);
+                    }
                 }
             }
         });

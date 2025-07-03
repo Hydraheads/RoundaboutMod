@@ -11,7 +11,8 @@ public class ServerToClientPackets {
         public enum MESSAGES {
             Rewind("rewind"),
             Interpolate("unskip_interpolation"),
-            Chrono("chrono_vision_player");
+            Chrono("chrono_vision_player"),
+            MANDOM_PENALTY("mandom_penalty");
 
             public final String value;
 

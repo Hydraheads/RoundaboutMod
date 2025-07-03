@@ -53,6 +53,7 @@
     "ZItem",
     "ZItemEntity",
     "ZItemStack",
+    "ZItemUsedOnLocationTrigger",
     "ZLevel",
     "ZLivingEntity",
     "ZLookAtPlayerGoal",
@@ -119,7 +120,6 @@
     "PlayerEntityClient",
     "PostChainMixin",
     "StandUserClient",
-    "networking.ZClientGamePacketListener",
     "WorldTickClient",
     "ZAbstractFurnaceScreen",
     "ZAbstractZombieRenderer",
@@ -170,7 +170,8 @@
     "ZSoundManager",
     "ZTimeStopTextureFreeze",
     "ZWindowMixin",
-    "ZWorldRenderer"
+    "ZWorldRenderer",
+    "networking.ZClientGamePacketListener"
   ],
   "server": [
   ],

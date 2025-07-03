@@ -1281,4 +1281,12 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             cir.cancel();
         }
     }
+
+
+    @Inject(method = "killedEntity", at = @At(value = "HEAD"), cancellable = true)
+    public void roundabout$hasLineOfSight(ServerLevel $$0, LivingEntity $$1, CallbackInfoReturnable<Boolean> cir) {
+        if (((StandUser)this).roundabout$getStandPowers().onKilledEntity($$0,$$1)){
+            cir.setReturnValue(false);
+        }
+    }
 }

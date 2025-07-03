@@ -50,8 +50,10 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.IceBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 import net.zetalasis.networking.message.api.ModMessageEvents;
@@ -2639,6 +2641,16 @@ public class StandPowers {
         }
     }
 
+    public void onPlaceBlock(ServerPlayer $$0, BlockPos $$1, ItemStack $$2){
+        /**Can't really cancel this one*/
+    }
+    public void onDestroyBlock(Level $$0, Player $$1, BlockPos $$2, BlockState $$3, BlockEntity $$4, ItemStack $$5){
+        /**Can't really cancel this one, also it only applies to survival mode*/
+    }
+    public boolean onKilledEntity(ServerLevel $$0, LivingEntity $$1){
+        /**return true to cancel the onkill event*/
+        return false;
+    }
 
     public final void spreadRadialClientPacket(double range, boolean skipSelf, String packet, Object... vargs) {
         if (!this.self.level().isClientSide) {
