@@ -6,7 +6,6 @@ import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.minecraft.server.MinecraftServer;
 import net.zetalasis.networking.message.impl.IMessageEvent;
 import net.hydra.jojomod.util.Networking;
-import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
 import net.zetalasis.networking.packet.impl.ModNetworking;
 import net.zetalasis.networking.packet.impl.packet.MessageC2S;

@@ -1,9 +1,7 @@
 package net.hydra.jojomod.networking;
 
 import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.zetalasis.networking.message.impl.IMessageEvent;
 import org.jetbrains.annotations.Nullable;

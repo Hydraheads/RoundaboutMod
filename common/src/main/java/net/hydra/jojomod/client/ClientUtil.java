@@ -13,6 +13,7 @@ import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.network.Connection;
 import net.zetalasis.client.shader.D4CShaderFX;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.D4CCloneEntity;
@@ -58,6 +59,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.zetalasis.networking.packet.api.IClientNetworking;
 import net.zetalasis.world.DynamicWorld;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
@@ -77,6 +79,14 @@ public class ClientUtil {
      * Not a perfect solution but it should help.*/
     public static int skipInterpolationFixAccidentTicks = -1;
 
+    public static boolean isPlayerOrCamera(Entity ent){
+        Minecraft mc = Minecraft.getInstance();
+        if (!(mc.getCameraEntity() != null && ent.is(mc.getCameraEntity())) &&
+                !(mc.player !=null && ent.is(mc.player))) {
+            return true;
+        }
+        return false;
+    }
 
     public static void tickClientUtilStuff(){
         if (ClientUtil.popSounds != null){
@@ -101,7 +111,16 @@ public class ClientUtil {
             }
         }
     }
+    public static @Nullable Connection getC2SConnection()
+    {
+        Minecraft client = Minecraft.getInstance();
+        if (client.player == null)
+            return null;
 
+        Connection integratedServerCon = ((IClientNetworking)client).roundabout$getServer();
+
+        return (integratedServerCon != null ? integratedServerCon : client.player.connection.getConnection());
+    }
 
     public static void handleGeneralPackets(String message, Object... vargs) {
         Minecraft instance = Minecraft.getInstance();
