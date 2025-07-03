@@ -374,7 +374,8 @@ public class PowersMandom extends NewDashPreset {
             JELLYFISH = 10,
             HAPPY = 11,
             EYE = 12,
-            MELON = 13;
+            MELON = 13,
+            ESIDISI = 14;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
@@ -390,7 +391,8 @@ public class PowersMandom extends NewDashPreset {
                 JELLYFISH,
                 HAPPY,
                 EYE,
-                MELON
+                MELON,
+                ESIDISI
         );
     }
     @Override public Component getSkinName(byte skinId) {
@@ -408,6 +410,7 @@ public class PowersMandom extends NewDashPreset {
             case PowersMandom.HAPPY -> Component.translatable("skins.roundabout.mandom.happy");
             case PowersMandom.EYE -> Component.translatable("skins.roundabout.mandom.eye");
             case PowersMandom.MELON -> Component.translatable("skins.roundabout.mandom.melon");
+            case PowersMandom.ESIDISI -> Component.translatable("skins.roundabout.mandom.esidisi");
             default -> Component.translatable("skins.roundabout.mandom.manga");
         };
     }
