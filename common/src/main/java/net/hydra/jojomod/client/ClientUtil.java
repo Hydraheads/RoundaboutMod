@@ -117,11 +117,10 @@ public class ClientUtil {
                             powers.timeRewindOverlayTicks = 0;
                         }
                     }
-
-                }
-                if (ConfigManager.getClientConfig().mandomRewindAttemptsToSkipInterpolation) {
-                    skipInterpolation = true;
-                    skipInterpolationFixAccidentTicks = 14;
+                    if (ConfigManager.getClientConfig().mandomRewindAttemptsToSkipInterpolation) {
+                        skipInterpolation = true;
+                        skipInterpolationFixAccidentTicks = 14;
+                    }
                 }
             }
             /**Generalized packet for resuming interpolation on all mobs*/

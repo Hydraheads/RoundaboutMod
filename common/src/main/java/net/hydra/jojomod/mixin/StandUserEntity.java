@@ -29,6 +29,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
 import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -607,6 +608,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void roundabout$tryBlip() {
         if (ClientUtil.skipInterpolation) {
+            Minecraft mc = Minecraft.getInstance();
+            if (!(mc.getCameraEntity() != null && this.is(mc.getCameraEntity())) &&
+                    !(mc.player !=null && this.is(mc.player))) {
             ((ILivingEntityAccess) this).roundabout$setLerpSteps(0);
             double lerpx = ((ILivingEntityAccess) this).roundabout$getLerpX();
             double lerpy = ((ILivingEntityAccess) this).roundabout$getLerpY();
@@ -619,6 +623,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             this.yOld = lerpy;
             this.zOld = lerpz;
             this.setPos(lerpx, lerpy, lerpz);
+            }
         } if (roundabout$blip && roundabout$blipVector !=null){
             ((ILivingEntityAccess) this).roundabout$setLerpSteps(0);
             this.xo = roundabout$blipVector.x;
