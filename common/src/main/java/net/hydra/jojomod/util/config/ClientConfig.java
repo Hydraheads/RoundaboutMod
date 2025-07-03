@@ -47,6 +47,8 @@ public class ClientConfig implements Cloneable {
     public Boolean magiciansRedRenderOnFireInFirstPerson;
     @BooleanOption(group = "inherit", value = true)
     public Boolean mandomRewindShowsVisualEffectsToNonMandomUsers;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean mandomRewindAttemptsToSkipInterpolation;
     @NestedOption(group = "modded")
     public ClientConfig.ParticleSettings particleSettings;
     @NestedOption(group = "modded")

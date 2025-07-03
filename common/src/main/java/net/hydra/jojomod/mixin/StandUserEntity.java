@@ -606,7 +606,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     @Override
     public void roundabout$tryBlip() {
-        if (roundabout$blip && roundabout$blipVector !=null){
+        if (ClientUtil.skipInterpolation) {
+            ((ILivingEntityAccess) this).roundabout$setLerpSteps(0);
+            double lerpx = ((ILivingEntityAccess) this).roundabout$getLerpX();
+            double lerpy = ((ILivingEntityAccess) this).roundabout$getLerpY();
+            double lerpz = ((ILivingEntityAccess) this).roundabout$getLerpZ();
+
+            this.xo = lerpx;
+            this.yo = lerpy;
+            this.zo = lerpz;
+            this.xOld = lerpx;
+            this.yOld = lerpy;
+            this.zOld = lerpz;
+            this.setPos(lerpx, lerpy, lerpz);
+        } if (roundabout$blip && roundabout$blipVector !=null){
             ((ILivingEntityAccess) this).roundabout$setLerpSteps(0);
             this.xo = roundabout$blipVector.x;
             this.yo = roundabout$blipVector.y;

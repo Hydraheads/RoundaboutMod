@@ -9,6 +9,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.gui.*;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.stand.powers.PowersMandom;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.zetalasis.client.shader.D4CShaderFX;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.D4CCloneEntity;
@@ -91,11 +92,13 @@ public class ClientUtil {
         }
         if (skipInterpolationFixAccidentTicks > -1){
             skipInterpolationFixAccidentTicks--;
+        } if (skipInterpolation){
             if (skipInterpolationFixAccidentTicks <= -1){
                 skipInterpolation = false;
             }
         }
     }
+
 
     public static void handleGeneralPackets(String message, Object... vargs) {
         Minecraft instance = Minecraft.getInstance();
@@ -114,11 +117,14 @@ public class ClientUtil {
                             powers.timeRewindOverlayTicks = 0;
                         }
                     }
+
+                }
+                if (ConfigManager.getClientConfig().mandomRewindAttemptsToSkipInterpolation) {
                     skipInterpolation = true;
-                    skipInterpolationFixAccidentTicks = 20;
+                    skipInterpolationFixAccidentTicks = 14;
                 }
             }
-            /**Generalized packet for resuming interpolation on all mobs, used on mandom skips*/
+            /**Generalized packet for resuming interpolation on all mobs*/
             if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Interpolate.value)) {
                 skipInterpolation = false;
             }

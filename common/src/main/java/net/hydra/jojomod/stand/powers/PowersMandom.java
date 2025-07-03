@@ -280,13 +280,22 @@ public class PowersMandom extends NewDashPreset {
                     }
                 }
             }
+            unskipInterp = 1;
         }
-        spreadRadialClientPacket(rewindPacketRange+50,false, "rewind");
     }
+
+    public int unskipInterp = -1;
 
     @Override
     public void tickPower() {
         super.tickPower();
+        if (unskipInterp > -1){
+            unskipInterp--;
+            if (unskipInterp <= -1){
+                int rewindPacketRange = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindRange;
+                spreadRadialClientPacket(rewindPacketRange+50,false, "unskip_interpolation");
+            }
+        }
 
         /**Grabs nearby entities pretty regularly to see if they can be rendered*/
         if (!this.self.level().isClientSide()) {
