@@ -132,7 +132,7 @@ public class Config implements Cloneable {
                     "roundabout:soft_and_wet_disc"
             )
     );
-    public Set<String> standArrowSecondaryPoolv2 = new HashSet<>(
+    public Set<String> standArrowSecondaryPoolv3 = new HashSet<>(
             Arrays.asList(
                     "roundabout:cinderella_disc",
                     "roundabout:hey_ya_disc",
@@ -149,7 +149,7 @@ public class Config implements Cloneable {
                     "roundabout:soft_and_wet_disc"
             )
     );
-    public Set<String> humanoidOnlyStandUserMobPoolv1 = new HashSet<>(
+    public Set<String> humanoidOnlyStandUserMobPoolv2 = new HashSet<>(
             Arrays.asList(
                     "roundabout:hey_ya_disc",
                     "roundabout:mandom_disc"
