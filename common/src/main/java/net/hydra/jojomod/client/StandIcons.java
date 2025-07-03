@@ -318,8 +318,17 @@ public class StandIcons {
             "textures/gui/icons/hey_ya/mining_yap.png");
     public static final ResourceLocation MINING_YAP_DISABLE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/hey_ya/mining_yap_disable.png");
+
     public static final ResourceLocation YAP_YAP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/hey_ya/yap_yap.png");
+    public static final ResourceLocation SPAWN = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/survivor/spawn.png");
+    public static final ResourceLocation DESPAWN = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/survivor/despawn.png");
+    public static final ResourceLocation BOTTLE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/survivor/bottle.png");
+    public static final ResourceLocation RAGE_SELECTION = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/survivor/mom_and_dad_fighting.png");
 
     public static final ResourceLocation EERIE_SKIN = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/eerie_shift.png");

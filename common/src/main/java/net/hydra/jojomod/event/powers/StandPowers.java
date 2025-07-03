@@ -647,6 +647,7 @@ public class StandPowers {
             }
             context.setColor(1f, 1f, 1f, 0.9f);
         } else {
+            RenderSystem.enableBlend();
             context.blit(rl, x, y, 0, 0, 18, 18, 18, 18);
         }
     }
@@ -1001,6 +1002,11 @@ public class StandPowers {
         }
     }
 
+
+    public boolean canUseStillStandingRecharge(byte bt){
+        return true;
+    }
+
     public void tickCooldowns(){
         int amt = 1;
         boolean isDrowning = false;
@@ -1026,6 +1032,9 @@ public class StandPowers {
         for (CooldownInstance ci : StandCooldowns){
             cin++;
             if (ci.time >= 0){
+                if (!canUseStillStandingRecharge(cin)){
+                    amt = 1;
+                }
                 ci.setFrozen(isDrowning && !ClientNetworking.getAppropriateConfig().cooldownsInTicks.canRechargeWhileDrowning);
 
                 boolean serverControlledCooldwon = isServerControlledCooldown(ci, cin);

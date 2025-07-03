@@ -54,17 +54,14 @@ public class PowersSurvivor extends NewDashPreset {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         // code for advanced icons
+         setSkillIcon(context, x, y, 1, StandIcons.BOTTLE, PowerIndex.SKILL_1);
 
-        if (dangerYappingOn())
-            setSkillIcon(context, x, y, 1, StandIcons.DANGER_YAP_DISABLE, PowerIndex.SKILL_1);
+        if (isHoldingSneak())
+            setSkillIcon(context, x, y, 2, StandIcons.DESPAWN, PowerIndex.NO_CD);
         else
-            setSkillIcon(context, x, y, 1, StandIcons.DANGER_YAP, PowerIndex.SKILL_1);
-
-        /**It is sneak because all stands share this cooldown and SP/TW
-         * shared it between dash and stand leap*/
-        setSkillIcon(context, x, y, 2, StandIcons.MINING_YAP, PowerIndex.SKILL_2);
+            setSkillIcon(context, x, y, 2, StandIcons.SPAWN, PowerIndex.SKILL_2);
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
-        setSkillIcon(context, x, y, 4, StandIcons.YAP_YAP, PowerIndex.SKILL_4);
+        setSkillIcon(context, x, y, 4, StandIcons.RAGE_SELECTION, PowerIndex.SKILL_4);
 
         super.renderIcons(context, x, y);
     }
