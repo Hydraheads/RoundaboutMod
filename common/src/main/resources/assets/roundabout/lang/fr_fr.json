@@ -52,6 +52,7 @@
   "item.roundabout.soft_and_wet_disc": "Disque Stand",
   "item.roundabout.cinderella_disc": "Disque Stand",
   "item.roundabout.hey_ya_disc": "Disque Stand",
+  "item.roundabout.mandom_disc": "Disque Stand",
   "item.roundabout.max_star_platinum_disc": "Disque Stand+",
   "item.roundabout.magicians_red_disc": "Disque Stand",
   "item.roundabout.killer_queen_disc": "Disque Stand",
@@ -72,6 +73,7 @@
   "item.roundabout.justice_disc.desc": "Justice",
   "item.roundabout.cinderella_disc.desc": "Cinderella",
   "item.roundabout.hey_ya_disc.desc": "Hey Ya!",
+  "item.roundabout.mandom_disc.desc": "Mandom",
   "item.roundabout.none_disc.desc": "Aucun",
 
   "item.roundabout.light_bulb": "Ampoule",
@@ -386,6 +388,7 @@
   "sounds.roundabout.summon_justice":  "Invocation de Justice",
   "sounds.roundabout.summon_justice_2":  "Invocation de Justice (Bad to the Bone)",
   "sounds.roundabout.summon_magician":  "Invocation de Magician's Red",
+  "sounds.roundabout.summon_mandom":  "Invocation de Mandom",
   "sounds.roundabout.hey_ya_summon":  "Invocation d'Hey Ya",
   "sounds.roundabout.ova_summon":  "Invocation de OAV Star Platinium",
   "sounds.roundabout.ova_summon_the_world":  "Invocation de OAV The World",
@@ -437,6 +440,8 @@
   "sounds.roundabout.soft_and_wet_barrage_2":  "ORA",
   "sounds.roundabout.water_encase":  "Splash",
   "sounds.roundabout.soft_and_wet_kick":  "Impacte",
+
+  "sounds.roundabout.mandom_rewind":  "Retour dans le temps",
 
   "sounds.roundabout.snap":  "Claquement de doigt",
   "sounds.roundabout.star_finger_silent":  "Star Finger",
@@ -821,6 +826,14 @@
   "ability.roundabout.yap_yap": "Encouragement",
   "ability.roundabout.yap_yap.desc": "Hey Ya vous encourage et améliore votre journée !",
 
+  "ability.roundabout.chrono_vision": "Chrono Vision",
+  "ability.roundabout.chrono_vision.desc": "Vous laisse voir des horloges fantômes au positions de retour des entités. Les étincelles de leur flot temporel montre la direction vers laquel la créature faisait face.",
+  "ability.roundabout.rewind_time": "Retour dans le temps",
+  "ability.roundabout.rewind_time.desc": "Retourne dans le temps de 6 secondes, aux même position qui sont visible si vous choissez d'utiliser la Chrono Vision. Ça restaure les choses comme la position, la vie, et les effets de status d'une créature. Ça ne restaure pas tout à propos d'une créature, ni à propos des blocks/objets/les temps de rechargement. Mais ça peut sauver votre vie et désorienté vos ennemis.",
+  "ability.roundabout.watch_switch": "Changer Montre",
+  "ability.roundabout.watch_switch.desc": "Une manifestation physique de votre activation mental pour retourner le temps. Boucle entre les potentiels montres. Comme c'est un objet physique, ceux qui n'ont pas de stand peuvent le voir.",
+  "ability.roundabout.clock": "Lecture du temps",
+  "ability.roundabout.clock.desc": "Montre une montre quand Mandom est actif, de tel manière que vous pouvez savoir l'heure de la journée dans les dimensions que ça concerne.",
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Non débloqué",
@@ -836,7 +849,7 @@
   "leveling.roundabout.levelup.max.moves": "Dévelopement Maximal : Nouvelle capacité !",
   "leveling.roundabout.levelup.max.both": "Dévelopement Maximal : Nouvelle capacité & Skin!",
   "leveling.roundabout.disc_wip": "En cours de développement, Pas disponible en Survie",
-  "leveling.roundabout.disc_wip_2": "Ça veut dire que les capacités ne sont pas terminé",
+  "leveling.roundabout.disc_wip_2": "Ça veut dire que les capacités ne sont pas terminée",
 
   "gamerule.roundaboutStandGriefing": "Actions destructrice des Stands",
   "gamerule.roundaboutStandGriefing.description": "Contrôle si les Stands peuvent intéragir avec les blocs ou non",
@@ -867,6 +880,7 @@
 
   "idle.roundabout.hey_ya_1": "Devant",
   "idle.roundabout.hey_ya_2": "En face",
+  "idle.roundabout.mandom_back": "Dans le dos",
 
   "skins.roundabout.star_platinum.base": "Partie 3",
   "skins.roundabout.star_platinum.manga": "Manga",
@@ -994,6 +1008,21 @@
   "skins.roundabout.hey_ya.anti": "Anti",
   "skins.roundabout.hey_ya.grey_ya": "Gris Ya",
   "skins.roundabout.hey_ya.angel": "Ange",
+  "skins.roundabout.hey_ya.knight": "Chevalier",
+
+  "skins.roundabout.mandom.manga": "Manga",
+  "skins.roundabout.mandom.purple": "Violet",
+  "skins.roundabout.mandom.sky": "Ciel",
+  "skins.roundabout.mandom.squid": "Poulpe",
+  "skins.roundabout.mandom.glow_squid": "Poulpe II",
+  "skins.roundabout.mandom.rose": "Rose",
+  "skins.roundabout.mandom.nautilus": "Nautilus",
+  "skins.roundabout.mandom.alien": "Alien",
+  "skins.roundabout.mandom.dark": "Sombre",
+  "skins.roundabout.mandom.jellyfish": "Méduse",
+  "skins.roundabout.mandom.happy": "G joyeux",
+  "skins.roundabout.mandom.eye": "Oeil de l'End",
+  "skins.roundabout.mandom.melon": "Pastèque",
 
   "skins.roundabout.killer_queen.base": "Partie 4",
 
@@ -1178,5 +1207,11 @@
   "text.roundabout.hey_ya_messaging.danger.evil.no_1": "%1$s, idiot.",
   "text.roundabout.hey_ya_messaging.danger.evil.no_2": "alerte %1$s, utilises ton cerveau.",
   "text.roundabout.hey_ya_messaging.danger.evil.no_3": "%1$s est proche, tu l'vois pas ?",
-  "text.roundabout.hey_ya_messaging.danger.evil.no_4": "%1$s va nous avoir, idiot !"
+  "text.roundabout.hey_ya_messaging.danger.evil.no_4": "%1$s va nous avoir, idiot !",
+
+  "text.roundabout.mandom.vision_off": "Chrono Vision Désactivée",
+  "text.roundabout.mandom.vision_on": "Chrono Vision Activée",
+  "text.roundabout.mandom.watch_off": "Sans Montre",
+  "text.roundabout.mandom.watch_on": "Montre principale",
+  "text.roundabout.mandom.watch_on_rolex": "Montre Rolex"
 }
