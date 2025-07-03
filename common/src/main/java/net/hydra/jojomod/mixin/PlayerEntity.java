@@ -825,7 +825,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 ((Player) (Object) this).level().broadcastEntityEvent(((Player) (Object) this), EntityEvent.SHIELD_DISABLED);
             }
             ci.cancel();
-        } else if (((StandUser) $$0).roundabout$getMainhandOverride()){
+        } else if (((StandUser) $$0).roundabout$getMainhandOverride() &&
+                ((StandUser) $$0).roundabout$getStandPowers().interceptAttack()){
             ci.cancel();
         }
     }
