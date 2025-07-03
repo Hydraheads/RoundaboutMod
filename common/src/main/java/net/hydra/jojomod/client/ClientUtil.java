@@ -178,7 +178,6 @@ public class ClientUtil {
                     StandUser user = ((StandUser)player);
                     StandPowers powers = user.roundabout$getStandPowers();
                     if (powers instanceof PowersMandom PM){
-                        Roundabout.LOGGER.info("tv time");
                         PM.setTimeHasBeenAltered(altared);
                     }
                 }
