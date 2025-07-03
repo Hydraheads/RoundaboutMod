@@ -1,30 +1,19 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.access.IMob;
-import net.hydra.jojomod.block.MiningAlertBlock;
-import net.hydra.jojomod.block.ModBlocks;
-import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -82,10 +71,25 @@ public class PowersSurvivor extends NewDashPreset {
         /**Making dash usable on both key presses*/
         switch (context)
         {
+            case SKILL_2_NORMAL-> {
+                summonSurvivorClient();
+            }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 dash();
             }
         }
+    }
+
+    public boolean canUseStillStandingRecharge(byte bt){
+        if (bt == PowerIndex.SKILL_2)
+            return false;
+        return super.canUseStillStandingRecharge(bt);
+    }
+
+    public void summonSurvivorClient(){
+        Vec3 pos = MainUtil.getRaytracePointOnMobOrBlock(this.self,30);
+        tryPosPowerPacket(PowerIndex.POWER_2,pos);
+
     }
 
 
