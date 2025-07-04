@@ -5,7 +5,9 @@ import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.index.Tactics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.nbt.Tag;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
@@ -95,9 +97,16 @@ public class CorpseBuildBreakGoal extends Goal {
 
     @Override
     public void start() {
-        
+        Vec3i direction =  blockHit.getDirection().getNormal();
+        BlockPos mineBlock = new BlockPos((useOn.getX() + direction.getX()*-1), (useOn.getY() + direction.getY()*-1), (useOn.getZ() + direction.getZ()*-1));
+        BlockState bstate = this.fallenMob.level().getBlockState(mineBlock);
         this.oldWaterCost = this.fallenMob.getPathfindingMalus(BlockPathTypes.WATER);
         this.fallenMob.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
+        if(!this.fallenMob.getMainHandItem().isCorrectToolForDrops(bstate)){
+            //Don't mine
+            this.stop();
+            this.fallenMob.removeBuildBreakGoal();
+        }
     }
 
     @Override
@@ -110,6 +119,15 @@ public class CorpseBuildBreakGoal extends Goal {
 
     }
 
+    public int getEnchLevel(String enchTags){
+        if(this.fallenMob.getMainHandItem().getEnchantmentTags().getAsString().indexOf(enchTags) == -1){
+            return -1;
+        }
+        int enchtagsInd = this.fallenMob.getMainHandItem().getEnchantmentTags().getAsString().indexOf(enchTags)+6+enchTags.length();
+
+        return Integer.valueOf(this.fallenMob.getMainHandItem().getEnchantmentTags().getAsString().charAt(enchtagsInd));
+
+    }
     @Override
     public void tick() {
         //Get distance
@@ -135,8 +153,14 @@ public class CorpseBuildBreakGoal extends Goal {
 
                     bstate.getBlock().destroy(this.fallenMob.level(),mineBlock,bstate);
                     this.fallenMob.level().destroyBlock(mineBlock,true);
-                    if(!this.fallenMob.getMainHandItem().isDamageableItem()) {
-                        this.fallenMob.getMainHandItem().setDamageValue(this.fallenMob.getMainHandItem().getDamageValue() + 1);
+                    if(this.fallenMob.getMainHandItem().isDamageableItem()) {
+                        if(getEnchLevel("minecraft:unbreaking") != -1){
+                            if(this.fallenMob.getRandom().nextIntBetweenInclusive(1,100) <= 100/(getEnchLevel("minecraft:unbreaking")+1)){
+                                this.fallenMob.getMainHandItem().setDamageValue(this.fallenMob.getMainHandItem().getDamageValue() + 1);
+
+                            }
+                        } else{this.fallenMob.getMainHandItem().setDamageValue(this.fallenMob.getMainHandItem().getDamageValue() + 1);}
+
                     }
                     this.stop();
                     this.fallenMob.removeBuildBreakGoal();
@@ -146,12 +170,49 @@ public class CorpseBuildBreakGoal extends Goal {
                 Vec3i direction =  blockHit.getDirection().getNormal();
                 BlockPos mineBlock = new BlockPos((useOn.getX() + direction.getX()*-1), (useOn.getY() + direction.getY()*-1), (useOn.getZ() + direction.getZ()*-1));
                 BlockState bstate = this.fallenMob.level().getBlockState(mineBlock);
+
                 if(bstate.getBlock().defaultDestroyTime() == -1){
+                    //Unbreakable
                     this.stop();
                     this.fallenMob.removeBuildBreakGoal();
 
                 } else {
-                    diggingTime = (int) (1 / ((this.fallenMob.getMainHandItem().getDestroySpeed(bstate) / bstate.getBlock().defaultDestroyTime()) / 30));
+
+                    double digTimebuilder;
+                    digTimebuilder = this.fallenMob.getMainHandItem().getDestroySpeed(bstate);
+                    if(!(getEnchLevel("minecraft:efficiency") == -1)){
+                        digTimebuilder += Math.pow(getEnchLevel("minecraft:efficiency"),2) + 1;
+                    }
+                    if(this.fallenMob.getEffect(MobEffects.DIG_SPEED) != null){
+                       digTimebuilder *= 0.2 * this.fallenMob.getEffect(MobEffects.DIG_SPEED).getAmplifier() + 1;
+                    }
+                    if(this.fallenMob.getEffect(MobEffects.DIG_SLOWDOWN) != null){
+                        digTimebuilder *= Math.pow(0.3, Math.min(this.fallenMob.getEffect(MobEffects.DIG_SLOWDOWN).getAmplifier() + 1,4) );
+                    }
+
+                    digTimebuilder = ((digTimebuilder / bstate.getBlock().defaultDestroyTime()) / 30);
+
+                    if(digTimebuilder > 1){
+                        //Instantly break
+                        bstate.getBlock().destroy(this.fallenMob.level(),mineBlock,bstate);
+                        this.fallenMob.level().destroyBlock(mineBlock,true);
+                        if(this.fallenMob.getMainHandItem().isDamageableItem()) {
+                            if(getEnchLevel("minecraft:unbreaking") != -1){
+                                if(this.fallenMob.getRandom().nextIntBetweenInclusive(1,100) <= 100/(getEnchLevel("minecraft:unbreaking")+1)){
+                                    this.fallenMob.getMainHandItem().setDamageValue(this.fallenMob.getMainHandItem().getDamageValue() + 1);
+
+                                }
+                            } else{this.fallenMob.getMainHandItem().setDamageValue(this.fallenMob.getMainHandItem().getDamageValue() + 1);}
+
+                        }
+                        this.stop();
+                        this.fallenMob.removeBuildBreakGoal();
+
+                    } else{
+                        diggingTime = (int) (1 / digTimebuilder);
+                    }
+
+
                 }
             }
 
