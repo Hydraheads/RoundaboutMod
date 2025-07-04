@@ -764,11 +764,23 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         return Entity.MovementEmission.NONE;
     }
 
+    public boolean hasNoPhysics(){
+        return true;
+    }
+
+    @Override
+    public void push(Entity $$0) {
+    }
+
+    @Override
+    public void doPush(Entity $$0) {
+    }
+
     /** This happens every tick. Basic stand movement/fade code, also see vex code for turning on noclip.*/
     @Override
     public void tick() {
         validateUUID();
-        this.noPhysics = true;
+        this.noPhysics = hasNoPhysics();
         float pitch = this.getXRot();
         float yaw = this.getYRot();
         byte ot = this.getOffsetType();

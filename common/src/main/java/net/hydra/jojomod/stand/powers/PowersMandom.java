@@ -221,15 +221,17 @@ public class PowersMandom extends NewDashPreset {
 
 
     public boolean itsRewindTime(){
-        int cooldown = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownv2;
-        if (timeHasBeenAltered > -1)
-            cooldown += ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownExtraCondition;
-        this.setCooldown(PowerIndex.SKILL_2,cooldown);
-        setTimeHasBeenAltered(-1);
-        if (isClient()){
-            this.self.playSound(ModSounds.MANDOM_REWIND_EVENT, 200F, 1.0F);
-        } else {
-            rewindTimeActivation();
+        if (isClient() || (!this.onCooldown(PowerIndex.SKILL_2) || !ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownUsesServerLatency)) {
+            int cooldown = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownv2;
+            if (timeHasBeenAltered > -1)
+                cooldown += ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownExtraCondition;
+            this.setCooldown(PowerIndex.SKILL_2, cooldown);
+            setTimeHasBeenAltered(-1);
+            if (isClient()) {
+                this.self.playSound(ModSounds.MANDOM_REWIND_EVENT, 200F, 1.0F);
+            } else {
+                rewindTimeActivation();
+            }
         }
         return true;
     }

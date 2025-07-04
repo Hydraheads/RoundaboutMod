@@ -1,18 +1,27 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
@@ -87,12 +96,53 @@ public class PowersSurvivor extends NewDashPreset {
     }
 
     public void summonSurvivorClient(){
-        Vec3 pos = MainUtil.getRaytracePointOnMobOrBlock(this.self,30);
-        tryPosPowerPacket(PowerIndex.POWER_2,pos);
+        if (!this.onCooldown(PowerIndex.SKILL_2)) {
+            Vec3 pos = MainUtil.getRaytracePointOnMobOrBlock(this.self, 30);
+            tryPosPower(PowerIndex.POWER_2,true,pos);
+            tryPosPowerPacket(PowerIndex.POWER_2, pos);
+        }
+    }
+    @Override
+    public boolean tryPosPower(int move, boolean forced, Vec3 pos) {
+        if (move == PowerIndex.POWER_2) {
+            createSurvivor(move, pos);
+            return true;
+        }
+        return tryPower(move, forced);
+    }
+
+    public void createSurvivor(int move, Vec3 pos){
+
+        if (isClient() || (!this.onCooldown(PowerIndex.SKILL_2) || !ClientNetworking.getAppropriateConfig().survivorSettings.SummonSurvivorCooldownCooldownUsesServerLatency)) {
+            int cooldown = ClientNetworking.getAppropriateConfig().survivorSettings.SummonSurvivorCooldown;
+            this.setCooldown(PowerIndex.SKILL_2, cooldown);
+            if (!isClient()) {
+                blipStand(pos);
+
+            }
+        }
+    }
+
+    public void blipStand(Vec3 pos){
+        StandEntity stand = ModEntities.SURVIVOR.create(this.getSelf().level());
+        if (stand != null) {
+            StandUser user = getStandUserSelf();
+            stand.absMoveTo(pos.x(), pos.y(), pos.z());
+            stand.setSkin(user.roundabout$getStandSkin());
+            stand.setIdleAnimation(user.roundabout$getIdlePos());
+            stand.setMaster(this.self);
+            this.self.level().addFreshEntity(stand);
+        }
 
     }
 
-
+    @Override
+    public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
+        if (num == PowerIndex.SKILL_2 && ClientNetworking.getAppropriateConfig().survivorSettings.SummonSurvivorCooldownCooldownUsesServerLatency) {
+            return true;
+        }
+        return super.isServerControlledCooldown(ci, num);
+    }
     @Override
     public boolean tryPower(int move, boolean forced) {
         return super.tryPower(move, forced);
