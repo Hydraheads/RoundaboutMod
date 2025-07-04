@@ -102,8 +102,9 @@ public class CorpseBuildBreakGoal extends Goal {
         BlockState bstate = this.fallenMob.level().getBlockState(mineBlock);
         this.oldWaterCost = this.fallenMob.getPathfindingMalus(BlockPathTypes.WATER);
         this.fallenMob.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
-        if(!this.fallenMob.getMainHandItem().isCorrectToolForDrops(bstate)){
+        if(!this.fallenMob.getMainHandItem().isCorrectToolForDrops(bstate) && !(this.fallenMob.getMainHandItem().getItem() instanceof BlockItem)){
             //Don't mine
+
             this.stop();
             this.fallenMob.removeBuildBreakGoal();
         }
@@ -144,6 +145,13 @@ public class CorpseBuildBreakGoal extends Goal {
                 this.fallenMob.removeBuildBreakGoal();
             } else if(diggingTime > 0) {
                 //And now we go mining.
+                //A check to ensure no one tries to change items during mining
+                if(this.fallenMob.getMainHandItem().getItem() instanceof BlockItem block){
+                    block.place(new BlockPlaceContext(this.owner,this.fallenMob.swingingArm,this.fallenMob.getMainHandItem(),blockHit));
+                    this.fallenMob.getMainHandItem().setCount(this.fallenMob.getMainHandItem().getCount() - 1);
+                    this.stop();
+                    this.fallenMob.removeBuildBreakGoal();
+                }
                 diggingTime -= 1;
                 Vec3i direction =  blockHit.getDirection().getNormal();
                 BlockPos mineBlock = new BlockPos((useOn.getX() + direction.getX()*-1), (useOn.getY() + direction.getY()*-1), (useOn.getZ() + direction.getZ()*-1));
@@ -167,6 +175,13 @@ public class CorpseBuildBreakGoal extends Goal {
                 }
             }
             else{
+                //Another check to ensure blocks are placed
+                if(this.fallenMob.getMainHandItem().getItem() instanceof BlockItem block){
+                    block.place(new BlockPlaceContext(this.owner,this.fallenMob.swingingArm,this.fallenMob.getMainHandItem(),blockHit));
+                    this.fallenMob.getMainHandItem().setCount(this.fallenMob.getMainHandItem().getCount() - 1);
+                    this.stop();
+                    this.fallenMob.removeBuildBreakGoal();
+                }
                 Vec3i direction =  blockHit.getDirection().getNormal();
                 BlockPos mineBlock = new BlockPos((useOn.getX() + direction.getX()*-1), (useOn.getY() + direction.getY()*-1), (useOn.getZ() + direction.getZ()*-1));
                 BlockState bstate = this.fallenMob.level().getBlockState(mineBlock);
@@ -180,9 +195,7 @@ public class CorpseBuildBreakGoal extends Goal {
 
                     double digTimebuilder;
                     digTimebuilder = this.fallenMob.getMainHandItem().getDestroySpeed(bstate);
-                    if(!(getEnchLevel("minecraft:efficiency") == -1)){
-                        digTimebuilder += Math.pow(getEnchLevel("minecraft:efficiency"),2) + 1;
-                    }
+
                     if(this.fallenMob.getEffect(MobEffects.DIG_SPEED) != null){
                        digTimebuilder *= 0.2 * this.fallenMob.getEffect(MobEffects.DIG_SPEED).getAmplifier() + 1;
                     }
