@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.mixin.WorldTickClient;
 import net.hydra.jojomod.mixin.WorldTickServer;
 import net.hydra.jojomod.util.MainUtil;
@@ -124,9 +125,9 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
 
     /**Like UserID and FollowingID, but for the actual entity data.*/
     @Nullable
-    private LivingEntity User;
+    public LivingEntity User;
     @Nullable
-    private LivingEntity Following;
+    public LivingEntity Following;
 
     /**No sculker noises*/
     @Override
@@ -792,11 +793,12 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
 
             if (this.isAlive() && !this.dead || forceVisible){
                 if (this.getNeedsUser() && !this.forceVisible) {
-                    if (this.getUser() != null && !this.getUser().isRemoved()) {
-                        StandUser user = this.getUserData(this.getUser());
+                    LivingEntity userEntity = this.getUser();
+                    if (userEntity != null && !userEntity.isRemoved()) {
+                        StandUser user = this.getUserData(userEntity);
                         boolean userActive = user.roundabout$getActive();
                         LivingEntity thisStand = user.roundabout$getStand();
-                        if (this.getUser().isAlive() && userActive && (thisStand != null && thisStand.is(this))) {
+                        if (isValid(userActive,thisStand, userEntity)) {
 
                             //Make it fade in
                             if (this.getFadeOut() < MaxFade) {
@@ -811,18 +813,21 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                                 return;
                             }
                         } else {
-                            if (thisStand != null && !thisStand.is(this) && thisStand instanceof StandEntity SE &&
-                            SE.getFadeOut() >= 1 && this.getFadeOut() > 1){
-                                this.setFadeOut((byte) 1);
-                                TickDown();
-                            }
-                            TickDown();
+                            handleTickDownIfDupe(thisStand);
                         }
                     } else {
                         TickDown();
                     }
                 } else {
-                    this.setFadeOut(this.getMaxFade());
+                    if (!this.getNeedsUser()){
+                        if (this.getFadeOut() < MaxFade) {
+                            if (!this.level().isClientSide()) {
+                                this.incFadeOut((byte) 1);
+                            }
+                        }
+                    } else {
+                        this.setFadeOut(this.getMaxFade());
+                    }
                 }
             } else {
                 TickDown();
@@ -831,8 +836,29 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         this.setNoGravity(true);
     } // Happens every tick
 
+
+    public boolean validatePowers(LivingEntity user){
+        return (((StandUser)user).roundabout$getStandPowers() instanceof StandPowers);
+    }
+
+    public boolean needsActive(){
+        return true;
+    }
+    public boolean isValid(boolean userActive, LivingEntity thisStand, LivingEntity userEntity){
+        return userEntity.isAlive() && !userEntity.isRemoved() && (!needsActive() || userActive) && (thisStand != null && thisStand.is(this));
+    }
+    public void handleTickDownIfDupe(LivingEntity thisStand){
+
+        if (thisStand != null && !thisStand.is(this) && thisStand instanceof StandEntity SE &&
+                SE.getFadeOut() >= 1 && this.getFadeOut() > 1){
+            this.setFadeOut((byte) 1);
+            TickDown();
+        }
+        TickDown();
+    }
+
     /** Makes the stand fade out every tick, eventually despawning.*/
-    private void TickDown(){
+    public void TickDown(){
         var currFade = this.getFadeOut();
         if (!this.level().isClientSide()) {
             if (currFade >= 0) {
@@ -858,6 +884,12 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         }
     }
 
+
+    /**Stands like harvest and survivor do not qualify as a "singular entity", so they will not despawn off
+     * of conditions like pressing the summoning key again */
+    public boolean isASingularEntity(){
+        return true;
+    }
 
     @Override
     @javax.annotation.Nullable

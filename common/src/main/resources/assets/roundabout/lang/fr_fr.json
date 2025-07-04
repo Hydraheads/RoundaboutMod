@@ -72,6 +72,7 @@
   "item.roundabout.the_world_disc.desc": "The World",
   "item.roundabout.justice_disc.desc": "Justice",
   "item.roundabout.cinderella_disc.desc": "Cinderella",
+  "item.roundabout.survivor_disc.desc": "Survivor",
   "item.roundabout.hey_ya_disc.desc": "Hey Ya!",
   "item.roundabout.mandom_disc.desc": "Mandom",
   "item.roundabout.none_disc.desc": "Aucun",
@@ -167,6 +168,7 @@
   "entity.roundabout.terrier": "Terrier (de Boston)",
   "entity.roundabout.the_world": "The World",
   "entity.roundabout.the_world_ultimate": "The World",
+  "entity.roundabout.survivor": "Survivor",
   "entity.roundabout.star_platinum": "Star Platinum",
   "entity.roundabout.star_platinum_baseball": "Star Platinum",
   "entity.roundabout.magicians_red": "Magician's Red",
@@ -1023,6 +1025,9 @@
   "skins.roundabout.mandom.happy": "G joyeux",
   "skins.roundabout.mandom.eye": "Oeil de l'End",
   "skins.roundabout.mandom.melon": "Pastèque",
+  "skins.roundabout.mandom.esidisi": "Esidisi",
+
+  "skins.roundabout.survivor.base": "Partie 6",
 
   "skins.roundabout.killer_queen.base": "Partie 4",
 

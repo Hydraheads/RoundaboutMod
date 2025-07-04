@@ -1,0 +1,181 @@
+package net.hydra.jojomod.stand.powers;
+
+import com.google.common.collect.Lists;
+import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+
+public class PowersSurvivor extends NewDashPreset {
+    public PowersSurvivor(LivingEntity self) {
+        super(self);
+    }
+
+    @Override
+    public StandPowers generateStandPowers(LivingEntity entity) {
+        return new PowersSurvivor(entity);
+    }
+
+
+    public boolean dangerYappingOn(){
+        return getStandUserSelf().roundabout$getUniqueStandModeToggle();
+    }
+    public boolean canSummonStandAsEntity(){
+        return false;
+    }
+    @Override
+    public boolean rendersPlayer(){
+        return true;
+    }
+    @Override
+    public void renderIcons(GuiGraphics context, int x, int y) {
+        // code for advanced icons
+         setSkillIcon(context, x, y, 1, StandIcons.BOTTLE, PowerIndex.SKILL_1);
+
+        if (isHoldingSneak())
+            setSkillIcon(context, x, y, 2, StandIcons.DESPAWN, PowerIndex.NO_CD);
+        else
+            setSkillIcon(context, x, y, 2, StandIcons.SPAWN, PowerIndex.SKILL_2);
+        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        setSkillIcon(context, x, y, 4, StandIcons.RAGE_SELECTION, PowerIndex.SKILL_4);
+
+        super.renderIcons(context, x, y);
+    }
+    public void registerHUDIcons() {
+        HashSet<GuiIcon> icons = new HashSet<>();
+
+        // code for basic icons: the rest rely on criteria we have to manually implement
+
+        GUI_ICON_REGISTRAR = icons;
+    }
+
+    @Override
+    public void tick() {
+    }
+
+    @Override
+    public void powerActivate(PowerContext context) {
+        /**Making dash usable on both key presses*/
+        switch (context)
+        {
+            case SKILL_2_NORMAL-> {
+                summonSurvivorClient();
+            }
+            case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
+                dash();
+            }
+        }
+    }
+
+    public boolean canUseStillStandingRecharge(byte bt){
+        if (bt == PowerIndex.SKILL_2)
+            return false;
+        return super.canUseStillStandingRecharge(bt);
+    }
+
+    public void summonSurvivorClient(){
+        Vec3 pos = MainUtil.getRaytracePointOnMobOrBlock(this.self,30);
+        tryPosPowerPacket(PowerIndex.POWER_2,pos);
+
+    }
+
+
+    @Override
+    public boolean tryPower(int move, boolean forced) {
+        return super.tryPower(move, forced);
+    }
+
+    @Override
+    public boolean isAttackIneptVisually(byte activeP, int slot) {
+        return super.isAttackIneptVisually(activeP, slot);
+    }
+
+    /** if = -1, not melt dodging */
+    public int meltDodgeTicks = -1;
+
+    @Override
+    public void tickPower() {
+        /**Yap animation based on using power*/
+        super.tickPower();
+    }
+
+
+    @Override
+    public void updateIntMove(int in) {
+
+        super.updateIntMove(in);
+    }
+
+    @Override
+    public void updateUniqueMoves() {
+        super.updateUniqueMoves();
+    }
+
+    public static final byte
+            BASE = 1;
+
+    @Override
+    public List<Byte> getSkinList() {
+        return Arrays.asList(
+                BASE
+        );
+    }
+
+    @Override public Component getSkinName(byte skinId) {
+        return switch (skinId)
+        {
+            default -> Component.translatable("skins.roundabout.survivor.base");
+        };
+    }
+
+    @Override
+    public boolean isSecondaryStand(){
+        return true;
+    }
+    protected Byte getSummonSound() {
+        return SoundIndex.SUMMON_SOUND;
+    }
+    @Override
+    public SoundEvent getSoundFromByte(byte soundChoice){
+        switch (soundChoice)
+        {
+            case SoundIndex.SUMMON_SOUND -> {
+                return ModSounds.HEY_YA_SUMMON_EVENT;
+            }
+        }
+        return super.getSoundFromByte(soundChoice);
+    }
+
+    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
+        List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
+                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
+        return $$1;
+    }
+
+    @Override
+    public boolean isWip(){
+        return true;
+    }
+    @Override
+    public Component ifWipListDevStatus(){
+        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
+    }
+    @Override
+    public Component ifWipListDev(){
+        return Component.literal(  "Hydra").withStyle(ChatFormatting.YELLOW);
+    }
+}

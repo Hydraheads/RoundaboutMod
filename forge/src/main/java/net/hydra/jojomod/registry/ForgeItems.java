@@ -5,10 +5,7 @@ import net.hydra.jojomod.event.powers.stand.*;
 import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.event.powers.visagedata.aesthetician.*;
 import net.hydra.jojomod.item.*;
-import net.hydra.jojomod.stand.powers.PowersD4C;
-import net.hydra.jojomod.stand.powers.PowersGreenDay;
-import net.hydra.jojomod.stand.powers.PowersHeyYa;
-import net.hydra.jojomod.stand.powers.PowersMandom;
+import net.hydra.jojomod.stand.powers.*;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
@@ -418,6 +415,8 @@ public class ForgeItems {
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersSoftAndWet(null))));
     public static final RegistryObject<Item> STAND_DISC_CINDERELLA = addToDiscTab(ITEMS.register("cinderella_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null))));
+    public static final RegistryObject<Item> STAND_DISC_SURVIVOR = addToWIPTab(ITEMS.register("survivor_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSurvivor(null))));
     public static final RegistryObject<Item> STAND_DISC_HEY_YA = addToDiscTab(ITEMS.register("hey_ya_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersHeyYa(null))));
     public static final RegistryObject<Item> STAND_DISC_MANDOM = addToDiscTab(ITEMS.register("mandom_disc",
