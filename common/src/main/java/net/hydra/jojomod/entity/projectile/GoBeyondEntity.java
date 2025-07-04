@@ -49,7 +49,10 @@ public class GoBeyondEntity extends SoftAndWetBubbleEntity implements NoHitboxRe
         this.chasing = chasing;
     }
 
-
+    @Override
+    public boolean dealWithPenetration(Entity proj){
+        return true;
+    }
     public boolean success = false;
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
