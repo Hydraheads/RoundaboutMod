@@ -1,9 +1,7 @@
 package net.hydra.jojomod.networking;
 
 import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.zetalasis.networking.message.impl.IMessageEvent;
 import org.jetbrains.annotations.Nullable;
@@ -11,7 +9,10 @@ import org.jetbrains.annotations.Nullable;
 public class ServerToClientPackets {
     public static class S2CPackets implements IMessageEvent {
         public enum MESSAGES {
-            Rewind("rewind");
+            Rewind("rewind"),
+            Interpolate("unskip_interpolation"),
+            Chrono("chrono_vision_player"),
+            MANDOM_PENALTY("mandom_penalty");
 
             public final String value;
 

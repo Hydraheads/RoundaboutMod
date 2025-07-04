@@ -2,11 +2,10 @@ package net.zetalasis.networking.packet.impl;
 
 import io.netty.buffer.Unpooled;
 import net.hydra.jojomod.Roundabout;
-import net.minecraft.world.phys.Vec3;
+import net.hydra.jojomod.client.ClientUtil;
 import net.zetalasis.networking.packet.api.IClientNetworking;
 import net.zetalasis.networking.packet.api.args.c2s.AbstractBaseC2SPacket;
 import net.zetalasis.networking.packet.api.args.s2c.AbstractBaseS2CPacket;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
@@ -76,13 +75,7 @@ public class ModNetworking {
 
     public static @Nullable Connection getC2SConnection()
     {
-        Minecraft client = Minecraft.getInstance();
-        if (client.player == null)
-            return null;
-
-        Connection integratedServerCon = ((IClientNetworking)client).roundabout$getServer();
-
-        return (integratedServerCon != null ? integratedServerCon : client.player.connection.getConnection());
+        return ClientUtil.getC2SConnection();
     }
 
     private static ResourceLocation buildFromClassName(Class<?> c)
@@ -179,6 +172,7 @@ public class ModNetworking {
 
     public static Object[] decodeBufferToVArgs(FriendlyByteBuf buf) {
         String sig = buf.readUtf();
+
         if (sig.equals("void")) {
             return new Object[0]; // no arguments
         }
@@ -195,6 +189,10 @@ public class ModNetworking {
                 throw new RuntimeException("Failed decoding FriendlyByteBuf to VArgs:\n" +
                         className + " was not found.\n[" + sig + "]");
             }
+        }
+
+        if (buf.readableBytes() > 0) {
+            throw new RuntimeException("Warning: extra unread bytes in buffer! Signature: " + sig);
         }
 
         return result.toArray();

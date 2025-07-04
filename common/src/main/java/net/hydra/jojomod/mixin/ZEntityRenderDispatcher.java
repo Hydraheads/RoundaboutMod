@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.NoHitboxRendering;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.SavedSecond;
@@ -62,7 +63,6 @@ public abstract class ZEntityRenderDispatcher {
             ci.cancel();
             return;
         }
-
 
 
         if ($$0 instanceof LivingEntity LE && !roundabout$recurse){

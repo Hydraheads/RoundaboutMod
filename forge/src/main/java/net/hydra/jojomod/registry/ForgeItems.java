@@ -420,7 +420,7 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null))));
     public static final RegistryObject<Item> STAND_DISC_HEY_YA = addToDiscTab(ITEMS.register("hey_ya_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersHeyYa(null))));
-    public static final RegistryObject<Item> STAND_DISC_MANDOM = addToWIPTab(ITEMS.register("mandom_disc",
+    public static final RegistryObject<Item> STAND_DISC_MANDOM = addToDiscTab(ITEMS.register("mandom_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMandom(null))));
     public static final RegistryObject<Item> STAND_DISC_D4C = ITEMS.register("d4c_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));

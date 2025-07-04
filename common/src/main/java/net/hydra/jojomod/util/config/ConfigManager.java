@@ -94,7 +94,7 @@ public abstract class ConfigManager {
                 ModItems.STAND_ARROW_POOL_FOR_MOBS.add((StandDiscItem) i);
             }
         }
-        if (getConfig().humanoidOnlyStandUserMobPoolv1 != null)
+        if (getConfig().humanoidOnlyStandUserMobPoolv2 != null)
         {
             ModItems.STAND_ARROW_POOL_FOR_HUMANOID_MOBS.clear();
 
@@ -102,7 +102,7 @@ public abstract class ConfigManager {
                 ModItems.STAND_ARROW_POOL_FOR_HUMANOID_MOBS.addAll(ModItems.STAND_ARROW_POOL_FOR_MOBS);
             }
 
-            for (String disc : getConfig().humanoidOnlyStandUserMobPoolv1)
+            for (String disc : getConfig().humanoidOnlyStandUserMobPoolv2)
             {
                 String[] split = disc.split(":");
 
@@ -120,11 +120,11 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getConfig().standArrowSecondaryPoolv2 != null)
+        if (getConfig().standArrowSecondaryPoolv3 != null)
         {
             ModItems.STAND_ARROW_SECONDARY_STAND_POOL.clear();
 
-            for (String disc : getConfig().standArrowSecondaryPoolv2)
+            for (String disc : getConfig().standArrowSecondaryPoolv3)
             {
                 String[] split = disc.split(":");
 

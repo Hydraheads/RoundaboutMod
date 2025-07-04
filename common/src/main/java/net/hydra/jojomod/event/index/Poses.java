@@ -15,7 +15,8 @@ public enum Poses {
     WAMUU((byte) 7,PoseAnimations.Wamuu),
 
     JOTARO((byte) 8, PoseAnimations.JOTARO),
-    JONATHAN((byte) 9, PoseAnimations.Jonathan);
+    JONATHAN((byte) 9, PoseAnimations.Jonathan),
+    WATCH((byte) 10, PoseAnimations.watch);
 
     public final byte id;
 
@@ -45,6 +46,8 @@ public enum Poses {
             return JOTARO;
         } if (bt== JONATHAN.id){
             return JONATHAN;
+        } if (bt== WATCH.id){
+            return WATCH;
         }
         return NONE;
     }

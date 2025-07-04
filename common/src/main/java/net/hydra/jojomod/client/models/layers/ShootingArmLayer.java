@@ -37,9 +37,6 @@ public class ShootingArmLayer <T extends LivingEntity, A extends HumanoidModel<T
             LivingEntity livent = entity;
             if (!entity.isInvisible()) {
                 if (entity!= null) {
-                    if (entity instanceof JojoNPC jnp && jnp.host != null){
-                        livent = jnp.host;
-                    }
                     StandUser user = ((StandUser)livent);
                     if (user.roundabout$getCombatMode()) {
                         if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {

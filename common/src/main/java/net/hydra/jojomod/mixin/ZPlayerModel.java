@@ -156,6 +156,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             this.roundabout$animate(ipe.getWamuu(), Poses.WAMUU.ad, $$3, 1f);
             this.roundabout$animate(ipe.getJotaro(), Poses.JOTARO.ad, $$3, 1f);
             this.roundabout$animate(ipe.getJonathan(), Poses.JONATHAN.ad, $$3, 1f);
+            this.roundabout$animate(ipe.getWatch(), Poses.WATCH.ad, $$3, 1f);
 
             /**Shoot mode aiming*/
             StandUser user = ((StandUser)$$0);
@@ -192,6 +193,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 this.roundabout$animate2(ipe.getWamuu(), Poses.WAMUU.ad, $$3, 1f);
                 this.roundabout$animate2(ipe.getJotaro(), Poses.JOTARO.ad, $$3, 1f);
                 this.roundabout$animate2(ipe.getJonathan(), Poses.JONATHAN.ad, $$3, 1f);
+                this.roundabout$animate2(ipe.getWatch(), Poses.WATCH.ad, $$3, 1f);
                 if ($$0.getItemBySlot(EquipmentSlot.CHEST).isEmpty()) {
                         this.cloak.z += 0.0F;
                         this.cloak.y += 0.0F;

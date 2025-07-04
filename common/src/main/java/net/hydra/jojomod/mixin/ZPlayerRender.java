@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.client.models.layers.*;
@@ -174,6 +175,12 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
         }
         ShootingArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,yes,
                 0,0,$$4);
+        if ($$4 != null && $$4.equals(this.model.rightArm)) {
+            MandomLayer.renderWatchFirstPerson(stack, buffer, getPackedLightCoords(acl, 1F), acl, 1, 1, 1, yes,
+                    0, 0, $$4, ((IPlayerModel) this.model).roundabout$getSlim()
+            );
+        }
+
     }
 
     @Inject(method = "renderRightHand", at = @At(value = "HEAD"), cancellable = true)

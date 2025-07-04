@@ -7,11 +7,13 @@ import net.hydra.jojomod.access.ICamera;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.gui.*;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.stand.powers.PowersMandom;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.network.Connection;
 import net.zetalasis.client.shader.D4CShaderFX;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.D4CCloneEntity;
@@ -57,6 +59,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.zetalasis.networking.packet.api.IClientNetworking;
 import net.zetalasis.world.DynamicWorld;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
@@ -72,16 +75,114 @@ public class ClientUtil {
     public static int checkthisdat = 0;
     public static boolean skipInterpolation = false;
 
+    /**Fallback in case the client exits the range and can't be fed the packet anymore.
+     * Not a perfect solution but it should help.*/
+    public static int skipInterpolationFixAccidentTicks = -1;
 
+    public static boolean isPlayerOrCamera(Entity ent){
+        Minecraft mc = Minecraft.getInstance();
+        if (!(mc.getCameraEntity() != null && ent.is(mc.getCameraEntity())) &&
+                !(mc.player !=null && ent.is(mc.player))) {
+            return true;
+        }
+        return false;
+    }
+
+    public static void tickClientUtilStuff(){
+        if (ClientUtil.popSounds != null){
+            ClientUtil.popSounds.popSounds();
+            ClientUtil.popSounds = null;
+        }
+
+        if (ClientUtil.isInCinderellaMobUI > -1){
+            if (!ClientUtil.hasCinderellaShopUI()){
+                ModPacketHandler.PACKET_ACCESS.intToServerPacket(ClientUtil.isInCinderellaMobUI, PacketDataIndex.INT_RELLA_CANCEL);
+                ClientUtil.isInCinderellaMobUI = -1;
+            }
+        } if (ClientUtil.setScreenNull){
+            ClientUtil.setScreenNull = false;
+            Minecraft.getInstance().setScreen(null);
+        }
+        if (skipInterpolationFixAccidentTicks > -1){
+            skipInterpolationFixAccidentTicks--;
+        } if (skipInterpolation){
+            if (skipInterpolationFixAccidentTicks <= -1){
+                skipInterpolation = false;
+            }
+        }
+    }
+    public static @Nullable Connection getC2SConnection()
+    {
+        Minecraft client = Minecraft.getInstance();
+        if (client.player == null)
+            return null;
+
+        Connection integratedServerCon = ((IClientNetworking)client).roundabout$getServer();
+
+        return (integratedServerCon != null ? integratedServerCon : client.player.connection.getConnection());
+    }
 
     public static void handleGeneralPackets(String message, Object... vargs) {
         Minecraft instance = Minecraft.getInstance();
         Player player = instance.player;
-        if (player != null) {
-            if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Rewind.value)) {
-                Roundabout.LOGGER.info("It's TV TIME :)");
+
+        instance.execute(() -> {
+            if (player != null) {
+                /**Mandom's time rewind flashes on people and makes their screen interpolate*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Rewind.value)) {
+                    StandUser user = ((StandUser)player);
+                    StandPowers powers = user.roundabout$getStandPowers();
+                    if (ConfigManager.getClientConfig().mandomRewindShowsVisualEffectsToNonMandomUsers ||
+                            powers instanceof PowersMandom){
+                        int ticks = powers.timeRewindOverlayTicks;
+                        if (ticks <= -1){
+                            powers.timeRewindOverlayTicks = 0;
+                        }
+                    }
+                    if (ConfigManager.getClientConfig().mandomRewindAttemptsToSkipInterpolation) {
+                        skipInterpolation = true;
+                        skipInterpolationFixAccidentTicks = 14;
+                    }
+                }
+                /**Generalized packet for resuming interpolation on all mobs*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Interpolate.value)) {
+                    skipInterpolation = false;
+                }
+                /**Mandom Clock Particle*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Chrono.value)) {
+                    int id = (int)vargs[0];
+                    double x = (double)vargs[1];
+                    double y = (double)vargs[2];
+                    double z = (double)vargs[3];
+                    SimpleParticleType clocktype = ModParticles.CLOCK;
+                    if (player.getId() != id)
+                        clocktype = ModParticles.BLUE_CLOCK;
+                    Entity ent = player.level().getEntity(id);
+                    if (ent != null) {
+
+                        player.level()
+                                .addParticle(
+                                        clocktype,
+                                        x,
+                                        y+ent.getEyeHeight()*0.8,
+                                        z,
+                                        0,
+                                        0,
+                                        0
+                                );
+                    }
+                }
+                /**The penalty for killing or placing blocks to distort time and raise cooldown*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.MANDOM_PENALTY.value)) {
+                    int altared = (int)vargs[0];
+                    StandUser user = ((StandUser)player);
+                    StandPowers powers = user.roundabout$getStandPowers();
+                    if (powers instanceof PowersMandom PM){
+                        PM.setTimeHasBeenAltered(altared);
+                    }
+                }
             }
-        }
+        });
     }
 
     /**

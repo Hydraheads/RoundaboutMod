@@ -54,6 +54,7 @@ public abstract class ZElytraModel<T extends LivingEntity> extends AgeableListMo
             this.roundabout$animate(ipe.getWamuu(), Poses.WAMUU.ad, $$3, 1f);
             this.roundabout$animate(ipe.getJotaro(), Poses.JOTARO.ad, $$3, 1f);
             this.roundabout$animate(ipe.getJonathan(), Poses.JONATHAN.ad, $$3, 1f);
+            this.roundabout$animate(ipe.getWatch(), Poses.WATCH.ad, $$3, 1f);
         }
     }
 

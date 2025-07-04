@@ -132,10 +132,11 @@ public class Config implements Cloneable {
                     "roundabout:soft_and_wet_disc"
             )
     );
-    public Set<String> standArrowSecondaryPoolv2 = new HashSet<>(
+    public Set<String> standArrowSecondaryPoolv3 = new HashSet<>(
             Arrays.asList(
                     "roundabout:cinderella_disc",
-                    "roundabout:hey_ya_disc"
+                    "roundabout:hey_ya_disc",
+                    "roundabout:mandom_disc"
             )
     );
     public Set<String> naturalStandUserMobPoolv3 = new HashSet<>(
@@ -148,9 +149,10 @@ public class Config implements Cloneable {
                     "roundabout:soft_and_wet_disc"
             )
     );
-    public Set<String> humanoidOnlyStandUserMobPoolv1 = new HashSet<>(
+    public Set<String> humanoidOnlyStandUserMobPoolv2 = new HashSet<>(
             Arrays.asList(
-                    "roundabout:hey_ya_disc"
+                    "roundabout:hey_ya_disc",
+                    "roundabout:mandom_disc"
             )
     );
     @NestedOption(group = "modded")
@@ -540,6 +542,8 @@ public class Config implements Cloneable {
         public Boolean timeRewindOnlySavesAndLoadsOnPlayers;
         @IntOption(group = "inherit", value = 220, min = 0, max = 72000)
         public Integer timeRewindCooldownv2;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer timeRewindCooldownExtraCondition;
         @BooleanOption(group = "inherit", value = true)
         public Boolean timeRewindCooldownUsesServerLatency;
         @IntOption(group = "inherit", value = 50, min = 0, max = 72000)

@@ -3,7 +3,6 @@ package net.hydra.jojomod.advancement.criteria;
 import net.hydra.jojomod.Roundabout;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.CriterionTrigger;
-import net.minecraft.resources.ResourceLocation;
 
 import java.lang.reflect.Method;
 

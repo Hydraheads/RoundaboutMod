@@ -670,6 +670,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     @Unique
     @Override
+    public AnimationState getWatch(){
+        return roundabout$WATCH;
+    }
+    @Unique
+    @Override
     public AnimationState getJotaro(){
         return roundabout$JOTARO;
     }
@@ -680,6 +685,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     @Unique
     public final AnimationState roundabout$WAMUU = new AnimationState();
+    @Unique
+    public final AnimationState roundabout$WATCH = new AnimationState();
 
     @Unique
     public final AnimationState roundabout$JOTARO = new AnimationState();
@@ -733,6 +740,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             this.roundabout$JOSEPH.startIfStopped(this.tickCount);
         } else {
             this.roundabout$JOSEPH.stop();
+        }
+        if (roundabout$GetPoseEmote() == Poses.WATCH.id) {
+            this.roundabout$WATCH.startIfStopped(this.tickCount);
+        } else {
+            this.roundabout$WATCH.stop();
         }
     }
 
@@ -825,7 +837,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 ((Player) (Object) this).level().broadcastEntityEvent(((Player) (Object) this), EntityEvent.SHIELD_DISABLED);
             }
             ci.cancel();
-        } else if (((StandUser) $$0).roundabout$getMainhandOverride()){
+        } else if (((StandUser) $$0).roundabout$getMainhandOverride() &&
+                ((StandUser) $$0).roundabout$getStandPowers().interceptAttack()){
             ci.cancel();
         }
     }
@@ -1266,6 +1279,14 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         {
             cir.setReturnValue(true);
             cir.cancel();
+        }
+    }
+
+
+    @Inject(method = "killedEntity", at = @At(value = "HEAD"), cancellable = true)
+    public void roundabout$hasLineOfSight(ServerLevel $$0, LivingEntity $$1, CallbackInfoReturnable<Boolean> cir) {
+        if (((StandUser)this).roundabout$getStandPowers().onKilledEntity($$0,$$1)){
+            cir.setReturnValue(false);
         }
     }
 }

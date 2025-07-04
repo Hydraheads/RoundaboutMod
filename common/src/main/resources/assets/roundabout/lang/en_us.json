@@ -829,7 +829,7 @@
   "ability.roundabout.chrono_vision": "Chrono Vision",
   "ability.roundabout.chrono_vision.desc": "Lets you see phantom clocks at the rewindable positions of entities. Their stream of time embers shows the direction the entity was facing.",
   "ability.roundabout.rewind_time": "Rewind Time",
-  "ability.roundabout.rewind_time.desc": "Rewinds time by 6 seconds, to the same positions that are visible if you choose to use Chrono Vision. It rewinds things such as positions, healths, and status of entities. It does not rewind everything about an entity, nor does it rewind blocks/items/cooldowns. But it can save your life and disorient your foes.",
+  "ability.roundabout.rewind_time.desc": "Rewinds time by 6 seconds, to the same positions that are visible if you choose to use Chrono Vision. It rewinds things such as positions, healths, and status of entities. It does not rewind everything about an entity, nor does it rewind blocks/items/cooldowns. But it can save your life and disorient your foes. Killing mobs/interfering with blocks distorts time, causing a longer cooldown.",
   "ability.roundabout.watch_switch": "Switch Watch",
   "ability.roundabout.watch_switch.desc": "A physical manifestation of your mental switch to rewind time. Equips and cycles through watches. As it is physical, those without stands can see it.",
   "ability.roundabout.clock": "Time Telling",
@@ -1023,6 +1023,7 @@
   "skins.roundabout.mandom.happy": "Happy G",
   "skins.roundabout.mandom.eye": "End Eye",
   "skins.roundabout.mandom.melon": "Melon",
+  "skins.roundabout.mandom.esidisi": "Esidisi",
 
   "skins.roundabout.killer_queen.base": "Part 4",
 

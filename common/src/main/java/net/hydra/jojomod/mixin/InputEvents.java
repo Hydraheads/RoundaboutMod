@@ -410,20 +410,7 @@ public abstract class InputEvents implements IInputEvents {
 
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     public void roundabout$tickTick(CallbackInfo ci) {
-        if (ClientUtil.popSounds != null){
-            ClientUtil.popSounds.popSounds();
-            ClientUtil.popSounds = null;
-        }
-
-        if (ClientUtil.isInCinderellaMobUI > -1){
-            if (!ClientUtil.hasCinderellaShopUI()){
-                ModPacketHandler.PACKET_ACCESS.intToServerPacket(ClientUtil.isInCinderellaMobUI, PacketDataIndex.INT_RELLA_CANCEL);
-                ClientUtil.isInCinderellaMobUI = -1;
-            }
-        } if (ClientUtil.setScreenNull){
-            ClientUtil.setScreenNull = false;
-            Minecraft.getInstance().setScreen(null);
-        }
+        ClientUtil.tickClientUtilStuff();
 
         if (this.player != null){
             //copy cooldowns on dimension switch code

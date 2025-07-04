@@ -14,15 +14,18 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -33,8 +36,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import net.zetalasis.networking.message.api.ModMessageEvents;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -62,18 +69,22 @@ public class PowersMandom extends NewDashPreset {
     public void renderIcons(GuiGraphics context, int x, int y) {
         // code for advanced icons
 
-        if (activatedPastVision()) {
+        if (activatedPastVision())
             setSkillIcon(context, x, y, 1, StandIcons.MANDOM_VISION_ON, PowerIndex.NO_CD);
-        } else {
+        else
             setSkillIcon(context, x, y, 1, StandIcons.MANDOM_VISION_OFF, PowerIndex.NO_CD);
-        }
 
-        setSkillIcon(context, x, y, 2, StandIcons.REWIND, PowerIndex.SKILL_2);
-        if (!isHoldingSneak()){
+        if (timeHasBeenAltered > -1 && ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownExtraCondition > 0)
+            setSkillIcon(context, x, y, 2, StandIcons.REWIND_PENALTY, PowerIndex.SKILL_2);
+        else
+            setSkillIcon(context, x, y, 2, StandIcons.REWIND, PowerIndex.SKILL_2);
+
+
+        if (!isHoldingSneak())
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
-        } else {
+        else
             setSkillIcon(context, x, y, 3, StandIcons.WATCH, PowerIndex.NO_CD);
-        }
+
         renderClock(context,x,y,4);
 
         super.renderIcons(context, x, y);
@@ -210,9 +221,12 @@ public class PowersMandom extends NewDashPreset {
 
 
     public boolean itsRewindTime(){
-        this.setCooldown(PowerIndex.SKILL_2,ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownv2);
+        int cooldown = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownv2;
+        if (timeHasBeenAltered > -1)
+            cooldown += ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownExtraCondition;
+        this.setCooldown(PowerIndex.SKILL_2,cooldown);
+        setTimeHasBeenAltered(-1);
         if (isClient()){
-            timeRewindOverlayTicks = 0;
             this.self.playSound(ModSounds.MANDOM_REWIND_EVENT, 200F, 1.0F);
         } else {
             rewindTimeActivation();
@@ -221,6 +235,48 @@ public class PowersMandom extends NewDashPreset {
     }
 
 
+    @Override
+    public void onPlaceBlock(ServerPlayer $$0, BlockPos $$1, ItemStack $$2){
+        /**Can't really cancel this one*/
+        if (!$$0.isCreative()) {
+            setTimeHasBeenAltered(140);
+        }
+        super.onPlaceBlock($$0,$$1,$$2);
+    }
+    @Override
+    public void onDestroyBlock(Level $$0, Player $$1, BlockPos $$2, BlockState $$3, BlockEntity $$4, ItemStack $$5){
+        if (!$$3.is(BlockTags.SAPLINGS) && !$$3.is(BlockTags.FLOWERS) && !$$3.is(BlockTags.REPLACEABLE)){
+            setTimeHasBeenAltered(140);
+        }
+        super.onDestroyBlock($$0,$$1,$$2,$$3,$$4,$$5);
+    }
+
+    @Override
+    public boolean onKilledEntity(ServerLevel $$0, LivingEntity $$1){
+        if (!(this.self instanceof Player PL && PL.isCreative())) {
+            setTimeHasBeenAltered(140);
+        }
+        return super.onKilledEntity($$0,$$1);
+    }
+    public int timeHasBeenAltered = -1;
+
+    public void tickTimeAlteration(){
+        if (!this.self.level().isClientSide()) {
+            if (timeHasBeenAltered > -1){
+                setTimeHasBeenAltered(timeHasBeenAltered-1);
+            }
+        }
+    }
+
+    public void setTimeHasBeenAltered(int altered){
+        if (timeHasBeenAltered != altered && ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownExtraCondition > 0){
+            // send packet here
+            timeHasBeenAltered = altered;
+            if (!this.self.level().isClientSide() && this.self instanceof ServerPlayer SP) {
+                ModMessageEvents.sendToPlayer(SP, "mandom_penalty",altered);
+            }
+        }
+    }
 
     int ticksSinceLastYap = 0;
     int maxTicksSinceLastYap = 400;
@@ -257,6 +313,7 @@ public class PowersMandom extends NewDashPreset {
 
     public void rewindTimeActivation(){
         int rewindPacketRange = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindRange;
+        int rewindCooldown = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownv2;
         spreadRadialClientPacket(rewindPacketRange,false, "rewind");
         List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.self.level(), this.self.blockPosition(),
                 rewindPacketRange);
@@ -268,14 +325,40 @@ public class PowersMandom extends NewDashPreset {
                     if (lastSecond != null) {
                         lastSecond.loadTime(ent);
                     }
+
+                    if (!ent.is(this.self)){
+                        if (ent instanceof LivingEntity LE){
+                            StandUser user = ((StandUser)LE);
+                            StandPowers powers = user.roundabout$getStandPowers();
+                            if (powers instanceof PowersMandom PM && !(PM.onCooldown(PowerIndex.SKILL_2) && PM.getCooldown(PowerIndex.SKILL_2).time > rewindCooldown)){
+                                PM.setCooldown(PowerIndex.SKILL_2,rewindCooldown);
+                            }
+                        }
+                    }
                 }
+            }
+            unskipInterp = 1;
+        }
+        if (this.self instanceof Player PE){
+            IPlayerEntity ipe = ((IPlayerEntity) PE);
+            if (ipe.roundabout$getWatchStyle() > WATCHLESS){
+                ipe.roundabout$SetPoseEmote((byte) 10);
             }
         }
     }
+    public int unskipInterp = -1;
 
     @Override
     public void tickPower() {
         super.tickPower();
+        tickTimeAlteration();
+        if (unskipInterp > -1){
+            unskipInterp--;
+            if (unskipInterp <= -1){
+                int rewindPacketRange = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindRange;
+                spreadRadialClientPacket(rewindPacketRange+50,false, "unskip_interpolation");
+            }
+        }
 
         /**Grabs nearby entities pretty regularly to see if they can be rendered*/
         if (!this.self.level().isClientSide()) {
@@ -291,9 +374,17 @@ public class PowersMandom extends NewDashPreset {
                                 if (!lastSecond.hasHadParticle){
                                     lastSecond.hasHadParticle = true;
                                     lastSecond.isTickingParticles = this.self;
-                                    ((ServerLevel) this.self.level()).sendParticles(getParticle(ent),
-                                            lastSecond.position.x, lastSecond.position.y+ent.getEyeHeight()*0.8, lastSecond.position.z,
-                                            0, 0, 0, 0, 0.015);
+                                    if (ent instanceof Player && this.self instanceof Player PE){
+                                        spreadRadialClientPacket(
+                                                ClientNetworking.getAppropriateConfig().mandomSettings.chronoVisionRange,
+                                                false,
+                                                "chrono_vision_player",
+                                                ent.getId(),lastSecond.position.x,lastSecond.position.y,lastSecond.position.z);
+                                    } else {
+                                        ((ServerLevel) this.self.level()).sendParticles(getParticle(ent),
+                                                lastSecond.position.x, lastSecond.position.y+ent.getEyeHeight()*0.8, lastSecond.position.z,
+                                                0, 0, 0, 0, 0.015);
+                                    }
                                 }
                                 if (!(ent instanceof Projectile) && !(ent instanceof ItemEntity)) {
                                     if (lastSecond.isTickingParticles != null && lastSecond.isTickingParticles.is(this.self)) {
@@ -341,7 +432,8 @@ public class PowersMandom extends NewDashPreset {
             JELLYFISH = 10,
             HAPPY = 11,
             EYE = 12,
-            MELON = 13;
+            MELON = 13,
+            ESIDISI = 14;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
@@ -357,7 +449,8 @@ public class PowersMandom extends NewDashPreset {
                 JELLYFISH,
                 HAPPY,
                 EYE,
-                MELON
+                MELON,
+                ESIDISI
         );
     }
     @Override public Component getSkinName(byte skinId) {
@@ -375,6 +468,7 @@ public class PowersMandom extends NewDashPreset {
             case PowersMandom.HAPPY -> Component.translatable("skins.roundabout.mandom.happy");
             case PowersMandom.EYE -> Component.translatable("skins.roundabout.mandom.eye");
             case PowersMandom.MELON -> Component.translatable("skins.roundabout.mandom.melon");
+            case PowersMandom.ESIDISI -> Component.translatable("skins.roundabout.mandom.esidisi");
             default -> Component.translatable("skins.roundabout.mandom.manga");
         };
     }
@@ -467,6 +561,7 @@ public class PowersMandom extends NewDashPreset {
         return super.isServerControlledCooldown(ci, num);
     }
 
+    /**
     @Override
     public boolean isWip(){
         return true;
@@ -479,4 +574,5 @@ public class PowersMandom extends NewDashPreset {
     public Component ifWipListDev(){
         return Component.literal(  "Hydra").withStyle(ChatFormatting.YELLOW);
     }
+     */
 }
