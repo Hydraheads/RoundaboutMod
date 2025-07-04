@@ -1,7 +1,9 @@
 package net.hydra.jojomod.entity.corpses;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.goals.FallenZombieAttackGoal;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -36,6 +38,15 @@ public class FallenZombie extends FallenMob{
                 add(Attributes.FOLLOW_RANGE, 48.0D);
     }
 
+    @Override
+    public float getAtkPower(Entity $$0){
+        if (((StandUser)this).roundabout$getStandPowers().getReducedDamage($$0)){
+            return getDamageMod((float) ((float) (3/2)
+                    * (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnPlayers *0.01)));
+        }
+        return getDamageMod((float) ((float) 3
+                * (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnMobs *0.01)));
+    }
     @Override
     public boolean doHurtTarget(Entity $$0) {
         boolean $$1 = super.doHurtTarget($$0);
