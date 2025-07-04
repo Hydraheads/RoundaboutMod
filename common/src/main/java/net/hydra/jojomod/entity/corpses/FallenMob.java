@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.corpses;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.goals.CorpseBuildBreakGoal;
 import net.hydra.jojomod.entity.goals.CorpseFollowCommanderGoal;
 import net.hydra.jojomod.entity.goals.CorpseStrollGoal;
 import net.hydra.jojomod.entity.goals.CorpseTargetGoal;
@@ -14,6 +15,7 @@ import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.item.BodyBagItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -33,6 +35,7 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Team;
 
@@ -82,7 +85,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     public void setJusticeTeamColor(byte fr){
         this.entityData.set(TEAM_COLOR, fr);
     }
-
+    private Goal thisBuildBreakGoal;
     /**Corpses will attempt to use their owner's scoreboard by default.
      *this can accomplish not killing your allies and their corpses*/
     @Override
@@ -277,6 +280,17 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
         this.targetSelector.addGoal(1, new CorpseTargetGoal(this));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::canGetMadAt));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false, this::canGetMadAt));
+    }
+    public void addBuildBreakGoal(BlockPos $$0, BlockHitResult $$1){
+        if(!(thisBuildBreakGoal == null)){
+            this.goalSelector.removeGoal(thisBuildBreakGoal);
+        }
+        thisBuildBreakGoal = new CorpseBuildBreakGoal(this,1.0,$$0,$$1,false);
+        this.goalSelector.addGoal(1, thisBuildBreakGoal);
+    }
+    public void removeBuildBreakGoal(){
+        this.goalSelector.removeGoal(thisBuildBreakGoal);
+        thisBuildBreakGoal = null;
     }
 
     public boolean canGetMadAt(LivingEntity $$0) {

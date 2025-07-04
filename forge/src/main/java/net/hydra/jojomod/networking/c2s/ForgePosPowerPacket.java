@@ -12,7 +12,13 @@ import java.util.function.Supplier;
 public class ForgePosPowerPacket {
         private final byte power;
         private final BlockPos blockPos;
+        private final BlockHitResult blockHit;
 
+        public ForgePosPowerPacket(byte power, BlockPos blockPos, BlockHitResult blockhit){
+            this.power = power;
+            this.blockPos = blockPos;
+            this.blockHit = blockhit;
+        }
         public ForgePosPowerPacket(byte power, BlockPos blockPos){
             this.power = power;
             this.blockPos = blockPos;
@@ -20,10 +26,18 @@ public class ForgePosPowerPacket {
         public ForgePosPowerPacket(FriendlyByteBuf buf){
             this.power = buf.readByte();
             this.blockPos = buf.readBlockPos();
+            try{
+                this.blockHit = buf.readBlockHitResult();
+            } catch (Exception ignored) {
+
+            }
         }
         public void toBytes(FriendlyByteBuf buf){
             buf.writeByte(power);
             buf.writeBlockPos(blockPos);
+            if(blockHit != null){
+                buf.writeBlockHitResult(blockHit);
+            }
         }
 
         public boolean handle(Supplier<NetworkEvent.Context> supplier){
@@ -32,7 +46,11 @@ public class ForgePosPowerPacket {
                 ServerPlayer player = context.getSender();
                 if (player != null) {
                     ServerLevel level = (ServerLevel) player.level();
-                    ((StandUser) player).roundabout$tryBlockPosPower(power, true, blockPos);
+                    if(blockHit != null){
+                        ((StandUser) player).roundabout$tryBlockPosPower(power, true, blockPos,blockHit);
+                    } else {
+                        ((StandUser) player).roundabout$tryBlockPosPower(power, true, blockPos);
+                    }
                 }
             });
             return true;

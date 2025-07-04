@@ -156,8 +156,8 @@ public class ForgePackets implements IPacketAccess {
 
     }
     @Override
-    public void StandPosPowerPacket(byte power, BlockPos blockPos) {
-        ForgePacketHandler.sendToServer(new ForgePosPowerPacket(power,blockPos));
+    public void StandPosPowerPacket(byte power, BlockPos blockPos, BlockHitResult blockHit) {
+        ForgePacketHandler.sendToServer(new ForgePosPowerPacket(power,blockPos,blockHit));
 
     }
     @Override
