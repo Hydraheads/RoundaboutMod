@@ -184,6 +184,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public MandomSettings mandomSettings;
     @NestedOption(group = "modded")
+    public SurvivorSettings survivorSettings;
+    @NestedOption(group = "modded")
     public TimeStopSettings timeStopSettings;
     @NestedOption(group="modded")
     public Experiments experiments;
@@ -554,6 +556,12 @@ public class Config implements Cloneable {
         public Boolean timeRewindStopsSuffocation;
         @BooleanOption(group = "inherit", value = true)
         public Boolean timeRewindStopsDeviousStrategies;
+    }
+    public static class SurvivorSettings {
+        @IntOption(group = "inherit", value = 140, min = 0, max = 72000)
+        public Integer SummonSurvivorCooldown;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean SummonSurvivorCooldownCooldownUsesServerLatency;
     }
     public static class TheWorldSettings {
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)

@@ -1,10 +1,12 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -87,12 +89,40 @@ public class PowersSurvivor extends NewDashPreset {
     }
 
     public void summonSurvivorClient(){
-        Vec3 pos = MainUtil.getRaytracePointOnMobOrBlock(this.self,30);
-        tryPosPowerPacket(PowerIndex.POWER_2,pos);
-
+        if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+            this.setCooldown(PowerIndex.SKILL_EXTRA, ClientNetworking.getAppropriateConfig().cooldownsInTicks.softAndWetEncasementBubbleCreate);
+            Vec3 pos = MainUtil.getRaytracePointOnMobOrBlock(this.self, 30);
+            tryPosPower(PowerIndex.POWER_2,true,pos);
+            tryPosPowerPacket(PowerIndex.POWER_2, pos);
+        }
+    }
+    @Override
+    public boolean tryPosPower(int move, boolean forced, Vec3 pos) {
+        if (move == PowerIndex.POWER_2) {
+            createSurvivor(move, pos);
+            return true;
+        }
+        return tryPower(move, forced);
     }
 
+    public void createSurvivor(int move, Vec3 pos){
 
+        if (isClient() || (!this.onCooldown(PowerIndex.SKILL_2) || !ClientNetworking.getAppropriateConfig().survivorSettings.SummonSurvivorCooldownCooldownUsesServerLatency)) {
+            int cooldown = ClientNetworking.getAppropriateConfig().survivorSettings.SummonSurvivorCooldown;
+            this.setCooldown(PowerIndex.SKILL_2, cooldown);
+            if (!isClient()) {
+                this.self.playSound(ModSounds.MANDOM_REWIND_EVENT, 200F, 1.0F);
+            }
+        }
+    }
+
+    @Override
+    public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
+        if (num == PowerIndex.SKILL_2 && ClientNetworking.getAppropriateConfig().survivorSettings.SummonSurvivorCooldownCooldownUsesServerLatency) {
+            return true;
+        }
+        return super.isServerControlledCooldown(ci, num);
+    }
     @Override
     public boolean tryPower(int move, boolean forced) {
         return super.tryPower(move, forced);
