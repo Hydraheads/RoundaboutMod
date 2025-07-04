@@ -89,8 +89,7 @@ public class PowersSurvivor extends NewDashPreset {
     }
 
     public void summonSurvivorClient(){
-        if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
-            this.setCooldown(PowerIndex.SKILL_EXTRA, ClientNetworking.getAppropriateConfig().cooldownsInTicks.softAndWetEncasementBubbleCreate);
+        if (!this.onCooldown(PowerIndex.SKILL_2)) {
             Vec3 pos = MainUtil.getRaytracePointOnMobOrBlock(this.self, 30);
             tryPosPower(PowerIndex.POWER_2,true,pos);
             tryPosPowerPacket(PowerIndex.POWER_2, pos);
