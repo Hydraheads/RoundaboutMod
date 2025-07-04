@@ -55,12 +55,12 @@ public class hey_ya<T extends Entity> extends EntityModel<T> {
 		PartDefinition cube_r1 = jaw.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(0, 14).addBox(-3.5F, 0.9914F, -5.5F, 7.0F, 1.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -1.2439F, -1.7218F, 0.0873F, 0.0F, 0.0F));
 
 		PartDefinition upper_head = head2.addOrReplaceChild("upper_head", CubeListBuilder.create().texOffs(0, 0).addBox(-3.3772F, -7.2F, -6.925F, 7.0F, 7.0F, 7.0F, new CubeDeformation(-0.01F))
-		.texOffs(0, 22).addBox(0.1228F, -9.2F, -2.925F, 0.0F, 8.0F, 8.0F, new CubeDeformation(-0.01F))
+		.texOffs(0, 22).addBox(0.1228F, -9.2F, -2.925F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
 		.texOffs(29, 1).addBox(-0.8772F, -2.0F, -7.9F, 2.0F, 3.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.1228F, -0.775F, 3.325F, -0.0873F, 0.0F, 0.0F));
 
-		PartDefinition cube_r2 = upper_head.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(28, 0).addBox(0.5F, -6.0F, -0.5F, 0.0F, 8.0F, 8.0F, new CubeDeformation(-0.01F)), PartPose.offsetAndRotation(0.0F, -3.2F, -2.2286F, 0.0F, 0.6109F, 0.0F));
+		PartDefinition cube_r2 = upper_head.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(28, 0).addBox(0.5F, -6.0F, -0.5F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -3.2F, -2.2286F, 0.0F, 0.6109F, 0.0F));
 
-		PartDefinition cube_r3 = upper_head.addOrReplaceChild("cube_r3", CubeListBuilder.create().texOffs(16, 22).addBox(0.5F, -6.0F, -0.5F, 0.0F, 8.0F, 8.0F, new CubeDeformation(-0.01F)), PartPose.offsetAndRotation(-0.5676F, -3.2F, -2.772F, 0.0F, -0.5672F, 0.0F));
+		PartDefinition cube_r3 = upper_head.addOrReplaceChild("cube_r3", CubeListBuilder.create().texOffs(16, 22).addBox(0.5F, -6.0F, -0.5F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.5676F, -3.2F, -2.772F, 0.0F, -0.5672F, 0.0F));
 
 		PartDefinition body = stand2.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, -20.0F, 1.5F));
 

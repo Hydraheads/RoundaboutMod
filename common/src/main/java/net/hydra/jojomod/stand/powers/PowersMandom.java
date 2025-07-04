@@ -348,6 +348,13 @@ public class PowersMandom extends NewDashPreset {
     }
     public int unskipInterp = -1;
 
+    public boolean canUseStillStandingRecharge(byte bt){
+        if (bt == PowerIndex.SKILL_2)
+            return false;
+        return super.canUseStillStandingRecharge(bt);
+    }
+
+
     @Override
     public void tickPower() {
         super.tickPower();

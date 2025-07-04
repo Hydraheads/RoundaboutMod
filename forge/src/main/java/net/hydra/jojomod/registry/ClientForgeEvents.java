@@ -56,6 +56,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.JUSTICE.get(), JusticeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MAGICIANS_RED.get(), MagiciansRedRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MAGICIANS_RED_OVA.get(), MagiciansRedOVARenderer::new);
+        event.registerEntityRenderer(ForgeEntities.SURVIVOR.get(), SurvivorRenderer::new);
         event.registerEntityRenderer(ForgeEntities.KILLER_QUEEN.get(), KillerQueenRenderer::new);
         event.registerEntityRenderer(ForgeEntities.D4C.get(), D4CRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GREEN_DAY.get(), GreenDayRenderer::new);
@@ -123,6 +124,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.THE_WORLD_ULTIMATE_LAYER, TheWorldUltimateModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STAR_PLATINUM_LAYER, StarPlatinumModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.SURVIVOR_LAYER, SurvivorModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STAR_PLATINUM_BASEBALL_LAYER, StarPlatinumBaseballModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.JUSTICE_LAYER, JusticeModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.MAGICIANS_RED_LAYER, MagiciansRedModel::getTexturedModelData);

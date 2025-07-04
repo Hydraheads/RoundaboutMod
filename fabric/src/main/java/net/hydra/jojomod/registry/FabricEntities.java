@@ -269,6 +269,13 @@ public class FabricEntities {
                         EntityType.Builder.of(GreenDayEntity::new, MobCategory.MISC).
                                 sized(0.75f, 2.05f).clientTrackingRange(12).build(Roundabout.MOD_ID+":green_day")
                 );
+        public static final EntityType<SurvivorEntity> SURVIVOR =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        Roundabout.location("survivor"),
+                        EntityType.Builder.of(SurvivorEntity::new, MobCategory.MISC).
+                                sized(0.5f, 0.3f).clientTrackingRange(12).build(Roundabout.MOD_ID+":survivor")
+                );
         public static final EntityType<SoftAndWetEntity> SOFT_AND_WET_DROWNED =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -476,6 +483,7 @@ public class FabricEntities {
                 ModEntities.MAGICIANS_RED_OVA = MAGICIANS_RED_OVA;
                 ModEntities.D4C = D4C;
                 ModEntities.GREEN_DAY = GREEN_DAY;
+                ModEntities.SURVIVOR = SURVIVOR;
                 ModEntities.SOFT_AND_WET = SOFT_AND_WET;
                 ModEntities.SOFT_AND_WET_DROWNED = SOFT_AND_WET_DROWNED;
                 ModEntities.SOFT_AND_WET_DEBUT = SOFT_AND_WET_DEBUT;
@@ -567,6 +575,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(MAGICIANS_RED_OVA, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(D4C, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(GREEN_DAY, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(SURVIVOR, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SOFT_AND_WET, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SOFT_AND_WET_DROWNED, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SOFT_AND_WET_DEBUT, StandEntity.createStandAttributes());
