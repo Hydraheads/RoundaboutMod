@@ -14,6 +14,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandArrowItem;
+import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
@@ -100,6 +101,12 @@ public abstract class ZItemInHandRenderer {
                 if (fp && SE.getScoping()){
                     ci.cancel();
                     return;
+                }
+            }
+            if (user.roundabout$getStandPowers() instanceof PowersRatt) {
+                if (user.roundabout$getStandPowers().scopeLevel != 0) {
+                    ci.cancel();
+                    return; 
                 }
             }
             if (powers.isPiloting()){

@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
 import net.hydra.jojomod.event.powers.visagedata.JosukePartEightVisage;
 import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -86,6 +87,13 @@ public abstract class HudRendering implements IHudAccess {
                         overlay2 = 0.5F - ((float) (40 - Math.min(overlayR, 40)) / 40) * 0.5F;
                     }
                     this.renderTextureOverlay($$1, StandIcons.GASOLINE_OVERLAY, overlay2);
+                }
+            }
+            if (((StandUser) this.minecraft.player ).roundabout$getStandPowers() instanceof PowersRatt) {
+                if ( ((StandUser) this.minecraft.player).roundabout$getStandPowers().scopeLevel != 0 ) {
+                    RenderSystem.enableBlend();
+                    this.renderTextureOverlay($$1, StandIcons.RATT_SCOPE_OVERLAY, 0.99F);
+                    RenderSystem.disableBlend();
                 }
             }
             if (this.minecraft.options.getCameraType().isFirstPerson()) {

@@ -17,9 +17,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
@@ -40,9 +39,6 @@ public class PowersRatt extends NewDashPreset {
     public StandPowers generateStandPowers(LivingEntity entity) {
         return new PowersRatt(entity);
     }
-    @Override
-    public boolean canSummonStandAsEntity() {/* lazy ass code*/return true;}
-
 
 
     @Override
@@ -57,32 +53,35 @@ public class PowersRatt extends NewDashPreset {
             PLACED = 2;
 
 
+    public boolean active = false;
+    @Override
+    public boolean canSummonStandAsEntity() {
+        return active;
+    }
+
     public byte getRattState() {
         RattEntity RE = (RattEntity) getStandUserSelf().roundabout$getStand();
         if (RE != null) {
             return RE.MotionState;
+        } else if (this.getStandUserSelf().roundabout$getActive()) {
+            return SHOULDER;
         }
         return -1;
     }
     public void setRattState(byte b) {
         RattEntity RE = (RattEntity) getStandUserSelf().roundabout$getStand();
         if (RE != null) {
-            RE.MotionState = b;
+            RE.UpdateMotionState(b);
         }
     }
     public boolean isRattState(byte b) {
         RattEntity RE = (RattEntity) getStandUserSelf().roundabout$getStand();
         if (RE != null) {
             return RE.MotionState == b;
+        } else if (b == SHOULDER) {
+                return true;
         }
         return false;
-    }
-    public Vec3  getRattPlacement() {
-        RattEntity RE = (RattEntity) getStandUserSelf().roundabout$getStand();
-        if (RE != null) {
-            return RE.Placement;
-        }
-        return Vec3.ZERO;
     }
     public void setRattPlacement(Vec3 b) {
         RattEntity RE = (RattEntity) getStandUserSelf().roundabout$getStand();
@@ -105,9 +104,6 @@ public class PowersRatt extends NewDashPreset {
 
 
 
-
-
-
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         ClientUtil.fx.roundabout$onGUI(context);
@@ -124,10 +120,8 @@ public class PowersRatt extends NewDashPreset {
                 setSkillIcon(context, x, y, 1, ScopeIcon, PowerIndex.SKILL_1);
                 setSkillIcon(context,x,y,2,StandIcons.JUSTICE_PILOT,PowerIndex.SKILL_2);
             }
-            case MOVING -> {
-                setSkillIcon(context,x,y,2,StandIcons.JUSTICE_PILOT_EXIT,PowerIndex.SKILL_2);
-            }
-            case PLACED -> {
+            case MOVING, PLACED -> {
+                setSkillIcon(context,x,y,1,StandIcons.NONE, PowerIndex.SKILL_1);
                 setSkillIcon(context,x,y,2,StandIcons.JUSTICE_PILOT_EXIT,PowerIndex.SKILL_2);
             }
         }
@@ -136,6 +130,21 @@ public class PowersRatt extends NewDashPreset {
     }
 
 
+    @Override
+    public boolean tryPower(int move, boolean forced) {
+        switch(move) {
+            case PowerIndex.POWER_1 -> {
+                active = true;
+                if (!this.isClient()) {
+                    this.getStandUserSelf().roundabout$summonStand(this.getSelf().level(), true, false);
+                }
+            }
+            case PowerIndex.POWER_1_SNEAK -> {
+                active = false;
+            }
+        }
+        return super.tryPower(move, forced);
+    }
     @Override
     public boolean tryPosPower(int move, boolean forced, Vec3 pos) {
         if (move == PowerIndex.POWER_2) {
@@ -148,12 +157,30 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime) {
-        if (move == PowerIndex.POWER_2) {
-            if (this.getStandEntity(this.getSelf()) != null) {
+        if (this.getStandEntity(this.getSelf()) != null) {
+            if (move == PowerIndex.POWER_2) {
                 this.getStandEntity(this.getSelf()).setOffsetType((byte) chargeTime);
+            } else if (move == PowerIndex.POWER_1) {
+                ((RattEntity)  this.getStandEntity(this.getSelf())).MotionState = (byte) chargeTime;
             }
         }
         return true;
+    }
+
+
+    @Override
+    public void tickPower() {
+        StandEntity SE = getStandEntity(this.getSelf());
+        if ( SE != null && SE.getOffsetType() == OffsetIndex.FOLLOW) {
+            if (active) {
+                Deploy();
+            } else {
+                if (!this.getSelf().level().isClientSide()) {
+                    SE.remove(Entity.RemovalReason.DISCARDED);
+                }
+            }
+        }
+        super.tickPower();
     }
 
 
@@ -184,7 +211,7 @@ public class PowersRatt extends NewDashPreset {
     }
 
     public void RattScope() {
-        /* will eventually add some sort of scope effect  */
+        /* will eventually add some sort of scope overlay  */
         int nl = scopeLevel + 1;
         if (nl == 2) {
             setScopeLevel(0);
@@ -200,8 +227,11 @@ public class PowersRatt extends NewDashPreset {
         if (RE != null) {
             if (getValidPlacement() != null) {
                 setRattState(MOVING);
-                setRattPlacement(getValidPlacement().getLocation());
+                setRattPlacement(getValidPlacement().getLocation().subtract(0,0.1,0));
             }
+        } else {
+            tryPower(PowerIndex.POWER_1,true);
+            tryPowerPacket(PowerIndex.POWER_1);
         }
     }
     public void Recall() {
@@ -209,6 +239,8 @@ public class PowersRatt extends NewDashPreset {
         if (RE != null) {
             setRattState(MOVING);
             setRattPlacement(null);
+            tryPower(PowerIndex.POWER_1_SNEAK,true);
+            tryPowerPacket(PowerIndex.POWER_1_SNEAK);
         }
     }
 
@@ -256,7 +288,7 @@ public class PowersRatt extends NewDashPreset {
     public SoundEvent getSoundFromByte(byte soundChoice){
         byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
-            return ModSounds.RATT_SUMMON_EVENT;
+            return ModSounds.SUMMON_SOUND_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }

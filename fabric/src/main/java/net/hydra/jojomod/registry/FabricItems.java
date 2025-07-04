@@ -331,6 +331,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_D4C);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
+                        entries.accept(STAND_DISC_RATT);
+                        entries.accept(MAX_STAND_DISC_RATT);
 
 
 

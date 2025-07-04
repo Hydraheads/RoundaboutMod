@@ -15,6 +15,7 @@ import net.hydra.jojomod.client.gui.PowerInventoryScreen;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.D4CEntity;
+import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.Poses;
@@ -106,6 +107,13 @@ public abstract class InputEvents implements IInputEvents {
                 }
             }
 
+            if ($$0 instanceof RattEntity) {
+                if (((StandEntity) $$0).getUser() != null) {
+                    if (((RattEntity) $$0).getUser().isCrouching()) {
+                        ci.setReturnValue(true);
+                    }
+                }
+            }
             if (powers.getGoBeyondTarget() != null && powers.getGoBeyondTarget().is($$0)) {
                 ci.setReturnValue(true);
                 return;

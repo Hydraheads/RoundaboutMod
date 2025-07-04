@@ -301,8 +301,7 @@ public class ForgeSounds {
             register(ModSounds.CINDERELLA_FAIL, ModSounds.CINDERELLA_FAIL_ID);
     public static final RegistryObject<SoundEvent> CINDERELLA_VISAGE_CREATION_EVENT =
             register(ModSounds.CINDERELLA_VISAGE_CREATION, ModSounds.CINDERELLA_VISAGE_CREATION_ID);
-    public static final RegistryObject<SoundEvent> RATT_SUMMON =
-            register(ModSounds.RATT_SUMMON, ModSounds.RATT_SUMMON_ID);
+
 
     public static final RegistryObject<SoundEvent> THE_WORLD_OVER_HEAVEN_EVENT =
             register(ModSounds.THE_WORLD_OVER_HEAVEN, ModSounds.THE_WORLD_OVER_HEAVEN_ID);

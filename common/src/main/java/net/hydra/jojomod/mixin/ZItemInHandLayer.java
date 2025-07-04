@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ArmedModel;
 import net.minecraft.client.model.EntityModel;
@@ -82,7 +83,13 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
         }
 
         LivingEntity host = entity;
-        if (entity instanceof JojoNPC jnpc && jnpc.host != null && ((StandUser)jnpc.host).roundabout$getEffectiveCombatMode()){
+        if ( ((StandUser)host).roundabout$getStandPowers() instanceof PowersRatt) {
+            if ( ((StandUser)host).roundabout$getStandPowers().scopeLevel != 0  ) {
+                ci.cancel();
+            }
+        }
+
+            if (entity instanceof JojoNPC jnpc && jnpc.host != null && ((StandUser)jnpc.host).roundabout$getEffectiveCombatMode()){
             host = jnpc.host;
         }
         if (host != null && ((StandUser)host).roundabout$getEffectiveCombatMode() && !host.isUsingItem()){

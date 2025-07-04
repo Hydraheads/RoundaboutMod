@@ -1,12 +1,8 @@
 package net.hydra.jojomod.entity.stand;
 
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.mixin.StandUserEntity;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.*;
@@ -37,9 +33,14 @@ public class RattEntity extends StandEntity {
     @Override
     public void tick() {
 
+        if (getUser() != null) {
+            if (!this.getUserData(this.getUser()).roundabout$getActive()) {
+                this.remove(RemovalReason.DISCARDED); // might not be the best method
+            }
+        }
+
         switch (MotionState) {
             case PowersRatt.SHOULDER -> {
-                // I'm going to either not summon RattEntity or just send him to the shadow realm (0,-1000,0)
                 UpdateState(OffsetIndex.FOLLOW);
             }
 
@@ -50,15 +51,15 @@ public class RattEntity extends StandEntity {
                     target = Placement;
                 }
 
-                UpdatePos(target);
+                UpdatePos(this.getPosition(0).lerp(target,0.8));
 
 
                 if (getPosition(0).distanceTo(target) < 0.2) {
                     UpdatePos(target);
                     if (target == Placement) {
-                        MotionState = PowersRatt.PLACED;
+                        UpdateMotionState(PowersRatt.PLACED);
                     } else {
-                        MotionState = PowersRatt.SHOULDER;
+                        UpdateMotionState(PowersRatt.SHOULDER);
                     }
                 }
             }
@@ -73,9 +74,18 @@ public class RattEntity extends StandEntity {
         super.tick();
     }
 
+
+
+
     public void UpdatePos(Vec3 v) {
         if (this.getUser() != null) {
             ((StandUser) this.getUser()).roundabout$getStandPowers().tryPosPowerPacket(PowerIndex.POWER_2,v);
+        }
+    }
+    public void UpdateMotionState(byte s) {
+        if (this.getUser() != null) {
+            MotionState = s;
+            ((StandUser) this.getUser()).roundabout$getStandPowers().tryIntPowerPacket(PowerIndex.POWER_1,(int) s);
         }
     }
     public void UpdateState(byte s) {
