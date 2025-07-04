@@ -3,18 +3,25 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
@@ -110,9 +117,23 @@ public class PowersSurvivor extends NewDashPreset {
             int cooldown = ClientNetworking.getAppropriateConfig().survivorSettings.SummonSurvivorCooldown;
             this.setCooldown(PowerIndex.SKILL_2, cooldown);
             if (!isClient()) {
-                this.self.playSound(ModSounds.MANDOM_REWIND_EVENT, 200F, 1.0F);
+                blipStand(pos);
+
             }
         }
+    }
+
+    public void blipStand(Vec3 pos){
+        StandEntity stand = ModEntities.SURVIVOR.create(this.getSelf().level());
+        if (stand != null) {
+            StandUser user = getStandUserSelf();
+            stand.absMoveTo(pos.x(), pos.y(), pos.z());
+            stand.setSkin(user.roundabout$getStandSkin());
+            stand.setIdleAnimation(user.roundabout$getIdlePos());
+            stand.setMaster(this.self);
+            this.self.level().addFreshEntity(stand);
+        }
+
     }
 
     @Override
