@@ -1891,7 +1891,7 @@ public void unlockSkin(){
                 }
             }
 
-            if (entity instanceof LivingEntity LE) {
+            if (entity instanceof LivingEntity LE && !(LE instanceof Player PE && PE.isCreative())) {
                 if (chargedFinal >= maxSuperHitTime) {
                     StandUser SE = ((StandUser) LE);
                     if (!SE.roundabout$isLaunchBubbleEncased()) {
