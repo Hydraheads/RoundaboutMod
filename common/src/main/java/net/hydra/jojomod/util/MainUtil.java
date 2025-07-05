@@ -221,7 +221,7 @@ public class MainUtil {
     }
     public static boolean isHumanoid(LivingEntity LE){
         return (LE instanceof Zombie || LE instanceof AbstractSkeleton
-        || LE instanceof EnderMan || LE instanceof Player || LE instanceof Piglin
+        || LE instanceof Player || LE instanceof Piglin
                 || LE instanceof JojoNPC);
 
     }
@@ -1325,6 +1325,35 @@ public class MainUtil {
         return blockHit.getLocation();
 
     }
+    public static Vec3 getRaytracePointOnMobOrBlock(Entity source, float range, float distance){
+        EntityHitResult targetEntity = rayCastEntityHitResult(source,range);
+        if (targetEntity != null && targetEntity.getEntity() != null && canActuallyHit(source,targetEntity.getEntity())){
+            return targetEntity.getLocation();
+        }
+
+        Vec3 vec3d = source.getEyePosition(0);
+        Vec3 vec3d2 = source.getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+        BlockHitResult blockHit = source.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,source));
+        return blockHit.getLocation().relative(blockHit.getDirection(),distance);
+
+    }
+    public static Vec3 getRaytracePointOnMobOrBlockIfNotUp(Entity source, float range, float distance){
+        EntityHitResult targetEntity = rayCastEntityHitResult(source,range);
+        if (targetEntity != null && targetEntity.getEntity() != null && canActuallyHit(source,targetEntity.getEntity())){
+            return targetEntity.getLocation();
+        }
+
+        Vec3 vec3d = source.getEyePosition(0);
+        Vec3 vec3d2 = source.getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+        BlockHitResult blockHit = source.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,source));
+        if (blockHit.getDirection().equals(Direction.UP))
+            return blockHit.getLocation();
+        return blockHit.getLocation().relative(blockHit.getDirection(),distance);
+
+    }
+
 
     public static boolean canActuallyHit(Entity self, Entity entity){
         if (ClientNetworking.getAppropriateConfig().generalDetectionGoThroughDoorsAndCorners){
