@@ -448,7 +448,7 @@ public class PermaCastWorld implements IPermaCasting {
                                 MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).roundabout$getStandPowers().getPermaCastRange()) {
                             if (!fm.getTicksThroughPlacer() || it.is(fm.placer)){
                                 if (((StandUser)it).roundabout$getStandPowers() instanceof PowersJustice PJ){
-                                    if (PJ.queryJusticeEntities().size() < ClientNetworking.getAppropriateConfig().justiceMaxCorpses){
+                                    if (PJ.queryJusticeEntities().size() < ClientNetworking.getAppropriateConfig().justiceSettings.maxCorpses){
                                         return it;
                                     }
                                 }
@@ -470,7 +470,7 @@ public class PermaCastWorld implements IPermaCasting {
                             if (it2 instanceof LivingEntity && ((StandUser) it2).roundabout$getStandPowers().getPermaCastContext() == PermanentZoneCastInstance.FOG_FIELD) {
                                 if (!fm.getTicksThroughPlacer() || it2.getId() == fm.getPlacer()) {
                                     if (((StandUser)it2).roundabout$getStandPowers() instanceof PowersJustice PJ) {
-                                        if (PJ.queryJusticeEntities().size() < ClientNetworking.getAppropriateConfig().justiceMaxCorpses) {
+                                        if (PJ.queryJusticeEntities().size() < ClientNetworking.getAppropriateConfig().justiceSettings.maxCorpses) {
                                             return (LivingEntity) it2;
                                         }
                                     }

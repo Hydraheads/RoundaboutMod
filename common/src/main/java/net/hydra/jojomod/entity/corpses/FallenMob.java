@@ -92,7 +92,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
      *this can accomplish not killing your allies and their corpses*/
     @Override
     public Team getTeam() {
-        if (ClientNetworking.getAppropriateConfig().justiceCorpsesUseOwnerTeam) {
+        if (ClientNetworking.getAppropriateConfig().justiceSettings.corpsesUseOwnerTeam) {
             if (getRealController() != null) {
                 return this.level().getScoreboard().getPlayersTeam(getRealController().getScoreboardName());
             }

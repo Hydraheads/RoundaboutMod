@@ -56,7 +56,7 @@ public abstract class ZServerGamePacketListenerImpl {
                 InteractionHand $$2 = $$0.getHand();
                 ItemStack $$3 = this.player.getItemInHand($$2);
                 if ($$3.getItem() instanceof FogBlockItem) {
-                    ROUNDABOUT$MAX_INTERACTION_DISTANCE = Mth.square(ClientNetworking.getAppropriateConfig().justiceFogAndPilotRange + 15);
+                    ROUNDABOUT$MAX_INTERACTION_DISTANCE = Mth.square(ClientNetworking.getAppropriateConfig().justiceSettings.fogAndPilotRange + 15);
                     roundabout$handleUseItemOn($$0);
                 }
                 ci.cancel();

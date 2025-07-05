@@ -128,7 +128,7 @@ public abstract class ZServerPlayerGameMode {
     @Unique
     public void roundabout$handleBlockBreakAction(BlockPos $$0, ServerboundPlayerActionPacket.Action $$1, Direction $$2, int $$3, int $$4) {
 
-        double ROUNDABOUT$MAX_INTERACTION_DISTANCE = Mth.square(ClientNetworking.getAppropriateConfig().justiceFogAndPilotRange+15);
+        double ROUNDABOUT$MAX_INTERACTION_DISTANCE = Mth.square(ClientNetworking.getAppropriateConfig().justiceSettings.fogAndPilotRange+15);
         if (this.player.getEyePosition().distanceToSqr(Vec3.atCenterOf($$0)) > ROUNDABOUT$MAX_INTERACTION_DISTANCE) {
         } else if ($$0.getY() >= $$3) {
             this.player.connection.send(new ClientboundBlockUpdatePacket($$0, this.level.getBlockState($$0)));

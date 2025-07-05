@@ -500,7 +500,7 @@ public class PowersJustice extends DashPreset {
                 if (fogControlledEntities == null) {
                     fogControlledEntities = new ArrayList<>();
                 }
-                if (fogControlledEntities.size() < ClientNetworking.getAppropriateConfig().justiceStandUserMobMinionCount
+                if (fogControlledEntities.size() < ClientNetworking.getAppropriateConfig().justiceSettings.standUserMobMinionCount
                 && this.getSelf().tickCount % 20 == 0){
                     if (!(this.getSelf() instanceof Creeper cr && this.getSelf().getMaxHealth() <= this.getSelf().getHealth())) {
                         initializeCorpse(rollCorpse(),attackTarget);
@@ -851,7 +851,7 @@ public class PowersJustice extends DashPreset {
 
     @Override
     public int getMaxPilotRange(){
-        return ClientNetworking.getAppropriateConfig().justiceFogAndPilotRange;
+        return ClientNetworking.getAppropriateConfig().justiceSettings.fogAndPilotRange;
     }
 
     public boolean hold1 = false;
@@ -1284,7 +1284,7 @@ public class PowersJustice extends DashPreset {
 
     @Override
     public float getPermaCastRange(){
-        return ClientNetworking.getAppropriateConfig().justiceFogAndPilotRange;
+        return ClientNetworking.getAppropriateConfig().justiceSettings.fogAndPilotRange;
     }
 
     @Override
