@@ -147,8 +147,9 @@ public class CorpseBuildBreakGoal extends Goal {
                 //And now we go mining.
                 //A check to ensure no one tries to change items during mining
                 if(this.fallenMob.getMainHandItem().getItem() instanceof BlockItem block){
-                    block.place(new BlockPlaceContext(this.owner,this.fallenMob.swingingArm,this.fallenMob.getMainHandItem(),blockHit));
-                    this.fallenMob.getMainHandItem().setCount(this.fallenMob.getMainHandItem().getCount() - 1);
+                    if (block.place(new BlockPlaceContext(this.owner,this.fallenMob.swingingArm,this.fallenMob.getMainHandItem(),blockHit)).consumesAction()){
+                        this.fallenMob.getMainHandItem().setCount(this.fallenMob.getMainHandItem().getCount() - 1);
+                    }
                     this.stop();
                     this.fallenMob.removeBuildBreakGoal();
                 }
