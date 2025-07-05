@@ -27,6 +27,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -295,6 +296,9 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
         } else {
             /**Otherwise it does stand damage of sorts*/
             boolean $$4 = DamageHandler.CorpseDamageEntity($$0, getAtkPower($$0),this, ent2);
+            if (this instanceof FallenZombie){
+                swing(InteractionHand.MAIN_HAND,true);
+            }
             if ($$4) {
                 if ($$2 > 0.0F && $$0 instanceof LivingEntity) {
                     ((LivingEntity)$$0)
@@ -314,6 +318,16 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
 
 
     }
+
+
+    @Override
+    public void aiStep() {
+        this.updateSwingTime();
+        super.aiStep();
+    }
+
+
+
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0, true));

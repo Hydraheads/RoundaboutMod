@@ -24,6 +24,9 @@ public class FallenZombie extends FallenMob{
         super($$0, $$1);
     }
 
+    protected float getEquipmentDropChance(EquipmentSlot $$0) {
+        return 100;
+    }
 
     @Override
     protected void registerGoals() {

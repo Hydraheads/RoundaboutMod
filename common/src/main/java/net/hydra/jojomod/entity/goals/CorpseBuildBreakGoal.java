@@ -142,7 +142,7 @@ public class CorpseBuildBreakGoal extends Goal {
             if(this.fallenMob.getMainHandItem().getItem() instanceof BlockItem block){
                 if (block.place(new BlockPlaceContext(this.owner,this.fallenMob.swingingArm,this.fallenMob.getMainHandItem(),blockHit)).consumesAction()){
                     this.fallenMob.getMainHandItem().setCount(this.fallenMob.getMainHandItem().getCount() - 1);
-                    this.fallenMob.swing(InteractionHand.MAIN_HAND);
+                    this.fallenMob.swing(InteractionHand.MAIN_HAND,true);
                 }
                 this.stop();
                 this.fallenMob.removeBuildBreakGoal();
