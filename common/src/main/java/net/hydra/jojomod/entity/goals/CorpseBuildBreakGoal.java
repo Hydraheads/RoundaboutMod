@@ -202,6 +202,7 @@ public class CorpseBuildBreakGoal extends Goal {
 
                     digTimebuilder = ((digTimebuilder / bstate.getBlock().defaultDestroyTime()) / 30);
 
+                    this.fallenMob.swing(InteractionHand.MAIN_HAND,true);
                     if(digTimebuilder > 1){
                         //Instantly break
                         bstate.getBlock().destroy(this.fallenMob.level(),mineBlock,bstate);

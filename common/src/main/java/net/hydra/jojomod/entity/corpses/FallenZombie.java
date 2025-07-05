@@ -41,22 +41,21 @@ public class FallenZombie extends FallenMob{
     }
     @Override
     public InteractionResult interactAt(Player player, Vec3 location, InteractionHand intHand) {
-        ItemStack plrItem = player.getItemInHand(intHand);
-        ItemStack corpseItem = this.getMainHandItem();
+        if (!player.level().isClientSide()) {
+            ItemStack plrItem = player.getItemInHand(intHand);
+            ItemStack corpseItem = this.getMainHandItem();
+            if (player.isCrouching()) {
 
-        if (plrItem.is(Items.NAME_TAG)) {
-            return InteractionResult.PASS;
-        }
-        if (player.isSpectator()) {
+                if (player.isSpectator()) {
+                    return InteractionResult.SUCCESS;
+                }
+                this.setItemSlotAndDropWhenKilled(EquipmentSlot.MAINHAND, plrItem);
+                player.setItemInHand(intHand, corpseItem);
             return InteractionResult.SUCCESS;
-        }
-        if (player.level().isClientSide) {
-            return InteractionResult.CONSUME;
-        }
-        this.setItemSlotAndDropWhenKilled(EquipmentSlot.MAINHAND,plrItem);
-        player.setItemInHand(intHand,corpseItem);
-        return InteractionResult.SUCCESS;
+            }
 
+        }
+        return InteractionResult.CONSUME;
 
     }
     @Override
