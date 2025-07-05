@@ -110,19 +110,16 @@ public class PowersRatt extends NewDashPreset {
 
         switch(getRattState()) {
             case SHOULDER -> {
-                ResourceLocation ScopeIcon = StandIcons.STAR_PLATINUM_SCOPE;
+                ResourceLocation ScopeIcon = StandIcons.RATT_SCOPE_IN;
                 if (scopeLevel == 1) {
-                    ScopeIcon = StandIcons.STAR_PLATINUM_SCOPE_1;
-                }
-                if (scopeLevel == 2) {
-                    ScopeIcon = StandIcons.STAR_PLATINUM_SCOPE_2;
+                    ScopeIcon = StandIcons.RATT_SCOPE_OUT;
                 }
                 setSkillIcon(context, x, y, 1, ScopeIcon, PowerIndex.SKILL_1);
-                setSkillIcon(context,x,y,2,StandIcons.JUSTICE_PILOT,PowerIndex.SKILL_2);
+                setSkillIcon(context,x,y,2,StandIcons.RATT_PLACE,PowerIndex.SKILL_2);
             }
             case MOVING, PLACED -> {
                 setSkillIcon(context,x,y,1,StandIcons.NONE, PowerIndex.SKILL_1);
-                setSkillIcon(context,x,y,2,StandIcons.JUSTICE_PILOT_EXIT,PowerIndex.SKILL_2);
+                setSkillIcon(context,x,y,2,StandIcons.RATT_RECALL,PowerIndex.SKILL_2);
             }
         }
         setSkillIcon(context,x,y,3,StandIcons.DODGE,PowerIndex.GLOBAL_DASH);
