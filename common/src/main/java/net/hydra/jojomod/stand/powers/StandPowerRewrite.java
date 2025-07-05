@@ -11,9 +11,6 @@ import java.util.HashSet;
 public class StandPowerRewrite extends StandPowers {
     public StandPowerRewrite(LivingEntity self) {
         super(self);
-        if (self != null && self.level().isClientSide()) {
-            registerHUDIcons();
-        }
     }
 
     public static HashSet<GuiIcon> GUI_ICON_REGISTRAR = new HashSet<>();
@@ -94,9 +91,6 @@ public class StandPowerRewrite extends StandPowers {
             }
         });
     }
-
-    /** Register Power Contexts for GUI such as hud and stuff */
-    public void registerHUDIcons() { return; };
     public void powerActivate(PowerContext context) {};
     /** Called per frame, use for particle FX and such */
     public void tick() {};

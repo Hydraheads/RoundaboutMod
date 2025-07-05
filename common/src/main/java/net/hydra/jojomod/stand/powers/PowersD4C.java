@@ -109,21 +109,6 @@ public class PowersD4C extends NewPunchingStand {
 
         super.renderIcons(context, x, y);
     }
-    public void registerHUDIcons() {
-        HashSet<GuiIcon> icons = new HashSet<>();
-
-        // code for basic icons: the rest rely on criteria we have to manually implement
-        icons.add(new GuiIcon(PowerIndex.SKILL_2, StandIcons.D4C_CLONE_SUMMON));
-        icons.add(new GuiIcon(PowerIndex.SKILL_2_GUARD, StandIcons.D4C_CLONE_SWAP));
-        icons.add(new GuiIcon(PowerIndex.SKILL_2_CROUCH_GUARD, StandIcons.D4C_CLONE_MINING));
-
-        icons.add(new GuiIcon(PowerIndex.SKILL_3, StandIcons.D4C_PARALLEL_RUNNING));
-        icons.add(new GuiIcon(PowerIndex.SKILL_3_GUARD, StandIcons.D4C_PARALLEL_RUNNING));
-        icons.add(new GuiIcon(PowerIndex.SKILL_3_CROUCH_GUARD, StandIcons.D4C_MELT_DODGE));
-        icons.add(new GuiIcon(PowerIndex.GLOBAL_DASH, StandIcons.D4C_MELT_DODGE));
-
-        GUI_ICON_REGISTRAR = icons;
-    }
 
     @Override
     public void tick() {

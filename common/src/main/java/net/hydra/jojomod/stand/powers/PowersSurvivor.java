@@ -63,13 +63,6 @@ public class PowersSurvivor extends NewDashPreset {
 
         super.renderIcons(context, x, y);
     }
-    public void registerHUDIcons() {
-        HashSet<GuiIcon> icons = new HashSet<>();
-
-        // code for basic icons: the rest rely on criteria we have to manually implement
-
-        GUI_ICON_REGISTRAR = icons;
-    }
 
     @Override
     public void tick() {
