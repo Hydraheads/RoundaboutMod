@@ -53,6 +53,8 @@
   "item.roundabout.cinderella_disc": "Stand Disc",
   "item.roundabout.survivor_disc": "Stand Disc",
   "item.roundabout.hey_ya_disc": "Stand Disc",
+  "item.roundabout.ratt_disc": "Stand Disc",
+  "item.roundabout.max_ratt_disc": "Stand Disc+",
   "item.roundabout.mandom_disc": "Stand Disc",
   "item.roundabout.max_star_platinum_disc": "Stand Disc+",
   "item.roundabout.magicians_red_disc": "Stand Disc",
@@ -73,6 +75,8 @@
   "item.roundabout.the_world_disc.desc": "The World",
   "item.roundabout.justice_disc.desc": "Justice",
   "item.roundabout.cinderella_disc.desc": "Cinderella",
+  "item.roundabout.max_ratt_disc.desc": "Ratt",
+  "item.roundabout.ratt_disc.desc": "Ratt",
   "item.roundabout.survivor_disc.desc": "Survivor",
   "item.roundabout.hey_ya_disc.desc": "Hey Ya!",
   "item.roundabout.mandom_disc.desc": "Mandom",
@@ -885,6 +889,10 @@
   "idle.roundabout.hey_ya_2": "Facing",
   "idle.roundabout.mandom_back": "Back",
 
+  "idle.roundabout.ratt_1": "Head",
+  "idle.roundabout.ratt_2": "Shoulder",
+
+
   "skins.roundabout.star_platinum.base": "Part 3",
   "skins.roundabout.star_platinum.manga": "Manga",
   "skins.roundabout.star_platinum.manga_purple": "Manga Purple",
@@ -984,6 +992,8 @@
   "skins.roundabout.d4c.grand": "Grand",
 
   "skins.roundabout.green_day.base": "Part 5",
+
+  "skins.roundabout.ratt.anime" : "Anime",
 
   "skins.roundabout.cinderella.base": "Part 4",
   "skins.roundabout.cinderella.manga": "Manga",

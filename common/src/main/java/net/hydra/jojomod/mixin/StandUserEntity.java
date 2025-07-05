@@ -28,6 +28,7 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
 import net.hydra.jojomod.stand.powers.PowersMandom;
+import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -1803,6 +1804,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$setHeyYaVanishTicks(int set){
         roundabout$heyYaVanishTicks = Mth.clamp(set,0,10);
     }
+
+    @Unique
+    public int roundabout$RattShoulderVanishTicks = 0;
+
+    @Unique
+    @Override
+    public int roundabout$getRattShoulderVanishTicks(){
+        return roundabout$RattShoulderVanishTicks;
+    }
+    @Unique
+    @Override
+    public void roundabout$setRattShoulderVanishTicks(int set){
+        roundabout$RattShoulderVanishTicks = Mth.clamp(set,0,10);
+    }
+
     @Unique
     public int roundabout$mandomVanishTicks = 0;
 
@@ -3390,6 +3406,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setMandomVanishTicks(roundabout$getMandomVanishTicks()+1);
         } else {
             roundabout$setMandomVanishTicks(roundabout$getMandomVanishTicks()-1);
+        }
+        /** RattShoulder fade ticks*/
+        if (roundabout$getActive() && roundabout$getStandPowers() instanceof PowersRatt &&
+                ((PowersRatt)roundabout$getStandPowers()).isRattState(PowersRatt.SHOULDER)
+        ){
+            roundabout$setRattShoulderVanishTicks(roundabout$getRattShoulderVanishTicks()+1);
+        } else {
+            roundabout$setRattShoulderVanishTicks(0);
         }
 
 
