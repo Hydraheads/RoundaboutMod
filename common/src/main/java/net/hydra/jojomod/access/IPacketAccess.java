@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
@@ -52,6 +53,7 @@ public interface IPacketAccess {
     void StandGuardCancelClientPacket();
     void StandPowerPacket(byte power);
     void StandPosPowerPacket(byte power, BlockPos blockPos);
+    void StandPosPowerPacket(byte power, BlockPos blockPos, BlockHitResult blockhit);
     void StandChargedPowerPacket(byte power, int chargeTime);
     void StandPunchPacket(int targetID, byte APP);
     void StandBarrageHitPacket(int targetID, int ATD);

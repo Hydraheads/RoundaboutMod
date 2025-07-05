@@ -3,6 +3,7 @@ package net.hydra.jojomod.networking;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPacketAccess;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.Networking;
@@ -13,6 +14,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
@@ -256,6 +258,15 @@ public class FabricPackets implements IPacketAccess {
         buffer.writeByte(power);
         buffer.writeInt(chargeTime);
         ClientPlayNetworking.send(ModMessages.STAND_CHARGED_POWER_PACKET, buffer);
+    }
+
+    @Override
+    public void StandPosPowerPacket(byte power, BlockPos blockPos, BlockHitResult blockhitres){
+        FriendlyByteBuf buffer = PacketByteBufs.create();
+        buffer.writeByte(power);
+        buffer.writeBlockPos(blockPos);
+        buffer.writeBlockHitResult(blockhitres);
+        ClientPlayNetworking.send(ModMessages.STAND_POS_POWER_PACKET, buffer);
     }
 
     @Override
