@@ -1314,7 +1314,7 @@ public class MainUtil {
     /**Generate pointer on block or entity position*/
     public static Vec3 getRaytracePointOnMobOrBlock(Entity source, float range){
         EntityHitResult targetEntity = rayCastEntityHitResult(source,range);
-        if (targetEntity != null){
+        if (targetEntity != null && targetEntity.getEntity() != null && canActuallyHit(source,targetEntity.getEntity())){
             return targetEntity.getLocation();
         }
 
@@ -1473,7 +1473,7 @@ public class MainUtil {
         EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(entityX, vec3d, vec3d3, box, entity -> !entity.isSpectator() && entity.isPickable() && !entity.isInvulnerable(), reach*reach);
         if (entityHitResult != null){
             Entity hitResult = entityHitResult.getEntity();
-            if (hitResult.isAlive() && !hitResult.isRemoved()) {
+            if (hitResult.isAlive() && !hitResult.isRemoved() && canActuallyHit(entityX,hitResult)) {
                 return hitResult;
             }
         }

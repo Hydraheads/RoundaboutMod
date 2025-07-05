@@ -14,6 +14,16 @@ public class MultipleTypeStand extends StandEntity {
     }
 
     @Override
+
+    public boolean standHasGravity(){
+        return true;
+    }
+
+    @Override
+    public boolean lockPos(){
+        return false;
+    }
+    @Override
     public boolean isASingularEntity(){
         return false;
     }
