@@ -296,19 +296,24 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
             return $$4;
         } else {
             /**Otherwise it does stand damage of sorts*/
-            boolean $$4 = DamageHandler.CorpseDamageEntity($$0, getAtkPower($$0),this, ent2);
+            boolean $$4 = DamageHandler.CorpseDamageEntity($$0, getAtkPower($$0),this);
             if (this instanceof FallenZombie){
                 swing(InteractionHand.MAIN_HAND,true);
             }
             if ($$4) {
-                if ($$2 > 0.0F && $$0 instanceof LivingEntity) {
-                    ((LivingEntity)$$0)
+                if ($$2 > 0.0F && $$0 instanceof LivingEntity LE) {
+                    LE
                             .knockback(
                                     (double)($$2 * 0.5F),
                                     (double) Mth.sin(this.getYRot() * (float) (Math.PI / 180.0)),
                                     (double)(-Mth.cos(this.getYRot() * (float) (Math.PI / 180.0)))
                             );
                     this.setDeltaMovement(this.getDeltaMovement().multiply(0.6, 1.0, 0.6));
+
+                        LE.setLastHurtMob(this);
+                        if (LE instanceof Mob mb){
+                            mb.setLastHurtByMob(this);
+                        }
                 }
 
                 this.doEnchantDamageEffects(this, $$0);
@@ -587,6 +592,12 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
         super.tick();
     }
 
+    @Override
+    public boolean killedEntity(ServerLevel $$0, LivingEntity $$1) {
+        if (controller != null)
+            return controller.killedEntity($$0,$$1);
+        return true;
+    }
     @Override
     protected Vec3 getLeashOffset() {
         if (!this.getActivated()){
