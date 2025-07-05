@@ -10,6 +10,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
@@ -21,7 +22,7 @@ public interface StandUser {
     /**This is in a LivingEntity Mixin, granting every living entity stand related functions and ddta.
      * Minimize the amount of synced data to just things you really need.*/
     boolean roundabout$hasStandOut();
-
+    void roundabout$tryBlockPosPower(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit);
     Vec3 roundabout$frictionSave();
     void roundabout$deeplyRemoveAttackTarget();
     boolean roundabout$getQueForTargetDeletion();

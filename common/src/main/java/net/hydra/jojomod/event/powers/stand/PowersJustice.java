@@ -13,6 +13,7 @@ import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenCreeper;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.corpses.FallenZombie;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
@@ -237,6 +238,7 @@ public class PowersJustice extends DashPreset {
         LivingEntity ent = getPilotingStand();
         if (ent != null) {
             Entity TE = MainUtil.getTargetEntity(ent, 100, 10);
+            //If Target is detected
             if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable())) {
                 Vec3 vec3d = ent.getEyePosition(0);
                 Vec3 vec3d2 = ent.getViewVector(0);
@@ -255,8 +257,120 @@ public class PowersJustice extends DashPreset {
                     }
                 }
             }
+            //This would mean they want us to place or break a block
+            else{
+                Vec3 vec3d = ent.getEyePosition(0);
+                Vec3 vec3d2 = ent.getViewVector(0);
+                Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
+                BlockHitResult blockHit = ent.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ent));
+                BlockPos bpos = blockHit.getBlockPos().relative(blockHit.getDirection());
+                tryBlockPosPowerPacket(PowerIndex.POWER_4,bpos,blockHit);
+                this.self.playSound(ModSounds.JUSTICE_SELECT_EVENT, 200F, 1.2F);
+                this.self.level()
+                        .addParticle(
+                                ModParticles.POINTER,
+                                bpos.getX()+0.5,
+                                bpos.getY()+0.5,
+                                bpos.getZ()+0.5,
+                                0,
+                                0,
+                                0
+                        );
+
+            }
         }
     }
+    public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit) {
+        if (move == PowerIndex.POWER_4) {
+            //Try to get the closest block to that block in a 5 block radius
+            //use navigation.getPath. if PATH is = to null, I'd guess that means there is no way there.
+            BlockPos.MutableBlockPos testpos = new BlockPos.MutableBlockPos();
+            BlockState blockState;
+            boolean donezo = false;
+            //Nested loops to go through every possible block within a 5 block range.
+            //Could this be more efficient? Probably. Do I care? Nay!
+            for (int x = blockPos.getX() - 5; x < blockPos.getX() + 5; x++) {
+                testpos.setX(x);
+                for (int y = blockPos.getY() - 5; y < blockPos.getY() + 5; y++) {
+                    testpos.setY(y);
+                    for (int z = blockPos.getZ() - 5; z < blockPos.getZ() + 5; z++) {
+                        testpos.setZ(z);
+                        //We can't include the same block in the check. That block will be filled later.
+                        if (x == blockPos.getX() && y == blockPos.getY() && z == blockPos.getZ()) {
+                            continue;
+                        }
+                        blockState = this.getSelf().level().getBlockState(testpos);
+                        //We found an empty block
+                        if (blockState.isAir()) {
+                            // We must make sure it's 2 blocks of air.
+                            testpos.setY(y + 1);
+                            blockState = this.getSelf().level().getBlockState(testpos);
+
+                            if (blockState.isAir()) {
+                                //Then we ensure that the block under it is a solid
+                                testpos.setY(y - 1);
+                                blockState = this.getSelf().level().getBlockState(testpos);
+
+                                if (blockState.isSolid()) {
+                                    //We are finally sure that a 2 block tall creature can fit here.
+                                    testpos.setY(y);
+                                    donezo = true;
+                                    //Now we look through corpses to find the right one.
+                                    //We just copy the code from above with a few tiny changes
+                                    if (fogControlledEntities == null) {
+                                        fogControlledEntities = new ArrayList<>();
+                                    }
+
+                                    List<LivingEntity> fogControlledEntities2 = new ArrayList<>(fogControlledEntities) {
+                                    };
+                                    if (!fogControlledEntities2.isEmpty()) {
+                                        for (LivingEntity value : fogControlledEntities2) {
+                                            if (value.isRemoved() || !value.isAlive()) {
+                                                removeJusticeEntities(value);
+                                            } else {
+                                                if (value instanceof FallenZombie fm) {
+                                                    if (fm.controller != null && fm.controller.is(this.getSelf())) {
+                                                        if (fm.getSelected()) {
+                                                            //We'll look at the item equipped
+
+                                                            ItemStack heldItem = fm.getMainHandItem();
+                                                            if (!heldItem.toString().equals("air")) {
+                                                                //We can now set the goal
+                                                                fm.addBuildBreakGoal(blockPos, blockHit);
+                                                            }
+                                                            //fm.getNavigation().moveTo(fm.getNavigation().createPath(blockPos, 0), 1);
+
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    testpos.setY(y);
+                                }
+
+                            } else {
+                                testpos.setY(y);
+                            }
+
+                        }
+
+                    }
+                    if (donezo) {
+                        break;
+                    }
+
+                }
+                if (donezo) {
+                    break;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
 
     @Override
     public void handleStandAttack(Player player, Entity target){

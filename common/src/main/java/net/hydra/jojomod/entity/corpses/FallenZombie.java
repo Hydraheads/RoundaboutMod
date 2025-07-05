@@ -1,15 +1,23 @@
 package net.hydra.jojomod.entity.corpses;
 
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.goals.FallenZombieAttackGoal;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 public class FallenZombie extends FallenMob{
     public FallenZombie(EntityType<? extends PathfinderMob> $$0, Level $$1) {
@@ -28,7 +36,26 @@ public class FallenZombie extends FallenMob{
                 .add(Attributes.ATTACK_DAMAGE, 3).
                 add(Attributes.FOLLOW_RANGE, 48.0D);
     }
+    @Override
+    public InteractionResult interactAt(Player player, Vec3 location, InteractionHand intHand) {
+        ItemStack plrItem = player.getItemInHand(intHand);
+        ItemStack corpseItem = this.getMainHandItem();
 
+        if (plrItem.is(Items.NAME_TAG)) {
+            return InteractionResult.PASS;
+        }
+        if (player.isSpectator()) {
+            return InteractionResult.SUCCESS;
+        }
+        if (player.level().isClientSide) {
+            return InteractionResult.CONSUME;
+        }
+        this.setItemSlotAndDropWhenKilled(EquipmentSlot.MAINHAND,plrItem);
+        player.setItemInHand(intHand,corpseItem);
+        return InteractionResult.SUCCESS;
+
+
+    }
     @Override
     public boolean doHurtTarget(Entity $$0) {
         boolean $$1 = super.doHurtTarget($$0);

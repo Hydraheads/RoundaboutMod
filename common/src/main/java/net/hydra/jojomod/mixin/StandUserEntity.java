@@ -2175,6 +2175,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         roundabout$sealedTicks = ticks;
     }
+
+    @Override
+    public void roundabout$tryBlockPosPower(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit){
+        if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
+            this.roundabout$getStandPowers().tryBlockPosPower(move, forced, blockPos, blockHit);
+            tryPowerStuff();
+        }
+    }
     @Override
     @Unique
     public void roundabout$setMaxSealedTicks(int ticks){
