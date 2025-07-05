@@ -2507,6 +2507,11 @@ public class StandPowers {
         /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
         return true;
     }
+    public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos, BlockHitResult blockhit){
+        tryPower(move, forced);
+        /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
+        return true;
+    }
     public boolean tryIntPower(int move, boolean forced, int chargeTime){
         tryPower(move, forced);
         /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
@@ -2536,6 +2541,16 @@ public class StandPowers {
                     ClientToServerPackets.StandPowerPackets.MESSAGES.TryBlockPosPower.value,
                     packet,
                     pos
+            );
+        }
+    }
+    public void tryBlockPosPowerPacket(byte packet, BlockPos pos, HitResult hitResult){
+        if (this.self.level().isClientSide()) {
+            ModMessageEvents.sendToServer(
+                    ClientToServerPackets.StandPowerPackets.MESSAGES.TryHitResultPosPower.value,
+                    packet,
+                    pos,
+                    hitResult
             );
         }
     }

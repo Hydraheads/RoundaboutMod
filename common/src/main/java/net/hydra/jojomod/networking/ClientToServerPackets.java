@@ -4,6 +4,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.zetalasis.networking.message.impl.IMessageEvent;
 import org.jetbrains.annotations.Nullable;
@@ -15,6 +16,7 @@ public class ClientToServerPackets {
             TryPower("try_power"),
             TryPosPower("try_pos_power"),
             TryBlockPosPower("try_block_pos_power"),
+            TryHitResultPosPower("try_hit_result_pos_power"),
             TryIntPower("try_int_power");
 
             public final String value;
@@ -65,6 +67,19 @@ public class ClientToServerPackets {
                         byte b = (byte)vargs[0];
                         BlockPos c = (BlockPos)vargs[1];
                         powers.roundabout$tryBlockPosPower(b,true, c);
+                });
+            }
+            /**Try Block Pos Power Packet*/
+            if (message.equals(MESSAGES.TryHitResultPosPower.value))
+            {
+                MinecraftServer server = sender.server;
+
+                server.execute(()->{
+                    StandUser powers = basicChecks(sender);
+                    byte b = (byte)vargs[0];
+                    BlockPos c = (BlockPos)vargs[1];
+                    BlockHitResult d = (BlockHitResult) vargs[2];
+                    powers.roundabout$tryBlockPosPower(b,true, c,d);
                 });
             }
             /**Try Power Packet*/
