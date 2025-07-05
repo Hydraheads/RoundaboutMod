@@ -6,6 +6,7 @@ import net.hydra.jojomod.client.models.worn_stand.*;
 public class ModStrayModels {
     public static SoftAndWetShootingArmModel SHOOTING_ARM;
     public static HeyYaModel HEY_YA;
+    public static RattShoulderModel RATT_SHOULDER;
     public static MandomModel MANDOM;
     public static WatchModel MANDOM_WATCH;
     public static SmallWatchModel MANDOM_WATCH_SMALL;

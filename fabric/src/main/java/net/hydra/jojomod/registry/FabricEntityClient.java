@@ -55,6 +55,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.MAGICIANS_RED_OVA, MagiciansRedOVARenderer::new);
         EntityRendererRegistry.register(FabricEntities.D4C, D4CRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GREEN_DAY, GreenDayRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.RATT, RattRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SURVIVOR, SurvivorRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SOFT_AND_WET, SoftAndWetRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SOFT_AND_WET_KING, SoftAndWetKingRenderer::new);
@@ -119,6 +120,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.JUSTICE_PIRATE_LAYER, JusticePirateModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.D4C_LAYER, D4CModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GREEN_DAY_LAYER, GreenDayModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.RATT_LAYER, RattModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SOFT_AND_WET_LAYER, SoftAndWetModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SOFT_AND_WET_KING_LAYER, SoftAndWetKingModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SOFT_AND_WET_DROWNED_LAYER, SoftAndWetDrownedModel::getTexturedModelData);
@@ -148,6 +150,7 @@ public class FabricEntityClient {
         ModStrayModels.SHOOTING_ARM = new SoftAndWetShootingArmModel();
         ModStrayModels.HEY_YA = new HeyYaModel();
         ModStrayModels.MANDOM = new MandomModel();
+        ModStrayModels.RATT_SHOULDER = new RattShoulderModel();
         ModStrayModels.MANDOM_WATCH = new WatchModel();
         ModStrayModels.MANDOM_WATCH_SMALL = new SmallWatchModel();
         ModStrayModels.ChestPart = new ChestPart();

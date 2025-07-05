@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.ICamera;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.gui.*;
+import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.stand.powers.PowersMandom;
@@ -296,6 +297,13 @@ public class ClientUtil {
         if (player != null) {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
+            if (entity instanceof RattEntity) {
+                if (((StandEntity) entity).getUser() != null) {
+                    if (((StandEntity) entity).getUser().isCrouching()) {
+                        return 12978493;
+                    }
+                }
+            }
             if (powers.getGoBeyondTarget() != null && powers.getGoBeyondTarget().is(entity)) {
                 return 10978493;
             } else if (powers.isPiloting()) {

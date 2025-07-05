@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import net.hydra.jojomod.client.FacelessLayer;
 import net.hydra.jojomod.client.models.layers.HeyYaLayer;
 import net.hydra.jojomod.client.models.layers.MandomLayer;
+import net.hydra.jojomod.client.models.layers.RattShoulderLayer;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
@@ -24,6 +25,7 @@ public abstract class ZHumanoidMobRenderer<T extends Mob, M extends HumanoidMode
         this.addLayer(new FacelessLayer<>($$0, this));
         this.addLayer(new HeyYaLayer<>($$0, this));
         this.addLayer(new MandomLayer<>($$0, this));
+        this.addLayer(new RattShoulderLayer<>($$0, this));
     }
 
 }

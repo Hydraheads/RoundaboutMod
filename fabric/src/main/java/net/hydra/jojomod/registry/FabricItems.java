@@ -51,6 +51,10 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersGreenDay(null)));
     public static Item MAX_STAND_DISC_GREEN_DAY = registerItem("max_green_day_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersGreenDay(null)));
+    public static Item STAND_DISC_RATT = registerItem("ratt_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersRatt(null)));
+    public static Item MAX_STAND_DISC_RATT = registerItem("max_ratt_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersRatt(null)));
     public static Item STAND_DISC_SOFT_AND_WET = registerItem("soft_and_wet_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSoftAndWet(null)));
     public static Item MAX_STAND_DISC_SOFT_AND_WET = registerItem("max_soft_and_wet_disc",
@@ -344,6 +348,8 @@ public class FabricItems {
                         entries.accept(STAND_DISC_SURVIVOR);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
+                        entries.accept(STAND_DISC_RATT);
+                        entries.accept(MAX_STAND_DISC_RATT);
 
 
 
@@ -423,6 +429,9 @@ public class FabricItems {
         ModItems.MAX_STAND_DISC_GREEN_DAY = MAX_STAND_DISC_GREEN_DAY;
         ModItems.STAND_DISC_GREEN_DAY = STAND_DISC_GREEN_DAY;
         ((MaxStandDiscItem)MAX_STAND_DISC_GREEN_DAY).baseDisc = ((StandDiscItem)STAND_DISC_GREEN_DAY);
+        ModItems.MAX_STAND_DISC_RATT = MAX_STAND_DISC_RATT;
+        ModItems.STAND_DISC_RATT = STAND_DISC_RATT;
+        ((MaxStandDiscItem)MAX_STAND_DISC_RATT).baseDisc = ((StandDiscItem)STAND_DISC_RATT);
         ModItems.STAND_DISC_SOFT_AND_WET = STAND_DISC_SOFT_AND_WET;
         ModItems.MAX_STAND_DISC_SOFT_AND_WET = MAX_STAND_DISC_SOFT_AND_WET;
         ((MaxStandDiscItem)MAX_STAND_DISC_SOFT_AND_WET).baseDisc = ((StandDiscItem)STAND_DISC_SOFT_AND_WET);

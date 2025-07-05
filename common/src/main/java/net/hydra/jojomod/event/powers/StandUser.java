@@ -92,6 +92,8 @@ public interface StandUser {
     AnimationState roundabout$getHeyYaAnimation2();
     int roundabout$getHeyYaVanishTicks();
     void roundabout$setHeyYaVanishTicks(int set);
+    int roundabout$getRattShoulderVanishTicks();
+    void roundabout$setRattShoulderVanishTicks(int set);
     int roundabout$getMandomVanishTicks();
     void roundabout$setMandomVanishTicks(int set);
 
