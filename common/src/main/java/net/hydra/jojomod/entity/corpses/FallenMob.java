@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.corpses;
 
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -33,6 +34,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -250,6 +252,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
 
 
 
+        float $$1 = (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
         float $$2 = (float)this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
         if ($$0 instanceof LivingEntity) {
             $$2 += (float)EnchantmentHelper.getKnockbackBonus(this);
@@ -264,23 +267,52 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
         if (getController() > 0 && getController() != $$0.getId()){
             ent2 = controller;
         }
-        boolean $$4 = DamageHandler.CorpseDamageEntity($$0, getAtkPower($$0),this, ent2);
-        if ($$4) {
-            if ($$2 > 0.0F && $$0 instanceof LivingEntity) {
-                ((LivingEntity)$$0)
-                        .knockback(
-                                (double)($$2 * 0.5F),
-                                (double) Mth.sin(this.getYRot() * (float) (Math.PI / 180.0)),
-                                (double)(-Mth.cos(this.getYRot() * (float) (Math.PI / 180.0)))
-                        );
-                this.setDeltaMovement(this.getDeltaMovement().multiply(0.6, 1.0, 0.6));
+
+
+        if (!getMainHandItem().isEmpty()){
+            /**If you give it an item, fights with it instead*/
+            boolean $$4 = $$0.hurt(this.damageSources().mobAttack(this), $$1);
+            if ($$4) {
+                if ($$2 > 0.0F && $$0 instanceof LivingEntity) {
+                    ((LivingEntity)$$0)
+                            .knockback(
+                                    (double)($$2 * 0.5F),
+                                    (double)Mth.sin(this.getYRot() * (float) (Math.PI / 180.0)),
+                                    (double)(-Mth.cos(this.getYRot() * (float) (Math.PI / 180.0)))
+                            );
+                    this.setDeltaMovement(this.getDeltaMovement().multiply(0.6, 1.0, 0.6));
+                }
+
+                if ($$0 instanceof Player $$5) {
+                    ((IMob)this).roundabout$maybeDisableShield($$5, this.getMainHandItem(), $$5.isUsingItem() ? $$5.getUseItem() : ItemStack.EMPTY);
+                }
+
+                this.doEnchantDamageEffects(this, $$0);
+                this.setLastHurtMob($$0);
             }
 
-            this.doEnchantDamageEffects(this, $$0);
-            this.setLastHurtMob($$0);
+            return $$4;
+        } else {
+            /**Otherwise it does stand damage of sorts*/
+            boolean $$4 = DamageHandler.CorpseDamageEntity($$0, getAtkPower($$0),this, ent2);
+            if ($$4) {
+                if ($$2 > 0.0F && $$0 instanceof LivingEntity) {
+                    ((LivingEntity)$$0)
+                            .knockback(
+                                    (double)($$2 * 0.5F),
+                                    (double) Mth.sin(this.getYRot() * (float) (Math.PI / 180.0)),
+                                    (double)(-Mth.cos(this.getYRot() * (float) (Math.PI / 180.0)))
+                            );
+                    this.setDeltaMovement(this.getDeltaMovement().multiply(0.6, 1.0, 0.6));
+                }
+
+                this.doEnchantDamageEffects(this, $$0);
+                this.setLastHurtMob($$0);
+            }
+            return $$4;
         }
 
-        return $$4;
+
     }
     @Override
     protected void registerGoals() {
