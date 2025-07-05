@@ -11,92 +11,9 @@ import java.util.HashSet;
 public class StandPowerRewrite extends StandPowers {
     public StandPowerRewrite(LivingEntity self) {
         super(self);
-        if (self != null && self.level().isClientSide()) {
-            registerHUDIcons();
-        }
     }
 
-    public static HashSet<GuiIcon> GUI_ICON_REGISTRAR = new HashSet<>();
 
-    @Override
-    public void renderIcons(GuiGraphics context, int x, int y) {
-        super.renderIcons(context, x, y);
-        GUI_ICON_REGISTRAR.forEach((icon) -> {
-            switch (icon.index)
-            {
-                case PowerIndex.SKILL_1 -> {
-                    if (!getSelf().isCrouching() && !isGuarding())
-                        setSkillIcon(context, x, y, 1, icon.iconLocation, icon.index);
-                }
-                case PowerIndex.SKILL_1_SNEAK -> {
-                    if (getSelf().isCrouching() && !isGuarding())
-                        setSkillIcon(context, x, y, 1, icon.iconLocation, icon.index);
-                }
-                case PowerIndex.SKILL_1_GUARD -> {
-                    if (!getSelf().isCrouching() && isGuarding())
-                        setSkillIcon(context, x, y, 1, icon.iconLocation, icon.index);
-                }
-                case PowerIndex.SKILL_1_CROUCH_GUARD -> {
-                    if (getSelf().isCrouching() && isGuarding())
-                        setSkillIcon(context, x, y, 1, icon.iconLocation, icon.index);
-                }
-
-                case PowerIndex.SKILL_2 -> {
-                    if (!getSelf().isCrouching() && !isGuarding())
-                        setSkillIcon(context, x, y, 2, icon.iconLocation, icon.index);
-                }
-                case PowerIndex.SKILL_2_SNEAK -> {
-                    if (getSelf().isCrouching() && !isGuarding())
-                        setSkillIcon(context, x, y, 2, icon.iconLocation, icon.index);
-                }
-                case PowerIndex.SKILL_2_GUARD -> {
-                    if (!getSelf().isCrouching() && isGuarding())
-                        setSkillIcon(context, x, y, 2, icon.iconLocation, icon.index);
-                }
-                case PowerIndex.SKILL_2_CROUCH_GUARD -> {
-                    if (getSelf().isCrouching() && isGuarding())
-                        setSkillIcon(context, x, y, 2, icon.iconLocation, icon.index);
-                }
-
-                case PowerIndex.SKILL_3 -> {
-                    if (!getSelf().isCrouching() && !isGuarding())
-                        setSkillIcon(context, x, y, 3, icon.iconLocation, icon.index);
-                }
-                case PowerIndex.GLOBAL_DASH -> {
-                    if (getSelf().isCrouching() && !isGuarding())
-                        setSkillIcon(context, x, y, 3, icon.iconLocation, icon.index);
-                }
-                case PowerIndex.SKILL_3_GUARD -> {
-                    if (!getSelf().isCrouching() && isGuarding())
-                        setSkillIcon(context, x, y, 3, icon.iconLocation, icon.index);
-                }
-                case PowerIndex.SKILL_3_CROUCH_GUARD -> {
-                    if (getSelf().isCrouching() && isGuarding())
-                        setSkillIcon(context, x, y, 3, icon.iconLocation, icon.index);
-                }
-
-                case PowerIndex.SKILL_4 -> {
-                    if (!getSelf().isCrouching() && !isGuarding())
-                        setSkillIcon(context, x, y, 4, icon.iconLocation, icon.index);
-                }
-                case PowerIndex.SKILL_4_SNEAK -> {
-                    if (getSelf().isCrouching() && !isGuarding())
-                        setSkillIcon(context, x, y, 4, icon.iconLocation, icon.index);
-                }
-                case PowerIndex.SKILL_4_GUARD -> {
-                    if (!getSelf().isCrouching() && isGuarding())
-                        setSkillIcon(context, x, y, 4, icon.iconLocation, icon.index);
-                }
-                case PowerIndex.SKILL_4_CROUCH_GUARD -> {
-                    if (getSelf().isCrouching() && isGuarding())
-                        setSkillIcon(context, x, y, 4, icon.iconLocation, icon.index);
-                }
-            }
-        });
-    }
-
-    /** Register Power Contexts for GUI such as hud and stuff */
-    public void registerHUDIcons() { return; };
     public void powerActivate(PowerContext context) {};
     /** Called per frame, use for particle FX and such */
     public void tick() {};

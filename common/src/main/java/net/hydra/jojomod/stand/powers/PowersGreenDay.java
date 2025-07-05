@@ -104,29 +104,6 @@ public class PowersGreenDay extends NewPunchingStand{
         super.renderIcons(context, x, y);
     }
 
-    @Override
-    public void registerHUDIcons() {
-        HashSet<GuiIcon> icons = new HashSet<>();
-
-        icons.add(new GuiIcon(PowerIndex.SKILL_1, StandIcons.GREEN_DAY_MOLD_PUNCH_LEFT));
-        icons.add(new GuiIcon(PowerIndex.SKILL_1_GUARD, StandIcons.GREEN_DAY_MOLD_SPIN_LEFT));
-        icons.add(new GuiIcon(PowerIndex.SKILL_1_CROUCH_GUARD, StandIcons.GREEN_DAY_ARM_RETURN_LEFT));
-        icons.add(new GuiIcon(PowerIndex.SKILL_1_SNEAK, StandIcons.GREEN_DAY_ARM_RETURN_LEFT));
-
-        icons.add(new GuiIcon(PowerIndex.SKILL_2, StandIcons.GREEN_DAY_MOLD_PUNCH_RIGHT));
-        icons.add(new GuiIcon(PowerIndex.SKILL_2_GUARD, StandIcons.GREEN_DAY_MOLD_SPIN_RIGHT));
-        icons.add(new GuiIcon(PowerIndex.SKILL_2_CROUCH_GUARD, StandIcons.GREEN_DAY_ARM_RETURN_RIGHT));
-        icons.add(new GuiIcon(PowerIndex.SKILL_2_SNEAK, StandIcons.GREEN_DAY_ARM_RETURN_RIGHT));
-
-        icons.add(new GuiIcon(PowerIndex.SKILL_3, StandIcons.DODGE));
-        icons.add(new GuiIcon(PowerIndex.SKILL_3_GUARD, StandIcons.DODGE));
-        icons.add(new GuiIcon(PowerIndex.SKILL_3_CROUCH_GUARD, StandIcons.GREEN_DAY_MOLD_LEAP));
-        icons.add(new GuiIcon(PowerIndex.GLOBAL_DASH, StandIcons.GREEN_DAY_MOLD_LEAP));
-
-
-
-        GUI_ICON_REGISTRAR = icons;
-    }
 
     @Override
     public void tick() {
