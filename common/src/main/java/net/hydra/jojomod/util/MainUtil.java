@@ -1350,7 +1350,9 @@ public class MainUtil {
         BlockHitResult blockHit = source.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,source));
         if (blockHit.getDirection().equals(Direction.UP))
             return blockHit.getLocation();
-        return blockHit.getLocation().relative(blockHit.getDirection(),distance);
+        Vec3 vec= new Vec3(blockHit.getBlockPos().getX(),blockHit.getBlockPos().getY(),blockHit.getBlockPos().getZ());
+        vec = vec.add(0.5f,0.5f,0.5f).relative(blockHit.getDirection(),0.5).relative(blockHit.getDirection(),distance);
+        return vec;
 
     }
 
