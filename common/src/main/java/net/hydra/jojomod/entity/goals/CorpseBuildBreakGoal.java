@@ -139,20 +139,14 @@ public class CorpseBuildBreakGoal extends Goal {
             this.fallenMob.getNavigation().moveTo(this.fallenMob,1);
 
             if(this.fallenMob.getMainHandItem().getItem() instanceof BlockItem block){
-                block.place(new BlockPlaceContext(this.owner,this.fallenMob.swingingArm,this.fallenMob.getMainHandItem(),blockHit));
-                this.fallenMob.getMainHandItem().setCount(this.fallenMob.getMainHandItem().getCount() - 1);
+                if (block.place(new BlockPlaceContext(this.owner,this.fallenMob.swingingArm,this.fallenMob.getMainHandItem(),blockHit)).consumesAction()){
+                    this.fallenMob.getMainHandItem().setCount(this.fallenMob.getMainHandItem().getCount() - 1);
+                }
                 this.stop();
                 this.fallenMob.removeBuildBreakGoal();
             } else if(diggingTime > 0) {
                 //And now we go mining.
                 //A check to ensure no one tries to change items during mining
-                if(this.fallenMob.getMainHandItem().getItem() instanceof BlockItem block){
-                    if (block.place(new BlockPlaceContext(this.owner,this.fallenMob.swingingArm,this.fallenMob.getMainHandItem(),blockHit)).consumesAction()){
-                        this.fallenMob.getMainHandItem().setCount(this.fallenMob.getMainHandItem().getCount() - 1);
-                    }
-                    this.stop();
-                    this.fallenMob.removeBuildBreakGoal();
-                }
                 diggingTime -= 1;
                 Vec3i direction =  blockHit.getDirection().getNormal();
                 BlockPos mineBlock = new BlockPos((useOn.getX() + direction.getX()*-1), (useOn.getY() + direction.getY()*-1), (useOn.getZ() + direction.getZ()*-1));
