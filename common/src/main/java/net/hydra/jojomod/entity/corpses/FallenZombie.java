@@ -24,6 +24,10 @@ public class FallenZombie extends FallenMob{
         super($$0, $$1);
     }
 
+    protected float getEquipmentDropChance(EquipmentSlot $$0) {
+        return 100;
+    }
+
 
     @Override
     protected void registerGoals() {
@@ -31,6 +35,13 @@ public class FallenZombie extends FallenMob{
         this.addBehaviourGoals();
     }
 
+    @Override
+    public void tick(){
+        super.tick();
+        if (hasPlaced > -1){
+            hasPlaced--;
+        }
+    }
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.23).add(Attributes.MAX_HEALTH, 20)
                 .add(Attributes.ATTACK_DAMAGE, 3).
@@ -38,22 +49,21 @@ public class FallenZombie extends FallenMob{
     }
     @Override
     public InteractionResult interactAt(Player player, Vec3 location, InteractionHand intHand) {
-        ItemStack plrItem = player.getItemInHand(intHand);
-        ItemStack corpseItem = this.getMainHandItem();
+        if (!player.level().isClientSide()) {
+            ItemStack plrItem = player.getItemInHand(intHand);
+            ItemStack corpseItem = this.getMainHandItem();
+            if (player.isCrouching() && ClientNetworking.getAppropriateConfig().justiceSettings.zombieCorpsesCanBeGivenItems) {
 
-        if (plrItem.is(Items.NAME_TAG)) {
-            return InteractionResult.PASS;
-        }
-        if (player.isSpectator()) {
+                if (player.isSpectator()) {
+                    return InteractionResult.SUCCESS;
+                }
+                this.setItemSlotAndDropWhenKilled(EquipmentSlot.MAINHAND, plrItem);
+                player.setItemInHand(intHand, corpseItem);
             return InteractionResult.SUCCESS;
-        }
-        if (player.level().isClientSide) {
-            return InteractionResult.CONSUME;
-        }
-        this.setItemSlotAndDropWhenKilled(EquipmentSlot.MAINHAND,plrItem);
-        player.setItemInHand(intHand,corpseItem);
-        return InteractionResult.SUCCESS;
+            }
 
+        }
+        return InteractionResult.CONSUME;
 
     }
     @Override

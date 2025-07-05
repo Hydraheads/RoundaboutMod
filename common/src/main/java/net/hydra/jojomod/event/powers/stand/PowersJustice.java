@@ -330,7 +330,8 @@ public class PowersJustice extends DashPreset {
                                             } else {
                                                 if (value instanceof FallenZombie fm) {
                                                     if (fm.controller != null && fm.controller.is(this.getSelf())) {
-                                                        if (fm.getSelected()) {
+                                                        if (fm.getSelected() && MainUtil.getIsGamemodeApproriateForGrief(this.self)
+                                                        && ClientNetworking.getAppropriateConfig().justiceSettings.zombieCorpsesCanMineAndPlaceBlocksWithGivenItems) {
                                                             //We'll look at the item equipped
 
                                                             ItemStack heldItem = fm.getMainHandItem();
@@ -500,7 +501,7 @@ public class PowersJustice extends DashPreset {
                 if (fogControlledEntities == null) {
                     fogControlledEntities = new ArrayList<>();
                 }
-                if (fogControlledEntities.size() < ClientNetworking.getAppropriateConfig().justiceStandUserMobMinionCount
+                if (fogControlledEntities.size() < ClientNetworking.getAppropriateConfig().justiceSettings.standUserMobMinionCount
                 && this.getSelf().tickCount % 20 == 0){
                     if (!(this.getSelf() instanceof Creeper cr && this.getSelf().getMaxHealth() <= this.getSelf().getHealth())) {
                         initializeCorpse(rollCorpse(),attackTarget);
@@ -851,7 +852,7 @@ public class PowersJustice extends DashPreset {
 
     @Override
     public int getMaxPilotRange(){
-        return ClientNetworking.getAppropriateConfig().justiceFogAndPilotRange;
+        return ClientNetworking.getAppropriateConfig().justiceSettings.fogAndPilotRange;
     }
 
     public boolean hold1 = false;
@@ -1284,7 +1285,7 @@ public class PowersJustice extends DashPreset {
 
     @Override
     public float getPermaCastRange(){
-        return ClientNetworking.getAppropriateConfig().justiceFogAndPilotRange;
+        return ClientNetworking.getAppropriateConfig().justiceSettings.fogAndPilotRange;
     }
 
     @Override

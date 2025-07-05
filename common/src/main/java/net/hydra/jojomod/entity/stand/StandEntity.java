@@ -50,6 +50,7 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
      * summoned. When a stand completely fades out, it despawns.*/
     public final int MaxFade = 8;
 
+    /**Disable this for a stand with its own movement or positioning unless you want it to freeze in the air*/
     public boolean lockPos(){
         return true;
     }
@@ -845,8 +846,13 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                 TickDown();
             }
         //this.noClip = false;
-        this.setNoGravity(true);
+        this.setNoGravity(!standHasGravity());
     } // Happens every tick
+
+
+    public boolean standHasGravity(){
+        return false;
+    }
 
 
     public boolean validatePowers(LivingEntity user){

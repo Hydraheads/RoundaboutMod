@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.corpses;
 
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -26,6 +27,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -33,6 +35,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -90,7 +93,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
      *this can accomplish not killing your allies and their corpses*/
     @Override
     public Team getTeam() {
-        if (ClientNetworking.getAppropriateConfig().justiceCorpsesUseOwnerTeam) {
+        if (ClientNetworking.getAppropriateConfig().justiceSettings.corpsesUseOwnerTeam) {
             if (getRealController() != null) {
                 return this.level().getScoreboard().getPlayersTeam(getRealController().getScoreboardName());
             }
@@ -235,6 +238,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
             return super.getSpeed();
         }
     }
+    public int hasPlaced = -1;
     @Override
     public boolean removeWhenFarAway(double $$0) {
         return false;
@@ -250,6 +254,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
 
 
 
+        float $$1 = (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
         float $$2 = (float)this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
         if ($$0 instanceof LivingEntity) {
             $$2 += (float)EnchantmentHelper.getKnockbackBonus(this);
@@ -264,24 +269,71 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
         if (getController() > 0 && getController() != $$0.getId()){
             ent2 = controller;
         }
-        boolean $$4 = DamageHandler.CorpseDamageEntity($$0, getAtkPower($$0),this, ent2);
-        if ($$4) {
-            if ($$2 > 0.0F && $$0 instanceof LivingEntity) {
-                ((LivingEntity)$$0)
-                        .knockback(
-                                (double)($$2 * 0.5F),
-                                (double) Mth.sin(this.getYRot() * (float) (Math.PI / 180.0)),
-                                (double)(-Mth.cos(this.getYRot() * (float) (Math.PI / 180.0)))
-                        );
-                this.setDeltaMovement(this.getDeltaMovement().multiply(0.6, 1.0, 0.6));
+
+
+        if (!getMainHandItem().isEmpty()){
+            /**If you give it an item, fights with it instead*/
+            boolean $$4 = $$0.hurt(this.damageSources().mobAttack(this), $$1);
+            if ($$4) {
+                if ($$2 > 0.0F && $$0 instanceof LivingEntity) {
+                    ((LivingEntity)$$0)
+                            .knockback(
+                                    (double)($$2 * 0.5F),
+                                    (double)Mth.sin(this.getYRot() * (float) (Math.PI / 180.0)),
+                                    (double)(-Mth.cos(this.getYRot() * (float) (Math.PI / 180.0)))
+                            );
+                    this.setDeltaMovement(this.getDeltaMovement().multiply(0.6, 1.0, 0.6));
+                }
+
+                if ($$0 instanceof Player $$5) {
+                    ((IMob)this).roundabout$maybeDisableShield($$5, this.getMainHandItem(), $$5.isUsingItem() ? $$5.getUseItem() : ItemStack.EMPTY);
+                }
+
+                this.doEnchantDamageEffects(this, $$0);
+                this.setLastHurtMob($$0);
             }
 
-            this.doEnchantDamageEffects(this, $$0);
-            this.setLastHurtMob($$0);
+            return $$4;
+        } else {
+            /**Otherwise it does stand damage of sorts*/
+            boolean $$4 = DamageHandler.CorpseDamageEntity($$0, getAtkPower($$0),this);
+            if (this instanceof FallenZombie){
+                swing(InteractionHand.MAIN_HAND,true);
+            }
+            if ($$4) {
+                if ($$2 > 0.0F && $$0 instanceof LivingEntity LE) {
+                    LE
+                            .knockback(
+                                    (double)($$2 * 0.5F),
+                                    (double) Mth.sin(this.getYRot() * (float) (Math.PI / 180.0)),
+                                    (double)(-Mth.cos(this.getYRot() * (float) (Math.PI / 180.0)))
+                            );
+                    this.setDeltaMovement(this.getDeltaMovement().multiply(0.6, 1.0, 0.6));
+
+                        LE.setLastHurtMob(this);
+                        if (LE instanceof Mob mb){
+                            mb.setLastHurtByMob(this);
+                        }
+                }
+
+                this.doEnchantDamageEffects(this, $$0);
+                this.setLastHurtMob($$0);
+            }
+            return $$4;
         }
 
-        return $$4;
+
     }
+
+
+    @Override
+    public void aiStep() {
+        this.updateSwingTime();
+        super.aiStep();
+    }
+
+
+
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0, true));
@@ -540,6 +592,12 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
         super.tick();
     }
 
+    @Override
+    public boolean killedEntity(ServerLevel $$0, LivingEntity $$1) {
+        if (controller != null)
+            return controller.killedEntity($$0,$$1);
+        return true;
+    }
     @Override
     protected Vec3 getLeashOffset() {
         if (!this.getActivated()){

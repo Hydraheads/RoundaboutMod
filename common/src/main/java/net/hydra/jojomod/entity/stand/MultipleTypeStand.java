@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,6 +14,16 @@ public class MultipleTypeStand extends StandEntity {
         setOffsetType(OffsetIndex.LOOSE);
     }
 
+    @Override
+
+    public boolean standHasGravity(){
+        return true;
+    }
+
+    @Override
+    public boolean lockPos(){
+        return false;
+    }
     @Override
     public boolean isASingularEntity(){
         return false;
@@ -39,5 +50,10 @@ public class MultipleTypeStand extends StandEntity {
     @Override
     public void handleTickDownIfDupe(LivingEntity thisStand){
         TickDown();
+    }
+
+    public void tick(){
+        super.tick();
+        //Roundabout.LOGGER.info("position: "+this.getPosition(1f));
     }
 }

@@ -90,7 +90,7 @@ public class PowersSurvivor extends NewDashPreset {
 
     public void summonSurvivorClient(){
         if (!this.onCooldown(PowerIndex.SKILL_2)) {
-            Vec3 pos = MainUtil.getRaytracePointOnMobOrBlock(this.self, 30);
+            Vec3 pos = MainUtil.getRaytracePointOnMobOrBlockIfNotUp(this.self, 30,0.3f);
             tryPosPower(PowerIndex.POWER_2,true,pos);
             tryPosPowerPacket(PowerIndex.POWER_2, pos);
         }

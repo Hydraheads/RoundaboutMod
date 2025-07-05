@@ -36,6 +36,7 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -51,6 +52,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.CombatTracker;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
@@ -3013,8 +3015,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             cir.setReturnValue($$1+($$1*amt));
         }
     }
+
     @Inject(method = "die", at = @At("HEAD"))
     protected void roundabout$die(DamageSource $$0, CallbackInfo ci){
+        if ($$0.getEntity() instanceof FallenMob fm){
+            Entity ent2 = fm;
+            if (fm.getController() > 0  && fm.getController() != fm.getId()){
+                ent2 = fm.controller;
+            }
+            DamageSource corpseCorrect = new DamageSource($$0.typeHolder(), ent2, ent2);
+            if (ent2 instanceof Player PE){
+                this.setLastHurtByPlayer(PE);
+                this.getCombatTracker().recordDamage(corpseCorrect, 0);
+            }
+        }
         StandEntity stnd = roundabout$getStand();
         if (stnd != null){
             stnd.setMaster(null);
@@ -3623,6 +3637,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Shadow public abstract ItemStack getItemBySlot(EquipmentSlot var1);
+
+    @Shadow public abstract void die(DamageSource $$0);
+
+    @Shadow public abstract CombatTracker getCombatTracker();
 
     @Unique private boolean roundabout$isPRunning = false;
 

@@ -170,6 +170,11 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
     }
 
+    @Override
+    public void roundabout$maybeDisableShield(Player $$0, ItemStack $$1, ItemStack $$2) {
+        maybeDisableShield($$0,$$1,$$2);
+    }
+
     /**Minor code, mobs in a barrage should not be attacking*/
     @Inject(method = "doHurtTarget", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$TryAttack(Entity $$0, CallbackInfoReturnable<Boolean> ci) {

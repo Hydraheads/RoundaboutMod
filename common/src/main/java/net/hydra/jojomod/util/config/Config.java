@@ -95,14 +95,6 @@ public class Config implements Cloneable {
     public Boolean SuperBlockDestructionBarrageLaunching;
     @BooleanOption(group = "inherit", value = false)
     public Boolean starPlatinumScopeUsesPotionEffectForNightVision;
-    @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-    public Integer justiceFogAndPilotRange;
-    @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
-    public Integer justiceMaxCorpses;
-    @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
-    public Integer justiceStandUserMobMinionCount;
-    @BooleanOption(group = "inherit", value = true)
-    public Boolean justiceCorpsesUseOwnerTeam;
     @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
     public Integer d4cDimensionKidnapRadius;
     @IntOption(group = "inherit", value = 4, min = 0, max = 72000)
@@ -177,6 +169,8 @@ public class Config implements Cloneable {
     public SoftAndWetSettings softAndWetSettings;
     @NestedOption(group = "modded")
     public MagiciansRedSettings magiciansRedSettings;
+    @NestedOption(group = "modded")
+    public JusticeSettings justiceSettings;
     @NestedOption(group = "modded")
     public TheWorldSettings theWorldSettings;
     @NestedOption(group = "modded")
@@ -514,6 +508,20 @@ public class Config implements Cloneable {
         public Integer magiciansRedFurnaceTicks;
         @BooleanOption(group = "inherit", value = false)
         public Boolean lifeTrackerManualPushing;
+    }
+    public static class JusticeSettings {
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer fogAndPilotRange;
+        @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
+        public Integer maxCorpses;
+        @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
+        public Integer standUserMobMinionCount;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean corpsesUseOwnerTeam;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean zombieCorpsesCanBeGivenItems;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean zombieCorpsesCanMineAndPlaceBlocksWithGivenItems;
     }
     public static class HeyYaSettings {
         @IntOption(group = "inherit", value = 35, min = 0, max = 72000)

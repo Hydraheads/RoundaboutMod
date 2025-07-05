@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.Tag;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -132,81 +133,31 @@ public class CorpseBuildBreakGoal extends Goal {
     @Override
     public void tick() {
         //Get distance
-        double distance = Math.sqrt(Math.pow(this.fallenMob.getBlockX() - useOn.getX(),2) + Math.pow(this.fallenMob.getBlockY() - useOn.getY(),2) + Math.pow(this.fallenMob.getBlockZ() - useOn.getZ(),2));
-        if (distance <= 5) {
-            this.fallenMob.getNavigation().stop();
-            //HACK ALERT
-            this.fallenMob.getNavigation().moveTo(this.fallenMob,1);
+        try {
+            double distance = Math.sqrt(Math.pow(this.fallenMob.getBlockX() - useOn.getX(),2) + Math.pow(this.fallenMob.getBlockY() - useOn.getY(),2) + Math.pow(this.fallenMob.getBlockZ() - useOn.getZ(),2));
+            if (distance <= 5 && fallenMob.hasPlaced <= -1) {
+                this.fallenMob.getNavigation().stop();
+                //HACK ALERT
+                this.fallenMob.getNavigation().moveTo(this.fallenMob,1);
 
-            if(this.fallenMob.getMainHandItem().getItem() instanceof BlockItem block){
-                block.place(new BlockPlaceContext(this.owner,this.fallenMob.swingingArm,this.fallenMob.getMainHandItem(),blockHit));
-                this.fallenMob.getMainHandItem().setCount(this.fallenMob.getMainHandItem().getCount() - 1);
-                this.stop();
-                this.fallenMob.removeBuildBreakGoal();
-            } else if(diggingTime > 0) {
-                //And now we go mining.
-                //A check to ensure no one tries to change items during mining
                 if(this.fallenMob.getMainHandItem().getItem() instanceof BlockItem block){
-                    block.place(new BlockPlaceContext(this.owner,this.fallenMob.swingingArm,this.fallenMob.getMainHandItem(),blockHit));
-                    this.fallenMob.getMainHandItem().setCount(this.fallenMob.getMainHandItem().getCount() - 1);
-                    this.stop();
-                    this.fallenMob.removeBuildBreakGoal();
-                }
-                diggingTime -= 1;
-                Vec3i direction =  blockHit.getDirection().getNormal();
-                BlockPos mineBlock = new BlockPos((useOn.getX() + direction.getX()*-1), (useOn.getY() + direction.getY()*-1), (useOn.getZ() + direction.getZ()*-1));
-                BlockState bstate = this.fallenMob.level().getBlockState(mineBlock);
-                this.fallenMob.level().playSound(null,mineBlock, bstate.getSoundType().getStepSound(),this.fallenMob.getSoundSource());
-                if(diggingTime == 0){
-
-                    bstate.getBlock().destroy(this.fallenMob.level(),mineBlock,bstate);
-                    this.fallenMob.level().destroyBlock(mineBlock,true);
-                    if(this.fallenMob.getMainHandItem().isDamageableItem()) {
-                        if(getEnchLevel("minecraft:unbreaking") != -1){
-                            if(this.fallenMob.getRandom().nextIntBetweenInclusive(1,100) <= 100/(getEnchLevel("minecraft:unbreaking")+1)){
-                                this.fallenMob.getMainHandItem().setDamageValue(this.fallenMob.getMainHandItem().getDamageValue() + 1);
-
-                            }
-                        } else{this.fallenMob.getMainHandItem().setDamageValue(this.fallenMob.getMainHandItem().getDamageValue() + 1);}
-
+                    if (block.place(new BlockPlaceContext(this.owner,this.fallenMob.swingingArm,this.fallenMob.getMainHandItem(),blockHit)).consumesAction()){
+                        this.fallenMob.getMainHandItem().setCount(this.fallenMob.getMainHandItem().getCount() - 1);
+                        this.fallenMob.swing(InteractionHand.MAIN_HAND,true);
+                        this.fallenMob.hasPlaced = 2;
                     }
                     this.stop();
                     this.fallenMob.removeBuildBreakGoal();
-                }
-            }
-            else{
-                //Another check to ensure blocks are placed
-                if(this.fallenMob.getMainHandItem().getItem() instanceof BlockItem block){
-                    block.place(new BlockPlaceContext(this.owner,this.fallenMob.swingingArm,this.fallenMob.getMainHandItem(),blockHit));
-                    this.fallenMob.getMainHandItem().setCount(this.fallenMob.getMainHandItem().getCount() - 1);
-                    this.stop();
-                    this.fallenMob.removeBuildBreakGoal();
-                }
-                Vec3i direction =  blockHit.getDirection().getNormal();
-                BlockPos mineBlock = new BlockPos((useOn.getX() + direction.getX()*-1), (useOn.getY() + direction.getY()*-1), (useOn.getZ() + direction.getZ()*-1));
-                BlockState bstate = this.fallenMob.level().getBlockState(mineBlock);
+                } else if(diggingTime > 0) {
+                    //And now we go mining.
+                    //A check to ensure no one tries to change items during mining
+                    diggingTime -= 1;
+                    Vec3i direction =  blockHit.getDirection().getNormal();
+                    BlockPos mineBlock = new BlockPos((useOn.getX() + direction.getX()*-1), (useOn.getY() + direction.getY()*-1), (useOn.getZ() + direction.getZ()*-1));
+                    BlockState bstate = this.fallenMob.level().getBlockState(mineBlock);
+                    this.fallenMob.level().playSound(null,mineBlock, bstate.getSoundType().getStepSound(),this.fallenMob.getSoundSource());
+                    if(diggingTime == 0){
 
-                if(bstate.getBlock().defaultDestroyTime() == -1){
-                    //Unbreakable
-                    this.stop();
-                    this.fallenMob.removeBuildBreakGoal();
-
-                } else {
-
-                    double digTimebuilder;
-                    digTimebuilder = this.fallenMob.getMainHandItem().getDestroySpeed(bstate);
-
-                    if(this.fallenMob.getEffect(MobEffects.DIG_SPEED) != null){
-                        digTimebuilder *= 0.2 * this.fallenMob.getEffect(MobEffects.DIG_SPEED).getAmplifier() + 1;
-                    }
-                    if(this.fallenMob.getEffect(MobEffects.DIG_SLOWDOWN) != null){
-                        digTimebuilder *= Math.pow(0.3, Math.min(this.fallenMob.getEffect(MobEffects.DIG_SLOWDOWN).getAmplifier() + 1,4) );
-                    }
-
-                    digTimebuilder = ((digTimebuilder / bstate.getBlock().defaultDestroyTime()) / 30);
-
-                    if(digTimebuilder > 1){
-                        //Instantly break
                         bstate.getBlock().destroy(this.fallenMob.level(),mineBlock,bstate);
                         this.fallenMob.level().destroyBlock(mineBlock,true);
                         if(this.fallenMob.getMainHandItem().isDamageableItem()) {
@@ -220,24 +171,79 @@ public class CorpseBuildBreakGoal extends Goal {
                         }
                         this.stop();
                         this.fallenMob.removeBuildBreakGoal();
-
-                    } else{
-                        diggingTime = (int) (1 / digTimebuilder);
                     }
-
-
                 }
+                else{
+                    //Another check to ensure blocks are placed
+                    if(this.fallenMob.getMainHandItem().getItem() instanceof BlockItem block){
+                        block.place(new BlockPlaceContext(this.owner,this.fallenMob.swingingArm,this.fallenMob.getMainHandItem(),blockHit));
+                        this.fallenMob.getMainHandItem().setCount(this.fallenMob.getMainHandItem().getCount() - 1);
+                        this.stop();
+                        this.fallenMob.removeBuildBreakGoal();
+                    }
+                    Vec3i direction =  blockHit.getDirection().getNormal();
+                    BlockPos mineBlock = new BlockPos((useOn.getX() + direction.getX()*-1), (useOn.getY() + direction.getY()*-1), (useOn.getZ() + direction.getZ()*-1));
+                    BlockState bstate = this.fallenMob.level().getBlockState(mineBlock);
+
+                    if(bstate.getBlock().defaultDestroyTime() == -1){
+                        //Unbreakable
+                        this.stop();
+                        this.fallenMob.removeBuildBreakGoal();
+
+                    } else {
+
+                        double digTimebuilder;
+                        digTimebuilder = this.fallenMob.getMainHandItem().getDestroySpeed(bstate);
+
+                        if(this.fallenMob.getEffect(MobEffects.DIG_SPEED) != null){
+                            digTimebuilder *= 0.2 * this.fallenMob.getEffect(MobEffects.DIG_SPEED).getAmplifier() + 1;
+                        }
+                        if(this.fallenMob.getEffect(MobEffects.DIG_SLOWDOWN) != null){
+                            digTimebuilder *= Math.pow(0.3, Math.min(this.fallenMob.getEffect(MobEffects.DIG_SLOWDOWN).getAmplifier() + 1,4) );
+                        }
+
+                        digTimebuilder = ((digTimebuilder / bstate.getBlock().defaultDestroyTime()) / 30);
+
+                        this.fallenMob.swing(InteractionHand.MAIN_HAND,true);
+                        if(digTimebuilder > 1){
+                            //Instantly break
+                            bstate.getBlock().destroy(this.fallenMob.level(),mineBlock,bstate);
+                            this.fallenMob.level().destroyBlock(mineBlock,true);
+                            if(this.fallenMob.getMainHandItem().isDamageableItem()) {
+                                if(getEnchLevel("minecraft:unbreaking") != -1){
+                                    if(this.fallenMob.getRandom().nextIntBetweenInclusive(1,100) <= 100/(getEnchLevel("minecraft:unbreaking")+1)){
+                                        this.fallenMob.getMainHandItem().setDamageValue(this.fallenMob.getMainHandItem().getDamageValue() + 1);
+
+                                    }
+                                } else{this.fallenMob.getMainHandItem().setDamageValue(this.fallenMob.getMainHandItem().getDamageValue() + 1);}
+
+                            }
+                            this.stop();
+                            this.fallenMob.removeBuildBreakGoal();
+
+                        } else{
+                            diggingTime = (int) (1 / digTimebuilder);
+                        }
+
+
+                    }
+                }
+
+
+
+
+
+
+
+
+            } else{
+                this.fallenMob.getNavigation().moveTo(this.fallenMob.getNavigation().createPath(useOn, 0), 1);
             }
-
-
-
-
-
-
-
-
-        } else{
-            this.fallenMob.getNavigation().moveTo(this.fallenMob.getNavigation().createPath(useOn, 0), 1);
+        } catch(Exception e) {
+            //put shader debug stuff here
+            Roundabout.LOGGER.info("Something might be amiss, report if a vanilla block caused this with corpse breaking or placing");
+            this.stop();
+            this.fallenMob.removeBuildBreakGoal();
         }
     }
 
