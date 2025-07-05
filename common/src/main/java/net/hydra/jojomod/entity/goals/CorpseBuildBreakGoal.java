@@ -134,7 +134,7 @@ public class CorpseBuildBreakGoal extends Goal {
     public void tick() {
         //Get distance
         double distance = Math.sqrt(Math.pow(this.fallenMob.getBlockX() - useOn.getX(),2) + Math.pow(this.fallenMob.getBlockY() - useOn.getY(),2) + Math.pow(this.fallenMob.getBlockZ() - useOn.getZ(),2));
-        if (distance <= 5) {
+        if (distance <= 5 && fallenMob.hasPlaced <= -1) {
             this.fallenMob.getNavigation().stop();
             //HACK ALERT
             this.fallenMob.getNavigation().moveTo(this.fallenMob,1);
@@ -143,6 +143,7 @@ public class CorpseBuildBreakGoal extends Goal {
                 if (block.place(new BlockPlaceContext(this.owner,this.fallenMob.swingingArm,this.fallenMob.getMainHandItem(),blockHit)).consumesAction()){
                     this.fallenMob.getMainHandItem().setCount(this.fallenMob.getMainHandItem().getCount() - 1);
                     this.fallenMob.swing(InteractionHand.MAIN_HAND,true);
+                    this.fallenMob.hasPlaced = 2;
                 }
                 this.stop();
                 this.fallenMob.removeBuildBreakGoal();

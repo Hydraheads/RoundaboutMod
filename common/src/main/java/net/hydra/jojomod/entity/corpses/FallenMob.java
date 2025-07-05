@@ -238,6 +238,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
             return super.getSpeed();
         }
     }
+    public int hasPlaced = -1;
     @Override
     public boolean removeWhenFarAway(double $$0) {
         return false;

@@ -28,12 +28,20 @@ public class FallenZombie extends FallenMob{
         return 100;
     }
 
+
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FallenZombieAttackGoal(this, 1.0, true));
         this.addBehaviourGoals();
     }
 
+    @Override
+    public void tick(){
+        super.tick();
+        if (hasPlaced > -1){
+            hasPlaced--;
+        }
+    }
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.23).add(Attributes.MAX_HEALTH, 20)
                 .add(Attributes.ATTACK_DAMAGE, 3).
