@@ -44,7 +44,7 @@ public class FallenZombie extends FallenMob{
         if (!player.level().isClientSide()) {
             ItemStack plrItem = player.getItemInHand(intHand);
             ItemStack corpseItem = this.getMainHandItem();
-            if (player.isCrouching()) {
+            if (player.isCrouching() && ClientNetworking.getAppropriateConfig().justiceSettings.zombieCorpsesCanBeGivenItems) {
 
                 if (player.isSpectator()) {
                     return InteractionResult.SUCCESS;

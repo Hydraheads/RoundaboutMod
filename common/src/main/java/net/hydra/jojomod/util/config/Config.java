@@ -518,6 +518,10 @@ public class Config implements Cloneable {
         public Integer standUserMobMinionCount;
         @BooleanOption(group = "inherit", value = true)
         public Boolean corpsesUseOwnerTeam;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean zombieCorpsesCanBeGivenItems;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean zombieCorpsesCanMineAndPlaceBlocksWithGivenItems;
     }
     public static class HeyYaSettings {
         @IntOption(group = "inherit", value = 35, min = 0, max = 72000)

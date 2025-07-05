@@ -330,7 +330,8 @@ public class PowersJustice extends DashPreset {
                                             } else {
                                                 if (value instanceof FallenZombie fm) {
                                                     if (fm.controller != null && fm.controller.is(this.getSelf())) {
-                                                        if (fm.getSelected()) {
+                                                        if (fm.getSelected() && MainUtil.getIsGamemodeApproriateForGrief(this.self)
+                                                        && ClientNetworking.getAppropriateConfig().justiceSettings.zombieCorpsesCanMineAndPlaceBlocksWithGivenItems) {
                                                             //We'll look at the item equipped
 
                                                             ItemStack heldItem = fm.getMainHandItem();
