@@ -939,7 +939,7 @@ public class MainUtil {
     public static boolean canPlaceOnClaim(Player player,BlockHitResult blockHit){
         //Seems counterintuitive but most abilities have their own ways of handling this, so I'll just make it return True.
 
-        if(!MainUtil.getIsGamemodeApproriateForGrief(player)){
+        if(!ClientNetworking.getAppropriateConfig().doExtraGriefChecksForClaims || !MainUtil.getIsGamemodeApproriateForGrief(player)){
             return true;
 
         }

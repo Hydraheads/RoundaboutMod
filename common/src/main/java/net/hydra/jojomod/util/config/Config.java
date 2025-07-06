@@ -94,6 +94,8 @@ public class Config implements Cloneable {
     @BooleanOption(group = "inherit", value = false)
     public Boolean SuperBlockDestructionBarrageLaunching;
     @BooleanOption(group = "inherit", value = false)
+    public Boolean doExtraGriefChecksForClaims;
+    @BooleanOption(group = "inherit", value = false)
     public Boolean starPlatinumScopeUsesPotionEffectForNightVision;
     @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
     public Integer d4cDimensionKidnapRadius;
