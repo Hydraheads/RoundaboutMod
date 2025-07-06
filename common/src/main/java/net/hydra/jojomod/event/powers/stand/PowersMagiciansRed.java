@@ -36,6 +36,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
@@ -1758,8 +1759,43 @@ public class PowersMagiciansRed extends PunchingStand {
         }
     }
     public BlockPos blockPosForSpecial = BlockPos.ZERO;
+    //This isn't in mainutils cause this isn't perfect (not even close), as is shown with me having to use this everywhere to ensure standfire doesn't appear
+    private boolean canPlaceOnClaimPos(Player p,BlockPos pos){
+        if(!p.level().getBlockState(pos).isAir() || p.level().getBlockState(pos.relative(Direction.DOWN)).isAir()){
+            if(p.level().getBlockState(pos.relative(Direction.DOWN)).is(Blocks.BARRIER)){
+                return false;
+            }
+
+            return true;
+        }
+
+        boolean can = MainUtil.canPlaceOnClaim(p,new BlockHitResult(new Vec3(p.getX(),p.getY(),p.getZ()), Direction.UP,pos.relative(Direction.DOWN),false));
+        if(p.level().getBlockState(pos.relative(Direction.DOWN)).is(Blocks.BARRIER)){
+            p.level().removeBlock(pos.relative(Direction.DOWN),false);
+        }
+        return can;
+    }
     public void updateCrossfireSpecial(){
         if (!this.self.level().isClientSide()) {
+            if(this.getSelf() instanceof Player p) {
+                if (!canPlaceOnClaimPos(p,blockPosForSpecial.east().east()) ||
+                        !canPlaceOnClaimPos(p,blockPosForSpecial.west().west()) ||
+                        !canPlaceOnClaimPos(p,blockPosForSpecial.north().north()) ||
+                        !canPlaceOnClaimPos(p,blockPosForSpecial.south().south()) ||
+                        !canPlaceOnClaimPos(p,blockPosForSpecial.north().west()) ||
+                        !canPlaceOnClaimPos(p,blockPosForSpecial.north().east()) ||
+                        !canPlaceOnClaimPos(p,blockPosForSpecial.south().west()) ||
+                        !canPlaceOnClaimPos(p,blockPosForSpecial.south().east()) ||
+                        !canPlaceOnClaimPos(p,blockPosForSpecial.east().east().north()) ||
+                        !canPlaceOnClaimPos(p,blockPosForSpecial.east().east().south()) ||
+                        !canPlaceOnClaimPos(p,blockPosForSpecial.west().west().north()) ||
+                        !canPlaceOnClaimPos(p,blockPosForSpecial.west().west().south()) ||
+                        !canPlaceOnClaimPos(p,blockPosForSpecial.north().north().east()) ||
+                        !canPlaceOnClaimPos(p,blockPosForSpecial.north().north().west()) ||
+                        !canPlaceOnClaimPos(p,blockPosForSpecial.south().south().east()) ||
+                        !canPlaceOnClaimPos(p,blockPosForSpecial.south().south().west())
+                ){return;}
+            }
             if (this.attackTimeDuring == 4) {
                 createStandFire2(blockPosForSpecial.east().east());
                 createStandFire2(blockPosForSpecial.west().west());
@@ -2581,15 +2617,38 @@ public class PowersMagiciansRed extends PunchingStand {
         this.fireIDNumber++;
         BlockState state = ((StandFireBlock)ModBlocks.STAND_FIRE).getStateForPlacement(this.self.level(),pos).
                 setValue(StandFireBlock.COLOR,(int)this.getFireColor());
-        this.getSelf().level().setBlockAndUpdate(pos, state);
-        BlockEntity be = this.self.level().getBlockEntity(pos);
-        if (be instanceof StandFireBlockEntity sfbe){
-            sfbe.standUser = this.self;
-            sfbe.snapNumber = this.snapNumber;
-            sfbe.fireIDNumber = this.fireIDNumber;
-            sfbe.fireColorType = getFireColor();
-        }
+        if(this.getSelf() instanceof Player p){
+            if(!canPlaceOnClaimPos(p,pos) ||
+            !canPlaceOnClaimPos(p,pos.east()) ||
+            !canPlaceOnClaimPos(p,pos.west()) ||
+            !canPlaceOnClaimPos(p,pos.north()) ||
+            !canPlaceOnClaimPos(p,pos.south()) ||
+            !canPlaceOnClaimPos(p,pos.north().east()) ||
+            !canPlaceOnClaimPos(p,pos.north().west()) ||
+            !canPlaceOnClaimPos(p,pos.south().east()) ||
+            !canPlaceOnClaimPos(p,pos.south().west())
+            ){
+                return;
+            }
+            this.getSelf().level().setBlockAndUpdate(pos, state);
+            BlockEntity be = this.self.level().getBlockEntity(pos);
+            if (be instanceof StandFireBlockEntity sfbe){
+                sfbe.standUser = this.self;
+                sfbe.snapNumber = this.snapNumber;
+                sfbe.fireIDNumber = this.fireIDNumber;
+                sfbe.fireColorType = getFireColor();
+            }
 
+        } else {
+            this.getSelf().level().setBlockAndUpdate(pos, state);
+            BlockEntity be = this.self.level().getBlockEntity(pos);
+            if (be instanceof StandFireBlockEntity sfbe) {
+                sfbe.standUser = this.self;
+                sfbe.snapNumber = this.snapNumber;
+                sfbe.fireIDNumber = this.fireIDNumber;
+                sfbe.fireColorType = getFireColor();
+            }
+        }
     }
 
     public byte getFireColor(){

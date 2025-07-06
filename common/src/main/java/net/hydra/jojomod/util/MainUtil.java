@@ -938,8 +938,8 @@ public class MainUtil {
     //It doesn't need the block hit to be on a claim
     public static boolean canPlaceOnClaim(Player player,BlockHitResult blockHit){
         //Always correct, but for some reason I need to put it as a conditional
-        if(Blocks.STONE.asItem() instanceof  BlockItem stone){
-            stone.place(new BlockPlaceContext(player,player.getUsedItemHand(),stone.getDefaultInstance(),blockHit));
+        if(Blocks.BARRIER.asItem() instanceof  BlockItem barrier){
+            barrier.place(new BlockPlaceContext(player,player.getUsedItemHand(),barrier.getDefaultInstance(),blockHit));
             BlockPos placedBPos = blockHit.getBlockPos().relative(blockHit.getDirection());
             player.level().destroyBlock(placedBPos,false,player);
             if(!player.level().getBlockState(placedBPos).isAir()){

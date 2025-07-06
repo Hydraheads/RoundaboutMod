@@ -29,6 +29,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -48,6 +49,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
@@ -3005,6 +3007,14 @@ public class StandPowers {
                                 (((Player) this.getSelf()).blockActionRestricted(this.getSelf().level(), pos, ((ServerPlayer)
                                         this.getSelf()).gameMode.getGameModeForPlayer()))) ||
                                 (this.getSelf() instanceof Player && !this.getSelf().level().mayInteract(((Player) this.getSelf()), pos))))) {
+                    if(this.self instanceof Player p){
+                        if(MainUtil.canPlaceOnClaim(p, new BlockHitResult(new Vec3(pos.relative(Direction.DOWN).getX(),pos.relative(Direction.DOWN).getY(),pos.relative(Direction.DOWN).getZ()), Direction.UP,pos.relative(Direction.DOWN),false))){
+                            return true;
+                        }
+                        else{
+                            return false;
+                        }
+                    }
                     return true;
                 }
         }
