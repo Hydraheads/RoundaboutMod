@@ -88,10 +88,8 @@ public class PowersSurvivor extends NewDashPreset {
         return super.canUseStillStandingRecharge(bt);
     }
 
-    boolean air = false;
     public void summonSurvivorClient(){
         if (!this.onCooldown(PowerIndex.SKILL_2)) {
-            air = false;
             Vec3 pos = MainUtil.getRaytracePointOnMobOrBlockIfNotUp(this.self, 30,0.3f);
             if (pos != null) {
                 tryPosPower(PowerIndex.POWER_2, true, pos);

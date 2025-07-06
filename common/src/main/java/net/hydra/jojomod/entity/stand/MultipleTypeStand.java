@@ -1,6 +1,5 @@
 package net.hydra.jojomod.entity.stand;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
