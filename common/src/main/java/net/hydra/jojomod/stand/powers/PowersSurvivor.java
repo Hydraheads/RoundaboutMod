@@ -88,11 +88,15 @@ public class PowersSurvivor extends NewDashPreset {
         return super.canUseStillStandingRecharge(bt);
     }
 
+    boolean air = false;
     public void summonSurvivorClient(){
         if (!this.onCooldown(PowerIndex.SKILL_2)) {
+            air = false;
             Vec3 pos = MainUtil.getRaytracePointOnMobOrBlockIfNotUp(this.self, 30,0.3f);
-            tryPosPower(PowerIndex.POWER_2,true,pos);
-            tryPosPowerPacket(PowerIndex.POWER_2, pos);
+            if (pos != null) {
+                tryPosPower(PowerIndex.POWER_2, true, pos);
+                tryPosPowerPacket(PowerIndex.POWER_2, pos);
+            }
         }
     }
     @Override
@@ -107,7 +111,7 @@ public class PowersSurvivor extends NewDashPreset {
     public void createSurvivor(int move, Vec3 pos){
 
         if (isClient() || (!this.onCooldown(PowerIndex.SKILL_2) || !ClientNetworking.getAppropriateConfig().survivorSettings.SummonSurvivorCooldownCooldownUsesServerLatency)) {
-            int cooldown = ClientNetworking.getAppropriateConfig().survivorSettings.SummonSurvivorCooldown;
+            int cooldown = ClientNetworking.getAppropriateConfig().survivorSettings.SummonSurvivorCooldownV2;
             this.setCooldown(PowerIndex.SKILL_2, cooldown);
             if (!isClient()) {
                 blipStand(pos);
