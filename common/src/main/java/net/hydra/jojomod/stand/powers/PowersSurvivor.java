@@ -1,10 +1,12 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -17,15 +19,11 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 public class PowersSurvivor extends NewDashPreset {
@@ -64,6 +62,65 @@ public class PowersSurvivor extends NewDashPreset {
         super.renderIcons(context, x, y);
     }
 
+
+    public List<SurvivorEntity> survivorsSpawned = new ArrayList<>();
+
+    public void listInit(){
+        if (survivorsSpawned == null) {
+            survivorsSpawned = new ArrayList<>();
+        }
+    }
+
+    @Override
+
+    public void tickPowerEnd() {
+        if (survivorsSpawned != null && !survivorsSpawned.isEmpty()) {
+            offloadSurvivors();
+        }
+    }
+    public void addSurvivorToList(SurvivorEntity che){
+        listInit();
+        survivorsSpawned.add(che);
+        List<SurvivorEntity> survivorsList2 = new ArrayList<>(survivorsSpawned) {
+        };
+        int scount = ClientNetworking.getAppropriateConfig().survivorSettings.maxSurvivorsCount;
+        if (!survivorsList2.isEmpty() && survivorsList2.size() > scount) {
+            survivorsList2.get(0).forceDespawn(true);
+            survivorsSpawned.remove(0);
+        }
+    }
+
+    public void offloadSurvivors(){
+        listInit();
+        List<SurvivorEntity> survivorsList2 = new ArrayList<>(survivorsSpawned) {
+        };
+        if (!survivorsList2.isEmpty()) {
+            for (SurvivorEntity value : survivorsList2) {
+                if (value.isRemoved() || !value.isAlive() || (this.self.level().isClientSide() && this.self.level().getEntity(value.getId()) == null)) {
+                    survivorsSpawned.remove(value);
+                }
+            }
+        }
+    }
+    public boolean removeAllSurvivors(){
+        listInit();
+
+        boolean success = false;
+        List<SurvivorEntity> survivorsList2 = new ArrayList<>(survivorsSpawned) {
+        };
+        if (!survivorsList2.isEmpty()) {
+            for (SurvivorEntity value : survivorsList2) {
+                    value.forceDespawn(true);
+                    success = true;
+                    survivorsSpawned.remove(value);
+            }
+        }
+
+        if (success)
+            playStandUserOnlySoundsIfNearby(RETRACT, 100, false, false);
+
+        return true;
+    }
     @Override
     public void tick() {
     }
@@ -76,12 +133,25 @@ public class PowersSurvivor extends NewDashPreset {
             case SKILL_2_NORMAL-> {
                 summonSurvivorClient();
             }
+            case SKILL_2_CROUCH-> {
+                despawnSurvivorClient();
+            }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 dash();
             }
         }
     }
 
+    @Override
+    public boolean setPowerOther(int move, int lastMove) {
+        switch (move)
+        {
+            case PowerIndex.POWER_2_SNEAK -> {
+                return removeAllSurvivors();
+            }
+        }
+        return super.setPowerOther(move,lastMove);
+    }
     public boolean canUseStillStandingRecharge(byte bt){
         if (bt == PowerIndex.SKILL_2)
             return false;
@@ -96,6 +166,9 @@ public class PowersSurvivor extends NewDashPreset {
                 tryPosPowerPacket(PowerIndex.POWER_2, pos);
             }
         }
+    }
+    public void despawnSurvivorClient(){
+        tryPowerPacket(PowerIndex.POWER_2_SNEAK);
     }
     @Override
     public boolean tryPosPower(int move, boolean forced, Vec3 pos) {
@@ -118,15 +191,20 @@ public class PowersSurvivor extends NewDashPreset {
         }
     }
 
+
     public void blipStand(Vec3 pos){
         StandEntity stand = ModEntities.SURVIVOR.create(this.getSelf().level());
-        if (stand != null) {
+        if (stand instanceof SurvivorEntity SE) {
             StandUser user = getStandUserSelf();
             stand.absMoveTo(pos.x(), pos.y(), pos.z());
             stand.setSkin(user.roundabout$getStandSkin());
             stand.setIdleAnimation(user.roundabout$getIdlePos());
             stand.setMaster(this.self);
+            addSurvivorToList(SE);
+            SE.setRandomSize((float) (Math.random()*0.4F));
+            SE.setYRot(this.self.getYHeadRot() % 360);
             this.self.level().addFreshEntity(stand);
+            playStandUserOnlySoundsIfNearby(PLACE, 100, false, false);
         }
 
     }
@@ -198,12 +276,25 @@ public class PowersSurvivor extends NewDashPreset {
         switch (soundChoice)
         {
             case SoundIndex.SUMMON_SOUND -> {
-                return ModSounds.HEY_YA_SUMMON_EVENT;
+                return ModSounds.SURVIVOR_SUMMON_EVENT;
+            }
+            case PLACE -> {
+                return ModSounds.SURVIVOR_PLACE_EVENT;
+            }
+            case RETRACT -> {
+                return ModSounds.SURVIVOR_REMOVE_EVENT;
+            }
+            case SHOCK -> {
+                return ModSounds.SURVIVOR_SHOCK_EVENT;
             }
         }
         return super.getSoundFromByte(soundChoice);
     }
 
+    public static final byte
+            PLACE = 61,
+            RETRACT = 62,
+            SHOCK = 63;
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",

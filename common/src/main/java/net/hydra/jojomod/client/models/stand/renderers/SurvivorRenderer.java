@@ -34,7 +34,7 @@ public class SurvivorRenderer<M extends StandEntity> extends StandRenderer<Survi
 
     @Override
     public void render(SurvivorEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
-        float factor = 0.5F + (mobEntity.getSizePercent()/2);
+        float factor = 0.8F + mobEntity.getRandomSize();
         if (mobEntity.isBaby()) {
             matrixStack.scale(0.5f*factor, 0.5f*factor, 0.5f*factor);
         } else {

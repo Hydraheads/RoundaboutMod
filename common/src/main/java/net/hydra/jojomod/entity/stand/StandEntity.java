@@ -804,7 +804,7 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                 }
             }
 
-            if (this.isAlive() && !this.dead || forceVisible){
+            if ((this.isAlive() && !this.dead || forceVisible) && !forceDespawnSet){
                 if (this.getNeedsUser() && !this.forceVisible) {
                     LivingEntity userEntity = this.getUser();
                     if (userEntity != null && !userEntity.isRemoved()) {
@@ -873,6 +873,11 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
             TickDown();
         }
         TickDown();
+    }
+
+    public boolean forceDespawnSet = false;
+    public void forceDespawn(boolean despawn){
+        forceDespawnSet = despawn;
     }
 
     /** Makes the stand fade out every tick, eventually despawning.*/

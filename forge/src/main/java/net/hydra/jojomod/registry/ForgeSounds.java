@@ -405,6 +405,14 @@ public class ForgeSounds {
             register(ModSounds.HEY_YA_7, ModSounds.HEY_YA_7_ID);
     public static final RegistryObject<SoundEvent> HEY_YA_SUMMON =
             register(ModSounds.HEY_YA_SUMMON, ModSounds.HEY_YA_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> SURVIVOR_SUMMON =
+            register(ModSounds.SURVIVOR_SUMMON, ModSounds.SURVIVOR_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> SURVIVOR_SHOCK =
+            register(ModSounds.SURVIVOR_SHOCK, ModSounds.SURVIVOR_SHOCK_ID);
+    public static final RegistryObject<SoundEvent> SURVIVOR_PLACE =
+            register(ModSounds.SURVIVOR_PLACE, ModSounds.SURVIVOR_PLACE_ID);
+    public static final RegistryObject<SoundEvent> SURVIVOR_REMOVE =
+            register(ModSounds.SURVIVOR_REMOVE, ModSounds.SURVIVOR_REMOVE_ID);
     public static final RegistryObject<SoundEvent> DIO_HOHO =
             register(ModSounds.DIO_HOHO, ModSounds.DIO_HOHO_ID);
     public static final RegistryObject<SoundEvent> DIO_DEATH =

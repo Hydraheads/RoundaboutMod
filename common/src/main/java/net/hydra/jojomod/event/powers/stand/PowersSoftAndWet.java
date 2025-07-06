@@ -1820,20 +1820,41 @@ public void unlockSkin(){
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.5F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.2F));
         } else {
-            return levelupDamageMod(multiplyPowerByStandConfigMobs(4.5F));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(4.0F));
         }
     }
 
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.2F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.6F));
         } else {
-            return levelupDamageMod(multiplyPowerByStandConfigMobs(5.5F));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(5.0F));
         }
     }
+
+    /**pre nerf
+     *
+     *
+     *     @Override
+     *     public float getPunchStrength(Entity entity){
+     *         if (this.getReducedDamage(entity)){
+     *             return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.5F));
+     *         } else {
+     *             return levelupDamageMod(multiplyPowerByStandConfigMobs(4.5F));
+     *         }
+     *     }
+     *
+     *     @Override
+     *     public float getHeavyPunchStrength(Entity entity){
+     *         if (this.getReducedDamage(entity)){
+     *             return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.2F));
+     *         } else {
+     *             return levelupDamageMod(multiplyPowerByStandConfigMobs(5.5F));
+     *         }
+     *     }*/
 
 
     public float getExplosiveBubbleStrength(Entity entity){

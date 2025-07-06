@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event;
 
 import net.hydra.jojomod.access.IAbstractArrowAccess;
+import net.hydra.jojomod.access.ICreeper;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -13,6 +14,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.RelativeMovement;
+import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.Level;
@@ -66,9 +69,41 @@ public class SavedSecond {
                     ((StandUser)PL).roundabout$getGasolineTime(),
                     PL.getAirSupply(),
                     ((StandUser)PL).roundabout$getLocacacaCurse(),
+                    ((StandUser)PL).roundabout$getLeapTicks(),
+                    ((StandUser)PL).roundabout$getBubbleEncased(),
                     PL.getFoodData().getFoodLevel(),
                     PL.getFoodData().getSaturationLevel(),
                     PL.getFoodData().getExhaustionLevel()
+            );
+        } if (ent instanceof Creeper CE) {
+            return new SavedSecondCreeper(
+                    CE.getYHeadRot(),
+                    CE.getRotationVector(),
+                    CE.getPosition(1),
+                    CE.getDeltaMovement(),
+                    ent.fallDistance,
+                    ent.level().dimensionTypeId(),
+                    CE.getActiveEffects(),
+                    CE.getHealth(),
+                    CE.getRemainingFireTicks(),
+                    ((StandUser)CE).roundabout$getRemainingFireTicks(),
+                    ((StandUser)CE).roundabout$getOnStandFire(),
+                    ((StandUser)CE).roundabout$getGasolineTime(),
+                    CE.getAirSupply(),
+                    ((StandUser)CE).roundabout$getLocacacaCurse(),
+                    ((StandUser)CE).roundabout$getLeapTicks(),
+                    ((StandUser)CE).roundabout$getBubbleEncased(),
+                    ((ICreeper)CE).roundabout$getSwell()
+            );
+        } if (ent instanceof PrimedTnt TN) {
+            return new SavedSecondTNT(
+                    TN.getYHeadRot(),
+                    TN.getRotationVector(),
+                    TN.getPosition(1),
+                    TN.getDeltaMovement(),
+                    ent.fallDistance,
+                    ent.level().dimensionTypeId(),
+                    TN.getFuse()
             );
         } if (ent instanceof LivingEntity LE) {
             return new SavedSecondLiving(
@@ -85,7 +120,9 @@ public class SavedSecond {
                     ((StandUser)LE).roundabout$getOnStandFire(),
                     ((StandUser)LE).roundabout$getGasolineTime(),
                     LE.getAirSupply(),
-                    ((StandUser)LE).roundabout$getLocacacaCurse()
+                    ((StandUser)LE).roundabout$getLocacacaCurse(),
+                    ((StandUser)LE).roundabout$getLeapTicks(),
+                    ((StandUser)LE).roundabout$getBubbleEncased()
             );
         } if (ent instanceof AbstractArrow LE) {
             return new SavedSecondAbstractArrow(

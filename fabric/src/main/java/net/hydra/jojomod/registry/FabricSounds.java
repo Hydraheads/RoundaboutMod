@@ -235,6 +235,10 @@ public class FabricSounds {
         addSound(ModSounds.HEY_YA_6_ID, ModSounds.HEY_YA_6_EVENT);
         addSound(ModSounds.HEY_YA_7_ID, ModSounds.HEY_YA_7_EVENT);
         addSound(ModSounds.HEY_YA_SUMMON_ID, ModSounds.HEY_YA_SUMMON_EVENT);
+        addSound(ModSounds.SURVIVOR_SUMMON_ID, ModSounds.SURVIVOR_SUMMON_EVENT);
+        addSound(ModSounds.SURVIVOR_SHOCK_ID, ModSounds.SURVIVOR_SHOCK_EVENT);
+        addSound(ModSounds.SURVIVOR_PLACE_ID, ModSounds.SURVIVOR_PLACE_EVENT);
+        addSound(ModSounds.SURVIVOR_REMOVE_ID, ModSounds.SURVIVOR_REMOVE_EVENT);
 
         addSound(ModSounds.DIO_HOHO_ID, ModSounds.DIO_HOHO_EVENT);
         addSound(ModSounds.DIO_HOHO_2_ID, ModSounds.DIO_HOHO_2_EVENT);

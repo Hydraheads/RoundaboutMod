@@ -34,22 +34,22 @@ public class StandPowerRewrite extends StandPowers {
                 return;
             held1 = true;
 
-            if (!getSelf().isCrouching() && !isGuarding())
+            if (!isHoldingSneak() && !isGuarding())
             {
                 powerActivate(PowerContext.SKILL_1_NORMAL);
                 return;
             }
-            if (getSelf().isCrouching() && !isGuarding())
+            if (isHoldingSneak() && !isGuarding())
             {
                 powerActivate(PowerContext.SKILL_1_CROUCH);
                 return;
             }
-            if (!getSelf().isCrouching() && isGuarding())
+            if (!isHoldingSneak() && isGuarding())
             {
                 powerActivate(PowerContext.SKILL_1_GUARD);
                 return;
             }
-            if (getSelf().isCrouching() && isGuarding())
+            if (isHoldingSneak() && isGuarding())
             {
                 powerActivate(PowerContext.SKILL_1_CROUCH_GUARD);
                 return;
@@ -71,22 +71,22 @@ public class StandPowerRewrite extends StandPowers {
                 return;
             held2 = true;
 
-            if (!getSelf().isCrouching() && !isGuarding())
+            if (!isHoldingSneak() && !isGuarding())
             {
                 powerActivate(PowerContext.SKILL_2_NORMAL);
                 return;
             }
-            if (getSelf().isCrouching() && !isGuarding())
+            if (isHoldingSneak() && !isGuarding())
             {
                 powerActivate(PowerContext.SKILL_2_CROUCH);
                 return;
             }
-            if (!getSelf().isCrouching() && isGuarding())
+            if (!isHoldingSneak() && isGuarding())
             {
                 powerActivate(PowerContext.SKILL_2_GUARD);
                 return;
             }
-            if (getSelf().isCrouching() && isGuarding())
+            if (isHoldingSneak() && isGuarding())
             {
                 powerActivate(PowerContext.SKILL_2_CROUCH_GUARD);
                 return;
@@ -108,22 +108,22 @@ public class StandPowerRewrite extends StandPowers {
                 return;
             held3 = true;
 
-            if (!getSelf().isCrouching() && !isGuarding())
+            if (!isHoldingSneak() && !isGuarding())
             {
                 powerActivate(PowerContext.SKILL_3_NORMAL);
                 return;
             }
-            if (getSelf().isCrouching() && !isGuarding())
+            if (isHoldingSneak() && !isGuarding())
             {
                 powerActivate(PowerContext.SKILL_3_CROUCH);
                 return;
             }
-            if (!getSelf().isCrouching() && isGuarding())
+            if (!isHoldingSneak() && isGuarding())
             {
                 powerActivate(PowerContext.SKILL_3_GUARD);
                 return;
             }
-            if (getSelf().isCrouching() && isGuarding())
+            if (isHoldingSneak() && isGuarding())
             {
                 powerActivate(PowerContext.SKILL_3_CROUCH_GUARD);
                 return;
@@ -145,22 +145,22 @@ public class StandPowerRewrite extends StandPowers {
                 return;
             held4 = true;
 
-            if (!getSelf().isCrouching() && !isGuarding())
+            if (!isHoldingSneak() && !isGuarding())
             {
                 powerActivate(PowerContext.SKILL_4_NORMAL);
                 return;
             }
-            if (getSelf().isCrouching() && !isGuarding())
+            if (isHoldingSneak() && !isGuarding())
             {
                 powerActivate(PowerContext.SKILL_4_CROUCH);
                 return;
             }
-            if (!getSelf().isCrouching() && isGuarding())
+            if (!isHoldingSneak() && isGuarding())
             {
                 powerActivate(PowerContext.SKILL_4_GUARD);
                 return;
             }
-            if (getSelf().isCrouching() && isGuarding())
+            if (isHoldingSneak() && isGuarding())
             {
                 powerActivate(PowerContext.SKILL_4_CROUCH_GUARD);
                 return;

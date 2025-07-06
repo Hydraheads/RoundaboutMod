@@ -48,6 +48,16 @@ public abstract class ZCreeper extends Monster implements ICreeper {
 
     @Shadow public abstract void setSwellDir(int $$0);
 
+    @Override
+    public int roundabout$getSwell(){
+        return swell;
+    }
+    @Override
+
+    public void roundabout$setSwell(int swell){
+        this.swell = swell;
+    }
+
     @Unique
     private static final EntityDataAccessor<Boolean> roundabout$IS_TRANSFORMED = SynchedEntityData.defineId(Creeper.class, EntityDataSerializers.BOOLEAN);
 
