@@ -1838,7 +1838,7 @@ public void unlockSkin(){
     /**pre nerf
      *
      *
-     *     @Override
+     *
      *     public float getPunchStrength(Entity entity){
      *         if (this.getReducedDamage(entity)){
      *             return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.5F));
@@ -1847,7 +1847,7 @@ public void unlockSkin(){
      *         }
      *     }
      *
-     *     @Override
+     *
      *     public float getHeavyPunchStrength(Entity entity){
      *         if (this.getReducedDamage(entity)){
      *             return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.2F));
