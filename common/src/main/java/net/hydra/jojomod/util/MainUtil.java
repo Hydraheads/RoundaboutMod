@@ -66,6 +66,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.inventory.AbstractFurnaceMenu;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
@@ -932,6 +933,22 @@ public class MainUtil {
             }
         }
         return false;
+    }
+    //Couldn't find better wording but this tests if you're on claimed land that isn't yours
+    //It doesn't need the block hit to be on a claim
+    public static boolean canPlaceOnClaim(Player player,BlockHitResult blockHit){
+        //Always correct, but for some reason I need to put it as a conditional
+        if(Blocks.STONE.asItem() instanceof  BlockItem stone){
+            stone.place(new BlockPlaceContext(player,player.getUsedItemHand(),stone.getDefaultInstance(),blockHit));
+            BlockPos placedBPos = blockHit.getBlockPos().relative(blockHit.getDirection());
+            player.level().destroyBlock(placedBPos,false,player);
+            if(!player.level().getBlockState(placedBPos).isAir()){
+                player.level().removeBlock(placedBPos,false);
+                return false;
+            }
+
+        }
+        return true;
     }
 
     public static void gasExplode(BlockState blk, ServerLevel level, BlockPos blkPos, int iteration, int hitRadius, int blockRadius, float power){

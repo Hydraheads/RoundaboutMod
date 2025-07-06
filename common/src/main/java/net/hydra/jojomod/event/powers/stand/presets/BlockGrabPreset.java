@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.powers.stand.presets;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IBoatItemAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMinecartItemAccess;
@@ -43,6 +44,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.entity.vehicle.*;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.DirectionalPlaceContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameType;
@@ -715,8 +717,17 @@ public class BlockGrabPreset extends PunchingStand{
                         }
                         if (pos != null) {
                             BlockState state = this.getSelf().level().getBlockState(pos);
-                            if (standEntity.getHeldItem().getItem() instanceof BlockItem) {
+                            if (standEntity.getHeldItem().getItem() instanceof BlockItem blockItem) {
                                 if (getCanPlace()) {
+                                    if(this.getSelf() instanceof Player plr) {
+                                        if(!MainUtil.canPlaceOnClaim(plr,$$0)){
+                                            ItemEntity itemDrop = new ItemEntity(this.getSelf().level(),this.getSelf().getX(),this.getSelf().getY(),this.getSelf().getZ(),standEntity.getHeldItem());
+                                            this.getSelf().level().addFreshEntity(itemDrop);
+                                            return true;
+
+                                        }
+                                    }
+
                                     if (tryHitBlock($$0, pos, state, standEntity)) {
                                         standEntity.setHeldItem(ItemStack.EMPTY);
 
@@ -837,8 +848,8 @@ public class BlockGrabPreset extends PunchingStand{
                                 && !(PE).blockActionRestricted(PE.level(), this.grabBlock, PE.gameMode.getGameModeForPlayer()))
                                 && PE.level().mayInteract(PE, this.grabBlock)) {
                             /*This is the code where blocks that are removable are grabbed*/
-                            boolean $$4 = this.getSelf().level().removeBlock(this.grabBlock, false);
-                            if ($$4) {
+                            boolean $$4 = this.getSelf().level().destroyBlock(this.grabBlock, false,this.getSelf());
+                            if ($$4 && this.getSelf().level().getBlockState(this.grabBlock).isAir()) {
                                 standEntity.canAcquireHeldItem = true;
                             } else {
                                 standEntity.canAcquireHeldItem = false;
@@ -846,31 +857,33 @@ public class BlockGrabPreset extends PunchingStand{
                         } else {
                             standEntity.canAcquireHeldItem = false;
                         }
-                        standEntity.setHeldItem(state.getBlock().asItem().getDefaultInstance());
-                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-                        this.setActivePower(PowerIndex.POWER_2_SNEAK);
-                        this.setAttackTimeDuring(0);
-                        poseStand(OffsetIndex.FOLLOW_NOLEAN);
-                        animateStand(StandEntity.BLOCK_GRAB);
-                        if (state.is(Blocks.GRASS_BLOCK) || (this.getSelf().level().getBlockState(this.grabBlock.above()).is(state.getBlock()) ||
-                                this.getSelf().level().getBlockState(this.grabBlock.below()).is(state.getBlock()) ||
-                                this.getSelf().level().getBlockState(this.grabBlock.north()).is(state.getBlock()) ||
-                                this.getSelf().level().getBlockState(this.grabBlock.south()).is(state.getBlock()) ||
-                                this.getSelf().level().getBlockState(this.grabBlock.east()).is(state.getBlock()) ||
-                                this.getSelf().level().getBlockState(this.grabBlock.west()).is(state.getBlock()) && !state.is(Blocks.PUMPKIN)
-                                && !(state.getBlock() instanceof StemGrownBlock)&& !(state.getBlock() instanceof GlassBlock))){
-                            if (!this.getSelf().level().isClientSide) {
+                        if(this.getSelf().level().getBlockState(this.grabBlock).isAir()) {
+                            standEntity.setHeldItem(state.getBlock().asItem().getDefaultInstance());
+                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                            this.setActivePower(PowerIndex.POWER_2_SNEAK);
+                            this.setAttackTimeDuring(0);
+                            poseStand(OffsetIndex.FOLLOW_NOLEAN);
+                            animateStand(StandEntity.BLOCK_GRAB);
+                            if (state.is(Blocks.GRASS_BLOCK) || (this.getSelf().level().getBlockState(this.grabBlock.above()).is(state.getBlock()) ||
+                                    this.getSelf().level().getBlockState(this.grabBlock.below()).is(state.getBlock()) ||
+                                    this.getSelf().level().getBlockState(this.grabBlock.north()).is(state.getBlock()) ||
+                                    this.getSelf().level().getBlockState(this.grabBlock.south()).is(state.getBlock()) ||
+                                    this.getSelf().level().getBlockState(this.grabBlock.east()).is(state.getBlock()) ||
+                                    this.getSelf().level().getBlockState(this.grabBlock.west()).is(state.getBlock()) && !state.is(Blocks.PUMPKIN)
+                                            && !(state.getBlock() instanceof StemGrownBlock) && !(state.getBlock() instanceof GlassBlock))) {
+                                if (!this.getSelf().level().isClientSide) {
 
-                                BlockState state1 = state;
-                               if (state.is(Blocks.GRASS_BLOCK)){
-                                    state1 = Blocks.DIRT.defaultBlockState();
-                               }
-                                ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
-                                                state1),
-                                        this.grabBlock.getX()+0.5, this.grabBlock.getY()+0.5, this.grabBlock.getZ()+0.5,
-                                        90, 0.4, 0.4, 0.4, 0.5);
-                                SoundEvent SE = state.getSoundType().getBreakSound();
-                                this.getSelf().level().playSound(null, this.getSelf().blockPosition(), SE, SoundSource.BLOCKS, 4.0F, 0.7F);
+                                    BlockState state1 = state;
+                                    if (state.is(Blocks.GRASS_BLOCK)) {
+                                        state1 = Blocks.DIRT.defaultBlockState();
+                                    }
+                                    ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
+                                                    state1),
+                                            this.grabBlock.getX() + 0.5, this.grabBlock.getY() + 0.5, this.grabBlock.getZ() + 0.5,
+                                            90, 0.4, 0.4, 0.4, 0.5);
+                                    SoundEvent SE = state.getSoundType().getBreakSound();
+                                    this.getSelf().level().playSound(null, this.getSelf().blockPosition(), SE, SoundSource.BLOCKS, 4.0F, 0.7F);
+                                }
                             }
                         }
 

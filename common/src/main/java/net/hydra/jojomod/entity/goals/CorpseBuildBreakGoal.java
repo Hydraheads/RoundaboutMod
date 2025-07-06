@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.goals;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.index.Tactics;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.Tag;
@@ -142,9 +143,22 @@ public class CorpseBuildBreakGoal extends Goal {
 
                 if(this.fallenMob.getMainHandItem().getItem() instanceof BlockItem block){
                     if (block.place(new BlockPlaceContext(this.owner,this.fallenMob.swingingArm,this.fallenMob.getMainHandItem(),blockHit)).consumesAction()){
-                        this.fallenMob.getMainHandItem().setCount(this.fallenMob.getMainHandItem().getCount() - 1);
-                        this.fallenMob.swing(InteractionHand.MAIN_HAND,true);
-                        this.fallenMob.hasPlaced = 2;
+                        //A check for a competent claims mod
+                        this.fallenMob.level().destroyBlock(useOn,false,this.owner);
+                        //if the block wasn't destroyed, this blockstate won't be air, which means that we shouldn't be placing here
+                        if(!this.fallenMob.level().getBlockState(useOn).isAir()){
+                            //so, we remove the block we placed as a test
+                            this.fallenMob.level().removeBlock(useOn,false);
+                        } else{
+                            //If the block was destroyed, that means we were right to place here.
+                            //So, we place
+                            block.place(new BlockPlaceContext(this.owner,this.fallenMob.swingingArm,this.fallenMob.getMainHandItem(),blockHit));
+                            this.fallenMob.getMainHandItem().setCount(this.fallenMob.getMainHandItem().getCount() - 1);
+                            this.fallenMob.swing(InteractionHand.MAIN_HAND,true);
+                            this.fallenMob.hasPlaced = 2;
+                        }
+
+
                     }
                     this.stop();
                     this.fallenMob.removeBuildBreakGoal();
@@ -159,7 +173,7 @@ public class CorpseBuildBreakGoal extends Goal {
                     if(diggingTime == 0){
 
                         bstate.getBlock().destroy(this.fallenMob.level(),mineBlock,bstate);
-                        this.fallenMob.level().destroyBlock(mineBlock,true);
+                        this.fallenMob.level().destroyBlock(mineBlock,true,this.owner);
                         if(this.fallenMob.getMainHandItem().isDamageableItem()) {
                             if(getEnchLevel("minecraft:unbreaking") != -1){
                                 if(this.fallenMob.getRandom().nextIntBetweenInclusive(1,100) <= 100/(getEnchLevel("minecraft:unbreaking")+1)){
@@ -176,8 +190,14 @@ public class CorpseBuildBreakGoal extends Goal {
                 else{
                     //Another check to ensure blocks are placed
                     if(this.fallenMob.getMainHandItem().getItem() instanceof BlockItem block){
-                        block.place(new BlockPlaceContext(this.owner,this.fallenMob.swingingArm,this.fallenMob.getMainHandItem(),blockHit));
-                        this.fallenMob.getMainHandItem().setCount(this.fallenMob.getMainHandItem().getCount() - 1);
+
+                        if(MainUtil.canPlaceOnClaim(this.owner,blockHit)){
+                            block.place(new BlockPlaceContext(this.owner,this.fallenMob.swingingArm,this.fallenMob.getMainHandItem(),blockHit));
+                            this.fallenMob.getMainHandItem().setCount(this.fallenMob.getMainHandItem().getCount() - 1);
+                            this.fallenMob.swing(InteractionHand.MAIN_HAND,true);
+                            this.fallenMob.hasPlaced = 2;
+                        }
+
                         this.stop();
                         this.fallenMob.removeBuildBreakGoal();
                     }
