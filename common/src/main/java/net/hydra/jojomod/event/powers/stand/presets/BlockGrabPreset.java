@@ -29,6 +29,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -187,6 +188,24 @@ public class BlockGrabPreset extends PunchingStand{
             }
         }
         return super.setPowerGuard();
+    }
+
+    @Override
+    public void onActuallyHurt(DamageSource $$0, float $$1){
+        if ($$0.getEntity() != null && !this.self.level().isClientSide()){
+
+            if (this.self instanceof Player PE) {
+                int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.mobThrowInterrupt;
+
+                setCooldown(PowerIndex.SKILL_2, cdr);
+                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) PE), PowerIndex.SKILL_2, cdr);
+            }
+
+            LivingEntity stand = getStandEntity(this.self);
+            if (stand != null && !stand.getPassengers().isEmpty()){
+                stand.ejectPassengers();
+            }
+        }
     }
 
     private int retractEndTIcks = -1;

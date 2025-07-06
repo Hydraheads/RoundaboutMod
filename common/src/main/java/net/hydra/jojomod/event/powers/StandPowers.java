@@ -3038,6 +3038,10 @@ public class StandPowers {
         }
     }
 
+    /**Call this so when you get hurt something can happen*/
+    public void onActuallyHurt(DamageSource $$0, float $$1){
+    }
+
     public void rollSkin(){
 
     }

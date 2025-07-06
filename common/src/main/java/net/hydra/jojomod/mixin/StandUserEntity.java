@@ -20,6 +20,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.SoftExplosion;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.event.powers.stand.presets.BlockGrabPreset;
 import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
@@ -2917,6 +2918,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     }
                 }
             }
+
+            roundabout$getStandPowers().onActuallyHurt($$0,$$1);
 
             Entity bound = roundabout$getBoundTo();
             if (bound != null && ($$0.getEntity() != null || $$0.is(DamageTypes.MAGIC) || $$0.is(DamageTypes.EXPLOSION)) && !$$0.is(ModDamageTypes.STAND_FIRE)){

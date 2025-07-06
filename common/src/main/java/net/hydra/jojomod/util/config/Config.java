@@ -378,6 +378,8 @@ public class Config implements Cloneable {
         public Integer objectPocket;
         @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
         public Integer mobThrow;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer mobThrowInterrupt;
         @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
         public Integer mobThrowAttack;
         @IntOption(group = "inherit", value = 800, min = 0, max = 72000)
