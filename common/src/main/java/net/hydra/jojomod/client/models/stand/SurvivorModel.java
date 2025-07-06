@@ -21,13 +21,13 @@ public class SurvivorModel<T extends SurvivorEntity> extends StandModel<T> {
 
         PartDefinition stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
 
-        PartDefinition stand2 = stand.addOrReplaceChild("stand2", CubeListBuilder.create().texOffs(-12, 0).addBox(-8.0F, -1.025F, -4.0F, 11.0F, 0.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, 1.0F, -1.0F));
+        PartDefinition stand2 = stand.addOrReplaceChild("stand2", CubeListBuilder.create().texOffs(-12, 0).addBox(-6.0F, -0.025F, -5.0F, 11.0F, 0.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
 
         PartDefinition bone = stand2.addOrReplaceChild("bone", CubeListBuilder.create().texOffs(0, 14).addBox(-2.0F, -2.0F, 0.0F, 4.0F, 1.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(-2, 12).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 0.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 1.0F, 0.0F, -1.5708F, 0.0F));
+                .texOffs(-2, 12).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 0.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.0F, 1.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 32, 32);
-        }
+    }
 
 
         StandPowers Power = new PowersSoftAndWet(null);
