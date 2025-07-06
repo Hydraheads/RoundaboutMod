@@ -566,8 +566,8 @@ public class Config implements Cloneable {
         public Boolean timeRewindStopsDeviousStrategies;
     }
     public static class SurvivorSettings {
-        @IntOption(group = "inherit", value = 140, min = 0, max = 72000)
-        public Integer SummonSurvivorCooldown;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer SummonSurvivorCooldownV2;
         @BooleanOption(group = "inherit", value = true)
         public Boolean SummonSurvivorCooldownCooldownUsesServerLatency;
     }

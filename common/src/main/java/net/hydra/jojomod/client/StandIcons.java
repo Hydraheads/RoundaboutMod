@@ -305,6 +305,11 @@ public class StandIcons {
     public static final ResourceLocation RATT_RECALL = Roundabout.location("textures/gui/icons/ratt/ratt_recall.png");
     public static final ResourceLocation RATT_SCOPE_IN = Roundabout.location("textures/gui/icons/ratt/ratt_scope_in.png");
     public static final ResourceLocation RATT_SCOPE_OUT = Roundabout.location("textures/gui/icons/ratt/ratt_scope_out.png");
+    public static final ResourceLocation RATT_SINGLE = Roundabout.location("textures/gui/icons/ratt/ratt_single.png");
+    public static final ResourceLocation RATT_BURST = Roundabout.location("textures/gui/icons/ratt/ratt_burst.png");
+    public static final ResourceLocation RATT_UNAUTO = Roundabout.location("textures/gui/icons/ratt/ratt_auto.png");
+    public static final ResourceLocation RATT_AUTO = Roundabout.location("textures/gui/icons/ratt/ratt_unauto.png");
+
 
     public static final ResourceLocation SOFT_AND_WET_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/soft_and_wet/barrage.png");

@@ -38,6 +38,7 @@ public class RattRenderer extends StandRenderer<RattEntity> {
         } else {
             matrixStack.scale(0.8f * factor, 0.8f * factor, 0.8f * factor);
         }
+        matrixStack.scale(0.75F,0.75F,0.75F);
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
 

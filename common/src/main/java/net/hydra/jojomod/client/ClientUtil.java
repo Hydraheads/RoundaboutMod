@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.stand.powers.PowersMandom;
+import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -299,7 +300,9 @@ public class ClientUtil {
             StandPowers powers = standComp.roundabout$getStandPowers();
             if (entity instanceof RattEntity) {
                 if (((StandEntity) entity).getUser() != null) {
-                    if (((StandEntity) entity).getUser().isCrouching()) {
+                    if ( ((PowersRatt) powers ).isAuto() ) {
+                        return 12948493;
+                    } else if (((StandEntity) entity).getUser().isCrouching()) {
                         return 12978493;
                     }
                 }
