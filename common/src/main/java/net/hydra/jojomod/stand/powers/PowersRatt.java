@@ -18,11 +18,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
@@ -44,13 +46,22 @@ public class PowersRatt extends NewDashPreset {
     @Override
     public StandEntity getNewStandEntity(){return ModEntities.RATT.create(this.getSelf().level());}
 
-    public static int MaxLerpTime = 25;
     public static float PlacementRange = 5.0F;
 
     public static final byte
             SHOULDER = 0,
             MOVING = 1,
-            PLACED = 2;
+            PLACED = 2,
+            RETURNING = 3,
+
+            UPDATE_POSITION = 4,
+            UPDATE_STATE = 5,
+            UPDATE_OFFSET_TYPE = 6,
+            UPDATE_PLACEMENT = 7,
+            NULL_PLACEMENT = 8,
+            ENABLE_ACTIVE = 9,
+            DISABLE_ACTIVE = 10,
+            ROTATE = 11;
 
 
     public boolean active = false;
@@ -90,17 +101,26 @@ public class PowersRatt extends NewDashPreset {
         }
     }
 
+    public boolean automatic = false;
+    public boolean isAuto() {
+        return automatic;
+    }
+    public void setAuto(boolean b) {
+        automatic = b;
+    }
+
     private BlockHitResult getValidPlacement(){
         Vec3 vec3d = this.getSelf().getEyePosition(0);
         Vec3 vec3d2 = this.getSelf().getViewVector(0);
         Vec3 vec3d3 = vec3d.add(vec3d2.x * PlacementRange, vec3d2.y * PlacementRange, vec3d2.z * PlacementRange);
         BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3,
                 ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
-        if (blockHit.getType() == HitResult.Type.BLOCK && blockHit.getDirection() == Direction.UP){
+        if (blockHit.getType() == HitResult.Type.BLOCK && blockHit.getDirection() != Direction.DOWN){
             return blockHit;
         }
         return null;
     }
+
 
 
 
@@ -117,8 +137,20 @@ public class PowersRatt extends NewDashPreset {
                 setSkillIcon(context, x, y, 1, ScopeIcon, PowerIndex.SKILL_1);
                 setSkillIcon(context,x,y,2,StandIcons.RATT_PLACE,PowerIndex.SKILL_2);
             }
-            case MOVING, PLACED -> {
+            case MOVING -> {
                 setSkillIcon(context,x,y,1,StandIcons.NONE, PowerIndex.SKILL_1);
+                setSkillIcon(context,x,y,2,StandIcons.RATT_RECALL,PowerIndex.SKILL_2);
+            }
+            case PLACED -> {
+                if (!getSelf().isCrouching()) {
+                    setSkillIcon(context,x,y,1,StandIcons.RATT_BURST, PowerIndex.SKILL_1);
+                } else {
+                    if (isAuto()) {
+                        setSkillIcon(context, x, y, 1, StandIcons.RATT_AUTO, PowerIndex.SKILL_1);
+                    } else {
+                        setSkillIcon(context,x,y,1,StandIcons.RATT_UNAUTO,PowerIndex.SKILL_1);
+                    }
+                }
                 setSkillIcon(context,x,y,2,StandIcons.RATT_RECALL,PowerIndex.SKILL_2);
             }
         }
@@ -130,13 +162,16 @@ public class PowersRatt extends NewDashPreset {
     @Override
     public boolean tryPower(int move, boolean forced) {
         switch(move) {
-            case PowerIndex.POWER_1 -> {
+            case NULL_PLACEMENT -> {
+                ((RattEntity) this.getStandEntity(this.getSelf()) ).Placement = null;
+            }
+            case ENABLE_ACTIVE -> {
                 active = true;
                 if (!this.isClient()) {
                     this.getStandUserSelf().roundabout$summonStand(this.getSelf().level(), true, false);
                 }
             }
-            case PowerIndex.POWER_1_SNEAK -> {
+            case DISABLE_ACTIVE -> {
                 active = false;
             }
         }
@@ -144,9 +179,21 @@ public class PowersRatt extends NewDashPreset {
     }
     @Override
     public boolean tryPosPower(int move, boolean forced, Vec3 pos) {
-        if (move == PowerIndex.POWER_2) {
-            if (this.getStandEntity(this.getSelf()) != null) {
-                this.getStandEntity(this.getSelf()).setPos(pos);
+        switch(move) {
+            case UPDATE_POSITION -> {
+                if (this.getStandEntity(this.getSelf()) != null) {
+                    this.getStandEntity(this.getSelf()).setPos(pos);
+                }
+            }
+            case UPDATE_PLACEMENT -> {
+                if (this.getStandEntity(this.getSelf()) != null) {
+                    ((RattEntity) this.getStandEntity(this.getSelf())).Placement = pos;
+                }
+            }
+            case ROTATE -> {
+                if (this.getStandEntity(this.getSelf()) != null) {
+                    this.getStandEntity(this.getSelf()).setStandRotationY((float) pos.y);
+                }
             }
         }
         return true;
@@ -155,10 +202,14 @@ public class PowersRatt extends NewDashPreset {
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime) {
         if (this.getStandEntity(this.getSelf()) != null) {
-            if (move == PowerIndex.POWER_2) {
-                this.getStandEntity(this.getSelf()).setOffsetType((byte) chargeTime);
-            } else if (move == PowerIndex.POWER_1) {
-                ((RattEntity)  this.getStandEntity(this.getSelf())).MotionState = (byte) chargeTime;
+            switch (move) {
+                case UPDATE_OFFSET_TYPE -> {
+                    this.getStandEntity(this.getSelf()).setOffsetType((byte) chargeTime);
+                }
+                case UPDATE_STATE -> {
+                    ((RattEntity)this.getStandEntity(this.getSelf())).MotionState = (byte) chargeTime;
+                }
+
             }
         }
         return true;
@@ -173,6 +224,7 @@ public class PowersRatt extends NewDashPreset {
                 Deploy();
             } else {
                 if (!this.getSelf().level().isClientSide()) {
+                    Roundabout.LOGGER.info("Ratt Down");
                     SE.remove(Entity.RemovalReason.DISCARDED);
                 }
             }
@@ -189,7 +241,12 @@ public class PowersRatt extends NewDashPreset {
             case SKILL_1_NORMAL -> {
                 if (isRattState(SHOULDER)) {
                     RattScope();
+                } else if (isRattState(PLACED)) {
+                        BurstFire();
                 }
+            }
+            case SKILL_1_CROUCH -> {
+                ToggleAuto();
             }
             case SKILL_2_NORMAL -> {
                 if (isRattState(SHOULDER) ) {
@@ -219,25 +276,47 @@ public class PowersRatt extends NewDashPreset {
 
     }
 
+    public void BurstFire() {
+        Roundabout.LOGGER.info("BURST FIRE RAAAH");
+    }
+
+    public void ToggleAuto() {
+        setAuto(!isAuto());
+    }
+
     public void Deploy() {
-        RattEntity RE = (RattEntity) this.getStandUserSelf().roundabout$getStand();
-        if (RE != null) {
-            if (getValidPlacement() != null) {
-                setRattState(MOVING);
-                setRattPlacement(getValidPlacement().getLocation().subtract(0,0.1,0));
+        if (!this.onCooldown(PowerIndex.POWER_2)) {
+            RattEntity RE = (RattEntity) this.getStandUserSelf().roundabout$getStand();
+            if (RE != null) {
+                if (getValidPlacement() != null) {
+                    this.setCooldown(PowerIndex.SKILL_2, 70);
+                    setRattState(MOVING);
+                    if (getValidPlacement().getDirection() == Direction.UP) {
+                        RE.UpdatePlacement(getValidPlacement().getLocation());
+                    } else {
+                        Vec3 pos2 = getValidPlacement().getLocation();
+                        Vec3 pos;
+                        pos = new Vec3(pos2.x(),((int)pos2.y())+1,pos2.z());
+                        RE.UpdatePlacement(pos);
+                    }
+                }
+            } else {
+                tryPower(ENABLE_ACTIVE, true);
+                tryPowerPacket(ENABLE_ACTIVE);
             }
-        } else {
-            tryPower(PowerIndex.POWER_1,true);
-            tryPowerPacket(PowerIndex.POWER_1);
         }
     }
+
+
     public void Recall() {
-        RattEntity RE = (RattEntity) this.getStandUserSelf().roundabout$getStand();
-        if (RE != null) {
-            setRattState(MOVING);
-            setRattPlacement(null);
-            tryPower(PowerIndex.POWER_1_SNEAK,true);
-            tryPowerPacket(PowerIndex.POWER_1_SNEAK);
+        if (!this.onCooldown(PowerIndex.POWER_2)) {
+            RattEntity RE = (RattEntity) this.getStandUserSelf().roundabout$getStand();
+            if (RE != null) {
+                this.setCooldown(PowerIndex.SKILL_2, 40);
+                RE.NullPlacement();
+                tryPower(DISABLE_ACTIVE, true);
+                tryPowerPacket(DISABLE_ACTIVE);
+            }
         }
     }
 

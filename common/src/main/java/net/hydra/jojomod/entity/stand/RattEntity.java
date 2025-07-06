@@ -1,12 +1,16 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 public class RattEntity extends StandEntity {
@@ -30,6 +34,10 @@ public class RattEntity extends StandEntity {
     public byte MotionState = PowersRatt.SHOULDER;
     public Vec3 Placement = null;
 
+    public BlockState BlockBelow = null;
+    public BlockState BlockInside = null;
+
+
     @Override
     public void tick() {
 
@@ -46,18 +54,21 @@ public class RattEntity extends StandEntity {
 
             case PowersRatt.MOVING -> {
                 UpdateState(OffsetIndex.LOOSE);
-                Vec3 target = getStandOffsetVector(getUser());
-                if (Placement != null) {
-                    target = Placement;
-                }
+                Vec3 target = this.getUser().getPosition(0);
+                if (Placement != null) {target = Placement;}
 
-                UpdatePos(this.getPosition(0).lerp(target,0.8));
+
+                UpdatePos(this.getPosition(0).lerp(target,0.83));
 
 
                 if (getPosition(0).distanceTo(target) < 0.2) {
                     UpdatePos(target);
                     if (target == Placement) {
                         UpdateMotionState(PowersRatt.PLACED);
+                        BlockPos pos = new BlockPos((int)this.getX(),(int)this.getY(),(int)this.getZ());
+                        BlockBelow = this.level().getBlockState(pos);
+                        BlockInside = this.level().getBlockState(pos.offset(0,1,0));
+                        Roundabout.LOGGER.info(BlockBelow.toString());
                     } else {
                         UpdateMotionState(PowersRatt.SHOULDER);
                     }
@@ -66,9 +77,25 @@ public class RattEntity extends StandEntity {
 
             case PowersRatt.PLACED -> {
                 UpdateState(OffsetIndex.LOOSE);
-                if (!getPosition(0).equals(Placement)) {
-                    UpdatePos(Placement);
+                if (Placement != null) {
+                    if (!getPosition(0).equals(Placement)) {
+                      //  UpdatePos(Placement);
+                    }
+                } else {
+                    UpdateMotionState(PowersRatt.MOVING);
                 }
+
+                BlockPos pos = new BlockPos((int)this.getX(),(int)this.getY(),(int)this.getZ());
+                int cd = 0;
+                // forced return code
+
+                if (cd != 0) {
+                    if (this.getUser() != null) {
+                        PowersRatt powers  = ((PowersRatt) this.getUserData(this.getUser()).roundabout$getStandPowers());
+                        powers.Recall();
+                    }
+                }
+
             }
         }
         super.tick();
@@ -79,23 +106,56 @@ public class RattEntity extends StandEntity {
 
     public void UpdatePos(Vec3 v) {
         if (this.getUser() != null) {
-            ((StandUser) this.getUser()).roundabout$getStandPowers().tryPosPowerPacket(PowerIndex.POWER_2,v);
+            ((StandUser) this.getUser()).roundabout$getStandPowers().tryPosPowerPacket(PowersRatt.UPDATE_POSITION,v);
         }
     }
+    public void UpdatePlacement(Vec3 v) {
+        if (this.getUser() != null) {
+            Placement = v;
+            ((StandUser) this.getUser()).roundabout$getStandPowers().tryPosPowerPacket(PowersRatt.UPDATE_PLACEMENT,v);
+        }
+    }
+    public void NullPlacement() {
+        if (this.getUser() != null) {
+            Placement = null;
+            ((StandUser) this.getUser()).roundabout$getStandPowers().tryPowerPacket(PowersRatt.NULL_PLACEMENT);
+        }
+    }
+    public void UpdateRotation(int x, int y, int z) {
+        if (this.getUser() != null) {
+            ((StandUser) this.getUser()).roundabout$getStandPowers().tryPosPower(PowersRatt.ROTATE,true,new Vec3(x,y,z));
+            ((StandUser) this.getUser()).roundabout$getStandPowers().tryPosPowerPacket(PowersRatt.ROTATE,new Vec3(x,y,z));
+        }
+    }
+
+
     public void UpdateMotionState(byte s) {
         if (this.getUser() != null) {
+            StandPowers powers = ((StandUser) this.getUser()).roundabout$getStandPowers();
             MotionState = s;
-            ((StandUser) this.getUser()).roundabout$getStandPowers().tryIntPowerPacket(PowerIndex.POWER_1,(int) s);
+            powers.tryIntPowerPacket(PowersRatt.UPDATE_STATE,(int) s);
         }
     }
     public void UpdateState(byte s) {
         if (this.getUser() != null) {
-            ((StandUser) this.getUser()).roundabout$getStandPowers().tryIntPowerPacket(PowerIndex.POWER_2,(int) s);
+            ((StandUser) this.getUser()).roundabout$getStandPowers().tryIntPowerPacket(PowersRatt.UPDATE_OFFSET_TYPE,(int) s);
         }
     }
 
 
+    @Override
+    public boolean lockPos(){
+        return false;
+    }
+    @Override
+    public boolean hasNoPhysics(){
+        return false;
+    }
 
+    @Override
+    public boolean standHasGravity() {
+        return true;
+    }
 
     @Override
     public void setupAnimationStates() {

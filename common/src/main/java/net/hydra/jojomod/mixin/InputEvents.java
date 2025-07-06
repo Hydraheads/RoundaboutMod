@@ -24,6 +24,7 @@ import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.item.FogBlockItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
@@ -108,7 +109,8 @@ public abstract class InputEvents implements IInputEvents {
             }
             if ($$0 instanceof RattEntity) {
                 if (((StandEntity) $$0).getUser() != null) {
-                    if (((RattEntity) $$0).getUser().isCrouching()) {
+                    PowersRatt PR = (PowersRatt) powers;
+                    if (((RattEntity) $$0).getUser().isCrouching() || PR.isAuto()) {
                         ci.setReturnValue(true);
                     }
                 }

@@ -216,7 +216,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<GreenDayEntity>> GREEN_DAY =
             ENTITY_TYPES.register("green_day", () ->
-                    EntityType.Builder.of(GreenDayEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                    EntityType.Builder.of(GreenDayEntity::new, MobCategory.MISC).sized(0.75F, 1.2f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "green_day").toString())
             );

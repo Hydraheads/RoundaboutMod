@@ -267,7 +267,7 @@ public class FabricEntities {
                         BuiltInRegistries.ENTITY_TYPE,
                         Roundabout.location("ratt"),
                         EntityType.Builder.of(RattEntity::new, MobCategory.MISC).
-                                sized(0.75f, 2.05f).clientTrackingRange(12).build(Roundabout.MOD_ID+":ratt")
+                                sized(0.75f, 1.2f).clientTrackingRange(12).build(Roundabout.MOD_ID+":ratt")
                 );
         public static final EntityType<GreenDayEntity> GREEN_DAY =
                 Registry.register(
