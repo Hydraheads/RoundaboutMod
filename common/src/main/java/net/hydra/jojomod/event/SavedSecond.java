@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event;
 
 import net.hydra.jojomod.access.IAbstractArrowAccess;
+import net.hydra.jojomod.access.ICreeper;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -13,6 +14,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.RelativeMovement;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.Level;
@@ -69,6 +71,24 @@ public class SavedSecond {
                     PL.getFoodData().getFoodLevel(),
                     PL.getFoodData().getSaturationLevel(),
                     PL.getFoodData().getExhaustionLevel()
+            );
+        } if (ent instanceof Creeper CE) {
+            return new SavedSecondCreeper(
+                    CE.getYHeadRot(),
+                    CE.getRotationVector(),
+                    CE.getPosition(1),
+                    CE.getDeltaMovement(),
+                    ent.fallDistance,
+                    ent.level().dimensionTypeId(),
+                    CE.getActiveEffects(),
+                    CE.getHealth(),
+                    CE.getRemainingFireTicks(),
+                    ((StandUser)CE).roundabout$getRemainingFireTicks(),
+                    ((StandUser)CE).roundabout$getOnStandFire(),
+                    ((StandUser)CE).roundabout$getGasolineTime(),
+                    CE.getAirSupply(),
+                    ((StandUser)CE).roundabout$getLocacacaCurse(),
+                    ((ICreeper)CE).roundabout$getSwell()
             );
         } if (ent instanceof LivingEntity LE) {
             return new SavedSecondLiving(
