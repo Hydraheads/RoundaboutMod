@@ -22,9 +22,10 @@ public class SavedSecondCreeper extends SavedSecondLiving {
                               ResourceKey<DimensionType> dimensionId,
                               Collection<MobEffectInstance> activeEffects, float health, int onFireTicks,
                               int onStandFireTicks, byte onStandFireType, int gasolineTicks, int airtime, byte locacaca,
+                              int leapTicks, byte bubbleEncased,
                               int swell) {
         super(headYRotation, rotationVec, position, deltaMovement, fallDistance, dimensionId, activeEffects, health, onFireTicks,
-                onStandFireTicks, onStandFireType, gasolineTicks, airtime, locacaca);
+                onStandFireTicks, onStandFireType, gasolineTicks, airtime, locacaca, leapTicks, bubbleEncased);
         this.swell = swell;
     }
 

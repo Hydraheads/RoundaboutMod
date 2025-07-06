@@ -68,6 +68,8 @@ public class SavedSecond {
                     ((StandUser)PL).roundabout$getGasolineTime(),
                     PL.getAirSupply(),
                     ((StandUser)PL).roundabout$getLocacacaCurse(),
+                    ((StandUser)PL).roundabout$getLeapTicks(),
+                    ((StandUser)PL).roundabout$getBubbleEncased(),
                     PL.getFoodData().getFoodLevel(),
                     PL.getFoodData().getSaturationLevel(),
                     PL.getFoodData().getExhaustionLevel()
@@ -88,6 +90,8 @@ public class SavedSecond {
                     ((StandUser)CE).roundabout$getGasolineTime(),
                     CE.getAirSupply(),
                     ((StandUser)CE).roundabout$getLocacacaCurse(),
+                    ((StandUser)CE).roundabout$getLeapTicks(),
+                    ((StandUser)CE).roundabout$getBubbleEncased(),
                     ((ICreeper)CE).roundabout$getSwell()
             );
         } if (ent instanceof LivingEntity LE) {
@@ -105,7 +109,9 @@ public class SavedSecond {
                     ((StandUser)LE).roundabout$getOnStandFire(),
                     ((StandUser)LE).roundabout$getGasolineTime(),
                     LE.getAirSupply(),
-                    ((StandUser)LE).roundabout$getLocacacaCurse()
+                    ((StandUser)LE).roundabout$getLocacacaCurse(),
+                    ((StandUser)LE).roundabout$getLeapTicks(),
+                    ((StandUser)LE).roundabout$getBubbleEncased()
             );
         } if (ent instanceof AbstractArrow LE) {
             return new SavedSecondAbstractArrow(
