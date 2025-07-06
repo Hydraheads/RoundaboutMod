@@ -937,6 +937,14 @@ public class MainUtil {
     //Couldn't find better wording but this tests if you're on claimed land that isn't yours
     //It doesn't need the block hit to be on a claim
     public static boolean canPlaceOnClaim(Player player,BlockHitResult blockHit){
+        //Seems counterintuitive but most abilities have their own ways of handling this, so I'll just make it return True.
+
+        if(!MainUtil.getIsGamemodeApproriateForGrief(player)){
+            return true;
+
+        }
+        boolean isLiquid = (!player.level().getBlockState(blockHit.getBlockPos()).isSolid() && !player.level().getBlockState(blockHit.getBlockPos()).isAir());
+        BlockState replace = player.level().getBlockState(blockHit.getBlockPos());
         //Always correct, but for some reason I need to put it as a conditional
         if(Blocks.BARRIER.asItem() instanceof  BlockItem barrier){
             barrier.place(new BlockPlaceContext(player,player.getUsedItemHand(),barrier.getDefaultInstance(),blockHit));
@@ -944,9 +952,14 @@ public class MainUtil {
             player.level().destroyBlock(placedBPos,false,player);
             if(!player.level().getBlockState(placedBPos).isAir()){
                 player.level().removeBlock(placedBPos,false);
+                if(isLiquid) {
+                    player.level().setBlock(blockHit.getBlockPos(), replace, 0);
+                }
                 return false;
             }
-
+            if(isLiquid) {
+                player.level().setBlock(blockHit.getBlockPos(), replace, 0);
+            }
         }
         return true;
     }

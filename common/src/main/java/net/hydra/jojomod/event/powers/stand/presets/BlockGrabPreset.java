@@ -857,7 +857,7 @@ public class BlockGrabPreset extends PunchingStand{
                         } else {
                             standEntity.canAcquireHeldItem = false;
                         }
-                        if(this.getSelf().level().getBlockState(this.grabBlock).isAir()) {
+                        if(this.getSelf().level().getBlockState(this.grabBlock).isAir() || !MainUtil.getIsGamemodeApproriateForGrief(this.getSelf())) {
                             standEntity.setHeldItem(state.getBlock().asItem().getDefaultInstance());
                             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                             this.setActivePower(PowerIndex.POWER_2_SNEAK);
@@ -877,12 +877,12 @@ public class BlockGrabPreset extends PunchingStand{
                                     if (state.is(Blocks.GRASS_BLOCK)) {
                                         state1 = Blocks.DIRT.defaultBlockState();
                                     }
-                                    ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
-                                                    state1),
-                                            this.grabBlock.getX() + 0.5, this.grabBlock.getY() + 0.5, this.grabBlock.getZ() + 0.5,
-                                            90, 0.4, 0.4, 0.4, 0.5);
-                                    SoundEvent SE = state.getSoundType().getBreakSound();
-                                    this.getSelf().level().playSound(null, this.getSelf().blockPosition(), SE, SoundSource.BLOCKS, 4.0F, 0.7F);
+                                    //((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
+                                    //                state1),
+                                    //        this.grabBlock.getX() + 0.5, this.grabBlock.getY() + 0.5, this.grabBlock.getZ() + 0.5,
+                                    //        90, 0.4, 0.4, 0.4, 0.5);
+                                    //SoundEvent SE = state.getSoundType().getBreakSound();
+                                    //this.getSelf().level().playSound(null, this.getSelf().blockPosition(), SE, SoundSource.BLOCKS, 4.0F, 0.7F);
                                 }
                             }
                         }
