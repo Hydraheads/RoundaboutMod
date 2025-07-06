@@ -694,6 +694,22 @@ public class ModSounds {
     public static final ResourceLocation HEY_YA_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HEY_YA_SUMMON);
     public static SoundEvent HEY_YA_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(HEY_YA_SUMMON_ID);
 
+    public static final String SURVIVOR_SUMMON = "survivor_summon";
+    public static final ResourceLocation SURVIVOR_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SURVIVOR_SUMMON);
+    public static SoundEvent SURVIVOR_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(SURVIVOR_SUMMON_ID);
+
+    public static final String SURVIVOR_SHOCK = "survivor_shock";
+    public static final ResourceLocation SURVIVOR_SHOCK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SURVIVOR_SHOCK);
+    public static SoundEvent SURVIVOR_SHOCK_EVENT = SoundEvent.createVariableRangeEvent(SURVIVOR_SHOCK_ID);
+
+    public static final String SURVIVOR_PLACE = "survivor_place";
+    public static final ResourceLocation SURVIVOR_PLACE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SURVIVOR_PLACE);
+    public static SoundEvent SURVIVOR_PLACE_EVENT = SoundEvent.createVariableRangeEvent(SURVIVOR_PLACE_ID);
+
+    public static final String SURVIVOR_REMOVE = "survivor_remove";
+    public static final ResourceLocation SURVIVOR_REMOVE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SURVIVOR_REMOVE);
+    public static SoundEvent SURVIVOR_REMOVE_EVENT = SoundEvent.createVariableRangeEvent(SURVIVOR_REMOVE_ID);
+
 
 
     public static final String DIO_HOHO = "dio_hoho";
