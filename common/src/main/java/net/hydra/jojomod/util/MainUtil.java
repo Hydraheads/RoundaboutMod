@@ -1348,6 +1348,10 @@ public class MainUtil {
         Vec3 vec3d2 = source.getViewVector(0);
         Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
         BlockHitResult blockHit = source.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,source));
+
+        if (blockHit.getType().equals(HitResult.Type.MISS))
+            return null;
+
         if (blockHit.getDirection().equals(Direction.UP))
             return blockHit.getLocation();
         Vec3 vec= new Vec3(blockHit.getBlockPos().getX(),blockHit.getBlockPos().getY(),blockHit.getBlockPos().getZ());
