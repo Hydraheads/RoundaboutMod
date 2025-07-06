@@ -103,7 +103,6 @@ public class GoBeyondEntity extends SoftAndWetBubbleEntity implements NoHitboxRe
                     }
                 }
             }
-            Roundabout.LOGGER.info("A "+ticksUntilDamage);
         }
     }
     //2.8F;
