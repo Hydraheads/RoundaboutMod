@@ -81,6 +81,13 @@ public class PowersSurvivor extends NewDashPreset {
     public void addSurvivorToList(SurvivorEntity che){
         listInit();
         survivorsSpawned.add(che);
+        List<SurvivorEntity> survivorsList2 = new ArrayList<>(survivorsSpawned) {
+        };
+        int scount = ClientNetworking.getAppropriateConfig().survivorSettings.maxSurvivorsCount;
+        if (!survivorsList2.isEmpty() && survivorsList2.size() > scount) {
+            survivorsList2.get(0).forceDespawn(true);
+            survivorsSpawned.remove(0);
+        }
     }
 
     public void offloadSurvivors(){
@@ -194,6 +201,7 @@ public class PowersSurvivor extends NewDashPreset {
             stand.setIdleAnimation(user.roundabout$getIdlePos());
             stand.setMaster(this.self);
             addSurvivorToList(SE);
+            SE.setYRot(this.self.getYHeadRot() % 360);
             this.self.level().addFreshEntity(stand);
             playStandUserOnlySoundsIfNearby(PLACE, 100, false, false);
         }
