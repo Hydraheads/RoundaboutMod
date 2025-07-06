@@ -945,7 +945,8 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     }
 
     public boolean canBeHitByStands(){
-        return (isRemoteControlled() || this.getFollowing() != this.getUser());
+        return (isRemoteControlled() || this.getFollowing() != this.getUser() ||
+                (this.getFollowing() == null && this.getUser() == null));
     }
     public boolean isRemoteControlled(){
         Entity ent = this.getUser();
