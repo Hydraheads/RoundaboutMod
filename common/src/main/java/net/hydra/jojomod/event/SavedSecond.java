@@ -14,6 +14,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.RelativeMovement;
+import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -93,6 +94,16 @@ public class SavedSecond {
                     ((StandUser)CE).roundabout$getLeapTicks(),
                     ((StandUser)CE).roundabout$getBubbleEncased(),
                     ((ICreeper)CE).roundabout$getSwell()
+            );
+        } if (ent instanceof PrimedTnt TN) {
+            return new SavedSecondTNT(
+                    TN.getYHeadRot(),
+                    TN.getRotationVector(),
+                    TN.getPosition(1),
+                    TN.getDeltaMovement(),
+                    ent.fallDistance,
+                    ent.level().dimensionTypeId(),
+                    TN.getFuse()
             );
         } if (ent instanceof LivingEntity LE) {
             return new SavedSecondLiving(
