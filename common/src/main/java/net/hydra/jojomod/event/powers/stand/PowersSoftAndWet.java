@@ -2,6 +2,7 @@ package net.hydra.jojomod.event.powers.stand;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
+import net.hydra.jojomod.access.IBucketItem;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.BubbleScaffoldBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
@@ -43,6 +44,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -62,10 +64,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.PotionItem;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -519,11 +518,14 @@ public class PowersSoftAndWet extends NewPunchingStand {
         amt= (int) (amt*(ClientNetworking.getAppropriateConfig().standExperienceNeededForLevelupMultiplier *0.01));
         return amt;
     }
+    @SuppressWarnings("deprecation")
     public boolean canUseWaterShield(){
         ItemStack stack = this.getSelf().getMainHandItem();
         ItemStack stack2 = this.getSelf().getOffhandItem();
         return ((!stack.isEmpty() && stack.getItem() instanceof PotionItem PI && PotionUtils.getPotion(stack) == Potions.WATER)
-        || (!stack2.isEmpty() && stack2.getItem() instanceof PotionItem PI2 && PotionUtils.getPotion(stack2) == Potions.WATER));
+        || (!stack2.isEmpty() && stack2.getItem() instanceof PotionItem PI2 && PotionUtils.getPotion(stack2) == Potions.WATER)
+        ||(!stack.isEmpty() && stack.getItem() instanceof BucketItem BI && ((IBucketItem)BI).roundabout$getContents().is(FluidTags.WATER))
+                || (!stack2.isEmpty() && stack2.getItem() instanceof BucketItem BI2 && ((IBucketItem)BI2).roundabout$getContents().is(FluidTags.WATER)));
     }
 
     /**For mob ai, change the bubbleType before trypower to set what kind of plunder it has*/
@@ -1097,6 +1099,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
         }
         return true;
     }
+    @SuppressWarnings("deprecation")
     public boolean useWaterShield(){
         if (this.self instanceof Player PL && !PL.level().isClientSide()) {
             ItemStack stack = this.getSelf().getMainHandItem();
@@ -1108,6 +1111,14 @@ public class PowersSoftAndWet extends NewPunchingStand {
                 splashWaterShield();
                 return true;
             }
+            if ((!stack.isEmpty() && stack.getItem() instanceof BucketItem BI && ((IBucketItem)BI).roundabout$getContents().is(FluidTags.WATER))) {
+                if (!PL.getAbilities().instabuild) {
+                    stack.shrink(1);
+                    PL.getInventory().add(new ItemStack(Items.BUCKET));
+                }
+                splashWaterShield();
+                return true;
+            }
             ItemStack stack2 = this.getSelf().getOffhandItem();
             if ((!stack2.isEmpty() && stack2.getItem() instanceof PotionItem PI2 && PotionUtils.getPotion(stack2) == Potions.WATER)) {
                 if (!PL.getAbilities().instabuild) {
@@ -1115,6 +1126,14 @@ public class PowersSoftAndWet extends NewPunchingStand {
                     PL.getInventory().add(new ItemStack(Items.GLASS_BOTTLE));
                 }
                 splashWaterShield();
+            }
+            if ((!stack2.isEmpty() && stack2.getItem() instanceof BucketItem BI && ((IBucketItem)BI).roundabout$getContents().is(FluidTags.WATER))) {
+                if (!PL.getAbilities().instabuild) {
+                    stack2.shrink(1);
+                    PL.getInventory().add(new ItemStack(Items.BUCKET));
+                }
+                splashWaterShield();
+                return true;
             }
         }
 
