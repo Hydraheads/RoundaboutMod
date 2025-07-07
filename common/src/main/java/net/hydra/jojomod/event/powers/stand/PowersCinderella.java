@@ -22,6 +22,8 @@ import net.hydra.jojomod.item.LuckyLipstickItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.NewDashPreset;
+import net.hydra.jojomod.stand.powers.PowerContext;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
@@ -43,7 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class PowersCinderella extends DashPreset {
+public class PowersCinderella extends NewDashPreset {
 
     public List<CinderellaVisageDisplayEntity> floatingVisages = new ArrayList<>();
     public PowersCinderella(LivingEntity self) {
@@ -77,6 +79,40 @@ public class PowersCinderella extends DashPreset {
         return $$1;
     }
 
+
+    @Override
+    public void powerActivate(PowerContext context) {
+        switch (context)
+        {
+            case SKILL_1_NORMAL, SKILL_1_CROUCH-> {
+                doUIClient();
+            }
+            case SKILL_2_NORMAL, SKILL_2_CROUCH-> {
+                doDefaceClient();
+            }
+            case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
+                dash();
+            }
+        }
+    }
+
+    public void doDefaceClient(){
+        if (!this.onCooldown(PowerIndex.SKILL_2)) {
+            if (this.activePower == PowerIndex.POWER_2) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+            } else {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2);
+            }
+        }
+    }
+
+    public void doUIClient(){
+        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+        ClientUtil.setCinderellaUI();
+        hasUIOpen = true;
+    }
     @Override
     public void tickPowerEnd() {
         if (floatingVisages != null && !floatingVisages.isEmpty()) {
@@ -262,39 +298,8 @@ public class PowersCinderella extends DashPreset {
     public boolean hold2 = false;
 
     public boolean hasUIOpen = false;
-    @Override
-    public void buttonInput1(boolean keyIsDown, Options options) {
-        if (keyIsDown) {
-            if (!hold2) {
-                hold2 = true;
-                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
-                ClientUtil.setCinderellaUI();
-                hasUIOpen = true;
-            }
-        } else {
-            hold2 = false;
-        }
-    }
     public boolean hold1 = false;
-    @Override
-    public void buttonInput2(boolean keyIsDown, Options options) {
-        if (keyIsDown) {
-            if (!hold1) {
-                hold1 = true;
-                if (!this.onCooldown(PowerIndex.SKILL_2)) {
-                    if (this.activePower == PowerIndex.POWER_2) {
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
-                    } else {
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
-                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2);
-                    }
-                }
-            }
-        } else {
-            hold1 = false;
-        }
-    }
+
 
     public void tickPower() {
         if (this.self.level().isClientSide()) {

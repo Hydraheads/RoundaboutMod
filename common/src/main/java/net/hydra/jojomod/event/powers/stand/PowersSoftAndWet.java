@@ -21,11 +21,12 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.NewPunchingStand;
+import net.hydra.jojomod.stand.powers.PowerContext;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
@@ -79,7 +80,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PowersSoftAndWet extends PunchingStand {
+public class PowersSoftAndWet extends NewPunchingStand {
     public PowersSoftAndWet(LivingEntity self) {
         super(self);
     }
@@ -100,6 +101,88 @@ public class PowersSoftAndWet extends PunchingStand {
         }
         return ModEntities.SOFT_AND_WET.create(this.getSelf().level());
     }
+
+
+    @Override
+    public void powerActivate(PowerContext context) {
+        switch (context)
+        {
+            case SKILL_3_NORMAL -> {
+                tryToDashClient();
+            }
+            case SKILL_3_CROUCH -> {
+                tryToBubbleScaffoldClient();
+            }
+            case SKILL_3_GUARD, SKILL_3_CROUCH_GUARD -> {
+                tryToBigBubbleClient();
+            }
+
+            case SKILL_4_NORMAL -> {
+                shootingModeToggleClient();
+            }
+            case SKILL_4_CROUCH -> {
+                waterShieldAttemptClient();
+            }
+        }
+    }
+
+    public void shootingModeToggleClient(){
+        if (canExecuteMoveWithLevel(getShootingModeLevel())) {
+            this.tryPower(PowerIndex.POWER_4, true);
+            tryPowerPacket(PowerIndex.POWER_4);
+
+            getStandUserSelf().roundabout$getStandPowers().tryPower(PowerIndex.NONE, true);
+            tryPowerPacket(PowerIndex.NONE);
+            ClientUtil.stopDestroyingBlock();
+        }
+    }
+
+
+    public void waterShieldAttemptClient(){
+        if (!inShootingMode()){
+            if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
+                if (canExecuteMoveWithLevel(getWaterShieldLevel())) {
+                    if (canUseWaterShield()) {
+                        this.tryPower(PowerIndex.POWER_4_SNEAK, true);
+                        tryPowerPacket(PowerIndex.POWER_4_SNEAK);
+                    }
+                }
+            }
+        } else {
+            shootingModeToggleClient();
+        }
+    }
+
+    public void tryToBubbleScaffoldClient(){
+        if (vaultOrFallBraceFails()){
+            if (canExecuteMoveWithLevel(getScaffoldLevel())) {
+                if (!this.onCooldown(PowerIndex.SKILL_3)) {
+                    if (!hold3) {
+                        if (canBridge()) {
+                            hold3 = true;
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+                            tryPowerPacket(PowerIndex.POWER_3);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    public void tryToBigBubbleClient(){
+        if (vaultOrFallBraceFails()){
+            if (!this.onCooldown(PowerIndex.SKILL_EXTRA) && canBigBubble()) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BONUS, true);
+                tryPowerPacket(PowerIndex.POWER_3_BONUS);
+            }
+        }
+    }
+    public void tryToDashClient(){
+        if (vaultOrFallBraceFails()){
+            dash();
+        }
+    }
+
+    public boolean hold3 = false;
 
     @Override
     public float getMiningMultiplier() {
@@ -2353,107 +2436,8 @@ public void unlockSkin(){
         this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BUBBLE_POP_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.9 + (Math.random() * 0.2)));
         this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BUBBLE_POP_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.9 + (Math.random() * 0.2)));
     }
-    public boolean hold3 = false;
-    @Override
-    public void buttonInput3(boolean keyIsDown, Options options) {
-        if (this.getSelf().level().isClientSide) {
-            if (!(keyIsDown && !hold3 && doVault())) {
-                if (canFallBrace()) {
-                    if (keyIsDown) {
-                        if (!hold3){
-                            hold3 = true;
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.EXTRA, true);
-                            tryPowerPacket(PowerIndex.EXTRA);
-                        }
-                    } else {
-                        hold3 = false;
-                    }
-                } else if (isGuarding()) {
-                    if (keyIsDown) {
-                        if (!hold3){
-                            hold3 = true;
-                            if (!this.onCooldown(PowerIndex.SKILL_EXTRA) && canBigBubble()) {
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BONUS, true);
-                                tryPowerPacket(PowerIndex.POWER_3_BONUS);
-                            }
-                        }
-                    } else {
-                        hold3 = false;
-                    }
-                } else if (isHoldingSneak()) {
-                    if (keyIsDown) {
-                        if (canExecuteMoveWithLevel(getScaffoldLevel())) {
-                            if (!this.onCooldown(PowerIndex.SKILL_3)) {
-                                if (!hold3) {
-                                    if (canBridge()) {
-                                        hold3 = true;
-                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
-                                        tryPowerPacket(PowerIndex.POWER_3);
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        hold3 = false;
-                    }
-                } else {
-                    if (!keyIsDown) {
-                        hold3 = false;
-                    }
-                    super.buttonInput3(keyIsDown, options);
-                }
-            }
-        }
-    }
 
     public boolean hold4 = false;
-    @Override
-    public void buttonInput4(boolean keyIsDown, Options options) {
-        if (this.getSelf().level().isClientSide) {
-            if (isGuarding()) {
-                if (keyIsDown) {
-                    if (!hold4){
-                        hold4 = true;
-                    }
-                } else {
-                    hold4 = false;
-                }
-            } else if (isHoldingSneak() && !inShootingMode()) {
-                if (keyIsDown) {
-                    if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
-                        if (canExecuteMoveWithLevel(getWaterShieldLevel())) {
-                            if (!hold4) {
-                                hold4 = true;
-                                if (canUseWaterShield()) {
-                                    this.tryPower(PowerIndex.POWER_4_SNEAK, true);
-                                    tryPowerPacket(PowerIndex.POWER_4_SNEAK);
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    hold4 = false;
-                }
-            } else {
-                if (keyIsDown) {
-                    if (canExecuteMoveWithLevel(getShootingModeLevel())) {
-                        if (!hold4) {
-                            hold4 = true;
-
-                            this.tryPower(PowerIndex.POWER_4, true);
-                            tryPowerPacket(PowerIndex.POWER_4);
-
-                            getStandUserSelf().roundabout$getStandPowers().tryPower(PowerIndex.NONE, true);
-                            tryPowerPacket(PowerIndex.NONE);
-                            ClientUtil.stopDestroyingBlock();
-                        }
-                    }
-                } else {
-                    hold4 = false;
-                }
-            }
-        }
-    }
 
     public boolean canBridge(){
         return ((this.self.onGround() && !this.self.isInWater()) || this.self.onClimbable() || (this.self instanceof Player PE && PE.isCreative()));
