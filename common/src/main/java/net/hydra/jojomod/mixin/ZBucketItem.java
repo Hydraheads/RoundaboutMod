@@ -1,9 +1,9 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.access.IBucketItem;
 import net.hydra.jojomod.block.GasolineBlock;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -18,22 +18,30 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BucketPickup;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BucketItem.class)
-public class ZBucketItem extends Item
+public class ZBucketItem extends Item implements IBucketItem
 {
+    @Shadow @Final private Fluid content;
+
     public ZBucketItem(Properties $$0) {
         super($$0);
     }
 
+    @Override
+    public Fluid roundabout$getContents(){
+        return content;
+    }
     @Inject(method = "use", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$use(Level level, Player player, InteractionHand hand,
                     CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
