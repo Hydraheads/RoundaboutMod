@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -64,50 +65,9 @@ public class ThrownWaterBottleEntity extends ThrowableItemProjectile implements 
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
         super.onHitBlock($$0);
-        if (!this.level().isClientSide) {
-            ItemStack $$1 = this.getItem();
-            Potion $$2 = PotionUtils.getPotion($$1);
-            List<MobEffectInstance> $$3 = PotionUtils.getMobEffects($$1);
-            boolean $$4 = $$2 == Potions.WATER && $$3.isEmpty();
-            Direction $$5 = $$0.getDirection();
-            BlockPos $$6 = $$0.getBlockPos();
-            BlockPos $$7 = $$6.relative($$5);
-            if ($$4) {
-                this.dowseFire($$7);
-                this.dowseFire($$7.relative($$5.getOpposite()));
-
-                for (Direction $$8 : Direction.Plane.HORIZONTAL) {
-                    this.dowseFire($$7.relative($$8));
-                }
-            }
-        }
     }
 
-    @Override
-    protected void onHit(HitResult $$0) {
-        super.onHit($$0);
-        if (!this.level().isClientSide) {
-            ItemStack $$1 = this.getItem();
-            Potion $$2 = PotionUtils.getPotion($$1);
-            List<MobEffectInstance> $$3 = PotionUtils.getMobEffects($$1);
-            boolean $$4 = $$2 == Potions.WATER && $$3.isEmpty();
-            if ($$4) {
-                this.applyWater();
-            } else if (!$$3.isEmpty()) {
-                if (this.isLingering()) {
-                    this.makeAreaOfEffectCloud($$1, $$2);
-                } else {
-                    this.applySplash($$3, $$0.getType() == HitResult.Type.ENTITY ? ((EntityHitResult)$$0).getEntity() : null);
-                }
-            }
-
-            int $$5 = $$2.hasInstantEffects() ? 2007 : 2002;
-            this.level().levelEvent($$5, this.blockPosition(), PotionUtils.getColor($$1));
-            this.discard();
-        }
-    }
-
-    private void applyWater() {
+    public void splashWater(){
         AABB $$0 = this.getBoundingBox().inflate(4.0, 2.0, 4.0);
 
         for (LivingEntity $$2 : this.level().getEntitiesOfClass(LivingEntity.class, $$0, WATER_SENSITIVE_OR_ON_FIRE)) {
@@ -126,42 +86,26 @@ public class ThrownWaterBottleEntity extends ThrowableItemProjectile implements 
         for (Axolotl $$5 : this.level().getEntitiesOfClass(Axolotl.class, $$0)) {
             $$5.rehydrate();
         }
-    }
-
-    private void applySplash(List<MobEffectInstance> $$0, @Nullable Entity $$1) {
-        AABB $$2 = this.getBoundingBox().inflate(4.0, 2.0, 4.0);
-        List<LivingEntity> $$3 = this.level().getEntitiesOfClass(LivingEntity.class, $$2);
-        if (!$$3.isEmpty()) {
-            Entity $$4 = this.getEffectSource();
-
-            for (LivingEntity $$5 : $$3) {
-                if ($$5.isAffectedByPotions()) {
-                    double $$6 = this.distanceToSqr($$5);
-                    if ($$6 < 16.0) {
-                        double $$7;
-                        if ($$5 == $$1) {
-                            $$7 = 1.0;
-                        } else {
-                            $$7 = 1.0 - Math.sqrt($$6) / 4.0;
-                        }
-
-                        for (MobEffectInstance $$9 : $$0) {
-                            MobEffect $$10 = $$9.getEffect();
-                            if ($$10.isInstantenous()) {
-                                $$10.applyInstantenousEffect(this, this.getOwner(), $$5, $$9.getAmplifier(), $$7);
-                            } else {
-                                int $$11 = $$9.mapDuration($$1x -> (int)($$7 * (double)$$1x + 0.5));
-                                MobEffectInstance $$12 = new MobEffectInstance($$10, $$11, $$9.getAmplifier(), $$9.isAmbient(), $$9.isVisible());
-                                if (!$$12.endsWithin(20)) {
-                                    $$5.addEffect($$12, $$4);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        for (SurvivorEntity $$5 : this.level().getEntitiesOfClass(SurvivorEntity.class, $$0)) {
+            $$5.setActivated(true);
         }
     }
+
+    @Override
+    protected void onHit(HitResult $$0) {
+        super.onHit($$0);
+        if (!this.level().isClientSide) {
+            ItemStack $$1 = this.getItem();
+            Potion $$2 = PotionUtils.getPotion($$1);
+            List<MobEffectInstance> $$3 = PotionUtils.getMobEffects($$1);
+            splashWater();
+
+            int $$5 = $$2.hasInstantEffects() ? 2007 : 2002;
+            this.level().levelEvent($$5, this.blockPosition(), PotionUtils.getColor($$1));
+            this.discard();
+        }
+    }
+
 
     private void makeAreaOfEffectCloud(ItemStack $$0, Potion $$1) {
         AreaEffectCloud $$2 = new AreaEffectCloud(this.level(), this.getX(), this.getY(), this.getZ());

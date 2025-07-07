@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.IBucketItem;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.projectile.ThrownWaterBottleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -163,9 +164,9 @@ public class PowersSurvivor extends NewDashPreset {
     }
 
     public void throwBottleActually(ItemStack stack){
-        ThrownPotion $$4 = new ThrownPotion(this.self.level(), this.self);
+        ThrownWaterBottleEntity $$4 = new ThrownWaterBottleEntity(this.self.level(), this.self);
         $$4.setItem(stack);
-        $$4.shootFromRotation(this.self, this.self.getXRot(), this.self.getYRot(), -20.0F, 0.5F, 1.0F);
+        $$4.shootFromRotation(this.self, this.self.getXRot(), this.self.getYRot(), -0.1F, 1.5F, 0.2F);
         this.self.level().addFreshEntity($$4);
     }
 
