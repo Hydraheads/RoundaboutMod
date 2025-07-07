@@ -1,6 +1,5 @@
 package net.hydra.jojomod.event.powers.stand.presets;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IBoatItemAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMinecartItemAccess;
@@ -20,12 +19,8 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Options;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
@@ -45,7 +40,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.entity.vehicle.*;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.DirectionalPlaceContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameType;
@@ -194,15 +188,15 @@ public class BlockGrabPreset extends PunchingStand{
     public void onActuallyHurt(DamageSource $$0, float $$1){
         if ($$0.getEntity() != null && !this.self.level().isClientSide()){
 
-            if (this.self instanceof Player PE) {
-                int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.mobThrowInterrupt;
-
-                setCooldown(PowerIndex.SKILL_2, cdr);
-                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) PE), PowerIndex.SKILL_2, cdr);
-            }
 
             LivingEntity stand = getStandEntity(this.self);
             if (stand != null && !stand.getPassengers().isEmpty()){
+                if (this.self instanceof Player PE) {
+                    int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.mobThrowInterruptv2;
+
+                    setCooldown(PowerIndex.SKILL_2, cdr);
+                    ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) PE), PowerIndex.SKILL_2, cdr);
+                }
                 stand.ejectPassengers();
             }
         }

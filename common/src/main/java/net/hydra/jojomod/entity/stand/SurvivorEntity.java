@@ -8,7 +8,9 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.PreRenderEntity;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersSurvivor;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -32,6 +34,8 @@ import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.List;
 
 public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity {
     /**
@@ -62,6 +66,7 @@ public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity
     }
 
     public int dryUpInNetherTicks = 0;
+    public int shockCountUpTicks = 0;
     @Override
 
     public boolean validatePowers(LivingEntity user){
@@ -90,6 +95,42 @@ public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity
                     dryUpInNetherTicks--;
                 }
                 dryUpInNetherTicks = Mth.clamp(dryUpInNetherTicks, 0, dryTickMax);
+            }
+
+
+            if (getActivated()) {
+                shockCountUpTicks++;
+                if (shockCountUpTicks > 15){
+                    attemptShock();
+                    shockCountUpTicks = 0;
+                }
+            } else {
+                shockCountUpTicks--;
+            }
+            shockCountUpTicks = Mth.clamp(shockCountUpTicks, 0, 15);
+        }
+    }
+
+    public void matchEntities(LivingEntity one, LivingEntity two){
+        this.level().playSound(null, this.blockPosition(), ModSounds.SURVIVOR_SHOCK_EVENT, SoundSource.NEUTRAL, 1F, (float) (0.9F + (Math.random() * 0.2F)));
+    }
+
+    public void attemptShock(){
+        List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.level(),this.blockPosition(), 7, this);
+        LivingEntity firstTarget = null;
+        if (!mobsInRange.isEmpty()) {
+            for (Entity ent : mobsInRange) {
+                if (ent.isAlive() && !ent.isRemoved() && (ent instanceof Mob || ent instanceof Player)
+                && !(ent instanceof StandEntity) && ent.isPickable() && !ent.isInvulnerable() &&
+                        !(ent instanceof Player PL && PL.isCreative()) &&
+                        ent instanceof LivingEntity LE){
+                    if (firstTarget == null){
+                        firstTarget = LE;
+                    } else {
+                        matchEntities(firstTarget,LE);
+                        return;
+                    }
+                }
             }
         }
     }
