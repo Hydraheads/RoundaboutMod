@@ -106,6 +106,27 @@ public class PowersSoftAndWet extends NewPunchingStand {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
+
+            case SKILL_1_NORMAL -> {
+                plunderBubbleSelectClient();
+            }
+            case SKILL_1_CROUCH -> {
+                plunderBubbleClusterClient();
+            }
+            case SKILL_1_GUARD, SKILL_1_CROUCH_GUARD -> {
+                clusterRedirectClient();
+            }
+
+            case SKILL_2_NORMAL -> {
+                plunderOrItemLaunchBubbleClient();
+            }
+            case SKILL_2_CROUCH -> {
+                bubblePopClient();
+            }
+            case SKILL_2_GUARD, SKILL_2_CROUCH_GUARD -> {
+                activatedBubbleRedirectClient();
+            }
+
             case SKILL_3_NORMAL -> {
                 tryToDashClient();
             }
@@ -121,6 +142,125 @@ public class PowersSoftAndWet extends NewPunchingStand {
             }
             case SKILL_4_CROUCH -> {
                 waterShieldAttemptClient();
+            }
+        }
+    }
+
+
+    public boolean goBeyondClient(){
+        if (inShootingMode()){
+            if (canExecuteMoveWithLevel(getGoBeyondLevel())) {
+                if (goBeyondCharged() && getGoBeyondTarget() != null) {
+                    this.tryIntPower(PowerIndex.SPECIAL_TRACKER, true, getGoBeyondTarget().getId());
+                    tryIntPowerPacket(PowerIndex.SPECIAL_TRACKER, getGoBeyondTarget().getId());
+                    this.setGoBeyondTarget(null);
+                    this.setGoBeyondChargeTicks(0);
+                    this.setShootTicks(0);
+                }
+            }
+            return true;
+        }
+       return false;
+    }
+    public void plunderBubbleSelectClient(){
+        if (!goBeyondClient()){
+            ClientUtil.openPlunderScreen();
+        }
+    }
+
+    public void plunderBubbleClusterClient(){
+        if (!goBeyondClient()){
+            if (canExecuteMoveWithLevel(getSpreadLevel())) {
+                if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+                    if (this.activePower != PowerIndex.POWER_1_SNEAK && !canDoBubbleClusterPop()) {
+                        hold1 = true;
+
+                        int bubbleType = 1;
+                        ClientConfig clientConfig = ConfigManager.getClientConfig();
+                        if (clientConfig != null && clientConfig.dynamicSettings != null) {
+                            bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
+                        }
+
+                        this.tryIntPower(PowerIndex.POWER_1_SNEAK, true, bubbleType);
+                        tryIntPowerPacket(PowerIndex.POWER_1_SNEAK, bubbleType);
+
+                    } else {
+                        if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+                            hold1 = true;
+                            this.tryPower(PowerIndex.EXTRA_2, true);
+                            tryPowerPacket(PowerIndex.EXTRA_2);
+                        }
+                    }
+                } else if (this.activePower == PowerIndex.POWER_1_SNEAK || this.canDoBubbleClusterRedirect()) {
+                    if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+                        hold1 = true;
+                        this.tryPower(PowerIndex.EXTRA_2, true);
+                        tryPowerPacket(PowerIndex.EXTRA_2);
+                    }
+                }
+            }
+        }
+    }
+    public void clusterRedirectClient(){
+        if (!goBeyondClient()){
+            if (canExecuteMoveWithLevel(getSpreadLevel())) {
+                if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+
+                    this.tryPower(PowerIndex.POWER_1_BONUS, true);
+
+                    tryPowerPacket(PowerIndex.POWER_1_BONUS);
+                }
+            }
+        }
+    }
+
+    public void activatedBubbleRedirectClient(){
+        if (!inShootingMode()) {
+            if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+                Vec3 pos = MainUtil.getRaytracePointOnMobOrBlock(this.self, 30);
+                this.tryPosPower(PowerIndex.POWER_2_EXTRA, true, pos);
+                tryPosPowerPacket(PowerIndex.POWER_2_EXTRA, pos);
+            }
+        }
+    }
+    public void bubblePopClient(){
+        if (!this.onCooldown(PowerIndex.SKILL_2_SNEAK)){
+            hold2 = true;
+
+            Vec3 pos = MainUtil.getRaytracePointOnMobOrBlock(this.self,30);
+
+            this.tryPosPower(PowerIndex.POWER_2_SNEAK, true, pos);
+            tryPosPowerPacket(PowerIndex.POWER_2_SNEAK,pos);
+            //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
+        }
+    }
+
+    public void plunderOrItemLaunchBubbleClient(){
+        if (!inShootingMode()) {
+            if (!this.onCooldown(PowerIndex.SKILL_2)) {
+
+                int bubbleType = 1;
+                ClientConfig clientConfig = ConfigManager.getClientConfig();
+                if (clientConfig != null && clientConfig.dynamicSettings != null) {
+                    bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
+                }
+
+                this.tryIntPower(PowerIndex.POWER_2, true, bubbleType);
+
+                tryIntPowerPacket(PowerIndex.POWER_2,bubbleType);
+                //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
+            }
+        } else {
+            if (canExecuteMoveWithLevel(getItemShootingLevel())) {
+                if (!this.onCooldown(PowerIndex.SKILL_2)) {
+                    if (canDoBubbleItemLaunch()) {
+
+                        this.tryIntPower(PowerIndex.POWER_2_BONUS, true, ((Player) this.getSelf()).getInventory().selected);
+
+                        tryIntPowerPacket(PowerIndex.POWER_2_BONUS, ((Player) this.getSelf()).getInventory().selected);
+                        //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
+                    }
+                }
             }
         }
     }
@@ -735,92 +875,6 @@ public class PowersSoftAndWet extends NewPunchingStand {
 
 
     @Override
-    public void buttonInput1(boolean keyIsDown, Options options) {
-        if (this.getSelf().level().isClientSide) {
-            if (inShootingMode()){
-                if (keyIsDown) {
-                    if (!hold1) {
-                        if (canExecuteMoveWithLevel(getGoBeyondLevel())) {
-                            if (goBeyondCharged() && getGoBeyondTarget() != null) {
-                                hold1 = true;
-                                this.tryIntPower(PowerIndex.SPECIAL_TRACKER, true, getGoBeyondTarget().getId());
-                                tryIntPowerPacket(PowerIndex.SPECIAL_TRACKER, getGoBeyondTarget().getId());
-                                this.setGoBeyondTarget(null);
-                                this.setGoBeyondChargeTicks(0);
-                                this.setShootTicks(0);
-                            }
-                        }
-                    }
-                } else {
-                    hold1 = false;
-                }
-            } else if (isGuarding()) {
-                if (keyIsDown) {
-                    if (!hold1) {
-                        if (canExecuteMoveWithLevel(getSpreadLevel())) {
-                            if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
-                                hold1 = true;
-
-                                this.tryPower(PowerIndex.POWER_1_BONUS, true);
-
-                                tryPowerPacket(PowerIndex.POWER_1_BONUS);
-                            }
-                        }
-                    }
-                } else {
-                    hold1 = false;
-                }
-            } else if (isHoldingSneak()) {
-                if (keyIsDown) {
-                    if (!hold1) {
-                        if (canExecuteMoveWithLevel(getSpreadLevel())) {
-                            if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
-                                if (this.activePower != PowerIndex.POWER_1_SNEAK && !canDoBubbleClusterPop()) {
-                                    hold1 = true;
-
-                                    int bubbleType = 1;
-                                    ClientConfig clientConfig = ConfigManager.getClientConfig();
-                                    if (clientConfig != null && clientConfig.dynamicSettings != null) {
-                                        bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
-                                    }
-
-                                    this.tryIntPower(PowerIndex.POWER_1_SNEAK, true, bubbleType);
-                                    tryIntPowerPacket(PowerIndex.POWER_1_SNEAK, bubbleType);
-
-                                } else {
-                                    if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
-                                        hold1 = true;
-                                        this.tryPower(PowerIndex.EXTRA_2, true);
-                                        tryPowerPacket(PowerIndex.EXTRA_2);
-                                    }
-                                }
-                            } else if (this.activePower == PowerIndex.POWER_1_SNEAK || this.canDoBubbleClusterRedirect()) {
-                                if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
-                                    hold1 = true;
-                                    this.tryPower(PowerIndex.EXTRA_2, true);
-                                    tryPowerPacket(PowerIndex.EXTRA_2);
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    hold1 = false;
-                }
-            } else {
-                if (keyIsDown) {
-                    if (!hold1) {
-                        hold1 = true;
-                        ClientUtil.openPlunderScreen();
-                    }
-                } else {
-                    hold1 = false;
-                }
-            }
-        }
-        super.buttonInput1(keyIsDown, options);
-    }
-
-    @Override
     public void tickStandRejection(MobEffectInstance effect){
         if (!this.getSelf().level().isClientSide()) {
             if (effect.getDuration() == 50) {
@@ -1191,9 +1245,8 @@ public class PowersSoftAndWet extends NewPunchingStand {
                     this.bubbleList.add(bubble);
                     this.getSelf().level().addFreshEntity(bubble);
 
-                    if (bubbleType != PlunderTypes.SOUND.id) {
                         this.self.level().playSound(bubble, bubble.blockPosition(), ModSounds.GO_BEYOND_LAUNCH_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
-                    }
+
 
                     Vec3 vector = Vec3.directionFromRotation(new Vec2(-52, this.self.yBodyRot - 90));
 
@@ -2342,89 +2395,6 @@ public void unlockSkin(){
         return true;
     }
 
-    @Override
-    public void buttonInput2(boolean keyIsDown, Options options) {
-        if (this.getSelf().level().isClientSide) {
-            if (isGuarding() && !inShootingMode()) {
-
-                if (keyIsDown) {
-                    if (!hold2) {
-                        if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)){
-                            hold2 = true;
-
-
-
-                            Vec3 pos = MainUtil.getRaytracePointOnMobOrBlock(this.self,30);
-
-                            this.tryPosPower(PowerIndex.POWER_2_EXTRA, true, pos);
-
-                            tryPosPowerPacket(PowerIndex.POWER_2_EXTRA,pos);
-
-                            //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
-                        }
-                    }
-                } else {
-                    hold2 = false;
-                }
-
-            } else if (isHoldingSneak()) {
-
-
-                if (keyIsDown) {
-                    if (!hold2) {
-                        if (!this.onCooldown(PowerIndex.SKILL_2_SNEAK)){
-                            hold2 = true;
-
-                            Vec3 pos = MainUtil.getRaytracePointOnMobOrBlock(this.self,30);
-
-                            this.tryPosPower(PowerIndex.POWER_2_SNEAK, true, pos);
-                            tryPosPowerPacket(PowerIndex.POWER_2_SNEAK,pos);
-                            //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
-                        }
-                    }
-                } else {
-                    hold2 = false;
-                }
-
-            } else {
-                if (keyIsDown) {
-                    if (!hold2) {
-                        hold2 = true;
-                        if (!inShootingMode()) {
-                            if (!this.onCooldown(PowerIndex.SKILL_2)) {
-
-                                int bubbleType = 1;
-                                ClientConfig clientConfig = ConfigManager.getClientConfig();
-                                if (clientConfig != null && clientConfig.dynamicSettings != null) {
-                                    bubbleType = clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble;
-                                }
-
-                                this.tryIntPower(PowerIndex.POWER_2, true, bubbleType);
-
-                                tryIntPowerPacket(PowerIndex.POWER_2,bubbleType);
-                                //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
-                            }
-                        } else {
-                            if (canExecuteMoveWithLevel(getItemShootingLevel())) {
-                                if (!this.onCooldown(PowerIndex.SKILL_2)) {
-                                    if (canDoBubbleItemLaunch()) {
-
-                                        this.tryIntPower(PowerIndex.POWER_2_BONUS, true, ((Player) this.getSelf()).getInventory().selected);
-
-                                        tryIntPowerPacket(PowerIndex.POWER_2_BONUS, ((Player) this.getSelf()).getInventory().selected);
-                                        //this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().cooldownsInTicks.magicianRedBindFailOrMiss);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    hold2 = false;
-                }
-            }
-        }
-        super.buttonInput1(keyIsDown, options);
-    }
 
     public boolean canDoBubbleItemLaunch(){
         ItemStack stack = this.getSelf().getMainHandItem();
