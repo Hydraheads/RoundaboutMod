@@ -1,9 +1,6 @@
-package net.hydra.jojomod.event.powers.stand;
+package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.block.GasolineBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -17,8 +14,6 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.stand.powers.NewPunchingStand;
-import net.hydra.jojomod.stand.powers.PowerContext;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;

@@ -3,16 +3,13 @@ package net.hydra.jojomod.client.hud;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
-import net.hydra.jojomod.client.gui.PowerInventoryMenu;
-import net.hydra.jojomod.client.gui.PowerInventoryScreen;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
+import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
