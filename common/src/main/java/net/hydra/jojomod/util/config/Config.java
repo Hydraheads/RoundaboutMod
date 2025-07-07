@@ -578,6 +578,8 @@ public class Config implements Cloneable {
         public Boolean SummonSurvivorCooldownCooldownUsesServerLatency;
         @IntOption(group = "inherit", value = 6, min = 0, max = 72000)
         public Integer maxSurvivorsCount;
+        @IntOption(group = "inherit", value = 140, min = 0, max = 72000)
+        public Integer dryUpInNetherTicks;
     }
     public static class TheWorldSettings {
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)

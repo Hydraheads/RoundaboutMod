@@ -10,11 +10,16 @@ import net.hydra.jojomod.client.models.layers.PreRenderEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersSurvivor;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
@@ -55,6 +60,8 @@ public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity
     public final boolean getActivated() {
         return this.entityData.get(ACTIVATED);
     }
+
+    public int dryUpInNetherTicks = 0;
     @Override
 
     public boolean validatePowers(LivingEntity user){
@@ -62,6 +69,29 @@ public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity
     }
     public boolean hasNoPhysics(){
         return false;
+    }
+
+    public void tick(){
+        super.tick();
+        if (!this.level().isClientSide()) {
+            if (this.level().dimension() == Level.NETHER) {
+                int dryTickMax = ClientNetworking.getAppropriateConfig().survivorSettings.dryUpInNetherTicks;
+                if (getActivated()) {
+                    dryUpInNetherTicks++;
+                    if (dryUpInNetherTicks > dryTickMax) {
+                        setActivated(false);
+                        this.level().playSound(null, this.blockPosition(), SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, 1F, (float) (0.9F + (Math.random() * 0.2F)));
+
+                        ((ServerLevel) this.level()).sendParticles(ParticleTypes.LARGE_SMOKE,
+                                this.getX(), this.getY(), this.getZ(),
+                                0, 0, 0, 0, 0.015);
+                    }
+                } else {
+                    dryUpInNetherTicks--;
+                }
+                dryUpInNetherTicks = Mth.clamp(dryUpInNetherTicks, 0, dryTickMax);
+            }
+        }
     }
 
 
