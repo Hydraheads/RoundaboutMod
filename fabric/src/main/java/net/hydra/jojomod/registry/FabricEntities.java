@@ -360,6 +360,13 @@ public class FabricEntities {
                         EntityType.Builder.<MatchEntity>of(MatchEntity::new, MobCategory.MISC).
                                 sized(0.5f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":match")
                 );
+        public static final EntityType<ThrownWaterBottleEntity> THROWN_WATER_BOTTLE =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "water_bottle"),
+                        EntityType.Builder.<ThrownWaterBottleEntity>of(ThrownWaterBottleEntity::new, MobCategory.MISC).
+                                sized(0.5f, 0.5f).clientTrackingRange(12).build(Roundabout.MOD_ID+":water_bottle")
+                );
         public static final EntityType<GasolineCanEntity> GASOLINE_CAN =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -504,6 +511,7 @@ public class FabricEntities {
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
                 ModEntities.THROWN_MATCH = THROWN_MATCH;
+                ModEntities.THROWN_WATER_BOTTLE = THROWN_WATER_BOTTLE;
                 ModEntities.CROSSFIRE_HURRICANE = CROSSFIRE_HURRICANE;
                 ModEntities.LIFE_TRACKER = LIFE_TRACKER;
                 ModEntities.STAND_FIREBALL = STAND_FIREBALL;

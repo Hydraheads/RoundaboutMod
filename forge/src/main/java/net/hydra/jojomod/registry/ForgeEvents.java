@@ -377,6 +377,7 @@ public class ForgeEvents {
         ModEntities.THROWN_HARPOON = ForgeEntities.THROWN_HARPOON.get();
         ModEntities.THROWN_KNIFE = ForgeEntities.THROWN_KNIFE.get();
         ModEntities.THROWN_MATCH = ForgeEntities.THROWN_MATCH.get();
+        ModEntities.THROWN_WATER_BOTTLE = ForgeEntities.THROWN_WATER_BOTTLE.get();
         ModEntities.CROSSFIRE_HURRICANE = ForgeEntities.CROSSFIRE_HURRICANE.get();
         ModEntities.LIFE_TRACKER = ForgeEntities.LIFE_TRACKER.get();
         ModEntities.STAND_FIREBALL = ForgeEntities.STAND_FIREBALL.get();

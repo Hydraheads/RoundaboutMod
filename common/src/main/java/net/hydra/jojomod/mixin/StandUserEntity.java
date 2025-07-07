@@ -1322,7 +1322,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         } else {
             roundabout$gasRenderTicks++;
         }
-        if (((LivingEntity) (Object) this) instanceof Player && !((LivingEntity) (Object) this).level().isClientSide){
+        if (((LivingEntity) (Object) this) instanceof Player && !((LivingEntity) (Object) this).level().isClientSide()){
             ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) (Object) this),(byte) 1, gasTicks);
         }
     }

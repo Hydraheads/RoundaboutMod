@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IBucketItem;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -19,7 +20,17 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.stats.Stats;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ThrownPotion;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.PotionItem;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -127,6 +138,9 @@ public class PowersSurvivor extends NewDashPreset {
         /**Making dash usable on both key presses*/
         switch (context)
         {
+            case SKILL_1_NORMAL, SKILL_1_CROUCH-> {
+                throwBottleClient();
+            }
             case SKILL_2_NORMAL-> {
                 summonSurvivorClient();
             }
@@ -139,10 +153,53 @@ public class PowersSurvivor extends NewDashPreset {
         }
     }
 
+    public void throwBottleClient(){
+        if (!this.onCooldown(PowerIndex.SKILL_1)) {
+            if (canUseWaterBottleThrow()) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                tryPowerPacket(PowerIndex.POWER_1);
+            }
+        }
+    }
+
+    public void throwBottleActually(ItemStack stack){
+        ThrownPotion $$4 = new ThrownPotion(this.self.level(), this.self);
+        $$4.setItem(stack);
+        $$4.shootFromRotation(this.self, this.self.getXRot(), this.self.getYRot(), -20.0F, 0.5F, 1.0F);
+        this.self.level().addFreshEntity($$4);
+    }
+
+    public boolean throwWaterBottle(){
+        int cooldown = 5;
+        this.setCooldown(PowerIndex.SKILL_1, cooldown);
+        if (!this.self.level().isClientSide() && this.self instanceof Player PL){
+            ItemStack stack = this.getSelf().getMainHandItem();
+            if ((!stack.isEmpty() && stack.getItem() instanceof PotionItem PI && PotionUtils.getPotion(stack) == Potions.WATER)) {
+                throwBottleActually(stack.copy());
+                if (!PL.getAbilities().instabuild) {
+                    stack.shrink(1);
+                }
+                return true;
+            }
+            ItemStack stack2 = this.getSelf().getOffhandItem();
+            if ((!stack2.isEmpty() && stack2.getItem() instanceof PotionItem PI && PotionUtils.getPotion(stack2) == Potions.WATER)) {
+                throwBottleActually(stack2.copy());
+                if (!PL.getAbilities().instabuild) {
+                    stack2.shrink(1);
+                }
+                return true;
+            }
+        }
+        return true;
+    }
+
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         switch (move)
         {
+            case PowerIndex.POWER_1 -> {
+                return throwWaterBottle();
+            }
             case PowerIndex.POWER_2_SNEAK -> {
                 return removeAllSurvivors();
             }
@@ -218,10 +275,6 @@ public class PowersSurvivor extends NewDashPreset {
         return super.tryPower(move, forced);
     }
 
-    @Override
-    public boolean isAttackIneptVisually(byte activeP, int slot) {
-        return super.isAttackIneptVisually(activeP, slot);
-    }
 
     /** if = -1, not melt dodging */
     public int meltDodgeTicks = -1;
@@ -286,6 +339,21 @@ public class PowersSurvivor extends NewDashPreset {
             }
         }
         return super.getSoundFromByte(soundChoice);
+    }
+
+
+    public boolean canUseWaterBottleThrow(){
+        ItemStack stack = this.getSelf().getMainHandItem();
+        ItemStack stack2 = this.getSelf().getOffhandItem();
+        return ((!stack.isEmpty() && stack.getItem() instanceof PotionItem PI && PotionUtils.getPotion(stack) == Potions.WATER)
+                || (!stack2.isEmpty() && stack2.getItem() instanceof PotionItem PI2 && PotionUtils.getPotion(stack2) == Potions.WATER));
+    }
+    public boolean isAttackIneptVisually(byte activeP, int slot) {
+        if (slot == 1 && !canUseWaterBottleThrow()){
+            return true;
+        }
+
+        return super.isAttackIneptVisually(activeP,slot);
     }
 
     public static final byte

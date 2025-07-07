@@ -304,6 +304,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "match").toString())
             );
+    public static final RegistryObject<EntityType<ThrownWaterBottleEntity>> THROWN_WATER_BOTTLE =
+            ENTITY_TYPES.register("water_bottle", () ->
+                    EntityType.Builder.<ThrownWaterBottleEntity>of(ThrownWaterBottleEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "water_bottle").toString())
+            );
     public static final RegistryObject<EntityType<GasolineCanEntity>> GASOLINE_CAN =
             ENTITY_TYPES.register("gasoline_can", () ->
                     EntityType.Builder.<GasolineCanEntity>of(GasolineCanEntity::new, MobCategory.MISC).sized(0.8f, 0.8f).
