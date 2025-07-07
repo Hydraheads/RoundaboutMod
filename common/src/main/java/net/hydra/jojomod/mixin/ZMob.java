@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.ITargetGoal;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModGamerules;
@@ -130,14 +131,16 @@ public abstract class ZMob extends LivingEntity implements IMob {
                         }
                     }
 
-                    this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
-                    if (this.random.nextDouble() < 0.5) {
+                    if (ClientNetworking.getAppropriateConfig().standUserMonstersDropMeteorite) {
                         this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
-                    }
-                    if ($$1 > 0) {
-                        for (int i = 0; i < $$1; i++) {
-                            if (this.random.nextDouble() < 0.5) {
-                                this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
+                        if (this.random.nextDouble() < 0.5) {
+                            this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
+                        }
+                        if ($$1 > 0) {
+                            for (int i = 0; i < $$1; i++) {
+                                if (this.random.nextDouble() < 0.5) {
+                                    this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
+                                }
                             }
                         }
                     }

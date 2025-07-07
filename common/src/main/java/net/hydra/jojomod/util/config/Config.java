@@ -85,6 +85,8 @@ public class Config implements Cloneable {
     public Float standUserVillagerOdds;
     @FloatOption(group = "inherit", value = 0.15F, min = 0, max = 1F)
     public Float userAndWorthyBreedingOddsBonus;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean standUserMonstersDropMeteorite;
     @BooleanOption(group = "inherit", value = false)
     public Boolean bossMobsCanNaturallyHaveStands;
     @IntOption(group = "inherit", value = 2, min = 0, max = 72000)
