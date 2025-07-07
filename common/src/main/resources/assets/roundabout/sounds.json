@@ -23,6 +23,12 @@
       "roundabout:survivor_summon"
     ]
   },
+  "survivor_shock": {
+    "subtitle": "sounds.roundabout.survivor_shock",
+    "sounds": [
+      "roundabout:survivor_shock"
+    ]
+  },
   "survivor_place": {
     "subtitle": "sounds.roundabout.survivor_place",
     "sounds": [

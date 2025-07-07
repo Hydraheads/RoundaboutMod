@@ -79,6 +79,9 @@ public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity
     public void tick(){
         super.tick();
         if (!this.level().isClientSide()) {
+            if (!getActivated() && isInWaterRainOrBubble()){
+                setActivated(true);
+            }
             if (this.level().dimension() == Level.NETHER) {
                 int dryTickMax = ClientNetworking.getAppropriateConfig().survivorSettings.dryUpInNetherTicks;
                 if (getActivated()) {
@@ -126,7 +129,9 @@ public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity
                         ent instanceof LivingEntity LE){
                     if (firstTarget == null){
                         firstTarget = LE;
+                        Roundabout.LOGGER.info("1");
                     } else {
+                        Roundabout.LOGGER.info("2");
                         matchEntities(firstTarget,LE);
                         return;
                     }
