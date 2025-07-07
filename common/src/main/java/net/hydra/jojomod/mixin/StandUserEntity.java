@@ -179,8 +179,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private int roundabout$destructionModeTrailTicks = -1;
     @Unique
     private int roundabout$detectTicks = -1;
-    @Unique
-    private final int roundabout$maxLeapTicks = 60;
 
     public StandUserEntity(EntityType<?> $$0, Level $$1) {
         super($$0, $$1);
@@ -208,6 +206,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Nullable
     @Unique
     private StandEntity roundabout$Stand;
+
+    /*Mob throw keeps track of the thrower to deal damage in their name*/
     @Nullable
     @Unique
     private LivingEntity roundabout$thrower;
@@ -329,8 +329,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private int roundabout$gasTicks = -1;
     @Unique
     private int roundabout$gasRenderTicks = -1;
-    private int roundabout$maxGasTicks = 200;
-    private int roundabout$maxBucketGasTicks = 600;
 
     /**
      * Idle time is how long you are standing still without using skills, eating, or
@@ -1044,7 +1042,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.roundabout$tickGuard();
         this.roundabout$tickDaze();
         if (this.roundabout$leapTicks > -1) {
-            if (this.onGround() && roundabout$leapTicks < (roundabout$maxLeapTicks - 5)) {
+            if (this.onGround() && roundabout$leapTicks < (MainUtil.maxLeapTicks() - 5)) {
                 roundabout$leapTicks = -1;
             }
             roundabout$cancelConsumableItem((LivingEntity) (Object) this);
@@ -1282,11 +1280,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     public int roundabout$getMaxGasolineTime(){
-        return this.roundabout$maxGasTicks;
+        return MainUtil.maxGasTicks();
     }
     @Unique
     public int roundabout$getMaxBucketGasolineTime(){
-        return this.roundabout$maxBucketGasTicks;
+        return MainUtil.maxBucketGasTicks();
     }
 
     @Override
@@ -1309,7 +1307,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     @Unique
     public int roundabout$getMaxLeapTicks(){
-        return this.roundabout$maxLeapTicks;
+        return MainUtil.maxLeapTicks();
     }
     @Override
     @Unique

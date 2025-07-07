@@ -99,6 +99,17 @@ public class MainUtil {
     }
 
 
+    public static int maxGasTicks(){
+        return 200;
+    }
+    public static int maxBucketGasTicks(){
+        return 200;
+    }
+    public static int maxLeapTicks(){
+        return 60;
+    }
+
+
     /**Additional math functions for the mod.*/
 
     /** This version of interpolation accommodates speed multipliers so you can control how
