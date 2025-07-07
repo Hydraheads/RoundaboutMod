@@ -121,9 +121,6 @@ public class PowersSurvivor extends NewDashPreset {
 
         return true;
     }
-    @Override
-    public void tick() {
-    }
 
     @Override
     public void powerActivate(PowerContext context) {

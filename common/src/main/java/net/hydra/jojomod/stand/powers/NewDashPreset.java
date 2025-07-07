@@ -106,11 +106,6 @@ public class NewDashPreset extends StandPowerRewrite {
     }
 
     @Override
-    public void tick() {
-
-    }
-
-    @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime){
         if (this.canChangePower(move, forced)) {
             if (move == PowerIndex.MOVEMENT) {

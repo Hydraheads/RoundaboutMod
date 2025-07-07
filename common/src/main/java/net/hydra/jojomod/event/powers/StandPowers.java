@@ -320,6 +320,8 @@ public class StandPowers {
         }
     }
 
+    /** Called per frame, use for particle FX and such */
+    public void visualFrameTick() {};
     public void updateGuard(boolean yeet){
         if (suspendGuard) {
             if (!yeet) {

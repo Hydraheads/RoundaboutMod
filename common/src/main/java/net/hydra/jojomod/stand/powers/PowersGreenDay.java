@@ -104,11 +104,6 @@ public class PowersGreenDay extends NewPunchingStand{
         super.renderIcons(context, x, y);
     }
 
-
-    @Override
-    public void tick() {
-    }
-
     @Override
     public void powerActivate(PowerContext context) {
         /**Making dash usable on both key presses*/

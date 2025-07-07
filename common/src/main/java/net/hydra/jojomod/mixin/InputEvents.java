@@ -963,6 +963,7 @@ public abstract class InputEvents implements IInputEvents {
                         KeyInputs.summonKey(player,((Minecraft) (Object) this));
                     }
 
+                ((StandUser)player).roundabout$getStandPowers().visualFrameTick();
 
                     KeyInputs.MoveKey1(player,((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.abilityOneKey),
                         this.options);

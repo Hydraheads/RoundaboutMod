@@ -1,12 +1,8 @@
 package net.hydra.jojomod.stand.powers;
 
-import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.minecraft.client.Options;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.LivingEntity;
-
-import java.util.HashSet;
 
 public class StandPowerRewrite extends StandPowers {
     public StandPowerRewrite(LivingEntity self) {
@@ -15,8 +11,6 @@ public class StandPowerRewrite extends StandPowers {
 
 
     public void powerActivate(PowerContext context) {};
-    /** Called per frame, use for particle FX and such */
-    public void tick() {};
 
     private boolean held1 = false;
     private boolean held2 = false;
@@ -25,9 +19,6 @@ public class StandPowerRewrite extends StandPowers {
 
     @Override
     public void buttonInput1(boolean keyIsDown, Options options) {
-        // really hacky but it works lol
-        this.tick();
-
         if (keyIsDown)
         {
             if (held1)
