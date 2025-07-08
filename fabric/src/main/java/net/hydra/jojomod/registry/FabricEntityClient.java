@@ -171,5 +171,7 @@ public class FabricEntityClient {
         ModStrayModels.RightArm = new RightArmPart();
         ModStrayModels.LeftArmSlim = new LeftArmSlimPart();
         ModStrayModels.LeftArm = new LeftArmPart();
+        ModStrayModels.RightLeg = new RightLegPart();
+        ModStrayModels.LeftLeg = new LeftLegPart();
     }
 }

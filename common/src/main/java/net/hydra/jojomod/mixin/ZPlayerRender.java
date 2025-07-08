@@ -804,9 +804,15 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
                 if (curse != LocacacaCurseIndex.RIGHT_HAND) {
                     $$1.rightSleeve.visible = false;
                 }
+                if (curse != LocacacaCurseIndex.RIGHT_LEG) {
+                    $$1.rightPants.visible = false;
+                }
             } else {
                 if (curse != LocacacaCurseIndex.LEFT_HAND) {
                     $$1.leftSleeve.visible = false;
+                }
+                if (curse != LocacacaCurseIndex.LEFT_LEG) {
+                    $$1.leftPants.visible = false;
                 }
             }
         }

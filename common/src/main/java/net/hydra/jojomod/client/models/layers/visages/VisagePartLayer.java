@@ -84,6 +84,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                 r, g, b, StandIcons.MUSCLE, 0.01F, 0, 0, alpha);
                     }
                 }
+                if (curse != LocacacaCurseIndex.RIGHT_LEG) {
+                    renderRightLeg(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
+                            r, g, b, StandIcons.MUSCLE, 0.01F, 0, 0, alpha);
+                }
             } else {
                 if (curse != LocacacaCurseIndex.LEFT_HAND) {
                     if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
@@ -93,6 +97,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         renderLeftArm(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
                                 r, g, b, StandIcons.MUSCLE, -0.01F, 0, 0, alpha);
                     }
+                }
+                if (curse != LocacacaCurseIndex.LEFT_LEG) {
+                    renderLeftLeg(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
+                            r, g, b, StandIcons.MUSCLE, -0.01F, 0, 0, alpha);
                 }
             }
         }
@@ -156,6 +164,26 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     }
                 }
             }
+    }
+    public void renderRightLeg(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                               float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
+        if (getParentModel().rightLeg.visible) {
+            poseStack.pushPose();
+            getParentModel().rightLeg.translateAndRotate(poseStack);
+            ModStrayModels.RightLeg.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
+            poseStack.popPose();
+        }
+    }
+    public void renderLeftLeg(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                               float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
+        if (getParentModel().leftLeg.visible) {
+            poseStack.pushPose();
+            getParentModel().leftLeg.translateAndRotate(poseStack);
+            ModStrayModels.LeftLeg.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
+            poseStack.popPose();
+        }
     }
     public void renderRightArm(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
                            float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
