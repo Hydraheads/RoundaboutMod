@@ -67,6 +67,13 @@ public class FallenSpider extends FallenMob implements PlayerRideableJumping {
     }
 
     @Override
+
+    public float modX(){
+        return 2F;
+    }
+
+
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(3, new LeapAtTargetGoal(this, 0.4F));
         this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0, false));
