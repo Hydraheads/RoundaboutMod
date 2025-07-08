@@ -1,6 +1,8 @@
 package net.hydra.jojomod.stand.powers;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -11,9 +13,16 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.mixin.StandUserEntity;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -21,7 +30,10 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec2;
@@ -94,19 +106,13 @@ public class PowersRatt extends NewDashPreset {
         }
         return false;
     }
-    public void setRattPlacement(Vec3 b) {
-        RattEntity RE = (RattEntity) getStandUserSelf().roundabout$getStand();
-        if (RE != null) {
-            RE.Placement = b;
-        }
-    }
 
-    public boolean automatic = false;
+
     public boolean isAuto() {
-        return automatic;
+        return this.getStandUserSelf().roundabout$getUniqueStandModeToggle();
     }
     public void setAuto(boolean b) {
-        automatic = b;
+        this.getStandUserSelf().roundabout$setUniqueStandModeToggle(b);
     }
 
     private BlockHitResult getValidPlacement(){
@@ -115,7 +121,14 @@ public class PowersRatt extends NewDashPreset {
         Vec3 vec3d3 = vec3d.add(vec3d2.x * PlacementRange, vec3d2.y * PlacementRange, vec3d2.z * PlacementRange);
         BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3,
                 ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
-        if (blockHit.getType() == HitResult.Type.BLOCK && blockHit.getDirection() != Direction.DOWN){
+        boolean cond = false;
+        if (blockHit.getDirection() != Direction.UP && blockHit.getDirection() != Direction.DOWN) {
+            BlockPos pos = blockHit.getBlockPos();
+            if (this.getSelf().level().getBlockState(pos.above()).isAir()) {
+                cond = true;
+            }
+        }
+        if (blockHit.getType() == HitResult.Type.BLOCK && blockHit.getDirection() == Direction.UP || cond){
             return blockHit;
         }
         return null;
@@ -155,7 +168,6 @@ public class PowersRatt extends NewDashPreset {
             }
         }
         setSkillIcon(context,x,y,3,StandIcons.DODGE,PowerIndex.GLOBAL_DASH);
-
     }
 
 
@@ -224,7 +236,6 @@ public class PowersRatt extends NewDashPreset {
                 Deploy();
             } else {
                 if (!this.getSelf().level().isClientSide()) {
-                    Roundabout.LOGGER.info("Ratt Down");
                     SE.remove(Entity.RemovalReason.DISCARDED);
                 }
             }
@@ -322,6 +333,14 @@ public class PowersRatt extends NewDashPreset {
 
 
     @Override
+    public boolean setPowerNone() {
+        if (isRattState(SHOULDER)) {
+            return super.setPowerNone();
+        }
+        return true;
+    }
+
+    @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         switch (activeP) {
             case PowerIndex.SKILL_2 -> {
@@ -344,10 +363,26 @@ public class PowersRatt extends NewDashPreset {
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
-                RattEntity.ANIME_SKIN
+                RattEntity.ANIME_SKIN,
+                RattEntity.MANGA_SKIN,
+                RattEntity.MELON_SKIN,
+                RattEntity.SAND_SKIN
         );
     }
 
+    @Override
+    public Component getSkinName(byte skinId) {
+        return getSkinNameT(skinId);
+    }
+
+    public static Component getSkinNameT(byte skinId){
+        switch (skinId) {
+            case RattEntity.MANGA_SKIN -> {return Component.translatable("skins.roundabout.ratt.manga");}
+            case RattEntity.MELON_SKIN -> {return Component.translatable("skins.roundabout.ratt.melon");}
+            case RattEntity.SAND_SKIN -> {return Component.translatable("skins.roundabout.ratt.sand");}
+            default -> {return Component.translatable("skins.roundabout.ratt.anime");}
+        }
+    }
 
 
 

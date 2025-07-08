@@ -110,7 +110,7 @@ public abstract class InputEvents implements IInputEvents {
             if ($$0 instanceof RattEntity) {
                 if (((StandEntity) $$0).getUser() != null) {
                     PowersRatt PR = (PowersRatt) powers;
-                    if (((RattEntity) $$0).getUser().isCrouching() || PR.isAuto()) {
+                    if (PR.isAuto()) {
                         ci.setReturnValue(true);
                     }
                 }
