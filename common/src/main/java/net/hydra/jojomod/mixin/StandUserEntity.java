@@ -845,6 +845,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void roundabout$setZappedToID(int bound) {
         if (this.entityData.hasItem(ROUNDABOUT$IS_ZAPPED_TO_ATTACK)) {
+            roundabout$zappedTicks = 0;
             this.getEntityData().set(ROUNDABOUT$IS_ZAPPED_TO_ATTACK, bound);
         }
     }
@@ -1049,12 +1050,27 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         return false;
     }
+    @Unique
+    public int roundabout$zappedTicks = -1;
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void roundabout$tick(CallbackInfo ci) {
 
         roundabout$tickStandOrStandless();
         //if (StandID > -1) {
         if (!this.level().isClientSide()) {
+            if (roundabout$getZappedToID() > -1){
+                roundabout$zappedTicks++;
+                if (roundabout$zappedTicks >= ClientNetworking.getAppropriateConfig().survivorSettings.durationOfAggressiveAngerSetting){
+                    roundabout$setZappedToID(-1);
+                } else {
+                    Entity ent = this.level().getEntity(roundabout$getZappedToID());
+                    if (!(ent != null && !ent.isRemoved() && ent.isAlive() && ent.distanceTo(this) < 50)) {
+                        roundabout$setZappedToID(-1);
+                    }
+                }
+            }
+
+
             if (this.roundabout$getActive() &&this.roundabout$getStandPowers().canSummonStand()&&this.roundabout$getStandPowers().canSummonStandAsEntity()  && (this.roundabout$getStand() == null ||
                     (this.roundabout$getStand().level().dimensionTypeId() != this.level().dimensionTypeId() &&
                             this.roundabout$getStand() instanceof FollowingStandEntity FE && OffsetIndex.OffsetStyle(FE.getOffsetType()) == OffsetIndex.FOLLOW_STYLE))){
