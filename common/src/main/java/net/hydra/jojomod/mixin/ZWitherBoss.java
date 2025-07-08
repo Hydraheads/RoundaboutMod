@@ -31,11 +31,11 @@ public abstract class ZWitherBoss extends Monster implements PowerableMob, Range
         if (!roundabout$antiRecurse) {
             Entity ent = this.level().getEntity($$1);
             if (ent instanceof StandEntity SE) {
-                if (SE.getFollowing() != null && !(SE.getFollowing() instanceof StandEntity)) {
-                    if (SE.getFollowing() instanceof ServerPlayer PE && !PE.gameMode.isCreative() && !PE.isSpectator()){
+                if (SE.getUser() != null && !(SE.getUser() instanceof StandEntity)) {
+                    if (SE.getUser() instanceof ServerPlayer PE && !PE.gameMode.isCreative() && !PE.isSpectator()){
                         ci.cancel();
                     }
-                    $$1 = SE.getFollowing().getId();
+                    $$1 = SE.getUser().getId();
                     roundabout$antiRecurse = true;
                     setAlternativeTarget($$0,$$1);
                     roundabout$antiRecurse = false;

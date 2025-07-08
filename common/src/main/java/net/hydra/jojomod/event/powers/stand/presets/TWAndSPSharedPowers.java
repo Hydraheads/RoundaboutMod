@@ -257,9 +257,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         StandEntity stand = getStandEntity(this.self);
                         if (Objects.nonNull(stand)) {
                             if (moveStarted) {
-                                stand.setPos(stand.getPosition(0).add(stand.getForward().scale(0.12)));
+                                stand.setPos(stand.getPosition(1).add(stand.getForward().scale(0.12)));
                             } else {
-                                stand.setPos(stand.getPosition(0).add(stand.getForward().scale(0.0075)));
+                                stand.setPos(stand.getPosition(1).add(stand.getForward().scale(0.0075)));
                             }
                             if ((stand.isTechnicallyInWall() && this.getActivePower() != PowerIndex.POWER_1_BONUS) ||
                                     stand.position().distanceTo(this.getSelf().position()) > getFloatOutRange()) {
@@ -1656,7 +1656,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
         BlockHitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
 
-        double mag = this.getSelf().getPosition(0).distanceTo(
+        double mag = this.getSelf().getPosition(1).distanceTo(
                 new Vec3(blockHit.getLocation().x, blockHit.getLocation().y,blockHit.getLocation().z))*0.75+1;
 
         MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),

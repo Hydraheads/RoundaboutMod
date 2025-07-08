@@ -14,6 +14,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -254,7 +255,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Nullable
     @Unique
-    private ImmutableList<StandEntity> roundabout$followers = ImmutableList.of();
+    private ImmutableList<FollowingStandEntity> roundabout$followers = ImmutableList.of();
 
     /**
      * StandID is used clientside only
@@ -1058,7 +1059,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (!this.level().isClientSide()) {
             if (this.roundabout$getActive() &&this.roundabout$getStandPowers().canSummonStand()&&this.roundabout$getStandPowers().canSummonStandAsEntity()  && (this.roundabout$getStand() == null ||
                     (this.roundabout$getStand().level().dimensionTypeId() != this.level().dimensionTypeId() &&
-                            OffsetIndex.OffsetStyle(this.roundabout$getStand().getOffsetType()) == OffsetIndex.FOLLOW_STYLE))){
+                            this.roundabout$getStand() instanceof FollowingStandEntity FE && OffsetIndex.OffsetStyle(FE.getOffsetType()) == OffsetIndex.FOLLOW_STYLE))){
                 this.roundabout$summonStand(this.level(),true,false);
             }
 
@@ -1172,18 +1173,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Override
-    public void roundabout$addFollower(StandEntity $$0) {
+    public void roundabout$addFollower(FollowingStandEntity $$0) {
         if (this.roundabout$followers.isEmpty()) {
             this.roundabout$followers = ImmutableList.of($$0);
         } else {
-            List<StandEntity> $$1 = Lists.newArrayList(this.roundabout$followers);
+            List<FollowingStandEntity> $$1 = Lists.newArrayList(this.roundabout$followers);
             $$1.add($$0);
             this.roundabout$followers = ImmutableList.copyOf($$1);
         }
     }
 
     @Override
-    public void roundabout$removeFollower(StandEntity $$0) {
+    public void roundabout$removeFollower(FollowingStandEntity $$0) {
         if (this.roundabout$followers.size() == 1 && this.roundabout$followers.get(0) == $$0) {
             this.roundabout$followers = ImmutableList.of();
         } else {
@@ -1193,12 +1194,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Override
-    public final List<StandEntity> roundabout$getFollowers() {
+    public final List<FollowingStandEntity> roundabout$getFollowers() {
         return this.roundabout$followers;
     }
 
     @Override
-    public boolean roundabout$hasFollower(StandEntity $$0) {
+    public boolean roundabout$hasFollower(FollowingStandEntity $$0) {
         return this.roundabout$followers.contains($$0);
     }
 
@@ -2292,20 +2293,27 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                                 roundabout$User.releaseUsingItem();
                             }
                         }
-                        Vec3 spos = stand.getStandOffsetVector(roundabout$User);
+                        if (stand instanceof FollowingStandEntity FE) {
+                            Vec3 spos = FE.getStandOffsetVector(roundabout$User);
                         stand.absMoveTo(spos.x(), spos.y(), spos.z());
+                        } else {
+                            Vec3 yes = this.getPosition(1F).add(stand.getBonusOffset());
+                            stand.absMoveTo(yes.x,yes.y,yes.z);
+                        }
 
                         stand.setSkin(roundabout$getStandSkin());
                         stand.setIdleAnimation(roundabout$getIdlePos());
 
                         if (((LivingEntity) (Object) this) instanceof Player PE) {
                             stand.playerSetProperties(PE);
-                            stand.setDistanceOut(((IPlayerEntity) PE).roundabout$getDistanceOut());
-                            stand.setAnchorPlace(((IPlayerEntity) PE).roundabout$getAnchorPlace());
-                            stand.setAnchorPlaceAttack(((IPlayerEntity) PE).roundabout$getAnchorPlaceAttack());
-                            stand.setSizePercent(((IPlayerEntity) PE).roundabout$getSizePercent());
-                            stand.setIdleRotation(((IPlayerEntity) PE).roundabout$getIdleRotation());
-                            stand.setIdleYOffset(((IPlayerEntity) PE).roundabout$getIdleYOffset());
+                            if (stand instanceof FollowingStandEntity FE) {
+                                FE.setDistanceOut(((IPlayerEntity) PE).roundabout$getDistanceOut());
+                                FE.setAnchorPlace(((IPlayerEntity) PE).roundabout$getAnchorPlace());
+                                FE.setAnchorPlaceAttack(((IPlayerEntity) PE).roundabout$getAnchorPlaceAttack());
+                                FE.setSizePercent(((IPlayerEntity) PE).roundabout$getSizePercent());
+                                FE.setIdleRotation(((IPlayerEntity) PE).roundabout$getIdleRotation());
+                                FE.setIdleYOffset(((IPlayerEntity) PE).roundabout$getIdleYOffset());
+                            }
                             if (!this.level().isClientSide()) {
                                 IPlayerEntity ipe = ((IPlayerEntity) this);
                                 ModPacketHandler.PACKET_ACCESS.s2cPowerInventorySettings(
@@ -2365,24 +2373,27 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
 
     /** Set Direction input. This is part of stand rendering as leaning.
-     * @see StandEntity#setMoveForward */
+     * @see FollowingStandEntity#setMoveForward(Byte)  */
     public void roundabout$setDI(byte forward, byte strafe){
         //RoundaboutMod.LOGGER.info("MF:"+ forward);
-        if (roundabout$Stand != null){
+        if (roundabout$Stand instanceof FollowingStandEntity FE){
             if (!roundabout$User.isShiftKeyDown() && roundabout$User.isSprinting()){
                 forward*=2;}
-            roundabout$Stand.setMoveForward(forward);
+            FE.setMoveForward(forward);
         }
     }
 
     /** Retooled vanilla riding code to update the location of a stand every tick relative to the entity it
      * is the user of.
-     * @see StandEntity#getAnchorPlace */
-    public void roundabout$updateStandOutPosition(StandEntity stand) {
+     * @see FollowingStandEntity#setMoveForward */
+    @Unique
+    @Override
+    public void roundabout$updateStandOutPosition(FollowingStandEntity stand) {
         this.roundabout$updateStandOutPosition(stand, Entity::setPos);
     }
 
-    public void roundabout$updateStandOutPosition(StandEntity stand, Entity.MoveFunction positionUpdater) {
+    @Unique
+    public void roundabout$updateStandOutPosition(FollowingStandEntity stand, Entity.MoveFunction positionUpdater) {
         if (!(this.roundabout$hasStandOut())) {
             return;
         }
@@ -2710,7 +2721,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         if (!this.isSprinting()) {
                             scale *= 1.3;
                         }
-                        Vec3 yesVec = this.getPosition(0).add(this.getDeltaMovement());
+                        Vec3 yesVec = this.getPosition(1).add(this.getDeltaMovement());
                         BlockPos yesVec2 = new BlockPos((int) yesVec.x, (int) (this.position().y), (int) yesVec.z);
                         if (this.level().getBlockState(yesVec2).isSolid()) {
                             roundabout$frictionSave = new Vec3(Math.random() - 0.5, 0, Math.random() - 0.5);
@@ -3200,7 +3211,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         if (this.getVehicle() != null && this.getVehicle() instanceof StandEntity SE && !this.level().isClientSide()){
             if (SE.dismountOnHit() && (damageSource.getDirectEntity() != null || damageSource.is(DamageTypes.IN_WALL))) {
-                Vec3 sanityCheckCoordinates = this.getPosition(0);
+                Vec3 sanityCheckCoordinates = this.getPosition(1);
                 SE.ejectPassengers();
                 if (SE.getUser() != null) {
                     //((StandUser)SE.getUser())
@@ -3234,7 +3245,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         ((IEntityAndData)this).roundabout$setQVec2Params(qVec2);
                     }
 
-                    if (this.getPosition(0).distanceTo(Vec3.ZERO) < 5){
+                    if (this.getPosition(1).distanceTo(Vec3.ZERO) < 5){
                         this.teleportTo(sanityCheckCoordinates.x,sanityCheckCoordinates.y,sanityCheckCoordinates.z);
                     }
                 }

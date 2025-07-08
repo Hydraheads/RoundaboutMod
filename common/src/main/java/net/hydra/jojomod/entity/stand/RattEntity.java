@@ -16,7 +16,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.Arrays;
 import java.util.List;
 
-public class RattEntity extends StandEntity {
+public class RattEntity extends FollowingStandEntity {
     public RattEntity(EntityType<? extends Mob> entityType, Level world) {super(entityType, world);}
 
     public static final byte

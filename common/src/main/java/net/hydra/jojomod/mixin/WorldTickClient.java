@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.SetBlockInstance;
@@ -60,7 +61,7 @@ import java.util.function.Supplier;
 public abstract class WorldTickClient extends Level implements IClientLevel {
 
     /** Called every tick on the Client. Checks if a mob has a stand out, and updates the position of the stand.
-     * @see StandEntity#tickStandOut */
+     * @see FollowingStandEntity#tickStandOut */
 
     @Shadow
     @Final
@@ -77,10 +78,10 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
             LivingEntity livingEntity = (LivingEntity) entity;
             if (((StandUser) livingEntity).roundabout$getStand() != null) {
                 StandEntity stand = ((StandUser) livingEntity).roundabout$getStand();
-                if (stand.getFollowing() != null && stand.getFollowing().getId() == livingEntity.getId()){
+                if (stand instanceof FollowingStandEntity FE && FE.getFollowing() != null && FE.getFollowing().getId() == livingEntity.getId()){
 
                     if (!(entity.getVehicle() != null && entity.getVehicle() == ((StandUser) entity).roundabout$getStand())) {
-                        this.roundabout$tickStandIn(livingEntity, stand);
+                        this.roundabout$tickStandIn(livingEntity, FE);
                     }
                 }
             }
@@ -91,9 +92,9 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     private void roundabout$updateStandTS(Entity entity){
         if (entity.showVehicleHealth()) {
             LivingEntity livingEntity = (LivingEntity) entity;
-            if (((StandUser) livingEntity).roundabout$getStand() != null) {
+            if (((StandUser) livingEntity).roundabout$getStand() instanceof FollowingStandEntity FE) {
                 StandEntity stand = ((StandUser) livingEntity).roundabout$getStand();
-                if (stand.getFollowing() != null && stand.getFollowing().getId() == livingEntity.getId()){
+                if (FE.getFollowing() != null && FE.getFollowing().getId() == livingEntity.getId()){
                     if (!(stand.isRemoved() || stand.getUser() != entity)) {
                         roundabout$TickLivingEntityTS(stand);
                     }
@@ -103,7 +104,7 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     }
 
     @Unique
-    private void roundabout$tickStandIn(LivingEntity entity, StandEntity stand) {
+    private void roundabout$tickStandIn(LivingEntity entity, FollowingStandEntity stand) {
         if (stand == null || stand.isRemoved()) {
             if (entity !=null) {
                 ((StandUser) entity).roundabout$removeFollower(stand);
@@ -134,11 +135,6 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     }
 
 
-    @Unique
-    private void roundabout$TickStandTS(StandEntity stand){
-        stand.setOldPosAndRot();
-        stand.tickStandOut2();
-    }
     @Unique
     private void roundabout$TickLivingEntityTS(LivingEntity livingEntity){
         if (livingEntity instanceof Player){
@@ -229,7 +225,7 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     @Inject(method = "tickNonPassenger", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$TickEntity2(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
-            if ($$0 instanceof StandEntity SE) {
+            if ($$0 instanceof FollowingStandEntity SE) {
                 if (SE.getFollowing() != null && ((StandUser)SE.getFollowing()).roundabout$getFollowers().contains(SE)){
                     ci.cancel();
                 }
@@ -298,7 +294,7 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     private void roundabout$TickEntityX(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
             if ($$0 instanceof LivingEntity LE) {
-                for (StandEntity SE : ((StandUser) $$0).roundabout$getFollowers()) {
+                for (FollowingStandEntity SE : ((StandUser) $$0).roundabout$getFollowers()) {
                     this.roundabout$tickStandIn(LE, SE);
                 }
             }
@@ -315,7 +311,7 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
 
     @Inject(method = "tickPassenger", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$TickEntity5(Entity $$0, Entity $$1, CallbackInfo ci) {
-        if ($$1 instanceof StandEntity SE) {
+        if ($$1 instanceof FollowingStandEntity SE) {
             if (SE.getFollowing() != null){
                 ci.cancel();
             }
@@ -346,7 +342,7 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     @Inject(method = "tickPassenger", at = @At(value = "TAIL"), cancellable = true)
     private void roundabout$TickEntity6(Entity $$0, Entity $$1, CallbackInfo ci) {
         if ($$1 instanceof LivingEntity LE) {
-            for (StandEntity SE : ((StandUser)$$1).roundabout$getFollowers()) {
+            for (FollowingStandEntity SE : ((StandUser)$$1).roundabout$getFollowers()) {
                 this.roundabout$tickStandIn(LE, SE);
             }
         }
@@ -635,7 +631,7 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
             }
         }
         this.tickingEntities.forEach($$0x -> {
-            if ($$0x instanceof StandEntity standEntity) {
+            if ($$0x instanceof FollowingStandEntity standEntity) {
                 if (standEntity.getFollowing() != null){
                     if (!standEntity.getFollowing().isRemoved()) {
                         LivingEntity LE = standEntity.getFollowing();

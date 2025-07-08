@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.client.models.stand.StandModel;
@@ -25,7 +26,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 
-public class MagiciansRedSpinEffectLayer<T extends StandEntity> extends RenderLayer<T, StandModel<T>> {
+public class MagiciansRedSpinEffectLayer<T extends FollowingStandEntity> extends RenderLayer<T, StandModel<T>> {
     public static final ResourceLocation TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/orange_flame_spin.png");
     public static final ResourceLocation TEXTURE_BLUE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/blue_flame_spin.png");
     public static final ResourceLocation TEXTURE_PURPLE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/purple_flame_spin.png");

@@ -27,7 +27,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
 
-public class JusticeEntity extends StandEntity {
+public class JusticeEntity extends FollowingStandEntity {
     public JusticeEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
     }

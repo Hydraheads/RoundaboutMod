@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.IBlockEntityAccess;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.GoBeyondEntity;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -317,8 +318,8 @@ public class TimeStopWorld implements TimeStop {
         } else if  (!(entity instanceof LivingEntity) && entity.getFirstPassenger() != null &&
                 entity.getFirstPassenger() instanceof LivingEntity && this.isTimeStoppingEntity((LivingEntity) entity.getFirstPassenger())){
             return false;
-        } else if (entity instanceof StandEntity) {
-            LivingEntity Following = ((StandEntity) entity).getFollowing();
+        } else if (entity instanceof FollowingStandEntity FE) {
+            LivingEntity Following = FE.getFollowing();
             if (Following != null && CanTimeStopEntity(Following)){
                 return true;
             } else {

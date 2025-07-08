@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers;
 
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
@@ -37,7 +38,7 @@ public interface StandUser {
     LivingEntity roundabout$getEmulator();
     void roundabout$setEmulator(LivingEntity le);
 
-    void roundabout$updateStandOutPosition(StandEntity passenger);
+    void roundabout$updateStandOutPosition(FollowingStandEntity passenger);
 
     int roundabout$increaseAirSupply(int $$0);
 
@@ -142,11 +143,11 @@ public interface StandUser {
     void roundabout$tryIntPower(int move, boolean forced, int chargeTime);
     void roundabout$tryBlockPosPower(int move, boolean forced, BlockPos blockPos);
     void roundabout$tryPosPower(int move, boolean forced, Vec3 blockPos);
-    void roundabout$addFollower(StandEntity $$0);
-    void roundabout$removeFollower(StandEntity $$0);
+    void roundabout$addFollower(FollowingStandEntity $$0);
+    void roundabout$removeFollower(FollowingStandEntity $$0);
 
-    List<StandEntity> roundabout$getFollowers();
-    boolean roundabout$hasFollower(StandEntity $$0);
+    List<FollowingStandEntity> roundabout$getFollowers();
+    boolean roundabout$hasFollower(FollowingStandEntity $$0);
     boolean roundabout$hasFollower(Predicate<Entity> $$0);
 
     int roundaboutGetTSHurtSound();

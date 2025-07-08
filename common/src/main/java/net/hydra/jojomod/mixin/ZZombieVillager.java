@@ -48,7 +48,7 @@ public abstract class ZZombieVillager extends Zombie implements VillagerDataHold
             if (rand < (ClientNetworking.getAppropriateConfig().percentOfZombieVillagersThatBecomeZombieAestheticians * 0.01)) {
                 ZombieAesthetician $$7 = ModEntities.ZOMBIE_AESTHETICIAN.create(this.level());
                 if ($$7 != null) {
-                    $$7.setPos(this.getPosition(0));
+                    $$7.setPos(this.getPosition(1));
                     this.level().addFreshEntity($$7);
                     this.discard();
                     roundabout$ceaseSound = true;

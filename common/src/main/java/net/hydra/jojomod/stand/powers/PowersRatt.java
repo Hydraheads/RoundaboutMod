@@ -6,6 +6,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -213,13 +214,13 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime) {
-        if (this.getStandEntity(this.getSelf()) != null) {
+        if (this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
             switch (move) {
                 case UPDATE_OFFSET_TYPE -> {
-                    this.getStandEntity(this.getSelf()).setOffsetType((byte) chargeTime);
+                    RE.setOffsetType((byte) chargeTime);
                 }
                 case UPDATE_STATE -> {
-                    ((RattEntity)this.getStandEntity(this.getSelf())).MotionState = (byte) chargeTime;
+                    RE.MotionState = (byte) chargeTime;
                 }
 
             }
@@ -231,7 +232,7 @@ public class PowersRatt extends NewDashPreset {
     @Override
     public void tickPower() {
         StandEntity SE = getStandEntity(this.getSelf());
-        if ( SE != null && SE.getOffsetType() == OffsetIndex.FOLLOW) {
+        if (SE instanceof RattEntity RE && RE.getOffsetType() == OffsetIndex.FOLLOW) {
             if (active) {
                 Deploy();
             } else {

@@ -129,8 +129,8 @@ public abstract class ZNearestAttackableTargetGoal<T extends LivingEntity> exten
     @Inject(method = "findTarget", at = @At(value = "TAIL"))
     protected void roundabout$findTarget(CallbackInfo ci) {
         if (this.target instanceof StandEntity SE) {
-            if(SE.getFollowing() != null && !(SE.getFollowing() instanceof StandEntity)){
-                if (SE.getFollowing() instanceof ServerPlayer PE && !PE.gameMode.isCreative() && !PE.isSpectator()){
+            if(SE.getUser() != null && !(SE.getUser() instanceof StandEntity)){
+                if (SE.getUser() instanceof ServerPlayer PE && !PE.gameMode.isCreative() && !PE.isSpectator()){
                     this.target = PE;
                 } else {
                     this.target = null;

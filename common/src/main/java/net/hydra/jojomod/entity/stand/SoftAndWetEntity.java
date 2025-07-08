@@ -6,7 +6,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 
-public class SoftAndWetEntity extends StandEntity {
+public class SoftAndWetEntity extends FollowingStandEntity {
     public SoftAndWetEntity(EntityType<? extends Mob> entityType, Level world) { super(entityType, world); }
 
     public static final byte

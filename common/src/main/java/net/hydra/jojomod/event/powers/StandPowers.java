@@ -11,6 +11,7 @@ import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModGamerules;
@@ -1351,8 +1352,8 @@ public class StandPowers {
     }
     public void poseStand(byte r){
         StandEntity stand = getStandEntity(this.self);
-        if (Objects.nonNull(stand)){
-            stand.setOffsetType(r);
+        if (stand instanceof FollowingStandEntity FE){
+            FE.setOffsetType(r);
         }
     }
     public void animateStand(byte r){
@@ -2402,7 +2403,7 @@ public class StandPowers {
                     if (!(value instanceof StandEntity SE1 && SE1.getUser() != null && SE1.getUser().is(User))) {
                         float distanceTo = value.distanceTo(User);
                         float range = this.getReach();
-                        if (value instanceof StandEntity SE && OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FOLLOW_STYLE) {
+                        if (value instanceof FollowingStandEntity SE && OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FOLLOW_STYLE) {
                             range /= 2;
                         }
                         if ((nearestDistance < 0 || distanceTo < nearestDistance)

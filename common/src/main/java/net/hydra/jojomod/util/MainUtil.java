@@ -1796,7 +1796,7 @@ public class MainUtil {
                 ((StandUser)player).roundabout$getStandPowers().poseStand(OffsetIndex.LOOSE);
                 StandEntity SE = ((StandUser)player).roundabout$getStand();
                 if (SE != null){
-                    SE.setPos(player.getPosition(0).add(player.getForward().scale(2)).add(0,0.2F,0));
+                    SE.setPos(player.getPosition(1).add(player.getForward().scale(2)).add(0,0.2F,0));
                     SE.setYRot(player.getYHeadRot() % 360);
                 }
             }

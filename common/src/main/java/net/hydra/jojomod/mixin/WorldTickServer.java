@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -47,7 +48,7 @@ import java.util.function.BooleanSupplier;
 public class WorldTickServer {
 
     /** Called every tick on the Server. Checks if a mob has a stand out, and updates the position of the stand.
-     * @see StandEntity#tickStandOut */
+     * @see FollowingStandEntity#tickStandOut */
 
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
@@ -58,7 +59,7 @@ public class WorldTickServer {
         ((IPermaCasting) this).roundabout$tickAllPermaCasts();
 
         this.entityTickList.forEach($$0x -> {
-            if ($$0x instanceof StandEntity standEntity) {
+            if ($$0x instanceof FollowingStandEntity standEntity) {
                 standEntity.validateUUID();
                 if (standEntity.getFollowing() != null){
                     if (!standEntity.getFollowing().isRemoved()){
@@ -118,7 +119,7 @@ public class WorldTickServer {
     }
 
     @Unique
-    private void roundabout$tickStandIn(LivingEntity entity, StandEntity stand) {
+    private void roundabout$tickStandIn(LivingEntity entity, FollowingStandEntity stand) {
         if (stand == null || stand.isRemoved()) {
             return;
         }
@@ -161,7 +162,7 @@ public class WorldTickServer {
     @Inject(method = "tickNonPassenger", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$TickEntity2(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
-            if ($$0 instanceof StandEntity SE) {
+            if ($$0 instanceof FollowingStandEntity SE) {
                 if (SE.getFollowing() != null && ((StandUser)SE.getFollowing()).roundabout$getFollowers().contains(SE)){
                     ci.cancel();
                 }
@@ -196,7 +197,7 @@ public class WorldTickServer {
     private void roundabout$TickEntityX(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
             if ($$0 instanceof LivingEntity LE) {
-                for (StandEntity SE : ((StandUser) $$0).roundabout$getFollowers()) {
+                for (FollowingStandEntity SE : ((StandUser) $$0).roundabout$getFollowers()) {
                     this.roundabout$tickStandIn(LE, SE);
                 }
             }
@@ -206,7 +207,7 @@ public class WorldTickServer {
     @Inject(method = "tickPassenger", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$TickEntity5(Entity $$0, Entity $$1, CallbackInfo ci) {
 
-        if ($$1 instanceof StandEntity SE) {
+        if ($$1 instanceof FollowingStandEntity SE) {
             if (SE.getFollowing() != null){
                 ci.cancel();
             }
@@ -240,7 +241,7 @@ public class WorldTickServer {
     @Inject(method = "tickPassenger", at = @At(value = "TAIL"), cancellable = true)
     private void roundabout$TickEntity6(Entity $$0, Entity $$1, CallbackInfo ci) {
         if ($$1 instanceof LivingEntity LE) {
-            for (StandEntity SE : ((StandUser)$$1).roundabout$getFollowers()) {
+            for (FollowingStandEntity SE : ((StandUser)$$1).roundabout$getFollowers()) {
                 this.roundabout$tickStandIn(LE, SE);
             }
         }

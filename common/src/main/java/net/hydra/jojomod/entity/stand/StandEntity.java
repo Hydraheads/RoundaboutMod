@@ -59,29 +59,14 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
             EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Byte> FADE_OUT = SynchedEntityData.defineId(StandEntity.class,
             EntityDataSerializers.BYTE);
-    protected static final EntityDataAccessor<Integer> ANCHOR_PLACE = SynchedEntityData.defineId(StandEntity.class,
-            EntityDataSerializers.INT);
-    protected static final EntityDataAccessor<Integer> ANCHOR_PLACE_ATTACK = SynchedEntityData.defineId(StandEntity.class,
-            EntityDataSerializers.INT);
 
-    /**The data of stand leaning from player inputs, might go to the user itself at some point.*/
-    protected static final EntityDataAccessor<Byte> MOVE_FORWARD = SynchedEntityData.defineId(StandEntity.class,
-            EntityDataSerializers.BYTE);
 
-    /**OFFSET_TYPE specifies if the stand is floating by your side,
-     * facing your direction, or detached on its own, for instance.*/
-    protected static final EntityDataAccessor<Byte> OFFSET_TYPE = SynchedEntityData.defineId(StandEntity.class,
-            EntityDataSerializers.BYTE);
 
     /**USER_ID is the mob id of the stand's user. Needs to be stored as an int,
      * because clients do not have access to UUIDS.*/
     protected static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(StandEntity.class,
             EntityDataSerializers.INT);
 
-    /**FOLLOWING_ID is the mob the stand is floating by. This does not have to be
-     * the user, for instance, if a stand like killer queen is planted in someone else.*/
-    protected static final EntityDataAccessor<Integer> FOLLOWING_ID = SynchedEntityData.defineId(StandEntity.class,
-            EntityDataSerializers.INT);
 
     /**The animation number playing on the entity. The number is technically arbitrary,
      * as this file defines what each value plays on a per stand basis and can be overridden.*/
@@ -96,17 +81,6 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     protected static final EntityDataAccessor<Byte> SKIN = SynchedEntityData.defineId(StandEntity.class,
             EntityDataSerializers.BYTE);
 
-    protected static final EntityDataAccessor<Float> DISTANCE_OUT = SynchedEntityData.defineId(StandEntity.class,
-            EntityDataSerializers.FLOAT);
-
-    protected static final EntityDataAccessor<Float> SIZE_PERCENT = SynchedEntityData.defineId(StandEntity.class,
-            EntityDataSerializers.FLOAT);
-    protected static final EntityDataAccessor<Float> IDLE_ROTATION = SynchedEntityData.defineId(StandEntity.class,
-            EntityDataSerializers.FLOAT);
-    protected static final EntityDataAccessor<Float> IDLE_Y_OFFSET = SynchedEntityData.defineId(StandEntity.class,
-            EntityDataSerializers.FLOAT);
-
-    private byte lastOffsetType = 0;
     public boolean canAcquireHeldItem = false;
 
     /**This rotation data is for the model rotating when you look certain directions,
@@ -127,8 +101,6 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     /**Like UserID and FollowingID, but for the actual entity data.*/
     @Nullable
     public LivingEntity User;
-    @Nullable
-    public LivingEntity Following;
 
     /**No sculker noises*/
     @Override
@@ -153,12 +125,6 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     }
 
     public void setFollowing(LivingEntity StandSet){
-        this.Following = StandSet;
-        int standSetId = -1;
-        if (StandSet != null){
-            standSetId = StandSet.getId();
-        }
-        this.entityData.set(FOLLOWING_ID, standSetId);
     }
 
     public static final byte
@@ -315,23 +281,6 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     public boolean forceVisible = false;
 
 
-    public final byte getMoveForward() {
-        return this.entityData.get(MOVE_FORWARD);
-    } //returns leaning direction
-
-    public final byte getOffsetType() {
-        if (this.level().isClientSide()){
-            if (ClientUtil.getScreenFreeze()){
-                return this.lastOffsetType;
-            }
-        }
-        return this.entityData.get(OFFSET_TYPE);
-    } //returns leaning direction
-
-    public final void setOffsetType(byte oft) {
-        this.entityData.set(OFFSET_TYPE, oft);
-    }
-
     public final void setAnimation(byte animation) {
         this.entityData.set(ANIMATION, animation);
     }
@@ -357,16 +306,6 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         this.entityData.set(HELD_ITEM, stack);
     }
 
-    /**
-     * Presently, this is how the stand knows to lean in any direction based on player movement.
-     * Creates the illusion of floaty movement within the stand.
-     * Relevant in stand model code:
-     *
-     */
-    public final void setMoveForward(Byte MF) {
-        this.entityData.set(MOVE_FORWARD, MF);
-    } //sets leaning direction
-
     public byte getMaxFade() {
         return MaxFade;
     }
@@ -385,13 +324,6 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         return this.entityData.get(FADE_PERCENT);
     }
 
-    public final int getAnchorPlace() {
-        return this.entityData.get(ANCHOR_PLACE);
-    }
-
-    public final int getAnchorPlaceAttack() {
-        return this.entityData.get(ANCHOR_PLACE_ATTACK);
-    }
 
     public boolean fireImmune() {
         return true;
@@ -463,45 +395,13 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         this.standRotationZ = bodRot;
     }
 
-    /**
-     * This is called when setting the anchor place of a stand, which is to say whether it will position itself
-     * next to the player to the left, right, front, back, or anywhere in between. Players individually can set
-     * this to accommodate their style and FOV settings. Purely cosmetic, as stands will teleport before taking
-     * actions..
-     */
-    public final void setAnchorPlace(Integer degrees) {
-        this.entityData.set(ANCHOR_PLACE, degrees);
-    }
-    public final void setAnchorPlaceAttack(Integer degrees) {
-        this.entityData.set(ANCHOR_PLACE_ATTACK, degrees);
+    public Vec3 getBonusOffset() {
+        return Vec3.ZERO;
     }
 
     public void playerSetProperties(Player PE) {
     }
-    public final void setDistanceOut(float blocks) {
-        this.entityData.set(DISTANCE_OUT, blocks);
-    }
-    public final float getDistanceOut() {
-        return this.entityData.get(DISTANCE_OUT);
-    }
-    public final void setSizePercent(float blocks) {
-        this.entityData.set(SIZE_PERCENT, blocks);
-    }
-    public final float getSizePercent() {
-        return this.entityData.get(SIZE_PERCENT);
-    }
-    public final void setIdleRotation(float blocks) {
-        this.entityData.set(IDLE_ROTATION, blocks);
-    }
-    public final float getIdleRotation() {
-        return this.entityData.get(IDLE_ROTATION);
-    }
-    public final void setIdleYOffset(float blocks) {
-        this.entityData.set(IDLE_Y_OFFSET, blocks);
-    }
-    public final float getIdleYOffset() {
-        return this.entityData.get(IDLE_Y_OFFSET);
-    }
+
 
     /**
      * These functions tell the game if the stand's user is Swimming, Crawling, or Elytra Flying.
@@ -564,18 +464,9 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(ANCHOR_PLACE, 55);
-        this.entityData.define(ANCHOR_PLACE_ATTACK, 55);
-        this.entityData.define(DISTANCE_OUT, 1.07F);
-        this.entityData.define(SIZE_PERCENT, 1F);
-        this.entityData.define(IDLE_ROTATION, 0F);
-        this.entityData.define(IDLE_Y_OFFSET, 0.1F);
         this.entityData.define(FADE_OUT, (byte) 0);
         this.entityData.define(FADE_PERCENT, 100);
-        this.entityData.define(MOVE_FORWARD, (byte) 0);
-        this.entityData.define(OFFSET_TYPE, (byte) 0);
         this.entityData.define(USER_ID, -1);
-        this.entityData.define(FOLLOWING_ID, -1);
         this.entityData.define(ANIMATION, (byte) 0);
         this.entityData.define(IDLE_ANIMATION, (byte) 0);
         this.entityData.define(HELD_ITEM, ItemStack.EMPTY);
@@ -609,23 +500,6 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
      */
     public void setMaster(LivingEntity Master) {
         this.setUser(Master);
-    }
-
-    /**
-     * Unused, will be used to lock a stand onto another mob.
-     * Use case example: Killer Queen BTD following someone else
-     * Code to tick on follower will be needed in client world mixin
-     */
-
-    public LivingEntity getFollowing() {
-        if (this.level().isClientSide){
-            return (LivingEntity) this.level().getEntity(this.entityData.get(FOLLOWING_ID));
-        } else {
-            if (this.Following != null && this.Following.isRemoved()){
-                this.setFollowing(null);
-            }
-            return this.Following;
-        }
     }
 
     /**
@@ -667,46 +541,6 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         ((StandUser) entity).roundabout$setStand(this);
         return true;
         //RoundaboutMod.LOGGER.info("MF");
-    }
-
-    /**
-     * Called every tick in
-     *
-     * @see WorldTickClient for the client and
-     * @see WorldTickServer for the server.
-     * Basically, this lets the user/followee tick the stand so that it moves exactly with them.
-     * The main purpose for this is to make the smooth visual effect of being ridden.
-     * Also, if a stand is perfectly still, it's possible it is just not ticking due to not being mounted properly
-     * with a follower.
-     */
-    public void tickStandOut() {
-
-
-            byte ot = this.getOffsetType();
-            if (lockPos()) {
-                this.setDeltaMovement(Vec3.ZERO);
-            }
-            this.tick();
-            if (this.getFollowing() == null) {
-                return;
-            }
-
-            if (!(OffsetIndex.OffsetStyle(ot) == OffsetIndex.LOOSE_STYLE) || this.isControlledByLocalInstance() ) {
-                ((StandUser) this.getFollowing()).roundabout$updateStandOutPosition(this);
-            }
-    }
-
-    public void tickStandOut2() {
-        byte ot = this.getOffsetType();
-        if (lockPos()) {
-            this.setDeltaMovement(Vec3.ZERO);
-        }
-        if (this.getFollowing() == null) {
-            return;
-        }
-        if (!(OffsetIndex.OffsetStyle(ot) == OffsetIndex.LOOSE_STYLE) || this.isControlledByLocalInstance() ) {
-            ((StandUser) this.getFollowing()).roundabout$updateStandOutPosition(this);
-        }
     }
 
 
@@ -782,26 +616,10 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     public void tick() {
         validateUUID();
         this.noPhysics = hasNoPhysics();
-        float pitch = this.getXRot();
-        float yaw = this.getYRot();
-        byte ot = this.getOffsetType();
-        if (this.lastOffsetType != ot){
-            this.lastOffsetType = ot;
-        }
         super.tick();
 
             if (this.level().isClientSide()){
                 setupAnimationStates();
-            } else {
-                if (!forceVisible) {
-                    if (OffsetIndex.OffsetStyle(ot) == OffsetIndex.LOOSE_STYLE) {
-                        this.setXRot(pitch);
-                        this.setYRot(yaw);
-                        this.setYBodyRot(yaw);
-                        this.xRotO = pitch;
-                        this.yRotO = yaw;
-                    }
-                }
             }
 
             if ((this.isAlive() && !this.dead || forceVisible) && !forceDespawnSet){
@@ -950,8 +768,7 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     }
 
     public boolean canBeHitByStands(){
-        return (isRemoteControlled() || this.getFollowing() != this.getUser() ||
-                (this.getFollowing() == null && this.getUser() == null));
+        return true;
     }
     public boolean isRemoteControlled(){
         Entity ent = this.getUser();
@@ -972,53 +789,6 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         return false;
     }
 
-    /** Math to determine the position of the stand floating away from its user.
-     * Based on Jojovein donut code with great help from Urbancase.*/
-    public Vec3 getStandOffsetVector(LivingEntity standUser){
-        byte ot = this.getOffsetType();
-        if (OffsetIndex.OffsetStyle(ot) == OffsetIndex.FOLLOW_STYLE) {
-            return getIdleOffset(standUser);
-        } else if (OffsetIndex.OffsetStyle(ot) == OffsetIndex.FIXED_STYLE) {
-            return getAttackOffset(standUser,ot);
-        }
-        return new Vec3(this.getX(),this.getY(),this.getZ());
-    }
-
-    /** The offset that can potentially can be used for rushes, punches, blocking, etc.
-     * Involves the stand being in an L shape away from the user,
-     * with the StandModel.java handling the inward rotation*/
-    public Vec3 getAttackOffset(LivingEntity standUser, byte ot) {
-        if (ot == OffsetIndex.BENEATH) {
-            Vec3 frontVectors = FrontVectors(standUser, 180, 0F);
-            return new Vec3(frontVectors.x, frontVectors.y-1.1, frontVectors.z);
-        } else {
-            float distanceFront;
-            float standrotDir2 = 0;
-            float standrotDir = (float) getPunchYaw(this.getAnchorPlaceAttack(),
-                    1);
-            if (standrotDir >0){standrotDir2=90;} else if (standrotDir < 0) {standrotDir2=-90;}
-            float addY = 0.3F;
-            float addXYZ = 0.3F;
-            float addXZ = 0.7F;
-
-            if (ot == OffsetIndex.GUARD || ot == OffsetIndex.GUARD_AND_TRACE) {
-                addXZ -= 0.015F;
-                distanceFront = 1.05F;
-            } else if (ot == OffsetIndex.GUARD_FURTHER_RIGHT) {
-                addXZ+= 0.15F;
-                distanceFront = 1.05F;
-            } else {
-                distanceFront = ((StandUser) standUser).roundabout$getStandPowers().getDistanceOutAccurate(standUser,((StandUser) standUser).roundabout$getStandReach(),true);
-            }
-
-            Vec3 frontVectors = FrontVectors(standUser, 0, distanceFront);
-
-            Vec3 vec3d2 = DamageHandler.getRotationVector(0, standUser.getYHeadRot()+ standrotDir2);
-            frontVectors = frontVectors.add(vec3d2.x * addXZ, 0, vec3d2.z * addXZ);
-            return new Vec3(frontVectors.x,frontVectors.y + standUser.getEyeHeight(standUser.getPose()) + addY - 1.6,
-                    frontVectors.z);
-        }
-    }
     @Override
     public boolean causeFallDamage(float $$0, float $$1, DamageSource $$2) {
         return false;
@@ -1106,41 +876,6 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         else if (Yaw <= 180){return (180-Yaw)*multi;}
         else if (Yaw <= 270){return -((Yaw-180)*multi);}
         else{return -((360-Yaw)*multi);}
-    }
-
-    /**This is the way a stand looks when it is passively floating by you*/
-    public Vec3 getIdleOffset(LivingEntity standUser) {
-        int vis = this.getFadeOut();
-        double r = (((double) vis / MaxFade) * ((standUser.getBbWidth()/2)+this.getDistanceOut()));
-        if (r < 0.5) {
-            r = 0.5;
-        }
-        double yawfix = standUser.getYRot();
-        yawfix += this.getAnchorPlace();
-        if (yawfix > 360) {
-            yawfix -= 360;
-        } else if (yawfix < 0) {
-            yawfix += 360;
-        }
-        double ang = (yawfix - 180) * Math.PI;
-
-        double mcap = 0.3;
-        Vec3 xyz = standUser.getDeltaMovement();
-        double yy = xyz.y() * 0.3;
-        if (yy > mcap) {
-            yy = mcap;
-        } else if (yy < -mcap) {
-            yy = -mcap;
-        }
-        if (isSwimming() || isVisuallyCrawling() || isFallFlying()) {
-            yy += 1;
-        }
-
-        double x1 = standUser.getX() - -1 * (r * (Math.sin(ang / 180)));
-        double y1 = standUser.getY() + getIdleYOffset() - yy;
-        double z1 = standUser.getZ() - (r * (Math.cos(ang / 180)));
-
-        return new Vec3(x1, y1, z1);
     }
 
     /** Builds Minecraft entity attributes like speed and health.
