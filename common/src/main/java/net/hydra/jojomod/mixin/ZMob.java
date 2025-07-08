@@ -465,9 +465,32 @@ public abstract class ZMob extends LivingEntity implements IMob {
         }
     }
     @Unique
+    @Override
+    public void roundabout$deeplyEnforceTarget(Entity ent){
+
+        if (ent instanceof LivingEntity LE){
+            setTarget(LE);
+            if (this.targetSelector != null) {
+                Stream<WrappedGoal> wrappedGoalStream = this.targetSelector.getRunningGoals();
+                wrappedGoalStream.forEach(wrappedGoal -> {
+                    Goal goal = wrappedGoal.getGoal();
+                    this.roundabout$enforceGoalTarget(goal, LE);
+                });
+            }
+        } else {
+            setTarget(null);
+        }
+    }
+    @Unique
     public void roundabout$removeGoalTarget(Goal goal){
         if (goal instanceof TargetGoal tg) {
             ((ITargetGoal) tg).roundabout$removeTarget();
+        }
+    }
+    @Unique
+    public void roundabout$enforceGoalTarget(Goal goal, LivingEntity ent){
+        if (goal instanceof TargetGoal tg) {
+            ((ITargetGoal) tg).roundabout$setTarget(ent);
         }
     }
 

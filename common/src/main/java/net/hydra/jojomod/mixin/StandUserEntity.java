@@ -285,6 +285,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private static final EntityDataAccessor<Integer> ROUNDABOUT$IS_BOUND_TO = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.INT);
     @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$IS_ZAPPED_TO_ATTACK = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.INT);
+    @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$ADJUSTED_GRAVITY = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.INT);
     @Unique
@@ -827,12 +830,55 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     @Override
     public void roundabout$setBoundToID(int bound) {
+        if (this.entityData.hasItem(ROUNDABOUT$IS_BOUND_TO)) {
             this.getEntityData().set(ROUNDABOUT$IS_BOUND_TO, bound);
+        }
     }
     @Unique
     @Override
     public int roundabout$getBoundToID() {
+        if (this.entityData.hasItem(ROUNDABOUT$IS_BOUND_TO)) {
             return this.getEntityData().get(ROUNDABOUT$IS_BOUND_TO);
+        }
+        return -1;
+    }
+    @Unique
+    @Override
+    public void roundabout$setZappedToID(int bound) {
+        if (this.entityData.hasItem(ROUNDABOUT$IS_ZAPPED_TO_ATTACK)) {
+            this.getEntityData().set(ROUNDABOUT$IS_ZAPPED_TO_ATTACK, bound);
+        }
+    }
+    @Unique
+    @Override
+    public int roundabout$getZappedToID() {
+        if (this.entityData.hasItem(ROUNDABOUT$IS_ZAPPED_TO_ATTACK)) {
+            return this.getEntityData().get(ROUNDABOUT$IS_ZAPPED_TO_ATTACK);
+        }
+        return -1;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$aggressivelyEnforceZapAggro(){
+
+        Entity theory = level().getEntity(roundabout$getZappedToID());
+        if (theory != null && !theory.isRemoved() && theory.isAlive()) {
+            if (theory instanceof Mob mb){
+                this.setLastHurtByMob(mb);
+            } else {
+                this.setLastHurtByMob(null);
+            }
+            if (theory instanceof Player pl){
+                this.setLastHurtByPlayer(pl);
+            } else {
+                this.setLastHurtByPlayer(null);
+            }
+            this.setLastHurtMob(theory);
+            if (((LivingEntity) (Object) this) instanceof Mob mb) {
+                ((IMob) mb).roundabout$deeplyEnforceTarget(theory);
+            }
+        }
     }
 
     /**-1 gravity is no change, 0 is suspending gravity, 1000 is the base amount*/
@@ -2395,6 +2441,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GLOW, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BUBBLE_ENCASED, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BOUND_TO, -1);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_ZAPPED_TO_ATTACK, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ADJUSTED_GRAVITY, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ONLY_BLEEDING, true);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$COMBAT_MODE, false);

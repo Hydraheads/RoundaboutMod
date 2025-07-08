@@ -37,6 +37,11 @@ public class ZTargetGoal implements ITargetGoal {
         targetMob = null;
     }
 
+    @Override
+    @Unique
+    public void roundabout$setTarget(LivingEntity target){
+        targetMob = target;
+    }
     /**Soft and Wet Plunder sight*/
     @Inject(method = "getFollowDistance", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$getFollowDistance(CallbackInfoReturnable<Double> cir) {

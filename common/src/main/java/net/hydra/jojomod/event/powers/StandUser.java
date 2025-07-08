@@ -199,6 +199,9 @@ public interface StandUser {
     void roundabout$startAutoSpinAttack(int p_204080_);
 
     void roundabout$setThrower(LivingEntity thrower);
+    void roundabout$setZappedToID(int bound);
+    int roundabout$getZappedToID();
+    void  roundabout$aggressivelyEnforceZapAggro();
 
     LivingEntity roundabout$getThrower();
 

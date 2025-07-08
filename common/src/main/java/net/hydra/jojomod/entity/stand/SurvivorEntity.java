@@ -115,6 +115,10 @@ public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity
     }
 
     public void matchEntities(LivingEntity one, LivingEntity two){
+        ((StandUser)one).roundabout$setZappedToID(two.getId());
+        ((StandUser)one).roundabout$aggressivelyEnforceZapAggro();
+        ((StandUser)two).roundabout$setZappedToID(one.getId());
+        ((StandUser)two).roundabout$aggressivelyEnforceZapAggro();
         this.level().playSound(null, this.blockPosition(), ModSounds.SURVIVOR_SHOCK_EVENT, SoundSource.NEUTRAL, 1F, (float) (0.9F + (Math.random() * 0.2F)));
     }
 
@@ -126,12 +130,10 @@ public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity
                 if (ent.isAlive() && !ent.isRemoved() && (ent instanceof Mob || ent instanceof Player)
                 && !(ent instanceof StandEntity) && ent.isPickable() && !ent.isInvulnerable() &&
                         !(ent instanceof Player PL && PL.isCreative()) &&
-                        ent instanceof LivingEntity LE){
+                        ent instanceof LivingEntity LE && ((StandUser)LE).roundabout$getZappedToID() <= -1){
                     if (firstTarget == null){
                         firstTarget = LE;
-                        Roundabout.LOGGER.info("1");
                     } else {
-                        Roundabout.LOGGER.info("2");
                         matchEntities(firstTarget,LE);
                         return;
                     }
