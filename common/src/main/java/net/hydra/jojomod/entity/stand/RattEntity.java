@@ -13,23 +13,29 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class RattEntity extends StandEntity {
     public RattEntity(EntityType<? extends Mob> entityType, Level world) {super(entityType, world);}
 
     public static final byte
             ANIME_SKIN = 1,
-            MANGA_SKIN = 2;
+            MANGA_SKIN = 2,
+            MELON_SKIN = 3,
+            SAND_SKIN = 4;
 
-    public Component getSkinName(byte skinId) {
-        return getSkinNameT(skinId);
+
+    public List<Byte> getSkinList() {
+        return Arrays.asList(
+                ANIME_SKIN,
+                MANGA_SKIN,
+                MELON_SKIN,
+                SAND_SKIN
+        );
     }
 
-    public static Component getSkinNameT(byte skinId){
-        if (skinId == MANGA_SKIN) {
-            return Component.translatable("skins.roundabout.ratt.manga");
-        }
-        return Component.translatable("skins.roundabout.ratt.anime");
-    }
+
 
     public byte MotionState = PowersRatt.SHOULDER;
     public Vec3 Placement = null;
@@ -40,6 +46,11 @@ public class RattEntity extends StandEntity {
 
     @Override
     public void tick() {
+        super.tick();
+
+        setXRot(45);
+
+        Roundabout.LOGGER.info(String.valueOf(this.getXRot()));
 
         if (getUser() != null) {
             if (!this.getUserData(this.getUser()).roundabout$getActive()) {
@@ -98,7 +109,6 @@ public class RattEntity extends StandEntity {
 
             }
         }
-        super.tick();
     }
 
 

@@ -5,8 +5,10 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
+import net.hydra.jojomod.client.models.layers.RattShoulderLayer;
 import net.hydra.jojomod.client.models.layers.animations.HeyYaAnimations;
 import net.hydra.jojomod.client.models.stand.RattModel;
+import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
@@ -48,14 +50,27 @@ public class RattShoulderModel extends PsuedoHierarchicalModel {
 
     @Override
     public void setupAnim(Entity var1, float pAgeInTicks) {
-
     }
+
     public static ResourceLocation base = new ResourceLocation(Roundabout.MOD_ID,
             "textures/stand/ratt/anime.png");
+    public static ResourceLocation anime = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/ratt/anime.png");
+    public static ResourceLocation manga = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/ratt/manga.png");
+    public static ResourceLocation melon = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/ratt/melon.png");
+    public static ResourceLocation sand = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/ratt/sand.png");
+
 
     public ResourceLocation getTextureLocation(Entity context, byte skin){
         switch (skin)
         {
+            case RattEntity.ANIME_SKIN -> {return anime;}
+            case RattEntity.MANGA_SKIN -> {return manga;}
+            case RattEntity.MELON_SKIN -> {return melon;}
+            case RattEntity.SAND_SKIN -> {return sand;}
             default -> {return base;}
         }
     }
