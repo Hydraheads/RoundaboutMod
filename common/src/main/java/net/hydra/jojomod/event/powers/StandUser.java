@@ -266,4 +266,7 @@ public interface StandUser {
 
     /** Green Day stuff**/
 
+    void DoMoldTick();
+    void MoldFieldExit();
+
 }

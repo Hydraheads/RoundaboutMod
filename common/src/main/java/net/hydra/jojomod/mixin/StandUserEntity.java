@@ -18,19 +18,17 @@ import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.SoftExplosion;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.event.powers.stand.presets.BlockGrabPreset;
-import net.hydra.jojomod.stand.powers.PowersD4C;
+import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.stand.powers.PowersHeyYa;
-import net.hydra.jojomod.stand.powers.PowersMandom;
-import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -3730,5 +3728,60 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
 
+    public double previousYpos = 0.0;
+    public float MoldLevel = 0.0f;
 
+    @Override
+    public void DoMoldTick() {
+        MoldLevel = MoldLevel + 1f;
+
+            if (MoldLevel % 5 == 0) {
+
+                if(MoldLevel > 60){
+                    MoldLevel = 0;
+                    if (true){
+                        this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION),326);
+                    }
+                }
+                else {
+                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), (MoldLevel/5f) + 3.0f);
+                }
+
+            }
+
+
+    }
+
+    @Override
+    public void MoldFieldExit() {
+        MoldLevel = 0;
+        this.tick();
+
+    }
+
+    @Inject(method = "travel", at = @At(value = "TAIL"))
+    public void   MoldDetection(Vec3 movement,CallbackInfo info) {
+        if((((IPermaCasting)this.level()).roundabout$inPermaCastRange(this.getOnPos(), PermanentZoneCastInstance.MOLD_FIELD))) {
+            Boolean isUser = (((IPermaCasting)this.level()).roundabout$isPermaCastingEntity(((LivingEntity)(Object) this))&& this.roundabout$getStandPowers() instanceof PowersGreenDay);
+            Boolean down = previousYpos > this.getY();
+            boolean isStand = (((LivingEntity)(Object) this) instanceof StandEntity);
+            if (!roundabout$getStandPowers().isStoppingTime() &&!this.roundabout$isBubbleEncased() && !isUser && !isStand && down){
+                for (int i = 0; i < 3; i = i + 1) {
+
+                    double width = this.getBbWidth();
+                    double height = this.getBbHeight();
+                    double randomX = Roundabout.RANDOM.nextDouble(0 - (width / 2), width / 2);
+                    double randomY = Roundabout.RANDOM.nextDouble(0 - (height / 2), height / 2);
+                    double randomZ = Roundabout.RANDOM.nextDouble(0 - (width / 2), width / 2);
+                    (this.level()).addParticle(ModParticles.MOLD,
+                            this.getX() + randomX, (this.getY() + height / 2) + randomY, this.getZ() + randomZ,
+                            this.getDeltaMovement().x, this.getDeltaMovement().y, this.getDeltaMovement().z
+                    );
+
+                }
+                DoMoldTick();
+            }
+        }
+        previousYpos = this.getY();
+    }
 }
