@@ -2941,6 +2941,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public boolean roundabout$mutualActuallyHurt(DamageSource $$0, float $$1){
         if (!this.isInvulnerableTo($$0)) {
 
+            Entity zent = $$0.getEntity();
+            if (zent != null && zent instanceof LivingEntity LE){
+                ItemStack stack = LE.getMainHandItem();
+
+                if (stack != null && !stack.isEmpty() && stack.is(ModItems.SCISSORS)) {
+                    if (MainUtil.getMobBleed(this)) {
+                        roundabout$setBleedLevel(0);
+                        addEffect(new MobEffectInstance(ModEffects.BLEED, 300, 0), LE);
+                    }
+                    stack.hurtAndBreak(1, LE, $$0x -> $$0x.broadcastBreakEvent(EquipmentSlot.MAINHAND));
+                }
+            }
             /**Big bubble pops*/
             if (roundabout$isBubbleEncased()){
                 if ($$0.getEntity() != null || $$0.is(DamageTypes.THORNS) || $$0.is(DamageTypes.ARROW)
