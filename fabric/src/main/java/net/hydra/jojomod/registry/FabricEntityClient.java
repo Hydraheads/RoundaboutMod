@@ -167,5 +167,7 @@ public class FabricEntityClient {
         ModStrayModels.LegCloakPart = new LegCloakPart();
         ModStrayModels.PlayerChestPart = new PlayerChestPart();
         ModStrayModels.PlayerSmallChestPart = new PlayerSmallChestPart();
+        ModStrayModels.RightArmSlim = new RightArmSlimPart();
+        ModStrayModels.RightArm = new RightArmPart();
     }
 }

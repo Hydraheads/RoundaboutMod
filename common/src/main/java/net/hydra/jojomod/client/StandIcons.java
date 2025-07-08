@@ -55,6 +55,10 @@ public class StandIcons {
     public static final ResourceLocation STONE_LEFT_LEG = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/locacaca_layers/left_leg.png");
 
+    public static final ResourceLocation MUSCLE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/other_layers/muscle_full.png");
+    public static final ResourceLocation MUSCLE_SLIM = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/other_layers/muscle_slim.png");
     public static final ResourceLocation THE_WORLD_ASSAULT = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/assault.png");
     public static final ResourceLocation THE_WORLD_IMPALE = new ResourceLocation(Roundabout.MOD_ID,

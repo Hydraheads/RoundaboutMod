@@ -694,6 +694,19 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
     @Inject(method = "setModelProperties",
             at = @At(value = "TAIL"), cancellable = true)
     public<T extends LivingEntity, M extends EntityModel<T>> void roundabout$setModelProps(AbstractClientPlayer $$0, CallbackInfo ci) {
+        /**Set visibility of limbs*/
+        /**Generally sleeves and whatnot gotta go for modded layers*/
+        StandUser user = ((StandUser) $$0);
+        int muscle = user.roundabout$getZappedToID();
+        //muscle = 100;
+        PlayerModel<AbstractClientPlayer> $$1 = this.getModel();
+        if (muscle > -1){
+            if ($$0.getMainArm() == HumanoidArm.RIGHT){
+                $$1.rightSleeve.visible= false;
+            } else {
+                $$1.leftSleeve.visible= false;
+            }
+        }
 
     }
     @Inject(method = "render(Lnet/minecraft/client/player/AbstractClientPlayer;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
