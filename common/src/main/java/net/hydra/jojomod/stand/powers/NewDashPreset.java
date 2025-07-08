@@ -106,11 +106,6 @@ public class NewDashPreset extends StandPowerRewrite {
     }
 
     @Override
-    public void tick() {
-
-    }
-
-    @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime){
         if (this.canChangePower(move, forced)) {
             if (move == PowerIndex.MOVEMENT) {
@@ -199,6 +194,20 @@ public class NewDashPreset extends StandPowerRewrite {
                 30, 1, 0.05, 1, 0.4);
     }
 
+    public boolean vaultOrFallBraceFails(){
+        if (!doVault()){
+            if (canFallBrace()) {
+                doFallBraceClient();
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+    public void doFallBraceClient(){
+        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.EXTRA, true);
+        tryPowerPacket(PowerIndex.EXTRA);
+    }
     public boolean fallBrace() {
         impactBrace= false;
         if (this.getActivePower() == PowerIndex.EXTRA && this.attackTimeDuring >= 0) {

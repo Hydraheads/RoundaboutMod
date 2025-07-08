@@ -83,7 +83,7 @@
   "item.roundabout.blank_mask": "Rostro cristalino",
   "item.roundabout.blank_mask.desc": "Esconde la armadura",
   "item.roundabout.modification_mask": "Rostro de modificación",
-  "item.roundabout.modification_mask.desc": "Interactia para persoanlizar tu apariencia",
+  "item.roundabout.modification_mask.desc": "Interactua para personalizar tu apariencia",
   "item.roundabout.jotaro_mask": "Rostro de Jotaro",
   "item.roundabout.jotaro_mask.desc": "Jotaro Kujo (Parte 3)",
   "item.roundabout.jotaro_mask.tag": "Jotaro",
@@ -644,7 +644,7 @@
   "sounds.roundabout.jotaro_yare_yare_4":  "No me jodas",
   "sounds.roundabout.jotaro_yare_yare_5":  "No me jodas",
   "sounds.roundabout.jotaro_pissed_off":  "Un error...",
-  "sounds.roundabout.jotaro_judgement":  "Jucio",
+  "sounds.roundabout.jotaro_judgement":  "¡Juicio!",
   "sounds.roundabout.jotaro_dio":  "¡DIO!",
   "sounds.roundabout.jotaro_getting_closer":  "De que otra manera...",
 
@@ -934,7 +934,7 @@
   "skins.roundabout.justice.wither": "Wither",
   "skins.roundabout.justice.flamed": "Flama",
   "skins.roundabout.justice.flamed_blue": "Flama azul",
-  "skins.roundabout.justice.twilight": "Twilight",
+  "skins.roundabout.justice.twilight": "Twilight Forestmn ",
   "skins.roundabout.justice.pirate": "Pirata",
   "skins.roundabout.justice.dark_mirage": "Dark Mirage",
   "skins.roundabout.justice.jojonium": "Jojonium",
@@ -986,7 +986,7 @@
 
   "skins.roundabout.cinderella.base": "Parte 4",
   "skins.roundabout.cinderella.manga": "Manga",
-  "skins.roundabout.cinderella.zombie": "Infecteda",
+  "skins.roundabout.cinderella.zombie": "Infectada",
 
   "skins.roundabout.hey_ya.manga": "Manga",
   "skins.roundabout.hey_ya.gothic": "Gótico",

@@ -85,6 +85,8 @@ public class Config implements Cloneable {
     public Float standUserVillagerOdds;
     @FloatOption(group = "inherit", value = 0.15F, min = 0, max = 1F)
     public Float userAndWorthyBreedingOddsBonus;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean standUserMonstersDropMeteorite;
     @BooleanOption(group = "inherit", value = false)
     public Boolean bossMobsCanNaturallyHaveStands;
     @IntOption(group = "inherit", value = 2, min = 0, max = 72000)
@@ -93,6 +95,8 @@ public class Config implements Cloneable {
     public Boolean SuperBlockDestructionBarragePunches;
     @BooleanOption(group = "inherit", value = false)
     public Boolean SuperBlockDestructionBarrageLaunching;
+    @BooleanOption(group = "inherit", value = false)
+    public Boolean doExtraGriefChecksForClaims;
     @BooleanOption(group = "inherit", value = false)
     public Boolean starPlatinumScopeUsesPotionEffectForNightVision;
     @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
@@ -376,6 +380,8 @@ public class Config implements Cloneable {
         public Integer objectPocket;
         @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
         public Integer mobThrow;
+        @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
+        public Integer mobThrowInterruptv2;
         @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
         public Integer mobThrowAttack;
         @IntOption(group = "inherit", value = 800, min = 0, max = 72000)
@@ -570,6 +576,10 @@ public class Config implements Cloneable {
         public Integer SummonSurvivorCooldownV2;
         @BooleanOption(group = "inherit", value = true)
         public Boolean SummonSurvivorCooldownCooldownUsesServerLatency;
+        @IntOption(group = "inherit", value = 6, min = 0, max = 72000)
+        public Integer maxSurvivorsCount;
+        @IntOption(group = "inherit", value = 140, min = 0, max = 72000)
+        public Integer dryUpInNetherTicks;
     }
     public static class TheWorldSettings {
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)

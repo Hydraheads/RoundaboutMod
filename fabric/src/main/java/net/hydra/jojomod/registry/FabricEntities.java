@@ -200,7 +200,7 @@ public class FabricEntities {
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "the_world"),
                         EntityType.Builder.of(TheWorldEntity::new, MobCategory.MISC).
-                                sized(0.75F, 2.05f).clientTrackingRange(10).build(Roundabout.MOD_ID+":the_world")
+                                sized(0.75F, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":the_world")
                 );
 
         public static final EntityType<TheWorldEntity> THE_WORLD_ULTIMATE =
@@ -208,7 +208,7 @@ public class FabricEntities {
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "the_world_ultimate"),
                         EntityType.Builder.of(TheWorldEntity::new, MobCategory.MISC).
-                                sized(0.75F, 2.05f).clientTrackingRange(10).build(Roundabout.MOD_ID+":the_world_ultimate")
+                                sized(0.75F, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":the_world_ultimate")
                 );
 
         public static final EntityType<StarPlatinumEntity> STAR_PLATINUM =
@@ -216,7 +216,7 @@ public class FabricEntities {
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "star_platinum"),
                         EntityType.Builder.of(StarPlatinumEntity::new, MobCategory.MISC).
-                                sized(0.75F, 2.05f).clientTrackingRange(10).build(Roundabout.MOD_ID+":star_platinum")
+                                sized(0.75F, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":star_platinum")
                 );
 
         public static final EntityType<StarPlatinumBaseballEntity> STAR_PLATINUM_BASEBALL =
@@ -224,35 +224,35 @@ public class FabricEntities {
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "star_platinum_baseball"),
                         EntityType.Builder.of(StarPlatinumBaseballEntity::new, MobCategory.MISC).
-                                sized(0.75F, 2.05f).clientTrackingRange(10).build(Roundabout.MOD_ID+":star_platinum_baseball")
+                                sized(0.75F, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":star_platinum_baseball")
                 );
         public static final EntityType<JusticeEntity> JUSTICE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "justice"),
                         EntityType.Builder.of(JusticeEntity::new, MobCategory.MISC).
-                                sized(ModEntities.justiceWidth, ModEntities.justiceHeight).clientTrackingRange(12).build(Roundabout.MOD_ID+":justice")
+                                sized(ModEntities.justiceWidth, ModEntities.justiceHeight).clientTrackingRange(14).build(Roundabout.MOD_ID+":justice")
                 );
         public static final EntityType<MagiciansRedEntity> MAGICIANS_RED =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "magicians_red"),
                         EntityType.Builder.of(MagiciansRedEntity::new, MobCategory.MISC).
-                                sized(0.75F, 2.05f).clientTrackingRange(12).build(Roundabout.MOD_ID+":magicians_red")
+                                sized(0.75F, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":magicians_red")
                 );
         public static final EntityType<MagiciansRedEntity> MAGICIANS_RED_OVA =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "magicians_red_ova"),
                         EntityType.Builder.of(MagiciansRedEntity::new, MobCategory.MISC).
-                                sized(0.75F, 2.05f).clientTrackingRange(12).build(Roundabout.MOD_ID+":magicians_red")
+                                sized(0.75F, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":magicians_red")
                 );
         public static final EntityType<D4CEntity> D4C =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         Roundabout.location("d4c"),
                         EntityType.Builder.of(D4CEntity::new, MobCategory.MISC).
-                                sized(0.75f, 2.05f).clientTrackingRange(12).build(Roundabout.MOD_ID+":d4c")
+                                sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":d4c")
                 );
 
         public static final EntityType<SoftAndWetEntity> SOFT_AND_WET =
@@ -260,84 +260,84 @@ public class FabricEntities {
                         BuiltInRegistries.ENTITY_TYPE,
                         Roundabout.location("soft_and_wet"),
                         EntityType.Builder.of(SoftAndWetEntity::new, MobCategory.MISC).
-                                sized(0.75f, 2.05f).clientTrackingRange(12).build(Roundabout.MOD_ID+":soft_and_wet")
+                                sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":soft_and_wet")
                 );
         public static final EntityType<RattEntity> RATT =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         Roundabout.location("ratt"),
                         EntityType.Builder.of(RattEntity::new, MobCategory.MISC).
-                                sized(0.75f, 1.2f).clientTrackingRange(12).build(Roundabout.MOD_ID+":ratt")
+                                sized(0.75f, 1.2f).clientTrackingRange(14).build(Roundabout.MOD_ID+":ratt")
                 );
         public static final EntityType<GreenDayEntity> GREEN_DAY =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         Roundabout.location("green_day"),
                         EntityType.Builder.of(GreenDayEntity::new, MobCategory.MISC).
-                                sized(0.75f, 2.05f).clientTrackingRange(12).build(Roundabout.MOD_ID+":green_day")
+                                sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":green_day")
                 );
         public static final EntityType<SurvivorEntity> SURVIVOR =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         Roundabout.location("survivor"),
                         EntityType.Builder.of(SurvivorEntity::new, MobCategory.MISC).
-                                sized(0.5f, 0.3f).clientTrackingRange(12).build(Roundabout.MOD_ID+":survivor")
+                                sized(0.5f, 0.3f).clientTrackingRange(14).build(Roundabout.MOD_ID+":survivor")
                 );
         public static final EntityType<SoftAndWetEntity> SOFT_AND_WET_DROWNED =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         Roundabout.location("soft_and_wet_drowned"),
                         EntityType.Builder.of(SoftAndWetEntity::new, MobCategory.MISC).
-                                sized(0.75f, 2.05f).clientTrackingRange(12).build(Roundabout.MOD_ID+":soft_and_wet_drowned")
+                                sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":soft_and_wet_drowned")
                 );
         public static final EntityType<SoftAndWetEntity> SOFT_AND_WET_DEBUT =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         Roundabout.location("soft_and_wet_debut"),
                         EntityType.Builder.of(SoftAndWetEntity::new, MobCategory.MISC).
-                                sized(0.75f, 2.05f).clientTrackingRange(12).build(Roundabout.MOD_ID+":soft_and_wet_debut")
+                                sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":soft_and_wet_debut")
                 );
         public static final EntityType<SoftAndWetEntity> SOFT_AND_WET_KING =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         Roundabout.location("soft_and_wet_king"),
                         EntityType.Builder.of(SoftAndWetEntity::new, MobCategory.MISC).
-                                sized(0.75f, 2.05f).clientTrackingRange(12).build(Roundabout.MOD_ID+":soft_and_wet_king")
+                                sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":soft_and_wet_king")
                 );
         public static final EntityType<SoftAndWetEntity> SOFT_AND_WET_KILLER_QUEEN =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         Roundabout.location("soft_and_wet_killer_queen"),
                         EntityType.Builder.of(SoftAndWetEntity::new, MobCategory.MISC).
-                                sized(0.75f, 2.05f).clientTrackingRange(12).build(Roundabout.MOD_ID+":soft_and_wet_killer_queen")
+                                sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":soft_and_wet_killer_queen")
                 );
         public static final EntityType<KillerQueenEntity> KILLER_QUEEN =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         Roundabout.location("killer_queen"),
                         EntityType.Builder.of(KillerQueenEntity::new, MobCategory.MISC).
-                                sized(0.75f, 2.05f).clientTrackingRange(12).build(Roundabout.MOD_ID+":killer_queen")
+                                sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":killer_queen")
                 );
         public static final EntityType<CinderellaEntity> CINDERELLA =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         Roundabout.location("cinderella"),
                         EntityType.Builder.of(CinderellaEntity::new, MobCategory.MISC).
-                                sized(0.75f, 2.05f).clientTrackingRange(12).build(Roundabout.MOD_ID+":cinderella")
+                                sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":cinderella")
                 );
         public static final EntityType<JusticePirateEntity> JUSTICE_PIRATE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "justice_pirate"),
                         EntityType.Builder.of(JusticePirateEntity::new, MobCategory.MISC).
-                                sized(ModEntities.justiceWidth, ModEntities.justiceHeight).clientTrackingRange(10).build(Roundabout.MOD_ID+":justice_pirate")
+                                sized(ModEntities.justiceWidth, ModEntities.justiceHeight).clientTrackingRange(14).build(Roundabout.MOD_ID+":justice_pirate")
                 );
         public static final EntityType<DarkMirageEntity> DARK_MIRAGE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "dark_mirage"),
                         EntityType.Builder.of(DarkMirageEntity::new, MobCategory.MISC).
-                                sized(0.75F, 2.05f).clientTrackingRange(10).build(Roundabout.MOD_ID+":dark_mirage")
+                                sized(0.75F, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":dark_mirage")
                 );
         public static final EntityType<HarpoonEntity> THROWN_HARPOON =
                 Registry.register(
@@ -359,6 +359,13 @@ public class FabricEntities {
                         new ResourceLocation(Roundabout.MOD_ID, "match"),
                         EntityType.Builder.<MatchEntity>of(MatchEntity::new, MobCategory.MISC).
                                 sized(0.5f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":match")
+                );
+        public static final EntityType<ThrownWaterBottleEntity> THROWN_WATER_BOTTLE =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "water_bottle"),
+                        EntityType.Builder.<ThrownWaterBottleEntity>of(ThrownWaterBottleEntity::new, MobCategory.MISC).
+                                sized(0.5f, 0.5f).clientTrackingRange(12).build(Roundabout.MOD_ID+":water_bottle")
                 );
         public static final EntityType<GasolineCanEntity> GASOLINE_CAN =
                 Registry.register(
@@ -504,6 +511,7 @@ public class FabricEntities {
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
                 ModEntities.THROWN_MATCH = THROWN_MATCH;
+                ModEntities.THROWN_WATER_BOTTLE = THROWN_WATER_BOTTLE;
                 ModEntities.CROSSFIRE_HURRICANE = CROSSFIRE_HURRICANE;
                 ModEntities.LIFE_TRACKER = LIFE_TRACKER;
                 ModEntities.STAND_FIREBALL = STAND_FIREBALL;

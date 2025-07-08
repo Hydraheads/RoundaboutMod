@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.ITargetGoal;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModGamerules;
@@ -130,14 +131,16 @@ public abstract class ZMob extends LivingEntity implements IMob {
                         }
                     }
 
-                    this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
-                    if (this.random.nextDouble() < 0.5) {
+                    if (ClientNetworking.getAppropriateConfig().standUserMonstersDropMeteorite) {
                         this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
-                    }
-                    if ($$1 > 0) {
-                        for (int i = 0; i < $$1; i++) {
-                            if (this.random.nextDouble() < 0.5) {
-                                this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
+                        if (this.random.nextDouble() < 0.5) {
+                            this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
+                        }
+                        if ($$1 > 0) {
+                            for (int i = 0; i < $$1; i++) {
+                                if (this.random.nextDouble() < 0.5) {
+                                    this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
+                                }
                             }
                         }
                     }
@@ -462,9 +465,32 @@ public abstract class ZMob extends LivingEntity implements IMob {
         }
     }
     @Unique
+    @Override
+    public void roundabout$deeplyEnforceTarget(Entity ent){
+
+        if (ent instanceof LivingEntity LE){
+            setTarget(LE);
+            if (this.targetSelector != null) {
+                Stream<WrappedGoal> wrappedGoalStream = this.targetSelector.getRunningGoals();
+                wrappedGoalStream.forEach(wrappedGoal -> {
+                    Goal goal = wrappedGoal.getGoal();
+                    this.roundabout$enforceGoalTarget(goal, LE);
+                });
+            }
+        } else {
+            setTarget(null);
+        }
+    }
+    @Unique
     public void roundabout$removeGoalTarget(Goal goal){
         if (goal instanceof TargetGoal tg) {
             ((ITargetGoal) tg).roundabout$removeTarget();
+        }
+    }
+    @Unique
+    public void roundabout$enforceGoalTarget(Goal goal, LivingEntity ent){
+        if (goal instanceof TargetGoal tg) {
+            ((ITargetGoal) tg).roundabout$setTarget(ent);
         }
     }
 

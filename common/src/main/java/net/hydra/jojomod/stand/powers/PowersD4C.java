@@ -111,7 +111,7 @@ public class PowersD4C extends NewPunchingStand {
     }
 
     @Override
-    public void tick() {
+    public void visualFrameTick() {
         if (betweenVision)
             highlightBlocksInFrustum(1500, 100);
 

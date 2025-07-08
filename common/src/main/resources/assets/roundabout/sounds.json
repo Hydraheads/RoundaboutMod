@@ -17,6 +17,30 @@
       "roundabout:summon_mandom"
     ]
   },
+  "survivor_summon": {
+    "subtitle": "sounds.roundabout.survivor_summon",
+    "sounds": [
+      "roundabout:survivor_summon"
+    ]
+  },
+  "survivor_shock": {
+    "subtitle": "sounds.roundabout.survivor_shock",
+    "sounds": [
+      "roundabout:survivor_shock"
+    ]
+  },
+  "survivor_place": {
+    "subtitle": "sounds.roundabout.survivor_place",
+    "sounds": [
+      "roundabout:survivor_place"
+    ]
+  },
+  "survivor_remove": {
+    "subtitle": "sounds.roundabout.survivor_remove",
+    "sounds": [
+      "roundabout:survivor_remove"
+    ]
+  },
   "mandom_rewind": {
     "subtitle": "sounds.roundabout.mandom_rewind",
     "sounds": [

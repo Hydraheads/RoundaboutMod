@@ -122,9 +122,6 @@ public class PowersMandom extends NewDashPreset {
     public boolean activatedPastVision(){
         return getStandUserSelf().roundabout$getUniqueStandModeToggle();
     }
-    @Override
-    public void tick() {
-    }
 
     @Override
     public void powerActivate(PowerContext context) {

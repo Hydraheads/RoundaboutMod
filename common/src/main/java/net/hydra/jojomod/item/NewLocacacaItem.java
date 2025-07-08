@@ -5,7 +5,7 @@ import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
+import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.particles.ItemParticleOption;

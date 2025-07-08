@@ -26,13 +26,15 @@ public class SavedSecondLiving extends SavedSecond {
     public int gasolineTicks;
     public int airtime;
     public byte locacaca;
+    public int leapTicks;
+    public byte bubbleEncase;
 
 
     public SavedSecondLiving(float headYRotation, Vec2 rotationVec, Vec3 position, Vec3 deltaMovement, float fallDistance,
                              ResourceKey<DimensionType> dimensionId,
                              Collection<MobEffectInstance> activeEffects, float health, int onFireTicks, int onStandFireTicks,
                              byte onStandFireType,
-                             int gasolineTicks, int airtime, byte locacaca){
+                             int gasolineTicks, int airtime, byte locacaca, int leapTicks, byte bubbleEncase){
         super(headYRotation,rotationVec,position,deltaMovement,fallDistance,dimensionId);
 
         List<MobEffectInstance> effects = new ArrayList<>(activeEffects.stream().toList());
@@ -50,6 +52,8 @@ public class SavedSecondLiving extends SavedSecond {
         this.gasolineTicks = gasolineTicks;
         this.airtime = airtime;
         this.locacaca = locacaca;
+        this.leapTicks = leapTicks;
+        this.bubbleEncase = bubbleEncase;
     }
     @Override
     public void loadTime(Entity ent){
@@ -85,6 +89,8 @@ public class SavedSecondLiving extends SavedSecond {
             user.roundabout$setGasolineTime(gasolineTicks);
             LE.setAirSupply(this.airtime);
             user.roundabout$setLocacacaCurse(this.locacaca);
+            user.roundabout$setLeapTicks(leapTicks);
+            user.roundabout$setBubbleEncased(bubbleEncase);
 
         }
     }

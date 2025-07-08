@@ -20,6 +20,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.SoftExplosion;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.event.powers.stand.presets.BlockGrabPreset;
 import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
@@ -178,8 +179,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private int roundabout$destructionModeTrailTicks = -1;
     @Unique
     private int roundabout$detectTicks = -1;
-    @Unique
-    private final int roundabout$maxLeapTicks = 60;
 
     public StandUserEntity(EntityType<?> $$0, Level $$1) {
         super($$0, $$1);
@@ -207,6 +206,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Nullable
     @Unique
     private StandEntity roundabout$Stand;
+
+    /*Mob throw keeps track of the thrower to deal damage in their name*/
     @Nullable
     @Unique
     private LivingEntity roundabout$thrower;
@@ -284,6 +285,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private static final EntityDataAccessor<Integer> ROUNDABOUT$IS_BOUND_TO = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.INT);
     @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$IS_ZAPPED_TO_ATTACK = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.INT);
+    @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$ADJUSTED_GRAVITY = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.INT);
     @Unique
@@ -328,8 +332,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private int roundabout$gasTicks = -1;
     @Unique
     private int roundabout$gasRenderTicks = -1;
-    private int roundabout$maxGasTicks = 200;
-    private int roundabout$maxBucketGasTicks = 600;
 
     /**
      * Idle time is how long you are standing still without using skills, eating, or
@@ -828,12 +830,55 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     @Override
     public void roundabout$setBoundToID(int bound) {
+        if (this.entityData.hasItem(ROUNDABOUT$IS_BOUND_TO)) {
             this.getEntityData().set(ROUNDABOUT$IS_BOUND_TO, bound);
+        }
     }
     @Unique
     @Override
     public int roundabout$getBoundToID() {
+        if (this.entityData.hasItem(ROUNDABOUT$IS_BOUND_TO)) {
             return this.getEntityData().get(ROUNDABOUT$IS_BOUND_TO);
+        }
+        return -1;
+    }
+    @Unique
+    @Override
+    public void roundabout$setZappedToID(int bound) {
+        if (this.entityData.hasItem(ROUNDABOUT$IS_ZAPPED_TO_ATTACK)) {
+            this.getEntityData().set(ROUNDABOUT$IS_ZAPPED_TO_ATTACK, bound);
+        }
+    }
+    @Unique
+    @Override
+    public int roundabout$getZappedToID() {
+        if (this.entityData.hasItem(ROUNDABOUT$IS_ZAPPED_TO_ATTACK)) {
+            return this.getEntityData().get(ROUNDABOUT$IS_ZAPPED_TO_ATTACK);
+        }
+        return -1;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$aggressivelyEnforceZapAggro(){
+
+        Entity theory = level().getEntity(roundabout$getZappedToID());
+        if (theory != null && !theory.isRemoved() && theory.isAlive()) {
+            if (theory instanceof Mob mb){
+                this.setLastHurtByMob(mb);
+            } else {
+                this.setLastHurtByMob(null);
+            }
+            if (theory instanceof Player pl){
+                this.setLastHurtByPlayer(pl);
+            } else {
+                this.setLastHurtByPlayer(null);
+            }
+            this.setLastHurtMob(theory);
+            if (((LivingEntity) (Object) this) instanceof Mob mb) {
+                ((IMob) mb).roundabout$deeplyEnforceTarget(theory);
+            }
+        }
     }
 
     /**-1 gravity is no change, 0 is suspending gravity, 1000 is the base amount*/
@@ -1043,7 +1088,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.roundabout$tickGuard();
         this.roundabout$tickDaze();
         if (this.roundabout$leapTicks > -1) {
-            if (this.onGround() && roundabout$leapTicks < (roundabout$maxLeapTicks - 5)) {
+            if (this.onGround() && roundabout$leapTicks < (MainUtil.maxLeapTicks() - 5)) {
                 roundabout$leapTicks = -1;
             }
             roundabout$cancelConsumableItem((LivingEntity) (Object) this);
@@ -1281,11 +1326,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     public int roundabout$getMaxGasolineTime(){
-        return this.roundabout$maxGasTicks;
+        return MainUtil.maxGasTicks();
     }
     @Unique
     public int roundabout$getMaxBucketGasolineTime(){
-        return this.roundabout$maxBucketGasTicks;
+        return MainUtil.maxBucketGasTicks();
     }
 
     @Override
@@ -1308,7 +1353,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     @Unique
     public int roundabout$getMaxLeapTicks(){
-        return this.roundabout$maxLeapTicks;
+        return MainUtil.maxLeapTicks();
     }
     @Override
     @Unique
@@ -1323,7 +1368,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         } else {
             roundabout$gasRenderTicks++;
         }
-        if (((LivingEntity) (Object) this) instanceof Player && !((LivingEntity) (Object) this).level().isClientSide){
+        if (((LivingEntity) (Object) this) instanceof Player && !((LivingEntity) (Object) this).level().isClientSide()){
             ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) (Object) this),(byte) 1, gasTicks);
         }
     }
@@ -2396,6 +2441,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GLOW, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BUBBLE_ENCASED, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BOUND_TO, -1);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_ZAPPED_TO_ATTACK, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ADJUSTED_GRAVITY, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ONLY_BLEEDING, true);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$COMBAT_MODE, false);
@@ -2479,7 +2525,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (FM.getController() > 0 && FM.getController() != this.getId()){
                 ent2 = FM.controller;
             }
-            ci.setReturnValue(hurt(ModDamageTypes.of(this.level(), ModDamageTypes.CORPSE_ARROW, $$0.getDirectEntity(),ent2),
+            ci.setReturnValue(hurt(ModDamageTypes.of(this.level(), ModDamageTypes.CORPSE_ARROW, ent2),
                     $$1));
             return;
         } else if ($$0.is(DamageTypes.PLAYER_EXPLOSION) && $$0.getEntity() instanceof FallenMob FM){
@@ -2917,6 +2963,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     }
                 }
             }
+
+            roundabout$getStandPowers().onActuallyHurt($$0,$$1);
 
             Entity bound = roundabout$getBoundTo();
             if (bound != null && ($$0.getEntity() != null || $$0.is(DamageTypes.MAGIC) || $$0.is(DamageTypes.EXPLOSION)) && !$$0.is(ModDamageTypes.STAND_FIRE)){

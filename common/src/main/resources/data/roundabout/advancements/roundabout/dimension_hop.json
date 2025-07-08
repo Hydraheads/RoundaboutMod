@@ -6,17 +6,17 @@
     }
   },
   "display": {
-    "announce_to_chat": true,
+    "announce_to_chat": false,
     "description": {
       "translate": "advancements.roundabout.dimension_hop.description"
     },
     "frame": "task",
-    "hidden": false,
+    "hidden": true,
     "icon": {
       "item": "roundabout:interdimensional_key",
       "nbt": "{Damage:0}"
     },
-    "show_toast": true,
+    "show_toast": false,
     "title": {
       "translate": "advancements.roundabout.dimension_hop.title"
     }

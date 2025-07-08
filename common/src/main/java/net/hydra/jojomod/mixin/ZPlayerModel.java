@@ -1,7 +1,6 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.client.ClientUtil;
@@ -9,7 +8,7 @@ import net.hydra.jojomod.client.models.layers.animations.FirstPersonLayerAnimati
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
+import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModificationMaskItem;
 import net.minecraft.client.animation.AnimationChannel;

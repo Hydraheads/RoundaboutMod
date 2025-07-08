@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.models.stand.SurvivorModel;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
+import net.hydra.jojomod.stand.powers.PowersSurvivor;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -27,14 +28,19 @@ public class SurvivorRenderer<M extends StandEntity> extends StandRenderer<Survi
     @Override
     public ResourceLocation getTextureLocation(SurvivorEntity entity) {
         byte BT = entity.getSkin();
-        if (BT == TheWorldEntity.PART_3_SKIN)
+        if (entity.getActivated()){
+            if (BT == PowersSurvivor.BASE)
+                return BASE_ACTIVATED;
+            return BASE_ACTIVATED;
+        }
+        if (BT == PowersSurvivor.BASE)
             return BASE;
         return BASE;
     }
 
     @Override
     public void render(SurvivorEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
-        float factor = 0.5F + (mobEntity.getSizePercent()/2);
+        float factor = 0.8F + mobEntity.getRandomSize();
         if (mobEntity.isBaby()) {
             matrixStack.scale(0.5f*factor, 0.5f*factor, 0.5f*factor);
         } else {

@@ -109,7 +109,7 @@ public class GlaiveItem extends SwordItem {
                 if (target.hurt(ModDamageTypes.of($$1, ModDamageTypes.GLAIVE, player), power)) {
                     if (!player.isCreative()) {
                         ItemStack item = player.getInventory().getItem((player.getInventory().findSlotMatchingItem($$0)));
-                        item.hurt(1, $$1.getRandom(), player);
+                        item.hurtAndBreak(1, player, $$1x -> $$1x.broadcastBreakEvent(player.getUsedItemHand()));
                     }
                     if (target instanceof LivingEntity) {
                         ((LivingEntity) target).knockback(0.35f, player.getX() - target.getX(), player.getZ() - target.getZ());

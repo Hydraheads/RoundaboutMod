@@ -51,7 +51,10 @@
   "item.roundabout.green_day_disc": "Disque Stand",
   "item.roundabout.soft_and_wet_disc": "Disque Stand",
   "item.roundabout.cinderella_disc": "Disque Stand",
+  "item.roundabout.survivor_disc": "Disque Stand",
   "item.roundabout.hey_ya_disc": "Disque Stand",
+  "item.roundabout.ratt_disc": "Disque Stand",
+  "item.roundabout.max_ratt_disc": "Disque Stand+",
   "item.roundabout.mandom_disc": "Disque Stand",
   "item.roundabout.max_star_platinum_disc": "Disque Stand+",
   "item.roundabout.magicians_red_disc": "Disque Stand",
@@ -72,6 +75,8 @@
   "item.roundabout.the_world_disc.desc": "The World",
   "item.roundabout.justice_disc.desc": "Justice",
   "item.roundabout.cinderella_disc.desc": "Cinderella",
+  "item.roundabout.max_ratt_disc.desc": "Ratt",
+  "item.roundabout.ratt_disc.desc": "Ratt",
   "item.roundabout.survivor_disc.desc": "Survivor",
   "item.roundabout.hey_ya_disc.desc": "Hey Ya!",
   "item.roundabout.mandom_disc.desc": "Mandom",
@@ -742,13 +747,13 @@
   "ability.roundabout.fog_blocks": "Blocs Illusoires",
   "ability.roundabout.fog_blocks.desc": "Crée un nombre illimité de bloc de brouillard, sur demande. Quand ils sont placés, ils ne peuvent seulement être visible dans le brouillard, et il est possible de marcher à travers (puisque ce ne sont que des illusions).",
   "ability.roundabout.corpse_army": "Armée de Cadavre",
-  "ability.roundabout.corpse_army.desc": "Récupérez des cadavres avec la Hache de bourreau ou des cisseaux (seulement en tant qu'utilisateur de Justice), et fabriquez un Sac à cadavre pour les stocker. Vous pouvez contrôler ces cadavres si ils sont à l'intérieur de votre brouillard. Une fois qu'il y a des trous dans les cadavres, Ils ne peuvent plus être récupérer dans un Sac à cadavre. Les Zombies, Squelettes, Creepers, Araignées, and Villageois (et Illageois) peuvent devenir des cadavres. Intéragissez avec un cadavre d'araignée vous contrôlez pour le monter.",
+  "ability.roundabout.corpse_army.desc": "Récupérez des cadavres avec la Hache de bourreau ou des cisseaux (seulement en tant qu'utilisateur de Justice), et fabriquez un Sac à cadavre pour les stocker. Vous pouvez contrôler ces cadavres si ils sont à l'intérieur de votre brouillard. Une fois qu'il y a des trous dans les cadavres, Ils ne peuvent plus être récupérer dans un Sac à cadavre. Les Zombies, Squelettes, Creepers, Araignées, and Villageois (et Illageois) peuvent devenir des cadavres. Intéragissez avec un cadavre d'araignée vous contrôlez pour le monter. Accroupissez-vous et Intéragissez avec un cadavre de zombie pour lui donner votre objet tenu. Noter que ces objet sont un échange contre les dégâts ignorant l'armure que normalement font les cadavres.",
   "ability.roundabout.fog_clones": "Clones Illusoires",
   "ability.roundabout.fog_clones.desc": "Créez des mirages brumeuses de vous-même. Si vous êtes attaquez, peut-être que c'était un de vos mirages qui a été attaqué, pas vous...",
   "ability.roundabout.tactics": "Menu Tactique",
   "ability.roundabout.tactics.desc": "Surlignez les cadavres et modifiez les ordres des cadavres sélectionnés.",
   "ability.roundabout.fog_pilot": "Contrôle de Justice",
-  "ability.roundabout.fog_pilot.desc": "Prenez la perspective de Justice, et voler dans le ciel brumeux. En plus de surveillé un espace, vous pouvez commandé les cadavres d'au-dessus pour les déplacer (Bouton Utiliser) et les faire attaquer (Bouton Attaquer) vos cibles, après avoir surligné la cible vous pointez (Bouton Attaquer). Intéragissez avec les cadavres de creeper que vous contrôler pour les faire exploser. Pressez à nouveau pour retournez à votre corps.",
+  "ability.roundabout.fog_pilot.desc": "Prenez la perspective de Justice, et voler dans le ciel brumeux. En plus de surveillé un espace, vous pouvez commandé les cadavres d'au-dessus pour les déplacer (Bouton Utiliser) et les faire attaquer (Bouton Attaquer) vos cibles, après avoir surligné la cible vous pointez (Bouton Attaquer). Intéragissez avec les cadavres de creeper que vous contrôler pour les faire exploser. Si vous donnez un objet à un cadavre de zombie en vous accroupissant et intéragissant, iels peuvent utiliser les outils pour miner et placé les blocs qu'iels tiennent avec le bouton d'attaque durant ce mode. Pressez à nouveau pour retournez à votre corps.",
 
   "ability.roundabout.red_lash": "Fouet de flamme",
   "ability.roundabout.red_lash.desc": "Vous utilisez les cordes de flammes de Red Bind pour fouetter vos adversaires, et ça a une plus grande portée ! Maintenez le pour un combo en 3 coups !",
@@ -884,6 +889,10 @@
   "idle.roundabout.hey_ya_2": "En face",
   "idle.roundabout.mandom_back": "Dans le dos",
 
+  "idle.roundabout.ratt_1": "Tête",
+  "idle.roundabout.ratt_2": "Epaule",
+
+
   "skins.roundabout.star_platinum.base": "Partie 3",
   "skins.roundabout.star_platinum.manga": "Manga",
   "skins.roundabout.star_platinum.manga_purple": "Manga Violet",
@@ -983,6 +992,8 @@
   "skins.roundabout.d4c.grand": "Grand",
 
   "skins.roundabout.green_day.base": "Part 5",
+
+  "skins.roundabout.ratt.anime" : "Anime",
 
   "skins.roundabout.cinderella.base": "Partie 4",
   "skins.roundabout.cinderella.manga": "Manga",

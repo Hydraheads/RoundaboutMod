@@ -4,7 +4,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.SoftAndWetExplosiveBubbleEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
+import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;

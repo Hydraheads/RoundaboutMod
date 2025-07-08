@@ -66,6 +66,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.inventory.AbstractFurnaceMenu;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
@@ -95,6 +96,17 @@ public class MainUtil {
     }
     public static void setClient(){
         isClient = true;
+    }
+
+
+    public static int maxGasTicks(){
+        return 200;
+    }
+    public static int maxBucketGasTicks(){
+        return 200;
+    }
+    public static int maxLeapTicks(){
+        return 60;
     }
 
 
@@ -932,6 +944,35 @@ public class MainUtil {
             }
         }
         return false;
+    }
+    //Couldn't find better wording but this tests if you're on claimed land that isn't yours
+    //It doesn't need the block hit to be on a claim
+    public static boolean canPlaceOnClaim(Player player,BlockHitResult blockHit){
+        //Seems counterintuitive but most abilities have their own ways of handling this, so I'll just make it return True.
+
+        if(!ClientNetworking.getAppropriateConfig().doExtraGriefChecksForClaims || !MainUtil.getIsGamemodeApproriateForGrief(player)){
+            return true;
+
+        }
+        boolean isLiquid = (!player.level().getBlockState(blockHit.getBlockPos()).isSolid() && !player.level().getBlockState(blockHit.getBlockPos()).isAir());
+        BlockState replace = player.level().getBlockState(blockHit.getBlockPos());
+        //Always correct, but for some reason I need to put it as a conditional
+        if(Blocks.BARRIER.asItem() instanceof  BlockItem barrier){
+            barrier.place(new BlockPlaceContext(player,player.getUsedItemHand(),barrier.getDefaultInstance(),blockHit));
+            BlockPos placedBPos = blockHit.getBlockPos().relative(blockHit.getDirection());
+            player.level().destroyBlock(placedBPos,false,player);
+            if(!player.level().getBlockState(placedBPos).isAir()){
+                player.level().removeBlock(placedBPos,false);
+                if(isLiquid) {
+                    player.level().setBlock(blockHit.getBlockPos(), replace, 0);
+                }
+                return false;
+            }
+            if(isLiquid) {
+                player.level().setBlock(blockHit.getBlockPos(), replace, 0);
+            }
+        }
+        return true;
     }
 
     public static void gasExplode(BlockState blk, ServerLevel level, BlockPos blkPos, int iteration, int hitRadius, int blockRadius, float power){

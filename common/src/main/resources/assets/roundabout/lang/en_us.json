@@ -397,6 +397,7 @@
   "sounds.roundabout.summon_magician":  "Stand summoned",
   "sounds.roundabout.summon_mandom":  "Stand summoned",
   "sounds.roundabout.hey_ya_summon":  "Stand summoned",
+  "sounds.roundabout.survivor_summon":  "Stand summoned",
   "sounds.roundabout.ova_summon":  "Stand summoned",
   "sounds.roundabout.ova_summon_the_world":  "Stand summoned",
   "sounds.roundabout.punch_sfx1":  "Air Cracks",
@@ -449,6 +450,10 @@
   "sounds.roundabout.soft_and_wet_kick":  "Impact",
 
   "sounds.roundabout.mandom_rewind":  "Time Rewind",
+
+  "sounds.roundabout.survivor_shock":  "Shock",
+  "sounds.roundabout.survivor_place":  "Crackle",
+  "sounds.roundabout.survivor_remove":  "Pop",
 
   "sounds.roundabout.snap":  "Snap",
   "sounds.roundabout.star_finger_silent":  "Star Finger",

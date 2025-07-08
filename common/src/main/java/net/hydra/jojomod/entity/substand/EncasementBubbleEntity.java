@@ -4,7 +4,7 @@ import net.hydra.jojomod.access.PenetratableWithProjectile;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
+import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.nbt.CompoundTag;
@@ -20,7 +20,6 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.EntityHitResult;
 
 import java.util.UUID;
 

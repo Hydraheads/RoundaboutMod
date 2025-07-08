@@ -496,24 +496,28 @@ public abstract class InputEvents implements IInputEvents {
                             return;
                         }
 
-                        if ($$47 != null && $$1.getItem() instanceof FogBlockItem) {
+                        if ($$47 != null && $$1.getItem() instanceof FogBlockItem && MainUtil.getIsGamemodeApproriateForGrief(this.player)) {
                             switch ($$47.getType()) {
                                 case BLOCK:
                                     BlockHitResult $$5 = (BlockHitResult)$$47;
                                     int $$6 = $$1.getCount();
-                                    InteractionResult $$7 = this.gameMode.useItemOn(this.player, $$0, $$5);
-                                    if ($$7.consumesAction()) {
-                                        if ($$7.shouldSwing()) {
-                                            this.player.swing($$0);
-                                            if (!$$1.isEmpty() && ($$1.getCount() != $$6 || this.gameMode.hasInfiniteItems())) {
-                                                this.gameRenderer.itemInHandRenderer.itemUsed($$0);
+                                    if(MainUtil.canPlaceOnClaim(this.player,$$5)) {
+                                        InteractionResult $$7 = this.gameMode.useItemOn(this.player, $$0, $$5);
+                                        if ($$7.consumesAction()) {
+                                            if ($$7.shouldSwing()) {
+                                                this.player.swing($$0);
+                                                if (!$$1.isEmpty() && ($$1.getCount() != $$6 || this.gameMode.hasInfiniteItems())) {
+                                                    this.gameRenderer.itemInHandRenderer.itemUsed($$0);
+                                                }
                                             }
+
+                                            return;
                                         }
 
-                                        return;
-                                    }
-
-                                    if ($$7 == InteractionResult.FAIL) {
+                                        if ($$7 == InteractionResult.FAIL) {
+                                            return;
+                                        }
+                                    } else{
                                         return;
                                     }
                             }
@@ -959,6 +963,7 @@ public abstract class InputEvents implements IInputEvents {
                         KeyInputs.summonKey(player,((Minecraft) (Object) this));
                     }
 
+                ((StandUser)player).roundabout$getStandPowers().visualFrameTick();
 
                     KeyInputs.MoveKey1(player,((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.abilityOneKey),
                         this.options);

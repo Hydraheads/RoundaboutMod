@@ -6,7 +6,7 @@ import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.client.models.layers.PreRenderEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.event.powers.stand.PowersCinderella;
+import net.hydra.jojomod.stand.powers.PowersCinderella;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.Direction;

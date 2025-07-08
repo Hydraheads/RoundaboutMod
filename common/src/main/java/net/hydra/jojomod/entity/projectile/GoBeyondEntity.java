@@ -1,17 +1,15 @@
 package net.hydra.jojomod.entity.projectile;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.NoHitboxRendering;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.stand.PowersSoftAndWet;
+import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
@@ -103,7 +101,6 @@ public class GoBeyondEntity extends SoftAndWetBubbleEntity implements NoHitboxRe
                     }
                 }
             }
-            Roundabout.LOGGER.info("A "+ticksUntilDamage);
         }
     }
     //2.8F;

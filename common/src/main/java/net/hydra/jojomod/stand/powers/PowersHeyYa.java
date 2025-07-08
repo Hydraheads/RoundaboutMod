@@ -71,10 +71,6 @@ public class PowersHeyYa extends NewDashPreset {
     }
 
     @Override
-    public void tick() {
-    }
-
-    @Override
     public void powerActivate(PowerContext context) {
         /**Making dash usable on both key presses*/
         switch (context)

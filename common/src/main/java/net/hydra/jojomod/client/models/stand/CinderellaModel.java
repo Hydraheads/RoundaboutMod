@@ -4,7 +4,7 @@ import net.hydra.jojomod.client.models.stand.animations.CinderellaAnimations;
 import net.hydra.jojomod.entity.stand.CinderellaEntity;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.event.powers.stand.PowersCinderella;
+import net.hydra.jojomod.stand.powers.PowersCinderella;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;

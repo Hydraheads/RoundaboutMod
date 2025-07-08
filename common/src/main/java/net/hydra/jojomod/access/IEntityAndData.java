@@ -70,6 +70,7 @@ public interface IEntityAndData {
     ArrayDeque<SavedSecond> roundabout$getSecondQue();
 
     SavedSecond roundabout$getLastSavedSecond();
+    void roundabout$addSecondToQueue();
 
     void roundabout$resetSecondQueue();
 

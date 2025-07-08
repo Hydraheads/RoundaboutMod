@@ -831,7 +831,6 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
         @Override
         public void clicked(int $$0, int $$1, ClickType $$2, Player $$3) {
             if ($$2 == ClickType.CLONE && !$$3.getAbilities().instabuild && this.getCarried().isEmpty() && $$0 >= 0) {
-                Roundabout.LOGGER.info("Sanity");
                 Slot $$32 = this.slots.get($$0);
                 if ($$32.hasItem()) {
                     ItemStack $$33 = $$32.getItem();

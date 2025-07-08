@@ -129,7 +129,6 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
     public static final byte
             SPTWTHROW = 1,
             SOFTTHROW = 2;
-
     public static boolean throwAnObject(LivingEntity thrower, boolean canSnipe, ItemStack item, float getShotAccuracy,
                                      float getBundleAccuracy,
                                      float getThrowAngle1, float getThrowAngle2, float getThrowAngle3,
@@ -407,12 +406,14 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
                 try {
                     if (getOwner() instanceof Player PE){
-                        if (((BlockItem)this.getItem().getItem()).place(new SafePlaceContext(this.level(), PE,
-                                pos,
-                                direction, this.getItem(),
-                                direction)) != InteractionResult.FAIL){
-                            this.tempDirection = direction;
-                            return true;
+                        if(MainUtil.canPlaceOnClaim(PE,$$0)) {
+                            if (((BlockItem) this.getItem().getItem()).place(new SafePlaceContext(this.level(), PE,
+                                    pos,
+                                    direction, this.getItem(),
+                                    direction)) != InteractionResult.FAIL) {
+                                this.tempDirection = direction;
+                                return true;
+                            }
                         }
                     } else {
                         if (((BlockItem)this.getItem().getItem()).place(new DirectionalPlaceContext(this.level(),
