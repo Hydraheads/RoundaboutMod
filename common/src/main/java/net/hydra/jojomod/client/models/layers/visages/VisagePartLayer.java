@@ -76,10 +76,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
             if (entity.getMainArm() == HumanoidArm.RIGHT) {
                 if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
                     renderRightArmSlim(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
-                            r, g, b, StandIcons.MUSCLE_SLIM, 0.01F, -0.01F, 0, alpha);
+                            r, g, b, StandIcons.MUSCLE_SLIM, 0.01F, 0, 0, alpha);
                 } else {
                     renderRightArm(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
-                            r, g, b, StandIcons.MUSCLE, 0.01F, -0.01F, 0, alpha);
+                            r, g, b, StandIcons.MUSCLE, 0.01F, 0, 0, alpha);
                 }
             }
         }
@@ -148,11 +148,12 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                            float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
         if (getParentModel().rightArm.visible) {
             poseStack.pushPose();
-            poseStack.scale(xx,yy,zz);
             getParentModel().rightArm.translateAndRotate(poseStack);
-            poseStack.translate(xtrans,ytrans,ztrans);
+            ModStrayModels.RightArm.root().xScale = xx;
+            ModStrayModels.RightArm.root().yScale = yy;
+            ModStrayModels.RightArm.root().zScale = zz;
             ModStrayModels.RightArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
-                    r, g, b, alpha, RL);
+                    r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
             poseStack.popPose();
         }
     }
@@ -162,9 +163,11 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
             poseStack.pushPose();
             poseStack.scale(xx,yy,zz);
             getParentModel().rightArm.translateAndRotate(poseStack);
-            poseStack.translate(xtrans,ytrans,ztrans);
+            ModStrayModels.RightArm.root().xScale = xx;
+            ModStrayModels.RightArm.root().yScale = yy;
+            ModStrayModels.RightArm.root().zScale = zz;
             ModStrayModels.RightArmSlim.render(entity, partialTicks, poseStack, bufferSource, packedLight,
-                    r, g, b, alpha, RL);
+                    r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
             poseStack.popPose();
         }
     }

@@ -32,11 +32,11 @@ public class RightArmPart extends PsuedoHierarchicalModel {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition bone = partdefinition.addOrReplaceChild("bone", CubeListBuilder.create(), PartPose.offset(1.0F, -2.0F, 2.0F));
+        PartDefinition bone = partdefinition.addOrReplaceChild("bone", CubeListBuilder.create(), PartPose.offset(1.0F, 0.0F, 0.0F));
 
-        PartDefinition right_arm = bone.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(40, 16).addBox(-4.0F, 0.0F, -4.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition right_arm = bone.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(40, 16).addBox(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-1.0F, 0.0F, 0.0F));
 
-        PartDefinition right_sleeve = bone.addOrReplaceChild("right_sleeve", CubeListBuilder.create().texOffs(40, 32).addBox(-4.0F, 0.0F, -4.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition right_sleeve = bone.addOrReplaceChild("right_sleeve", CubeListBuilder.create().texOffs(40, 32).addBox(-4.0F, 0.0F, -4.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, -2.0F, 2.0F));
 
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
@@ -67,9 +67,16 @@ public class RightArmPart extends PsuedoHierarchicalModel {
         root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
     }
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
-                       int light, float r, float g, float b, float alpha, ResourceLocation path) {
+                       int light, float r, float g, float b, float alpha, ResourceLocation path, float xx, float yy, float zz,
+                       float xtrans, float ytrans, float ztrans) {
         if (context instanceof LivingEntity LE) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
+            this.root().yScale = yy;
+            this.root().xScale = xx;
+            this.root().zScale = zz;
+            this.bone.x += xtrans;
+            this.bone.y += ytrans;
+            this.bone.z += ztrans;
             if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
                 partialTicks = 0;
             }

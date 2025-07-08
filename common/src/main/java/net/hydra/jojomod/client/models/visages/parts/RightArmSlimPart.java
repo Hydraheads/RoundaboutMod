@@ -67,9 +67,16 @@ public class RightArmSlimPart extends PsuedoHierarchicalModel {
         root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
     }
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
-                       int light, float r, float g, float b, float alpha, ResourceLocation path) {
+                       int light, float r, float g, float b, float alpha, ResourceLocation path, float xx, float yy, float zz,
+                       float xtrans, float ytrans, float ztrans) {
         if (context instanceof LivingEntity LE) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
+            this.root().yScale = yy;
+            this.root().xScale = xx;
+            this.root().zScale = zz;
+            this.bone.x += xtrans;
+            this.bone.y += ytrans;
+            this.bone.z += ztrans;
             if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
                 partialTicks = 0;
             }
