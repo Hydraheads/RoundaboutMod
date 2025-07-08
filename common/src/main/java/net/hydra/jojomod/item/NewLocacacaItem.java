@@ -100,7 +100,7 @@ public class NewLocacacaItem extends Item {
                             damage = 40;
                         }
                         if (ent.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.FUSION, entity), damage)) {
-                            if (curse == LocacacaCurseIndex.MAIN_HAND || curse == LocacacaCurseIndex.OFF_HAND) {
+                            if (curse == LocacacaCurseIndex.RIGHT_HAND || curse == LocacacaCurseIndex.LEFT_HAND) {
                                 ent.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 1200, 1), entity);
                             } else if (curse == LocacacaCurseIndex.LEFT_LEG || curse == LocacacaCurseIndex.RIGHT_LEG) {
                                 ent.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 1200, 1), entity);

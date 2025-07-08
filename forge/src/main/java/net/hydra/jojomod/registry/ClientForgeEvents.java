@@ -177,6 +177,8 @@ public class ClientForgeEvents {
         ModStrayModels.PlayerSmallChestPart = new PlayerSmallChestPart();
         ModStrayModels.RightArm = new RightArmPart();
         ModStrayModels.RightArmSlim = new RightArmSlimPart();
+        ModStrayModels.LeftArm = new LeftArmPart();
+        ModStrayModels.LeftArmSlim = new LeftArmSlimPart();
         //BlockEntityRenderers.register(ModBlocks.STAND_FIRE_BLOCK_ENTITY, StandFireRenderer::new);
     }
     @SubscribeEvent

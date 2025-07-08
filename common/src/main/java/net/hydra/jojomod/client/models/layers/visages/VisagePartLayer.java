@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -60,12 +61,12 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
             visage = znpc.getBasis();
         }
 
-
         boolean isHurt = entity.hurtTime > 0;
         float r = isHurt ? 1.0F : 1.0F;
         float g = isHurt ? 0.6F : 1.0F;
         float b = isHurt ? 0.6F : 1.0F;
         StandUser user = ((StandUser) entity);
+        byte curse = user.roundabout$getLocacacaCurse();
         int muscle = user.roundabout$getZappedToID();
         //muscle = 100;
         if (muscle > -1){
@@ -74,12 +75,24 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
             float oscillation = Math.abs(((entity.tickCount % 10) + (partialTicks%1))-5)*0.04F;
             alpha += oscillation;
             if (entity.getMainArm() == HumanoidArm.RIGHT) {
-                if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
-                    renderRightArmSlim(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
-                            r, g, b, StandIcons.MUSCLE_SLIM, 0.01F, 0, 0, alpha);
-                } else {
-                    renderRightArm(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
-                            r, g, b, StandIcons.MUSCLE, 0.01F, 0, 0, alpha);
+                if (curse != LocacacaCurseIndex.RIGHT_HAND) {
+                    if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
+                        renderRightArmSlim(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
+                                r, g, b, StandIcons.MUSCLE_SLIM, 0.01F, 0, 0, alpha);
+                    } else {
+                        renderRightArm(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
+                                r, g, b, StandIcons.MUSCLE, 0.01F, 0, 0, alpha);
+                    }
+                }
+            } else {
+                if (curse != LocacacaCurseIndex.LEFT_HAND) {
+                    if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
+                        renderLeftArmSlim(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
+                                r, g, b, StandIcons.MUSCLE_SLIM, -0.01F, 0, 0, alpha);
+                    } else {
+                        renderLeftArm(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
+                                r, g, b, StandIcons.MUSCLE, -0.01F, 0, 0, alpha);
+                    }
                 }
             }
         }
@@ -149,9 +162,6 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         if (getParentModel().rightArm.visible) {
             poseStack.pushPose();
             getParentModel().rightArm.translateAndRotate(poseStack);
-            ModStrayModels.RightArm.root().xScale = xx;
-            ModStrayModels.RightArm.root().yScale = yy;
-            ModStrayModels.RightArm.root().zScale = zz;
             ModStrayModels.RightArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                     r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
             poseStack.popPose();
@@ -161,12 +171,28 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
         if (getParentModel().rightArm.visible) {
             poseStack.pushPose();
-            poseStack.scale(xx,yy,zz);
             getParentModel().rightArm.translateAndRotate(poseStack);
-            ModStrayModels.RightArm.root().xScale = xx;
-            ModStrayModels.RightArm.root().yScale = yy;
-            ModStrayModels.RightArm.root().zScale = zz;
             ModStrayModels.RightArmSlim.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
+            poseStack.popPose();
+        }
+    }
+    public void renderLeftArm(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                               float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
+        if (getParentModel().leftArm.visible) {
+            poseStack.pushPose();
+            getParentModel().leftArm.translateAndRotate(poseStack);
+            ModStrayModels.LeftArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
+            poseStack.popPose();
+        }
+    }
+    public void renderLeftArmSlim(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                                   float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
+        if (getParentModel().leftArm.visible) {
+            poseStack.pushPose();
+            getParentModel().leftArm.translateAndRotate(poseStack);
+            ModStrayModels.LeftArmSlim.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                     r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
             poseStack.popPose();
         }

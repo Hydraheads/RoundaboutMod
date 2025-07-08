@@ -2,7 +2,6 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.IInputEvents;
 import net.hydra.jojomod.access.IMultiplayerGameMode;
-import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -25,7 +24,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import org.apache.commons.lang3.mutable.MutableObject;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -73,8 +71,8 @@ public abstract class ZMultiPlayerGameMode implements IMultiplayerGameMode {
 
         byte curse = ((StandUser)$$0).roundabout$getLocacacaCurse();
         if (curse > -1) {
-            if ((curse == LocacacaCurseIndex.OFF_HAND && $$0.getMainArm() == HumanoidArm.RIGHT && $$1 == InteractionHand.OFF_HAND)
-                    || (curse == LocacacaCurseIndex.MAIN_HAND && $$0.getMainArm() == HumanoidArm.LEFT && $$1 == InteractionHand.OFF_HAND)) {
+            if ((curse == LocacacaCurseIndex.LEFT_HAND && $$0.getMainArm() == HumanoidArm.RIGHT && $$1 == InteractionHand.OFF_HAND)
+                    || (curse == LocacacaCurseIndex.RIGHT_HAND && $$0.getMainArm() == HumanoidArm.LEFT && $$1 == InteractionHand.OFF_HAND)) {
                 cir.setReturnValue(InteractionResult.FAIL);
             }
         }

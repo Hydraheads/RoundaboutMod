@@ -26,8 +26,8 @@ public class ModStrayModels {
     public static ChestPart Body;
     public static RightArmPart RightArm;
     public static RightArmSlimPart RightArmSlim;
-    public static ChestPart LeftArm;
-    public static ChestPart LeftArmSlim;
+    public static LeftArmPart LeftArm;
+    public static LeftArmSlimPart LeftArmSlim;
     public static ChestPart Head;
     public static ChestPart RightLeg;
     public static ChestPart LeftLeg;

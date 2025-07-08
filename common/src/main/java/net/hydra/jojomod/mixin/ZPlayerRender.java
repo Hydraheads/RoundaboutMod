@@ -1,7 +1,6 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.client.models.layers.*;
@@ -96,28 +95,127 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
 
     /**Stone Arms with locacaca first person*/
     @Inject(method = "renderRightHand", at = @At(value = "TAIL"))
-    public void roundabout$renderRightHand(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, CallbackInfo ci) {
-        byte curse = ((StandUser) $$3).roundabout$getLocacacaCurse();
-        if (curse == LocacacaCurseIndex.MAIN_HAND) {
+    public void roundabout$renderRightHand(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, AbstractClientPlayer player, CallbackInfo ci) {
+        byte curse = ((StandUser) player).roundabout$getLocacacaCurse();
+        if (curse == LocacacaCurseIndex.RIGHT_HAND) {
             this.model.rightSleeve.xScale += 0.04F;
             this.model.rightSleeve.zScale += 0.04F;
-            this.model.rightSleeve.render($$0, $$1.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_RIGHT_ARM)), $$2, OverlayTexture.NO_OVERLAY);
+            this.model.rightSleeve.render(poseStack, bufferSource.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_RIGHT_ARM)), packedLight, OverlayTexture.NO_OVERLAY);
             this.model.rightSleeve.xScale -= 0.04F;
             this.model.rightSleeve.zScale -= 0.04F;
+        } else {
+
+            boolean isHurt = player.hurtTime > 0;
+            float r = isHurt ? 1.0F : 1.0F;
+            float g = isHurt ? 0.6F : 1.0F;
+            float b = isHurt ? 0.6F : 1.0F;
+            StandUser user = ((StandUser) player);
+            int muscle = user.roundabout$getZappedToID();
+            //muscle = 100;
+            if (muscle > -1) {
+                float scale = 1.055F;
+                float alpha = 0.6F;
+                float delta = ClientUtil.getDelta();
+                if (((TimeStop) player.level()).CanTimeStopEntity(player)) {
+                    delta = 0;
+                }
+                float oscillation = Math.abs(((player.tickCount % 10) + (delta % 1)) - 5) * 0.04F;
+                alpha += oscillation;
+                if (player.getMainArm() == HumanoidArm.RIGHT) {
+                    if (((IPlayerModel) this.model).roundabout$getSlim()) {
+                        roundabout$renderRightArmExtraModelSlim(poseStack, bufferSource, packedLight, (T) player, scale, scale, scale, delta,
+                                1, 1, 1, StandIcons.MUSCLE_SLIM, 0.01F, 0, 0, alpha);
+                    } else {
+                        roundabout$renderRightArmExtraModel(poseStack, bufferSource, packedLight, (T) player, scale, scale, scale, delta,
+                                r, g, b, StandIcons.MUSCLE, 0.01F, 0, 0, alpha);
+                    }
+                }
+            }
         }
     }
 
+
     @Inject(method = "renderLeftHand", at = @At(value = "TAIL"))
-    public void roundabout$renderLeftHand(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, CallbackInfo ci) {
-        byte curse = ((StandUser) $$3).roundabout$getLocacacaCurse();
-        if (curse == LocacacaCurseIndex.OFF_HAND) {
+    public void roundabout$renderLeftHand(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, AbstractClientPlayer player, CallbackInfo ci) {
+        byte curse = ((StandUser) player).roundabout$getLocacacaCurse();
+        if (curse == LocacacaCurseIndex.LEFT_HAND) {
             this.model.leftSleeve.xScale += 0.04F;
             this.model.leftSleeve.zScale += 0.04F;
-            this.model.leftSleeve.render($$0, $$1.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_LEFT_ARM)), $$2, OverlayTexture.NO_OVERLAY);
+            this.model.leftSleeve.render(poseStack, bufferSource.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_LEFT_ARM)), packedLight, OverlayTexture.NO_OVERLAY);
             this.model.leftSleeve.xScale -= 0.04F;
             this.model.leftSleeve.zScale -= 0.04F;
+        } else {
+            boolean isHurt = player.hurtTime > 0;
+            float r = isHurt ? 1.0F : 1.0F;
+            float g = isHurt ? 0.6F : 1.0F;
+            float b = isHurt ? 0.6F : 1.0F;
+            StandUser user = ((StandUser) player);
+            int muscle = user.roundabout$getZappedToID();
+            //muscle = 100;
+            if (muscle > -1) {
+                float scale = 1.055F;
+                float alpha = 0.6F;
+                float delta = ClientUtil.getDelta();
+                if (((TimeStop) player.level()).CanTimeStopEntity(player)) {
+                    delta = 0;
+                }
+                float oscillation = Math.abs(((player.tickCount % 10) + (delta % 1)) - 5) * 0.04F;
+                alpha += oscillation;
+                if (player.getMainArm() == HumanoidArm.LEFT) {
+                    if (((IPlayerModel) this.model).roundabout$getSlim()) {
+                        roundabout$renderLeftArmExtraModelSlim(poseStack, bufferSource, packedLight, (T) player, scale, scale, scale, delta,
+                                r, g, b, StandIcons.MUSCLE_SLIM, -0.01F, 0, 0, alpha);
+                    } else {
+                        roundabout$renderLeftArmExtraModel(poseStack, bufferSource, packedLight, (T) player, scale, scale, scale, delta,
+                                r, g, b, StandIcons.MUSCLE, -0.01F, 0, 0, alpha);
+                    }
+                }
+            }
         }
     }
+
+    @Unique
+    public void roundabout$renderRightArmExtraModel(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                                                    float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
+        if (model.rightArm.visible) {
+            poseStack.pushPose();
+            model.rightArm.translateAndRotate(poseStack);
+            ModStrayModels.RightArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
+            poseStack.popPose();
+        }
+    }
+    public void roundabout$renderRightArmExtraModelSlim(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                                   float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
+        if (model.rightArm.visible) {
+            poseStack.pushPose();
+            model.rightArm.translateAndRotate(poseStack);
+            ModStrayModels.RightArmSlim.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
+            poseStack.popPose();
+        }
+    }
+    public void roundabout$renderLeftArmExtraModel(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                              float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
+        if (model.leftArm.visible) {
+            poseStack.pushPose();
+            model.leftArm.translateAndRotate(poseStack);
+            ModStrayModels.LeftArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
+            poseStack.popPose();
+        }
+    }
+    public void roundabout$renderLeftArmExtraModelSlim(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                                  float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
+        if (model.leftArm.visible) {
+            poseStack.pushPose();
+            model.leftArm.translateAndRotate(poseStack);
+            ModStrayModels.LeftArmSlim.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
+            poseStack.popPose();
+        }
+    }
+
 
 
     @Shadow
@@ -699,12 +797,17 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
         StandUser user = ((StandUser) $$0);
         int muscle = user.roundabout$getZappedToID();
         //muscle = 100;
+        byte curse = user.roundabout$getLocacacaCurse();
         PlayerModel<AbstractClientPlayer> $$1 = this.getModel();
         if (muscle > -1){
             if ($$0.getMainArm() == HumanoidArm.RIGHT){
-                $$1.rightSleeve.visible= false;
+                if (curse != LocacacaCurseIndex.RIGHT_HAND) {
+                    $$1.rightSleeve.visible = false;
+                }
             } else {
-                $$1.leftSleeve.visible= false;
+                if (curse != LocacacaCurseIndex.LEFT_HAND) {
+                    $$1.leftSleeve.visible = false;
+                }
             }
         }
 

@@ -494,8 +494,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         byte curse = ((StandUser)this).roundabout$getLocacacaCurse();
         float modifier = 1;
         if (curse > -1) {
-            if ((curse == LocacacaCurseIndex.MAIN_HAND && this.getMainArm() == HumanoidArm.RIGHT)
-            || (curse == LocacacaCurseIndex.OFF_HAND && this.getMainArm() == HumanoidArm.LEFT)) {
+            if ((curse == LocacacaCurseIndex.RIGHT_HAND && this.getMainArm() == HumanoidArm.RIGHT)
+            || (curse == LocacacaCurseIndex.LEFT_HAND && this.getMainArm() == HumanoidArm.LEFT)) {
                 modifier = 0.6F;
             }
         }
@@ -529,8 +529,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             roundabout$destroySpeedRecursion = true;
             float dSpeed = this.getDestroySpeed($$0);
             roundabout$destroySpeedRecursion = false;
-            if (curse > -1 && (curse == LocacacaCurseIndex.MAIN_HAND && this.getMainArm() == HumanoidArm.RIGHT)
-                    || (curse == LocacacaCurseIndex.OFF_HAND && this.getMainArm() == HumanoidArm.LEFT)) {
+            if (curse > -1 && (curse == LocacacaCurseIndex.RIGHT_HAND && this.getMainArm() == HumanoidArm.RIGHT)
+                    || (curse == LocacacaCurseIndex.LEFT_HAND && this.getMainArm() == HumanoidArm.LEFT)) {
                 dSpeed *= 0.6F;
             }
 

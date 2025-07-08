@@ -8,7 +8,6 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.visages.mobs.JosukePartEightNPC;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.visagedata.JosukePartEightVisage;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -52,9 +51,9 @@ public class StoneLayer<T extends LivingEntity, M extends HumanoidModel<T>, A ex
                 rl = StandIcons.STONE_LEFT_LEG;
             } else if (curse == LocacacaCurseIndex.RIGHT_LEG){
                 rl = StandIcons.STONE_RIGHT_LEG;
-            } else if (curse == LocacacaCurseIndex.OFF_HAND){
+            } else if (curse == LocacacaCurseIndex.LEFT_HAND){
                 rl = StandIcons.STONE_LEFT_ARM;
-            } else if (curse == LocacacaCurseIndex.MAIN_HAND){
+            } else if (curse == LocacacaCurseIndex.RIGHT_HAND){
                 rl = StandIcons.STONE_RIGHT_ARM;
             } else if (curse == LocacacaCurseIndex.CHEST){
                 rl = StandIcons.STONE_CHEST;
