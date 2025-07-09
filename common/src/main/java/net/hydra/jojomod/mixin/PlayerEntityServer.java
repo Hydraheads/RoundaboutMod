@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -109,9 +110,9 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
                 }
             });
             StandUser standUserData = ((StandUser) this);
-            if (standUserData.roundabout$hasStandOut()) {
+            if (standUserData.roundabout$hasStandOut()  && standUserData.roundabout$getStand() instanceof FollowingStandEntity fe) {
 
-                standUserData.roundabout$updateStandOutPosition(standUserData.roundabout$getStand(), Entity::moveTo);
+                standUserData.roundabout$updateStandOutPosition(fe, Entity::moveTo);
             }
         }
     }

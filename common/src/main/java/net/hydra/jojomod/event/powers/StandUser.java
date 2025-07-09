@@ -55,7 +55,7 @@ public interface StandUser {
     void roundabout$dropString();
     void roundabout$tickString();
 
-    void roundabout$updateStandOutPosition(StandEntity passenger, Entity.MoveFunction positionUpdater);
+    void roundabout$updateStandOutPosition(FollowingStandEntity passenger, Entity.MoveFunction positionUpdater);
     void roundabout$removeStandOut();
     void roundabout$setDI(byte forward, byte strafe);
     void roundabout$standMount(StandEntity StandSet);

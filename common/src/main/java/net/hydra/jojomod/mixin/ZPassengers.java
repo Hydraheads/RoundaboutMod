@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.entity.Entity;
@@ -30,8 +31,8 @@ public class ZPassengers {
                 }
             });
             StandUser standUserData = ((StandUser) this);
-            if (standUserData.roundabout$hasStandOut()) {
-                standUserData.roundabout$updateStandOutPosition(standUserData.roundabout$getStand(), Entity::moveTo);
+            if (standUserData.roundabout$hasStandOut() && standUserData.roundabout$getStand() instanceof FollowingStandEntity fe) {
+                standUserData.roundabout$updateStandOutPosition(fe, Entity::moveTo);
             }
 
         }
