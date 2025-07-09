@@ -1,11 +1,14 @@
 package net.hydra.jojomod.entity.stand;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.*;
@@ -23,7 +26,9 @@ public class RattEntity extends StandEntity {
             ANIME_SKIN = 1,
             MANGA_SKIN = 2,
             MELON_SKIN = 3,
-            SAND_SKIN = 4;
+            SAND_SKIN = 4,
+            AZTEC_SKIN = 5,
+            REDD_SKIN = 6;
 
 
     public List<Byte> getSkinList() {
@@ -31,7 +36,8 @@ public class RattEntity extends StandEntity {
                 ANIME_SKIN,
                 MANGA_SKIN,
                 MELON_SKIN,
-                SAND_SKIN
+                SAND_SKIN,
+                REDD_SKIN
         );
     }
 
@@ -48,9 +54,8 @@ public class RattEntity extends StandEntity {
     public void tick() {
         super.tick();
 
-        setXRot(45);
 
-        Roundabout.LOGGER.info(String.valueOf(this.getXRot()));
+        this.setYBodyRot(this.getBodyRotationY()+10);
 
         if (getUser() != null) {
             if (!this.getUserData(this.getUser()).roundabout$getActive()) {
@@ -88,6 +93,7 @@ public class RattEntity extends StandEntity {
 
             case PowersRatt.PLACED -> {
                 UpdateState(OffsetIndex.LOOSE);
+             //   setBodyRotationY(this.getBodyRotationY()+10);
                 if (Placement != null) {
                     if (!getPosition(0).equals(Placement)) {
                       //  UpdatePos(Placement);

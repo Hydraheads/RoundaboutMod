@@ -56,7 +56,13 @@ public class PowersRatt extends NewDashPreset {
 
 
     @Override
-    public StandEntity getNewStandEntity(){return ModEntities.RATT.create(this.getSelf().level());}
+    public StandEntity getNewStandEntity(){
+        byte sk = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        switch(sk) {
+            case RattEntity.REDD_SKIN -> {return ModEntities.EYEBROW_RATT.create(this.getSelf().level());}
+            default -> {return ModEntities.RATT.create(this.getSelf().level());}
+        }
+    }
 
     public static float PlacementRange = 5.0F;
 
@@ -128,8 +134,10 @@ public class PowersRatt extends NewDashPreset {
                 cond = true;
             }
         }
-        if (blockHit.getType() == HitResult.Type.BLOCK && blockHit.getDirection() == Direction.UP || cond){
-            return blockHit;
+        if (blockHit.getLocation().distanceTo(this.getSelf().getPosition(0)) <= PlacementRange) {
+            if (blockHit.getType() == HitResult.Type.BLOCK && blockHit.getDirection() == Direction.UP || cond) {
+                return blockHit;
+            }
         }
         return null;
     }
@@ -230,6 +238,7 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public void tickPower() {
+        super.tickPower();
         StandEntity SE = getStandEntity(this.getSelf());
         if ( SE != null && SE.getOffsetType() == OffsetIndex.FOLLOW) {
             if (active) {
@@ -239,8 +248,8 @@ public class PowersRatt extends NewDashPreset {
                     SE.remove(Entity.RemovalReason.DISCARDED);
                 }
             }
+        } else if (SE != null) {
         }
-        super.tickPower();
     }
 
 
@@ -366,7 +375,9 @@ public class PowersRatt extends NewDashPreset {
                 RattEntity.ANIME_SKIN,
                 RattEntity.MANGA_SKIN,
                 RattEntity.MELON_SKIN,
-                RattEntity.SAND_SKIN
+                RattEntity.SAND_SKIN,
+                RattEntity.AZTEC_SKIN,
+                RattEntity.REDD_SKIN
         );
     }
 
@@ -380,6 +391,8 @@ public class PowersRatt extends NewDashPreset {
             case RattEntity.MANGA_SKIN -> {return Component.translatable("skins.roundabout.ratt.manga");}
             case RattEntity.MELON_SKIN -> {return Component.translatable("skins.roundabout.ratt.melon");}
             case RattEntity.SAND_SKIN -> {return Component.translatable("skins.roundabout.ratt.sand");}
+            case RattEntity.AZTEC_SKIN -> {return Component.translatable("skins.roundabout.ratt.aztec");}
+            case RattEntity.REDD_SKIN -> {return Component.translatable("skins.roundabout.ratt.redd");}
             default -> {return Component.translatable("skins.roundabout.ratt.anime");}
         }
     }

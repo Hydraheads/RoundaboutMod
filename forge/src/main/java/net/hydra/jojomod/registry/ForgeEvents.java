@@ -50,6 +50,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.D4C.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.GREEN_DAY.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.RATT.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.EYEBROW_RATT.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SOFT_AND_WET.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SOFT_AND_WET_KING.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SOFT_AND_WET_DROWNED.get(), StandEntity.createStandAttributes().build());
@@ -364,6 +365,7 @@ public class ForgeEvents {
         ModEntities.D4C = ForgeEntities.D4C.get();
         ModEntities.GREEN_DAY = ForgeEntities.GREEN_DAY.get();
         ModEntities.RATT = ForgeEntities.RATT.get();
+        ModEntities.EYEBROW_RATT = ForgeEntities.EYEBROW_RATT.get();
         ModEntities.SOFT_AND_WET = ForgeEntities.SOFT_AND_WET.get();
         ModEntities.SOFT_AND_WET_KING = ForgeEntities.SOFT_AND_WET_KING.get();
         ModEntities.SOFT_AND_WET_DROWNED = ForgeEntities.SOFT_AND_WET_DROWNED.get();

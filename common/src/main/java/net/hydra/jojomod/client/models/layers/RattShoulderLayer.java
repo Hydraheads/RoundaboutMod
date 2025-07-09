@@ -6,6 +6,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -124,8 +125,14 @@ public class RattShoulderLayer<T extends LivingEntity, A extends HumanoidModel<T
                             float g = isHurt ? 0.0F : 1.0F;
                             float b = isHurt ? 0.0F : 1.0F;
                             if (user.roundabout$getRattShoulderVanishTicks() != 0) {
-                                ModStrayModels.RATT_SHOULDER.render(livent, partialTicks, poseStack, bufferSource, packedLight,
-                                        r, g, b, heyFull, skin);
+                                if (user.roundabout$getStandSkin() == RattEntity.REDD_SKIN) {
+                                    ModStrayModels.EYEBROW_RATT_SHOULDER.render(livent, partialTicks, poseStack, bufferSource, packedLight,
+                                            r, g, b, heyFull, skin);
+                                } else {
+                                    ModStrayModels.RATT_SHOULDER.render(livent, partialTicks, poseStack, bufferSource, packedLight,
+                                            r, g, b, heyFull, skin);
+                                }
+
                             }
                             poseStack.popPose();
 
