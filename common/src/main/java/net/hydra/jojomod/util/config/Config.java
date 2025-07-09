@@ -444,6 +444,8 @@ public class Config implements Cloneable {
         public Integer switchStandDisc;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer switchStandDiscWhileOnCooldowns;
+        @IntOption(group = "inherit", value = 1200, min = 0, max = 72000)
+        public Integer locacacaEatingCooldowns;
         @BooleanOption(group = "inherit", value = true)
         public Boolean creativeModeRefreshesCooldowns;
         @BooleanOption(group = "inherit", value = true)
