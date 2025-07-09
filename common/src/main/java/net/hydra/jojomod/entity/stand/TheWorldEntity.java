@@ -6,7 +6,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 
-public class TheWorldEntity extends StandEntity {
+public class TheWorldEntity extends FollowingStandEntity {
     public TheWorldEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
     }

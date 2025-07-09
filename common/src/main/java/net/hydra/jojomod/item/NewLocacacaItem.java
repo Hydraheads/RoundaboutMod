@@ -1,6 +1,7 @@
 package net.hydra.jojomod.item;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -83,7 +84,7 @@ public class NewLocacacaItem extends Item {
         LivingEntity ent = MainUtil.getStoneTarget(level, entity);
         if (ent != null) {
             if (entity instanceof Player PE){
-                PE.getCooldowns().addCooldown(this, 400);
+                PE.getCooldowns().addCooldown(this, ClientNetworking.getAppropriateConfig().cooldownsInTicks.locacacaEatingCooldowns);
             }
             byte entCurse = ((StandUser)ent).roundabout$getLocacacaCurse();
             if (!level.isClientSide && entity.isAlive()) {
@@ -100,7 +101,7 @@ public class NewLocacacaItem extends Item {
                             damage = 40;
                         }
                         if (ent.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.FUSION, entity), damage)) {
-                            if (curse == LocacacaCurseIndex.MAIN_HAND || curse == LocacacaCurseIndex.OFF_HAND) {
+                            if (curse == LocacacaCurseIndex.RIGHT_HAND || curse == LocacacaCurseIndex.LEFT_HAND) {
                                 ent.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 1200, 1), entity);
                             } else if (curse == LocacacaCurseIndex.LEFT_LEG || curse == LocacacaCurseIndex.RIGHT_LEG) {
                                 ent.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 1200, 1), entity);

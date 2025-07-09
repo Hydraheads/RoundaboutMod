@@ -219,7 +219,11 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                                 * (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnPlayers *0.01)));
         }
         return getDamageMod((float) ((float) this.getAttributeValue(Attributes.ATTACK_DAMAGE)
-                        * (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnMobs *0.01)));
+                        * (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnMobs *0.01)) * modX());
+    }
+
+    public float modX(){
+        return 1.5F;
     }
 
     /**If rpg leveling config is on*/
@@ -293,6 +297,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                 this.setLastHurtMob($$0);
             }
 
+            getMainHandItem().hurtAndBreak(1, this, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
             return $$4;
         } else {
             /**Otherwise it does stand damage of sorts*/

@@ -34,9 +34,9 @@ public class LocacacaItem extends Item {
         } else if (random <= 0.3F){
             newCurse= LocacacaCurseIndex.RIGHT_LEG;
         } else if (random <= 0.45F){
-            newCurse= LocacacaCurseIndex.OFF_HAND;
+            newCurse= LocacacaCurseIndex.LEFT_HAND;
         } else if (random <= 0.6F){
-            newCurse= LocacacaCurseIndex.MAIN_HAND;
+            newCurse= LocacacaCurseIndex.RIGHT_HAND;
         } else if (random <= 0.75F){
             newCurse= LocacacaCurseIndex.CHEST;
         } else if (random <= 0.9F){

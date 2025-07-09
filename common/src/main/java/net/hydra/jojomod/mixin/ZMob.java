@@ -33,10 +33,13 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.ai.memory.ExpirableValue;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.sensing.Sensing;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
@@ -61,6 +64,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -349,6 +353,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
     @Shadow public abstract void removeAllGoals(Predicate<Goal> $$0);
 
+    @Shadow public abstract void setAggressive(boolean $$0);
+
     @Unique
     protected int roundabout$unseenMemoryTicks = 300;
 
@@ -476,6 +482,24 @@ public abstract class ZMob extends LivingEntity implements IMob {
                     Goal goal = wrappedGoal.getGoal();
                     this.roundabout$enforceGoalTarget(goal, LE);
                 });
+            }
+
+
+            setAggressive(true);
+
+            Optional<? extends ExpirableValue<?>> $$x = brain.getMemories().get(MemoryModuleType.ANGRY_AT);
+            if ($$x != null) {
+                brain.setMemoryWithExpiry(MemoryModuleType.ANGRY_AT, LE.getUUID(), 600L);
+            }
+            Optional<? extends ExpirableValue<?>> $$1 = brain.getMemories().get(MemoryModuleType.ATTACK_TARGET);
+            if ($$1 != null) {
+                if (((LivingEntity)(Object)this) instanceof Piglin){
+                    brain.eraseMemory(MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLIN);
+                    brain.eraseMemory(MemoryModuleType.AVOID_TARGET);
+                    brain.eraseMemory(MemoryModuleType.HURT_BY_ENTITY);
+                }
+
+                brain.setMemory(MemoryModuleType.ATTACK_TARGET, LE);
             }
         } else {
             setTarget(null);

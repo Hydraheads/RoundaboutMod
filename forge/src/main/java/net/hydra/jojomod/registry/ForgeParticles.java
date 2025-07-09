@@ -116,6 +116,10 @@ public class ForgeParticles {
             "time_ember",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> ZAP = PARTICLES.register(
+            "zap",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> CINDERELLA_GLOW = PARTICLES.register(
             "cinderella_glow",
             () -> new SimpleParticleType(true)

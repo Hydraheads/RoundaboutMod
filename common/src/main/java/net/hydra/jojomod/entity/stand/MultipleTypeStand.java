@@ -10,7 +10,6 @@ public class MultipleTypeStand extends StandEntity {
     /**Colony stands (as the community calls them for some reason) fall into this category*/
     protected MultipleTypeStand(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
-        setOffsetType(OffsetIndex.LOOSE);
     }
 
     @Override

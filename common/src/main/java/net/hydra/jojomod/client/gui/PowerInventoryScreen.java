@@ -7,6 +7,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -258,13 +259,17 @@ public class PowerInventoryScreen
         float $$13 = $$6.getXRot();
         float $$14 = $$6.yHeadRotO;
         float $$15 = $$6.yHeadRot;
-        byte OT = $$6.getOffsetType();
+
         $$6.yBodyRot = 180.0F + $$7 * 20.0F;
         $$6.setYRot(180.0F + $$7 * 40.0F);
         $$6.setXRot(-$$8 * 20.0F);
         $$6.yHeadRot = user.getYRot();
         $$6.yHeadRotO = user.getYRot();
-        $$6.setOffsetType(OffsetIndex.LOOSE);
+        byte OT = 0;
+        if ($$6 instanceof FollowingStandEntity FE) {
+             OT = FE.getOffsetType();
+            FE.setOffsetType(OffsetIndex.LOOSE);
+        }
         $$6.setDisplay(true);
         renderEntityInInventory($$0, $$1, $$2, $$3, $$9, $$10, $$6);
         $$6.setDisplay(false);
@@ -273,7 +278,9 @@ public class PowerInventoryScreen
         $$6.setXRot($$13);
         $$6.yHeadRotO = $$14;
         $$6.yHeadRot = $$15;
-        $$6.setOffsetType(OT);
+        if ($$6 instanceof FollowingStandEntity FE) {
+            FE.setOffsetType(OT);
+        }
     }
 
     public int leftposModifier = 50;

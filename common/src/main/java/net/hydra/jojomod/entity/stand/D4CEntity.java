@@ -9,7 +9,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 
-public class D4CEntity extends StandEntity {
+public class D4CEntity extends FollowingStandEntity {
     public D4CEntity(EntityType<? extends Mob> entityType, Level world) { super(entityType, world); }
 
     public static final byte

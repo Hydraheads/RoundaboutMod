@@ -291,10 +291,8 @@ public class PowersCinderella extends NewDashPreset {
         }
         return super.tryPower(move,forced);
     }
-    public boolean hold2 = false;
 
     public boolean hasUIOpen = false;
-    public boolean hold1 = false;
 
 
     public void tickPower() {

@@ -3,6 +3,7 @@ package net.hydra.jojomod.client.models.stand;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -151,124 +152,129 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
     }
 
     public void rotateHead(T mobEntity,  ModelPart head, float tickDelta){
-        if (mobEntity.getDisplay()){
-            this.setHeadRotations(0,0);
-            return;
-        }
-
-        var animationNumber = mobEntity.getOffsetType();
-        var animationStyle = OffsetIndex.OffsetStyle(animationNumber);
-        float rotX = mobEntity.getHeadRotationX();
-        float rotY = mobEntity.getHeadRotationY();
-        if (animationStyle == OffsetIndex.FOLLOW_STYLE){
-            /*This code makes the head of the model turn towards swim rotation while swimming*/
-            if ((mobEntity.isSwimming() || mobEntity.isVisuallyCrawling() || mobEntity.isFallFlying()) && animationNumber != OffsetIndex.FOLLOW_NOLEAN) {
-                if (swimRotCorrect > -45) {
-                    swimRotCorrect -= 2;
-                    swimRotCorrect = Math.min(swimRotCorrect, -45);
-                }
-            } else {
-                if (swimRotCorrect < 0) {
-                    swimRotCorrect += 2;
-                    swimRotCorrect = Math.max(swimRotCorrect, 0);
-                }
+        if (mobEntity instanceof FollowingStandEntity FSE) {
+            if (mobEntity.getDisplay()) {
+                this.setHeadRotations(0, 0);
+                return;
             }
-            float tickDelta2 = Math.min(tickDelta,2);
-            rotX = ((mobEntity.getUser().getViewXRot(tickDelta2)%360) - swimRotCorrect) * Mth.DEG_TO_RAD;
-            rotY = 0;
 
-        } else if (animationStyle == OffsetIndex.FIXED_STYLE){
-            rotX = 0;
-            rotY = 0;
-        } else if (animationStyle == OffsetIndex.LOOSE_STYLE){
-            rotX = 0;
-            rotY = 0;
+            var animationNumber = FSE.getOffsetType();
+            var animationStyle = OffsetIndex.OffsetStyle(animationNumber);
+            float rotX = mobEntity.getHeadRotationX();
+            float rotY = mobEntity.getHeadRotationY();
+            if (animationStyle == OffsetIndex.FOLLOW_STYLE) {
+                /*This code makes the head of the model turn towards swim rotation while swimming*/
+                if ((mobEntity.isSwimming() || mobEntity.isVisuallyCrawling() || mobEntity.isFallFlying()) && animationNumber != OffsetIndex.FOLLOW_NOLEAN) {
+                    if (swimRotCorrect > -45) {
+                        swimRotCorrect -= 2;
+                        swimRotCorrect = Math.min(swimRotCorrect, -45);
+                    }
+                } else {
+                    if (swimRotCorrect < 0) {
+                        swimRotCorrect += 2;
+                        swimRotCorrect = Math.max(swimRotCorrect, 0);
+                    }
+                }
+                float tickDelta2 = Math.min(tickDelta, 2);
+                rotX = ((mobEntity.getUser().getViewXRot(tickDelta2) % 360) - swimRotCorrect) * Mth.DEG_TO_RAD;
+                rotY = 0;
+
+            } else if (animationStyle == OffsetIndex.FIXED_STYLE) {
+                rotX = 0;
+                rotY = 0;
+            } else if (animationStyle == OffsetIndex.LOOSE_STYLE) {
+                rotX = 0;
+                rotY = 0;
+            }
+            mobEntity.setHeadRotationX(rotX);
+            mobEntity.setHeadRotationY(rotY);
+            this.setHeadRotations(rotX, rotY);
         }
-        mobEntity.setHeadRotationX(rotX);
-        mobEntity.setHeadRotationY(rotY);
-        this.setHeadRotations(rotX,rotY);
     } public void rotateStand(T mobEntity,  ModelPart stand, float tickDelta){
-        if (mobEntity.getDisplay()){
-            this.setStandRotations(0,0,0);
-            return;
-        }
-        var animationNumber = mobEntity.getOffsetType();
-        var animationStyle = OffsetIndex.OffsetStyle(animationNumber);
-
-        float rotX = mobEntity.getStandRotationX();
-        float rotY = mobEntity.getStandRotationY();
-        float rotZ = mobEntity.getStandRotationZ();
-        float cRX = 0;
-        float cRY = 0;
-        float cRZ = 0;
-        if (animationNumber == OffsetIndex.FOLLOW){
-            cRY = mobEntity.getIdleRotation() * Mth.DEG_TO_RAD;
-        }
-        if (animationStyle == OffsetIndex.FIXED_STYLE){
-            cRX = (mobEntity.getUser().getViewXRot(tickDelta)%360) * Mth.DEG_TO_RAD;
-
-            if (animationNumber == OffsetIndex.BENEATH){
-                cRX = 90 * Mth.DEG_TO_RAD;
-                cRZ = 180 * Mth.DEG_TO_RAD;
+        if (mobEntity instanceof FollowingStandEntity FSE) {
+            if (mobEntity.getDisplay()) {
+                this.setStandRotations(0, 0, 0);
+                return;
             }
-        } else if (animationStyle == OffsetIndex.LOOSE_STYLE || animationNumber == OffsetIndex.GUARD_AND_TRACE){
-            cRX = (mobEntity.getViewXRot(tickDelta)%360) * Mth.DEG_TO_RAD;
-        }
-        rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, cRX, 0.8f);
-        rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, cRY, 0.8f);
-        rotZ = MainUtil.controlledLerpRadianDegrees(tickDelta, rotZ, cRZ, 0.8f);
-        mobEntity.setStandRotationX(rotX);
-        mobEntity.setStandRotationY(rotY);
-        mobEntity.setStandRotationZ(rotZ);
-        this.setStandRotations(rotX,rotY,rotZ);
+            var animationNumber = FSE.getOffsetType();
+            var animationStyle = OffsetIndex.OffsetStyle(animationNumber);
 
+            float rotX = mobEntity.getStandRotationX();
+            float rotY = mobEntity.getStandRotationY();
+            float rotZ = mobEntity.getStandRotationZ();
+            float cRX = 0;
+            float cRY = 0;
+            float cRZ = 0;
+            if (animationNumber == OffsetIndex.FOLLOW) {
+                cRY = FSE.getIdleRotation() * Mth.DEG_TO_RAD;
+            }
+            if (animationStyle == OffsetIndex.FIXED_STYLE) {
+                cRX = (mobEntity.getUser().getViewXRot(tickDelta) % 360) * Mth.DEG_TO_RAD;
+
+                if (animationNumber == OffsetIndex.BENEATH) {
+                    cRX = 90 * Mth.DEG_TO_RAD;
+                    cRZ = 180 * Mth.DEG_TO_RAD;
+                }
+            } else if (animationStyle == OffsetIndex.LOOSE_STYLE || animationNumber == OffsetIndex.GUARD_AND_TRACE) {
+                cRX = (mobEntity.getViewXRot(tickDelta) % 360) * Mth.DEG_TO_RAD;
+            }
+            rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, cRX, 0.8f);
+            rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, cRY, 0.8f);
+            rotZ = MainUtil.controlledLerpRadianDegrees(tickDelta, rotZ, cRZ, 0.8f);
+            mobEntity.setStandRotationX(rotX);
+            mobEntity.setStandRotationY(rotY);
+            mobEntity.setStandRotationZ(rotZ);
+            this.setStandRotations(rotX, rotY, rotZ);
+        }
     }
     public void rotateBody(T mobEntity,  ModelPart body, float tickDelta){
-        if (mobEntity.getDisplay()){
-            this.setBodyRotations(0,0);
-            return;
-        }
-        var animationNumber = mobEntity.getOffsetType();
-        var animationStyle = OffsetIndex.OffsetStyle(animationNumber);
-
-        float rotX = mobEntity.getBodyRotationX();
-        float rotY = mobEntity.getBodyRotationY();
-        if (animationStyle == OffsetIndex.FOLLOW_STYLE){
-            float cRot = maxRotX;
-
-            if ((mobEntity.isSwimming() || mobEntity.isFallFlying()) && animationNumber != OffsetIndex.FOLLOW_NOLEAN) {
-                cRot = ((mobEntity.getUser().getViewXRot(tickDelta)%360) + 90) * Mth.DEG_TO_RAD;
-            } else if (mobEntity.isVisuallyCrawling() && animationNumber != OffsetIndex.FOLLOW_NOLEAN) {
-                cRot = 90 * Mth.DEG_TO_RAD;
-            } else {
-                int moveForward = mobEntity.getMoveForward();
-                if (animationNumber==OffsetIndex.FOLLOW_NOLEAN){
-                    moveForward = 0;
-                }
-                if (moveForward < 0) {
-                    cRot *= -moveForward;
-                } else if (moveForward > 0) {
-                    cRot *= -moveForward;
-                } else {
-                    cRot = 0;
-                }
-                cRot *= -0.6F;
+        if (mobEntity instanceof FollowingStandEntity FSE) {
+            if (mobEntity.getDisplay()) {
+                this.setBodyRotations(0, 0);
+                return;
             }
-            rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, cRot, 0.15f);
-            rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, 0, 0.8f);
-        } else if (animationStyle == OffsetIndex.FIXED_STYLE) {
-            float xRot = 0;
-            float yRot = 0;
-            rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, xRot, 0.8f);
-            rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, yRot, 0.8f);
-        } else if (animationStyle == OffsetIndex.LOOSE_STYLE) {
-            rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, 0, 0.8f);
-            rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, 0, 0.8f);
+            var animationNumber = FSE.getOffsetType();
+            var animationStyle = OffsetIndex.OffsetStyle(animationNumber);
 
+            float rotX = mobEntity.getBodyRotationX();
+            float rotY = mobEntity.getBodyRotationY();
+            if (animationStyle == OffsetIndex.FOLLOW_STYLE) {
+                float cRot = maxRotX;
+
+                if ((mobEntity.isSwimming() || mobEntity.isFallFlying()) && animationNumber != OffsetIndex.FOLLOW_NOLEAN) {
+                    cRot = ((mobEntity.getUser().getViewXRot(tickDelta) % 360) + 90) * Mth.DEG_TO_RAD;
+                } else if (mobEntity.isVisuallyCrawling() && animationNumber != OffsetIndex.FOLLOW_NOLEAN) {
+                    cRot = 90 * Mth.DEG_TO_RAD;
+                } else {
+                    int moveForward = FSE.getMoveForward();
+                    if (animationNumber == OffsetIndex.FOLLOW_NOLEAN) {
+                        moveForward = 0;
+                    }
+                    if (moveForward < 0) {
+                        cRot *= -moveForward;
+                    } else if (moveForward > 0) {
+                        cRot *= -moveForward;
+                    } else {
+                        cRot = 0;
+                    }
+                    cRot *= -0.6F;
+                }
+                rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, cRot, 0.15f);
+                rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, 0, 0.8f);
+            } else if (animationStyle == OffsetIndex.FIXED_STYLE) {
+                float xRot = 0;
+                float yRot = 0;
+                rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, xRot, 0.8f);
+                rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, yRot, 0.8f);
+            } else if (animationStyle == OffsetIndex.LOOSE_STYLE) {
+                rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, 0, 0.8f);
+                rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, 0, 0.8f);
+
+            }
+            mobEntity.setBodyRotationX(rotX);
+            mobEntity.setBodyRotationY(rotY);
+            this.setBodyRotations(rotX, rotY);
         }
-        mobEntity.setBodyRotationX(rotX);
-        mobEntity.setBodyRotationY(rotY);
-        this.setBodyRotations(rotX,rotY);
     }
 
 

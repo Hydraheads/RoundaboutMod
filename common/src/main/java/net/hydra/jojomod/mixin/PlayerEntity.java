@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -205,8 +206,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         anchorPlace = Mth.clamp(anchorPlace,0,360);
         this.roundabout$anchorPlace = anchorPlace;
         StandEntity ent = ((StandUser)this).roundabout$getStand();
-        if (ent != null){
-            ent.setAnchorPlace(anchorPlace);
+        if (ent instanceof FollowingStandEntity FE){
+            FE.setAnchorPlace(anchorPlace);
         }
     }
     @Unique
@@ -215,8 +216,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         anchorPlace = Mth.clamp(anchorPlace,0,360);
         this.roundabout$anchorPlaceAttack = anchorPlace;
         StandEntity ent = ((StandUser)this).roundabout$getStand();
-        if (ent != null){
-            ent.setAnchorPlaceAttack(anchorPlace);
+        if (ent instanceof FollowingStandEntity FE){
+            FE.setAnchorPlaceAttack(anchorPlace);
         }
     }
     @Unique
@@ -225,8 +226,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         anchorPlace = Mth.clamp(anchorPlace,0,3);
         this.roundabout$sizePercent = anchorPlace;
         StandEntity ent = ((StandUser)this).roundabout$getStand();
-        if (ent != null){
-            ent.setSizePercent(anchorPlace);
+        if (ent instanceof FollowingStandEntity FE){
+            FE.setSizePercent(anchorPlace);
         }
     }
     @Unique
@@ -235,8 +236,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         anchorPlace = Mth.clamp(anchorPlace,0,360);
         this.roundabout$idleRotation = anchorPlace;
         StandEntity ent = ((StandUser)this).roundabout$getStand();
-        if (ent != null){
-            ent.setIdleRotation(anchorPlace);
+        if (ent instanceof FollowingStandEntity FE){
+            FE.setIdleRotation(anchorPlace);
         }
     }
     @Unique
@@ -245,8 +246,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         anchorPlace = Mth.clamp(anchorPlace,0,2);
         this.roundabout$idleYOffset = anchorPlace;
         StandEntity ent = ((StandUser)this).roundabout$getStand();
-        if (ent != null){
-            ent.setIdleYOffset(anchorPlace);
+        if (ent instanceof FollowingStandEntity FE){
+            FE.setIdleYOffset(anchorPlace);
         }
     }
     @Unique
@@ -265,8 +266,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         distanceOut = Mth.clamp(distanceOut,0,2F);
         this.roundabout$distanceOut = distanceOut;
         StandEntity ent = ((StandUser)this).roundabout$getStand();
-        if (ent != null){
-            ent.setDistanceOut(distanceOut);
+        if (ent instanceof FollowingStandEntity FE){
+            FE.setDistanceOut(distanceOut);
         }
     }
     @Unique
@@ -493,8 +494,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         byte curse = ((StandUser)this).roundabout$getLocacacaCurse();
         float modifier = 1;
         if (curse > -1) {
-            if ((curse == LocacacaCurseIndex.MAIN_HAND && this.getMainArm() == HumanoidArm.RIGHT)
-            || (curse == LocacacaCurseIndex.OFF_HAND && this.getMainArm() == HumanoidArm.LEFT)) {
+            if ((curse == LocacacaCurseIndex.RIGHT_HAND && this.getMainArm() == HumanoidArm.RIGHT)
+            || (curse == LocacacaCurseIndex.LEFT_HAND && this.getMainArm() == HumanoidArm.LEFT)) {
                 modifier = 0.6F;
             }
         }
@@ -528,8 +529,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             roundabout$destroySpeedRecursion = true;
             float dSpeed = this.getDestroySpeed($$0);
             roundabout$destroySpeedRecursion = false;
-            if (curse > -1 && (curse == LocacacaCurseIndex.MAIN_HAND && this.getMainArm() == HumanoidArm.RIGHT)
-                    || (curse == LocacacaCurseIndex.OFF_HAND && this.getMainArm() == HumanoidArm.LEFT)) {
+            if (curse > -1 && (curse == LocacacaCurseIndex.RIGHT_HAND && this.getMainArm() == HumanoidArm.RIGHT)
+                    || (curse == LocacacaCurseIndex.LEFT_HAND && this.getMainArm() == HumanoidArm.LEFT)) {
                 dSpeed *= 0.6F;
             }
 

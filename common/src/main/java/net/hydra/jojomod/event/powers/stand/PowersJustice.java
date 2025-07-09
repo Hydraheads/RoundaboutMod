@@ -14,6 +14,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenCreeper;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.corpses.FallenZombie;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
@@ -1196,8 +1197,8 @@ public class PowersJustice extends DashPreset {
     @Override
     public void poseStand(byte r){
         StandEntity stand = getStandEntity(this.self);
-        if (Objects.nonNull(stand) && !isPiloting()){
-            stand.setOffsetType(r);
+        if (Objects.nonNull(stand) && !isPiloting() && stand instanceof FollowingStandEntity  FE){
+            FE.setOffsetType(r);
         }
     }
 

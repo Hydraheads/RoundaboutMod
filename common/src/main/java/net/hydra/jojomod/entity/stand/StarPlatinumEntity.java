@@ -10,7 +10,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Unique;
 
-public class StarPlatinumEntity extends StandEntity {
+public class StarPlatinumEntity extends FollowingStandEntity {
 
     public StarPlatinumEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);

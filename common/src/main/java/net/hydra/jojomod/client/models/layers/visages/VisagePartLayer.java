@@ -4,20 +4,28 @@ import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPlayerModel;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -38,6 +46,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, float var9, float var10) {
 
+
         ItemStack visage = null;
         if (entity instanceof Player play) {
             IPlayerEntity pl = ((IPlayerEntity) play);
@@ -52,13 +61,54 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
             visage = znpc.getBasis();
         }
 
+        boolean isHurt = entity.hurtTime > 0;
+        float r = isHurt ? 1.0F : 1.0F;
+        float g = isHurt ? 0.6F : 1.0F;
+        float b = isHurt ? 0.6F : 1.0F;
+        StandUser user = ((StandUser) entity);
+        byte curse = user.roundabout$getLocacacaCurse();
+        int muscle = user.roundabout$getZappedToID();
+        //muscle = 100;
+        if (muscle > -1){
+            float scale = 1.055F;
+            float alpha = 0.6F;
+            float oscillation = Math.abs(((entity.tickCount % 10) + (partialTicks%1))-5)*0.04F;
+            alpha += oscillation;
+            if (entity.getMainArm() == HumanoidArm.RIGHT) {
+                if (curse != LocacacaCurseIndex.RIGHT_HAND) {
+                    if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
+                        renderRightArmSlim(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
+                                r, g, b, StandIcons.MUSCLE_SLIM, 0.01F, 0, 0, alpha);
+                    } else {
+                        renderRightArm(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
+                                r, g, b, StandIcons.MUSCLE, 0.01F, 0, 0, alpha);
+                    }
+                }
+                if (curse != LocacacaCurseIndex.RIGHT_LEG) {
+                    renderRightLeg(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
+                            r, g, b, StandIcons.MUSCLE, 0.01F, 0, 0, alpha);
+                }
+            } else {
+                if (curse != LocacacaCurseIndex.LEFT_HAND) {
+                    if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
+                        renderLeftArmSlim(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
+                                r, g, b, StandIcons.MUSCLE_SLIM, -0.01F, 0, 0, alpha);
+                    } else {
+                        renderLeftArm(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
+                                r, g, b, StandIcons.MUSCLE, -0.01F, 0, 0, alpha);
+                    }
+                }
+                if (curse != LocacacaCurseIndex.LEFT_LEG) {
+                    renderLeftLeg(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
+                            r, g, b, StandIcons.MUSCLE, -0.01F, 0, 0, alpha);
+                }
+            }
+        }
+
+
             if (visage != null && !visage.isEmpty()) {
                 if (visage.getItem() instanceof MaskItem MI) {
                     VisageData vd = MI.visageData.generateVisageData(entity);
-                    boolean isHurt = entity.hurtTime > 0;
-                    float r = isHurt ? 1.0F : 1.0F;
-                    float g = isHurt ? 0.6F : 1.0F;
-                    float b = isHurt ? 0.6F : 1.0F;
                     String path = MI.visageData.getSkinPath();
                     if (vd.rendersBreast()){
                         renderNormalBreast(poseStack,bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
@@ -114,6 +164,66 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     }
                 }
             }
+    }
+    public void renderRightLeg(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                               float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
+        if (getParentModel().rightLeg.visible) {
+            poseStack.pushPose();
+            getParentModel().rightLeg.translateAndRotate(poseStack);
+            ModStrayModels.RightLeg.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
+            poseStack.popPose();
+        }
+    }
+    public void renderLeftLeg(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                               float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
+        if (getParentModel().leftLeg.visible) {
+            poseStack.pushPose();
+            getParentModel().leftLeg.translateAndRotate(poseStack);
+            ModStrayModels.LeftLeg.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
+            poseStack.popPose();
+        }
+    }
+    public void renderRightArm(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                           float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
+        if (getParentModel().rightArm.visible) {
+            poseStack.pushPose();
+            getParentModel().rightArm.translateAndRotate(poseStack);
+            ModStrayModels.RightArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
+            poseStack.popPose();
+        }
+    }
+    public void renderRightArmSlim(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                               float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
+        if (getParentModel().rightArm.visible) {
+            poseStack.pushPose();
+            getParentModel().rightArm.translateAndRotate(poseStack);
+            ModStrayModels.RightArmSlim.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
+            poseStack.popPose();
+        }
+    }
+    public void renderLeftArm(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                               float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
+        if (getParentModel().leftArm.visible) {
+            poseStack.pushPose();
+            getParentModel().leftArm.translateAndRotate(poseStack);
+            ModStrayModels.LeftArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
+            poseStack.popPose();
+        }
+    }
+    public void renderLeftArmSlim(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                                   float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
+        if (getParentModel().leftArm.visible) {
+            poseStack.pushPose();
+            getParentModel().leftArm.translateAndRotate(poseStack);
+            ModStrayModels.LeftArmSlim.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
+            poseStack.popPose();
+        }
     }
     public void renderNormalBreast(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                                    float r, float g, float b) {

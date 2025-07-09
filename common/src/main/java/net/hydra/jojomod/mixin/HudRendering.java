@@ -1,8 +1,10 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IHudAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -76,6 +78,12 @@ public abstract class HudRendering implements IHudAccess {
 
 
         if (this.minecraft.player != null) {
+            float tsdelta = ClientUtil.getDelta();
+            tsdelta = tsdelta % 1;
+
+            if (((TimeStop) minecraft.level).CanTimeStopEntity(minecraft.player)) {
+                tsdelta = 0;
+            }
             StandUser user = ((StandUser) this.minecraft.player);
             boolean renderGasOverlay = ConfigManager.getClientConfig().renderGasSplatterOverlay;
             if (renderGasOverlay) {
@@ -114,6 +122,18 @@ public abstract class HudRendering implements IHudAccess {
                         this.renderTextureOverlay($$1, StandIcons.STONE_HEAD_OVERLAY, 1F);
                     }
                 }
+
+                float ticks = user.roundabout$getZappedTicks();
+                if (ticks > -1){
+                    if (user.roundabout$getZappedToID() > -1){
+                        ticks+=tsdelta;
+                    } else {
+                        ticks-=tsdelta;
+                    }
+                    ticks = Mth.clamp(ticks,0,10);
+                    ticks*=0.1F;
+                    roundabout$renderTextureOverlay($$1, StandIcons.SURVIVOR_ANGER, ticks*0.6F,1F,1F,1F);
+                }
             }
 
              StandPowers powers = user.roundabout$getStandPowers();
@@ -127,6 +147,17 @@ public abstract class HudRendering implements IHudAccess {
         StandHudRender.renderStandHud($$1, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), roundabout$flashAlpha, roundabout$otherFlashAlpha);
 
         RenderSystem.enableBlend();
+    }
+
+
+    private void roundabout$renderTextureOverlay(GuiGraphics $$0, ResourceLocation $$1, float opacity, float r, float g, float b) {
+        RenderSystem.disableDepthTest();
+        RenderSystem.depthMask(false);
+        $$0.setColor(r, g, b, opacity);
+        $$0.blit($$1, 0, 0, -90, 0.0F, 0.0F, this.screenWidth, this.screenHeight, this.screenWidth, this.screenHeight);
+        RenderSystem.depthMask(true);
+        RenderSystem.enableDepthTest();
+        $$0.setColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderEffects(Lnet/minecraft/client/gui/GuiGraphics;)V"))
     private void roundabout$renderOverlay(GuiGraphics $$0, float $$1, CallbackInfo ci) {

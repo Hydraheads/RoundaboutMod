@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.PreRenderEntity;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersSurvivor;
@@ -114,11 +115,35 @@ public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity
         }
     }
 
+
+    public static void drawParticleLine(Entity from, Entity to, int particleCount) {
+        if (!(from.level() instanceof ServerLevel serverLevel)) return;
+
+        Vec3 start = from.position();
+        Vec3 end = to.position();
+        Vec3 diff = end.subtract(start);
+
+        for (int i = 0; i <= particleCount; i++) {
+            double progress = i / (double) particleCount;
+            Vec3 point = start.add(diff.scale(progress));
+
+            serverLevel.sendParticles(
+                    ModParticles.ZAP, // change to whatever particle you want
+                    point.x, point.y, point.z,
+                    1, // count
+                    0, 0.2F, 0, // offset
+                    0       // speed
+            );
+        }
+    }
     public void matchEntities(LivingEntity one, LivingEntity two){
         ((StandUser)one).roundabout$setZappedToID(two.getId());
         ((StandUser)one).roundabout$aggressivelyEnforceZapAggro();
         ((StandUser)two).roundabout$setZappedToID(one.getId());
         ((StandUser)two).roundabout$aggressivelyEnforceZapAggro();
+        drawParticleLine(this,one,10);
+        drawParticleLine(this,two,10);
+        drawParticleLine(one,two,10);
         this.level().playSound(null, this.blockPosition(), ModSounds.SURVIVOR_SHOCK_EVENT, SoundSource.NEUTRAL, 1F, (float) (0.9F + (Math.random() * 0.2F)));
     }
 

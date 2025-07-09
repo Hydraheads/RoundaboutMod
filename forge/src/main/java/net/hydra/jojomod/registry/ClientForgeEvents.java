@@ -178,6 +178,12 @@ public class ClientForgeEvents {
         ModStrayModels.LegCloakPart = new LegCloakPart();
         ModStrayModels.PlayerChestPart = new PlayerChestPart();
         ModStrayModels.PlayerSmallChestPart = new PlayerSmallChestPart();
+        ModStrayModels.RightArm = new RightArmPart();
+        ModStrayModels.RightArmSlim = new RightArmSlimPart();
+        ModStrayModels.LeftArm = new LeftArmPart();
+        ModStrayModels.LeftArmSlim = new LeftArmSlimPart();
+        ModStrayModels.RightLeg = new RightLegPart();
+        ModStrayModels.LeftLeg = new LeftLegPart();
         //BlockEntityRenderers.register(ModBlocks.STAND_FIRE_BLOCK_ENTITY, StandFireRenderer::new);
     }
     @SubscribeEvent
@@ -210,6 +216,7 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.GREEN_CLOCK.get(), MandomClockParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.ORANGE_CLOCK.get(), MandomClockParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.TIME_EMBER.get(), MandomClockParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.ZAP.get(), ZapParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.CINDERELLA_GLOW.get(), CinderellaGlowParticle.CinderellaGlowProvider::new);
         event.registerSpriteSet(ForgeParticles.PINK_SMOKE.get(), CinderellaSmokeParticle.CosyProvider::new);
         event.registerSpriteSet(ForgeParticles.BUBBLE_POP.get(), SoftBubblePopParticle.Provider::new);

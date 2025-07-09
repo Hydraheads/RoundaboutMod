@@ -15,6 +15,7 @@ import net.hydra.jojomod.client.gui.PowerInventoryScreen;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.D4CEntity;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
@@ -941,8 +942,8 @@ public abstract class InputEvents implements IInputEvents {
                  * Currently, strafe is reported, but unused.*/
                 if (((StandUser) player).roundabout$getActive()) {
                     StandEntity stand = ((StandUser) player).roundabout$getStand();
-                    if (stand != null) {
-                        var mf = stand.getMoveForward();
+                    if (stand instanceof FollowingStandEntity FE) {
+                        var mf = FE.getMoveForward();
                         byte forward = 0;
                         byte strafe = 0;
                         if (options.keyUp.isDown()) forward++;

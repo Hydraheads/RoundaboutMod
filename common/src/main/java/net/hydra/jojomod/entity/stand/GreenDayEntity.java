@@ -5,7 +5,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 
-public class GreenDayEntity extends StandEntity{
+public class GreenDayEntity extends FollowingStandEntity{
 
     public GreenDayEntity(EntityType<? extends Mob> entityType, Level world) { super(entityType, world); }
     public static final byte

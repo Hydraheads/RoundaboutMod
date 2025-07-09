@@ -223,7 +223,6 @@ public class PowersSoftAndWet extends NewPunchingStand {
     }
     public void bubblePopClient(){
         if (!this.onCooldown(PowerIndex.SKILL_2_SNEAK)){
-            hold2 = true;
 
             Vec3 pos = MainUtil.getRaytracePointOnMobOrBlock(this.self,30);
 
@@ -294,13 +293,10 @@ public class PowersSoftAndWet extends NewPunchingStand {
         if (vaultOrFallBraceFails()){
             if (canExecuteMoveWithLevel(getScaffoldLevel())) {
                 if (!this.onCooldown(PowerIndex.SKILL_3)) {
-                    if (!hold3) {
                         if (canBridge()) {
-                            hold3 = true;
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
                             tryPowerPacket(PowerIndex.POWER_3);
                         }
-                    }
                 }
             }
         }
@@ -319,7 +315,6 @@ public class PowersSoftAndWet extends NewPunchingStand {
         }
     }
 
-    public boolean hold3 = false;
 
     @Override
     public float getMiningMultiplier() {
@@ -1006,7 +1001,6 @@ public class PowersSoftAndWet extends NewPunchingStand {
              **/
         }
     }
-    public boolean hold2 = false;
     public SoftAndWetPlunderBubbleEntity getPlunderBubble(){
         SoftAndWetPlunderBubbleEntity bubble = new SoftAndWetPlunderBubbleEntity(this.self,this.self.level());
         bubble.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
@@ -2424,7 +2418,6 @@ public void unlockSkin(){
         this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BUBBLE_POP_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.9 + (Math.random() * 0.2)));
     }
 
-    public boolean hold4 = false;
 
     public boolean canBridge(){
         return ((this.self.onGround() && !this.self.isInWater()) || this.self.onClimbable() || (this.self instanceof Player PE && PE.isCreative()));

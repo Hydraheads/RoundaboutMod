@@ -10,7 +10,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 
-public class MagiciansRedEntity extends StandEntity {
+public class MagiciansRedEntity extends FollowingStandEntity {
     public MagiciansRedEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
     }

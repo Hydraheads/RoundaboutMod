@@ -2,18 +2,22 @@ package net.hydra.jojomod.stand.powers;
 
 import com.mojang.datafixers.optics.Lens;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 
+import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 
+import net.hydra.jojomod.mixin.StandUserEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 
@@ -201,9 +205,32 @@ public class PowersGreenDay extends NewPunchingStand{
         return true;
     }
 
+    @Override
+    public byte getPermaCastContext() {
+        return PermanentZoneCastInstance.MOLD_FIELD;
+    }
+
+        public boolean toggleMoldField() {
+        if (!this.getSelf().level().isClientSide()) {
+            IPermaCasting icast = ((IPermaCasting) this.getSelf().level());
+            if (!icast.roundabout$isPermaCastingEntity(this.getSelf())) {
+                icast.roundabout$addPermaCaster(this.getSelf());
+
+            } else {
+                removeMold();
+            }
+        }
+        return true;
+    }
+
+    public void removeMold() {
+        IPermaCasting icast = ((IPermaCasting) this.getSelf().level());
+        icast.roundabout$removePermaCastingEntity(this.getSelf());
+    }
+
     public void moldShenanigans() {
         if (!isClient()) {
-            if(IsMoldFieldActive) {
+            if(isMoldFieldOn()) {
                 for(int i = 0; i < 84; i = i + 1) {
                     double randX = Roundabout.RANDOM.nextDouble(-50, 50);
                     double randY = Roundabout.RANDOM.nextDouble(-50, 50);
@@ -216,47 +243,45 @@ public class PowersGreenDay extends NewPunchingStand{
 
                 }
 
-                List<Entity> entityList = DamageHandler.genHitbox(this.getSelf(), this.getSelf().getX(), this.getSelf().getY(),
-                        this.getSelf().getZ(), 50, 50, 50);
-                if (!entityList.isEmpty()){
-                    for (Entity value : entityList) {
-                        if (!value.is(this.self)){
-                            if (value instanceof LivingEntity){
-                                LivingEntity creature = (LivingEntity) value;
-                                if(value.getY() < this.self.getY() && (value.getDeltaMovement().y<-0.0784000015258789)) {
-                                    for (int i = 0; i < 3; i = i + 1) {
 
-                                        double width = value.getBbWidth();
-                                        double height = value.getBbHeight();
-                                        double randomX = Roundabout.RANDOM.nextDouble(0 - (width / 2), width / 2);
-                                        double randomY = Roundabout.RANDOM.nextDouble(0 - (height / 2), height / 2);
-                                        double randomZ = Roundabout.RANDOM.nextDouble(0 - (width / 2), width / 2);
-                                        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MOLD,
-                                                value.getX() + randomX, value.getY() + height / 2 + randomY, value.getZ() + randomZ,
-                                                0, value.getDeltaMovement().x, value.getDeltaMovement().y, value.getDeltaMovement().z,
-                                                0.12);
+                //List<Entity> entityList = DamageHandler.genHitbox(this.getSelf(), this.getSelf().getX(), this.getSelf().getY(),
+                 //       this.getSelf().getZ(), 50, 50, 50);
+               // if (!entityList.isEmpty()){
+             //       for (Entity value : entityList) {
+           //             if (!value.is(this.self)){
+         //                   if (value instanceof LivingEntity){
+       //                         LivingEntity creature = (LivingEntity) value;
+     //                           if(value.getY() < this.self.getY() && (value.getDeltaMovement().y<-0.0784000015258789)) {
+   //                                 for (int i = 0; i < 3; i = i + 1) {
 
-                                    }
-                                }
+                              //          double width = value.getBbWidth();
+                             //           double height = value.getBbHeight();
+                             //           double randomX = Roundabout.RANDOM.nextDouble(0 - (width / 2), width / 2);
+                             //           double randomY = Roundabout.RANDOM.nextDouble(0 - (height / 2), height / 2);
+                             //           double randomZ = Roundabout.RANDOM.nextDouble(0 - (width / 2), width / 2);
+                             //           ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MOLD,
+                            //                    value.getX() + randomX, (value.getY() + height / 2) + randomY, value.getZ() + randomZ,
+                            //                    0, value.getDeltaMovement().x, value.getDeltaMovement().y, value.getDeltaMovement().z,
+                            //                    0.12);
 
-                            }
+                          //          }
+                        //        }
 
-                        }
-                    }
-                }
+                      //      }
+
+                    //    }
+                  //  }
+                //}
 
             }
         }
     }
 
     public boolean isMoldFieldOn() {
-        return IsMoldFieldActive;
+        return((IPermaCasting) this.getSelf().level()).roundabout$isPermaCastingEntity(this.self);
     };
 
-    public boolean toggleMoldField(){
-        IsMoldFieldActive = !IsMoldFieldActive;
-        return true;
-    }
+
 
 
     @Override

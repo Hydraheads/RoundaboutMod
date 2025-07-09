@@ -53,7 +53,7 @@ public class DashPreset extends StandPowers {
                 if (!this.onCooldown(PowerIndex.GLOBAL_DASH)) {
                     /*Stand vaulting*/
                     this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().cooldownsInTicks.vaulting);
-                    double mag = this.getSelf().getPosition(0).distanceTo(
+                    double mag = this.getSelf().getPosition(1).distanceTo(
                             new Vec3(blockHit.getLocation().x, blockHit.getLocation().y, blockHit.getLocation().z)) * 1.68 + 1;
                     MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
                             (blockHit.getLocation().x - this.getSelf().getX()) / mag,

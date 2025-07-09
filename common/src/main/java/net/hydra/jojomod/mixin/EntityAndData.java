@@ -552,7 +552,7 @@ public abstract class EntityAndData implements IEntityAndData {
         if (!this.level.isClientSide()) {
             Vec3 vec = new Vec3(roundabout$qknockback2params.x, roundabout$qknockback2params.y, roundabout$qknockback2params.z);
             if (!vec.equals(Vec3.ZERO) && vec.distanceTo(Vec3.ZERO) > 5) {
-                if (vec.distanceTo(this.getPosition(0)) < 50) {
+                if (vec.distanceTo(this.getPosition(1)) < 50) {
                     if (((Entity) (Object) this) instanceof LivingEntity le) {
                         le.teleportTo(vec.x, vec.y, vec.z);
                     } else {

@@ -14,22 +14,21 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.SoftExplosion;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.event.powers.stand.presets.BlockGrabPreset;
-import net.hydra.jojomod.stand.powers.PowersD4C;
+import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.stand.powers.PowersHeyYa;
-import net.hydra.jojomod.stand.powers.PowersMandom;
-import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -254,7 +253,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Nullable
     @Unique
-    private ImmutableList<StandEntity> roundabout$followers = ImmutableList.of();
+    private ImmutableList<FollowingStandEntity> roundabout$followers = ImmutableList.of();
 
     /**
      * StandID is used clientside only
@@ -846,6 +845,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void roundabout$setZappedToID(int bound) {
         if (this.entityData.hasItem(ROUNDABOUT$IS_ZAPPED_TO_ATTACK)) {
+            roundabout$zappedTicks = 0;
             this.getEntityData().set(ROUNDABOUT$IS_ZAPPED_TO_ATTACK, bound);
         }
     }
@@ -856,6 +856,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             return this.getEntityData().get(ROUNDABOUT$IS_ZAPPED_TO_ATTACK);
         }
         return -1;
+    }
+
+    public int roundabout$getZappedTicks(){
+        return roundabout$zappedTicks;
     }
 
     @Unique
@@ -1050,15 +1054,37 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         return false;
     }
+    @Unique
+    public int roundabout$zappedTicks = -1;
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void roundabout$tick(CallbackInfo ci) {
 
         roundabout$tickStandOrStandless();
         //if (StandID > -1) {
         if (!this.level().isClientSide()) {
+            if (roundabout$getZappedToID() > -1){
+                roundabout$zappedTicks++;
+                if (roundabout$zappedTicks >= ClientNetworking.getAppropriateConfig().survivorSettings.durationOfAggressiveAngerSetting){
+                    roundabout$setZappedToID(-1);
+                } else {
+                    Entity ent = this.level().getEntity(roundabout$getZappedToID());
+                    if (!(ent != null && !ent.isRemoved() && ent.isAlive() && ent.distanceTo(this) < 50)) {
+                        roundabout$setZappedToID(-1);
+                    }
+                }
+            } else {
+                if (roundabout$zappedTicks > -1) {
+                    if (roundabout$zappedTicks > 10) {
+                        roundabout$zappedTicks = 10;
+                    }
+                }
+                roundabout$zappedTicks--;
+            }
+
+
             if (this.roundabout$getActive() &&this.roundabout$getStandPowers().canSummonStand()&&this.roundabout$getStandPowers().canSummonStandAsEntity()  && (this.roundabout$getStand() == null ||
                     (this.roundabout$getStand().level().dimensionTypeId() != this.level().dimensionTypeId() &&
-                            OffsetIndex.OffsetStyle(this.roundabout$getStand().getOffsetType()) == OffsetIndex.FOLLOW_STYLE))){
+                            this.roundabout$getStand() instanceof FollowingStandEntity FE && OffsetIndex.OffsetStyle(FE.getOffsetType()) == OffsetIndex.FOLLOW_STYLE))){
                 this.roundabout$summonStand(this.level(),true,false);
             }
 
@@ -1083,6 +1109,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 dt--;
                 roundabout$detectTicks = dt;
             }
+
+            if (roundabout$getZappedToID() > -1){
+                roundabout$zappedTicks++;
+            } else {
+                if (roundabout$zappedTicks > -1) {
+                    if (roundabout$zappedTicks > 10) {
+                        roundabout$zappedTicks = 10;
+                    }
+                }
+                roundabout$zappedTicks--;
+            }
+            roundabout$zappedTicks = Mth.clamp(roundabout$zappedTicks,0,10);
         }
         this.roundabout$getStandPowers().tickPower();
         this.roundabout$tickGuard();
@@ -1172,18 +1210,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Override
-    public void roundabout$addFollower(StandEntity $$0) {
+    public void roundabout$addFollower(FollowingStandEntity $$0) {
         if (this.roundabout$followers.isEmpty()) {
             this.roundabout$followers = ImmutableList.of($$0);
         } else {
-            List<StandEntity> $$1 = Lists.newArrayList(this.roundabout$followers);
+            List<FollowingStandEntity> $$1 = Lists.newArrayList(this.roundabout$followers);
             $$1.add($$0);
             this.roundabout$followers = ImmutableList.copyOf($$1);
         }
     }
 
     @Override
-    public void roundabout$removeFollower(StandEntity $$0) {
+    public void roundabout$removeFollower(FollowingStandEntity $$0) {
         if (this.roundabout$followers.size() == 1 && this.roundabout$followers.get(0) == $$0) {
             this.roundabout$followers = ImmutableList.of();
         } else {
@@ -1193,12 +1231,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Override
-    public final List<StandEntity> roundabout$getFollowers() {
+    public final List<FollowingStandEntity> roundabout$getFollowers() {
         return this.roundabout$followers;
     }
 
     @Override
-    public boolean roundabout$hasFollower(StandEntity $$0) {
+    public boolean roundabout$hasFollower(FollowingStandEntity $$0) {
         return this.roundabout$followers.contains($$0);
     }
 
@@ -2292,20 +2330,27 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                                 roundabout$User.releaseUsingItem();
                             }
                         }
-                        Vec3 spos = stand.getStandOffsetVector(roundabout$User);
+                        if (stand instanceof FollowingStandEntity FE) {
+                            Vec3 spos = FE.getStandOffsetVector(roundabout$User);
                         stand.absMoveTo(spos.x(), spos.y(), spos.z());
+                        } else {
+                            Vec3 yes = this.getPosition(1F).add(stand.getBonusOffset());
+                            stand.absMoveTo(yes.x,yes.y,yes.z);
+                        }
 
                         stand.setSkin(roundabout$getStandSkin());
                         stand.setIdleAnimation(roundabout$getIdlePos());
 
                         if (((LivingEntity) (Object) this) instanceof Player PE) {
                             stand.playerSetProperties(PE);
-                            stand.setDistanceOut(((IPlayerEntity) PE).roundabout$getDistanceOut());
-                            stand.setAnchorPlace(((IPlayerEntity) PE).roundabout$getAnchorPlace());
-                            stand.setAnchorPlaceAttack(((IPlayerEntity) PE).roundabout$getAnchorPlaceAttack());
-                            stand.setSizePercent(((IPlayerEntity) PE).roundabout$getSizePercent());
-                            stand.setIdleRotation(((IPlayerEntity) PE).roundabout$getIdleRotation());
-                            stand.setIdleYOffset(((IPlayerEntity) PE).roundabout$getIdleYOffset());
+                            if (stand instanceof FollowingStandEntity FE) {
+                                FE.setDistanceOut(((IPlayerEntity) PE).roundabout$getDistanceOut());
+                                FE.setAnchorPlace(((IPlayerEntity) PE).roundabout$getAnchorPlace());
+                                FE.setAnchorPlaceAttack(((IPlayerEntity) PE).roundabout$getAnchorPlaceAttack());
+                                FE.setSizePercent(((IPlayerEntity) PE).roundabout$getSizePercent());
+                                FE.setIdleRotation(((IPlayerEntity) PE).roundabout$getIdleRotation());
+                                FE.setIdleYOffset(((IPlayerEntity) PE).roundabout$getIdleYOffset());
+                            }
                             if (!this.level().isClientSide()) {
                                 IPlayerEntity ipe = ((IPlayerEntity) this);
                                 ModPacketHandler.PACKET_ACCESS.s2cPowerInventorySettings(
@@ -2365,24 +2410,27 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
 
     /** Set Direction input. This is part of stand rendering as leaning.
-     * @see StandEntity#setMoveForward */
+     * @see FollowingStandEntity#setMoveForward(Byte)  */
     public void roundabout$setDI(byte forward, byte strafe){
         //RoundaboutMod.LOGGER.info("MF:"+ forward);
-        if (roundabout$Stand != null){
+        if (roundabout$Stand instanceof FollowingStandEntity FE){
             if (!roundabout$User.isShiftKeyDown() && roundabout$User.isSprinting()){
                 forward*=2;}
-            roundabout$Stand.setMoveForward(forward);
+            FE.setMoveForward(forward);
         }
     }
 
     /** Retooled vanilla riding code to update the location of a stand every tick relative to the entity it
      * is the user of.
-     * @see StandEntity#getAnchorPlace */
-    public void roundabout$updateStandOutPosition(StandEntity stand) {
+     * @see FollowingStandEntity#setMoveForward */
+    @Unique
+    @Override
+    public void roundabout$updateStandOutPosition(FollowingStandEntity stand) {
         this.roundabout$updateStandOutPosition(stand, Entity::setPos);
     }
 
-    public void roundabout$updateStandOutPosition(StandEntity stand, Entity.MoveFunction positionUpdater) {
+    @Unique
+    public void roundabout$updateStandOutPosition(FollowingStandEntity stand, Entity.MoveFunction positionUpdater) {
         if (!(this.roundabout$hasStandOut())) {
             return;
         }
@@ -2521,11 +2569,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 $$1 *= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnMobs *0.01);
                 $$1 = FM.getDamageMod($$1);
             }
-            Entity ent2 = FM;
-            if (FM.getController() > 0 && FM.getController() != this.getId()){
-                ent2 = FM.controller;
-            }
-            ci.setReturnValue(hurt(ModDamageTypes.of(this.level(), ModDamageTypes.CORPSE_ARROW, ent2),
+            ci.setReturnValue(hurt(ModDamageTypes.of(this.level(), ModDamageTypes.CORPSE_ARROW, FM),
                     $$1));
             return;
         } else if ($$0.is(DamageTypes.PLAYER_EXPLOSION) && $$0.getEntity() instanceof FallenMob FM){
@@ -2714,7 +2758,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         if (!this.isSprinting()) {
                             scale *= 1.3;
                         }
-                        Vec3 yesVec = this.getPosition(0).add(this.getDeltaMovement());
+                        Vec3 yesVec = this.getPosition(1).add(this.getDeltaMovement());
                         BlockPos yesVec2 = new BlockPos((int) yesVec.x, (int) (this.position().y), (int) yesVec.z);
                         if (this.level().getBlockState(yesVec2).isSolid()) {
                             roundabout$frictionSave = new Vec3(Math.random() - 0.5, 0, Math.random() - 0.5);
@@ -2945,6 +2989,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public boolean roundabout$mutualActuallyHurt(DamageSource $$0, float $$1){
         if (!this.isInvulnerableTo($$0)) {
 
+            Entity zent = $$0.getEntity();
+            if (zent != null && zent instanceof LivingEntity LE){
+                ItemStack stack = LE.getMainHandItem();
+
+                if (stack != null && !stack.isEmpty() && stack.is(ModItems.SCISSORS)) {
+                    if (MainUtil.getMobBleed(this)) {
+                        roundabout$setBleedLevel(0);
+                        addEffect(new MobEffectInstance(ModEffects.BLEED, 300, 0), LE);
+                    }
+                    stack.hurtAndBreak(1, LE, $$0x -> $$0x.broadcastBreakEvent(EquipmentSlot.MAINHAND));
+                }
+            }
             /**Big bubble pops*/
             if (roundabout$isBubbleEncased()){
                 if ($$0.getEntity() != null || $$0.is(DamageTypes.THORNS) || $$0.is(DamageTypes.ARROW)
@@ -3192,7 +3248,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         if (this.getVehicle() != null && this.getVehicle() instanceof StandEntity SE && !this.level().isClientSide()){
             if (SE.dismountOnHit() && (damageSource.getDirectEntity() != null || damageSource.is(DamageTypes.IN_WALL))) {
-                Vec3 sanityCheckCoordinates = this.getPosition(0);
+                Vec3 sanityCheckCoordinates = this.getPosition(1);
                 SE.ejectPassengers();
                 if (SE.getUser() != null) {
                     //((StandUser)SE.getUser())
@@ -3226,7 +3282,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         ((IEntityAndData)this).roundabout$setQVec2Params(qVec2);
                     }
 
-                    if (this.getPosition(0).distanceTo(Vec3.ZERO) < 5){
+                    if (this.getPosition(1).distanceTo(Vec3.ZERO) < 5){
                         this.teleportTo(sanityCheckCoordinates.x,sanityCheckCoordinates.y,sanityCheckCoordinates.z);
                     }
                 }
@@ -3711,5 +3767,60 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
 
+    public double previousYpos = 0.0;
+    public float MoldLevel = 0.0f;
 
+    @Override
+    public void DoMoldTick() {
+        MoldLevel = MoldLevel + 1f;
+
+            if (MoldLevel % 5 == 0) {
+
+                if(MoldLevel > 60){
+                    MoldLevel = 0;
+                    if (true){
+                        this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION),326);
+                    }
+                }
+                else {
+                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), (MoldLevel/5f) + 3.0f);
+                }
+
+            }
+
+
+    }
+
+    @Override
+    public void MoldFieldExit() {
+        MoldLevel = 0;
+        this.tick();
+
+    }
+
+    @Inject(method = "travel", at = @At(value = "TAIL"))
+    public void   MoldDetection(Vec3 movement,CallbackInfo info) {
+        if((((IPermaCasting)this.level()).roundabout$inPermaCastRange(this.getOnPos(), PermanentZoneCastInstance.MOLD_FIELD))) {
+            Boolean isUser = (((IPermaCasting)this.level()).roundabout$isPermaCastingEntity(((LivingEntity)(Object) this))&& this.roundabout$getStandPowers() instanceof PowersGreenDay);
+            Boolean down = previousYpos > this.getY();
+            boolean isStand = (((LivingEntity)(Object) this) instanceof StandEntity);
+            if (!roundabout$getStandPowers().isStoppingTime() &&!this.roundabout$isBubbleEncased() && !isUser && !isStand && down){
+                for (int i = 0; i < 3; i = i + 1) {
+
+                    double width = this.getBbWidth();
+                    double height = this.getBbHeight();
+                    double randomX = Roundabout.RANDOM.nextDouble(0 - (width / 2), width / 2);
+                    double randomY = Roundabout.RANDOM.nextDouble(0 - (height / 2), height / 2);
+                    double randomZ = Roundabout.RANDOM.nextDouble(0 - (width / 2), width / 2);
+                    (this.level()).addParticle(ModParticles.MOLD,
+                            this.getX() + randomX, (this.getY() + height / 2) + randomY, this.getZ() + randomZ,
+                            this.getDeltaMovement().x, this.getDeltaMovement().y, this.getDeltaMovement().z
+                    );
+
+                }
+                DoMoldTick();
+            }
+        }
+        previousYpos = this.getY();
+    }
 }
