@@ -1120,7 +1120,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
                 roundabout$zappedTicks--;
             }
-            roundabout$zappedTicks = Mth.clamp(roundabout$zappedTicks,0,10);
+            roundabout$zappedTicks = Mth.clamp(roundabout$zappedTicks,-1,10);
         }
         this.roundabout$getStandPowers().tickPower();
         this.roundabout$tickGuard();
