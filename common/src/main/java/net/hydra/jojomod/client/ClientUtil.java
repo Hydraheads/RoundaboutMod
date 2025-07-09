@@ -519,6 +519,7 @@ public class ClientUtil {
                         mc.player, mc.player.connection.enabledFeatures(), mc.options.operatorItemsTab().get()
                 ));
     }
+
     public static float getDelta() {
         Minecraft mc = Minecraft.getInstance();
         return mc.getDeltaFrameTime();

@@ -22,6 +22,7 @@ public class FabricParticles {
     public static final SimpleParticleType PURPLE_STAR = FabricParticleTypes.simple();
     public static final SimpleParticleType MENACING = FabricParticleTypes.simple();
     public static final SimpleParticleType VACUUM = FabricParticleTypes.simple();
+    public static final SimpleParticleType ZAP = FabricParticleTypes.simple();
     public static final SimpleParticleType ORANGE_FLAME = FabricParticleTypes.simple();
     public static final SimpleParticleType BLUE_FLAME = FabricParticleTypes.simple();
     public static final SimpleParticleType PURPLE_FLAME = FabricParticleTypes.simple();
@@ -61,6 +62,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("air_crackle"), AIR_CRACKLE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("menacing"), MENACING);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("vacuum"), VACUUM);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("zap"), ZAP);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("fog_chain"), FOG_CHAIN);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("bubble_trail"), BUBBLE_TRAIL);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("warden_clock"), WARDEN_CLOCK);
@@ -108,6 +110,7 @@ public class FabricParticles {
         ModParticles.ORANGE_CLOCK = ORANGE_CLOCK;
         ModParticles.TIME_EMBER = TIME_EMBER;
         ModParticles.POINTER = POINTER;
+        ModParticles.ZAP = ZAP;
         ModParticles.POINTER_SOFT = POINTER_SOFT;
         ModParticles.ORANGE_FLAME = ORANGE_FLAME;
         ModParticles.BLUE_FLAME = BLUE_FLAME;

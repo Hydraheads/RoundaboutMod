@@ -858,6 +858,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return -1;
     }
 
+    public int roundabout$getZappedTicks(){
+        return roundabout$zappedTicks;
+    }
+
     @Unique
     @Override
     public void roundabout$aggressivelyEnforceZapAggro(){
@@ -1068,6 +1072,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         roundabout$setZappedToID(-1);
                     }
                 }
+            } else {
+                if (roundabout$zappedTicks > -1) {
+                    if (roundabout$zappedTicks > 10) {
+                        roundabout$zappedTicks = 10;
+                    }
+                }
+                roundabout$zappedTicks--;
             }
 
 
@@ -1098,6 +1109,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 dt--;
                 roundabout$detectTicks = dt;
             }
+
+            if (roundabout$getZappedToID() > -1){
+                roundabout$zappedTicks++;
+            } else {
+                if (roundabout$zappedTicks > -1) {
+                    if (roundabout$zappedTicks > 10) {
+                        roundabout$zappedTicks = 10;
+                    }
+                }
+                roundabout$zappedTicks--;
+            }
+            roundabout$zappedTicks = Mth.clamp(roundabout$zappedTicks,0,10);
         }
         this.roundabout$getStandPowers().tickPower();
         this.roundabout$tickGuard();
