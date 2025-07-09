@@ -133,7 +133,7 @@ public abstract class HudRendering implements IHudAccess {
                     ticks = Mth.clamp(ticks,0,10);
                     ticks*=0.1F;
                     float oscillation = Math.abs(((this.tickCount % 10) + (tsdelta % 1)) - 5) * 0.12F;
-                    roundabout$renderTextureOverlay($$1, StandIcons.SURVIVOR_ANGER, ticks,1F-(oscillation),1,0.7F+(oscillation));
+                    roundabout$renderTextureOverlay($$1, StandIcons.SURVIVOR_ANGER, ticks*0.7F,0.7F+(oscillation),1F-(oscillation),1F-(oscillation));
                 }
             }
 
