@@ -1,10 +1,12 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.ThrownWaterBottleEntity;
+import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -55,10 +57,6 @@ public class PowersSurvivor extends NewDashPreset {
     }
     public boolean canSummonStandAsEntity(){
         return false;
-    }
-    @Override
-    public boolean rendersPlayer(){
-        return true;
     }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
@@ -286,7 +284,11 @@ public class PowersSurvivor extends NewDashPreset {
         return 11283968;
     }
 
-
+    public StandEntity displayStand = null;
+    @Override
+    public boolean returnFakeStandForHud(){
+        return true;
+    }
     public SurvivorEntity SurvivorTarget = null;
     public Entity EntityTargetOne = null;
     public Entity EntityTargetTwo = null;
@@ -496,6 +498,18 @@ public class PowersSurvivor extends NewDashPreset {
         );
     }
 
+    @Override
+    public int getDisplayPowerInventoryScale(){
+        return 60;
+    }
+    @Override
+    public int getDisplayPowerInventoryYOffset(){
+        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (skn == JusticeEntity.DARK_MIRAGE){
+            return super.getDisplayPowerInventoryYOffset();
+        }
+        return 7;
+    }
     @Override public Component getSkinName(byte skinId) {
         return switch (skinId)
         {

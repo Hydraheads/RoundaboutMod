@@ -191,8 +191,10 @@ public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity
                         if (firstTarget == null) {
                             firstTarget = LE;
                         } else {
-                            matchEntities(firstTarget, LE);
-                            return;
+                            if (MainUtil.canActuallyHit(firstTarget,LE)) {
+                                matchEntities(firstTarget, LE);
+                                return;
+                            }
                         }
                     }
                 }

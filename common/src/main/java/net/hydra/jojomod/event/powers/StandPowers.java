@@ -6,6 +6,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.client.*;
+import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
@@ -869,6 +870,12 @@ public class StandPowers {
             if (this.self instanceof Player) {
                 tickOverlayTicks();
             }
+
+            if (displayStand != null){
+                if (displayStand.getFadeOut() < displayStand.MaxFade) {
+                    displayStand.incFadeOut((byte) 1);
+                }
+            }
         }
 
         if (this.self instanceof Player PE && PE.isSpectator()) {
@@ -970,6 +977,26 @@ public class StandPowers {
 
     }
 
+    public boolean returnFakeStandForHud(){
+        return false;
+    }
+
+    public StandEntity getStandForHUD(){
+        if (returnFakeStandForHud())
+            return getStandForHUDIfFake();
+        return getStandUserSelf().roundabout$getStand();
+    }
+
+    public StandEntity getStandForHUDIfFake(){
+        if (displayStand == null){
+            displayStand = ModEntities.SURVIVOR.create(this.getSelf().level());
+        }
+        if (this.self instanceof Player PL && ((IPlayerEntity)PL).roundabout$getStandSkin() != displayStand.getSkin()){
+            displayStand = ModEntities.SURVIVOR.create(this.getSelf().level());
+            displayStand.setSkin(((IPlayerEntity)PL).roundabout$getStandSkin());
+        }
+        return displayStand;
+    }
     public boolean getCreative(){
         return this.self instanceof Player PE && PE.isCreative();
     }
@@ -2697,6 +2724,7 @@ public class StandPowers {
         return false;
     }
 
+    public StandEntity displayStand = null;
     public final void spreadRadialClientPacket(double range, boolean skipSelf, String packet, Object... vargs) {
         if (!this.self.level().isClientSide) {
             ServerLevel serverWorld = ((ServerLevel) this.self.level());

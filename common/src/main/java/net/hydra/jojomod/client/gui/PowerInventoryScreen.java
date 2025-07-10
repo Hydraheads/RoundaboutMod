@@ -92,7 +92,7 @@ public class PowerInventoryScreen
 
         if (pl != null) {
             StandUser standUser = ((StandUser) pl);
-            if (!standUser.roundabout$getStandDisc().isEmpty() && !standUser.roundabout$getStandDisc().getItem().equals(ModItems.STAND_DISC)) {
+            if (standUser.roundabout$hasAStand()) {
 
                 StandPowers sp = standUser.roundabout$getStandPowers();
                 if (sp.rendersPlayer()) {
@@ -101,14 +101,14 @@ public class PowerInventoryScreen
                             context, i + 51, j + 75, 30, (float) (i + 51) - this.xMouse, (float) (j + 75 - 50) - this.yMouse, this.minecraft.player
                     );
                 } else {
-                    stand = standUser.roundabout$getStand();
+                    stand = standUser.roundabout$getStandPowers().getStandForHUD();
                     if (stand != null) {
                         renderStandEntityInInventoryFollowsMouse(context, i + 51, j + 75 - sp.getDisplayPowerInventoryYOffset(), sp.getDisplayPowerInventoryScale(),
                                 (float) (i + 51) - this.xMouse, (float) (j + 75 - 50) - this.yMouse, stand, pl);
 
                     }
                 }
-                context.drawString(this.font, sp.getSkinName(((IPlayerEntity) pl).roundabout$getStandSkin()), this.titleLabelX + 11 + leftPos, this.titleLabelY + 18 + topPos, 16777215, false);
+                context.drawString(this.font, sp.getSkinName(((StandUser) pl).roundabout$getStandSkin()), this.titleLabelX + 11 + leftPos, this.titleLabelY + 18 + topPos, 16777215, false);
                 context.drawString(this.font, sp.getPosName(standUser.roundabout$getIdlePos()), this.titleLabelX + 11 + leftPos, this.titleLabelY + 36 + topPos, 16777215, false);
                 int lefXPos = leftPos + 77;
                 int rightXPos = leftPos + 164;
@@ -797,7 +797,7 @@ public class PowerInventoryScreen
             StandPowers sp = standUser.roundabout$getStandPowers();
             StandUserClientPlayer scp = ((StandUserClientPlayer) pl);
             int menuTicks = scp.roundabout$getMenuTicks();
-            stand = standUser.roundabout$getStand();
+            stand = standUser.roundabout$getStandPowers().getStandForHUD();
             if (sp.hasMoreThanOneSkin()) {
                 if (isSurelyHovering(rightXPos, topYPos, 7, 13, $$0, $$1)) {
                     if (menuTicks <= -1) {
