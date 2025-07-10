@@ -163,7 +163,8 @@ public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity
                 if (ent.isAlive() && !ent.isRemoved() && (ent instanceof Mob || ent instanceof Player)
                 && !(ent instanceof StandEntity) && ent.isPickable() && !ent.isInvulnerable() &&
                         !(ent instanceof Player PL && PL.isCreative()) &&
-                        ent instanceof LivingEntity LE && ((StandUser)LE).roundabout$getZappedToID() <= -1){
+                        ent instanceof LivingEntity LE && ((StandUser)LE).roundabout$getZappedToID() <= -1
+                && !((StandUser) LE).roundabout$isBubbleEncased()){
                     if (firstTarget == null){
                         firstTarget = LE;
                     } else {
