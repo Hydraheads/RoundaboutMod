@@ -365,6 +365,7 @@
   "death.attack.glaive.item": "%1$s a été embroché(e) par %2$s en utilisant %3$s",
   "death.attack.stand_virus": "%1$s a été transformé(e) en sauce tomate",
   "death.attack.stand_virus.item": "%1$s a été transformé(e) en sauce tomate",
+  "death.attack,disintegration": "%1$ s'est désintégré",
 
   "item.glaive.charge_power": "Chargé l'attaque",
 
@@ -397,6 +398,7 @@
   "sounds.roundabout.summon_magician":  "Invocation de Magician's Red",
   "sounds.roundabout.summon_mandom":  "Invocation de Mandom",
   "sounds.roundabout.hey_ya_summon":  "Invocation d'Hey Ya",
+  "sounds.roundabout.survivor_summon":  "Invocation de Survivor",
   "sounds.roundabout.ova_summon":  "Invocation de OAV Star Platinium",
   "sounds.roundabout.ova_summon_the_world":  "Invocation de OAV The World",
   "sounds.roundabout.punch_sfx1":  "Air qui siffle",
@@ -449,6 +451,10 @@
   "sounds.roundabout.soft_and_wet_kick":  "Impacte",
 
   "sounds.roundabout.mandom_rewind":  "Retour dans le temps",
+
+  "sounds.roundabout.survivor_shock":  "Choque",
+  "sounds.roundabout.survivor_place":  "Craquement électrique",
+  "sounds.roundabout.survivor_remove":  "Pop",
 
   "sounds.roundabout.snap":  "Claquement de doigt",
   "sounds.roundabout.star_finger_silent":  "Star Finger",
@@ -842,6 +848,17 @@
   "ability.roundabout.clock": "Lecture du temps",
   "ability.roundabout.clock.desc": "Montre une montre quand Mandom est actif, de tel manière que vous pouvez savoir l'heure de la journée dans les dimensions que ça concerne.",
 
+
+  "ability.roundabout.throw_bottle": "Lancer de fiole d'eau",
+  "ability.roundabout.throw_bottle.desc": "Lance une fiole d'eau tenu directement depuis votre inventaire, elle va loin et est un bon moyen d'activé le Stand.",
+  "ability.roundabout.summon_survivor": "Invocation du Stand",
+  "ability.roundabout.summon_survivor.desc": "Place votre Stand là où vous regardez, jusqu'à une certaine portée. Quand arrosé avec de l'eau, il s'active, et électrise les nerfs des créatures à proximité. Ça les fait se battre entre eux jusqu'à la mort. Vous pouvez aussi être électrisé, vous mettant dans un combat. Quand quelqu'un est électrisé, la force au corps à corps augmente, ainsi que la résistance aux dégâts qui ne sont pas corps à corps.",
+  "ability.roundabout.desummon_survivor": "Rapelle du Stand",
+  "ability.roundabout.desummon_survivor.desc": "Chaque instance de votre Stand que vous avez placé commence à disparaitre. Ça n'efface pas une fureur prééxistante, alors soyez prudent avec quel violence vous choissez de provoquer.",
+  "ability.roundabout.target_zap": "Cupidon de la Rage",
+  "ability.roundabout.target_zap.desc": "Vous laisse sélectionné quel créature doivent s'affronté ! Entre un mode sélection, utilisez votre bouton d'attaque pour sélectionné un Survivor actif, puis une cible, et puis une autre. Iels vont se battre ! Pressez le bouton de cette capacité à nouveau pour annuler ou refaire la sélection. Pendant que ce mode est actif, vos Survivors ne vont pas automatiquement électriser des créatures ensembles.",
+
+
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Non débloqué",
   "ability.roundabout.locked.desc": "Débloquer au niveau de Développement %1$s",
@@ -991,9 +1008,16 @@
   "skins.roundabout.d4c.special": "Spécial",
   "skins.roundabout.d4c.grand": "Grand",
 
-  "skins.roundabout.green_day.base": "Part 5",
+  "skins.roundabout.green_day.base": "Partie 5",
 
   "skins.roundabout.ratt.anime" : "Anime",
+  "skins.roundabout.ratt.manga" : "Manga",
+  "skins.roundabout.ratt.melon" : "Pasthèque",
+  "skins.roundabout.ratt.sand" : "Sable",
+  "skins.roundabout.ratt.aztec" : "Aztèque",
+  "skins.roundabout.ratt.redd" : "Rouge",
+
+
 
   "skins.roundabout.cinderella.base": "Partie 4",
   "skins.roundabout.cinderella.manga": "Manga",
@@ -1039,6 +1063,12 @@
   "skins.roundabout.mandom.esidisi": "Esidisi",
 
   "skins.roundabout.survivor.base": "Partie 6",
+  "skins.roundabout.survivor.green": "Vert",
+  "skins.roundabout.survivor.purple": "Violet",
+  "skins.roundabout.survivor.red": "Rouge",
+  "skins.roundabout.survivor.blue": "Bleu",
+  "skins.roundabout.survivor.silver": "Argent",
+  "skins.roundabout.survivor.ghast": "Ghastelin",
 
   "skins.roundabout.killer_queen.base": "Partie 4",
 
@@ -1229,5 +1259,9 @@
   "text.roundabout.mandom.vision_on": "Chrono Vision Activée",
   "text.roundabout.mandom.watch_off": "Sans Montre",
   "text.roundabout.mandom.watch_on": "Montre principale",
-  "text.roundabout.mandom.watch_on_rolex": "Montre Rolex"
+  "text.roundabout.mandom.watch_on_rolex": "Montre Rolex",
+
+  "text.roundabout.survivor.match": "Affrontes %1$s!",
+  "text.roundabout.survivor.anger_selection": "Mode Cupidon de la Fureur Activé",
+  "text.roundabout.survivor.anger_selection_off": "Mode Cupidon de la Fureur Désactivé"
 }
