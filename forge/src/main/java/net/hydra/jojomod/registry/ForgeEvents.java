@@ -74,6 +74,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.ZOMBIE_AESTHETICIAN.get(), ZombieAesthetician.createAttributes().build());
         event.put(ForgeEntities.RINGO.get(), RingoNPC.createAttributes().build());
         event.put(ForgeEntities.POCOLOCO.get(), PocolocoNPC.createAttributes().build());
+        event.put(ForgeEntities.GUCCIO.get(), GuccioNPC.createAttributes().build());
         event.put(ForgeEntities.VALENTINE.get(), ValentineNPC.createAttributes().build());
         event.put(ForgeEntities.STEVE_NPC.get(), PlayerSteveNPC.createAttributes().build());
         event.put(ForgeEntities.ALEX_NPC.get(), PlayerAlexNPC.createAttributes().build());
@@ -275,6 +276,7 @@ public class ForgeEvents {
         ModItems.MODIFICATION_MASK = ForgeItems.MODIFICATION_MASK.get();
         ModItems.JOTARO_MASK = ForgeItems.JOTARO_MASK.get();
         ModItems.DIO_MASK = ForgeItems.DIO_MASK.get();
+        ModItems.GUCCIO_MASK = ForgeItems.GUCCIO_MASK.get();
         ModItems.ENYA_MASK = ForgeItems.ENYA_MASK.get();
         ModItems.ENYA_OVA_MASK = ForgeItems.ENYA_OVA_MASK.get();
         ModItems.VALENTINE_MASK = ForgeItems.VALENTINE_MASK.get();
@@ -415,6 +417,7 @@ public class ForgeEvents {
         ModEntities.AESTHETICIAN = ForgeEntities.AESTHETICIAN.get();
         ModEntities.ZOMBIE_AESTHETICIAN = ForgeEntities.ZOMBIE_AESTHETICIAN.get();
         ModEntities.POCOLOCO = ForgeEntities.POCOLOCO.get();
+        ModEntities.GUCCIO = ForgeEntities.GUCCIO.get();
         ModEntities.RINGO = ForgeEntities.RINGO.get();
         ModEntities.VALENTINE = ForgeEntities.VALENTINE.get();
         ModEntities.STEVE_NPC = ForgeEntities.STEVE_NPC.get();

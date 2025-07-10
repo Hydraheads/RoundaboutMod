@@ -122,6 +122,13 @@ public class FabricEntities {
                         EntityType.Builder.of(PocolocoNPC::new, MobCategory.MISC).
                                 sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_pocoloco")
                 );
+        public static final EntityType<GuccioNPC> GUCCIO =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_guccio"),
+                        EntityType.Builder.of(GuccioNPC::new, MobCategory.MISC).
+                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_guccio")
+                );
         public static final EntityType<RingoNPC> RINGO =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -556,6 +563,7 @@ public class FabricEntities {
                 ModEntities.AESTHETICIAN = AESTHETICIAN;
                 ModEntities.ZOMBIE_AESTHETICIAN = ZOMBIE_AESTHETICIAN;
                 ModEntities.POCOLOCO = POCOLOCO;
+                ModEntities.GUCCIO = GUCCIO;
                 ModEntities.RINGO = RINGO;
                 ModEntities.STEVE_NPC = STEVE_NPC;
                 ModEntities.ALEX_NPC = ALEX_NPC;
@@ -578,6 +586,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(AESTHETICIAN, Aesthetician.createAttributes());
                 FabricDefaultAttributeRegistry.register(RINGO, RingoNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(POCOLOCO, PocolocoNPC.createAttributes());
+                FabricDefaultAttributeRegistry.register(GUCCIO, GuccioNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(ZOMBIE_AESTHETICIAN, ZombieAesthetician.createAttributes());
                 FabricDefaultAttributeRegistry.register(STEVE_NPC, PlayerSteveNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(ALEX_NPC, PlayerAlexNPC.createAttributes());

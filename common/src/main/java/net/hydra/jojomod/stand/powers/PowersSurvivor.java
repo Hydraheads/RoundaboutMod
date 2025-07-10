@@ -348,9 +348,9 @@ public class PowersSurvivor extends NewDashPreset {
     public int lastPlacementTime = -1;
     @Override
     public void tickMobAI(LivingEntity attackTarget){
-        lastPlacementTime++;
-        if (lastPlacementTime > 600){
-            lastPlacementTime = -1;
+        lastPlacementTime--;
+        if (lastPlacementTime <= -1){
+            lastPlacementTime = 600;
             createSurvivor(this.self.getPosition(1),true);
         }
     }
