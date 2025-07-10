@@ -291,6 +291,7 @@ public class PowersSurvivor extends NewDashPreset {
     public Entity EntityTargetOne = null;
     public Entity EntityTargetTwo = null;
     public boolean selectTarget(){
+        setRageCupidCooldown();
         unloadTargets();
         SurvivorEntity surv = SurvivorTarget;
         if (surv != null && EntityTargetOne instanceof LivingEntity LE && EntityTargetTwo instanceof LivingEntity LE2){
@@ -313,9 +314,13 @@ public class PowersSurvivor extends NewDashPreset {
         } else {
             if (SurvivorEntity.canZapEntity(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange() && !EntityTargetOne.is(TE)){
                 /**Passing 3 integers is something a block pos can do, so why not just use that packet*/
-                tryBlockPosPowerPacket(PowerIndex.POWER_4_BONUS,new BlockPos(SurvivorTarget.getId(),EntityTargetOne.getId(),TE.getId()));
-                SurvivorTarget = null;
-                EntityTargetOne = null;
+
+                if (!this.onCooldown(PowerIndex.SKILL_4)) {
+                    setRageCupidCooldown();
+                    tryBlockPosPowerPacket(PowerIndex.POWER_4_BONUS, new BlockPos(SurvivorTarget.getId(), EntityTargetOne.getId(), TE.getId()));
+                    SurvivorTarget = null;
+                    EntityTargetOne = null;
+                }
             }
         }
     }
@@ -358,6 +363,11 @@ public class PowersSurvivor extends NewDashPreset {
         }
     }
 
+    public void setRageCupidCooldown(){
+        int cooldown = ClientNetworking.getAppropriateConfig().survivorSettings.rageCupidCooldown;
+        this.setCooldown(PowerIndex.SKILL_4, cooldown);
+    }
+
     public Entity getHighlighter(){
         Entity TE = MainUtil.getTargetEntity(this.self, getCupidHighlightRange(), 15);
         if (SurvivorTarget == null){
@@ -397,6 +407,9 @@ public class PowersSurvivor extends NewDashPreset {
     @Override
     public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
         if (num == PowerIndex.SKILL_2 && ClientNetworking.getAppropriateConfig().survivorSettings.SummonSurvivorCooldownCooldownUsesServerLatency) {
+            return true;
+        }
+        if (num == PowerIndex.SKILL_4 && ClientNetworking.getAppropriateConfig().survivorSettings.rageCupidCooldownCooldownUsesServerLatency) {
             return true;
         }
         return super.isServerControlledCooldown(ci, num);
