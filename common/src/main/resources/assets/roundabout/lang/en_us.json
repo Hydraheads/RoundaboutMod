@@ -848,6 +848,17 @@
   "ability.roundabout.clock": "Time Telling",
   "ability.roundabout.clock.desc": "Displays a clock when active, so you can know the time of day in applicable dimensions.",
 
+
+  "ability.roundabout.throw_bottle": "Water Bottle Throw",
+  "ability.roundabout.throw_bottle.desc": "Throws a held water bottle directly from your inventory, it travels far and is good for activating the stand.",
+  "ability.roundabout.summon_survivor": "Summon Stand",
+  "ability.roundabout.summon_survivor.desc": "Place your stand down where you are looking, up to a certain range. When it is doused with water, it activates, and zaps the nerves of nearby mobs. This causes them to fight each other to the death. You can be zapped as well, locking you into a fight. When zapped, melee power increases, and you resist damage that is not melee.",
+  "ability.roundabout.desummon_survivor": "Retract Stand",
+  "ability.roundabout.desummon_survivor.desc": "Every instance of your stand that you place down starts to disappear. This does not remove existing anger, so be careful what violence you choose to incite.",
+  "ability.roundabout.target_zap": "Target Battle",
+  "ability.roundabout.target_zap.desc": "Enter selection mode, use your attack key to select an activated survivor, then one target, and then another. They will then fight! Press the ability key again to cancel or redo selection.",
+
+
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Locked",
   "ability.roundabout.locked.desc": "Unlock at Development Stage %1$s",
