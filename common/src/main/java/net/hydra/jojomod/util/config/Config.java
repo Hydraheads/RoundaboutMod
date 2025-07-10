@@ -578,7 +578,7 @@ public class Config implements Cloneable {
         public Integer SummonSurvivorCooldownV2;
         @BooleanOption(group = "inherit", value = true)
         public Boolean SummonSurvivorCooldownCooldownUsesServerLatency;
-        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
         public Integer rageCupidCooldown;
         @BooleanOption(group = "inherit", value = true)
         public Boolean rageCupidCooldownCooldownUsesServerLatency;
