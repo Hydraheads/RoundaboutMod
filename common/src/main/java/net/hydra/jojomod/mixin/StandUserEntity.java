@@ -2983,6 +2983,34 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    @Override
+    @Unique
+    public float roundabout$mutualGetSpeed(float basis){
+        byte curse = this.roundabout$getLocacacaCurse();
+        if (curse > -1) {
+            if (curse == LocacacaCurseIndex.RIGHT_LEG || curse == LocacacaCurseIndex.LEFT_LEG) {
+                basis = (basis * 0.82F);
+            } else if (curse == LocacacaCurseIndex.CHEST) {
+                basis = (basis * 0.85F);
+            }
+        }
+
+        int zapped = roundabout$getZappedToID();
+        if (zapped > -1){
+            Entity ent = level().getEntity(zapped);
+            if (ent != null){
+                float dist1 = distanceTo(ent);
+                float dist2 = (float) position().add(getDeltaMovement()).distanceTo(ent.position());
+                if (dist1 >= dist2){
+                    basis *= 1.2F;
+                } else {
+                    basis *= 0.7F;
+                }
+            }
+        }
+
+        return basis;
+    }
 
     @Override
     @Unique
@@ -3678,11 +3706,30 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    @Unique
+    boolean roundabout$cancelsprintJump(){
+        byte curse = this.roundabout$getLocacacaCurse();
+        if (curse > -1 && (curse == LocacacaCurseIndex.RIGHT_LEG || curse == LocacacaCurseIndex.LEFT_LEG))
+            return true;
+
+        int zapped = roundabout$getZappedToID();
+        if (zapped > -1){
+            Entity ent = level().getEntity(zapped);
+            if (ent != null){
+                float dist1 = distanceTo(ent);
+                float dist2 = (float) position().add(getDeltaMovement()).distanceTo(ent.position());
+                if (dist1 < dist2){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /**Use this code to eliminate the sprint jump during certain actions*/
     @Inject(method = "jumpFromGround", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$jumpFromGround(CallbackInfo ci) {
-        byte curse = this.roundabout$getLocacacaCurse();
-        if (this.roundabout$getStandPowers().cancelSprintJump() || (curse > -1 && (curse == LocacacaCurseIndex.RIGHT_LEG || curse == LocacacaCurseIndex.LEFT_LEG))) {
+        if (this.roundabout$getStandPowers().cancelSprintJump() || roundabout$cancelsprintJump()) {
             Vec3 $$0 = this.getDeltaMovement();
             this.setDeltaMovement($$0.x, (double) this.getJumpPower(), $$0.z);
             this.hasImpulse = true;
@@ -3712,14 +3759,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
             basis = roundabout$getStandPowers().inputSpeedModifiers(basis);
         }
-        byte curse = this.roundabout$getLocacacaCurse();
-        if (curse > -1) {
-            if (curse == LocacacaCurseIndex.RIGHT_LEG || curse == LocacacaCurseIndex.LEFT_LEG) {
-                basis = (basis * 0.82F);
-            } else if (curse == LocacacaCurseIndex.CHEST) {
-                basis = (basis * 0.85F);
-            }
-        }
+
+        basis = roundabout$mutualGetSpeed(basis);
         if (!((StandUser) this).roundabout$getStandDisc().isEmpty() &&
 
                 (((LivingEntity)(Object)this) instanceof AbstractVillager AV &&

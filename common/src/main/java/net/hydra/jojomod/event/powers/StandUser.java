@@ -43,6 +43,8 @@ public interface StandUser {
     int roundabout$increaseAirSupply(int $$0);
     int roundabout$getZappedTicks();
 
+    float roundabout$mutualGetSpeed(float basis);
+
     int roundabout$getDetectTicks();
     void roundabout$setDetectTicks(int life);
     Entity roundabout$getBoundTo();
