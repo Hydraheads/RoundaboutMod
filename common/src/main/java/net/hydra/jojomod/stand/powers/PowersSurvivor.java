@@ -13,13 +13,16 @@ import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -42,6 +45,9 @@ public class PowersSurvivor extends NewDashPreset {
         return new PowersSurvivor(entity);
     }
 
+    public boolean interceptAttack(){
+        return angerSelectionMode();
+    }
 
     public boolean angerSelectionMode(){
         return getStandUserSelf().roundabout$getUniqueStandModeToggle();
@@ -221,8 +227,27 @@ public class PowersSurvivor extends NewDashPreset {
             case PowerIndex.POWER_4 -> {
                 return switchAngerSelectionMode();
             }
+            case PowerIndex.POWER_4_BONUS -> {
+                return selectTarget();
+            }
         }
         return super.setPowerOther(move,lastMove);
+    }
+
+    @Override
+    public boolean highlightsEntity(Entity ent,Player player){
+        if (angerSelectionMode()){
+
+        }
+        return false;
+    }
+    @Override
+    public int highlightsEntityColor(Entity ent, Player player){
+        return 4971295;
+    }
+
+    public boolean selectTarget(){
+        return true;
     }
     public boolean canUseStillStandingRecharge(byte bt){
         if (bt == PowerIndex.SKILL_2)
@@ -435,5 +460,19 @@ public class PowersSurvivor extends NewDashPreset {
             }
         }
         return true;
+    }
+
+
+    boolean holdAttack = false;
+    public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (keyIsDown) {
+            if (!holdAttack) {
+                holdAttack = true;
+                this.tryPower(PowerIndex.POWER_4_BONUS, true);
+                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_BONUS);
+            }
+        } else if (holdAttack){
+            holdAttack = false;
+        }
     }
 }

@@ -310,44 +310,10 @@ public class ClientUtil {
 
             if (powers.getGoBeyondTarget() != null && powers.getGoBeyondTarget().is(entity)) {
                 return 10978493;
-            } else if (powers.isPiloting()) {
-                LivingEntity ent = powers.getPilotingStand();
-                if (ent != null && powers instanceof PowersJustice) {
-                    Entity TE = MainUtil.getTargetEntity(ent,100,10);
-                    if (TE != null && TE.is(entity) && !(TE instanceof StandEntity && !TE.isAttackable())) {
-                        Vec3 vec3d = ent.getEyePosition(0);
-                        Vec3 vec3d2 = ent.getViewVector(0);
-                        Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
-                        BlockHitResult blockHit = ent.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ent));
-                        if ((blockHit.distanceTo(ent)-1) < ent.distanceToSqr(entity)){
-                        } else {
-                            if (TE.is(player)){
-                                return 16701501;
-                            } else {
-                                if (TE instanceof FallenMob fm && fm.getController() == player.getId()){
-                                    if (fm.getSelected()){
-                                        return 1503183;
-                                    } else {
-                                        return 1503059;
-                                    }
-
-                                    //Blue -> 3972095
-                                    //Green -> 8385147
-                                }
-                                return 14233126;
-                            }
-                        }
-
-
-                        // 3847130 corpse
-                    }
-                    if (entity instanceof FallenMob fm){
-                        if (fm.getSelected() && fm.getController() == player.getId()){
-                            return 3972095;
-                        }
-                    }
-                }
             }
+
+            if (powers.highlightsEntity(entity, player))
+                return powers.highlightsEntityColor(entity,player);
 
             if (MainUtil.isZapper(player,entity)){
                 //15974080
@@ -377,6 +343,15 @@ public class ClientUtil {
         }
 
         return  -1;
+    }
+
+    public static void synchToCamera(Entity ent){
+        if (Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
+            Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+            ent.setYRot(camera.getYRot());
+            ent.setXRot(camera.getXRot());
+            ent.setYHeadRot(ent.getYRot());
+        }
     }
     public static int wasFrozen = 0;
     public static SoftAndWetPlunderBubbleEntity popSounds = null;

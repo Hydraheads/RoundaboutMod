@@ -5,10 +5,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IProjectileAccess;
-import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.client.KeyInputRegistry;
-import net.hydra.jojomod.client.KeyboardPilotInput;
-import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.*;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
@@ -1010,6 +1008,16 @@ public class StandPowers {
 
     public boolean canUseStillStandingRecharge(byte bt){
         return true;
+    }
+
+    public boolean highlightsEntity(Entity ent,Player player){
+        return false;
+    }
+    public int highlightsEntityColor(Entity ent, Player player){
+        return 0;
+    }
+
+    public void synchToCamera(){
     }
 
     public void tickCooldowns(){

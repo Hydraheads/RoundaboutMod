@@ -93,14 +93,14 @@ public abstract class InputEvents implements IInputEvents {
     /*outline, highlight, glowing, justice, corpse*/
     /**See entityanddatta for glowing colors*/
     @Inject(method = "shouldEntityAppearGlowing", at = @At("HEAD"), cancellable = true)
-    public void roundabout$entityGlowing(Entity $$0,CallbackInfoReturnable<Boolean> ci) {
+    public void roundabout$entityGlowing(Entity entity,CallbackInfoReturnable<Boolean> ci) {
         if (player != null) {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
 
             if (standComp.roundabout$getStand() instanceof D4CEntity)
             {
-                if ($$0 instanceof D4CCloneEntity clone)
+                if (entity instanceof D4CCloneEntity clone)
                 {
                     if (player.isCrouching() && clone.player != null && clone.player.equals(player))
                     {
@@ -109,54 +109,32 @@ public abstract class InputEvents implements IInputEvents {
                     }
                 }
             }
-            if ($$0 instanceof RattEntity) {
-                if (((StandEntity) $$0).getUser() != null) {
+            if (entity instanceof RattEntity) {
+                if (((StandEntity) entity).getUser() != null) {
                     PowersRatt PR = (PowersRatt) powers;
                     if (PR.isAuto()) {
                         ci.setReturnValue(true);
                     }
                 }
             }
-            if (powers.getGoBeyondTarget() != null && powers.getGoBeyondTarget().is($$0)) {
+            if (powers.getGoBeyondTarget() != null && powers.getGoBeyondTarget().is(entity)) {
                 ci.setReturnValue(true);
                 return;
-            } else if (powers.isPiloting()) {
-                LivingEntity ent = powers.getPilotingStand();
-                if (ent != null && powers instanceof PowersJustice){
-                    if (Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
-                        Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
-                        ent.setYRot(camera.getYRot());
-                        ent.setXRot(camera.getXRot());
-                        ent.setYHeadRot(ent.getYRot());
-                    }
-                    if ($$0 instanceof FallenMob fm){
-                        if (fm.getSelected() && fm.getController() == player.getId()){
-                            ci.setReturnValue(true);
-                            return;
-                        }
-                    }
-                    Entity TE = MainUtil.getTargetEntity(ent,100,10);
-                    if (TE != null && TE.is($$0) && !(TE instanceof StandEntity && !TE.isAttackable())) {
-                        Vec3 vec3d = ent.getEyePosition(0);
-                        Vec3 vec3d2 = ent.getViewVector(0);
-                        Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
-                        BlockHitResult blockHit = ent.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ent));
-                        if ((blockHit.distanceTo(ent)-1) < ent.distanceToSqr(TE)){
-                        } else {
-                            ci.setReturnValue(true);
-                        }
-                        return;
-                    }
-                }
             }
 
-            if (MainUtil.isZapper(player, $$0)) {
+            powers.synchToCamera();
+            if (powers.highlightsEntity(entity, player)) {
+                ci.setReturnValue(true);
+                return;
+            }
+
+            if (MainUtil.isZapper(player, entity)) {
                 ci.setReturnValue(true);
                 return;
             }
         }
 
-        if ($$0 instanceof LivingEntity LE){
+        if (entity instanceof LivingEntity LE){
             int yes = ((StandUser)LE).roundabout$getDetectTicks();
             if (yes > -1){
                 ci.setReturnValue(true);

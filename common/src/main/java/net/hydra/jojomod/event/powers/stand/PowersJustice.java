@@ -1513,4 +1513,71 @@ public class PowersJustice extends DashPreset {
         }
         return false;
     }
+
+    public void synchToCamera(){
+        if (isPiloting()) {
+            LivingEntity ent = getPilotingStand();
+            if (ent != null) {
+                ClientUtil.synchToCamera(ent);
+            }
+        }
+    }
+    public boolean passedOver = true;
+    @Override
+    public boolean highlightsEntity(Entity entity,Player player){
+        passedOver = true;
+        if (isPiloting()){
+            LivingEntity ent = getPilotingStand();
+            if (ent != null){
+                if (entity instanceof FallenMob fm){
+                    if (fm.getSelected() && fm.getController() == player.getId()){
+                        return true;
+                    }
+                }
+                Entity TE = MainUtil.getTargetEntity(ent,100,10);
+                if (TE != null && TE.is(entity) && !(TE instanceof StandEntity && !TE.isAttackable())) {
+                    Vec3 vec3d = ent.getEyePosition(0);
+                    Vec3 vec3d2 = ent.getViewVector(0);
+                    Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
+                    BlockHitResult blockHit = ent.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ent));
+                    if ((blockHit.distanceTo(ent)-1) < ent.distanceToSqr(TE)){
+                    } else {
+                        return true;
+                    }
+                }
+                passedOver = false;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int highlightsEntityColor(Entity ent, Player player){
+
+        if (passedOver) {
+            if (ent.is(player)) {
+                return 16701501;
+            } else {
+                if (ent instanceof FallenMob fm && fm.getController() == player.getId()) {
+                    if (fm.getSelected()) {
+                        return 1503183;
+                    } else {
+                        return 1503059;
+                    }
+
+                    //Blue -> 3972095
+                    //Green -> 8385147
+                }
+                return 14233126;
+            }
+        }
+
+
+        if (ent instanceof FallenMob fm){
+            if (fm.getSelected() && fm.getController() == player.getId()){
+                return 3972095;
+            }
+        }
+        return 0;
+    }
 }
