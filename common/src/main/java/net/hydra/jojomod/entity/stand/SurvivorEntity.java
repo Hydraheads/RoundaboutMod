@@ -188,12 +188,21 @@ public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity
                 for (Entity ent : mobsInRange) {
                     if (canZapEntity(ent) && ent instanceof LivingEntity LE
                     && ((StandUser) LE).roundabout$getZappedToID() <= -1) {
-                        if (firstTarget == null) {
-                            firstTarget = LE;
-                        } else {
-                            if (MainUtil.canActuallyHit(firstTarget,LE)) {
-                                matchEntities(firstTarget, LE);
-                                return;
+                        if (
+                                !(
+                                        MainUtil.isBossMob(LE) &&
+                                                !ClientNetworking.getAppropriateConfig().survivorSettings.canUseSurvivorOnBossesInSurvival &&
+                                                !(this.getUser() instanceof Player PE && PE.isCreative())
+                                )
+                        ) {
+
+                            if (firstTarget == null) {
+                                firstTarget = LE;
+                            } else {
+                                if (MainUtil.canActuallyHit(firstTarget, LE)) {
+                                    matchEntities(firstTarget, LE);
+                                    return;
+                                }
                             }
                         }
                     }

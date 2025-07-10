@@ -311,12 +311,12 @@ public class PowersSurvivor extends NewDashPreset {
                 this.self.playSound(ModSounds.SURVIVOR_PLACE_EVENT, 1F, 1.5F);
             }
         } else if (EntityTargetOne == null){
-            if (SurvivorEntity.canZapEntity(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()){
+            if (SurvivorEntity.canZapEntity(TE) && canUseZap(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()){
                 EntityTargetOne = TE;
                 this.self.playSound(ModSounds.SURVIVOR_PLACE_EVENT, 1F, 1.5F);
             }
         } else {
-            if (SurvivorEntity.canZapEntity(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange() && !EntityTargetOne.is(TE)){
+            if (SurvivorEntity.canZapEntity(TE) && canUseZap(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange() && !EntityTargetOne.is(TE)){
                 /**Passing 3 integers is something a block pos can do, so why not just use that packet*/
 
                 if (!this.onCooldown(PowerIndex.SKILL_4)) {
@@ -378,7 +378,7 @@ public class PowersSurvivor extends NewDashPreset {
                     LivingEntity firstTarget = null;
                     if (!mobsInRange.isEmpty()) {
                         for (Entity ent : mobsInRange) {
-                            if (SurvivorEntity.canZapEntity(ent) && ent instanceof LivingEntity LE) {
+                            if (SurvivorEntity.canZapEntity(ent) && canUseZap(ent) && ent instanceof LivingEntity LE) {
                                 tempstand.matchEntities(this.self,LE);
                             }
                         }
@@ -386,6 +386,19 @@ public class PowersSurvivor extends NewDashPreset {
                 }
             }
         }
+    }
+
+    public boolean canUseZap(Entity ent) {
+        if (ent instanceof LivingEntity LE &&
+                (
+                        MainUtil.isBossMob(LE) &&
+                                !ClientNetworking.getAppropriateConfig().survivorSettings.canUseSurvivorOnBossesInSurvival &&
+                                !(this.getCreative())
+                )
+        ) {
+            return false;
+        }
+        return true;
     }
 
     public void createSurvivor(Vec3 pos, boolean activated){
@@ -412,11 +425,11 @@ public class PowersSurvivor extends NewDashPreset {
                 return SE;
             }
         } else if (EntityTargetOne == null){
-            if (SurvivorEntity.canZapEntity(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()){
+            if (SurvivorEntity.canZapEntity(TE) && canUseZap(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()){
                 return TE;
             }
         } else {
-            if (SurvivorEntity.canZapEntity(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()
+            if (SurvivorEntity.canZapEntity(TE) && canUseZap(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()
             && !EntityTargetOne.is(TE)){
                 return TE;
             }

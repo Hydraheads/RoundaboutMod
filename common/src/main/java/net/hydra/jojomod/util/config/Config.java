@@ -605,6 +605,8 @@ public class Config implements Cloneable {
         public Integer survivorCupidCreativeRange;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer survivorCupidHighlightRange;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean canUseSurvivorOnBossesInSurvival;
     }
     public static class TheWorldSettings {
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
