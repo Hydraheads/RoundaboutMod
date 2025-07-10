@@ -198,6 +198,7 @@ public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity
                     if (!player.getAbilities().instabuild) {
                         plrItem.shrink(1);
                         player.getInventory().add(new ItemStack(Items.GLASS_BOTTLE));
+                        this.level().playSound(null, this.blockPosition(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1F, 0.9F);
                     }
                     this.setActivated(true);
                     return InteractionResult.SUCCESS;
