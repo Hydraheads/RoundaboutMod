@@ -1,8 +1,6 @@
 package net.hydra.jojomod.entity.stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IBucketItem;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -24,13 +22,11 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PotionItem;
@@ -202,13 +198,6 @@ public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity
                     if (!player.getAbilities().instabuild) {
                         plrItem.shrink(1);
                         player.getInventory().add(new ItemStack(Items.GLASS_BOTTLE));
-                    }
-                    this.setActivated(true);
-                    return InteractionResult.SUCCESS;
-                } if ((!plrItem.isEmpty() && plrItem.getItem() instanceof BucketItem BI && ((IBucketItem)BI).roundabout$getContents().is(FluidTags.WATER))) {
-                    if (!player.getAbilities().instabuild) {
-                        plrItem.shrink(1);
-                        player.getInventory().add(new ItemStack(Items.BUCKET));
                     }
                     this.setActivated(true);
                     return InteractionResult.SUCCESS;
