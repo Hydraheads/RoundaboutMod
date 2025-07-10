@@ -128,11 +128,12 @@ public class Config implements Cloneable {
                     "roundabout:soft_and_wet_disc"
             )
     );
-    public Set<String> standArrowSecondaryPoolv3 = new HashSet<>(
+    public Set<String> standArrowSecondaryPoolv4 = new HashSet<>(
             Arrays.asList(
                     "roundabout:cinderella_disc",
                     "roundabout:hey_ya_disc",
-                    "roundabout:mandom_disc"
+                    "roundabout:mandom_disc",
+                    "roundabout:survivor_disc"
             )
     );
     public Set<String> naturalStandUserMobPoolv3 = new HashSet<>(

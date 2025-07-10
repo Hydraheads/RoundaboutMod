@@ -734,6 +734,18 @@ public class PowerInventoryScreen
         }
         return false;
     }
+
+
+    @Override
+    public void onClose() {
+        Player pl = Minecraft.getInstance().player;
+        if (pl != null) {
+            StandUser user = ((StandUser) pl);
+            StandPowers powers = user.roundabout$getStandPowers();
+            powers.displayStand = null;
+        }
+        super.onClose();
+    }
     @Override
     public boolean mouseClicked(double $$0, double $$1, int $$2) {
         Player pl = Minecraft.getInstance().player;

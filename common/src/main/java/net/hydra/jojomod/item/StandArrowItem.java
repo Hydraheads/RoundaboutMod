@@ -64,7 +64,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
                 if ($$1.isCrouching()) {
                     int reroll = ClientNetworking.getAppropriateConfig().levelsToRerollStand;
                     if ($$1.experienceLevel >= reroll || $$1.isCreative()) {
-                        if (ClientNetworking.getAppropriateConfig().standArrowSecondaryPoolv3.isEmpty()) {
+                        if (ClientNetworking.getAppropriateConfig().standArrowSecondaryPoolv4.isEmpty()) {
                              if (!$$1.isCreative()) {
                              $$1.giveExperienceLevels(-reroll);
                              }
@@ -87,7 +87,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
                     return InteractionResultHolder.consume($$3);
                 }
             } else {
-                if (!$$1.isCrouching() || ClientNetworking.getAppropriateConfig().standArrowSecondaryPoolv3.isEmpty()) {
+                if (!$$1.isCrouching() || ClientNetworking.getAppropriateConfig().standArrowSecondaryPoolv4.isEmpty()) {
                     if (!$$0.isClientSide) {
                         rollStand($$0, $$1, $$3, true);
                         return InteractionResultHolder.consume($$3);

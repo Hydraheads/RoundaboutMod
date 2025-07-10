@@ -584,6 +584,7 @@ public class PowersSurvivor extends NewDashPreset {
         return $$1;
     }
 
+    /**
     @Override
     public boolean isWip(){
         return true;
@@ -596,6 +597,7 @@ public class PowersSurvivor extends NewDashPreset {
     public Component ifWipListDev(){
         return Component.literal(  "Hydra").withStyle(ChatFormatting.YELLOW);
     }
+    **/
 
 
     public boolean switchAngerSelectionMode(){
