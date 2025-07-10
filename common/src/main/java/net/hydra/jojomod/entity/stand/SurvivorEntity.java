@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.ILivingEntityAccess;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.PreRenderEntity;
@@ -170,20 +171,23 @@ public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity
     }
 
     public void attemptShock(){
-        List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.level(),this.blockPosition(), ClientNetworking.getAppropriateConfig().survivorSettings.survivorRange, this);
-        LivingEntity firstTarget = null;
-        if (!mobsInRange.isEmpty()) {
-            for (Entity ent : mobsInRange) {
-                if (ent.isAlive() && !ent.isRemoved() && (ent instanceof Mob || ent instanceof Player)
-                && !(ent instanceof StandEntity) && ent.isPickable() && !ent.isInvulnerable() &&
-                        !(ent instanceof Player PL && PL.isCreative()) &&
-                        ent instanceof LivingEntity LE && ((StandUser)LE).roundabout$getZappedToID() <= -1
-                && !((StandUser) LE).roundabout$isBubbleEncased()){
-                    if (firstTarget == null){
-                        firstTarget = LE;
-                    } else {
-                        matchEntities(firstTarget,LE);
-                        return;
+        LivingEntity user = this.getUser();
+        if (user != null && !((StandUser)user).roundabout$getUniqueStandModeToggle()) {
+            List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.level(), this.blockPosition(), ClientNetworking.getAppropriateConfig().survivorSettings.survivorRange, this);
+            LivingEntity firstTarget = null;
+            if (!mobsInRange.isEmpty()) {
+                for (Entity ent : mobsInRange) {
+                    if (ent.isAlive() && !ent.isRemoved() && (ent instanceof Mob || ent instanceof Player)
+                            && !(ent instanceof StandEntity) && ent.isPickable() && !ent.isInvulnerable() &&
+                            !(ent instanceof Player PL && PL.isCreative()) &&
+                            ent instanceof LivingEntity LE && ((StandUser) LE).roundabout$getZappedToID() <= -1
+                            && !((StandUser) LE).roundabout$isBubbleEncased()) {
+                        if (firstTarget == null) {
+                            firstTarget = LE;
+                        } else {
+                            matchEntities(firstTarget, LE);
+                            return;
+                        }
                     }
                 }
             }

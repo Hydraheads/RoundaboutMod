@@ -63,7 +63,11 @@ public class PowersSurvivor extends NewDashPreset {
         else
             setSkillIcon(context, x, y, 2, StandIcons.SPAWN, PowerIndex.SKILL_2);
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
-        setSkillIcon(context, x, y, 4, StandIcons.RAGE_SELECTION, PowerIndex.SKILL_4);
+
+        if (angerSelectionMode())
+            setSkillIcon(context, x, y, 4, StandIcons.CUPID_ON, PowerIndex.SKILL_4);
+        else
+            setSkillIcon(context, x, y, 4, StandIcons.RAGE_SELECTION, PowerIndex.SKILL_4);
 
         super.renderIcons(context, x, y);
     }
@@ -154,9 +158,14 @@ public class PowersSurvivor extends NewDashPreset {
                 dash();
             }
             case SKILL_4_NORMAL, SKILL_4_CROUCH -> {
-                switchAngerSelectionMode();
+                switchModeClient();
             }
         }
+    }
+
+    public void switchModeClient(){
+        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
+        tryPowerPacket(PowerIndex.POWER_4);
     }
 
     public void throwBottleClient(){
@@ -208,6 +217,9 @@ public class PowersSurvivor extends NewDashPreset {
             }
             case PowerIndex.POWER_2_SNEAK -> {
                 return removeAllSurvivors();
+            }
+            case PowerIndex.POWER_4 -> {
+                return switchAngerSelectionMode();
             }
         }
         return super.setPowerOther(move,lastMove);
