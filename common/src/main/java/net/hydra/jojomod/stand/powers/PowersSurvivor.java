@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
@@ -25,6 +26,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -341,25 +343,58 @@ public class PowersSurvivor extends NewDashPreset {
             }
         }
     }
+
+
+    public int lastPlacementTime = -1;
+    @Override
+    public void tickMobAI(LivingEntity attackTarget){
+        lastPlacementTime++;
+        if (lastPlacementTime > 600){
+            lastPlacementTime = -1;
+            createSurvivor(this.self.getPosition(1),true);
+        }
+    }
+
     public void despawnSurvivorClient(){
         tryPowerPacket(PowerIndex.POWER_2_SNEAK);
     }
     @Override
     public boolean tryPosPower(int move, boolean forced, Vec3 pos) {
         if (move == PowerIndex.POWER_2) {
-            createSurvivor(move, pos);
+            createSurvivor(pos,false);
             return true;
         }
         return tryPower(move, forced);
     }
 
-    public void createSurvivor(int move, Vec3 pos){
+    boolean thisistheend=false;
+    @Override
+    public void tickStandRejection(MobEffectInstance effect) {
+        if (!this.getSelf().level().isClientSide()) {
+            if (effect.getDuration() == 50) {
+                createSurvivor(this.self.getPosition(1F),true);
+                if (tempstand != null) {
+                    List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.self.level(), this.self.blockPosition(), ClientNetworking.getAppropriateConfig().survivorSettings.survivorRange, this.self);
+                    LivingEntity firstTarget = null;
+                    if (!mobsInRange.isEmpty()) {
+                        for (Entity ent : mobsInRange) {
+                            if (SurvivorEntity.canZapEntity(ent) && ent instanceof LivingEntity LE) {
+                                tempstand.matchEntities(this.self,LE);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void createSurvivor(Vec3 pos, boolean activated){
 
         if (isClient() || (!this.onCooldown(PowerIndex.SKILL_2) || !ClientNetworking.getAppropriateConfig().survivorSettings.SummonSurvivorCooldownCooldownUsesServerLatency)) {
             int cooldown = ClientNetworking.getAppropriateConfig().survivorSettings.SummonSurvivorCooldownV2;
             this.setCooldown(PowerIndex.SKILL_2, cooldown);
             if (!isClient()) {
-                blipStand(pos);
+                blipStand(pos,activated);
 
             }
         }
@@ -389,7 +424,8 @@ public class PowersSurvivor extends NewDashPreset {
         return null;
     }
 
-    public void blipStand(Vec3 pos){
+    SurvivorEntity tempstand = null;
+    public void blipStand(Vec3 pos, boolean activated){
         StandEntity stand = ModEntities.SURVIVOR.create(this.getSelf().level());
         if (stand instanceof SurvivorEntity SE) {
             StandUser user = getStandUserSelf();
@@ -400,6 +436,10 @@ public class PowersSurvivor extends NewDashPreset {
             addSurvivorToList(SE);
             SE.setRandomSize((float) (Math.random()*0.4F));
             SE.setYRot(this.self.getYHeadRot() % 360);
+            if (activated){
+                SE.setActivated(true);
+            }
+            tempstand = SE;
             this.self.level().addFreshEntity(stand);
             playStandUserOnlySoundsIfNearby(PLACE, 100, false, false);
         }
