@@ -99,6 +99,20 @@ public class MainUtil {
     }
 
 
+    public static boolean isZapper(LivingEntity ent1, Entity ent2){
+        if (ent1 != null && ent2 != null) {
+            StandUser standComp = ((StandUser) ent1);
+            int zappedId = standComp.roundabout$getZappedToID();
+            if (zappedId > -1){
+                Entity ent = ent2.level().getEntity(zappedId);
+                if (ent != null && ent.is(ent2)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public static int maxGasTicks(){
         return 200;
     }

@@ -254,6 +254,7 @@ public abstract class EntityAndData implements IEntityAndData {
     }
 
     /**Highlight color with Justice piloting*/
+    /**See inputevents for allowing the mob to glow*/
     @Inject(method = "getTeamColor()I", at = @At("HEAD"), cancellable = true)
     public void roundabout$getTeamColor(CallbackInfoReturnable<Integer> cir){
         if (this.level.isClientSide()){

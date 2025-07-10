@@ -307,6 +307,7 @@ public class ClientUtil {
                     }
                 }
             }
+
             if (powers.getGoBeyondTarget() != null && powers.getGoBeyondTarget().is(entity)) {
                 return 10978493;
             } else if (powers.isPiloting()) {
@@ -348,7 +349,12 @@ public class ClientUtil {
                 }
             }
 
-            if (((StandUser) player).roundabout$getStand() instanceof D4CEntity)
+            if (MainUtil.isZapper(player,entity)){
+                //15974080
+                return 11559774;
+            }
+
+            if (standComp.roundabout$getStand() instanceof D4CEntity)
             {
                 if (entity instanceof D4CCloneEntity clone && clone.player != null && clone.player.equals(player) && player.isCrouching())
                 {

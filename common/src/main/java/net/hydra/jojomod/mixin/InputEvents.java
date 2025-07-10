@@ -91,6 +91,7 @@ public abstract class InputEvents implements IInputEvents {
     }
 
     /*outline, highlight, glowing, justice, corpse*/
+    /**See entityanddatta for glowing colors*/
     @Inject(method = "shouldEntityAppearGlowing", at = @At("HEAD"), cancellable = true)
     public void roundabout$entityGlowing(Entity $$0,CallbackInfoReturnable<Boolean> ci) {
         if (player != null) {
@@ -148,6 +149,11 @@ public abstract class InputEvents implements IInputEvents {
                     }
                 }
             }
+
+            if (MainUtil.isZapper(player, $$0)) {
+                ci.setReturnValue(true);
+                return;
+            }
         }
 
         if ($$0 instanceof LivingEntity LE){
@@ -156,8 +162,6 @@ public abstract class InputEvents implements IInputEvents {
                 ci.setReturnValue(true);
             }
         }
-
-
     }
     @Shadow
     @Final
