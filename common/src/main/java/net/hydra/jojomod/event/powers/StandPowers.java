@@ -2018,6 +2018,10 @@ public class StandPowers {
         return (skinList != null && !skinList.isEmpty() && skinList.size() > 1);
     }
 
+    public boolean hasMoreThanOnePos(){
+        List<Byte> posList = getPosList();
+        return (posList != null && !posList.isEmpty() && posList.size() > 1);
+    }
     public boolean hasGoldenDisc(){
         ItemStack stack = ((StandUser)this.getSelf()).roundabout$getStandDisc();
         return !stack.isEmpty() && stack.getItem() instanceof MaxStandDiscItem;

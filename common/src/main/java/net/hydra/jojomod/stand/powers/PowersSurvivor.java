@@ -83,6 +83,14 @@ public class PowersSurvivor extends NewDashPreset {
         }
     }
 
+    public Component getPosName(byte posID){
+        return Component.empty();
+    }
+    public List<Byte> getPosList(){
+        List<Byte> $$1 = Lists.newArrayList();
+        return $$1;
+    }
+
     @Override
 
     public void tickPowerEnd() {
