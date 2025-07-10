@@ -91,9 +91,9 @@ public class PowersGreenDay extends NewPunchingStand{
             setSkillIcon(context, x, y, 3, StandIcons.GREEN_DAY_MOLD_LEAP, PowerIndex.SKILL_3_CROUCH_GUARD);
         else
         if(isGuarding())
-            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3_GUARD);
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         else
-            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3);
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
 
         if (isHoldingSneak())
             setSkillIcon(context, x, y, 1, StandIcons.GREEN_DAY_ARM_RETURN_LEFT, PowerIndex.SKILL_1);
@@ -116,9 +116,7 @@ public class PowersGreenDay extends NewPunchingStand{
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 Roundabout.LOGGER.info("dash");
                 dash();
-
             }
-
             case SKILL_4_CROUCH, SKILL_4_CROUCH_GUARD -> {
                 Stitch();
             }

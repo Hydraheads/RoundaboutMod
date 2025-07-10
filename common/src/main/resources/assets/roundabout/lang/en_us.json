@@ -366,6 +366,7 @@
   "death.attack.stand_virus": "%1$s was turned into tomato sauce",
   "death.attack.stand_virus.item": "%1$s was turned into tomato sauce",
   "death.attack,disintegration": "%1$ disintegrated",
+  "death.attack,disintegration.player": "%1$ was disintegrated by %$2s",
 
   "item.glaive.charge_power": "Charge Attack",
 
