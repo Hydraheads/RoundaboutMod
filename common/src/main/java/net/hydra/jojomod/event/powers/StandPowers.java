@@ -970,6 +970,10 @@ public class StandPowers {
 
     }
 
+    public boolean getCreative(){
+        return this.self instanceof Player PE && PE.isCreative();
+    }
+
     public void tickDash(){
         if (this.getSelf() instanceof Player) {
 

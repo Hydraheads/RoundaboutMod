@@ -218,6 +218,25 @@ public class PowersSurvivor extends NewDashPreset {
     }
 
     @Override
+    public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos) {
+        switch (move)
+        {
+            case PowerIndex.POWER_4_BONUS -> {
+                initializeTargets(blockPos);
+            }
+        }
+        return tryPower(move, forced);
+    }
+
+    public void initializeTargets(BlockPos blockPos){
+        Entity targ = this.self.level().getEntity(blockPos.getX());
+        if (targ instanceof SurvivorEntity SE){
+            SurvivorTarget = SE;
+        }
+        EntityTargetOne = this.self.level().getEntity(blockPos.getY());
+        EntityTargetTwo = this.self.level().getEntity(blockPos.getZ());
+    }
+    @Override
     public boolean setPowerOther(int move, int lastMove) {
         switch (move)
         {
@@ -243,7 +262,7 @@ public class PowersSurvivor extends NewDashPreset {
             if (angerSelectionMode()) {
                 if (
                         (SurvivorTarget != null  && ent.is(SurvivorTarget)) ||
-                                (SurvivorTarget != null && ent.is(SurvivorTarget))
+                                (EntityTargetOne != null && ent.is(EntityTargetOne))
                 ) {
                     return true;
                 }
@@ -260,11 +279,11 @@ public class PowersSurvivor extends NewDashPreset {
     public int highlightsEntityColor(Entity ent, Player player){
         if (
                 (SurvivorTarget != null && ent != null && ent.is(SurvivorTarget)) ||
-                        (SurvivorTarget != null && ent != null && ent.is(SurvivorTarget))
+                        (EntityTargetOne != null && ent != null && ent.is(EntityTargetOne))
         ){
-            return 11283968;
+            return 4971295;
         }
-        return 4971295;
+        return 11283968;
     }
 
 
@@ -272,20 +291,27 @@ public class PowersSurvivor extends NewDashPreset {
     public Entity EntityTargetOne = null;
     public Entity EntityTargetTwo = null;
     public boolean selectTarget(){
+        unloadTargets();
+        SurvivorEntity surv = SurvivorTarget;
+        if (surv != null && EntityTargetOne instanceof LivingEntity LE && EntityTargetTwo instanceof LivingEntity LE2){
+            surv.matchEntities(LE,LE2);
+        }
         return true;
     }
     public void selectTargetClient(){
         Entity TE = MainUtil.getTargetEntity(this.self, getCupidHighlightRange(), 15);
         if (SurvivorTarget == null){
-            if (TE instanceof SurvivorEntity SE && SE.getActivated()){
+            if (TE instanceof SurvivorEntity SE && (SE.getActivated() || getCreative())){
                 SurvivorTarget = SE;
+                this.self.playSound(ModSounds.SURVIVOR_PLACE_EVENT, 1F, 1.5F);
             }
         } else if (EntityTargetOne == null){
-            if (SurvivorEntity.canZapEntity(TE) && EntityTargetOne.distanceTo(SurvivorTarget) <= getCupidRange()){
+            if (SurvivorEntity.canZapEntity(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()){
                 EntityTargetOne = TE;
+                this.self.playSound(ModSounds.SURVIVOR_PLACE_EVENT, 1F, 1.5F);
             }
         } else {
-            if (SurvivorEntity.canZapEntity(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()){
+            if (SurvivorEntity.canZapEntity(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange() && !EntityTargetOne.is(TE)){
                 /**Passing 3 integers is something a block pos can do, so why not just use that packet*/
                 tryBlockPosPowerPacket(PowerIndex.POWER_4_BONUS,new BlockPos(SurvivorTarget.getId(),EntityTargetOne.getId(),TE.getId()));
                 SurvivorTarget = null;
@@ -335,15 +361,16 @@ public class PowersSurvivor extends NewDashPreset {
     public Entity getHighlighter(){
         Entity TE = MainUtil.getTargetEntity(this.self, getCupidHighlightRange(), 15);
         if (SurvivorTarget == null){
-            if (TE instanceof SurvivorEntity SE && SE.getActivated()){
+            if (TE instanceof SurvivorEntity SE && (SE.getActivated() || getCreative())){
                 return SE;
             }
         } else if (EntityTargetOne == null){
             if (SurvivorEntity.canZapEntity(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()){
-                return EntityTargetOne;
+                return TE;
             }
         } else {
-            if (SurvivorEntity.canZapEntity(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()){
+            if (SurvivorEntity.canZapEntity(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()
+            && !EntityTargetOne.is(TE)){
                 return TE;
             }
         }
@@ -384,6 +411,8 @@ public class PowersSurvivor extends NewDashPreset {
     public int meltDodgeTicks = -1;
 
     public int getCupidRange(){
+        if (getCreative())
+            return ClientNetworking.getAppropriateConfig().survivorSettings.survivorCupidCreativeRange;
         return ClientNetworking.getAppropriateConfig().survivorSettings.survivorCupidRange;
     }
     public int getCupidHighlightRange(){
@@ -392,7 +421,7 @@ public class PowersSurvivor extends NewDashPreset {
 
     public void unloadTargets(){
         if (SurvivorTarget != null){
-            if (!SurvivorTarget.getActivated() || SurvivorTarget.isRemoved() || !SurvivorTarget.isAlive()){
+            if ((!SurvivorTarget.getActivated() && !getCreative()) || SurvivorTarget.isRemoved() || !SurvivorTarget.isAlive()){
                 SurvivorTarget = null;
             }
         }
@@ -406,7 +435,8 @@ public class PowersSurvivor extends NewDashPreset {
         if (EntityTargetTwo != null){
             if (SurvivorTarget == null || EntityTargetOne == null ||
                     EntityTargetTwo.isRemoved() || !EntityTargetTwo.isAlive() ||
-                    (EntityTargetTwo.distanceTo(SurvivorTarget) > getCupidRange())){
+                    (EntityTargetTwo.distanceTo(SurvivorTarget) > getCupidRange())
+            || (EntityTargetOne != null && EntityTargetOne.is(EntityTargetTwo))){
                 EntityTargetTwo = null;
             }
         }

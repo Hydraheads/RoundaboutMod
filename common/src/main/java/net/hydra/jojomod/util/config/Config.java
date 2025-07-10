@@ -597,6 +597,8 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
         public Integer survivorCupidRange;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer survivorCupidCreativeRange;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer survivorCupidHighlightRange;
     }
     public static class TheWorldSettings {
