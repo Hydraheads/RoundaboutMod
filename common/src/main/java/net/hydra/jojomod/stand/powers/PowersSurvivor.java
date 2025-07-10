@@ -19,6 +19,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -170,6 +171,8 @@ public class PowersSurvivor extends NewDashPreset {
     }
 
     public void switchModeClient(){
+        SurvivorTarget = null;
+        EntityTargetOne = null;
         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
         tryPowerPacket(PowerIndex.POWER_4);
     }
@@ -236,18 +239,59 @@ public class PowersSurvivor extends NewDashPreset {
 
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
-        if (angerSelectionMode()){
+        if (ent != null) {
+            if (angerSelectionMode()) {
+                if (
+                        (SurvivorTarget != null  && ent.is(SurvivorTarget)) ||
+                                (SurvivorTarget != null && ent.is(SurvivorTarget))
+                ) {
+                    return true;
+                }
 
+                Entity highlights = getHighlighter();
+                if (highlights != null && highlights.is(ent)){
+                    return true;
+                }
+            }
         }
         return false;
     }
     @Override
     public int highlightsEntityColor(Entity ent, Player player){
+        if (
+                (SurvivorTarget != null && ent != null && ent.is(SurvivorTarget)) ||
+                        (SurvivorTarget != null && ent != null && ent.is(SurvivorTarget))
+        ){
+            return 11283968;
+        }
         return 4971295;
     }
 
+
+    public SurvivorEntity SurvivorTarget = null;
+    public Entity EntityTargetOne = null;
+    public Entity EntityTargetTwo = null;
     public boolean selectTarget(){
         return true;
+    }
+    public void selectTargetClient(){
+        Entity TE = MainUtil.getTargetEntity(this.self, getCupidHighlightRange(), 15);
+        if (SurvivorTarget == null){
+            if (TE instanceof SurvivorEntity SE && SE.getActivated()){
+                SurvivorTarget = SE;
+            }
+        } else if (EntityTargetOne == null){
+            if (SurvivorEntity.canZapEntity(TE) && EntityTargetOne.distanceTo(SurvivorTarget) <= getCupidRange()){
+                EntityTargetOne = TE;
+            }
+        } else {
+            if (SurvivorEntity.canZapEntity(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()){
+                /**Passing 3 integers is something a block pos can do, so why not just use that packet*/
+                tryBlockPosPowerPacket(PowerIndex.POWER_4_BONUS,new BlockPos(SurvivorTarget.getId(),EntityTargetOne.getId(),TE.getId()));
+                SurvivorTarget = null;
+                EntityTargetOne = null;
+            }
+        }
     }
     public boolean canUseStillStandingRecharge(byte bt){
         if (bt == PowerIndex.SKILL_2)
@@ -288,6 +332,23 @@ public class PowersSurvivor extends NewDashPreset {
         }
     }
 
+    public Entity getHighlighter(){
+        Entity TE = MainUtil.getTargetEntity(this.self, getCupidHighlightRange(), 15);
+        if (SurvivorTarget == null){
+            if (TE instanceof SurvivorEntity SE && SE.getActivated()){
+                return SE;
+            }
+        } else if (EntityTargetOne == null){
+            if (SurvivorEntity.canZapEntity(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()){
+                return EntityTargetOne;
+            }
+        } else {
+            if (SurvivorEntity.canZapEntity(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()){
+                return TE;
+            }
+        }
+        return null;
+    }
 
     public void blipStand(Vec3 pos){
         StandEntity stand = ModEntities.SURVIVOR.create(this.getSelf().level());
@@ -322,9 +383,39 @@ public class PowersSurvivor extends NewDashPreset {
     /** if = -1, not melt dodging */
     public int meltDodgeTicks = -1;
 
+    public int getCupidRange(){
+        return ClientNetworking.getAppropriateConfig().survivorSettings.survivorCupidRange;
+    }
+    public int getCupidHighlightRange(){
+        return ClientNetworking.getAppropriateConfig().survivorSettings.survivorCupidHighlightRange;
+    }
+
+    public void unloadTargets(){
+        if (SurvivorTarget != null){
+            if (!SurvivorTarget.getActivated() || SurvivorTarget.isRemoved() || !SurvivorTarget.isAlive()){
+                SurvivorTarget = null;
+            }
+        }
+        if (EntityTargetOne != null){
+            if (SurvivorTarget == null ||
+                    EntityTargetOne.isRemoved() || !EntityTargetOne.isAlive() ||
+                    (EntityTargetOne.distanceTo(SurvivorTarget) > getCupidRange())){
+                SurvivorTarget = null;
+            }
+        }
+        if (EntityTargetTwo != null){
+            if (SurvivorTarget == null || EntityTargetOne == null ||
+                    EntityTargetTwo.isRemoved() || !EntityTargetTwo.isAlive() ||
+                    (EntityTargetTwo.distanceTo(SurvivorTarget) > getCupidRange())){
+                EntityTargetTwo = null;
+            }
+        }
+    }
     @Override
     public void tickPower() {
-        /**Yap animation based on using power*/
+        if (this.self.level().isClientSide()){
+            unloadTargets();
+        }
         super.tickPower();
     }
 
@@ -468,8 +559,7 @@ public class PowersSurvivor extends NewDashPreset {
         if (keyIsDown) {
             if (!holdAttack) {
                 holdAttack = true;
-                this.tryPower(PowerIndex.POWER_4_BONUS, true);
-                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_BONUS);
+                selectTargetClient();
             }
         } else if (holdAttack){
             holdAttack = false;

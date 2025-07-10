@@ -170,6 +170,15 @@ public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity
         }
     }
 
+
+    public static boolean canZapEntity(Entity ent){
+        return (ent != null && ent.isAlive() && !ent.isRemoved() && (ent instanceof Mob || ent instanceof Player)
+                && !(ent instanceof StandEntity) && ent.isPickable() && !ent.isInvulnerable() &&
+                !(ent instanceof Player PL && PL.isCreative()) &&
+                ent instanceof LivingEntity LE
+                && !((StandUser) LE).roundabout$isBubbleEncased());
+    }
+
     public void attemptShock(){
         LivingEntity user = this.getUser();
         if (user != null && !((StandUser)user).roundabout$getUniqueStandModeToggle()) {
@@ -177,11 +186,8 @@ public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity
             LivingEntity firstTarget = null;
             if (!mobsInRange.isEmpty()) {
                 for (Entity ent : mobsInRange) {
-                    if (ent.isAlive() && !ent.isRemoved() && (ent instanceof Mob || ent instanceof Player)
-                            && !(ent instanceof StandEntity) && ent.isPickable() && !ent.isInvulnerable() &&
-                            !(ent instanceof Player PL && PL.isCreative()) &&
-                            ent instanceof LivingEntity LE && ((StandUser) LE).roundabout$getZappedToID() <= -1
-                            && !((StandUser) LE).roundabout$isBubbleEncased()) {
+                    if (canZapEntity(ent) && ent instanceof LivingEntity LE
+                    && ((StandUser) LE).roundabout$getZappedToID() <= -1) {
                         if (firstTarget == null) {
                             firstTarget = LE;
                         } else {
