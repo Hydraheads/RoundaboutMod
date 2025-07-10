@@ -638,15 +638,12 @@ public class PowersSurvivor extends NewDashPreset {
     }
 
     /**
-    @Override
     public boolean isWip(){
         return true;
     }
-    @Override
     public Component ifWipListDevStatus(){
         return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
     }
-    @Override
     public Component ifWipListDev(){
         return Component.literal(  "Hydra").withStyle(ChatFormatting.YELLOW);
     }
