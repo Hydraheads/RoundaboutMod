@@ -1,8 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IBucketItem;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -20,15 +18,11 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.stats.Stats;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ThrownPotion;
-import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
@@ -49,7 +43,7 @@ public class PowersSurvivor extends NewDashPreset {
     }
 
 
-    public boolean dangerYappingOn(){
+    public boolean angerSelectionMode(){
         return getStandUserSelf().roundabout$getUniqueStandModeToggle();
     }
     public boolean canSummonStandAsEntity(){
@@ -158,6 +152,9 @@ public class PowersSurvivor extends NewDashPreset {
             }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 dash();
+            }
+            case SKILL_4_NORMAL, SKILL_4_CROUCH -> {
+                switchAngerSelectionMode();
             }
         }
     }
@@ -413,5 +410,18 @@ public class PowersSurvivor extends NewDashPreset {
     @Override
     public Component ifWipListDev(){
         return Component.literal(  "Hydra").withStyle(ChatFormatting.YELLOW);
+    }
+
+
+    public boolean switchAngerSelectionMode(){
+        getStandUserSelf().roundabout$setUniqueStandModeToggle(!angerSelectionMode());
+        if (!isClient() && this.self instanceof ServerPlayer PE) {
+            if (angerSelectionMode()) {
+                PE.displayClientMessage(Component.translatable("text.roundabout.survivor.anger_selection").withStyle(ChatFormatting.RED), true);
+            } else {
+                PE.displayClientMessage(Component.translatable("text.roundabout.survivor.anger_selection_off").withStyle(ChatFormatting.RED), true);
+            }
+        }
+        return true;
     }
 }

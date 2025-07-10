@@ -855,8 +855,8 @@
   "ability.roundabout.summon_survivor.desc": "Place your stand down where you are looking, up to a certain range. When it is doused with water, it activates, and zaps the nerves of nearby mobs. This causes them to fight each other to the death. You can be zapped as well, locking you into a fight. When zapped, melee power increases, and you resist damage that is not melee.",
   "ability.roundabout.desummon_survivor": "Retract Stand",
   "ability.roundabout.desummon_survivor.desc": "Every instance of your stand that you place down starts to disappear. This does not remove existing anger, so be careful what violence you choose to incite.",
-  "ability.roundabout.target_zap": "Target Battle",
-  "ability.roundabout.target_zap.desc": "Enter selection mode, use your attack key to select an activated survivor, then one target, and then another. They will then fight! Press the ability key again to cancel or redo selection.",
+  "ability.roundabout.target_zap": "Rage Cupid",
+  "ability.roundabout.target_zap.desc": "Lets you select which mobs fight each other! Enter selection mode, use your attack key to select an activated survivor, then one target, and then another. They will then fight! Press the ability key again to cancel or redo selection. While this mode is active, your survivors will not automatically zap mobs together.",
 
 
   "ability.roundabout.locked": "???",
@@ -1261,5 +1261,7 @@
   "text.roundabout.mandom.watch_on": "Main Watch On",
   "text.roundabout.mandom.watch_on_rolex": "Rolex Watch On",
 
-  "text.roundabout.survivor.match": "Fight %1$s!"
+  "text.roundabout.survivor.match": "Fight %1$s!",
+  "text.roundabout.survivor.anger_selection": "Rage Cupid Mode On",
+  "text.roundabout.survivor.anger_selection_off": "Rage Cupid Mode On"
 }
