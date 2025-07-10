@@ -658,7 +658,9 @@ public class PowersSurvivor extends NewDashPreset {
         if (keyIsDown) {
             if (!holdAttack) {
                 holdAttack = true;
-                selectTargetClient();
+                if (angerSelectionMode()) {
+                    selectTargetClient();
+                }
             }
         } else if (holdAttack){
             holdAttack = false;
