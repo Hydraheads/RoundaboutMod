@@ -12,13 +12,16 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersSurvivor;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
@@ -144,11 +147,20 @@ public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity
         drawParticleLine(this,one,10);
         drawParticleLine(this,two,10);
         drawParticleLine(one,two,10);
+        sendMessageTo(one,two);
+        sendMessageTo(two,one);
         this.level().playSound(null, this.blockPosition(), ModSounds.SURVIVOR_SHOCK_EVENT, SoundSource.NEUTRAL, 1F, (float) (0.9F + (Math.random() * 0.2F)));
     }
 
+    public void sendMessageTo(LivingEntity LE, LivingEntity LE2){
+        if (LE instanceof ServerPlayer PE) {
+            PE.displayClientMessage(Component.translatable("text.roundabout.survivor.match", LE2.getDisplayName()).
+                    withStyle(ChatFormatting.RED), true);
+        }
+    }
+
     public void attemptShock(){
-        List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.level(),this.blockPosition(), 7, this);
+        List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.level(),this.blockPosition(), ClientNetworking.getAppropriateConfig().survivorSettings.survivorRange, this);
         LivingEntity firstTarget = null;
         if (!mobsInRange.isEmpty()) {
             for (Entity ent : mobsInRange) {

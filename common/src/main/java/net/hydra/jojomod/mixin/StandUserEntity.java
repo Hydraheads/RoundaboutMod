@@ -3002,9 +3002,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 float dist1 = distanceTo(ent);
                 float dist2 = (float) position().add(getDeltaMovement()).distanceTo(ent.position());
                 if (dist1 >= dist2){
-                    basis *= 1.2F;
+                    basis *= ClientNetworking.getAppropriateConfig().survivorSettings.speedMultiplierTowardsEnemy;
                 } else {
-                    basis *= 0.7F;
+                    basis *= ClientNetworking.getAppropriateConfig().survivorSettings.speedMultiplierAwayFromEnemy;
                 }
             }
         }

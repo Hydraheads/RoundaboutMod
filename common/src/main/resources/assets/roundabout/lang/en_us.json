@@ -1242,5 +1242,7 @@
   "text.roundabout.mandom.vision_on": "Chrono Vision On",
   "text.roundabout.mandom.watch_off": "Watchless",
   "text.roundabout.mandom.watch_on": "Main Watch On",
-  "text.roundabout.mandom.watch_on_rolex": "Rolex Watch On"
+  "text.roundabout.mandom.watch_on_rolex": "Rolex Watch On",
+
+  "text.roundabout.survivor.match": "Fight %1$s!"
 }

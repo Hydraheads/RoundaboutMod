@@ -584,6 +584,12 @@ public class Config implements Cloneable {
         public Integer dryUpInNetherTicks;
         @IntOption(group = "inherit", value = 1200, min = 0, max = 72000)
         public Integer durationOfAggressiveAngerSetting;
+        @FloatOption(group = "inherit", value = 1.2F, min = 0, max = 72000F)
+        public Float speedMultiplierTowardsEnemy;
+        @FloatOption(group = "inherit", value = 0.7F, min = 0, max = 72000F)
+        public Float speedMultiplierAwayFromEnemy;
+        @IntOption(group = "inherit", value = 8, min = 0, max = 72000)
+        public Integer survivorRange;
     }
     public static class TheWorldSettings {
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
