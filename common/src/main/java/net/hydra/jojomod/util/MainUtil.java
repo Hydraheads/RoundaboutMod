@@ -1628,6 +1628,14 @@ public class MainUtil {
         return false;
     }
 
+    public static boolean forceAggression(LivingEntity LE){
+        if (LE != null){
+            StandUser user = ((StandUser) LE);
+            return (user.roundabout$hasAStand() || user.roundabout$getZappedToID() > -1);
+        }
+        return false;
+    }
+
     public static boolean knockShieldPlusStand(Entity entity, int duration){
 
         if (entity != null && entity.isAlive() && !entity.isRemoved()) {

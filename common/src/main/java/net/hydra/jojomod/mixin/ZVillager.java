@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -14,8 +15,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ReputationEventHandler;
 import net.minecraft.world.entity.ai.Brain;
-import net.minecraft.world.entity.ai.behavior.Behavior;
-import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.entity.ai.behavior.VillagerGoalPackages;
 import net.minecraft.world.entity.ai.gossip.GossipContainer;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -38,9 +37,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Map;
-import java.util.Set;
-
 @Mixin(Villager.class)
 public abstract class ZVillager extends AbstractVillager implements ReputationEventHandler, VillagerDataHolder {
     public ZVillager(EntityType<? extends AbstractVillager> $$0, Level $$1) {
@@ -50,23 +46,34 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
     @Shadow public abstract Brain<Villager> getBrain();
 
     @Unique
-    public boolean roundabout$initializedStandUser = false;
+    public boolean roundabout$initializedViolence = false;
     @Inject(method = "customServerAiStep", at = @At(value = "HEAD"))
     private void roundabout$customServerAiStep(CallbackInfo ci) {
-        if (!((StandUser)this).roundabout$getStandDisc().isEmpty()) {
-            if (!roundabout$initializedStandUser){
+        StandUser user = ((StandUser)this);
+        boolean hasAStand = user.roundabout$hasAStand();
+        boolean isAggressive = MainUtil.forceAggression(this);
+        if (isAggressive) {
+            if (!roundabout$initializedViolence){
                 ((IMob)this).roundabout$toggleFightOrFlight(true);
-                roundabout$initializedStandUser = true;
+                roundabout$initializedViolence = true;
             }
-            if (((IMob)this).roundabout$getFightOrFlight() && this.getHealth() > this.getMaxHealth()*0.6){
-                this.refreshBrain(((ServerLevel)this.level()));
-                ((IMob)this).roundabout$toggleFightOrFlight(false);
-            } else if (!((IMob)this).roundabout$getFightOrFlight() && this.getHealth() < this.getMaxHealth()*0.35){
-                this.roundabout$refreshBrainOG(((ServerLevel)this.level()));
-                ((IMob)this).roundabout$toggleFightOrFlight(true);
+
+            if (hasAStand) {
+                if (((IMob) this).roundabout$getFightOrFlight() && this.getHealth() > this.getMaxHealth() * 0.6) {
+                    this.refreshBrain(((ServerLevel) this.level()));
+                    ((IMob) this).roundabout$toggleFightOrFlight(false);
+                } else if (!((IMob) this).roundabout$getFightOrFlight() && this.getHealth() < this.getMaxHealth() * 0.35) {
+                    this.roundabout$refreshBrainOG(((ServerLevel) this.level()));
+                    ((IMob) this).roundabout$toggleFightOrFlight(true);
+                }
             }
 
             if (!((IMob)this).roundabout$getFightOrFlight()){
+            }
+        } else {
+            if (roundabout$initializedViolence){
+                roundabout$initializedViolence = false;
+                this.refreshBrain(((ServerLevel) this.level()));
             }
         }
     }
