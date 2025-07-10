@@ -588,6 +588,10 @@ public class Config implements Cloneable {
         public Float speedMultiplierTowardsEnemy;
         @FloatOption(group = "inherit", value = 0.7F, min = 0, max = 72000F)
         public Float speedMultiplierAwayFromEnemy;
+        @FloatOption(group = "inherit", value = 0.8F, min = 0, max = 72000F)
+        public Float resilienceToNonMeleeAttacksWhenZapped;
+        @FloatOption(group = "inherit", value = 1.2F, min = 0, max = 72000F)
+        public Float buffToMeleeAttacksWhenZapped;
         @IntOption(group = "inherit", value = 8, min = 0, max = 72000)
         public Integer survivorRange;
     }

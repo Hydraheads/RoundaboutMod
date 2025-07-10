@@ -42,6 +42,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -98,6 +99,12 @@ public class MainUtil {
         isClient = true;
     }
 
+
+    public static boolean isMeleeDamage(DamageSource di){
+        if (di.is(DamageTypes.PLAYER_ATTACK) || di.is(DamageTypes.MOB_ATTACK))
+            return true;
+        return false;
+    }
 
     public static boolean isZapper(LivingEntity ent1, Entity ent2){
         if (ent1 != null && ent2 != null) {

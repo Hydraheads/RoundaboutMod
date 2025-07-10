@@ -3142,9 +3142,30 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 cir.setReturnValue($$1);
             }
         }
+        boolean modified = false;
         if (this.hasEffect(ModEffects.FACELESS)) {
             float amt = (float) (0.15* this.getEffect(ModEffects.FACELESS).getAmplifier()+0.15F);
-            cir.setReturnValue($$1+($$1*amt));
+            $$1 = ($$1+($$1*amt));
+            modified = true;
+        }
+        if (roundabout$getZappedToID() > -1){
+            if (!MainUtil.isMeleeDamage($$0)){
+                $$1 = $$1*ClientNetworking.getAppropriateConfig().survivorSettings.resilienceToNonMeleeAttacksWhenZapped;
+                modified = true;
+            }
+        }
+
+        if ($$0.getEntity() instanceof LivingEntity LE){
+            if (((StandUser)LE).roundabout$getZappedToID() > -1){
+                if (MainUtil.isMeleeDamage($$0)){
+                    $$1 = $$1*ClientNetworking.getAppropriateConfig().survivorSettings.buffToMeleeAttacksWhenZapped;
+                    modified = true;
+                }
+            }
+        }
+
+        if (modified){
+            cir.setReturnValue($$1);
         }
     }
 
