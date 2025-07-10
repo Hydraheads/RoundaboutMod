@@ -299,18 +299,36 @@ public class PowersSurvivor extends NewDashPreset {
     }
 
     public static final byte
-            BASE = 1;
+            BASE = 1,
+            GREEN =2,
+            RED =3,
+            PURPLE=4,
+            BLUE=5,
+            SILVER=6,
+            GHAST=7;
 
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
-                BASE
+                BASE,
+                GREEN,
+                RED,
+                PURPLE,
+                BLUE,
+                SILVER,
+                GHAST
         );
     }
 
     @Override public Component getSkinName(byte skinId) {
         return switch (skinId)
         {
+            case GREEN -> Component.translatable("skins.roundabout.survivor.green");
+            case RED -> Component.translatable("skins.roundabout.survivor.red");
+            case PURPLE -> Component.translatable("skins.roundabout.survivor.purple");
+            case BLUE -> Component.translatable("skins.roundabout.survivor.blue");
+            case SILVER -> Component.translatable("skins.roundabout.survivor.silver");
+            case GHAST -> Component.translatable("skins.roundabout.survivor.ghast");
             default -> Component.translatable("skins.roundabout.survivor.base");
         };
     }
