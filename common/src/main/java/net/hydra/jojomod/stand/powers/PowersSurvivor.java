@@ -73,10 +73,12 @@ public class PowersSurvivor extends NewDashPreset {
             setSkillIcon(context, x, y, 2, StandIcons.SPAWN, PowerIndex.SKILL_2);
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
 
-        if (angerSelectionMode())
-            setSkillIcon(context, x, y, 4, StandIcons.CUPID_ON, PowerIndex.SKILL_4);
-        else
-            setSkillIcon(context, x, y, 4, StandIcons.RAGE_SELECTION, PowerIndex.SKILL_4);
+        if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
+            if (angerSelectionMode())
+                setSkillIcon(context, x, y, 4, StandIcons.CUPID_ON, PowerIndex.SKILL_4);
+            else
+                setSkillIcon(context, x, y, 4, StandIcons.RAGE_SELECTION, PowerIndex.SKILL_4);
+        }
 
         super.renderIcons(context, x, y);
     }
@@ -173,10 +175,12 @@ public class PowersSurvivor extends NewDashPreset {
     }
 
     public void switchModeClient(){
-        SurvivorTarget = null;
-        EntityTargetOne = null;
-        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
-        tryPowerPacket(PowerIndex.POWER_4);
+        if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
+            SurvivorTarget = null;
+            EntityTargetOne = null;
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
+            tryPowerPacket(PowerIndex.POWER_4);
+        }
     }
 
     public void throwBottleClient(){
@@ -663,12 +667,14 @@ public class PowersSurvivor extends NewDashPreset {
 
 
     public boolean switchAngerSelectionMode(){
-        getStandUserSelf().roundabout$setUniqueStandModeToggle(!angerSelectionMode());
-        if (!isClient() && this.self instanceof ServerPlayer PE) {
-            if (angerSelectionMode()) {
-                PE.displayClientMessage(Component.translatable("text.roundabout.survivor.anger_selection").withStyle(ChatFormatting.RED), true);
-            } else {
-                PE.displayClientMessage(Component.translatable("text.roundabout.survivor.anger_selection_off").withStyle(ChatFormatting.RED), true);
+        if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
+            getStandUserSelf().roundabout$setUniqueStandModeToggle(!angerSelectionMode());
+            if (!isClient() && this.self instanceof ServerPlayer PE) {
+                if (angerSelectionMode()) {
+                    PE.displayClientMessage(Component.translatable("text.roundabout.survivor.anger_selection").withStyle(ChatFormatting.RED), true);
+                } else {
+                    PE.displayClientMessage(Component.translatable("text.roundabout.survivor.anger_selection_off").withStyle(ChatFormatting.RED), true);
+                }
             }
         }
         return true;
