@@ -2565,6 +2565,11 @@ public class StandPowers {
         /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
         return true;
     }
+    public boolean tryTripleIntPower(int move, boolean forced, int chargeTime, int move2, int move3){
+        tryPower(move, forced);
+        /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
+        return true;
+    }
 
     public void tryPowerPacket(byte packet){
         if (this.self.level().isClientSide()) {
@@ -2580,6 +2585,18 @@ public class StandPowers {
                     ClientToServerPackets.StandPowerPackets.MESSAGES.TryIntPower.value,
                     packet,
                     integer
+            );
+        }
+    }
+
+    public void tryTripleIntPacket(byte packet, int in1, int in2, int in3){
+        if (this.self.level().isClientSide()) {
+            ModMessageEvents.sendToServer(
+                    ClientToServerPackets.StandPowerPackets.MESSAGES.TryTripleIntPower.value,
+                    packet,
+                    in1,
+                    in2,
+                    in3
             );
         }
     }

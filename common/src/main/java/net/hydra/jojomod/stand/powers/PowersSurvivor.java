@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -218,23 +219,25 @@ public class PowersSurvivor extends NewDashPreset {
     }
 
     @Override
-    public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos) {
+    public boolean tryTripleIntPower(int move, boolean forced, int chargeTime, int move2, int move3){
         switch (move)
         {
             case PowerIndex.POWER_4_BONUS -> {
-                initializeTargets(blockPos);
+                initializeTargets(chargeTime,move2, move3);
             }
         }
         return tryPower(move, forced);
     }
 
-    public void initializeTargets(BlockPos blockPos){
-        Entity targ = this.self.level().getEntity(blockPos.getX());
+    public void initializeTargets(int x, int y, int z){
+
+
+        Entity targ = this.self.level().getEntity(x);
         if (targ instanceof SurvivorEntity SE){
             SurvivorTarget = SE;
         }
-        EntityTargetOne = this.self.level().getEntity(blockPos.getY());
-        EntityTargetTwo = this.self.level().getEntity(blockPos.getZ());
+        EntityTargetOne = this.self.level().getEntity(y);
+        EntityTargetTwo = this.self.level().getEntity(z);
     }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
@@ -321,7 +324,8 @@ public class PowersSurvivor extends NewDashPreset {
 
                 if (!this.onCooldown(PowerIndex.SKILL_4)) {
                     setRageCupidCooldown();
-                    tryBlockPosPowerPacket(PowerIndex.POWER_4_BONUS, new BlockPos(SurvivorTarget.getId(), EntityTargetOne.getId(), TE.getId()));
+                    tryTripleIntPacket(PowerIndex.POWER_4_BONUS, SurvivorTarget.getId(), EntityTargetOne.getId(), TE.getId());
+
                     SurvivorTarget = null;
                     EntityTargetOne = null;
                 }

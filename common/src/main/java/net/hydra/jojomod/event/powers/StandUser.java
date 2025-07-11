@@ -144,6 +144,7 @@ public interface StandUser {
 
     void roundabout$tryPower(int move, boolean forced);
     void roundabout$tryIntPower(int move, boolean forced, int chargeTime);
+    void roundabout$tryIntPower(int move,boolean forced, int chargeTime, int move2, int move3);
     void roundabout$tryBlockPosPower(int move, boolean forced, BlockPos blockPos);
     void roundabout$tryPosPower(int move, boolean forced, Vec3 blockPos);
     void roundabout$addFollower(FollowingStandEntity $$0);

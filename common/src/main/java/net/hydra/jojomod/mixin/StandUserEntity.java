@@ -2107,6 +2107,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     @Override
+    public void roundabout$tryIntPower(int move,  boolean forced, int chargeTime,int move2, int move3){
+        if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
+            this.roundabout$getStandPowers().tryTripleIntPower(move, forced, chargeTime, move2, move3);
+            tryPowerStuff();
+        }
+    }
+    @Unique
+    @Override
     public void roundabout$tryBlockPosPower(int move, boolean forced, BlockPos blockPos){
         if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
             this.roundabout$getStandPowers().tryBlockPosPower(move, forced, blockPos);
