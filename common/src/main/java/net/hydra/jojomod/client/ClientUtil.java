@@ -9,11 +9,10 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.gui.*;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.hydra.jojomod.stand.powers.PowersRatt;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.Connection;
 import net.zetalasis.client.shader.D4CShaderFX;
@@ -30,7 +29,6 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersD4C;
-import net.hydra.jojomod.event.powers.stand.PowersJustice;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
 import net.hydra.jojomod.item.BodyBagItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -345,6 +343,27 @@ public class ClientUtil {
         return  -1;
     }
 
+    public static boolean hasATimeStopSeeingStandAndCanBypass(){
+        ClientConfig clientConfig = ConfigManager.getClientConfig();
+        if (clientConfig != null && clientConfig.timeStopSettings != null &&
+                clientConfig.timeStopSettings.tsStandsSeeTSTeleportAndDontFreeze) {
+            return hasATimeStopSeeingStand();
+        }
+        return false;
+    }
+
+    public static boolean hasATimeStopSeeingStand(){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            StandUser user = ((StandUser) player);
+            ItemStack stack = user.roundabout$getStandDisc();
+            if (stack != null && !stack.isEmpty()){
+                return (stack.is(ModItems.STAND_DISC_STAR_PLATINUM) || stack.is(ModItems.STAND_DISC_THE_WORLD)
+                        || stack.is(ModItems.MAX_STAND_DISC_STAR_PLATINUM) || stack.is(ModItems.MAX_STAND_DISC_THE_WORLD));
+            }
+        }
+        return false;
+    }
     public static void synchToCamera(Entity ent){
         if (Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
             Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
@@ -359,6 +378,8 @@ public class ClientUtil {
         return wasFrozen != 0;
     }
     public static boolean getScreenFreeze(){
+        if (hasATimeStopSeeingStandAndCanBypass())
+            return false;
         ClientConfig clientConfig = ConfigManager.getClientConfig();
         if (clientConfig != null && clientConfig.timeStopSettings != null && clientConfig.timeStopSettings.timeStopFreezesScreen) {
             LocalPlayer player = Minecraft.getInstance().player;
@@ -424,6 +445,8 @@ public class ClientUtil {
      * A generalized packet for sending ints to the client. Context is what to do with the data int
      */
     public static void handleBlipPacketS2C(LocalPlayer player, int data, byte context, Vector3f vec) {
+        if (hasATimeStopSeeingStandAndCanBypass())
+            return;
         if (context == 2) {
             /*This code makes the world using mobs appear to teleport by skipping interpolation*/
             Entity target = player.level().getEntity(data);
