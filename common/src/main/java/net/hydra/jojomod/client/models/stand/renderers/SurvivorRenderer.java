@@ -39,6 +39,9 @@ public class SurvivorRenderer<M extends StandEntity> extends StandRenderer<Survi
     private static final ResourceLocation GHAST = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/ghast.png");
     private static final ResourceLocation GHAST_ACTIVATED = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/activated/ghast.png");
 
+    private static final ResourceLocation ENDER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/ender.png");
+    private static final ResourceLocation ENDER_ACTIVATED = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/activated/ender.png");
+
     public SurvivorRenderer(EntityRendererProvider.Context context) {
         super(context, new SurvivorModel<>(context.bakeLayer(ModEntityRendererClient.SURVIVOR_LAYER)),0f);
     }
@@ -59,6 +62,8 @@ public class SurvivorRenderer<M extends StandEntity> extends StandRenderer<Survi
                 return SILVER_ACTIVATED;
             if (BT == PowersSurvivor.GHAST)
                 return GHAST_ACTIVATED;
+            if (BT == PowersSurvivor.ENDER)
+                return ENDER_ACTIVATED;
             return BASE_ACTIVATED;
         }
         if (BT == PowersSurvivor.RED)
@@ -73,6 +78,8 @@ public class SurvivorRenderer<M extends StandEntity> extends StandRenderer<Survi
             return SILVER;
         if (BT == PowersSurvivor.GHAST)
             return GHAST;
+        if (BT == PowersSurvivor.ENDER)
+            return ENDER;
         return BASE;
     }
 

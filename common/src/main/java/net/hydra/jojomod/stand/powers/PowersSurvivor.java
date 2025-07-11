@@ -543,7 +543,8 @@ public class PowersSurvivor extends NewDashPreset {
             PURPLE=4,
             BLUE=5,
             SILVER=6,
-            GHAST=7;
+            GHAST=7,
+            ENDER=8;
 
     @Override
     public List<Byte> getSkinList() {
@@ -554,7 +555,8 @@ public class PowersSurvivor extends NewDashPreset {
                 PURPLE,
                 BLUE,
                 SILVER,
-                GHAST
+                GHAST,
+                ENDER
         );
     }
 
@@ -579,6 +581,7 @@ public class PowersSurvivor extends NewDashPreset {
             case BLUE -> Component.translatable("skins.roundabout.survivor.blue");
             case SILVER -> Component.translatable("skins.roundabout.survivor.silver");
             case GHAST -> Component.translatable("skins.roundabout.survivor.ghast");
+            case ENDER -> Component.translatable("skins.roundabout.survivor.ender");
             default -> Component.translatable("skins.roundabout.survivor.base");
         };
     }
