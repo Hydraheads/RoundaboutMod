@@ -120,11 +120,11 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getConfig().standArrowSecondaryPoolv3 != null)
+        if (getConfig().standArrowSecondaryPoolv4 != null)
         {
             ModItems.STAND_ARROW_SECONDARY_STAND_POOL.clear();
 
-            for (String disc : getConfig().standArrowSecondaryPoolv3)
+            for (String disc : getConfig().standArrowSecondaryPoolv4)
             {
                 String[] split = disc.split(":");
 

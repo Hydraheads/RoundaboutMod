@@ -84,7 +84,10 @@ public class GroundHurricaneEntity extends GroundPathfindingStandAttackEntity {
             burst(PMR);
             if ($$0 instanceof LivingEntity LE){
                 PMR.addEXP(7,LE);
+
+                MainUtil.knockShieldPlusStand($$0, 20);
             }
+
             CrossfireHurricaneEntity.blastEntity($$0, this,
                     this.getSize(), user, true, PMR,fireStormCreated);
         }

@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -59,7 +60,7 @@ public abstract class ZPanicGoal extends Goal {
 
     @Unique
     public boolean roundabout$getPanicGoal(){
-        if (!((StandUser)this.mob).roundabout$getStandDisc().isEmpty() && (!(this.mob instanceof Wolf) &&
+        if (MainUtil.forceAggression(this.mob) && (!(this.mob instanceof Wolf) &&
                 !(this.mob instanceof PolarBear))) {
             return true;
         } else {

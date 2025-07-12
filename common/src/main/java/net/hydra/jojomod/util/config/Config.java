@@ -128,11 +128,12 @@ public class Config implements Cloneable {
                     "roundabout:soft_and_wet_disc"
             )
     );
-    public Set<String> standArrowSecondaryPoolv3 = new HashSet<>(
+    public Set<String> standArrowSecondaryPoolv4 = new HashSet<>(
             Arrays.asList(
                     "roundabout:cinderella_disc",
                     "roundabout:hey_ya_disc",
-                    "roundabout:mandom_disc"
+                    "roundabout:mandom_disc",
+                    "roundabout:survivor_disc"
             )
     );
     public Set<String> naturalStandUserMobPoolv3 = new HashSet<>(
@@ -578,12 +579,38 @@ public class Config implements Cloneable {
         public Integer SummonSurvivorCooldownV2;
         @BooleanOption(group = "inherit", value = true)
         public Boolean SummonSurvivorCooldownCooldownUsesServerLatency;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean canonSurvivorHasNoRageCupid;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer rageCupidCooldown;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean rageCupidCooldownCooldownUsesServerLatency;
         @IntOption(group = "inherit", value = 6, min = 0, max = 72000)
         public Integer maxSurvivorsCount;
         @IntOption(group = "inherit", value = 140, min = 0, max = 72000)
         public Integer dryUpInNetherTicks;
         @IntOption(group = "inherit", value = 1200, min = 0, max = 72000)
         public Integer durationOfAggressiveAngerSetting;
+        @FloatOption(group = "inherit", value = 1.2F, min = 0, max = 72000F)
+        public Float speedMultiplierTowardsEnemy;
+        @FloatOption(group = "inherit", value = 0.7F, min = 0, max = 72000F)
+        public Float speedMultiplierAwayFromEnemy;
+        @FloatOption(group = "inherit", value = 0.8F, min = 0, max = 72000F)
+        public Float resilienceToNonMeleeAttacksWhenZapped;
+        @FloatOption(group = "inherit", value = 1.2F, min = 0, max = 72000F)
+        public Float buffToMeleeAttacksWhenZapped;
+        @IntOption(group = "inherit", value = 8, min = 0, max = 72000)
+        public Integer survivorRange;
+        @FloatOption(group = "inherit", value = 3.0F, min = 0, max = 72000F)
+        public Float  bonusDamageWhenPunching;
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer survivorCupidRange;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer survivorCupidCreativeRange;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer survivorCupidHighlightRange;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean canUseSurvivorOnBossesInSurvival;
     }
     public static class TheWorldSettings {
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)

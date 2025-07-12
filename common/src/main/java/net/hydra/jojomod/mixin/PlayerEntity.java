@@ -811,14 +811,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (!((StandUser)this).roundabout$getStandDisc().isEmpty()){
             basis = ((StandUser)this).roundabout$getStandPowers().inputSpeedModifiers(basis);
         }
-        byte curse = ((StandUser)this).roundabout$getLocacacaCurse();
-        if (curse > -1) {
-            if (curse == LocacacaCurseIndex.RIGHT_LEG || curse == LocacacaCurseIndex.LEFT_LEG) {
-                basis = (basis * 0.82F);
-            } else if (curse == LocacacaCurseIndex.CHEST) {
-                basis = (basis * 0.85F);
-            }
-        }
+        basis = ((StandUser)this).roundabout$mutualGetSpeed(basis);
+
         cir.setReturnValue(basis);
     }
 

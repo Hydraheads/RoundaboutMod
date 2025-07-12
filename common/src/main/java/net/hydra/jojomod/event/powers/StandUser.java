@@ -43,6 +43,8 @@ public interface StandUser {
     int roundabout$increaseAirSupply(int $$0);
     int roundabout$getZappedTicks();
 
+    float roundabout$mutualGetSpeed(float basis);
+
     int roundabout$getDetectTicks();
     void roundabout$setDetectTicks(int life);
     Entity roundabout$getBoundTo();
@@ -55,7 +57,7 @@ public interface StandUser {
     void roundabout$dropString();
     void roundabout$tickString();
 
-    void roundabout$updateStandOutPosition(StandEntity passenger, Entity.MoveFunction positionUpdater);
+    void roundabout$updateStandOutPosition(FollowingStandEntity passenger, Entity.MoveFunction positionUpdater);
     void roundabout$removeStandOut();
     void roundabout$setDI(byte forward, byte strafe);
     void roundabout$standMount(StandEntity StandSet);
@@ -142,6 +144,7 @@ public interface StandUser {
 
     void roundabout$tryPower(int move, boolean forced);
     void roundabout$tryIntPower(int move, boolean forced, int chargeTime);
+    void roundabout$tryIntPower(int move,boolean forced, int chargeTime, int move2, int move3);
     void roundabout$tryBlockPosPower(int move, boolean forced, BlockPos blockPos);
     void roundabout$tryPosPower(int move, boolean forced, Vec3 blockPos);
     void roundabout$addFollower(FollowingStandEntity $$0);

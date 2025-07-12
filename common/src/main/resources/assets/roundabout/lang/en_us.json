@@ -54,6 +54,7 @@
   "item.roundabout.survivor_disc": "Stand Disc",
   "item.roundabout.hey_ya_disc": "Stand Disc",
   "item.roundabout.ratt_disc": "Stand Disc",
+  "item.roundabout.achtung_baby_disc": "Stand Disc",
   "item.roundabout.max_ratt_disc": "Stand Disc+",
   "item.roundabout.mandom_disc": "Stand Disc",
   "item.roundabout.max_star_platinum_disc": "Stand Disc+",
@@ -77,6 +78,7 @@
   "item.roundabout.cinderella_disc.desc": "Cinderella",
   "item.roundabout.max_ratt_disc.desc": "Ratt",
   "item.roundabout.ratt_disc.desc": "Ratt",
+  "item.roundabout.achtung_baby_disc.desc": "Achtung Baby",
   "item.roundabout.survivor_disc.desc": "Survivor",
   "item.roundabout.hey_ya_disc.desc": "Hey Ya!",
   "item.roundabout.mandom_disc.desc": "Mandom",
@@ -103,6 +105,9 @@
   "item.roundabout.pocoloco_mask": "Pocoloco Visage",
   "item.roundabout.pocoloco_mask.desc": "Pocoloco",
   "item.roundabout.pocoloco_mask.tag": "Pocoloco",
+  "item.roundabout.guccio_mask": "Guccio Visage",
+  "item.roundabout.guccio_mask.desc": "Guccio",
+  "item.roundabout.guccio_mask.tag": "Guccio",
   "item.roundabout.ringo_mask": "Ringo Visage",
   "item.roundabout.ringo_mask.desc": "Ringo Roadagain",
   "item.roundabout.ringo_mask.tag": "Ringo",
@@ -208,6 +213,7 @@
   "entity.roundabout.jojo_npc_josuke_part_eight": "Josuke",
   "entity.roundabout.jojo_npc_valentine": "Valentine",
   "entity.roundabout.jojo_npc_aya": "Aya",
+  "entity.roundabout.jojo_npc_guccio": "Guccio",
   "entity.roundabout.jojo_npc_ringo": "Ringo",
   "entity.roundabout.jojo_npc_pocoloco": "Pocoloco",
   "entity.roundabout.aesthetician": "Aesthetician",
@@ -366,6 +372,7 @@
   "death.attack.stand_virus": "%1$s was turned into tomato sauce",
   "death.attack.stand_virus.item": "%1$s was turned into tomato sauce",
   "death.attack,disintegration": "%1$ disintegrated",
+  "death.attack,disintegration.player": "%1$ was disintegrated by %$2s",
 
   "item.glaive.charge_power": "Charge Attack",
 
@@ -851,6 +858,17 @@
   "ability.roundabout.clock": "Time Telling",
   "ability.roundabout.clock.desc": "Displays a clock when active, so you can know the time of day in applicable dimensions.",
 
+
+  "ability.roundabout.throw_bottle": "Water Bottle Throw",
+  "ability.roundabout.throw_bottle.desc": "Throws a held water bottle directly from your inventory, it travels far and is good for activating the stand.",
+  "ability.roundabout.summon_survivor": "Summon Stand",
+  "ability.roundabout.summon_survivor.desc": "Place your stand down where you are looking, up to a certain range. When it is doused with water, it activates, and zaps the nerves of nearby mobs. This causes them to fight each other to the death. You can be zapped as well, locking you into a fight. When zapped, melee power increases, and you resist damage that is not melee.",
+  "ability.roundabout.desummon_survivor": "Retract Stand",
+  "ability.roundabout.desummon_survivor.desc": "Every instance of your stand that you place down starts to disappear. This does not remove existing anger, so be careful what violence you choose to incite.",
+  "ability.roundabout.target_zap": "Rage Cupid",
+  "ability.roundabout.target_zap.desc": "Lets you select which mobs fight each other! Enter selection mode, use your attack key to select an activated survivor, then one target, and then another. They will then fight! Press the ability key again to cancel or redo selection. While this mode is active, your survivors will not automatically zap mobs together.",
+
+
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Locked",
   "ability.roundabout.locked.desc": "Unlock at Development Stage %1$s",
@@ -1015,6 +1033,7 @@
   "skins.roundabout.cinderella.base": "Part 4",
   "skins.roundabout.cinderella.manga": "Manga",
   "skins.roundabout.cinderella.zombie": "Infected",
+  "skins.roundabout.cinderella.jack_in_the_box": "Jack",
 
   "skins.roundabout.hey_ya.manga": "Manga",
   "skins.roundabout.hey_ya.gothic": "Gothic",
@@ -1056,6 +1075,14 @@
   "skins.roundabout.mandom.esidisi": "Esidisi",
 
   "skins.roundabout.survivor.base": "Part 6",
+  "skins.roundabout.survivor.green": "Green",
+  "skins.roundabout.survivor.purple": "Purple",
+  "skins.roundabout.survivor.red": "Red",
+  "skins.roundabout.survivor.blue": "Blue",
+  "skins.roundabout.survivor.silver": "Silver",
+  "skins.roundabout.survivor.ghast": "Ghastling",
+  "skins.roundabout.survivor.ender": "Ender",
+  "skins.roundabout.survivor.conduit": "Conduit",
 
   "skins.roundabout.killer_queen.base": "Part 4",
 
@@ -1246,5 +1273,9 @@
   "text.roundabout.mandom.vision_on": "Chrono Vision On",
   "text.roundabout.mandom.watch_off": "Watchless",
   "text.roundabout.mandom.watch_on": "Main Watch On",
-  "text.roundabout.mandom.watch_on_rolex": "Rolex Watch On"
+  "text.roundabout.mandom.watch_on_rolex": "Rolex Watch On",
+
+  "text.roundabout.survivor.match": "Fight %1$s!",
+  "text.roundabout.survivor.anger_selection": "Rage Cupid Mode On",
+  "text.roundabout.survivor.anger_selection_off": "Rage Cupid Mode Off"
 }

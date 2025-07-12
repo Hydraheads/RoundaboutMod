@@ -3,7 +3,7 @@ package net.hydra.jojomod.mixin;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.corpses.renderers.FallenZombieRenderer;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.stand.PowersJustice;
+import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.minecraft.client.renderer.entity.AbstractZombieRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.monster.Zombie;

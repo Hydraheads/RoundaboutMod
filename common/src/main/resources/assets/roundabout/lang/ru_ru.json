@@ -51,7 +51,10 @@
   "item.roundabout.green_day_disc": "Диск со Стендом",
   "item.roundabout.soft_and_wet_disc": "Диск со Стендом",
   "item.roundabout.cinderella_disc": "Диск со Стендом",
+  "item.roundabout.survivor_disc": "Диск со Стендом",
   "item.roundabout.hey_ya_disc": "Диск со Стендом",
+  "item.roundabout.ratt_disc": "Диск со Стендом",
+  "item.roundabout.max_ratt_disc": "Диск со Стендом+",
   "item.roundabout.mandom_disc": "Диск со Стендом",
   "item.roundabout.max_star_platinum_disc": "Диск со Стендом+",
   "item.roundabout.magicians_red_disc": "Диск со Стендом",
@@ -72,6 +75,9 @@
   "item.roundabout.the_world_disc.desc": "The World",
   "item.roundabout.justice_disc.desc": "Justice",
   "item.roundabout.cinderella_disc.desc": "Cinderella",
+  "item.roundabout.max_ratt_disc.desc": "Ratt",
+  "item.roundabout.ratt_disc.desc": "Ratt",
+  "item.roundabout.survivor_disc.desc": "Survivor",
   "item.roundabout.hey_ya_disc.desc": "Hey Ya!",
   "item.roundabout.mandom_disc.desc": "Mandom",
   "item.roundabout.none_disc.desc": "None",
@@ -97,6 +103,9 @@
   "item.roundabout.pocoloco_mask": "Облик Поколоко",
   "item.roundabout.pocoloco_mask.desc": "Поколоко",
   "item.roundabout.pocoloco_mask.tag": "Поколоко",
+  "item.roundabout.guccio_mask": "Облик Гуччио",
+  "item.roundabout.guccio_mask.desc": "Гуччио",
+  "item.roundabout.guccio_mask.tag": "Гуччио",
   "item.roundabout.ringo_mask": "Облик Ринго",
   "item.roundabout.ringo_mask.desc": "Ринго Роудагейн",
   "item.roundabout.ringo_mask.tag": "Ринго",
@@ -167,6 +176,7 @@
   "entity.roundabout.terrier": "Бостон-Терьер",
   "entity.roundabout.the_world": "The World",
   "entity.roundabout.the_world_ultimate": "The World",
+  "entity.roundabout.survivor": "Survivor",
   "entity.roundabout.star_platinum": "Star Platinum",
   "entity.roundabout.star_platinum_baseball": "Star Platinum",
   "entity.roundabout.magicians_red": "Magician's Red",
@@ -201,6 +211,7 @@
   "entity.roundabout.jojo_npc_josuke_part_eight": "Джоске",
   "entity.roundabout.jojo_npc_valentine": "Валентайн",
   "entity.roundabout.jojo_npc_aya": "Ая",
+  "entity.roundabout.jojo_npc_guccio": "Гуччио",
   "entity.roundabout.jojo_npc_ringo": "Ринго",
   "entity.roundabout.jojo_npc_pocoloco": "Поколоко",
   "entity.roundabout.aesthetician": "Косметолог",
@@ -358,6 +369,8 @@
   "death.attack.glaive.item": "%1$s был проколот %2$s при помощи %3$s",
   "death.attack.stand_virus": "%1$s превращён в фарш",
   "death.attack.stand_virus.item": "%1$s превращён в фарш",
+  "death.attack,disintegration": "%1$ растерзан",
+  "death.attack,disintegration.player": "%1$ был растерзан в борьбе с %$2s",
 
   "item.glaive.charge_power": "Усиленная Атака",
 
@@ -390,6 +403,7 @@
   "sounds.roundabout.summon_magician":  "Стенд призван",
   "sounds.roundabout.summon_mandom":  "Стенд призван",
   "sounds.roundabout.hey_ya_summon":  "'Удачливый' Стенд призван",
+  "sounds.roundabout.survivor_summon":  "Стенд призван",
   "sounds.roundabout.ova_summon":  "Стенд призван",
   "sounds.roundabout.ova_summon_the_world":  "Стенд призван",
   "sounds.roundabout.punch_sfx1":  "Воздушные разрывы",
@@ -442,6 +456,10 @@
   "sounds.roundabout.soft_and_wet_kick":  "Удар",
 
   "sounds.roundabout.mandom_rewind":  "Отмотка времени",
+
+  "sounds.roundabout.survivor_shock":  "Искрится",
+  "sounds.roundabout.survivor_place":  "Хруст",
+  "sounds.roundabout.survivor_remove":  "Хлопок",
 
   "sounds.roundabout.snap":  "Щелчок",
   "sounds.roundabout.star_finger_silent":  "Стар Фингер",
@@ -835,6 +853,16 @@
   "ability.roundabout.clock": "Определение времени",
   "ability.roundabout.clock.desc": "Показывает часы, когда способность активна, позволяя узнать время суток в различных измерениях.",
 
+
+  "ability.roundabout.throw_bottle": "Бросок колбы с водой",
+  "ability.roundabout.throw_bottle.desc": "Бросает колбу с водой в направлении взгляда, она летит далеко и подходит для активации стенда.",
+  "ability.roundabout.summon_survivor": "активация стенда",
+  "ability.roundabout.summon_survivor.desc": "Установите свой стенд в точке, на которую вы смотрите, в пределах определенного радиуса. При контакте с водой стенд активируется и воздействует на нервы ближайших мобов, заставляя их сражаться друг с другом до самой смерти. Вы также можете попасть под воздействие, что заставит вас вступить в бой. При воздействии увеличивается сила ближнего боя, и вы получаете сопротивление к урону, не связанному с ближним боем.",
+  "ability.roundabout.desummon_survivor": "Отзыв стенда",
+  "ability.roundabout.desummon_survivor.desc": "Все частицы вашего стенда, которые вы установили, исчезнут. Это не снимает уже вызванную агрессию, поэтому будьте осторожны с тем, кого вы спровоцировали.",
+  "ability.roundabout.target_zap": "Купидон Ярости",
+  "ability.roundabout.target_zap.desc": "Позволяет выбрать, какие мобы будут сражаться друг с другом. Войдите в режим выбора, используйте клавишу атаки, чтобы выбрать активную часть вашего стенда, затем конкретного моба, а затем другого. И они начнут сражаться! Нажмите клавишу способности снова, чтобы отменить или перезапустить выбор. Пока этот режим активен, другие части стенда не будут автоматически воздействовать на мобов.",
+
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Недоступно",
   "ability.roundabout.locked.desc": "Разблокируется на %1$s уровне",
@@ -879,8 +907,12 @@
   "idle.roundabout.battle_justice": "Угрожающая поза",
 
   "idle.roundabout.hey_ya_1": "Наклон вперёд",
-  "idle.roundabout.hey_ya_2": "Facing",
+  "idle.roundabout.hey_ya_2": "Лицом вперёд",
   "idle.roundabout.mandom_back": "Наклон назад",
+
+  "idle.roundabout.ratt_1": "На голове",
+  "idle.roundabout.ratt_2": "На плече",
+
 
   "skins.roundabout.star_platinum.base": "Часть 3",
   "skins.roundabout.star_platinum.manga": "Манга",
@@ -982,6 +1014,13 @@
 
   "skins.roundabout.green_day.base": "Часть 5",
 
+  "skins.roundabout.ratt.anime" : "Аниме",
+  "skins.roundabout.ratt.manga" : "Манга",
+  "skins.roundabout.ratt.melon" : "Арбуз",
+  "skins.roundabout.ratt.sand" : "Песочный",
+  "skins.roundabout.ratt.aztec" : "Ацтекский",
+  "skins.roundabout.ratt.redd" : "Редд",
+
   "skins.roundabout.cinderella.base": "Часть 4",
   "skins.roundabout.cinderella.manga": "Манга",
   "skins.roundabout.cinderella.zombie": "Заражённая",
@@ -1024,6 +1063,14 @@
   "skins.roundabout.mandom.eye": "Око Края",
   "skins.roundabout.mandom.melon": "Арбуз",
   "skins.roundabout.mandom.esidisi": "Эйсидиси",
+
+  "skins.roundabout.survivor.base": "Часть 6",
+  "skins.roundabout.survivor.green": "Зелёный",
+  "skins.roundabout.survivor.purple": "Фиолетовый",
+  "skins.roundabout.survivor.red": "Красный",
+  "skins.roundabout.survivor.blue": "Голубой",
+  "skins.roundabout.survivor.silver": "Серебрянный",
+  "skins.roundabout.survivor.ghast": "Гастлинг",
 
   "skins.roundabout.killer_queen.base": "Часть 4",
 
@@ -1214,5 +1261,9 @@
   "text.roundabout.mandom.vision_on": "Хроновидение: Включено",
   "text.roundabout.mandom.watch_off": "Часы: Убраны",
   "text.roundabout.mandom.watch_on": "Часы: Одеты",
-  "text.roundabout.mandom.watch_on_rolex": "Часы: Одеты (Ролексы)"
+  "text.roundabout.mandom.watch_on_rolex": "Часы: Одеты (Ролексы)",
+
+  "text.roundabout.survivor.match": "Срази %1$s!",
+  "text.roundabout.survivor.anger_selection": "Купидон Ярости: Включено",
+  "text.roundabout.survivor.anger_selection_off": "Купидон Ярости: Отключено"
 }

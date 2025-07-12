@@ -1,5 +1,6 @@
 package net.hydra.jojomod.item;
 
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
@@ -25,6 +26,11 @@ public class LocacacaItem extends Item {
                 health=maxHealth;
             }
             entity.setHealth(health);
+        }
+
+
+        if (entity.hasEffect(ModEffects.HEX)){
+            ((StandUser)entity).roundabout$setLocacacaCurse(LocacacaCurseIndex.HEART);
         }
 
         double random = Math.random();

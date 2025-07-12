@@ -348,6 +348,8 @@ public class StandIcons {
             "textures/gui/icons/survivor/bottle.png");
     public static final ResourceLocation RAGE_SELECTION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/survivor/mom_and_dad_fighting.png");
+    public static final ResourceLocation CUPID_ON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/survivor/cupid_on.png");
 
     public static final ResourceLocation EERIE_SKIN = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/eerie_shift.png");

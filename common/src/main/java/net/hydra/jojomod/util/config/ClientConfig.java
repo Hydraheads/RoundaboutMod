@@ -108,6 +108,8 @@ public class ClientConfig implements Cloneable {
         @BooleanOption(group = "inherit", value = false)
         public Boolean timeStopFreezesScreen;
         @BooleanOption(group = "inherit", value = true)
+        public Boolean tsStandsSeeTSTeleportAndDontFreeze;
+        @BooleanOption(group = "inherit", value = true)
         public Boolean simpleTimeStopShader;
     }
     public static class VanillaMCTweaks {

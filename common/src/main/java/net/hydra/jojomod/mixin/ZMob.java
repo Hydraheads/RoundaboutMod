@@ -190,7 +190,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
                         ((StandUser)this).roundabout$getStandPowers().disableMobAiAttack()) || ((StandUser) this).roundabout$isRestrained()) {
             ci.setReturnValue(false);
         } else {
-            if (((StandUser)this).roundabout$hasAStand()){
+            if (MainUtil.forceAggression(this)){
                 float $$1 = 1F;
                 if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)){
                     $$1 = (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
@@ -553,51 +553,57 @@ public abstract class ZMob extends LivingEntity implements IMob {
     shift= At.Shift.BEFORE))
     private void roundabout$serverAiStep(CallbackInfo ci) {
 
-        /**Passive to neutral stuff for stand users*/
+        /**Passive to neutral stuff for stand users + survivor zapped mobs*/
         if (this.isAlive()) {
-            if (((StandUser)this).roundabout$hasAStand()) {
+            StandUser user = ((StandUser)this);
+            boolean isStandUser = user.roundabout$hasAStand();
+            if (MainUtil.forceAggression(this)) {
 
                 Mob mb = ((Mob) (Object) this);
-                if (this.getTarget() != null && !this.roundabout$getFightOrFlight()){
-                    if (!((StandUser) this).roundabout$getActive() &&
-                            !((StandUser)this).roundabout$isSealed()){
-                        ((StandUser)this).roundabout$summonStand(this.level(),true,true);
-                    }
-                    if (roundabout$retractTicks != 100) {
-                        roundabout$retractTicks = 100;
-                    }
-                } else {
-                    if (((StandUser)this).roundabout$getStandPowers().getActivePower() == PowerIndex.NONE) {
-                        roundabout$retractTicks = Math.max(roundabout$retractTicks - 1, -1);
-                        if (roundabout$retractTicks == -1 ||
-                                (this.roundabout$getFightOrFlight() && !((Mob)(Object)this instanceof JojoNPC JP &&
-                                        JP.canSummonStandThroughFightOrFlightActive()))
-                        ) {
-                            if (((StandUser) this).roundabout$getActive()) {
-                                ((StandUser) this).roundabout$summonStand(this.level(), false, false);
+                if (isStandUser) {
+                    if (this.getTarget() != null && !this.roundabout$getFightOrFlight()) {
+                        if (!user.roundabout$getActive() &&
+                                !user.roundabout$isSealed()) {
+                            user.roundabout$summonStand(this.level(), true, true);
+                        }
+                        if (roundabout$retractTicks != 100) {
+                            roundabout$retractTicks = 100;
+                        }
+                    } else {
+                        if (user.roundabout$getStandPowers().getActivePower() == PowerIndex.NONE) {
+                            roundabout$retractTicks = Math.max(roundabout$retractTicks - 1, -1);
+                            if (roundabout$retractTicks == -1 ||
+                                    (this.roundabout$getFightOrFlight() && !((Mob) (Object) this instanceof JojoNPC JP &&
+                                            JP.canSummonStandThroughFightOrFlightActive()))
+                            ) {
+                                if (user.roundabout$getActive()) {
+                                    user.roundabout$summonStand(this.level(), false, false);
+                                }
                             }
                         }
                     }
                 }
 
                 if (!(((Mob) (Object) this) instanceof Enemy)
-                        && !(((Mob) (Object) this) instanceof NeutralMob) && !this.roundabout$getFightOrFlight()) {
+                        && !(((Mob) (Object) this) instanceof NeutralMob) && !(isStandUser && this.roundabout$getFightOrFlight())) {
                     if (this.getTarget() != null && this.getTarget() instanceof Player PE && PE.isCreative()){
                         this.setTarget(null);
                     }
 
 
-                    if (mb instanceof AbstractVillager || (mb instanceof JojoNPC jn && jn.villageDefends())){
-                        if (this.getTarget() == null){
-                            if (this.tickCount % 4 == 0){
-                                roundabout$targetVillageEnemies();
-                            }
-                            if (this.getTarget() instanceof AbstractVillager || this.getLastHurtByMob()
-                                    instanceof AbstractVillager ||
-                                    (this.getTarget() instanceof JojoNPC J1 && J1.villageDefends()) || (this.getLastHurtByMob()
-                                    instanceof JojoNPC J2 && J2.villageDefends())){
-                                this.setTarget(null);
-                                this.setLastHurtByMob(null);
+                    if (isStandUser) {
+                        if (mb instanceof AbstractVillager || (mb instanceof JojoNPC jn && jn.villageDefends())) {
+                            if (this.getTarget() == null) {
+                                if (this.tickCount % 4 == 0) {
+                                    roundabout$targetVillageEnemies();
+                                }
+                                if (this.getTarget() instanceof AbstractVillager || this.getLastHurtByMob()
+                                        instanceof AbstractVillager ||
+                                        (this.getTarget() instanceof JojoNPC J1 && J1.villageDefends()) || (this.getLastHurtByMob()
+                                        instanceof JojoNPC J2 && J2.villageDefends())) {
+                                    this.setTarget(null);
+                                    this.setLastHurtByMob(null);
+                                }
                             }
                         }
                     }
@@ -649,14 +655,16 @@ public abstract class ZMob extends LivingEntity implements IMob {
                     }
                 }
 
-                if (this.getTarget() == null){
-                    if (roundabout$standAttractionTicks > -1){
-                        roundabout$standAttractionTicks = Math.max(roundabout$standAttractionTicks-1,-1);
-                        if (roundabout$standPath != null){
-                            this.getNavigation().moveTo(roundabout$standPath, 1.1);
+                if (isStandUser) {
+                    if (this.getTarget() == null) {
+                        if (roundabout$standAttractionTicks > -1) {
+                            roundabout$standAttractionTicks = Math.max(roundabout$standAttractionTicks - 1, -1);
+                            if (roundabout$standPath != null) {
+                                this.getNavigation().moveTo(roundabout$standPath, 1.1);
+                            }
                         }
+                        roundabout$standUserAttraction();
                     }
-                    roundabout$standUserAttraction();
                 }
 
                 if (mb instanceof TamableAnimal TA){

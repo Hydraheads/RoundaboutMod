@@ -22,9 +22,8 @@ import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.SoftExplosion;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
-import net.hydra.jojomod.event.powers.stand.presets.BlockGrabPreset;
 import net.hydra.jojomod.stand.powers.*;
-import net.hydra.jojomod.event.powers.stand.PowersJustice;
+import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -36,7 +35,6 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -52,6 +50,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.CombatRules;
 import net.minecraft.world.damagesource.CombatTracker;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -60,6 +59,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.npc.AbstractVillager;
@@ -1120,7 +1121,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
                 roundabout$zappedTicks--;
             }
-            roundabout$zappedTicks = Mth.clamp(roundabout$zappedTicks,0,10);
+            roundabout$zappedTicks = Mth.clamp(roundabout$zappedTicks,-1,10);
         }
         this.roundabout$getStandPowers().tickPower();
         this.roundabout$tickGuard();
@@ -2107,6 +2108,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     @Override
+    public void roundabout$tryIntPower(int move,  boolean forced, int chargeTime,int move2, int move3){
+        if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
+            this.roundabout$getStandPowers().tryTripleIntPower(move, forced, chargeTime, move2, move3);
+            tryPowerStuff();
+        }
+    }
+    @Unique
+    @Override
     public void roundabout$tryBlockPosPower(int move, boolean forced, BlockPos blockPos){
         if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
             this.roundabout$getStandPowers().tryBlockPosPower(move, forced, blockPos);
@@ -2983,6 +2992,34 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    @Override
+    @Unique
+    public float roundabout$mutualGetSpeed(float basis){
+        byte curse = this.roundabout$getLocacacaCurse();
+        if (curse > -1) {
+            if (curse == LocacacaCurseIndex.RIGHT_LEG || curse == LocacacaCurseIndex.LEFT_LEG) {
+                basis = (basis * 0.82F);
+            } else if (curse == LocacacaCurseIndex.CHEST) {
+                basis = (basis * 0.85F);
+            }
+        }
+
+        int zapped = roundabout$getZappedToID();
+        if (zapped > -1){
+            Entity ent = level().getEntity(zapped);
+            if (ent != null){
+                float dist1 = distanceTo(ent);
+                float dist2 = (float) position().add(getDeltaMovement()).distanceTo(ent.position());
+                if (dist1 >= dist2){
+                    basis *= ClientNetworking.getAppropriateConfig().survivorSettings.speedMultiplierTowardsEnemy;
+                } else {
+                    basis *= ClientNetworking.getAppropriateConfig().survivorSettings.speedMultiplierAwayFromEnemy;
+                }
+            }
+        }
+
+        return basis;
+    }
 
     @Override
     @Unique
@@ -3114,9 +3151,40 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 cir.setReturnValue($$1);
             }
         }
+        boolean modified = false;
         if (this.hasEffect(ModEffects.FACELESS)) {
             float amt = (float) (0.15* this.getEffect(ModEffects.FACELESS).getAmplifier()+0.15F);
-            cir.setReturnValue($$1+($$1*amt));
+            $$1 = ($$1+($$1*amt));
+            modified = true;
+        }
+        if (roundabout$getZappedToID() > -1){
+            if (!MainUtil.isMeleeDamage($$0)){
+                $$1 = $$1*ClientNetworking.getAppropriateConfig().survivorSettings.resilienceToNonMeleeAttacksWhenZapped;
+                modified = true;
+            }
+        }
+
+        if ($$0.getEntity() instanceof LivingEntity LE){
+            if (((StandUser)LE).roundabout$getZappedToID() > -1){
+                if (MainUtil.isMeleeDamage($$0)){
+                    $$1 = $$1*ClientNetworking.getAppropriateConfig().survivorSettings.buffToMeleeAttacksWhenZapped;
+                    modified = true;
+
+                    if (LE.getMainHandItem() != null && LE.getMainHandItem().isEmpty()){
+                        float power = ClientNetworking.getAppropriateConfig().survivorSettings.bonusDamageWhenPunching;
+                        if (power > 0){
+                            $$1 += (CombatRules.getDamageAfterAbsorb(power, (float)this.getArmorValue(), (float)this.getAttributeValue(Attributes.ARMOR_TOUGHNESS)));
+                        }
+                        if (MainUtil.getMobBleed(LE)){
+                            MainUtil.makeBleed(LE,0,200,LE);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (modified){
+            cir.setReturnValue($$1);
         }
     }
 
@@ -3678,11 +3746,30 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    @Unique
+    boolean roundabout$cancelsprintJump(){
+        byte curse = this.roundabout$getLocacacaCurse();
+        if (curse > -1 && (curse == LocacacaCurseIndex.RIGHT_LEG || curse == LocacacaCurseIndex.LEFT_LEG))
+            return true;
+
+        int zapped = roundabout$getZappedToID();
+        if (zapped > -1){
+            Entity ent = level().getEntity(zapped);
+            if (ent != null){
+                float dist1 = distanceTo(ent);
+                float dist2 = (float) position().add(getDeltaMovement()).distanceTo(ent.position());
+                if (dist1 < dist2){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /**Use this code to eliminate the sprint jump during certain actions*/
     @Inject(method = "jumpFromGround", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$jumpFromGround(CallbackInfo ci) {
-        byte curse = this.roundabout$getLocacacaCurse();
-        if (this.roundabout$getStandPowers().cancelSprintJump() || (curse > -1 && (curse == LocacacaCurseIndex.RIGHT_LEG || curse == LocacacaCurseIndex.LEFT_LEG))) {
+        if (this.roundabout$getStandPowers().cancelSprintJump() || roundabout$cancelsprintJump()) {
             Vec3 $$0 = this.getDeltaMovement();
             this.setDeltaMovement($$0.x, (double) this.getJumpPower(), $$0.z);
             this.hasImpulse = true;
@@ -3712,14 +3799,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
             basis = roundabout$getStandPowers().inputSpeedModifiers(basis);
         }
-        byte curse = this.roundabout$getLocacacaCurse();
-        if (curse > -1) {
-            if (curse == LocacacaCurseIndex.RIGHT_LEG || curse == LocacacaCurseIndex.LEFT_LEG) {
-                basis = (basis * 0.82F);
-            } else if (curse == LocacacaCurseIndex.CHEST) {
-                basis = (basis * 0.85F);
-            }
-        }
+
+        basis = roundabout$mutualGetSpeed(basis);
         if (!((StandUser) this).roundabout$getStandDisc().isEmpty() &&
 
                 (((LivingEntity)(Object)this) instanceof AbstractVillager AV &&
@@ -3745,6 +3826,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Shadow public abstract void die(DamageSource $$0);
 
     @Shadow public abstract CombatTracker getCombatTracker();
+
+    @Shadow public abstract int getArmorValue();
+
+    @Shadow public abstract double getAttributeValue(Attribute $$0);
 
     @Unique private boolean roundabout$isPRunning = false;
 

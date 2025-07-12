@@ -5,10 +5,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IProjectileAccess;
-import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.client.KeyInputRegistry;
-import net.hydra.jojomod.client.KeyboardPilotInput;
-import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.*;
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
@@ -871,6 +870,12 @@ public class StandPowers {
             if (this.self instanceof Player) {
                 tickOverlayTicks();
             }
+
+            if (displayStand != null){
+                if (displayStand.getFadeOut() < displayStand.MaxFade) {
+                    displayStand.incFadeOut((byte) 1);
+                }
+            }
         }
 
         if (this.self instanceof Player PE && PE.isSpectator()) {
@@ -972,6 +977,30 @@ public class StandPowers {
 
     }
 
+    public boolean returnFakeStandForHud(){
+        return false;
+    }
+
+    public StandEntity getStandForHUD(){
+        if (returnFakeStandForHud())
+            return getStandForHUDIfFake();
+        return getStandUserSelf().roundabout$getStand();
+    }
+
+    public StandEntity getStandForHUDIfFake(){
+        if (displayStand == null){
+            displayStand = ModEntities.SURVIVOR.create(this.getSelf().level());
+        }
+        if (this.self instanceof Player PL && ((IPlayerEntity)PL).roundabout$getStandSkin() != displayStand.getSkin()){
+            displayStand = ModEntities.SURVIVOR.create(this.getSelf().level());
+            displayStand.setSkin(((IPlayerEntity)PL).roundabout$getStandSkin());
+        }
+        return displayStand;
+    }
+    public boolean getCreative(){
+        return this.self instanceof Player PE && PE.isCreative();
+    }
+
     public void tickDash(){
         if (this.getSelf() instanceof Player) {
 
@@ -1010,6 +1039,16 @@ public class StandPowers {
 
     public boolean canUseStillStandingRecharge(byte bt){
         return true;
+    }
+
+    public boolean highlightsEntity(Entity ent,Player player){
+        return false;
+    }
+    public int highlightsEntityColor(Entity ent, Player player){
+        return 0;
+    }
+
+    public void synchToCamera(){
     }
 
     public void tickCooldowns(){
@@ -2018,6 +2057,10 @@ public class StandPowers {
         return (skinList != null && !skinList.isEmpty() && skinList.size() > 1);
     }
 
+    public boolean hasMoreThanOnePos(){
+        List<Byte> posList = getPosList();
+        return (posList != null && !posList.isEmpty() && posList.size() > 1);
+    }
     public boolean hasGoldenDisc(){
         ItemStack stack = ((StandUser)this.getSelf()).roundabout$getStandDisc();
         return !stack.isEmpty() && stack.getItem() instanceof MaxStandDiscItem;
@@ -2522,6 +2565,11 @@ public class StandPowers {
         /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
         return true;
     }
+    public boolean tryTripleIntPower(int move, boolean forced, int chargeTime, int move2, int move3){
+        tryPower(move, forced);
+        /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
+        return true;
+    }
 
     public void tryPowerPacket(byte packet){
         if (this.self.level().isClientSide()) {
@@ -2537,6 +2585,18 @@ public class StandPowers {
                     ClientToServerPackets.StandPowerPackets.MESSAGES.TryIntPower.value,
                     packet,
                     integer
+            );
+        }
+    }
+
+    public void tryTripleIntPacket(byte packet, int in1, int in2, int in3){
+        if (this.self.level().isClientSide()) {
+            ModMessageEvents.sendToServer(
+                    ClientToServerPackets.StandPowerPackets.MESSAGES.TryTripleIntPower.value,
+                    packet,
+                    in1,
+                    in2,
+                    in3
             );
         }
     }
@@ -2681,6 +2741,7 @@ public class StandPowers {
         return false;
     }
 
+    public StandEntity displayStand = null;
     public final void spreadRadialClientPacket(double range, boolean skipSelf, String packet, Object... vargs) {
         if (!this.self.level().isClientSide) {
             ServerLevel serverWorld = ((ServerLevel) this.self.level());

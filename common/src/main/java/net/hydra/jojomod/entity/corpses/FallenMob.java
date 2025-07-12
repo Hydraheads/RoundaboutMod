@@ -12,7 +12,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.Tactics;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.stand.PowersJustice;
+import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.item.BodyBagItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.config.ConfigManager;

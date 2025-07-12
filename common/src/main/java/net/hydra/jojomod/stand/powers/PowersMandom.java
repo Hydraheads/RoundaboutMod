@@ -149,17 +149,17 @@ public class PowersMandom extends NewDashPreset {
     }
     public boolean switchWatch(){
         swapWatchStyle();
-        if (!isClient()) {
+        if (!isClient() && this.self instanceof ServerPlayer PE) {
             switch (getWatchStyle())
             {
                 case WATCHLESS -> {
-                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.mandom.watch_off").withStyle(ChatFormatting.GOLD), true);
+                    PE.displayClientMessage(Component.translatable("text.roundabout.mandom.watch_off").withStyle(ChatFormatting.GOLD), true);
                 }
                 case MAIN -> {
-                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.mandom.watch_on").withStyle(ChatFormatting.GOLD), true);
+                    PE.displayClientMessage(Component.translatable("text.roundabout.mandom.watch_on").withStyle(ChatFormatting.GOLD), true);
                 }
                 case ROLEX -> {
-                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.mandom.watch_on_rolex").withStyle(ChatFormatting.GOLD), true);
+                    PE.displayClientMessage(Component.translatable("text.roundabout.mandom.watch_on_rolex").withStyle(ChatFormatting.GOLD), true);
                 }
             }
         }

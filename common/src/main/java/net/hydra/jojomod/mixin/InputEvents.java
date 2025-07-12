@@ -1,6 +1,5 @@
 package net.hydra.jojomod.mixin;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IInputEvents;
 import net.hydra.jojomod.access.IMultiplayerGameMode;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -13,7 +12,6 @@ import net.hydra.jojomod.client.gui.NoCancelInputScreen;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryScreen;
 import net.hydra.jojomod.entity.D4CCloneEntity;
-import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
@@ -22,7 +20,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.*;
-import net.hydra.jojomod.event.powers.stand.PowersJustice;
+import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.item.FogBlockItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.stand.powers.PowersRatt;
@@ -49,7 +47,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
@@ -58,7 +55,6 @@ import net.minecraft.world.level.block.WebBlock;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -91,15 +87,16 @@ public abstract class InputEvents implements IInputEvents {
     }
 
     /*outline, highlight, glowing, justice, corpse*/
+    /**See entityanddatta for glowing colors*/
     @Inject(method = "shouldEntityAppearGlowing", at = @At("HEAD"), cancellable = true)
-    public void roundabout$entityGlowing(Entity $$0,CallbackInfoReturnable<Boolean> ci) {
+    public void roundabout$entityGlowing(Entity entity,CallbackInfoReturnable<Boolean> ci) {
         if (player != null) {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
 
             if (standComp.roundabout$getStand() instanceof D4CEntity)
             {
-                if ($$0 instanceof D4CCloneEntity clone)
+                if (entity instanceof D4CCloneEntity clone)
                 {
                     if (player.isCrouching() && clone.player != null && clone.player.equals(player))
                     {
@@ -108,56 +105,37 @@ public abstract class InputEvents implements IInputEvents {
                     }
                 }
             }
-            if ($$0 instanceof RattEntity) {
-                if (((StandEntity) $$0).getUser() != null) {
+            if (entity instanceof RattEntity) {
+                if (((StandEntity) entity).getUser() != null) {
                     PowersRatt PR = (PowersRatt) powers;
                     if (PR.isAuto()) {
                         ci.setReturnValue(true);
                     }
                 }
             }
-            if (powers.getGoBeyondTarget() != null && powers.getGoBeyondTarget().is($$0)) {
+            if (powers.getGoBeyondTarget() != null && powers.getGoBeyondTarget().is(entity)) {
                 ci.setReturnValue(true);
                 return;
-            } else if (powers.isPiloting()) {
-                LivingEntity ent = powers.getPilotingStand();
-                if (ent != null && powers instanceof PowersJustice){
-                    if (Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
-                        Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
-                        ent.setYRot(camera.getYRot());
-                        ent.setXRot(camera.getXRot());
-                        ent.setYHeadRot(ent.getYRot());
-                    }
-                    if ($$0 instanceof FallenMob fm){
-                        if (fm.getSelected() && fm.getController() == player.getId()){
-                            ci.setReturnValue(true);
-                            return;
-                        }
-                    }
-                    Entity TE = MainUtil.getTargetEntity(ent,100,10);
-                    if (TE != null && TE.is($$0) && !(TE instanceof StandEntity && !TE.isAttackable())) {
-                        Vec3 vec3d = ent.getEyePosition(0);
-                        Vec3 vec3d2 = ent.getViewVector(0);
-                        Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
-                        BlockHitResult blockHit = ent.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ent));
-                        if ((blockHit.distanceTo(ent)-1) < ent.distanceToSqr(TE)){
-                        } else {
-                            ci.setReturnValue(true);
-                        }
-                        return;
-                    }
-                }
+            }
+
+            powers.synchToCamera();
+            if (powers.highlightsEntity(entity, player)) {
+                ci.setReturnValue(true);
+                return;
+            }
+
+            if (MainUtil.isZapper(player, entity)) {
+                ci.setReturnValue(true);
+                return;
             }
         }
 
-        if ($$0 instanceof LivingEntity LE){
+        if (entity instanceof LivingEntity LE){
             int yes = ((StandUser)LE).roundabout$getDetectTicks();
             if (yes > -1){
                 ci.setReturnValue(true);
             }
         }
-
-
     }
     @Shadow
     @Final

@@ -24,7 +24,7 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
-import net.hydra.jojomod.event.powers.stand.PowersJustice;
+import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
@@ -42,6 +42,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -98,6 +99,26 @@ public class MainUtil {
         isClient = true;
     }
 
+
+    public static boolean isMeleeDamage(DamageSource di){
+        if (di.is(DamageTypes.PLAYER_ATTACK) || di.is(DamageTypes.MOB_ATTACK))
+            return true;
+        return false;
+    }
+
+    public static boolean isZapper(LivingEntity ent1, Entity ent2){
+        if (ent1 != null && ent2 != null) {
+            StandUser standComp = ((StandUser) ent1);
+            int zappedId = standComp.roundabout$getZappedToID();
+            if (zappedId > -1){
+                Entity ent = ent2.level().getEntity(zappedId);
+                if (ent != null && ent.is(ent2)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     public static int maxGasTicks(){
         return 200;
@@ -1603,6 +1624,14 @@ public class MainUtil {
                     return true;
                 }
             }
+        }
+        return false;
+    }
+
+    public static boolean forceAggression(LivingEntity LE){
+        if (LE != null){
+            StandUser user = ((StandUser) LE);
+            return (user.roundabout$hasAStand() || user.roundabout$getZappedToID() > -1);
         }
         return false;
     }

@@ -71,6 +71,8 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMandom(null)));
     public static Item STAND_DISC_SURVIVOR = registerItem("survivor_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSurvivor(null)));
+    public static Item STAND_DISC_ACHTUNG = registerItem("achtung_baby_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAchtungBaby(null)));
     public static Item LUCK_UPGRADE = registerItem("luck_upgrade",
         new SmithingTemplateItem(SmithingTemplates.LUCK_UPGRADE_APPLIES_TO, SmithingTemplates.LUCK_UPGRADE_INGREDIENTS, SmithingTemplates.LUCK_UPGRADE, SmithingTemplates.LUCK_UPGRADE_BASE_SLOT_DESCRIPTION, SmithingTemplates.LUCK_UPGRADE_ADDITIONS_SLOT_DESCRIPTION, SmithingTemplates.createLuckUpgradeIconList(), SmithingTemplates.createLuckMatIconList())
     );
@@ -122,6 +124,7 @@ public class FabricItems {
     public static Item DIEGO_MASK = registerItem("diego_mask", new MaskItem(new Item.Properties().stacksTo(1), new DiegoVisage(null)));
     public static Item VALENTINE_MASK = registerItem("valentine_mask", new MaskItem(new Item.Properties().stacksTo(1), new ValentineVisage(null)));
     public static Item JOSUKE_PART_EIGHT_MASK = registerItem("josuke_part_eight_mask", new MaskItem(new Item.Properties().stacksTo(1), new JosukePartEightVisage(null)));
+    public static Item GUCCIO_MASK = registerItem("guccio_mask", new MaskItem(new Item.Properties().stacksTo(1), new GuccioVisage(null)));
     public static Item ENYA_MASK = registerItem("enya_mask", new MaskItem(new Item.Properties().stacksTo(1), new EnyaVisage(null)));
     public static Item ENYA_OVA_MASK = registerItem("enya_ova_mask", new MaskItem(new Item.Properties().stacksTo(1), new EnyaOVAVisage(null)));
     public static Item AYA_MASK = registerItem("aya_mask", new MaskItem(new Item.Properties().stacksTo(1), new AyaVisage(null)));
@@ -295,6 +298,7 @@ public class FabricItems {
                         entries.accept(VALENTINE_MASK);
                         entries.accept(JOSUKE_PART_EIGHT_MASK);
                         entries.accept(AYA_MASK);
+                        entries.accept(GUCCIO_MASK);
                         entries.accept(POCOLOCO_MASK);
                         entries.accept(RINGO_MASK);
 
@@ -331,6 +335,7 @@ public class FabricItems {
                         entries.accept(STAND_DISC_SOFT_AND_WET);
                         entries.accept(MAX_STAND_DISC_SOFT_AND_WET);
                         entries.accept(STAND_DISC_CINDERELLA);
+                        entries.accept(STAND_DISC_SURVIVOR);
                         entries.accept(STAND_DISC_HEY_YA);
                         entries.accept(STAND_DISC_MANDOM);
 
@@ -345,7 +350,7 @@ public class FabricItems {
                         //entries.accept(STAND_DISC_D4C);
                         //entries.accept(MAX_STAND_DISC_D4C);
                         //entries.accept(INTERDIMENSIONAL_KEY);
-                        entries.accept(STAND_DISC_SURVIVOR);
+                        entries.accept(STAND_DISC_ACHTUNG);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_RATT);
@@ -442,6 +447,7 @@ public class FabricItems {
         ModItems.STAND_DISC_HEY_YA = STAND_DISC_HEY_YA;
         ModItems.STAND_DISC_MANDOM = STAND_DISC_MANDOM;
         ModItems.STAND_DISC_SURVIVOR = STAND_DISC_SURVIVOR;
+        ModItems.STAND_DISC_ACHTUNG = STAND_DISC_ACHTUNG;
         ModItems.LUCK_UPGRADE = LUCK_UPGRADE;
         ModItems.EXECUTION_UPGRADE = EXECUTION_UPGRADE;
         ModItems.LUCK_SWORD = LUCK_SWORD;
@@ -494,6 +500,7 @@ public class FabricItems {
         ModItems.RINGO_MASK = RINGO_MASK;
         ModItems.VALENTINE_MASK = VALENTINE_MASK;
         ModItems.JOSUKE_PART_EIGHT_MASK = JOSUKE_PART_EIGHT_MASK;
+        ModItems.GUCCIO_MASK = GUCCIO_MASK;
         ModItems.ENYA_MASK = ENYA_MASK;
         ModItems.ENYA_OVA_MASK = ENYA_OVA_MASK;
         ModItems.AYA_MASK = AYA_MASK;

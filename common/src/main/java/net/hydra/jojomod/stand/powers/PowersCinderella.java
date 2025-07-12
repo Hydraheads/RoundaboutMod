@@ -152,6 +152,8 @@ public class PowersCinderella extends NewDashPreset {
             return Component.translatable("skins.roundabout.cinderella.manga");
         } if (skinId == CinderellaEntity.ZOMBIE_SKIN) {
             return Component.translatable("skins.roundabout.cinderella.zombie");
+        } if (skinId == CinderellaEntity.JACK_SKIN) {
+            return Component.translatable("skins.roundabout.cinderella.jack_in_the_box");
         }
         return Component.translatable("skins.roundabout.cinderella.base");
     }
@@ -463,6 +465,7 @@ public class PowersCinderella extends NewDashPreset {
         $$1.add(CinderellaEntity.PART_4_SKIN);
         $$1.add(CinderellaEntity.MANGA_SKIN);
         $$1.add(CinderellaEntity.ZOMBIE_SKIN);
+        $$1.add(CinderellaEntity.JACK_SKIN);
         return $$1;
     }
 

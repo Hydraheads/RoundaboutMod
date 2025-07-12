@@ -17,7 +17,8 @@ public class ClientToServerPackets {
             TryPosPower("try_pos_power"),
             TryBlockPosPower("try_block_pos_power"),
             TryHitResultPosPower("try_hit_result_pos_power"),
-            TryIntPower("try_int_power");
+            TryIntPower("try_int_power"),
+            TryTripleIntPower("try_triple_int_power");
 
             public final String value;
 
@@ -92,6 +93,20 @@ public class ClientToServerPackets {
                         byte b = (byte)vargs[0];
                         int c = (int)vargs[1];
                         powers.roundabout$tryIntPower(b,true,c);
+                });
+            }
+            /**Try Triple Int Power Packet*/
+            if (message.equals(MESSAGES.TryTripleIntPower.value))
+            {
+                MinecraftServer server = sender.server;
+
+                server.execute(()->{
+                    StandUser powers = basicChecks(sender);
+                    byte b = (byte)vargs[0];
+                    int c = (int)vargs[1];
+                    int d = (int)vargs[2];
+                    int e = (int)vargs[3];
+                    powers.roundabout$tryIntPower(b,true,c,d,e);
                 });
             }
         }

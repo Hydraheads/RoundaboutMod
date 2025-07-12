@@ -92,7 +92,7 @@ public class PowerInventoryScreen
 
         if (pl != null) {
             StandUser standUser = ((StandUser) pl);
-            if (!standUser.roundabout$getStandDisc().isEmpty() && !standUser.roundabout$getStandDisc().getItem().equals(ModItems.STAND_DISC)) {
+            if (standUser.roundabout$hasAStand()) {
 
                 StandPowers sp = standUser.roundabout$getStandPowers();
                 if (sp.rendersPlayer()) {
@@ -101,14 +101,14 @@ public class PowerInventoryScreen
                             context, i + 51, j + 75, 30, (float) (i + 51) - this.xMouse, (float) (j + 75 - 50) - this.yMouse, this.minecraft.player
                     );
                 } else {
-                    stand = standUser.roundabout$getStand();
+                    stand = standUser.roundabout$getStandPowers().getStandForHUD();
                     if (stand != null) {
                         renderStandEntityInInventoryFollowsMouse(context, i + 51, j + 75 - sp.getDisplayPowerInventoryYOffset(), sp.getDisplayPowerInventoryScale(),
                                 (float) (i + 51) - this.xMouse, (float) (j + 75 - 50) - this.yMouse, stand, pl);
 
                     }
                 }
-                context.drawString(this.font, sp.getSkinName(((IPlayerEntity) pl).roundabout$getStandSkin()), this.titleLabelX + 11 + leftPos, this.titleLabelY + 18 + topPos, 16777215, false);
+                context.drawString(this.font, sp.getSkinName(((StandUser) pl).roundabout$getStandSkin()), this.titleLabelX + 11 + leftPos, this.titleLabelY + 18 + topPos, 16777215, false);
                 context.drawString(this.font, sp.getPosName(standUser.roundabout$getIdlePos()), this.titleLabelX + 11 + leftPos, this.titleLabelY + 36 + topPos, 16777215, false);
                 int lefXPos = leftPos + 77;
                 int rightXPos = leftPos + 164;
@@ -129,6 +129,7 @@ public class PowerInventoryScreen
                     }
                 }
 
+                if (sp.hasMoreThanOnePos()) {
                 if (isSurelyHovering(rightXPos, bottomYPos, 7, 13, mouseX, mouseY)) {
                     context.blit(POWER_INVENTORY_LOCATION, rightXPos, bottomYPos, 177, 31, 7, 11);
                 } else {
@@ -139,7 +140,7 @@ public class PowerInventoryScreen
                     context.blit(POWER_INVENTORY_LOCATION, lefXPos, bottomYPos, 185, 31, 7, 11);
                 } else {
                     context.blit(POWER_INVENTORY_LOCATION, lefXPos, bottomYPos, 185, 19, 7, 11);
-                }
+                }}
 
                 int leftGearPos = leftPos + 5;
                 int topGearPos = topPos + 60;
@@ -733,16 +734,28 @@ public class PowerInventoryScreen
         }
         return false;
     }
+
+
+    @Override
+    public void onClose() {
+        Player pl = Minecraft.getInstance().player;
+        if (pl != null) {
+            StandUser user = ((StandUser) pl);
+            StandPowers powers = user.roundabout$getStandPowers();
+            powers.displayStand = null;
+        }
+        super.onClose();
+    }
     @Override
     public boolean mouseClicked(double $$0, double $$1, int $$2) {
         Player pl = Minecraft.getInstance().player;
         if (pl != null) {
-            if (pl.isSpectator()){
+            if (pl.isSpectator()) {
                 onClose();
                 return true;
             }
 
-            if (updateClicked($$0,$$1,$$2)){
+            if (updateClicked($$0, $$1, $$2)) {
                 return true;
             }
             IPlayerEntity ipe = ((IPlayerEntity) pl);
@@ -779,8 +792,8 @@ public class PowerInventoryScreen
                 return true;
             }
 
-            int leftGearPos = leftPos+6;
-            int topGearPos = topPos+60;
+            int leftGearPos = leftPos + 6;
+            int topGearPos = topPos + 60;
             if (isSurelyHovering(leftGearPos, topGearPos, 18, 18, $$0, $$1)) {
                 gearChange();
                 SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
@@ -794,54 +807,54 @@ public class PowerInventoryScreen
             int bottomYPos = topPos + 40;
             StandUser standUser = ((StandUser) pl);
             StandPowers sp = standUser.roundabout$getStandPowers();
-            StandUserClientPlayer scp = ((StandUserClientPlayer)pl);
+            StandUserClientPlayer scp = ((StandUserClientPlayer) pl);
             int menuTicks = scp.roundabout$getMenuTicks();
-            stand = standUser.roundabout$getStand();
-                if (sp.hasMoreThanOneSkin()) {
-                    if (isSurelyHovering(rightXPos, topYPos, 7, 13, $$0, $$1)) {
-                        if (menuTicks <= -1) {
-                            scp.roundabout$setMenuTicks(5);
-                            scp.roundabout$setMenuTicks(5);
-                            if (standUser.roundabout$isSealed()){
-                                ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT_SEALED);
-                            } else {
-                                ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT);
-                            }
+            stand = standUser.roundabout$getStandPowers().getStandForHUD();
+            if (sp.hasMoreThanOneSkin()) {
+                if (isSurelyHovering(rightXPos, topYPos, 7, 13, $$0, $$1)) {
+                    if (menuTicks <= -1) {
+                        scp.roundabout$setMenuTicks(5);
+                        scp.roundabout$setMenuTicks(5);
+                        if (standUser.roundabout$isSealed()) {
+                            ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT_SEALED);
+                        } else {
+                            ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT);
                         }
-                        return true;
                     }
-
-                    if (isSurelyHovering(lefXPos, topYPos, 7, 13, $$0, $$1)) {
-                        if (menuTicks <= -1) {
-                            scp.roundabout$setMenuTicks(5);
-                            if (standUser.roundabout$isSealed()){
-                                ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SKIN_LEFT_SEALED);
-                            } else {
-                                ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SKIN_LEFT);
-                            }
-                        }
-                        return true;
-                    }
+                    return true;
                 }
 
-
-
-
-            if (isSurelyHovering(rightXPos, bottomYPos, 7, 13, $$0, $$1)) {
-                        if (menuTicks <= -1) {
-                            scp.roundabout$setMenuTicks(5);
-                            ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_IDLE_RIGHT);
+                if (isSurelyHovering(lefXPos, topYPos, 7, 13, $$0, $$1)) {
+                    if (menuTicks <= -1) {
+                        scp.roundabout$setMenuTicks(5);
+                        if (standUser.roundabout$isSealed()) {
+                            ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SKIN_LEFT_SEALED);
+                        } else {
+                            ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SKIN_LEFT);
                         }
-                        return true;
                     }
+                    return true;
+                }
+            }
 
-                    if (isSurelyHovering(lefXPos, bottomYPos, 7, 13, $$0, $$1)) {
-                        if (menuTicks <= -1) {
-                            scp.roundabout$setMenuTicks(5);
-                            ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_IDLE_LEFT);
-                        }
-                        return true;
+
+            if (sp.hasMoreThanOnePos()) {
+                if (isSurelyHovering(rightXPos, bottomYPos, 7, 13, $$0, $$1)) {
+                    if (menuTicks <= -1) {
+                        scp.roundabout$setMenuTicks(5);
+                        ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_IDLE_RIGHT);
                     }
+                    return true;
+                }
+
+                if (isSurelyHovering(lefXPos, bottomYPos, 7, 13, $$0, $$1)) {
+                    if (menuTicks <= -1) {
+                        scp.roundabout$setMenuTicks(5);
+                        ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_IDLE_LEFT);
+                    }
+                    return true;
+                }
+            }
         }
         /**
         if (this.recipeBookComponent.mouseClicked($$0, $$1, $$2)) {

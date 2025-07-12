@@ -1,4 +1,4 @@
-package net.hydra.jojomod.event.powers.stand;
+package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.ICreeper;
@@ -26,7 +26,6 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
-import net.hydra.jojomod.event.powers.stand.presets.DashPreset;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -75,7 +74,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class PowersJustice extends DashPreset {
+public class PowersJustice extends NewDashPreset {
     public PowersJustice(LivingEntity self) {
         super(self);
     }
@@ -88,6 +87,16 @@ public class PowersJustice extends DashPreset {
     public boolean canSummonStand(){
         if (this.getSelf() instanceof Creeper || this.getSelf() instanceof Raider){
             return false;
+        }
+        return true;
+    }
+    public boolean canSummonStandAsEntity(){
+        if (this.getSelf() instanceof  Player PE){
+            IPlayerEntity ipe = ((IPlayerEntity)PE);
+            byte morph = ipe.roundabout$getShapeShift();
+            if (!ShapeShifts.getShiftFromByte(morph).equals(ShapeShifts.PLAYER)){
+                return false;
+            }
         }
         return true;
     }
@@ -581,6 +590,10 @@ public class PowersJustice extends DashPreset {
     }
     public void tickPower() {
         if  (!this.self.level().isClientSide()){
+            if (!canSummonStandAsEntity() && getStandEntity(this.self) instanceof JusticeEntity JE){
+                JE.forceDespawnSet = true;
+            }
+
             if (((StandUser)this.self).roundabout$isSealed()){
                 if (this.isCastingFog()){
                     this.castFog();
@@ -856,40 +869,138 @@ public class PowersJustice extends DashPreset {
         return ClientNetworking.getAppropriateConfig().justiceSettings.fogAndPilotRange;
     }
 
-    public boolean hold1 = false;
-    @Override
-    public void buttonInput1(boolean keyIsDown, Options options) {
-            if (this.getSelf().level().isClientSide) {
-                if (!isHoldingSneak() || isPiloting()) {
-                    if (keyIsDown) {
-                        if (!hold1) {
-                            hold1 = true;
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
-                        }
-                    } else {
-                        hold1 = false;
-                    }
+    public void activateFogClient(){
+        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+        tryPowerPacket(PowerIndex.POWER_1);
+    }
+    public void shapeshiftClient(){
+        if (isPiloting()) {
+            activateFogClient();
+            return;
+        }
+        if (!this.onCooldown(PowerIndex.SKILL_3)){
+            if (canExecuteMoveWithLevel(getVillagerMorphLevel())
+                    || canExecuteMoveWithLevel(getZombieMorphLevel()) ||
+                    canExecuteMoveWithLevel(getSkeletonMorphLevel())) {
+                ClientUtil.setJusticeScreen();
+            }
+        }
+    }
+
+
+    public void fogChainClient(){
+        if (!this.onCooldown(PowerIndex.SKILL_2)) {
+            IPermaCasting icast = ((IPermaCasting) this.getSelf().level());
+            if (icast.roundabout$isPermaCastingEntity(this.getSelf())) {
+                int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.fogChain;
+                this.setCooldown(PowerIndex.SKILL_2, cdr);
+                StandEntity piloting = getPilotingStand();
+                if (isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved()) {
+                    Vec3 vec3d = piloting.getEyePosition(0);
+                    Vec3 vec3d2 = piloting.getViewVector(0);
+                    Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
+                    BlockHitResult blockHit = this.self.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, piloting));
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+                    tryBlockPosPowerPacket(PowerIndex.POWER_2, blockHit.getBlockPos());
                 } else {
-                    if (keyIsDown) {
-                        if (!hold1) {
-                            if (!this.onCooldown(PowerIndex.SKILL_3)){
-                                hold1 = true;
-
-                                if (canExecuteMoveWithLevel(getVillagerMorphLevel())
-                                        || canExecuteMoveWithLevel(getZombieMorphLevel()) ||
-                                        canExecuteMoveWithLevel(getSkeletonMorphLevel())) {
-                                    ClientUtil.setJusticeScreen();
-                                }
-                            }
-                        }
-                    } else {
-
-                        hold1 = false;
-                    }
+                    Vec3 vec3d = this.self.getEyePosition(0);
+                    Vec3 vec3d2 = this.self.getViewVector(0);
+                    Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
+                    BlockHitResult blockHit = this.self.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+                    tryBlockPosPowerPacket(PowerIndex.POWER_2, blockHit.getBlockPos());
                 }
             }
-        super.buttonInput1(keyIsDown, options);
+        }
+    }
+
+    public void setFogBlockScreen(){
+        if (isPiloting()) {
+            fogChainClient();
+            return;
+        }
+        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+            ClientUtil.setJusticeBlockScreen();
+        }
+    }
+
+    public void dashOrTacticsScreenClient(){
+        if (isPiloting()) {
+            ClientUtil.setJusticeTacticsScreen();
+            return;
+        }
+
+        dash();
+    }
+
+
+    public void fogClonesOrTacticsScreenClient(){
+        if (isPiloting()) {
+            ClientUtil.setJusticeTacticsScreen();
+            return;
+        }
+
+        if (!this.onCooldown(PowerIndex.SKILL_3) && this.getSelf().onGround()) {
+
+            if (canExecuteMoveWithLevel(getFogCloneLevel())) {
+                if (this.getSelf() instanceof Player PE && ((IPlayerEntity)PE).roundabout$getShapeShift() > ShapeShifts.PLAYER.id){
+                    ModPacketHandler.PACKET_ACCESS.byteToServerPacket((byte) 0, PacketDataIndex.BYTE_CHANGE_MORPH);
+                }
+                this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.justiceFogClone);
+                tryPowerPacket(PowerIndex.POWER_3);
+            }
+        }
+    }
+
+
+
+    public void togglePilotClient(){
+        if (isPiloting()){
+            if (this.self instanceof Player PE) {
+                IPlayerEntity ipe = ((IPlayerEntity) PE);
+                ipe.roundabout$setIsControlling(0);
+            }
+            ModPacketHandler.PACKET_ACCESS.intToServerPacket(0,
+                    PacketDataIndex.INT_UPDATE_PILOT);
+        } else {
+            StandEntity entity = this.getStandEntity(this.self);
+            int L = 0;
+            if (entity != null){L=entity.getId();}
+
+            ModPacketHandler.PACKET_ACCESS.intToServerPacket(L,
+                    PacketDataIndex.INT_UPDATE_PILOT);
+        }
+    }
+
+
+
+    @Override
+    public void powerActivate(PowerContext context) {
+        switch (context)
+        {
+
+            case SKILL_1_NORMAL -> {
+                activateFogClient();
+            }
+            case SKILL_1_CROUCH -> {
+                shapeshiftClient();
+            }
+            case SKILL_2_NORMAL -> {
+                fogChainClient();
+            }
+            case SKILL_2_CROUCH -> {
+                setFogBlockScreen();
+            }
+            case SKILL_3_NORMAL -> {
+                dashOrTacticsScreenClient();
+            }
+            case SKILL_3_CROUCH -> {
+                fogClonesOrTacticsScreenClient();
+            }
+            case SKILL_4_NORMAL, SKILL_4_CROUCH -> {
+                togglePilotClient();
+            }
+        }
     }
 
     @Override
@@ -1075,124 +1186,6 @@ public class PowersJustice extends DashPreset {
         return false;
     }
     public BlockPos bpos;
-    public boolean hold3 = false;
-    @Override
-    public void buttonInput3(boolean keyIsDown, Options options) {
-        if (!isPiloting()) {
-            if (keyIsDown) {
-                if (!inputDash) {
-                    if (isHoldingSneak()) {
-                        if (!this.onCooldown(PowerIndex.SKILL_3) && this.getSelf().onGround()) {
-
-                            if (canExecuteMoveWithLevel(getFogCloneLevel())) {
-                                if (this.getSelf() instanceof Player PE && ((IPlayerEntity)PE).roundabout$getShapeShift() > ShapeShifts.PLAYER.id){
-                                    ModPacketHandler.PACKET_ACCESS.byteToServerPacket((byte) 0, PacketDataIndex.BYTE_CHANGE_MORPH);
-                                }
-                                this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.justiceFogClone);
-                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
-                            }
-                        }
-                        inputDash = true;
-                    } else {
-                        super.buttonInput3(keyIsDown, options);
-                    }
-                }
-            } else {
-                inputDash = false;
-            }
-        } else {
-            if (keyIsDown) {
-                if (!hold3) {
-                    hold3 = true;
-                    ClientUtil.setJusticeTacticsScreen();
-                }
-            } else {
-                if (hold3) {
-                    hold3 = false;
-                }
-            }
-        }
-    }
-    public boolean hold2 = false;
-    @Override
-    public void buttonInput2(boolean keyIsDown, Options options) {
-        if (this.getSelf().level().isClientSide) {
-            if (!isHoldingSneak()) {
-                if (keyIsDown) {
-                    if (!hold2) {
-                        hold2 = true;
-                        if (!this.onCooldown(PowerIndex.SKILL_2)) {
-                            IPermaCasting icast = ((IPermaCasting) this.getSelf().level());
-                            if (icast.roundabout$isPermaCastingEntity(this.getSelf())) {
-                                int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.fogChain;
-                                this.setCooldown(PowerIndex.SKILL_2, cdr);
-                                StandEntity piloting = getPilotingStand();
-                                if (isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved()) {
-                                    Vec3 vec3d = piloting.getEyePosition(0);
-                                    Vec3 vec3d2 = piloting.getViewVector(0);
-                                    Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
-                                    BlockHitResult blockHit = this.self.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, piloting));
-                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
-                                    ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, blockHit.getBlockPos());
-                                } else {
-                                    Vec3 vec3d = this.self.getEyePosition(0);
-                                    Vec3 vec3d2 = this.self.getViewVector(0);
-                                    Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
-                                    BlockHitResult blockHit = this.self.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
-                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
-                                    ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, blockHit.getBlockPos());
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    hold2 = false;
-                }
-            } else {
-                if (keyIsDown) {
-                    if (!hold1) {
-                        if (!isPiloting()) {
-                            if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
-                                hold1 = true;
-                                ClientUtil.setJusticeBlockScreen();
-                            }
-                        }
-                    }
-                } else {
-                    hold1 = false;
-                }
-            }
-        }
-    }
-
-    public boolean hold4 = false;
-    @Override
-    public void buttonInput4(boolean keyIsDown, Options options) {
-        if (this.getSelf().level().isClientSide) {
-            if (keyIsDown) {
-                if (!hold4) {
-                    hold4 = true;
-                    if (isPiloting()){
-                        if (this.self instanceof Player PE) {
-                            IPlayerEntity ipe = ((IPlayerEntity) PE);
-                            ipe.roundabout$setIsControlling(0);
-                        }
-                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(0,
-                                PacketDataIndex.INT_UPDATE_PILOT);
-                    } else {
-                        StandEntity entity = this.getStandEntity(this.self);
-                        int L = 0;
-                        if (entity != null){L=entity.getId();}
-
-                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(L,
-                                PacketDataIndex.INT_UPDATE_PILOT);
-                    }
-                }
-            } else {
-                hold4 = false;
-            }
-        }
-    }
 
     @Override
     public void poseStand(byte r){
@@ -1512,5 +1505,72 @@ public class PowersJustice extends DashPreset {
             return true;
         }
         return false;
+    }
+
+    public void synchToCamera(){
+        if (isPiloting()) {
+            LivingEntity ent = getPilotingStand();
+            if (ent != null) {
+                ClientUtil.synchToCamera(ent);
+            }
+        }
+    }
+    public boolean passedOver = true;
+    @Override
+    public boolean highlightsEntity(Entity entity,Player player){
+        passedOver = true;
+        if (isPiloting()){
+            LivingEntity ent = getPilotingStand();
+            if (ent != null){
+                if (entity instanceof FallenMob fm){
+                    if (fm.getSelected() && fm.getController() == player.getId()){
+                        return true;
+                    }
+                }
+                Entity TE = MainUtil.getTargetEntity(ent,100,10);
+                if (TE != null && TE.is(entity) && !(TE instanceof StandEntity && !TE.isAttackable())) {
+                    Vec3 vec3d = ent.getEyePosition(0);
+                    Vec3 vec3d2 = ent.getViewVector(0);
+                    Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
+                    BlockHitResult blockHit = ent.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ent));
+                    if ((blockHit.distanceTo(ent)-1) < ent.distanceToSqr(TE)){
+                    } else {
+                        return true;
+                    }
+                }
+                passedOver = false;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int highlightsEntityColor(Entity ent, Player player){
+
+        if (passedOver) {
+            if (ent.is(player)) {
+                return 16701501;
+            } else {
+                if (ent instanceof FallenMob fm && fm.getController() == player.getId()) {
+                    if (fm.getSelected()) {
+                        return 1503183;
+                    } else {
+                        return 1503059;
+                    }
+
+                    //Blue -> 3972095
+                    //Green -> 8385147
+                }
+                return 14233126;
+            }
+        }
+
+
+        if (ent instanceof FallenMob fm){
+            if (fm.getSelected() && fm.getController() == player.getId()){
+                return 3972095;
+            }
+        }
+        return 0;
     }
 }
