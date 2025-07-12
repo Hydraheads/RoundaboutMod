@@ -350,6 +350,11 @@ public class PowersRatt extends NewDashPreset {
     }
 
     @Override
+    public boolean rendersPlayer() {
+        return !isPlaced();
+    }
+
+    @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 RattEntity.ANIME_SKIN,
