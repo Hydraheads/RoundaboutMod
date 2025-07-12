@@ -90,6 +90,16 @@ public class PowersJustice extends NewDashPreset {
         }
         return true;
     }
+    public boolean canSummonStandAsEntity(){
+        if (this.getSelf() instanceof  Player PE){
+            IPlayerEntity ipe = ((IPlayerEntity)PE);
+            byte morph = ipe.roundabout$getShapeShift();
+            if (!ShapeShifts.getShiftFromByte(morph).equals(ShapeShifts.PLAYER)){
+                return false;
+            }
+        }
+        return true;
+    }
     @Override
     public Component getPosName(byte posID){
         if (posID == 1){
@@ -580,6 +590,10 @@ public class PowersJustice extends NewDashPreset {
     }
     public void tickPower() {
         if  (!this.self.level().isClientSide()){
+            if (!canSummonStandAsEntity() && getStandEntity(this.self) instanceof JusticeEntity JE){
+                JE.forceDespawnSet = true;
+            }
+
             if (((StandUser)this.self).roundabout$isSealed()){
                 if (this.isCastingFog()){
                     this.castFog();
