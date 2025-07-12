@@ -1,16 +1,22 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.CancelDataDrivenDropLimits;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
@@ -47,4 +53,22 @@ public class ZBlock {
             ((StandUser)$$1).roundabout$getStandPowers().onDestroyBlock($$0,$$1,$$2,$$3,$$4,$$5);
         }
     }
+    /**
+    Inject(method = "shouldRenderFace", at = @At(value = "HEAD"), cancellable = true)
+    private static void roundabout$shouldRenderFace(BlockState $$0, BlockGetter $$1, BlockPos $$2, Direction $$3, BlockPos $$4, CallbackInfoReturnable<Boolean> cir) {
+        if (MainUtil.hiddenBlocks.contains($$4)) {
+            if (!MainUtil.hiddenBlocks.contains($$2)) {
+                cir.setReturnValue(true);
+                return;
+            } else {
+                cir.setReturnValue(false);
+                return;
+            }
+        }
+        if (MainUtil.hiddenBlocks.contains($$2)) {
+            cir.setReturnValue(false);
+            return;
+        }
+    }
+    **/
 }

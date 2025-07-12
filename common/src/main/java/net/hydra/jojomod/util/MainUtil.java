@@ -82,10 +82,7 @@ import net.minecraft.world.phys.*;
 import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class MainUtil {
@@ -99,6 +96,13 @@ public class MainUtil {
         isClient = true;
     }
 
+    /**
+    public static Set<BlockPos> hiddenBlocks = new HashSet<>();
+
+    public static Set<BlockPos> getHiddenBlocks(){
+        return hiddenBlocks;
+    }
+     **/
 
     public static boolean isMeleeDamage(DamageSource di){
         if (di.is(DamageTypes.PLAYER_ATTACK) || di.is(DamageTypes.MOB_ATTACK))

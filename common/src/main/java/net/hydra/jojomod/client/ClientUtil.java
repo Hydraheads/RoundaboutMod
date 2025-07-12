@@ -3,18 +3,24 @@ package net.hydra.jojomod.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.ICamera;
-import net.hydra.jojomod.access.IPermaCasting;
-import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.gui.*;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ServerToClientPackets;
+import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
 import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.chunk.ChunkRenderDispatcher;
+import net.minecraft.core.SectionPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.Connection;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.zetalasis.client.shader.D4CShaderFX;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.D4CCloneEntity;
@@ -40,9 +46,6 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceKey;
@@ -65,6 +68,9 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Unique;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class ClientUtil {
@@ -89,6 +95,14 @@ public class ClientUtil {
     }
 
     public static void tickClientUtilStuff(){
+
+        /**
+        Minecraft mc = Minecraft.getInstance();
+        if (mc!= null && mc.player != null) {
+            markBlockAsInvisible(mc.player.getOnPos());
+            markBlockAsInvisible(mc.player.getOnPos().below());
+        }
+         **/
         if (ClientUtil.popSounds != null){
             ClientUtil.popSounds.popSounds();
             ClientUtil.popSounds = null;
@@ -522,6 +536,65 @@ public class ClientUtil {
                 new FogInventoryScreen(
                         mc.player, mc.player.connection.enabledFeatures(), mc.options.operatorItemsTab().get()
                 ));
+    }
+
+    /**
+    public static void markBlockAsInvisible(BlockPos pos){
+        if (!MainUtil.hiddenBlocks.contains(pos)) {
+            MainUtil.hiddenBlocks.add(pos);
+
+            Minecraft mc = Minecraft.getInstance();
+            if (mc != null) {
+                LocalPlayer localPlayer = mc.player;
+                if (localPlayer != null && localPlayer.level() != null) {
+                    Roundabout.LOGGER.info("1");
+
+                    Level lvl = localPlayer.level();
+                    LevelRenderer renderer = mc.levelRenderer;
+
+                    // Force full render update
+                    renderer.setBlocksDirty(pos.getX(), pos.getY(), pos.getZ(), pos.getX(), pos.getY(), pos.getZ());
+                    lvl.getChunkSource().getLightEngine().checkBlock(pos);
+                    forceChunkRebuild(pos);
+                }
+            }
+        }
+    }
+
+    public static boolean toggleAGH = false;
+
+        public static void forceChunkRebuild(BlockPos pos) {
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.level == null) return;
+
+            LevelRenderer renderer = mc.levelRenderer;
+            ViewArea viewArea = ((ILevelRenderer)renderer).roundabout$getViewArea();
+            if (viewArea == null) return;
+
+
+            ChunkRenderDispatcher.RenderChunk renderChunk = ((IViewArea)viewArea).roundabout$getRenderChunkAt(pos);
+            if (renderChunk != null) {
+                renderChunk.setDirty(true); // this schedules the chunk to rebuild next frame
+                Roundabout.LOGGER.info("X");
+                toggleAGH = true;
+                var original = mc.level.getBlockState(pos);
+
+                // Replace with the same state to force model rebuild
+                mc.level.setBlock(pos, original, 3); // 3 = Block.UPDATE_ALL
+            }
+        }
+     **/
+
+    public static boolean getInvisibilityVision(){
+        if (Minecraft.getInstance() != null) {
+            LocalPlayer localPlayer = Minecraft.getInstance().player;
+            if (localPlayer == null)
+                return false;
+            if (((StandUser) localPlayer).roundabout$getStandPowers() instanceof PowersAchtungBaby PA && PA.angerSelectionMode()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static float getDelta() {

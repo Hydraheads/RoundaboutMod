@@ -27,6 +27,14 @@
         "${mod_id}.mixins.json",
         "${mod_id}.fabric.mixins.json"
     ],
+    "custom": {
+        "fabric-loom:injected_interfaces": [],
+        "fabric-loader:mixins": {
+            "sodium": [
+                "${mod_id}.sodium.mixins.json"
+            ]
+        }
+    },
     "depends": {
         "fabricloader": ">=0.14",
         "fabric": "*",

@@ -10,7 +10,8 @@
   ],
   "client": [
     "DimensionResourceKeyD4CFabric",
-    "FabricFireBlock"
+    "FabricFireBlock",
+    "FabricTerrainRenderContext"
   ],
   "server": [
   ],

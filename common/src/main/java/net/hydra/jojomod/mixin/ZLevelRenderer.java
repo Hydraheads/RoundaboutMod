@@ -4,6 +4,7 @@ import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.vertex.*;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.ILevelRenderer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.SavedSecond;
 import net.minecraft.client.player.LocalPlayer;
@@ -47,7 +48,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayDeque;
 
 @Mixin(LevelRenderer.class)
-public abstract class ZLevelRenderer {
+public abstract class ZLevelRenderer implements ILevelRenderer {
 
     @Shadow
     @Final
@@ -81,6 +82,13 @@ public abstract class ZLevelRenderer {
 
     @Shadow public abstract boolean isChunkCompiled(BlockPos $$0);
 
+    @Shadow @Nullable private ViewArea viewArea;
+
+    @Override
+    @Unique
+    public ViewArea roundabout$getViewArea(){
+        return viewArea;
+    }
     @Unique
     public boolean roundabout$recurse = false;
     @Inject(method = "renderEntity(Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V",

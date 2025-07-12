@@ -49,9 +49,6 @@ public class PowersAchtungBaby extends NewDashPreset {
         return new PowersAchtungBaby(entity);
     }
 
-    public boolean interceptAttack(){
-        return angerSelectionMode();
-    }
 
     public boolean angerSelectionMode(){
         return getStandUserSelf().roundabout$getUniqueStandModeToggle();
