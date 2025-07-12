@@ -16,6 +16,7 @@ public class CinderellaRenderer extends StandRenderer<CinderellaEntity> {
     private static final ResourceLocation PART_4_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/cinderella/anime.png");
     private static final ResourceLocation MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/cinderella/manga.png");
     private static final ResourceLocation ZOMBIE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/cinderella/zombie.png");
+    private static final ResourceLocation JACK_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/cinderella/jack.png");
 
     public CinderellaRenderer(EntityRendererProvider.Context context) {
         super(context, new CinderellaModel<>(context.bakeLayer(ModEntityRendererClient.CINDERELLA_LAYER)), 0f);
@@ -29,6 +30,8 @@ public class CinderellaRenderer extends StandRenderer<CinderellaEntity> {
                 return MANGA_SKIN;
             case (CinderellaEntity.ZOMBIE_SKIN):
                 return ZOMBIE_SKIN;
+            case (CinderellaEntity.JACK_SKIN):
+                return JACK_SKIN;
             default:
                 return PART_4_SKIN;
         }

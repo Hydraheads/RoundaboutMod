@@ -13,7 +13,8 @@ public class CinderellaEntity extends FollowingStandEntity {
     public static final byte
             PART_4_SKIN = 1,
             MANGA_SKIN = 2,
-            ZOMBIE_SKIN = 3;
+            ZOMBIE_SKIN = 3,
+            JACK_SKIN = 4;
 
     public final AnimationState deface = new AnimationState();
     public final AnimationState visages = new AnimationState();
