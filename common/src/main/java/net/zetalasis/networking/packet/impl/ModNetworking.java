@@ -47,6 +47,7 @@ public class ModNetworking {
         DECODERS.put(String.class, FriendlyByteBuf::readUtf);
         DECODERS.put(UUID.class, FriendlyByteBuf::readUUID);
         DECODERS.put(ResourceLocation.class, FriendlyByteBuf::readResourceLocation);
+        DECODERS.put(BlockPos.MutableBlockPos.class, FriendlyByteBuf::readBlockPos);
         DECODERS.put(BlockPos.class, FriendlyByteBuf::readBlockPos);
         DECODERS.put(Vector3f.class, FriendlyByteBuf::readVector3f);
         DECODERS.put(ItemStack.class, FriendlyByteBuf::readItem);
@@ -71,6 +72,7 @@ public class ModNetworking {
         ENCODERS.put(String.class, (buf, o) -> buf.writeUtf((String) o));
         ENCODERS.put(UUID.class, (buf, o) -> buf.writeUUID((UUID) o));
         ENCODERS.put(ResourceLocation.class, (buf, o) -> buf.writeResourceLocation((ResourceLocation) o));
+        ENCODERS.put(BlockPos.MutableBlockPos.class, (buf, o) -> buf.writeBlockPos((BlockPos) o));
         ENCODERS.put(BlockPos.class, (buf, o) -> buf.writeBlockPos((BlockPos) o));
         ENCODERS.put(ItemStack.class, (buf, o) -> buf.writeItem((ItemStack) o));
         ENCODERS.put(Vector3f.class, (buf, o) -> buf.writeVector3f((Vector3f)o));
