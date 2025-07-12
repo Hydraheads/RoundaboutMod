@@ -26,6 +26,8 @@ public class RattRenderer extends StandRenderer<RattEntity> {
     private static final ResourceLocation SAND_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/sand.png");
     private static final ResourceLocation AZTEC_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/aztec.png");
     private static final ResourceLocation REDD_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/redd.png");
+    private static final ResourceLocation SNOWY_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/snowy.png");
+
 
 
     public RattRenderer(EntityRendererProvider.Context context) {
@@ -41,6 +43,7 @@ public class RattRenderer extends StandRenderer<RattEntity> {
             case RattEntity.SAND_SKIN -> {return SAND_SKIN;}
             case RattEntity.AZTEC_SKIN -> {return AZTEC_SKIN;}
             case RattEntity.REDD_SKIN -> {return REDD_SKIN;}
+            case RattEntity.SNOWY_SKIN -> {return SNOWY_SKIN;}
             default -> {return ANIME_SKIN;}
         }
     }
@@ -50,12 +53,6 @@ public class RattRenderer extends StandRenderer<RattEntity> {
 
     @Override
     public void render(RattEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
-        float factor = 0.5F + (mobEntity.getSizePercent()/2);
-        if (mobEntity.isBaby()) {
-            matrixStack.scale(0.5f*factor, 0.5f*factor, 0.5f*factor);
-        } else {
-            matrixStack.scale(0.8f * factor, 0.8f * factor, 0.8f * factor);
-        }
         matrixStack.scale(0.75F,0.75F,0.75F);
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }

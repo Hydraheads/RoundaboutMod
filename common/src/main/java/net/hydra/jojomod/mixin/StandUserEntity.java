@@ -3595,7 +3595,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         /** RattShoulder fade ticks*/
         if (roundabout$getActive() && roundabout$getStandPowers() instanceof PowersRatt &&
-                ((PowersRatt)roundabout$getStandPowers()).isRattState(PowersRatt.SHOULDER)
+                !((PowersRatt)roundabout$getStandPowers()).isPlaced()
         ){
             roundabout$setRattShoulderVanishTicks(roundabout$getRattShoulderVanishTicks()+1);
         } else {
