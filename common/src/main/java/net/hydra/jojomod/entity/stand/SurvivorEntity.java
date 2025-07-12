@@ -32,6 +32,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PotionItem;
+import net.minecraft.world.item.SplashPotionItem;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
@@ -230,7 +231,8 @@ public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity
 
             if (!this.getActivated()) {
                 ItemStack plrItem = player.getItemInHand(intHand);
-                if ((!plrItem.isEmpty() && plrItem.getItem() instanceof PotionItem PI && PotionUtils.getPotion(plrItem) == Potions.WATER)) {
+                if ((!plrItem.isEmpty() && plrItem.getItem() instanceof PotionItem PI && PotionUtils.getPotion(plrItem) == Potions.WATER &&
+                        !(PI instanceof SplashPotionItem))) {
                     if (!player.getAbilities().instabuild) {
                         plrItem.shrink(1);
                         player.getInventory().add(new ItemStack(Items.GLASS_BOTTLE));
