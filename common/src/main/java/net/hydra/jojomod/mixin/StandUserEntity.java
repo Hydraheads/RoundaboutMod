@@ -50,6 +50,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.CombatRules;
 import net.minecraft.world.damagesource.CombatTracker;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -58,6 +59,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.npc.AbstractVillager;
@@ -3166,6 +3169,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 if (MainUtil.isMeleeDamage($$0)){
                     $$1 = $$1*ClientNetworking.getAppropriateConfig().survivorSettings.buffToMeleeAttacksWhenZapped;
                     modified = true;
+
+                    if (LE.getMainHandItem() != null && LE.getMainHandItem().isEmpty()){
+                        float power = ClientNetworking.getAppropriateConfig().survivorSettings.bonusDamageWhenPunching;
+                        if (power > 0){
+                            $$1 += (CombatRules.getDamageAfterAbsorb(power, (float)this.getArmorValue(), (float)this.getAttributeValue(Attributes.ARMOR_TOUGHNESS)));
+                        }
+                        if (MainUtil.getMobBleed(LE)){
+                            MainUtil.makeBleed(LE,0,200,LE);
+                        }
+                    }
                 }
             }
         }
@@ -3813,6 +3826,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Shadow public abstract void die(DamageSource $$0);
 
     @Shadow public abstract CombatTracker getCombatTracker();
+
+    @Shadow public abstract int getArmorValue();
+
+    @Shadow public abstract double getAttributeValue(Attribute $$0);
 
     @Unique private boolean roundabout$isPRunning = false;
 

@@ -601,6 +601,8 @@ public class Config implements Cloneable {
         public Float buffToMeleeAttacksWhenZapped;
         @IntOption(group = "inherit", value = 8, min = 0, max = 72000)
         public Integer survivorRange;
+        @FloatOption(group = "inherit", value = 3.0F, min = 0, max = 72000F)
+        public Float  bonusDamageWhenPunching;
         @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
         public Integer survivorCupidRange;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
