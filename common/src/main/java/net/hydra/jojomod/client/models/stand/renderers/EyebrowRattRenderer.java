@@ -26,13 +26,6 @@ public class EyebrowRattRenderer extends StandRenderer<RattEntity> {
 
     @Override
     public void render(RattEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
-        float factor = 0.5F + (mobEntity.getSizePercent()/2);
-        if (mobEntity.isBaby()) {
-            matrixStack.scale(0.5f*factor, 0.5f*factor, 0.5f*factor);
-        } else {
-            matrixStack.scale(0.8f * factor, 0.8f * factor, 0.8f * factor);
-        }
-        matrixStack.scale(0.75F,0.75F,0.75F);
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
 

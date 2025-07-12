@@ -556,6 +556,9 @@
   "sounds.roundabout.cinderella_fail":  "Uh oh",
   "sounds.roundabout.cinderella_visage_creation":  "Mechanical whirl",
 
+  "sounds.roundabout.ratt_summon":  "Stand Summoned",
+  "sounds.roundabout.ratt_scope":  "Scope Whirr",
+
   "sounds.roundabout.arcade_impale":  "[Arcade Impale]",
   "sounds.roundabout.arcade_long_ts":  "[Stop Time]",
   "sounds.roundabout.arcade_muda":  "[Arcade Muda]",
@@ -1005,6 +1008,7 @@
   "skins.roundabout.ratt.sand" : "Sand",
   "skins.roundabout.ratt.aztec" : "Aztec",
   "skins.roundabout.ratt.redd" : "Redd",
+  "skins.roundabout.ratt.snowy" : "Snowy",
 
 
 

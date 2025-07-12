@@ -683,6 +683,18 @@
       "roundabout:cinderella_visage_creation"
     ]
   },
+  "ratt_summon": {
+    "subtitle": "sounds.roundabout.ratt_summon",
+    "sounds": [
+      "roundabout:ratt_summon"
+    ]
+  },
+  "ratt_scope": {
+    "subtitle": "sounds.roundabout.ratt_scope",
+    "sounds": [
+      "roundabout:ratt_scope"
+    ]
+  },
   "ova_summon": {
     "subtitle": "sounds.roundabout.ova_summon",
     "sounds": [

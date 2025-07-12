@@ -302,12 +302,11 @@ public class ClientUtil {
                 if (((StandEntity) entity).getUser() != null) {
                     if ( ((PowersRatt) powers ).isAuto() ) {
                         return 12948493;
-                    } else if (((StandEntity) entity).getUser().isCrouching()) {
-                        return 12978493;
                     }
                 }
             }
             if (powers.getGoBeyondTarget() != null && powers.getGoBeyondTarget().is(entity)) {
+                if (powers instanceof PowersRatt) {return 12948493;}
                 return 10978493;
             } else if (powers.isPiloting()) {
                 LivingEntity ent = powers.getPilotingStand();
