@@ -27,6 +27,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -193,6 +195,17 @@ public class PowersSurvivor extends NewDashPreset {
     }
 
     public void throwBottleActually(ItemStack stack){
+
+        this.self.level().playSound(
+                null,
+                this.self.getX(),
+                this.self.getY(),
+                this.self.getZ(),
+                SoundEvents.SPLASH_POTION_THROW,
+                SoundSource.PLAYERS,
+                0.5F,
+                0.4F / (this.self.getRandom().nextFloat() * 0.4F + 0.8F)
+        );
         ThrownWaterBottleEntity $$4 = new ThrownWaterBottleEntity(this.self.level(), this.self);
         $$4.setItem(stack);
         $$4.shootFromRotation(this.self, this.self.getXRot(), this.self.getYRot(), -0.1F, 1.5F, 0.2F);
