@@ -50,7 +50,7 @@ public class PowersAchtungBaby extends NewDashPreset {
     }
 
 
-    public boolean angerSelectionMode(){
+    public boolean InvisibleVisionOn(){
         return getStandUserSelf().roundabout$getUniqueStandModeToggle();
     }
     public boolean canSummonStandAsEntity(){
@@ -59,20 +59,18 @@ public class PowersAchtungBaby extends NewDashPreset {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         // code for advanced icons
-         setSkillIcon(context, x, y, 1, StandIcons.BOTTLE, PowerIndex.SKILL_1);
+        if (InvisibleVisionOn())
+            setSkillIcon(context, x, y, 1, StandIcons.BABY_VISION_ON, PowerIndex.SKILL_1);
+        else
+            setSkillIcon(context, x, y, 1, StandIcons.BABY_VISION_OFF, PowerIndex.SKILL_1);
+
 
         if (isHoldingSneak())
-            setSkillIcon(context, x, y, 2, StandIcons.DESPAWN, PowerIndex.NO_CD);
+            setSkillIcon(context, x, y, 2, StandIcons.SELF_INVIS, PowerIndex.NO_CD);
         else
-            setSkillIcon(context, x, y, 2, StandIcons.SPAWN, PowerIndex.SKILL_2);
-        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+            setSkillIcon(context, x, y, 2, StandIcons.BURST_INVIS, PowerIndex.SKILL_2);
 
-        if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
-            if (angerSelectionMode())
-                setSkillIcon(context, x, y, 4, StandIcons.CUPID_ON, PowerIndex.SKILL_4);
-            else
-                setSkillIcon(context, x, y, 4, StandIcons.RAGE_SELECTION, PowerIndex.SKILL_4);
-        }
+        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
 
         super.renderIcons(context, x, y);
     }
@@ -151,7 +149,7 @@ public class PowersAchtungBaby extends NewDashPreset {
         switch (context)
         {
             case SKILL_1_NORMAL, SKILL_1_CROUCH-> {
-                throwBottleClient();
+                switchModeClient();
             }
             case SKILL_2_NORMAL-> {
                 summonSurvivorClient();
@@ -162,84 +160,17 @@ public class PowersAchtungBaby extends NewDashPreset {
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 dash();
             }
-            case SKILL_4_NORMAL, SKILL_4_CROUCH -> {
-                switchModeClient();
-            }
         }
     }
 
     public void switchModeClient(){
-        if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
             SurvivorTarget = null;
             EntityTargetOne = null;
-            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
-            tryPowerPacket(PowerIndex.POWER_4);
-        }
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+            tryPowerPacket(PowerIndex.POWER_1);
     }
 
-    public void throwBottleClient(){
-        if (!this.onCooldown(PowerIndex.SKILL_1)) {
-            if (canUseWaterBottleThrow()) {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
-                tryPowerPacket(PowerIndex.POWER_1);
-            }
-        }
-    }
 
-    public void throwBottleActually(ItemStack stack){
-
-        this.self.level().playSound(
-                null,
-                this.self.getX(),
-                this.self.getY(),
-                this.self.getZ(),
-                SoundEvents.SPLASH_POTION_THROW,
-                SoundSource.PLAYERS,
-                0.5F,
-                0.4F / (this.self.getRandom().nextFloat() * 0.4F + 0.8F)
-        );
-        ThrownWaterBottleEntity $$4 = new ThrownWaterBottleEntity(this.self.level(), this.self);
-        $$4.setItem(stack);
-        $$4.shootFromRotation(this.self, this.self.getXRot(), this.self.getYRot(), -0.1F, 1.5F, 0.2F);
-        this.self.level().addFreshEntity($$4);
-    }
-
-    public boolean throwWaterBottle(){
-        int cooldown = 5;
-        this.setCooldown(PowerIndex.SKILL_1, cooldown);
-        if (!this.self.level().isClientSide() && this.self instanceof Player PL){
-            ItemStack stack = this.getSelf().getMainHandItem();
-            if ((!stack.isEmpty() && stack.getItem() instanceof PotionItem PI && PotionUtils.getPotion(stack) == Potions.WATER)
-            && !(stack.getItem() instanceof SplashPotionItem )) {
-                throwBottleActually(stack.copy());
-                if (!PL.getAbilities().instabuild) {
-                    stack.shrink(1);
-                }
-                return true;
-            }
-            ItemStack stack2 = this.getSelf().getOffhandItem();
-            if ((!stack2.isEmpty() && stack2.getItem() instanceof PotionItem PI && PotionUtils.getPotion(stack2) == Potions.WATER)
-                    && !(stack2.getItem() instanceof SplashPotionItem )) {
-                throwBottleActually(stack2.copy());
-                if (!PL.getAbilities().instabuild) {
-                    stack2.shrink(1);
-                }
-                return true;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public boolean tryTripleIntPower(int move, boolean forced, int chargeTime, int move2, int move3){
-        switch (move)
-        {
-            case PowerIndex.POWER_4_BONUS -> {
-                initializeTargets(chargeTime,move2, move3);
-            }
-        }
-        return tryPower(move, forced);
-    }
 
     public void initializeTargets(int x, int y, int z){
 
@@ -256,16 +187,10 @@ public class PowersAchtungBaby extends NewDashPreset {
         switch (move)
         {
             case PowerIndex.POWER_1 -> {
-                return throwWaterBottle();
+                return switchAngerSelectionMode();
             }
             case PowerIndex.POWER_2_SNEAK -> {
                 return removeAllSurvivors();
-            }
-            case PowerIndex.POWER_4 -> {
-                return switchAngerSelectionMode();
-            }
-            case PowerIndex.POWER_4_BONUS -> {
-                return selectTarget();
             }
         }
         return super.setPowerOther(move,lastMove);
@@ -274,7 +199,7 @@ public class PowersAchtungBaby extends NewDashPreset {
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
         if (ent != null) {
-            if (angerSelectionMode()) {
+            if (InvisibleVisionOn()) {
                 if (
                         (SurvivorTarget != null  && ent.is(SurvivorTarget)) ||
                                 (EntityTargetOne != null && ent.is(EntityTargetOne))
@@ -626,19 +551,7 @@ public class PowersAchtungBaby extends NewDashPreset {
     }
 
 
-    public boolean canUseWaterBottleThrow(){
-        ItemStack stack = this.getSelf().getMainHandItem();
-        ItemStack stack2 = this.getSelf().getOffhandItem();
-        return ((!stack.isEmpty() && stack.getItem() instanceof PotionItem PI &&
-                PotionUtils.getPotion(stack) == Potions.WATER && !(PI instanceof SplashPotionItem))
-                || ((!stack2.isEmpty() && stack2.getItem() instanceof PotionItem PI2 && PotionUtils.getPotion(stack2) == Potions.WATER)
-                && !(PI2 instanceof SplashPotionItem)));
-    }
     public boolean isAttackIneptVisually(byte activeP, int slot) {
-        if (slot == 1 && !canUseWaterBottleThrow()){
-            return true;
-        }
-
         return super.isAttackIneptVisually(activeP,slot);
     }
 
@@ -676,12 +589,12 @@ public class PowersAchtungBaby extends NewDashPreset {
 
     public boolean switchAngerSelectionMode(){
         if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
-            getStandUserSelf().roundabout$setUniqueStandModeToggle(!angerSelectionMode());
+            getStandUserSelf().roundabout$setUniqueStandModeToggle(!InvisibleVisionOn());
             if (!isClient() && this.self instanceof ServerPlayer PE) {
-                if (angerSelectionMode()) {
-                    PE.displayClientMessage(Component.translatable("text.roundabout.survivor.anger_selection").withStyle(ChatFormatting.RED), true);
+                if (InvisibleVisionOn()) {
+                    PE.displayClientMessage(Component.translatable("text.roundabout.achtung.vision_on").withStyle(ChatFormatting.AQUA), true);
                 } else {
-                    PE.displayClientMessage(Component.translatable("text.roundabout.survivor.anger_selection_off").withStyle(ChatFormatting.RED), true);
+                    PE.displayClientMessage(Component.translatable("text.roundabout.achtung.vision_off").withStyle(ChatFormatting.AQUA), true);
                 }
             }
         }
@@ -694,7 +607,7 @@ public class PowersAchtungBaby extends NewDashPreset {
         if (keyIsDown) {
             if (!holdAttack) {
                 holdAttack = true;
-                if (angerSelectionMode()) {
+                if (InvisibleVisionOn()) {
                     selectTargetClient();
                 }
             }

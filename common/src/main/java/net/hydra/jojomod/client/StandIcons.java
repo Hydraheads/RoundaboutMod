@@ -351,6 +351,15 @@ public class StandIcons {
     public static final ResourceLocation CUPID_ON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/survivor/cupid_on.png");
 
+    public static final ResourceLocation SELF_INVIS = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/achtung_baby/self_invis.png");
+    public static final ResourceLocation BURST_INVIS = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/achtung_baby/burst_invis.png");
+    public static final ResourceLocation BABY_VISION_ON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/achtung_baby/vision_on.png");
+    public static final ResourceLocation BABY_VISION_OFF = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/achtung_baby/vision_off.png");
+
     public static final ResourceLocation EERIE_SKIN = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/eerie_shift.png");
     public static final ResourceLocation EERIE_SKIN_ALEX = new ResourceLocation(Roundabout.MOD_ID,
