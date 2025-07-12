@@ -648,8 +648,10 @@ public class PowersSurvivor extends NewDashPreset {
                 "instruction.roundabout.press_skill_crouch", StandIcons.DESPAWN,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.target_zap",
-                "instruction.roundabout.press_skill", StandIcons.RAGE_SELECTION,4,level,bypass));
+        if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.target_zap",
+                    "instruction.roundabout.press_skill", StandIcons.RAGE_SELECTION, 4, level, bypass));
+        }
         return $$1;
     }
 
