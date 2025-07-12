@@ -760,8 +760,7 @@ public class ClientUtil {
     }
 
     public static void tickTSFreezeScreen() {
-        ClientConfig clientConfig = ConfigManager.getClientConfig();
-        if (clientConfig != null && clientConfig.timeStopSettings != null && clientConfig.timeStopSettings.timeStopFreezesScreen){
+        if (ClientUtil.getScreenFreeze()){
             Minecraft mc = Minecraft.getInstance();
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null && mc.level != null) {
