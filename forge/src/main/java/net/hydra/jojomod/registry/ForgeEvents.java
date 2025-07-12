@@ -252,6 +252,7 @@ public class ForgeEvents {
         ModItems.STAND_DISC_HEY_YA = ForgeItems.STAND_DISC_HEY_YA.get();
         ModItems.STAND_DISC_MANDOM = ForgeItems.STAND_DISC_MANDOM.get();
         ModItems.STAND_DISC_SURVIVOR = ForgeItems.STAND_DISC_SURVIVOR.get();
+        ModItems.STAND_DISC_ACHTUNG = ForgeItems.STAND_DISC_ACHTUNG.get();
         ModItems.COFFEE_GUM = ForgeItems.COFFEE_GUM.get();
 
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_DIO.get()).referenceItem = ForgeItems.STREET_SIGN_DIO_BLOCK_ITEM.get().getDefaultInstance();

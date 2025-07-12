@@ -39,6 +39,7 @@ public class ModItems {
     public static Item STAND_DISC_HEY_YA;
     public static Item STAND_DISC_MANDOM;
     public static Item STAND_DISC_SURVIVOR;
+    public static Item STAND_DISC_ACHTUNG;
     public static Item STAND_DISC;
     public static Item STREET_SIGN_DIO_BLOCK_ITEM;
     public static Item STREET_SIGN_RIGHT_BLOCK_ITEM;
