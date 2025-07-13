@@ -44,5 +44,7 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.STITCH, StitchParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.MOLD_DUST, MoldDustParticle.CosyProvider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.MOLD, MoldParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.BABY_CRACKLE, BabyCrackleParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.MAGIC_DUST, MagicDustParticle.Provider::new);
     }
 }
