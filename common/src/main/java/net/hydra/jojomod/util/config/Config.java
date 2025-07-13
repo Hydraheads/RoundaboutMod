@@ -185,6 +185,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public SurvivorSettings survivorSettings;
     @NestedOption(group = "modded")
+    public AchtungSettings achtungSettings;
+    @NestedOption(group = "modded")
     public TimeStopSettings timeStopSettings;
     @NestedOption(group="modded")
     public Experiments experiments;
@@ -612,6 +614,12 @@ public class Config implements Cloneable {
         @BooleanOption(group = "inherit", value = false)
         public Boolean canUseSurvivorOnBossesInSurvival;
     }
+
+    public static class AchtungSettings {
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean invisibilityPotionAsWell;
+    }
+
     public static class TheWorldSettings {
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer oxygenTankAdditionalTicks;

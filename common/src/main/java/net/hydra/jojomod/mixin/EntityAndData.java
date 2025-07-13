@@ -30,6 +30,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -93,6 +96,16 @@ public abstract class EntityAndData implements IEntityAndData {
     public void roundabout$setTrueInvisibility(int invis){
         if (((Entity)(Object)this) instanceof LivingEntity LE){
             ((StandUser)LE).roundabout$setTrueInvis(invis);
+
+            if (!this.level().isClientSide()) {
+                if (ClientNetworking.getAppropriateConfig().achtungSettings.invisibilityPotionAsWell) {
+                    if (invis <= -1) {
+                        LE.removeEffect(MobEffects.INVISIBILITY);
+                    } else {
+                        LE.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 10, 0, false, false), null);
+                    }
+                }
+            }
         } else {
             roundabout$trueInvisibility = invis;
             if (!this.level().isClientSide()) {
