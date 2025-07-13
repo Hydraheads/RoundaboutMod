@@ -3,6 +3,7 @@ package net.hydra.jojomod.client.gui.config;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.Config;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -110,7 +111,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                 e.printStackTrace();
             }
 
-            toggleButton = Button.builder(Component.translatable("config.roundabout."+field.getName()+".name").append(": " + currentValue),
+            toggleButton = Button.builder(Component.translatable("config.roundabout."+field.getName()+".name").append(getNewValueRender(currentValue)),
                     btn -> {
                         try {
                             Boolean newVal = !(Boolean) field.get(instance);
@@ -122,11 +123,17 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                                 case CLIENT -> ConfigManager.saveClientConfig();
                             }
 
-                            btn.setMessage(Component.translatable("config.roundabout."+field.getName()+".name").append(": " + newVal));
+                            btn.setMessage(Component.translatable("config.roundabout."+field.getName()+".name").append(getNewValueRender(newVal)));
                         } catch (IllegalAccessException e) {
                             e.printStackTrace();
                         }
                     }).size(200, 20).build();
+        }
+
+        public Component getNewValueRender(boolean newVal){
+            if (newVal)
+                return Component.literal(": ").append(Component.literal(("")+newVal).withStyle(ChatFormatting.AQUA));
+            return Component.literal(": ").append(Component.literal(("")+newVal).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
 
         @Override
