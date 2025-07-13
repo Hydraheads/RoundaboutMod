@@ -45,6 +45,8 @@ public class FabricParticles {
     public static final SimpleParticleType PLUNDER = FabricParticleTypes.simple();
     public static final SimpleParticleType FRICTIONLESS = FabricParticleTypes.simple();
     public static final SimpleParticleType EXCLAMATION = FabricParticleTypes.simple();
+    public static final SimpleParticleType BABY_CRACKLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType MAGIC_DUST = FabricParticleTypes.simple();
     public static final SimpleParticleType STITCH = FabricParticleTypes.simple();
     public static final SimpleParticleType MOLD_DUST = FabricParticleTypes.simple();
     public static final SimpleParticleType MOLD = FabricParticleTypes.simple();
@@ -88,6 +90,8 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("green_clock"), GREEN_CLOCK);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("orange_clock"), ORANGE_CLOCK);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("time_ember"), TIME_EMBER);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("baby_crackle"), BABY_CRACKLE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("magic_dust"), MAGIC_DUST);
 
         ModParticles.BLOOD = BLOOD;
         ModParticles.BLUE_BLOOD = BLUE_BLOOD;
@@ -125,6 +129,8 @@ public class FabricParticles {
         ModParticles.PLUNDER = PLUNDER;
         ModParticles.FRICTIONLESS = FRICTIONLESS;
         ModParticles.EXCLAMATION = EXCLAMATION;
+        ModParticles.BABY_CRACKLE = BABY_CRACKLE;
+        ModParticles.MAGIC_DUST = MAGIC_DUST;
         ModParticles.STITCH = STITCH;
         ModParticles.MOLD_DUST = MOLD_DUST;
         ModParticles.MOLD = MOLD;
