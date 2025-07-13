@@ -10,7 +10,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ModItems {
 
@@ -129,16 +128,16 @@ public class ModItems {
     }
     public static void initializeVisageStore(){
         addToVisageStore(LUCKY_LIPSTICK,0,
-                ClientNetworking.getAppropriateConfig().cinderellaLevelCostLipstick,
-                ClientNetworking.getAppropriateConfig().cinderellaEmeraldCostLipstick);
+                ClientNetworking.getAppropriateConfig().cinderellaSettings.levelCostLipstick,
+                ClientNetworking.getAppropriateConfig().cinderellaSettings.emeraldCostLipstick);
         addToVisageStore(BLANK_MASK,0,
-                ClientNetworking.getAppropriateConfig().cinderellaLevelCostGlassVisage,
-                ClientNetworking.getAppropriateConfig().cinderellaEmeraldCostGlassVisage);
+                ClientNetworking.getAppropriateConfig().cinderellaSettings.levelCostGlassVisage,
+                ClientNetworking.getAppropriateConfig().cinderellaSettings.emeraldCostGlassVisage);
         addToVisageStore(MODIFICATION_MASK,0,
-                ClientNetworking.getAppropriateConfig().cinderellaLevelCostModificationVisage,
-                ClientNetworking.getAppropriateConfig().cinderellaEmeraldCostModificationVisage);
-        int characterCostExp = ClientNetworking.getAppropriateConfig().cinderellaLevelCostCharacterVisage;
-        int characterCostEmerald = ClientNetworking.getAppropriateConfig().cinderellaEmeraldCostCharacterVisage;
+                ClientNetworking.getAppropriateConfig().cinderellaSettings.levelCostModificationVisage,
+                ClientNetworking.getAppropriateConfig().cinderellaSettings.emeraldCostModificationVisage);
+        int characterCostExp = ClientNetworking.getAppropriateConfig().cinderellaSettings.levelCostCharacterVisage;
+        int characterCostEmerald = ClientNetworking.getAppropriateConfig().cinderellaSettings.emeraldCostCharacterVisage;
         addToVisageStore(JOTARO_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(AVDOL_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(DIO_MASK,1, characterCostExp, characterCostEmerald);

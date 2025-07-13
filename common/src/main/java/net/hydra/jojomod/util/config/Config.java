@@ -97,22 +97,6 @@ public class Config implements Cloneable {
     public Boolean SuperBlockDestructionBarrageLaunching;
     @BooleanOption(group = "inherit", value = false)
     public Boolean doExtraGriefChecksForClaims;
-    @IntOption(group = "inherit", value = 4, min = 0, max = 72000)
-    public Integer cinderellaLevelCostLipstick;
-    @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
-    public Integer cinderellaEmeraldCostLipstick;
-    @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
-    public Integer cinderellaLevelCostGlassVisage;
-    @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
-    public Integer cinderellaEmeraldCostGlassVisage;
-    @IntOption(group = "inherit", value = 7, min = 0, max = 72000)
-    public Integer cinderellaLevelCostModificationVisage;
-    @IntOption(group = "inherit", value = 7, min = 0, max = 72000)
-    public Integer cinderellaEmeraldCostModificationVisage;
-    @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
-    public Integer cinderellaLevelCostCharacterVisage;
-    @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
-    public Integer cinderellaEmeraldCostCharacterVisage;
     @IntOption(group = "inherit", value = 15, min = 0, max = 365)
     public Integer basePunchAngle;
     public Set<String> standArrowPoolv2 = new HashSet<>(
@@ -170,6 +154,8 @@ public class Config implements Cloneable {
     public MagiciansRedSettings magiciansRedSettings;
     @NestedOption(group = "modded")
     public JusticeSettings justiceSettings;
+    @NestedOption(group = "modded")
+    public CinderellaSettings cinderellaSettings;
     @NestedOption(group = "modded")
     public HeyYaSettings heyYaSettings;
     @NestedOption(group = "modded")
@@ -362,8 +348,6 @@ public class Config implements Cloneable {
         public Integer mobThrowInterruptv2;
         @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
         public Integer mobThrowAttack;
-        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
-        public Integer cinderellaDefaceAttack;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer switchStandDisc;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
@@ -498,6 +482,26 @@ public class Config implements Cloneable {
         public Integer fogCloneCooldown;
         @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
         public Integer fogChainCooldown;
+    }
+    public static class CinderellaSettings {
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
+        public Integer defaceAttackCooldown;
+        @IntOption(group = "inherit", value = 4, min = 0, max = 72000)
+        public Integer levelCostLipstick;
+        @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
+        public Integer emeraldCostLipstick;
+        @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
+        public Integer levelCostGlassVisage;
+        @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
+        public Integer emeraldCostGlassVisage;
+        @IntOption(group = "inherit", value = 7, min = 0, max = 72000)
+        public Integer levelCostModificationVisage;
+        @IntOption(group = "inherit", value = 7, min = 0, max = 72000)
+        public Integer emeraldCostModificationVisage;
+        @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
+        public Integer levelCostCharacterVisage;
+        @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
+        public Integer emeraldCostCharacterVisage;
     }
     public static class HeyYaSettings {
         @IntOption(group = "inherit", value = 35, min = 0, max = 72000)

@@ -528,9 +528,9 @@ public class PowersCinderella extends NewDashPreset {
         }
 
         if (this.getSelf() instanceof Player) {
-            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2,  ClientNetworking.getAppropriateConfig().cooldownsInTicks.cinderellaDefaceAttack);
+            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2,  ClientNetworking.getAppropriateConfig().cinderellaSettings.defaceAttackCooldown);
         }
-        this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().cooldownsInTicks.cinderellaDefaceAttack);
+        this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().cinderellaSettings.defaceAttackCooldown);
         SoundEvent SE;
         float pitch = 1F;
         if (entity != null) {
