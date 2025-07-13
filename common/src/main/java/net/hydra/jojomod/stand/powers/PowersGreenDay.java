@@ -52,7 +52,7 @@ public class PowersGreenDay extends NewPunchingStand{
 
     @Override
     public int getMaxGuardPoints(){
-        return ClientNetworking.getAppropriateConfig().guardPoints.d4cDefend;
+        return 20;
     }
 
     @Override

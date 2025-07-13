@@ -68,7 +68,7 @@ public class PowersD4C extends NewPunchingStand {
 
     @Override
     public int getMaxGuardPoints(){
-        return ClientNetworking.getAppropriateConfig().guardPoints.d4cDefend;
+        return 12;
     }
 
     @Override
@@ -215,7 +215,8 @@ public class PowersD4C extends NewPunchingStand {
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
                 ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
-                this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.D4CMeltDodgeCooldown);
+                this.setCooldown(PowerIndex.SKILL_3, 80);
+                //insert melt dodge cooldown here
             }
             case SKILL_3_GUARD -> {
                 if (isPRunning || isBetweenTwoThings(this.getSelf().blockPosition()))
@@ -232,7 +233,7 @@ public class PowersD4C extends NewPunchingStand {
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4);
                         } else {
-                            this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().cooldownsInTicks.d4cDimensionKidnap);
+                            this.setCooldown(PowerIndex.SKILL_4,6000);
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_SNEAK, true);
                             ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_SNEAK);
                         }
@@ -492,7 +493,7 @@ public class PowersD4C extends NewPunchingStand {
         {
             if (this.getSelf().level().isClientSide)
                 if (!this.getSelf().level().dimension().location().getPath().equals("overworld"))
-                    this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().cooldownsInTicks.d4cDimensionHopToOldDimension);
+                    this.setCooldown(PowerIndex.SKILL_4, 400);
 
             if (this.getSelf().getServer() == null)
                 return;
@@ -527,7 +528,7 @@ public class PowersD4C extends NewPunchingStand {
         {
             if (this.getSelf().level().isClientSide)
                 if (!this.getSelf().level().dimension().location().getPath().equals("overworld"))
-                    this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().cooldownsInTicks.d4cDimensionHopToNewDimension);
+                    this.setCooldown(PowerIndex.SKILL_4, 4000);
 
             if (attackTimeDuring > 39)
             {
@@ -569,7 +570,7 @@ public class PowersD4C extends NewPunchingStand {
             return false;
 
         BlockPos thisPosition = this.getSelf().blockPosition();
-        int radius = ClientNetworking.getAppropriateConfig().d4cDimensionKidnapRadius;
+        int radius = 5;
 
         List<LivingEntity> entities = this.getSelf().getServer().overworld().getNearbyEntities(LivingEntity.class, TargetingConditions.DEFAULT, this.getSelf(),
                 new AABB(thisPosition).inflate(radius));

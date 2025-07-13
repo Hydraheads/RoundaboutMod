@@ -97,8 +97,6 @@ public class Config implements Cloneable {
     public Boolean SuperBlockDestructionBarrageLaunching;
     @BooleanOption(group = "inherit", value = false)
     public Boolean doExtraGriefChecksForClaims;
-    @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
-    public Integer d4cDimensionKidnapRadius;
     @IntOption(group = "inherit", value = 4, min = 0, max = 72000)
     public Integer cinderellaLevelCostLipstick;
     @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
@@ -164,8 +162,6 @@ public class Config implements Cloneable {
     public MiningSettings miningSettings;
     @NestedOption(group = "modded")
     public NameTagSettings nameTagSettings;
-    @NestedOption(group = "modded")
-    public Durations durationsInTicks;
     @NestedOption(group = "modded")
     public Cooldowns cooldownsInTicks;
     @NestedOption(group = "modded")
@@ -275,12 +271,8 @@ public class Config implements Cloneable {
         public Integer starPlatinumDefend;
         @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
         public Integer magiciansRedDefend;
-        @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
-        public Integer d4cDefend;
         @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
         public Integer softAndWetDefend;
-        @IntOption(group= "inherit", value = 15, min = 0, max = 72000)
-        public Integer killerQueenDefend;
         @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
         public Integer standGuardMultiplier;
     }
@@ -335,10 +327,6 @@ public class Config implements Cloneable {
         public Boolean bypassAllNametagHidesInCreativeMode;
     }
 
-    public static class Durations {
-        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
-        public Integer D4CMeltDodgeTicks;
-    }
 
     public static class Cooldowns {
         @IntOption(group = "inherit", value = 27, min = 0, max = 72000)
@@ -374,14 +362,6 @@ public class Config implements Cloneable {
         public Integer mobThrowInterruptv2;
         @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
         public Integer mobThrowAttack;
-        @IntOption(group = "inherit", value = 4000, min = 0, max = 72000)
-        public Integer d4cDimensionHopToNewDimension;
-        @IntOption(group = "inherit", value = 6000, min = 0, max = 72000)
-        public Integer d4cDimensionKidnap;
-        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
-        public Integer d4cDimensionHopToOldDimension;
-        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
-        public Integer D4CMeltDodgeCooldown;
         @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
         public Integer cinderellaDefaceAttack;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
