@@ -3330,7 +3330,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (damageSource.is(ModDamageTypes.GASOLINE_EXPLOSION)) {
                 roundabout$gasolineIFRAMES = 10;
                 roundabout$knifeIFrameTicks = 10;
-                roundabout$stackedKnivesAndMatches = ClientNetworking.getAppropriateConfig().damageMultipliers.maxKnivesInOneHit;
+                roundabout$stackedKnivesAndMatches = ClientNetworking.getAppropriateConfig().itemSettings.maxKnivesInOneHit;
             }
         }
 
@@ -3478,7 +3478,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         if (damageSource.is(ModDamageTypes.KNIFE)){
                             roundabout$gasolineIFRAMES = 10;
                         }
-                        int knifeCap = ClientNetworking.getAppropriateConfig().damageMultipliers.maxKnivesInOneHit;
+                        int knifeCap = ClientNetworking.getAppropriateConfig().itemSettings.maxKnivesInOneHit;
                         if (roundabout$stackedKnivesAndMatches < knifeCap) {
                             if (roundabout$stackedKnivesAndMatches <= 0) {
                                 roundabout$knifeIFrameTicks = 9;

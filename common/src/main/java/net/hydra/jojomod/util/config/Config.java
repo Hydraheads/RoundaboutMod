@@ -135,6 +135,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public VanillaMCTweaks vanillaMinecraftTweaks;
     @NestedOption(group = "modded")
+    public ItemSettings itemSettings;
+    @NestedOption(group = "modded")
     public ChargeSettings chargeSettings;
     @NestedOption(group = "modded")
     public DamageMultipliers damageMultipliers;
@@ -176,6 +178,21 @@ public class Config implements Cloneable {
         public Boolean mountingHorsesInCreativeTamesThem;
     }
 
+
+    public static class ItemSettings {
+        @IntOption(group = "inherit", value = 1200, min = 0, max = 72000)
+        public Integer locacacaEatingCooldowns;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer knifeDamageOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer knifeDamageOnPlayers;
+        @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
+        public Integer maxKnivesInOneHit;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer gasolineExplosionDamage;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer matchDamage;
+    }
     public static class ChargeSettings {
         @IntOption(group = "inherit", value = 29, min = 0, max = 72000)
         public Integer barrageWindup;
@@ -237,16 +254,6 @@ public class Config implements Cloneable {
         public Integer cinderellaAttackOnMobs;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer cinderellaAttackOnPlayers;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer gasolineExplosion;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer knifeDamageOnMobs;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer knifeDamageOnPlayers;
-        @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
-        public Integer maxKnivesInOneHit;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer matchDamage;
         @BooleanOption(group = "inherit", value = true)
         public Boolean standUserMobsTakePlayerDamageMultipliers;
     }
@@ -352,8 +359,6 @@ public class Config implements Cloneable {
         public Integer switchStandDisc;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer switchStandDiscWhileOnCooldowns;
-        @IntOption(group = "inherit", value = 1200, min = 0, max = 72000)
-        public Integer locacacaEatingCooldowns;
         @BooleanOption(group = "inherit", value = true)
         public Boolean creativeModeRefreshesCooldowns;
         @BooleanOption(group = "inherit", value = true)

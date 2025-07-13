@@ -84,7 +84,7 @@ public class NewLocacacaItem extends Item {
         LivingEntity ent = MainUtil.getStoneTarget(level, entity);
         if (ent != null) {
             if (entity instanceof Player PE){
-                PE.getCooldowns().addCooldown(this, ClientNetworking.getAppropriateConfig().cooldownsInTicks.locacacaEatingCooldowns);
+                PE.getCooldowns().addCooldown(this, ClientNetworking.getAppropriateConfig().itemSettings.locacacaEatingCooldowns);
             }
             byte entCurse = ((StandUser)ent).roundabout$getLocacacaCurse();
             if (!level.isClientSide && entity.isAlive()) {

@@ -115,9 +115,9 @@ public class KnifeEntity extends AbstractArrow {
         float $$2;
 
         if ($$1 instanceof Player) {
-            $$2 = (float) (2.29F * (ClientNetworking.getAppropriateConfig().damageMultipliers.knifeDamageOnPlayers *0.01));
+            $$2 = (float) (2.29F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnPlayers *0.01));
         } else {
-            $$2 = (float) (4.0F * (ClientNetworking.getAppropriateConfig().damageMultipliers.knifeDamageOnMobs *0.01));;
+            $$2 = (float) (4.0F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnMobs *0.01));;
         }
 
         if ($$1 instanceof LivingEntity $$3) {

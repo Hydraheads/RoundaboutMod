@@ -1296,6 +1296,8 @@
 
 
 
+  "config.roundabout.mountingHorsesInCreativeTamesThem.name": "Creative Mount To Tame",
+  "config.roundabout.mountingHorsesInCreativeTamesThem.desc": "If you mount a horse in creative mode, you instantly tame it.",
 
 
   "config.roundabout.z.name": "",
