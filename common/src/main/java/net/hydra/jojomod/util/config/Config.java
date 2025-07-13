@@ -376,36 +376,6 @@ public class Config implements Cloneable {
         public Integer mobThrowInterruptv2;
         @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
         public Integer mobThrowAttack;
-        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
-        public Integer magicianKickMinimum;
-        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
-        public Integer magicianSnapFireAway;
-        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
-        public Integer magicianIgniteFire;
-        @IntOption(group = "inherit", value = 27, min = 0, max = 72000)
-        public Integer magicianLash;
-        @IntOption(group = "inherit", value = 37, min = 0, max = 72000)
-        public Integer magicianLastLashInString;
-        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
-        public Integer magicianRedBindFailOrMiss;
-        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
-        public Integer magicianRedBindManualRelease;
-        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
-        public Integer magicianRedBindDazeAttack;
-        @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
-        public Integer magicianRedAnkhSuccess;
-        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
-        public Integer magicianRedAnkhConcealed;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer magicianRedAnkhHidden;
-        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
-        public Integer magicianRedAnkhFail;
-        @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
-        public Integer magicianRedHurricaneSpecial;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer magicianRedProjectileBurn;
-        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
-        public Integer magicianRedFlameCrash;
         @IntOption(group = "inherit", value = 4000, min = 0, max = 72000)
         public Integer d4cDimensionHopToNewDimension;
         @IntOption(group = "inherit", value = 6000, min = 0, max = 72000)
@@ -504,6 +474,36 @@ public class Config implements Cloneable {
         public Integer magiciansRedFurnaceTicks;
         @BooleanOption(group = "inherit", value = false)
         public Boolean lifeTrackerManualPushing;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer magicianKickMinimumCooldown;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer snapFireAwayCooldown;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer igniteFireCooldown;
+        @IntOption(group = "inherit", value = 27, min = 0, max = 72000)
+        public Integer lashCooldown;
+        @IntOption(group = "inherit", value = 37, min = 0, max = 72000)
+        public Integer lastLashInStringCooldown;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer redBindFailOrMissCooldown;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer redBindManualReleaseCooldown;
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        public Integer redBindDazeAttackCooldown;
+        @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
+        public Integer ankhSuccessCooldown;
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        public Integer ankhConcealedCooldown;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer ankhHiddenCooldown;
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        public Integer ankhFailCooldown;
+        @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
+        public Integer hurricaneSpecialCooldown;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer projectileBurnCooldown;
+        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
+        public Integer flameCrashCooldown;
     }
     public static class JusticeSettings {
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
