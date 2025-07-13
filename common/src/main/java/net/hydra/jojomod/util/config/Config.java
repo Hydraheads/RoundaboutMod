@@ -188,8 +188,6 @@ public class Config implements Cloneable {
     public AchtungSettings achtungSettings;
     @NestedOption(group = "modded")
     public TimeStopSettings timeStopSettings;
-    @NestedOption(group="modded")
-    public Experiments experiments;
 
     public static class VanillaMCTweaks {
         @BooleanOption(group = "inherit", value = true)
@@ -601,10 +599,10 @@ public class Config implements Cloneable {
         public Float resilienceToNonMeleeAttacksWhenZapped;
         @FloatOption(group = "inherit", value = 1.2F, min = 0, max = 72000F)
         public Float buffToMeleeAttacksWhenZapped;
+        @FloatOption(group = "inherit", value = 3.0F, min = 0, max = 72000F)
+        public Float bonusDamageWhenPunching;
         @IntOption(group = "inherit", value = 8, min = 0, max = 72000)
         public Integer survivorRange;
-        @FloatOption(group = "inherit", value = 3.0F, min = 0, max = 72000F)
-        public Float  bonusDamageWhenPunching;
         @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
         public Integer survivorCupidRange;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
@@ -670,9 +668,5 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 100, min = -1, max = 72000)
         public Integer blockRangeNegativeOneIsInfinite;
 
-    }
-    public static class Experiments {
-//        @BooleanOption(group = "inherit", value = false)
-//        public Boolean d4cShouldUseColorShader;
     }
 }
