@@ -180,7 +180,7 @@ public class PowersMagiciansRed extends PunchingStand {
 
     @Override
     public int getMaxGuardPoints(){
-        return ClientNetworking.getAppropriateConfig().guardPoints.magiciansRedDefend;
+        return ClientNetworking.getAppropriateConfig().magiciansRedSettings.magiciansRedGuardPoints;
     }
     public void tickPower() {
         if (!this.self.level().isClientSide()) {

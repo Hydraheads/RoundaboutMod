@@ -1893,7 +1893,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     public float roundabout$getMaxGuardPoints(){
-        return (float) (roundabout$getStandPowers().getMaxGuardPoints()*(ClientNetworking.getAppropriateConfig().guardPoints.standGuardMultiplier*0.01));
+        return (float) (roundabout$getStandPowers().getMaxGuardPoints()*(ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardMultiplier*0.01));
     }
 
     @Unique

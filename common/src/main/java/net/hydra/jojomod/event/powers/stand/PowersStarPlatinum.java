@@ -99,7 +99,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     @Override
     public int getMaxGuardPoints(){
-        return ClientNetworking.getAppropriateConfig().guardPoints.starPlatinumDefend;
+        return ClientNetworking.getAppropriateConfig().starPlatinumSettings.starPlatinumGuardPoints;
     }
     @Override
     public void playSummonEffects(boolean forced){

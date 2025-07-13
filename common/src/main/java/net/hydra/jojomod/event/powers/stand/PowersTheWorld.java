@@ -104,7 +104,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     @Override
     public int getMaxGuardPoints(){
-        return ClientNetworking.getAppropriateConfig().guardPoints.theWorldDefend;
+        return ClientNetworking.getAppropriateConfig().theWorldSettings.theWorldGuardPoints;
     }
     @Override
     public void playTheLastHitSound(){

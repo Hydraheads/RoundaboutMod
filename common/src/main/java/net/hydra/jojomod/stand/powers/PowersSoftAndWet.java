@@ -1784,7 +1784,7 @@ public void unlockSkin(){
     }
     @Override
     public int getMaxGuardPoints(){
-        return ClientNetworking.getAppropriateConfig().guardPoints.softAndWetDefend;
+        return ClientNetworking.getAppropriateConfig().softAndWetSettings.softAndWetGuardPoints;
     }
     @Override
     public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos) {

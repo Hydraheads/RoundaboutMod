@@ -135,19 +135,19 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public VanillaMCTweaks vanillaMinecraftTweaks;
     @NestedOption(group = "modded")
+    public WorldGenSettings worldgenSettings;
+    @NestedOption(group = "modded")
     public ItemSettings itemSettings;
+    @NestedOption(group = "modded")
+    public NameTagSettings nameTagSettings;
     @NestedOption(group = "modded")
     public ChargeSettings chargeSettings;
     @NestedOption(group = "modded")
     public DamageMultipliers damageMultipliers;
     @NestedOption(group = "modded")
-    public GuardPoints guardPoints;
-    @NestedOption(group = "modded")
-    public WorldGenSettings worldgenSettings;
+    public GeneralStandSettings generalStandSettings;
     @NestedOption(group = "modded")
     public MiningSettings miningSettings;
-    @NestedOption(group = "modded")
-    public NameTagSettings nameTagSettings;
     @NestedOption(group = "modded")
     public Cooldowns cooldownsInTicks;
     @NestedOption(group = "modded")
@@ -257,33 +257,25 @@ public class Config implements Cloneable {
         @BooleanOption(group = "inherit", value = true)
         public Boolean standUserMobsTakePlayerDamageMultipliers;
     }
-    public static class GuardPoints {
-        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
-        public Integer theWorldDefend;
-        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
-        public Integer starPlatinumDefend;
-        @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
-        public Integer magiciansRedDefend;
-        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
-        public Integer softAndWetDefend;
-        @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
-        public Integer standGuardMultiplier;
-    }
     public static class WorldGenSettings {
         @IntOption(group = "inherit", value = 55, min = 0, max = 4096)
         public Integer cinderellaSpacing;
         @IntOption(group = "inherit", value = 54, min = 0, max = 4096)
         public Integer cinderellaSeparationMakeSmallerThanSpacing;
+        @IntOption(group = "inherit", value = 1, min = 0, max = 150)
+        public Integer cinderellaWeight;
         @IntOption(group = "inherit", value = 14, min = 0, max = 4096)
         public Integer meteoriteSpacing;
         @IntOption(group = "inherit", value = 12, min = 0, max = 4096)
         public Integer meteoriteSeparationMakeSmallerThanSpacing;
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean modifyStructureWeights;
-        @IntOption(group = "inherit", value = 1, min = 0, max = 150)
-        public Integer cinderellaWeight;
         @IntOption(group = "inherit", value = 1, min = 0, max = 150)
         public Integer meteoriteWeight;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean modifyStructureWeights;
+    }
+    public static class GeneralStandSettings {
+        @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
+        public Integer standGuardMultiplier;
     }
     public static class MiningSettings {
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
@@ -367,6 +359,8 @@ public class Config implements Cloneable {
 
 
     public static class SoftAndWetSettings {
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer softAndWetGuardPoints;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer maxPlunderBubbleTravelDistanceBeforePopping;
         @BooleanOption(group = "inherit", value = true)
@@ -431,6 +425,9 @@ public class Config implements Cloneable {
         public Integer encasementBubbleCreateCooldown;
     }
     public static class MagiciansRedSettings {
+
+        @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
+        public Integer magiciansRedGuardPoints;
         @IntOption(group = "inherit", value = 100, min = -1, max = 72000)
         public Integer maxMagiciansRedFlames;
         @IntOption(group = "inherit", value = 100, min = -1, max = 72000)
@@ -593,6 +590,8 @@ public class Config implements Cloneable {
     }
 
     public static class TheWorldSettings {
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer theWorldGuardPoints;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer oxygenTankAdditionalTicks;
         @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
@@ -602,6 +601,8 @@ public class Config implements Cloneable {
     }
 
     public static class StarPlatinumSettings {
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer starPlatinumGuardPoints;
         @BooleanOption(group = "inherit", value = false)
         public Boolean starPlatinumScopeUsesPotionEffectForNightVision;
         @IntOption(group = "inherit", value = 160, min = 0, max = 72000)

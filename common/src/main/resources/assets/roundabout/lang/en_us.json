@@ -1300,8 +1300,39 @@
   "config.roundabout.mountingHorsesInCreativeTamesThem.desc": "If you mount a horse in creative mode, you instantly tame it.",
 
 
+  "config.roundabout.cinderellaSpacing.name": "Cinderella Salon Spacing",
+  "config.roundabout.cinderellaSpacing.desc": "How far spaced these structures are.",
+  "config.roundabout.cinderellaSeparationMakeSmallerThanSpacing.name": "Cinderella Salon Separation",
+  "config.roundabout.cinderellaSeparationMakeSmallerThanSpacing.desc": "Must be smaller than spacing, how separated these structures are.",
+  "config.roundabout.cinderellaWeight.name": "Cinderella Salon Weight",
+  "config.roundabout.cinderellaWeight.desc": "Adjust the weight to give it more priority over other modded structures.",
+  "config.roundabout.meteoriteWeight.name": "Meteorite Weight",
+  "config.roundabout.meteoriteWeight.desc": "Adjust the weight to give it more priority over other modded structures.",
+  "config.roundabout.meteoriteSpacing.name": "Meteorite Spacing",
+  "config.roundabout.meteoriteSpacing.desc": "How far spaced these structures are.",
+  "config.roundabout.meteoriteSeparationMakeSmallerThanSpacing.name": "Meteorite Separation",
+  "config.roundabout.meteoriteSeparationMakeSmallerThanSpacing.desc": "Must be smaller than spacing, how separated these structures are.",
+  "config.roundabout.modifyStructureWeights.name": "Modify Structure Weights",
+  "config.roundabout.modifyStructureWeights.desc": "Whether or not to modify structure weights, there is an off chance that it will conflict with other mods. (unlikely)",
+
   "config.roundabout.z.name": "",
   "config.roundabout.z.desc": "",
+
+  "config.roundabout.renderNameTagOnPlayerVisages.name": "Player Visage Tags",
+  "config.roundabout.renderNameTagOnPlayerVisages.desc": "Turn off to make glass visages and modification visages hide name tags like they used to.",
+  "config.roundabout.renderNameTagOnCharacterVisages.name": "Character Visage Tags",
+  "config.roundabout.renderNameTagOnCharacterVisages.desc": "Turn off to make character visages hide name tags like they used to.",
+  "config.roundabout.renderActualCharactersNameUsingVisages.name": "Use Visage Character Names",
+  "config.roundabout.renderActualCharactersNameUsingVisages.desc": "Uses the character names of the equipped visage while the visage is equipped.",
+  "config.roundabout.renderNameTagsInJusticeFog.name": "Justice Fog Tags",
+  "config.roundabout.renderNameTagsInJusticeFog.desc": "By default, Justice's fog hides all name tags.",
+  "config.roundabout.renderNameTagsWhenJusticeMorphed.name": "Illusion Tags",
+  "config.roundabout.renderNameTagsWhenJusticeMorphed.desc": "By default, Justice's morphs hide name tags.",
+  "config.roundabout.bypassAllNametagHidesInCreativeMode.name": "Creative Tag Vision",
+  "config.roundabout.bypassAllNametagHidesInCreativeMode.desc": "In creative mode, bypass all settings and see real nametags.",
+
+
+
   "config.roundabout.defaceAttackCooldown.name": "Deface Cooldown",
   "config.roundabout.defaceAttackCooldown.desc": "The cooldown of the deface attack, by default it is 50 ticks (over 2 seconds).",
   "config.roundabout.levelCostLipstick.name": "Lipstick Level Cost",
@@ -1321,6 +1352,8 @@
   "config.roundabout.emeraldCostCharacterVisage.name": "Character Visage Emerald Cost",
   "config.roundabout.emeraldCostCharacterVisage.desc": "Any character themed visage in the Cinderella shop, default 10.",
 
+  "config.roundabout.softAndWetGuardPoints.name": "Guard Points",
+  "config.roundabout.softAndWetGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
   "config.roundabout.maxPlunderBubbleTravelDistanceBeforePopping.name": "Max Plunder Distance",
   "config.roundabout.maxPlunderBubbleTravelDistanceBeforePopping.desc": "How far plunder bubbles can go before popping, the default is 100 blocks.",
   "config.roundabout.moistureWithStandGriefingTakesLiquidBlocks.name": "Liquid Source Plunder",
@@ -1384,6 +1417,8 @@
   "config.roundabout.encasementBubbleCreateCooldown.name": "Encasement Bubble Cooldown",
   "config.roundabout.encasementBubbleCreateCooldown.desc": "The time between creating encasement bubbles. The default is 80, or 4 seconds.",
 
+  "config.roundabout.magiciansRedGuardPoints.name": "Guard Points",
+  "config.roundabout.magiciansRedGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
   "config.roundabout.maxMagiciansRedFlames.name": "Maximum Flame Count",
   "config.roundabout.maxMagiciansRedFlames.desc": "The maximum amount of flames you can create. It is capped at 100 by default for server performance reasons, as the stand fire is a block entity.",
   "config.roundabout.maxMagiciansRedFlameDistance.name": "Max Flame Distance",
@@ -1520,6 +1555,8 @@
   "config.roundabout.invisibilityPotionAsWell.name": "Apply Invis Potion",
   "config.roundabout.invisibilityPotionAsWell.desc": "If you want the invisibility power to apply the potion effect as well, turn this on. This could be useful for map mods that respect players invisibility.",
 
+  "config.roundabout.theWorldGuardPoints.name": "Guard Points",
+  "config.roundabout.theWorldGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
   "config.roundabout.oxygenTankAdditionalTicks.name": "Oxygen Tank Ticks",
   "config.roundabout.oxygenTankAdditionalTicks.desc": "How many ticks of oxygen do you want saved in The World's tank? The default, 300, is 15 seconds worth of extra underwater breathing.",
   "config.roundabout.assaultCooldown.name": "Assault Cooldown",
@@ -1572,6 +1609,8 @@
   "config.roundabout.blockRangeNegativeOneIsInfinite.name": "Radius of Stopped Time",
   "config.roundabout.blockRangeNegativeOneIsInfinite.desc": "By default the ability has an 100 block radius so only players nearby feel it. If you set it to -1, it becomes global and actually stops the time of day beyond just visually.",
 
+  "config.roundabout.starPlatinumGuardPoints.name": "Guard Points",
+  "config.roundabout.starPlatinumGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
   "config.roundabout.starPlatinumScopeUsesPotionEffectForNightVision.name": "Scope Uses NV Potion",
   "config.roundabout.starPlatinumScopeUsesPotionEffectForNightVision.desc": "If you have a mod like Bad Optimizations that deletes the vanilla code that scope uses to light things up, turn this on so it works regardless.",
   "config.roundabout.guardianCooldown.name": "Guardian Cooldown",
