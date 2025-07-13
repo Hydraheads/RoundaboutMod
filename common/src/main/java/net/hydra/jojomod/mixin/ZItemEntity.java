@@ -51,7 +51,7 @@ public abstract class ZItemEntity extends Entity implements IItemEntityAccess {
     }
     @Inject(method = "tick", at = @At(value = "HEAD"))
     protected void roundabout$tick(CallbackInfo ci) {
-        ((IEntityAndData)this).roundabout$addSecondToQueue();
+        ((IEntityAndData)this).roundabout$universalTick();
         if (((IEntityAndData)this).roundabout$getNoGravTicks() > 0){
             ((IEntityAndData)this).roundabout$setNoGravTicks(((IEntityAndData)this).roundabout$getNoGravTicks()-1);
             if (!this.isNoGravity()) {

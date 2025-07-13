@@ -858,6 +858,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         return -1;
     }
+    @Unique
+    @Override
+    public void roundabout$setTrueInvis(int bound) {
+        if (this.entityData.hasItem(ROUNDABOUT$TRUE_INVISIBILITY)) {
+            roundabout$zappedTicks = 0;
+            this.getEntityData().set(ROUNDABOUT$TRUE_INVISIBILITY, bound);
+        }
+    }
+    @Unique
+    @Override
+    public int roundabout$getTrueInvis() {
+        if (this.entityData.hasItem(ROUNDABOUT$TRUE_INVISIBILITY)) {
+            return this.getEntityData().get(ROUNDABOUT$TRUE_INVISIBILITY);
+        }
+        return -1;
+    }
 
     public int roundabout$getZappedTicks(){
         return roundabout$zappedTicks;
@@ -1273,6 +1289,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$UNIQUE_STAND_MODE_TOGGLE = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.BOOLEAN);
+    @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$TRUE_INVISIBILITY = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.INT);
 
     private byte roundabout$lastSkin = 0;
     @Override
@@ -2499,6 +2518,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BUBBLE_ENCASED, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BOUND_TO, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_ZAPPED_TO_ATTACK, -1);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$TRUE_INVISIBILITY, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ADJUSTED_GRAVITY, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ONLY_BLEEDING, true);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$COMBAT_MODE, false);

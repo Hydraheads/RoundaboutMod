@@ -74,4 +74,9 @@ public interface IEntityAndData {
 
     void roundabout$resetSecondQueue();
 
+    void roundabout$setTrueInvisibility(int only);
+    int roundabout$getTrueInvisibility();
+    void roundabout$universalTick();
+
+
 }

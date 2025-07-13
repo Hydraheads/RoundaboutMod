@@ -186,6 +186,16 @@ public class ClientUtil {
                         PM.setTimeHasBeenAltered(altared);
                     }
                 }
+                /**Invis Psuedo Tracked Data*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.TRUE_INVISIBILITY.value)) {
+                    int entityID = (int)vargs[0];
+                    int altered = (int)vargs[1];
+                    Entity ent = player.level().getEntity(entityID);
+                    if (ent != null){
+                        ((IEntityAndData)ent).roundabout$setTrueInvisibility(altered);
+
+                    }
+                }
             }
         });
     }

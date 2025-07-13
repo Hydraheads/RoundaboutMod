@@ -79,6 +79,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.*;
+import net.zetalasis.networking.message.api.ModMessageEvents;
 import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
@@ -157,6 +158,28 @@ public class MainUtil {
         );
 
         return level.getEntities(exception, area);
+    }
+
+    public static final void spreadRadialClientPacket(Entity entity,double range, boolean skipSelf, String packet, Object... vargs) {
+        if (!entity.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) entity.level());
+            Vec3 userLocation = new Vec3(entity.getX(),  entity.getY(), entity.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) entity.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+                if (skipSelf && entity.is(serverPlayerEntity)) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, range)) {
+                    ModMessageEvents.sendToPlayer((ServerPlayer)serverPlayerEntity, packet,vargs);
+                }
+            }
+        }
     }
     public static boolean isCreativeOrInvincible(Entity ent){
         if (ent != null && (ent.isInvulnerable() || (ent instanceof Player PL && PL.isCreative()))){
