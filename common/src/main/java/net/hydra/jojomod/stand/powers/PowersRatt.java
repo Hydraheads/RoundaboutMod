@@ -128,15 +128,16 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public boolean tryPosPower(int move, boolean forced, Vec3 pos) {
+        StandEntity SE = this.getStandEntity(this.getSelf());
         switch(move) {
             case UPDATE_POSITION -> {
-                if (this.getStandEntity(this.getSelf()) != null) {
-                    this.getStandEntity(this.getSelf()).setPos(pos);
+                if (SE != null) {
+                    SE.setPos(pos);
                 }
             }
             case ROTATE -> {
-                if (this.getStandEntity(this.getSelf()) != null) {
-                    this.getStandEntity(this.getSelf()).setStandRotationY((float) pos.y);
+                if (SE != null) {
+                    SE.setYBodyRot((float) pos.y);
                 }
             }
             case PowerIndex.POWER_2 -> {
@@ -166,6 +167,7 @@ public class PowersRatt extends NewDashPreset {
             stand.setSkin(user.roundabout$getStandSkin());
             stand.setMaster(this.self);
             stand.absMoveTo(pos.x(),pos.y(),pos.z());
+            stand.setFadeOut((byte)2);
             this.getStandUserSelf().roundabout$standMount(stand);
             this.self.level().addFreshEntity(stand);
         }
@@ -183,26 +185,19 @@ public class PowersRatt extends NewDashPreset {
 
         if (isPlaced()) {
 
-
             if (this.isClient()) {
                 Entity e = MainUtil.getTargetEntity(this.self, 30, 15);
-                Entity target = null;
 
-                boolean cond = true;
-                if (!(e instanceof LivingEntity)) { cond = false; }
-                if (e != null) {
-                    if (e.equals(this.getStandEntity(this.getSelf()))) { cond = false; }
-                    if (e.getPosition(0).distanceTo(SE.getPosition(0)) > 30) {cond = false;}
-                }
 
-                if (cond) {target = e;}
-                if (isAuto()) {
-                    if (target != null) {
-                        setShootTarget(target);
+                if (!isAuto()) {
+                    if (e instanceof LivingEntity && !e.equals(SE) ) {
+                        setShootTarget(e);
                     }
-                } else {
-                    setShootTarget(target);
                 }
+                if (e != null) {
+                    if (e.distanceTo(SE) >= 30 ) {setShootTarget(null);}
+                }
+
                 setGoBeyondTarget(getShootTarget());
             }
         } else if (active) {

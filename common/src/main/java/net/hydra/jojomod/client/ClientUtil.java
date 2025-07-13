@@ -311,13 +311,6 @@ public class ClientUtil {
         if (player != null) {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
-            if (entity instanceof RattEntity) {
-                if (((StandEntity) entity).getUser() != null) {
-                    if ( ((PowersRatt) powers ).isAuto() ) {
-                        return 12948493;
-                    }
-                }
-            }
 
             if (powers.getGoBeyondTarget() != null && powers.getGoBeyondTarget().is(entity)) {
                 if (powers instanceof PowersRatt) {return 12948493;}
