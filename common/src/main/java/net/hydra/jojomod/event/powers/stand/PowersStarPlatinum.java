@@ -346,7 +346,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             StandEntity stand = getStandEntity(this.self);
             if (!(Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE && this.self instanceof ServerPlayer PE && SE.getScoping() &&
                     SE.level().dimensionTypeId() == this.self.level().dimensionTypeId())) {
-                if (ClientNetworking.getAppropriateConfig().starPlatinumScopeUsesPotionEffectForNightVision) {
+                if (ClientNetworking.getAppropriateConfig().starPlatinumSettings.starPlatinumScopeUsesPotionEffectForNightVision) {
                     MobEffectInstance ME = this.getSelf().getEffect(MobEffects.NIGHT_VISION);
                     if (ME != null && ME.getDuration() >= 100000 && ME.getAmplifier() > 20) {
                         this.getSelf().removeEffect(MobEffects.NIGHT_VISION);
@@ -692,11 +692,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                         }
 
                         if (success){
-                            int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.starPlatinumGuardian;
+                            int cdr = ClientNetworking.getAppropriateConfig().starPlatinumSettings.guardianCooldown;
                             ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
                                     PowerIndex.SKILL_EXTRA_2, cdr);
                             ((StarPlatinumEntity) stand).setScoping(false);
-                            if (ClientNetworking.getAppropriateConfig().starPlatinumScopeUsesPotionEffectForNightVision) {
+                            if (ClientNetworking.getAppropriateConfig().starPlatinumSettings.starPlatinumScopeUsesPotionEffectForNightVision) {
                                 MobEffectInstance ME = this.getSelf().getEffect(MobEffects.NIGHT_VISION);
                                 if (ME != null && ME.getDuration() >= 100000 && ME.getAmplifier() > 20) {
                                     this.getSelf().removeEffect(MobEffects.NIGHT_VISION);
@@ -895,7 +895,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                         ModPacketHandler.PACKET_ACCESS.floatToServerPacket((float)
                                 maxDist2, FLOAT_STAR_FINGER_SIZE);
                         if (this.attackTimeDuring == 27){
-                            int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.starFinger;
+                            int cdr = ClientNetworking.getAppropriateConfig().starPlatinumSettings.starFingerCooldown;
                             this.setCooldown(PowerIndex.SKILL_1, cdr);
                             ticksForFinger = 101;
                             List<Entity> fingerTargets = doFinger((float) maxDist);
@@ -913,7 +913,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             SE.setFingerLength((float) maxDist2);
                         }
                         if (this.attackTimeDuring == 27){
-                            int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.starFinger;
+                            int cdr = ClientNetworking.getAppropriateConfig().starPlatinumSettings.starFingerCooldown;
                             this.setCooldown(PowerIndex.SKILL_1, cdr);
 
                             List<Entity> fingerTargets = doFinger((float) maxDist);
@@ -955,7 +955,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public boolean canInterruptPower(){
         if (this.getActivePower() == PowerIndex.POWER_1 && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
-            int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.starFingerInterrupt;
+            int cdr = ClientNetworking.getAppropriateConfig().starPlatinumSettings.starFingerInterruptCooldown;
             if (this.getSelf() instanceof Player) {
                 ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, cdr);
             }

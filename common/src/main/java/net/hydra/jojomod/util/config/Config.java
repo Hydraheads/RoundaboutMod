@@ -97,8 +97,6 @@ public class Config implements Cloneable {
     public Boolean SuperBlockDestructionBarrageLaunching;
     @BooleanOption(group = "inherit", value = false)
     public Boolean doExtraGriefChecksForClaims;
-    @BooleanOption(group = "inherit", value = false)
-    public Boolean starPlatinumScopeUsesPotionEffectForNightVision;
     @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
     public Integer d4cDimensionKidnapRadius;
     @IntOption(group = "inherit", value = 4, min = 0, max = 72000)
@@ -177,8 +175,6 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public JusticeSettings justiceSettings;
     @NestedOption(group = "modded")
-    public TheWorldSettings theWorldSettings;
-    @NestedOption(group = "modded")
     public HeyYaSettings heyYaSettings;
     @NestedOption(group = "modded")
     public MandomSettings mandomSettings;
@@ -186,6 +182,10 @@ public class Config implements Cloneable {
     public SurvivorSettings survivorSettings;
     @NestedOption(group = "modded")
     public AchtungSettings achtungSettings;
+    @NestedOption(group = "modded")
+    public TheWorldSettings theWorldSettings;
+    @NestedOption(group = "modded")
+    public StarPlatinumSettings starPlatinumSettings;
     @NestedOption(group = "modded")
     public TimeStopSettings timeStopSettings;
 
@@ -347,22 +347,13 @@ public class Config implements Cloneable {
         public Integer finalStandPunchInString;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer finalPunchAndKickMinimum;
-        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
-        public Integer starPlatinumGuardian;
         @IntOption(group = "inherit", value = 35, min = 1, max = 72000)
         public Integer barrageRecoil;
         @IntOption(group = "inherit", value = 35, min = 1, max = 72000)
         public Integer kickBarrageRecoil;
         @IntOption(group = "inherit", value = 35, min = 1, max = 72000)
         public Integer bubbleBarrageRecoil;
-        @IntOption(group = "inherit", value = 90, min = 0, max = 72000)
-        public Integer starFinger;
-        @IntOption(group = "inherit", value = 90, min = 0, max = 72000)
-        public Integer starFingerInterrupt;
-        @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
-        public Integer theWorldAssault;
-        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
-        public Integer theWorldAssaultInterrupt;
+
         @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
         public Integer dash;
         @IntOption(group = "inherit", value = 160, min = 0, max = 72000)
@@ -385,10 +376,6 @@ public class Config implements Cloneable {
         public Integer mobThrowInterruptv2;
         @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
         public Integer mobThrowAttack;
-        @IntOption(group = "inherit", value = 800, min = 0, max = 72000)
-        public Integer justiceFogClone;
-        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
-        public Integer fogChain;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer magicianKickMinimum;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
@@ -531,6 +518,10 @@ public class Config implements Cloneable {
         public Boolean zombieCorpsesCanBeGivenItems;
         @BooleanOption(group = "inherit", value = true)
         public Boolean zombieCorpsesCanMineAndPlaceBlocksWithGivenItems;
+        @IntOption(group = "inherit", value = 700, min = 0, max = 72000)
+        public Integer fogCloneCooldown;
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        public Integer fogChainCooldown;
     }
     public static class HeyYaSettings {
         @IntOption(group = "inherit", value = 35, min = 0, max = 72000)
@@ -621,6 +612,21 @@ public class Config implements Cloneable {
     public static class TheWorldSettings {
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer oxygenTankAdditionalTicks;
+        @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
+        public Integer assaultCooldown;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer assaultInterruptCooldown;
+    }
+
+    public static class StarPlatinumSettings {
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean starPlatinumScopeUsesPotionEffectForNightVision;
+        @IntOption(group = "inherit", value = 160, min = 0, max = 72000)
+        public Integer guardianCooldown;
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        public Integer starFingerCooldown;
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        public Integer starFingerInterruptCooldown;
     }
     public static class TimeStopSettings {
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)

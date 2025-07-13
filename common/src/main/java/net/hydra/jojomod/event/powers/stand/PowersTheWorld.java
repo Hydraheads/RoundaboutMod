@@ -820,7 +820,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                     stand.setXRot(getLookAtEntityPitch(stand,$$5));
                     this.self.level().playSound(null, this.self.blockPosition(),  ModSounds.PUNCH_4_SOUND_EVENT,
                             SoundSource.PLAYERS, 0.95F, 1.3F);
-                    int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.theWorldAssault;
+                    int cdr = ClientNetworking.getAppropriateConfig().theWorldSettings.assaultCooldown;
                     if (this.getSelf() instanceof ServerPlayer) {
                         ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
                                 PowerIndex.SKILL_1, cdr);
@@ -945,7 +945,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public boolean canInterruptPower(){
         if (this.getActivePower() == PowerIndex.POWER_1 || this.getActivePower() == PowerIndex.POWER_1_BONUS){
-            int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.theWorldAssaultInterrupt;
+            int cdr = ClientNetworking.getAppropriateConfig().theWorldSettings.assaultInterruptCooldown;
             if (this.getSelf() instanceof Player) {
                 ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, cdr);
             }

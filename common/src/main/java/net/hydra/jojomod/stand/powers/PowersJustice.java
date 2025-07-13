@@ -892,7 +892,7 @@ public class PowersJustice extends NewDashPreset {
         if (!this.onCooldown(PowerIndex.SKILL_2)) {
             IPermaCasting icast = ((IPermaCasting) this.getSelf().level());
             if (icast.roundabout$isPermaCastingEntity(this.getSelf())) {
-                int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.fogChain;
+                int cdr = ClientNetworking.getAppropriateConfig().justiceSettings.fogChainCooldown;
                 this.setCooldown(PowerIndex.SKILL_2, cdr);
                 StandEntity piloting = getPilotingStand();
                 if (isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved()) {
@@ -946,7 +946,7 @@ public class PowersJustice extends NewDashPreset {
                 if (this.getSelf() instanceof Player PE && ((IPlayerEntity)PE).roundabout$getShapeShift() > ShapeShifts.PLAYER.id){
                     ModPacketHandler.PACKET_ACCESS.byteToServerPacket((byte) 0, PacketDataIndex.BYTE_CHANGE_MORPH);
                 }
-                this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.justiceFogClone);
+                this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().justiceSettings.fogCloneCooldown);
                 tryPowerPacket(PowerIndex.POWER_3);
             }
         }
@@ -1331,7 +1331,7 @@ public class PowersJustice extends NewDashPreset {
             clone1 = fclone;
             clone2 = fclone2;
 
-            this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.justiceFogClone);
+            this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().justiceSettings.fogCloneCooldown);
             ((ServerLevel) this.self.level()).sendParticles(ModParticles.FOG_CHAIN, this.self.getX(),
                     this.self.getY()+this.self.getEyeHeight(), this.self.getZ(),
                     50, 1, 1, 1, 0.1);
@@ -1467,7 +1467,7 @@ public class PowersJustice extends NewDashPreset {
 
                 if (success) {
                     addEXP(4);
-                    int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.fogChain;
+                    int cdr = ClientNetworking.getAppropriateConfig().justiceSettings.fogChainCooldown;
                     this.setCooldown(PowerIndex.SKILL_2, cdr);
                     this.self.level().playSound(null, this.self.getX(), this.self.getY(),
                             this.self.getZ(), ModSounds.INHALE_EVENT, this.self.getSoundSource(), 100.0F, 0.5F);

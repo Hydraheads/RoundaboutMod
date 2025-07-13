@@ -1294,6 +1294,29 @@
   "config_translatiors_note_2": "of everything beneath this being translated, it is a lot of work. But if you really",
   "config_translatiors_note_3": "have the time and drive to do so, you deserve a cookie. :)",
 
+
+
+
+
+  "config.roundabout.z.name": "",
+  "config.roundabout.z.desc": "",
+  "config.roundabout.fogAndPilotRange.name": "Fog and Control Range",
+  "config.roundabout.fogAndPilotRange.desc": "How far the fog extends, and how far you can pilot justice in control mode.",
+  "config.roundabout.maxCorpses.name": "Max Corpses",
+  "config.roundabout.maxCorpses.desc": "The amount of corpses you can activate at once. The default is 12, for balance in pvp reasons and server performance reasons. But in canon, according to JoJo 6251 (a guide written by Araki), Justice can control over a thousand corpses at once.",
+  "config.roundabout.standUserMobMinionCount.name": "Enemy User Max Corpses",
+  "config.roundabout.standUserMobMinionCount.desc": "The same as above, but for enemy stand users. By default it is 5 as to not overwhelm.",
+  "config.roundabout.corpsesUseOwnerTeam.name": "Corpses Use Owner Team",
+  "config.roundabout.corpsesUseOwnerTeam.desc": "Enables corpses sharing the scoreboard team of their owners.",
+  "config.roundabout.zombieCorpsesCanBeGivenItems.name": "Corpse Item Giving",
+  "config.roundabout.zombieCorpsesCanBeGivenItems.desc": "Enables the ability for corpses to be given items by sneak right clicking them.",
+  "config.roundabout.zombieCorpsesCanMineAndPlaceBlocksWithGivenItems.name": "Zombie Corpse Building",
+  "config.roundabout.zombieCorpsesCanMineAndPlaceBlocksWithGivenItems.desc": "Enables the ability for zombie corpses to mine and place blocks with their given items, if directed at a block in justice control mode.",
+  "config.roundabout.fogCloneCooldown.name": "Fog Clone Cooldown",
+  "config.roundabout.fogCloneCooldown.desc": "Change the cooldown of fog clone creation, by default the cooldown is 700 ticks (35 seconds) because the ability is extremely powerful defensively and lets you eat with little consequence.",
+  "config.roundabout.fogChainCooldown.name": "Fog Chain Cooldown",
+  "config.roundabout.fogChainCooldown.desc": "Change the cooldown of fog chains, by default the cooldown is 80 (4 seconds).",
+
   "config.roundabout.numberOfYapLines.name": "Yap Line Count",
   "config.roundabout.numberOfYapLines.desc": "Change this if you want to add more yap lines to the lang file in a resource pack.",
   "config.roundabout.numberOfEvilYapLines.name": "Evil Yap Line Count",
@@ -1306,16 +1329,16 @@
   "config.roundabout.numberOfDangerYapLines.desc": "Change this if you want to add more yap lines to the lang file in a resource pack.",
   "config.roundabout.numberOfEvilDangerYapLines.name": "Evil Danger Line Count",
   "config.roundabout.numberOfEvilDangerYapLines.desc": "Change this if you want to add more yap lines to the lang file in a resource pack.",
-  "config.roundabout.detectedOreLightDuration.name": "",
-  "config.roundabout.detectedOreLightDuration.desc": "",
-  "config.roundabout.oreDetectionRadius.name": "",
-  "config.roundabout.oreDetectionRadius.desc": "",
-  "config.roundabout.oreDetectionMaximum.name": "",
-  "config.roundabout.oreDetectionMaximum.desc": "",
+  "config.roundabout.detectedOreLightDuration.name": "Ore Light Duration",
+  "config.roundabout.detectedOreLightDuration.desc": "How long do the lights appear by ores? (200 ticks or 10 seconds by default)",
+  "config.roundabout.oreDetectionRadius.name": "Ore Detection Radius",
+  "config.roundabout.oreDetectionRadius.desc": "How many blocks away (default 20) can you detect ores?",
+  "config.roundabout.oreDetectionMaximum.name": "Max Ores Detectable",
+  "config.roundabout.oreDetectionMaximum.desc": "What's the maximum amount of ores (default 15) you can detect at once?",
   "config.roundabout.oreDetectionCooldown.name": "Ore Detection Cooldown",
-  "config.roundabout.oreDetectionCooldown.desc": "",
+  "config.roundabout.oreDetectionCooldown.desc": "What is the cooldown (default 300 ticks or 15 secodns) of detecting ores?",
   "config.roundabout.yapCooldown.name": "Encourage Cooldown",
-  "config.roundabout.yapCooldown.desc": "",
+  "config.roundabout.yapCooldown.desc": "What is the cooldown for cheering you on? (42 ticks or ~2 seconds by default)",
 
   "config.roundabout.timeRewindOnlySavesAndLoadsOnPlayers.name": "Only Rewind Players",
   "config.roundabout.timeRewindOnlySavesAndLoadsOnPlayers.desc": "This setting is off by default, it makes time rewind only work on players. There might be a small marginal performance benefit from not saving past locations on entities in larger packs, so this ability is mostly for that.",
@@ -1378,6 +1401,10 @@
 
   "config.roundabout.oxygenTankAdditionalTicks.name": "Oxygen Tank Ticks",
   "config.roundabout.oxygenTankAdditionalTicks.desc": "How many ticks of oxygen do you want saved in The World's tank? The default, 300, is 15 seconds worth of extra underwater breathing.",
+  "config.roundabout.assaultCooldown.name": "Assault Cooldown",
+  "config.roundabout.assaultCooldown.desc": "After assault hits its target, set the resulting cooldown. (default is 40 ticks or 2 seconds)",
+  "config.roundabout.assaultInterruptCooldown.name": "Assault Interrupt Cooldown",
+  "config.roundabout.assaultInterruptCooldown.desc": "If you are hit before assault connects, this cooldown is incurred. (default is 60 ticks or 3 seconds)",
 
   "config.roundabout.maxTimeStopTicksStarPlatinum.name": "Max SP Length in Ticks",
   "config.roundabout.maxTimeStopTicksStarPlatinum.desc": "Star Platinum's Time Stop lasts 100 ticks (5 seconds, Jotaro's highest achieved length) at a full charge by default.",
@@ -1418,15 +1445,23 @@
   "config.roundabout.wardenMovesInStoppedTime.name": "Warden Can Move",
   "config.roundabout.wardenMovesInStoppedTime.desc": "The Warden can bypass stopped time, because it is a supernatural entity with special properties.",
   "config.roundabout.playerDamageCapHealthPercent.name": "Player Damage Cap",
-  "config.roundabout.playerDamageCapHealthPercent.desc": "The maximum percentage of a player's health you can reduce in stopped time. By default, it is essentially a quarter of their max health.",
+  "config.roundabout.playerDamageCapHealthPercent.desc": "The maximum percentage of a player's health you can reduce in stopped time. By default, it is 30 percent of their max health.",
   "config.roundabout.creativeModeInfiniteTimeStop.name": "Creative Mode Infinite",
   "config.roundabout.creativeModeInfiniteTimeStop.desc": "Creative players can stop time on a dime forever, this is useful as a tool for building, stopping griefing or fire spread, taking screenshots, etc.",
   "config.roundabout.blockRangeNegativeOneIsInfinite.name": "Radius of Stopped Time",
   "config.roundabout.blockRangeNegativeOneIsInfinite.desc": "By default the ability has an 100 block radius so only players nearby feel it. If you set it to -1, it becomes global and actually stops the time of day beyond just visually.",
 
+  "config.roundabout.starPlatinumScopeUsesPotionEffectForNightVision.name": "Scope Uses NV Potion",
+  "config.roundabout.starPlatinumScopeUsesPotionEffectForNightVision.desc": "If you have a mod like Bad Optimizations that deletes the vanilla code that scope uses to light things up, turn this on so it works regardless.",
+  "config.roundabout.guardianCooldown.name": "Guardian Cooldown",
+  "config.roundabout.guardianCooldown.desc": "Change the length in between scope grabbing and throwing incoming projectiles. (default is 160 or 8 seconds)",
+  "config.roundabout.starFingerCooldown.name": "Star Finger Cooldown",
+  "config.roundabout.starFingerCooldown.desc": "Change the length in between using Star Finger. (default is 80 or 4 seconds)",
+  "config.roundabout.starFingerInterruptCooldown.name": "Star Finger Interrupt Cooldown",
+  "config.roundabout.starFingerInterruptCooldown.desc": "Change the length of interrupt time if you are hit our of star finger. (default is 80 or 4 seconds)",
+
   "config.roundabout.z.name": "",
   "config.roundabout.z.desc": "",
-
   "config.roundabout.x.name": "Applies Invis Potion",
   "config.roundabout.x.desc": "of everything beneath this being translated, it is a lot of work. But if you really"
 }

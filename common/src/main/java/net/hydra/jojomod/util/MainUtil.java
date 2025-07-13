@@ -1831,14 +1831,14 @@ public class MainUtil {
         } else if (context == PacketDataIndex.SINGLE_BYTE_SCOPE) {
             if (player != null && ((StandUser)player).roundabout$getStand() instanceof StarPlatinumEntity SE){
                 SE.setScoping(true);
-                if (ClientNetworking.getAppropriateConfig().starPlatinumScopeUsesPotionEffectForNightVision) {
+                if (ClientNetworking.getAppropriateConfig().starPlatinumSettings.starPlatinumScopeUsesPotionEffectForNightVision) {
                     player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 1000000, 21, false, false), null);
                 }
             }
         } else if (context == PacketDataIndex.SINGLE_BYTE_SCOPE_OFF) {
             if (player != null && ((StandUser)player).roundabout$getStand() instanceof StarPlatinumEntity SE){
                 SE.setScoping(false);
-                if (ClientNetworking.getAppropriateConfig().starPlatinumScopeUsesPotionEffectForNightVision) {
+                if (ClientNetworking.getAppropriateConfig().starPlatinumSettings.starPlatinumScopeUsesPotionEffectForNightVision) {
                     MobEffectInstance ME = player.getEffect(MobEffects.NIGHT_VISION);
                     if (ME != null && ME.getDuration() >= 100000 && ME.getDuration() >= 100000 && ME.getAmplifier() > 20) {
                         player.removeEffect(MobEffects.NIGHT_VISION);
