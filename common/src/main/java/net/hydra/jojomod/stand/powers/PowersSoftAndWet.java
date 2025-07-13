@@ -781,7 +781,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
 
     public int getBubbleBarrageRecoilTime(){
         return ClientNetworking.getAppropriateConfig().
-                cooldownsInTicks.bubbleBarrageRecoil;
+                softAndWetSettings.bubbleBarrageRecoilCooldown;
     }
     public void updateBubbleBarrage(){
         if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
@@ -895,7 +895,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
         SoftAndWetPlunderBubbleEntity bubble = getPlunderBubble();
         if (!onCooldown(PowerIndex.SKILL_2)) {
             if (bubble != null) {
-                this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().cooldownsInTicks.softAndWetBasicBubbleShot);
+                this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().softAndWetSettings.basicBubbleShotCooldown);
 
                 this.poseStand(OffsetIndex.FOLLOW);
                 this.setAttackTimeDuring(-10);
@@ -925,7 +925,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                     if (!this.onCooldown(PowerIndex.SKILL_EXTRA)) {
                         this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BIG_BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
                         ((StandUser) this.getSelf()).roundabout$setBubbleEncased((byte) 1);
-                        this.setCooldown(PowerIndex.SKILL_EXTRA, ClientNetworking.getAppropriateConfig().cooldownsInTicks.softAndWetEncasementBubbleCreate);
+                        this.setCooldown(PowerIndex.SKILL_EXTRA, ClientNetworking.getAppropriateConfig().softAndWetSettings.encasementBubbleCreateCooldown);
                         return;
                     }
                 }
@@ -1022,7 +1022,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
         bubble.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
         bubble.setUser(this.self);
         bubble.setOwner(this.self);
-        bubble.lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.explosiveBubbleLifespanInTicks;
+        bubble.lifeSpan = 400;
         return bubble;
     }
     public GoBeyondEntity getGoBeyondBubble(){
@@ -1183,7 +1183,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
             }
         }
 
-        this.setCooldown(PowerIndex.SKILL_4_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.softAndWetWaterShieldCD);
+        this.setCooldown(PowerIndex.SKILL_4_SNEAK, ClientNetworking.getAppropriateConfig().softAndWetSettings.waterShieldCooldown);
 
         return true;
     }
@@ -1270,7 +1270,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
         ItemStack stack = ((Player) this.getSelf()).getInventory().getItem(this.grabInventorySlot);
         if (!stack.isEmpty() && !(stack.getItem() instanceof BlockItem &&
                 ((BlockItem) stack.getItem()).getBlock() instanceof ShulkerBoxBlock)) {
-            this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().cooldownsInTicks.softAndWetItemBubbleShot);
+            this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().softAndWetSettings.itemBubbleShotCooldown);
             if (!this.self.level().isClientSide()) {
 
                 SoftAndWetItemLaunchingBubbleEntity bubble = getItemLaunchingBubble();
@@ -1297,7 +1297,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
         SoftAndWetPlunderBubbleEntity bubble = getPlunderBubble();
 
         if (bubble != null){
-            this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().cooldownsInTicks.softAndWetBasicBubbleShot);
+            this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().softAndWetSettings.basicBubbleShotCooldown);
 
             this.poseStand(OffsetIndex.FOLLOW);
             this.setAttackTimeDuring(-10);
@@ -1807,7 +1807,7 @@ public void unlockSkin(){
         return super.tryPower(move,forced);
     }
     public boolean bigEncasementBubbleCreate() {
-        this.setCooldown(PowerIndex.SKILL_EXTRA, ClientNetworking.getAppropriateConfig().cooldownsInTicks.softAndWetEncasementBubbleCreate);
+        this.setCooldown(PowerIndex.SKILL_EXTRA, ClientNetworking.getAppropriateConfig().softAndWetSettings.encasementBubbleCreateCooldown);
         if (!this.self.level().isClientSide()) {
             EncasementBubbleEntity encasement = ModEntities.ENCASEMENT_BUBBLE.create(this.getSelf().level());
             if (encasement != null){
@@ -1816,7 +1816,7 @@ public void unlockSkin(){
                 Vec3 movevec = this.self.getPosition(0).add(0,(this.self.getEyeHeight()*0.65F),0).add(this.self.getForward().normalize().scale(0.72));
                 encasement.absMoveTo(movevec.x(), movevec.y(), movevec.z());
                 encasement.setUser(this.self);
-                encasement.lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.encasementBubbleFloatingLifespanInTicks;
+                encasement.lifeSpan = 200;
                 this.getSelf().level().addFreshEntity(encasement);
                 addEXP(1);
 
@@ -2142,9 +2142,9 @@ public void unlockSkin(){
     public void encasementKick(){
 
         if (chargedFinal >= maxSuperHitTime) {
-            this.setAttackTimeMax((int) (ClientNetworking.getAppropriateConfig().cooldownsInTicks.softAndWetKickMinimum + chargedFinal * 1.5));
+            this.setAttackTimeMax((int) (ClientNetworking.getAppropriateConfig().softAndWetSettings.kickMinimumCooldown + chargedFinal * 1.5));
         } else {
-            this.setAttackTimeMax((int) (ClientNetworking.getAppropriateConfig().cooldownsInTicks.softAndWetKickMinimum + chargedFinal));
+            this.setAttackTimeMax((int) (ClientNetworking.getAppropriateConfig().softAndWetSettings.kickMinimumCooldown + chargedFinal));
         }
         this.setAttackTime(0);
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
@@ -2184,7 +2184,7 @@ public void unlockSkin(){
 
                     tryPowerPacket(PowerIndex.POWER_3_EXTRA);
                     bubbleScaffoldCount++;
-                    this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.softAndWetBubbleScaffolding);
+                    this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().softAndWetSettings.bubbleScaffoldingCooldown);
                     if (bubbleScaffoldCount >= 10){
                         this.tryPower(PowerIndex.NONE, true);
                         tryPowerPacket(PowerIndex.NONE);

@@ -351,8 +351,6 @@ public class Config implements Cloneable {
         public Integer barrageRecoil;
         @IntOption(group = "inherit", value = 35, min = 1, max = 72000)
         public Integer kickBarrageRecoil;
-        @IntOption(group = "inherit", value = 35, min = 1, max = 72000)
-        public Integer bubbleBarrageRecoil;
 
         @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
         public Integer dash;
@@ -384,18 +382,6 @@ public class Config implements Cloneable {
         public Integer d4cDimensionHopToOldDimension;
         @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
         public Integer D4CMeltDodgeCooldown;
-        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
-        public Integer softAndWetKickMinimum;
-        @IntOption(group = "inherit", value = 240, min = 0, max = 72000)
-        public Integer softAndWetBubbleScaffolding;
-        @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
-        public Integer softAndWetWaterShieldCD;
-        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
-        public Integer softAndWetItemBubbleShot;
-        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
-        public Integer softAndWetBasicBubbleShot;
-        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
-        public Integer softAndWetEncasementBubbleCreate;
         @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
         public Integer cinderellaDefaceAttack;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
@@ -442,8 +428,6 @@ public class Config implements Cloneable {
         public Integer maxExplosiveBubbleTravelDistanceBeforePopping;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer explosiveBubbleShootSpeedMultiplier;
-        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
-        public Integer explosiveBubbleLifespanInTicks;
         @IntOption(group = "inherit", value = 2499, min = 0, max = 72000)
         public Integer heatGainedPerShot;
         @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
@@ -460,10 +444,22 @@ public class Config implements Cloneable {
         public Integer goBeyondLifespanInTicks;
         @IntOption(group = "inherit", value = 26, min = 0, max = 72000)
         public Integer goBeyondTicksUntilItCanHit;
-        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
-        public Integer encasementBubbleFloatingLifespanInTicks;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer waterShieldDurationInTicks;
+        @IntOption(group = "inherit", value = 35, min = 1, max = 72000)
+        public Integer bubbleBarrageRecoilCooldown;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer kickMinimumCooldown;
+        @IntOption(group = "inherit", value = 240, min = 0, max = 72000)
+        public Integer bubbleScaffoldingCooldown;
+        @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
+        public Integer waterShieldCooldown;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer itemBubbleShotCooldown;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer basicBubbleShotCooldown;
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        public Integer encasementBubbleCreateCooldown;
     }
     public static class MagiciansRedSettings {
         @IntOption(group = "inherit", value = 100, min = -1, max = 72000)
