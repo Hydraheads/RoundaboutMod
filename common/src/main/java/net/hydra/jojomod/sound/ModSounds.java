@@ -701,6 +701,9 @@ public class ModSounds {
     public static final ResourceLocation HEY_YA_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HEY_YA_SUMMON);
     public static SoundEvent HEY_YA_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(HEY_YA_SUMMON_ID);
 
+    public static final String SUMMON_ACHTUNG = "summon_achtung";
+    public static final ResourceLocation SUMMON_ACHTUNG_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_ACHTUNG);
+    public static SoundEvent SUMMON_ACHTUNG_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_ACHTUNG_ID);
     public static final String SURVIVOR_SUMMON = "survivor_summon";
     public static final ResourceLocation SURVIVOR_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SURVIVOR_SUMMON);
     public static SoundEvent SURVIVOR_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(SURVIVOR_SUMMON_ID);

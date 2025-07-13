@@ -23,6 +23,12 @@
       "roundabout:survivor_summon"
     ]
   },
+  "summon_achtung": {
+    "subtitle": "sounds.roundabout.summon_achtung",
+    "sounds": [
+      "roundabout:summon_achtung"
+    ]
+  },
   "achtung_burst": {
     "subtitle": "sounds.roundabout.achtung_burst",
     "sounds": [
