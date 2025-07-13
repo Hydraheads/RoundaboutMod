@@ -1,0 +1,8 @@
+{
+  "required": false,
+  "package": "net.hydra.jojomod.sodium.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "SodiumChunkBuilderMixin"
+  ]
+}

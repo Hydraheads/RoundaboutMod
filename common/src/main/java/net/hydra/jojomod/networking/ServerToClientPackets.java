@@ -12,7 +12,8 @@ public class ServerToClientPackets {
             Rewind("rewind"),
             Interpolate("unskip_interpolation"),
             Chrono("chrono_vision_player"),
-            MANDOM_PENALTY("mandom_penalty");
+            MANDOM_PENALTY("mandom_penalty"),
+            TRUE_INVISIBILITY("invis");
 
             public final String value;
 

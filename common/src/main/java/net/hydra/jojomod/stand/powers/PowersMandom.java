@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
@@ -305,7 +306,7 @@ public class PowersMandom extends NewDashPreset {
     public void rewindTimeActivation(){
         int rewindPacketRange = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindRange;
         int rewindCooldown = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownv2;
-        spreadRadialClientPacket(rewindPacketRange,false, "rewind");
+        spreadRadialClientPacket(rewindPacketRange,false, ServerToClientPackets.S2CPackets.MESSAGES.Rewind.value);
         List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.self.level(), this.self.blockPosition(),
                 rewindPacketRange);
         if (!mobsInRange.isEmpty()) {

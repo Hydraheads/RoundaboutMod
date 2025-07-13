@@ -20,7 +20,7 @@ public abstract class ZPrimedTnt extends Entity {
 
     @Inject(method = "tick", at = @At(value = "TAIL"), cancellable = true)
     protected void roundabout$tick(CallbackInfo ci) {
-        ((IEntityAndData)this).roundabout$addSecondToQueue();
+        ((IEntityAndData)this).roundabout$universalTick();
         ((IEntityAndData)this).roundabout$tickQVec();
 
     }

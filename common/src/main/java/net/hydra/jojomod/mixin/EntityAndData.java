@@ -16,16 +16,23 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -81,7 +88,51 @@ public abstract class EntityAndData implements IEntityAndData {
     public int roundabout$noGravityTicks = 0;
     @Unique
     public boolean roundabout$renderingExclusiveLayers = false;
+    @Unique
+    public int roundabout$trueInvisibility = -1;
 
+    @Unique
+    @Override
+    public void roundabout$setTrueInvisibility(int invis){
+        if (((Entity)(Object)this) instanceof LivingEntity LE){
+            ((StandUser)LE).roundabout$setTrueInvis(invis);
+
+            if (!this.level().isClientSide()) {
+                if (ClientNetworking.getAppropriateConfig().achtungSettings.invisibilityPotionAsWell) {
+                    if (invis <= -1) {
+                        LE.removeEffect(MobEffects.INVISIBILITY);
+                    } else {
+                        LE.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 10, 0, false, false), null);
+                    }
+                }
+            }
+        } else {
+            roundabout$trueInvisibility = invis;
+            if (!this.level().isClientSide()) {
+                MainUtil.spreadRadialClientPacket(((Entity) (Object) this), 120, false,
+                        ServerToClientPackets.S2CPackets.MESSAGES.TRUE_INVISIBILITY.value,
+                        getId(), invis
+                );
+            }
+        }
+    }
+    @Unique
+    @Override
+    public int roundabout$getTrueInvisibility(){
+        if (((Entity)(Object)this) instanceof LivingEntity LE){
+            return ((StandUser)LE).roundabout$getTrueInvis();
+        }
+        return roundabout$trueInvisibility;
+    }
+
+    @Unique
+    public void roundabout$tickTrueInvisibility(){
+        if (!this.level().isClientSide()){
+            if (roundabout$getTrueInvisibility() > -1){
+                roundabout$setTrueInvisibility(roundabout$getTrueInvisibility()-1);
+            }
+        }
+    }
 
     /**Mandom Time Queue, not sure if it will have any other use*/
     @Unique
@@ -106,7 +157,6 @@ public abstract class EntityAndData implements IEntityAndData {
             /**Every 20 ticks save a second on the entity for mandom rewinding*/
             if (roundabout$secondQue.isEmpty() || this.tickCount % 20 == 0) {
                 roundabout$addSecondToQueue(SavedSecond.saveEntitySecond((Entity) (Object) this));
-
             }
         }
     }
@@ -504,9 +554,19 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Shadow public int tickCount;
 
+
+    @Shadow public abstract int getId();
+
+    @Override
+    @Unique
+    public void roundabout$universalTick(){
+        roundabout$addSecondToQueue();
+        roundabout$tickTrueInvisibility();
+    }
+
     @Inject(method = "tick", at = @At(value = "HEAD"))
     protected void roundabout$tickH(CallbackInfo ci) {
-        roundabout$addSecondToQueue();
+        roundabout$universalTick();
     }
     @Inject(method = "tick", at = @At(value = "TAIL"))
     protected void roundabout$tick(CallbackInfo ci) {
