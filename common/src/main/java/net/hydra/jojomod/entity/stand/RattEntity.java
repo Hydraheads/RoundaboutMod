@@ -22,7 +22,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class RattEntity extends StandEntity {
-    public RattEntity(EntityType<? extends Mob> entityType, Level world) {super(entityType, world);}
+    public RattEntity(EntityType<? extends Mob> entityType, Level world) {
+        super(entityType, world);
+    }
 
     public static final byte
             ANIME_SKIN = 1,
@@ -47,10 +49,9 @@ public class RattEntity extends StandEntity {
 
 
 
+
     @Override
     public void tick() {
-
-
 
        /*  if (this.getUser() != null) {
              PowersRatt RE = (PowersRatt) this.getUserData(this.getUser()).roundabout$getStandPowers();

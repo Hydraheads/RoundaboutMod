@@ -1,46 +1,29 @@
 package net.hydra.jojomod.stand.powers;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.SurvivorEntity;
-import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.mixin.StandUserEntity;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.data.Main;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
@@ -80,7 +63,7 @@ public class PowersRatt extends NewDashPreset {
 
     boolean active = false;
     @Override
-    public boolean canSummonStandAsEntity() {return active;}
+    public boolean canSummonStandAsEntity() {return false;}
 
 
     public boolean isPlaced() {return this.getStandEntity(this.getSelf()) != null;}
@@ -158,7 +141,8 @@ public class PowersRatt extends NewDashPreset {
             }
             case PowerIndex.POWER_2 -> {
                 active = true;
-                placeRatt(pos);
+                Placement = pos;
+                this.setCooldown(PowerIndex.POWER_2,80);
             }
         }
         return true;
@@ -170,6 +154,9 @@ public class PowersRatt extends NewDashPreset {
         if (!isClient()) {
             blipStand(pos);
         }
+  /*      ((ServerLevel) this.self.level()).sendParticles(ModParticles.FOG_CHAIN, pos.x(),
+                pos.y(), pos.z(),
+                14, 0.4, 0.2, 0.4, 0.35); */
     }
 
     public void blipStand(Vec3 pos) {
@@ -178,9 +165,9 @@ public class PowersRatt extends NewDashPreset {
             StandUser user = getStandUserSelf();
             stand.setSkin(user.roundabout$getStandSkin());
             stand.setMaster(this.self);
+            stand.absMoveTo(pos.x(),pos.y(),pos.z());
+            this.getStandUserSelf().roundabout$standMount(stand);
             this.self.level().addFreshEntity(stand);
-            Placement = pos;
-          //  stand.setPos(Placement);
         }
     }
 
@@ -196,28 +183,19 @@ public class PowersRatt extends NewDashPreset {
 
         if (isPlaced()) {
 
-            if (Placement != null) {
-                if (!SE.getPosition(0).equals(Placement)) {
-                    tryPosPower(PowersRatt.UPDATE_POSITION,true,Placement);
-                    tryPosPowerPacket(PowersRatt.UPDATE_POSITION,Placement);
-                    Placement = null;
-                }
-            }
 
             if (this.isClient()) {
-                Entity e = MainUtil.rayCastEntity(this.getSelf(), 60);
+                Entity e = MainUtil.getTargetEntity(this.self, 30, 15);
                 Entity target = null;
+
                 boolean cond = true;
-                if (!(e instanceof LivingEntity)) {
-                    cond = false;
-                }
+                if (!(e instanceof LivingEntity)) { cond = false; }
                 if (e != null) {
-                    if (e.getPosition(0).distanceTo(SE.getPosition(0)) > 30) {
-                        cond = false;
-                    }
+                    if (e.equals(this.getStandEntity(this.getSelf()))) { cond = false; }
+                    if (e.getPosition(0).distanceTo(SE.getPosition(0)) > 30) {cond = false;}
                 }
 
-                target = e;
+                if (cond) {target = e;}
                 if (isAuto()) {
                     if (target != null) {
                         setShootTarget(target);
@@ -227,8 +205,12 @@ public class PowersRatt extends NewDashPreset {
                 }
                 setGoBeyondTarget(getShootTarget());
             }
-        } else {
-
+        } else if (active) {
+            if (!isClient()) {
+                if (Placement != null) {
+                    placeRatt(Placement);
+                }
+            }
 
         }
     }
@@ -290,11 +272,12 @@ public class PowersRatt extends NewDashPreset {
 
     public void DeployClient() {
         if (!this.onCooldown(PowerIndex.POWER_2)) {
+            this.getSelf().playSound(ModSounds.RATT_SUMMON_EVENT, 1.0F, (float) (0.98F + (Math.random() * 0.04F)));
             BlockHitResult blockHitResult = getValidPlacement();
             if (blockHitResult != null) {
                 Vec3 pos = blockHitResult.getLocation();
                 if (blockHitResult.getDirection() != Direction.UP && blockHitResult.getDirection() != Direction.DOWN) {
-                    pos = new Vec3(pos.x(), pos.y() + 1, pos.z());
+                    pos = new Vec3(pos.x(), ((int) pos.y()) + 1, pos.z());
                 }
                 tryPosPower(PowerIndex.POWER_2, true, pos);
                 tryPosPowerPacket(PowerIndex.POWER_2, pos);
@@ -316,6 +299,7 @@ public class PowersRatt extends NewDashPreset {
             case PowerIndex.POWER_2_SNEAK -> {
                 active = false;
                 this.getStandEntity(this.getSelf()).remove(Entity.RemovalReason.DISCARDED);
+                this.setCooldown(PowerIndex.POWER_2,40);
             }
         }
         return super.tryPower(move, forced);
@@ -336,7 +320,7 @@ public class PowersRatt extends NewDashPreset {
                 return getValidPlacement() == null && !isPlaced();
             }
             case PowerIndex.SKILL_1 -> {
-                return getShootTarget() == null && this.getSelf().isCrouching() && !isPlaced() && !isAuto();
+                return getShootTarget() == null && this.getSelf().isCrouching() && !isAuto() && isPlaced();
             }
         }
         return super.isAttackIneptVisually(activeP, slot);
@@ -393,7 +377,6 @@ public class PowersRatt extends NewDashPreset {
     }
 
     @Override
-    protected Byte getSummonSound() {return SoundIndex.SUMMON_SOUND;}
     public SoundEvent getSoundFromByte(byte soundChoice){
         byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
