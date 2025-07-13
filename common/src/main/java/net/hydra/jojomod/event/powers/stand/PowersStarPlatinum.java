@@ -945,7 +945,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
     /**Makes*/
     public boolean fullTSChargeBonus(){
-        if (canExecuteMoveWithLevel(getMaxTSFactorLevel()) && ClientNetworking.getAppropriateConfig().timeStopSettings.maxedStarPlatinumBypassesReducedDamageAtFullCharge){
+        if (canExecuteMoveWithLevel(getMaxTSFactorLevel()) && ClientNetworking.getAppropriateConfig().timeStopSettings.maxSPBypassesReduction){
             return this.maxChargedTSTicks >= ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum;
         } else {
             return false;
@@ -1463,8 +1463,15 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public int setCurrentMaxTSTime(int chargedTSSeconds){
         if (chargedTSSeconds >= (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum)){
-            this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum);
-            this.setChargedTSTicks(this.maxChargeTSTime);
+            if (canExecuteMoveWithLevel(getMaxTSFactorLevel()) && this.getSelf() instanceof Player) {
+                this.maxChargeTSTime = ClientNetworking.getAppropriateConfig().timeStopSettings.maxSPChargeBonusTicks +
+                        ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum;
+                this.setChargedTSTicks(this.maxChargeTSTime);
+                return ClientNetworking.getAppropriateConfig().timeStopSettings.maxSPChargeBonusTicks;
+            } else {
+                this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum);
+                this.setChargedTSTicks(this.maxChargeTSTime);
+            }
         } else if (chargedTSSeconds == (Math.min(ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum,ClientNetworking.getAppropriateConfig().timeStopSettings.impulseTimeStopLength))) {
             this.maxChargeTSTime = (int) (Math.min(ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum,ClientNetworking.getAppropriateConfig().timeStopSettings.impulseTimeStopLength));
         } else {

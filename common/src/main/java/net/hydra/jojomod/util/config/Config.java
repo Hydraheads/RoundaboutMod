@@ -630,7 +630,15 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer maxTimeStopTicksTheWorld;
         @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
-        public Integer additionalTimeStopTicksForFullyChargedTheWorld;
+        public Integer maxTWChargeBonusTicks;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 72000)
+        public Integer maxSPChargeBonusTicks;
+        @IntOption(group = "inherit", value = 66, min = 0, max = 100)
+        public Integer reducedTSDamageDealt;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean maxSPBypassesReduction;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean maxTWBypassesReduction;
         @IntOption(group = "inherit", value = 20, min = 1, max = 72000)
         public Integer impulseTimeStopLength;
         @IntOption(group = "inherit", value = 2, min = 1, max = 72000)
@@ -638,17 +646,13 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer timeStopMinimumCooldown;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer timeStopAdditionalCooldownPerSecondsUsedMultiplier;
+        public Integer additionalCooldownPerSecondsUsed;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer timeStopBonusActionsCooldown;
-        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
-        public Integer timeStopInterruptedCooldown;
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        public Integer timeStopInterruptedCooldownv2;
         @BooleanOption(group = "inherit", value = true)
         public Boolean timeStopIsAlwaysInterruptable;
-        @IntOption(group = "inherit", value = 66, min = 0, max = 100)
-        public Integer reducedDamagePercentDealtInTimeStop;
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean maxedStarPlatinumBypassesReducedDamageAtFullCharge;
         @BooleanOption(group = "inherit", value = false)
         public Boolean preventsBreathing;
         @BooleanOption(group = "inherit", value = true)

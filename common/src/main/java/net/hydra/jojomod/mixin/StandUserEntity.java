@@ -3412,7 +3412,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                                 1, 0.3, 0.3, 0.3, 0.3);
                     }
                 } else {
-                    $$1 *= (((float)(ClientNetworking.getAppropriateConfig().timeStopSettings.reducedDamagePercentDealtInTimeStop))*0.01F);
+                    $$1 *= (((float)(ClientNetworking.getAppropriateConfig().timeStopSettings.reducedTSDamageDealt))*0.01F);
                 }
                 if ((dmg + $$1) > max) {
                     roundabout$setStoredDamage(max);

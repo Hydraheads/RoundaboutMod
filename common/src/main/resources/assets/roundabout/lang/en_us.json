@@ -1283,5 +1283,73 @@
   "text.roundabout.survivor.anger_selection_off": "Rage Cupid Mode Off",
 
   "text.roundabout.achtung.vision_off": "Invisi-Vision Off",
-  "text.roundabout.achtung.vision_on": "Invisi-Vision On"
+  "text.roundabout.achtung.vision_on": "Invisi-Vision On",
+
+
+
+
+
+
+  "config_translatiors_note": "(Text of this string not ingame): Hello, translators of the mod! I have no expectations",
+  "config_translatiors_note_2": "of everything beneath this being translated, it is a lot of work. But if you really",
+  "config_translatiors_note_3": "have the time and drive to do so, you deserve a cookie. :)",
+
+
+
+  "config.roundabout.invisibilityPotionAsWell.name": "Apply Invis Potion",
+  "config.roundabout.invisibilityPotionAsWell.desc": "If you want the invisibility power to apply the potion effect as well, turn this on. This could be useful for map mods that respect players invisibility.",
+
+  "config.roundabout.oxygenTankAdditionalTicks.name": "Oxygen Tank Ticks",
+  "config.roundabout.oxygenTankAdditionalTicks.desc": "How many ticks of oxygen do you want saved in The World's tank? The default, 300, is 15 seconds worth of extra underwater breathing.",
+
+  "config.roundabout.maxTimeStopTicksStarPlatinum.name": "Max SP Length in Ticks",
+  "config.roundabout.maxTimeStopTicksStarPlatinum.desc": "Star Platinum's Time Stop lasts 100 ticks (5 seconds, Jotaro's highest achieved length) at a full charge by default.",
+  "config.roundabout.maxTimeStopTicksTheWorld.name": "Max TW Length in Ticks",
+  "config.roundabout.maxTimeStopTicksTheWorld.desc": "The World's Time Stop only gets extra seconds if it is fully charged and fully leveled, so this is the basic maximum you charge (100 ticks). Keep in mind pressing time stop again early lets use activate the ability without a full charge.",
+  "config.roundabout.additionalTimeStopTicksForFullyChargedTheWorld.name": "Full Charge TW Ticks",
+  "config.roundabout.additionalTimeStopTicksForFullyChargedTheWorld.desc": "When Time stop is fully charged and The World is fully leveled, it gains an additional 4 seconds (80 ticks). This lets it reach 9 seconds, which Araki later confirmed to be DIO's true limit (as opposed to the 11 seconds DIO presumed).",
+  "config.roundabout.maxSPChargeBonusTicks.name": "Full Charge SP Ticks",
+  "config.roundabout.maxSPChargeBonusTicks.desc": "The same as the above but for Star Platinum. By default, the mod offers a different advantage for Star Platinum's full charge (see below), so this is not recommended.",
+  "config.roundabout.reducedTSDamageDealt.name": "Reduced Damage Dealt",
+  "config.roundabout.reducedTSDamageDealt.desc": "By default, all attacks deal 66 Percent damage in stopped time for balancing reasoning. If you change it to 100, all attacks deal full damage. If you change it to zero, you cannot attack directly.",
+  "config.roundabout.maxSPBypassesReduction.name": "Max SP Bypass Reduction",
+  "config.roundabout.maxSPBypassesReduction.desc": "When time stop is fully charged, Star Platinum bypasses damage reduction to deal full damage. This is an ability designed to at least somewhat rival extra seconds, as the cooldown for time stop is dependent on seconds used by default.",
+  "config.roundabout.maxTWBypassesReduction.name": "Max TW Bypass Reduction",
+  "config.roundabout.maxTWBypassesReduction.desc": "The same as the above, but for The World. The World definitely does not need this with its 9 second Time Stop.",
+  "config.roundabout.impulseTimeStopLength.name": "Impulse Length",
+  "config.roundabout.impulseTimeStopLength.desc": "The length of using the crouch variation of Time Stop. It is an ability designed to emulate pressing the Time Stop key twice, just for people with really fast reaction time. But some users may want this ability to be more relevant or dominant in battle.",
+  "config.roundabout.rateOfChargingTimeStop.name": "Charging Rate",
+  "config.roundabout.rateOfChargingTimeStop.desc": "How many ticks of time stop do you charge per ticks that pass by? You start a time stop charge with 20 ticks, so at the default rate of 2 ticks, charging time stop fully takes two seconds. But if you raise Time Stop's length at all, you may want to consider increasing this rate, or the charging animation will take forever.",
+  "config.roundabout.timeStopMinimumCooldown.name": "Minimum Cooldown",
+  "config.roundabout.timeStopMinimumCooldown.desc": "When you end a time stop, regardless of what happens, this cooldown will always apply. Note there are other factors below that go into the cooldown length. Default is 200, 10 seconds.",
+  "config.roundabout.additionalCooldownPerSecondsUsed.name": "Cooldown Per Seconds Used",
+  "config.roundabout.additionalCooldownPerSecondsUsed.desc": "The longer you spend in stopped time, without ending it early, the longer the cooldown is by these ticks. By default it is set to 100, so after every second of spent time you have to wait five additional seconds. This is to incentivize ending the ability early for a shorter cooldown and to balance the power of time stop.",
+  "config.roundabout.timeStopBonusActionsCooldown.name": "Bonus Action Cooldown",
+  "config.roundabout.timeStopBonusActionsCooldown.desc": "Doing any action like attacking, eating, or launching projectiles in stopped time raises the cooldown even further by this amount (300 ticks or 15 seconds by default) once. This is to encourage using time stop for movement instead of attacking and for balancing reasons.",
+  "config.roundabout.timeStopInterruptedCooldownv2.name": "Interrupt Cooldown",
+  "config.roundabout.timeStopInterruptedCooldownv2.desc": "The cooldown for getting hit and having your time stop canceled. By default, it is 80 ticks (4 seconds). This cooldown exists both for balancing, and to incentivize pressing the time stop button again early to prevent getting hit out of time stop, decreasing your TS time when you do so.",
+  "config.roundabout.timeStopIsAlwaysInterruptable.name": "Always Interruptable",
+  "config.roundabout.timeStopIsAlwaysInterruptable.desc": "Whether or not you can even be interrupted while charging time stop. By default this is set to true for balancing reasons, but if you just want to be powerful set this to false.",
+  "config.roundabout.preventsBreathing.name": "Prevents Breathing",
+  "config.roundabout.preventsBreathing.desc": "Whether or not Time Stop uses your oxygen as well. Technically, Araki said in an interview that The World's Tanks were used for breathing in stopped time, so this option is an impractical homage to that, and is off by default.",
+  "config.roundabout.enableHovering.name": "Enable Hovering",
+  "config.roundabout.enableHovering.desc": "When holding spacebar, you can hover in stopped time by default. This is because Time Stop halts gravity. Time and gravity are connected in JoJo, and so DIO is shown hovering while time is stopped. Jotaro even hovers a bit in Part 4.",
+  "config.roundabout.enableCarryingWhileHovering.name": "Carrying While Hovering",
+  "config.roundabout.enableCarryingWhileHovering.desc": "When you hover, drops targets that you grabbed. This is to prevent excessive fall damage tricks.",
+  "config.roundabout.mobsTeleportInsteadOfStoppingTime.name": "Mobs Teleport Instead",
+  "config.roundabout.mobsTeleportInsteadOfStoppingTime.desc": "Mobs using The World teleport instead of truly stopping time. This is on by default because getting stopped by simple mob ai does not feel great from a gameplay perspective, nor is it fair for a creeper to do so. But if you want that to happen...",
+  "config.roundabout.wardenMovesInStoppedTime.name": "Warden Can Move",
+  "config.roundabout.wardenMovesInStoppedTime.desc": "The Warden can bypass stopped time, because it is a supernatural entity with special properties.",
+  "config.roundabout.playerDamageCapHealthPercent.name": "Player Damage Cap",
+  "config.roundabout.playerDamageCapHealthPercent.desc": "The maximum percentage of a player's health you can reduce in stopped time. By default, it is essentially a quarter of their max health.",
+  "config.roundabout.creativeModeInfiniteTimeStop.name": "Creative Mode Infinite",
+  "config.roundabout.creativeModeInfiniteTimeStop.desc": "Creative players can stop time on a dime forever, this is useful as a tool for building, stopping griefing or fire spread, taking screenshots, etc.",
+  "config.roundabout.blockRangeNegativeOneIsInfinite.name": "Radius of Stopped Time",
+  "config.roundabout.blockRangeNegativeOneIsInfinite.desc": "By default the ability has an 100 block radius so only players nearby feel it. If you set it to -1, it becomes global and actually stops the time of day beyond just visually.",
+
+  "config.roundabout.z.name": "",
+  "config.roundabout.z.desc": "",
+
+  "config.roundabout.x.name": "Applies Invis Potion",
+  "config.roundabout.x.desc": "of everything beneath this being translated, it is a lot of work. But if you really"
 }

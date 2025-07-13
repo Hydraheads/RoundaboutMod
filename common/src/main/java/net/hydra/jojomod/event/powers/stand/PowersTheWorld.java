@@ -411,14 +411,23 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 miningSettings.speedMultiplierTheWorld*0.01));
     }
 
+
+    public boolean fullTSChargeBonus(){
+        if (canExecuteMoveWithLevel(getMaxTSFactorLevel()) && ClientNetworking.getAppropriateConfig().timeStopSettings.maxTWBypassesReduction){
+            return this.maxChargedTSTicks >= ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld;
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public int setCurrentMaxTSTime(int chargedTSSeconds){
         if (chargedTSSeconds >= (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld)){
             if (canExecuteMoveWithLevel(getMaxTSFactorLevel()) && this.getSelf() instanceof Player) {
-                this.maxChargeTSTime = ClientNetworking.getAppropriateConfig().timeStopSettings.additionalTimeStopTicksForFullyChargedTheWorld +
+                this.maxChargeTSTime = ClientNetworking.getAppropriateConfig().timeStopSettings.maxTWChargeBonusTicks +
                 ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld;
                 this.setChargedTSTicks(this.maxChargeTSTime);
-                return ClientNetworking.getAppropriateConfig().timeStopSettings.additionalTimeStopTicksForFullyChargedTheWorld;
+                return ClientNetworking.getAppropriateConfig().timeStopSettings.maxTWChargeBonusTicks;
             } else {
                 this.maxChargeTSTime = ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld;
                 this.setChargedTSTicks(this.maxChargeTSTime);
