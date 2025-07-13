@@ -213,38 +213,14 @@ public class PowersAchtungBaby extends NewDashPreset {
     public Entity EntityTargetTwo = null;
     public boolean selectTarget(){
         setRageCupidCooldown();
-        unloadTargets();
         SurvivorEntity surv = SurvivorTarget;
         if (surv != null && EntityTargetOne instanceof LivingEntity LE && EntityTargetTwo instanceof LivingEntity LE2){
             surv.matchEntities(LE,LE2);
         }
         return true;
     }
+
     public void selectTargetClient(){
-        Entity TE = MainUtil.getTargetEntity(this.self, getCupidHighlightRange(), 15);
-        if (SurvivorTarget == null){
-            if (TE instanceof SurvivorEntity SE && (SE.getActivated() || getCreative())){
-                SurvivorTarget = SE;
-                this.self.playSound(ModSounds.SURVIVOR_PLACE_EVENT, 1F, 1.5F);
-            }
-        } else if (EntityTargetOne == null){
-            if (SurvivorEntity.canZapEntity(TE) && canUseZap(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()){
-                EntityTargetOne = TE;
-                this.self.playSound(ModSounds.SURVIVOR_PLACE_EVENT, 1F, 1.5F);
-            }
-        } else {
-            if (SurvivorEntity.canZapEntity(TE) && canUseZap(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange() && !EntityTargetOne.is(TE)){
-                /**Passing 3 integers is something a block pos can do, so why not just use that packet*/
-
-                if (!this.onCooldown(PowerIndex.SKILL_4)) {
-                    setRageCupidCooldown();
-                    tryTripleIntPacket(PowerIndex.POWER_4_BONUS, SurvivorTarget.getId(), EntityTargetOne.getId(), TE.getId());
-
-                    SurvivorTarget = null;
-                    EntityTargetOne = null;
-                }
-            }
-        }
     }
     public boolean canUseStillStandingRecharge(byte bt){
         if (bt == PowerIndex.SKILL_2)
@@ -347,43 +323,12 @@ public class PowersAchtungBaby extends NewDashPreset {
 
 
     /** if = -1, not melt dodging */
-    public int meltDodgeTicks = -1;
 
-    public int getCupidRange(){
-        if (getCreative())
-            return ClientNetworking.getAppropriateConfig().survivorSettings.survivorCupidCreativeRange;
-        return ClientNetworking.getAppropriateConfig().survivorSettings.survivorCupidRange;
-    }
-    public int getCupidHighlightRange(){
-        return ClientNetworking.getAppropriateConfig().survivorSettings.survivorCupidHighlightRange;
-    }
 
-    public void unloadTargets(){
-        if (SurvivorTarget != null){
-            if ((!SurvivorTarget.getActivated() && !getCreative()) || SurvivorTarget.isRemoved() || !SurvivorTarget.isAlive()){
-                SurvivorTarget = null;
-            }
-        }
-        if (EntityTargetOne != null){
-            if (SurvivorTarget == null ||
-                    EntityTargetOne.isRemoved() || !EntityTargetOne.isAlive() ||
-                    (EntityTargetOne.distanceTo(SurvivorTarget) > getCupidRange())){
-                SurvivorTarget = null;
-            }
-        }
-        if (EntityTargetTwo != null){
-            if (SurvivorTarget == null || EntityTargetOne == null ||
-                    EntityTargetTwo.isRemoved() || !EntityTargetTwo.isAlive() ||
-                    (EntityTargetTwo.distanceTo(SurvivorTarget) > getCupidRange())
-            || (EntityTargetOne != null && EntityTargetOne.is(EntityTargetTwo))){
-                EntityTargetTwo = null;
-            }
-        }
-    }
+
     @Override
     public void tickPower() {
         if (this.self.level().isClientSide()){
-            unloadTargets();
         }
         super.tickPower();
     }

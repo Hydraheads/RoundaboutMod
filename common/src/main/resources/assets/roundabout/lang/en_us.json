@@ -1513,8 +1513,6 @@
   "config.roundabout.survivorCupidRange.desc": "The distance mobs can be from a highlighted survivor stand to get zapped in survival mode (15 by default).",
   "config.roundabout.survivorCupidCreativeRange.name": "Cupid Creative Range",
   "config.roundabout.survivorCupidCreativeRange.desc": "The distance mobs can be from a highlighted survivor stand to get zapped in creative mode.",
-  "config.roundabout.survivorCupidHighlightRange.name": "Cupid Highlight Range",
-  "config.roundabout.survivorCupidHighlightRange.desc": "The range at which rage cupid highlights mobs from the player's point of view, but only if they are in range of the survivor stand (see above).",
   "config.roundabout.canUseSurvivorOnBossesInSurvival.name": "Zap Bosses in Survival",
   "config.roundabout.canUseSurvivorOnBossesInSurvival.desc": "In survival, survivor does not work on bosses by default for balancing reasons.",
 

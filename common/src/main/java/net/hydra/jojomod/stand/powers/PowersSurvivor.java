@@ -508,7 +508,7 @@ public class PowersSurvivor extends NewDashPreset {
         return ClientNetworking.getAppropriateConfig().survivorSettings.survivorCupidRange;
     }
     public int getCupidHighlightRange(){
-        return ClientNetworking.getAppropriateConfig().survivorSettings.survivorCupidHighlightRange;
+        return 100;
     }
 
     public void unloadTargets(){
