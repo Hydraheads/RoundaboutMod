@@ -62,10 +62,6 @@ public class ConfigScreen extends Screen {
                             ConfigManager.resetClient();
                             ConfigManager.saveClientConfig();
                         }
-                        case SERVER -> {
-                            ConfigManager.resetServer();
-                            ConfigManager.saveServerConfig();
-                        }
                     }
 
                     this.minecraft.setScreen(new ConfigScreen(selectedType));

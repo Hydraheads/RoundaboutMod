@@ -1,6 +1,5 @@
 package net.hydra.jojomod.client.gui.config;
 
-import net.hydra.jojomod.util.config.Config;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -53,7 +52,6 @@ public class EditValueScreen extends Screen {
                 {
                     case COMMON -> ConfigManager.saveLocalConfig();
                     case CLIENT -> ConfigManager.saveClientConfig();
-                    case SERVER -> ConfigManager.saveServerConfig();
                 }
             } catch (Exception e) {
                 e.printStackTrace();

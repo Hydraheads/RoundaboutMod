@@ -30,7 +30,6 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
         {
             case COMMON -> this.addEntry(new CommentEntry("Common Config"));
             case CLIENT -> this.addEntry(new CommentEntry("Client Config"));
-            case SERVER -> this.addEntry(new CommentEntry("Server Config"));
         }
 
         Object instance = null;
@@ -39,7 +38,6 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
         {
             case COMMON -> instance = Config.getLocalInstance();
             case CLIENT -> instance = ClientConfig.getLocalInstance();
-            case SERVER -> instance = Config.getServerInstance();
         }
 
         Class<?> clazz = instance.getClass();
@@ -112,7 +110,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                 e.printStackTrace();
             }
 
-            toggleButton = Button.builder(Component.literal(field.getName() + ": " + currentValue),
+            toggleButton = Button.builder(Component.translatable("config.roundabout."+field.getName()+".name").append(": " + currentValue),
                     btn -> {
                         try {
                             Boolean newVal = !(Boolean) field.get(instance);
@@ -122,10 +120,9 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                             {
                                 case COMMON -> ConfigManager.saveLocalConfig();
                                 case CLIENT -> ConfigManager.saveClientConfig();
-                                case SERVER -> ConfigManager.saveServerConfig();
                             }
 
-                            btn.setMessage(Component.literal(field.getName() + ": " + newVal));
+                            btn.setMessage(Component.translatable("config.roundabout."+field.getName()+".name").append(": " + newVal));
                         } catch (IllegalAccessException e) {
                             e.printStackTrace();
                         }
@@ -177,7 +174,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
         public void render(GuiGraphics drawContext, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
             editButton.setX(x);
             editButton.setY(y);
-            editButton.setMessage(Component.literal(getFieldDisplay()));
+            editButton.setMessage(Component.translatable("config.roundabout."+field.getName()+".name"));
             editButton.render(drawContext, mouseX, mouseY, partialTick);
         }
 
