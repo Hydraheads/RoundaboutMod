@@ -175,21 +175,6 @@ public class PowersAchtungBaby extends NewDashPreset {
 
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
-        if (ent != null) {
-            if (InvisibleVisionOn()) {
-                if (
-                        (SurvivorTarget != null  && ent.is(SurvivorTarget)) ||
-                                (EntityTargetOne != null && ent.is(EntityTargetOne))
-                ) {
-                    return true;
-                }
-
-                Entity highlights = getHighlighter();
-                if (highlights != null && highlights.is(ent)){
-                    return true;
-                }
-            }
-        }
         return false;
     }
     @Override
@@ -287,24 +272,6 @@ public class PowersAchtungBaby extends NewDashPreset {
         this.setCooldown(PowerIndex.SKILL_4, cooldown);
     }
 
-    public Entity getHighlighter(){
-        Entity TE = MainUtil.getTargetEntity(this.self, getCupidHighlightRange(), 15);
-        if (SurvivorTarget == null){
-            if (TE instanceof SurvivorEntity SE && (SE.getActivated() || getCreative())){
-                return SE;
-            }
-        } else if (EntityTargetOne == null){
-            if (SurvivorEntity.canZapEntity(TE) && canUseZap(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()){
-                return TE;
-            }
-        } else {
-            if (SurvivorEntity.canZapEntity(TE) && canUseZap(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()
-            && !EntityTargetOne.is(TE)){
-                return TE;
-            }
-        }
-        return null;
-    }
 
     @Override
     public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
