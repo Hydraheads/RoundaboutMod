@@ -53,28 +53,36 @@ public class RattEntity extends StandEntity {
     @Override
     public void tick() {
 
-       /*  if (this.getUser() != null) {
-             PowersRatt RE = (PowersRatt) this.getUserData(this.getUser()).roundabout$getStandPowers();
-             Entity target = RE.getShootTarget();
-             Vec3 targetPos = null;
-             if (target != null) {
-                 targetPos = target.getPosition(0);
-             } else {
-                 targetPos = RE.getTargetPos().getLocation();
-             }
-             double x = targetPos.x()-this.getPosition(0).x();
-             double z = targetPos.z()-this.getPosition(0).z();
-             this.setYRot((float)Math.atan( (float)z/(float)x )*180/ (float)Math.PI);
-             Roundabout.LOGGER.info("TargetPos: {}", targetPos);
-             Roundabout.LOGGER.info("X: {}, Z: {}", x, z);
-             Roundabout.LOGGER.info("ROT: {}", getYRot());
-         }*/
+
+
+        if (this.level().isClientSide()) {
+            if (this.getUser() != null) {
+                PowersRatt RE = (PowersRatt) this.getUserData(this.getUser()).roundabout$getStandPowers();
+                Entity target = RE.getShootTarget();
+                Vec3 targetPos = RE.getTargetPos().getLocation();
+                if (target != null) {
+                    targetPos = target.getPosition(0);
+                }
+                double x = targetPos.x() - this.getPosition(0).x();
+                double z = targetPos.z() - this.getPosition(0).z();
+                float rot = ((float) Math.atan2((float) z, (float) x) * 180 / (float) Math.PI) - 90;
+                updateRotation(new Vec3(rot, rot, 0));
+            }
+        }
 
 
         super.tick();
     }
 
 
+    public void updateRotation(Vec3 v) {
+        if (this.getUser() != null){
+            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersRatt RE) {
+                RE.tryPosPower(PowersRatt.ROTATE,true,v);
+                RE.tryPosPowerPacket(PowersRatt.ROTATE,v);
+            }
+        }
+    }
 
     @Override
     public boolean lockPos(){

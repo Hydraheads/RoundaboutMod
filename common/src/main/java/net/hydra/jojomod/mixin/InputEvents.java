@@ -105,14 +105,6 @@ public abstract class InputEvents implements IInputEvents {
                     }
                 }
             }
-            if (entity instanceof RattEntity) {
-                if (((StandEntity) entity).getUser() != null) {
-                    PowersRatt PR = (PowersRatt) powers;
-                    if (PR.isAuto()) {
-                        ci.setReturnValue(true);
-                    }
-                }
-            }
             if (powers.getGoBeyondTarget() != null && powers.getGoBeyondTarget().is(entity)) {
                 ci.setReturnValue(true);
                 return;
