@@ -29,8 +29,8 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
 
         switch (selectedType)
         {
-            case COMMON -> this.addEntry(new CommentEntry("Common Config"));
-            case CLIENT -> this.addEntry(new CommentEntry("Client Config"));
+            case COMMON -> this.addEntry(new CommentEntry("§r§l§6"+Component.translatable("config.roundabout.major.common_config").getString()));
+            case CLIENT -> this.addEntry(new CommentEntry("§r§l§6"+Component.translatable("config.roundabout.major.client_config").getString()));
         }
 
         Object instance = null;
