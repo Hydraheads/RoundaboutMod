@@ -42,7 +42,7 @@ public abstract class ZMobRenderer <T extends Mob, M extends EntityModel<T>> ext
     private void roundabout$render(T $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
 
         if ($$0 instanceof Ghast || $$0 instanceof Allay || $$0 instanceof Vex) {
-            if (ConfigManager.getClientConfig().onlyStandUsersCanSeeVanillaGhostMobs) {
+            if (ConfigManager.getClientConfig().vanillaMinecraftTweaks.onlyStandUsersCanSeeVanillaGhostMobs) {
                 LocalPlayer lp = Minecraft.getInstance().player;
                 if (lp !=null) {
                     if (((StandUser) lp).roundabout$getStandDisc().isEmpty() &&

@@ -12,7 +12,7 @@ public class ExperimentalFixD4CForge {
     //Skip experimental warning
     @Inject(method = "hasConfirmedExperimentalWarning()Z", at = @At("HEAD"), cancellable = true,remap=false)
     private void roundabout$askForBackup(CallbackInfoReturnable<Boolean> cir) {
-        if (ConfigManager.getClientConfig().disableObviousExperimentalWarning){
+        if (ConfigManager.getClientConfig().vanillaMinecraftTweaks.disableObviousExperimentalWarning){
             cir.setReturnValue(true);
         }
     }

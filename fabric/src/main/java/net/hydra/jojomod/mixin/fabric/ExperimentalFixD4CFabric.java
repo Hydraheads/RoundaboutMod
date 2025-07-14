@@ -16,7 +16,7 @@ public abstract class ExperimentalFixD4CFabric {
     @ModifyVariable(method = "doLoadLevel(Lnet/minecraft/client/gui/screens/Screen;Ljava/lang/String;ZZ)V", at = @At(value = "STORE"),
             ordinal=3)
     private boolean roundabout$experimental(boolean value,Screen screen, String string, boolean bl, boolean bl2) {
-        if (ConfigManager.getClientConfig().disableObviousExperimentalWarning){
+        if (ConfigManager.getClientConfig().vanillaMinecraftTweaks.disableObviousExperimentalWarning){
             return false;
         }
         return value;
