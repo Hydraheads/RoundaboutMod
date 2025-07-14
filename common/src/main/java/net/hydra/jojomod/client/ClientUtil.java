@@ -530,52 +530,6 @@ public class ClientUtil {
                 ));
     }
 
-    /**
-    public static void markBlockAsInvisible(BlockPos pos){
-        if (!MainUtil.hiddenBlocks.contains(pos)) {
-            MainUtil.hiddenBlocks.add(pos);
-
-            Minecraft mc = Minecraft.getInstance();
-            if (mc != null) {
-                LocalPlayer localPlayer = mc.player;
-                if (localPlayer != null && localPlayer.level() != null) {
-                    Roundabout.LOGGER.info("1");
-
-                    Level lvl = localPlayer.level();
-                    LevelRenderer renderer = mc.levelRenderer;
-
-                    // Force full render update
-                    renderer.setBlocksDirty(pos.getX(), pos.getY(), pos.getZ(), pos.getX(), pos.getY(), pos.getZ());
-                    lvl.getChunkSource().getLightEngine().checkBlock(pos);
-                    forceChunkRebuild(pos);
-                }
-            }
-        }
-    }
-
-    public static boolean toggleAGH = false;
-
-        public static void forceChunkRebuild(BlockPos pos) {
-            Minecraft mc = Minecraft.getInstance();
-            if (mc.level == null) return;
-
-            LevelRenderer renderer = mc.levelRenderer;
-            ViewArea viewArea = ((ILevelRenderer)renderer).roundabout$getViewArea();
-            if (viewArea == null) return;
-
-
-            ChunkRenderDispatcher.RenderChunk renderChunk = ((IViewArea)viewArea).roundabout$getRenderChunkAt(pos);
-            if (renderChunk != null) {
-                renderChunk.setDirty(true); // this schedules the chunk to rebuild next frame
-                Roundabout.LOGGER.info("X");
-                toggleAGH = true;
-                var original = mc.level.getBlockState(pos);
-
-                // Replace with the same state to force model rebuild
-                mc.level.setBlock(pos, original, 3); // 3 = Block.UPDATE_ALL
-            }
-        }
-     **/
 
     public static boolean getInvisibilityVision(){
         if (Minecraft.getInstance() != null) {

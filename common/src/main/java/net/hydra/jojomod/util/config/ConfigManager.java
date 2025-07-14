@@ -44,10 +44,12 @@ public abstract class ConfigManager {
         return ClientConfig.getLocalInstance();
     }
 
-    public static void loadConfigs(Path client, Path server, Path advanced, Path actualClient) {
+    public static void loadConfigs(Path client,  Path advanced,
+                                   //Path server
+                                   Path actualClient) {
         clientConfigPath = actualClient;
         localConfigPath = client;
-        serverConfigPath = server;
+        serverConfigPath = client;
         advancedConfigPath = advanced;
         loadClientConfig();
         loadLocalConfig();
@@ -149,6 +151,9 @@ public abstract class ConfigManager {
         }
     }
 
+    public static void saveServerConfig() {
+        save(Config.getServerInstance(), serverConfigPath);
+    }
     private static void loadClientConfig() {
         ClientConfig config = loadClient();
         validateFields(config);
@@ -168,7 +173,6 @@ public abstract class ConfigManager {
         Config config = loadServer();
         validateFields(config);
         Config.updateServer(config);
-        saveServerConfig();
         Roundabout.LOGGER.info("Loaded server config");
     }
     private static void loadAdvancedConfig() {
@@ -234,7 +238,6 @@ public abstract class ConfigManager {
 
     public static void deserializeConfig(String serialized) {
         Config.updateServer(GSON.fromJson(serialized, Config.class));
-        saveServerConfig();
     }
 
     private static ClientConfig DEFAULT_CLIENT_CONFIG;
@@ -281,7 +284,6 @@ public abstract class ConfigManager {
 
         DEFAULT_SERVER_CONFIG = loaded.clone();
 
-        saveServerConfig();
         return loaded;
     }
 
@@ -361,10 +363,6 @@ public abstract class ConfigManager {
     public static void saveLocalConfig() {
         validateFields(Config.getLocalInstance());
         save(Config.getLocalInstance(), localConfigPath);
-    }
-
-    public static void saveServerConfig() {
-        save(Config.getServerInstance(), serverConfigPath);
     }
 
     private static void save(Config config, Path path) {

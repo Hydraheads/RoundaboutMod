@@ -97,13 +97,6 @@ public class MainUtil {
         isClient = true;
     }
 
-    /**
-    public static Set<BlockPos> hiddenBlocks = new HashSet<>();
-
-    public static Set<BlockPos> getHiddenBlocks(){
-        return hiddenBlocks;
-    }
-     **/
 
     public static boolean isMeleeDamage(DamageSource di){
         if (di.is(DamageTypes.PLAYER_ATTACK) || di.is(DamageTypes.MOB_ATTACK))
