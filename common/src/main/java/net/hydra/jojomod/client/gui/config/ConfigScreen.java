@@ -46,13 +46,13 @@ public class ConfigScreen extends Screen {
                 .pos(startX, y)
                 .build();
 
-        this.doneButton = Button.builder(Component.literal("Done"), btn -> {
+        this.doneButton = Button.builder(Component.translatable("config.roundabout.major.done"), btn -> {
                     this.minecraft.setScreen(new TitleScreen());
                 }).size(buttonWidth, buttonHeight)
                 .pos(startX + buttonWidth + spacing, y)
                 .build();
 
-        this.resetButton = Button.builder(Component.literal("Reset"), btn -> {
+        this.resetButton = Button.builder(Component.translatable("config.roundabout.major.reset"), btn -> {
                     switch (selectedType) {
                         case COMMON -> {
                             ConfigManager.resetLocal();

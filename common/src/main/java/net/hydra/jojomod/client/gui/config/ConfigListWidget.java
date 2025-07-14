@@ -58,7 +58,8 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                 }
                 else {
                     Object nestedObject = field.get(instance);
-                    this.addEntry(new CommentEntry(field.getName()));
+                    this.addEntry(new CommentEntry(
+                            Component.translatable("config.roundabout."+field.getName()+".name").getString()));
 
                     if (nestedObject == null) {
                         continue;
@@ -213,7 +214,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                            int mouseX, int mouseY, boolean hovered, float delta) {
             guiGraphics.drawCenteredString(
                     Minecraft.getInstance().font,
-                    Component.literal("§l" + comment + "§r"),
+                    Component.literal("§l§e" + comment + "§r"),
                     x + entryWidth / 2,
                     y + 6,
                     0xFFFFFF
