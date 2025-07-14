@@ -19,10 +19,7 @@ public class ClientNetworking {
     }
 
     public static void initialize(boolean connected, String ser){
-        isConnectedToDedicated = connected;
-        ConfigManager.deserializeConfig(ser);
-        if (!isConnectedToDedicated) return;
-
+        isConnectedToDedicated = true;
         ConfigManager.deserializeConfig(ser);
     }
     public static void sendHandshake() {

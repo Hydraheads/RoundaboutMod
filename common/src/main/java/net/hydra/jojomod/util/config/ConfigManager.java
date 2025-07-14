@@ -233,7 +233,7 @@ public abstract class ConfigManager {
     }
 
     public static String serializeConfig() {
-        return GSON.toJson(Config.getServerInstance());
+        return GSON.toJson(Config.getLocalInstance());
     }
 
     public static void deserializeConfig(String serialized) {
