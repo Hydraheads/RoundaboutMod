@@ -531,6 +531,7 @@ public class ClientUtil {
                         mc.player, mc.player.connection.enabledFeatures(), mc.options.operatorItemsTab().get()
                 ));
     }
+    public static boolean roundabout$configButtonSelected = false;
 
     public static String[] splitIntoLine(String input, int maxCharInLine){
 
