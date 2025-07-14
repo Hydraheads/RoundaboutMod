@@ -763,7 +763,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
     }
 
     public int getBubbleBarrageWindup(){
-        return ClientNetworking.getAppropriateConfig().chargeSettings.barrageWindup;
+        return ClientNetworking.getAppropriateConfig().generalStandSettings.barrageWindup;
     }
 
     public float getBubbleBarrageChargePitch(){

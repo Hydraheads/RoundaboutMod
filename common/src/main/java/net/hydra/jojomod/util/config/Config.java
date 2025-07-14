@@ -85,8 +85,6 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public NameTagSettings nameTagSettings;
     @NestedOption(group = "modded")
-    public ChargeSettings chargeSettings;
-    @NestedOption(group = "modded")
     public GriefSettings griefSettings;
     @NestedOption(group = "modded")
     public MiscSettings miscellaneousSettings;
@@ -94,8 +92,6 @@ public class Config implements Cloneable {
     public StandLevelingSettings standLevelingSettings;
     @NestedOption(group = "modded")
     public GeneralStandSettings generalStandSettings;
-    @NestedOption(group = "modded")
-    public Cooldowns cooldownsInTicks;
     @NestedOption(group = "modded")
     public SoftAndWetSettings softAndWetSettings;
     @NestedOption(group = "modded")
@@ -153,11 +149,14 @@ public class Config implements Cloneable {
         public Integer levelsToGetStand;
         @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
         public Integer levelsToRerollStandWithArrow;
-
         @BooleanOption(group = "inherit", value = false)
         public Boolean canAwakenOtherPlayersWithArrows;
         @BooleanOption(group = "inherit", value = false)
         public Boolean canThrowVisagesOntoOtherPlayers;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer switchStandDiscLength;
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        public Integer switchStandDiscWhileOnCooldownsLength;
         @BooleanOption(group = "inherit", value = false)
         public Boolean standDiscsDropWithKeepGameRuleOff;
         @IntOption(group = "inherit", value = 1200, min = 0, max = 72000)
@@ -172,24 +171,6 @@ public class Config implements Cloneable {
         public Integer gasolineExplosionDamage;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer matchDamage;
-    }
-    public static class ChargeSettings {
-        @IntOption(group = "inherit", value = 29, min = 0, max = 72000)
-        public Integer barrageWindup;
-        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
-        public Integer kickBarrageWindup;
-        @IntOption(group = "inherit", value = 29, min = 0, max = 72000)
-        public Integer magiciansRedFireballsWindup;
-        @IntOption(group = "inherit", value = 24, min = 0, max = 72000)
-        public Integer magiciansRedFlamethrowerWindup;
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean mobsInterruptSomeStandAttacks;
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean standsInterruptSomeStandAttacks;
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean playersInterruptSomeStandAttacks;
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean barragesAreAlwaysInterruptable;
     }
     public static class WorldGenSettings {
         @IntOption(group = "inherit", value = 55, min = 0, max = 4096)
@@ -228,11 +209,19 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 15, min = 0, max = 365)
         public Integer basePunchAngle;
         @BooleanOption(group = "inherit", value = true)
+        public Boolean mobsInterruptSomeStandAttacks;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean standsInterruptSomeStandAttacks;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean playersInterruptSomeStandAttacks;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean barragesAreAlwaysInterruptable;
+        @BooleanOption(group = "inherit", value = true)
         public Boolean barrageHasAreaOfEffect;
         @BooleanOption(group = "inherit", value = true)
         public Boolean barragesOnlyKillOnLastHit;
         @BooleanOption(group = "inherit", value = true)
-        public Boolean barrageDeflectsArrrows;
+        public Boolean barrageDeflectsArrows;
         @BooleanOption(group = "inherit", value = false)
         public Boolean standPunchesGoThroughDoorsAndCorners;
         @IntOption(group = "inherit", value = 3, min = 0, max = 72000)
@@ -245,6 +234,46 @@ public class Config implements Cloneable {
         public Integer generalImpaleAttackMultiplier;
         @BooleanOption(group = "inherit", value = true)
         public Boolean crouchingStopsStandsFromMiningOres;
+        @IntOption(group = "inherit", value = 29, min = 0, max = 72000)
+        public Integer barrageWindup;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer kickBarrageWindup;
+        @IntOption(group = "inherit", value = 27, min = 0, max = 72000)
+        public Integer standPunchCooldown;
+        @IntOption(group = "inherit", value = 37, min = 0, max = 72000)
+        public Integer finalStandPunchInStringCooldown;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer finalPunchAndKickMinimumCooldown;
+        @IntOption(group = "inherit", value = 35, min = 1, max = 72000)
+        public Integer barrageRecoilCooldown;
+        @IntOption(group = "inherit", value = 35, min = 1, max = 72000)
+        public Integer kickBarrageRecoilCooldown;
+        @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
+        public Integer dashCooldown;
+        @IntOption(group = "inherit", value = 160, min = 0, max = 72000)
+        public Integer jumpingDashCooldown;
+        @IntOption(group = "inherit", value = 280, min = 0, max = 72000)
+        public Integer standJumpCooldown;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean standJumpAndDashShareCooldown;
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        public Integer vaultingCooldown;
+        @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
+        public Integer impaleAttackCooldown;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
+        public Integer objectThrowCooldown;
+        @IntOption(group = "inherit", value = 25, min = 0, max = 72000)
+        public Integer objectPocketCooldown;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
+        public Integer mobThrowCooldown;
+        @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
+        public Integer mobThrowInterruptCooldown;
+        @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
+        public Integer mobThrowAttackCooldown;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean creativeModeRefreshesCooldowns;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean canRechargeCooldownsWhileDrowning;
     }
     public static class GriefSettings {
 
@@ -268,50 +297,6 @@ public class Config implements Cloneable {
         public Boolean renderNameTagsWhenJusticeMorphed;
         @BooleanOption(group = "inherit", value = true)
         public Boolean bypassAllNametagHidesInCreativeMode;
-    }
-
-    public static class Cooldowns {
-        @IntOption(group = "inherit", value = 27, min = 0, max = 72000)
-        public Integer standPunch;
-        @IntOption(group = "inherit", value = 37, min = 0, max = 72000)
-        public Integer finalStandPunchInString;
-        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
-        public Integer finalPunchAndKickMinimum;
-        @IntOption(group = "inherit", value = 35, min = 1, max = 72000)
-        public Integer barrageRecoil;
-        @IntOption(group = "inherit", value = 35, min = 1, max = 72000)
-        public Integer kickBarrageRecoil;
-
-        @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
-        public Integer dash;
-        @IntOption(group = "inherit", value = 160, min = 0, max = 72000)
-        public Integer jumpingDash;
-        @IntOption(group = "inherit", value = 280, min = 0, max = 72000)
-        public Integer standJump;
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean standJumpAndDashShareCooldown;
-        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
-        public Integer vaulting;
-        @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
-        public Integer impaleAttack;
-        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
-        public Integer objectThrow;
-        @IntOption(group = "inherit", value = 25, min = 0, max = 72000)
-        public Integer objectPocket;
-        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
-        public Integer mobThrow;
-        @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
-        public Integer mobThrowInterruptv2;
-        @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
-        public Integer mobThrowAttack;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer switchStandDisc;
-        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
-        public Integer switchStandDiscWhileOnCooldowns;
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean creativeModeRefreshesCooldowns;
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean canRechargeWhileDrowning;
     }
 
 
@@ -449,6 +434,10 @@ public class Config implements Cloneable {
         public Integer projectileBurnCooldown;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         public Integer flameCrashCooldown;
+        @IntOption(group = "inherit", value = 29, min = 0, max = 72000)
+        public Integer magiciansRedFireballsWindup;
+        @IntOption(group = "inherit", value = 24, min = 0, max = 72000)
+        public Integer magiciansRedFlamethrowerWindup;
     }
     public static class JusticeSettings {
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)

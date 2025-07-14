@@ -661,10 +661,10 @@ public class PowersMagiciansRed extends PunchingStand {
         return (this.activePower == PowerIndex.RANGED_BARRAGE || this.activePower == PowerIndex.RANGED_BARRAGE_CHARGE);
     }
     public int getRangedBarrageWindup(){
-        return ClientNetworking.getAppropriateConfig().chargeSettings.magiciansRedFireballsWindup;
+        return ClientNetworking.getAppropriateConfig().magiciansRedSettings.magiciansRedFireballsWindup;
     }
     public int getRangedBarrageWindup2(){
-        return ClientNetworking.getAppropriateConfig().chargeSettings.magiciansRedFlamethrowerWindup;
+        return ClientNetworking.getAppropriateConfig().magiciansRedSettings.magiciansRedFlamethrowerWindup;
     }
 
     public int getRangedBarrageLength(){
@@ -1410,7 +1410,7 @@ public class PowersMagiciansRed extends PunchingStand {
     }
     @Override
     public int getKickBarrageWindup(){
-        return ClientNetworking.getAppropriateConfig().chargeSettings.kickBarrageWindup;
+        return ClientNetworking.getAppropriateConfig().generalStandSettings.kickBarrageWindup;
     }
     @Override
     public byte getSoundCancelingGroupByte(byte soundChoice) {

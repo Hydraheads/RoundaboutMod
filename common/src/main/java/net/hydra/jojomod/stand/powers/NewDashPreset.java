@@ -85,11 +85,11 @@ public class NewDashPreset extends StandPowerRewrite {
                             backwards = -3;
                         }
 
-                        int cdTime = ClientNetworking.getAppropriateConfig().cooldownsInTicks.dash;
+                        int cdTime = ClientNetworking.getAppropriateConfig().generalStandSettings.dashCooldown;
                         if (this.getSelf() instanceof Player) {
                             ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(0);
                             if (options.keyJump.isDown()) {
-                                cdTime = ClientNetworking.getAppropriateConfig().cooldownsInTicks.jumpingDash;
+                                cdTime = ClientNetworking.getAppropriateConfig().generalStandSettings.jumpingDashCooldown;
                             }
                         }
                         this.setCooldown(PowerIndex.GLOBAL_DASH, cdTime);
@@ -128,7 +128,7 @@ public class NewDashPreset extends StandPowerRewrite {
                     && !this.getSelf().level().getBlockState(blockHit.getBlockPos().above()).isSolid()) {
                 if (!this.onCooldown(PowerIndex.GLOBAL_DASH)) {
                     /*Stand vaulting*/
-                    this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().cooldownsInTicks.vaulting);
+                    this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.vaultingCooldown);
                     double mag = this.getSelf().getPosition(0).distanceTo(
                             new Vec3(blockHit.getLocation().x, blockHit.getLocation().y, blockHit.getLocation().z)) * 1.68 + 1;
                     MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),

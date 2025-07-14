@@ -1264,7 +1264,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 }
                 if (!done) {
                     if (canExecuteMoveWithLevel(getLeapLevel())) {
-                        boolean jojoveinLikeKeys = !ClientNetworking.getAppropriateConfig().cooldownsInTicks.standJumpAndDashShareCooldown;
+                        boolean jojoveinLikeKeys = !ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpAndDashShareCooldown;
                         if (jojoveinLikeKeys){
                             setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_STAR_PLATINUM, PowerIndex.SKILL_3);
                         } else {

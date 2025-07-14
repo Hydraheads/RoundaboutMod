@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.gui.*;
-import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ServerToClientPackets;
@@ -818,13 +817,13 @@ public class ClientUtil {
         } else if (context == PacketDataIndex.S2C_SIMPLE_FREEZE_STAND) {
             if (((StandUser)player).roundabout$getStandPowers().hasCooldowns() ||
                     ((StandUser)player).roundabout$isSealed()) {
-                int punishTicks = ClientNetworking.getAppropriateConfig().cooldownsInTicks.switchStandDiscWhileOnCooldowns;
+                int punishTicks = ClientNetworking.getAppropriateConfig().itemSettings.switchStandDiscWhileOnCooldownsLength;
                 if (punishTicks > 0){
                     ((StandUser) player).roundabout$setMaxSealedTicks(punishTicks);
                     ((StandUser) player).roundabout$setSealedTicks(punishTicks);
                 }
             } else {
-                int switchTicks = ClientNetworking.getAppropriateConfig().cooldownsInTicks.switchStandDisc;
+                int switchTicks = ClientNetworking.getAppropriateConfig().itemSettings.switchStandDiscLength;
                 if (switchTicks > 0){
                     ((StandUser) player).roundabout$setMaxSealedTicks(switchTicks);
                     ((StandUser) player).roundabout$setSealedTicks(switchTicks);
