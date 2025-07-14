@@ -29,8 +29,8 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
 
         switch (selectedType)
         {
-            case COMMON -> this.addEntry(new CommentEntry("§r§l§6"+Component.translatable("config.roundabout.major.common_config").getString()));
-            case CLIENT -> this.addEntry(new CommentEntry("§r§l§6"+Component.translatable("config.roundabout.major.client_config").getString()));
+            case COMMON -> this.addEntry(new CommentEntry("§r§6§l"+Component.translatable("config.roundabout.major.common_config").getString()));
+            case CLIENT -> this.addEntry(new CommentEntry("§r§6§l"+Component.translatable("config.roundabout.major.client_config").getString()));
         }
 
         Object instance = null;
@@ -214,7 +214,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                            int mouseX, int mouseY, boolean hovered, float delta) {
             guiGraphics.drawCenteredString(
                     Minecraft.getInstance().font,
-                    Component.literal("§l§e" + comment + "§r"),
+                    Component.literal("§e§l" + comment + "§r"),
                     x + entryWidth / 2,
                     y + 6,
                     0xFFFFFF

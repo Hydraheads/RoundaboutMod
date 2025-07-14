@@ -31,6 +31,9 @@ public class RoundaboutFabric implements ModInitializer {
                 .resolve(Roundabout.MOD_ID + "-server.json"),
                 FabricLoader.getInstance()
                         .getConfigDir()
+                        .resolve(Roundabout.MOD_ID + "-advanced.json"),
+                FabricLoader.getInstance()
+                        .getConfigDir()
                         .resolve(Roundabout.MOD_ID + "-clientOnly.json"));
 
         /**

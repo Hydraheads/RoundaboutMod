@@ -41,39 +41,6 @@ public class Config implements Cloneable {
         SERVER_INSTANCE = config;
     }
 
-    public Set<String> standArrowPoolv2 = new HashSet<>(
-            Arrays.asList(
-                    "roundabout:star_platinum_disc",
-                    "roundabout:the_world_disc",
-                    "roundabout:justice_disc",
-                    "roundabout:magicians_red_disc",
-                    "roundabout:soft_and_wet_disc"
-            )
-    );
-    public Set<String> standArrowSecondaryPoolv4 = new HashSet<>(
-            Arrays.asList(
-                    "roundabout:cinderella_disc",
-                    "roundabout:hey_ya_disc",
-                    "roundabout:mandom_disc",
-                    "roundabout:survivor_disc"
-            )
-    );
-    public Set<String> naturalStandUserMobPoolv3 = new HashSet<>(
-            Arrays.asList(
-                    "roundabout:star_platinum_disc",
-                    "roundabout:the_world_disc",
-                    "roundabout:justice_disc",
-                    "roundabout:magicians_red_disc",
-                    "roundabout:cinderella_disc",
-                    "roundabout:soft_and_wet_disc"
-            )
-    );
-    public Set<String> humanoidOnlyStandUserMobPoolv2 = new HashSet<>(
-            Arrays.asList(
-                    "roundabout:hey_ya_disc",
-                    "roundabout:mandom_disc"
-            )
-    );
     @NestedOption(group = "modded")
     public GeneralStandUserMobSettings generalStandUserMobSettings;
     @NestedOption(group = "modded")

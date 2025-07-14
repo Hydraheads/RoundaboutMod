@@ -1,0 +1,70 @@
+package net.hydra.jojomod.util.config;
+
+import net.hydra.jojomod.util.config.annotation.*;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+@Groups({
+        "toggles",
+        "vanilla",
+        "added_vanilla",
+        "modded"
+})
+
+public class AdvancedConfig implements Cloneable {
+    private static AdvancedConfig SERVER_OINLY_INSTANCE = new AdvancedConfig();
+
+    public AdvancedConfig() {
+    }
+
+    public static AdvancedConfig getInstance() {
+        return SERVER_OINLY_INSTANCE;
+    }
+
+
+    @Override
+    public AdvancedConfig clone() {
+        return ConfigManager.GSON.fromJson(ConfigManager.GSON.toJson(this), AdvancedConfig.class);
+    }
+
+    static void updateServer(AdvancedConfig config) {
+        SERVER_OINLY_INSTANCE = config;
+    }
+
+    public Set<String> standArrowPoolv2 = new HashSet<>(
+            Arrays.asList(
+                    "roundabout:star_platinum_disc",
+                    "roundabout:the_world_disc",
+                    "roundabout:justice_disc",
+                    "roundabout:magicians_red_disc",
+                    "roundabout:soft_and_wet_disc"
+            )
+    );
+    public Set<String> standArrowSecondaryPoolv4 = new HashSet<>(
+            Arrays.asList(
+                    "roundabout:cinderella_disc",
+                    "roundabout:hey_ya_disc",
+                    "roundabout:mandom_disc",
+                    "roundabout:survivor_disc"
+            )
+    );
+    public Set<String> naturalStandUserMobPoolv3 = new HashSet<>(
+            Arrays.asList(
+                    "roundabout:star_platinum_disc",
+                    "roundabout:the_world_disc",
+                    "roundabout:justice_disc",
+                    "roundabout:magicians_red_disc",
+                    "roundabout:cinderella_disc",
+                    "roundabout:soft_and_wet_disc"
+            )
+    );
+    public Set<String> humanoidOnlyStandUserMobPoolv2 = new HashSet<>(
+            Arrays.asList(
+                    "roundabout:hey_ya_disc",
+                    "roundabout:mandom_disc"
+            )
+    );
+
+}

@@ -22,6 +22,7 @@ public class RoundaboutModForge {
 
         ConfigManager.loadConfigs(FMLPaths.CONFIGDIR.get().resolve(Roundabout.MOD_ID + ".json"),
                 FMLPaths.CONFIGDIR.get().resolve(Roundabout.MOD_ID + "-server.json"),
+                FMLPaths.CONFIGDIR.get().resolve(Roundabout.MOD_ID + "-advanced.json"),
                 FMLPaths.CONFIGDIR.get().resolve(Roundabout.MOD_ID + "-clientOnly.json"));
         //ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ForgeCommonConfig.SPEC, "roundabout-client.toml");
         //ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ForgeCommonConfig.SPEC, "roundabout-common.toml");
