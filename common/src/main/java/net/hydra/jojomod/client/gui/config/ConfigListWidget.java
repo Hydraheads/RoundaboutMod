@@ -1,5 +1,7 @@
 package net.hydra.jojomod.client.gui.config;
 
+import com.google.common.collect.Lists;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.Config;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -15,6 +17,7 @@ import net.minecraft.network.chat.Component;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWidget.Entry> {
     private final ConfigScreen parent;
@@ -142,6 +145,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
             toggleButton.setX(x);
             toggleButton.setY(y);
             toggleButton.render(drawContext, mouseX, mouseY, delta);
+            renderHover(drawContext,index,y,x,width,height,mouseX,mouseY,hovered,delta,field, toggleButton);
         }
 
         @Override
@@ -155,6 +159,18 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
         }
     }
 
+
+    public void renderHover(GuiGraphics drawContext, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTic,
+                            Field field, Button editButton){
+        if (editButton.isHovered()){
+            List<Component> compList = Lists.newArrayList();
+            String[] strung2 = ClientUtil.splitIntoLine(Component.translatable("config.roundabout."+field.getName()+".desc").getString(), 35);
+            for (String s : strung2) {
+                compList.add(Component.literal(s).withStyle(ChatFormatting.BLUE));
+            }
+            drawContext.renderTooltip(Minecraft.getInstance().font, compList, Optional.empty(), x, y+8-(10*strung2.length));
+        }
+    }
     public class NumberEntry extends Entry {
         private final Field field;
         private final Object instance;
@@ -184,6 +200,8 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
             editButton.setY(y);
             editButton.setMessage(Component.translatable("config.roundabout."+field.getName()+".name"));
             editButton.render(drawContext, mouseX, mouseY, partialTick);
+            renderHover(drawContext,index,y,x,width,height,mouseX,mouseY,hovering,partialTick,field, editButton);
+
         }
 
         @Override

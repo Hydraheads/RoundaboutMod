@@ -1309,7 +1309,7 @@
   "config.roundabout.standExperienceNeededForLevelupMultiplier.name": "Development Multiplier",
   "config.roundabout.standExperienceNeededForLevelupMultiplier.desc": "Multiplies the amount of experience needed to level up. Increasing this number makes levelups take longer, and vice versa.",
   "config.roundabout.enableStandLeveling.name": "Enable Stand Leveling",
-  "config.roundabout.enableStandLeveling.desc": "Stand Leveling is for unlocking sins and skills",
+  "config.roundabout.enableStandLeveling.desc": "Stand Leveling is for unlocking skins and skills",
 
   "config.roundabout.cinderellaSpacing.name": "Cinderella Salon Spacing",
   "config.roundabout.cinderellaSpacing.desc": "How far spaced these structures are.",
@@ -1385,7 +1385,7 @@
   "config.roundabout.mobThrowCooldown.name": "Mob Throw Cooldown",
   "config.roundabout.mobThrowCooldown.desc": "The shared cooldown for stand mob grab related throwing.",
   "config.roundabout.mobThrowInterruptCooldown.name": "Mob Grab Interrupt Cooldown",
-  "config.roundabout.mobThrowInterruptCooldowndesc": "The cooldown for when you are holding a mob with your stand and get hit, dropping the mob.",
+  "config.roundabout.mobThrowInterruptCooldown.desc": "The cooldown for when you are holding a mob with your stand and get hit, dropping the mob.",
   "config.roundabout.mobThrowAttackCooldown.name": "Grab Attack Cooldown",
   "config.roundabout.mobThrowAttackCooldown.desc": "The cooldown associated with grab attacking picked up mobs.",
   "config.roundabout.creativeModeRefreshesCooldowns.name": "Creative Cooldown Refresh",
@@ -1805,7 +1805,7 @@
   "config.roundabout.bossMobsCanNaturallyHaveStands.name": "Natural Boss Users",
   "config.roundabout.bossMobsCanNaturallyHaveStands.desc": "Whether or not boss mobs also have a chance of being stand users. By default, it's a no, so you don't get cheated by an unfair fight.",
   "config.roundabout.standUserMobsTakePlayerDamageMultipliers.name": "User Mobs Reduced Damage",
-  "config.roundabout.standUserMobsTakePlayerDamageMultipliersdesc": "By default, stand user mobs take the player damage multipliers in the config instead of mob damage multipliers for balancing reasons. Changing this makes them take the full damage instead.",
+  "config.roundabout.standUserMobsTakePlayerDamageMultipliers.desc": "By default, stand user mobs take the player damage multipliers in the config instead of mob damage multipliers for balancing reasons. Changing this makes them take the full damage instead.",
   "config.roundabout.percentOfZombieVillagersThatBecomeZombieAestheticians.name": "Zombie Aesthetician Rate",
   "config.roundabout.percentOfZombieVillagersThatBecomeZombieAestheticians.desc": "The percentage of zombie villagers that become zombie aestheticians instead.",
 

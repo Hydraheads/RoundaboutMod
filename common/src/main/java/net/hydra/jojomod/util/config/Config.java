@@ -2,10 +2,6 @@ package net.hydra.jojomod.util.config;
 
 import net.hydra.jojomod.util.config.annotation.*;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 @Groups({
         "toggles",
         "vanilla",
@@ -356,7 +352,7 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
         public Integer magiciansRedGuardPoints;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer speedMultiplierMagiciansRed;
+        public Integer MiningSpeedMultiplierMagiciansRed;
         @IntOption(group = "inherit", value = 0, min = 0, max = 4)
         public Integer getMiningTierMagiciansRed;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
