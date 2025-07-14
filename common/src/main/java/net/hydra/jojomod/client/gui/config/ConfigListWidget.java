@@ -182,7 +182,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
 
             String display = getFieldDisplay();
             editButton = Button.builder(Component.literal(display), btn -> {
-                Minecraft.getInstance().setScreen(new EditValueScreen(ConfigListWidget.this.parent, field, instance, configType));
+                Minecraft.getInstance().setScreen(new EditValueScreen(ConfigListWidget.this.parent, field, instance, configType,getScrollAmount()));
             }).size(200, 20).build();
         }
 

@@ -16,13 +16,15 @@ public class EditValueScreen extends Screen {
     private EditBox inputBox;
     private Button doneButton;
     private final ConfigType configType;
+    private final double savedScrollAmount;
 
-    public EditValueScreen(Screen parent, Field field, Object instance, ConfigType configType) {
+    public EditValueScreen(Screen parent, Field field, Object instance, ConfigType configType, double savedScrollAmount) {
         super(Component.translatable("config.roundabout.major.edit_value"));
         this.parent = parent;
         this.field = field;
         this.instance = instance;
         this.configType = configType;
+        this.savedScrollAmount = savedScrollAmount;
     }
 
     @Override
@@ -58,6 +60,9 @@ public class EditValueScreen extends Screen {
             }
 
             this.minecraft.setScreen(parent);
+            if (parent instanceof ConfigScreen cs){
+                cs.listWidget.setScrollAmount(savedScrollAmount);
+            }
         }).pos(this.width / 2 - 40, this.height / 2 + 20).size(80, 20).build();
 
         this.addRenderableWidget(doneButton);

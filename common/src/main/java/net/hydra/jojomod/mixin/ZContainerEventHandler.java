@@ -31,7 +31,7 @@ public interface ZContainerEventHandler {
         {
             ClientUtil.roundabout$configButtonSelected = false;
             Minecraft client = Minecraft.getInstance();
-            client.setScreen(new ConfigScreen(ConfigType.COMMON));
+            client.setScreen(new ConfigScreen(ConfigType.COMMON, client.screen));
 
             SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
             soundmanager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));

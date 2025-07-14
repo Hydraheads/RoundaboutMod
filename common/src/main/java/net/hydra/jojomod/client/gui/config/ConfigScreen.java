@@ -13,15 +13,17 @@ import net.minecraft.network.chat.Component;
 import java.util.List;
 
 public class ConfigScreen extends Screen {
-    private ConfigListWidget listWidget;
+    public ConfigListWidget listWidget;
     private Button doneButton;
     private Button resetButton;
     private Button configTypeButton;
     private ConfigType selectedType;
+    private final Screen lastScreen;
 
-    public ConfigScreen(ConfigType type) {
+    public ConfigScreen(ConfigType type, Screen lastScreen) {
         super(GameNarrator.NO_TITLE);
         this.selectedType = type;
+        this.lastScreen =lastScreen;
     }
 
     @Override
@@ -41,13 +43,13 @@ public class ConfigScreen extends Screen {
                     ConfigType[] types = ConfigType.values();
                     int index = (selectedType.ordinal() + 1) % types.length;
                     selectedType = types[index];
-                    this.minecraft.setScreen(new ConfigScreen(selectedType));
+                    this.minecraft.setScreen(new ConfigScreen(selectedType,lastScreen));
                 }).size(buttonWidth, buttonHeight)
                 .pos(startX, y)
                 .build();
 
         this.doneButton = Button.builder(Component.translatable("config.roundabout.major.done"), btn -> {
-                    this.minecraft.setScreen(new TitleScreen());
+                    this.minecraft.setScreen(lastScreen);
                 }).size(buttonWidth, buttonHeight)
                 .pos(startX + buttonWidth + spacing, y)
                 .build();
@@ -64,7 +66,7 @@ public class ConfigScreen extends Screen {
                         }
                     }
 
-                    this.minecraft.setScreen(new ConfigScreen(selectedType));
+                    this.minecraft.setScreen(new ConfigScreen(selectedType,lastScreen));
                 }).size(buttonWidth, buttonHeight)
                 .pos(startX + 2 * (buttonWidth + spacing), y)
                 .build();
