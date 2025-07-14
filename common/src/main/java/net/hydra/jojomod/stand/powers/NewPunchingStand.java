@@ -339,7 +339,7 @@ public class NewPunchingStand extends NewDashPreset {
     }
 
     public float getPunchAngle(){
-        return ClientNetworking.getAppropriateConfig().basePunchAngle;
+        return ClientNetworking.getAppropriateConfig().generalStandSettings.basePunchAngle;
     }
 
     @Override

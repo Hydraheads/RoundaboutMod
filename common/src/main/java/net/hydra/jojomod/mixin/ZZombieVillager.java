@@ -45,7 +45,7 @@ public abstract class ZZombieVillager extends Zombie implements VillagerDataHold
     protected void roundabout$finalizeSpawn(ServerLevelAccessor $$0, DifficultyInstance $$1, MobSpawnType $$2, SpawnGroupData $$3, CompoundTag $$4, CallbackInfoReturnable<SpawnGroupData> cir) {
         if ($$2.equals(MobSpawnType.NATURAL) || $$2.equals(MobSpawnType.CHUNK_GENERATION)) {
             float rand = this.level().random.nextFloat();
-            if (rand < (ClientNetworking.getAppropriateConfig().percentOfZombieVillagersThatBecomeZombieAestheticians * 0.01)) {
+            if (rand < (ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.percentOfZombieVillagersThatBecomeZombieAestheticians * 0.01)) {
                 ZombieAesthetician $$7 = ModEntities.ZOMBIE_AESTHETICIAN.create(this.level());
                 if ($$7 != null) {
                     $$7.setPos(this.getPosition(1));

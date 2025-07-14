@@ -484,10 +484,10 @@ public class PowersCinderella extends NewDashPreset {
     public float getDefaceStrength(Entity entity){
         if (this.getReducedDamage(entity)){
             return levelupDamageMod(((float) ((float) 3* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.cinderellaAttackOnPlayers*0.01))));
+                    cinderellaSettings.cinderellaAttackMultOnPlayers*0.01))));
         } else {
             return levelupDamageMod(((float) ((float) 9* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.cinderellaAttackOnMobs*0.01))));
+                    cinderellaSettings.cinderellaAttackMultOnMobs*0.01))));
         }
     }
     public float getDefaceKnockback(){

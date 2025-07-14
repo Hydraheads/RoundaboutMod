@@ -522,7 +522,7 @@ public class StandPowers {
     }
 
     public boolean canExecuteMoveWithLevel(int minLevel){
-        if (!ClientNetworking.getAppropriateConfig().enableStandLeveling) {
+        if (!ClientNetworking.getAppropriateConfig().standLevelingSettings.enableStandLeveling) {
             return true;
         }
 
@@ -1209,13 +1209,17 @@ public class StandPowers {
         user2.knockback(0.55f,user1.getX()-user2.getX(), user1.getZ()-user2.getZ());
     }
 
+    public float getLevelMultiplier(){
+        return (float) (ClientNetworking.getAppropriateConfig().standLevelingSettings.standExperienceNeededForLevelupMultiplier *0.01);
+    }
+
     public boolean canInterruptPower(){
         return false;
     }
 
     public float levelupDamageMod(float damage){
         int percent = ClientNetworking.getAppropriateConfig().
-                damageMultipliers.bonusStandDmgByMaxLevel;
+                standLevelingSettings.bonusStandDmgByMaxLevel;
 
         if (percent > 0  && this.self instanceof Player PE && this.getMaxLevel() >= 1){
             int maxlevel = getMaxLevel();
@@ -1479,7 +1483,7 @@ public class StandPowers {
                     id = storeEnt.getId();
                 }
                     ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(id, this.attackTimeDuring);
-                if (!listE.isEmpty() && ClientNetworking.getAppropriateConfig().barrageHasAreaOfEffect){
+                if (!listE.isEmpty() && ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect){
                     for (int i = 0; i< listE.size(); i++){
                         if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
                             if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
@@ -1678,7 +1682,7 @@ public class StandPowers {
         }
         /*Barrage hits are incapable of killing their target until the last hit.*/
         if (entity instanceof LivingEntity){
-            if (power >= ((LivingEntity) entity).getHealth() && ClientNetworking.getAppropriateConfig().barragesOnlyKillOnLastHit){
+            if (power >= ((LivingEntity) entity).getHealth() && ClientNetworking.getAppropriateConfig().generalStandSettings.barragesOnlyKillOnLastHit){
                 if (entity instanceof Player) {
                     power = 0.00001F;
                 } else {
@@ -1691,7 +1695,7 @@ public class StandPowers {
     public boolean getReducedDamage(Entity entity){
         return (entity instanceof Player || entity instanceof StandEntity ||
                 ((entity instanceof LivingEntity LE && !((StandUser)LE).roundabout$getStandDisc().isEmpty()) &&
-                        ClientNetworking.getAppropriateConfig().damageMultipliers.standUserMobsTakePlayerDamageMultipliers)
+                        ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.standUserMobsTakePlayerDamageMultipliers)
         );
     }
 
@@ -1755,7 +1759,7 @@ public class StandPowers {
             if (bonusBarrageConditions()) {
                 boolean sideHit = false;
                 if (hitNumber > 1000){
-                    if (!(ClientNetworking.getAppropriateConfig().barrageHasAreaOfEffect)){
+                    if (!(ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect)){
                         return;
                     }
                     hitNumber-=1000;
@@ -2419,7 +2423,7 @@ public class StandPowers {
 
     /**This function is a sanity check so mobs can't be hit behind doors*/
     public boolean canActuallyHit(Entity entity){
-        if (ClientNetworking.getAppropriateConfig().standPunchesGoThroughDoorsAndCorners){
+        if (ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchesGoThroughDoorsAndCorners){
             return true;
         }
         Vec3 from = new Vec3(this.self.getX(), this.self.getY(), this.self.getZ()); // your position
@@ -2538,7 +2542,7 @@ public class StandPowers {
         Vec3 pointVec = DamageHandler.getRayPoint(this.self, halfReach);
         List<Entity> arrows = arrowGrabHitbox(this.self,DamageHandler.genHitbox(this.self, pointVec.x, pointVec.y,
                 pointVec.z, halfReach, halfReach, halfReach), getReach());
-        if (!arrows.isEmpty() && ClientNetworking.getAppropriateConfig().barrageDeflectsArrrows) {
+        if (!arrows.isEmpty() && ClientNetworking.getAppropriateConfig().generalStandSettings.barrageDeflectsArrrows) {
             for (int i = 0; i < arrows.size(); i++) {
                 deflectArrowsAndBullets(arrows.get(i));
             }

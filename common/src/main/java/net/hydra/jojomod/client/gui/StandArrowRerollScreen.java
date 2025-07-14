@@ -210,7 +210,7 @@ public class StandArrowRerollScreen extends Screen {
 
     public enum standRerollIcon {
         MAIN_STAND(Component.translatable("roundabout.stand_switch.main"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/stand_type_icons/main_stand.png"),(byte)1,-31,31, Component.translatable("roundabout.stand_switch.main.desc", ClientNetworking.getAppropriateConfig().levelsToGetStand)),
+                "textures/gui/stand_type_icons/main_stand.png"),(byte)1,-31,31, Component.translatable("roundabout.stand_switch.main.desc", ClientNetworking.getAppropriateConfig().itemSettings.levelsToGetStand)),
         SECONDARY_STAND(Component.translatable("roundabout.stand_switch.secondary"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/stand_type_icons/secondary_stand.png"),(byte)2,31,31, Component.translatable("roundabout.stand_switch.secondary.desc")),
 

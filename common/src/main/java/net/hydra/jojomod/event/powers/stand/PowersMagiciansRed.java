@@ -640,7 +640,7 @@ public class PowersMagiciansRed extends PunchingStand {
         } else {
             amt = (100+((currentLevel-1)*50));
         }
-        amt= (int) (amt*(ClientNetworking.getAppropriateConfig().standExperienceNeededForLevelupMultiplier *0.01));
+        amt= (int) (amt*getLevelMultiplier());
         return amt;
     }
 
@@ -2136,16 +2136,26 @@ public class PowersMagiciansRed extends PunchingStand {
 
         if (power > 0.005F) {
             if (getReducedDamage(entity)) {
-                power *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                        damageMultipliers.magicianAttackOnPlayers * 0.01)));
+                power = levelupDamageMod(multiplyPowerByStandConfigPlayers(power));
             } else {
-                power *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                        damageMultipliers.magicianAttackOnMobs * 0.01)));
+                power = levelupDamageMod(multiplyPowerByStandConfigMobs(power));
             }
         }
 
         return power;
     }
+
+    @Override
+    public float multiplyPowerByStandConfigPlayers(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                magiciansRedSettings.magicianAttackMultOnPlayers*0.01));
+    }
+    @Override
+    public float multiplyPowerByStandConfigMobs(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                magiciansRedSettings.magicianAttackMultOnMobs*0.01));
+    }
+
 
     public void rangedBarrageImpact(Entity entity, boolean finalHit){
         if (entity != null && moveStarted){
@@ -2281,12 +2291,12 @@ public class PowersMagiciansRed extends PunchingStand {
     @Override
     public float getMiningMultiplier() {
         return (float) (1F*(ClientNetworking.getAppropriateConfig().
-                        miningSettings.speedMultiplierMagiciansRed*0.01));
+                        magiciansRedSettings.speedMultiplierMagiciansRed*0.01));
     }
 
     @Override
     public int getMiningLevel() {
-        return ClientNetworking.getAppropriateConfig().miningSettings.getMiningTierMagiciansRed;
+        return ClientNetworking.getAppropriateConfig().magiciansRedSettings.getMiningTierMagiciansRed;
     }
     @Override
     public boolean clickRelease(){
@@ -2730,30 +2740,24 @@ public class PowersMagiciansRed extends PunchingStand {
 
     public float getHurricaneDirectDamage(Entity entity, float size, boolean fireStorm){
         if (this.getReducedDamage(entity)){
-            return bumpDamage(levelupDamageMod((float) (0.5+((size/60)* 5.5) * (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.magicianAttackOnPlayers*0.01))),fireStorm);
+            return bumpDamage(levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (0.5+((size/60)* 5.5)))),fireStorm);
         } else {
-            return bumpDamage(levelupDamageMod((float) (1+(((size)/60)* 16) * (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.magicianAttackOnMobs*0.01))),fireStorm);
+            return bumpDamage(levelupDamageMod(multiplyPowerByStandConfigMobs(1+((size/60)* 16))),fireStorm);
         }
     }
     public float getHurricaneDamage(Entity entity,  float size, boolean fireStorm){
         if (size >=52){size=60;}
         if (this.getReducedDamage(entity)){
-            return bumpDamage(levelupDamageMod((float) (0.5+((size/60)* 2.5) * (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.magicianAttackOnPlayers*0.01))),fireStorm);
+            return bumpDamage(levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (0.5+((size/60)* 2.5)))),fireStorm);
         } else {
-            return bumpDamage(levelupDamageMod((float) (1+((size/60)* 9) * (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.magicianAttackOnMobs*0.01))),fireStorm);
+            return bumpDamage(levelupDamageMod(multiplyPowerByStandConfigMobs(1+((size/60)* 9))),fireStorm);
         }
     }
     public float getFireballDamage(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) (1.5 * (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.magicianAttackOnPlayers*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.5F));
         } else {
-            return levelupDamageMod((float) (4* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.magicianAttackOnMobs*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(4));
         }
     }
 
@@ -2761,21 +2765,17 @@ public class PowersMagiciansRed extends PunchingStand {
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 1.25* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.magicianAttackOnPlayers*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.25F));
         } else {
-            return levelupDamageMod((float) ((float) 3.5* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.magicianAttackOnMobs*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(3.5F));
         }
     }
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 1.75* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.magicianAttackOnPlayers*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.75F));
         } else {
-            return levelupDamageMod((float) ((float) 4.5* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.magicianAttackOnMobs*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(4.5F));
         }
     }
     @Override

@@ -319,7 +319,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
     @Override
     public float getMiningMultiplier() {
         return (float) (1F*(ClientNetworking.getAppropriateConfig().
-                miningSettings.speedMultiplierSoftAndWet*0.01));
+                softAndWetSettings.miningSpeedMultiplierSoftAndWet *0.01));
     }
 
 
@@ -342,7 +342,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
 
     @Override
     public int getMiningLevel() {
-        return ClientNetworking.getAppropriateConfig().miningSettings.getMiningTierSoftAndWet;
+        return ClientNetworking.getAppropriateConfig().softAndWetSettings.getMiningTierSoftAndWet;
     }
     @Override
     public boolean canSummonStand(){
@@ -648,7 +648,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
         } else {
             amt = (100+((currentLevel-1)*55));
         }
-        amt= (int) (amt*(ClientNetworking.getAppropriateConfig().standExperienceNeededForLevelupMultiplier *0.01));
+        amt= (int) (amt*getLevelMultiplier());
         return amt;
     }
     @SuppressWarnings("deprecation")
@@ -1936,10 +1936,10 @@ public void unlockSkin(){
         if (str > 0.005F) {
             if (getReducedDamage(entity)) {
                 str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                        damageMultipliers.softAndWetAttacksOnPlayers * 0.01)));
+                        softAndWetSettings.softAndWetAttackMultOnPlayers * 0.01)));
             } else {
                 str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                        damageMultipliers.softAndWetAttacksOnMobs * 0.01)));
+                        softAndWetSettings.softAndWetAttackMultOnMobs * 0.01)));
             }
         }
         return str;
@@ -1947,22 +1947,22 @@ public void unlockSkin(){
     @Override
     public float multiplyPowerByStandConfigPlayers(float power){
         return (float) (power*(ClientNetworking.getAppropriateConfig().
-                        damageMultipliers.softAndWetAttacksOnPlayers*0.01));
+                softAndWetSettings.softAndWetAttackMultOnPlayers *0.01));
     }
 
     @Override
     public float multiplyPowerByStandConfigMobs(float power){
         return (float) (power*(ClientNetworking.getAppropriateConfig().
-                damageMultipliers.softAndWetAttacksOnMobs*0.01));
+                softAndWetSettings.softAndWetAttackMultOnMobs *0.01));
     }
 
     public float multiplyPowerByStandConfigShooting(float power){
         return (float) (power*(ClientNetworking.getAppropriateConfig().
-                damageMultipliers.softAndWetShootingModePower*0.01));
+                softAndWetSettings.softAndWetShootingModePower*0.01));
     }
     public float multiplyPowerByStandConfigGoBeyond(float power){
         return (float) (power*(ClientNetworking.getAppropriateConfig().
-                damageMultipliers.softAndWetGoBeyondPower*0.01));
+                softAndWetSettings.softAndWetGoBeyondPower*0.01));
     }
     @Override
     public float getPunchStrength(Entity entity){

@@ -334,10 +334,10 @@ public class StandFireBlock extends BaseEntityBlock {
                     float fd = 1;
                     if (user.roundabout$getStandPowers().getReducedDamage(LE)){
                         fd = (float) (fd*(ClientNetworking.getAppropriateConfig().
-                                damageMultipliers.standFireOnPlayers*0.01));
+                                magiciansRedSettings.standFireOnPlayersMult*0.01));
                     } else {
                         fd = (float) (fd*(ClientNetworking.getAppropriateConfig().
-                                damageMultipliers.standFireOnMobs*0.01));
+                                magiciansRedSettings.standFireOnMobsMult*0.01));
                     }
                     Vec3 prevVelocity = LE.getDeltaMovement();
                     LE.hurt(ModDamageTypes.of($$1, ModDamageTypes.STAND_FIRE, fb.standUser), fd);

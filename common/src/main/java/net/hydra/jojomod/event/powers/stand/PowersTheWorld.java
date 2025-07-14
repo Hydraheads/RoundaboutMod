@@ -403,12 +403,12 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     @Override
     public int getMiningLevel() {
-        return ClientNetworking.getAppropriateConfig().miningSettings.getMiningTierTheWorld;
+        return ClientNetworking.getAppropriateConfig().theWorldSettings.getMiningTierTheWorld;
     }
     @Override
     public float getMiningMultiplier() {
         return (float) (1F*(ClientNetworking.getAppropriateConfig().
-                miningSettings.speedMultiplierTheWorld*0.01));
+                theWorldSettings.miningSpeedMultiplierTheWorld *0.01));
     }
 
 
@@ -714,33 +714,38 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
 
     @Override
+    public float multiplyPowerByStandConfigPlayers(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                theWorldSettings.theWorldAttackMultOnPlayers *0.01));
+    }
+
+    @Override
+    public float multiplyPowerByStandConfigMobs(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                theWorldSettings.theWorldAttackMultOnMobs *0.01));
+    }
+    @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 1.75* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnPlayers*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.75F));
         } else {
-            return levelupDamageMod((float) ((float) 5* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnMobs*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(5));
         }
     }
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 2.5* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnPlayers*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.5F));
         } else {
-            return levelupDamageMod((float) ((float) 6* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnMobs*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(6F));
         }
     }
     @Override
     public float getBarrageFinisherStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 3* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnPlayers*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(3));
         } else {
-            return levelupDamageMod((float) ((float) 8* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnMobs*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(8));
         }
     }
     @Override
@@ -749,10 +754,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (str > 0.005F) {
             if (getReducedDamage(entity)) {
                 str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                        damageMultipliers.theWorldAttacksOnPlayers * 0.01)));
+                        theWorldSettings.theWorldAttackMultOnPlayers * 0.01)));
             } else {
                 str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                        damageMultipliers.theWorldAttacksOnMobs * 0.01)));
+                        theWorldSettings.theWorldAttackMultOnMobs * 0.01)));
             }
         }
         return str;
@@ -762,10 +767,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         float str = super.getKickBarrageFinisherStrength(entity);
         if (this.getReducedDamage(entity)){
             return str*levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnPlayers*0.01)));
+                    theWorldSettings.theWorldAttackMultOnPlayers *0.01)));
         } else {
             return str*levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnMobs*0.01)));
+                    theWorldSettings.theWorldAttackMultOnMobs *0.01)));
         }
     }
     @Override
@@ -774,10 +779,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (str > 0.005F) {
             if (getReducedDamage(entity)) {
                 str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                        damageMultipliers.theWorldAttacksOnPlayers * 0.01)));
+                        theWorldSettings.theWorldAttackMultOnPlayers * 0.01)));
             } else {
                 str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                        damageMultipliers.theWorldAttacksOnMobs * 0.01)));
+                        theWorldSettings.theWorldAttackMultOnMobs * 0.01)));
             }
         }
         return str;
@@ -785,13 +790,11 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public float getImpalePunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 3* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnPlayers*0.01) * (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAndStarPlatinumImpalePower*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (3F * (ClientNetworking.getAppropriateConfig().
+                                generalStandSettings.generalImpaleAttackMultiplier *0.01))));
         } else {
-            return levelupDamageMod((float) ((float) 17* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnMobs*0.01) * (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAndStarPlatinumImpalePower*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs((float) (17F * (ClientNetworking.getAppropriateConfig().
+                    generalStandSettings.generalImpaleAttackMultiplier *0.01))));
         }
     }
 
@@ -836,20 +839,16 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
     public float getAssaultStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 1.7* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnPlayers*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.7F));
         } else {
-            return levelupDamageMod((float) ((float) 7* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnMobs*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(7F));
         }
     }
     public float getGrabThrowStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 1.85* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnPlayers*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.85F));
         } else {
-            return levelupDamageMod((float) ((float) 7.5* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnMobs*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(7.5F));
         }
     }
 
@@ -965,7 +964,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         } else {
             amt = (100+((currentLevel-1)*50));
         }
-        amt= (int) (amt*(ClientNetworking.getAppropriateConfig().standExperienceNeededForLevelupMultiplier *0.01));
+        amt= (int) (amt*(getLevelMultiplier()));
         return amt;
     }
 

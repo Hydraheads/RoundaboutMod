@@ -776,7 +776,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
 
             if (isBarrageAttacking() && !this.self.level().isClientSide()){
-                if (ClientNetworking.getAppropriateConfig().SuperBlockDestructionBarragePunches){
+                if (ClientNetworking.getAppropriateConfig().griefSettings.SuperBlockDestructionBarragePunches){
 
                     Vec3 vec3d = this.self.getEyePosition(0);
                     Vec3 vec3d2 = this.self.getViewVector(0);
@@ -991,7 +991,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         id = storeEnt.getId();
                     }
                         ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(id, this.attackTimeDuring);
-                    if (!listE.isEmpty() && ClientNetworking.getAppropriateConfig().barrageHasAreaOfEffect){
+                    if (!listE.isEmpty() && ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect){
                         for (int i = 0; i< listE.size(); i++){
                             if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
                                 if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
@@ -1047,7 +1047,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             if (bonusBarrageConditions()) {
                 boolean sideHit = false;
                 if (hitNumber > 1000){
-                    if (!(ClientNetworking.getAppropriateConfig().barrageHasAreaOfEffect)){
+                    if (!(ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect)){
                         return;
                     }
                     hitNumber-=1000;
@@ -1167,7 +1167,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
         /*Barrage hits are incapable of killing their target until the last hit.*/
         if (entity instanceof LivingEntity){
-            if (power >= ((LivingEntity) entity).getHealth() && ClientNetworking.getAppropriateConfig().barragesOnlyKillOnLastHit){
+            if (power >= ((LivingEntity) entity).getHealth() && ClientNetworking.getAppropriateConfig().generalStandSettings.barragesOnlyKillOnLastHit){
                 if (entity instanceof Player) {
                     power = 0.00001F;
                 } else {

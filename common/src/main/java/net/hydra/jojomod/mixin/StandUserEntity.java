@@ -504,7 +504,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 this.roundabout$setGlow(glow);
             }
         } else {
-            if (ClientNetworking.getAppropriateConfig().disableBleedingAndBloodSplatters &&
+            if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.disableBleedingAndBloodSplatters &&
                     (((IPermaCasting)this.level()).roundabout$inPermaCastFogRange(this)
                     && this.getHealth() < this.getMaxHealth())){
 
@@ -1399,7 +1399,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     @Unique
     public void roundabout$setDestructionTrailTicks(int destructTicks){
-        if (ClientNetworking.getAppropriateConfig().SuperBlockDestructionBarrageLaunching) {
+        if (ClientNetworking.getAppropriateConfig().griefSettings.SuperBlockDestructionBarrageLaunching) {
             this.roundabout$destructionModeTrailTicks = destructTicks;
         }
     }
@@ -2214,7 +2214,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return this.roundabout$isGuardingEffectively2();
     }
     public boolean roundabout$isGuardingEffectively2(){
-        return (this.roundabout$shieldNotDisabled() && this.roundabout$getStandPowers().isGuarding() && this.roundabout$getStandPowers().getAttackTimeDuring() >= ClientNetworking.getAppropriateConfig().standGuardDelayTicks);
+        return (this.roundabout$shieldNotDisabled() && this.roundabout$getStandPowers().isGuarding() && this.roundabout$getStandPowers().getAttackTimeDuring() >= ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardDelayTicks);
     }
 
     public boolean roundabout$shieldNotDisabled(){
@@ -2592,10 +2592,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
             if (this.roundabout$getStandPowers().getReducedDamage(this)){
                 $$1/=3.2f;
-                $$1*= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnPlayers *0.01);
+                $$1*= (float) (ClientNetworking.getAppropriateConfig().justiceSettings.corpseDamageMultOnPlayers *0.01);
                 $$1 = FM.getDamageMod($$1);
             } else {
-                $$1 *= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnMobs *0.01);
+                $$1 *= (float) (ClientNetworking.getAppropriateConfig().justiceSettings.corpseDamageMultOnMobs *0.01);
                 $$1 = FM.getDamageMod($$1);
             }
             ci.setReturnValue(hurt(ModDamageTypes.of(this.level(), ModDamageTypes.CORPSE_ARROW, FM),
@@ -2604,10 +2604,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         } else if ($$0.is(DamageTypes.PLAYER_EXPLOSION) && $$0.getEntity() instanceof FallenMob FM){
             if (this.roundabout$getStandPowers().getReducedDamage(this)){
                 $$1/=2;
-                $$1*= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnPlayers *0.01);
+                $$1*= (float) (ClientNetworking.getAppropriateConfig().justiceSettings.corpseDamageMultOnPlayers *0.01);
                 $$1 = FM.getDamageMod($$1);
             } else {
-                $$1 *= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnMobs *0.01);
+                $$1 *= (float) (ClientNetworking.getAppropriateConfig().justiceSettings.corpseDamageMultOnMobs *0.01);
                 $$1 = FM.getDamageMod($$1);
             }
             Entity ent2 = FM;
@@ -3562,10 +3562,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         float fireDamage = 1;
                         if (this.roundabout$getStandPowers().getReducedDamage((LivingEntity) (Object) this)) {
                             fireDamage = (float) (fireDamage * (ClientNetworking.getAppropriateConfig().
-                                    damageMultipliers.standFireOnPlayers * 0.01))*0.8F;
+                                    magiciansRedSettings.standFireOnPlayersMult * 0.01))*0.8F;
                         } else {
                             fireDamage = (float) (fireDamage * (ClientNetworking.getAppropriateConfig().
-                                    damageMultipliers.standFireOnMobs * 0.01))*0.8F;
+                                    magiciansRedSettings.standFireOnMobsMult * 0.01))*0.8F;
                         }
                         this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.STAND_FIRE), fireDamage);
                     }

@@ -41,64 +41,8 @@ public class Config implements Cloneable {
         SERVER_INSTANCE = config;
     }
 
-    @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
-    public Integer levelsToGetStand;
-    @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
-    public Integer levelsToRerollStand;
     @BooleanOption(group = "inherit", value = false)
     public Boolean canAwakenOtherPlayersWithArrows;
-    @BooleanOption(group = "inherit", value = false)
-    public Boolean canThrowVisagesOntoOtherPlayers;
-    @BooleanOption(group = "inherit", value = true)
-    public Boolean enableStandLeveling;
-    @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
-    public Integer standExperienceNeededForLevelupMultiplier;
-    @BooleanOption(group = "inherit", value = true)
-    public Boolean barrageHasAreaOfEffect;
-    @BooleanOption(group = "inherit", value = true)
-    public Boolean barrageDeflectsArrrows;
-    @BooleanOption(group = "inherit", value = true)
-    public Boolean barragesOnlyKillOnLastHit;
-    @BooleanOption(group = "inherit", value = true)
-    public Boolean disableMeleeWhileStandActive;
-    @BooleanOption(group = "inherit", value = false)
-    public Boolean disableBleedingAndBloodSplatters;
-    @BooleanOption(group = "inherit", value = false)
-    public Boolean standDiscsDropWithKeepGameRuleOff;
-    @BooleanOption(group = "inherit", value = false)
-    public Boolean standPunchesGoThroughDoorsAndCorners;
-    @BooleanOption(group = "inherit", value = false)
-    public Boolean generalDetectionGoThroughDoorsAndCorners;
-    @IntOption(group = "inherit", value = 3, min = 0, max = 72000)
-    public Integer standGuardDelayTicks;
-    @IntOption(group = "inherit", value = 2, min = 0, max = 72000)
-    public Integer fabricTerrierSpawnWeightInTaigaUseDatapackForForge;
-    @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
-    public Integer fabricTerrierSpawnWeightInDesertUseDatapackForForge;
-    @FloatOption(group = "inherit", value = 10F, min = 0, max = 72000F)
-    public Float percentOfZombieVillagersThatBecomeZombieAestheticians;
-    @FloatOption(group = "inherit", value = 0.05F, min = 0, max = 1F)
-    public Float worthyMobOdds;
-    @FloatOption(group = "inherit", value = 0.005F, min = 0, max = 1F)
-    public Float standUserOdds;
-    @FloatOption(group = "inherit", value = 0.02F, min = 0, max = 1F)
-    public Float standUserVillagerOdds;
-    @FloatOption(group = "inherit", value = 0.15F, min = 0, max = 1F)
-    public Float userAndWorthyBreedingOddsBonus;
-    @BooleanOption(group = "inherit", value = true)
-    public Boolean standUserMonstersDropMeteorite;
-    @BooleanOption(group = "inherit", value = false)
-    public Boolean bossMobsCanNaturallyHaveStands;
-    @IntOption(group = "inherit", value = 2, min = 0, max = 72000)
-    public Integer multiplyAboveForVillagerBreeding;
-    @BooleanOption(group = "inherit", value = false)
-    public Boolean SuperBlockDestructionBarragePunches;
-    @BooleanOption(group = "inherit", value = false)
-    public Boolean SuperBlockDestructionBarrageLaunching;
-    @BooleanOption(group = "inherit", value = false)
-    public Boolean doExtraGriefChecksForClaims;
-    @IntOption(group = "inherit", value = 15, min = 0, max = 365)
-    public Integer basePunchAngle;
     public Set<String> standArrowPoolv2 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
@@ -133,6 +77,8 @@ public class Config implements Cloneable {
             )
     );
     @NestedOption(group = "modded")
+    public GeneralStandUserMobSettings generalStandUserMobSettings;
+    @NestedOption(group = "modded")
     public VanillaMCTweaks vanillaMinecraftTweaks;
     @NestedOption(group = "modded")
     public WorldGenSettings worldgenSettings;
@@ -143,11 +89,13 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public ChargeSettings chargeSettings;
     @NestedOption(group = "modded")
-    public DamageMultipliers damageMultipliers;
+    public GriefSettings griefSettings;
+    @NestedOption(group = "modded")
+    public MiscSettings miscellaneousSettings;
+    @NestedOption(group = "modded")
+    public StandLevelingSettings standLevelingSettings;
     @NestedOption(group = "modded")
     public GeneralStandSettings generalStandSettings;
-    @NestedOption(group = "modded")
-    public MiningSettings miningSettings;
     @NestedOption(group = "modded")
     public Cooldowns cooldownsInTicks;
     @NestedOption(group = "modded")
@@ -178,8 +126,39 @@ public class Config implements Cloneable {
         public Boolean mountingHorsesInCreativeTamesThem;
     }
 
+    public static class GeneralStandUserMobSettings {
+
+        @FloatOption(group = "inherit", value = 0.05F, min = 0, max = 1F)
+        public Float worthyMobOdds;
+        @FloatOption(group = "inherit", value = 0.005F, min = 0, max = 1F)
+        public Float standUserOdds;
+        @FloatOption(group = "inherit", value = 0.02F, min = 0, max = 1F)
+        public Float standUserVillagerOdds;
+        @FloatOption(group = "inherit", value = 0.15F, min = 0, max = 1F)
+        public Float userAndWorthyBreedingOddsBonus;
+        @IntOption(group = "inherit", value = 2, min = 0, max = 72000)
+        public Integer multiplyAboveForVillagerBreeding;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean standUserMonstersDropMeteorite;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean bossMobsCanNaturallyHaveStands;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean standUserMobsTakePlayerDamageMultipliers;
+
+        @FloatOption(group = "inherit", value = 10F, min = 0, max = 72000F)
+        public Float percentOfZombieVillagersThatBecomeZombieAestheticians;
+    }
 
     public static class ItemSettings {
+
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer levelsToGetStand;
+        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        public Integer levelsToRerollStandWithArrow;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean canThrowVisagesOntoOtherPlayers;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean standDiscsDropWithKeepGameRuleOff;
         @IntOption(group = "inherit", value = 1200, min = 0, max = 72000)
         public Integer locacacaEatingCooldowns;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
@@ -211,52 +190,6 @@ public class Config implements Cloneable {
         @BooleanOption(group = "inherit", value = true)
         public Boolean barragesAreAlwaysInterruptable;
     }
-    public static class DamageMultipliers {
-        @IntOption(group = "inherit", value = 0, min = 0, max = 72000)
-        public Integer bonusStandDmgByMaxLevel;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer starPlatinumAttacksOnMobs;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer starPlatinumAttacksOnPlayers;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer theWorldAttacksOnMobs;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer theWorldAttacksOnPlayers;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer theWorldAndStarPlatinumImpalePower;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer softAndWetAttacksOnPlayers;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer softAndWetAttacksOnMobs;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer softAndWetShootingModePower;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer softAndWetGoBeyondPower;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer standFireOnMobs;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer standFireOnPlayers;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer thrownBlocks;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer bubbleLaunchedBlocks;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer corpseDamageOnMobs;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer corpseDamageOnPlayers;
-        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
-        public Integer villagerCorpseProjectileResilienceDamageTaken;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer magicianAttackOnMobs;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer magicianAttackOnPlayers;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer cinderellaAttackOnMobs;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer cinderellaAttackOnPlayers;
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean standUserMobsTakePlayerDamageMultipliers;
-    }
     public static class WorldGenSettings {
         @IntOption(group = "inherit", value = 55, min = 0, max = 4096)
         public Integer cinderellaSpacing;
@@ -273,29 +206,53 @@ public class Config implements Cloneable {
         @BooleanOption(group = "inherit", value = true)
         public Boolean modifyStructureWeights;
     }
+    public static class MiscSettings {
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean generalDetectionGoThroughDoorsAndCorners;
+
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean disableBleedingAndBloodSplatters;
+    }
+    public static class StandLevelingSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableStandLeveling;
+        @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
+        public Integer standExperienceNeededForLevelupMultiplier;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 72000)
+        public Integer bonusStandDmgByMaxLevel;
+    }
     public static class GeneralStandSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean disableMeleeWhileStandActive;
+        @IntOption(group = "inherit", value = 15, min = 0, max = 365)
+        public Integer basePunchAngle;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean barrageHasAreaOfEffect;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean barragesOnlyKillOnLastHit;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean barrageDeflectsArrrows;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean standPunchesGoThroughDoorsAndCorners;
+        @IntOption(group = "inherit", value = 3, min = 0, max = 72000)
+        public Integer standGuardDelayTicks;
         @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
         public Integer standGuardMultiplier;
-    }
-    public static class MiningSettings {
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer speedMultiplierStarPlatinum;
+        public Integer standThrownObjectMultiplier;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer speedMultiplierTheWorld;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer speedMultiplierMagiciansRed;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer speedMultiplierSoftAndWet;
-        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
-        public Integer getMiningTierStarPlatinum;
-        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
-        public Integer getMiningTierTheWorld;
-        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
-        public Integer getMiningTierMagiciansRed;
-        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
-        public Integer getMiningTierSoftAndWet;
+        public Integer generalImpaleAttackMultiplier;
         @BooleanOption(group = "inherit", value = true)
-        public Boolean crouchingStopsMiningOres;
+        public Boolean crouchingStopsStandsFromMiningOres;
+    }
+    public static class GriefSettings {
+
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean doExtraGriefChecksForClaims;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean SuperBlockDestructionBarrageLaunching;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean SuperBlockDestructionBarragePunches;
     }
     public static class NameTagSettings {
         @BooleanOption(group = "inherit", value = true)
@@ -311,7 +268,6 @@ public class Config implements Cloneable {
         @BooleanOption(group = "inherit", value = true)
         public Boolean bypassAllNametagHidesInCreativeMode;
     }
-
 
     public static class Cooldowns {
         @IntOption(group = "inherit", value = 27, min = 0, max = 72000)
@@ -359,8 +315,22 @@ public class Config implements Cloneable {
 
 
     public static class SoftAndWetSettings {
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer softAndWetAttackMultOnPlayers;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer softAndWetAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer softAndWetShootingModePower;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer bubbleLaunchedObjectMultiplier;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer softAndWetGoBeyondPower;
         @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
         public Integer softAndWetGuardPoints;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer miningSpeedMultiplierSoftAndWet;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierSoftAndWet;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer maxPlunderBubbleTravelDistanceBeforePopping;
         @BooleanOption(group = "inherit", value = true)
@@ -426,8 +396,20 @@ public class Config implements Cloneable {
     }
     public static class MagiciansRedSettings {
 
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer magicianAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer magicianAttackMultOnPlayers;
         @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
         public Integer magiciansRedGuardPoints;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer speedMultiplierMagiciansRed;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierMagiciansRed;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer standFireOnPlayersMult;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer standFireOnMobsMult;
         @IntOption(group = "inherit", value = 100, min = -1, max = 72000)
         public Integer maxMagiciansRedFlames;
         @IntOption(group = "inherit", value = 100, min = -1, max = 72000)
@@ -469,6 +451,12 @@ public class Config implements Cloneable {
     }
     public static class JusticeSettings {
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer corpseDamageMultOnPlayers;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer corpseDamageMultOnMobs;
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
+        public Integer villagerCorpseProjectileResilienceDamageTaken;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer fogAndPilotRange;
         @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
         public Integer maxCorpses;
@@ -486,6 +474,10 @@ public class Config implements Cloneable {
         public Integer fogChainCooldown;
     }
     public static class CinderellaSettings {
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer cinderellaAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer cinderellaAttackMultOnPlayers;
         @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
         public Integer defaceAttackCooldown;
         @IntOption(group = "inherit", value = 4, min = 0, max = 72000)
@@ -590,8 +582,16 @@ public class Config implements Cloneable {
     }
 
     public static class TheWorldSettings {
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer theWorldAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer theWorldAttackMultOnPlayers;
         @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
         public Integer theWorldGuardPoints;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer miningSpeedMultiplierTheWorld;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierTheWorld;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer oxygenTankAdditionalTicks;
         @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
@@ -601,8 +601,16 @@ public class Config implements Cloneable {
     }
 
     public static class StarPlatinumSettings {
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer starPlatinumAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer starPlatinumAttackMultOnPlayers;
         @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
         public Integer starPlatinumGuardPoints;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer miningSpeedMultiplierStarPlatinum;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierStarPlatinum;
         @BooleanOption(group = "inherit", value = false)
         public Boolean starPlatinumScopeUsesPotionEffectForNightVision;
         @IntOption(group = "inherit", value = 160, min = 0, max = 72000)

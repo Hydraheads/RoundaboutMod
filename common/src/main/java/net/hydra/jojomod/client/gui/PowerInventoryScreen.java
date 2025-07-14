@@ -429,7 +429,7 @@ public class PowerInventoryScreen
             pl.isCreative()){
                 bypass = true;
             }
-            if (!ClientNetworking.getAppropriateConfig().enableStandLeveling) {
+            if (!ClientNetworking.getAppropriateConfig().standLevelingSettings.enableStandLeveling) {
                 bypass=true;
             }
             abilityList = standUser.roundabout$getStandPowers().drawGUIIcons(context, delta, mouseX, mouseY, i, j,

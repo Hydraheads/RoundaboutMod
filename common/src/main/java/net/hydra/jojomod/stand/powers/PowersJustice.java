@@ -666,7 +666,7 @@ public class PowersJustice extends NewDashPreset {
         } else {
             amt = (100+((currentLevel-1)*100));
         }
-        amt= (int) (amt*(ClientNetworking.getAppropriateConfig().standExperienceNeededForLevelupMultiplier *0.01));
+        amt= (int) (amt*(getLevelMultiplier()));
         return amt;
     }
     @Override
@@ -1437,7 +1437,7 @@ public class PowersJustice extends NewDashPreset {
                             if (bpos != null){
                                 if (value instanceof LivingEntity LE){
                                     if (LE.hasEffect(ModEffects.BLEED) ||
-                                            (ClientNetworking.getAppropriateConfig().disableBleedingAndBloodSplatters
+                                            (ClientNetworking.getAppropriateConfig().miscellaneousSettings.disableBleedingAndBloodSplatters
                                             && LE.getHealth() < LE.getMaxHealth())){
                                         double random = (Math.random() * 1.2) - 0.6;
                                         double random2 = (Math.random() * 1.2) - 0.6;

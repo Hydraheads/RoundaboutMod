@@ -237,11 +237,11 @@ public class MainUtil {
     public static final TargetingConditions plsWorkTargetting = TargetingConditions.forCombat().range(20.0).ignoreInvisibilityTesting();
 
     public static double getWorthyOdds(Mob mob) {
-        if ((isBossMob(mob) && !ClientNetworking.getAppropriateConfig().bossMobsCanNaturallyHaveStands)
+        if ((isBossMob(mob) && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
         || mob instanceof JojoNPC){
             return 0;
         }
-        return ClientNetworking.getAppropriateConfig().worthyMobOdds;
+        return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.worthyMobOdds;
     }
     public static boolean getIfMobIsAttacking(Mob mb){
         for (WrappedGoal wrappedGoal : ((IMob)mb).roundabout$getGoalSelector().getAvailableGoals()) {
@@ -258,26 +258,26 @@ public class MainUtil {
         return true;
     }
     public static double getStandUserOdds(Mob mob) {
-        if ((isBossMob(mob) && !ClientNetworking.getAppropriateConfig().bossMobsCanNaturallyHaveStands)
+        if ((isBossMob(mob) && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
                 || mob instanceof JojoNPC
                 || mob instanceof Vex){
             return 0;
         } else if (mob instanceof AbstractVillager){
-            return ClientNetworking.getAppropriateConfig().standUserVillagerOdds;
+            return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.standUserVillagerOdds;
         }
-        return ClientNetworking.getAppropriateConfig().standUserOdds;
+        return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.standUserOdds;
     }
     public static double getWorthyBreedBonus(Mob mob) {
         if (mob instanceof AbstractVillager){
-            return ClientNetworking.getAppropriateConfig().userAndWorthyBreedingOddsBonus *ClientNetworking.getAppropriateConfig().multiplyAboveForVillagerBreeding;
+            return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.userAndWorthyBreedingOddsBonus *ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.multiplyAboveForVillagerBreeding;
         }
-        return ClientNetworking.getAppropriateConfig().userAndWorthyBreedingOddsBonus;
+        return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.userAndWorthyBreedingOddsBonus;
     }
     public static double getStandUserBreedBonus(Mob mob) {
         if (mob instanceof AbstractVillager){
-            return ClientNetworking.getAppropriateConfig().userAndWorthyBreedingOddsBonus *ClientNetworking.getAppropriateConfig().multiplyAboveForVillagerBreeding;
+            return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.userAndWorthyBreedingOddsBonus *ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.multiplyAboveForVillagerBreeding;
         }
-        return ClientNetworking.getAppropriateConfig().userAndWorthyBreedingOddsBonus;
+        return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.userAndWorthyBreedingOddsBonus;
     }
     public static boolean isHumanoid(LivingEntity LE){
         return (LE instanceof Zombie || LE instanceof AbstractSkeleton
@@ -548,7 +548,7 @@ public class MainUtil {
         return null;
     }
     public static boolean getMobBleed(Entity Mob) {
-        if (ClientNetworking.getAppropriateConfig().disableBleedingAndBloodSplatters){
+        if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.disableBleedingAndBloodSplatters){
             return false;
         }
 
@@ -664,7 +664,7 @@ public class MainUtil {
                 }
             }
         } else if (ent instanceof Player PE){
-            if (PE.experienceLevel < ClientNetworking.getAppropriateConfig().levelsToGetStand && ((StandUser) PE).roundabout$getStandDisc().isEmpty()){
+            if (PE.experienceLevel < ClientNetworking.getAppropriateConfig().itemSettings.levelsToGetStand && ((StandUser) PE).roundabout$getStandDisc().isEmpty()){
                 return true;
             }
         }
@@ -680,7 +680,7 @@ public class MainUtil {
         } else if (ent instanceof Player PL){
             if (ClientNetworking.getAppropriateConfig().canAwakenOtherPlayersWithArrows){
                 if (((StandUser)PL).roundabout$getStandDisc().isEmpty()){
-                    return PL.experienceLevel >= ClientNetworking.getAppropriateConfig().levelsToGetStand;
+                    return PL.experienceLevel >= ClientNetworking.getAppropriateConfig().itemSettings.levelsToGetStand;
                 }
             }
         }
@@ -692,7 +692,7 @@ public class MainUtil {
     }
 
     public static void makeBleed(Entity entity, int level, int ticks, Entity source){
-        if (ClientNetworking.getAppropriateConfig().disableBleedingAndBloodSplatters){
+        if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.disableBleedingAndBloodSplatters){
             return;
         }
         if (getMobBleed(entity)){
@@ -998,7 +998,7 @@ public class MainUtil {
     public static boolean canPlaceOnClaim(Player player,BlockHitResult blockHit){
         //Seems counterintuitive but most abilities have their own ways of handling this, so I'll just make it return True.
 
-        if(!ClientNetworking.getAppropriateConfig().doExtraGriefChecksForClaims || !MainUtil.getIsGamemodeApproriateForGrief(player)){
+        if(!ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims || !MainUtil.getIsGamemodeApproriateForGrief(player)){
             return true;
 
         }
@@ -1451,7 +1451,7 @@ public class MainUtil {
 
 
     public static boolean canActuallyHit(Entity self, Entity entity){
-        if (ClientNetworking.getAppropriateConfig().generalDetectionGoThroughDoorsAndCorners){
+        if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.generalDetectionGoThroughDoorsAndCorners){
             return true;
         }
         Vec3 from = new Vec3(self.getX(), self.getY(), self.getZ()); // your position
