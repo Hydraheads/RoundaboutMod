@@ -678,7 +678,7 @@ public class MainUtil {
                 }
             }
         } else if (ent instanceof Player PL){
-            if (ClientNetworking.getAppropriateConfig().canAwakenOtherPlayersWithArrows){
+            if (ClientNetworking.getAppropriateConfig().itemSettings.canAwakenOtherPlayersWithArrows){
                 if (((StandUser)PL).roundabout$getStandDisc().isEmpty()){
                     return PL.experienceLevel >= ClientNetworking.getAppropriateConfig().itemSettings.levelsToGetStand;
                 }

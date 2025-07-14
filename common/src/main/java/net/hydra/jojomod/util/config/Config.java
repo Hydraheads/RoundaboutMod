@@ -41,8 +41,6 @@ public class Config implements Cloneable {
         SERVER_INSTANCE = config;
     }
 
-    @BooleanOption(group = "inherit", value = false)
-    public Boolean canAwakenOtherPlayersWithArrows;
     public Set<String> standArrowPoolv2 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
@@ -155,6 +153,9 @@ public class Config implements Cloneable {
         public Integer levelsToGetStand;
         @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
         public Integer levelsToRerollStandWithArrow;
+
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean canAwakenOtherPlayersWithArrows;
         @BooleanOption(group = "inherit", value = false)
         public Boolean canThrowVisagesOntoOtherPlayers;
         @BooleanOption(group = "inherit", value = false)
