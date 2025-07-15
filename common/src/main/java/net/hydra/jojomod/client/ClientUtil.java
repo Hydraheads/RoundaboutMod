@@ -308,6 +308,14 @@ public class ClientUtil {
         return entity != null && entity.isAlive() && !entity.isRemoved();
     }
 
+
+    public static void setThrowFadeToTheEther(float ether){
+        throwFadeToTheEther = ether;
+    }
+    public static float getThrowFadeToTheEther(){
+        return throwFadeToTheEther;
+    }
+    public static float throwFadeToTheEther = 1f;
     public static int getOutlineColor(Entity entity) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {

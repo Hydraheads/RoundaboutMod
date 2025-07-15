@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILivingEntityRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
@@ -14,6 +15,7 @@ import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
 import net.hydra.jojomod.entity.visages.mobs.PlayerSteveNPC;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.AgeableListModel;
 import net.minecraft.client.model.EntityModel;
@@ -74,7 +76,19 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 //        if (roundabout$isRenderingYellowLines)
 //            return;
 
+        /**
+        StandUser user = ((StandUser)entity);
+        float modified = MainUtil.hasModifiedPartialVisibility(entity);
+        if (modified != 1){
+            if (model instanceof AgeableListModel<?> ageableListModel)
+                ((IAlphaModel)ageableListModel).roundabout$setAlpha(0.5f);
+        }
+         **/
+
+        boolean shouldLetVisMod = true;
         ClientUtil.savedPose = $$3.last().pose();
+
+        float throwFadeToTheEther = 1f;
 
         if (((StandUser)entity).roundabout$isParallelRunning())
         {
@@ -87,8 +101,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                 }
                 else
                 {
-                    if (model instanceof AgeableListModel<?> ageableListModel)
-                        ((IAlphaModel)ageableListModel).roundabout$setAlpha(0.5f);
+                    throwFadeToTheEther = 0.5F;
                 }
             }
             else
@@ -97,16 +110,38 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         else
         {
             if (entity instanceof Player)
-                if (model instanceof AgeableListModel<?> ageableListModel)
-                {
-                    ((IAlphaModel)ageableListModel).roundabout$setAlpha(1.0f);
                     this.shadowRadius = 0.5f;
-                }
         }
+
+
+        IEntityAndData entityAndData = ((IEntityAndData) entity);
+        if (entityAndData.roundabout$getTrueInvisibility() > -1){
+            throwFadeToTheEther *= 0.4F;
+            shouldLetVisMod = false;
+        }
+
+
+        if (shouldLetVisMod) {
+            Minecraft $$17 = Minecraft.getInstance();
+            boolean $$18 = this.isBodyVisible(entity);
+            boolean $$19 = !$$18 && !entity.isInvisibleTo($$17.player);
+            boolean $$20 = $$17.shouldEntityAppearGlowing(entity);
+            RenderType $$21 = this.getRenderType(entity, $$18, $$19, $$20);
+            if ($$21 != null) {
+                if ($$19) {
+                    throwFadeToTheEther *= 0.15F;
+                }
+            }
+        }
+        ClientUtil.setThrowFadeToTheEther(throwFadeToTheEther);
 
 //        if (!ci.isCancelled()) {
 //            roundabout$isRenderingYellowLines = true;
 //        }
+    }
+    @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "TAIL"))
+    private void roundabout$renderTail(T entity, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
+        ClientUtil.setThrowFadeToTheEther(1f);
     }
 
     @Inject(method= "<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Lnet/minecraft/client/model/EntityModel;F)V", at = @At(value = "RETURN"))
@@ -259,6 +294,10 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
     protected float getFlipDegrees(T $$0) {
         return 90.0F;
     }
+
+    @Shadow protected abstract boolean isBodyVisible(T $$0);
+
+    @Shadow @Nullable protected abstract RenderType getRenderType(T $$0, boolean $$1, boolean $$2, boolean $$3);
 
     @Inject(method = "shouldShowName(Lnet/minecraft/world/entity/LivingEntity;)Z", at=@At("HEAD"), cancellable = true)
     private void roundabout$shouldShowName(T entity, CallbackInfoReturnable<Boolean> cir)

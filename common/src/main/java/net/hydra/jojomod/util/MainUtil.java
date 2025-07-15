@@ -1456,6 +1456,13 @@ public class MainUtil {
 
     }
 
+    public static float hasModifiedPartialVisibility(Entity entity){
+        float basis = 1F;
+        if (getEntityIsTrulyInvisible(entity)){
+            basis *=0.4F;
+        }
+        return basis;
+    }
     public static boolean canActuallyHitInvolved(Entity self, Entity entity){
         if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.generalDetectionGoThroughDoorsAndCorners){
             return true;
