@@ -449,11 +449,11 @@ public class PowersSurvivor extends NewDashPreset {
                 return SE;
             }
         } else if (EntityTargetOne == null){
-            if (SurvivorEntity.canZapEntity(TE) && canUseZap(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()){
+            if (SurvivorEntity.canZapEntity(TE) && canUseZap(TE) && !TE.isInvisible() && TE.distanceTo(SurvivorTarget) <= getCupidRange()){
                 return TE;
             }
         } else {
-            if (SurvivorEntity.canZapEntity(TE) && canUseZap(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()
+            if (SurvivorEntity.canZapEntity(TE) && canUseZap(TE) && !TE.isInvisible() && TE.distanceTo(SurvivorTarget) <= getCupidRange()
             && !EntityTargetOne.is(TE)){
                 return TE;
             }

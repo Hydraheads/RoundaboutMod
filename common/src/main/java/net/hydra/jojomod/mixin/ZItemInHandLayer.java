@@ -59,6 +59,13 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
     private static final ResourceLocation roundabout$TEXTURE_4 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/shooting_bubble_4.png");
     @Inject(method = "render", at = @At(value = "HEAD"),cancellable = true)
     public void roundabout$Render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T entity, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci){
+
+        IEntityAndData entityAndData = ((IEntityAndData) entity);
+        if (entityAndData.roundabout$getTrueInvisibility() > -1){
+            ci.cancel();
+            return;
+        }
+
         dominant$Hand = entity.getMainArm() == HumanoidArm.RIGHT;
         if (entity instanceof Player) {
             roundabout$ModifyEntity = ((TimeStop) entity.level()).CanTimeStopEntity(entity) || ClientUtil.getScreenFreeze();

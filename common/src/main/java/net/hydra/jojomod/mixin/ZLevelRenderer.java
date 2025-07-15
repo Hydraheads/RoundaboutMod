@@ -102,6 +102,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                 /**A side effect of canceling rendering like this is for Achtung on non living entities is they do not
                  * render flames while invisible, this would be an easy fix but I don't know if it is necessary.
                  * LivingEntities use Entity function getInvisible entirely.*/
+                
                 ci.cancel();
                 return;
             }
