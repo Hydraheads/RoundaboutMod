@@ -12,12 +12,16 @@ import net.hydra.jojomod.util.config.annotation.*;
 public class Config implements Cloneable {
     private static Config LOCAL_INSTANCE = new Config();
     private static Config SERVER_INSTANCE = new Config();
+    private static Config DEFAULT_INSTANCE = new Config();
 
     public Config() {
     }
 
     public static Config getLocalInstance() {
         return LOCAL_INSTANCE;
+    }
+    public static Config getDefaultInstance() {
+        return DEFAULT_INSTANCE;
     }
 
     public static Config getServerInstance() {

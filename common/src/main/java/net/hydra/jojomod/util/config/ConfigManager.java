@@ -270,9 +270,6 @@ public abstract class ConfigManager {
         Config loaded = load(new Config(), localConfigPath);
         validateFields(loaded);
         Config.updateLocal(loaded);
-
-        DEFAULT_LOCAL_CONFIG = loaded.clone();
-
         saveLocalConfig();
         return loaded;
     }
@@ -392,16 +389,15 @@ public abstract class ConfigManager {
 
     public static void resetLocal()
     {
-        Config.updateLocal(DEFAULT_LOCAL_CONFIG.clone());
+        Config.updateLocal(Config.getDefaultInstance().clone());
     }
 
     public static void resetClient()
     {
-        ClientConfig.updateLocal(DEFAULT_CLIENT_CONFIG.clone());
+        ClientConfig.updateLocal(ClientConfig.getDefaultInstance().clone());
     }
 
     public static void resetServer()
     {
-        Config.updateServer(DEFAULT_SERVER_CONFIG.clone());
     }
 }

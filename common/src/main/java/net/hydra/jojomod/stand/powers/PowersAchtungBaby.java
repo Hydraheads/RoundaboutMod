@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -148,6 +149,19 @@ public class PowersAchtungBaby extends NewDashPreset {
                     0,0, 0, 0, 0);
             playStandUserOnlySoundsIfNearby(BURST, 27, false,false);
             spawnExplosionParticles(this.self.level(), pos, 100, 0.5);
+
+            float range = 5;
+            List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.self.level(), this.getSelf().blockPosition(), range+1);
+
+            if (!mobsInRange.isEmpty()) {
+                for (Entity ent : mobsInRange) {
+                    if (ent.distanceTo(this.self) <= range){
+                        IEntityAndData entityAndData = ((IEntityAndData) ent);
+                        entityAndData.roundabout$setTrueInvisibility(300);
+                    }
+                }
+            }
+
         }
 
         return true;

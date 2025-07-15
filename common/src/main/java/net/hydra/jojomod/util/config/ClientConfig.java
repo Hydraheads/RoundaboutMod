@@ -11,6 +11,11 @@ import net.hydra.jojomod.util.config.annotation.*;
 
 public class ClientConfig implements Cloneable {
     private static ClientConfig LOCAL_INSTANCE = new ClientConfig();
+    private static ClientConfig DEFAULT_INSTANCE = new ClientConfig();
+
+    public static ClientConfig getDefaultInstance() {
+        return DEFAULT_INSTANCE;
+    }
 
     @Override
     public ClientConfig clone() {
