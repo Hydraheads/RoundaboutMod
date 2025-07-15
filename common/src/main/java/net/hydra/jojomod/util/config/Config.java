@@ -356,7 +356,7 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
         public Integer magiciansRedGuardPoints;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer MiningSpeedMultiplierMagiciansRed;
+        public Integer miningSpeedMultiplierMagiciansRed;
         @IntOption(group = "inherit", value = 0, min = 0, max = 4)
         public Integer getMiningTierMagiciansRed;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)

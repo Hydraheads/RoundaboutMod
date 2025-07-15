@@ -2291,7 +2291,7 @@ public class PowersMagiciansRed extends PunchingStand {
     @Override
     public float getMiningMultiplier() {
         return (float) (1F*(ClientNetworking.getAppropriateConfig().
-                        magiciansRedSettings.MiningSpeedMultiplierMagiciansRed *0.01));
+                        magiciansRedSettings.miningSpeedMultiplierMagiciansRed *0.01));
     }
 
     @Override
