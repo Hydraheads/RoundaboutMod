@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -86,7 +87,7 @@ public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity
     @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.getUser() != null && MainUtil.isStandDamage(source) && !forceDespawnSet){
-            forceDespawnSet = true;
+            forceDespawn(true);
             return this.getUser().hurt(source,amount*0.5F);
         }
         return false;

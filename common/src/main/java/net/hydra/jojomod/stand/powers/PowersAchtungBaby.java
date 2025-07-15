@@ -91,17 +91,6 @@ public class PowersAchtungBaby extends NewDashPreset {
             offloadSurvivors();
         }
     }
-    public void addSurvivorToList(SurvivorEntity che){
-        listInit();
-        survivorsSpawned.add(che);
-        List<SurvivorEntity> survivorsList2 = new ArrayList<>(survivorsSpawned) {
-        };
-        int scount = ClientNetworking.getAppropriateConfig().survivorSettings.maxSurvivorsCount;
-        if (!survivorsList2.isEmpty() && survivorsList2.size() > scount) {
-            survivorsList2.get(0).forceDespawn(true);
-            survivorsSpawned.remove(0);
-        }
-    }
 
     public void offloadSurvivors(){
         listInit();
