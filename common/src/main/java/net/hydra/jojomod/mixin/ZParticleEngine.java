@@ -126,6 +126,7 @@ public class ZParticleEngine {
             RenderSystem.applyModelViewMatrix();
             RenderSystem.depthMask(true);
             RenderSystem.disableBlend();
+            //These are true when ts is happening and in the original particle engine
             $$2.turnOffLightLayer();
             ci.cancel();
         }

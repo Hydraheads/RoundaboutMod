@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
-import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
@@ -20,25 +19,20 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 public class PowersAchtungBaby extends NewDashPreset {
     public PowersAchtungBaby(LivingEntity self) {
@@ -51,7 +45,7 @@ public class PowersAchtungBaby extends NewDashPreset {
     }
 
 
-    public boolean InvisibleVisionOn(){
+    public boolean invisibleVisionOn(){
         return getStandUserSelf().roundabout$getUniqueStandModeToggle();
     }
     public boolean canSummonStandAsEntity(){
@@ -60,7 +54,7 @@ public class PowersAchtungBaby extends NewDashPreset {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         // code for advanced icons
-        if (InvisibleVisionOn())
+        if (invisibleVisionOn())
             setSkillIcon(context, x, y, 1, StandIcons.BABY_VISION_ON, PowerIndex.SKILL_1);
         else
             setSkillIcon(context, x, y, 1, StandIcons.BABY_VISION_OFF, PowerIndex.SKILL_1);
@@ -190,17 +184,17 @@ public class PowersAchtungBaby extends NewDashPreset {
 
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
+        /**
+        if (ent.isInvisibleTo())
+        if (invisibleVisionOn() && MainUtil.getEntityIsTrulyInvisible(ent) && MainUtil.canActuallyHitInvolved(this.self,ent)){
+            return true;
+        }
+         **/
         return false;
     }
     @Override
     public int highlightsEntityColor(Entity ent, Player player){
-        if (
-                (SurvivorTarget != null && ent != null && ent.is(SurvivorTarget)) ||
-                        (EntityTargetOne != null && ent != null && ent.is(EntityTargetOne))
-        ){
-            return 4971295;
-        }
-        return 11283968;
+        return 14806268;
     }
 
     public StandEntity displayStand = null;
@@ -410,9 +404,9 @@ public class PowersAchtungBaby extends NewDashPreset {
 
     public boolean invisibleVisionSwitch(){
         if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
-            getStandUserSelf().roundabout$setUniqueStandModeToggle(!InvisibleVisionOn());
+            getStandUserSelf().roundabout$setUniqueStandModeToggle(!invisibleVisionOn());
             if (!isClient() && this.self instanceof ServerPlayer PE) {
-                if (InvisibleVisionOn()) {
+                if (invisibleVisionOn()) {
                     PE.displayClientMessage(Component.translatable("text.roundabout.achtung.vision_on").withStyle(ChatFormatting.AQUA), true);
                 } else {
                     PE.displayClientMessage(Component.translatable("text.roundabout.achtung.vision_off").withStyle(ChatFormatting.AQUA), true);
@@ -428,7 +422,7 @@ public class PowersAchtungBaby extends NewDashPreset {
         if (keyIsDown) {
             if (!holdAttack) {
                 holdAttack = true;
-                if (InvisibleVisionOn()) {
+                if (invisibleVisionOn()) {
                     selectTargetClient();
                 }
             }

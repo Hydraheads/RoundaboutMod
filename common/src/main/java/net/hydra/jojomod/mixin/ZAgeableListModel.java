@@ -35,6 +35,9 @@ public abstract class ZAgeableListModel implements IAlphaModel {
             ordinal = 3
     )
     private float roundabout$modifyAlpha(float originalAlpha) {
-        return roundabout$alpha;
+        if (roundabout$alpha != 1){
+            return originalAlpha*roundabout$alpha;
+        }
+        return originalAlpha;
     }
 }

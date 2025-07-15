@@ -566,7 +566,7 @@ public class ClientUtil {
             LocalPlayer localPlayer = Minecraft.getInstance().player;
             if (localPlayer == null)
                 return false;
-            if (((StandUser) localPlayer).roundabout$getStandPowers() instanceof PowersAchtungBaby PA && PA.InvisibleVisionOn()) {
+            if (((StandUser) localPlayer).roundabout$getStandPowers() instanceof PowersAchtungBaby PA && PA.invisibleVisionOn()) {
                 return true;
             }
         }
