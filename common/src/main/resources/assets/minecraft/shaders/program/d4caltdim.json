@@ -1,8 +1,8 @@
 {
   "blend": {
     "func": "add",
-    "srcrgb": "1",
-    "dstrgb": "0"
+    "srcrgb": "srcalpha",
+    "dstrgb": "1-srcalpha"
   },
   "vertex": "blit",
   "fragment": "d4caltdim",
