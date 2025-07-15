@@ -536,6 +536,10 @@ public class Config implements Cloneable {
     public static class AchtungSettings {
         @BooleanOption(group = "inherit", value = false)
         public Boolean invisibilityPotionAsWell;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean hidesArmor;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean hidesHeldItems;
     }
 
     public static class TheWorldSettings {

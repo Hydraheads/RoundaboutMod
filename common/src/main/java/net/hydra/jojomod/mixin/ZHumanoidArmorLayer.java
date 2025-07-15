@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -53,7 +54,9 @@ public class ZHumanoidArmorLayer<T extends LivingEntity, M extends HumanoidModel
     public void roundabout$Render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
         roundabout$ArmorPhase = 0;
         IEntityAndData entityAndData = ((IEntityAndData) $$3);
-        if (entityAndData.roundabout$getTrueInvisibility() > -1){
+        if (entityAndData.roundabout$getTrueInvisibility() > -1 && ClientNetworking.getAppropriateConfig() != null &&
+                ClientNetworking.getAppropriateConfig().achtungSettings != null &&
+                ClientNetworking.getAppropriateConfig().achtungSettings.hidesArmor){
             ci.cancel();
             return;
         }
