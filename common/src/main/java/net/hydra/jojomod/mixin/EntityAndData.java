@@ -18,6 +18,7 @@ import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -319,6 +320,17 @@ public abstract class EntityAndData implements IEntityAndData {
     public void roundabout$isInvisible(CallbackInfoReturnable<Boolean> cir){
         if (roundabout$getTrueInvisibility() > -1){
             cir.setReturnValue(true);
+            return;
+        }
+    }
+
+    @Inject(method = "isInvisibleTo", at = @At("HEAD"), cancellable = true)
+    public void roundabout$isInvisibleTo(Player pl, CallbackInfoReturnable<Boolean> cir){
+        if (roundabout$getTrueInvisibility() > -1){
+            if (pl != null && ((StandUser)pl).roundabout$getStandPowers() instanceof PowersAchtungBaby PA
+            && PA.invisibleVisionOn()){
+                cir.setReturnValue(false);
+            }
             return;
         }
     }

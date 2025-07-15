@@ -154,6 +154,7 @@ public abstract class ZScreenEffectRenderer {
 
             RenderSystem.disableBlend();
             RenderSystem.depthMask(true);
+            //this only applies on stand fire
             RenderSystem.depthFunc(GL20C.GL_LEQUAL);
         }
     }

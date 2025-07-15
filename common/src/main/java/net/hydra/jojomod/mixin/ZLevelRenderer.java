@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
@@ -95,6 +96,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             at = @At(value = "HEAD"),
             cancellable = true)
     private void roundabout$renderEntity(Entity entity, double cameraX, double cameraY, double cameraZ, float partialTick, PoseStack stack, MultiBufferSource buffer, CallbackInfo ci) {
+
         if (entity != null){
             IEntityAndData entityAndData = ((IEntityAndData)entity);
             entityAndData.roundabout$setExclusiveLayers(true);
