@@ -180,6 +180,20 @@ public class MainUtil {
         }
         return false;
     }
+    public static boolean getEntityIsTrulyInvisible(Entity ent){
+        if (ent != null){
+            IEntityAndData entityAndData = ((IEntityAndData) ent);
+            return entityAndData.roundabout$getTrueInvisibility() > -1;
+        }
+        return false;
+    }
+    public static int getEntityTrulyInvisibleTicks(Entity ent){
+        if (ent != null){
+            IEntityAndData entityAndData = ((IEntityAndData) ent);
+            return entityAndData.roundabout$getTrueInvisibility();
+        }
+        return -1;
+    }
     public static boolean isMobOrItsMounts(Entity ent, Entity checkAgaist){
         if (ent != null && checkAgaist != null){
             if (ent.is(checkAgaist)){

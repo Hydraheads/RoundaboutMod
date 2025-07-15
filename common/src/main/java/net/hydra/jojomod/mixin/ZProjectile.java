@@ -1,8 +1,11 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IProjectileAccess;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -103,6 +106,9 @@ public abstract class ZProjectile extends Entity implements IProjectileAccess{
                         ((StandUser) $$0).roundabout$getStandPowers().hasActedInTS = true;
                     }
                 }
+            }
+            if (MainUtil.getEntityIsTrulyInvisible($$0) && ClientNetworking.getAppropriateConfig().achtungSettings.hidesShotProjectiles){
+                ((IEntityAndData)this).roundabout$setTrueInvisibility(MainUtil.getEntityTrulyInvisibleTicks($$0));
             }
         }
     }
