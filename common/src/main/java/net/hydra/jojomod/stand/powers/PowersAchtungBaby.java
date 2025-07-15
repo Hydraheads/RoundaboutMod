@@ -8,6 +8,7 @@ import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.CooldownInstance;
@@ -18,18 +19,25 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 public class PowersAchtungBaby extends NewDashPreset {
     public PowersAchtungBaby(LivingEntity self) {
@@ -84,26 +92,6 @@ public class PowersAchtungBaby extends NewDashPreset {
         return $$1;
     }
 
-    @Override
-
-    public void tickPowerEnd() {
-        if (survivorsSpawned != null && !survivorsSpawned.isEmpty()) {
-            offloadSurvivors();
-        }
-    }
-
-    public void offloadSurvivors(){
-        listInit();
-        List<SurvivorEntity> survivorsList2 = new ArrayList<>(survivorsSpawned) {
-        };
-        if (!survivorsList2.isEmpty()) {
-            for (SurvivorEntity value : survivorsList2) {
-                if (value.isRemoved() || !value.isAlive() || (this.self.level().isClientSide() && this.self.level().getEntity(value.getId()) == null)) {
-                    survivorsSpawned.remove(value);
-                }
-            }
-        }
-    }
 
     @Override
     public void powerActivate(PowerContext context) {
@@ -114,10 +102,7 @@ public class PowersAchtungBaby extends NewDashPreset {
                 switchModeClient();
             }
             case SKILL_2_NORMAL-> {
-                summonSurvivorClient();
-            }
-            case SKILL_2_CROUCH-> {
-                despawnSurvivorClient();
+                invisiburstClient();
             }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 dash();
@@ -125,25 +110,18 @@ public class PowersAchtungBaby extends NewDashPreset {
         }
     }
 
+    public void invisiburstClient(){
+        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+        tryPowerPacket(PowerIndex.POWER_2);
+    }
+
     public void switchModeClient(){
-            SurvivorTarget = null;
-            EntityTargetOne = null;
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
             tryPowerPacket(PowerIndex.POWER_1);
     }
 
 
 
-    public void initializeTargets(int x, int y, int z){
-
-
-        Entity targ = this.self.level().getEntity(x);
-        if (targ instanceof SurvivorEntity SE){
-            SurvivorTarget = SE;
-        }
-        EntityTargetOne = this.self.level().getEntity(y);
-        EntityTargetTwo = this.self.level().getEntity(z);
-    }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         switch (move)
@@ -159,7 +137,41 @@ public class PowersAchtungBaby extends NewDashPreset {
     }
 
     public boolean invisibleBurst(){
+        if (this.self.level() instanceof ServerLevel sl){
+            Vec3 pos = new Vec3(this.self.getX(),
+                    this.self.getY() +(this.self.getBbHeight()*0.5),
+                    this.self.getZ());
+            sl.sendParticles(ModParticles.BABY_CRACKLE,
+                    pos.x(),
+                    pos.y(),
+                    pos.z(),
+                    0,0, 0, 0, 0);
+            playStandUserOnlySoundsIfNearby(BURST, 27, false,false);
+            spawnExplosionParticles(this.self.level(), pos, 100, 0.5);
+        }
+
         return true;
+    }
+
+
+    public static void spawnExplosionParticles(Level level, Vec3 center, int particleCount, double speed) {
+        if (!(level instanceof ServerLevel serverLevel)) return;
+
+        RandomSource random = level.random;
+
+        for (int i = 0; i < particleCount; i++) {
+            // Random direction on the unit sphere
+            double x = random.nextFloat()-0.5F;
+            double y = random.nextFloat()-0.5F;
+            double z = random.nextFloat()-0.5F;
+
+            serverLevel.sendParticles(
+                    ModParticles.MAGIC_DUST, // Use another ParticleOptions if desired
+                    center.x, center.y, center.z,
+                    0, // count (we send 1 at a time in a loop)
+                    x, y, z, speed
+            );
+        }
     }
 
     @Override
@@ -213,32 +225,6 @@ public class PowersAchtungBaby extends NewDashPreset {
     }
 
 
-    public int lastPlacementTime = -1;
-    @Override
-    public void tickMobAI(LivingEntity attackTarget){
-        lastPlacementTime--;
-        if (lastPlacementTime <= -1){
-            lastPlacementTime = 600;
-            createSurvivor(this.self.getPosition(1),true);
-        }
-    }
-
-    public void despawnSurvivorClient(){
-        tryPowerPacket(PowerIndex.POWER_2_SNEAK);
-    }
-    @Override
-    public boolean tryPosPower(int move, boolean forced, Vec3 pos) {
-        if (move == PowerIndex.POWER_2) {
-            createSurvivor(pos,false);
-            return true;
-        }
-        return tryPower(move, forced);
-    }
-
-    boolean thisistheend=false;
-    @Override
-    public void tickStandRejection(MobEffectInstance effect) {
-    }
 
     public boolean canUseZap(Entity ent) {
         if (ent instanceof LivingEntity LE &&
@@ -253,8 +239,6 @@ public class PowersAchtungBaby extends NewDashPreset {
         return true;
     }
 
-    public void createSurvivor(Vec3 pos, boolean activated){
-    }
 
     public void setRageCupidCooldown(){
         int cooldown = ClientNetworking.getAppropriateConfig().survivorSettings.rageCupidCooldown;

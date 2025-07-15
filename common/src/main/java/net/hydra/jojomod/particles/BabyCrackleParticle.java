@@ -18,8 +18,8 @@ public class BabyCrackleParticle extends TextureSheetParticle {
     protected BabyCrackleParticle(ClientLevel $$0, double $$1, double $$2, double $$3, double $$4, double $$5, double $$6, SpriteSet $$7) {
         super($$0, $$1, $$2, $$3, 0.0, 0.0, 0.0);
         this.age = 0;
-        this.lifetime = 8;
-        this.quadSize = 0.4F;
+        this.lifetime = 11;
+        this.quadSize = 1.8F;
         this.sprites = $$7;
         this.setSpriteFromAge($$7);
     }
