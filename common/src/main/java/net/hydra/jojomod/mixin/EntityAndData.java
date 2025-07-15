@@ -315,6 +315,15 @@ public abstract class EntityAndData implements IEntityAndData {
         }
 
     }
+    @Inject(method = "isInvisible", at = @At("HEAD"), cancellable = true)
+    public void roundabout$isInvisible(CallbackInfoReturnable<Boolean> cir){
+        if (roundabout$getTrueInvisibility() > -1){
+            cir.setReturnValue(true);
+            return;
+        }
+    }
+
+
     @Inject(method = "moveRelative", at = @At("HEAD"), cancellable = true)
     private void roundabout$moveRelative(float $$0, Vec3 $$1, CallbackInfo ci){
 

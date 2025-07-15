@@ -192,6 +192,7 @@ public class ClientUtil {
                     int entityID = (int)vargs[0];
                     int altered = (int)vargs[1];
                     Entity ent = player.level().getEntity(entityID);
+                    Roundabout.LOGGER.info("2");
                     if (ent != null){
                         ((IEntityAndData)ent).roundabout$setTrueInvisibility(altered);
 
