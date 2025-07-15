@@ -1922,6 +1922,8 @@
   "config.roundabout.particleSettings.name": "Particle Settings",
   "config.roundabout.opacitySettings.name": "Opacity Settings",
   "config.roundabout.dynamicSettings.name": "Dynamic Settings",
+
+  "config.roundabout.roundaboutconfig.name": "JoJo",
   "config.roundabout.z.name": "",
   "config.roundabout.z.desc": "",
   "config.roundabout.x.name": "Applies Invis Potion",
