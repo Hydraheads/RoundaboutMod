@@ -101,16 +101,12 @@ public abstract class HudRendering implements IHudAccess {
             }
             if (((StandUser) this.minecraft.player ).roundabout$getStandPowers() instanceof PowersRatt) {
                 if ( ((StandUser) this.minecraft.player).roundabout$getStandPowers().scopeLevel != 0 ) {
-                    RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.RATT_SCOPE_OVERLAY, 0.99F);
-                    RenderSystem.disableBlend();
                 }
             }
             if (this.minecraft.options.getCameraType().isFirstPerson()) {
                 if (user.roundabout$isBubbleEncased()){
-                    RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.IN_BUBBLE_OVERLAY, 0.99F);
-                    RenderSystem.disableBlend();
                 }
                 if (user.roundabout$getLocacacaCurse() == LocacacaCurseIndex.HEAD) {
                     if (((IPlayerEntity) this.minecraft.player).roundabout$getMaskSlot() != null &&
@@ -138,9 +134,7 @@ public abstract class HudRendering implements IHudAccess {
 
              StandPowers powers = user.roundabout$getStandPowers();
                 if (powers.timeRewindOverlayTicks > -1) {
-                    RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.TIME_REWIND, powers.getOverlayFromOverlayTicks($$0));
-                    RenderSystem.disableBlend();
                 }
 
         }
