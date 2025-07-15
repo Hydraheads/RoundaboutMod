@@ -3874,6 +3874,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     public double previousYpos = 0.0;
     public float MoldLevel = 0.0f;
+    public int jumpImmunityTicks = 0;
 
     @Override
     public void DoMoldTick() {
@@ -3906,10 +3907,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "travel", at = @At(value = "TAIL"))
     public void   MoldDetection(Vec3 movement,CallbackInfo info) {
         if((((IPermaCasting)this.level()).roundabout$inPermaCastRange(this.getOnPos(), PermanentZoneCastInstance.MOLD_FIELD))) {
-            Boolean isUser = (((IPermaCasting)this.level()).roundabout$isPermaCastingEntity(((LivingEntity)(Object) this))&& this.roundabout$getStandPowers() instanceof PowersGreenDay);
-            Boolean down = previousYpos > this.getY();
+            boolean isUser = (((IPermaCasting)this.level()).roundabout$isPermaCastingEntity(((LivingEntity)(Object) this))&& this.roundabout$getStandPowers() instanceof PowersGreenDay);
+            boolean down = previousYpos > this.getY();
+            boolean JumpImmune = jumpImmunityTicks > 0;
             boolean isStand = (((LivingEntity)(Object) this) instanceof StandEntity);
-            if (!roundabout$getStandPowers().isStoppingTime() &&!this.roundabout$isBubbleEncased() && !isUser && !isStand && down){
+            if (!roundabout$getStandPowers().isStoppingTime() &&!this.roundabout$isBubbleEncased() && !isUser && !isStand && down &&!JumpImmune){
                 for (int i = 0; i < 3; i = i + 1) {
 
                     double width = this.getBbWidth();
@@ -3924,6 +3926,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
                 }
                 DoMoldTick();
+            }
+            else {
+                if (previousYpos < this.getY()) {
+                    jumpImmunityTicks = 2;
+                }
+            }
+            if(JumpImmune){
+                jumpImmunityTicks = jumpImmunityTicks-1;
             }
         }
         previousYpos = this.getY();
