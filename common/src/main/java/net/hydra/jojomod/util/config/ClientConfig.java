@@ -17,8 +17,11 @@ public class ClientConfig implements Cloneable {
         return ConfigManager.GSON.fromJson(ConfigManager.GSON.toJson(this), ClientConfig.class);
     }
 
-    @BooleanOption(group = "inherit", value = true)
-    public Boolean onlyStandUsersCanSeeStands;
+
+
+
+    @NestedOption(group = "modded")
+    public ClientConfig.GeneralSettings generalSettings;
     @BooleanOption(group = "inherit", value = true)
     public Boolean pressingAbilityKeysSummonsStands;
     @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
@@ -61,6 +64,10 @@ public class ClientConfig implements Cloneable {
 
 
     public ClientConfig() {
+    }
+    public static class GeneralSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean onlyStandUsersCanSeeStands;
     }
     public static class ConfigSettings {
 

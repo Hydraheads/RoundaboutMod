@@ -1917,6 +1917,7 @@
   "config.roundabout.shouldShowConfigButton.name": "Show Config Button",
   "config.roundabout.shouldShowConfigButton.desc": "Whether or not the config button needs to be shown at all. If you are a modpack dev you will most likely want to turn this off when your pack is fully configured.",
 
+  "config.roundabout.generalSettings.name": "General Settings",
   "config.roundabout.configSettings.name": "Config Settings",
   "config.roundabout.particleSettings.name": "Particle Settings",
   "config.roundabout.opacitySettings.name": "Opacity Settings",

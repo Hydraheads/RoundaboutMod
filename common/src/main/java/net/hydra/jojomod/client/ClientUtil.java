@@ -235,7 +235,7 @@ public class ClientUtil {
 
     public static boolean canSeeStands(Player lp){
         return !(lp != null && (((StandUser)lp).roundabout$getStandDisc().isEmpty() &&
-                !lp.isSpectator()) && ConfigManager.getClientConfig().onlyStandUsersCanSeeStands);
+                !lp.isSpectator()) && ConfigManager.getClientConfig().generalSettings.onlyStandUsersCanSeeStands);
     }
     public static boolean checkIfClientCanSeePastLocations() {
         LocalPlayer player = Minecraft.getInstance().player;
