@@ -192,7 +192,6 @@ public class ClientUtil {
                     int entityID = (int)vargs[0];
                     int altered = (int)vargs[1];
                     Entity ent = player.level().getEntity(entityID);
-                    Roundabout.LOGGER.info("2");
                     if (ent != null){
                         ((IEntityAndData)ent).roundabout$setTrueInvisibility(altered);
 
@@ -242,6 +241,15 @@ public class ClientUtil {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
             if (((StandUser)player).roundabout$getStandPowers() instanceof PowersMandom PM && PM.activatedPastVision()){
+                return true;
+            }
+        }
+        return false;
+    }
+    public static boolean checkIfClientCanSeeInvisAchtung() {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersAchtungBaby PM && PM.invisibleVisionOn()){
                 return true;
             }
         }

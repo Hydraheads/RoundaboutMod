@@ -54,7 +54,7 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
     public void roundabout$Render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T entity, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci){
 
         IEntityAndData entityAndData = ((IEntityAndData) entity);
-        if (entityAndData.roundabout$getTrueInvisibility() > -1 && ClientNetworking.getAppropriateConfig() != null &&
+        if (entityAndData.roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() && ClientNetworking.getAppropriateConfig() != null &&
         ClientNetworking.getAppropriateConfig().achtungSettings != null &&
                 ClientNetworking.getAppropriateConfig().achtungSettings.hidesHeldItems){
             ci.cancel();

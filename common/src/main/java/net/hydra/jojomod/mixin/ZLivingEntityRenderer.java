@@ -72,7 +72,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
     @Unique private boolean roundabout$isRenderingYellowLines = false;
 
     @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$render(T entity, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
+    private void roundabout$renderX(T entity, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
 //        if (roundabout$isRenderingYellowLines)
 //            return;
 
@@ -85,9 +85,11 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         }
          **/
 
-        boolean shouldLetVisMod = true;
+        //boolean shouldLetVisMod = true;
         ClientUtil.savedPose = $$3.last().pose();
 
+
+        /**
         float throwFadeToTheEther = 1f;
 
         if (((StandUser)entity).roundabout$isParallelRunning())
@@ -116,7 +118,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
         IEntityAndData entityAndData = ((IEntityAndData) entity);
         if (entityAndData.roundabout$getTrueInvisibility() > -1){
-            throwFadeToTheEther *= 0.4F;
+            throwFadeToTheEther = throwFadeToTheEther*0.4F;
             shouldLetVisMod = false;
         }
 
@@ -134,6 +136,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
             }
         }
         ClientUtil.setThrowFadeToTheEther(throwFadeToTheEther);
+         **/
 
 //        if (!ci.isCancelled()) {
 //            roundabout$isRenderingYellowLines = true;
@@ -141,7 +144,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
     }
     @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "TAIL"))
     private void roundabout$renderTail(T entity, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
-        ClientUtil.setThrowFadeToTheEther(1f);
+
     }
 
     @Inject(method= "<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Lnet/minecraft/client/model/EntityModel;F)V", at = @At(value = "RETURN"))
