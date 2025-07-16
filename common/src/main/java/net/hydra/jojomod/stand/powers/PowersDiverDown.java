@@ -21,10 +21,17 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PowersDiverDown extends NewPunchingStand {
-
+    public void tryToDashClient(){
+        if (vaultOrFallBraceFails()){
+            dash();
+        }
+    }
         @Override
         public void powerActivate (PowerContext context){
             switch (context) {
+                case SKILL_3_NORMAL ->
+                    tryToDashClient();
+
             }
         }
     @Override
@@ -49,8 +56,13 @@ public class PowersDiverDown extends NewPunchingStand {
     }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.roundabout.dodge",
+                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
         return $$1;
+
     }
+
+
         @Override
         public List<Byte> getSkinList () {
             return Arrays.asList(
