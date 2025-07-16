@@ -17,82 +17,82 @@ import java.util.List;
 
 public class PowersDiverDown extends NewPunchingStand {
 
-
-    @Override
-    public void powerActivate(PowerContext context) {
-        switch (context) {
+        @Override
+        public void powerActivate (PowerContext context){
+            switch (context) {
+            }
         }
-    }
 
-    @Override
-    public List<Byte> getSkinList() {
-        return Arrays.asList(
-                DiverDownEntity.PART_6
-        );
-    }
+        @Override
+        public List<Byte> getSkinList () {
+            return Arrays.asList(
+                    DiverDownEntity.PART_6
+            );
+        }
 
-    public float standReach = 5;
+        public float standReach = 5;
 
     public PowersDiverDown(LivingEntity self) {
-        super(self);
-    }
-
-    @Override
-    public boolean canSummonStand() {
-        return true;
-    }
-
-    @Override
-    public boolean isMiningStand() {
-        return true;
-    }
-
-    @Override
-    public StandPowers generateStandPowers(LivingEntity entity) {
-        return new PowersDiverDown(entity);
-    }
-
-    @Override
-    public int getMaxGuardPoints() {
-        return 15;
-    }
-
-    @Override
-    public void handleStandAttack(Player player, Entity target) {
-        super.handleStandAttack(player, target);
-    }
-
-    @Override
-    public boolean tryPower(int move, boolean forced) {
-        return super.tryPower(move, forced);
-    }
-
-    @Override
-    public StandEntity getNewStandEntity() {
-        return ModEntities.DIVER_DOWN.create(this.getSelf().level());
-    }
-
-
-    @Override
-    public boolean isWip(){
-        return true;
-    }
-
-    @Override
-    public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
-    }
-    @Override
-    public Component ifWipListDev(){
-        return Component.literal(  "MrInkyTech").withStyle(ChatFormatting.YELLOW);
-    }
-
-    @Override public Component getSkinName(byte skinId) {
-        switch (skinId)
-        {
-            case DiverDownEntity.PART_6 -> {return Component.translatable("skins.roundabout.diver_down.base");}
+            super(self);
         }
-        return Component.translatable("skins.roundabout.diver_down.base");
+
+        @Override
+        public boolean canSummonStand () {
+            return true;
+        }
+
+        @Override
+        public boolean isMiningStand () {
+            return true;
+        }
+
+        @Override
+        public StandPowers generateStandPowers (LivingEntity entity){
+            return new PowersDiverDown(entity);
+        }
+
+        @Override
+        public int getMaxGuardPoints () {
+            return 15;
+        }
+
+        @Override
+        public void handleStandAttack (Player player, Entity target){
+            super.handleStandAttack(player, target);
+        }
+
+        @Override
+        public boolean tryPower ( int move, boolean forced){
+            return super.tryPower(move, forced);
+        }
+
+        @Override
+        public StandEntity getNewStandEntity () {
+            return ModEntities.DIVER_DOWN.create(this.getSelf().level());
+        }
+
+
+        @Override
+        public boolean isWip () {
+            return true;
+        }
+
+        @Override
+        public Component ifWipListDevStatus () {
+            return Component.translatable("roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
+        }
+        @Override
+        public Component ifWipListDev () {
+            return Component.literal("MrInkyTech").withStyle(ChatFormatting.YELLOW);
+        }
+
+        @Override public Component getSkinName ( byte skinId){
+            switch (skinId) {
+                case DiverDownEntity.PART_6 -> {
+                    return Component.translatable("skins.roundabout.diver_down.base");
+                }
+            }
+            return Component.translatable("skins.roundabout.diver_down.base");
+        }
     }
-}
 
