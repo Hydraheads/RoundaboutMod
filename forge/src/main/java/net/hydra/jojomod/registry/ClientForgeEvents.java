@@ -71,6 +71,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.CINDERELLA.get(), CinderellaRenderer::new);
         event.registerEntityRenderer(ForgeEntities.JUSTICE_PIRATE.get(), JusticePirateRenderer::new);
         event.registerEntityRenderer(ForgeEntities.DARK_MIRAGE.get(), DarkMirageRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.DIVER_DOWN.get(), DiverDownRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_HARPOON.get(), HarpoonRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_KNIFE.get(), KnifeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.RATT_DART.get(), RattDartRenderer::new);
@@ -144,6 +145,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.SOFT_AND_WET_KILLER_QUEEN_LAYER, SoftAndWetKillerQueenModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.CINDERELLA_LAYER, CinderellaModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.DARK_MIRAGE_LAYER, DarkMirageModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.DIVER_DOWN_LAYER, DiverDownModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.KNIFE_LAYER, KnifeModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.RATT_DART_LAYER, RattDartModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.HARPOON_LAYER, HarpoonModel::createBodyLayer);

@@ -73,6 +73,10 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSurvivor(null)));
     public static Item STAND_DISC_ACHTUNG = registerItem("achtung_baby_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAchtungBaby(null)));
+    public static Item STAND_DISC_DIVER_DOWN = registerItem("diver_down_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
+    public static Item MAX_STAND_DISC_DIVER_DOWN = registerItem("max_diver_down_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
     public static Item LUCK_UPGRADE = registerItem("luck_upgrade",
         new SmithingTemplateItem(SmithingTemplates.LUCK_UPGRADE_APPLIES_TO, SmithingTemplates.LUCK_UPGRADE_INGREDIENTS, SmithingTemplates.LUCK_UPGRADE, SmithingTemplates.LUCK_UPGRADE_BASE_SLOT_DESCRIPTION, SmithingTemplates.LUCK_UPGRADE_ADDITIONS_SLOT_DESCRIPTION, SmithingTemplates.createLuckUpgradeIconList(), SmithingTemplates.createLuckMatIconList())
     );
@@ -355,7 +359,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_RATT);
                         entries.accept(MAX_STAND_DISC_RATT);
-
+                        entries.accept(STAND_DISC_DIVER_DOWN);
+                        entries.accept(MAX_STAND_DISC_DIVER_DOWN);
 
 
                     }).build());
@@ -448,6 +453,9 @@ public class FabricItems {
         ModItems.STAND_DISC_MANDOM = STAND_DISC_MANDOM;
         ModItems.STAND_DISC_SURVIVOR = STAND_DISC_SURVIVOR;
         ModItems.STAND_DISC_ACHTUNG = STAND_DISC_ACHTUNG;
+        ModItems.STAND_DISC_DIVER_DOWN = STAND_DISC_DIVER_DOWN;
+        ((MaxStandDiscItem)MAX_STAND_DISC_DIVER_DOWN).baseDisc = ((StandDiscItem)STAND_DISC_DIVER_DOWN);
+        ModItems.MAX_STAND_DISC_DIVER_DOWN = MAX_STAND_DISC_DIVER_DOWN;
         ModItems.LUCK_UPGRADE = LUCK_UPGRADE;
         ModItems.EXECUTION_UPGRADE = EXECUTION_UPGRADE;
         ModItems.LUCK_SWORD = LUCK_SWORD;
