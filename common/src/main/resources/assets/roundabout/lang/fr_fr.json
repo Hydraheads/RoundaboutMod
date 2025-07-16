@@ -54,6 +54,7 @@
   "item.roundabout.survivor_disc": "Disque Stand",
   "item.roundabout.hey_ya_disc": "Disque Stand",
   "item.roundabout.ratt_disc": "Disque Stand",
+  "item.roundabout.achtung_baby_disc": "Disque Stand",
   "item.roundabout.max_ratt_disc": "Disque Stand+",
   "item.roundabout.mandom_disc": "Disque Stand",
   "item.roundabout.max_star_platinum_disc": "Disque Stand+",
@@ -77,6 +78,7 @@
   "item.roundabout.cinderella_disc.desc": "Cinderella",
   "item.roundabout.max_ratt_disc.desc": "Ratt",
   "item.roundabout.ratt_disc.desc": "Ratt",
+  "item.roundabout.achtung_baby_disc.desc": "Achtung Baby",
   "item.roundabout.survivor_disc.desc": "Survivor",
   "item.roundabout.hey_ya_disc.desc": "Hey Ya!",
   "item.roundabout.mandom_disc.desc": "Mandom",
@@ -103,6 +105,9 @@
   "item.roundabout.pocoloco_mask": "Visage de Pocoloco",
   "item.roundabout.pocoloco_mask.desc": "Pocoloco",
   "item.roundabout.pocoloco_mask.tag": "Pocoloco",
+  "item.roundabout.guccio_mask": "Visage de Guccio",
+  "item.roundabout.guccio_mask.desc": "Guccio",
+  "item.roundabout.guccio_mask.tag": "Guccio",
   "item.roundabout.ringo_mask": "Visage de Ringo",
   "item.roundabout.ringo_mask.desc": "Ringo Roadagain",
   "item.roundabout.ringo_mask.tag": "Ringo",
@@ -208,6 +213,7 @@
   "entity.roundabout.jojo_npc_josuke_part_eight": "Josuke",
   "entity.roundabout.jojo_npc_valentine": "Valentine",
   "entity.roundabout.jojo_npc_aya": "Aya",
+  "entity.roundabout.jojo_npc_guccio": "Guccio",
   "entity.roundabout.jojo_npc_ringo": "Ringo",
   "entity.roundabout.jojo_npc_pocoloco": "Pocoloco",
   "entity.roundabout.aesthetician": "Esthéticienne",
@@ -365,7 +371,8 @@
   "death.attack.glaive.item": "%1$s a été embroché(e) par %2$s en utilisant %3$s",
   "death.attack.stand_virus": "%1$s a été transformé(e) en sauce tomate",
   "death.attack.stand_virus.item": "%1$s a été transformé(e) en sauce tomate",
-  "death.attack,disintegration": "%1$ s'est désintégré",
+  "death.attack,disintegration": "%1$ a été désintégrer",
+  "death.attack,disintegration.player": "%1$ a été désintégrer par %$2s",
 
   "item.glaive.charge_power": "Chargé l'attaque",
 
@@ -397,6 +404,7 @@
   "sounds.roundabout.summon_justice_2":  "Invocation de Justice (Bad to the Bone)",
   "sounds.roundabout.summon_magician":  "Invocation de Magician's Red",
   "sounds.roundabout.summon_mandom":  "Invocation de Mandom",
+  "sounds.roundabout.summon_achtung":  "Invocation d'Achtung Baby",
   "sounds.roundabout.hey_ya_summon":  "Invocation d'Hey Ya",
   "sounds.roundabout.survivor_summon":  "Invocation de Survivor",
   "sounds.roundabout.ova_summon":  "Invocation de OAV Star Platinium",
@@ -455,6 +463,8 @@
   "sounds.roundabout.survivor_shock":  "Choque",
   "sounds.roundabout.survivor_place":  "Craquement électrique",
   "sounds.roundabout.survivor_remove":  "Pop",
+
+  "sounds.roundabout.achtung_burst":  "Disparu",
 
   "sounds.roundabout.snap":  "Claquement de doigt",
   "sounds.roundabout.star_finger_silent":  "Star Finger",
@@ -555,6 +565,9 @@
   "sounds.roundabout.cinderella_sparkle":  "Étincelles magiques",
   "sounds.roundabout.cinderella_fail":  "Uh oh",
   "sounds.roundabout.cinderella_visage_creation":  "Tourbillon mécanique",
+
+  "sounds.roundabout.ratt_summon":  "Invocation de Ratt",
+  "sounds.roundabout.ratt_scope":  "Bruit de viseur",
 
   "sounds.roundabout.arcade_impale":  "[Arcade Empalement]",
   "sounds.roundabout.arcade_long_ts":  "[Arrêt du Temps]",
@@ -1015,13 +1028,15 @@
   "skins.roundabout.ratt.melon" : "Pasthèque",
   "skins.roundabout.ratt.sand" : "Sable",
   "skins.roundabout.ratt.aztec" : "Aztèque",
-  "skins.roundabout.ratt.redd" : "Rouge",
+  "skins.roundabout.ratt.redd" : "Redstone",
+  "skins.roundabout.ratt.snowy" : "Neigeux",
 
 
 
   "skins.roundabout.cinderella.base": "Partie 4",
   "skins.roundabout.cinderella.manga": "Manga",
   "skins.roundabout.cinderella.zombie": "Infecté",
+  "skins.roundabout.cinderella.jack_in_the_box": "Clown",
 
   "skins.roundabout.hey_ya.manga": "Manga",
   "skins.roundabout.hey_ya.gothic": "Gothic",
@@ -1069,6 +1084,8 @@
   "skins.roundabout.survivor.blue": "Bleu",
   "skins.roundabout.survivor.silver": "Argent",
   "skins.roundabout.survivor.ghast": "Ghastelin",
+  "skins.roundabout.survivor.ender": "Ender",
+  "skins.roundabout.survivor.conduit": "Conduit",
 
   "skins.roundabout.killer_queen.base": "Partie 4",
 
@@ -1263,5 +1280,8 @@
 
   "text.roundabout.survivor.match": "Affrontes %1$s!",
   "text.roundabout.survivor.anger_selection": "Mode Cupidon de la Fureur Activé",
-  "text.roundabout.survivor.anger_selection_off": "Mode Cupidon de la Fureur Désactivé"
+  "text.roundabout.survivor.anger_selection_off": "Mode Cupidon de la Fureur Désactivé",
+
+  "text.roundabout.achtung.vision_off": "Invisi-Vision Désactivée",
+  "text.roundabout.achtung.vision_on": "Invisi-Vision Activée"
 }

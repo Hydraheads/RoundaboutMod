@@ -151,7 +151,7 @@ public abstract class ForgePlayer extends LivingEntity {
                     mspeed /= 5.0F;
                 }
 
-                if (this.isCrouching() && $$0.getBlock() instanceof DropExperienceBlock && ClientNetworking.getAppropriateConfig().miningSettings.crouchingStopsMiningOres) {
+                if (this.isCrouching() && $$0.getBlock() instanceof DropExperienceBlock && ClientNetworking.getAppropriateConfig().generalStandSettings.crouchingStopsStandsFromMiningOres) {
                     mspeed = 0.0F;
                 }
 

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.shaders.Uniform;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.zetalasis.client.shader.IPostChainAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.PostChain;
@@ -15,6 +16,9 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 import java.util.List;
+
+import static org.lwjgl.opengl.GL11C.GL_ONE_MINUS_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11C.GL_SRC_ALPHA;
 
 @Mixin(PostChain.class)
 public class PostChainMixin implements IPostChainAccessor {
@@ -34,13 +38,23 @@ public class PostChainMixin implements IPostChainAccessor {
 
     @Override
     public void roundabout$process(float tickDelta) {
+        Minecraft client = Minecraft.getInstance();
+
         processCount += 1;
+        roundabout$setUniform("FrameCount", processCount);
 
         this.roundabout$resize();
-        roundabout$setUniform("FrameCount", processCount);
+
+        RenderSystem.disableBlend();
+        RenderSystem.disableDepthTest();
+        RenderSystem.resetTextureMatrix();
+
         ((PostChain)(Object)this).process(tickDelta);
-        Minecraft client = Minecraft.getInstance();
-        client.getMainRenderTarget().bindWrite(false);
+        client.getMainRenderTarget().bindWrite(true);
+
+        RenderSystem.disableBlend();
+        RenderSystem.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        RenderSystem.enableDepthTest();
     }
 
     @Override

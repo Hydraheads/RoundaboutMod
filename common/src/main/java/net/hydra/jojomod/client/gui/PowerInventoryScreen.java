@@ -7,6 +7,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -219,32 +220,6 @@ public class PowerInventoryScreen
         Lighting.setupFor3DItems();
     }
 
-    public String[] splitIntoLine(String input, int maxCharInLine){
-
-        StringTokenizer tok = new StringTokenizer(input, " ");
-        StringBuilder output = new StringBuilder(input.length());
-        int lineLen = 0;
-        while (tok.hasMoreTokens()) {
-            String word = tok.nextToken();
-
-            while(word.length() > maxCharInLine){
-                output.append(word.substring(0, maxCharInLine-lineLen) + "\n");
-                word = word.substring(maxCharInLine-lineLen);
-                lineLen = 0;
-            }
-
-            if (lineLen + word.length() > maxCharInLine) {
-                output.append("\n");
-                lineLen = 0;
-            }
-            output.append(word + " ");
-
-            lineLen += word.length() + 1;
-        }
-        // output.split();
-        // return output.toString();
-        return output.toString().split("\n");
-    }
     protected boolean isSurelyHovering(int p_97768_, int p_97769_, int p_97770_, int p_97771_, double p_97772_, double p_97773_) {
         return p_97772_ >= (double)(p_97768_) && p_97772_ <= (double)(p_97768_ + p_97770_) && p_97773_ >= (double)(p_97769_) && p_97773_ <= (double)(p_97769_ + p_97771_);
     }
@@ -429,7 +404,7 @@ public class PowerInventoryScreen
             pl.isCreative()){
                 bypass = true;
             }
-            if (!ClientNetworking.getAppropriateConfig().enableStandLeveling) {
+            if (!ClientNetworking.getAppropriateConfig().standLevelingSettings.enableStandLeveling) {
                 bypass=true;
             }
             abilityList = standUser.roundabout$getStandPowers().drawGUIIcons(context, delta, mouseX, mouseY, i, j,
@@ -443,7 +418,7 @@ public class PowerInventoryScreen
                         List<Component> compList = Lists.newArrayList();
                         compList.add(aii.name);
                         compList.add(aii.instruction);
-                        String[] strung2 = splitIntoLine(aii.description.getString(), 30);
+                        String[] strung2 = ClientUtil.splitIntoLine(aii.description.getString(), 30);
                         for (String s : strung2) {
                             compList.add(Component.literal(s));
                         }

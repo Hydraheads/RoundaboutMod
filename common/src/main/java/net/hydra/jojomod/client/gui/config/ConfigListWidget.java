@@ -1,8 +1,11 @@
 package net.hydra.jojomod.client.gui.config;
 
+import com.google.common.collect.Lists;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.Config;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -14,6 +17,7 @@ import net.minecraft.network.chat.Component;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWidget.Entry> {
     private final ConfigScreen parent;
@@ -28,9 +32,8 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
 
         switch (selectedType)
         {
-            case COMMON -> this.addEntry(new CommentEntry("Common Config"));
-            case CLIENT -> this.addEntry(new CommentEntry("Client Config"));
-            case SERVER -> this.addEntry(new CommentEntry("Server Config"));
+            case COMMON -> this.addEntry(new CommentEntry("§r§6§l"+Component.translatable("config.roundabout.major.common_config").getString()));
+            case CLIENT -> this.addEntry(new CommentEntry("§r§6§l"+Component.translatable("config.roundabout.major.client_config").getString()));
         }
 
         Object instance = null;
@@ -39,7 +42,6 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
         {
             case COMMON -> instance = Config.getLocalInstance();
             case CLIENT -> instance = ClientConfig.getLocalInstance();
-            case SERVER -> instance = Config.getServerInstance();
         }
 
         Class<?> clazz = instance.getClass();
@@ -59,7 +61,8 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                 }
                 else {
                     Object nestedObject = field.get(instance);
-                    this.addEntry(new CommentEntry(field.getName()));
+                    this.addEntry(new CommentEntry(
+                            Component.translatable("config.roundabout."+field.getName()+".name").getString()));
 
                     if (nestedObject == null) {
                         continue;
@@ -112,7 +115,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                 e.printStackTrace();
             }
 
-            toggleButton = Button.builder(Component.literal(field.getName() + ": " + currentValue),
+            toggleButton = Button.builder(Component.translatable("config.roundabout."+field.getName()+".name").append(getNewValueRender(currentValue)),
                     btn -> {
                         try {
                             Boolean newVal = !(Boolean) field.get(instance);
@@ -122,14 +125,19 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                             {
                                 case COMMON -> ConfigManager.saveLocalConfig();
                                 case CLIENT -> ConfigManager.saveClientConfig();
-                                case SERVER -> ConfigManager.saveServerConfig();
                             }
 
-                            btn.setMessage(Component.literal(field.getName() + ": " + newVal));
+                            btn.setMessage(Component.translatable("config.roundabout."+field.getName()+".name").append(getNewValueRender(newVal)));
                         } catch (IllegalAccessException e) {
                             e.printStackTrace();
                         }
                     }).size(200, 20).build();
+        }
+
+        public Component getNewValueRender(boolean newVal){
+            if (newVal)
+                return Component.literal(": ").append(Component.literal(("")+newVal).withStyle(ChatFormatting.AQUA));
+            return Component.literal(": ").append(Component.literal(("")+newVal).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
 
         @Override
@@ -137,6 +145,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
             toggleButton.setX(x);
             toggleButton.setY(y);
             toggleButton.render(drawContext, mouseX, mouseY, delta);
+            renderHover(drawContext,index,y,x,width,height,mouseX,mouseY,hovered,delta,field, toggleButton);
         }
 
         @Override
@@ -150,6 +159,18 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
         }
     }
 
+
+    public void renderHover(GuiGraphics drawContext, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTic,
+                            Field field, Button editButton){
+        if (editButton.isHovered()){
+            List<Component> compList = Lists.newArrayList();
+            String[] strung2 = ClientUtil.splitIntoLine(Component.translatable("config.roundabout."+field.getName()+".desc").getString(), 35);
+            for (String s : strung2) {
+                compList.add(Component.literal(s).withStyle(ChatFormatting.BLUE));
+            }
+            drawContext.renderTooltip(Minecraft.getInstance().font, compList, Optional.empty(), x, y+8-(10*strung2.length));
+        }
+    }
     public class NumberEntry extends Entry {
         private final Field field;
         private final Object instance;
@@ -161,7 +182,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
 
             String display = getFieldDisplay();
             editButton = Button.builder(Component.literal(display), btn -> {
-                Minecraft.getInstance().setScreen(new EditValueScreen(ConfigListWidget.this.parent, field, instance, configType));
+                Minecraft.getInstance().setScreen(new EditValueScreen(ConfigListWidget.this.parent, field, instance, configType,getScrollAmount()));
             }).size(200, 20).build();
         }
 
@@ -177,8 +198,10 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
         public void render(GuiGraphics drawContext, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
             editButton.setX(x);
             editButton.setY(y);
-            editButton.setMessage(Component.literal(getFieldDisplay()));
+            editButton.setMessage(Component.translatable("config.roundabout."+field.getName()+".name"));
             editButton.render(drawContext, mouseX, mouseY, partialTick);
+            renderHover(drawContext,index,y,x,width,height,mouseX,mouseY,hovering,partialTick,field, editButton);
+
         }
 
         @Override
@@ -209,7 +232,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                            int mouseX, int mouseY, boolean hovered, float delta) {
             guiGraphics.drawCenteredString(
                     Minecraft.getInstance().font,
-                    Component.literal("§l" + comment + "§r"),
+                    Component.literal("§e§l" + comment + "§r"),
                     x + entryWidth / 2,
                     y + 6,
                     0xFFFFFF

@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -44,7 +45,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
             CompoundTag tag = stack.isEmpty() ? null : stack.getTagElement("StandDisc");
             CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
             if (tag2 != null) {
-                player.giveExperienceLevels(-ClientNetworking.getAppropriateConfig().levelsToRerollStand);
+                player.giveExperienceLevels(-ClientNetworking.getAppropriateConfig().itemSettings.levelsToRerollStandWithArrow);
             }
         }
         if (context == PacketDataIndex.ITEM_SWITCH_MAIN){
@@ -62,9 +63,9 @@ public class StandArrowItem extends RoundaboutArrowItem {
             CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
             if (tag2 != null) {
                 if ($$1.isCrouching()) {
-                    int reroll = ClientNetworking.getAppropriateConfig().levelsToRerollStand;
+                    int reroll = ClientNetworking.getAppropriateConfig().itemSettings.levelsToRerollStandWithArrow;
                     if ($$1.experienceLevel >= reroll || $$1.isCreative()) {
-                        if (ClientNetworking.getAppropriateConfig().standArrowSecondaryPoolv4.isEmpty()) {
+                        if (ConfigManager.getAdvancedConfig().standArrowSecondaryPoolv4.isEmpty()) {
                              if (!$$1.isCreative()) {
                              $$1.giveExperienceLevels(-reroll);
                              }
@@ -87,7 +88,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
                     return InteractionResultHolder.consume($$3);
                 }
             } else {
-                if (!$$1.isCrouching() || ClientNetworking.getAppropriateConfig().standArrowSecondaryPoolv4.isEmpty()) {
+                if (!$$1.isCrouching() || ConfigManager.getAdvancedConfig().standArrowSecondaryPoolv4.isEmpty()) {
                     if (!$$0.isClientSide) {
                         rollStand($$0, $$1, $$3, true);
                         return InteractionResultHolder.consume($$3);
@@ -209,7 +210,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
                         if (!((StandUser) $$2).roundabout$getStandDisc().isEmpty()) {
                             PE.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.haveStand").withStyle(ChatFormatting.RED), true);
                         } else {
-                            int get = ClientNetworking.getAppropriateConfig().levelsToGetStand;
+                            int get = ClientNetworking.getAppropriateConfig().itemSettings.levelsToGetStand;
                             CompoundTag tag = $$0.isEmpty() ? null : $$0.getTagElement("StandDisc");
                             CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
                             if (tag2 != null) {
@@ -330,7 +331,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
                             Component.empty()
                     );
                     $$2.add(
-                            Component.translatable("item.roundabout.stand_arrow.reroll",ClientNetworking.getAppropriateConfig().levelsToRerollStand).withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC)
+                            Component.translatable("item.roundabout.stand_arrow.reroll",ClientNetworking.getAppropriateConfig().itemSettings.levelsToRerollStandWithArrow).withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC)
                     );
                     $$2.add(
                             Component.translatable("item.roundabout.stand_arrow.reroll2").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC)

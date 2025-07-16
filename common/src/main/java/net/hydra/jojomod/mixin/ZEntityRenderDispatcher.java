@@ -131,6 +131,7 @@ public abstract class ZEntityRenderDispatcher {
             $$0.pushPose();
             BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
             RenderSystem.depthMask(true);
+            //this only applies on stand fire
             RenderSystem.enableBlend();
 
             $$0.mulPose(Axis.YP.rotationDegrees(-this.camera.getYRot()));

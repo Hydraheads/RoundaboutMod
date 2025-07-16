@@ -66,7 +66,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
     @Override
     public int getMaxGuardPoints(){
-        return ClientNetworking.getAppropriateConfig().guardPoints.killerQueenDefend;
+        return 15;
     }
     @Override
     public void handleStandAttack(Player player, Entity target){

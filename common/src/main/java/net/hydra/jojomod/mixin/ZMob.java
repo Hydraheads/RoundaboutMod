@@ -135,7 +135,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
                         }
                     }
 
-                    if (ClientNetworking.getAppropriateConfig().standUserMonstersDropMeteorite) {
+                    if (ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.standUserMonstersDropMeteorite) {
                         this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
                         if (this.random.nextDouble() < 0.5) {
                             this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());

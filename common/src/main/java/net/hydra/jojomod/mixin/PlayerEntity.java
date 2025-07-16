@@ -454,7 +454,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Override
     @Unique
     public void roundabout$addStandExp(int amt){
-        if (ClientNetworking.getAppropriateConfig().enableStandLeveling) {
+        if (ClientNetworking.getAppropriateConfig().standLevelingSettings.enableStandLeveling) {
             int currentExp = roundabout$getStandExp();
             currentExp += amt;
             byte level = this.roundabout$getStandLevel();
@@ -973,7 +973,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 mspeed /= 5.0F;
             }
 
-            if (this.isCrouching() && $$0.getBlock() instanceof DropExperienceBlock && ClientNetworking.getAppropriateConfig().miningSettings.crouchingStopsMiningOres) {
+            if (this.isCrouching() && $$0.getBlock() instanceof DropExperienceBlock && ClientNetworking.getAppropriateConfig().generalStandSettings.crouchingStopsStandsFromMiningOres) {
                 mspeed = 0.0F;
             }
 
@@ -1108,7 +1108,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         byte knifeCount = this.entityData.get(ROUNDABOUT$DATA_KNIFE_COUNT_ID);
 
         knifeCount++;
-        if (knifeCount <= ClientNetworking.getAppropriateConfig().damageMultipliers.maxKnivesInOneHit){
+        if (knifeCount <= ClientNetworking.getAppropriateConfig().itemSettings.maxKnivesInOneHit){
             ((LivingEntity) (Object) this).getEntityData().set(ROUNDABOUT$DATA_KNIFE_COUNT_ID, knifeCount);
         }
     }

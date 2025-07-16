@@ -154,6 +154,8 @@ public class PowersCinderella extends NewDashPreset {
             return Component.translatable("skins.roundabout.cinderella.zombie");
         } if (skinId == CinderellaEntity.JACK_SKIN) {
             return Component.translatable("skins.roundabout.cinderella.jack_in_the_box");
+        } if (skinId == CinderellaEntity.BUSINESS_SKIN) {
+            return Component.translatable("skins.roundabout.cinderella.business");
         }
         return Component.translatable("skins.roundabout.cinderella.base");
     }
@@ -466,6 +468,7 @@ public class PowersCinderella extends NewDashPreset {
         $$1.add(CinderellaEntity.MANGA_SKIN);
         $$1.add(CinderellaEntity.ZOMBIE_SKIN);
         $$1.add(CinderellaEntity.JACK_SKIN);
+        $$1.add(CinderellaEntity.BUSINESS_SKIN);
         return $$1;
     }
 
@@ -484,10 +487,10 @@ public class PowersCinderella extends NewDashPreset {
     public float getDefaceStrength(Entity entity){
         if (this.getReducedDamage(entity)){
             return levelupDamageMod(((float) ((float) 3* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.cinderellaAttackOnPlayers*0.01))));
+                    cinderellaSettings.cinderellaAttackMultOnPlayers*0.01))));
         } else {
             return levelupDamageMod(((float) ((float) 9* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.cinderellaAttackOnMobs*0.01))));
+                    cinderellaSettings.cinderellaAttackMultOnMobs*0.01))));
         }
     }
     public float getDefaceKnockback(){
@@ -528,9 +531,9 @@ public class PowersCinderella extends NewDashPreset {
         }
 
         if (this.getSelf() instanceof Player) {
-            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2,  ClientNetworking.getAppropriateConfig().cooldownsInTicks.cinderellaDefaceAttack);
+            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2,  ClientNetworking.getAppropriateConfig().cinderellaSettings.defaceAttackCooldown);
         }
-        this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().cooldownsInTicks.cinderellaDefaceAttack);
+        this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().cinderellaSettings.defaceAttackCooldown);
         SoundEvent SE;
         float pitch = 1F;
         if (entity != null) {

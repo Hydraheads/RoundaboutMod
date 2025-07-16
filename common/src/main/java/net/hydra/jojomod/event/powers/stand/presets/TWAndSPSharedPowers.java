@@ -150,11 +150,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                                 }
 
 
-                                int cdTime = ClientNetworking.getAppropriateConfig().cooldownsInTicks.dash;
+                                int cdTime = ClientNetworking.getAppropriateConfig().generalStandSettings.dashCooldown;
                                 if (this.getSelf() instanceof Player) {
                                     ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(0);
                                     if (options.keyJump.isDown()) {
-                                        cdTime = ClientNetworking.getAppropriateConfig().cooldownsInTicks.jumpingDash;
+                                        cdTime = ClientNetworking.getAppropriateConfig().generalStandSettings.jumpingDashCooldown;
                                     }
                                 }
                                 this.setCooldown(PowerIndex.GLOBAL_DASH, cdTime);
@@ -177,14 +177,14 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         }
                     } else {
                         if (this.getSelf().onGround()) {
-                            boolean jojoveinLikeKeys = !ClientNetworking.getAppropriateConfig().cooldownsInTicks.standJumpAndDashShareCooldown;
+                            boolean jojoveinLikeKeys = !ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpAndDashShareCooldown;
                             if ((jojoveinLikeKeys && !this.onCooldown(PowerIndex.SKILL_3)) ||
                                     (!jojoveinLikeKeys && !this.onCooldown(PowerIndex.GLOBAL_DASH))) {
                                 if (canExecuteMoveWithLevel(getLeapLevel())) {
                                     if (jojoveinLikeKeys) {
-                                        this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.standJump);
+                                        this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
                                     } else {
-                                        this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().cooldownsInTicks.standJump);
+                                        this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
                                     }
                                     bonusLeapCount = 3;
                                     bigLeap(this.getSelf(), 20, 1);
@@ -562,9 +562,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
 
         if (this.getSelf() instanceof Player) {
-            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.impaleAttack);
+            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown);
         }
-        this.setCooldown(PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().cooldownsInTicks.impaleAttack);
+        this.setCooldown(PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown);
         SoundEvent SE;
         float pitch = 1F;
             if (entity != null) {
@@ -670,7 +670,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         /*Time Resume*/
         if (!level.isClientSide()) {
             if (((TimeStop) level).isTimeStoppingEntity(this.getSelf())) {
-                float tsTimeRemaining = (float) (ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopMinimumCooldown+((this.maxChargedTSTicks-this.getChargedTSTicks())*5*(ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopAdditionalCooldownPerSecondsUsedMultiplier*0.01)));
+                float tsTimeRemaining = (float) (ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopMinimumCooldown+((this.maxChargedTSTicks-this.getChargedTSTicks())*5*(ClientNetworking.getAppropriateConfig().timeStopSettings.additionalCooldownPerSecondsUsed *0.01)));
                 if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.POWER_1_SNEAK ||
                         this.getActivePower() == PowerIndex.SNEAK_ATTACK ||
                         this.getActivePower() == PowerIndex.POWER_1) && this.getAttackTimeDuring() > -1){
@@ -776,7 +776,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
 
             if (isBarrageAttacking() && !this.self.level().isClientSide()){
-                if (ClientNetworking.getAppropriateConfig().SuperBlockDestructionBarragePunches){
+                if (ClientNetworking.getAppropriateConfig().griefSettings.SuperBlockDestructionBarragePunches){
 
                     Vec3 vec3d = this.self.getEyePosition(0);
                     Vec3 vec3d2 = this.self.getViewVector(0);
@@ -960,7 +960,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     public void standFinalAttack(){
 
-        this.setAttackTimeMax(ClientNetworking.getAppropriateConfig().cooldownsInTicks.finalPunchAndKickMinimum + chargedFinal);
+        this.setAttackTimeMax(ClientNetworking.getAppropriateConfig().generalStandSettings.finalPunchAndKickMinimumCooldown + chargedFinal);
         this.setAttackTime(0);
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
 
@@ -991,7 +991,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         id = storeEnt.getId();
                     }
                         ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(id, this.attackTimeDuring);
-                    if (!listE.isEmpty() && ClientNetworking.getAppropriateConfig().barrageHasAreaOfEffect){
+                    if (!listE.isEmpty() && ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect){
                         for (int i = 0; i< listE.size(); i++){
                             if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
                                 if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
@@ -1047,7 +1047,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             if (bonusBarrageConditions()) {
                 boolean sideHit = false;
                 if (hitNumber > 1000){
-                    if (!(ClientNetworking.getAppropriateConfig().barrageHasAreaOfEffect)){
+                    if (!(ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect)){
                         return;
                     }
                     hitNumber-=1000;
@@ -1167,7 +1167,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
         /*Barrage hits are incapable of killing their target until the last hit.*/
         if (entity instanceof LivingEntity){
-            if (power >= ((LivingEntity) entity).getHealth() && ClientNetworking.getAppropriateConfig().barragesOnlyKillOnLastHit){
+            if (power >= ((LivingEntity) entity).getHealth() && ClientNetworking.getAppropriateConfig().generalStandSettings.barragesOnlyKillOnLastHit){
                 if (entity instanceof Player) {
                     power = 0.00001F;
                 } else {
@@ -1212,14 +1212,14 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
             return true;
         } else if (this.getActivePower() == PowerIndex.SPECIAL) {
-            int cdr = ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopInterruptedCooldown;
+            int cdr = ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopInterruptedCooldownv2;
             if (this.getSelf() instanceof Player) {
                 ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, cdr);
             }
             this.setCooldown(PowerIndex.SKILL_4, cdr);
             return true;
         } else if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
-            int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.impaleAttack;
+            int cdr = ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown;
             if (this.getSelf() instanceof Player) {
                 ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, cdr);
             }
@@ -1395,7 +1395,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     public int getKickBarrageRecoilTime(){
         return ClientNetworking.getAppropriateConfig().
-                cooldownsInTicks.kickBarrageRecoil;
+                generalStandSettings.kickBarrageRecoilCooldown;
     }
     public void updateKickBarrage(){
         if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
@@ -1454,7 +1454,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
     @Override
     public int getKickBarrageWindup(){
-        return ClientNetworking.getAppropriateConfig().chargeSettings.kickBarrageWindup;
+        return ClientNetworking.getAppropriateConfig().generalStandSettings.kickBarrageWindup;
     }
 
     private float getKickBarrageChargePitch(){
@@ -1906,7 +1906,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     @Override
     public int getBarrageWindup(){
-        int windupSetting = ClientNetworking.getAppropriateConfig().chargeSettings.barrageWindup;
+        int windupSetting = ClientNetworking.getAppropriateConfig().generalStandSettings.barrageWindup;
         if (timeStopStartedBarrage) {
             return Math.min(13,windupSetting);
         } else {

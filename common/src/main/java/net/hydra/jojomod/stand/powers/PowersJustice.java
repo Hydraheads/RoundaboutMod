@@ -666,7 +666,7 @@ public class PowersJustice extends NewDashPreset {
         } else {
             amt = (100+((currentLevel-1)*100));
         }
-        amt= (int) (amt*(ClientNetworking.getAppropriateConfig().standExperienceNeededForLevelupMultiplier *0.01));
+        amt= (int) (amt*(getLevelMultiplier()));
         return amt;
     }
     @Override
@@ -892,7 +892,7 @@ public class PowersJustice extends NewDashPreset {
         if (!this.onCooldown(PowerIndex.SKILL_2)) {
             IPermaCasting icast = ((IPermaCasting) this.getSelf().level());
             if (icast.roundabout$isPermaCastingEntity(this.getSelf())) {
-                int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.fogChain;
+                int cdr = ClientNetworking.getAppropriateConfig().justiceSettings.fogChainCooldown;
                 this.setCooldown(PowerIndex.SKILL_2, cdr);
                 StandEntity piloting = getPilotingStand();
                 if (isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved()) {
@@ -946,7 +946,7 @@ public class PowersJustice extends NewDashPreset {
                 if (this.getSelf() instanceof Player PE && ((IPlayerEntity)PE).roundabout$getShapeShift() > ShapeShifts.PLAYER.id){
                     ModPacketHandler.PACKET_ACCESS.byteToServerPacket((byte) 0, PacketDataIndex.BYTE_CHANGE_MORPH);
                 }
-                this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.justiceFogClone);
+                this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().justiceSettings.fogCloneCooldown);
                 tryPowerPacket(PowerIndex.POWER_3);
             }
         }
@@ -1331,7 +1331,7 @@ public class PowersJustice extends NewDashPreset {
             clone1 = fclone;
             clone2 = fclone2;
 
-            this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().cooldownsInTicks.justiceFogClone);
+            this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().justiceSettings.fogCloneCooldown);
             ((ServerLevel) this.self.level()).sendParticles(ModParticles.FOG_CHAIN, this.self.getX(),
                     this.self.getY()+this.self.getEyeHeight(), this.self.getZ(),
                     50, 1, 1, 1, 0.1);
@@ -1437,7 +1437,7 @@ public class PowersJustice extends NewDashPreset {
                             if (bpos != null){
                                 if (value instanceof LivingEntity LE){
                                     if (LE.hasEffect(ModEffects.BLEED) ||
-                                            (ClientNetworking.getAppropriateConfig().disableBleedingAndBloodSplatters
+                                            (ClientNetworking.getAppropriateConfig().miscellaneousSettings.disableBleedingAndBloodSplatters
                                             && LE.getHealth() < LE.getMaxHealth())){
                                         double random = (Math.random() * 1.2) - 0.6;
                                         double random2 = (Math.random() * 1.2) - 0.6;
@@ -1467,7 +1467,7 @@ public class PowersJustice extends NewDashPreset {
 
                 if (success) {
                     addEXP(4);
-                    int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.fogChain;
+                    int cdr = ClientNetworking.getAppropriateConfig().justiceSettings.fogChainCooldown;
                     this.setCooldown(PowerIndex.SKILL_2, cdr);
                     this.self.level().playSound(null, this.self.getX(), this.self.getY(),
                             this.self.getZ(), ModSounds.INHALE_EVENT, this.self.getSoundSource(), 100.0F, 0.5F);
@@ -1528,7 +1528,7 @@ public class PowersJustice extends NewDashPreset {
                     }
                 }
                 Entity TE = MainUtil.getTargetEntity(ent,100,10);
-                if (TE != null && TE.is(entity) && !(TE instanceof StandEntity && !TE.isAttackable())) {
+                if (TE != null && TE.is(entity) && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible()) {
                     Vec3 vec3d = ent.getEyePosition(0);
                     Vec3 vec3d2 = ent.getViewVector(0);
                     Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);

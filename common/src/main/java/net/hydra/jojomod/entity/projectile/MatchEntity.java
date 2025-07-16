@@ -123,7 +123,7 @@ public class MatchEntity extends ThrowableItemProjectile {
         if (!this.level().isClientSide()) {
             if (!isDud()) {
                 Entity $$1 = $$0.getEntity();
-                float $$2 = (float) (2.0f * (ClientNetworking.getAppropriateConfig().damageMultipliers.matchDamage * 0.01));
+                float $$2 = (float) (2.0f * (ClientNetworking.getAppropriateConfig().itemSettings.matchDamage * 0.01));
 
                 Entity $$4 = this.getOwner();
 

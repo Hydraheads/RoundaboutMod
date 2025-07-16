@@ -8,12 +8,9 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
-import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.*;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
@@ -48,7 +45,6 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.JukeboxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -611,10 +607,10 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             }
         }
         if (getStyle() == SOFTTHROW){
-            damage*= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.bubbleLaunchedBlocks*0.01);
+            damage*= (float) (ClientNetworking.getAppropriateConfig().softAndWetSettings.bubbleLaunchedObjectMultiplier*0.01);
             damage*= 0.75F;
         } else if (getStyle() == SPTWTHROW){
-            damage*= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.thrownBlocks*0.01);
+            damage*= (float) (ClientNetworking.getAppropriateConfig().generalStandSettings.standThrownObjectMultiplier *0.01);
         }
         return damage;
     }
@@ -682,9 +678,9 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 this.dropItem($$1.getOnPos());
             }
         } else if (this.getItem().getItem() instanceof MaskItem && $$1 instanceof Player pe) {
-            if (ClientNetworking.getAppropriateConfig().canThrowVisagesOntoOtherPlayers && ((IPlayerEntity)pe).roundabout$getMaskInventory().getItem(0).isEmpty()) {
+            if (ClientNetworking.getAppropriateConfig().itemSettings.canThrowVisagesOntoOtherPlayers && ((IPlayerEntity)pe).roundabout$getMaskInventory().getItem(0).isEmpty()) {
                 ((IPlayerEntity) pe).roundabout$getMaskInventory().setItem(0, this.getItem().copy());
-            } else if (ClientNetworking.getAppropriateConfig().canThrowVisagesOntoOtherPlayers && ((IPlayerEntity)pe).roundabout$getMaskInventory().getItem(1).isEmpty()){
+            } else if (ClientNetworking.getAppropriateConfig().itemSettings.canThrowVisagesOntoOtherPlayers && ((IPlayerEntity)pe).roundabout$getMaskInventory().getItem(1).isEmpty()){
                 ((IPlayerEntity)pe).roundabout$getMaskInventory().setItem(1,this.getItem().copy());
             } else {
                 this.dropItem($$1.getOnPos());

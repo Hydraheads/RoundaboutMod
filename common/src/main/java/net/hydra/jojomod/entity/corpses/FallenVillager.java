@@ -29,7 +29,7 @@ public class FallenVillager extends FallenMob{
     public boolean hurt(DamageSource $$0, float $$1) {
         if ($$0.is(DamageTypeTags.IS_PROJECTILE)){
             return super.hurt($$0, (float) ($$1*
-                    (ClientNetworking.getAppropriateConfig().damageMultipliers.villagerCorpseProjectileResilienceDamageTaken *0.01)));
+                    (ClientNetworking.getAppropriateConfig().justiceSettings.villagerCorpseProjectileResilienceDamageTaken *0.01)));
         } else {
             return super.hurt($$0,$$1);
         }

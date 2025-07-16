@@ -2,12 +2,10 @@ package net.hydra.jojomod.event.powers;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
@@ -49,7 +47,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
@@ -522,7 +519,7 @@ public class StandPowers {
     }
 
     public boolean canExecuteMoveWithLevel(int minLevel){
-        if (!ClientNetworking.getAppropriateConfig().enableStandLeveling) {
+        if (!ClientNetworking.getAppropriateConfig().standLevelingSettings.enableStandLeveling) {
             return true;
         }
 
@@ -1068,7 +1065,7 @@ public class StandPowers {
                 amt *= 2;
             }
 
-            if (isDrowning && !ClientNetworking.getAppropriateConfig().cooldownsInTicks.canRechargeWhileDrowning)
+            if (isDrowning && !ClientNetworking.getAppropriateConfig().generalStandSettings.canRechargeCooldownsWhileDrowning)
             { amt = 0; }
         }
 
@@ -1079,7 +1076,7 @@ public class StandPowers {
                 if (!canUseStillStandingRecharge(cin)){
                     amt = 1;
                 }
-                ci.setFrozen(isDrowning && !ClientNetworking.getAppropriateConfig().cooldownsInTicks.canRechargeWhileDrowning);
+                ci.setFrozen(isDrowning && !ClientNetworking.getAppropriateConfig().generalStandSettings.canRechargeCooldownsWhileDrowning);
 
                 boolean serverControlledCooldwon = isServerControlledCooldown(ci, cin);
                 if (!(this.self.level().isClientSide() && serverControlledCooldwon)) {
@@ -1094,7 +1091,7 @@ public class StandPowers {
 
                     if (this.self instanceof Player) {
                         if ((((Player) this.self).isCreative() &&
-                                ClientNetworking.getAppropriateConfig().cooldownsInTicks.creativeModeRefreshesCooldowns) && ci.time > 2) {
+                                ClientNetworking.getAppropriateConfig().generalStandSettings.creativeModeRefreshesCooldowns) && ci.time > 2) {
                             ci.time = 2;
                         }
                     }
@@ -1209,13 +1206,17 @@ public class StandPowers {
         user2.knockback(0.55f,user1.getX()-user2.getX(), user1.getZ()-user2.getZ());
     }
 
+    public float getLevelMultiplier(){
+        return (float) (ClientNetworking.getAppropriateConfig().standLevelingSettings.standExperienceNeededForLevelupMultiplier *0.01);
+    }
+
     public boolean canInterruptPower(){
         return false;
     }
 
     public float levelupDamageMod(float damage){
         int percent = ClientNetworking.getAppropriateConfig().
-                damageMultipliers.bonusStandDmgByMaxLevel;
+                standLevelingSettings.bonusStandDmgByMaxLevel;
 
         if (percent > 0  && this.self instanceof Player PE && this.getMaxLevel() >= 1){
             int maxlevel = getMaxLevel();
@@ -1236,17 +1237,17 @@ public class StandPowers {
     public boolean preCanInterruptPower(Entity interrupter, boolean isStandDamage){
         boolean interrupt = false;
         if (interrupter != null){
-            if (this.isBarraging() && ClientNetworking.getAppropriateConfig().chargeSettings.barragesAreAlwaysInterruptable) {
+            if (this.isBarraging() && ClientNetworking.getAppropriateConfig().generalStandSettings.barragesAreAlwaysInterruptable) {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                 return true;
-            } else if (isStandDamage && ClientNetworking.getAppropriateConfig().chargeSettings.standsInterruptSomeStandAttacks){
+            } else if (isStandDamage && ClientNetworking.getAppropriateConfig().generalStandSettings.standsInterruptSomeStandAttacks){
                 interrupt = true;
             } else if (this instanceof TWAndSPSharedPowers && this.getActivePower() == PowerIndex.SPECIAL &&
                     ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopIsAlwaysInterruptable){
                 interrupt = true;
-            } else if (interrupter instanceof Player && ClientNetworking.getAppropriateConfig().chargeSettings.playersInterruptSomeStandAttacks){
+            } else if (interrupter instanceof Player && ClientNetworking.getAppropriateConfig().generalStandSettings.playersInterruptSomeStandAttacks){
                 interrupt = true;
-            } else if (interrupter instanceof Mob && ClientNetworking.getAppropriateConfig().chargeSettings.mobsInterruptSomeStandAttacks){
+            } else if (interrupter instanceof Mob && ClientNetworking.getAppropriateConfig().generalStandSettings.mobsInterruptSomeStandAttacks){
                 interrupt = true;
             }
         } else {
@@ -1479,7 +1480,7 @@ public class StandPowers {
                     id = storeEnt.getId();
                 }
                     ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(id, this.attackTimeDuring);
-                if (!listE.isEmpty() && ClientNetworking.getAppropriateConfig().barrageHasAreaOfEffect){
+                if (!listE.isEmpty() && ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect){
                     for (int i = 0; i< listE.size(); i++){
                         if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
                             if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
@@ -1678,7 +1679,7 @@ public class StandPowers {
         }
         /*Barrage hits are incapable of killing their target until the last hit.*/
         if (entity instanceof LivingEntity){
-            if (power >= ((LivingEntity) entity).getHealth() && ClientNetworking.getAppropriateConfig().barragesOnlyKillOnLastHit){
+            if (power >= ((LivingEntity) entity).getHealth() && ClientNetworking.getAppropriateConfig().generalStandSettings.barragesOnlyKillOnLastHit){
                 if (entity instanceof Player) {
                     power = 0.00001F;
                 } else {
@@ -1691,7 +1692,7 @@ public class StandPowers {
     public boolean getReducedDamage(Entity entity){
         return (entity instanceof Player || entity instanceof StandEntity ||
                 ((entity instanceof LivingEntity LE && !((StandUser)LE).roundabout$getStandDisc().isEmpty()) &&
-                        ClientNetworking.getAppropriateConfig().damageMultipliers.standUserMobsTakePlayerDamageMultipliers)
+                        ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.standUserMobsTakePlayerDamageMultipliers)
         );
     }
 
@@ -1755,7 +1756,7 @@ public class StandPowers {
             if (bonusBarrageConditions()) {
                 boolean sideHit = false;
                 if (hitNumber > 1000){
-                    if (!(ClientNetworking.getAppropriateConfig().barrageHasAreaOfEffect)){
+                    if (!(ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect)){
                         return;
                     }
                     hitNumber-=1000;
@@ -2419,7 +2420,7 @@ public class StandPowers {
 
     /**This function is a sanity check so mobs can't be hit behind doors*/
     public boolean canActuallyHit(Entity entity){
-        if (ClientNetworking.getAppropriateConfig().standPunchesGoThroughDoorsAndCorners){
+        if (ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchesGoThroughDoorsAndCorners){
             return true;
         }
         Vec3 from = new Vec3(this.self.getX(), this.self.getY(), this.self.getZ()); // your position
@@ -2538,7 +2539,7 @@ public class StandPowers {
         Vec3 pointVec = DamageHandler.getRayPoint(this.self, halfReach);
         List<Entity> arrows = arrowGrabHitbox(this.self,DamageHandler.genHitbox(this.self, pointVec.x, pointVec.y,
                 pointVec.z, halfReach, halfReach, halfReach), getReach());
-        if (!arrows.isEmpty() && ClientNetworking.getAppropriateConfig().barrageDeflectsArrrows) {
+        if (!arrows.isEmpty() && ClientNetworking.getAppropriateConfig().generalStandSettings.barrageDeflectsArrows) {
             for (int i = 0; i < arrows.size(); i++) {
                 deflectArrowsAndBullets(arrows.get(i));
             }
@@ -2962,7 +2963,7 @@ public class StandPowers {
 
     public int getBarrageRecoilTime(){
         return ClientNetworking.getAppropriateConfig().
-                cooldownsInTicks.barrageRecoil;
+                generalStandSettings.barrageRecoilCooldown;
     }
 
     public boolean isGuarding(){
@@ -2989,10 +2990,10 @@ public class StandPowers {
     public void tickMobAI(LivingEntity attackTarget){
     }
     public int getKickBarrageWindup(){
-        return ClientNetworking.getAppropriateConfig().chargeSettings.kickBarrageWindup;
+        return ClientNetworking.getAppropriateConfig().generalStandSettings.kickBarrageWindup;
     }
     public int getBarrageWindup(){
-        return ClientNetworking.getAppropriateConfig().chargeSettings.barrageWindup;
+        return ClientNetworking.getAppropriateConfig().generalStandSettings.barrageWindup;
     }
     public int getBarrageLength(){
         return 60;

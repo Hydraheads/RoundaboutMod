@@ -29,6 +29,7 @@ public abstract class ConfigManager {
     private static Path clientConfigPath;
     private static Path localConfigPath;
     private static Path serverConfigPath;
+    private static Path advancedConfigPath;
 
     private static boolean loaded = false;
 
@@ -36,27 +37,34 @@ public abstract class ConfigManager {
         if (Networking.isDedicated()) return Config.getServerInstance();
         return Config.getLocalInstance();
     }
+    public static AdvancedConfig getAdvancedConfig() {
+        return AdvancedConfig.getInstance();
+    }
     public static ClientConfig getClientConfig() {
         return ClientConfig.getLocalInstance();
     }
 
-    public static void loadConfigs(Path client, Path server, Path actualClient) {
+    public static void loadConfigs(Path client,  Path advanced,
+                                   //Path server
+                                   Path actualClient) {
         clientConfigPath = actualClient;
         localConfigPath = client;
-        serverConfigPath = server;
+        serverConfigPath = client;
+        advancedConfigPath = advanced;
         loadClientConfig();
         loadLocalConfig();
         loadServerConfig();
+        loadAdvancedConfig();
         loaded = true;
     }
 
     public static void loadStandArrowPool()
     {
-        if (getConfig().standArrowPoolv2 != null)
+        if (getAdvancedConfig().standArrowPoolv2 != null)
         {
             ModItems.STAND_ARROW_POOL.clear();
 
-            for (String disc : getConfig().standArrowPoolv2)
+            for (String disc : getAdvancedConfig().standArrowPoolv2)
             {
                 String[] split = disc.split(":");
 
@@ -73,11 +81,11 @@ public abstract class ConfigManager {
                 ModItems.STAND_ARROW_POOL.add((StandDiscItem) i);
             }
         }
-        if (getConfig().naturalStandUserMobPoolv3 != null)
+        if (getAdvancedConfig().naturalStandUserMobPoolv3 != null)
         {
             ModItems.STAND_ARROW_POOL_FOR_MOBS.clear();
 
-            for (String disc : getConfig().naturalStandUserMobPoolv3)
+            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv3)
             {
                 String[] split = disc.split(":");
 
@@ -94,7 +102,7 @@ public abstract class ConfigManager {
                 ModItems.STAND_ARROW_POOL_FOR_MOBS.add((StandDiscItem) i);
             }
         }
-        if (getConfig().humanoidOnlyStandUserMobPoolv2 != null)
+        if (getAdvancedConfig().humanoidOnlyStandUserMobPoolv2 != null)
         {
             ModItems.STAND_ARROW_POOL_FOR_HUMANOID_MOBS.clear();
 
@@ -102,7 +110,7 @@ public abstract class ConfigManager {
                 ModItems.STAND_ARROW_POOL_FOR_HUMANOID_MOBS.addAll(ModItems.STAND_ARROW_POOL_FOR_MOBS);
             }
 
-            for (String disc : getConfig().humanoidOnlyStandUserMobPoolv2)
+            for (String disc : getAdvancedConfig().humanoidOnlyStandUserMobPoolv2)
             {
                 String[] split = disc.split(":");
 
@@ -120,11 +128,11 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getConfig().standArrowSecondaryPoolv4 != null)
+        if (getAdvancedConfig().standArrowSecondaryPoolv4 != null)
         {
             ModItems.STAND_ARROW_SECONDARY_STAND_POOL.clear();
 
-            for (String disc : getConfig().standArrowSecondaryPoolv4)
+            for (String disc : getAdvancedConfig().standArrowSecondaryPoolv4)
             {
                 String[] split = disc.split(":");
 
@@ -143,6 +151,9 @@ public abstract class ConfigManager {
         }
     }
 
+    public static void saveServerConfig() {
+        save(Config.getServerInstance(), serverConfigPath);
+    }
     private static void loadClientConfig() {
         ClientConfig config = loadClient();
         validateFields(config);
@@ -162,8 +173,14 @@ public abstract class ConfigManager {
         Config config = loadServer();
         validateFields(config);
         Config.updateServer(config);
-        saveServerConfig();
         Roundabout.LOGGER.info("Loaded server config");
+    }
+    private static void loadAdvancedConfig() {
+        AdvancedConfig config = loadAdvanced();
+        validateFields(config);
+        AdvancedConfig.updateServer(config);
+        saveAdvacedConfig();
+        Roundabout.LOGGER.info("Loaded advanced config");
     }
 
     public static void validateFields(Object instance) {
@@ -216,17 +233,17 @@ public abstract class ConfigManager {
     }
 
     public static String serializeConfig() {
-        return GSON.toJson(Config.getServerInstance());
+        return GSON.toJson(Config.getLocalInstance());
     }
 
     public static void deserializeConfig(String serialized) {
         Config.updateServer(GSON.fromJson(serialized, Config.class));
-        saveServerConfig();
     }
 
     private static ClientConfig DEFAULT_CLIENT_CONFIG;
     private static Config DEFAULT_LOCAL_CONFIG;
     private static Config DEFAULT_SERVER_CONFIG;
+    private static AdvancedConfig DEFAULT_ADVANCED_CONFIG;
 
     private static ClientConfig loadClient() {
         ClientConfig loaded = loadClient(new ClientConfig(), clientConfigPath);
@@ -239,13 +256,20 @@ public abstract class ConfigManager {
         return loaded;
     }
 
+    private static AdvancedConfig loadAdvanced() {
+        AdvancedConfig loaded = loadAdvanced(new AdvancedConfig(), advancedConfigPath);
+        validateFields(loaded);
+        AdvancedConfig.updateServer(loaded);
+
+        DEFAULT_ADVANCED_CONFIG = loaded.clone();
+
+        saveAdvacedConfig();
+        return loaded;
+    }
     private static Config loadLocal() {
         Config loaded = load(new Config(), localConfigPath);
         validateFields(loaded);
         Config.updateLocal(loaded);
-
-        DEFAULT_LOCAL_CONFIG = loaded.clone();
-
         saveLocalConfig();
         return loaded;
     }
@@ -257,7 +281,6 @@ public abstract class ConfigManager {
 
         DEFAULT_SERVER_CONFIG = loaded.clone();
 
-        saveServerConfig();
         return loaded;
     }
 
@@ -282,6 +305,26 @@ public abstract class ConfigManager {
         return defaultConfig;
     }
 
+    private static AdvancedConfig loadAdvanced(AdvancedConfig defaultConfig, Path path) {
+        try {
+            if (!Files.exists(path)) {
+                Files.createDirectories(path.getParent());
+                Files.createFile(path);
+                return defaultConfig;
+            }
+            try {
+                String fileContent = String.join(System.lineSeparator(), Files.readAllLines(path));
+                JsonValue hjson = JsonValue.readHjson(fileContent);
+
+                return GSON.fromJson(hjson.toString(), AdvancedConfig.class);
+            } catch (Exception e) {
+                Roundabout.LOGGER.error("Failed to parse defaultConfig file, using default config");
+            }
+        } catch (IOException e) {
+            Roundabout.LOGGER.error("Failed to load config", e);
+        }
+        return defaultConfig;
+    }
 
     private static ClientConfig loadClient(ClientConfig defaultConfig, Path path) {
         try {
@@ -311,13 +354,12 @@ public abstract class ConfigManager {
     public static void saveClientConfig() {
         saveClient(ClientConfig.getLocalInstance(), clientConfigPath);
     }
+    public static void saveAdvacedConfig() {
+        saveAdvanced(AdvancedConfig.getInstance(), advancedConfigPath);
+    }
     public static void saveLocalConfig() {
         validateFields(Config.getLocalInstance());
         save(Config.getLocalInstance(), localConfigPath);
-    }
-
-    public static void saveServerConfig() {
-        save(Config.getServerInstance(), serverConfigPath);
     }
 
     private static void save(Config config, Path path) {
@@ -336,19 +378,26 @@ public abstract class ConfigManager {
             Roundabout.LOGGER.error("Failed to save config", e);
         }
     }
+    private static void saveAdvanced(AdvancedConfig config, Path path) {
+        try {
+            String parsed = String.join(System.lineSeparator(), ConfigParser.parse(config));
+            Files.write(path, parsed.getBytes());
+        } catch (IOException e) {
+            Roundabout.LOGGER.error("Failed to save config", e);
+        }
+    }
 
     public static void resetLocal()
     {
-        Config.updateLocal(DEFAULT_LOCAL_CONFIG.clone());
+        Config.updateLocal(Config.getDefaultInstance().clone());
     }
 
     public static void resetClient()
     {
-        ClientConfig.updateLocal(DEFAULT_CLIENT_CONFIG.clone());
+        ClientConfig.updateLocal(ClientConfig.getDefaultInstance().clone());
     }
 
     public static void resetServer()
     {
-        Config.updateServer(DEFAULT_SERVER_CONFIG.clone());
     }
 }

@@ -213,7 +213,7 @@ public abstract class InputEvents implements IInputEvents {
                         }
                     }
 
-                    if (ClientNetworking.getAppropriateConfig().disableMeleeWhileStandActive) {
+                    if (ClientNetworking.getAppropriateConfig().generalStandSettings.disableMeleeWhileStandActive) {
                         ci.setReturnValue($$1);
                         return;
                     }

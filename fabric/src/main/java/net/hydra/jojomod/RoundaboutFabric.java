@@ -26,9 +26,12 @@ public class RoundaboutFabric implements ModInitializer {
         ConfigManager.loadConfigs(FabricLoader.getInstance()
                 .getConfigDir()
                 .resolve(Roundabout.MOD_ID + ".json"),
+                //FabricLoader.getInstance()
+                //.getConfigDir()
+                //.resolve(Roundabout.MOD_ID + "-server.json"),
                 FabricLoader.getInstance()
-                .getConfigDir()
-                .resolve(Roundabout.MOD_ID + "-server.json"),
+                        .getConfigDir()
+                        .resolve(Roundabout.MOD_ID + "-advanced.json"),
                 FabricLoader.getInstance()
                         .getConfigDir()
                         .resolve(Roundabout.MOD_ID + "-clientOnly.json"));

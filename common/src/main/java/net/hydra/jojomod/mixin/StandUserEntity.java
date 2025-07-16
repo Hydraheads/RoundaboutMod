@@ -504,7 +504,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 this.roundabout$setGlow(glow);
             }
         } else {
-            if (ClientNetworking.getAppropriateConfig().disableBleedingAndBloodSplatters &&
+            if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.disableBleedingAndBloodSplatters &&
                     (((IPermaCasting)this.level()).roundabout$inPermaCastFogRange(this)
                     && this.getHealth() < this.getMaxHealth())){
 
@@ -1399,7 +1399,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     @Unique
     public void roundabout$setDestructionTrailTicks(int destructTicks){
-        if (ClientNetworking.getAppropriateConfig().SuperBlockDestructionBarrageLaunching) {
+        if (ClientNetworking.getAppropriateConfig().griefSettings.SuperBlockDestructionBarrageLaunching) {
             this.roundabout$destructionModeTrailTicks = destructTicks;
         }
     }
@@ -1893,7 +1893,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     public float roundabout$getMaxGuardPoints(){
-        return (float) (roundabout$getStandPowers().getMaxGuardPoints()*(ClientNetworking.getAppropriateConfig().guardPoints.standGuardMultiplier*0.01));
+        return (float) (roundabout$getStandPowers().getMaxGuardPoints()*(ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardMultiplier*0.01));
     }
 
     @Unique
@@ -2214,7 +2214,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return this.roundabout$isGuardingEffectively2();
     }
     public boolean roundabout$isGuardingEffectively2(){
-        return (this.roundabout$shieldNotDisabled() && this.roundabout$getStandPowers().isGuarding() && this.roundabout$getStandPowers().getAttackTimeDuring() >= ClientNetworking.getAppropriateConfig().standGuardDelayTicks);
+        return (this.roundabout$shieldNotDisabled() && this.roundabout$getStandPowers().isGuarding() && this.roundabout$getStandPowers().getAttackTimeDuring() >= ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardDelayTicks);
     }
 
     public boolean roundabout$shieldNotDisabled(){
@@ -2592,10 +2592,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
             if (this.roundabout$getStandPowers().getReducedDamage(this)){
                 $$1/=3.2f;
-                $$1*= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnPlayers *0.01);
+                $$1*= (float) (ClientNetworking.getAppropriateConfig().justiceSettings.corpseDamageMultOnPlayers *0.01);
                 $$1 = FM.getDamageMod($$1);
             } else {
-                $$1 *= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnMobs *0.01);
+                $$1 *= (float) (ClientNetworking.getAppropriateConfig().justiceSettings.corpseDamageMultOnMobs *0.01);
                 $$1 = FM.getDamageMod($$1);
             }
             ci.setReturnValue(hurt(ModDamageTypes.of(this.level(), ModDamageTypes.CORPSE_ARROW, FM),
@@ -2604,10 +2604,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         } else if ($$0.is(DamageTypes.PLAYER_EXPLOSION) && $$0.getEntity() instanceof FallenMob FM){
             if (this.roundabout$getStandPowers().getReducedDamage(this)){
                 $$1/=2;
-                $$1*= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnPlayers *0.01);
+                $$1*= (float) (ClientNetworking.getAppropriateConfig().justiceSettings.corpseDamageMultOnPlayers *0.01);
                 $$1 = FM.getDamageMod($$1);
             } else {
-                $$1 *= (float) (ClientNetworking.getAppropriateConfig().damageMultipliers.corpseDamageOnMobs *0.01);
+                $$1 *= (float) (ClientNetworking.getAppropriateConfig().justiceSettings.corpseDamageMultOnMobs *0.01);
                 $$1 = FM.getDamageMod($$1);
             }
             Entity ent2 = FM;
@@ -2998,14 +2998,33 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
 
 
-            if ($$0.getEntity() instanceof Player pe && !$$0.isIndirect()
+
+
+            if (!$$0.isIndirect()
                     && !$$0.is(DamageTypes.THORNS)){
-                if (((StandUser)pe).roundabout$getStandPowers().interceptSuccessfulDamageDealtEvent($$0,$$1, ((LivingEntity)(Object)this))){
-                    ci.cancel();
-                    return;
+                if ($$0.getEntity() instanceof Player pe){
+                    if (((StandUser)pe).roundabout$getStandPowers().interceptSuccessfulDamageDealtEvent($$0,$$1, ((LivingEntity)(Object)this))){
+                        ci.cancel();
+                        return;
+                    }
+                }
+                if (((IEntityAndData)this).roundabout$getTrueInvisibility() > -1 &&
+                        ClientNetworking.getAppropriateConfig().achtungSettings.revealLocationWhenDamagingOrHurt){
+                    ((IEntityAndData)this).roundabout$setTrueInvisibility(-1);
+                }
+                if ($$0.getEntity() != null){
+                    if (((IEntityAndData)$$0.getEntity()).roundabout$getTrueInvisibility() > -1 &&
+                            ClientNetworking.getAppropriateConfig().achtungSettings.revealLocationWhenDamagingOrHurt){
+                        ((IEntityAndData)$$0.getEntity()).roundabout$setTrueInvisibility(-1);
+                    }
+                }
+                if ($$0.getDirectEntity() != null){
+                    if (((IEntityAndData)$$0.getDirectEntity()).roundabout$getTrueInvisibility() > -1 &&
+                            ClientNetworking.getAppropriateConfig().achtungSettings.revealLocationWhenDamagingOrHurt){
+                        ((IEntityAndData)$$0.getDirectEntity()).roundabout$setTrueInvisibility(-1);
+                    }
                 }
             }
-
         }
         if (roundabout$mutualActuallyHurt($$0,$$1)){
             ci.cancel();
@@ -3330,7 +3349,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (damageSource.is(ModDamageTypes.GASOLINE_EXPLOSION)) {
                 roundabout$gasolineIFRAMES = 10;
                 roundabout$knifeIFrameTicks = 10;
-                roundabout$stackedKnivesAndMatches = ClientNetworking.getAppropriateConfig().damageMultipliers.maxKnivesInOneHit;
+                roundabout$stackedKnivesAndMatches = ClientNetworking.getAppropriateConfig().itemSettings.maxKnivesInOneHit;
             }
         }
 
@@ -3412,7 +3431,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                                 1, 0.3, 0.3, 0.3, 0.3);
                     }
                 } else {
-                    $$1 *= (((float)(ClientNetworking.getAppropriateConfig().timeStopSettings.reducedDamagePercentDealtInTimeStop))*0.01F);
+                    $$1 *= (((float)(ClientNetworking.getAppropriateConfig().timeStopSettings.reducedTSDamageDealt))*0.01F);
                 }
                 if ((dmg + $$1) > max) {
                     roundabout$setStoredDamage(max);
@@ -3478,7 +3497,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         if (damageSource.is(ModDamageTypes.KNIFE)){
                             roundabout$gasolineIFRAMES = 10;
                         }
-                        int knifeCap = ClientNetworking.getAppropriateConfig().damageMultipliers.maxKnivesInOneHit;
+                        int knifeCap = ClientNetworking.getAppropriateConfig().itemSettings.maxKnivesInOneHit;
                         if (roundabout$stackedKnivesAndMatches < knifeCap) {
                             if (roundabout$stackedKnivesAndMatches <= 0) {
                                 roundabout$knifeIFrameTicks = 9;
@@ -3562,10 +3581,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         float fireDamage = 1;
                         if (this.roundabout$getStandPowers().getReducedDamage((LivingEntity) (Object) this)) {
                             fireDamage = (float) (fireDamage * (ClientNetworking.getAppropriateConfig().
-                                    damageMultipliers.standFireOnPlayers * 0.01))*0.8F;
+                                    magiciansRedSettings.standFireOnPlayersMult * 0.01))*0.8F;
                         } else {
                             fireDamage = (float) (fireDamage * (ClientNetworking.getAppropriateConfig().
-                                    damageMultipliers.standFireOnMobs * 0.01))*0.8F;
+                                    magiciansRedSettings.standFireOnMobsMult * 0.01))*0.8F;
                         }
                         this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.STAND_FIRE), fireDamage);
                     }
@@ -3874,6 +3893,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     public double previousYpos = 0.0;
     public float MoldLevel = 0.0f;
+    public int jumpImmunityTicks = 0;
 
     @Override
     public void DoMoldTick() {
@@ -3906,10 +3926,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "travel", at = @At(value = "TAIL"))
     public void   MoldDetection(Vec3 movement,CallbackInfo info) {
         if((((IPermaCasting)this.level()).roundabout$inPermaCastRange(this.getOnPos(), PermanentZoneCastInstance.MOLD_FIELD))) {
-            Boolean isUser = (((IPermaCasting)this.level()).roundabout$isPermaCastingEntity(((LivingEntity)(Object) this))&& this.roundabout$getStandPowers() instanceof PowersGreenDay);
-            Boolean down = previousYpos > this.getY();
+            boolean isUser = (((IPermaCasting)this.level()).roundabout$isPermaCastingEntity(((LivingEntity)(Object) this))&& this.roundabout$getStandPowers() instanceof PowersGreenDay);
+            boolean down = previousYpos > this.getY();
+            boolean JumpImmune = jumpImmunityTicks > 0;
             boolean isStand = (((LivingEntity)(Object) this) instanceof StandEntity);
-            if (!roundabout$getStandPowers().isStoppingTime() &&!this.roundabout$isBubbleEncased() && !isUser && !isStand && down){
+            if (!roundabout$getStandPowers().isStoppingTime() &&!this.roundabout$isBubbleEncased() && !isUser && !isStand && down &&!JumpImmune){
                 for (int i = 0; i < 3; i = i + 1) {
 
                     double width = this.getBbWidth();
@@ -3924,6 +3945,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
                 }
                 DoMoldTick();
+            }
+            else {
+                if (previousYpos < this.getY()) {
+                    jumpImmunityTicks = 2;
+                }
+            }
+            if(JumpImmune){
+                jumpImmunityTicks = jumpImmunityTicks-1;
             }
         }
         previousYpos = this.getY();

@@ -104,7 +104,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     @Override
     public int getMaxGuardPoints(){
-        return ClientNetworking.getAppropriateConfig().guardPoints.theWorldDefend;
+        return ClientNetworking.getAppropriateConfig().theWorldSettings.theWorldGuardPoints;
     }
     @Override
     public void playTheLastHitSound(){
@@ -403,22 +403,31 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     @Override
     public int getMiningLevel() {
-        return ClientNetworking.getAppropriateConfig().miningSettings.getMiningTierTheWorld;
+        return ClientNetworking.getAppropriateConfig().theWorldSettings.getMiningTierTheWorld;
     }
     @Override
     public float getMiningMultiplier() {
         return (float) (1F*(ClientNetworking.getAppropriateConfig().
-                miningSettings.speedMultiplierTheWorld*0.01));
+                theWorldSettings.miningSpeedMultiplierTheWorld *0.01));
+    }
+
+
+    public boolean fullTSChargeBonus(){
+        if (canExecuteMoveWithLevel(getMaxTSFactorLevel()) && ClientNetworking.getAppropriateConfig().timeStopSettings.maxTWBypassesReduction){
+            return this.maxChargedTSTicks >= ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public int setCurrentMaxTSTime(int chargedTSSeconds){
         if (chargedTSSeconds >= (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld)){
             if (canExecuteMoveWithLevel(getMaxTSFactorLevel()) && this.getSelf() instanceof Player) {
-                this.maxChargeTSTime = ClientNetworking.getAppropriateConfig().timeStopSettings.additionalTimeStopTicksForFullyChargedTheWorld +
+                this.maxChargeTSTime = ClientNetworking.getAppropriateConfig().timeStopSettings.maxTWChargeBonusTicks +
                 ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld;
                 this.setChargedTSTicks(this.maxChargeTSTime);
-                return ClientNetworking.getAppropriateConfig().timeStopSettings.additionalTimeStopTicksForFullyChargedTheWorld;
+                return ClientNetworking.getAppropriateConfig().timeStopSettings.maxTWChargeBonusTicks;
             } else {
                 this.maxChargeTSTime = ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld;
                 this.setChargedTSTicks(this.maxChargeTSTime);
@@ -705,33 +714,38 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
 
     @Override
+    public float multiplyPowerByStandConfigPlayers(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                theWorldSettings.theWorldAttackMultOnPlayers *0.01));
+    }
+
+    @Override
+    public float multiplyPowerByStandConfigMobs(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                theWorldSettings.theWorldAttackMultOnMobs *0.01));
+    }
+    @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 1.75* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnPlayers*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.75F));
         } else {
-            return levelupDamageMod((float) ((float) 5* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnMobs*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(5));
         }
     }
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 2.5* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnPlayers*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.5F));
         } else {
-            return levelupDamageMod((float) ((float) 6* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnMobs*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(6F));
         }
     }
     @Override
     public float getBarrageFinisherStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 3* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnPlayers*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(3));
         } else {
-            return levelupDamageMod((float) ((float) 8* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnMobs*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(8));
         }
     }
     @Override
@@ -740,10 +754,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (str > 0.005F) {
             if (getReducedDamage(entity)) {
                 str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                        damageMultipliers.theWorldAttacksOnPlayers * 0.01)));
+                        theWorldSettings.theWorldAttackMultOnPlayers * 0.01)));
             } else {
                 str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                        damageMultipliers.theWorldAttacksOnMobs * 0.01)));
+                        theWorldSettings.theWorldAttackMultOnMobs * 0.01)));
             }
         }
         return str;
@@ -753,10 +767,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         float str = super.getKickBarrageFinisherStrength(entity);
         if (this.getReducedDamage(entity)){
             return str*levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnPlayers*0.01)));
+                    theWorldSettings.theWorldAttackMultOnPlayers *0.01)));
         } else {
             return str*levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnMobs*0.01)));
+                    theWorldSettings.theWorldAttackMultOnMobs *0.01)));
         }
     }
     @Override
@@ -765,10 +779,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (str > 0.005F) {
             if (getReducedDamage(entity)) {
                 str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                        damageMultipliers.theWorldAttacksOnPlayers * 0.01)));
+                        theWorldSettings.theWorldAttackMultOnPlayers * 0.01)));
             } else {
                 str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                        damageMultipliers.theWorldAttacksOnMobs * 0.01)));
+                        theWorldSettings.theWorldAttackMultOnMobs * 0.01)));
             }
         }
         return str;
@@ -776,13 +790,11 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public float getImpalePunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 3* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnPlayers*0.01) * (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAndStarPlatinumImpalePower*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (3F * (ClientNetworking.getAppropriateConfig().
+                                generalStandSettings.generalImpaleAttackMultiplier *0.01))));
         } else {
-            return levelupDamageMod((float) ((float) 17* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnMobs*0.01) * (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAndStarPlatinumImpalePower*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs((float) (17F * (ClientNetworking.getAppropriateConfig().
+                    generalStandSettings.generalImpaleAttackMultiplier *0.01))));
         }
     }
 
@@ -811,7 +823,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                     stand.setXRot(getLookAtEntityPitch(stand,$$5));
                     this.self.level().playSound(null, this.self.blockPosition(),  ModSounds.PUNCH_4_SOUND_EVENT,
                             SoundSource.PLAYERS, 0.95F, 1.3F);
-                    int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.theWorldAssault;
+                    int cdr = ClientNetworking.getAppropriateConfig().theWorldSettings.assaultCooldown;
                     if (this.getSelf() instanceof ServerPlayer) {
                         ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
                                 PowerIndex.SKILL_1, cdr);
@@ -827,20 +839,16 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
     public float getAssaultStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 1.7* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnPlayers*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.7F));
         } else {
-            return levelupDamageMod((float) ((float) 7* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnMobs*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(7F));
         }
     }
     public float getGrabThrowStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 1.85* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnPlayers*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.85F));
         } else {
-            return levelupDamageMod((float) ((float) 7.5* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAttacksOnMobs*0.01)));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(7.5F));
         }
     }
 
@@ -936,7 +944,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public boolean canInterruptPower(){
         if (this.getActivePower() == PowerIndex.POWER_1 || this.getActivePower() == PowerIndex.POWER_1_BONUS){
-            int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.theWorldAssaultInterrupt;
+            int cdr = ClientNetworking.getAppropriateConfig().theWorldSettings.assaultInterruptCooldown;
             if (this.getSelf() instanceof Player) {
                 ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, cdr);
             }
@@ -956,7 +964,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         } else {
             amt = (100+((currentLevel-1)*50));
         }
-        amt= (int) (amt*(ClientNetworking.getAppropriateConfig().standExperienceNeededForLevelupMultiplier *0.01));
+        amt= (int) (amt*(getLevelMultiplier()));
         return amt;
     }
 
@@ -1538,7 +1546,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             }
             if (!done){
                 if (canExecuteMoveWithLevel(getLeapLevel())) {
-                    boolean jojoveinLikeKeys = !ClientNetworking.getAppropriateConfig().cooldownsInTicks.standJumpAndDashShareCooldown;
+                    boolean jojoveinLikeKeys = !ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpAndDashShareCooldown;
                     if (jojoveinLikeKeys){
                         setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_WORLD, PowerIndex.SKILL_3);
                     } else {

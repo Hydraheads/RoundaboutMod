@@ -99,7 +99,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     @Override
     public int getMaxGuardPoints(){
-        return ClientNetworking.getAppropriateConfig().guardPoints.starPlatinumDefend;
+        return ClientNetworking.getAppropriateConfig().starPlatinumSettings.starPlatinumGuardPoints;
     }
     @Override
     public void playSummonEffects(boolean forced){
@@ -117,12 +117,12 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public float getMiningMultiplier() {
         return (float) (1F*(ClientNetworking.getAppropriateConfig().
-                miningSettings.speedMultiplierStarPlatinum*0.01));
+                starPlatinumSettings.miningSpeedMultiplierStarPlatinum *0.01));
     }
 
     @Override
     public int getMiningLevel() {
-        return ClientNetworking.getAppropriateConfig().miningSettings.getMiningTierStarPlatinum;
+        return ClientNetworking.getAppropriateConfig().starPlatinumSettings.getMiningTierStarPlatinum;
     }
     @Override
     public void levelUp(){
@@ -209,10 +209,10 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public float getGrabThrowStrength(Entity entity){
         if (this.getReducedDamage(entity)){
             return levelupDamageMod((float) ((float) 1.85* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnPlayers*0.01)));
+                    starPlatinumSettings.starPlatinumAttackMultOnPlayers*0.01)));
         } else {
             return levelupDamageMod((float) ((float) 7.5* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnMobs*0.01)));
+                    starPlatinumSettings.starPlatinumAttackMultOnMobs*0.01)));
         }
     }
     public int scopeTicks = -1;
@@ -233,10 +233,10 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (str > 0.005F) {
             if (getReducedDamage(entity)) {
                 str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                        damageMultipliers.starPlatinumAttacksOnPlayers * 0.01)));
+                        starPlatinumSettings.starPlatinumAttackMultOnPlayers * 0.01)));
             } else {
                 str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                        damageMultipliers.starPlatinumAttacksOnMobs * 0.01)));
+                        starPlatinumSettings.starPlatinumAttackMultOnMobs * 0.01)));
             }
             if (forwardBarrage) {
                 str *= 0.6F;
@@ -249,10 +249,10 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         float str = super.getBarrageFinisherStrength(entity);
         if (this.getReducedDamage(entity)){
             str *=levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnPlayers*0.01)));
+                    starPlatinumSettings.starPlatinumAttackMultOnPlayers*0.01)));
         } else {
             str *=levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnMobs*0.01)));
+                    starPlatinumSettings.starPlatinumAttackMultOnMobs*0.01)));
         }
         if (forwardBarrage && !(entity instanceof Player)){
             str*=0.6F;
@@ -267,10 +267,10 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (str > 0.005F) {
             if (getReducedDamage(entity)) {
                 str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                        damageMultipliers.starPlatinumAttacksOnPlayers * 0.01)));
+                        starPlatinumSettings.starPlatinumAttackMultOnPlayers * 0.01)));
             } else {
                 str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                        damageMultipliers.starPlatinumAttacksOnMobs * 0.01)));
+                        starPlatinumSettings.starPlatinumAttackMultOnMobs * 0.01)));
             }
             if (forwardBarrage) {
                 str *= 0.6F;
@@ -283,10 +283,10 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         float str = super.getKickBarrageFinisherStrength(entity);
         if (this.getReducedDamage(entity)){
             str *=levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnPlayers*0.01)));
+                    starPlatinumSettings.starPlatinumAttackMultOnPlayers*0.01)));
         } else {
             str *=levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnMobs*0.01)));
+                    starPlatinumSettings.starPlatinumAttackMultOnMobs*0.01)));
         }
         if (forwardBarrage && !(entity instanceof Player)){
             str*=0.6F;
@@ -346,7 +346,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             StandEntity stand = getStandEntity(this.self);
             if (!(Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE && this.self instanceof ServerPlayer PE && SE.getScoping() &&
                     SE.level().dimensionTypeId() == this.self.level().dimensionTypeId())) {
-                if (ClientNetworking.getAppropriateConfig().starPlatinumScopeUsesPotionEffectForNightVision) {
+                if (ClientNetworking.getAppropriateConfig().starPlatinumSettings.starPlatinumScopeUsesPotionEffectForNightVision) {
                     MobEffectInstance ME = this.getSelf().getEffect(MobEffects.NIGHT_VISION);
                     if (ME != null && ME.getDuration() >= 100000 && ME.getAmplifier() > 20) {
                         this.getSelf().removeEffect(MobEffects.NIGHT_VISION);
@@ -515,7 +515,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         } else {
             amt = (100+((currentLevel-1)*50));
         }
-        amt= (int) (amt*(ClientNetworking.getAppropriateConfig().standExperienceNeededForLevelupMultiplier *0.01));
+        amt= (int) (amt*(getLevelMultiplier()));
         return amt;
     }
     @Override
@@ -692,11 +692,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                         }
 
                         if (success){
-                            int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.starPlatinumGuardian;
+                            int cdr = ClientNetworking.getAppropriateConfig().starPlatinumSettings.guardianCooldown;
                             ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
                                     PowerIndex.SKILL_EXTRA_2, cdr);
                             ((StarPlatinumEntity) stand).setScoping(false);
-                            if (ClientNetworking.getAppropriateConfig().starPlatinumScopeUsesPotionEffectForNightVision) {
+                            if (ClientNetworking.getAppropriateConfig().starPlatinumSettings.starPlatinumScopeUsesPotionEffectForNightVision) {
                                 MobEffectInstance ME = this.getSelf().getEffect(MobEffects.NIGHT_VISION);
                                 if (ME != null && ME.getDuration() >= 100000 && ME.getAmplifier() > 20) {
                                     this.getSelf().removeEffect(MobEffects.NIGHT_VISION);
@@ -812,27 +812,27 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
             return levelupDamageMod((float) ((float) 1.75* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnPlayers*0.01)));
+                    starPlatinumSettings.starPlatinumAttackMultOnPlayers*0.01)));
         } else {
             return levelupDamageMod((float) ((float) 5* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnMobs*0.01)));
+                    starPlatinumSettings.starPlatinumAttackMultOnMobs*0.01)));
         }
     } public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
             return levelupDamageMod((float) ((float) 2.5* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnPlayers*0.01)));
+                    starPlatinumSettings.starPlatinumAttackMultOnPlayers*0.01)));
         } else {
             return levelupDamageMod((float) ((float) 6* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnMobs*0.01)));
+                    starPlatinumSettings.starPlatinumAttackMultOnMobs*0.01)));
         }
     }
     public float getFingerDamage(Entity entity){
         if (this.getReducedDamage(entity)){
             return levelupDamageMod((float) ((float) 2.7* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnPlayers*0.01)));
+                    starPlatinumSettings.starPlatinumAttackMultOnPlayers*0.01)));
         } else {
             return levelupDamageMod((float) ((float) 10* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnMobs*0.01)));
+                    starPlatinumSettings.starPlatinumAttackMultOnMobs*0.01)));
         }
     }
     public List<Entity> FingerGrabHitbox(List<Entity> entities, float maxDistance){
@@ -895,7 +895,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                         ModPacketHandler.PACKET_ACCESS.floatToServerPacket((float)
                                 maxDist2, FLOAT_STAR_FINGER_SIZE);
                         if (this.attackTimeDuring == 27){
-                            int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.starFinger;
+                            int cdr = ClientNetworking.getAppropriateConfig().starPlatinumSettings.starFingerCooldown;
                             this.setCooldown(PowerIndex.SKILL_1, cdr);
                             ticksForFinger = 101;
                             List<Entity> fingerTargets = doFinger((float) maxDist);
@@ -913,7 +913,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             SE.setFingerLength((float) maxDist2);
                         }
                         if (this.attackTimeDuring == 27){
-                            int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.starFinger;
+                            int cdr = ClientNetworking.getAppropriateConfig().starPlatinumSettings.starFingerCooldown;
                             this.setCooldown(PowerIndex.SKILL_1, cdr);
 
                             List<Entity> fingerTargets = doFinger((float) maxDist);
@@ -945,7 +945,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
     /**Makes*/
     public boolean fullTSChargeBonus(){
-        if (canExecuteMoveWithLevel(getMaxTSFactorLevel()) && ClientNetworking.getAppropriateConfig().timeStopSettings.maxedStarPlatinumBypassesReducedDamageAtFullCharge){
+        if (canExecuteMoveWithLevel(getMaxTSFactorLevel()) && ClientNetworking.getAppropriateConfig().timeStopSettings.maxSPBypassesReduction){
             return this.maxChargedTSTicks >= ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum;
         } else {
             return false;
@@ -955,7 +955,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public boolean canInterruptPower(){
         if (this.getActivePower() == PowerIndex.POWER_1 && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
-            int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.starFingerInterrupt;
+            int cdr = ClientNetworking.getAppropriateConfig().starPlatinumSettings.starFingerInterruptCooldown;
             if (this.getSelf() instanceof Player) {
                 ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, cdr);
             }
@@ -1264,7 +1264,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 }
                 if (!done) {
                     if (canExecuteMoveWithLevel(getLeapLevel())) {
-                        boolean jojoveinLikeKeys = !ClientNetworking.getAppropriateConfig().cooldownsInTicks.standJumpAndDashShareCooldown;
+                        boolean jojoveinLikeKeys = !ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpAndDashShareCooldown;
                         if (jojoveinLikeKeys){
                             setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_STAR_PLATINUM, PowerIndex.SKILL_3);
                         } else {
@@ -1463,8 +1463,15 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public int setCurrentMaxTSTime(int chargedTSSeconds){
         if (chargedTSSeconds >= (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum)){
-            this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum);
-            this.setChargedTSTicks(this.maxChargeTSTime);
+            if (canExecuteMoveWithLevel(getMaxTSFactorLevel()) && this.getSelf() instanceof Player) {
+                this.maxChargeTSTime = ClientNetworking.getAppropriateConfig().timeStopSettings.maxSPChargeBonusTicks +
+                        ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum;
+                this.setChargedTSTicks(this.maxChargeTSTime);
+                return ClientNetworking.getAppropriateConfig().timeStopSettings.maxSPChargeBonusTicks;
+            } else {
+                this.maxChargeTSTime = (int) (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum);
+                this.setChargedTSTicks(this.maxChargeTSTime);
+            }
         } else if (chargedTSSeconds == (Math.min(ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum,ClientNetworking.getAppropriateConfig().timeStopSettings.impulseTimeStopLength))) {
             this.maxChargeTSTime = (int) (Math.min(ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum,ClientNetworking.getAppropriateConfig().timeStopSettings.impulseTimeStopLength));
         } else {
@@ -1645,12 +1652,12 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public float getImpalePunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
             return levelupDamageMod(((float) ((float) 3* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnPlayers*0.01) * (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAndStarPlatinumImpalePower*0.01))));
+                    starPlatinumSettings.starPlatinumAttackMultOnPlayers*0.01) * (ClientNetworking.getAppropriateConfig().
+                    generalStandSettings.generalImpaleAttackMultiplier *0.01))));
         } else {
             return levelupDamageMod(((float) ((float) 17* (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.starPlatinumAttacksOnMobs*0.01) * (ClientNetworking.getAppropriateConfig().
-                    damageMultipliers.theWorldAndStarPlatinumImpalePower*0.01))));
+                    starPlatinumSettings.starPlatinumAttackMultOnMobs*0.01) * (ClientNetworking.getAppropriateConfig().
+                    generalStandSettings.generalImpaleAttackMultiplier *0.01))));
         }
     }
     @Override

@@ -638,9 +638,9 @@ public class FabricEntities {
 
                 /*Spawn Weights and Biomes*/
                 BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.DESERT), MobCategory.CREATURE,
-                        ModEntities.TERRIER_DOG, ClientNetworking.getAppropriateConfig().fabricTerrierSpawnWeightInDesertUseDatapackForForge, 1, 1);
+                        ModEntities.TERRIER_DOG, 2, 1, 1);
                  BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.TAIGA), MobCategory.CREATURE,
-                         ModEntities.TERRIER_DOG, ClientNetworking.getAppropriateConfig().fabricTerrierSpawnWeightInTaigaUseDatapackForForge, 1, 3);
+                         ModEntities.TERRIER_DOG, 1, 1, 3);
 
                 /*Spawn Placement rules*/
                  SpawnPlacements.register(ModEntities.TERRIER_DOG, SpawnPlacements.Type.ON_GROUND,

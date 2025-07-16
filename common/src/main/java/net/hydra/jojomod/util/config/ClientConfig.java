@@ -11,20 +11,24 @@ import net.hydra.jojomod.util.config.annotation.*;
 
 public class ClientConfig implements Cloneable {
     private static ClientConfig LOCAL_INSTANCE = new ClientConfig();
+    private static ClientConfig DEFAULT_INSTANCE = new ClientConfig();
+
+    public static ClientConfig getDefaultInstance() {
+        return DEFAULT_INSTANCE;
+    }
 
     @Override
     public ClientConfig clone() {
         return ConfigManager.GSON.fromJson(ConfigManager.GSON.toJson(this), ClientConfig.class);
     }
 
+
+
+
+    @NestedOption(group = "modded")
+    public ClientConfig.GeneralSettings generalSettings;
     @BooleanOption(group = "inherit", value = true)
-    public Boolean onlyStandUsersCanSeeStands;
-    @BooleanOption(group = "inherit", value = false)
-    public Boolean onlyStandUsersCanSeeVanillaGhostMobs;
-    @BooleanOption(group = "inherit", value = true)
-    public Boolean renderJusticeHandsWhilePiloting;
-    @BooleanOption(group = "inherit", value = true)
-    public Boolean renderArmorOnPlayerCloneAbilities;
+    public Boolean pressingAbilityKeysSummonsStands;
     @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
     public Integer maxMirrorRendersAtOnceSetToZeroToDisable;
     @BooleanOption(group = "inherit", value = false)
@@ -33,12 +37,12 @@ public class ClientConfig implements Cloneable {
     public Boolean renderGasSplatterOverlay;
     @BooleanOption(group = "inherit", value = true)
     public Boolean showCreativeTextOnWorthinessArrow;
-    @BooleanOption(group = "inherit", value = true)
-    public Boolean pressingAbilityKeysSummonsStands;
-    @BooleanOption(group = "inherit", value = true)
-    public Boolean disableObviousExperimentalWarning;
     @IntOption(group = "inherit", value = 190)
     public Integer justiceFogBrightness;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean renderJusticeHandsWhilePiloting;
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean renderArmorOnPlayerCloneAbilities;
     @BooleanOption(group = "inherit", value = true)
     public Boolean magiciansRedTexturesMakeItEmmissive;
     @BooleanOption(group = "inherit", value = false)
@@ -50,6 +54,8 @@ public class ClientConfig implements Cloneable {
     @BooleanOption(group = "inherit", value = true)
     public Boolean mandomRewindAttemptsToSkipInterpolation;
     @NestedOption(group = "modded")
+    public ClientConfig.ConfigSettings configSettings;
+    @NestedOption(group = "modded")
     public ClientConfig.ParticleSettings particleSettings;
     @NestedOption(group = "modded")
     public ClientConfig.OpacitySettings opacitySettings;
@@ -59,10 +65,28 @@ public class ClientConfig implements Cloneable {
     public ClientConfig.VanillaMCTweaks vanillaMinecraftTweaks;
     @NestedOption(group = "modded")
     public ClientConfig.TimeStopSettings timeStopSettings;
-    @NestedOption(group="modded")
-    public ClientConfig.Experiments experiments;
+
+
 
     public ClientConfig() {
+    }
+    public static class GeneralSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean onlyStandUsersCanSeeStands;
+    }
+    public static class ConfigSettings {
+
+        @CommentedOption(comment = "Offset of the Config Button (stand arrow button) in X coordinates")
+        @IntOption(group = "inherit", value = 0, min = -1024, max = 1024)
+        public Integer configButtonOffsetX;
+
+        @CommentedOption(comment = "Offset of the Config Button (stand arrow button) in Y coordinates")
+        @IntOption(group = "inherit", value = 0, min = -1024, max = 1024)
+        public Integer configButtonOffsetY;
+
+        @CommentedOption(comment = "Should Roundabout render the Config Button (stand arrow button) on the main menu?")
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean shouldShowConfigButton;
     }
 
     public static ClientConfig getLocalInstance() {
@@ -104,6 +128,14 @@ public class ClientConfig implements Cloneable {
         @IntOption(group = "inherit", value = 1, min = 1, max = 8)
         public Integer SoftAndWetCurrentlySelectedBubble;
     }
+    public static class VanillaMCTweaks {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean namedSBRHorseSkins;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean onlyStandUsersCanSeeVanillaGhostMobs;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean disableObviousExperimentalWarning;
+    }
     public static class TimeStopSettings {
         @BooleanOption(group = "inherit", value = false)
         public Boolean timeStopFreezesScreen;
@@ -112,26 +144,6 @@ public class ClientConfig implements Cloneable {
         @BooleanOption(group = "inherit", value = true)
         public Boolean simpleTimeStopShader;
     }
-    public static class VanillaMCTweaks {
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean namedSBRHorseSkins;
-    }
 
-    public static class Experiments {
-        @CommentedOption(comment = "Should use the hue shift shader to symbolize being in an alternate world?")
-        @BooleanOption(group = "inherit", value = false)
-        public Boolean d4cShouldUseColorShader;
-    }
-
-    @CommentedOption(comment = "Offset of the Config Button (stand arrow button) in X coordinates")
-    @IntOption(group = "inherit", value = 0, min = -1024, max = 1024)
-    public Integer configButtonOffsetX;
-
-    @CommentedOption(comment = "Offset of the Config Button (stand arrow button) in Y coordinates")
-    @IntOption(group = "inherit", value = 0, min = -1024, max = 1024)
-    public Integer configButtonOffsetY;
-
-    @CommentedOption(comment = "Should Roundabout render the Config Button (stand arrow button) on the main menu?")
-    @BooleanOption(group = "inherit", value = true)
-    public Boolean shouldShowConfigButton;
+    //CommentedOption(comment = "Should use the hue shift shader to symbolize being in an alternate world?")
 }

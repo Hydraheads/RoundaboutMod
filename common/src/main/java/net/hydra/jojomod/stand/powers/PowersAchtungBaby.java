@@ -1,14 +1,14 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
-import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.projectile.ThrownWaterBottleEntity;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.CooldownInstance;
@@ -20,19 +20,14 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PotionItem;
-import net.minecraft.world.item.SplashPotionItem;
-import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -50,7 +45,7 @@ public class PowersAchtungBaby extends NewDashPreset {
     }
 
 
-    public boolean InvisibleVisionOn(){
+    public boolean invisibleVisionOn(){
         return getStandUserSelf().roundabout$getUniqueStandModeToggle();
     }
     public boolean canSummonStandAsEntity(){
@@ -59,7 +54,7 @@ public class PowersAchtungBaby extends NewDashPreset {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         // code for advanced icons
-        if (InvisibleVisionOn())
+        if (invisibleVisionOn())
             setSkillIcon(context, x, y, 1, StandIcons.BABY_VISION_ON, PowerIndex.SKILL_1);
         else
             setSkillIcon(context, x, y, 1, StandIcons.BABY_VISION_OFF, PowerIndex.SKILL_1);
@@ -92,56 +87,6 @@ public class PowersAchtungBaby extends NewDashPreset {
         return $$1;
     }
 
-    @Override
-
-    public void tickPowerEnd() {
-        if (survivorsSpawned != null && !survivorsSpawned.isEmpty()) {
-            offloadSurvivors();
-        }
-    }
-    public void addSurvivorToList(SurvivorEntity che){
-        listInit();
-        survivorsSpawned.add(che);
-        List<SurvivorEntity> survivorsList2 = new ArrayList<>(survivorsSpawned) {
-        };
-        int scount = ClientNetworking.getAppropriateConfig().survivorSettings.maxSurvivorsCount;
-        if (!survivorsList2.isEmpty() && survivorsList2.size() > scount) {
-            survivorsList2.get(0).forceDespawn(true);
-            survivorsSpawned.remove(0);
-        }
-    }
-
-    public void offloadSurvivors(){
-        listInit();
-        List<SurvivorEntity> survivorsList2 = new ArrayList<>(survivorsSpawned) {
-        };
-        if (!survivorsList2.isEmpty()) {
-            for (SurvivorEntity value : survivorsList2) {
-                if (value.isRemoved() || !value.isAlive() || (this.self.level().isClientSide() && this.self.level().getEntity(value.getId()) == null)) {
-                    survivorsSpawned.remove(value);
-                }
-            }
-        }
-    }
-    public boolean removeAllSurvivors(){
-        listInit();
-
-        boolean success = false;
-        List<SurvivorEntity> survivorsList2 = new ArrayList<>(survivorsSpawned) {
-        };
-        if (!survivorsList2.isEmpty()) {
-            for (SurvivorEntity value : survivorsList2) {
-                    value.forceDespawn(true);
-                    success = true;
-                    survivorsSpawned.remove(value);
-            }
-        }
-
-        if (success)
-            playStandUserOnlySoundsIfNearby(RETRACT, 100, false, false);
-
-        return true;
-    }
 
     @Override
     public void powerActivate(PowerContext context) {
@@ -152,10 +97,7 @@ public class PowersAchtungBaby extends NewDashPreset {
                 switchModeClient();
             }
             case SKILL_2_NORMAL-> {
-                summonSurvivorClient();
-            }
-            case SKILL_2_CROUCH-> {
-                despawnSurvivorClient();
+                invisiburstClient();
             }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 dash();
@@ -163,67 +105,96 @@ public class PowersAchtungBaby extends NewDashPreset {
         }
     }
 
+    public void invisiburstClient(){
+        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+        tryPowerPacket(PowerIndex.POWER_2);
+    }
+
     public void switchModeClient(){
-            SurvivorTarget = null;
-            EntityTargetOne = null;
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
             tryPowerPacket(PowerIndex.POWER_1);
     }
 
 
 
-    public void initializeTargets(int x, int y, int z){
-
-
-        Entity targ = this.self.level().getEntity(x);
-        if (targ instanceof SurvivorEntity SE){
-            SurvivorTarget = SE;
-        }
-        EntityTargetOne = this.self.level().getEntity(y);
-        EntityTargetTwo = this.self.level().getEntity(z);
-    }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         switch (move)
         {
             case PowerIndex.POWER_1 -> {
-                return switchAngerSelectionMode();
+                return invisibleVisionSwitch();
             }
-            case PowerIndex.POWER_2_SNEAK -> {
-                return removeAllSurvivors();
+            case PowerIndex.POWER_2 -> {
+                return invisibleBurst();
             }
         }
         return super.setPowerOther(move,lastMove);
     }
 
-    @Override
-    public boolean highlightsEntity(Entity ent,Player player){
-        if (ent != null) {
-            if (InvisibleVisionOn()) {
-                if (
-                        (SurvivorTarget != null  && ent.is(SurvivorTarget)) ||
-                                (EntityTargetOne != null && ent.is(EntityTargetOne))
-                ) {
-                    return true;
-                }
+    public boolean invisibleBurst(){
+        if (this.self.level() instanceof ServerLevel sl){
+            Vec3 pos = new Vec3(this.self.getX(),
+                    this.self.getY() +(this.self.getBbHeight()*0.5),
+                    this.self.getZ());
+            sl.sendParticles(ModParticles.BABY_CRACKLE,
+                    pos.x(),
+                    pos.y(),
+                    pos.z(),
+                    0,0, 0, 0, 0);
+            playStandUserOnlySoundsIfNearby(BURST, 27, false,false);
+            spawnExplosionParticles(this.self.level(), pos, 100, 0.5);
 
-                Entity highlights = getHighlighter();
-                if (highlights != null && highlights.is(ent)){
-                    return true;
+            float range = 5;
+            List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.self.level(), this.getSelf().blockPosition(), range+1);
+
+            if (!mobsInRange.isEmpty()) {
+                for (Entity ent : mobsInRange) {
+                    if (ent.distanceTo(this.self) <= range){
+                        IEntityAndData entityAndData = ((IEntityAndData) ent);
+                        entityAndData.roundabout$setTrueInvisibility(300);
+                    }
                 }
             }
+
         }
+
+        return true;
+    }
+
+
+    public static void spawnExplosionParticles(Level level, Vec3 center, int particleCount, double speed) {
+        if (!(level instanceof ServerLevel serverLevel)) return;
+
+        RandomSource random = level.random;
+
+        for (int i = 0; i < particleCount; i++) {
+            // Random direction on the unit sphere
+            double x = random.nextFloat()-0.5F;
+            double y = random.nextFloat()-0.5F;
+            double z = random.nextFloat()-0.5F;
+
+            serverLevel.sendParticles(
+                    ModParticles.MAGIC_DUST, // Use another ParticleOptions if desired
+                    center.x, center.y, center.z,
+                    0, // count (we send 1 at a time in a loop)
+                    x, y, z, speed
+            );
+        }
+    }
+
+    @Override
+    public boolean highlightsEntity(Entity ent,Player player){
+        /**
+        if (ent.isInvisibleTo())
+        if (invisibleVisionOn() && MainUtil.getEntityIsTrulyInvisible(ent) && MainUtil.canActuallyHitInvolved(this.self,ent)){
+            return true;
+        }
+         **/
         return false;
     }
     @Override
     public int highlightsEntityColor(Entity ent, Player player){
-        if (
-                (SurvivorTarget != null && ent != null && ent.is(SurvivorTarget)) ||
-                        (EntityTargetOne != null && ent != null && ent.is(EntityTargetOne))
-        ){
-            return 4971295;
-        }
-        return 11283968;
+        return 14806268;
     }
 
     public StandEntity displayStand = null;
@@ -236,38 +207,14 @@ public class PowersAchtungBaby extends NewDashPreset {
     public Entity EntityTargetTwo = null;
     public boolean selectTarget(){
         setRageCupidCooldown();
-        unloadTargets();
         SurvivorEntity surv = SurvivorTarget;
         if (surv != null && EntityTargetOne instanceof LivingEntity LE && EntityTargetTwo instanceof LivingEntity LE2){
             surv.matchEntities(LE,LE2);
         }
         return true;
     }
+
     public void selectTargetClient(){
-        Entity TE = MainUtil.getTargetEntity(this.self, getCupidHighlightRange(), 15);
-        if (SurvivorTarget == null){
-            if (TE instanceof SurvivorEntity SE && (SE.getActivated() || getCreative())){
-                SurvivorTarget = SE;
-                this.self.playSound(ModSounds.SURVIVOR_PLACE_EVENT, 1F, 1.5F);
-            }
-        } else if (EntityTargetOne == null){
-            if (SurvivorEntity.canZapEntity(TE) && canUseZap(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()){
-                EntityTargetOne = TE;
-                this.self.playSound(ModSounds.SURVIVOR_PLACE_EVENT, 1F, 1.5F);
-            }
-        } else {
-            if (SurvivorEntity.canZapEntity(TE) && canUseZap(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange() && !EntityTargetOne.is(TE)){
-                /**Passing 3 integers is something a block pos can do, so why not just use that packet*/
-
-                if (!this.onCooldown(PowerIndex.SKILL_4)) {
-                    setRageCupidCooldown();
-                    tryTripleIntPacket(PowerIndex.POWER_4_BONUS, SurvivorTarget.getId(), EntityTargetOne.getId(), TE.getId());
-
-                    SurvivorTarget = null;
-                    EntityTargetOne = null;
-                }
-            }
-        }
     }
     public boolean canUseStillStandingRecharge(byte bt){
         if (bt == PowerIndex.SKILL_2)
@@ -286,48 +233,6 @@ public class PowersAchtungBaby extends NewDashPreset {
     }
 
 
-    public int lastPlacementTime = -1;
-    @Override
-    public void tickMobAI(LivingEntity attackTarget){
-        lastPlacementTime--;
-        if (lastPlacementTime <= -1){
-            lastPlacementTime = 600;
-            createSurvivor(this.self.getPosition(1),true);
-        }
-    }
-
-    public void despawnSurvivorClient(){
-        tryPowerPacket(PowerIndex.POWER_2_SNEAK);
-    }
-    @Override
-    public boolean tryPosPower(int move, boolean forced, Vec3 pos) {
-        if (move == PowerIndex.POWER_2) {
-            createSurvivor(pos,false);
-            return true;
-        }
-        return tryPower(move, forced);
-    }
-
-    boolean thisistheend=false;
-    @Override
-    public void tickStandRejection(MobEffectInstance effect) {
-        if (!this.getSelf().level().isClientSide()) {
-            if (effect.getDuration() == 50) {
-                createSurvivor(this.self.getPosition(1F),true);
-                if (tempstand != null) {
-                    List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.self.level(), this.self.blockPosition(), ClientNetworking.getAppropriateConfig().survivorSettings.survivorRange, this.self);
-                    LivingEntity firstTarget = null;
-                    if (!mobsInRange.isEmpty()) {
-                        for (Entity ent : mobsInRange) {
-                            if (SurvivorEntity.canZapEntity(ent) && canUseZap(ent) && ent instanceof LivingEntity LE) {
-                                tempstand.matchEntities(this.self,LE);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     public boolean canUseZap(Entity ent) {
         if (ent instanceof LivingEntity LE &&
@@ -342,63 +247,12 @@ public class PowersAchtungBaby extends NewDashPreset {
         return true;
     }
 
-    public void createSurvivor(Vec3 pos, boolean activated){
-
-        if (isClient() || (!this.onCooldown(PowerIndex.SKILL_2) || !ClientNetworking.getAppropriateConfig().survivorSettings.SummonSurvivorCooldownCooldownUsesServerLatency)) {
-            int cooldown = ClientNetworking.getAppropriateConfig().survivorSettings.SummonSurvivorCooldownV2;
-            this.setCooldown(PowerIndex.SKILL_2, cooldown);
-            if (!isClient()) {
-                blipStand(pos,activated);
-
-            }
-        }
-    }
 
     public void setRageCupidCooldown(){
         int cooldown = ClientNetworking.getAppropriateConfig().survivorSettings.rageCupidCooldown;
         this.setCooldown(PowerIndex.SKILL_4, cooldown);
     }
 
-    public Entity getHighlighter(){
-        Entity TE = MainUtil.getTargetEntity(this.self, getCupidHighlightRange(), 15);
-        if (SurvivorTarget == null){
-            if (TE instanceof SurvivorEntity SE && (SE.getActivated() || getCreative())){
-                return SE;
-            }
-        } else if (EntityTargetOne == null){
-            if (SurvivorEntity.canZapEntity(TE) && canUseZap(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()){
-                return TE;
-            }
-        } else {
-            if (SurvivorEntity.canZapEntity(TE) && canUseZap(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()
-            && !EntityTargetOne.is(TE)){
-                return TE;
-            }
-        }
-        return null;
-    }
-
-    SurvivorEntity tempstand = null;
-    public void blipStand(Vec3 pos, boolean activated){
-        StandEntity stand = ModEntities.SURVIVOR.create(this.getSelf().level());
-        if (stand instanceof SurvivorEntity SE) {
-            StandUser user = getStandUserSelf();
-            stand.absMoveTo(pos.x(), pos.y(), pos.z());
-            stand.setSkin(user.roundabout$getStandSkin());
-            stand.setIdleAnimation(user.roundabout$getIdlePos());
-            stand.setMaster(this.self);
-            addSurvivorToList(SE);
-            SE.setRandomSize((float) (Math.random()*0.4F));
-            SE.setYRot(this.self.getYHeadRot() % 360);
-            if (activated){
-                SE.setActivated(true);
-            }
-            tempstand = SE;
-            this.self.level().addFreshEntity(stand);
-            playStandUserOnlySoundsIfNearby(PLACE, 100, false, false);
-        }
-
-    }
 
     @Override
     public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
@@ -417,43 +271,12 @@ public class PowersAchtungBaby extends NewDashPreset {
 
 
     /** if = -1, not melt dodging */
-    public int meltDodgeTicks = -1;
 
-    public int getCupidRange(){
-        if (getCreative())
-            return ClientNetworking.getAppropriateConfig().survivorSettings.survivorCupidCreativeRange;
-        return ClientNetworking.getAppropriateConfig().survivorSettings.survivorCupidRange;
-    }
-    public int getCupidHighlightRange(){
-        return ClientNetworking.getAppropriateConfig().survivorSettings.survivorCupidHighlightRange;
-    }
 
-    public void unloadTargets(){
-        if (SurvivorTarget != null){
-            if ((!SurvivorTarget.getActivated() && !getCreative()) || SurvivorTarget.isRemoved() || !SurvivorTarget.isAlive()){
-                SurvivorTarget = null;
-            }
-        }
-        if (EntityTargetOne != null){
-            if (SurvivorTarget == null ||
-                    EntityTargetOne.isRemoved() || !EntityTargetOne.isAlive() ||
-                    (EntityTargetOne.distanceTo(SurvivorTarget) > getCupidRange())){
-                SurvivorTarget = null;
-            }
-        }
-        if (EntityTargetTwo != null){
-            if (SurvivorTarget == null || EntityTargetOne == null ||
-                    EntityTargetTwo.isRemoved() || !EntityTargetTwo.isAlive() ||
-                    (EntityTargetTwo.distanceTo(SurvivorTarget) > getCupidRange())
-            || (EntityTargetOne != null && EntityTargetOne.is(EntityTargetTwo))){
-                EntityTargetTwo = null;
-            }
-        }
-    }
+
     @Override
     public void tickPower() {
         if (this.self.level().isClientSide()){
-            unloadTargets();
         }
         super.tickPower();
     }
@@ -535,16 +358,10 @@ public class PowersAchtungBaby extends NewDashPreset {
         switch (soundChoice)
         {
             case SoundIndex.SUMMON_SOUND -> {
-                return ModSounds.SURVIVOR_SUMMON_EVENT;
+                return ModSounds.SUMMON_ACHTUNG_EVENT;
             }
-            case PLACE -> {
-                return ModSounds.SURVIVOR_PLACE_EVENT;
-            }
-            case RETRACT -> {
-                return ModSounds.SURVIVOR_REMOVE_EVENT;
-            }
-            case SHOCK -> {
-                return ModSounds.SURVIVOR_SHOCK_EVENT;
+            case BURST -> {
+                return ModSounds.ACHTUNG_BURST_EVENT;
             }
         }
         return super.getSoundFromByte(soundChoice);
@@ -556,9 +373,7 @@ public class PowersAchtungBaby extends NewDashPreset {
     }
 
     public static final byte
-            PLACE = 61,
-            RETRACT = 62,
-            SHOCK = 63;
+            BURST = 61;
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.throw_bottle",
@@ -587,11 +402,11 @@ public class PowersAchtungBaby extends NewDashPreset {
     }
 
 
-    public boolean switchAngerSelectionMode(){
+    public boolean invisibleVisionSwitch(){
         if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
-            getStandUserSelf().roundabout$setUniqueStandModeToggle(!InvisibleVisionOn());
+            getStandUserSelf().roundabout$setUniqueStandModeToggle(!invisibleVisionOn());
             if (!isClient() && this.self instanceof ServerPlayer PE) {
-                if (InvisibleVisionOn()) {
+                if (invisibleVisionOn()) {
                     PE.displayClientMessage(Component.translatable("text.roundabout.achtung.vision_on").withStyle(ChatFormatting.AQUA), true);
                 } else {
                     PE.displayClientMessage(Component.translatable("text.roundabout.achtung.vision_off").withStyle(ChatFormatting.AQUA), true);
@@ -607,7 +422,7 @@ public class PowersAchtungBaby extends NewDashPreset {
         if (keyIsDown) {
             if (!holdAttack) {
                 holdAttack = true;
-                if (InvisibleVisionOn()) {
+                if (invisibleVisionOn()) {
                     selectTargetClient();
                 }
             }

@@ -78,7 +78,7 @@ public class D4CEntity extends FollowingStandEntity {
             if (PD4C.meltDodgeTicks != -1)
                 PD4C.meltDodgeTicks += 1;
 
-            if (PD4C.meltDodgeTicks >= ClientNetworking.getAppropriateConfig().durationsInTicks.D4CMeltDodgeTicks)
+            if (PD4C.meltDodgeTicks >= 20) //insert melt dodge ticks cooldown here
                 PD4C.meltDodgeTicks = -1;
         }
     }

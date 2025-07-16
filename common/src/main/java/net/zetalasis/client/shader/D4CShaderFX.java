@@ -44,7 +44,8 @@ public class D4CShaderFX implements IRendererCallback {
             return;
 
         ClientConfig clientConfig = ConfigManager.getClientConfig();
-        if (shouldShowDimensionFx && clientConfig.experiments.d4cShouldUseColorShader)
+        if (shouldShowDimensionFx && //clientConfig.experiments.d4cShouldUseColorShader
+                false == true)
         {
             if (RPostShaderRegistry.D4C_ALT_DIMENSION != null)
             {

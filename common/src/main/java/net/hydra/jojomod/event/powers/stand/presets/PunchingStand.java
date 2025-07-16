@@ -1,14 +1,12 @@
 package net.hydra.jojomod.event.powers.stand.presets;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
-import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
@@ -114,9 +112,9 @@ public class PunchingStand extends DashPreset {
         } else {
             this.activePowerPhase++;
             if (this.activePowerPhase == 3) {
-                this.attackTimeMax= ClientNetworking.getAppropriateConfig().cooldownsInTicks.finalStandPunchInString;
+                this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown;
             } else {
-                this.attackTimeMax= ClientNetworking.getAppropriateConfig().cooldownsInTicks.standPunch;
+                this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchCooldown;
             }
 
         }
@@ -340,7 +338,7 @@ public class PunchingStand extends DashPreset {
     }
 
     public float getPunchAngle(){
-        return ClientNetworking.getAppropriateConfig().basePunchAngle;
+        return ClientNetworking.getAppropriateConfig().generalStandSettings.basePunchAngle;
     }
 
     @Override

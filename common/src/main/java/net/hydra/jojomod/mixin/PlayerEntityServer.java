@@ -124,7 +124,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
         if ($$0.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_KEEP_STANDS_ON_DEATH)){
             ((StandUser)this).roundabout$setStandDisc(MainUtil.saveToDiscData($$0,((StandUser)$$0).roundabout$getStandDisc()));
         } else {
-            if (ClientNetworking.getAppropriateConfig().standDiscsDropWithKeepGameRuleOff){
+            if (ClientNetworking.getAppropriateConfig().itemSettings.standDiscsDropWithKeepGameRuleOff){
                 ItemStack disc = MainUtil.saveToDiscData($$0,((StandUser)$$0).roundabout$getStandDisc());
                 $$0.drop(disc,true,false);
             }

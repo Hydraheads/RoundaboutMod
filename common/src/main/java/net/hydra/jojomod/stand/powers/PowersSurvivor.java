@@ -449,11 +449,11 @@ public class PowersSurvivor extends NewDashPreset {
                 return SE;
             }
         } else if (EntityTargetOne == null){
-            if (SurvivorEntity.canZapEntity(TE) && canUseZap(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()){
+            if (SurvivorEntity.canZapEntity(TE) && canUseZap(TE) && !TE.isInvisible() && TE.distanceTo(SurvivorTarget) <= getCupidRange()){
                 return TE;
             }
         } else {
-            if (SurvivorEntity.canZapEntity(TE) && canUseZap(TE) && TE.distanceTo(SurvivorTarget) <= getCupidRange()
+            if (SurvivorEntity.canZapEntity(TE) && canUseZap(TE) && !TE.isInvisible() && TE.distanceTo(SurvivorTarget) <= getCupidRange()
             && !EntityTargetOne.is(TE)){
                 return TE;
             }
@@ -508,7 +508,7 @@ public class PowersSurvivor extends NewDashPreset {
         return ClientNetworking.getAppropriateConfig().survivorSettings.survivorCupidRange;
     }
     public int getCupidHighlightRange(){
-        return ClientNetworking.getAppropriateConfig().survivorSettings.survivorCupidHighlightRange;
+        return 100;
     }
 
     public void unloadTargets(){
@@ -562,7 +562,8 @@ public class PowersSurvivor extends NewDashPreset {
             SILVER=6,
             GHAST=7,
             ENDER=8,
-            CONDUIT=9;
+            CONDUIT=9,
+            CAKE=10;
 
     @Override
     public List<Byte> getSkinList() {
@@ -575,7 +576,8 @@ public class PowersSurvivor extends NewDashPreset {
                 SILVER,
                 GHAST,
                 ENDER,
-                CONDUIT
+                CONDUIT,
+                CAKE
         );
     }
 
@@ -602,6 +604,7 @@ public class PowersSurvivor extends NewDashPreset {
             case GHAST -> Component.translatable("skins.roundabout.survivor.ghast");
             case ENDER -> Component.translatable("skins.roundabout.survivor.ender");
             case CONDUIT -> Component.translatable("skins.roundabout.survivor.conduit");
+            case CAKE -> Component.translatable("skins.roundabout.survivor.cake");
             default -> Component.translatable("skins.roundabout.survivor.base");
         };
     }

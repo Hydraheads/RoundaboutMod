@@ -1,11 +1,13 @@
 package net.hydra.jojomod.entity.stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.PreRenderEntity;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
@@ -85,7 +87,7 @@ public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity
     @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.getUser() != null && MainUtil.isStandDamage(source) && !forceDespawnSet){
-            forceDespawnSet = true;
+            forceDespawn(true);
             return this.getUser().hurt(source,amount*0.5F);
         }
         return false;
@@ -174,7 +176,7 @@ public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity
 
     public static boolean canZapEntity(Entity ent){
         return (ent != null && ent.isAlive() && !ent.isRemoved() && (ent instanceof Mob || ent instanceof Player)
-                && !(ent instanceof StandEntity) && ent.isPickable() && !ent.isInvulnerable() &&
+                && !(ent instanceof StandEntity)&& !(ent instanceof FallenMob) && ent.isPickable() && !ent.isInvulnerable() &&
                 !(ent instanceof Player PL && PL.isCreative()) &&
                 ent instanceof LivingEntity LE
                 && !((StandUser) LE).roundabout$isBubbleEncased());

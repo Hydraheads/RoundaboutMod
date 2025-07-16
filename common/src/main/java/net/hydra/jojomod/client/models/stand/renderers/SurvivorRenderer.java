@@ -45,6 +45,9 @@ public class SurvivorRenderer<M extends StandEntity> extends StandRenderer<Survi
     private static final ResourceLocation CONDUIT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/conduit.png");
     private static final ResourceLocation CONDUIT_ACTIVATED = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/activated/conduit.png");
 
+    private static final ResourceLocation CAKE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/cake.png");
+    private static final ResourceLocation CAKE_ACTIVATED = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/activated/cake.png");
+
     public SurvivorRenderer(EntityRendererProvider.Context context) {
         super(context, new SurvivorModel<>(context.bakeLayer(ModEntityRendererClient.SURVIVOR_LAYER)),0f);
     }
@@ -69,6 +72,8 @@ public class SurvivorRenderer<M extends StandEntity> extends StandRenderer<Survi
                 return ENDER_ACTIVATED;
             if (BT == PowersSurvivor.CONDUIT)
                 return CONDUIT_ACTIVATED;
+            if (BT == PowersSurvivor.CAKE)
+                return CAKE_ACTIVATED;
             return BASE_ACTIVATED;
         }
         if (BT == PowersSurvivor.RED)
@@ -87,6 +92,8 @@ public class SurvivorRenderer<M extends StandEntity> extends StandRenderer<Survi
             return ENDER;
         if (BT == PowersSurvivor.CONDUIT)
             return CONDUIT;
+        if (BT == PowersSurvivor.CAKE)
+            return CAKE;
         return BASE;
     }
 

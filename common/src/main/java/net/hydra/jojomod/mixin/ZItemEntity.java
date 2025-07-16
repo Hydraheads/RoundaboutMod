@@ -3,14 +3,21 @@ package net.hydra.jojomod.mixin;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IItemEntityAccess;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.FogBlockItem;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -20,6 +27,9 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import javax.annotation.Nullable;
+import java.util.UUID;
 
 @Mixin(ItemEntity.class)
 public abstract class ZItemEntity extends Entity implements IItemEntityAccess {
@@ -48,6 +58,17 @@ public abstract class ZItemEntity extends Entity implements IItemEntityAccess {
 
     public ZItemEntity(EntityType<?> $$0, Level $$1) {
         super($$0, $$1);
+    }
+    @Inject(method = "setThrower", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$setThrower(@Nullable UUID $$0, CallbackInfo ci) {
+        if ($$0 != null) {
+            Player pl =  this.level().getPlayerByUUID($$0);
+            if (pl != null){
+                if (MainUtil.getEntityIsTrulyInvisible(pl) && ClientNetworking.getAppropriateConfig().achtungSettings.hidesShotProjectiles){
+                    ((IEntityAndData)this).roundabout$setTrueInvisibility(MainUtil.getEntityTrulyInvisibleTicks(pl));
+                }
+            }
+        }
     }
     @Inject(method = "tick", at = @At(value = "HEAD"))
     protected void roundabout$tick(CallbackInfo ci) {

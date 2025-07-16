@@ -97,13 +97,6 @@ public class MainUtil {
         isClient = true;
     }
 
-    /**
-    public static Set<BlockPos> hiddenBlocks = new HashSet<>();
-
-    public static Set<BlockPos> getHiddenBlocks(){
-        return hiddenBlocks;
-    }
-     **/
 
     public static boolean isMeleeDamage(DamageSource di){
         if (di.is(DamageTypes.PLAYER_ATTACK) || di.is(DamageTypes.MOB_ATTACK))
@@ -187,6 +180,20 @@ public class MainUtil {
         }
         return false;
     }
+    public static boolean getEntityIsTrulyInvisible(Entity ent){
+        if (ent != null){
+            IEntityAndData entityAndData = ((IEntityAndData) ent);
+            return entityAndData.roundabout$getTrueInvisibility() > -1;
+        }
+        return false;
+    }
+    public static int getEntityTrulyInvisibleTicks(Entity ent){
+        if (ent != null){
+            IEntityAndData entityAndData = ((IEntityAndData) ent);
+            return entityAndData.roundabout$getTrueInvisibility();
+        }
+        return -1;
+    }
     public static boolean isMobOrItsMounts(Entity ent, Entity checkAgaist){
         if (ent != null && checkAgaist != null){
             if (ent.is(checkAgaist)){
@@ -237,11 +244,11 @@ public class MainUtil {
     public static final TargetingConditions plsWorkTargetting = TargetingConditions.forCombat().range(20.0).ignoreInvisibilityTesting();
 
     public static double getWorthyOdds(Mob mob) {
-        if ((isBossMob(mob) && !ClientNetworking.getAppropriateConfig().bossMobsCanNaturallyHaveStands)
+        if ((isBossMob(mob) && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
         || mob instanceof JojoNPC){
             return 0;
         }
-        return ClientNetworking.getAppropriateConfig().worthyMobOdds;
+        return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.worthyMobOdds;
     }
     public static boolean getIfMobIsAttacking(Mob mb){
         for (WrappedGoal wrappedGoal : ((IMob)mb).roundabout$getGoalSelector().getAvailableGoals()) {
@@ -258,26 +265,26 @@ public class MainUtil {
         return true;
     }
     public static double getStandUserOdds(Mob mob) {
-        if ((isBossMob(mob) && !ClientNetworking.getAppropriateConfig().bossMobsCanNaturallyHaveStands)
+        if ((isBossMob(mob) && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
                 || mob instanceof JojoNPC
                 || mob instanceof Vex){
             return 0;
         } else if (mob instanceof AbstractVillager){
-            return ClientNetworking.getAppropriateConfig().standUserVillagerOdds;
+            return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.standUserVillagerOdds;
         }
-        return ClientNetworking.getAppropriateConfig().standUserOdds;
+        return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.standUserOdds;
     }
     public static double getWorthyBreedBonus(Mob mob) {
         if (mob instanceof AbstractVillager){
-            return ClientNetworking.getAppropriateConfig().userAndWorthyBreedingOddsBonus *ClientNetworking.getAppropriateConfig().multiplyAboveForVillagerBreeding;
+            return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.userAndWorthyBreedingOddsBonus *ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.multiplyAboveForVillagerBreeding;
         }
-        return ClientNetworking.getAppropriateConfig().userAndWorthyBreedingOddsBonus;
+        return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.userAndWorthyBreedingOddsBonus;
     }
     public static double getStandUserBreedBonus(Mob mob) {
         if (mob instanceof AbstractVillager){
-            return ClientNetworking.getAppropriateConfig().userAndWorthyBreedingOddsBonus *ClientNetworking.getAppropriateConfig().multiplyAboveForVillagerBreeding;
+            return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.userAndWorthyBreedingOddsBonus *ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.multiplyAboveForVillagerBreeding;
         }
-        return ClientNetworking.getAppropriateConfig().userAndWorthyBreedingOddsBonus;
+        return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.userAndWorthyBreedingOddsBonus;
     }
     public static boolean isHumanoid(LivingEntity LE){
         return (LE instanceof Zombie || LE instanceof AbstractSkeleton
@@ -548,7 +555,7 @@ public class MainUtil {
         return null;
     }
     public static boolean getMobBleed(Entity Mob) {
-        if (ClientNetworking.getAppropriateConfig().disableBleedingAndBloodSplatters){
+        if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.disableBleedingAndBloodSplatters){
             return false;
         }
 
@@ -664,7 +671,7 @@ public class MainUtil {
                 }
             }
         } else if (ent instanceof Player PE){
-            if (PE.experienceLevel < ClientNetworking.getAppropriateConfig().levelsToGetStand && ((StandUser) PE).roundabout$getStandDisc().isEmpty()){
+            if (PE.experienceLevel < ClientNetworking.getAppropriateConfig().itemSettings.levelsToGetStand && ((StandUser) PE).roundabout$getStandDisc().isEmpty()){
                 return true;
             }
         }
@@ -678,9 +685,9 @@ public class MainUtil {
                 }
             }
         } else if (ent instanceof Player PL){
-            if (ClientNetworking.getAppropriateConfig().canAwakenOtherPlayersWithArrows){
+            if (ClientNetworking.getAppropriateConfig().itemSettings.canAwakenOtherPlayersWithArrows){
                 if (((StandUser)PL).roundabout$getStandDisc().isEmpty()){
-                    return PL.experienceLevel >= ClientNetworking.getAppropriateConfig().levelsToGetStand;
+                    return PL.experienceLevel >= ClientNetworking.getAppropriateConfig().itemSettings.levelsToGetStand;
                 }
             }
         }
@@ -688,11 +695,11 @@ public class MainUtil {
     }
 
     public static float gasDamageMultiplier(){
-        return (float) (0.83F * (ClientNetworking.getAppropriateConfig().damageMultipliers.gasolineExplosion *0.01));
+        return (float) (0.83F * (ClientNetworking.getAppropriateConfig().itemSettings.gasolineExplosionDamage *0.01));
     }
 
     public static void makeBleed(Entity entity, int level, int ticks, Entity source){
-        if (ClientNetworking.getAppropriateConfig().disableBleedingAndBloodSplatters){
+        if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.disableBleedingAndBloodSplatters){
             return;
         }
         if (getMobBleed(entity)){
@@ -998,7 +1005,7 @@ public class MainUtil {
     public static boolean canPlaceOnClaim(Player player,BlockHitResult blockHit){
         //Seems counterintuitive but most abilities have their own ways of handling this, so I'll just make it return True.
 
-        if(!ClientNetworking.getAppropriateConfig().doExtraGriefChecksForClaims || !MainUtil.getIsGamemodeApproriateForGrief(player)){
+        if(!ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims || !MainUtil.getIsGamemodeApproriateForGrief(player)){
             return true;
 
         }
@@ -1449,9 +1456,62 @@ public class MainUtil {
 
     }
 
+    public static float hasModifiedPartialVisibility(Entity entity){
+        float basis = 1F;
+        if (getEntityIsTrulyInvisible(entity)){
+            basis *=0.4F;
+        }
+        return basis;
+    }
+    public static boolean canActuallyHitInvolved(Entity self, Entity entity){
+        if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.generalDetectionGoThroughDoorsAndCorners){
+            return true;
+        }
+        Vec3 from = new Vec3(self.getX(), self.getY(), self.getZ()); // your position
+        Vec3 to = entity.getEyePosition(1.0F); // where the entity's eyes are
+
+        BlockHitResult result = self.level().clip(new ClipContext(
+                from,
+                to,
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.NONE,
+                self
+        ));
+        boolean isBlocked = result.getType() != HitResult.Type.MISS &&
+                result.getLocation().distanceTo(from) < to.distanceTo(from);
+
+        Vec3 from2 = new Vec3(entity.getX(), entity.getY(), entity.getZ()); // your position
+        Vec3 to2 = self.getEyePosition(1.0F); // where the entity's eyes are
+
+        BlockHitResult result2 = self.level().clip(new ClipContext(
+                from2,
+                to2,
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.NONE,
+                self
+        ));
+        boolean isBlocked2 = result2.getType() != HitResult.Type.MISS &&
+                result2.getLocation().distanceTo(from2) < to2.distanceTo(from2);
+
+
+        Vec3 from3 = new Vec3(entity.getX(), entity.getY(), entity.getZ()); // your position
+        Vec3 to3 = self.getEyePosition(1.0F); // where the entity's eyes are
+
+        BlockHitResult result3 = self.level().clip(new ClipContext(
+                from3,
+                to2,
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.NONE,
+                self
+        ));
+        boolean isBlocked3 = result3.getType() != HitResult.Type.MISS &&
+                result3.getLocation().distanceTo(from3) < to3.distanceTo(from3);
+
+        return !isBlocked || !isBlocked2 || !isBlocked3;
+    }
 
     public static boolean canActuallyHit(Entity self, Entity entity){
-        if (ClientNetworking.getAppropriateConfig().generalDetectionGoThroughDoorsAndCorners){
+        if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.generalDetectionGoThroughDoorsAndCorners){
             return true;
         }
         Vec3 from = new Vec3(self.getX(), self.getY(), self.getZ()); // your position
@@ -1831,14 +1891,14 @@ public class MainUtil {
         } else if (context == PacketDataIndex.SINGLE_BYTE_SCOPE) {
             if (player != null && ((StandUser)player).roundabout$getStand() instanceof StarPlatinumEntity SE){
                 SE.setScoping(true);
-                if (ClientNetworking.getAppropriateConfig().starPlatinumScopeUsesPotionEffectForNightVision) {
+                if (ClientNetworking.getAppropriateConfig().starPlatinumSettings.starPlatinumScopeUsesPotionEffectForNightVision) {
                     player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 1000000, 21, false, false), null);
                 }
             }
         } else if (context == PacketDataIndex.SINGLE_BYTE_SCOPE_OFF) {
             if (player != null && ((StandUser)player).roundabout$getStand() instanceof StarPlatinumEntity SE){
                 SE.setScoping(false);
-                if (ClientNetworking.getAppropriateConfig().starPlatinumScopeUsesPotionEffectForNightVision) {
+                if (ClientNetworking.getAppropriateConfig().starPlatinumSettings.starPlatinumScopeUsesPotionEffectForNightVision) {
                     MobEffectInstance ME = player.getEffect(MobEffects.NIGHT_VISION);
                     if (ME != null && ME.getDuration() >= 100000 && ME.getDuration() >= 100000 && ME.getAmplifier() > 20) {
                         player.removeEffect(MobEffects.NIGHT_VISION);

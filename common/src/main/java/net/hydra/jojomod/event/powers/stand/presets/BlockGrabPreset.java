@@ -59,7 +59,7 @@ public class BlockGrabPreset extends PunchingStand{
     public int freezeAttackInput = -1;
 
     public boolean throwObject(ItemStack item){
-        int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.objectThrow;
+        int cdr = ClientNetworking.getAppropriateConfig().generalStandSettings.objectThrowCooldown;
         ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, cdr);
         this.setCooldown(PowerIndex.SKILL_2, cdr);
         /***/
@@ -192,7 +192,7 @@ public class BlockGrabPreset extends PunchingStand{
             LivingEntity stand = getStandEntity(this.self);
             if (stand != null && !stand.getPassengers().isEmpty()){
                 if (this.self instanceof Player PE) {
-                    int cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.mobThrowInterruptv2;
+                    int cdr = ClientNetworking.getAppropriateConfig().generalStandSettings.mobThrowInterruptCooldown;
 
                     setCooldown(PowerIndex.SKILL_2, cdr);
                     ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) PE), PowerIndex.SKILL_2, cdr);
@@ -287,9 +287,9 @@ public class BlockGrabPreset extends PunchingStand{
                     if (!this.getSelf().level().isClientSide) {
                         int cdr = 0;
                         if (this.getSelf() instanceof Player pl && pl.isCrouching()){
-                            cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.mobThrowAttack;
+                            cdr = ClientNetworking.getAppropriateConfig().generalStandSettings.mobThrowAttackCooldown;
                         } else {
-                            cdr = ClientNetworking.getAppropriateConfig().cooldownsInTicks.mobThrow;
+                            cdr = ClientNetworking.getAppropriateConfig().generalStandSettings.mobThrowCooldown;
                         }
 
                         ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, cdr);
@@ -670,8 +670,8 @@ public class BlockGrabPreset extends PunchingStand{
     public void addItem(StandEntity standEntity){
         addItemLight(standEntity);
 
-        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().cooldownsInTicks.objectPocket);
-        this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().cooldownsInTicks.objectPocket);
+        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
+        this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
     }
     public void addItemLight(StandEntity standEntity){
         if (canAddItem(standEntity.getHeldItem(), ((Player) this.getSelf()).getInventory())) {
