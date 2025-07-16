@@ -1683,6 +1683,8 @@
   "config.roundabout.hidesHeldItems.desc": "Makes the invisibility hide the item you are holding.",
   "config.roundabout.hidesShotProjectiles.name": "Hides Launched Items",
   "config.roundabout.hidesShotProjectiles.desc": "Makes the invisibility apply to items you throw, shoot, drop, etc.",
+  "config.roundabout.revealLocationWhenDamagingOrHurt.name": "Damage Reveals Self",
+  "config.roundabout.revealLocationWhenDamagingOrHurt.desc": "If damage dealt to and damage received from an entity removes your invisibility.",
 
   "config.roundabout.theWorldAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.theWorldAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",

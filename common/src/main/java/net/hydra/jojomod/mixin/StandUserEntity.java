@@ -2998,14 +2998,33 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
 
 
-            if ($$0.getEntity() instanceof Player pe && !$$0.isIndirect()
+
+
+            if (!$$0.isIndirect()
                     && !$$0.is(DamageTypes.THORNS)){
-                if (((StandUser)pe).roundabout$getStandPowers().interceptSuccessfulDamageDealtEvent($$0,$$1, ((LivingEntity)(Object)this))){
-                    ci.cancel();
-                    return;
+                if ($$0.getEntity() instanceof Player pe){
+                    if (((StandUser)pe).roundabout$getStandPowers().interceptSuccessfulDamageDealtEvent($$0,$$1, ((LivingEntity)(Object)this))){
+                        ci.cancel();
+                        return;
+                    }
+                }
+                if (((IEntityAndData)this).roundabout$getTrueInvisibility() > -1 &&
+                        ClientNetworking.getAppropriateConfig().achtungSettings.revealLocationWhenDamagingOrHurt){
+                    ((IEntityAndData)this).roundabout$setTrueInvisibility(-1);
+                }
+                if ($$0.getEntity() != null){
+                    if (((IEntityAndData)$$0.getEntity()).roundabout$getTrueInvisibility() > -1 &&
+                            ClientNetworking.getAppropriateConfig().achtungSettings.revealLocationWhenDamagingOrHurt){
+                        ((IEntityAndData)$$0.getEntity()).roundabout$setTrueInvisibility(-1);
+                    }
+                }
+                if ($$0.getDirectEntity() != null){
+                    if (((IEntityAndData)$$0.getDirectEntity()).roundabout$getTrueInvisibility() > -1 &&
+                            ClientNetworking.getAppropriateConfig().achtungSettings.revealLocationWhenDamagingOrHurt){
+                        ((IEntityAndData)$$0.getDirectEntity()).roundabout$setTrueInvisibility(-1);
+                    }
                 }
             }
-
         }
         if (roundabout$mutualActuallyHurt($$0,$$1)){
             ci.cancel();
