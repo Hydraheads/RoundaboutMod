@@ -600,7 +600,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
             setSkillIcon(context, x, y, 2, StandIcons.PLUNDER_BUBBLE, PowerIndex.SKILL_2);
         }
 
-        if (canVault()) {
+        if (canVault() ) {
             setSkillIcon(context, x, y, 3, StandIcons.SOFT_AND_WET_VAULT, PowerIndex.GLOBAL_DASH);
         } else if (canFallBrace()) {
             setSkillIcon(context, x, y, 3, StandIcons.SOFT_AND_WET_FALL_CATCH, PowerIndex.NONE);

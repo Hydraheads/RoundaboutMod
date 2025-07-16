@@ -148,6 +148,8 @@ public class NewDashPreset extends StandPowerRewrite {
 
     @SuppressWarnings("deprecation")
     public boolean canVault(){
+        if (this.self.onGround())
+            return false;
         Vec3 vec3d = this.getSelf().getEyePosition(0);
         Vec3 vec3d2 = this.getSelf().getViewVector(0);
         Vec3 vec3d3 = vec3d.add(vec3d2.x * 2, vec3d2.y * 2, vec3d2.z * 2);
