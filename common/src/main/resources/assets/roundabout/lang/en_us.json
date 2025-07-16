@@ -1677,6 +1677,12 @@
 
   "config.roundabout.invisibilityPotionAsWell.name": "Apply Invis Potion",
   "config.roundabout.invisibilityPotionAsWell.desc": "If you want the invisibility power to apply the potion effect as well, turn this on. This could be useful for map mods that respect players invisibility.",
+  "config.roundabout.hidesArmor.name": "Hides Armor",
+  "config.roundabout.hidesArmor.desc": "Makes the invisibility hide your armor.",
+  "config.roundabout.hidesHeldItems.name": "Hides Held Items",
+  "config.roundabout.hidesHeldItems.desc": "Makes the invisibility hide the item you are holding.",
+  "config.roundabout.hidesShotProjectiles.name": "Hides Launched Items",
+  "config.roundabout.hidesShotProjectiles.desc": "Makes the invisibility apply to items you throw, shoot, drop, etc.",
 
   "config.roundabout.theWorldAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.theWorldAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
