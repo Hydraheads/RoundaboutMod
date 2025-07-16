@@ -140,6 +140,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             ((IEntityAndData)$$0).roundabout$setExclusiveLayers(false);
         }
         ClientUtil.setThrowFadeToTheEther(1F);
+        ClientUtil.saveBufferTexture = null;
     }
 
     @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",
