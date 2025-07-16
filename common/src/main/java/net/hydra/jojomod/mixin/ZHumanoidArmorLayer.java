@@ -54,7 +54,9 @@ public class ZHumanoidArmorLayer<T extends LivingEntity, M extends HumanoidModel
     public void roundabout$Render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
         roundabout$ArmorPhase = 0;
         IEntityAndData entityAndData = ((IEntityAndData) $$3);
-        if (entityAndData.roundabout$getTrueInvisibility() > -1  && (!ClientUtil.checkIfClientCanSeeInvisAchtung()) && ClientNetworking.getAppropriateConfig() != null &&
+        if (entityAndData.roundabout$getTrueInvisibility() > -1
+                //&&  (!ClientUtil.checkIfClientCanSeeInvisAchtung())
+                && ClientNetworking.getAppropriateConfig() != null &&
                 ClientNetworking.getAppropriateConfig().achtungSettings != null &&
                 ClientNetworking.getAppropriateConfig().achtungSettings.hidesArmor){
             ci.cancel();
