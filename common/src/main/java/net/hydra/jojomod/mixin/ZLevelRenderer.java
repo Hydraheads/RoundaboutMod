@@ -100,7 +100,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
         if (entity != null){
             IEntityAndData entityAndData = ((IEntityAndData)entity);
             entityAndData.roundabout$setExclusiveLayers(true);
-            if (!(entity instanceof LivingEntity) && entityAndData.roundabout$getTrueInvisibility() > -1){
+            if (!(entity instanceof LivingEntity) && entityAndData.roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung()){
                 /**A side effect of canceling rendering like this is for Achtung on non living entities is they do not
                  * render flames while invisible, this would be an easy fix but I don't know if it is necessary.
                  * LivingEntities use Entity function getInvisible entirely.*/
@@ -112,17 +112,25 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
         }
 
         if (!roundabout$recurse) {
-
             if (entity instanceof PreRenderEntity pre) {
                 if (pre.preRender(entity, cameraX, cameraY, cameraZ, partialTick, stack, buffer)) {
                     ci.cancel();
                     ((IEntityAndData) entity).roundabout$setExclusiveLayers(false);
                 }
             }
-
-
-
         }
+
+        boolean shouldLetVisMod = true;
+        float throwFadeToTheEther = 1f;
+
+        IEntityAndData entityAndData = ((IEntityAndData) entity);
+        if (entityAndData.roundabout$getTrueInvisibility() > -1){
+            throwFadeToTheEther = throwFadeToTheEther*0.4F;
+            shouldLetVisMod = false;
+        }
+
+
+        ClientUtil.setThrowFadeToTheEther(throwFadeToTheEther);
 
     }
     @Inject(method = "renderEntity(Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V",
@@ -131,6 +139,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
         if ($$0 != null){
             ((IEntityAndData)$$0).roundabout$setExclusiveLayers(false);
         }
+        ClientUtil.setThrowFadeToTheEther(1F);
     }
 
     @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",
