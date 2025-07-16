@@ -384,6 +384,7 @@ public class ForgeEvents {
         ModEntities.STAR_PLATINUM_BASEBALL = ForgeEntities.STAR_PLATINUM_BASEBALL.get();
         ModEntities.THROWN_HARPOON = ForgeEntities.THROWN_HARPOON.get();
         ModEntities.THROWN_KNIFE = ForgeEntities.THROWN_KNIFE.get();
+        ModEntities.RATT_DART = ForgeEntities.RATT_DART.get();
         ModEntities.THROWN_MATCH = ForgeEntities.THROWN_MATCH.get();
         ModEntities.THROWN_WATER_BOTTLE = ForgeEntities.THROWN_WATER_BOTTLE.get();
         ModEntities.CROSSFIRE_HURRICANE = ForgeEntities.CROSSFIRE_HURRICANE.get();

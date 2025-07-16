@@ -304,6 +304,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "knife").toString())
             );
+    public static final RegistryObject<EntityType<RattDartEntity>> RATT_DART =
+            ENTITY_TYPES.register("knife", () ->
+                    EntityType.Builder.<RattDartEntity>of(RattDartEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "ratt_dart").toString())
+            );
     public static final RegistryObject<EntityType<HarpoonEntity>> THROWN_HARPOON =
             ENTITY_TYPES.register("harpoon", () ->
                     EntityType.Builder.<HarpoonEntity>of(HarpoonEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).

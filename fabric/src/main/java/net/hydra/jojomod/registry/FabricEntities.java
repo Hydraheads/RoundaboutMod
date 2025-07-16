@@ -367,6 +367,13 @@ public class FabricEntities {
                         EntityType.Builder.<KnifeEntity>of(KnifeEntity::new, MobCategory.MISC).
                                 sized(0.5f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":knife")
                 );
+        public static final EntityType<RattDartEntity> RATT_DART =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "ratt_dart"),
+                        EntityType.Builder.<RattDartEntity>of(RattDartEntity::new, MobCategory.MISC).
+                                sized(0.5f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":ratt_dart")
+                );
         public static final EntityType<MatchEntity> THROWN_MATCH =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -525,6 +532,7 @@ public class FabricEntities {
                 ModEntities.DARK_MIRAGE = DARK_MIRAGE;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
+                ModEntities.RATT_DART = RATT_DART;
                 ModEntities.THROWN_MATCH = THROWN_MATCH;
                 ModEntities.THROWN_WATER_BOTTLE = THROWN_WATER_BOTTLE;
                 ModEntities.CROSSFIRE_HURRICANE = CROSSFIRE_HURRICANE;
