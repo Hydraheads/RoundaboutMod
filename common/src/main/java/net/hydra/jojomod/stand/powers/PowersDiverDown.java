@@ -1,11 +1,16 @@
 package net.hydra.jojomod.stand.powers;
 
 
+import com.google.common.collect.Lists;
+import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.DiverDownEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,7 +27,30 @@ public class PowersDiverDown extends NewPunchingStand {
             switch (context) {
             }
         }
+    @Override
+    public void renderIcons(GuiGraphics context, int x, int y) {
 
+        if (isHoldingSneak()){
+            setSkillIcon(context, x, y, 1, StandIcons.NONE, PowerIndex.NONE);
+        } else {
+            setSkillIcon(context, x, y, 1, StandIcons.NONE, PowerIndex.NO_CD);
+
+        }
+
+        setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.SKILL_2);
+
+        if (isHoldingSneak()){
+            setSkillIcon(context, x, y, 3, StandIcons.NONE, PowerIndex.NONE);
+        } else {
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        }
+
+        setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.SKILL_4);
+    }
+    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas) {
+        List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        return $$1;
+    }
         @Override
         public List<Byte> getSkinList () {
             return Arrays.asList(
