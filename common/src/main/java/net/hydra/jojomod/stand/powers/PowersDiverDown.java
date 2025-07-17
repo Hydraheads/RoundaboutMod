@@ -47,7 +47,7 @@ public class PowersDiverDown extends NewPunchingStand {
         setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.SKILL_2);
 
         if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 3, StandIcons.NONE, PowerIndex.NONE);
+            setSkillIcon(context, x, y, 3, StandIcons.DIVER_DOWN_VAULT, PowerIndex.VAULT);
         } else {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         }
