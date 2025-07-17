@@ -47,7 +47,7 @@ public class PowersDiverDown extends NewPunchingStand {
         setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.SKILL_2);
 
         if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 3, StandIcons.DIVER_DOWN_VAULT, PowerIndex.VAULT);
+            setSkillIcon(context, x, y, 3, StandIcons.NONE, PowerIndex.NONE);
         } else {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         }
@@ -58,6 +58,8 @@ public class PowersDiverDown extends NewPunchingStand {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99, 0,"ability.roundabout.vault",
+                "instruction.roundabout.press_skill_air", StandIcons.DIVER_DOWN_VAULT,3,level,bypas));
         return $$1;
 
     }
