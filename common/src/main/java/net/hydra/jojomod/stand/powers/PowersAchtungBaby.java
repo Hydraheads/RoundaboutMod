@@ -71,14 +71,10 @@ public class PowersAchtungBaby extends NewDashPreset {
     }
 
 
-    public List<SurvivorEntity> survivorsSpawned = new ArrayList<>();
-
-    public void listInit(){
-        if (survivorsSpawned == null) {
-            survivorsSpawned = new ArrayList<>();
-        }
+    @Override
+    public boolean rendersPlayer(){
+        return true;
     }
-
     public Component getPosName(byte posID){
         return Component.empty();
     }
@@ -198,21 +194,6 @@ public class PowersAchtungBaby extends NewDashPreset {
     }
 
     public StandEntity displayStand = null;
-    @Override
-    public boolean returnFakeStandForHud(){
-        return true;
-    }
-    public SurvivorEntity SurvivorTarget = null;
-    public Entity EntityTargetOne = null;
-    public Entity EntityTargetTwo = null;
-    public boolean selectTarget(){
-        setRageCupidCooldown();
-        SurvivorEntity surv = SurvivorTarget;
-        if (surv != null && EntityTargetOne instanceof LivingEntity LE && EntityTargetTwo instanceof LivingEntity LE2){
-            surv.matchEntities(LE,LE2);
-        }
-        return true;
-    }
 
     public void selectTargetClient(){
     }
@@ -234,36 +215,6 @@ public class PowersAchtungBaby extends NewDashPreset {
 
 
 
-    public boolean canUseZap(Entity ent) {
-        if (ent instanceof LivingEntity LE &&
-                (
-                        MainUtil.isBossMob(LE) &&
-                                !ClientNetworking.getAppropriateConfig().survivorSettings.canUseSurvivorOnBossesInSurvival &&
-                                !(this.getCreative())
-                )
-        ) {
-            return false;
-        }
-        return true;
-    }
-
-
-    public void setRageCupidCooldown(){
-        int cooldown = ClientNetworking.getAppropriateConfig().survivorSettings.rageCupidCooldown;
-        this.setCooldown(PowerIndex.SKILL_4, cooldown);
-    }
-
-
-    @Override
-    public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
-        if (num == PowerIndex.SKILL_2 && ClientNetworking.getAppropriateConfig().survivorSettings.SummonSurvivorCooldownCooldownUsesServerLatency) {
-            return true;
-        }
-        if (num == PowerIndex.SKILL_4 && ClientNetworking.getAppropriateConfig().survivorSettings.rageCupidCooldownCooldownUsesServerLatency) {
-            return true;
-        }
-        return super.isServerControlledCooldown(ci, num);
-    }
     @Override
     public boolean tryPower(int move, boolean forced) {
         return super.tryPower(move, forced);
@@ -293,31 +244,7 @@ public class PowersAchtungBaby extends NewDashPreset {
         super.updateUniqueMoves();
     }
 
-    public static final byte
-            BASE = 1,
-            GREEN =2,
-            RED =3,
-            PURPLE=4,
-            BLUE=5,
-            SILVER=6,
-            GHAST=7,
-            ENDER=8,
-            CONDUIT=9;
 
-    @Override
-    public List<Byte> getSkinList() {
-        return Arrays.asList(
-                BASE,
-                GREEN,
-                RED,
-                PURPLE,
-                BLUE,
-                SILVER,
-                GHAST,
-                ENDER,
-                CONDUIT
-        );
-    }
 
     @Override
     public int getDisplayPowerInventoryScale(){
@@ -332,18 +259,7 @@ public class PowersAchtungBaby extends NewDashPreset {
         return 7;
     }
     @Override public Component getSkinName(byte skinId) {
-        return switch (skinId)
-        {
-            case GREEN -> Component.translatable("skins.roundabout.survivor.green");
-            case RED -> Component.translatable("skins.roundabout.survivor.red");
-            case PURPLE -> Component.translatable("skins.roundabout.survivor.purple");
-            case BLUE -> Component.translatable("skins.roundabout.survivor.blue");
-            case SILVER -> Component.translatable("skins.roundabout.survivor.silver");
-            case GHAST -> Component.translatable("skins.roundabout.survivor.ghast");
-            case ENDER -> Component.translatable("skins.roundabout.survivor.ender");
-            case CONDUIT -> Component.translatable("skins.roundabout.survivor.conduit");
-            default -> Component.translatable("skins.roundabout.survivor.base");
-        };
+        return Component.translatable("skins.roundabout.achtung_baby.base");
     }
 
     @Override
@@ -376,18 +292,8 @@ public class PowersAchtungBaby extends NewDashPreset {
             BURST = 61;
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.throw_bottle",
-                "instruction.roundabout.press_skill", StandIcons.BOTTLE, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.summon_survivor",
-                "instruction.roundabout.press_skill", StandIcons.SPAWN,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.desummon_survivor",
-                "instruction.roundabout.press_skill_crouch", StandIcons.DESPAWN,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
-        if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
-            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.target_zap",
-                    "instruction.roundabout.press_skill", StandIcons.RAGE_SELECTION, 4, level, bypass));
-        }
         return $$1;
     }
 
@@ -416,18 +322,4 @@ public class PowersAchtungBaby extends NewDashPreset {
         return true;
     }
 
-
-    boolean holdAttack = false;
-    public void buttonInputAttack(boolean keyIsDown, Options options) {
-        if (keyIsDown) {
-            if (!holdAttack) {
-                holdAttack = true;
-                if (invisibleVisionOn()) {
-                    selectTargetClient();
-                }
-            }
-        } else if (holdAttack){
-            holdAttack = false;
-        }
-    }
 }

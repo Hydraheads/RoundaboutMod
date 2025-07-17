@@ -55,22 +55,33 @@ public abstract class ZEntityRenderDispatcher {
     @Unique
     public boolean roundabout$recurse = false;
     @Inject(method = "render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"), cancellable = true)
-    protected <E extends Entity>  void roundabout$render(E $$0, double $$1, double $$2, double $$3, float $$4, float $$5, PoseStack $$6, MultiBufferSource $$7, int light, CallbackInfo ci) {
-        if ($$0 instanceof LivingEntity){
-            ((StandUser)$$0).roundabout$tryBlip();
+    protected <E extends Entity>  void roundabout$render(E entity, double $$1, double $$2, double $$3, float $$4, float $$5, PoseStack $$6, MultiBufferSource $$7, int light, CallbackInfo ci) {
+        if (entity instanceof LivingEntity){
+            ((StandUser)entity).roundabout$tryBlip();
         }
-        if ($$0 instanceof Projectile && ClientUtil.getScreenFreeze()){
+        if (entity instanceof Projectile && ClientUtil.getScreenFreeze()){
             ci.cancel();
             return;
         }
 
 
-        if ($$0 instanceof LivingEntity LE && !roundabout$recurse){
+        float throwFadeToTheEther = 1f;
+
+        IEntityAndData entityAndData = ((IEntityAndData) entity);
+        if (entityAndData.roundabout$getTrueInvisibility() > -1){
+            throwFadeToTheEther = throwFadeToTheEther*0.4F;
+        }
+
+
+        ClientUtil.setThrowFadeToTheEther(throwFadeToTheEther);
+
+
+        if (entity instanceof LivingEntity LE && !roundabout$recurse){
             byte bt =  ((StandUser)LE).roundabout$getGlow();
             if (bt > 0){
                 int light2 = light;
                 if (bt ==1){
-                    if ($$0 instanceof Zombie || $$0 instanceof Player) {
+                    if (entity instanceof Zombie || entity instanceof Player) {
                         light2 = Math.min(light2, 11010048);
                     } else {
                         light2 = (int)(((float)light2)/2);
@@ -87,11 +98,16 @@ public abstract class ZEntityRenderDispatcher {
                     light2 = 15728880;
                 }
                 roundabout$recurse = true;
-                render($$0,$$1,$$2,$$3,$$4,$$5,$$6,$$7,light2);
+                render(entity,$$1,$$2,$$3,$$4,$$5,$$6,$$7,light2);
                 roundabout$recurse = false;
                 ci.cancel();
             }
         }
+    }
+    @Inject(method = "render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "TAIL"))
+    protected <E extends Entity>  void roundabout$renderTail(E entity, double $$1, double $$2, double $$3, float $$4, float $$5, PoseStack $$6, MultiBufferSource $$7, int light, CallbackInfo ci) {
+
+        ClientUtil.setThrowFadeToTheEther(1);
     }
 
     /**Cancel hitbox rendering for stuff like go beyond*/

@@ -120,17 +120,6 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             }
         }
 
-        boolean shouldLetVisMod = true;
-        float throwFadeToTheEther = 1f;
-
-        IEntityAndData entityAndData = ((IEntityAndData) entity);
-        if (entityAndData.roundabout$getTrueInvisibility() > -1){
-            throwFadeToTheEther = throwFadeToTheEther*0.4F;
-            shouldLetVisMod = false;
-        }
-
-
-        ClientUtil.setThrowFadeToTheEther(throwFadeToTheEther);
 
     }
     @Inject(method = "renderEntity(Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V",
