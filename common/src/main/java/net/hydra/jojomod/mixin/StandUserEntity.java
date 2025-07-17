@@ -2956,10 +2956,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         return $$1;
     }
-
+    /**Hide from mobs with armor on*/
+    @Inject(method = "getArmorCoverPercentage", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$getArmorCoverPercentage(CallbackInfoReturnable<Float> cir) {
+        if (roundabout$getTrueInvis() > -1 && ClientNetworking.getAppropriateConfig().achtungSettings.hidesArmor) {
+            cir.setReturnValue(0f);
+        }
+    }
     /**This code prevents you from swimming upwards while barrage clashing*/
     @Inject(method = "jumpInLiquid", at = @At(value = "HEAD"), cancellable = true)
-    protected void rooundabout$swimUpward(TagKey<Fluid> $$0, CallbackInfo ci) {
+    protected void roundabout$swimUpward(TagKey<Fluid> $$0, CallbackInfo ci) {
         if (this.roundabout$isClashing()) {
             ci.cancel();
         }
