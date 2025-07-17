@@ -3000,7 +3000,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
 
 
-            if (!$$0.isIndirect()
+            if ($$0.getEntity() != null
                     && !$$0.is(DamageTypes.THORNS)){
                 if ($$0.getEntity() instanceof Player pe){
                     if (((StandUser)pe).roundabout$getStandPowers().interceptSuccessfulDamageDealtEvent($$0,$$1, ((LivingEntity)(Object)this))){
@@ -3010,7 +3010,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
 
-            if (!$$0.is(DamageTypes.THORNS)){
+            if (($$0.getEntity() != null || $$0.is(DamageTypes.THROWN)) && !$$0.is(DamageTypes.THORNS)){
                 if (((IEntityAndData)this).roundabout$getTrueInvisibility() > -1 &&
                         ClientNetworking.getAppropriateConfig().achtungSettings.revealLocationWhenDamagingOrHurt){
                     ((IEntityAndData)this).roundabout$setTrueInvisibility(-1);
