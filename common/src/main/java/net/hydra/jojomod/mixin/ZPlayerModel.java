@@ -124,7 +124,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 this.roundabout$animate(ipe.roundabout$getOffsetCorrect(), FirstPersonLayerAnimations.offsetCorrect, yes, 1f);
                 this.rightSleeve.copyFrom(this.rightArm);
                 this.leftSleeve.copyFrom(this.leftArm);
-                one.render(ps, mb.getBuffer(RenderType.entitySolid($$0.getSkinTextureLocation())), packedLight, OverlayTexture.NO_OVERLAY);
+                one.render(ps, mb.getBuffer(RenderType.entityTranslucentCull($$0.getSkinTextureLocation())), packedLight, OverlayTexture.NO_OVERLAY);
                 two.render(ps, mb.getBuffer(RenderType.entityTranslucent($$0.getSkinTextureLocation())), packedLight, OverlayTexture.NO_OVERLAY);
                 return true;
             }
