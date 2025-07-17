@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -12,12 +13,16 @@ import net.hydra.jojomod.item.MaskItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,7 +34,9 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(HumanoidArmorLayer.class)
-public class ZHumanoidArmorLayer<T extends LivingEntity, M extends HumanoidModel<T>, A extends HumanoidModel<T>> extends RenderLayer<T, M> {
+public abstract class ZHumanoidArmorLayer<T extends LivingEntity, M extends HumanoidModel<T>, A extends HumanoidModel<T>> extends RenderLayer<T, M> {
+
+    @Shadow protected abstract ResourceLocation getArmorLocation(ArmorItem $$0, boolean $$1, @Nullable String $$2);
 
     /**This class is targetted so the last piece of equipment worn before a timestop is rendered in the timestop*/
 
@@ -49,6 +56,17 @@ public class ZHumanoidArmorLayer<T extends LivingEntity, M extends HumanoidModel
     public @Nullable ItemStack roundabout$RenderBoots;
     @Unique
     public @Nullable ItemStack roundabout$RenderHead;
+
+
+    @Inject(method = "renderModel(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/item/ArmorItem;Lnet/minecraft/client/model/HumanoidModel;ZFFFLjava/lang/String;)V",
+            at = @At(value = "HEAD"),cancellable = true)
+    public void roundabout$Render(PoseStack $$0, MultiBufferSource $$1, int $$2, ArmorItem $$3, A $$4, boolean $$5, float $$6, float $$7, float $$8, String $$9, CallbackInfo ci) {
+        if (ClientUtil.getThrowFadeToTheEther() != 1){
+            VertexConsumer $$10 = $$1.getBuffer(RenderType.entityTranslucentCull(this.getArmorLocation($$3, $$5, $$9)));
+            $$4.renderToBuffer($$0, $$10, $$2, OverlayTexture.NO_OVERLAY, $$6, $$7, $$8, 1.0F);
+            ci.cancel();
+        }
+    }
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",
             at = @At(value = "HEAD"),cancellable = true)
     public void roundabout$Render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
