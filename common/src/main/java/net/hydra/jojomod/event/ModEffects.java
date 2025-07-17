@@ -10,6 +10,6 @@ public class ModEffects {
     public static MobEffect STAND_VIRUS;
     public static MobEffect CAPTURING_LOVE;
     public static MobEffect FACELESS;
-
+    public static MobEffect MELTING;
 
 }

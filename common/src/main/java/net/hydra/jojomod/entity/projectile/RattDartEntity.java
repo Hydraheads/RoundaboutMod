@@ -123,7 +123,7 @@ public class RattDartEntity extends AbstractArrow {
             }
             if (MainUtil.getMobBleed($$1)){
                 ((StandUser)$$1).roundabout$setBleedLevel(0);
-                ((LivingEntity)$$1).addEffect(new MobEffectInstance(ModEffects.BLEED, 400, 0), this);
+                ((LivingEntity)$$1).addEffect(new MobEffectInstance(ModEffects.MELTING, 900, 0), this);
             }
             if ($$1.getType() == EntityType.ENDERMAN) {
                 return;

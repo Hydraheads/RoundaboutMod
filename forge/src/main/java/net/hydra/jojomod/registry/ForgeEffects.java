@@ -31,6 +31,11 @@ public class ForgeEffects{
             POTION_EFFECTS.register("faceless", () ->
                     new Effect(MobEffectCategory.HARMFUL, 10329495)
             );
+    public static final RegistryObject<MobEffect> MELTING =
+            POTION_EFFECTS.register("melting", () ->
+                    new Effect(MobEffectCategory.HARMFUL, 10329495) // CHANGE THIS
+            );
+
 
     public static class Effect extends MobEffect{
         public Effect(MobEffectCategory typeIn, int liquidColorIn) {

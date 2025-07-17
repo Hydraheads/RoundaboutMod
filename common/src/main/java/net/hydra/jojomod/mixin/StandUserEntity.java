@@ -3663,6 +3663,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
+        if (this.hasEffect(ModEffects.MELTING)) {
+            if (!this.level().isClientSide() && this.isAlive()) {
+                // put code here?
+            }
+        }
+
         if (this.hasEffect(ModEffects.STAND_VIRUS)) {
             if (this.tickCount % 20 == 0) {
                 if (!this.level().isClientSide() && this.isAlive()){

@@ -19,6 +19,8 @@ public class FabricEffects extends MobEffect{
     public static final MobEffect STAND_VIRUS = register("stand_virus", new FabricEffects(MobEffectCategory.HARMFUL, 9979490));
     public static final MobEffect CAPTURING_LOVE = register("capturing_love", new FabricEffects(MobEffectCategory.BENEFICIAL, 16772988));
     public static final MobEffect FACELESS = register("faceless", new FabricEffects(MobEffectCategory.HARMFUL, 10329495));
+    public static final MobEffect MELTING = register("melting", new FabricEffects(MobEffectCategory.HARMFUL, 10329495)); // CHANGE THE COLOR
+
 
     protected FabricEffects(MobEffectCategory mobEffectCategory, int i) {
         super(mobEffectCategory, i);
@@ -35,5 +37,6 @@ public class FabricEffects extends MobEffect{
         ModEffects.STAND_VIRUS = STAND_VIRUS;
         ModEffects.CAPTURING_LOVE = CAPTURING_LOVE;
         ModEffects.FACELESS = FACELESS;
+        ModEffects.MELTING = MELTING;
     }
 }
