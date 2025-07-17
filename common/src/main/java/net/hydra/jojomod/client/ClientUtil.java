@@ -14,6 +14,7 @@ import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.minecraft.client.renderer.*;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.Connection;
+import net.minecraft.resources.ResourceLocation;
 import net.zetalasis.client.shader.D4CShaderFX;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.D4CCloneEntity;
@@ -316,12 +317,17 @@ public class ClientUtil {
         return entity != null && entity.isAlive() && !entity.isRemoved();
     }
 
+    public static ResourceLocation saveBufferTexture = null;
+
 
     public static void setThrowFadeToTheEther(float ether){
         throwFadeToTheEther = ether;
     }
     public static float getThrowFadeToTheEther(){
         return throwFadeToTheEther;
+    }
+    public static int getThrowFadeToTheEtherInt(){
+        return Mth.floor(throwFadeToTheEther*255);
     }
     public static float throwFadeToTheEther = 1f;
     public static int getOutlineColor(Entity entity) {

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.StandArrowEntity;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -46,6 +47,11 @@ public class StandArrowRenderer<T extends StandArrowEntity> extends EntityRender
     }
 
     public void render(T $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
+        float throwfade = ClientUtil.getThrowFadeToTheEther();
+        int alpha = 255;
+        if (throwfade != 1) {
+            alpha = ClientUtil.getThrowFadeToTheEtherInt();
+        }
         $$3.pushPose();
         $$3.mulPose(Axis.YP.rotationDegrees(Mth.lerp($$2, $$0.yRotO, $$0.getYRot()) - 90.0F));
         $$3.mulPose(Axis.ZP.rotationDegrees(Mth.lerp($$2, $$0.xRotO, $$0.getXRot())));
@@ -69,33 +75,37 @@ public class StandArrowRenderer<T extends StandArrowEntity> extends EntityRender
         $$3.scale(0.0845F, 0.0845F, 0.0845F);
         $$3.translate(-4.0F, 0.0F, 0.0F);
         VertexConsumer $$18 = $$4.getBuffer(RenderType.entityCutout(this.getTextureLocation($$0)));
+        if (throwfade != 1) {
+            $$18 = $$4.getBuffer(RenderType.entityTranslucentCull(this.getTextureLocation($$0)));
+        }
         PoseStack.Pose $$19 = $$3.last();
         Matrix4f $$20 = $$19.pose();
         Matrix3f $$21 = $$19.normal();
-        this.vertex($$20, $$21, $$18, -7, -2, -2, 0.0F, 0.15625F, -1, 0, 0, $$5);
-        this.vertex($$20, $$21, $$18, -7, -2, 2, 0.15625F, 0.15625F, -1, 0, 0, $$5);
-        this.vertex($$20, $$21, $$18, -7, 2, 2, 0.15625F, 0.3125F, -1, 0, 0, $$5);
-        this.vertex($$20, $$21, $$18, -7, 2, -2, 0.0F, 0.3125F, -1, 0, 0, $$5);
-        this.vertex($$20, $$21, $$18, -7, 2, -2, 0.0F, 0.15625F, 1, 0, 0, $$5);
-        this.vertex($$20, $$21, $$18, -7, 2, 2, 0.15625F, 0.15625F, 1, 0, 0, $$5);
-        this.vertex($$20, $$21, $$18, -7, -2, 2, 0.15625F, 0.3125F, 1, 0, 0, $$5);
-        this.vertex($$20, $$21, $$18, -7, -2, -2, 0.0F, 0.3125F, 1, 0, 0, $$5);
+        this.vertex($$20, $$21, $$18, -7, -2, -2, 0.0F, 0.15625F, -1, 0, 0, $$5,alpha);
+        this.vertex($$20, $$21, $$18, -7, -2, 2, 0.15625F, 0.15625F, -1, 0, 0, $$5,alpha);
+        this.vertex($$20, $$21, $$18, -7, 2, 2, 0.15625F, 0.3125F, -1, 0, 0, $$5,alpha);
+        this.vertex($$20, $$21, $$18, -7, 2, -2, 0.0F, 0.3125F, -1, 0, 0, $$5,alpha);
+        this.vertex($$20, $$21, $$18, -7, 2, -2, 0.0F, 0.15625F, 1, 0, 0, $$5,alpha);
+        this.vertex($$20, $$21, $$18, -7, 2, 2, 0.15625F, 0.15625F, 1, 0, 0, $$5,alpha);
+        this.vertex($$20, $$21, $$18, -7, -2, 2, 0.15625F, 0.3125F, 1, 0, 0, $$5,alpha);
+        this.vertex($$20, $$21, $$18, -7, -2, -2, 0.0F, 0.3125F, 1, 0, 0, $$5,alpha);
 
         for (int $$22 = 0; $$22 < 4; $$22++) {
             $$3.mulPose(Axis.XP.rotationDegrees(90.0F));
-            this.vertex($$20, $$21, $$18, -8, -2, 0, 0.0F, 0.0F, 0, 1, 0, $$5);
-            this.vertex($$20, $$21, $$18, 8, -2, 0, 0.5F, 0.0F, 0, 1, 0, $$5);
-            this.vertex($$20, $$21, $$18, 8, 2, 0, 0.5F, 0.15625F, 0, 1, 0, $$5);
-            this.vertex($$20, $$21, $$18, -8, 2, 0, 0.0F, 0.15625F, 0, 1, 0, $$5);
+            this.vertex($$20, $$21, $$18, -8, -2, 0, 0.0F, 0.0F, 0, 1, 0, $$5,alpha);
+            this.vertex($$20, $$21, $$18, 8, -2, 0, 0.5F, 0.0F, 0, 1, 0, $$5,alpha);
+            this.vertex($$20, $$21, $$18, 8, 2, 0, 0.5F, 0.15625F, 0, 1, 0, $$5,alpha);
+            this.vertex($$20, $$21, $$18, -8, 2, 0, 0.0F, 0.15625F, 0, 1, 0, $$5,alpha);
         }
 
         $$3.popPose();
         super.render($$0, $$1, $$2, $$3, $$4, $$5);
     }
 
-    public void vertex(Matrix4f $$0, Matrix3f $$1, VertexConsumer $$2, int $$3, int $$4, int $$5, float $$6, float $$7, int $$8, int $$9, int $$10, int $$11) {
+    public void vertex(Matrix4f $$0, Matrix3f $$1, VertexConsumer $$2, int $$3, int $$4, int $$5, float $$6, float $$7, int $$8, int $$9, int $$10, int $$11,
+                       int alpha) {
         $$2.vertex($$0, (float)$$3, (float)$$4, (float)$$5)
-                .color(255, 255, 255, 255)
+                .color(255, 255, 255, alpha)
                 .uv($$6, $$7)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
                 .uv2($$11)
