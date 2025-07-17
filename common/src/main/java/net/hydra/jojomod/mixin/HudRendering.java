@@ -331,6 +331,9 @@ public abstract class HudRendering implements IHudAccess {
                 removeNum = true;
             }
 
+            // there might be a better way, but it'd be way more convoluted
+            if (user.roundabout$getStandPowers() instanceof PowersRatt) {return false;}
+
             boolean isTSEntity = ((TimeStop) minecraft.level).isTimeStoppingEntity(minecraft.player);
             if (((TimeStop) minecraft.level).CanTimeStopEntity(minecraft.player)) {
 

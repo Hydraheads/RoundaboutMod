@@ -55,7 +55,6 @@ public class RattDartEntity extends AbstractArrow {
     public RattDartEntity(Level world, LivingEntity player,int i) {
         super(ModEntities.RATT_DART, player, world);
         charged = i;
-        Roundabout.LOGGER.info(String.valueOf(charged));
     }
 
     @Override
@@ -148,7 +147,7 @@ public class RattDartEntity extends AbstractArrow {
     @Override
     public void tick(){
         Vec3 delta = this.getDeltaMovement();
-        if (inGroundTime >= 40) {
+        if (inGroundTime >= 80) {
             this.remove(RemovalReason.DISCARDED);
         }
         super.tick();
