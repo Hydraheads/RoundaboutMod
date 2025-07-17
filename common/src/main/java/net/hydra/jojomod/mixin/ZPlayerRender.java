@@ -252,6 +252,32 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
         return $$0;
     }
 
+    /**Render external layers like soft and wet shooting mode out of context*/
+    @Inject(method = "renderHand", at = @At(value = "HEAD"), cancellable = true)
+    private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderHandHEAD(PoseStack stack, MultiBufferSource buffer, int integer,
+                                                                                                AbstractClientPlayer acl, ModelPart $$4, ModelPart $$5,
+                                                                                                CallbackInfo ci) {
+        if (ClientUtil.getThrowFadeToTheEther() != 1){
+            ci.cancel();
+            PlayerModel<AbstractClientPlayer> $$6 = this.getModel();
+            this.setModelProperties(acl);
+            $$6.attackTime = 0.0F;
+            $$6.crouching = false;
+            $$6.swimAmount = 0.0F;
+            $$6.setupAnim(acl, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+            PlayerModel<AbstractClientPlayer> pbm = this.getModel();
+            if (((IPlayerModel)pbm).roundabout$setupFirstPersonAnimations(acl, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F,$$4,$$5,
+                    buffer,integer,stack)){
+                roundabout$renderHandLayers2(stack,buffer,integer,acl,$$4,$$5);
+                return;
+            }
+            $$4.xRot = 0.0F;
+            $$4.render(stack, buffer.getBuffer(RenderType.entityTranslucentCull(acl.getSkinTextureLocation())), integer, OverlayTexture.NO_OVERLAY);
+            $$5.xRot = 0.0F;
+            $$5.render(stack, buffer.getBuffer(RenderType.entityTranslucent(acl.getSkinTextureLocation())), integer, OverlayTexture.NO_OVERLAY);
+            roundabout$renderHandLayers2(stack,buffer,integer,acl,$$4,$$5);
+        }
+    }
 
     /**Render external layers like soft and wet shooting mode out of context*/
     @Inject(method = "renderHand", at = @At(value = "TAIL"))

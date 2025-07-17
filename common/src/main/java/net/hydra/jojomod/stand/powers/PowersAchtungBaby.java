@@ -46,7 +46,7 @@ public class PowersAchtungBaby extends NewDashPreset {
 
 
     public boolean invisibleVisionOn(){
-        return getStandUserSelf().roundabout$getUniqueStandModeToggle();
+        return !getStandUserSelf().roundabout$getUniqueStandModeToggle();
     }
     public boolean canSummonStandAsEntity(){
         return false;
@@ -404,7 +404,7 @@ public class PowersAchtungBaby extends NewDashPreset {
 
     public boolean invisibleVisionSwitch(){
         if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
-            getStandUserSelf().roundabout$setUniqueStandModeToggle(!invisibleVisionOn());
+            getStandUserSelf().roundabout$setUniqueStandModeToggle(invisibleVisionOn());
             if (!isClient() && this.self instanceof ServerPlayer PE) {
                 if (invisibleVisionOn()) {
                     PE.displayClientMessage(Component.translatable("text.roundabout.achtung.vision_on").withStyle(ChatFormatting.AQUA), true);

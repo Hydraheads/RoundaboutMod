@@ -318,7 +318,10 @@ public class ClientUtil {
     }
 
     public static ResourceLocation saveBufferTexture = null;
-
+    public static boolean hideInvis = false;
+    public static boolean getHideInvis(){
+        return hideInvis;
+    }
 
     public static void setThrowFadeToTheEther(float ether){
         throwFadeToTheEther = ether;
@@ -402,6 +405,12 @@ public class ClientUtil {
             ent.setXRot(camera.getXRot());
             ent.setYHeadRot(ent.getYRot());
         }
+    }
+    public static boolean getFirstPerson(){
+        if (Minecraft.getInstance() != null && Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
+            return true;
+        }
+        return false;
     }
     public static int wasFrozen = 0;
     public static SoftAndWetPlunderBubbleEntity popSounds = null;

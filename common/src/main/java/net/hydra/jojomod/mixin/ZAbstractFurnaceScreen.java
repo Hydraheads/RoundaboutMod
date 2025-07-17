@@ -73,14 +73,6 @@ public abstract class ZAbstractFurnaceScreen<T extends AbstractFurnaceMenu> exte
                         ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SMELT);
                         SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
                         soundmanager.play(SimpleSoundInstance.forUI(SoundEvents.FIRECHARGE_USE, 1.0F));
-                        /**
-                         if (this.menu instanceof FurnaceMenu fm) {
-                         Container ct = ((IAbstractFurnaceMenu)fm).roundabout$getContainer();
-                         if (ct instanceof FurnaceBlockEntity fbe){
-                         Roundabout.LOGGER.info("Sigma Sigma Boy");
-                         }
-                         }
-                         */
                         cir.setReturnValue(true);
                     }
                 }

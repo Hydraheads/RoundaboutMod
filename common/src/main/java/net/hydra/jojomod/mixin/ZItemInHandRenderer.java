@@ -4,6 +4,9 @@ import com.google.common.base.MoreObjects;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.stand.JusticeModel;
 import net.hydra.jojomod.client.models.stand.renderers.JusticeBaseRenderer;
 import net.hydra.jojomod.client.models.stand.renderers.JusticeRenderer;
@@ -14,6 +17,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandArrowItem;
+import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
@@ -109,6 +113,23 @@ public abstract class ZItemInHandRenderer {
                     return;
                 }
             }
+
+            float throwFadeToTheEther = 1f;
+            IEntityAndData entityAndData = ((IEntityAndData) user);
+            if (entityAndData.roundabout$getTrueInvisibility() > -1){
+                throwFadeToTheEther = throwFadeToTheEther*0.4F;
+                if (powers instanceof PowersAchtungBaby PB && PB.invisibleVisionOn()){
+                    AbstractClientPlayer $$14 = this.minecraft.player;
+                    if ($$14 != null) {
+                        PlayerRenderer $$15 = (PlayerRenderer) this.entityRenderDispatcher.<AbstractClientPlayer>getRenderer($$14);
+                        $$15.getModel().setAllVisible(true);
+
+                    }
+                }
+            }
+            ClientUtil.setThrowFadeToTheEther(throwFadeToTheEther);
+
+
             if (powers.isPiloting()){
                 StandEntity stand = powers.getPilotingStand();
                 float aan = $$3.getAttackAnim($$0);
