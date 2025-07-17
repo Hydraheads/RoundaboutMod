@@ -353,6 +353,13 @@ public class FabricEntities {
                         EntityType.Builder.of(DarkMirageEntity::new, MobCategory.MISC).
                                 sized(0.75F, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":dark_mirage")
                 );
+        public static final EntityType<DiverDownEntity> DIVER_DOWN =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        Roundabout.location("diver_down"),
+                        EntityType.Builder.of(DiverDownEntity::new, MobCategory.MISC).
+                                sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":diver_down")
+                );
         public static final EntityType<HarpoonEntity> THROWN_HARPOON =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -530,6 +537,7 @@ public class FabricEntities {
                 ModEntities.CINDERELLA = CINDERELLA;
                 ModEntities.JUSTICE_PIRATE = JUSTICE_PIRATE;
                 ModEntities.DARK_MIRAGE = DARK_MIRAGE;
+                ModEntities.DIVER_DOWN = DIVER_DOWN;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
                 ModEntities.RATT_DART = RATT_DART;
@@ -629,6 +637,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(JUSTICE_PIRATE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DARK_MIRAGE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(CINDERELLA, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(DIVER_DOWN, StandEntity.createStandAttributes());
 
 
                 FabricDefaultAttributeRegistry.register(GROUND_HURRICANE, GroundHurricaneEntity.createStandAttributes());

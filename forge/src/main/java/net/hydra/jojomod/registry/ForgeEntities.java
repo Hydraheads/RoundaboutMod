@@ -298,6 +298,12 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "star_platinum_baseball").toString())
             );
+    public static final RegistryObject<EntityType<DiverDownEntity>> DIVER_DOWN =
+            ENTITY_TYPES.register("diver_down", () ->
+                    EntityType.Builder.of(DiverDownEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "d4c").toString())
+            );
     public static final RegistryObject<EntityType<KnifeEntity>> THROWN_KNIFE =
             ENTITY_TYPES.register("knife", () ->
                     EntityType.Builder.<KnifeEntity>of(KnifeEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).

@@ -3008,6 +3008,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         return;
                     }
                 }
+            }
+
+            if (!$$0.is(DamageTypes.THORNS)){
                 if (((IEntityAndData)this).roundabout$getTrueInvisibility() > -1 &&
                         ClientNetworking.getAppropriateConfig().achtungSettings.revealLocationWhenDamagingOrHurt){
                     ((IEntityAndData)this).roundabout$setTrueInvisibility(-1);
