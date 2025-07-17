@@ -311,7 +311,7 @@ public class ForgeEntities {
                             build(new ResourceLocation(Roundabout.MOD_ID, "knife").toString())
             );
     public static final RegistryObject<EntityType<RattDartEntity>> RATT_DART =
-            ENTITY_TYPES.register("knife", () ->
+            ENTITY_TYPES.register("ratt_dart", () ->
                     EntityType.Builder.<RattDartEntity>of(RattDartEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "ratt_dart").toString())
