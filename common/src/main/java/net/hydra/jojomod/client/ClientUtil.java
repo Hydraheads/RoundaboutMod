@@ -326,6 +326,9 @@ public class ClientUtil {
     public static float getThrowFadeToTheEther(){
         return throwFadeToTheEther;
     }
+    public static int getThrowFadeToTheEtherInt(){
+        return Mth.floor(throwFadeToTheEther*255);
+    }
     public static float throwFadeToTheEther = 1f;
     public static int getOutlineColor(Entity entity) {
         LocalPlayer player = Minecraft.getInstance().player;

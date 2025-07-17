@@ -48,7 +48,7 @@ public abstract class ZModelPart {
                 MultiBufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
                 RenderType translucentType = RenderType.entityTranslucentCull(rl); // or any other transparent-compatible layer
                 newConsumer = bufferSource.getBuffer(translucentType);
-                rl = null;
+                ClientUtil.saveBufferTexture = null;
             }
 
             originalAlpha = ether;

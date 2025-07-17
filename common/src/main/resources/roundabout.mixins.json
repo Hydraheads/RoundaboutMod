@@ -126,6 +126,7 @@
     "ZAbstractFurnaceScreen",
     "ZAbstractZombieRenderer",
     "ZAgeableListModel",
+    "ZArrowRenderer",
     "ZBannerRenderer",
     "ZBlockEntityClient",
     "ZBlockEntityRenderDispatcher",
