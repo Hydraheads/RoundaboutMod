@@ -36,6 +36,9 @@ public class VisageData {
     public boolean hasVoices(){
         return false;
     }
+    public boolean isJojovein(){
+        return false;
+    }
 
     public VoiceData voiceData(LivingEntity realSelf){
         return new VoiceData(realSelf);

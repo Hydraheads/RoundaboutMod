@@ -453,6 +453,9 @@ public class Config implements Cloneable {
         public Integer levelCostCharacterVisage;
         @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
         public Integer emeraldCostCharacterVisage;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean enableJojoveinVisagesInShop;
+
     }
     public static class HeyYaSettings {
         @IntOption(group = "inherit", value = 35, min = 0, max = 72000)
