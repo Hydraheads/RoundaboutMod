@@ -55,7 +55,7 @@ public class ZHumanoidArmorLayer<T extends LivingEntity, M extends HumanoidModel
         roundabout$ArmorPhase = 0;
         IEntityAndData entityAndData = ((IEntityAndData) $$3);
         if (entityAndData.roundabout$getTrueInvisibility() > -1
-                //&&  (!ClientUtil.checkIfClientCanSeeInvisAchtung())
+                &&  (!ClientUtil.checkIfClientCanSeeInvisAchtung())
                 && ClientNetworking.getAppropriateConfig() != null &&
                 ClientNetworking.getAppropriateConfig().achtungSettings != null &&
                 ClientNetworking.getAppropriateConfig().achtungSettings.hidesArmor){
