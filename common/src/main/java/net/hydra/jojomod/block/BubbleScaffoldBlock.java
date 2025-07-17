@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -32,6 +33,7 @@ public class BubbleScaffoldBlock extends BaseEntityBlock {
 
     private static final VoxelShape STABLE_SHAPE;
     public static final BooleanProperty TRIGGERED;
+
     protected BubbleScaffoldBlock(Properties $$0) {
         super($$0);
         this.registerDefaultState(this.stateDefinition.any().setValue(TRIGGERED, false));

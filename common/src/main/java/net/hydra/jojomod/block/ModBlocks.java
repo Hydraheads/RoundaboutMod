@@ -60,6 +60,7 @@ public class ModBlocks {
 
     public static Block MINING_ALERT_BLOCK;
     public static Block BUBBLE_SCAFFOLD;
+    public static Block INVISIBLOCK;
 
     public static Block STAND_FIRE;
     public static Block ORANGE_FIRE;
@@ -118,6 +119,7 @@ public class ModBlocks {
     public static BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY;
     public static BlockEntityType<MirrorBlockEntity> MIRROR_BLOCK_ENTITY;
     public static BlockEntityType<BubbleScaffoldBlockEntity> BUBBLE_SCAFFOLD_BLOCK_ENTITY;
+    public static BlockEntityType<InvisiBlockEntity> INVISIBLE_BLOCK_ENTITY;
     public static BlockEntityType<D4CLightBlockEntity> D4C_LIGHT_BLOCK_ENTITY;
     public static Block ANCIENT_METEOR_PROPERTIES = new Block(
             BlockBehaviour.Properties.of()
@@ -339,6 +341,10 @@ public class ModBlocks {
                         .replaceable()
         );
     }
+    public static InvisiBlock INVISIBLE_BLOCK_PROPERTIES = new InvisiBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.NONE).dynamicShape().noOcclusion().strength(-1.0F, 3600000.0F).lightLevel((p_152607_) -> {
+                return 1;
+            }).noParticlesOnBreak().pushReaction(PushReaction.IGNORE).sound(SoundType.EMPTY));
     public static StereoBlock STEREO_PROPERTIES = new StereoBlock(
 
             BlockBehaviour.Properties.of().mapColor(MapColor.RAW_IRON).

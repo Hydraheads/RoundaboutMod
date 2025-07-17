@@ -154,6 +154,7 @@ public class FabricEntityClient {
         BlockEntityRenderers.register(ModBlocks.STAND_FIRE_BLOCK_ENTITY, StandFireRenderer::new);
         BlockEntityRenderers.register(ModBlocks.MIRROR_BLOCK_ENTITY, MirrorBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY, BubbleScaffoldBlockEntityRenderer::new);
+        BlockEntityRenderers.register(ModBlocks.INVISIBLE_BLOCK_ENTITY, InvisiBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlocks.D4C_LIGHT_BLOCK_ENTITY, D4CLightBlockEntityRenderer::new);
 
         ModStrayModels.SHOOTING_ARM = new SoftAndWetShootingArmModel();
