@@ -5,6 +5,12 @@
       "roundabout:summon_stand"
     ]
   },
+  "summon_diver_down": {
+    "subtitle": "sounds.roundabout.summon_diver_down",
+    "sounds": [
+      "roundabout:summon_diver_down"
+    ]
+  },
   "summon_magician": {
     "subtitle": "sounds.roundabout.summon_magician",
     "sounds": [
