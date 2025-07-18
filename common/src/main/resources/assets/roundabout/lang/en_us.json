@@ -884,6 +884,12 @@
   "ability.roundabout.target_zap": "Rage Cupid",
   "ability.roundabout.target_zap.desc": "Lets you select which mobs fight each other! Enter selection mode, use your attack key to select an activated survivor, then one target, and then another. They will then fight! Press the ability key again to cancel or redo selection. While this mode is active, your survivors will not automatically zap mobs together.",
 
+  "ability.roundabout.invisivision": "Invisi-Vision",
+  "ability.roundabout.invisivision.desc": "Turn on and off the able to see see-through versions of blocks and entities that you turn invisible with your power. Turning it off is useful to get the perspective of someone without the stand, and to see through invisible blocks better.",
+  "ability.roundabout.invisiburst": "Invisiburst",
+  "ability.roundabout.invisiburst.desc": "Release your emotions in a burst of invisibility, making you and all nearby entities invisible. It decreases your range of being seen, and wears off overtime, or when you do certain actions. Activating this ability briefly lets mobs see you. If the stand griefing gamerule is off, temporarily makes blocks that are not ores around you invisible too, which can assist in mining. Invisible blocks are without properties, and cannot be blown up.",
+  "ability.roundabout.controlled_burst": "Controlled Burst",
+  "ability.roundabout.controlled_burst.desc": "A variation of Invisiburst with decreased range and no block invisibility. Signifies greater control of the user's emotions. Useful if you don't want to accidentally make your opponents invisible.",
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Locked",

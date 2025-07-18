@@ -374,6 +374,12 @@ public class PowersAchtungBaby extends NewDashPreset {
             BURST = 61;
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.invisivision",
+                "instruction.roundabout.press_skill", StandIcons.BABY_VISION_ON, 1, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.invisiburst",
+                "instruction.roundabout.press_skill", StandIcons.BURST_INVIS,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.controlled_burst",
+                "instruction.roundabout.press_skill_crouch", StandIcons.SELF_INVIS,3,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
         return $$1;
