@@ -45,13 +45,16 @@ public class PowersDiverDown extends NewPunchingStand {
         } else {
             setSkillIcon(context, x, y, 1, StandIcons.NONE, PowerIndex.NO_CD);
         }
-        if (canVault() ) {
-            setSkillIcon(context, x, y, 3, StandIcons.DIVER_DOWN_VAULT, PowerIndex.GLOBAL_DASH);
-        }
+
         setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.SKILL_2);
 
         if (isHoldingSneak()){
             setSkillIcon(context, x, y, 3, StandIcons.NONE, PowerIndex.NONE);
+        } else {
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        }
+        if (canVault() ) {
+            setSkillIcon(context, x, y, 3, StandIcons.DIVER_DOWN_VAULT, PowerIndex.GLOBAL_DASH);
         } else {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         }
@@ -82,7 +85,9 @@ public class PowersDiverDown extends NewPunchingStand {
             super(self);
         }
 
-
+    @Override
+    protected Byte getSummonSound() {return SoundIndex.SUMMON_SOUND;
+    }
 
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice){

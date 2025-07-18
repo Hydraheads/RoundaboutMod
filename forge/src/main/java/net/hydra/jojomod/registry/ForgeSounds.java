@@ -417,6 +417,8 @@ public class ForgeSounds {
             register(ModSounds.SUMMON_ACHTUNG, ModSounds.SUMMON_ACHTUNG_ID);
     public static final RegistryObject<SoundEvent> SURVIVOR_REMOVE =
             register(ModSounds.SURVIVOR_REMOVE, ModSounds.SURVIVOR_REMOVE_ID);
+    public static final RegistryObject<SoundEvent> SUMMON_DIVER_DOWN =
+            register(ModSounds.SUMMON_DIVER_DOWN, ModSounds.SUMMON_DIVER_DOWN_ID);
     public static final RegistryObject<SoundEvent> DIO_HOHO =
             register(ModSounds.DIO_HOHO, ModSounds.DIO_HOHO_ID);
     public static final RegistryObject<SoundEvent> DIO_DEATH =
