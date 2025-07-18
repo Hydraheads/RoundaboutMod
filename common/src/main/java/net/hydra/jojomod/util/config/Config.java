@@ -528,7 +528,7 @@ public class Config implements Cloneable {
         public Float bonusDamageWhenPunching;
         @IntOption(group = "inherit", value = 8, min = 0, max = 72000)
         public Integer survivorRange;
-        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 8, min = 0, max = 72000)
         public Integer survivorCupidRange;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer survivorCupidCreativeRange;
@@ -549,6 +549,14 @@ public class Config implements Cloneable {
         public Boolean hidesPlacedBlocks;
         @BooleanOption(group = "inherit", value = true)
         public Boolean revealLocationWhenDamagingOrHurt;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean revealLocationWhenFinishedEating;
+
+        @IntOption(group = "inherit", value = 140, min = 0, max = 72000)
+        public Integer invisiBurstCooldown;
+
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer invisiBurstDuration;
     }
 
     public static class TheWorldSettings {

@@ -68,7 +68,7 @@ public class PowersAchtungBaby extends NewDashPreset {
 
 
         if (isHoldingSneak())
-            setSkillIcon(context, x, y, 2, StandIcons.SELF_INVIS, PowerIndex.NO_CD);
+            setSkillIcon(context, x, y, 2, StandIcons.SELF_INVIS, PowerIndex.SKILL_2);
         else
             setSkillIcon(context, x, y, 2, StandIcons.BURST_INVIS, PowerIndex.SKILL_2);
 
@@ -112,12 +112,16 @@ public class PowersAchtungBaby extends NewDashPreset {
     }
 
     public void invisiburstClient(){
-        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
-        tryPowerPacket(PowerIndex.POWER_2);
+        if (!this.onCooldown(PowerIndex.SKILL_2)) {
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+            tryPowerPacket(PowerIndex.POWER_2);
+        }
     }
     public void invisiburstSimpleClient(){
-        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
-        tryPowerPacket(PowerIndex.POWER_2_SNEAK);
+        if (!this.onCooldown(PowerIndex.SKILL_2)) {
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
+            tryPowerPacket(PowerIndex.POWER_2_SNEAK);
+        }
     }
 
     public void switchModeClient(){
@@ -146,6 +150,7 @@ public class PowersAchtungBaby extends NewDashPreset {
 
     @SuppressWarnings("deprecation")
     public boolean invisibleBurst(){
+        setCooldown(PowerIndex.SKILL_2,ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstCooldown);
         if (this.self.level() instanceof ServerLevel sl){
             burstParticles(sl);
             float range = 5;
@@ -203,13 +208,12 @@ public class PowersAchtungBaby extends NewDashPreset {
     }
 
     public void burstEntities(float range){
-
         List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.self.level(), this.getSelf().blockPosition(), range+1);
         if (!mobsInRange.isEmpty()) {
             for (Entity ent : mobsInRange) {
                 if (ent.distanceTo(this.self) <= range){
                     IEntityAndData entityAndData = ((IEntityAndData) ent);
-                    entityAndData.roundabout$setTrueInvisibility(300);
+                    entityAndData.roundabout$setTrueInvisibility(ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstDuration);
                 }
             }
         }
@@ -259,27 +263,6 @@ public class PowersAchtungBaby extends NewDashPreset {
     public int highlightsEntityColor(Entity ent, Player player){
         return 14806268;
     }
-
-    public StandEntity displayStand = null;
-
-    public void selectTargetClient(){
-    }
-    public boolean canUseStillStandingRecharge(byte bt){
-        if (bt == PowerIndex.SKILL_2)
-            return false;
-        return super.canUseStillStandingRecharge(bt);
-    }
-
-    public void summonSurvivorClient(){
-        if (!this.onCooldown(PowerIndex.SKILL_2)) {
-            Vec3 pos = MainUtil.getRaytracePointOnMobOrBlockIfNotUp(this.self, 30,0.3f);
-            if (pos != null) {
-                tryPosPower(PowerIndex.POWER_2, true, pos);
-                tryPosPowerPacket(PowerIndex.POWER_2, pos);
-            }
-        }
-    }
-
 
 
     @Override

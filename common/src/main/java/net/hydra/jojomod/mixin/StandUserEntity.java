@@ -605,6 +605,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+
+
     /**When mobs TS teleport, part of canceling visual interpolation between two points so it looks like they
      * just "blip" there*/
     @Unique
@@ -2682,13 +2684,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Hex prevents eating effects from golden apples. Once you reach level 3 (commands only), all foods lose them*/
     @Inject(method = "addEatEffect", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$addEatEffect(ItemStack $$0, Level $$1, LivingEntity $$2, CallbackInfo ci) {
+
+        if (((IEntityAndData)this).roundabout$getTrueInvisibility() > -1 &&
+                ClientNetworking.getAppropriateConfig().achtungSettings.revealLocationWhenFinishedEating){
+            ((IEntityAndData)this).roundabout$setTrueInvisibility(-1);
+        }
         if (this.hasEffect(ModEffects.HEX)) {
             int hexLevel = this.getEffect(ModEffects.HEX).getAmplifier();
             if ((hexLevel >= 0 && $$0.is(Items.ENCHANTED_GOLDEN_APPLE)) || (hexLevel >= 1 && $$0.is(Items.GOLDEN_APPLE))
                     || hexLevel >= 2){
                 ci.cancel();
+                return;
             }
         }
+        roundabout$getStandPowers().eatEffectIntercept($$0,$$1,$$2);
     }
 
 

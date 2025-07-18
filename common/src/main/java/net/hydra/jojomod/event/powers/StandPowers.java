@@ -58,6 +58,7 @@ import net.minecraft.world.phys.*;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -2588,6 +2589,9 @@ public class StandPowers {
                     integer
             );
         }
+    }
+
+    public void eatEffectIntercept(ItemStack $$0, Level $$1, LivingEntity $$2){
     }
 
     public void tryTripleIntPacket(byte packet, int in1, int in2, int in3){

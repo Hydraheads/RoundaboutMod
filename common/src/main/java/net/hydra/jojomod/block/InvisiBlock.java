@@ -2,6 +2,7 @@ package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.access.IEntityAndData;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -68,6 +69,18 @@ public class InvisiBlock extends BaseEntityBlock {
                 inv.restoreNow();
             }
         }
+    }
+
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public VoxelShape getOcclusionShape(BlockState $$0, BlockGetter $$1, BlockPos $$2) {
+        return Shapes.empty();
+    }
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean skipRendering(BlockState p_53972_, BlockState p_53973_, Direction p_53974_) {
+        return false;
     }
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {

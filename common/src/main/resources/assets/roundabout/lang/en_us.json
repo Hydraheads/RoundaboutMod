@@ -1687,7 +1687,7 @@
   "config.roundabout.survivorRange.name": "Base Range",
   "config.roundabout.survivorRange.desc": "The maximum distance from a survivor stand that a mob or player can be to get zapped on the stand's default mode (8 by default).",
   "config.roundabout.survivorCupidRange.name": "Cupid Survival Range",
-  "config.roundabout.survivorCupidRange.desc": "The distance mobs can be from a highlighted survivor stand to get zapped in survival mode (15 by default).",
+  "config.roundabout.survivorCupidRange.desc": "The distance mobs can be from a highlighted survivor stand to get zapped in survival mode (8 by default).",
   "config.roundabout.survivorCupidCreativeRange.name": "Cupid Creative Range",
   "config.roundabout.survivorCupidCreativeRange.desc": "The distance mobs can be from a highlighted survivor stand to get zapped in creative mode.",
   "config.roundabout.canUseSurvivorOnBossesInSurvival.name": "Zap Bosses in Survival",
