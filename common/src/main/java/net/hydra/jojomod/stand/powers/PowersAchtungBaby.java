@@ -430,6 +430,7 @@ public class PowersAchtungBaby extends NewDashPreset {
         return $$1;
     }
 
+    /**
     public boolean isWip(){
         return true;
     }
@@ -439,7 +440,7 @@ public class PowersAchtungBaby extends NewDashPreset {
     public Component ifWipListDev(){
         return Component.literal(  "Hydra").withStyle(ChatFormatting.YELLOW);
     }
-
+     **/
 
     public boolean invisibleVisionSwitch(){
         if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
