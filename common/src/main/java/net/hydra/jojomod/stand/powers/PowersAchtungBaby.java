@@ -251,6 +251,12 @@ public class PowersAchtungBaby extends NewDashPreset {
         return true;
     }
 
+    public boolean canUseStillStandingRecharge(byte bt){
+        if (bt == PowerIndex.SKILL_2)
+            return false;
+        return super.canUseStillStandingRecharge(bt);
+    }
+
     public static void spawnExplosionParticles(Level level, Vec3 center, int particleCount, double speed) {
         if (!(level instanceof ServerLevel serverLevel)) return;
 
