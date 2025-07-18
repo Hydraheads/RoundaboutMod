@@ -557,6 +557,12 @@ public class Config implements Cloneable {
 
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer invisiBurstDuration;
+        @FloatOption(group = "inherit", value = 4F, min = 0, max = 200F)
+        public Float invisiBurstRange;
+        @FloatOption(group = "inherit", value = 2F, min = 0, max = 200F)
+        public Float invisiBurstCrouchRange;
+        @IntOption(group = "inherit", value = 4, min = 0, max = 72000)
+        public Integer invisiBurstBlockRange;
     }
 
     public static class TheWorldSettings {

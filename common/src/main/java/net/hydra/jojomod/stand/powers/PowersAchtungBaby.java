@@ -153,35 +153,37 @@ public class PowersAchtungBaby extends NewDashPreset {
         setCooldown(PowerIndex.SKILL_2,ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstCooldown);
         if (this.self.level() instanceof ServerLevel sl){
             burstParticles(sl);
-            float range = 5;
+            float range = ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstRange;
             burstEntities(range);
-            int radius = 4;
+            int radius = ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstBlockRange;
 
             BlockPos baseCenter = this.self.getOnPos();
 
-            if (MainUtil.getIsGamemodeApproriateForGrief(this.self)) {
-                for (int x = -radius; x <= radius; x++) {
-                    for (int y = 0; y <= radius; y++) {
-                        for (int z = -radius; z <= radius; z++) {
-                            if (x * x + y * y + z * z <= radius * radius) {
-                                BlockPos targetPos = baseCenter.offset(x, y, z);
-                                BlockState oldState = this.self.level().getBlockState(targetPos);
+            if (radius > 0) {
+                if (MainUtil.getIsGamemodeApproriateForGrief(this.self)) {
+                    for (int x = -radius; x <= radius; x++) {
+                        for (int y = 0; y <= radius; y++) {
+                            for (int z = -radius; z <= radius; z++) {
+                                if (x * x + y * y + z * z <= radius * radius) {
+                                    BlockPos targetPos = baseCenter.offset(x, y, z);
+                                    BlockState oldState = this.self.level().getBlockState(targetPos);
 
-                                // Example: Replace dirt with glowstone
-                                if (!oldState.isAir() && oldState.getBlock().isCollisionShapeFullBlock(oldState, this.self.level(), targetPos)
-                                        && this.self.level().getBlockEntity(targetPos) == null && !oldState.is(ModPacketHandler.PLATFORM_ACCESS.getOreTag())) {
-                                    BlockState replaced = sl.getBlockState(targetPos);
-                                    BlockEntity replacedEntity = sl.getBlockEntity(targetPos);
-                                    CompoundTag replacedTag = replacedEntity != null ? replacedEntity.saveWithFullMetadata() : null;
+                                    // Example: Replace dirt with glowstone
+                                    if (!oldState.isAir() && oldState.getBlock().isCollisionShapeFullBlock(oldState, this.self.level(), targetPos)
+                                            && this.self.level().getBlockEntity(targetPos) == null && !oldState.is(ModPacketHandler.PLATFORM_ACCESS.getOreTag())) {
+                                        BlockState replaced = sl.getBlockState(targetPos);
+                                        BlockEntity replacedEntity = sl.getBlockEntity(targetPos);
+                                        CompoundTag replacedTag = replacedEntity != null ? replacedEntity.saveWithFullMetadata() : null;
 
-                                    sl.setBlock(targetPos, ModBlocks.INVISIBLOCK.defaultBlockState(), 3);
+                                        sl.setBlock(targetPos, ModBlocks.INVISIBLOCK.defaultBlockState(), 3);
 
-                                    BlockEntity maybeEntity = sl.getBlockEntity(targetPos);
-                                    if (maybeEntity instanceof InvisiBlockEntity entity) {
-                                        entity.setOriginal(replaced, replacedTag, this.self.level());
-                                        entity.ticksUntilRestore = ((IEntityAndData)this.self).roundabout$getTrueInvisibility();
+                                        BlockEntity maybeEntity = sl.getBlockEntity(targetPos);
+                                        if (maybeEntity instanceof InvisiBlockEntity entity) {
+                                            entity.setOriginal(replaced, replacedTag, this.self.level());
+                                            entity.ticksUntilRestore = ((IEntityAndData) this.self).roundabout$getTrueInvisibility();
+                                        }
+                                        this.self.level().setBlock(targetPos, ModBlocks.INVISIBLOCK.defaultBlockState(), 3);
                                     }
-                                    this.self.level().setBlock(targetPos, ModBlocks.INVISIBLOCK.defaultBlockState(), 3);
                                 }
                             }
                         }
@@ -221,7 +223,7 @@ public class PowersAchtungBaby extends NewDashPreset {
     public boolean invisibleBurstSimple(){
         if (this.self.level() instanceof ServerLevel sl){
             burstParticles(sl);
-            float range = 3;
+            float range = ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstCrouchRange;
             burstEntities(range);
 
         }
