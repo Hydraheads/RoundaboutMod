@@ -904,6 +904,27 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    @Unique
+    @Override
+    public void roundabout$aggressivelyEnforceAggro(Entity theory){
+
+        if (theory == null || (!theory.isRemoved() && theory.isAlive())) {
+            if (theory instanceof Mob mb){
+                this.setLastHurtByMob(mb);
+            } else {
+                this.setLastHurtByMob(null);
+            }
+            if (theory instanceof Player pl){
+                this.setLastHurtByPlayer(pl);
+            } else {
+                this.setLastHurtByPlayer(null);
+            }
+            this.setLastHurtMob(theory);
+            if (((LivingEntity) (Object) this) instanceof Mob mb) {
+                ((IMob) mb).roundabout$deeplyEnforceTarget(theory);
+            }
+        }
+    }
     /**-1 gravity is no change, 0 is suspending gravity, 1000 is the base amount*/
     @Unique
     @Override
@@ -2968,7 +2989,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "getVisibilityPercent", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$getVisibilityPercent(CallbackInfoReturnable<Double> cir) {
         if (roundabout$getStandPowers() instanceof PowersAchtungBaby PB && PB.inBurstState() && ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstAlertsMobs){
-            cir.setReturnValue(0.8);
+            cir.setReturnValue(0.33);
         }
     }
     /**Hide from mobs with armor on*/

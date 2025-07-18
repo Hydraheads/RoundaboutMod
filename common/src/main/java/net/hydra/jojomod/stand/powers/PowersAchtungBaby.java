@@ -1,15 +1,13 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
-import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.block.InvisiBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -21,7 +19,6 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -34,6 +31,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -251,12 +249,30 @@ public class PowersAchtungBaby extends NewDashPreset {
     }
 
     public void burstEntities(float range){
+        burstEntitiesAggro();
         List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.self.level(), this.getSelf().blockPosition(), range+1);
         if (!mobsInRange.isEmpty()) {
             for (Entity ent : mobsInRange) {
                 if (ent.distanceTo(this.self) <= range){
                     IEntityAndData entityAndData = ((IEntityAndData) ent);
                     entityAndData.roundabout$setTrueInvisibility(ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstDuration);
+                }
+            }
+        }
+    }
+
+    public void burstEntitiesAggro(){
+        float range = 100;
+        float range2 = 13;
+        if (range2 > -1) {
+            List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.self.level(), this.getSelf().blockPosition(), range + 1);
+            if (!mobsInRange.isEmpty()) {
+                for (Entity ent : mobsInRange) {
+                    if (ent instanceof Mob mb) {
+                        if (mb.distanceTo(this.self) >= range2) {
+                            ((StandUser)mb).roundabout$aggressivelyEnforceAggro(null);
+                        }
+                    }
                 }
             }
         }

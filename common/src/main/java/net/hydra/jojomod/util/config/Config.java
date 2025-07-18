@@ -555,7 +555,7 @@ public class Config implements Cloneable {
         public Integer invisiBurstCooldown;
         @BooleanOption(group = "inherit", value = true)
         public Boolean invisiBurstCooldownUsesServerLatency;
-        @IntOption(group = "inherit", value = 240, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 280, min = 0, max = 72000)
         public Integer invisiBurstDuration;
         @FloatOption(group = "inherit", value = 4F, min = 0, max = 200F)
         public Float invisiBurstRange;

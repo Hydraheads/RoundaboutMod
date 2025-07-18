@@ -207,7 +207,7 @@ public interface StandUser {
     void roundabout$setZappedToID(int bound);
     int roundabout$getZappedToID();
     void  roundabout$aggressivelyEnforceZapAggro();
-
+    void roundabout$aggressivelyEnforceAggro(Entity theory);
     LivingEntity roundabout$getThrower();
 
     int roundabout$getIdleTime();

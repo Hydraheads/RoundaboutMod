@@ -70,7 +70,16 @@ public class InvisiBlock extends BaseEntityBlock {
             }
         }
     }
+    @Override
+    public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+        return true;
+    }
 
+    @SuppressWarnings("deprecation")
+    @Override
+    public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
+        return 1.0F;
+    }
 
     @SuppressWarnings("deprecation")
     @Override
