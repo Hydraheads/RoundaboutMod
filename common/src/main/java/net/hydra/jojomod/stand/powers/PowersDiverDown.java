@@ -44,7 +44,6 @@ public class PowersDiverDown extends NewPunchingStand {
             setSkillIcon(context, x, y, 1, StandIcons.NONE, PowerIndex.NONE);
         } else {
             setSkillIcon(context, x, y, 1, StandIcons.NONE, PowerIndex.NO_CD);
-
         }
         if (canVault() ) {
             setSkillIcon(context, x, y, 3, StandIcons.DIVER_DOWN_VAULT, PowerIndex.GLOBAL_DASH);
@@ -83,9 +82,7 @@ public class PowersDiverDown extends NewPunchingStand {
             super(self);
         }
 
-    @Override
-    protected Byte getSummonSound() {return SoundIndex.SUMMON_SOUND;
-    }
+
 
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice){
