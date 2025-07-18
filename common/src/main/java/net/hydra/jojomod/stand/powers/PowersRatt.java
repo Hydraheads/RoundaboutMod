@@ -38,6 +38,12 @@ public class PowersRatt extends NewDashPreset {
         super(self);
     }
 
+    public static final int MinThreshold = 30;
+    public static final int MaxThreshold = 90;
+    public static final int BaseShootCooldown = 30;
+    public static final int[] ShotThresholds = {MinThreshold,50,MaxThreshold};
+    public static final float[] ShotPowerFloats = {3,4.2F,5};
+    public static final int[] ShotSuperthrowTicks = {4,10,15};
 
 
     @Override
@@ -81,7 +87,6 @@ public class PowersRatt extends NewDashPreset {
     }
 
     int shotcooldown = 0;
-    int maxshotcooldown = 30;
 
     public boolean isPlaced() {return this.getStandEntity(this.getSelf()) != null;}
     public boolean isAuto() {return this.getStandUserSelf().roundabout$getUniqueStandModeToggle();}
@@ -204,8 +209,8 @@ public class PowersRatt extends NewDashPreset {
         if (shotcooldown != 0) {shotcooldown--;}
 
         if (scopeLevel == 0) {
-            if (attackTime > 30 && this.getChargeTime() != 0) {
-                chargeTime -= 3;
+            if (attackTime > 20 && this.getChargeTime() != 0) {
+                chargeTime -= 2;
             }
         }
 
@@ -343,7 +348,7 @@ public class PowersRatt extends NewDashPreset {
             }
 
             case PowerIndex.POWER_1_SNEAK -> {
-                shotcooldown = maxshotcooldown;
+                shotcooldown = BaseShootCooldown;
                 this.setCooldown(PowerIndex.SKILL_2,30);
                 if (!isClient()) {
                     FireDart(chargeTime);
@@ -370,8 +375,15 @@ public class PowersRatt extends NewDashPreset {
 
 
     public void FireDart(int i) {
+        float power = 0;
+        for (int b=ShotThresholds.length-1;b>=0;b--) {
+            if (i >= ShotThresholds[b]) {
+                power = ShotPowerFloats[b];
+                break;
+            }
+        }
         RattDartEntity e = new RattDartEntity(this.getSelf().level(),this.getSelf(),i);
-        e.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0.5F, 4.2F, 0.2F);
+        e.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0.5F, power, 0.2F);
         e.EnableSuperThrow();
         this.getSelf().level().addFreshEntity(e);
     }
@@ -429,6 +441,14 @@ public class PowersRatt extends NewDashPreset {
     }
 
     @Override
+    public float inputSpeedModifiers(float basis) {
+        if (scopeLevel != 0){
+            basis*=0.5f;
+        }
+        return super.inputSpeedModifiers(basis);
+    }
+
+    @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         switch (activeP) {
             case PowerIndex.SKILL_1 -> {
@@ -445,7 +465,7 @@ public class PowersRatt extends NewDashPreset {
             }
             case PowerIndex.SKILL_1_SNEAK -> {
                 if (scopeLevel != 0) {
-                    return getChargeTime() <= 35 || shotcooldown != 0;
+                    return getChargeTime() <= MinThreshold || shotcooldown != 0;
                 }
             }
 
@@ -483,16 +503,16 @@ public class PowersRatt extends NewDashPreset {
 
         if (shotcooldown != 0) {
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
-            float ratio = (float) shotcooldown /maxshotcooldown;
-            int fifteen = Math.round(ratio*15);
+            float ratio = (float) shotcooldown /BaseShootCooldown;
+            int fifteen = 15-Math.round(ratio*15);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 12, fifteen, 6);
 
         } else if (getChargeTime() >= 10 || scopeLevel != 0) {
-            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6    , 15, 6);
             float amount = (float) getChargeTime() /100;
             int finalAmount = Math.round(amount*15);
             int bartexture = 30;
-            if (finalAmount == 15) {bartexture -= 6;}
+            if (getChargeTime() >= MaxThreshold) {bartexture -= 6;}
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, bartexture, finalAmount, 6);
         }
     }
