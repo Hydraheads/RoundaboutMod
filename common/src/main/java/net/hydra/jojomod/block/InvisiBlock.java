@@ -13,6 +13,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -53,7 +54,7 @@ public class InvisiBlock extends BaseEntityBlock {
     public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity) {
         if (!level.isClientSide) {
             BlockEntity blockEntity = level.getBlockEntity(pos);
-            if (blockEntity instanceof InvisiBlockEntity inv) {
+            if (blockEntity instanceof InvisiBlockEntity inv && inv.getOriginalState().is(Blocks.POWDER_SNOW)) {
                 if (entity != null && ((IEntityAndData)entity).roundabout$getTrueInvisibility() <= -1) {
                     inv.restoreNow();
                 }
