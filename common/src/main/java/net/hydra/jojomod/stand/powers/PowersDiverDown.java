@@ -8,10 +8,13 @@ import net.hydra.jojomod.entity.stand.DiverDownEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -43,7 +46,9 @@ public class PowersDiverDown extends NewPunchingStand {
             setSkillIcon(context, x, y, 1, StandIcons.NONE, PowerIndex.NO_CD);
 
         }
-
+        if (canVault() ) {
+            setSkillIcon(context, x, y, 3, StandIcons.DIVER_DOWN_VAULT, PowerIndex.GLOBAL_DASH);
+        }
         setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.SKILL_2);
 
         if (isHoldingSneak()){
@@ -77,6 +82,21 @@ public class PowersDiverDown extends NewPunchingStand {
     public PowersDiverDown(LivingEntity self) {
             super(self);
         }
+
+    @Override
+    protected Byte getSummonSound() {return SoundIndex.SUMMON_SOUND;
+    }
+
+    @Override
+    public SoundEvent getSoundFromByte(byte soundChoice){
+        switch (soundChoice)
+        {
+            case SoundIndex.SUMMON_SOUND -> {
+                return ModSounds.SUMMON_DIVER_DOWN_EVENT;
+            }
+        }
+        return super.getSoundFromByte(soundChoice);
+    }
 
         @Override
         public boolean canSummonStand () {
