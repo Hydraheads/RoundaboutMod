@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.block.InvisiBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -28,7 +29,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -161,7 +164,41 @@ public class PowersAchtungBaby extends NewDashPreset {
         return super.isServerControlledCooldown(ci, num);
     }
 
-    @SuppressWarnings("deprecation")
+    public void burstBlocks(ServerLevel sl){
+        int radius = ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstBlockRange;
+        BlockPos baseCenter = this.self.getOnPos();
+        if (radius > 0) {
+            if (MainUtil.getIsGamemodeApproriateForGrief(this.self)) {
+                for (int x = -radius; x <= radius; x++) {
+                    for (int y = 0; y <= radius; y++) {
+                        for (int z = -radius; z <= radius; z++) {
+                            if (x * x + y * y + z * z <= radius * radius) {
+                                BlockPos targetPos = baseCenter.offset(x, y, z);
+                                BlockState oldState = this.self.level().getBlockState(targetPos);
+
+                                // Example: Replace dirt with glowstone
+                                if (!oldState.isAir() && oldState.getBlock().isCollisionShapeFullBlock(oldState, this.self.level(), targetPos)
+                                        && this.self.level().getBlockEntity(targetPos) == null && !oldState.is(ModPacketHandler.PLATFORM_ACCESS.getOreTag())) {
+                                    BlockState replaced = sl.getBlockState(targetPos);
+                                    BlockEntity replacedEntity = sl.getBlockEntity(targetPos);
+                                    CompoundTag replacedTag = replacedEntity != null ? replacedEntity.saveWithFullMetadata() : null;
+
+                                    sl.setBlock(targetPos, ModBlocks.INVISIBLOCK.defaultBlockState(), 3);
+
+                                    BlockEntity maybeEntity = sl.getBlockEntity(targetPos);
+                                    if (maybeEntity instanceof InvisiBlockEntity entity) {
+                                        entity.setOriginal(replaced, replacedTag, this.self.level());
+                                        entity.ticksUntilRestore = ((IEntityAndData) this.self).roundabout$getTrueInvisibility();
+                                    }
+                                    this.self.level().setBlock(targetPos, ModBlocks.INVISIBLOCK.defaultBlockState(), 3);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     public boolean invisibleBurst(){
         if (isClient() || (!this.onCooldown(PowerIndex.SKILL_2) || !ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstCooldownUsesServerLatency)) {
             setCooldown(PowerIndex.SKILL_2,ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstCooldown);
@@ -170,47 +207,35 @@ public class PowersAchtungBaby extends NewDashPreset {
                 burstParticles(sl);
                 float range = ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstRange;
                 burstEntities(range);
-                int radius = ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstBlockRange;
-
-                BlockPos baseCenter = this.self.getOnPos();
-
-                if (radius > 0) {
-                    if (MainUtil.getIsGamemodeApproriateForGrief(this.self)) {
-                        for (int x = -radius; x <= radius; x++) {
-                            for (int y = 0; y <= radius; y++) {
-                                for (int z = -radius; z <= radius; z++) {
-                                    if (x * x + y * y + z * z <= radius * radius) {
-                                        BlockPos targetPos = baseCenter.offset(x, y, z);
-                                        BlockState oldState = this.self.level().getBlockState(targetPos);
-
-                                        // Example: Replace dirt with glowstone
-                                        if (!oldState.isAir() && oldState.getBlock().isCollisionShapeFullBlock(oldState, this.self.level(), targetPos)
-                                                && this.self.level().getBlockEntity(targetPos) == null && !oldState.is(ModPacketHandler.PLATFORM_ACCESS.getOreTag())) {
-                                            BlockState replaced = sl.getBlockState(targetPos);
-                                            BlockEntity replacedEntity = sl.getBlockEntity(targetPos);
-                                            CompoundTag replacedTag = replacedEntity != null ? replacedEntity.saveWithFullMetadata() : null;
-
-                                            sl.setBlock(targetPos, ModBlocks.INVISIBLOCK.defaultBlockState(), 3);
-
-                                            BlockEntity maybeEntity = sl.getBlockEntity(targetPos);
-                                            if (maybeEntity instanceof InvisiBlockEntity entity) {
-                                                entity.setOriginal(replaced, replacedTag, this.self.level());
-                                                entity.ticksUntilRestore = ((IEntityAndData) this.self).roundabout$getTrueInvisibility();
-                                            }
-                                            this.self.level().setBlock(targetPos, ModBlocks.INVISIBLOCK.defaultBlockState(), 3);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                burstBlocks(sl);
             }
         }
-
         return true;
     }
 
+    public void burstRejection(){
+        if (this.self.level() instanceof ServerLevel sl) {
+            burstTicks = 22;
+            burstParticlesRejection(sl);
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.ACHTUNG_BURST_EVENT, SoundSource.PLAYERS, 0.95F, 1f);
+            float range = ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstRange;
+            burstEntities(range);
+            burstBlocks(sl);
+        }
+    }
+
+    public void burstParticlesRejection(ServerLevel sl){
+
+        Vec3 pos = new Vec3(this.self.getX(),
+                this.self.getY() +(this.self.getBbHeight()*0.5),
+                this.self.getZ());
+        sl.sendParticles(ModParticles.BABY_CRACKLE,
+                pos.x(),
+                pos.y(),
+                pos.z(),
+                0,0, 0, 0, 0);
+        spawnExplosionParticles(this.self.level(), pos, 100, 0.5);
+    }
     public void burstParticles(ServerLevel sl){
 
         Vec3 pos = new Vec3(this.self.getX(),
@@ -302,6 +327,26 @@ public class PowersAchtungBaby extends NewDashPreset {
     /** if = -1, not melt dodging */
 
 
+    int timebetweenbursts=10;
+    @Override
+    public void tickStandRejection(MobEffectInstance effect) {
+        if (!this.getSelf().level().isClientSide()) {
+            timebetweenbursts--;
+            if (timebetweenbursts <= -1){
+                burstRejection();
+                timebetweenbursts = 30;
+            }
+        }
+    }
+
+    @Override
+    public void tickMobAI(LivingEntity attackTarget){
+        if (this.self.level() instanceof ServerLevel sl) {
+            if (attackTarget != null && !onCooldown(PowerIndex.SKILL_2)) {
+                invisibleBurst();
+            }
+        }
+    }
 
     @Override
     public void tickPower() {

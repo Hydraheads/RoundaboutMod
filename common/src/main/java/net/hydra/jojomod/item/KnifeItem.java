@@ -62,7 +62,6 @@ public class KnifeItem extends Item{
             if ($$0.is(ModItems.KNIFE)){itemTime=5;}
             if ($$5 >= itemTime) {
                 if (!$$1.isClientSide) {
-                    $$0.hurtAndBreak(1, $$4, $$1x -> $$1x.broadcastBreakEvent($$2.getUsedItemHand()));
                     int knifeCount = 1;
                     boolean bundle = $$0.is(ModItems.KNIFE_BUNDLE);
                     if (bundle){knifeCount=4;}
