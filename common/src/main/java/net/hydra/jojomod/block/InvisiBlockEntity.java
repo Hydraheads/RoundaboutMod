@@ -27,13 +27,9 @@ public class InvisiBlockEntity extends BlockEntity {
     private CompoundTag originalTag = null;
     public int ticksUntilRestore = 100; // 5 seconds at 20 tps
 
-    public int tickCount = 0;
     public LivingEntity standuser = null;
 
     public List<Vec3> bubbleList = new ArrayList<>();
-    public int getTickCount(){
-        return tickCount;
-    }
 
     public void setOriginal(BlockState replacedState, @Nullable CompoundTag tag) {
         this.originalState = replacedState;
@@ -78,6 +74,7 @@ public class InvisiBlockEntity extends BlockEntity {
                 level.setBlock(worldPosition, originalState, 3);
                 if (originalTag != null) {
                     BlockEntity restored = level.getBlockEntity(worldPosition);
+                    level.scheduleTick(worldPosition, originalState.getBlock(), 1);
                     if (restored != null) {
                         restored.load(originalTag);
                     }
