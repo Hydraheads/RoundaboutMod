@@ -2,6 +2,8 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.block.InvisiBlockEntity;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
@@ -19,6 +21,8 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,6 +32,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -71,14 +77,10 @@ public class PowersAchtungBaby extends NewDashPreset {
     }
 
 
-    public List<SurvivorEntity> survivorsSpawned = new ArrayList<>();
-
-    public void listInit(){
-        if (survivorsSpawned == null) {
-            survivorsSpawned = new ArrayList<>();
-        }
+    @Override
+    public boolean rendersPlayer(){
+        return true;
     }
-
     public Component getPosName(byte posID){
         return Component.empty();
     }
@@ -99,6 +101,9 @@ public class PowersAchtungBaby extends NewDashPreset {
             case SKILL_2_NORMAL-> {
                 invisiburstClient();
             }
+            case SKILL_2_CROUCH-> {
+                invisiburstSimpleClient();
+            }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 dash();
             }
@@ -108,6 +113,10 @@ public class PowersAchtungBaby extends NewDashPreset {
     public void invisiburstClient(){
         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
         tryPowerPacket(PowerIndex.POWER_2);
+    }
+    public void invisiburstSimpleClient(){
+        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
+        tryPowerPacket(PowerIndex.POWER_2_SNEAK);
     }
 
     public void switchModeClient(){
@@ -127,40 +136,93 @@ public class PowersAchtungBaby extends NewDashPreset {
             case PowerIndex.POWER_2 -> {
                 return invisibleBurst();
             }
+            case PowerIndex.POWER_2_SNEAK -> {
+                return invisibleBurstSimple();
+            }
         }
         return super.setPowerOther(move,lastMove);
     }
 
+    @SuppressWarnings("deprecation")
     public boolean invisibleBurst(){
         if (this.self.level() instanceof ServerLevel sl){
-            Vec3 pos = new Vec3(this.self.getX(),
-                    this.self.getY() +(this.self.getBbHeight()*0.5),
-                    this.self.getZ());
-            sl.sendParticles(ModParticles.BABY_CRACKLE,
-                    pos.x(),
-                    pos.y(),
-                    pos.z(),
-                    0,0, 0, 0, 0);
-            playStandUserOnlySoundsIfNearby(BURST, 27, false,false);
-            spawnExplosionParticles(this.self.level(), pos, 100, 0.5);
-
+            burstParticles(sl);
             float range = 5;
-            List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.self.level(), this.getSelf().blockPosition(), range+1);
+            burstEntities(range);
+            int radius = 4;
 
-            if (!mobsInRange.isEmpty()) {
-                for (Entity ent : mobsInRange) {
-                    if (ent.distanceTo(this.self) <= range){
-                        IEntityAndData entityAndData = ((IEntityAndData) ent);
-                        entityAndData.roundabout$setTrueInvisibility(300);
+            BlockPos baseCenter = this.self.getOnPos();
+
+            if (MainUtil.getIsGamemodeApproriateForGrief(this.self)) {
+                for (int x = -radius; x <= radius; x++) {
+                    for (int y = 0; y <= radius; y++) {
+                        for (int z = -radius; z <= radius; z++) {
+                            if (x * x + y * y + z * z <= radius * radius) {
+                                BlockPos targetPos = baseCenter.offset(x, y, z);
+                                BlockState oldState = this.self.level().getBlockState(targetPos);
+
+                                // Example: Replace dirt with glowstone
+                                if (!oldState.isAir() && oldState.getBlock().isCollisionShapeFullBlock(oldState, this.self.level(), targetPos)
+                                        && this.self.level().getBlockEntity(targetPos) == null) {
+                                    BlockState replaced = sl.getBlockState(targetPos);
+                                    BlockEntity replacedEntity = sl.getBlockEntity(targetPos);
+                                    CompoundTag replacedTag = replacedEntity != null ? replacedEntity.saveWithFullMetadata() : null;
+
+                                    sl.setBlock(targetPos, ModBlocks.INVISIBLOCK.defaultBlockState(), 3);
+
+                                    BlockEntity maybeEntity = sl.getBlockEntity(targetPos);
+                                    if (maybeEntity instanceof InvisiBlockEntity entity) {
+                                        entity.setOriginal(replaced, replacedTag);
+                                        entity.ticksUntilRestore = ((IEntityAndData)this.self).roundabout$getTrueInvisibility();
+                                    }
+                                    this.self.level().setBlock(targetPos, ModBlocks.INVISIBLOCK.defaultBlockState(), 3);
+                                }
+                            }
+                        }
                     }
                 }
             }
-
         }
 
         return true;
     }
 
+    public void burstParticles(ServerLevel sl){
+
+        Vec3 pos = new Vec3(this.self.getX(),
+                this.self.getY() +(this.self.getBbHeight()*0.5),
+                this.self.getZ());
+        sl.sendParticles(ModParticles.BABY_CRACKLE,
+                pos.x(),
+                pos.y(),
+                pos.z(),
+                0,0, 0, 0, 0);
+        playStandUserOnlySoundsIfNearby(BURST, 27, false,false);
+        spawnExplosionParticles(this.self.level(), pos, 100, 0.5);
+    }
+
+    public void burstEntities(float range){
+
+        List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.self.level(), this.getSelf().blockPosition(), range+1);
+        if (!mobsInRange.isEmpty()) {
+            for (Entity ent : mobsInRange) {
+                if (ent.distanceTo(this.self) <= range){
+                    IEntityAndData entityAndData = ((IEntityAndData) ent);
+                    entityAndData.roundabout$setTrueInvisibility(300);
+                }
+            }
+        }
+    }
+    public boolean invisibleBurstSimple(){
+        if (this.self.level() instanceof ServerLevel sl){
+            burstParticles(sl);
+            float range = 3;
+            burstEntities(range);
+
+        }
+
+        return true;
+    }
 
     public static void spawnExplosionParticles(Level level, Vec3 center, int particleCount, double speed) {
         if (!(level instanceof ServerLevel serverLevel)) return;
@@ -198,21 +260,6 @@ public class PowersAchtungBaby extends NewDashPreset {
     }
 
     public StandEntity displayStand = null;
-    @Override
-    public boolean returnFakeStandForHud(){
-        return true;
-    }
-    public SurvivorEntity SurvivorTarget = null;
-    public Entity EntityTargetOne = null;
-    public Entity EntityTargetTwo = null;
-    public boolean selectTarget(){
-        setRageCupidCooldown();
-        SurvivorEntity surv = SurvivorTarget;
-        if (surv != null && EntityTargetOne instanceof LivingEntity LE && EntityTargetTwo instanceof LivingEntity LE2){
-            surv.matchEntities(LE,LE2);
-        }
-        return true;
-    }
 
     public void selectTargetClient(){
     }
@@ -234,36 +281,6 @@ public class PowersAchtungBaby extends NewDashPreset {
 
 
 
-    public boolean canUseZap(Entity ent) {
-        if (ent instanceof LivingEntity LE &&
-                (
-                        MainUtil.isBossMob(LE) &&
-                                !ClientNetworking.getAppropriateConfig().survivorSettings.canUseSurvivorOnBossesInSurvival &&
-                                !(this.getCreative())
-                )
-        ) {
-            return false;
-        }
-        return true;
-    }
-
-
-    public void setRageCupidCooldown(){
-        int cooldown = ClientNetworking.getAppropriateConfig().survivorSettings.rageCupidCooldown;
-        this.setCooldown(PowerIndex.SKILL_4, cooldown);
-    }
-
-
-    @Override
-    public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
-        if (num == PowerIndex.SKILL_2 && ClientNetworking.getAppropriateConfig().survivorSettings.SummonSurvivorCooldownCooldownUsesServerLatency) {
-            return true;
-        }
-        if (num == PowerIndex.SKILL_4 && ClientNetworking.getAppropriateConfig().survivorSettings.rageCupidCooldownCooldownUsesServerLatency) {
-            return true;
-        }
-        return super.isServerControlledCooldown(ci, num);
-    }
     @Override
     public boolean tryPower(int move, boolean forced) {
         return super.tryPower(move, forced);
@@ -293,31 +310,7 @@ public class PowersAchtungBaby extends NewDashPreset {
         super.updateUniqueMoves();
     }
 
-    public static final byte
-            BASE = 1,
-            GREEN =2,
-            RED =3,
-            PURPLE=4,
-            BLUE=5,
-            SILVER=6,
-            GHAST=7,
-            ENDER=8,
-            CONDUIT=9;
 
-    @Override
-    public List<Byte> getSkinList() {
-        return Arrays.asList(
-                BASE,
-                GREEN,
-                RED,
-                PURPLE,
-                BLUE,
-                SILVER,
-                GHAST,
-                ENDER,
-                CONDUIT
-        );
-    }
 
     @Override
     public int getDisplayPowerInventoryScale(){
@@ -332,18 +325,7 @@ public class PowersAchtungBaby extends NewDashPreset {
         return 7;
     }
     @Override public Component getSkinName(byte skinId) {
-        return switch (skinId)
-        {
-            case GREEN -> Component.translatable("skins.roundabout.survivor.green");
-            case RED -> Component.translatable("skins.roundabout.survivor.red");
-            case PURPLE -> Component.translatable("skins.roundabout.survivor.purple");
-            case BLUE -> Component.translatable("skins.roundabout.survivor.blue");
-            case SILVER -> Component.translatable("skins.roundabout.survivor.silver");
-            case GHAST -> Component.translatable("skins.roundabout.survivor.ghast");
-            case ENDER -> Component.translatable("skins.roundabout.survivor.ender");
-            case CONDUIT -> Component.translatable("skins.roundabout.survivor.conduit");
-            default -> Component.translatable("skins.roundabout.survivor.base");
-        };
+        return Component.translatable("skins.roundabout.achtung_baby.base");
     }
 
     @Override
@@ -376,18 +358,8 @@ public class PowersAchtungBaby extends NewDashPreset {
             BURST = 61;
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.throw_bottle",
-                "instruction.roundabout.press_skill", StandIcons.BOTTLE, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.summon_survivor",
-                "instruction.roundabout.press_skill", StandIcons.SPAWN,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.desummon_survivor",
-                "instruction.roundabout.press_skill_crouch", StandIcons.DESPAWN,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
-        if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
-            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.target_zap",
-                    "instruction.roundabout.press_skill", StandIcons.RAGE_SELECTION, 4, level, bypass));
-        }
         return $$1;
     }
 
@@ -416,18 +388,4 @@ public class PowersAchtungBaby extends NewDashPreset {
         return true;
     }
 
-
-    boolean holdAttack = false;
-    public void buttonInputAttack(boolean keyIsDown, Options options) {
-        if (keyIsDown) {
-            if (!holdAttack) {
-                holdAttack = true;
-                if (invisibleVisionOn()) {
-                    selectTargetClient();
-                }
-            }
-        } else if (holdAttack){
-            holdAttack = false;
-        }
-    }
 }

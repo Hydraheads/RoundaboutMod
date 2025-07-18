@@ -86,6 +86,7 @@ public class ModEntities {
     public static EntityType<PocolocoNPC> POCOLOCO;
     public static EntityType<GuccioNPC> GUCCIO;
     public static EntityType<RingoNPC> RINGO;
+    public static EntityType<ShizukaNPC> SHIZUKA;
     public static EntityType<PlayerSteveNPC> STEVE_NPC;
     public static EntityType<PlayerAlexNPC> ALEX_NPC;
     public static EntityType<PlayerModifiedNPC> MODIFIED_NPC;

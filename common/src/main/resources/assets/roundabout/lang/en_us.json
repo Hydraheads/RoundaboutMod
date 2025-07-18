@@ -148,6 +148,9 @@
   "item.roundabout.josuke_part_eight_mask": "Josuke Visage",
   "item.roundabout.josuke_part_eight_mask.desc": "Josuke Higashikata (Part 8)",
   "item.roundabout.josuke_part_eight_mask.tag": "Josuke",
+  "item.roundabout.shizuka_mask": "Shizuka Visage",
+  "item.roundabout.shizuka_mask.desc": "Shizuka (JoJovein / JoJo Stars)",
+  "item.roundabout.shizuka_mask.tag": "Shizuka",
 
   "item.roundabout.stand_arrow.fail": "Need more experience!",
 
@@ -174,6 +177,7 @@
   "effect.roundabout.faceless": "Faceless",
   "effect.roundabout.melting": "Melting",
 
+  "item.roundabout.creative_only.info": "Creative Only",
 
   "text.roundabout.meteorite": "Meteorite",
 
@@ -222,6 +226,7 @@
   "entity.roundabout.jojo_npc_aya": "Aya",
   "entity.roundabout.jojo_npc_guccio": "Guccio",
   "entity.roundabout.jojo_npc_ringo": "Ringo",
+  "entity.roundabout.jojo_npc_shizuka": "Shizuka",
   "entity.roundabout.jojo_npc_pocoloco": "Pocoloco",
   "entity.roundabout.aesthetician": "Aesthetician",
   "entity.roundabout.zombie_aesthetician": "Zombie Aesthetician",
@@ -1099,6 +1104,8 @@
 
   "skins.roundabout.diver_down.base": "Part 6",
 
+  "skins.roundabout.achtung_baby.base": "Has No Form",
+
   "unlock_skin.roundabout.the_world.over_heaven": "The World: Over Heaven Skin Unlocked!",
   "unlock_skin.roundabout.star_platinum.atomic": "Star Platinum: Atomic Skin Unlocked!",
   "unlock_skin.roundabout.justice.bad_bone": "Justice: Bad to The Bone Skin Unlocked!",
@@ -1448,6 +1455,8 @@
   "config.roundabout.levelCostCharacterVisage.desc": "Any character themed visage in the Cinderella shop, default 10.",
   "config.roundabout.emeraldCostCharacterVisage.name": "Character Visage Emerald Cost",
   "config.roundabout.emeraldCostCharacterVisage.desc": "Any character themed visage in the Cinderella shop, default 10.",
+  "config.roundabout.enableJojoveinVisagesInShop.name": "JoJovein Visages",
+  "config.roundabout.enableJojoveinVisagesInShop.desc": "Whether or not visages for designs used in JoJovein (the precursor mod/server/modpack to Roundabout). For example, Shizuka from JoJo Stars, which uses an adapted fan design. This config requires a restart to load.",
 
   "config.roundabout.softAndWetAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.softAndWetAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",

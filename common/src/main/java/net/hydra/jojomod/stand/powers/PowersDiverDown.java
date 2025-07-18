@@ -8,10 +8,13 @@ import net.hydra.jojomod.entity.stand.DiverDownEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -41,13 +44,17 @@ public class PowersDiverDown extends NewPunchingStand {
             setSkillIcon(context, x, y, 1, StandIcons.NONE, PowerIndex.NONE);
         } else {
             setSkillIcon(context, x, y, 1, StandIcons.NONE, PowerIndex.NO_CD);
-
         }
 
         setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.SKILL_2);
 
         if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 3, StandIcons.DIVER_DOWN_VAULT, PowerIndex.VAULT);
+            setSkillIcon(context, x, y, 3, StandIcons.NONE, PowerIndex.NONE);
+        } else {
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        }
+        if (canVault() ) {
+            setSkillIcon(context, x, y, 3, StandIcons.DIVER_DOWN_VAULT, PowerIndex.GLOBAL_DASH);
         } else {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         }
@@ -58,6 +65,8 @@ public class PowersDiverDown extends NewPunchingStand {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99, 0,"ability.roundabout.vault",
+                "instruction.roundabout.press_skill_air", StandIcons.DIVER_DOWN_VAULT,3,level,bypas));
         return $$1;
 
     }
@@ -75,6 +84,21 @@ public class PowersDiverDown extends NewPunchingStand {
     public PowersDiverDown(LivingEntity self) {
             super(self);
         }
+
+    @Override
+    protected Byte getSummonSound() {return SoundIndex.SUMMON_SOUND;
+    }
+
+    @Override
+    public SoundEvent getSoundFromByte(byte soundChoice){
+        switch (soundChoice)
+        {
+            case SoundIndex.SUMMON_SOUND -> {
+                return ModSounds.SUMMON_DIVER_DOWN_EVENT;
+            }
+        }
+        return super.getSoundFromByte(soundChoice);
+    }
 
         @Override
         public boolean canSummonStand () {

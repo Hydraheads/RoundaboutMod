@@ -129,6 +129,7 @@ public class FabricItems {
     public static Item VALENTINE_MASK = registerItem("valentine_mask", new MaskItem(new Item.Properties().stacksTo(1), new ValentineVisage(null)));
     public static Item JOSUKE_PART_EIGHT_MASK = registerItem("josuke_part_eight_mask", new MaskItem(new Item.Properties().stacksTo(1), new JosukePartEightVisage(null)));
     public static Item GUCCIO_MASK = registerItem("guccio_mask", new MaskItem(new Item.Properties().stacksTo(1), new GuccioVisage(null)));
+    public static Item SHIZUKA_MASK = registerItem("shizuka_mask", new MaskItem(new Item.Properties().stacksTo(1), new ShizukaVisage(null)));
     public static Item ENYA_MASK = registerItem("enya_mask", new MaskItem(new Item.Properties().stacksTo(1), new EnyaVisage(null)));
     public static Item ENYA_OVA_MASK = registerItem("enya_ova_mask", new MaskItem(new Item.Properties().stacksTo(1), new EnyaOVAVisage(null)));
     public static Item AYA_MASK = registerItem("aya_mask", new MaskItem(new Item.Properties().stacksTo(1), new AyaVisage(null)));
@@ -305,6 +306,7 @@ public class FabricItems {
                         entries.accept(GUCCIO_MASK);
                         entries.accept(POCOLOCO_MASK);
                         entries.accept(RINGO_MASK);
+                        entries.accept(SHIZUKA_MASK);
 
 
                     }).build());
@@ -509,6 +511,7 @@ public class FabricItems {
         ModItems.VALENTINE_MASK = VALENTINE_MASK;
         ModItems.JOSUKE_PART_EIGHT_MASK = JOSUKE_PART_EIGHT_MASK;
         ModItems.GUCCIO_MASK = GUCCIO_MASK;
+        ModItems.SHIZUKA_MASK = SHIZUKA_MASK;
         ModItems.ENYA_MASK = ENYA_MASK;
         ModItems.ENYA_OVA_MASK = ENYA_OVA_MASK;
         ModItems.AYA_MASK = AYA_MASK;

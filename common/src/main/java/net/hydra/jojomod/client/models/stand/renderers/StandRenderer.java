@@ -1,10 +1,12 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.stand.StandModel;
+import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -16,6 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.core.BlockPos;
@@ -26,6 +29,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandModel<T>> {
     /**Stand renderers should all extend this, because it is used
@@ -113,8 +117,6 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
         }
         (this.model).setAlpha(mobEntity.fadePercent);
 
-
-
         if (skipLighting(mobEntity)){
             super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, 15728880);
         } else {
@@ -160,5 +162,12 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
                 tot = 0;
             }
             return tot;
+    }
+
+
+    @Nullable
+    @Override
+    protected RenderType getRenderType(T entity, boolean showBody, boolean translucent, boolean showOutline) {
+        return super.getRenderType(entity, showBody, true, showOutline);
     }
 }

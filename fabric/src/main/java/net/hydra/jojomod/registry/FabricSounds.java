@@ -245,6 +245,7 @@ public class FabricSounds {
         addSound(ModSounds.SURVIVOR_REMOVE_ID, ModSounds.SURVIVOR_REMOVE_EVENT);
         addSound(ModSounds.ACHTUNG_BURST_ID, ModSounds.ACHTUNG_BURST_EVENT);
         addSound(ModSounds.SUMMON_ACHTUNG_ID, ModSounds.SUMMON_ACHTUNG_EVENT);
+        addSound(ModSounds.SUMMON_DIVER_DOWN_ID, ModSounds.SUMMON_DIVER_DOWN_EVENT);
 
         addSound(ModSounds.DIO_HOHO_ID, ModSounds.DIO_HOHO_EVENT);
         addSound(ModSounds.DIO_HOHO_2_ID, ModSounds.DIO_HOHO_2_EVENT);

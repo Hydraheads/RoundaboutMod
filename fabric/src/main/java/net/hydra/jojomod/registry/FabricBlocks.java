@@ -68,6 +68,7 @@ public class FabricBlocks {
     public static final Block CEILING_LIGHT = registerBlock("ceiling_light",ModBlocks.CEILING_LIGHT_BLOCK_PROPERTIES);
     public static final Block MIRROR = registerBlock("mirror",ModBlocks.getMirrorBlockProperties());
     public static final Block BUBBLE_SCAFFOLD = registerBlockItemless("bubble_scaffold",ModBlocks.BUBBLE_SCAFFOLD_BLOCK_PROPERTIES);
+    public static final Block INVISIBLOCK = registerBlockItemless("invisible_block",ModBlocks.INVISIBLE_BLOCK_PROPERTIES);
     public static final Block D4C_LIGHT_BLOCK = registerBlockItemless("d4c_light_block",ModBlocks.D4C_LIGHT_BLOCK_PROPERTIES);
 
     public static final Block STEREO = registerBlock("stereo",ModBlocks.STEREO_PROPERTIES);
@@ -132,6 +133,8 @@ public class FabricBlocks {
             registerBE("mirror",BlockEntityType.Builder.of(MirrorBlockEntity::new, MIRROR));
     public static final BlockEntityType<BubbleScaffoldBlockEntity> BUBBLE_SCAFFOLD_BLOCK_ENTITY =
             registerBE("bubble_scaffold",BlockEntityType.Builder.of(BubbleScaffoldBlockEntity::new, BUBBLE_SCAFFOLD));
+    public static final BlockEntityType<InvisiBlockEntity> INVISI_BLOCK_ENTITY =
+            registerBE("invisible_block",BlockEntityType.Builder.of(InvisiBlockEntity::new, INVISIBLOCK));
     public static final BlockEntityType<D4CLightBlockEntity> D4C_LIGHT_BLOCK_ENTITY =
             registerBE("d4c_light_block",BlockEntityType.Builder.of(D4CLightBlockEntity::new, D4C_LIGHT_BLOCK));
 
@@ -194,6 +197,8 @@ public class FabricBlocks {
         ModBlocks.STEREO = STEREO;
         ModBlocks.MINING_ALERT_BLOCK = MINING_ALERT_BLOCK;
         ModBlocks.BUBBLE_SCAFFOLD = BUBBLE_SCAFFOLD;
+
+        ModBlocks.INVISIBLOCK = INVISIBLOCK;
         ModBlocks.STAND_FIRE = STAND_FIRE;
         ModBlocks.ORANGE_FIRE = ORANGE_FIRE;
         ModBlocks.BLUE_FIRE = BLUE_FIRE;
@@ -205,6 +210,7 @@ public class FabricBlocks {
         ModBlocks.STAND_FIRE_BLOCK_ENTITY = STAND_FIRE_BLOCK_ENTITY;
         ModBlocks.MIRROR_BLOCK_ENTITY = MIRROR_BLOCK_ENTITY;
         ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY = BUBBLE_SCAFFOLD_BLOCK_ENTITY;
+        ModBlocks.INVISIBLE_BLOCK_ENTITY = INVISI_BLOCK_ENTITY;
         ModBlocks.D4C_LIGHT_BLOCK_ENTITY = D4C_LIGHT_BLOCK_ENTITY;
         ModBlocks.D4C_LIGHT_BLOCK = D4C_LIGHT_BLOCK;
         ModBlocks.FOG_DIRT = FOG_DIRT;

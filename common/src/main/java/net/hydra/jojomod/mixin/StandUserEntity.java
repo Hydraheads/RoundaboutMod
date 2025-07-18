@@ -2956,10 +2956,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         return $$1;
     }
-
+    /**Hide from mobs with armor on*/
+    @Inject(method = "getArmorCoverPercentage", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$getArmorCoverPercentage(CallbackInfoReturnable<Float> cir) {
+        if (roundabout$getTrueInvis() > -1 && ClientNetworking.getAppropriateConfig().achtungSettings.hidesArmor) {
+            cir.setReturnValue(0f);
+        }
+    }
     /**This code prevents you from swimming upwards while barrage clashing*/
     @Inject(method = "jumpInLiquid", at = @At(value = "HEAD"), cancellable = true)
-    protected void rooundabout$swimUpward(TagKey<Fluid> $$0, CallbackInfo ci) {
+    protected void roundabout$swimUpward(TagKey<Fluid> $$0, CallbackInfo ci) {
         if (this.roundabout$isClashing()) {
             ci.cancel();
         }
@@ -3000,7 +3006,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
 
 
-            if (!$$0.isIndirect()
+            if ($$0.getEntity() != null
                     && !$$0.is(DamageTypes.THORNS)){
                 if ($$0.getEntity() instanceof Player pe){
                     if (((StandUser)pe).roundabout$getStandPowers().interceptSuccessfulDamageDealtEvent($$0,$$1, ((LivingEntity)(Object)this))){
@@ -3010,7 +3016,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
 
-            if (!$$0.is(DamageTypes.THORNS)){
+            if (($$0.getEntity() != null || $$0.is(DamageTypes.THROWN)) && !$$0.is(DamageTypes.THORNS)){
                 if (((IEntityAndData)this).roundabout$getTrueInvisibility() > -1 &&
                         ClientNetworking.getAppropriateConfig().achtungSettings.revealLocationWhenDamagingOrHurt){
                     ((IEntityAndData)this).roundabout$setTrueInvisibility(-1);

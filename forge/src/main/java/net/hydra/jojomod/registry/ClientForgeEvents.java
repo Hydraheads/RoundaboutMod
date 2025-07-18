@@ -1,10 +1,7 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.block.BubbleScaffoldBlockEntityRenderer;
-import net.hydra.jojomod.block.D4CLightBlockEntityRenderer;
-import net.hydra.jojomod.block.MirrorBlockEntityRenderer;
-import net.hydra.jojomod.block.StandFireRenderer;
+import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
 import net.hydra.jojomod.client.models.projectile.*;
@@ -107,6 +104,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.RINGO.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.POCOLOCO.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GUCCIO.get(), VisageBasisRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.SHIZUKA.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STEVE_NPC.get(), PlayerNPCRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ALEX_NPC.get(), PlayerAlexRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FOG_CLONE.get(), FogCloneRenderer::new);
@@ -121,6 +119,7 @@ public class ClientForgeEvents {
         event.registerBlockEntityRenderer(ForgeBlocks.STAND_FIRE_BLOCK_ENTITY.get(), StandFireRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.MIRROR_BLOCK_ENTITY.get(), MirrorBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY.get(), BubbleScaffoldBlockEntityRenderer::new);
+        event.registerBlockEntityRenderer(ForgeBlocks.INVISIBLE_BLOCK_ENTITY.get(), InvisiBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.D4C_LIGHT_BLOCK_ENTITY.get(), D4CLightBlockEntityRenderer::new);
     }
 

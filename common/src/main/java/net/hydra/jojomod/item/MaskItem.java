@@ -1,5 +1,6 @@
 package net.hydra.jojomod.item;
 
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -32,6 +33,12 @@ public class MaskItem extends Item {
         if (visageData.hasVoices() || $$0.is(ModItems.BLANK_MASK)){
             $$2.add(
                     Component.translatable("roundabout.cinderella.mod_visage.voice_available").withStyle(ChatFormatting.AQUA)
+            );
+        }
+        if (visageData.isJojovein() && !ClientNetworking.getAppropriateConfig().cinderellaSettings.enableJojoveinVisagesInShop){
+
+            $$2.add(
+                    Component.translatable("item.roundabout.creative_only.info").withStyle(ChatFormatting.GOLD)
             );
         }
     }

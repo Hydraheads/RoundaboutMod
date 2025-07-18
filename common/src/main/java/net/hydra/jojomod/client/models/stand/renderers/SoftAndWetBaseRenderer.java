@@ -56,11 +56,5 @@ public class SoftAndWetBaseRenderer<M extends StandEntity> extends StandRenderer
         }
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
-
-    @Nullable
-    @Override
-    protected RenderType getRenderType(SoftAndWetEntity entity, boolean showBody, boolean translucent, boolean showOutline) {
-        return super.getRenderType(entity, showBody, true, showOutline);
-    }
 }
 

@@ -74,6 +74,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.AESTHETICIAN.get(), Aesthetician.createAttributes().build());
         event.put(ForgeEntities.ZOMBIE_AESTHETICIAN.get(), ZombieAesthetician.createAttributes().build());
         event.put(ForgeEntities.RINGO.get(), RingoNPC.createAttributes().build());
+        event.put(ForgeEntities.SHIZUKA.get(), ShizukaNPC.createAttributes().build());
         event.put(ForgeEntities.POCOLOCO.get(), PocolocoNPC.createAttributes().build());
         event.put(ForgeEntities.GUCCIO.get(), GuccioNPC.createAttributes().build());
         event.put(ForgeEntities.VALENTINE.get(), ValentineNPC.createAttributes().build());
@@ -183,6 +184,7 @@ public class ForgeEvents {
         ModBlocks.STEREO = ForgeBlocks.STEREO.get();
         ModBlocks.STAND_FIRE = ForgeBlocks.STAND_FIRE.get();
         ModBlocks.BUBBLE_SCAFFOLD = ForgeBlocks.BUBBLE_SCAFFOLD.get();
+        ModBlocks.INVISIBLOCK = ForgeBlocks.INVISIBLOCK.get();
         ModBlocks.D4C_LIGHT_BLOCK = ForgeBlocks.D4C_LIGHT_BLOCK.get();
 
         ModBlocks.ORANGE_FIRE = ForgeBlocks.ORANGE_FIRE.get();
@@ -196,6 +198,7 @@ public class ForgeEvents {
         ModBlocks.MIRROR_BLOCK_ENTITY = ForgeBlocks.MIRROR_BLOCK_ENTITY.get();
         ModBlocks.STAND_FIRE_BLOCK_ENTITY = ForgeBlocks.STAND_FIRE_BLOCK_ENTITY.get();
         ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY = ForgeBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY.get();
+        ModBlocks.INVISIBLE_BLOCK_ENTITY = ForgeBlocks.INVISIBLE_BLOCK_ENTITY.get();
         ModBlocks.D4C_LIGHT_BLOCK_ENTITY = ForgeBlocks.D4C_LIGHT_BLOCK_ENTITY.get();
 
         ModItems.STAND_ARROW = ForgeItems.STAND_ARROW.get();
@@ -296,6 +299,7 @@ public class ForgeEvents {
         ModItems.AVDOL_MASK = ForgeItems.AVDOL_MASK.get();
         ModItems.DIEGO_MASK = ForgeItems.DIEGO_MASK.get();
         ModItems.RINGO_MASK = ForgeItems.RINGO_MASK.get();
+        ModItems.SHIZUKA_MASK = ForgeItems.SHIZUKA_MASK.get();
         ModItems.POCOLOCO_MASK = ForgeItems.POCOLOCO_MASK.get();
         ModItems.TERRIER_SPAWN_EGG = ForgeItems.TERRIER_SPAWN_EGG.get();
         ModItems.AESTHETICIAN_SPAWN_EGG = ForgeItems.AESTHETICIAN_SPAWN_EGG.get();
@@ -430,6 +434,7 @@ public class ForgeEvents {
         ModEntities.POCOLOCO = ForgeEntities.POCOLOCO.get();
         ModEntities.GUCCIO = ForgeEntities.GUCCIO.get();
         ModEntities.RINGO = ForgeEntities.RINGO.get();
+        ModEntities.SHIZUKA = ForgeEntities.SHIZUKA.get();
         ModEntities.VALENTINE = ForgeEntities.VALENTINE.get();
         ModEntities.STEVE_NPC = ForgeEntities.STEVE_NPC.get();
         ModEntities.ALEX_NPC = ForgeEntities.ALEX_NPC.get();
