@@ -111,6 +111,11 @@ public class PowersAchtungBaby extends NewDashPreset {
         }
     }
 
+    public int burstTicks = -1;
+    public boolean inBurstState(){
+        return burstTicks > 1;
+    }
+
     public void invisiburstClient(){
         if (!this.onCooldown(PowerIndex.SKILL_2)) {
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
@@ -148,41 +153,52 @@ public class PowersAchtungBaby extends NewDashPreset {
         return super.setPowerOther(move,lastMove);
     }
 
+
+    public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
+        if (num == PowerIndex.SKILL_2 && ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstCooldownUsesServerLatency) {
+            return true;
+        }
+        return super.isServerControlledCooldown(ci, num);
+    }
+
     @SuppressWarnings("deprecation")
     public boolean invisibleBurst(){
-        setCooldown(PowerIndex.SKILL_2,ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstCooldown);
-        if (this.self.level() instanceof ServerLevel sl){
-            burstParticles(sl);
-            float range = ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstRange;
-            burstEntities(range);
-            int radius = ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstBlockRange;
+        if (isClient() || (!this.onCooldown(PowerIndex.SKILL_2) || !ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstCooldownUsesServerLatency)) {
+            setCooldown(PowerIndex.SKILL_2,ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstCooldown);
+            if (this.self.level() instanceof ServerLevel sl) {
+                burstTicks = 22;
+                burstParticles(sl);
+                float range = ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstRange;
+                burstEntities(range);
+                int radius = ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstBlockRange;
 
-            BlockPos baseCenter = this.self.getOnPos();
+                BlockPos baseCenter = this.self.getOnPos();
 
-            if (radius > 0) {
-                if (MainUtil.getIsGamemodeApproriateForGrief(this.self)) {
-                    for (int x = -radius; x <= radius; x++) {
-                        for (int y = 0; y <= radius; y++) {
-                            for (int z = -radius; z <= radius; z++) {
-                                if (x * x + y * y + z * z <= radius * radius) {
-                                    BlockPos targetPos = baseCenter.offset(x, y, z);
-                                    BlockState oldState = this.self.level().getBlockState(targetPos);
+                if (radius > 0) {
+                    if (MainUtil.getIsGamemodeApproriateForGrief(this.self)) {
+                        for (int x = -radius; x <= radius; x++) {
+                            for (int y = 0; y <= radius; y++) {
+                                for (int z = -radius; z <= radius; z++) {
+                                    if (x * x + y * y + z * z <= radius * radius) {
+                                        BlockPos targetPos = baseCenter.offset(x, y, z);
+                                        BlockState oldState = this.self.level().getBlockState(targetPos);
 
-                                    // Example: Replace dirt with glowstone
-                                    if (!oldState.isAir() && oldState.getBlock().isCollisionShapeFullBlock(oldState, this.self.level(), targetPos)
-                                            && this.self.level().getBlockEntity(targetPos) == null && !oldState.is(ModPacketHandler.PLATFORM_ACCESS.getOreTag())) {
-                                        BlockState replaced = sl.getBlockState(targetPos);
-                                        BlockEntity replacedEntity = sl.getBlockEntity(targetPos);
-                                        CompoundTag replacedTag = replacedEntity != null ? replacedEntity.saveWithFullMetadata() : null;
+                                        // Example: Replace dirt with glowstone
+                                        if (!oldState.isAir() && oldState.getBlock().isCollisionShapeFullBlock(oldState, this.self.level(), targetPos)
+                                                && this.self.level().getBlockEntity(targetPos) == null && !oldState.is(ModPacketHandler.PLATFORM_ACCESS.getOreTag())) {
+                                            BlockState replaced = sl.getBlockState(targetPos);
+                                            BlockEntity replacedEntity = sl.getBlockEntity(targetPos);
+                                            CompoundTag replacedTag = replacedEntity != null ? replacedEntity.saveWithFullMetadata() : null;
 
-                                        sl.setBlock(targetPos, ModBlocks.INVISIBLOCK.defaultBlockState(), 3);
+                                            sl.setBlock(targetPos, ModBlocks.INVISIBLOCK.defaultBlockState(), 3);
 
-                                        BlockEntity maybeEntity = sl.getBlockEntity(targetPos);
-                                        if (maybeEntity instanceof InvisiBlockEntity entity) {
-                                            entity.setOriginal(replaced, replacedTag, this.self.level());
-                                            entity.ticksUntilRestore = ((IEntityAndData) this.self).roundabout$getTrueInvisibility();
+                                            BlockEntity maybeEntity = sl.getBlockEntity(targetPos);
+                                            if (maybeEntity instanceof InvisiBlockEntity entity) {
+                                                entity.setOriginal(replaced, replacedTag, this.self.level());
+                                                entity.ticksUntilRestore = ((IEntityAndData) this.self).roundabout$getTrueInvisibility();
+                                            }
+                                            this.self.level().setBlock(targetPos, ModBlocks.INVISIBLOCK.defaultBlockState(), 3);
                                         }
-                                        this.self.level().setBlock(targetPos, ModBlocks.INVISIBLOCK.defaultBlockState(), 3);
                                     }
                                 }
                             }
@@ -221,13 +237,17 @@ public class PowersAchtungBaby extends NewDashPreset {
         }
     }
     public boolean invisibleBurstSimple(){
-        if (this.self.level() instanceof ServerLevel sl){
-            burstParticles(sl);
-            float range = ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstCrouchRange;
-            burstEntities(range);
+        if (isClient() || (!this.onCooldown(PowerIndex.SKILL_2) || !ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstCooldownUsesServerLatency)) {
+            setCooldown(PowerIndex.SKILL_2,ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstCooldown);
+            if (this.self.level() instanceof ServerLevel sl) {
+                burstTicks = 22;
+                burstParticles(sl);
+                float range = ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstCrouchRange;
+                burstEntities(range);
+
+            }
 
         }
-
         return true;
     }
 
@@ -279,7 +299,11 @@ public class PowersAchtungBaby extends NewDashPreset {
 
     @Override
     public void tickPower() {
-        if (this.self.level().isClientSide()){
+        if (!this.self.level().isClientSide()){
+            if (burstTicks > -1){
+                burstTicks--;
+            }
+
         }
         super.tickPower();
     }

@@ -551,11 +551,11 @@ public class Config implements Cloneable {
         public Boolean revealLocationWhenDamagingOrHurt;
         @BooleanOption(group = "inherit", value = true)
         public Boolean revealLocationWhenFinishedEating;
-
-        @IntOption(group = "inherit", value = 140, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 139, min = 0, max = 72000)
         public Integer invisiBurstCooldown;
-
-        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean invisiBurstCooldownUsesServerLatency;
+        @IntOption(group = "inherit", value = 240, min = 0, max = 72000)
         public Integer invisiBurstDuration;
         @FloatOption(group = "inherit", value = 4F, min = 0, max = 200F)
         public Float invisiBurstRange;
@@ -563,6 +563,8 @@ public class Config implements Cloneable {
         public Float invisiBurstCrouchRange;
         @IntOption(group = "inherit", value = 4, min = 0, max = 72000)
         public Integer invisiBurstBlockRange;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean invisiBurstAlertsMobs;
     }
 
     public static class TheWorldSettings {

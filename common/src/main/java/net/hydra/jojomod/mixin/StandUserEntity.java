@@ -2965,6 +2965,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         return $$1;
     }
+    @Inject(method = "getVisibilityPercent", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$getVisibilityPercent(CallbackInfoReturnable<Double> cir) {
+        if (roundabout$getStandPowers() instanceof PowersAchtungBaby PB && PB.inBurstState() && ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstAlertsMobs){
+            cir.setReturnValue(0.8);
+        }
+    }
     /**Hide from mobs with armor on*/
     @Inject(method = "getArmorCoverPercentage", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$getArmorCoverPercentage(CallbackInfoReturnable<Float> cir) {
