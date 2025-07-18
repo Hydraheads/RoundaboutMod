@@ -174,6 +174,24 @@ public class MainUtil {
             }
         }
     }
+    public static final void spreadRadialClientPacket(Level level,BlockPos pos,double range, String packet, Object... vargs) {
+        if (!level.isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) level);
+            Vec3 userLocation = new Vec3(pos.getX(),  pos.getY(), pos.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) level).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, range)) {
+                    ModMessageEvents.sendToPlayer((ServerPlayer)serverPlayerEntity, packet,vargs);
+                }
+            }
+        }
+    }
     public static boolean isCreativeOrInvincible(Entity ent){
         if (ent != null && (ent.isInvulnerable() || (ent instanceof Player PL && PL.isCreative()))){
             return true;

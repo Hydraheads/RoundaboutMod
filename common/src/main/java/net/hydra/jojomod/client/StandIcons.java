@@ -9,6 +9,8 @@ public class StandIcons {
     public static final Material STAND_FIRE = new Material(TextureAtlas.LOCATION_BLOCKS,
             new ResourceLocation(Roundabout.MOD_ID,"block/fire_0"));
 
+    public static final ResourceLocation INVISIBLOCK = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/block/invisiblock.png");
     public static final ResourceLocation JOJO_ICONS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/jojo_icons.png");
     public static final ResourceLocation NONE = new ResourceLocation(Roundabout.MOD_ID,

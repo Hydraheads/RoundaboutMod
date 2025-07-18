@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.block.InvisiBlockEntity;
 import net.hydra.jojomod.client.gui.*;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.item.ModItems;
@@ -11,10 +12,16 @@ import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
 import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.*;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.zetalasis.client.shader.D4CShaderFX;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.D4CCloneEntity;
@@ -196,6 +203,24 @@ public class ClientUtil {
                     if (ent != null){
                         ((IEntityAndData)ent).roundabout$setTrueInvisibility(altered);
 
+                    }
+                }
+                /**Render invis blocks by getting their state*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.INVIS_BLOCK_STATE.value)) {
+                    Roundabout.LOGGER.info("Yes");
+                    BlockPos pos = (BlockPos) vargs[0];
+                    CompoundTag tag = (CompoundTag) vargs[1];
+                    ClientLevel level = Minecraft.getInstance().level;
+                    if (level != null && level.getChunkSource().hasChunk(pos.getX() >> 4, pos.getZ() >> 4)) {
+                        BlockEntity be =  level.getChunkAt(pos).getBlockEntity(pos, LevelChunk.EntityCreationType.IMMEDIATE);
+                        if (be instanceof InvisiBlockEntity ivb) {
+                            Roundabout.LOGGER.info("Yeyeye");
+                            if (tag.contains("OriginalState")) {
+                                Roundabout.LOGGER.info("Yeye");
+                                BlockState state = NbtUtils.readBlockState(BuiltInRegistries.BLOCK.asLookup(), tag.getCompound("OriginalState"));
+                                ivb.setOriginal2(state);
+                            }
+                        }
                     }
                 }
             }

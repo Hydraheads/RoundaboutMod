@@ -545,6 +545,8 @@ public class Config implements Cloneable {
         public Boolean hidesHeldItems;
         @BooleanOption(group = "inherit", value = true)
         public Boolean hidesShotProjectiles;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean hidesPlacedBlocks;
         @BooleanOption(group = "inherit", value = true)
         public Boolean revealLocationWhenDamagingOrHurt;
     }
