@@ -3,6 +3,7 @@ package net.zetalasis.networking.packet.impl;
 import io.netty.buffer.Unpooled;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.zetalasis.networking.packet.api.IClientNetworking;
@@ -52,6 +53,7 @@ public class ModNetworking {
         DECODERS.put(Vector3f.class, FriendlyByteBuf::readVector3f);
         DECODERS.put(ItemStack.class, FriendlyByteBuf::readItem);
         DECODERS.put(BlockHitResult.class, FriendlyByteBuf::readBlockHitResult);
+        DECODERS.put(CompoundTag.class, FriendlyByteBuf::readNbt);
 
         ENCODERS.put(Integer.class, (buf, o) -> buf.writeInt((Integer) o));
         ENCODERS.put(int.class, (buf, o) -> buf.writeInt((Integer) o));
@@ -77,6 +79,7 @@ public class ModNetworking {
         ENCODERS.put(ItemStack.class, (buf, o) -> buf.writeItem((ItemStack) o));
         ENCODERS.put(Vector3f.class, (buf, o) -> buf.writeVector3f((Vector3f)o));
         ENCODERS.put(BlockHitResult.class, (buf, o) -> buf.writeBlockHitResult((BlockHitResult) o));
+        ENCODERS.put(CompoundTag.class, (buf, o) -> buf.writeNbt((CompoundTag) o));
     }
 
     public static @Nullable Connection getC2SConnection()

@@ -3,14 +3,20 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.CancelDataDrivenDropLimits;
+import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.block.InvisiBlockEntity;
+import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -51,6 +57,28 @@ public class ZBlock {
     private void roundabout$playerDestroy(Level $$0, Player $$1, BlockPos $$2, BlockState $$3, BlockEntity $$4, ItemStack $$5, CallbackInfo ci) {
         if ($$1 != null && !$$0.isClientSide()){
             ((StandUser)$$1).roundabout$getStandPowers().onDestroyBlock($$0,$$1,$$2,$$3,$$4,$$5);
+        }
+    }
+    @SuppressWarnings("deprecation")
+    @Inject(method = "setPlacedBy", at = @At(value = "HEAD"))
+    private void roundabout$setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity $$3, ItemStack $$4, CallbackInfo ci) {
+        if ($$3 != null && !level.isClientSide() && ((IEntityAndData)$$3).roundabout$getTrueInvisibility() > -1){
+            if (ClientNetworking.getAppropriateConfig().achtungSettings.hidesPlacedBlocks &&
+            state.getBlock().isCollisionShapeFullBlock(state, level, pos)){
+                BlockState placed = level.getBlockState(pos);
+                BlockEntity placedEntity = level.getBlockEntity(pos);
+                CompoundTag placedTag = placedEntity != null ? placedEntity.saveWithFullMetadata() : null;
+
+                // Replace with Invisiblock
+                level.setBlock(pos, ModBlocks.INVISIBLOCK.defaultBlockState(), 3);
+
+                BlockEntity newEntity = level.getBlockEntity(pos);
+                if (newEntity instanceof InvisiBlockEntity inv) {
+                    inv.setOriginal(placed, placedTag, level);
+                    inv.ticksUntilRestore = ((IEntityAndData)$$3).roundabout$getTrueInvisibility();
+                    inv.restoreParticlesLesser();
+                }
+            }
         }
     }
     /**

@@ -16,6 +16,7 @@ import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
@@ -163,7 +164,7 @@ public class PowersAchtungBaby extends NewDashPreset {
 
                                 // Example: Replace dirt with glowstone
                                 if (!oldState.isAir() && oldState.getBlock().isCollisionShapeFullBlock(oldState, this.self.level(), targetPos)
-                                        && this.self.level().getBlockEntity(targetPos) == null) {
+                                        && this.self.level().getBlockEntity(targetPos) == null && !oldState.is(ModPacketHandler.PLATFORM_ACCESS.getOreTag())) {
                                     BlockState replaced = sl.getBlockState(targetPos);
                                     BlockEntity replacedEntity = sl.getBlockEntity(targetPos);
                                     CompoundTag replacedTag = replacedEntity != null ? replacedEntity.saveWithFullMetadata() : null;
@@ -172,7 +173,7 @@ public class PowersAchtungBaby extends NewDashPreset {
 
                                     BlockEntity maybeEntity = sl.getBlockEntity(targetPos);
                                     if (maybeEntity instanceof InvisiBlockEntity entity) {
-                                        entity.setOriginal(replaced, replacedTag);
+                                        entity.setOriginal(replaced, replacedTag, this.self.level());
                                         entity.ticksUntilRestore = ((IEntityAndData)this.self).roundabout$getTrueInvisibility();
                                     }
                                     this.self.level().setBlock(targetPos, ModBlocks.INVISIBLOCK.defaultBlockState(), 3);

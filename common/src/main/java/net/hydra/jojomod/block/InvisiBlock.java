@@ -1,11 +1,13 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.access.IEntityAndData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -46,7 +48,18 @@ public class InvisiBlock extends BaseEntityBlock {
     protected void spawnDestroyParticles(Level $$0, Player $$1, BlockPos $$2, BlockState $$3) {
 
     }
-
+    @Override
+    public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity) {
+        if (!level.isClientSide) {
+            BlockEntity blockEntity = level.getBlockEntity(pos);
+            if (blockEntity instanceof InvisiBlockEntity inv) {
+                if (entity != null && ((IEntityAndData)entity).roundabout$getTrueInvisibility() <= -1) {
+                    inv.restoreNow();
+                }
+            }
+        }
+        super.stepOn(level, pos, state, entity); // preserve vanilla behavior
+    }
     @Override
     public void attack(BlockState state, Level level, BlockPos pos, Player player) {
         if (!level.isClientSide) {
@@ -58,7 +71,8 @@ public class InvisiBlock extends BaseEntityBlock {
     }
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide && player != null && (((IEntityAndData)player).roundabout$getTrueInvisibility() <= -1 ||
+                !(!player.getItemInHand(hand).isEmpty() && player.getItemInHand(hand).getItem() instanceof BlockItem))) {
             BlockEntity entity = level.getBlockEntity(pos);
             if (entity instanceof InvisiBlockEntity inv) {
                 inv.restoreNow();

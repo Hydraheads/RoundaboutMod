@@ -13,7 +13,8 @@ public class ServerToClientPackets {
             Interpolate("unskip_interpolation"),
             Chrono("chrono_vision_player"),
             MANDOM_PENALTY("mandom_penalty"),
-            TRUE_INVISIBILITY("invis");
+            TRUE_INVISIBILITY("invis"),
+            INVIS_BLOCK_STATE("invis_block");
 
             public final String value;
 

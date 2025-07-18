@@ -53,6 +53,9 @@ public class ClientConfig implements Cloneable {
     public Boolean mandomRewindShowsVisualEffectsToNonMandomUsers;
     @BooleanOption(group = "inherit", value = true)
     public Boolean mandomRewindAttemptsToSkipInterpolation;
+
+    @IntOption(group = "inherit", value = 60, min = 0, max = 255)
+    public Integer invisibleBlockDepth;
     @NestedOption(group = "modded")
     public ClientConfig.ConfigSettings configSettings;
     @NestedOption(group = "modded")
