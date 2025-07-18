@@ -2,6 +2,8 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.block.InvisiBlockEntity;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
@@ -19,6 +21,8 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,6 +32,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -95,6 +101,9 @@ public class PowersAchtungBaby extends NewDashPreset {
             case SKILL_2_NORMAL-> {
                 invisiburstClient();
             }
+            case SKILL_2_CROUCH-> {
+                invisiburstSimpleClient();
+            }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 dash();
             }
@@ -104,6 +113,10 @@ public class PowersAchtungBaby extends NewDashPreset {
     public void invisiburstClient(){
         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
         tryPowerPacket(PowerIndex.POWER_2);
+    }
+    public void invisiburstSimpleClient(){
+        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
+        tryPowerPacket(PowerIndex.POWER_2_SNEAK);
     }
 
     public void switchModeClient(){
@@ -123,40 +136,90 @@ public class PowersAchtungBaby extends NewDashPreset {
             case PowerIndex.POWER_2 -> {
                 return invisibleBurst();
             }
+            case PowerIndex.POWER_2_SNEAK -> {
+                return invisibleBurstSimple();
+            }
         }
         return super.setPowerOther(move,lastMove);
     }
 
+    @SuppressWarnings("deprecation")
     public boolean invisibleBurst(){
         if (this.self.level() instanceof ServerLevel sl){
-            Vec3 pos = new Vec3(this.self.getX(),
-                    this.self.getY() +(this.self.getBbHeight()*0.5),
-                    this.self.getZ());
-            sl.sendParticles(ModParticles.BABY_CRACKLE,
-                    pos.x(),
-                    pos.y(),
-                    pos.z(),
-                    0,0, 0, 0, 0);
-            playStandUserOnlySoundsIfNearby(BURST, 27, false,false);
-            spawnExplosionParticles(this.self.level(), pos, 100, 0.5);
-
+            burstParticles(sl);
             float range = 5;
-            List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.self.level(), this.getSelf().blockPosition(), range+1);
+            burstEntities(range);
+            int radius = 4;
 
-            if (!mobsInRange.isEmpty()) {
-                for (Entity ent : mobsInRange) {
-                    if (ent.distanceTo(this.self) <= range){
-                        IEntityAndData entityAndData = ((IEntityAndData) ent);
-                        entityAndData.roundabout$setTrueInvisibility(300);
+            BlockPos baseCenter = this.self.getOnPos();
+
+            for (int x = -radius; x <= radius; x++) {
+                for (int y = 0; y <= radius; y++) {
+                    for (int z = -radius; z <= radius; z++) {
+                        if (x * x + y * y + z * z <= radius * radius) {
+                            BlockPos targetPos = baseCenter.offset(x, y, z);
+                            BlockState oldState = this.self.level().getBlockState(targetPos);
+
+                            // Example: Replace dirt with glowstone
+                            if (!oldState.isAir() && oldState.getBlock().isCollisionShapeFullBlock(oldState,this.self.level(),targetPos)
+                            && this.self.level().getBlockEntity(targetPos) == null) {
+                                BlockState replaced = sl.getBlockState(targetPos);
+                                BlockEntity replacedEntity = sl.getBlockEntity(targetPos);
+                                CompoundTag replacedTag = replacedEntity != null ? replacedEntity.saveWithFullMetadata() : null;
+
+                                sl.setBlock(targetPos, ModBlocks.INVISIBLOCK.defaultBlockState(), 3);
+
+                                BlockEntity maybeEntity = sl.getBlockEntity(targetPos);
+                                if (maybeEntity instanceof InvisiBlockEntity entity) {
+                                    entity.setOriginal(replaced, replacedTag);
+                                }
+                                this.self.level().setBlock(targetPos, ModBlocks.INVISIBLOCK.defaultBlockState(), 3);
+                            }
+                        }
                     }
                 }
             }
-
         }
 
         return true;
     }
 
+    public void burstParticles(ServerLevel sl){
+
+        Vec3 pos = new Vec3(this.self.getX(),
+                this.self.getY() +(this.self.getBbHeight()*0.5),
+                this.self.getZ());
+        sl.sendParticles(ModParticles.BABY_CRACKLE,
+                pos.x(),
+                pos.y(),
+                pos.z(),
+                0,0, 0, 0, 0);
+        playStandUserOnlySoundsIfNearby(BURST, 27, false,false);
+        spawnExplosionParticles(this.self.level(), pos, 100, 0.5);
+    }
+
+    public void burstEntities(float range){
+
+        List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.self.level(), this.getSelf().blockPosition(), range+1);
+        if (!mobsInRange.isEmpty()) {
+            for (Entity ent : mobsInRange) {
+                if (ent.distanceTo(this.self) <= range){
+                    IEntityAndData entityAndData = ((IEntityAndData) ent);
+                    entityAndData.roundabout$setTrueInvisibility(300);
+                }
+            }
+        }
+    }
+    public boolean invisibleBurstSimple(){
+        if (this.self.level() instanceof ServerLevel sl){
+            burstParticles(sl);
+            float range = 3;
+            burstEntities(range);
+
+        }
+
+        return true;
+    }
 
     public static void spawnExplosionParticles(Level level, Vec3 center, int particleCount, double speed) {
         if (!(level instanceof ServerLevel serverLevel)) return;
