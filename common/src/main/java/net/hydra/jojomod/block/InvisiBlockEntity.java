@@ -11,6 +11,7 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -41,10 +42,39 @@ public class InvisiBlockEntity extends BlockEntity {
         return super.getLevel();
     }
 
+    public void restoreNow() {
+        if (level != null && !level.isClientSide && level.getBlockEntity(worldPosition) == this) {
+            level.setBlock(worldPosition, originalState, 3);
+            level.scheduleTick(worldPosition, originalState.getBlock(), 1);
+
+            if (originalTag != null) {
+                BlockEntity restored = level.getBlockEntity(worldPosition);
+                if (restored != null) {
+                    restored.load(originalTag);
+                }
+            }
+            restoreParticles();
+        }
+    }
+
+    public void restoreParticles(){
+
+        if (level instanceof ServerLevel SL) {
+            SL.sendParticles(
+                    ModParticles.MAGIC_DUST, // use whatever type you like
+                    worldPosition.getX() + 0.5,
+                    worldPosition.getY() + 0.5,
+                    worldPosition.getZ() + 0.5,
+                    7, // count
+                    0.3, 0.3, 0.3, // spread
+                    0.05 // speed
+            );
+        }
+    }
+
     public InvisiBlockEntity(BlockPos $$0, BlockState $$1) {
         super(ModBlocks.INVISIBLE_BLOCK_ENTITY, $$0, $$1);
     }
-
     @Override
     protected void saveAdditional(CompoundTag tag) {
         tag.put("OriginalState", NbtUtils.writeBlockState(originalState));
@@ -72,6 +102,7 @@ public class InvisiBlockEntity extends BlockEntity {
         if (!level.isClientSide && --ticksUntilRestore <= 0) {
             if (level != null && level.getBlockEntity(worldPosition) == this) {
                 level.setBlock(worldPosition, originalState, 3);
+                restoreParticles();
                 if (originalTag != null) {
                     BlockEntity restored = level.getBlockEntity(worldPosition);
                     level.scheduleTick(worldPosition, originalState.getBlock(), 1);
