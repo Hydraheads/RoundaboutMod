@@ -114,7 +114,6 @@
     "networking.ZServerGamePacketListenerImpl"
   ],
   "client": [
-    "AchtungArrowRenderer",
     "CustomItemRendererMixin",
     "D4CDisableBlockInteraction",
     "GeckolibCompatAttempt",
@@ -151,10 +150,8 @@
     "ZHumanoidArmorLayer",
     "ZHumanoidMobRenderer",
     "ZHumanoidModel",
-    "ZItemBlockRenderTypes",
     "ZItemInHandLayer",
     "ZItemInHandRenderer",
-    "ZItemPickupParticle",
     "ZItemRenderer",
     "ZKeyboardHandler",
     "ZKeyboardInput",
@@ -187,7 +184,10 @@
     "ZWorldRenderer",
     "achtung.AchtungArrowRenderer",
     "achtung.AchtungHumanoidArmorLayer",
+    "achtung.AchtungItemBlockRenderTypes",
+    "achtung.AchtungItemPickupParticle",
     "achtung.AchtungItemRenderer",
+    "achtung.AchtungLevelRenderer",
     "achtung.AchtungModel",
     "achtung.AchtungModelPart",
     "networking.ZClientGamePacketListener"

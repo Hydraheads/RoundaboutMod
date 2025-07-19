@@ -252,7 +252,7 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
         return $$0;
     }
 
-    /**Render external layers like soft and wet shooting mode out of context*/
+    /**Render external layers like soft and wet shooting mode out of context. This particular inject is for Achtung Baby*/
     @Inject(method = "renderHand", at = @At(value = "HEAD"), cancellable = true)
     private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderHandHEAD(PoseStack stack, MultiBufferSource buffer, int integer,
                                                                                                 AbstractClientPlayer acl, ModelPart $$4, ModelPart $$5,

@@ -23,7 +23,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ArrowRenderer.class)
 public abstract class AchtungArrowRenderer<T extends AbstractArrow> extends EntityRenderer<T> {
-
     /***
      * Code for rendering see through arrows with Achtung Baby!
      * If partially invisible, replace the renderer.
@@ -103,9 +102,11 @@ public abstract class AchtungArrowRenderer<T extends AbstractArrow> extends Enti
      * */
 
 
-    @Shadow public abstract void vertex(Matrix4f $$0, Matrix3f $$1, VertexConsumer $$2, int $$3, int $$4, int $$5, float $$6, float $$7, int $$8, int $$9, int $$10, int $$11);
-
     protected AchtungArrowRenderer(EntityRendererProvider.Context $$0) {
         super($$0);
     }
+
+    @Shadow
+    public abstract void vertex(Matrix4f $$0, Matrix3f $$1, VertexConsumer $$2, int $$3, int $$4, int $$5, float $$6, float $$7, int $$8, int $$9, int $$10, int $$11);
+
 }
