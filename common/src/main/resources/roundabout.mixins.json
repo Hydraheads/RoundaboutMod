@@ -183,6 +183,7 @@
     "ZWindowMixin",
     "ZWorldRenderer",
     "achtung.AchtungArrowRenderer",
+    "achtung.AchtungEntityRenderDispatcher",
     "achtung.AchtungGameRenderer",
     "achtung.AchtungHumanoidArmorLayer",
     "achtung.AchtungItemBlockRenderTypes",
