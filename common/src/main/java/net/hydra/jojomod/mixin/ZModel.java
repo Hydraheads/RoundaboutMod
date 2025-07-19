@@ -15,7 +15,7 @@ public class ZModel {
     @Inject(method = "renderType", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$renderType(ResourceLocation $$0, CallbackInfoReturnable<RenderType> cir) {
         float throwfade = ClientUtil.getThrowFadeToTheEther();
-        if (throwfade != 1) {
+        if (throwfade != 1 && !ClientUtil.isFabulous()) {
             cir.setReturnValue(RenderType.entityTranslucentCull($$0));
         }
     }
