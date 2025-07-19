@@ -5,31 +5,21 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.ModParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -58,7 +48,8 @@ public class InvisiBlock extends BaseEntityBlock {
     public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity) {
         if (!level.isClientSide) {
             BlockEntity blockEntity = level.getBlockEntity(pos);
-            if (blockEntity instanceof InvisiBlockEntity inv && inv.getOriginalState().is(Blocks.POWDER_SNOW)) {
+            if (blockEntity instanceof InvisiBlockEntity inv && (inv.getOriginalState().is(Blocks.POWDER_SNOW)
+                    || inv.getOriginalState().is(Blocks.MAGMA_BLOCK))) {
                 if (entity != null && ((IEntityAndData)entity).roundabout$getTrueInvisibility() <= -1) {
                     inv.restoreNow();
                 }
