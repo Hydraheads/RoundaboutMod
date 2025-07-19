@@ -47,8 +47,6 @@ public class RattRenderer extends StandRenderer<RattEntity> {
         }
     }
 
-    private static final ResourceLocation main_skin = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/anime.png");
-
 
     @Override
     public void render(RattEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {

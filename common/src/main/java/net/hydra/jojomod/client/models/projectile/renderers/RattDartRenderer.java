@@ -23,11 +23,11 @@ public class RattDartRenderer extends EntityRenderer<RattDartEntity> {
 
     public RattDartRenderer(EntityRendererProvider.Context $$0) {
         super($$0);
-        this.model = new RattDartModel($$0.bakeLayer(ModEntityRendererClient.KNIFE_LAYER));
+        this.model = new RattDartModel($$0.bakeLayer(ModEntityRendererClient.RATT_DART_LAYER));
     }
 
     @Override
-    public ResourceLocation getTextureLocation(RattDartEntity rattDartEntity) {return ModEntities.KNIFE_TEXTURE;}
+    public ResourceLocation getTextureLocation(RattDartEntity rattDartEntity) {return ModEntities.RATT_DART_TEXTURE;}
 
     public void render(RattDartEntity $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
         if (!ClientUtil.getScreenFreeze()) {
