@@ -890,6 +890,8 @@
   "ability.roundabout.invisiburst.desc": "Libères vos émotions dans un débordement d'invisibilité, rendant vous et tout autres créatures environnantes invisibles. Ça diminue votre distance de détection, et se dissipe au bout d'un moment, ou quand vous effectuez certaines actions. Activer cette capacité brièvement laisse les créatures vous détecté. Si les Stand peuvent intéragir avec les blocs, rend temporairement les blocs environnants qui ne sont pas des minerais autour de vous invisibles aussi, ce qui peut aider pendant une séance de minage. Les blocs invisibles n'ont pas de propriétés, et ne peuvent pas être explosés.",
   "ability.roundabout.controlled_burst": "Débordement Contrôlé",
   "ability.roundabout.controlled_burst.desc": "Une variation du débordement d'invisibilité avec une porté réduite et aucune invisibilité de blocs. Signifie un plus grand contrôle des émotions de l'utilisateur. Utile si vous ne voulez pas rendre vos adversaires invisibles.",
+  "ability.roundabout.place_invis": "Placement de Bloc Invisible",
+  "ability.roundabout.place_invis.desc": "Place un bloc, partageant une duré d'invisibilité avec vous. Marche seulement lorsque vous êtes invisible.",
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Non débloqué",
