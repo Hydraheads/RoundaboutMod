@@ -34,7 +34,7 @@ public abstract class ConfigManager {
     private static boolean loaded = false;
 
     public static Config getConfig() {
-        if (Networking.isDedicated()) return Config.getServerInstance();
+        //if (Networking.isDedicated()) return Config.getServerInstance();
         return Config.getLocalInstance();
     }
     public static AdvancedConfig getAdvancedConfig() {
