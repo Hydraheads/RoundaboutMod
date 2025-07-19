@@ -890,6 +890,8 @@
   "ability.roundabout.invisiburst.desc": "Release your emotions in a burst of invisibility, making you and all nearby entities invisible. It decreases your range of being seen, and wears off overtime, or when you do certain actions. Activating this ability briefly lets mobs see you. If the stand griefing gamerule is off, temporarily makes blocks that are not ores around you invisible too, which can assist in mining. Invisible blocks are without properties, and cannot be blown up.",
   "ability.roundabout.controlled_burst": "Controlled Burst",
   "ability.roundabout.controlled_burst.desc": "A variation of Invisiburst with decreased range and no block invisibility. Signifies greater control of the user's emotions. Useful if you don't want to accidentally make your opponents invisible.",
+  "ability.roundabout.place_invis": "Invisible Block Placement",
+  "ability.roundabout.place_invis.desc": "Place blocks, passing your invisibility duration down to them. Only works while you are invisible.",
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Locked",
@@ -1707,7 +1709,7 @@
   "config.roundabout.hidesHeldItems.name": "Hides Held Items",
   "config.roundabout.hidesHeldItems.desc": "Makes the invisibility hide the item you are holding.",
   "config.roundabout.hidesPlacedBlocks.name": "Hides Placed Blocks",
-  "config.roundabout.hidesPlacedBlocks.desc": "Makes the invisibility hide the block you place down. The block is visible for a split second first due to technical safeguarding reasons, but I felt this made the stand look less polished so this is off by default.",
+  "config.roundabout.hidesPlacedBlocks.desc": "Enables the ability to hide blocks if they are placed while invisible via skill key 3 (crouch input, unless you press the row switch button).",
   "config.roundabout.hidesShotProjectiles.name": "Hides Launched Items",
   "config.roundabout.hidesShotProjectiles.desc": "Makes the invisibility apply to items you throw, shoot, drop, etc.",
   "config.roundabout.revealLocationWhenDamagingOrHurt.name": "Damage Reveals Self",
