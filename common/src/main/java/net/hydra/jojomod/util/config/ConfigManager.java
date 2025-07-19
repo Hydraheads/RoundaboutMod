@@ -352,6 +352,7 @@ public abstract class ConfigManager {
     }
 
     public static void saveClientConfig() {
+        validateFields(ClientConfig.getLocalInstance());
         saveClient(ClientConfig.getLocalInstance(), clientConfigPath);
     }
     public static void saveAdvacedConfig() {
