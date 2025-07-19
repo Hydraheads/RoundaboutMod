@@ -218,6 +218,10 @@ public class InvisiBlock extends BaseEntityBlock {
     public static void explode(Level $$0, BlockPos $$1, @Nullable LivingEntity $$2) {
         if (!$$0.isClientSide) {
             PrimedTnt $$3 = new PrimedTnt($$0, (double)$$1.getX() + 0.5, (double)$$1.getY(), (double)$$1.getZ() + 0.5, $$2);
+            BlockEntity ent = $$0.getBlockEntity($$1);
+            if (ent instanceof InvisiBlockEntity ibe && $$3 != null){
+                ((IEntityAndData)$$3).roundabout$setTrueInvisibility(ibe.ticksUntilRestore);
+            }
             $$0.addFreshEntity($$3);
             $$0.playSound(null, $$3.getX(), $$3.getY(), $$3.getZ(), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
             $$0.gameEvent($$2, GameEvent.PRIME_FUSE, $$1);
