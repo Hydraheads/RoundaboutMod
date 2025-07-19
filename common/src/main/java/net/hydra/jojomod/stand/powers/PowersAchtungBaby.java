@@ -453,7 +453,7 @@ public class PowersAchtungBaby extends NewDashPreset {
             List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.self.level(), this.getSelf().blockPosition(), range + 1);
             if (!mobsInRange.isEmpty()) {
                 for (Entity ent : mobsInRange) {
-                    if (ent instanceof Mob mb) {
+                    if (ent instanceof Mob mb && mb.getTarget() != null && mb.getTarget().is(this.self)) {
                         if (mb.distanceTo(this.self) >= range2) {
                             ((StandUser)mb).roundabout$aggressivelyEnforceAggro(null);
                         }
