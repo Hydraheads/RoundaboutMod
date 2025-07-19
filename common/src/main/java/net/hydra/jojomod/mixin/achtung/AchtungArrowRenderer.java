@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.achtung;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -22,15 +22,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ArrowRenderer.class)
-public abstract class ZArrowRenderer<T extends AbstractArrow> extends EntityRenderer<T> {
+public abstract class AchtungArrowRenderer<T extends AbstractArrow> extends EntityRenderer<T> {
 
-    @Shadow public abstract void vertex(Matrix4f $$0, Matrix3f $$1, VertexConsumer $$2, int $$3, int $$4, int $$5, float $$6, float $$7, int $$8, int $$9, int $$10, int $$11);
+    /***
+     * Code for rendering see through arrows with Achtung Baby!
+     * If partially invisible, replace the renderer.
+     * This is a copy of the arrow renderer, but with transparency support
+     * like the stand arrow renderer now has*/
 
-    protected ZArrowRenderer(EntityRendererProvider.Context $$0) {
-        super($$0);
-    }
 
-    /**If partially invisible, replace the renderer*/
     @Inject(method = "render(Lnet/minecraft/world/entity/projectile/AbstractArrow;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$renderArrow(T $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
         float throwfade = ClientUtil.getThrowFadeToTheEther();
@@ -93,5 +93,19 @@ public abstract class ZArrowRenderer<T extends AbstractArrow> extends EntityRend
                 .uv2($$11)
                 .normal($$1, (float)$$8, (float)$$10, (float)$$9)
                 .endVertex();
+    }
+
+
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+
+    @Shadow public abstract void vertex(Matrix4f $$0, Matrix3f $$1, VertexConsumer $$2, int $$3, int $$4, int $$5, float $$6, float $$7, int $$8, int $$9, int $$10, int $$11);
+
+    protected AchtungArrowRenderer(EntityRendererProvider.Context $$0) {
+        super($$0);
     }
 }

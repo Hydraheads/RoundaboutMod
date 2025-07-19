@@ -114,6 +114,7 @@
     "networking.ZServerGamePacketListenerImpl"
   ],
   "client": [
+    "AchtungArrowRenderer",
     "CustomItemRendererMixin",
     "D4CDisableBlockInteraction",
     "GeckolibCompatAttempt",
@@ -128,7 +129,6 @@
     "ZAbstractFurnaceScreen",
     "ZAbstractZombieRenderer",
     "ZAgeableListModel",
-    "ZArrowRenderer",
     "ZBannerRenderer",
     "ZBlockEntityClient",
     "ZBlockEntityRenderDispatcher",
@@ -185,6 +185,7 @@
     "ZViewArea",
     "ZWindowMixin",
     "ZWorldRenderer",
+    "achtung.AchtungArrowRenderer",
     "achtung.AchtungHumanoidArmorLayer",
     "achtung.AchtungItemRenderer",
     "achtung.AchtungModel",
