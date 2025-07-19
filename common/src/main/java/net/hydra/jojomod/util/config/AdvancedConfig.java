@@ -42,22 +42,24 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:soft_and_wet_disc"
             )
     );
-    public Set<String> standArrowSecondaryPoolv4 = new HashSet<>(
+    public Set<String> standArrowSecondaryPoolv5 = new HashSet<>(
             Arrays.asList(
                     "roundabout:cinderella_disc",
                     "roundabout:hey_ya_disc",
                     "roundabout:mandom_disc",
-                    "roundabout:survivor_disc"
+                    "roundabout:survivor_disc",
+                    "roundabout:achtung_baby_disc"
             )
     );
-    public Set<String> naturalStandUserMobPoolv3 = new HashSet<>(
+    public Set<String> naturalStandUserMobPoolv4 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
                     "roundabout:justice_disc",
                     "roundabout:magicians_red_disc",
                     "roundabout:cinderella_disc",
-                    "roundabout:soft_and_wet_disc"
+                    "roundabout:soft_and_wet_disc",
+                    "roundabout:achtung_baby_disc"
             )
     );
     public Set<String> humanoidOnlyStandUserMobPoolv2 = new HashSet<>(

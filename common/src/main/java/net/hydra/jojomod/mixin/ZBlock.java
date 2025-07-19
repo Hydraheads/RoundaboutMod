@@ -9,6 +9,7 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
@@ -62,24 +63,28 @@ public class ZBlock {
     @SuppressWarnings("deprecation")
     @Inject(method = "setPlacedBy", at = @At(value = "HEAD"))
     private void roundabout$setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity $$3, ItemStack $$4, CallbackInfo ci) {
+        /**
         if ($$3 != null && !level.isClientSide() && ((IEntityAndData)$$3).roundabout$getTrueInvisibility() > -1){
             if (ClientNetworking.getAppropriateConfig().achtungSettings.hidesPlacedBlocks &&
             state.getBlock().isCollisionShapeFullBlock(state, level, pos)){
-                BlockState placed = level.getBlockState(pos);
-                BlockEntity placedEntity = level.getBlockEntity(pos);
-                CompoundTag placedTag = placedEntity != null ? placedEntity.saveWithFullMetadata() : null;
+                if ($$3 instanceof Player PE && PE.isCrouching() && ((StandUser)PE).roundabout$getStandPowers() instanceof PowersAchtungBaby PB) {
+                    BlockState placed = level.getBlockState(pos);
+                    BlockEntity placedEntity = level.getBlockEntity(pos);
+                    CompoundTag placedTag = placedEntity != null ? placedEntity.saveWithFullMetadata() : null;
 
-                // Replace with Invisiblock
-                level.setBlock(pos, ModBlocks.INVISIBLOCK.defaultBlockState(), 3);
+                    // Replace with Invisiblock
+                    level.setBlock(pos, ModBlocks.INVISIBLOCK.defaultBlockState(), 3);
 
-                BlockEntity newEntity = level.getBlockEntity(pos);
-                if (newEntity instanceof InvisiBlockEntity inv) {
-                    inv.setOriginal(placed, placedTag, level);
-                    inv.ticksUntilRestore = ((IEntityAndData)$$3).roundabout$getTrueInvisibility();
-                    inv.restoreParticlesLesser();
+                    BlockEntity newEntity = level.getBlockEntity(pos);
+                    if (newEntity instanceof InvisiBlockEntity inv) {
+                        inv.setOriginal(placed, placedTag, level);
+                        inv.ticksUntilRestore = ((IEntityAndData) $$3).roundabout$getTrueInvisibility();
+                        PowersAchtungBaby.spawnExplosionParticles(PE.level(), pos.getCenter(), 10, 0.2);
+                    }
                 }
             }
         }
+         **/
     }
     /**
     Inject(method = "shouldRenderFace", at = @At(value = "HEAD"), cancellable = true)

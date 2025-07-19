@@ -1,23 +1,15 @@
 package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.networking.ServerToClientPackets;
-import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
-import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -31,6 +23,7 @@ public class InvisiBlockEntity extends BlockEntity {
     public BlockState getOriginalState(){
         return originalState;
     }
+
     private CompoundTag originalTag = null;
     public int ticksUntilRestore = 100; // 5 seconds at 20 tps
 
