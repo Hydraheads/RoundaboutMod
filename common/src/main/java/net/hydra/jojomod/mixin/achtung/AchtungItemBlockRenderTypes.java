@@ -20,7 +20,7 @@ public abstract class AchtungItemBlockRenderTypes {
      *
      */
     @Inject(method = "getRenderType(Lnet/minecraft/world/item/ItemStack;Z)Lnet/minecraft/client/renderer/RenderType;", at = @At(value = "HEAD"), cancellable = true)
-    private static void roundabout$getRenderTypeItems(ItemStack $$0, boolean $$1, CallbackInfoReturnable<RenderType> cir) {
+    private static void roundabout$getRenderTypeItemsAchtung(ItemStack $$0, boolean $$1, CallbackInfoReturnable<RenderType> cir) {
         float throwfade = ClientUtil.getThrowFadeToTheEther();
         if (throwfade != 1 && !ClientUtil.isFabulous()) {
             cir.setReturnValue(Sheets.translucentItemSheet());

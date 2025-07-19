@@ -31,7 +31,7 @@ public abstract class AchtungArrowRenderer<T extends AbstractArrow> extends Enti
 
 
     @Inject(method = "render(Lnet/minecraft/world/entity/projectile/AbstractArrow;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$renderArrow(T $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
+    private void roundabout$renderArrowAchtung(T $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
         float throwfade = ClientUtil.getThrowFadeToTheEther();
         if (throwfade != 1){
             $$3.pushPose();
@@ -60,21 +60,21 @@ public abstract class AchtungArrowRenderer<T extends AbstractArrow> extends Enti
             PoseStack.Pose $$19 = $$3.last();
             Matrix4f $$20 = $$19.pose();
             Matrix3f $$21 = $$19.normal();
-            this.roundabout$vertex($$20, $$21, $$18, -7, -2, -2, 0.0F, 0.15625F, -1, 0, 0, $$5);
-            this.roundabout$vertex($$20, $$21, $$18, -7, -2, 2, 0.15625F, 0.15625F, -1, 0, 0, $$5);
-            this.roundabout$vertex($$20, $$21, $$18, -7, 2, 2, 0.15625F, 0.3125F, -1, 0, 0, $$5);
-            this.roundabout$vertex($$20, $$21, $$18, -7, 2, -2, 0.0F, 0.3125F, -1, 0, 0, $$5);
-            this.roundabout$vertex($$20, $$21, $$18, -7, 2, -2, 0.0F, 0.15625F, 1, 0, 0, $$5);
-            this.roundabout$vertex($$20, $$21, $$18, -7, 2, 2, 0.15625F, 0.15625F, 1, 0, 0, $$5);
-            this.roundabout$vertex($$20, $$21, $$18, -7, -2, 2, 0.15625F, 0.3125F, 1, 0, 0, $$5);
-            this.roundabout$vertex($$20, $$21, $$18, -7, -2, -2, 0.0F, 0.3125F, 1, 0, 0, $$5);
+            this.roundabout$vertexAchtung($$20, $$21, $$18, -7, -2, -2, 0.0F, 0.15625F, -1, 0, 0, $$5);
+            this.roundabout$vertexAchtung($$20, $$21, $$18, -7, -2, 2, 0.15625F, 0.15625F, -1, 0, 0, $$5);
+            this.roundabout$vertexAchtung($$20, $$21, $$18, -7, 2, 2, 0.15625F, 0.3125F, -1, 0, 0, $$5);
+            this.roundabout$vertexAchtung($$20, $$21, $$18, -7, 2, -2, 0.0F, 0.3125F, -1, 0, 0, $$5);
+            this.roundabout$vertexAchtung($$20, $$21, $$18, -7, 2, -2, 0.0F, 0.15625F, 1, 0, 0, $$5);
+            this.roundabout$vertexAchtung($$20, $$21, $$18, -7, 2, 2, 0.15625F, 0.15625F, 1, 0, 0, $$5);
+            this.roundabout$vertexAchtung($$20, $$21, $$18, -7, -2, 2, 0.15625F, 0.3125F, 1, 0, 0, $$5);
+            this.roundabout$vertexAchtung($$20, $$21, $$18, -7, -2, -2, 0.0F, 0.3125F, 1, 0, 0, $$5);
 
             for (int $$22 = 0; $$22 < 4; $$22++) {
                 $$3.mulPose(Axis.XP.rotationDegrees(90.0F));
-                this.roundabout$vertex($$20, $$21, $$18, -8, -2, 0, 0.0F, 0.0F, 0, 1, 0, $$5);
-                this.roundabout$vertex($$20, $$21, $$18, 8, -2, 0, 0.5F, 0.0F, 0, 1, 0, $$5);
-                this.roundabout$vertex($$20, $$21, $$18, 8, 2, 0, 0.5F, 0.15625F, 0, 1, 0, $$5);
-                this.roundabout$vertex($$20, $$21, $$18, -8, 2, 0, 0.0F, 0.15625F, 0, 1, 0, $$5);
+                this.roundabout$vertexAchtung($$20, $$21, $$18, -8, -2, 0, 0.0F, 0.0F, 0, 1, 0, $$5);
+                this.roundabout$vertexAchtung($$20, $$21, $$18, 8, -2, 0, 0.5F, 0.0F, 0, 1, 0, $$5);
+                this.roundabout$vertexAchtung($$20, $$21, $$18, 8, 2, 0, 0.5F, 0.15625F, 0, 1, 0, $$5);
+                this.roundabout$vertexAchtung($$20, $$21, $$18, -8, 2, 0, 0.0F, 0.15625F, 0, 1, 0, $$5);
             }
 
             $$3.popPose();
@@ -84,7 +84,7 @@ public abstract class AchtungArrowRenderer<T extends AbstractArrow> extends Enti
     }
 
     @Unique
-    public void roundabout$vertex(Matrix4f $$0, Matrix3f $$1, VertexConsumer $$2, int $$3, int $$4, int $$5, float $$6, float $$7, int $$8, int $$9, int $$10, int $$11) {
+    public void roundabout$vertexAchtung(Matrix4f $$0, Matrix3f $$1, VertexConsumer $$2, int $$3, int $$4, int $$5, float $$6, float $$7, int $$8, int $$9, int $$10, int $$11) {
         $$2.vertex($$0, (float)$$3, (float)$$4, (float)$$5)
                 .color(255, 255, 255, ClientUtil.getThrowFadeToTheEtherInt())
                 .uv($$6, $$7)

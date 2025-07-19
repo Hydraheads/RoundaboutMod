@@ -37,12 +37,6 @@ public abstract class ZGameRenderer {
         // TODO: copy the old depth buffer to a texture
     }
 
-    @Inject(method = "renderItemInHand", at = @At(value = "TAIL"))
-    private void roundabout$renderItemInHand(PoseStack $$0, Camera $$1, float $$2, CallbackInfo ci)
-    {
-        ClientUtil.setThrowFadeToTheEther(1);
-        ClientUtil.hideInvis = false;
-    }
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;doEntityOutline()V", shift = At.Shift.AFTER))
     private void roundabout$renderShaders(float tickDelta, long $$1, boolean renderLevel, CallbackInfo ci)
     {
