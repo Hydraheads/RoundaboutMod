@@ -16,14 +16,72 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
 import java.util.List;
 
 @Mixin(LivingEntity.class)
-public abstract class StandUserClient extends Entity implements net.hydra.jojomod.event.powers.StandUserClient {
+public abstract class StandUserClientOnly extends Entity implements net.hydra.jojomod.event.powers.StandUserClient {
+
+    /**Mixin for data that only the client tracks on a living entity, meaning servers don't tick or strain
+     * these, only the client has them present*/
+
+
+
+    @Unique
+    public @Nullable ItemStack roundabout$RenderChest;
+    @Unique
+    public @Nullable ItemStack roundabout$RenderLegs;
+    @Unique
+    public @Nullable ItemStack roundabout$RenderBoots;
+    @Unique
+    public @Nullable ItemStack roundabout$RenderHead;
+    @Unique
+    public @Nullable ItemStack roundabout$RenderMainHand;
+    @Unique
+    public @Nullable ItemStack roundabout$RenderOffHand;
+    public @Nullable ItemStack roundabout$getRoundaboutRenderChest(){
+        return this.roundabout$RenderChest;
+    }
+    public @Nullable ItemStack roundabout$getRoundaboutRenderLegs(){
+        return this.roundabout$RenderLegs;
+    }
+    public @Nullable ItemStack roundabout$getRoundaboutRenderBoots(){
+        return this.roundabout$RenderBoots;
+    }
+    public @Nullable ItemStack roundabout$getRoundaboutRenderHead(){
+        return this.roundabout$RenderHead;
+    }
+    public @Nullable ItemStack roundabout$getRoundaboutRenderMainHand(){
+        return this.roundabout$RenderMainHand;
+    }
+    public @Nullable ItemStack roundabout$getRoundaboutRenderOffHand(){
+        return this.roundabout$RenderOffHand;
+    }
+
+    public void roundabout$setRoundaboutRenderChest(@Nullable ItemStack chest){
+        this.roundabout$RenderChest = chest;
+    }
+    public void roundabout$setRoundaboutRenderLegs(@Nullable ItemStack legs){
+        this.roundabout$RenderLegs = legs;
+    }
+    public void roundabout$setRoundaboutRenderBoots(@Nullable ItemStack boots){
+        this.roundabout$RenderBoots = boots;
+    }
+    public void roundabout$setRoundaboutRenderHead(@Nullable ItemStack head){
+        this.roundabout$RenderHead = head;
+    }
+    public void roundabout$setRoundaboutRenderMainHand(@Nullable ItemStack mainhand){
+        this.roundabout$RenderMainHand = mainhand;
+    }
+    public void roundabout$setRoundaboutRenderOffHand(@Nullable ItemStack offhand){
+        this.roundabout$RenderOffHand = offhand;
+    }
+
     @Unique
     public boolean roundabout$soundCancel = false;
     @Unique
@@ -33,7 +91,7 @@ public abstract class StandUserClient extends Entity implements net.hydra.jojomo
     @Unique
     public ImmutableList<Byte> roundabout$soundsToCancel = ImmutableList.of();
 
-    public StandUserClient(EntityType<?> $$0, Level $$1) {
+    public StandUserClientOnly(EntityType<?> $$0, Level $$1) {
         super($$0, $$1);
     }
 

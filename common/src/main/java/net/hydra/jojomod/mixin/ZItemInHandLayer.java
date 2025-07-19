@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.minecraft.client.model.ArmedModel;
@@ -54,6 +55,7 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
     public void roundabout$Render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T entity, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci){
 
         IEntityAndData entityAndData = ((IEntityAndData) entity);
+        StandUserClient userClient = ((StandUserClient) entity);
         if (entityAndData.roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() && ClientNetworking.getAppropriateConfig() != null &&
         ClientNetworking.getAppropriateConfig().achtungSettings != null &&
                 ClientNetworking.getAppropriateConfig().achtungSettings.hidesHeldItems){
@@ -65,19 +67,19 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
         if (entity instanceof Player) {
             roundabout$ModifyEntity = ((TimeStop) entity.level()).CanTimeStopEntity(entity) || ClientUtil.getScreenFreeze();
             if (roundabout$ModifyEntity) {
-                if (((IEntityAndData) entity).roundabout$getRoundaboutRenderMainHand() == null){
-                    ((IEntityAndData) entity).roundabout$setRoundaboutRenderMainHand(entity.getMainHandItem().copy());
+                if (userClient.roundabout$getRoundaboutRenderMainHand() == null){
+                    userClient.roundabout$setRoundaboutRenderMainHand(entity.getMainHandItem().copy());
                 }
-                if (((IEntityAndData) entity).roundabout$getRoundaboutRenderOffHand() == null){
-                    ((IEntityAndData) entity).roundabout$setRoundaboutRenderOffHand(entity.getOffhandItem().copy());
+                if (userClient.roundabout$getRoundaboutRenderOffHand() == null){
+                    userClient.roundabout$setRoundaboutRenderOffHand(entity.getOffhandItem().copy());
                 }
-                roundabout$RenderMainHand = ((IEntityAndData) entity).roundabout$getRoundaboutRenderMainHand();
-                roundabout$RenderOffHand = ((IEntityAndData) entity).roundabout$getRoundaboutRenderOffHand();
+                roundabout$RenderMainHand = userClient.roundabout$getRoundaboutRenderMainHand();
+                roundabout$RenderOffHand = userClient.roundabout$getRoundaboutRenderOffHand();
             } else {
-                if (((IEntityAndData) entity).roundabout$getRoundaboutRenderOffHand() != null){
-                    ((IEntityAndData) entity).roundabout$setRoundaboutRenderOffHand(null);
-                } else if (((IEntityAndData) entity).roundabout$getRoundaboutRenderMainHand() != null){
-                    ((IEntityAndData) entity).roundabout$setRoundaboutRenderMainHand(null);
+                if (userClient.roundabout$getRoundaboutRenderOffHand() != null){
+                    userClient.roundabout$setRoundaboutRenderOffHand(null);
+                } else if (userClient.roundabout$getRoundaboutRenderMainHand() != null){
+                    userClient.roundabout$setRoundaboutRenderMainHand(null);
                 }
             }
         } else {

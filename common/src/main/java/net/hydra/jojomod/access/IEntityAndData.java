@@ -43,20 +43,6 @@ public interface IEntityAndData {
 
     void roundabout$resetPreTSTick();
 
-    void roundabout$setRoundaboutRenderChest(@Nullable ItemStack chest);
-    void roundabout$setRoundaboutRenderLegs(@Nullable ItemStack legs);
-
-    void roundabout$setRoundaboutRenderBoots(@Nullable ItemStack boots);
-    void roundabout$setRoundaboutRenderHead(@Nullable ItemStack head);
-    void roundabout$setRoundaboutRenderMainHand(@Nullable ItemStack main);
-    void roundabout$setRoundaboutRenderOffHand(@Nullable ItemStack main);
-
-    @Nullable ItemStack roundabout$getRoundaboutRenderChest();
-    @Nullable ItemStack roundabout$getRoundaboutRenderLegs();
-    @Nullable ItemStack roundabout$getRoundaboutRenderBoots();
-    @Nullable ItemStack roundabout$getRoundaboutRenderHead();
-    @Nullable ItemStack roundabout$getRoundaboutRenderMainHand();
-    @Nullable ItemStack roundabout$getRoundaboutRenderOffHand();
     @Nullable Vec3 roundabout$getRoundaboutDeltaBuildupTS();
 
     void roundabout$setRoundaboutDeltaBuildupTS(Vec3 vec3);

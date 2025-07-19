@@ -860,22 +860,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         return -1;
     }
-    @Unique
-    @Override
-    public void roundabout$setTrueInvis(int bound) {
-        if (this.entityData.hasItem(ROUNDABOUT$TRUE_INVISIBILITY)) {
-            roundabout$zappedTicks = 0;
-            this.getEntityData().set(ROUNDABOUT$TRUE_INVISIBILITY, bound);
-        }
-    }
-    @Unique
-    @Override
-    public int roundabout$getTrueInvis() {
-        if (this.entityData.hasItem(ROUNDABOUT$TRUE_INVISIBILITY)) {
-            return this.getEntityData().get(ROUNDABOUT$TRUE_INVISIBILITY);
-        }
-        return -1;
-    }
 
     public int roundabout$getZappedTicks(){
         return roundabout$zappedTicks;
@@ -2744,6 +2728,28 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (this.roundabout$isDazed()) {
             ci.cancel();
         }
+    }
+
+
+    /***
+     * Invisiblity functions for Achtung Baby. Note that only Living Entities use tracked/synched entitydata,
+     * so regular entities use a function in IEntityAndData instead.
+     */
+    @Unique
+    @Override
+    public void roundabout$setTrueInvis(int bound) {
+        if (this.entityData.hasItem(ROUNDABOUT$TRUE_INVISIBILITY)) {
+            roundabout$zappedTicks = 0;
+            this.getEntityData().set(ROUNDABOUT$TRUE_INVISIBILITY, bound);
+        }
+    }
+    @Unique
+    @Override
+    public int roundabout$getTrueInvis() {
+        if (this.entityData.hasItem(ROUNDABOUT$TRUE_INVISIBILITY)) {
+            return this.getEntityData().get(ROUNDABOUT$TRUE_INVISIBILITY);
+        }
+        return -1;
     }
 
     @Shadow

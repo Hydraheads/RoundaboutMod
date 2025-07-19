@@ -8,6 +8,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaskItem;
 import net.minecraft.client.Minecraft;
@@ -63,6 +64,7 @@ public abstract class ZHumanoidArmorLayer<T extends LivingEntity, M extends Huma
     public void roundabout$Render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
         roundabout$ArmorPhase = 0;
         IEntityAndData entityAndData = ((IEntityAndData) $$3);
+        StandUserClient userclient = ((StandUserClient) $$3);
         if (entityAndData.roundabout$getTrueInvisibility() > -1
                 &&  (!ClientUtil.checkIfClientCanSeeInvisAchtung())
                 && ClientNetworking.getAppropriateConfig() != null &&
@@ -82,34 +84,34 @@ public abstract class ZHumanoidArmorLayer<T extends LivingEntity, M extends Huma
 
             roundabout$ModifyEntity = ((TimeStop) $$3.level()).CanTimeStopEntity($$3) || ClientUtil.getScreenFreeze();
             if (roundabout$ModifyEntity) {
-                if (entityAndData.roundabout$getRoundaboutRenderChest() == null){
-                    entityAndData.roundabout$setRoundaboutRenderChest($$3.getItemBySlot(EquipmentSlot.CHEST).copy());
+                if (userclient.roundabout$getRoundaboutRenderChest() == null){
+                    userclient.roundabout$setRoundaboutRenderChest($$3.getItemBySlot(EquipmentSlot.CHEST).copy());
                 }
-                if (entityAndData.roundabout$getRoundaboutRenderLegs() == null){
-                    entityAndData.roundabout$setRoundaboutRenderLegs($$3.getItemBySlot(EquipmentSlot.LEGS).copy());
+                if (userclient.roundabout$getRoundaboutRenderLegs() == null){
+                    userclient.roundabout$setRoundaboutRenderLegs($$3.getItemBySlot(EquipmentSlot.LEGS).copy());
                 }
-                if (entityAndData.roundabout$getRoundaboutRenderBoots() == null){
-                    entityAndData.roundabout$setRoundaboutRenderBoots($$3.getItemBySlot(EquipmentSlot.FEET).copy());
+                if (userclient.roundabout$getRoundaboutRenderBoots() == null){
+                    userclient.roundabout$setRoundaboutRenderBoots($$3.getItemBySlot(EquipmentSlot.FEET).copy());
                 }
-                if (entityAndData.roundabout$getRoundaboutRenderHead() == null){
-                    entityAndData.roundabout$setRoundaboutRenderHead($$3.getItemBySlot(EquipmentSlot.HEAD).copy());
+                if (userclient.roundabout$getRoundaboutRenderHead() == null){
+                    userclient.roundabout$setRoundaboutRenderHead($$3.getItemBySlot(EquipmentSlot.HEAD).copy());
                 }
-                roundabout$RenderChest = entityAndData.roundabout$getRoundaboutRenderChest();
-                roundabout$RenderLegs = entityAndData.roundabout$getRoundaboutRenderLegs();
-                roundabout$RenderBoots = entityAndData.roundabout$getRoundaboutRenderBoots();
-                roundabout$RenderHead = entityAndData.roundabout$getRoundaboutRenderHead();
+                roundabout$RenderChest = userclient.roundabout$getRoundaboutRenderChest();
+                roundabout$RenderLegs = userclient.roundabout$getRoundaboutRenderLegs();
+                roundabout$RenderBoots = userclient.roundabout$getRoundaboutRenderBoots();
+                roundabout$RenderHead = userclient.roundabout$getRoundaboutRenderHead();
             } else {
-                if (entityAndData.roundabout$getRoundaboutRenderChest() != null){
-                    entityAndData.roundabout$setRoundaboutRenderChest(null);
+                if (userclient.roundabout$getRoundaboutRenderChest() != null){
+                    userclient.roundabout$setRoundaboutRenderChest(null);
                 }
-                if (entityAndData.roundabout$getRoundaboutRenderLegs() != null){
-                    entityAndData.roundabout$setRoundaboutRenderLegs(null);
+                if (userclient.roundabout$getRoundaboutRenderLegs() != null){
+                    userclient.roundabout$setRoundaboutRenderLegs(null);
                 }
-                if (entityAndData.roundabout$getRoundaboutRenderBoots() != null){
-                    entityAndData.roundabout$setRoundaboutRenderBoots(null);
+                if (userclient.roundabout$getRoundaboutRenderBoots() != null){
+                    userclient.roundabout$setRoundaboutRenderBoots(null);
                 }
-                if (entityAndData.roundabout$getRoundaboutRenderHead() != null){
-                    entityAndData.roundabout$setRoundaboutRenderHead(null);
+                if (userclient.roundabout$getRoundaboutRenderHead() != null){
+                    userclient.roundabout$setRoundaboutRenderHead(null);
                 }
             }
 

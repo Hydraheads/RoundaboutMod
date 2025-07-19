@@ -13,6 +13,7 @@ import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
@@ -244,10 +245,10 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
     }
     @ModifyVariable(method = "getArmPose", at = @At(value = "STORE"),ordinal = 0)
     private static ItemStack roundabout$GetArmPose2(ItemStack $$0) {
-        if (IH == InteractionHand.MAIN_HAND && ((IEntityAndData)ACP).roundabout$getRoundaboutRenderMainHand() != null){
-            $$0 = ((IEntityAndData)ACP).roundabout$getRoundaboutRenderMainHand();
-        } if (IH == InteractionHand.OFF_HAND && ((IEntityAndData)ACP).roundabout$getRoundaboutRenderOffHand() != null){
-            $$0 = ((IEntityAndData)ACP).roundabout$getRoundaboutRenderOffHand();
+        if (IH == InteractionHand.MAIN_HAND && ((StandUserClient)ACP).roundabout$getRoundaboutRenderMainHand() != null){
+            $$0 = ((StandUserClient)ACP).roundabout$getRoundaboutRenderMainHand();
+        } if (IH == InteractionHand.OFF_HAND && ((StandUserClient)ACP).roundabout$getRoundaboutRenderOffHand() != null){
+            $$0 = ((StandUserClient)ACP).roundabout$getRoundaboutRenderOffHand();
         }
         return $$0;
     }

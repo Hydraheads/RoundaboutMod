@@ -16,6 +16,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class AchtungLevelRenderer {
 
 
+    /**
+     * Code for Achtung Baby entity rendering, the roundabout$renderEntity part
+     * is to cancel rendering on nonliving entities, living entities
+     * already have partial rendering canceling when the isInvisible function
+     * returns true in the entity class
+     *
+     * roundabout$renderEntityEnd is for resetting the invisibility value in case a mod cancels
+     * the entity rendering, we don't want to accidentally make random things transparent
+     * */
+
     @Inject(method = "renderEntity(Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V",
             at = @At(value = "HEAD"),
             cancellable = true)
@@ -33,7 +43,7 @@ public abstract class AchtungLevelRenderer {
     }
     @Inject(method = "renderEntity(Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V",
             at = @At(value = "TAIL"))
-    private void roundabout$renderEntityEnd(Entity $$0, double $$1, double $$2, double $$3, float $$4, PoseStack $$5, MultiBufferSource $$6, CallbackInfo ci) {
+    private void roundabout$renderEntityEnd(Entity entity, double cameraX, double cameraY, double cameraZ,  float partialTick, PoseStack stack, MultiBufferSource buffer, CallbackInfo ci) {
         ClientUtil.setThrowFadeToTheEther(1F);
         ClientUtil.saveBufferTexture = null;
     }
