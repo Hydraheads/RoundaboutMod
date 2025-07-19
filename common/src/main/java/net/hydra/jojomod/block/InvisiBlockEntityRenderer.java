@@ -7,15 +7,21 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
+import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.config.ClientConfig;
+import net.minecraft.client.GraphicsStatus;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.OptionInstance;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
@@ -29,8 +35,11 @@ import java.util.ArrayList;
 import java.util.function.BiConsumer;
 
 public class InvisiBlockEntityRenderer implements BlockEntityRenderer<InvisiBlockEntity> {
+
+    private final BlockRenderDispatcher itemRenderer;
     public InvisiBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
         super();
+        this.itemRenderer = context.getBlockRenderDispatcher();
     }
     public int bubbleCount = 7;
 
@@ -56,20 +65,24 @@ public class InvisiBlockEntityRenderer implements BlockEntityRenderer<InvisiBloc
                        MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
 
         if (ClientUtil.checkIfClientCanSeeInvisAchtung()) {
-            poseStack.pushPose();
+            if (ClientUtil.isFabulous()){
+            } else {
 
-            // Move to block center
-            poseStack.translate(0.0, 0.0, 0.0);
+                poseStack.pushPose();
 
-            // Get a translucent buffer (cutout or translucent depending on goal)
-            VertexConsumer buffer = bufferSource.getBuffer(RenderType.translucent());
+                // Move to block center
+                poseStack.translate(0.0, 0.0, 0.0);
 
-            // Define cube coordinates (from 0 to 1, full block)
-            AABB cube = new AABB(0.1, 0.1, 0.1, 0.9, 0.9, 0.9);
+                // Get a translucent buffer (cutout or translucent depending on goal)
+                VertexConsumer buffer = bufferSource.getBuffer(RenderType.translucent());
 
-            renderCube(poseStack, buffer, cube, new Color(200, 200, 200, ClientConfig.getLocalInstance().invisibleBlockDepth), packedLight); // light gray with alpha
+                // Define cube coordinates (from 0 to 1, full block)
+                AABB cube = new AABB(0.1, 0.1, 0.1, 0.9, 0.9, 0.9);
 
-            poseStack.popPose();
+                renderCube(poseStack, buffer, cube, new Color(200, 200, 200, ClientConfig.getLocalInstance().invisibleBlockDepth), packedLight); // light gray with alpha
+
+                poseStack.popPose();
+            }
         }
     }
 

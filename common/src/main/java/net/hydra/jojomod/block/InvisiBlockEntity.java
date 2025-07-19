@@ -12,6 +12,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -31,6 +32,7 @@ public class InvisiBlockEntity extends BlockEntity {
     public BlockState getOriginalState(){
         return originalState;
     }
+
     private CompoundTag originalTag = null;
     public int ticksUntilRestore = 100; // 5 seconds at 20 tps
 

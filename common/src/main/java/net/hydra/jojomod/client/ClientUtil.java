@@ -12,6 +12,7 @@ import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
 import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.minecraft.client.*;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.*;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -43,9 +44,6 @@ import net.zetalasis.networking.message.api.ModMessageEvents;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.client.Camera;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -280,6 +278,12 @@ public class ClientUtil {
             }
         }
         return false;
+    }
+    public static boolean isFabulous(){
+
+        OptionInstance<GraphicsStatus> $$2 = Minecraft.getInstance().options.graphicsMode();
+        GraphicsStatus $$3 = (GraphicsStatus)$$2.get();
+        return $$3.equals(GraphicsStatus.FABULOUS);
     }
     public static boolean checkIfClientHoldingBag() {
         LocalPlayer player = Minecraft.getInstance().player;
