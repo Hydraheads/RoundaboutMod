@@ -76,6 +76,7 @@ public interface StandUser {
 
     int roundabout$getAttackTimeMax();
     int roundabout$getAttackTime();
+    DamageSource roundabout$getLogSource();
     int roundabout$getAttackTimeDuring();
     void roundabout$setBleedLevel(int bleedLevel);
     int roundabout$getBleedLevel();

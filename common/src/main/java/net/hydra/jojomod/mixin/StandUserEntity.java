@@ -2772,15 +2772,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Unique
     DamageSource roundabout$logSource = null;
-    @Inject(method = "hurtCurrentlyUsedShield", at = @At(value = "HEAD"))
-    private void roundabout$hurtCurrentlyUsedShield(float amount, CallbackInfo ci) {
-        if (this.roundabout$isGuarding()) {
-            if (roundabout$logSource != null && !roundabout$logSource.is(DamageTypeTags.BYPASSES_COOLDOWN) && this.roundabout$getGuardCooldown() > 0) {
-                return;
-            }
 
-            this.roundabout$damageGuard(amount);
-        }
+    public DamageSource roundabout$getLogSource(){
+        return roundabout$logSource;
     }
 
     /**For things like bubble encasement delta*/
