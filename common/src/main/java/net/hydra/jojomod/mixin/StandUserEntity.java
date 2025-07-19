@@ -2765,10 +2765,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Shadow protected float lastHurt;
 
     /**Part of Registering Stand Guarding as a form of Blocking*/
-    @Inject(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;hurtCurrentlyUsedShield(F)V", shift = At.Shift.BEFORE))
+    @Inject(method = "hurt", at = @At(value = "HEAD"))
     private void roundabout$RoundaboutDamage2(DamageSource source, float amount, CallbackInfoReturnable<Boolean> ci) {
+        roundabout$logSource = source;
+    }
+
+    @Unique
+    DamageSource roundabout$logSource = null;
+    @Inject(method = "hurtCurrentlyUsedShield", at = @At(value = "HEAD"))
+    private void roundabout$hurtCurrentlyUsedShield(float amount, CallbackInfo ci) {
         if (this.roundabout$isGuarding()) {
-            if (!source.is(DamageTypeTags.BYPASSES_COOLDOWN) && this.roundabout$getGuardCooldown() > 0) {
+            if (roundabout$logSource != null && !roundabout$logSource.is(DamageTypeTags.BYPASSES_COOLDOWN) && this.roundabout$getGuardCooldown() > 0) {
                 return;
             }
 
