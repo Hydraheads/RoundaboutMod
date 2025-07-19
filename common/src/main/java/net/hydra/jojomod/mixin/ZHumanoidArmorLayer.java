@@ -58,15 +58,6 @@ public abstract class ZHumanoidArmorLayer<T extends LivingEntity, M extends Huma
     public @Nullable ItemStack roundabout$RenderHead;
 
 
-    @Inject(method = "renderModel(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/item/ArmorItem;Lnet/minecraft/client/model/HumanoidModel;ZFFFLjava/lang/String;)V",
-            at = @At(value = "HEAD"),cancellable = true)
-    public void roundabout$Render(PoseStack $$0, MultiBufferSource $$1, int $$2, ArmorItem $$3, A $$4, boolean $$5, float $$6, float $$7, float $$8, String $$9, CallbackInfo ci) {
-        if (ClientUtil.getThrowFadeToTheEther() != 1){
-            VertexConsumer $$10 = $$1.getBuffer(RenderType.entityTranslucentCull(this.getArmorLocation($$3, $$5, $$9)));
-            $$4.renderToBuffer($$0, $$10, $$2, OverlayTexture.NO_OVERLAY, $$6, $$7, $$8, 1.0F);
-            ci.cancel();
-        }
-    }
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",
             at = @At(value = "HEAD"),cancellable = true)
     public void roundabout$Render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {

@@ -164,10 +164,8 @@
     "ZLivingEntityRenderer",
     "ZMinecraftClient",
     "ZMobRenderer",
-    "ZModel",
     "ZModelBakery",
     "ZModelBlockRenderer",
-    "ZModelPart",
     "ZMouseHandler",
     "ZMultiPlayerGameMode",
     "ZOptionsScreen",
@@ -187,6 +185,10 @@
     "ZViewArea",
     "ZWindowMixin",
     "ZWorldRenderer",
+    "achtung.AchtungHumanoidArmorLayer",
+    "achtung.AchtungItemRenderer",
+    "achtung.AchtungModel",
+    "achtung.AchtungModelPart",
     "networking.ZClientGamePacketListener"
   ],
   "server": [
