@@ -51,7 +51,6 @@
     "ZFoodData",
     "ZFoodProperties",
     "ZInventoryAccess",
-    "ZIronGolem",
     "ZItem",
     "ZItemEntity",
     "ZItemStack",
@@ -111,6 +110,8 @@
     "dworlds.D4CStopLogger",
     "dworlds.RegistryMixin",
     "dworlds.ServerAccessorMixin",
+    "justice.JusticeIronGolem",
+    "justice.JusticeZombie",
     "networking.ZServerGamePacketListenerImpl"
   ],
   "client": [

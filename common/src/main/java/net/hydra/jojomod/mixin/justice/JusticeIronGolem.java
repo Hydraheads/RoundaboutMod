@@ -1,6 +1,5 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.justice;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IIronGolem;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.ShapeShifts;
@@ -19,31 +18,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
 @Mixin(IronGolem.class)
-public abstract class ZIronGolem extends AbstractGolem implements NeutralMob, IIronGolem {
-    protected ZIronGolem(EntityType<? extends AbstractGolem> $$0, Level $$1) {
-        super($$0, $$1);
-    }
+public abstract class JusticeIronGolem extends AbstractGolem implements NeutralMob, IIronGolem {
 
-    @Unique
-    public boolean roundabout$Negation = false;
-
-    @Override
-    @Unique
-    public boolean roundabout$getNegation(){
-        return roundabout$Negation;
-    }
-    @Override
-    @Unique
-    public void roundabout$setNegation(boolean negate){
-        roundabout$Negation = negate;
-    }
-
-    @Shadow
-    protected void registerGoals() {
-
-    }
-    @Unique
-    public ShapeShifts roundabout$lastSeenAsMorph = ShapeShifts.PLAYER;
+    /**A workaround to golem aggro. This is created so that switching to zombies and skeletons forces anger, but
+     * switching off of them removes it. And switching to a villager calms them down.
+     *
+     * This mixin exists in relation to Justice's fog morph ability, the one where it disguises
+     * as select humanoid vanilla mobs, based on the JoJo OVA in which Enya disguises as younger.*/
     @Inject(method = "aiStep()V", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/animal/IronGolem;updatePersistentAnger(Lnet/minecraft/server/level/ServerLevel;Z)V",shift = At.Shift.BEFORE))
     protected void roundabout$aiStep(CallbackInfo ci) {
@@ -74,5 +55,37 @@ public abstract class ZIronGolem extends AbstractGolem implements NeutralMob, II
                 roundabout$setNegation(true);
             }
         }
+    }
+
+    /**Have to save some extra variables to get this working*/
+
+    @Unique
+    public boolean roundabout$Negation = false;
+
+    @Override
+    @Unique
+    public boolean roundabout$getNegation(){
+        return roundabout$Negation;
+    }
+    @Override
+    @Unique
+    public void roundabout$setNegation(boolean negate){
+        roundabout$Negation = negate;
+    }
+    @Unique
+    public ShapeShifts roundabout$lastSeenAsMorph = ShapeShifts.PLAYER;
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+
+    @Shadow
+    protected void registerGoals() {
+
+    }
+    protected JusticeIronGolem(EntityType<? extends AbstractGolem> $$0, Level $$1) {
+        super($$0, $$1);
     }
 }
