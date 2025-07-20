@@ -1,5 +1,6 @@
 package net.hydra.jojomod.client;
 
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
@@ -15,12 +16,15 @@ import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.minecraft.client.*;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.zetalasis.client.shader.D4CShaderFX;
@@ -1037,5 +1041,35 @@ public class ClientUtil {
         ModMessageEvents.sendToServer(
                 DynamicWorld.DynamicWorldNetMessages.MESSAGES.ADD_WORLD.value
         );
+    }
+
+
+
+    public static void applyJusticeFogBlockTextureOverlayInInventory(ItemStack $$0, ItemDisplayContext $$1, boolean $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, int $$6,
+                                                                     ItemModelShaper shaper, BlockEntityWithoutLevelRenderer renderer, ItemRenderer itemRenderer){
+        boolean $$8 = $$1 == ItemDisplayContext.GUI;
+        if ($$8){
+            Lighting.setupForFlatItems();
+            BakedModel $$7 = shaper.getModelManager().getModel(ModItemModels.FOG_BLOCK_ICON);
+            $$3.pushPose();
+
+            $$7.getTransforms().getTransform($$1).apply($$2, $$3);
+            $$3.translate(-0.5F, -0.5F, 0.5F);
+
+            if (!$$7.isCustomRenderer()) {
+                boolean $$10;
+                $$10 = true;
+
+                RenderType $$12 = ItemBlockRenderTypes.getRenderType($$0, $$10);
+                VertexConsumer $$14;
+                $$14 = ItemRenderer.getFoilBufferDirect($$4, $$12, true, $$0.hasFoil());
+
+                ((IItemRenderer)itemRenderer).roundabout$renderModelLists($$7, $$0, $$5, $$6, $$3, $$14);
+            } else {
+                renderer.renderByItem($$0, $$1, $$3, $$4, $$5, $$6);
+            }
+
+            $$3.popPose();
+        }
     }
 }

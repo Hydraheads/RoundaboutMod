@@ -104,11 +104,6 @@ public abstract class ZEntityRenderDispatcher {
             }
         }
     }
-    @Inject(method = "render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "TAIL"))
-    protected <E extends Entity>  void roundabout$renderTail(E entity, double $$1, double $$2, double $$3, float $$4, float $$5, PoseStack $$6, MultiBufferSource $$7, int light, CallbackInfo ci) {
-
-        ClientUtil.setThrowFadeToTheEther(1);
-    }
 
     /**Cancel hitbox rendering for stuff like go beyond*/
     @Inject(method = "renderHitbox(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraft/world/entity/Entity;F)V", at = @At(value = "HEAD"), cancellable = true)

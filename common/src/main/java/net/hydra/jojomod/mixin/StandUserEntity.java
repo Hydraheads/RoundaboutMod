@@ -860,22 +860,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         return -1;
     }
-    @Unique
-    @Override
-    public void roundabout$setTrueInvis(int bound) {
-        if (this.entityData.hasItem(ROUNDABOUT$TRUE_INVISIBILITY)) {
-            roundabout$zappedTicks = 0;
-            this.getEntityData().set(ROUNDABOUT$TRUE_INVISIBILITY, bound);
-        }
-    }
-    @Unique
-    @Override
-    public int roundabout$getTrueInvis() {
-        if (this.entityData.hasItem(ROUNDABOUT$TRUE_INVISIBILITY)) {
-            return this.getEntityData().get(ROUNDABOUT$TRUE_INVISIBILITY);
-        }
-        return -1;
-    }
 
     public int roundabout$getZappedTicks(){
         return roundabout$zappedTicks;
@@ -2746,6 +2730,28 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+
+    /***
+     * Invisiblity functions for Achtung Baby. Note that only Living Entities use tracked/synched entitydata,
+     * so regular entities use a function in IEntityAndData instead.
+     */
+    @Unique
+    @Override
+    public void roundabout$setTrueInvis(int bound) {
+        if (this.entityData.hasItem(ROUNDABOUT$TRUE_INVISIBILITY)) {
+            roundabout$zappedTicks = 0;
+            this.getEntityData().set(ROUNDABOUT$TRUE_INVISIBILITY, bound);
+        }
+    }
+    @Unique
+    @Override
+    public int roundabout$getTrueInvis() {
+        if (this.entityData.hasItem(ROUNDABOUT$TRUE_INVISIBILITY)) {
+            return this.getEntityData().get(ROUNDABOUT$TRUE_INVISIBILITY);
+        }
+        return -1;
+    }
+
     @Shadow
     protected float getDamageAfterArmorAbsorb(DamageSource $$0, float $$1){
         return 0;
@@ -2759,15 +2765,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Shadow protected float lastHurt;
 
     /**Part of Registering Stand Guarding as a form of Blocking*/
-    @Inject(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;hurtCurrentlyUsedShield(F)V", shift = At.Shift.BEFORE))
+    @Inject(method = "hurt", at = @At(value = "HEAD"))
     private void roundabout$RoundaboutDamage2(DamageSource source, float amount, CallbackInfoReturnable<Boolean> ci) {
-        if (this.roundabout$isGuarding()) {
-            if (!source.is(DamageTypeTags.BYPASSES_COOLDOWN) && this.roundabout$getGuardCooldown() > 0) {
-                return;
-            }
+        roundabout$logSource = source;
+    }
 
-            this.roundabout$damageGuard(amount);
-        }
+    @Unique
+    DamageSource roundabout$logSource = null;
+
+    public DamageSource roundabout$getLogSource(){
+        return roundabout$logSource;
     }
 
     /**For things like bubble encasement delta*/

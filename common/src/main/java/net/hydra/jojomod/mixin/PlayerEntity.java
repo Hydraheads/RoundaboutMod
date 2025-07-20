@@ -31,6 +31,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -913,8 +914,14 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
     /**your shield does not take damage if the stand blocks it*/
     @Inject(method = "hurtCurrentlyUsedShield", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundaboutDamageShield(float $$0, CallbackInfo ci) {
-        if (((StandUser) this).roundabout$isGuarding()) {
+    protected void roundaboutDamageShield(float amount, CallbackInfo ci) {
+        StandUser user = ((StandUser) this);
+        if (user.roundabout$isGuarding()) {
+            if (user.roundabout$getLogSource() != null && !user.roundabout$getLogSource().is(DamageTypeTags.BYPASSES_COOLDOWN) && user.roundabout$getGuardCooldown() > 0) {
+                return;
+            }
+
+            user.roundabout$damageGuard(amount);
             ci.cancel();
         }
     }

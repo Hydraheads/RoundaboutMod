@@ -60,46 +60,16 @@ public abstract class ZItemInHandRenderer {
     }
 
     @Shadow @Final private EntityRenderDispatcher entityRenderDispatcher;
-    @Shadow
-    private float mainHandHeight;
-    @Shadow
-    private float oMainHandHeight;
-    @Shadow
-    private float offHandHeight;
-    @Shadow
-    private float oOffHandHeight;
 
     @Shadow protected abstract void renderPlayerArm(PoseStack $$0, MultiBufferSource $$1, int $$2, float $$3, float $$4, HumanoidArm $$5);
 
-    @Shadow private ItemStack offHandItem;
-    @Shadow private ItemStack mainHandItem;
-    float d1 = 1;
-    float d2 = -0.3F;
-    float d3 = 0.4F;
-    float d4 = -0.4F;
-    float d5 = 0.64000005F;
-    float d6 = -0.6F;
-    float d7 = -0.6F;
-    float d8 = -0.71999997F;
-    float d9 = 45F;
-    float d10 = 70F;
-    float d11 = -20F;
-    float d15 = 120F;
-    float d16 = 200F;
-    float d17 = -135F;
-    float d18 = 5.6F;
-    float d19 = 0;
-    float d20 = 0;
-    float d21 = -20F;
-    float d22 = -20F;
-    float d23 = -20F;
     @Inject(method = "renderHandsWithItems", at = @At(value = "HEAD"), cancellable = true)
     public<T extends LivingEntity, M extends EntityModel<T>>
-    void roundabout$renderHandsWithItems(float $$0, PoseStack $$1, MultiBufferSource.BufferSource $$2,
-                                         LocalPlayer $$3, int $$4, CallbackInfo ci) {
-        if ($$3 != null){
+    void roundabout$renderHandsWithItems(float partialTick, PoseStack poseStack, MultiBufferSource.BufferSource bufferSource,
+                                         LocalPlayer localPlayer, int light, CallbackInfo ci) {
+        if (localPlayer != null){
             boolean fp = Minecraft.getInstance().options.getCameraType().isFirstPerson();
-            StandUser user = ((StandUser)$$3);
+            StandUser user = ((StandUser)localPlayer);
             StandPowers powers = user.roundabout$getStandPowers();
             if (user.roundabout$getStand() instanceof StarPlatinumEntity SE){
                 if (fp && SE.getScoping()){
@@ -114,35 +84,20 @@ public abstract class ZItemInHandRenderer {
                 }
             }
 
-            float throwFadeToTheEther = 1f;
-            IEntityAndData entityAndData = ((IEntityAndData) user);
-            if (entityAndData.roundabout$getTrueInvisibility() > -1){
-                throwFadeToTheEther = throwFadeToTheEther*0.4F;
-                if (powers instanceof PowersAchtungBaby PB && PB.invisibleVisionOn()){
-                    AbstractClientPlayer $$14 = this.minecraft.player;
-                    if ($$14 != null) {
-                        PlayerRenderer $$15 = (PlayerRenderer) this.entityRenderDispatcher.<AbstractClientPlayer>getRenderer($$14);
-                        $$15.getModel().setAllVisible(true);
-
-                    }
-                }
-            }
-            ClientUtil.setThrowFadeToTheEther(throwFadeToTheEther);
-
 
             if (powers.isPiloting()){
                 StandEntity stand = powers.getPilotingStand();
-                float aan = $$3.getAttackAnim($$0);
-                InteractionHand hando = MoreObjects.firstNonNull($$3.swingingArm, InteractionHand.MAIN_HAND);
-                float sev = Mth.lerp($$0, $$3.xRotO, $$3.getXRot());
-                float nine = Mth.lerp($$0, $$3.xBobO, $$3.xBob);
-                float ten = Mth.lerp($$0, $$3.yBobO, $$3.yBob);
-                $$1.mulPose(Axis.XP.rotationDegrees(($$3.getViewXRot($$0) - nine) * 0.1F));
-                $$1.mulPose(Axis.YP.rotationDegrees(($$3.getViewYRot($$0) - ten) * 0.1F));
+                float aan = localPlayer.getAttackAnim(partialTick);
+                InteractionHand hando = MoreObjects.firstNonNull(localPlayer.swingingArm, InteractionHand.MAIN_HAND);
+                float sev = Mth.lerp(partialTick, localPlayer.xRotO, localPlayer.getXRot());
+                float nine = Mth.lerp(partialTick, localPlayer.xBobO, localPlayer.xBob);
+                float ten = Mth.lerp(partialTick, localPlayer.yBobO, localPlayer.yBob);
+                poseStack.mulPose(Axis.XP.rotationDegrees((localPlayer.getViewXRot(partialTick) - nine) * 0.1F));
+                poseStack.mulPose(Axis.YP.rotationDegrees((localPlayer.getViewYRot(partialTick) - ten) * 0.1F));
                 if (stand != null) {
                     EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
                     EntityRenderer<? super T> ER = $$7.getRenderer(stand);
-                    EntityRenderer<? super T> P = $$7.getRenderer($$3);
+                    EntityRenderer<? super T> P = $$7.getRenderer(localPlayer);
                     if (ER instanceof StandRenderer<?>) {
                         Model ml = ((StandRenderer<?>) ER).getModel();
                         if (ml instanceof JusticeModel<?> sm) {
@@ -174,27 +129,7 @@ public abstract class ZItemInHandRenderer {
             }
         }
     }
-    /*
-    $$3, $$0, sev, InteractionHand.OFF_HAND, $$13, $$14, $$1, $$2, $$4,
-    sm.leftHand, null, ml, zr.getTextureLocation(skl),
-    1,-0.3F,0.4F,-0.4F,0.64000005F,-0.6F,-0.6F,
-    -0.71999997F, 45F,70F,-20F, -1, 3.6F, 3.5F,
-    120F,200F,-135F,5.6F,0,0,1,1,1);
-    * */
 
-    @Unique
-    private void roundabout$renderJusticeArmWithItem(
-            AbstractClientPlayer $$0, float $$1, float $$2, InteractionHand $$3, float $$4, float $$6, PoseStack $$7,
-            MultiBufferSource $$8, int $$9, JusticeEntity skl
-    ) {
-        boolean $$10 = $$3 == InteractionHand.MAIN_HAND;
-        HumanoidArm $$11 = $$10 ? $$0.getMainArm() : $$0.getMainArm().getOpposite();
-        $$7.pushPose();
-        if ($$10 && !$$0.isInvisible()) {
-            this.roundabout$renderJusticeArm($$7, $$8, $$9, $$6, $$4, $$11, skl);
-        }
-        $$7.popPose();
-    }
     @Unique
     private<T extends StandEntity>  void roundabout$renderJusticeArm(PoseStack $$0, MultiBufferSource $$1, int $$2,
                                                                      float $$3, float $$4, HumanoidArm $$5, JusticeEntity JE) {
