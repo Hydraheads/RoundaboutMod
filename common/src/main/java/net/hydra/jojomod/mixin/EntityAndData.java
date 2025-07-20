@@ -75,23 +75,35 @@ public abstract class EntityAndData implements IEntityAndData {
     private double roundabout$PrevZ = 0;
 
     @Unique
-    public @Nullable ItemStack roundabout$RenderChest;
-    @Unique
-    public @Nullable ItemStack roundabout$RenderLegs;
-    @Unique
-    public @Nullable ItemStack roundabout$RenderBoots;
-    @Unique
-    public @Nullable ItemStack roundabout$RenderHead;
-    @Unique
-    public @Nullable ItemStack roundabout$RenderMainHand;
-    @Unique
-    public @Nullable ItemStack roundabout$RenderOffHand;
-    @Unique
     public int roundabout$noGravityTicks = 0;
     @Unique
     public boolean roundabout$renderingExclusiveLayers = false;
+
+
+
+    /***
+     * Invisiblity functions for Achtung Baby. Note that only Living Entities use tracked/synched entitydata,
+     * so regular entities use a function in IEntityAndData instead.
+     */
     @Unique
     public int roundabout$trueInvisibility = -1;
+    @Unique
+    @Override
+    public int roundabout$getTrueInvisibility(){
+        if (((Entity)(Object)this) instanceof LivingEntity LE){
+            return ((StandUser)LE).roundabout$getTrueInvis();
+        }
+        return roundabout$trueInvisibility;
+    }
+
+    @Unique
+    public void roundabout$tickTrueInvisibility(){
+        if (!this.level().isClientSide()){
+            if (roundabout$getTrueInvisibility() > -1){
+                roundabout$setTrueInvisibility(roundabout$getTrueInvisibility()-1);
+            }
+        }
+    }
 
     @Unique
     @Override
@@ -118,23 +130,7 @@ public abstract class EntityAndData implements IEntityAndData {
             }
         }
     }
-    @Unique
-    @Override
-    public int roundabout$getTrueInvisibility(){
-        if (((Entity)(Object)this) instanceof LivingEntity LE){
-            return ((StandUser)LE).roundabout$getTrueInvis();
-        }
-        return roundabout$trueInvisibility;
-    }
 
-    @Unique
-    public void roundabout$tickTrueInvisibility(){
-        if (!this.level().isClientSide()){
-            if (roundabout$getTrueInvisibility() > -1){
-                roundabout$setTrueInvisibility(roundabout$getTrueInvisibility()-1);
-            }
-        }
-    }
 
     /**Mandom Time Queue, not sure if it will have any other use*/
     @Unique
@@ -190,49 +186,12 @@ public abstract class EntityAndData implements IEntityAndData {
     public boolean roundabout$getExclusiveLayers(){
         return this.roundabout$renderingExclusiveLayers;
     }
-    public void roundabout$setRoundaboutRenderChest(@Nullable ItemStack chest){
-        this.roundabout$RenderChest = chest;
-    }
-    public void roundabout$setRoundaboutRenderLegs(@Nullable ItemStack legs){
-        this.roundabout$RenderLegs = legs;
-    }
-    public void roundabout$setRoundaboutRenderBoots(@Nullable ItemStack boots){
-        this.roundabout$RenderBoots = boots;
-    }
-    public void roundabout$setRoundaboutRenderHead(@Nullable ItemStack head){
-        this.roundabout$RenderHead = head;
-    }
-    public void roundabout$setRoundaboutRenderMainHand(@Nullable ItemStack mainhand){
-        this.roundabout$RenderMainHand = mainhand;
-    }
-    public void roundabout$setRoundaboutRenderOffHand(@Nullable ItemStack offhand){
-        this.roundabout$RenderOffHand = offhand;
-    }
 
     @Override
     @Unique
     public void roundabout$setNoAAB(){
         bb = new AABB(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     }
-    public @Nullable ItemStack roundabout$getRoundaboutRenderChest(){
-        return this.roundabout$RenderChest;
-    }
-    public @Nullable ItemStack roundabout$getRoundaboutRenderLegs(){
-        return this.roundabout$RenderLegs;
-    }
-    public @Nullable ItemStack roundabout$getRoundaboutRenderBoots(){
-        return this.roundabout$RenderBoots;
-    }
-    public @Nullable ItemStack roundabout$getRoundaboutRenderHead(){
-        return this.roundabout$RenderHead;
-    }
-    public @Nullable ItemStack roundabout$getRoundaboutRenderMainHand(){
-        return this.roundabout$RenderMainHand;
-    }
-    public @Nullable ItemStack roundabout$getRoundaboutRenderOffHand(){
-        return this.roundabout$RenderOffHand;
-    }
-
     public void roundabout$setRoundaboutPrevX(double roundaboutPrevX){
         this.roundabout$PrevX = roundaboutPrevX;
     }

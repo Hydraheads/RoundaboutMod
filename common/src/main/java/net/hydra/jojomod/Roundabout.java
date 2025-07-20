@@ -3,11 +3,7 @@ package net.hydra.jojomod;
 import net.hydra.jojomod.advancement.criteria.ModCriteria;
 import net.zetalasis.networking.packet.impl.ModNetworking;
 import net.hydra.jojomod.platform.Services;
-import net.hydra.jojomod.util.config.ConfigManager;
-import net.hydra.jojomod.util.Networking;
-import net.zetalasis.world.DynamicWorld;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,13 +34,6 @@ public class Roundabout {
 
         ModCriteria.bootstrap();
         ModNetworking.bootstrap();
-    }
-
-    public static void onServerStarted(MinecraftServer server)
-    {
-        Networking.setServer(server);
-        ConfigManager.loadStandArrowPool();
-        DynamicWorld.loadDynamicWorlds(server);
     }
 
     public static ResourceLocation location(String path) {

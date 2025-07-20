@@ -605,6 +605,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+
+
     /**When mobs TS teleport, part of canceling visual interpolation between two points so it looks like they
      * just "blip" there*/
     @Unique
@@ -858,22 +860,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         return -1;
     }
-    @Unique
-    @Override
-    public void roundabout$setTrueInvis(int bound) {
-        if (this.entityData.hasItem(ROUNDABOUT$TRUE_INVISIBILITY)) {
-            roundabout$zappedTicks = 0;
-            this.getEntityData().set(ROUNDABOUT$TRUE_INVISIBILITY, bound);
-        }
-    }
-    @Unique
-    @Override
-    public int roundabout$getTrueInvis() {
-        if (this.entityData.hasItem(ROUNDABOUT$TRUE_INVISIBILITY)) {
-            return this.getEntityData().get(ROUNDABOUT$TRUE_INVISIBILITY);
-        }
-        return -1;
-    }
 
     public int roundabout$getZappedTicks(){
         return roundabout$zappedTicks;
@@ -902,6 +888,27 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    @Unique
+    @Override
+    public void roundabout$aggressivelyEnforceAggro(Entity theory){
+
+        if (theory == null || (!theory.isRemoved() && theory.isAlive())) {
+            if (theory instanceof Mob mb){
+                this.setLastHurtByMob(mb);
+            } else {
+                this.setLastHurtByMob(null);
+            }
+            if (theory instanceof Player pl){
+                this.setLastHurtByPlayer(pl);
+            } else {
+                this.setLastHurtByPlayer(null);
+            }
+            this.setLastHurtMob(theory);
+            if (((LivingEntity) (Object) this) instanceof Mob mb) {
+                ((IMob) mb).roundabout$deeplyEnforceTarget(theory);
+            }
+        }
+    }
     /**-1 gravity is no change, 0 is suspending gravity, 1000 is the base amount*/
     @Unique
     @Override
@@ -2682,13 +2689,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Hex prevents eating effects from golden apples. Once you reach level 3 (commands only), all foods lose them*/
     @Inject(method = "addEatEffect", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$addEatEffect(ItemStack $$0, Level $$1, LivingEntity $$2, CallbackInfo ci) {
+
+        if (((IEntityAndData)this).roundabout$getTrueInvisibility() > -1 &&
+                ClientNetworking.getAppropriateConfig().achtungSettings.revealLocationWhenFinishedEating){
+            ((IEntityAndData)this).roundabout$setTrueInvisibility(-1);
+        }
         if (this.hasEffect(ModEffects.HEX)) {
             int hexLevel = this.getEffect(ModEffects.HEX).getAmplifier();
             if ((hexLevel >= 0 && $$0.is(Items.ENCHANTED_GOLDEN_APPLE)) || (hexLevel >= 1 && $$0.is(Items.GOLDEN_APPLE))
                     || hexLevel >= 2){
                 ci.cancel();
+                return;
             }
         }
+        roundabout$getStandPowers().eatEffectIntercept($$0,$$1,$$2);
     }
 
 
@@ -2716,6 +2730,28 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+
+    /***
+     * Invisiblity functions for Achtung Baby. Note that only Living Entities use tracked/synched entitydata,
+     * so regular entities use a function in IEntityAndData instead.
+     */
+    @Unique
+    @Override
+    public void roundabout$setTrueInvis(int bound) {
+        if (this.entityData.hasItem(ROUNDABOUT$TRUE_INVISIBILITY)) {
+            roundabout$zappedTicks = 0;
+            this.getEntityData().set(ROUNDABOUT$TRUE_INVISIBILITY, bound);
+        }
+    }
+    @Unique
+    @Override
+    public int roundabout$getTrueInvis() {
+        if (this.entityData.hasItem(ROUNDABOUT$TRUE_INVISIBILITY)) {
+            return this.getEntityData().get(ROUNDABOUT$TRUE_INVISIBILITY);
+        }
+        return -1;
+    }
+
     @Shadow
     protected float getDamageAfterArmorAbsorb(DamageSource $$0, float $$1){
         return 0;
@@ -2729,15 +2765,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Shadow protected float lastHurt;
 
     /**Part of Registering Stand Guarding as a form of Blocking*/
-    @Inject(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;hurtCurrentlyUsedShield(F)V", shift = At.Shift.BEFORE))
+    @Inject(method = "hurt", at = @At(value = "HEAD"))
     private void roundabout$RoundaboutDamage2(DamageSource source, float amount, CallbackInfoReturnable<Boolean> ci) {
-        if (this.roundabout$isGuarding()) {
-            if (!source.is(DamageTypeTags.BYPASSES_COOLDOWN) && this.roundabout$getGuardCooldown() > 0) {
-                return;
-            }
+        roundabout$logSource = source;
+    }
 
-            this.roundabout$damageGuard(amount);
-        }
+    @Unique
+    DamageSource roundabout$logSource = null;
+
+    public DamageSource roundabout$getLogSource(){
+        return roundabout$logSource;
     }
 
     /**For things like bubble encasement delta*/
@@ -2955,6 +2992,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).resetFallDistance();
         }
         return $$1;
+    }
+    @Inject(method = "getVisibilityPercent", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$getVisibilityPercent(CallbackInfoReturnable<Double> cir) {
+        if (roundabout$getStandPowers() instanceof PowersAchtungBaby PB && PB.inBurstState() && ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstAlertsMobs){
+            cir.setReturnValue(0.33);
+        }
     }
     /**Hide from mobs with armor on*/
     @Inject(method = "getArmorCoverPercentage", at = @At(value = "HEAD"), cancellable = true)

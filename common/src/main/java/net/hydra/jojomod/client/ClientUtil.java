@@ -1,9 +1,11 @@
 package net.hydra.jojomod.client;
 
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.block.InvisiBlockEntity;
 import net.hydra.jojomod.client.gui.*;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.item.ModItems;
@@ -11,10 +13,20 @@ import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
 import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.minecraft.client.*;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.zetalasis.client.shader.D4CShaderFX;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.D4CCloneEntity;
@@ -36,9 +48,6 @@ import net.zetalasis.networking.message.api.ModMessageEvents;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.client.Camera;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -198,6 +207,24 @@ public class ClientUtil {
 
                     }
                 }
+                /**Render invis blocks by getting their state*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.INVIS_BLOCK_STATE.value)) {
+                    Roundabout.LOGGER.info("Yes");
+                    BlockPos pos = (BlockPos) vargs[0];
+                    CompoundTag tag = (CompoundTag) vargs[1];
+                    ClientLevel level = Minecraft.getInstance().level;
+                    if (level != null && level.getChunkSource().hasChunk(pos.getX() >> 4, pos.getZ() >> 4)) {
+                        BlockEntity be =  level.getChunkAt(pos).getBlockEntity(pos, LevelChunk.EntityCreationType.IMMEDIATE);
+                        if (be instanceof InvisiBlockEntity ivb) {
+                            Roundabout.LOGGER.info("Yeyeye");
+                            if (tag.contains("OriginalState")) {
+                                Roundabout.LOGGER.info("Yeye");
+                                BlockState state = NbtUtils.readBlockState(BuiltInRegistries.BLOCK.asLookup(), tag.getCompound("OriginalState"));
+                                ivb.setOriginal2(state);
+                            }
+                        }
+                    }
+                }
             }
         });
     }
@@ -255,6 +282,12 @@ public class ClientUtil {
             }
         }
         return false;
+    }
+    public static boolean isFabulous(){
+
+        OptionInstance<GraphicsStatus> $$2 = Minecraft.getInstance().options.graphicsMode();
+        GraphicsStatus $$3 = (GraphicsStatus)$$2.get();
+        return $$3.equals(GraphicsStatus.FABULOUS);
     }
     public static boolean checkIfClientHoldingBag() {
         LocalPlayer player = Minecraft.getInstance().player;
@@ -1008,5 +1041,35 @@ public class ClientUtil {
         ModMessageEvents.sendToServer(
                 DynamicWorld.DynamicWorldNetMessages.MESSAGES.ADD_WORLD.value
         );
+    }
+
+
+
+    public static void applyJusticeFogBlockTextureOverlayInInventory(ItemStack $$0, ItemDisplayContext $$1, boolean $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, int $$6,
+                                                                     ItemModelShaper shaper, BlockEntityWithoutLevelRenderer renderer, ItemRenderer itemRenderer){
+        boolean $$8 = $$1 == ItemDisplayContext.GUI;
+        if ($$8){
+            Lighting.setupForFlatItems();
+            BakedModel $$7 = shaper.getModelManager().getModel(ModItemModels.FOG_BLOCK_ICON);
+            $$3.pushPose();
+
+            $$7.getTransforms().getTransform($$1).apply($$2, $$3);
+            $$3.translate(-0.5F, -0.5F, 0.5F);
+
+            if (!$$7.isCustomRenderer()) {
+                boolean $$10;
+                $$10 = true;
+
+                RenderType $$12 = ItemBlockRenderTypes.getRenderType($$0, $$10);
+                VertexConsumer $$14;
+                $$14 = ItemRenderer.getFoilBufferDirect($$4, $$12, true, $$0.hasFoil());
+
+                ((IItemRenderer)itemRenderer).roundabout$renderModelLists($$7, $$0, $$5, $$6, $$3, $$14);
+            } else {
+                renderer.renderByItem($$0, $$1, $$3, $$4, $$5, $$6);
+            }
+
+            $$3.popPose();
+        }
     }
 }

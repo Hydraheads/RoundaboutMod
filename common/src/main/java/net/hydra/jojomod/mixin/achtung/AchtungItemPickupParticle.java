@@ -1,18 +1,13 @@
-package net.hydra.jojomod.mixin;
-
+package net.hydra.jojomod.mixin.achtung;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
 import net.minecraft.client.Camera;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ItemPickupParticle;
 import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.RenderBuffers;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,14 +18,18 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import javax.annotation.Nullable;
-import java.util.UUID;
-
 @Mixin(ItemPickupParticle.class)
-public class ZItemPickupParticle {
+public class AchtungItemPickupParticle {
 
-    @Shadow @Final private Entity target;
-    @Shadow @Final private Entity itemEntity;
+    /***
+     * Code for Achtung Baby Item Pickup Rendering!
+     * The game renders items as particles as they are being picked up, this
+     * makes them see through (unless on fabulous)
+     *
+     * There is a packet sent to the client to spawn these particles, which exists in init.
+     * When the entity the particle is going towards is invisible, it hides them by
+     * marking the entity as invisible
+     */
     @Unique
     public boolean roundabout$invisibilityPickedUp = false;
     @Inject(method = "render", at = @At(value = "HEAD"), cancellable = true)
@@ -38,7 +37,7 @@ public class ZItemPickupParticle {
         if (roundabout$invisibilityPickedUp){
             /**Achtung users with invis vision are the only ones that can see items being picked up by achtung invis
              * players*/
-            if (!ClientUtil.checkIfClientCanSeeInvisAchtung()){
+            if (!ClientUtil.checkIfClientCanSeeInvisAchtung() || ClientUtil.isFabulous()){
                 ci.cancel();
             } else {
                 if (target != null) {
@@ -67,7 +66,7 @@ public class ZItemPickupParticle {
     }
     @Inject(method = "getRenderType()Lnet/minecraft/client/particle/ParticleRenderType;", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$getRenderType(CallbackInfoReturnable<ParticleRenderType> cir) {
-        if (roundabout$invisibilityPickedUp){
+        if (roundabout$invisibilityPickedUp && !ClientUtil.isFabulous()){
             cir.setReturnValue(ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT);
         }
     }
@@ -80,5 +79,11 @@ public class ZItemPickupParticle {
             }
         }
     }
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+    @Shadow @Final private Entity target;
+    @Shadow @Final private Entity itemEntity;
 
 }

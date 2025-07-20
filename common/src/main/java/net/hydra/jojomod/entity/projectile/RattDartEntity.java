@@ -9,6 +9,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -17,6 +18,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -94,7 +96,14 @@ public class RattDartEntity extends AbstractArrow {
 
     public void EnableSuperThrow() {
         this.entityData.set(ROUNDABOUT$SUPER_THROWN, true);
-        superThrowTicks = 20;
+        int ticks = 0;
+        for (int b=PowersRatt.ShotThresholds.length-1;b>=0;b--) {
+            if (this.charged >= PowersRatt.ShotThresholds[b]) {
+                ticks = PowersRatt.ShotSuperthrowTicks[b];
+                break;
+            }
+        }
+        superThrowTicks = ticks;
     }
     public void DisableSuperThrow() {
         this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
@@ -115,19 +124,24 @@ public class RattDartEntity extends AbstractArrow {
 
         Entity $$4 = this.getOwner();
         DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.KNIFE, $$4);
+        //   DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.MELTING, $$4);
         SoundEvent $$6 = ModSounds.KNIFE_IMPACT_EVENT;
         if ($$1.hurt($$5, $$2)) {
 
             if ($$4 instanceof LivingEntity LE) {
                 LE.setLastHurtMob($$1);
             }
-            if (MainUtil.getMobBleed($$1)){
-                ((StandUser)$$1).roundabout$setBleedLevel(0);
-                ((LivingEntity)$$1).addEffect(new MobEffectInstance(ModEffects.MELTING, 900, 0), this);
+
+            int stack = 0;
+            if ( ((LivingEntity)$$1).getEffect(ModEffects.MELTING) != null) {
+                stack = ((LivingEntity) $$1).getEffect(ModEffects.MELTING).getAmplifier() + 1;
             }
+            stack += charged >= PowersRatt.MaxThreshold ? 1 : 0;
+            ((LivingEntity)$$1).addEffect(new MobEffectInstance(ModEffects.MELTING, 900, stack), this);
             if ($$1.getType() == EntityType.ENDERMAN) {
                 return;
             }
+
 
             if ($$1 instanceof LivingEntity $$7) {
                 $$1.setDeltaMovement($$1.getDeltaMovement().multiply(0.4,0.4,0.4));
@@ -147,7 +161,7 @@ public class RattDartEntity extends AbstractArrow {
     @Override
     public void tick(){
         Vec3 delta = this.getDeltaMovement();
-        if (inGroundTime >= 80) {
+        if (inGroundTime >= 160) {
             this.remove(RemovalReason.DISCARDED);
         }
         super.tick();

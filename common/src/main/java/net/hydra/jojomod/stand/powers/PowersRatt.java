@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.mixin.StandUserEntity;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
@@ -24,6 +25,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.TropicalFish;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
@@ -38,6 +40,13 @@ public class PowersRatt extends NewDashPreset {
         super(self);
     }
 
+    public static final int MinThreshold = 30;
+    public static final int MaxThreshold = 90;
+    public static final int BaseShootCooldown = 10;
+    public static final int MaxShootCooldown = 30;
+    public static final int[] ShotThresholds = {MinThreshold,50,MaxThreshold};
+    public static final float[] ShotPowerFloats = {3,4.2F,5};
+    public static final int[] ShotSuperthrowTicks = {4,10,15};
 
 
     @Override
@@ -55,18 +64,25 @@ public class PowersRatt extends NewDashPreset {
         }
     }
 
+    public void setShotCooldown(int i) {
+        shotcooldown = i;
+        maxshotcooldown = i;
+    }
+
 
     public static float PlacementRange = 5.0F;
 
     public static final byte
             UPDATE_POSITION = 0,
             ROTATE = 1,
-            UPDATE_SCOPE = 2,
+            UPDATE_SCOPE = 20,
             UPDATE_CHARGE = 3;
 
     public Entity ShootTarget = null;
     public Entity getShootTarget() {return ShootTarget;}
     public void setShootTarget(Entity e) {ShootTarget = e;}
+
+
 
     boolean active = false;
     @Override
@@ -81,7 +97,7 @@ public class PowersRatt extends NewDashPreset {
     }
 
     int shotcooldown = 0;
-    int maxshotcooldown = 30;
+    int maxshotcooldown = 0;
 
     public boolean isPlaced() {return this.getStandEntity(this.getSelf()) != null;}
     public boolean isAuto() {return this.getStandUserSelf().roundabout$getUniqueStandModeToggle();}
@@ -142,7 +158,11 @@ public class PowersRatt extends NewDashPreset {
             if (scopeLevel == 0) {
                 setSkillIcon(context, x, y, 2, StandIcons.RATT_PLACE, PowerIndex.SKILL_2);
             } else {
-                setSkillIcon(context, x, y, 2, StandIcons.RATT_SINGLE, PowerIndex.SKILL_1_SNEAK);
+                if (isAuto()) {
+                    setSkillIcon(context, x, y, 2, StandIcons.RATT_BURST, PowerIndex.SKILL_1_SNEAK);
+                } else {
+                    setSkillIcon(context, x, y, 2, StandIcons.RATT_SINGLE, PowerIndex.SKILL_1_SNEAK);
+                }
             }
         }
         setSkillIcon(context,x,y,3,StandIcons.DODGE,PowerIndex.GLOBAL_DASH);
@@ -164,6 +184,7 @@ public class PowersRatt extends NewDashPreset {
                 }
             }
             case PowerIndex.POWER_2 -> {
+                this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
                 active = true;
                 Placement = pos;
                 this.setCooldown(PowerIndex.SKILL_2,80);
@@ -201,11 +222,14 @@ public class PowersRatt extends NewDashPreset {
     public void tickPower() {
         super.tickPower();
 
+        //Roundabout.LOGGER.info("A: {}, B: {}", this.getActivePower(), this.getAttackTimeDuring());
+
         if (shotcooldown != 0) {shotcooldown--;}
+        if (shotcooldown == 0) {maxshotcooldown = 0;}
 
         if (scopeLevel == 0) {
             if (attackTime > 30 && this.getChargeTime() != 0) {
-                chargeTime -= 3;
+                chargeTime -= 2;
             }
         }
 
@@ -265,6 +289,18 @@ public class PowersRatt extends NewDashPreset {
 
             if (getChargeTime() == 100) {this.setActivePower(PowerIndex.NONE);}
             if (scopeLevel == 0) {setActivePower(PowerIndex.NONE);}
+        } else if (this.getActivePower() == PowerIndex.POWER_1_BLOCK) {
+            if (isClient()) {
+                if (this.attackTimeDuring%12 == 2) {
+                    tryPower(PowerIndex.POWER_1_BLOCK,true);
+                    tryPowerPacket(PowerIndex.POWER_1_BLOCK);
+                }
+                if (this.chargeTime < 30) {
+                    this.updateChargeTime(0);
+                    this.setShotCooldown(30);
+                    this.setActivePower(PowerIndex.NONE);
+                }
+            }
         }
         super.updateUniqueMoves();
     }
@@ -290,9 +326,7 @@ public class PowersRatt extends NewDashPreset {
             }
             case SKILL_2_NORMAL -> {
                 if (scopeLevel != 0)  {
-                    if (!isAttackIneptVisually(PowerIndex.SKILL_2, 2)) {
-                        PlayerFire();
-                    }
+                    ToggleBursting();
                 } else {
                     if (!isPlaced()) {
                         if (getValidPlacement() != null) {
@@ -343,23 +377,37 @@ public class PowersRatt extends NewDashPreset {
             }
 
             case PowerIndex.POWER_1_SNEAK -> {
-                shotcooldown = maxshotcooldown;
+                setShotCooldown(chargeTime >= MaxThreshold ? MaxShootCooldown : BaseShootCooldown);
                 this.setCooldown(PowerIndex.SKILL_2,30);
                 if (!isClient()) {
-                    FireDart(chargeTime);
+                    FireDart(chargeTime,0.2F);
                 }  else {
                     updateChargeTime(0);
                 }
 
             }
+
+
         }
         return super.tryIntPower(move, forced, chargeTime);
+    }
+
+    public void ToggleBursting() {
+        this.getStandUserSelf().roundabout$setUniqueStandModeToggle(!isAuto());
+        tryPower(PowerIndex.POWER_1_BONUS,true);
+        tryPowerPacket(PowerIndex.POWER_1_BONUS);
+        this.setCooldown(PowerIndex.SKILL_1_SNEAK,10);
     }
 
     public void PlayerFire() {
         int i = getChargeTime();
         tryIntPower(PowerIndex.POWER_1_SNEAK,true,i);
         tryIntPowerPacket(PowerIndex.POWER_1_SNEAK,i);
+
+    }
+    public void PlayerBurstFire() {
+        tryPower(PowerIndex.SNEAK_ATTACK,true);
+        tryPowerPacket(PowerIndex.SNEAK_ATTACK);
 
     }
 
@@ -369,9 +417,16 @@ public class PowersRatt extends NewDashPreset {
     }
 
 
-    public void FireDart(int i) {
+    public void FireDart(int i, float acuracy) {
+        float power = 0;
+        for (int b=ShotThresholds.length-1;b>=0;b--) {
+            if (i >= ShotThresholds[b]) {
+                power = ShotPowerFloats[b];
+                break;
+            }
+        }
         RattDartEntity e = new RattDartEntity(this.getSelf().level(),this.getSelf(),i);
-        e.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0.5F, 4.2F, 0.2F);
+        e.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0.5F, power, acuracy);
         e.EnableSuperThrow();
         this.getSelf().level().addFreshEntity(e);
     }
@@ -409,12 +464,32 @@ public class PowersRatt extends NewDashPreset {
         switch (move) {
             case PowerIndex.POWER_2_SNEAK -> {
                 active = false;
+                this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
                 this.getStandEntity(this.getSelf()).remove(Entity.RemovalReason.DISCARDED);
                 this.setCooldown(PowerIndex.SKILL_2,40);
             }
             case PowerIndex.POWER_1 -> {
                 this.setCooldown(PowerIndex.SKILL_1,10);
                 this.setAttackTime(-1);
+            }
+            case PowerIndex.POWER_1_SNEAK -> {
+                this.setCooldown(PowerIndex.SKILL_1_SNEAK,15);
+            }
+            case PowerIndex.SNEAK_ATTACK -> {
+                this.setAttackTimeDuring(0);
+                this.setActivePower(PowerIndex.POWER_1_BLOCK);
+            }
+            case PowerIndex.POWER_1_BLOCK -> {
+                this.setCooldown(PowerIndex.SKILL_2,30);
+                this.setActivePower(PowerIndex.POWER_1_BLOCK);
+                if (!isClient()) {
+                    FireDart(51,0.4F);
+                }  else {
+                    updateChargeTime(getChargeTime()-30);
+                }
+            }
+            case PowerIndex.POWER_1_BONUS -> {
+                this.setCooldown(PowerIndex.SKILL_1_SNEAK,30);
             }
         }
         return super.tryPower(move, forced);
@@ -426,6 +501,14 @@ public class PowersRatt extends NewDashPreset {
             return super.setPowerNone();
         }
         return true;
+    }
+
+    @Override
+    public float inputSpeedModifiers(float basis) {
+        if (scopeLevel != 0){
+            basis*=0.5f;
+        }
+        return super.inputSpeedModifiers(basis);
     }
 
     @Override
@@ -445,8 +528,9 @@ public class PowersRatt extends NewDashPreset {
             }
             case PowerIndex.SKILL_1_SNEAK -> {
                 if (scopeLevel != 0) {
-                    return getChargeTime() <= 35 || shotcooldown != 0;
+                    return getChargeTime() <= MinThreshold || shotcooldown != 0;
                 }
+                return true;
             }
 
         }
@@ -458,8 +542,14 @@ public class PowersRatt extends NewDashPreset {
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (keyIsDown) {
-            if (!isAttackIneptVisually(PowerIndex.SKILL_1_SNEAK, 2)) {
-                PlayerFire();
+            if (this.getActivePower() == PowerIndex.NONE) {
+                if (!isAttackIneptVisually(PowerIndex.SKILL_1_SNEAK, 2)) {
+                    if (isAuto()) {
+                        PlayerBurstFire();
+                    } else {
+                        PlayerFire();
+                    }
+                }
             }
         }
     }
@@ -468,9 +558,11 @@ public class PowersRatt extends NewDashPreset {
     public boolean interceptGuard() {return   scopeLevel != 0;}
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
-        if (getChargeTime() != 100 && shotcooldown == 0 ) {
-            tryPower(PowerIndex.GUARD, true);
-            tryPowerPacket(PowerIndex.GUARD);
+        if (this.getActivePower() == PowerIndex.NONE) {
+            if (getChargeTime() != 100 && shotcooldown == 0) {
+                tryPower(PowerIndex.GUARD, true);
+                tryPowerPacket(PowerIndex.GUARD);
+            }
         }
         return true;
     }
@@ -481,18 +573,19 @@ public class PowersRatt extends NewDashPreset {
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
 
+
         if (shotcooldown != 0) {
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             float ratio = (float) shotcooldown /maxshotcooldown;
-            int fifteen = Math.round(ratio*15);
+            int fifteen = 15-Math.round(ratio*15);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 12, fifteen, 6);
 
         } else if (getChargeTime() >= 10 || scopeLevel != 0) {
-            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6    , 15, 6);
             float amount = (float) getChargeTime() /100;
             int finalAmount = Math.round(amount*15);
             int bartexture = 30;
-            if (finalAmount == 15) {bartexture -= 6;}
+            if (getChargeTime() >= MaxThreshold) {bartexture -= 6;}
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, bartexture, finalAmount, 6);
         }
     }

@@ -415,10 +415,10 @@ public class ForgeItems {
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersSoftAndWet(null))));
     public static final RegistryObject<Item> STAND_DISC_CINDERELLA = addToDiscTab(ITEMS.register("cinderella_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null))));
+    public static final RegistryObject<Item> STAND_DISC_ACHTUNG = addToDiscTab(ITEMS.register("achtung_baby_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAchtungBaby(null))));
     public static final RegistryObject<Item> STAND_DISC_SURVIVOR = addToDiscTab(ITEMS.register("survivor_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSurvivor(null))));
-    public static final RegistryObject<Item> STAND_DISC_ACHTUNG = addToWIPTab(ITEMS.register("achtung_baby_disc",
-            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAchtungBaby(null))));
     public static final RegistryObject<Item> STAND_DISC_HEY_YA = addToDiscTab(ITEMS.register("hey_ya_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersHeyYa(null))));
     public static final RegistryObject<Item> STAND_DISC_MANDOM = addToDiscTab(ITEMS.register("mandom_disc",

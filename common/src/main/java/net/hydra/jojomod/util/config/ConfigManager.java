@@ -34,7 +34,7 @@ public abstract class ConfigManager {
     private static boolean loaded = false;
 
     public static Config getConfig() {
-        if (Networking.isDedicated()) return Config.getServerInstance();
+        //if (Networking.isDedicated()) return Config.getServerInstance();
         return Config.getLocalInstance();
     }
     public static AdvancedConfig getAdvancedConfig() {
@@ -81,11 +81,11 @@ public abstract class ConfigManager {
                 ModItems.STAND_ARROW_POOL.add((StandDiscItem) i);
             }
         }
-        if (getAdvancedConfig().naturalStandUserMobPoolv3 != null)
+        if (getAdvancedConfig().naturalStandUserMobPoolv4 != null)
         {
             ModItems.STAND_ARROW_POOL_FOR_MOBS.clear();
 
-            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv3)
+            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv4)
             {
                 String[] split = disc.split(":");
 
@@ -128,11 +128,11 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().standArrowSecondaryPoolv4 != null)
+        if (getAdvancedConfig().standArrowSecondaryPoolv5 != null)
         {
             ModItems.STAND_ARROW_SECONDARY_STAND_POOL.clear();
 
-            for (String disc : getAdvancedConfig().standArrowSecondaryPoolv4)
+            for (String disc : getAdvancedConfig().standArrowSecondaryPoolv5)
             {
                 String[] split = disc.split(":");
 
@@ -352,6 +352,7 @@ public abstract class ConfigManager {
     }
 
     public static void saveClientConfig() {
+        validateFields(ClientConfig.getLocalInstance());
         saveClient(ClientConfig.getLocalInstance(), clientConfigPath);
     }
     public static void saveAdvacedConfig() {

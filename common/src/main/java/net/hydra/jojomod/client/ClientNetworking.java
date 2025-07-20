@@ -12,7 +12,9 @@ public class ClientNetworking {
     private static boolean refreshScreen = false;
 
     public static Config getAppropriateConfig(){
-        if (isConnectedToDedicated || Networking.isDedicated()){
+        if (isConnectedToDedicated
+                //|| Networking.isDedicated()
+        ){
             return Config.getServerInstance();
         }
         return Config.getLocalInstance();

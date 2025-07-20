@@ -9,6 +9,8 @@ public class StandIcons {
     public static final Material STAND_FIRE = new Material(TextureAtlas.LOCATION_BLOCKS,
             new ResourceLocation(Roundabout.MOD_ID,"block/fire_0"));
 
+    public static final ResourceLocation INVISIBLOCK = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/block/invisiblock.png");
     public static final ResourceLocation JOJO_ICONS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/jojo_icons.png");
     public static final ResourceLocation NONE = new ResourceLocation(Roundabout.MOD_ID,
@@ -359,6 +361,8 @@ public class StandIcons {
             "textures/gui/icons/achtung_baby/vision_on.png");
     public static final ResourceLocation BABY_VISION_OFF = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/achtung_baby/vision_off.png");
+    public static final ResourceLocation INVIS_BLOCK = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/achtung_baby/invis_block.png");
 
     public static final ResourceLocation DIVER_DOWN_VAULT = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/diver_down/stand_ledge_grab.png");

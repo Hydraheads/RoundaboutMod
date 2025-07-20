@@ -36,6 +36,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
@@ -47,17 +48,20 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.DirectionalPlaceContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.IceBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -816,7 +820,33 @@ public class StandPowers {
     public void tickPowerEnd(){
 
     }
+    public boolean tryHitBlock(BlockHitResult $$0, BlockPos pos, BlockState state, ItemStack stack){
 
+        if ((state.isAir() || state.canBeReplaced()) && !((this.getSelf() instanceof Player &&
+                (((Player) this.getSelf()).blockActionRestricted(this.getSelf().level(), pos, ((ServerPlayer)
+                        this.getSelf()).gameMode.getGameModeForPlayer()))) ||
+                !this.getSelf().level().mayInteract(((Player) this.getSelf()), pos))){
+
+            if (stack.getItem() instanceof BlockItem) {
+                Direction direction = $$0.getDirection();
+                if (direction.getAxis() == Direction.Axis.X){
+                    direction = direction.getOpposite();
+                }
+                if (((BlockItem) stack.getItem()).getBlock() instanceof RotatedPillarBlock){
+                    direction = $$0.getDirection();
+                }
+
+                if (((BlockItem)stack.getItem()).place(new DirectionalPlaceContext(this.getSelf().level(),
+                        pos,
+                        direction, stack,
+                        direction)) != InteractionResult.FAIL){
+                    return true;
+                }
+            }
+
+        }
+        return false;
+    }
 
     public void setAirAmount(int airAmount){
     }
@@ -2588,6 +2618,9 @@ public class StandPowers {
                     integer
             );
         }
+    }
+
+    public void eatEffectIntercept(ItemStack $$0, Level $$1, LivingEntity $$2){
     }
 
     public void tryTripleIntPacket(byte packet, int in1, int in2, int in3){

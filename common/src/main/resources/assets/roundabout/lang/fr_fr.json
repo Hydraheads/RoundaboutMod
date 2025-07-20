@@ -67,6 +67,8 @@
   "item.roundabout.max_soft_and_wet_disc": "Disque Stand+",
   "item.roundabout.max_magicians_red_disc": "Disque Stand+",
   "item.roundabout.max_killer_queen_disc": "Disque Stand+",
+  "item.roundabout.diver_down_disc": "Disque Stand",
+  "item.roundabout.max_diver_down_disc": "Disque Stand+",
   "item.roundabout.d4c_disc.desc": "D4C",
   "item.roundabout.green_day_disc.desc": "Green Day",
   "item.roundabout.soft_and_wet_disc.desc": "Soft And Wet",
@@ -82,6 +84,8 @@
   "item.roundabout.survivor_disc.desc": "Survivor",
   "item.roundabout.hey_ya_disc.desc": "Hey Ya!",
   "item.roundabout.mandom_disc.desc": "Mandom",
+  "item.roundabout.diver_down_disc.desc": "Diver Down",
+  "item.roundabout.max_diver_down_disc.desc": "Diver Down",
   "item.roundabout.none_disc.desc": "Aucun",
 
   "item.roundabout.light_bulb": "Ampoule",
@@ -144,6 +148,9 @@
   "item.roundabout.josuke_part_eight_mask": "Visage de Josuke",
   "item.roundabout.josuke_part_eight_mask.desc": "Josuke Higashikata (Partie 8)",
   "item.roundabout.josuke_part_eight_mask.tag": "Josuke",
+  "item.roundabout.shizuka_mask": "Visage de Shizuka",
+  "item.roundabout.shizuka_mask.desc": "Shizuka (JoJovein / JoJo Stars)",
+  "item.roundabout.shizuka_mask.tag": "Shizuka",
 
   "item.roundabout.stand_arrow.fail": "Besoin de plus d'expérience!",
 
@@ -168,6 +175,9 @@
   "effect.roundabout.stand_virus": "Virus des Stand",
   "effect.roundabout.capturing_love": "Beauté captivante",
   "effect.roundabout.faceless": "Sans visage",
+  "effect.roundabout.melting": "Dissous",
+
+  "item.roundabout.creative_only.info": "Créatif Uniquement",
 
   "text.roundabout.meteorite": "Météorite",
 
@@ -192,6 +202,7 @@
   "entity.roundabout.soft_and_wet_king": "Soft And Wet",
   "entity.roundabout.soft_and_wet_drowned": "Soft And Wet",
   "entity.roundabout.soft_and_wet_killer_queen": "Killer Queen",
+  "entity.roundabout.diver_down": "Diver Down",
   "entity.roundabout.harpoon": "Harpon",
   "entity.roundabout.match": "Allumette",
   "entity.roundabout.knife": "Couteau",
@@ -215,6 +226,7 @@
   "entity.roundabout.jojo_npc_aya": "Aya",
   "entity.roundabout.jojo_npc_guccio": "Guccio",
   "entity.roundabout.jojo_npc_ringo": "Ringo",
+  "entity.roundabout.jojo_npc_shizuka": "Shizuka",
   "entity.roundabout.jojo_npc_pocoloco": "Pocoloco",
   "entity.roundabout.aesthetician": "Esthéticienne",
   "entity.roundabout.zombie_aesthetician": "Esthéticienne zombie",
@@ -373,6 +385,7 @@
   "death.attack.stand_virus.item": "%1$s a été transformé(e) en sauce tomate",
   "death.attack,disintegration": "%1$ a été désintégrer",
   "death.attack,disintegration.player": "%1$ a été désintégrer par %$2s",
+  "death.attack.melting": "%1$s a été transformé(e) en flaque par %2$s",
 
   "item.glaive.charge_power": "Chargé l'attaque",
 
@@ -871,6 +884,14 @@
   "ability.roundabout.target_zap": "Cupidon de la Rage",
   "ability.roundabout.target_zap.desc": "Vous laisse sélectionné quel créature doivent s'affronté ! Entre un mode sélection, utilisez votre bouton d'attaque pour sélectionné un Survivor actif, puis une cible, et puis une autre. Iels vont se battre ! Pressez le bouton de cette capacité à nouveau pour annuler ou refaire la sélection. Pendant que ce mode est actif, vos Survivors ne vont pas automatiquement électriser des créatures ensembles.",
 
+  "ability.roundabout.invisivision": "Invisi-Vision",
+  "ability.roundabout.invisivision.desc": "Active ou désactive la capacité de voir des versions transparentes des blocs et créatures que vous avez rendu invisible avec vos pouvoirs. La désactivée est utile pour obtenir la perspective de quelqu'un qui n'a pas ce stand, et de voir plus facilement à travers les blocs invisibles.",
+  "ability.roundabout.invisiburst": "Débordement d'Invisibilité",
+  "ability.roundabout.invisiburst.desc": "Libères vos émotions dans un débordement d'invisibilité, rendant vous et tout autres créatures environnantes invisibles. Ça diminue votre distance de détection, et se dissipe au bout d'un moment, ou quand vous effectuez certaines actions. Activer cette capacité brièvement laisse les créatures vous détecté. Si les Stand peuvent intéragir avec les blocs, rend temporairement les blocs environnants qui ne sont pas des minerais autour de vous invisibles aussi, ce qui peut aider pendant une séance de minage. Les blocs invisibles n'ont pas de propriétés, et ne peuvent pas être explosés.",
+  "ability.roundabout.controlled_burst": "Débordement Contrôlé",
+  "ability.roundabout.controlled_burst.desc": "Une variation du débordement d'invisibilité avec une porté réduite et aucune invisibilité de blocs. Signifie un plus grand contrôle des émotions de l'utilisateur. Utile si vous ne voulez pas rendre vos adversaires invisibles.",
+  "ability.roundabout.place_invis": "Placement de Bloc Invisible",
+  "ability.roundabout.place_invis.desc": "Place un bloc, partageant une duré d'invisibilité avec vous. Marche seulement lorsque vous êtes invisible.",
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Non débloqué",
@@ -1031,12 +1052,11 @@
   "skins.roundabout.ratt.redd" : "Redstone",
   "skins.roundabout.ratt.snowy" : "Neigeux",
 
-
-
   "skins.roundabout.cinderella.base": "Partie 4",
   "skins.roundabout.cinderella.manga": "Manga",
   "skins.roundabout.cinderella.zombie": "Infecté",
   "skins.roundabout.cinderella.jack_in_the_box": "Clown",
+  "skins.roundabout.cinderella.business": "Business",
 
   "skins.roundabout.hey_ya.manga": "Manga",
   "skins.roundabout.hey_ya.gothic": "Gothic",
@@ -1086,8 +1106,13 @@
   "skins.roundabout.survivor.ghast": "Ghastelin",
   "skins.roundabout.survivor.ender": "Ender",
   "skins.roundabout.survivor.conduit": "Conduit",
+  "skins.roundabout.survivor.cake": "Gateaux",
 
   "skins.roundabout.killer_queen.base": "Partie 4",
+
+  "skins.roundabout.diver_down.base": "Partie 6",
+
+  "skins.roundabout.achtung_baby.base": "N'a pas de Forme",
 
   "unlock_skin.roundabout.the_world.over_heaven": "Skin The World: Skin Over Heaven Débloqué !",
   "unlock_skin.roundabout.star_platinum.atomic": "Skin Star Platinum: Skin Atomic Débloqué !",
