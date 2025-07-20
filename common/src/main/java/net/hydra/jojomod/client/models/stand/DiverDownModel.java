@@ -36,7 +36,11 @@ public class DiverDownModel<T extends DiverDownEntity> extends StandModel<T>{
                 .texOffs(40, 23).addBox(-2.0F, -10.25F, -4.9F, 4.0F, 4.0F, 1.0F, new CubeDeformation(-0.25F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition extra_details = head2.addOrReplaceChild("extra_details", CubeListBuilder.create().texOffs(0, 0).addBox(3.0F, -11.85F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(2, 1).addBox(4.0F, -13.85F, -1.0F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+                .texOffs(2, 1).addBox(4.0F, -13.85F, -1.0F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(-1, 32).addBox(-1.5F, 0.15F, -5.0F, 3.0F, 1.0F, 1.0F, new CubeDeformation(0.3F))
+                .texOffs(0, 35).addBox(-5.5F, 0.15F, -5.0F, 11.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 42).addBox(-5.5F, -0.85F, -5.0F, 11.0F, 1.0F, 10.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 55).addBox(-4.5F, -0.85F, -5.0F, 9.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition body = stand2.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, -24.0F, 0.0F));
 
@@ -49,10 +53,6 @@ public class DiverDownModel<T extends DiverDownEntity> extends StandModel<T>{
         PartDefinition upper_chest_only = upper_chest.addOrReplaceChild("upper_chest_only", CubeListBuilder.create().texOffs(0, 19).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.35F))
                 .texOffs(40, 23).addBox(0.5F, -4.5F, -3.0F, 4.0F, 4.0F, 1.0F, new CubeDeformation(-0.25F))
                 .texOffs(40, 29).addBox(-4.5F, -4.5F, -3.0F, 4.0F, 4.0F, 1.0F, new CubeDeformation(-0.25F))
-                .texOffs(-1, 32).addBox(-1.5F, -6.0F, -5.0F, 3.0F, 1.0F, 1.0F, new CubeDeformation(0.3F))
-                .texOffs(0, 35).addBox(-5.5F, -6.0F, -5.0F, 11.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 42).addBox(-5.5F, -7.0F, -5.0F, 11.0F, 1.0F, 10.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 55).addBox(-4.5F, -7.0F, -5.0F, 9.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 61).addBox(-4.0F, -6.0F, 0.0F, 8.0F, 9.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition right_arm = upper_chest.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.offset(-4.0F, -5.25F, 0.0F));
