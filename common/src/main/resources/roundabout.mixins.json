@@ -18,7 +18,7 @@
     "ZAbstractFurnaceMenu",
     "ZAbstractHorse",
     "ZAbstractSchoolingFish",
-    "ZAllaySounds",
+    "soft_and_wet.SoftAndWetAllaySounds",
     "ZAnimal",
     "ZAnvilMenu",
     "ZAreaOfEffectCloud",
