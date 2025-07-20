@@ -64,18 +64,6 @@ public abstract class ZEntityRenderDispatcher {
             return;
         }
 
-
-        float throwFadeToTheEther = 1f;
-
-        IEntityAndData entityAndData = ((IEntityAndData) entity);
-        if (entityAndData.roundabout$getTrueInvisibility() > -1){
-            throwFadeToTheEther = throwFadeToTheEther*0.4F;
-        }
-
-
-        ClientUtil.setThrowFadeToTheEther(throwFadeToTheEther);
-
-
         if (entity instanceof LivingEntity LE && !roundabout$recurse){
             byte bt =  ((StandUser)LE).roundabout$getGlow();
             if (bt > 0){
