@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.achtung;
 
 import net.hydra.jojomod.block.ModBlocks;
 import net.minecraft.core.BlockPos;
@@ -11,9 +11,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BushBlock.class)
-public class ZBushBlock {
+public class AchtungBushBlock {
 
-    /**blocks we don't want breaking grass*/
+    /**The invisible blocks of achtung baby should not be breaking tallgrass or plants*/
     @Inject(method = "mayPlaceOn(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)Z", at = @At("HEAD"), cancellable = true)
     public void roundabout$mayPlaceOn(BlockState $$0, BlockGetter $$1, BlockPos $$2, CallbackInfoReturnable<Boolean> cir) {
         if ($$0.is(ModBlocks.INVISIBLOCK)){
