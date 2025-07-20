@@ -7,25 +7,12 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 
 public class DiverDownEntity extends FollowingStandEntity {
-
-
-
-    public DiverDownEntity(EntityType<? extends Mob> entityType, Level world) {
-        super(entityType, world);
-    }
-
-    public static Component getSkinNameT(byte skinId) {
-        switch (skinId)
-        {
-            case PART_6 -> {return Component.translatable("skins.roundabout.diver_down.base");}
-        }
-        return Component.translatable("skins.roundabout.diver_down.base");
-    }
+    public DiverDownEntity(EntityType<? extends Mob> entityType, Level world) {super(entityType, world);}
 
     public static final byte
-            PART_6 = 0;
+            PART_6 = 0,
+            LAVA_DIVER = 1;
 
-    public final AnimationState lid_open = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState hideLeg = new AnimationState();
     public final AnimationState kick_barrage = new AnimationState();

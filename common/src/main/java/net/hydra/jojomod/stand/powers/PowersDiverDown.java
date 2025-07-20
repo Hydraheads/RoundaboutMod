@@ -4,6 +4,7 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.DiverDownEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -71,14 +72,22 @@ public class PowersDiverDown extends NewPunchingStand {
 
     }
 
-
-        @Override
-        public List<Byte> getSkinList () {
-            return Arrays.asList(
-                    DiverDownEntity.PART_6
-            );
+    @Override public Component getSkinName(byte skinId) {
+        switch (skinId)
+        {
+            case DiverDownEntity.PART_6 -> {return Component.translatable("skins.roundabout.diver_down.base");}
+            case DiverDownEntity.LAVA_DIVER -> {return Component.translatable("skins.roundabout.diver_down.lavadiver");}
+            default -> {return Component.translatable("skins.roundabout.diver_down.base");}
         }
+    }
 
+    @Override
+    public List<Byte> getSkinList() {
+        return Arrays.asList(
+                DiverDownEntity.PART_6,
+                DiverDownEntity.LAVA_DIVER
+        );
+    }
         public float standReach = 5;
 
     public PowersDiverDown(LivingEntity self) {
@@ -148,15 +157,6 @@ public class PowersDiverDown extends NewPunchingStand {
         @Override
         public Component ifWipListDev () {
             return Component.literal("MrInkyTech").withStyle(ChatFormatting.YELLOW);
-        }
-
-        @Override public Component getSkinName ( byte skinId){
-            switch (skinId) {
-                case DiverDownEntity.PART_6 -> {
-                    return Component.translatable("skins.roundabout.diver_down.base");
-                }
-            }
-            return Component.translatable("skins.roundabout.diver_down.base");
         }
     }
 
