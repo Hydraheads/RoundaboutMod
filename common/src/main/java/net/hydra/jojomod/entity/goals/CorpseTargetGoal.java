@@ -54,10 +54,38 @@ public class CorpseTargetGoal extends TargetGoal {
     }
 
     @Override
+    public void tick() {
+        if(mob instanceof FallenMob fm) {
+            if (fm.getTarget() != null) {
+
+
+                if (!fm.getTarget().isAlive()) {
+                    stop();
+                    fm.setTarget(null);
+
+                }
+                this.mob.lookAt(fm.getTarget(), 30.0f, 30.0f);
+            }
+
+        }
+        super.tick();
+    }
+
+    @Override
+    public void stop() {
+        this.mob.getNavigation().createPath(this.mob.getX(),this.mob.getY(),this.mob.getZ(),1);
+        this.mob.getNavigation().stop();
+        this.mob.setDeltaMovement(0,0,0);
+        super.stop();
+    }
+
+    @Override
     public void start() {
         if (mob instanceof FallenMob fm){
+            fm.getNavigation().stop();
             if (fm.getActivated() && fm.getTargetTactic() != Tactics.PEACEFUL.id){
                 this.mob.setTarget(fm.corpseTarget);
+
             } else {
                 this.mob.setTarget(null);
             }

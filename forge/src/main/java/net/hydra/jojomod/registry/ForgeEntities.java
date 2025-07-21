@@ -178,6 +178,11 @@ public class ForgeEntities {
                     EntityType.Builder.of(FallenCreeper::new, MobCategory.MISC).sized(0.6F, 1.7F).clientTrackingRange(8).
                             build(new ResourceLocation(Roundabout.MOD_ID, "fallen_creeper").toString())
             );
+    public static final RegistryObject<EntityType<FallenPhantom>> FALLEN_PHANTOM =
+            ENTITY_TYPES.register("fallen_phantom", () ->
+                    EntityType.Builder.of(FallenPhantom::new, MobCategory.MISC).sized(0.8F, 0.5F).clientTrackingRange(8).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "fallen_phantom").toString())
+            );
     public static final RegistryObject<EntityType<TheWorldEntity>> THE_WORLD =
             ENTITY_TYPES.register("the_world", () ->
                     EntityType.Builder.of(TheWorldEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).

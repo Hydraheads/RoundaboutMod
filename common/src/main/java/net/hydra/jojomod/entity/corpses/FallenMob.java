@@ -682,4 +682,8 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     public UUID getPersistentAngerTarget() {
         return this.persistentAngerTarget;
     }
+    public int getUniqueFlapTickOffset() {
+        return this.getId() * 3;
+
+    }
 }

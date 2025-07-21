@@ -1,6 +1,7 @@
 package net.hydra.jojomod.networking.packet.c2s;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.util.MainUtil;
@@ -111,7 +112,7 @@ public class UtilC2S {
         ItemStack context = buf.readItem();
         byte bt2 = buf.readByte();
         Vector3f vec = buf.readVector3f();
-
+        Roundabout.LOGGER.info("byte1: " + bt + " Byte2: " + bt2);
         server.execute(() -> {
             MainUtil.handleChangeItem(player,bt,context,bt2,vec);
         });

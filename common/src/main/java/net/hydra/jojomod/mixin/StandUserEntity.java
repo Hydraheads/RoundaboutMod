@@ -3335,6 +3335,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     } else if (ths instanceof Creeper) {
                         marked = true;
                         mb = ModEntities.FALLEN_CREEPER.create(this.level());
+                    } else if (ths instanceof Phantom){
+                        marked = true;
+                        mb = ModEntities.FALLEN_PHANTOM.create(this.level());
                     }
                 }
                 if (mb != null){
@@ -3352,6 +3355,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     ci.cancel();
                 }
             }
+
         }
     }
         @SuppressWarnings("deprecation")

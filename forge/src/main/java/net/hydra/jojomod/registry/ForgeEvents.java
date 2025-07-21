@@ -87,6 +87,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.FALLEN_SPIDER.get(), FallenSpider.createAttributes().build());
         event.put(ForgeEntities.FALLEN_VILLAGER.get(), FallenVillager.createAttributes().build());
         event.put(ForgeEntities.FALLEN_CREEPER.get(), FallenCreeper.createAttributes().build());
+        event.put(ForgeEntities.FALLEN_PHANTOM.get(), FallenPhantom.createAttributes().build());
         event.put(ForgeEntities.GROUND_HURRICANE.get(), GroundHurricaneEntity.createStandAttributes().build());
         event.put(ForgeEntities.GROUND_BUBBLE.get(), GroundBubbleEntity.createStandAttributes().build());
         event.put(ForgeEntities.LIFE_TRACKER.get(), LifeTrackerEntity.createStandAttributes().build());
@@ -420,6 +421,7 @@ public class ForgeEvents {
         ModEntities.FALLEN_SPIDER = ForgeEntities.FALLEN_SPIDER.get();
         ModEntities.FALLEN_VILLAGER = ForgeEntities.FALLEN_VILLAGER.get();
         ModEntities.FALLEN_CREEPER = ForgeEntities.FALLEN_CREEPER.get();
+        ModEntities.FALLEN_PHANTOM = ForgeEntities.FALLEN_PHANTOM.get();
 
         ModEntities.OVA_ENYA = ForgeEntities.OVA_ENYA.get();
         ModEntities.ENYA = ForgeEntities.ENYA.get();

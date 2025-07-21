@@ -437,9 +437,12 @@ public class PowersJustice extends NewDashPreset {
             corpse = ModEntities.FALLEN_ZOMBIE.create(this.getSelf().level());
         } else if (this.getSelf() instanceof Spider){
             corpse = ModEntities.FALLEN_SPIDER.create(this.getSelf().level());
-        } else if (this.getSelf() instanceof Vindicator){
+        } else if (this.getSelf() instanceof Vindicator) {
             corpse = ModEntities.FALLEN_VILLAGER.create(this.getSelf().level());
-        } else {
+        } else if (this.getSelf() instanceof Phantom){
+                corpse = ModEntities.FALLEN_PHANTOM.create(this.getSelf().level());
+        }
+         else {
             double rand = Math.random();
             if (rand < 0.2){
                 corpse = ModEntities.FALLEN_VILLAGER.create(this.getSelf().level());
@@ -460,7 +463,12 @@ public class PowersJustice extends NewDashPreset {
                 } else if (this.self instanceof EnyaNPC || this.self instanceof OVAEnyaNPC){
                     corpse = ModEntities.FALLEN_VILLAGER.create(this.getSelf().level());
                 } else {
-                    corpse = ModEntities.FALLEN_CREEPER.create(this.getSelf().level());
+                    double rand2 = Math.random();
+                    if(rand2 < 0.5) {
+                        corpse = ModEntities.FALLEN_CREEPER.create(this.getSelf().level());
+                    } else{
+                        corpse = ModEntities.FALLEN_PHANTOM.create(this.getSelf().level());
+                    }
                 }
             }
         }

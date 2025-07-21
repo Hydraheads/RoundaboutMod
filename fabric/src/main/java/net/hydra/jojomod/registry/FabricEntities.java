@@ -209,6 +209,13 @@ public class FabricEntities {
                         EntityType.Builder.of(FallenCreeper::new, MobCategory.MISC).sized(0.6F, 1.7F).clientTrackingRange(8).build(Roundabout.MOD_ID+":fallen_skeleton")
                 );
 
+        public static final EntityType<FallenPhantom> FALLEN_PHANTOM =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "fallen_phantom"),
+                        EntityType.Builder.of(FallenPhantom::new, MobCategory.MISC).sized(0.8F, 0.5F).clientTrackingRange(8).build(Roundabout.MOD_ID+":fallen_skeleton")
+                );
+
         public static final EntityType<TheWorldEntity> THE_WORLD =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -573,6 +580,7 @@ public class FabricEntities {
                 ModEntities.FALLEN_SPIDER = FALLEN_SPIDER;
                 ModEntities.FALLEN_VILLAGER = FALLEN_VILLAGER;
                 ModEntities.FALLEN_CREEPER = FALLEN_CREEPER;
+                ModEntities.FALLEN_PHANTOM = FALLEN_PHANTOM;
 
                 ModEntities.OVA_ENYA = OVA_ENYA;
                 ModEntities.ENYA = ENYA;
@@ -623,6 +631,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(FALLEN_SPIDER, FallenSpider.createAttributes());
                 FabricDefaultAttributeRegistry.register(FALLEN_VILLAGER, FallenVillager.createAttributes());
                 FabricDefaultAttributeRegistry.register(FALLEN_CREEPER, FallenCreeper.createAttributes());
+                FabricDefaultAttributeRegistry.register(FALLEN_PHANTOM,FallenPhantom.createAttributes());
 
                 FabricDefaultAttributeRegistry.register(THE_WORLD, StandEntity.createStandAttributes());
 

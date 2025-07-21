@@ -79,6 +79,7 @@ public class CorpseBagScreen extends Screen {
     public int spiders = 0;
     public int villagers = 0;
     public int creepers = 0;
+    public int phantoms = 0;
 
     @Override
     protected void init() {
@@ -92,12 +93,14 @@ public class CorpseBagScreen extends Screen {
             spiders = $$1.getInt("spider");
             villagers = $$1.getInt("villager");
             creepers = $$1.getInt("creeper");
+            phantoms = $$1.getInt("phantom");
         } else {
             zombies = 0;
             skeletons = 0;
             spiders = 0;
             villagers = 0;
             creepers = 0;
+            phantoms = 0;
         }
 
         this.currentlyHovered = corpseIcon.NONE;
@@ -157,6 +160,8 @@ public class CorpseBagScreen extends Screen {
                         num = spiders;
                     } else if (pIcon == corpseIcon.VILLAGER) {
                         num = villagers;
+                    }else if(pIcon == corpseIcon.PHANTOM) {
+                        num = phantoms;
                     }
                     guiGraphics.drawString(this.font, "" + num, this.width / 2 + pIcon.xoff - 13, this.height / 2 + pIcon.yoff - 44, -1);
                 }
@@ -172,7 +177,6 @@ public class CorpseBagScreen extends Screen {
         if (minecraft.gameMode == null || minecraft.player == null) {
             return;
         }
-
         if (stack != null && !stack.isEmpty() && minecraft.player != null) {
 
             Vec3 vec3d = minecraft.player.getEyePosition(0);
@@ -184,8 +188,10 @@ public class CorpseBagScreen extends Screen {
             if (blockHit.getType() == HitResult.Type.BLOCK){
                 vc = blockHit.getBlockPos().getCenter().toVector3f().add(0,1,0);
             }
+
             ModPacketHandler.PACKET_ACCESS.itemContextToServer(pIcon.id,
-                    stack, PacketDataIndex.USE_CORPSE_BAG, vc);
+                        stack, PacketDataIndex.USE_CORPSE_BAG, vc);
+
         }
     }
     public boolean sameKeyOne(KeyMapping key1, Options options){
@@ -231,6 +237,8 @@ public class CorpseBagScreen extends Screen {
                 "textures/gui/corpse_icons/villager.png"),Corpses.VILLAGER.id,-31,0),
         SPIDER(Component.translatable("entity.minecraft.spider"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/corpse_icons/spider.png"),Corpses.SPIDER.id,31,31),
+        PHANTOM(Component.translatable("entity.minecraft.phantom"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/corpse_icons/phantom.png"),Corpses.PHANTOM.id,0,62),
 
         NONE(Component.translatable("roundabout.corpse.none"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/pose_icons/jonathan.png"),Corpses.NONE.id,0,31);
@@ -243,6 +251,7 @@ public class CorpseBagScreen extends Screen {
                 case CREEPER -> CREEPER;
                 case VILLAGER -> VILLAGER;
                 case SPIDER -> SPIDER;
+                case PHANTOM -> PHANTOM;
                 case NONE -> NONE;
             };
         }
@@ -273,7 +282,7 @@ public class CorpseBagScreen extends Screen {
         }
 
         static {
-            VALUES = new corpseIcon[]{ZOMBIE,SKELETON,VILLAGER,CREEPER,SPIDER,
+            VALUES = new corpseIcon[]{ZOMBIE,SKELETON,VILLAGER,CREEPER,SPIDER,PHANTOM,
                     NONE};
         }
     }
@@ -298,7 +307,8 @@ public class CorpseBagScreen extends Screen {
                            (this.icon.equals(corpseIcon.SKELETON) && skeletons <= 0) ||
                            (this.icon.equals(corpseIcon.ZOMBIE) && zombies <= 0) ||
                            (this.icon.equals(corpseIcon.SPIDER) && spiders <= 0) ||
-                           (this.icon.equals(corpseIcon.VILLAGER) && villagers <= 0))
+                           (this.icon.equals(corpseIcon.VILLAGER) && villagers <= 0) ||
+                           (this.icon.equals(corpseIcon.PHANTOM) && phantoms <= 0))
                 ){
                     guiGraphics.setColor(0.5f, 0.5f, 0.5f, 0.7f);
                 }

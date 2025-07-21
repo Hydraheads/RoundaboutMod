@@ -115,6 +115,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.FALLEN_SPIDER.get(), FallenSpiderRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FALLEN_VILLAGER.get(), FallenVillagerRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FALLEN_CREEPER.get(), FallenCreeperRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.FALLEN_PHANTOM.get(), FallenPhantomRenderer::new);
 
         event.registerBlockEntityRenderer(ForgeBlocks.STAND_FIRE_BLOCK_ENTITY.get(), StandFireRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.MIRROR_BLOCK_ENTITY.get(), MirrorBlockEntityRenderer::new);

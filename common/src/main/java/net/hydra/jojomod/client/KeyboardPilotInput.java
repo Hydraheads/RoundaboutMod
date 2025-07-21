@@ -1,5 +1,7 @@
 package net.hydra.jojomod.client;
 
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -10,7 +12,7 @@ import net.minecraft.world.entity.player.Player;
 
 public class KeyboardPilotInput extends Input {
     private final Options options;
-
+    public boolean ctrlKeyDown;
     public KeyboardPilotInput(Options $$0) {
         this.options = $$0;
     }
@@ -33,6 +35,7 @@ public class KeyboardPilotInput extends Input {
         this.leftImpulse = calculateImpulse(this.left, this.right);
         this.jumping = this.options.keyJump.isDown();
         this.shiftKeyDown = this.options.keyShift.isDown();
+        this.ctrlKeyDown = this.options.keySprint.isDown();
         if ($$0) {
             this.leftImpulse *= $$1;
             this.forwardImpulse *= $$1;
@@ -45,6 +48,9 @@ public class KeyboardPilotInput extends Input {
                 if (ent != null) {
                     user.roundabout$getStandPowers().pilotStandControls(this,ent);
                 }
+            } else if (player.isPassenger() && player.getVehicle() instanceof FallenPhantom phant) {
+                phant.handlePlrInput(this);
+                
             }
         }
     }

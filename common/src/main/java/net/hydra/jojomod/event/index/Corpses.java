@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.index;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.minecraft.world.level.Level;
@@ -11,7 +12,8 @@ public enum Corpses {
     SKELETON((byte) 2),
     CREEPER((byte) 3),
     VILLAGER((byte) 4),
-    SPIDER((byte) 5);
+    SPIDER((byte) 5),
+    PHANTOM((byte) 6);
 
     public final byte id;
 
@@ -30,6 +32,8 @@ public enum Corpses {
             return ModEntities.FALLEN_VILLAGER.create(level);
         } else if (corpses.equals(CREEPER)){
             return ModEntities.FALLEN_CREEPER.create(level);
+        } else if(corpses.equals(PHANTOM)){
+            return ModEntities.FALLEN_PHANTOM.create(level);
         }
         return null;
     }
@@ -45,6 +49,8 @@ public enum Corpses {
             return CREEPER;
         } if (bt== VILLAGER.id) {
             return VILLAGER;
+        } if(bt== PHANTOM.id){
+            return PHANTOM;
         }
         return NONE;
     }
