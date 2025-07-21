@@ -2,7 +2,9 @@ package net.hydra.jojomod.client.hud;
 
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
@@ -157,6 +159,35 @@ public class StandHudRender {
         k = scaledWidth/2 - 5;
         l = scaledHeight - 31 - 5;
         context.blit(StandIcons.JOJO_ICONS, k, l, u, 60, 9, 9);
+    }
+
+    public static void renderInvisibilityHUD(GuiGraphics context, Player playerEntity,
+                                                 int scaledWidth, int scaledHeight, int x) {
+
+        int l;
+        int gb = ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstDuration;
+        int gc =((IEntityAndData)playerEntity).roundabout$getTrueInvisibility();  gc= Mth.clamp(gc,0,gb);
+        int gc2 = Mth.floor(((float)gc+19)/20);
+        l = scaledHeight - 32 + 3;
+        StandUser standUser = ((StandUser)playerEntity);
+        int blt = (int) Math.floor(((double) 182 /gb)*(gc));
+        context.blit(StandIcons.JOJO_ICONS, x, l, 0, 0, 182, 5);
+        if (blt > 0) {
+            context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 5, blt, 5);
+        }
+
+        Minecraft minecraft = Minecraft.getInstance();
+        int y = 10398321;
+        Font renderer = minecraft.font;
+        String $$6 = gc2 + "";
+        int $$7 = (scaledWidth - renderer.width($$6)) / 2;
+        int $$8 = scaledHeight - 31 - 4;
+        context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7 - 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8, y, false);
+
     }
 
     public static void renderShootModeSoftAndWet(GuiGraphics context, Minecraft client, Player playerEntity,
