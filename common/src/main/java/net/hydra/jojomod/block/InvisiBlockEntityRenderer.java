@@ -24,6 +24,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -166,13 +167,26 @@ public class InvisiBlockEntityRenderer implements BlockEntityRenderer<InvisiBloc
                     ModParticles.BRIEF_MAGIC_DUST, x, y, z, 0, 0, 0);
         }
     }
+
+
+    @SuppressWarnings("deprecation")
     @Override
     public void render(InvisiBlockEntity blockEntity, float partialTicks, PoseStack poseStack,
                        MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
 
         if (ClientUtil.checkIfClientCanSeeInvisAchtung()) {
             Level level = blockEntity.getLevel();
-            if (level.isClientSide()) {
+            BlockPos blockPos = blockEntity.getBlockPos();
+            if (level.isClientSide() &&
+                    (
+                            (!level.getBlockState(blockPos.north()).isSolid() && !level.getBlockState(blockPos.north()).is(ModBlocks.INVISIBLOCK)) ||
+                                    (!level.getBlockState(blockPos.south()).isSolid() && !level.getBlockState(blockPos.south()).is(ModBlocks.INVISIBLOCK)) ||
+                                    (!level.getBlockState(blockPos.east()).isSolid() && !level.getBlockState(blockPos.east()).is(ModBlocks.INVISIBLOCK)) ||
+                                    (!level.getBlockState(blockPos.west()).isSolid() && !level.getBlockState(blockPos.west()).is(ModBlocks.INVISIBLOCK)) ||
+                                    (!level.getBlockState(blockPos.above()).isSolid() && !level.getBlockState(blockPos.above()).is(ModBlocks.INVISIBLOCK)) ||
+                                    (!level.getBlockState(blockPos.below()).isSolid() && !level.getBlockState(blockPos.below()).is(ModBlocks.INVISIBLOCK))
+                    )
+            ) {
                 int step = ClientUtil.getClientTicker();
                 if (blockEntity.lastRenderTick != step && step%5==0) {
                     blockEntity.lastRenderTick = step;

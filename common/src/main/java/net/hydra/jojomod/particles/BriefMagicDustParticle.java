@@ -15,7 +15,7 @@ import net.minecraft.world.phys.Vec3;
 public class BriefMagicDustParticle extends SimpleAnimatedParticle {
     BriefMagicDustParticle(ClientLevel clientLevel, double d, double e, double f, double g, double h, double i, SpriteSet spriteSet) {
         super(clientLevel, d, e, f, spriteSet, 1f);
-        this.quadSize = 0.4f;
+        this.quadSize = 0.3f;
         this.friction = 0.96F;
         this.gravity = 0F;
         this.xd = this.xd * 0.01F + g;
