@@ -13,6 +13,9 @@ public class StandIcons {
             "textures/block/invisiblock.png");
     public static final ResourceLocation JOJO_ICONS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/jojo_icons.png");
+    public static final ResourceLocation JOJO_ICONS_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/jojo_icons_2.png");
+
     public static final ResourceLocation NONE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/none.png");
     public static final ResourceLocation SQUARE_ICON = new ResourceLocation(Roundabout.MOD_ID,
