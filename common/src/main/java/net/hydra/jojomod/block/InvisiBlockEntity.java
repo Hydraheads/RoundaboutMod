@@ -29,6 +29,8 @@ public class InvisiBlockEntity extends BlockEntity {
 
     public LivingEntity standuser = null;
 
+    public int lastRenderTick = 0;
+
     public List<Vec3> bubbleList = new ArrayList<>();
 
     public void setOriginal(BlockState replacedState, @Nullable CompoundTag tag, Level level) {

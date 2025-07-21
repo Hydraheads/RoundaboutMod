@@ -92,20 +92,6 @@ public class InvisiBlock extends BaseEntityBlock {
 
     @Override
     public void animateTick(BlockState $$0, Level $$1, BlockPos $$2, RandomSource $$3) {
-        if ($$1.isClientSide() && ClientUtil.isFabulous() && ClientUtil.checkIfClientCanSeeInvisAchtung()) {
-            double $$4 = (double) $$2.getX();
-            double $$5 = (double) $$2.getY();
-            double $$6 = (double) $$2.getZ();
-            float rnd = (float) Math.random();
-            rnd -= 0.5f;
-            float rnd2 = (float) Math.random();
-            rnd2 -= 0.5f;
-            float rnd3 = (float) Math.random();
-            rnd3 -= 0.5f;
-            $$1.addAlwaysVisibleParticle(
-                    ModParticles.MAGIC_DUST, $$4 + 0.5F + (rnd*0.8F), $$5 + 0.5F+(rnd2*0.8F), $$6 + 0.5F+(rnd3*0.8F), 0, 0, 0
-            );
-        }
     }
     @Override
     public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {

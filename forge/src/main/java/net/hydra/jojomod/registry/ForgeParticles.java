@@ -152,6 +152,10 @@ public class ForgeParticles {
             "magic_dust",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> BRIEF_MAGIC_DUST = PARTICLES.register(
+            "brief_magic_dust",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> D4C_LINES = PARTICLES.register(
             "d4c_lines",
             () -> new SimpleParticleType(true)

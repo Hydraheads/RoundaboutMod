@@ -231,5 +231,6 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.STITCH.get(), StitchParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.BABY_CRACKLE.get(), BabyCrackleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.MAGIC_DUST.get(), MagicDustParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.BRIEF_MAGIC_DUST.get(), BriefMagicDustParticle.Provider::new);
     }
 }
