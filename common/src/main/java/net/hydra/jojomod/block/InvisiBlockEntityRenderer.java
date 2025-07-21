@@ -174,7 +174,7 @@ public class InvisiBlockEntityRenderer implements BlockEntityRenderer<InvisiBloc
             Level level = blockEntity.getLevel();
             if (level.isClientSide()) {
                 int step = ClientUtil.getClientTicker();
-                if (blockEntity.lastRenderTick != step && step%11==0) {
+                if (blockEntity.lastRenderTick != step && step%5==0) {
                     blockEntity.lastRenderTick = step;
                     Vec3 pos = blockEntity.getBlockPos().getCenter();
                     level.addAlwaysVisibleParticle(

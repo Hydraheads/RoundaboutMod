@@ -1733,8 +1733,10 @@
   "config.roundabout.invisiBurstCrouchRange.desc": "Change how far the small variation of invisiburst extends outwards in turning mobs invisible.",
   "config.roundabout.invisiBurstBlockRange.name": "Invisiburst Block Range",
   "config.roundabout.invisiBurstBlockRange.desc": "The block radius of invisiburst, in full numbers. Set to zero to disable block invisibility.",
-  "config.roundabout.invisibleBlockDepth.name": "Invisible Block Depth",
-  "config.roundabout.invisibleBlockDepth.desc": "How see through should invisible blocks be? By default it is 60 out of 255 (255 is fully visible).",
+  "config.roundabout.invisibleBlockDepthF.name": "Invisible Block Depth",
+  "config.roundabout.invisibleBlockDepthF.desc": "How see through should invisible blocks be? By default it is 0.26 out of 1 (1 is fully visible).",
+  "config.roundabout.invisibleBlocksDistanceAwaySeenI.name": "Invisible Distance Seen",
+  "config.roundabout.invisibleBlocksDistanceAwaySeenI.desc": "How far away can you see the invisible blocks roughly as the stand user, raising this makes mining view more obstructed but might help with combat.",
 
   "config.roundabout.theWorldAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.theWorldAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",

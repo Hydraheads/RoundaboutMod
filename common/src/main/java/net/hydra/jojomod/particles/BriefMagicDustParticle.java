@@ -1,7 +1,10 @@
 package net.hydra.jojomod.particles;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.util.config.ClientConfig;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
@@ -18,7 +21,7 @@ public class BriefMagicDustParticle extends SimpleAnimatedParticle {
         this.xd = this.xd * 0.01F + g;
         this.yd = this.yd * 0.01F + h;
         this.zd = this.zd * 0.01F + i;
-        this.lifetime = 10;
+        this.lifetime = 4;
         this.setAlpha(0.15f);
         this.setSpriteFromAge(spriteSet);
     }
@@ -40,15 +43,17 @@ public class BriefMagicDustParticle extends SimpleAnimatedParticle {
     public void render(VertexConsumer $$0, Camera $$1, float $$2) {
         if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
 
-            double maxdist = 6;
-            double distance = new Vec3(this.x,this.y,this.z).distanceTo(ClientUtil.getPlayer().position());
-            distance = Mth.clamp(distance,0,maxdist);
-            distance/=maxdist;
-            float alphaThis = 0.26f;
-            distance*=alphaThis;
+            float alphaThis = ConfigManager.getClientConfig().invisibleBlockDepthF;
+            if (alphaThis > 0) {
+                double maxdist = ConfigManager.getClientConfig().invisibleBlocksDistanceAwaySeenI;
+                double distance = new Vec3(this.x, this.y, this.z).distanceTo(ClientUtil.getPlayer().position());
+                distance = Mth.clamp(distance, 0, maxdist);
+                distance /= maxdist;
+                distance *= alphaThis;
 
-            this.setAlpha((float) (alphaThis-distance));
-            super.render($$0, $$1, $$2);
+                this.setAlpha(0+(float) (alphaThis - distance));
+                super.render($$0, $$1, $$2);
+            }
         }
     }
 
