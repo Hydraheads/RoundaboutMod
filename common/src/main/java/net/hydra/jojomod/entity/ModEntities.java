@@ -96,6 +96,7 @@ public class ModEntities {
     public static EntityType<FallenSkeleton> FALLEN_SKELETON;
     public static EntityType<FallenSpider> FALLEN_SPIDER;
     public static EntityType<FallenVillager> FALLEN_VILLAGER;
+    public static EntityType<FallenPhantom> FALLEN_PHANTOM;
     public static EntityType<FallenCreeper> FALLEN_CREEPER;
     public static final ResourceLocation HARPOON_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_harpoon.png");
     public static final ResourceLocation KNIFE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_knife.png");

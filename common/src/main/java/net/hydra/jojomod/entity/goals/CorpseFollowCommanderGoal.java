@@ -86,6 +86,7 @@ public class CorpseFollowCommanderGoal extends Goal {
 
     @Override
     public void start() {
+        this.navigation.stop();
         this.timeToRecalcPath = 0;
         this.oldWaterCost = this.fallenMob.getPathfindingMalus(BlockPathTypes.WATER);
         this.fallenMob.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);

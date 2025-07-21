@@ -59,7 +59,7 @@ public class RoundaboutFabric implements ModInitializer {
         });
         ModWorldGeneration.generateWorldGen();
         DispenserRegistry.init();
-        Roundabout.init();
+        Roundabout.init(false);
         ModSounds.registerSoundEvents();
     }
 

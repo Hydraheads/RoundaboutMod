@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILivingEntityRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -9,6 +10,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.IAlphaModel;
 import net.hydra.jojomod.client.models.layers.BigBubbleLayer;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.entity.corpses.FallenSpider;
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
 import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
@@ -213,9 +215,13 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                 yes = Math.max(0,tickTock- $$4);
             }
             float $$5 = (yes /10);
-            if ($$0 instanceof FallenSpider FS){
+            if ($$0 instanceof FallenSpider){
                 $$1.mulPose(Axis.XP.rotationDegrees($$5 * 180));
-                $$1.translate(0,-$$5*(1*FM.getBbHeight()),0);
+
+                $$1.translate(0, -$$5 * (1 * FM.getBbHeight()), 0);
+            } else if ($$0 instanceof FallenPhantom) {
+                $$1.mulPose(Axis.XP.rotationDegrees($$5 * 180));
+                $$1.translate(0,-$$5 *(6*FM.getBbHeight()),0);
             } else {
                 $$1.mulPose(Axis.XP.rotationDegrees($$5 * 90));
                 $$1.translate(0,-$$5*(0.5*FM.getBbHeight()),-($$5*0.15));

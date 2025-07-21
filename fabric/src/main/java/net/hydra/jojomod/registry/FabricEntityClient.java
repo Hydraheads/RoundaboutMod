@@ -113,6 +113,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.FALLEN_SPIDER, FallenSpiderRenderer::new);
         EntityRendererRegistry.register(FabricEntities.FALLEN_VILLAGER, FallenVillagerRenderer::new);
         EntityRendererRegistry.register(FabricEntities.FALLEN_CREEPER, FallenCreeperRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.FALLEN_PHANTOM,FallenPhantomRenderer::new);
         /*Models*/
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.WOLF_LAYER, TerrierEntityModel::createBodyLayerTerrier);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);

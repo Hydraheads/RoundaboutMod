@@ -54,7 +54,7 @@ public class RoundaboutModForge {
 
 
         Roundabout.LOGGER.info("Hello Forge world!");
-        Roundabout.init();
+        Roundabout.init(true);
 
         //ForgeItems.assignStupidForge();
     }

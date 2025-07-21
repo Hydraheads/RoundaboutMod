@@ -344,22 +344,7 @@ public class MainUtil {
     }
 
     public static void handleChangeItem(Player player, byte context, ItemStack stack, byte context2, Vector3f vec) {
-        if (context == PacketDataIndex.ITEM_MOD_VISAGE) {
-            boolean offh = ItemStack.isSameItemSameTags(player.getOffhandItem(),stack);
-            if (stack.getItem() instanceof ModificationMaskItem || player.getInventory().contains(stack) || offh) {
-                ItemStack item;
-                if (offh) {
-                    item = player.getOffhandItem();
-                } else {
-                    int yes = player.getInventory().findSlotMatchingItem(stack);
-                    item = player.getInventory().getItem(yes);
-                }
-                item.getOrCreateTagElement("modifications").putInt("height", (int) vec.x);
-                item.getOrCreateTagElement("modifications").putInt("width", (int) vec.y);
-                item.getOrCreateTagElement("modifications").putInt("head", (int) vec.z);
-                item.getOrCreateTagElement("modifications").putInt("chest", context2);
-            }
-        } else if (context2 == PacketDataIndex.USE_CORPSE_BAG) {
+         if (context2 == PacketDataIndex.USE_CORPSE_BAG) {
             boolean offh = ItemStack.isSameItemSameTags(player.getOffhandItem(),stack);
             if (player.getInventory().contains(stack) || offh || stack.is(ModItems.CREATIVE_BODY_BAG)) {
                 ItemStack item;
@@ -368,6 +353,7 @@ public class MainUtil {
                 int spiders = 1;
                 int villagers = 1;
                 int creepers = 1;
+                int phantoms = 1;
                 if (!stack.is(ModItems.CREATIVE_BODY_BAG)){
                     if (offh) {
                         item = player.getOffhandItem();
@@ -380,6 +366,7 @@ public class MainUtil {
                     spiders = $$1.getInt("spider");
                     villagers = $$1.getInt("villager");
                     creepers = $$1.getInt("creeper");
+                    phantoms = $$1.getInt("phantoms");
                 }
                     FallenMob fm = null;
                     int yElevation = 0;
@@ -408,9 +395,15 @@ public class MainUtil {
                         if (creepers >= 0) {
                             fm = ModEntities.FALLEN_CREEPER.create(player.level());
                         }
+                    } else{
+                        phantoms--;
+                        if (phantoms >= 0) {
+                            fm = ModEntities.FALLEN_PHANTOM.create(player.level());
+                        }
+
                     }
 
-                    if (fm != null) {
+                if (fm != null) {
                         fm.setPos(vec.x, vec.y + yElevation, vec.z);
                         fm.placer = player;
                         fm.setPhasesFull(true);
@@ -436,12 +429,29 @@ public class MainUtil {
                                     item.getOrCreateTagElement("bodies").putInt("villager", villagers);
                                 } else if (context == Corpses.CREEPER.id) {
                                     item.getOrCreateTagElement("bodies").putInt("creeper", creepers);
+                                } else{
+                                    item.getOrCreateTagElement("bodies").putInt("phantom", phantoms);
                                 }
                             }
                         }
                     }
             }
-        } else if (context == PacketDataIndex.ITEM_SWITCH_MAIN || context == PacketDataIndex.ITEM_SWITCH_SECONDARY) {
+        } else if (context == PacketDataIndex.ITEM_MOD_VISAGE) {
+             boolean offh = ItemStack.isSameItemSameTags(player.getOffhandItem(),stack);
+             if (stack.getItem() instanceof ModificationMaskItem || player.getInventory().contains(stack) || offh) {
+                 ItemStack item;
+                 if (offh) {
+                     item = player.getOffhandItem();
+                 } else {
+                     int yes = player.getInventory().findSlotMatchingItem(stack);
+                     item = player.getInventory().getItem(yes);
+                 }
+                 item.getOrCreateTagElement("modifications").putInt("height", (int) vec.x);
+                 item.getOrCreateTagElement("modifications").putInt("width", (int) vec.y);
+                 item.getOrCreateTagElement("modifications").putInt("head", (int) vec.z);
+                 item.getOrCreateTagElement("modifications").putInt("chest", context2);
+             }
+         } else if (context == PacketDataIndex.ITEM_SWITCH_MAIN || context == PacketDataIndex.ITEM_SWITCH_SECONDARY) {
             boolean offh = ItemStack.isSameItemSameTags(player.getOffhandItem(),stack);
             if (player.getInventory().contains(stack) || offh){
                 if (stack.getItem() instanceof StandArrowItem){

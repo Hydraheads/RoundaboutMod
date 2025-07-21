@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.client.KeyboardPilotInput;
+import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -23,6 +24,9 @@ public abstract class ZKeyboardInput extends Input {
 
     @Unique
     private KeyboardPilotInput roundabout$keyPilot;
+
+    @Unique
+    private KeyboardPilotInput roundabout$keyRider;
 
     @Inject(method = "tick(ZF)V", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$tick(boolean $$0, float $$1, CallbackInfo ci) {
@@ -47,6 +51,12 @@ public abstract class ZKeyboardInput extends Input {
                     this.shiftKeyDown = false;
                     ci.cancel();
                 }
+            } else if (player.isPassenger() && player.getVehicle() instanceof FallenPhantom phantom) {
+                if (roundabout$keyRider == null){
+                    roundabout$keyRider = new KeyboardPilotInput(this.options);
+                }
+                roundabout$keyRider.tick($$0,$$1);
+
             }
         }
     }

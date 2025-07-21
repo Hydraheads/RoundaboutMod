@@ -15,11 +15,10 @@ public class Roundabout {
     public static final String MOD_ID = "roundabout";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static final Random RANDOM = new Random();
-
+    private static boolean isForge = false;
     public static float gasDamage = 0.83F;
 
-
-    public static void init() {
+    public static void init(boolean isForge) {
         //LOGGER.info("Hello from Common init on {}! we are currently in a {} environment!", Services.PLATFORM.getPlatformName(), Services.PLATFORM.getEnvironmentName());
         //LOGGER.info("The ID for diamonds is {}", BuiltInRegistries.ITEM.getKey(Items.DIAMOND));
 
@@ -28,12 +27,19 @@ public class Roundabout {
         // your own abstraction layer. You can learn more about this in our provided services class. In this example
         // we have an interface in the common code and use a loader specific implementation to delegate our call to
         // the platform specific approach.
+
         if (Services.PLATFORM.isModLoaded("roundabout")) {
             LOGGER.info("Hello to roundabout");
         }
-
+        forgeSet(isForge);
         ModCriteria.bootstrap();
         ModNetworking.bootstrap();
+    }
+    public static void forgeSet(boolean b){
+        isForge = b;
+    }
+    public static boolean getIsForge(){
+        return isForge;
     }
 
     public static ResourceLocation location(String path) {
