@@ -6,6 +6,7 @@ import net.hydra.jojomod.entity.goals.AvoidEntityWhenFacelessGoal;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -25,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Collection;
 
-@Mixin(Creeper.class)
+@Mixin(value = Creeper.class)
 public abstract class ZCreeper extends Monster implements ICreeper {
     /**Minor code for stopping creepers in a barrage*/
     @Shadow
@@ -53,18 +54,8 @@ public abstract class ZCreeper extends Monster implements ICreeper {
         this.swell = swell;
     }
 
-    @Unique
-    private static final EntityDataAccessor<Boolean> roundabout$IS_TRANSFORMED = SynchedEntityData.defineId(Creeper.class, EntityDataSerializers.BOOLEAN);
-
     protected ZCreeper(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
-    }
-    @Unique
-    public boolean roundabout$isTransformed(){
-        return this.getEntityData().get(roundabout$IS_TRANSFORMED);
-    }
-    public void roundabout$setTransformed(boolean transformed){
-        this.getEntityData().set(roundabout$IS_TRANSFORMED, transformed);
     }
 
     @ModifyVariable(method = "spawnLingeringCloud()V", at = @At("STORE"), ordinal = 0)
@@ -72,7 +63,7 @@ public abstract class ZCreeper extends Monster implements ICreeper {
         if (!col.isEmpty()) {
             Collection<MobEffectInstance> col2 = Lists.newArrayList();
             for (MobEffectInstance $$2 : col) {
-                if (!$$2.getEffect().equals(ModEffects.BLEED)){
+                if (!MainUtil.isSpecialEffect($$2.getEffect())){
                     col2.add($$2);
                 }
             }
@@ -85,28 +76,9 @@ public abstract class ZCreeper extends Monster implements ICreeper {
         this.goalSelector.addGoal(3, new AvoidEntityWhenFacelessGoal<>(this, Player.class, 6.0F, 1.0, 1.2));
 
     }
-    @Inject(method = "defineSynchedData", at = @At(value = "HEAD"))
-    protected void roundabout$DefineSyncedData(CallbackInfo ci) {
-        this.entityData.define(roundabout$IS_TRANSFORMED, false);
-
-    }
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$Tick(CallbackInfo ci) {
         StandUser user = ((StandUser) this);
-        if (((StandUser)this).roundabout$isDazed() ||
-                (!((StandUser)this).roundabout$getStandDisc().isEmpty() &&
-                        ((StandUser)this).roundabout$getStandPowers().disableMobAiAttack())) {
-            if (((Creeper)(Object)this).isAlive()) {
-                oldSwell = swell;
-            }
-
-            this.swell -= 1;
-            if (this.swell < 0) {
-                this.swell = 0;
-            }
-            super.tick();
-            ci.cancel();
-        }
 
         if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
             /**Soft and Wet creepers don't make a sound*/
