@@ -44,6 +44,7 @@ public class ModParticles {
     public static SimpleParticleType EXCLAMATION;
     public static SimpleParticleType BABY_CRACKLE;
     public static SimpleParticleType MAGIC_DUST;
+    public static SimpleParticleType BRIEF_MAGIC_DUST;
     public static SimpleParticleType STITCH;
     public static SimpleParticleType MOLD_DUST;
     public static SimpleParticleType MOLD;

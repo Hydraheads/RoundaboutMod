@@ -423,6 +423,7 @@
   "sounds.roundabout.survivor_summon":  "Stand summoned",
   "sounds.roundabout.ova_summon":  "Stand summoned",
   "sounds.roundabout.ova_summon_the_world":  "Stand summoned",
+  "sounds.roundabout.diver_down_summon":  "Stand summoned",
   "sounds.roundabout.punch_sfx1":  "Air Cracks",
   "sounds.roundabout.punch_sfx2":  "Air Cracks",
   "sounds.roundabout.punch_sfx3":  "Impact",
@@ -1112,6 +1113,8 @@
   "skins.roundabout.killer_queen.base": "Part 4",
 
   "skins.roundabout.diver_down.base": "Part 6",
+  "skins.roundabout.diver_down.lavadiver": "Lava Diver",
+
 
   "skins.roundabout.achtung_baby.base": "Has No Form",
 

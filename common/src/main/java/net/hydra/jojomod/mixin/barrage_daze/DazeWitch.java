@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.barrage_daze;
 
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -13,14 +13,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Witch.class)
-public class ZWitch {
-    /**Minor code for stopping witches in a barrage*/
-
-    @Shadow
-    private static final EntityDataAccessor<Boolean> DATA_USING_ITEM = SynchedEntityData.defineId(Witch.class, EntityDataSerializers.BOOLEAN);
+public class DazeWitch {
+    /**This mixin is in relation to barrages disabling mobs from attacking or doing things.
+     * The daze that barrages inflict prevent witches from using and drinking potions*/
 
     @Inject(method = "isDrinkingPotion", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$IsDrinking(CallbackInfoReturnable<Boolean> ci) {
+    protected void roundabout$isDrinkingPotion(CallbackInfoReturnable<Boolean> ci) {
         if (((StandUser) this).roundabout$isDazed() ||
                 (!((StandUser)this).roundabout$getStandDisc().isEmpty() &&
                         ((StandUser)this).roundabout$getStandPowers().disableMobAiAttack())) {
@@ -29,7 +27,7 @@ public class ZWitch {
     }
 
     @Inject(method = "setUsingItem", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$SetDrinking(boolean $$0, CallbackInfo ci) {
+    protected void roundabout$setUsingItem(boolean $$0, CallbackInfo ci) {
         if (((StandUser) this).roundabout$isDazed() ||
                 (!((StandUser)this).roundabout$getStandDisc().isEmpty() &&
                         ((StandUser)this).roundabout$getStandPowers().disableMobAiAttack())) {
@@ -37,4 +35,14 @@ public class ZWitch {
             ci.cancel();
         }
     }
+
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    @Shadow
+    private static final EntityDataAccessor<Boolean> DATA_USING_ITEM = SynchedEntityData.defineId(Witch.class, EntityDataSerializers.BOOLEAN);
+
 }

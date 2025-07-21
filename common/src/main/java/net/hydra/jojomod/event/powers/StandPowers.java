@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.client.*;
+import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
@@ -3019,6 +3020,13 @@ public class StandPowers {
         return ((this.activePower == PowerIndex.BARRAGE_CLASH && this.attackTimeDuring > -1) || this.isBarraging());
     }
 
+    /**An easy way to throw up a new HUD*/
+    public boolean replaceHudActively(){
+        return false;
+    }
+    /**Remember to reserve client classes for a... client class. Wouldn't want server crashes in our stand powers.*/
+    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x){
+    }
     /**The AI for a stand User Mob, runs every tick. AttackTarget may be null*/
     public void tickMobAI(LivingEntity attackTarget){
     }

@@ -54,7 +54,7 @@ public abstract class ZMobRenderer <T extends Mob, M extends EntityModel<T>> ext
         }
 
         if ($$0 instanceof Creeper) {
-            if (((ICreeper) $$0).roundabout$isTransformed()){
+            if (((IJusticeCreeper) $$0).roundabout$isTransformed()){
                 roundabout$shapeShift = EntityType.PIG.create(Minecraft.getInstance().level);
                 doTheThing($$0,$$1,$$2,$$3,$$4,$$5);
                 ci.cancel();

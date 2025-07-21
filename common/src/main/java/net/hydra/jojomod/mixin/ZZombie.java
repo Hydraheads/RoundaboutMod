@@ -36,22 +36,6 @@ public abstract class ZZombie extends Monster {
         super($$0, $$1);
     }
 
-    @Inject(method = "tick", at = @At(value = "HEAD"))
-    protected void roundabout$tick(CallbackInfo ci) {
-        if (this.getTarget() instanceof Player $$0){
-            IPlayerEntity ple = ((IPlayerEntity) $$0);
-            byte shape = ple.roundabout$getShapeShift();
-            ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
-            if (shift != ShapeShifts.PLAYER) {
-                if (shift == ShapeShifts.ZOMBIE) {
-                    this.setTarget(null);
-                    this.setLastHurtByPlayer(null);
-                    this.setLastHurtByMob(null);
-                }
-            }
-        }
-    }
-
 
     @Inject(method = "killedEntity", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$killedEntity(ServerLevel serverLevel, LivingEntity livingEntity, CallbackInfoReturnable<Boolean> cir) {

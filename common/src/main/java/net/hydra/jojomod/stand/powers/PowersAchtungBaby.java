@@ -5,7 +5,9 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.block.InvisiBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
@@ -650,6 +652,14 @@ public class PowersAchtungBaby extends NewDashPreset {
         return Component.literal(  "Hydra").withStyle(ChatFormatting.YELLOW);
     }
      **/
+
+
+    public boolean replaceHudActively(){
+        return invisibleVisionOn() && ((IEntityAndData)this.self).roundabout$getTrueInvisibility() > -1;
+    }
+    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x){
+        StandHudRender.renderInvisibilityHUD(context,cameraPlayer,screenWidth,screenHeight,x);
+    }
 
     public boolean invisibleVisionSwitch(){
         if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {

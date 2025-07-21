@@ -13,16 +13,23 @@ import org.jetbrains.annotations.Nullable;
 
 public class DiverDownRenderer extends StandRenderer<DiverDownEntity>{
 
-
-    @Override public ResourceLocation getTextureLocation(DiverDownEntity entity) {
-        return main_skin;
-    }
-
-    private static final ResourceLocation main_skin = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/diver_down/base.png");
-
     public DiverDownRenderer(EntityRendererProvider.Context context) {
         super(context, new DiverDownModel<>(context.bakeLayer(ModEntityRendererClient.DIVER_DOWN_LAYER)), 0f);
     }
+
+    @Override public ResourceLocation getTextureLocation(DiverDownEntity entity) {
+        byte BT = entity.getSkin();
+        switch (BT) {
+            case DiverDownEntity.PART_6 -> {return PART_6;}
+            case DiverDownEntity.LAVA_DIVER -> {return LAVA_DIVER;}
+            default -> {return PART_6;}
+        }
+    }
+
+    private static final ResourceLocation PART_6 = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/diver_down/base.png");
+    private static final ResourceLocation LAVA_DIVER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/diver_down/lavadiver.png");
+
+
     @Override
     public void render(DiverDownEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         float factor = 0.5F + (mobEntity.getSizePercent()/2);

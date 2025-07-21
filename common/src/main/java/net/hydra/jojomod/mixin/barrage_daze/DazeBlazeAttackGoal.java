@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.barrage_daze;
 
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -11,11 +11,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(targets = "net/minecraft/world/entity/monster/Blaze$BlazeAttackGoal")
-public abstract class ZBlaze extends Goal {
-    /**Minor code for blazes to stop shooting in a barrage*/
-    @Final
-    @Shadow
-    private Blaze blaze;
+public abstract class DazeBlazeAttackGoal extends Goal {
+    /**This mixin is in relation to barrages disabling mobs from attacking or doing things.
+     * The daze that barrages inflict prevent blazes from shooting fire.
+     *
+     * This mixin also makes it so when the blaze is barraging, it doesn't also use its other attacks.*/
 
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$Tick(CallbackInfo ci) {
@@ -27,4 +27,12 @@ public abstract class ZBlaze extends Goal {
         }
     }
 
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    @Final
+    @Shadow
+    private Blaze blaze;
 }

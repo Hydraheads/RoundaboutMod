@@ -1,10 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.access.ICreeper;
-import net.hydra.jojomod.access.IPermaCasting;
-import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.access.IRaider;
+import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyboardPilotInput;
@@ -497,7 +494,7 @@ public class PowersJustice extends NewDashPreset {
                     }
                 }
                 if (this.getSelf() instanceof Creeper cr){
-                    ICreeper ic = ((ICreeper) cr);
+                    IJusticeCreeper ic = ((IJusticeCreeper) cr);
                     if (this.getSelf().getMaxHealth() <= this.getSelf().getHealth()){
                         if (!ic.roundabout$isTransformed()){
                             ic.roundabout$setTransformed(true);
@@ -531,7 +528,7 @@ public class PowersJustice extends NewDashPreset {
                 this.castFog();
             }
             if (this.getSelf() instanceof Creeper cr){
-                ICreeper ic = ((ICreeper) cr);
+                IJusticeCreeper ic = ((IJusticeCreeper) cr);
                 if (ic.roundabout$isTransformed()){
                     ic.roundabout$setTransformed(false);
                     particleSpew();

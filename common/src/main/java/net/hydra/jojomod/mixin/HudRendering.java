@@ -349,15 +349,13 @@ public abstract class HudRendering implements IHudAccess {
                 StandHudRender.renderClashHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, ((StandUserClientPlayer) minecraft.player).roundabout$getLastClashPower());
                 return true;
             } else if (((StandUser) minecraft.player).roundabout$isGuarding()) {
+
                 StandHudRender.renderGuardHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
                 return true;
             } else if (isTSEntity || (((StandUser) minecraft.player).roundabout$getStandPowers().getMaxTSTime() > 0
                     && (((StandUser) minecraft.player).roundabout$getStandPowers().getActivePower() == PowerIndex.SPECIAL) ||  ((StandUser) minecraft.player).roundabout$getStandPowers().getActivePower() == PowerIndex.LEAD_IN)) {
 
                 StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, true, this.getFont());
-                return true;
-            } else if (((StandUser) minecraft.player).roundabout$getGuardPoints() < ((StandUser) minecraft.player).roundabout$getMaxGuardPoints()){
-                StandHudRender.renderGuardHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
                 return true;
             } else if (minecraft.player.getVehicle() != null && minecraft.player.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted()){
 
@@ -374,6 +372,13 @@ public abstract class HudRendering implements IHudAccess {
                 return true;
             } else if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && user.roundabout$getEffectiveCombatMode()){
                 StandHudRender.renderShootModeSoftAndWet(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PW);
+                return true;
+
+            } else if (user.roundabout$getStandPowers().replaceHudActively()){
+                user.roundabout$getStandPowers().getReplacementHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x);
+                return true;
+            } else if (((StandUser) minecraft.player).roundabout$getGuardPoints() < ((StandUser) minecraft.player).roundabout$getMaxGuardPoints()){
+                StandHudRender.renderGuardHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
                 return true;
             } else if (((IPlayerEntity)minecraft.player).roundabout$getDisplayExp()){
 

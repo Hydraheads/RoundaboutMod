@@ -15,8 +15,7 @@
     "ForgeFireBlock",
     "ForgeForgeGui",
     "ForgeHumanoidArmorLayer",
-    "ForgeKillsScreenInputsFix",
-    "MixinTitleScreen"
+    "ForgeKillsScreenInputsFix"
   ],
   "server": [
   ],

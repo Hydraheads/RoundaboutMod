@@ -96,7 +96,12 @@ public class ClientUtil {
         return false;
     }
 
+    public static int clientTicker;
+    public static int getClientTicker(){
+        return clientTicker;
+    }
     public static void tickClientUtilStuff(){
+        clientTicker++;
 
         /**
         Minecraft mc = Minecraft.getInstance();

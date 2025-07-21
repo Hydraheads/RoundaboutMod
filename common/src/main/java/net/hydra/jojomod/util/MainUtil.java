@@ -43,6 +43,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -1398,6 +1399,10 @@ public class MainUtil {
     public static boolean isSpecialEffect(MobEffectInstance value){
         return value.getEffect().equals(ModEffects.BLEED) || value.getEffect().equals(ModEffects.FACELESS) ||
                 value.getEffect().equals(ModEffects.CAPTURING_LOVE);
+    }
+    public static boolean isSpecialEffect(MobEffect value){
+        return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS) ||
+                value.equals(ModEffects.CAPTURING_LOVE);
     }
     public static boolean canHaveFrictionTaken(LivingEntity LE){
         if (LE.onClimbable()){
