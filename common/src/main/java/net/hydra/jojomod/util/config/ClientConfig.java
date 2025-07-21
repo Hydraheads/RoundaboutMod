@@ -54,9 +54,9 @@ public class ClientConfig implements Cloneable {
     @BooleanOption(group = "inherit", value = true)
     public Boolean mandomRewindAttemptsToSkipInterpolation;
 
-    @FloatOption(group = "inherit", value = 0.2F, min = 0, max = 1)
+    @FloatOption(group = "inherit", value = 0.22F, min = 0, max = 1)
     public Float invisibleBlockDepthF;
-    @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
+    @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
     public Integer invisibleBlocksDistanceAwaySeenI;
     @NestedOption(group = "modded")
     public ClientConfig.ConfigSettings configSettings;
