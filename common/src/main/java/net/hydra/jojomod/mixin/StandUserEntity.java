@@ -3096,7 +3096,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
         int zapped = roundabout$getZappedToID();
-        if (zapped > -1){
+        if (zapped > -1 && !(((LivingEntity)(Object)this) instanceof Drowned)){
             Entity ent = level().getEntity(zapped);
             if (ent != null){
                 float dist1 = distanceTo(ent);
