@@ -193,7 +193,7 @@ public class ClientToServerPackets {
                                         } else if (context == Corpses.CREEPER.id) {
                                             item.getOrCreateTagElement("bodies").putInt("creeper", creepers);
                                         } else if (context == Corpses.PHANTOM.id) {
-                                            item.getOrCreateTagElement("bodies").putInt("phantom", creepers);
+                                            item.getOrCreateTagElement("bodies").putInt("phantom", phantoms);
                                         }
                                     }
                                 }
