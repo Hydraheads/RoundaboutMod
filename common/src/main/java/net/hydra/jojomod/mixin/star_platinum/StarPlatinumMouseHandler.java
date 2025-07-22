@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.star_platinum;
 
 import com.mojang.blaze3d.Blaze3D;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -13,50 +13,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MouseHandler.class)
-public class ZMouseHandler {
-    @Shadow
-    @Final
-    private Minecraft minecraft;
-    @Shadow
-    private boolean isLeftPressed;
-    @Shadow
-    private boolean isMiddlePressed;
-    @Shadow
-    private boolean isRightPressed;
-    @Shadow
-    private double xpos;
-    @Shadow
-    private double ypos;
-    @Shadow
-    private int fakeRightMouse;
-    @Shadow
-    private int activeButton = -1;
-    @Shadow
-    private boolean ignoreFirstMove = true;
-    @Shadow
-    private int clickDepth;
-    @Shadow
-    private double mousePressedTime;
-    @Shadow
-    @Final
-    private SmoothDouble smoothTurnX = new SmoothDouble();
-    @Shadow
-    @Final
-    private SmoothDouble smoothTurnY = new SmoothDouble();
-    @Shadow
-    private double accumulatedDX;
-    @Shadow
-    private double accumulatedDY;
-    @Shadow
-    private double accumulatedScroll;
-    @Shadow
-    private double lastMouseEventTime = Double.MIN_VALUE;
-    @Shadow
-    private boolean mouseGrabbed;
-    @Shadow
-    public boolean isMouseGrabbed() {
-        return this.mouseGrabbed;
-    }
+public class StarPlatinumMouseHandler {
+
+    /**Star Platinum makes the mouse sensitivity go down so you move your view slower, this is because
+     * it is hard to keep up with full speed, and so the community requested this feature.
+     *
+     * The class isn't super accessible so this mixin uses a lot of base code*/
 
     @Inject(method = "turnPlayer()V",
             at = @At(value = "HEAD"),cancellable = true)
@@ -122,5 +84,55 @@ public class ZMouseHandler {
                 }
             }
         }
+    }
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+
+    @Shadow
+    @Final
+    private Minecraft minecraft;
+    @Shadow
+    private boolean isLeftPressed;
+    @Shadow
+    private boolean isMiddlePressed;
+    @Shadow
+    private boolean isRightPressed;
+    @Shadow
+    private double xpos;
+    @Shadow
+    private double ypos;
+    @Shadow
+    private int fakeRightMouse;
+    @Shadow
+    private int activeButton = -1;
+    @Shadow
+    private boolean ignoreFirstMove = true;
+    @Shadow
+    private int clickDepth;
+    @Shadow
+    private double mousePressedTime;
+    @Shadow
+    @Final
+    private SmoothDouble smoothTurnX = new SmoothDouble();
+    @Shadow
+    @Final
+    private SmoothDouble smoothTurnY = new SmoothDouble();
+    @Shadow
+    private double accumulatedDX;
+    @Shadow
+    private double accumulatedDY;
+    @Shadow
+    private double accumulatedScroll;
+    @Shadow
+    private double lastMouseEventTime = Double.MIN_VALUE;
+    @Shadow
+    private boolean mouseGrabbed;
+    @Shadow
+    public boolean isMouseGrabbed() {
+        return this.mouseGrabbed;
     }
 }

@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.justice;
 
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.corpses.renderers.FallenSkeletonRenderer;
@@ -14,7 +14,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(SkeletonRenderer.class)
-public class ZSkeletonRenderer {
+public class JusticeSkeletonRenderer {
+
+    /**Justice makes a skeleton render differently. Why? Well, you can morph into a skeleton, and it uses the skeleton
+     * renderer. But you can also make a skeleton look like a team member with the justice team colors. Lets say you
+     * select green team- your skeleton morph will look like a green team skeleton.*/
+
     @Inject(method = "getTextureLocation(Lnet/minecraft/world/entity/monster/AbstractSkeleton;)Lnet/minecraft/resources/ResourceLocation;", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$getTexture(AbstractSkeleton $$0, CallbackInfoReturnable<ResourceLocation> cir) {
         if ($$0 != null){

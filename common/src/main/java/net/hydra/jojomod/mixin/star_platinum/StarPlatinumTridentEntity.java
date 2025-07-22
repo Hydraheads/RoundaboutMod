@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.star_platinum;
 
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.minecraft.world.entity.projectile.ThrownTrident;
@@ -9,8 +9,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ThrownTrident.class)
-public class ZTridentEntity {
+public class StarPlatinumTridentEntity {
 
+    /**Star Platinum's super item throw ability is canceled on hit, otherwise the returning trident...
+     * will be a little rebellious until super throw wears off and keep careening forward*/
 
     @Inject(method = "onHitEntity", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$onHitEntity(EntityHitResult $$0, CallbackInfo ci) {
