@@ -415,16 +415,17 @@ public class PowersSoftAndWet extends NewPunchingStand {
             byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
             ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+            $$1.add(SoftAndWetEntity.MANGA_SKIN);
             if (Level > 1 || bypass){
-                $$1.add(SoftAndWetEntity.MANGA_SKIN);
-            } if (Level > 2 || bypass){
                 $$1.add(SoftAndWetEntity.DEBUT);
-            } if (Level > 3 || bypass){
+            } if (Level > 2 || bypass){
                 $$1.add(SoftAndWetEntity.GREEN);
                 $$1.add(SoftAndWetEntity.STRIPED);
-            } if (Level > 4 || bypass){
+            } if (Level > 3 || bypass){
                 $$1.add(SoftAndWetEntity.FIGURE_SKIN);
                 $$1.add(SoftAndWetEntity.COLORS);
+            } if (Level > 4 || bypass){
+                $$1.add(SoftAndWetEntity.KNIGHT);
             } if (Level > 5 || bypass){
                 $$1.add(SoftAndWetEntity.DROWNED_SKIN);
                 $$1.add(SoftAndWetEntity.DROWNED_SKIN_2);
@@ -2446,6 +2447,7 @@ public void unlockSkin(){
             case SoftAndWetEntity.COLORS -> Component.translatable("skins.roundabout.soft_and_wet.colors");
             case SoftAndWetEntity.KIRA -> Component.translatable("skins.roundabout.soft_and_wet.kira");
             case SoftAndWetEntity.GREEN -> Component.translatable("skins.roundabout.soft_and_wet.green");
+            case SoftAndWetEntity.KNIGHT -> Component.translatable("skins.roundabout.soft_and_wet.knight");
             default -> Component.translatable("skins.roundabout.soft_and_wet.light");
         };
     }

@@ -141,6 +141,8 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
             "textures/stand/hey_ya/angel.png");
     public static ResourceLocation knight = new ResourceLocation(Roundabout.MOD_ID,
             "textures/stand/hey_ya/knight.png");
+    public static ResourceLocation saint = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/hey_ya/saint.png");
 
     public ResourceLocation getTextureLocation(Entity context, byte skin){
         switch (skin)
@@ -167,6 +169,7 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
             case PowersHeyYa.GREY_YA ->  {return grey_ya;}
             case PowersHeyYa.ANGEL ->  {return angel;}
             case PowersHeyYa.KNIGHT ->  {return knight;}
+            case PowersHeyYa.SAINT ->  {return saint;}
             default -> {return base;}
         }
     }
