@@ -290,13 +290,6 @@ public class FabricEntities {
                         EntityType.Builder.of(RattEntity::new, MobCategory.MISC).
                                 sized(0.75f, 1.2f).clientTrackingRange(14).build(Roundabout.MOD_ID+":ratt")
                 );
-        public static final EntityType<RattEntity> EYEBROW_RATT =
-                Registry.register(
-                        BuiltInRegistries.ENTITY_TYPE,
-                        Roundabout.location("eyebrow_ratt"),
-                        EntityType.Builder.of(RattEntity::new, MobCategory.MISC).
-                                sized(0.75f, 1.2f).clientTrackingRange(14).build(Roundabout.MOD_ID+":eyebrow_ratt")
-                );
         public static final EntityType<GreenDayEntity> GREEN_DAY =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -540,7 +533,6 @@ public class FabricEntities {
                 ModEntities.D4C = D4C;
                 ModEntities.GREEN_DAY = GREEN_DAY;
                 ModEntities.RATT = RATT;
-                ModEntities.EYEBROW_RATT = EYEBROW_RATT;
                 ModEntities.SURVIVOR = SURVIVOR;
                 ModEntities.SOFT_AND_WET = SOFT_AND_WET;
                 ModEntities.SOFT_AND_WET_DROWNED = SOFT_AND_WET_DROWNED;
@@ -643,7 +635,6 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(D4C, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(GREEN_DAY, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(RATT, StandEntity.createStandAttributes());
-                FabricDefaultAttributeRegistry.register(EYEBROW_RATT, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SURVIVOR, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SOFT_AND_WET, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SOFT_AND_WET_DROWNED, StandEntity.createStandAttributes());

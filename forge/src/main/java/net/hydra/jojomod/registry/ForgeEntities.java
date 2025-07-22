@@ -243,12 +243,6 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "ratt").toString())
             );
-    public static final RegistryObject<EntityType<RattEntity>> EYEBROW_RATT =
-            ENTITY_TYPES.register("eyebrow_ratt", () ->
-                    EntityType.Builder.of(RattEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
-                            clientTrackingRange(14).
-                            build(new ResourceLocation(Roundabout.MOD_ID, "eyebrow_ratt").toString())
-            );
     public static final RegistryObject<EntityType<SoftAndWetEntity>> SOFT_AND_WET =
             ENTITY_TYPES.register("soft_and_wet", () ->
                     EntityType.Builder.of(SoftAndWetEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).

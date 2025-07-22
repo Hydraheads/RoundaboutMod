@@ -1188,7 +1188,9 @@ public class MainUtil {
         if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.PENETRATING_STAND) || sauce.is(ModDamageTypes.STAR_FINGER)
                 || sauce.is(ModDamageTypes.STAND_RUSH)|| sauce.is(ModDamageTypes.CROSSFIRE)|| sauce.is(ModDamageTypes.EXPLOSIVE_STAND)
                 || sauce.is(ModDamageTypes.GO_BEYOND)
-                || sauce.is(ModDamageTypes.CORPSE) || sauce.is(ModDamageTypes.CORPSE_EXPLOSION) || sauce.is(ModDamageTypes.CORPSE_ARROW)){
+                || sauce.is(ModDamageTypes.CORPSE) || sauce.is(ModDamageTypes.CORPSE_EXPLOSION) || sauce.is(ModDamageTypes.CORPSE_ARROW)
+                || sauce.is(ModDamageTypes.MELTING)
+        ){
             return true;
         }
         return false;
