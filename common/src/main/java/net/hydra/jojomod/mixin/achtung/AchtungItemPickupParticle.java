@@ -38,11 +38,10 @@ public class AchtungItemPickupParticle {
     public boolean roundabout$invisibilityPickedUp = false;
     @Inject(method = "render", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$renderHead(VertexConsumer $$0, Camera $$1, float $$2, CallbackInfo ci) {
-        //if (roundabout$invisibilityPickedUp){
+        if (roundabout$invisibilityPickedUp){
             /**Achtung users with invis vision are the only ones that can see items being picked up by achtung invis
              * players*/
 
-            /**
             if (!ClientUtil.checkIfClientCanSeeInvisAchtung() || ClientUtil.isFabulous()){
                 ci.cancel();
             } else {
@@ -67,11 +66,10 @@ public class AchtungItemPickupParticle {
             }
         }
         ClientUtil.setThrowFadeToTheEther(1);
-             **/
     }
     @Inject(method = "render", at = @At(value = "TAIL"))
     protected void roundabout$renderTail(VertexConsumer $$0, Camera $$1, float $$2, CallbackInfo ci) {
-        //ClientUtil.setThrowFadeToTheEther(1);
+        ClientUtil.setThrowFadeToTheEther(1);
     }
     @Inject(method = "getRenderType()Lnet/minecraft/client/particle/ParticleRenderType;", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$getRenderType(CallbackInfoReturnable<ParticleRenderType> cir) {
@@ -81,12 +79,12 @@ public class AchtungItemPickupParticle {
     }
     @Inject(method = "<init>(Lnet/minecraft/client/renderer/entity/EntityRenderDispatcher;Lnet/minecraft/client/renderer/RenderBuffers;Lnet/minecraft/client/multiplayer/ClientLevel;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;)V", at = @At(value = "TAIL"))
     protected void roundabout$init(EntityRenderDispatcher $$0, RenderBuffers $$1, ClientLevel $$2, Entity $$3, Entity $$4, CallbackInfo ci) {
-        //if ($$4 != null && ((IEntityAndData)$$4).roundabout$getTrueInvisibility() > -1){
-            //roundabout$invisibilityPickedUp = true;
-           // if ($$3 != null){
-               // ((IEntityAndData)$$3).roundabout$setTrueInvisibility(((IEntityAndData)$$4).roundabout$getTrueInvisibility());
-            //}
-        //}
+        if ($$4 != null && ((IEntityAndData)$$4).roundabout$getTrueInvisibility() > -1){
+            roundabout$invisibilityPickedUp = true;
+             if ($$3 != null){
+               ((IEntityAndData)$$3).roundabout$setTrueInvisibility(((IEntityAndData)$$4).roundabout$getTrueInvisibility());
+             }
+        }
     }
 
     /**Shadows, ignore
