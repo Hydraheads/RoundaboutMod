@@ -822,8 +822,7 @@ public class BlockGrabPreset extends NewPunchingStand {
     }
 
     public boolean canGrab(Entity entity){
-        if (entity.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_ALLOW_ENTITY_GRAB) &&
-                !(entity instanceof EnderDragon) && !(entity instanceof WitherBoss) && !(entity instanceof Warden)
+        if (entity.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_ALLOW_ENTITY_GRAB)
                 && !(entity instanceof LivingEntity ent && MainUtil.isBossMob(ent))
                 && !(entity instanceof Player pl && pl.isCreative())
                 && !(entity instanceof MinecartCommandBlock)
