@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.visages;
 
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
 import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.event.powers.stand.PowersStarPlatinum;
+import net.hydra.jojomod.stand.powers.PowersStarPlatinum;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
