@@ -1,4 +1,4 @@
-package net.hydra.jojomod.event.powers.stand.presets;
+package net.hydra.jojomod.stand.powers.presets;
 
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -95,149 +95,62 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     public boolean inputDash = false;
     /**Dodge ability*/
-    @Override
-    public void buttonInput3(boolean keyIsDown, Options options) {
-        if (keyIsDown) {
-            if (!inputDash){
-            inputDash = true;
-            if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
-                    && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
-                    && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
-                if (!((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
-                    if (!isHoldingSneak()) {
-                        if (((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1) {
-                            /*Stand leap rebounds*/
-                            standRebound();
-                        } else {
-                            if (this.getSelf().onGround() && !this.onCooldown(PowerIndex.GLOBAL_DASH)) {
-                                byte forward = 0;
-                                byte strafe = 0;
-                                if (options.keyUp.isDown()) forward++;
-                                if (options.keyDown.isDown()) forward--;
-                                if (options.keyLeft.isDown()) strafe++;
-                                if (options.keyRight.isDown()) strafe--;
-                                int degrees = (int) (this.getSelf().getYRot() % 360);
-                                int backwards = 0;
 
-                                if (strafe > 0 && forward == 0) {
-                                    degrees -= 90;
-                                    degrees = degrees % 360;
-                                    backwards = 1;
-                                } else if (strafe > 0 && forward > 0) {
-                                    degrees -= 45;
-                                    degrees = degrees % 360;
-                                    backwards = 2;
-                                } else if (strafe > 0) {
-                                    degrees -= 135;
-                                    degrees = degrees % 360;
-                                    backwards = -1;
-                                } else if (strafe < 0 && forward == 0) {
-                                    degrees += 90;
-                                    degrees = degrees % 360;
-                                    backwards = 3;
-                                } else if (strafe < 0 && forward > 0) {
-                                    degrees += 45;
-                                    degrees = degrees % 360;
-                                    backwards = 4;
-                                } else if (strafe < 0) {
-                                    degrees += 135;
-                                    degrees = degrees % 360;
-                                    backwards = -2;
-                                } else if (forward < 0) {
-                                    degrees += 180;
-                                    degrees = degrees % 360;
-                                    backwards = -3;
-                                }
-
-
-                                int cdTime = ClientNetworking.getAppropriateConfig().generalStandSettings.dashCooldown;
-                                if (this.getSelf() instanceof Player) {
-                                    ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(0);
-                                    if (options.keyJump.isDown()) {
-                                        cdTime = ClientNetworking.getAppropriateConfig().generalStandSettings.jumpingDashCooldown;
-                                    }
-                                }
-                                this.setCooldown(PowerIndex.GLOBAL_DASH, cdTime);
-                                MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.91F,
-                                        Mth.sin(degrees * ((float) Math.PI / 180)),
-                                        Mth.sin(-20 * ((float) Math.PI / 180)),
-                                        -Mth.cos(degrees * ((float) Math.PI / 180)));
-
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.MOVEMENT, true);
-                                ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.MOVEMENT, backwards);
-                            } else {
-                                if (!doVault() && this.getSelf().fallDistance > 3) {
-                                    if ((this.getActivePower() != PowerIndex.EXTRA || this.getAttackTimeDuring() == -1)) {
-
-                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.EXTRA, true);
-                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA);
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        if (this.getSelf().onGround()) {
-                            boolean jojoveinLikeKeys = !ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpAndDashShareCooldown;
-                            if ((jojoveinLikeKeys && !this.onCooldown(PowerIndex.SKILL_3)) ||
-                                    (!jojoveinLikeKeys && !this.onCooldown(PowerIndex.GLOBAL_DASH))) {
-                                if (canExecuteMoveWithLevel(getLeapLevel())) {
-                                    if (jojoveinLikeKeys) {
-                                        this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
-                                    } else {
-                                        this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
-                                    }
-                                    bonusLeapCount = 3;
-                                    bigLeap(this.getSelf(), 20, 1);
-                                    ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
-                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_MOVEMENT, true);
-                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SNEAK_MOVEMENT);
-                                }
-                            }
-                        } else {
-                            if (((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1) {
-                                /*Stand leap rebounds*/
-                                standRebound();
-                            } else {
-                                if ((!doVault()) && canFallBrace()) {
-                                    if ((this.getActivePower() != PowerIndex.EXTRA || this.getAttackTimeDuring() == -1)) {
-
-                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.EXTRA, true);
-                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.EXTRA);
-                                    }
-                                }
-                            }
-                        }
-
-                        }
-                    }
-                }
-            }
-        } else {
-            inputDash = false;
+    public boolean tryReboundLeap(){
+        if (!this.getSelf().onGround() && ((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1) {
+            /*Stand leap rebounds*/
+            standRebound();
+            return true;
         }
+        return false;
     }
 
-    /**Phase Grab*/
-    public void buttonInput2(boolean keyIsDown, Options options) {
+    public void phaseGrabClient(){
+        if (hasBlock() || hasEntity())
+            return;
         if ((this.getActivePower() != PowerIndex.POWER_2_BLOCK)) {
-            if (keyIsDown) {
-                if (((!this.isBarrageAttacking() && this.getActivePower() != PowerIndex.BARRAGE_2) ||
-                        this.getAttackTimeDuring() < 0) && this.isGuarding()) {
-                    if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
-                            && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
-                            && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
-                        if (!this.onCooldown(PowerIndex.SKILL_2)) {
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BLOCK, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BLOCK);
+            if (!this.onCooldown(PowerIndex.SKILL_2)) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BLOCK, true);
+                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BLOCK);
+            }
+        }
+    }
+    public void tryToStandLeapClient() {
+        if (hasBlock() || hasEntity())
+            return;
+        if (tryReboundLeap())
+            return;
+        if (vaultOrFallBraceFails()) {
+            if (this.getSelf().onGround()) {
+                boolean jojoveinLikeKeys = !ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpAndDashShareCooldown;
+                if ((jojoveinLikeKeys && !this.onCooldown(PowerIndex.SKILL_3)) ||
+                        (!jojoveinLikeKeys && !this.onCooldown(PowerIndex.GLOBAL_DASH))) {
+                    if (canExecuteMoveWithLevel(getLeapLevel())) {
+                        if (jojoveinLikeKeys) {
+                            this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
+                        } else {
+                            this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
                         }
+                        bonusLeapCount = 3;
+                        bigLeap(this.getSelf(), 20, 1);
+                        ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_MOVEMENT, true);
+                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SNEAK_MOVEMENT);
                     }
-                    return;
                 }
             }
-            super.buttonInput2(keyIsDown, options);
         }
     }
 
+    public void tryToDashClient(){
+        if (hasBlock() || hasEntity())
+            return;
+        if (tryReboundLeap())
+            return;
+        if (vaultOrFallBraceFails()){
+            dash();
+        }
+    }
 
     public float getFloatOutRange(){
         return 7F;
@@ -432,56 +345,45 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
     }
 
+
+
     /**Begin Charging Time Stop, also detects activation via release**/
-    @Override
-    public void buttonInput4(boolean keyIsDown, Options options) {
-        if (this.getSelf().level().isClientSide) {
-            if (!this.onCooldown(PowerIndex.SKILL_4) || (((Player)this.getSelf()).isCreative() && ClientNetworking.getAppropriateConfig().timeStopSettings.creativeModeInfiniteTimeStop)) {
-                if ((((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) || !this.isAttackInept(this.getActivePower()))) {
-                    boolean exTS = canExecuteMoveWithLevel(getTSLevel());
-                    boolean exImpTS = canExecuteMoveWithLevel(getImpulseTSLevel());
-                    boolean sendPacket = false;
-                    if (KeyInputs.roundaboutClickCount == 0) {
-                        if (keyIsDown) {
-                            if (this.isStoppingTime()) {
-                                KeyInputs.roundaboutClickCount = 2;
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SPECIAL_FINISH, true);
-                                ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_FINISH, this.getChargedTSTicks());
-                            } else if (this.getActivePower() == PowerIndex.SPECIAL || (this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative() && ClientNetworking.getAppropriateConfig().timeStopSettings.creativeModeInfiniteTimeStop))) {
-                                sendPacket = true;
-                            } else {
-                                KeyInputs.roundaboutClickCount = 2;
-                                if (isHoldingSneak() || (!exTS &&
-                                        exImpTS)) {
-                                    if (exImpTS) {
-                                        this.setChargedTSTicks(ClientNetworking.getAppropriateConfig().timeStopSettings.impulseTimeStopLength);
-                                        this.setMaxChargeTSTime(ClientNetworking.getAppropriateConfig().timeStopSettings.impulseTimeStopLength);
-                                        sendPacket = true;
-                                    }
-                                } else {
-                                    if (this.getAttackTimeDuring() < 0) {
-                                        if (exTS) {
-                                            this.setMaxChargeTSTime(this.getMaxTSTime());
-                                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SPECIAL, true);
-                                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SPECIAL);
-                                            this.updateUniqueMoves();
-                                        }
-                                    }
-                                }
+    public void doTSClient(){
+        if (!this.onCooldown(PowerIndex.SKILL_4) || (((Player)this.getSelf()).isCreative() && ClientNetworking.getAppropriateConfig().timeStopSettings.creativeModeInfiniteTimeStop)) {
+            if ((((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) || !this.isAttackInept(this.getActivePower()))) {
+                boolean exTS = canExecuteMoveWithLevel(getTSLevel());
+                boolean exImpTS = canExecuteMoveWithLevel(getImpulseTSLevel());
+                boolean sendPacket = false;
+                if (this.isStoppingTime()) {
+                    KeyInputs.roundaboutClickCount = 2;
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SPECIAL_FINISH, true);
+                    ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_FINISH, this.getChargedTSTicks());
+                } else if (this.getActivePower() == PowerIndex.SPECIAL || (this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative() && ClientNetworking.getAppropriateConfig().timeStopSettings.creativeModeInfiniteTimeStop))) {
+                    sendPacket = true;
+                } else {
+                    if (isHoldingSneak() || hasBlock() || hasEntity() || (!exTS &&
+                            exImpTS)) {
+                        if (exImpTS) {
+                            this.setChargedTSTicks(ClientNetworking.getAppropriateConfig().timeStopSettings.impulseTimeStopLength);
+                            this.setMaxChargeTSTime(ClientNetworking.getAppropriateConfig().timeStopSettings.impulseTimeStopLength);
+                            sendPacket = true;
+                        }
+                    } else {
+                        if (this.getAttackTimeDuring() < 0) {
+                            if (exTS) {
+                                this.setMaxChargeTSTime(this.getMaxTSTime());
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SPECIAL, true);
+                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.SPECIAL);
+                                this.updateUniqueMoves();
                             }
                         }
-
-                    } else {
-                        if (keyIsDown) {
-                            KeyInputs.roundaboutClickCount = 2;
-                        }
                     }
+                }
 
-                    if (sendPacket) {
-                        KeyInputs.roundaboutClickCount = 2;
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SPECIAL_CHARGED, true);
-                        ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_CHARGED, this.getChargedTSTicks());
-                    }
+
+                if (sendPacket) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SPECIAL_CHARGED, true);
+                    ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.SPECIAL_CHARGED, this.getChargedTSTicks());
                 }
             }
         }
@@ -820,9 +722,48 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
     }
 
+    public void impaleOrFBarrageClient(){
+        if (hasBlock() || hasEntity())
+            return;
+        if (clientForwardBarrage())
+            return;
+        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+            if (canExecuteMoveWithLevel(getImpaleLevel())) {
+                if (this.activePower == PowerIndex.POWER_1_SNEAK) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                } else {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_SNEAK);
+                }
+            }
+        }
+    }
+    public boolean clientForwardBarrage(){
+        if (this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2){
+            if (!forwardBarrage) {
+                hold1 = true;
+                forwardBarrage = true;
+                ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_FORWARD_BARRAGE);
+            } else {
+
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+
+     if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
+     && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
+     && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
+     */
     @Override
     public void preButtonInput4(boolean keyIsDown, Options options){
         if (hasStandActive(this.getSelf()) && !this.isClashing()) {
+            ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
             buttonInput4(keyIsDown, options);
         }
     }
@@ -830,42 +771,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     /**Impale Ability*/
     public boolean hold1 = false;
-    @Override
-    public void buttonInput1(boolean keyIsDown, Options options) {
-        if (this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2){
-            if (keyIsDown && !forwardBarrage) {
-                hold1 = true;
-                forwardBarrage = true;
-                ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_FORWARD_BARRAGE);
-                return;
-            }
-        }
 
-        if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
-                && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
-                && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
-                if (isHoldingSneak()) {
-                    if (keyIsDown) {
-                        if (!hold1) {
-                            hold1 = true;
-                            if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
-                                if (canExecuteMoveWithLevel(getImpaleLevel())) {
-                                    if (this.activePower == PowerIndex.POWER_1_SNEAK) {
-                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
-                                    } else {
-                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
-                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_SNEAK);
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        hold1 = false;
-                    }
-                }
-        }
-    }
     public int getImpaleLevel(){
         return 5;
     }

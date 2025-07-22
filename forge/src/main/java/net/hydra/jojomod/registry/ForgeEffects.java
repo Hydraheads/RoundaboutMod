@@ -3,6 +3,8 @@ package net.hydra.jojomod.registry;
 import net.hydra.jojomod.Roundabout;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -33,7 +35,7 @@ public class ForgeEffects{
             );
     public static final RegistryObject<MobEffect> MELTING =
             POTION_EFFECTS.register("melting", () ->
-                    new Effect(MobEffectCategory.HARMFUL, 10329495) // CHANGE THIS
+                    new Effect(MobEffectCategory.HARMFUL, 10329495).addAttributeModifier(Attributes.MAX_HEALTH,"7107DE5E-7CE8-4030-940E-514C1F160890",-1.1, AttributeModifier.Operation.ADDITION)
             );
 
 

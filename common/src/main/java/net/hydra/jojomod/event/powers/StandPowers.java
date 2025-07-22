@@ -5,7 +5,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.client.*;
-import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
@@ -14,7 +13,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.*;
-import net.hydra.jojomod.event.powers.stand.presets.TWAndSPSharedPowers;
+import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
@@ -62,7 +61,6 @@ import net.minecraft.world.phys.*;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -279,14 +277,6 @@ public class StandPowers {
 
     }
 
-    public void preButtonInput4(boolean keyIsDown, Options options){
-        if (hasStandActive(this.getSelf()) && !this.isClashing()) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
-                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
-                buttonInput4(keyIsDown, options);
-            }
-        }
-    }
 
 
 
@@ -295,6 +285,14 @@ public class StandPowers {
     }
 
     public boolean forwardBarrage = false;
+    public void preButtonInput4(boolean keyIsDown, Options options){
+        if (hasStandActive(this.getSelf()) && !this.isClashing()) {
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
+                buttonInput4(keyIsDown, options);
+            }
+        }
+    }
     public void preButtonInput3(boolean keyIsDown, Options options){
         if (hasStandActive(this.getSelf()) && !this.isClashing()) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {

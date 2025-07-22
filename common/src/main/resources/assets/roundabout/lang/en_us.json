@@ -386,7 +386,9 @@
   "death.attack.stand_virus.item": "%1$s was turned into tomato sauce",
   "death.attack,disintegration": "%1$ disintegrated",
   "death.attack,disintegration.player": "%1$ was disintegrated by %$2s",
-  "death.attack.melting": "%1$s was reduced to a puddle by %2$s",
+  "death.attack.melting": "%1$s became a fluid",
+  "death.attack.melting.player": "%1$s was reduced to a puddle by %$2s",
+
 
   "item.glaive.charge_power": "Charge Attack",
 
@@ -1036,6 +1038,7 @@
   "skins.roundabout.soft_and_wet.kira": "Kira",
   "skins.roundabout.soft_and_wet.colors": "Colors",
   "skins.roundabout.soft_and_wet.green": "Green",
+  "skins.roundabout.soft_and_wet.knight": "Knight",
 
   "skins.roundabout.d4c.base": "Manga",
   "skins.roundabout.d4c.wonder_festival": "JOJOVELLER",
@@ -1083,6 +1086,7 @@
   "skins.roundabout.hey_ya.grey_ya": "Grey Ya",
   "skins.roundabout.hey_ya.angel": "Angel",
   "skins.roundabout.hey_ya.knight": "Knight",
+  "skins.roundabout.hey_ya.saint": "The Saint",
 
   "skins.roundabout.mandom.manga": "Manga",
   "skins.roundabout.mandom.purple": "Purple",

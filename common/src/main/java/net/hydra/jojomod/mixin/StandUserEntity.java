@@ -60,6 +60,7 @@ import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.*;
@@ -503,6 +504,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (this.roundabout$getGlow() != glow) {
                 this.roundabout$setGlow(glow);
             }
+
+            if (this.getHealth() > this.getMaxHealth()) {
+                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.MELTING),this.getHealth()-this.getMaxHealth());
+            }
+            if (this.getEffect(ModEffects.MELTING) != null) {
+                if (this.getEffect(ModEffects.MELTING).getAmplifier() >= 6) {
+                    this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 1));
+                }
+                if (Math.abs(1.0-this.getMaxHealth()) <=0.2) {
+                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.MELTING), 200);
+                }
+            }
+
         } else {
             if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.disableBleedingAndBloodSplatters &&
                     (((IPermaCasting)this.level()).roundabout$inPermaCastFogRange(this)
@@ -3931,6 +3945,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Shadow public abstract int getArmorValue();
 
     @Shadow public abstract double getAttributeValue(Attribute $$0);
+
+    @Shadow @Nullable public abstract AttributeInstance getAttribute(Attribute attribute);
+
+    @Shadow public abstract void kill();
 
     @Unique private boolean roundabout$isPRunning = false;
 

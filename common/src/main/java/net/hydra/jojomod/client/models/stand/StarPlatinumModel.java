@@ -9,7 +9,7 @@ import net.hydra.jojomod.client.models.stand.animations.StarPlatinumAnimations;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.event.powers.stand.PowersStarPlatinum;
+import net.hydra.jojomod.stand.powers.PowersStarPlatinum;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;

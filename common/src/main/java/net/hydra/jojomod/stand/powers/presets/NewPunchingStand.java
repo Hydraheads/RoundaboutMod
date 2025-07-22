@@ -1,4 +1,4 @@
-package net.hydra.jojomod.stand.powers;
+package net.hydra.jojomod.stand.powers.presets;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.client.ClientNetworking;

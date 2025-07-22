@@ -1,4 +1,4 @@
-package net.hydra.jojomod.stand.powers;
+package net.hydra.jojomod.stand.powers.elements;
 
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.minecraft.resources.ResourceLocation;

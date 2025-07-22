@@ -1,6 +1,7 @@
-package net.hydra.jojomod.stand.powers;
+package net.hydra.jojomod.stand.powers.presets;
 
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.minecraft.client.Options;
 import net.minecraft.world.entity.LivingEntity;
 

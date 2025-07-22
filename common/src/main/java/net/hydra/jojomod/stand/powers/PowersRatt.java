@@ -11,8 +11,9 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.mixin.StandUserEntity;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.elements.PowerContext;
+import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
@@ -25,7 +26,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.animal.TropicalFish;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
@@ -57,11 +57,7 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public StandEntity getNewStandEntity(){
-        byte sk = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-        switch(sk) {
-            case RattEntity.REDD_SKIN -> {return ModEntities.EYEBROW_RATT.create(this.getSelf().level());}
-            default -> {return ModEntities.RATT.create(this.getSelf().level());}
-        }
+        return ModEntities.RATT.create(this.getSelf().level());
     }
 
     public void setShotCooldown(int i) {
@@ -180,7 +176,10 @@ public class PowersRatt extends NewDashPreset {
             }
             case ROTATE -> {
                 if (SE != null) {
-                    SE.setYBodyRot((float) pos.y);
+                    SE.setHeadRotationY((float)pos.y);
+                    SE.setBodyRotationY((float)pos.y);
+                    SE.setHeadRotationY((float)pos.y);
+                    //SE.setYBodyRot((float) pos.y);
                 }
             }
             case PowerIndex.POWER_2 -> {
@@ -338,7 +337,7 @@ public class PowersRatt extends NewDashPreset {
                 }
             }
 
-            case SKILL_3_NORMAL -> {
+            case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 dash();
             }
         }
@@ -609,7 +608,7 @@ public class PowersRatt extends NewDashPreset {
                 RattEntity.MELON_SKIN,
                 RattEntity.SAND_SKIN,
                 RattEntity.AZTEC_SKIN,
-                RattEntity.REDD_SKIN,
+               // RattEntity.REDD_SKIN,
                 RattEntity.SNOWY_SKIN
         );
     }
