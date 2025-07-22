@@ -343,7 +343,8 @@ public class PowersHeyYa extends NewDashPreset {
             ANTI = 20,
             GREY_YA = 21,
             ANGEL = 22,
-            KNIGHT = 23;
+            KNIGHT = 23,
+            SAINT = 24;
 
     public static final byte
             YAP_1 = 61,
@@ -375,6 +376,7 @@ public class PowersHeyYa extends NewDashPreset {
                 WITHER,
                 WARDEN,
                 GREY_YA,
+                SAINT,
                 ANGEL,
                 DEVIL,
                 ANTI,
@@ -415,6 +417,7 @@ public class PowersHeyYa extends NewDashPreset {
             case GREY_YA -> Component.translatable("skins.roundabout.hey_ya.grey_ya");
             case ANGEL -> Component.translatable("skins.roundabout.hey_ya.angel");
             case KNIGHT -> Component.translatable("skins.roundabout.hey_ya.knight");
+            case SAINT -> Component.translatable("skins.roundabout.hey_ya.saint");
             default -> Component.translatable("skins.roundabout.hey_ya.manga");
         };
     }

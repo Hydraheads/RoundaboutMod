@@ -21,7 +21,8 @@ public class SoftAndWetEntity extends FollowingStandEntity {
             DEBUT = 9,
             KIRA = 10,
             COLORS = 11,
-            GREEN = 12;
+            GREEN = 12,
+            KNIGHT = 13;
 
 
     public final AnimationState hideFists = new AnimationState();
