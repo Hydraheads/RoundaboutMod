@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.scissors;
 
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.sounds.SoundSource;
@@ -7,7 +7,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Shearable;
 import net.minecraft.world.entity.animal.AbstractGolem;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
@@ -20,12 +19,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(SnowGolem.class)
-public abstract class ZSnowGolem extends AbstractGolem implements Shearable,
+public abstract class ScissorsSnowGolem extends AbstractGolem implements Shearable,
         RangedAttackMob {
     /**You can sheer a snow golem with scissors as well*/
-    protected ZSnowGolem(EntityType<? extends AbstractGolem> $$0, Level $$1) {
-        super($$0, $$1);
-    }
 
     @Inject(method = "mobInteract", at = @At(value = "HEAD"),cancellable = true)
     public void roundabout$interact(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
@@ -40,5 +36,11 @@ public abstract class ZSnowGolem extends AbstractGolem implements Shearable,
 
             cir.setReturnValue(InteractionResult.sidedSuccess(this.level().isClientSide));
         }
+    }
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+    protected ScissorsSnowGolem(EntityType<? extends AbstractGolem> $$0, Level $$1) {
+        super($$0, $$1);
     }
 }

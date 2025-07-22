@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.time_stop;
 
 import net.hydra.jojomod.access.IBlockEntityAccess;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -20,8 +20,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ChestBlock.class)
-public class ZChestBlock  {
-    /**This mixin exists to make chest blocks open during TS. Unfortunately, requires packets to be sent.**/
+public class TimeStopChestBlock {
+    /**This mixin exists to make chest blocks open during TS. Unfortunately, requires packets to be sent.
+     * The end result though, is that the chest appears frozen mid-closing it.
+     * Most people honestly won't notice this detail but during the month of time stop,
+     * it was decided that we would be super elaborate as to make the ability feel bugless**/
+
     @Inject(method = "use", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$OpenChest(BlockState $$0, Level $$1, BlockPos $$2, Player $$3, InteractionHand $$4, BlockHitResult $$5, CallbackInfoReturnable<InteractionResult> ci) {
         if (!$$1.isClientSide) {
