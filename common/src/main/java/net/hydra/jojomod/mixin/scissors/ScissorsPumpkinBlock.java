@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.scissors;
 
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.core.BlockPos;
@@ -22,12 +22,13 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PumpkinBlock.class)
-public class ZPumpkinBlock {
-    /**Scissors*/
+public class ScissorsPumpkinBlock {
+
+    /**This mixin allows you to use scissors to shear a pumpkin block*/
+
     @Inject(method = "use", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$tick(BlockState $$0, Level $$1, BlockPos $$2, Player $$3, InteractionHand $$4, BlockHitResult $$5, CallbackInfoReturnable<InteractionResult> cir) {
         ItemStack $$6 = $$3.getItemInHand($$4);

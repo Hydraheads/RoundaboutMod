@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.access;
 
 import net.hydra.jojomod.access.IAreaOfEffectCloud;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -12,11 +12,8 @@ import org.spongepowered.asm.mixin.Unique;
 import java.util.List;
 
 @Mixin(AreaEffectCloud.class)
-public class ZAreaOfEffectCloud implements IAreaOfEffectCloud {
-    @Shadow @Final private List<MobEffectInstance> effects;
-
-    @Shadow private Potion potion;
-
+public class AccessAreaOfEffectCloud implements IAreaOfEffectCloud {
+    /**There is no reason for these to be private or protected, we should be able to tap into them.*/
     @Unique
     @Override
     public List<MobEffectInstance> roundabout$getEffects(){
@@ -27,4 +24,11 @@ public class ZAreaOfEffectCloud implements IAreaOfEffectCloud {
     public Potion roundabout$getPotions(){
         return this.potion;
     }
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+    @Shadow @Final private List<MobEffectInstance> effects;
+
+    @Shadow private Potion potion;
 }

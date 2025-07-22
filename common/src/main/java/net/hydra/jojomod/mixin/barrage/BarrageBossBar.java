@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.barrage;
 
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.Minecraft;
@@ -12,14 +12,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BossHealthOverlay.class)
-public class ZBossBar {
+public class BarrageBossBar {
+
     /**Minor code that makes barrage clashing stop the rendering of boss bars
      * so that they don't obstruct each other.*/
-    @Final
-    @Shadow
-    private Minecraft minecraft;
-
-
     /** When in a barrage clash, boss bars are hidden.*/
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     public void roundabout$Render(GuiGraphics context, CallbackInfo ci) {
@@ -27,4 +23,13 @@ public class ZBossBar {
             ci.cancel();
         }
     }
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+    @Final
+    @Shadow
+    private Minecraft minecraft;
+
 }

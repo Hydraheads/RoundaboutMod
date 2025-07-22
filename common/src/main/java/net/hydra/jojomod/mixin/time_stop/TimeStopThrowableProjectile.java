@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.time_stop;
 
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.entity.TimeMovingProjectile;
@@ -13,9 +13,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ThrowableProjectile.class)
-public abstract class ZThrowableProjectile extends Entity {
+public abstract class TimeStopThrowableProjectile extends Entity {
 
-    public ZThrowableProjectile(EntityType<?> $$0, Level $$1) {
+    /**In stopped time, projectiles you throw stop before they hit something, this is because there is a custom
+     * class that ticks them instead of their own tick functions, making it a catch-all with no notable
+     * exceptions*/
+
+    public TimeStopThrowableProjectile(EntityType<?> $$0, Level $$1) {
         super($$0, $$1);
     }
 

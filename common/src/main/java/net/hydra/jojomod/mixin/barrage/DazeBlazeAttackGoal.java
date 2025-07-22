@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin.barrage_daze;
+package net.hydra.jojomod.mixin.barrage;
 
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.entity.ai.goal.Goal;

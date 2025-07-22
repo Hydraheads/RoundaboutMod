@@ -1,11 +1,10 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.survivor;
 
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.entity.projectile.ThrownPotion;
@@ -19,11 +18,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ThrownPotion.class)
-public abstract class ZThrownPotion extends ThrowableItemProjectile implements ItemSupplier {
+public abstract class SurvivorThrownPotion extends ThrowableItemProjectile implements ItemSupplier {
 
-    public ZThrownPotion(EntityType<? extends ThrowableItemProjectile> $$0, Level $$1) {
-        super($$0, $$1);
-    }
+    /**Makes thrown potions activate survivor, this includes throwable water bottles which
+     * are in fact classified as a potion, the custom normal water bottle throw entity for survivor
+     * is not included in here but in its own class*/
 
     @Inject(method = "onHit", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$onHit(HitResult $$0,CallbackInfo ci) {
@@ -44,4 +43,15 @@ public abstract class ZThrownPotion extends ThrowableItemProjectile implements I
             $$5.setActivated(true);
         }
     }
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+
+    public SurvivorThrownPotion(EntityType<? extends ThrowableItemProjectile> $$0, Level $$1) {
+        super($$0, $$1);
+    }
+
 }
