@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.time_stop;
 
 import net.hydra.jojomod.access.IFishingRodAccess;
 import net.hydra.jojomod.access.IProjectileAccess;
@@ -20,28 +20,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import javax.annotation.Nullable;
 
 @Mixin(FishingHook.class)
-public abstract class ZFishingHook extends Entity implements IFishingRodAccess {
-
-    public ZFishingHook(EntityType<?> $$0, Level $$1) {
-        super($$0, $$1);
-    }
+public abstract class TimeStopFishingHook extends Entity implements IFishingRodAccess {
 
 
-    @Shadow
-    @Final
-    private RandomSource syncronizedRandom;
-
-    @Shadow
-    @Nullable
-    public Player getPlayerOwner() {
-        return null;
-    }
-
-    @Shadow
-    @Nullable
-    private boolean shouldStopFishing(Player $$0) {
-        return true;
-    }
+    /**Fishing Hooks move and slow in stopped time, much like projectiles thrown, and stop before they hit something*/
 
     @Inject(method = "tick", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$SetPosForTS(CallbackInfo ci) {
@@ -71,4 +53,30 @@ public abstract class ZFishingHook extends Entity implements IFishingRodAccess {
         }
     }
 
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    public TimeStopFishingHook(EntityType<?> $$0, Level $$1) {
+        super($$0, $$1);
+    }
+
+
+    @Shadow
+    @Final
+    private RandomSource syncronizedRandom;
+
+    @Shadow
+    @Nullable
+    public Player getPlayerOwner() {
+        return null;
+    }
+
+    @Shadow
+    @Nullable
+    private boolean shouldStopFishing(Player $$0) {
+        return true;
+    }
 }

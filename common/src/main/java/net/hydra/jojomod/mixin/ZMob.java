@@ -461,14 +461,10 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Unique
     @Override
     public void roundabout$deeplyRemoveTargets(){
-        if (((LivingEntity)(Object)this) instanceof EnderMan){
-            ((IEnderMan)this).roundabout$stripGoals();
-        } else {
             if (this.targetSelector != null) {
                 Stream<WrappedGoal> wrappedGoalStream = this.targetSelector.getRunningGoals();
                 wrappedGoalStream.forEach(this::roundabout$removeGoalTarget);
             }
-        }
     }
     @Unique
     @Override

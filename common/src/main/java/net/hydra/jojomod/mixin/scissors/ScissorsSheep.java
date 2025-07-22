@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.scissors;
 
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.sounds.SoundSource;
@@ -18,22 +18,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Sheep.class)
-public abstract class ZSheep extends Animal implements Shearable {
-    /**You can sheer sheep with scissors as well*/
-    protected ZSheep(EntityType<? extends Animal> $$0, Level $$1) {
-        super($$0, $$1);
-    }
-
-
-
-    @Shadow
-    public boolean readyForShearing() {
-        return false;
-    }
-
-    @Shadow
-    public void shear(SoundSource $$0) {
-    }
+public abstract class ScissorsSheep extends Animal implements Shearable {
+    /**This mixin allows you to use scissors to shear sheep*/
 
     @Inject(method = "mobInteract", at = @At(value = "HEAD"),cancellable = true)
     public void roundabout$interact(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
@@ -48,5 +34,23 @@ public abstract class ZSheep extends Animal implements Shearable {
         }
     }
 
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
 
+
+    protected ScissorsSheep(EntityType<? extends Animal> $$0, Level $$1) {
+        super($$0, $$1);
+    }
+
+
+
+    @Shadow
+    public boolean readyForShearing() {
+        return false;
+    }
+
+    @Shadow
+    public void shear(SoundSource $$0) {
+    }
 }

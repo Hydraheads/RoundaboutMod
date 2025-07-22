@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.time_stop;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -30,17 +30,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 @Mixin(BannerRenderer.class)
-public class ZBannerRenderer {
+public class TimeStopBannerRenderer {
+    /**
+     * Banners need to freeze in stopped time, but they are set up in a complicated way in the code,
+     * so they freeze in a complicated way.
+     */
 
-    @Shadow
-    @Final
-    private ModelPart flag;
-    @Shadow
-    @Final
-    private ModelPart pole;
-    @Shadow
-    @Final
-    private ModelPart bar;
     @Inject(method = "render(Lnet/minecraft/world/level/block/entity/BannerBlockEntity;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V", at = @At("HEAD"), cancellable = true)
     public void roundabout$render(BannerBlockEntity $$0, float $$1, PoseStack $$2,
                                   MultiBufferSource $$3, int $$4, int $$5, CallbackInfo ci) {
@@ -85,6 +80,22 @@ public class ZBannerRenderer {
         }
     }
 
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+
+    @Shadow
+    @Final
+    private ModelPart flag;
+    @Shadow
+    @Final
+    private ModelPart pole;
+    @Shadow
+    @Final
+    private ModelPart bar;
     @Shadow
     public static void renderPatterns(
             PoseStack $$0, MultiBufferSource $$1, int $$2, int $$3, ModelPart $$4, Material $$5, boolean $$6, List<Pair<Holder<BannerPattern>, DyeColor>> $$7
