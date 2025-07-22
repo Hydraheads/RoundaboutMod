@@ -512,7 +512,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 if (this.getEffect(ModEffects.MELTING).getAmplifier() >= 6) {
                     this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 1));
                 }
-                if (this.getEffect(ModEffects.MELTING).getAmplifier()+1 >= this.getMaxHealth()) {
+                if (Math.abs(1.0-this.getMaxHealth()) <=0.2) {
                     this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.MELTING), 200);
                 }
             }
