@@ -41,7 +41,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersD4C;
-import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
+import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.item.BodyBagItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.zetalasis.networking.message.api.ModMessageEvents;

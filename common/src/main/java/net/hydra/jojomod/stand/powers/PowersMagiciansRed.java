@@ -1,4 +1,4 @@
-package net.hydra.jojomod.event.powers.stand;
+package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
@@ -25,11 +25,12 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.stand.presets.PunchingStand;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.elements.PowerContext;
+import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -82,7 +83,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class PowersMagiciansRed extends PunchingStand {
+public class PowersMagiciansRed extends NewPunchingStand {
 
     public CrossfireHurricaneEntity hurricane;
 
@@ -615,7 +616,7 @@ public class PowersMagiciansRed extends PunchingStand {
                     if (isUsingFirestorm()) {
                         setSkillIcon(context, x, y, 4, StandIcons.CROSSFIRE_FIRESTORM_END, PowerIndex.NO_CD);
                     } else {
-                        setSkillIcon(context, x, y, 4, StandIcons.CROSSFIRE_FIRESTORM, PowerIndex.SKILL_EXTRA);
+                        setSkillIcon(context, x, y, 4, StandIcons.CROSSFIRE_FIRESTORM, PowerIndex.NO_CD);
                     }
                 } else {
                     setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
@@ -860,101 +861,173 @@ public class PowersMagiciansRed extends PunchingStand {
     public boolean isBusy(){
         return this.activePower == PowerIndex.POWER_4 || this.activePower == PowerIndex.POWER_4_BONUS;
     }
-    @Override
-    public void buttonInput1(boolean keyIsDown, Options options) {
-        if (!isBusy()) {
-            if (keyIsDown) {
-                if (!hold1) {
-                    hold1 = true;
-                    if (!isLockedByWater()) {
-                        if (canShootConcealedCrossfire()) {
-                            this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.ankhConcealedCooldown));
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BONUS, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_BONUS);
-                        } else {
-                            if (!isChargingCrossfire() && !hasHurricaneSingle()) {
-                                if (!isGuarding()) {
-                                    if (isHoldingSneak()) {
-                                        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
-                                            BlockPos HR = getGrabBlock();
-                                            if (HR != null) {
-                                                this.setCooldown(PowerIndex.SKILL_1_SNEAK,
-                                                        multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.igniteFireCooldown)
-                                                );
-                                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
-                                                ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.EXTRA, grabBlock2);
-                                                ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_1_SNEAK, HR);
-                                            }
-                                        }
-                                    } else {
-                                        if (!this.onCooldown(PowerIndex.SKILL_1) && this.getActivePower() != PowerIndex.POWER_1) {
-                                            if (leaded == null) {
-                                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
-                                            } else {
-                                                this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().magiciansRedSettings.redBindManualReleaseCooldown);
-                                            }
-                                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
-                                        }
-                                    }
-                                } else {
-                                    if (canExecuteMoveWithLevel(5)) {
-                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BLOCK, true);
-                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_BLOCK);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            } else {
-                hold1 = false;
-            }
-        }
-    }
-    @Override
-    public void buttonInput2(boolean keyIsDown, Options options) {
-        if (!isBusy()) {
-            if (keyIsDown) {
-                if (!hold2) {
-                    hold2 = true;
-                    if (!isLockedByWater()) {
-                        if (hasHurricaneSpecial()) {
-                            if (!isChargingCrossfire()) {
-                                if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
-                                    this.setCooldown(PowerIndex.SKILL_EXTRA_2, 8);
-                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
-                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
-                                }
-                            }
-                        } else if (hasHurricaneSingle() || isChargingCrossfireSingle()) {
-                            this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.ankhSuccessCooldown));
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
-                        } else {
-                            if (!isGuarding()) {
-                                if (isHoldingSneak()) {
-                                    if (!this.onCooldown(PowerIndex.SKILL_2_SNEAK) && canExecuteMoveWithLevel(4)) {
-                                        this.setCooldown(PowerIndex.SKILL_2_SNEAK, multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.hurricaneSpecialCooldown));
-                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
-                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_SNEAK);
-                                    }
-                                } else {
-                                    if (!this.onCooldown(PowerIndex.SKILL_2)) {
 
-                                        this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.ankhFailCooldown));
-                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
-                                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            } else {
-                hold2 = false;
+    @Override
+    public void powerActivate(PowerContext context) {
+        switch (context) {
+            case SKILL_1_NORMAL -> {
+                tryRedBindClient();
+            }
+            case SKILL_1_CROUCH -> {
+                tryIgnitionClient();
+            }
+            case SKILL_1_GUARD, SKILL_1_CROUCH_GUARD -> {
+                tryLifeTrackerClient();
+            }
+
+            case SKILL_2_NORMAL -> {
+                hurricaneClient();
+            }
+            case SKILL_2_CROUCH -> {
+                hurricaneSpecialClient();
+            }
+
+            case SKILL_3_NORMAL -> {
+                tryToDashClient();
+            }
+            case SKILL_3_CROUCH -> {
+                tryToSnapFireAway();
+            }
+            case SKILL_3_GUARD, SKILL_3_CROUCH_GUARD -> {
+                destroyProjectilesClient();
+            }
+
+            case SKILL_4_NORMAL -> {
+                bigHurricaneClient();
+            }
+            case SKILL_4_CROUCH -> {
+                cawFireSlamClientCaw();
             }
         }
     }
+
+    public boolean useHurricaneSpecialClient(){
+        if (hasHurricaneSpecial()) {
+            if (!isChargingCrossfire()) {
+                if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+                    this.setCooldown(PowerIndex.SKILL_EXTRA_2, 8);
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public boolean ankhShootClient(){
+        if (hasHurricaneSingle() || isChargingCrossfireSingle()) {
+            this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.ankhSuccessCooldown));
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
+            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
+            return true;
+        }
+        return false;
+    }
+    public void hurricaneSpecialClient(){
+        if (this.isChargingCrossfireSpecial())
+            return;
+        if (isLockedByWater())
+            return;
+        if (useHurricaneSpecialClient()){
+            return;
+        }
+        if (ankhShootClient()){
+            return;
+        }
+        if (!this.onCooldown(PowerIndex.SKILL_2_SNEAK) && canExecuteMoveWithLevel(4)) {
+            this.setCooldown(PowerIndex.SKILL_2_SNEAK, multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.hurricaneSpecialCooldown));
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
+            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_SNEAK);
+        }
+    }
+    public void hurricaneClient(){
+        if (this.isChargingCrossfireSpecial())
+            return;
+        if (isLockedByWater())
+            return;
+        if (useHurricaneSpecialClient()){
+            return;
+        }
+        if (ankhShootClient()){
+            return;
+        }
+        if (!this.onCooldown(PowerIndex.SKILL_2)) {
+            this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.ankhFailCooldown));
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2);
+        }
+    }
+
+    public boolean getShootConcealedHurricane() {
+        if (canShootConcealedCrossfire()) {
+            if (!onCooldown(PowerIndex.SKILL_2)) {
+                this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.ankhConcealedCooldown));
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BONUS, true);
+                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_BONUS);
+            }
+            return true;
+        }
+        return false;
+    }
+    public void tryRedBindClient(){
+        if (isChargingCrossfireSpecial())
+            return;
+        if (isBusy() || isLockedByWater())
+            return;
+        if (getShootConcealedHurricane()) {
+            return;
+        }
+        if (!isChargingCrossfire() && !hasHurricaneSingle()) {
+            if (!this.onCooldown(PowerIndex.SKILL_1) && this.getActivePower() != PowerIndex.POWER_1) {
+                if (leaded == null) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                } else {
+                    this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().magiciansRedSettings.redBindManualReleaseCooldown);
+                }
+                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+            }
+        }
+    }
+
+    public void tryIgnitionClient() {
+        if (isChargingCrossfireSpecial())
+            return;
+        if (isBusy() || isLockedByWater())
+            return;
+        if (getShootConcealedHurricane()) {
+            return;
+        }
+        if (!isChargingCrossfire() && !hasHurricaneSingle()) {
+            if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+                BlockPos HR = getGrabBlock();
+                if (HR != null) {
+                    this.setCooldown(PowerIndex.SKILL_1_SNEAK,
+                            multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.igniteFireCooldown)
+                    );
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
+                    ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.EXTRA, grabBlock2);
+                    ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_1_SNEAK, HR);
+                }
+            }
+        }
+    }
+
+    public void tryLifeTrackerClient() {
+        if (isChargingCrossfireSpecial())
+            return;
+        if (isBusy() || isLockedByWater())
+            return;
+        if (getShootConcealedHurricane()) {
+            return;
+        }
+        if (!isChargingCrossfire() && !hasHurricaneSingle()) {
+            if (canExecuteMoveWithLevel(5)) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BLOCK, true);
+                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_BLOCK);
+            }
+        }
+    }
+
     public BlockPos grabBlock = null;
     public BlockPos grabBlock2 = null;
     public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos){
@@ -970,89 +1043,82 @@ public class PowersMagiciansRed extends PunchingStand {
         return false;
         /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
     }
-    @Override
-    public void buttonInput3(boolean keyIsDown, Options options) {
 
-        if (!isBusy()) {
-            if (keyIsDown) {
-                if (!inputDash) {
-                    boolean hasSingle = isChargingCrossfireSingle() || hasHurricaneSingle();
-                    if (!isChargingCrossfire() && !hasSingle) {
-                        if (this.isGuarding()) {
-                            if (!isLockedByWater()) {
-                                if (!this.onCooldown(PowerIndex.SKILL_EXTRA) && canExecuteMoveWithLevel(2)) {
-                                    this.setCooldown(PowerIndex.SKILL_EXTRA, multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.projectileBurnCooldown));
-
-                                    BlockPos HR = getGrabPos(10);
-                                    if (HR != null) {
-                                        ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_3_BLOCK, HR);
-                                    }
-                                }
-                                inputDash = true;
-                            }
-                        } else if (isHoldingSneak()) {
-                            if (!this.onCooldown(PowerIndex.SKILL_3)) {
-                                this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().magiciansRedSettings.snapFireAwayCooldown);
-                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
-                            }
-                            inputDash = true;
-                        } else {
-                            if (this.self.onGround()) {
-                                super.buttonInput3(keyIsDown, options);
-                            } else {
-                                doVault();
-                            }
-                        }
-                    } else if (hasSingle) {
-                        if (canExecuteMoveWithLevel(3)) {
-                            this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.ankhHiddenCooldown));
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BONUS, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3_BONUS);
-                        }
-                        inputDash = true;
-                    }
-                }
-            } else {
-                inputDash = false;
+    public boolean crossfireVariationClient(){
+        boolean hasSingle = isChargingCrossfireSingle() || hasHurricaneSingle();
+        if (hasSingle) {
+            if (canExecuteMoveWithLevel(3)) {
+                this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.ankhHiddenCooldown));
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BONUS, true);
+                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3_BONUS);
             }
+            return true;
+        }
+        return false;
+    }
+    public void tryToDashClient(){
+        if (isChargingCrossfireSpecial())
+            return;
+        if (isBusy())
+            return;
+        if (crossfireVariationClient())
+            return;
+        if (!doVault()) {
+            dash();
+        }
+    }
+    public void destroyProjectilesClient(){
+        if (isChargingCrossfireSpecial())
+            return;
+        if (isBusy() || isLockedByWater())
+            return;
+        if (crossfireVariationClient())
+            return;
+        if (!this.onCooldown(PowerIndex.SKILL_EXTRA) && canExecuteMoveWithLevel(2)) {
+            this.setCooldown(PowerIndex.SKILL_EXTRA, multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.projectileBurnCooldown));
+
+            BlockPos HR = getGrabPos(10);
+            if (HR != null) {
+                ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_3_BLOCK, HR);
+            }
+        }
+    }
+    public void tryToSnapFireAway(){
+        if (this.isChargingCrossfireSpecial())
+            return;
+        if (isBusy())
+            return;
+        if (crossfireVariationClient())
+            return;
+        if (!this.onCooldown(PowerIndex.SKILL_3)) {
+            this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().magiciansRedSettings.snapFireAwayCooldown);
+            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
+        }
+    }
+
+    public void bigHurricaneClient(){
+        if (isChargingCrossfire() || hasHurricaneSingle())
+            return;
+        if (isBusy() || isLockedByWater())
+            return;
+        if (canExecuteMoveWithLevel(7) && !hasHurricaneSpecial()) {
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_SNEAK, true);
+            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_SNEAK);
+        }
+    }
+    public void cawFireSlamClientCaw(){
+        if (isChargingCrossfire())
+            return;
+        if (isBusy() || isLockedByWater())
+            return;
+        if (!this.onCooldown(PowerIndex.SKILL_4) && canExecuteMoveWithLevel(6)) {
+            hold4 = true;
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_BONUS, true);
+            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_BONUS);
+            this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().magiciansRedSettings.flameCrashCooldown);
         }
     }
     public boolean hold4 = false;
-    @Override
-    public void buttonInput4(boolean keyIsDown, Options options) {
-        if (!isBusy()) {
-            if (!isChargingCrossfire() && !hasHurricaneSingle()) {
-                if (isHoldingSneak()) {
-                    if (!isLockedByWater()) {
-                        if (keyIsDown) {
-                            if (!hold4) {
-                                if (!this.onCooldown(PowerIndex.SKILL_4) && canExecuteMoveWithLevel(6)) {
-                                    hold4 = true;
-                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_BONUS, true);
-                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_BONUS);
-                                    this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().magiciansRedSettings.flameCrashCooldown);
-                                }
-                            }
-                        } else {
-                            hold4 = false;
-                        }
-                    }
-                } else {
-                    if (keyIsDown) {
-                        if (!hold4) {
-                            hold4 = true;
-                            if (canExecuteMoveWithLevel(7) && !hasHurricaneSpecial()) {
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_SNEAK, true);
-                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_SNEAK);
-                            }
-                        }
-                    } else {
-                        hold4 = false;
-                    }
-                }
-            }
-        }
-    }
     @Override
     public boolean tryPower(int move, boolean forced) {
         if ((move == PowerIndex.GUARD || move == PowerIndex.NONE)){

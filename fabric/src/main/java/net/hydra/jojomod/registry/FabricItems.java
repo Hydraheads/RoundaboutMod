@@ -6,7 +6,6 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StreetSignBlock;
 import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.event.powers.stand.*;
 import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.event.powers.visagedata.aesthetician.*;
 import net.hydra.jojomod.item.*;

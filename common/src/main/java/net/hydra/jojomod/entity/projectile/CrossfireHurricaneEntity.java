@@ -13,7 +13,7 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
+import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
