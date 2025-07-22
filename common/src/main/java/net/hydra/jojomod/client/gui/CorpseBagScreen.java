@@ -12,6 +12,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.networking.ClientToServerPackets;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.KeyMapping;
@@ -30,6 +31,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.zetalasis.networking.message.api.ModMessageEvents;
 import org.joml.Vector3f;
 
 import java.util.List;
@@ -189,8 +191,11 @@ public class CorpseBagScreen extends Screen {
                 vc = blockHit.getBlockPos().getCenter().toVector3f().add(0,1,0);
             }
 
-            ModPacketHandler.PACKET_ACCESS.itemContextToServer(pIcon.id,
-                        stack, PacketDataIndex.USE_CORPSE_BAG, vc);
+            ModMessageEvents.sendToServer(
+                    ClientToServerPackets.StandPowerPackets.MESSAGES.BodyBag.value,
+                    pIcon.id,
+                    stack, vc
+            );
 
         }
     }
