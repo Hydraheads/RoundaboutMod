@@ -53,7 +53,7 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
     private boolean goinDown = false;
     private final float verticalSpeed = 0.1f;
     private final float slowSpeed = 0.04f;
-    private final float nonDrivenSpeed = 0.05f;
+    private final float nonDrivenSpeed = 0.3f;
 
     public FallenPhantom(EntityType<? extends PathfinderMob> $$0, Level $$1) {
         super($$0, $$1);
@@ -115,6 +115,9 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
     @Override
     public void tick() {
         if(!this.getActivated()){
+            for(Entity ent : this.getPassengers()){
+                ent.unRide();
+            }
             this.setNoGravity(false);
             //Drop this dude
             if(!this.onGround() && this.level().getBlockState(new BlockPos((int) this.getX(),(int) (this.getY()-0.1),(int) this.getZ())).isAir() && !this.level().getBlockState(new BlockPos((int) this.getX(),(int) (this.getY()-0.1),(int) this.getZ())).isSolid()){
@@ -136,18 +139,24 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
             this.level().addParticle(ParticleTypes.MYCELIUM, this.getX() + (double)h, this.getY() + (double)k, this.getZ() + (double)j, 0.0, 0.0, 0.0);
             this.level().addParticle(ParticleTypes.MYCELIUM, this.getX() - (double)h, this.getY() + (double)k, this.getZ() - (double)j, 0.0, 0.0, 0.0);
         }
-        if(this.navigation.isInProgress() && this.navigation.getTargetPos().getY() < this.getY()){
-            if(this.level().getBlockState(new BlockPos((int)this.getX(),(int) (this.getY()-verticalSpeed),(int) this.getZ())).isAir()){
-                //this.setPos(this.getX(),this.getY()-verticalSpeed,this.getZ());
-                this.moveRelative(slowSpeed,new Vec3(0,-verticalSpeed,0));
+        if(this.navigation.isInProgress()) {
+            float targetY = this.navigation.getTargetPos().getY();
+            if(this.getTarget() != null){
+                targetY += (float) (this.getTarget().getBoundingBox().getYsize()/2);
             }
+            if (targetY < this.getY()) {
+                if (this.level().getBlockState(new BlockPos((int) this.getX(), (int) (this.getY() - verticalSpeed), (int) this.getZ())).isAir()) {
+                    //this.setPos(this.getX(),this.getY()-verticalSpeed,this.getZ());
+                    this.moveRelative(slowSpeed, new Vec3(0, -verticalSpeed, 0));
+                }
 
-        } else if (this.navigation.isInProgress() && this.navigation.getTargetPos().getY() > this.getY()) {
-            if(this.level().getBlockState(new BlockPos((int)this.getX(),(int) (this.getY()+verticalSpeed),(int) this.getZ())).isAir()){
-                //this.setPos(this.getX(),this.getY()+verticalSpeed,this.getZ());
-                this.moveRelative(slowSpeed,new Vec3(0,verticalSpeed*2,0));
+            } else if (targetY > this.getY()) {
+                if (this.level().getBlockState(new BlockPos((int) this.getX(), (int) (this.getY() + verticalSpeed), (int) this.getZ())).isAir()) {
+                    //this.setPos(this.getX(),this.getY()+verticalSpeed,this.getZ());
+                    this.moveRelative(slowSpeed, new Vec3(0, verticalSpeed * 2, 0));
+                }
+
             }
-
         }
         super.tick();
 
@@ -177,6 +186,9 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
             this.goinUp = true;
             this.goinDown = false;
 
+        } else{
+            this.goinUp = false;
+            this.goinDown = false;
         }
 
     }
@@ -329,16 +341,17 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
 
     @Override
     protected Vec3 getRiddenInput(Player $$0, Vec3 $$1) {
-        float $$2 = $$0.xxa * 2;
+        float $$2 = $$0.xxa;
         float $$3 = 0;
-        float $$4 = $$0.zza * 4;
+        float $$4 = $$0.zza * 2;
         if ($$4 <= 0.0F) {
             $$4 *= 0.25F;
         }
         if(this.level().getDayTime() % 24000L < 13000){
-            $$2 *= 0.2f * 0.5f;
-            $$4 *= 0.2f * 0.5f;
+            $$2 *= 0.2f * 0.75f;
+            $$4 *= 0.2f * 0.75f;
         }
+
         if(this.goinUp){
             $$3 = changeHeightBy;
             this.goinUp = false;
@@ -394,7 +407,9 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
 
     @Override
     public boolean hurt(DamageSource $$0, float $$1) {
-        this.ejectPassengers();
+        for(Entity ent : this.getPassengers()){
+            ent.unRide();
+        }
         return super.hurt($$0, $$1);
     }
 
