@@ -13,6 +13,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.VisageStoreEntry;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ModificationMaskItem;
+import net.hydra.jojomod.networking.ClientToServerPackets;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.*;
@@ -29,6 +30,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.zetalasis.networking.message.api.ModMessageEvents;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -160,8 +162,12 @@ public class ModificationVisageScreen extends Screen {
             if (!delStack.getOrCreateTagElement("modifications").contains("height")){
                 delStack.removeTagKey("modifications");
             }
-            ModPacketHandler.PACKET_ACCESS.itemContextToServer(PacketDataIndex.ITEM_MOD_VISAGE, delStack, (byte)chestType,
-                    new Vector3f(visageHeight,visageWidth,visageHeadSize));
+
+            ModMessageEvents.sendToServer(
+                    ClientToServerPackets.StandPowerPackets.MESSAGES.ModVisageConfigure.value,
+                    (byte)chestType, delStack,
+                    new Vector3f(visageHeight,visageWidth,visageHeadSize)
+            );
             //SAVE
             this.minecraft.setScreen(null);
             return true;

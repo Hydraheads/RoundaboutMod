@@ -344,23 +344,7 @@ public class MainUtil {
     }
 
     public static void handleChangeItem(Player player, byte context, ItemStack stack, byte context2, Vector3f vec) {
-         if (context2 == PacketDataIndex.USE_CORPSE_BAG) {
-        } else if (context == PacketDataIndex.ITEM_MOD_VISAGE) {
-             boolean offh = ItemStack.isSameItemSameTags(player.getOffhandItem(),stack);
-             if (stack.getItem() instanceof ModificationMaskItem || player.getInventory().contains(stack) || offh) {
-                 ItemStack item;
-                 if (offh) {
-                     item = player.getOffhandItem();
-                 } else {
-                     int yes = player.getInventory().findSlotMatchingItem(stack);
-                     item = player.getInventory().getItem(yes);
-                 }
-                 item.getOrCreateTagElement("modifications").putInt("height", (int) vec.x);
-                 item.getOrCreateTagElement("modifications").putInt("width", (int) vec.y);
-                 item.getOrCreateTagElement("modifications").putInt("head", (int) vec.z);
-                 item.getOrCreateTagElement("modifications").putInt("chest", context2);
-             }
-         } else if (context == PacketDataIndex.ITEM_SWITCH_MAIN || context == PacketDataIndex.ITEM_SWITCH_SECONDARY) {
+        if (context == PacketDataIndex.ITEM_SWITCH_MAIN || context == PacketDataIndex.ITEM_SWITCH_SECONDARY) {
             boolean offh = ItemStack.isSameItemSameTags(player.getOffhandItem(),stack);
             if (player.getInventory().contains(stack) || offh){
                 if (stack.getItem() instanceof StandArrowItem){

@@ -5,6 +5,7 @@ import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.index.Corpses;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.ModificationMaskItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
@@ -26,7 +27,8 @@ public class ClientToServerPackets {
             TryHitResultPosPower("try_hit_result_pos_power"),
             TryIntPower("try_int_power"),
             TryTripleIntPower("try_triple_int_power"),
-            BodyBag("body_bag");
+            BodyBag("body_bag"),
+            ModVisageConfigure("mod_visage");
 
             public final String value;
 
@@ -198,6 +200,29 @@ public class ClientToServerPackets {
                                     }
                                 }
                             }
+                        }
+                    });
+                } /**Justice Body Bag Usage Packet*/
+                if (message.equals(MESSAGES.ModVisageConfigure.value)) {
+                    server.execute(() -> {
+                        ServerLevel world = (ServerLevel) sender.level();
+                        byte chest = (byte) vargs[0];
+                        ItemStack stack = (ItemStack) vargs[1];
+                        Vector3f vec = (Vector3f) vargs[2];
+
+                        boolean offh = ItemStack.isSameItemSameTags(sender.getOffhandItem(),stack);
+                        if (stack.getItem() instanceof ModificationMaskItem || sender.getInventory().contains(stack) || offh) {
+                            ItemStack item;
+                            if (offh) {
+                                item = sender.getOffhandItem();
+                            } else {
+                                int yes = sender.getInventory().findSlotMatchingItem(stack);
+                                item = sender.getInventory().getItem(yes);
+                            }
+                            item.getOrCreateTagElement("modifications").putInt("height", (int) vec.x);
+                            item.getOrCreateTagElement("modifications").putInt("width", (int) vec.y);
+                            item.getOrCreateTagElement("modifications").putInt("head", (int) vec.z);
+                            item.getOrCreateTagElement("modifications").putInt("chest", chest);
                         }
                     });
                 }
