@@ -1,4 +1,4 @@
-package net.hydra.jojomod.event.powers.stand;
+package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
@@ -24,7 +24,8 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.event.powers.stand.presets.TWAndSPSharedPowers;
+import net.hydra.jojomod.stand.powers.elements.PowerContext;
+import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.JotaroVoice;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
@@ -432,78 +433,107 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         }
     }
 
-    public void buttonInput3(boolean keyIsDown, Options options) {
-        if (keyIsDown) {
-            if (!inputDash) {
-                if (this.getActivePower() != PowerIndex.POWER_3_SNEAK) {
-                    if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
-                            && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
-                            && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
-                        if (this.isGuarding()) {
-                            if (this.activePower != PowerIndex.POWER_3 && !this.getSelf().isUnderWater()) {
-                                if (canExecuteMoveWithLevel(getInhaleLevel())) {
-                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
-                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
-                                }
-                            }
-                        } else {
-                            if (this.activePower != PowerIndex.POWER_3) {
-                                super.buttonInput3(keyIsDown, options);
-                            }
-                        }
-                    }
-                }
+
+    @Override
+    public void powerActivate(PowerContext context) {
+        switch (context) {
+
+            case SKILL_1_NORMAL -> {
+                starFingerOrFBarrageClient();
             }
-        } else {
-            inputDash = false;
+            case SKILL_1_GUARD, SKILL_1_CROUCH_GUARD -> {
+                tryScopeOrFBarrageClient();
+            }
+            case SKILL_1_CROUCH -> {
+                impaleOrFBarrageClient();
+            }
+
+            case SKILL_2_NORMAL -> {
+                blockAndEntityGrabClient();
+            }
+            case SKILL_2_GUARD, SKILL_2_CROUCH_GUARD -> {
+                phaseGrabClient();
+            }
+            case SKILL_2_CROUCH -> {
+                itemGrabClient();
+            }
+
+            case SKILL_3_NORMAL -> {
+                tryToDashClient();
+            }
+            case SKILL_3_CROUCH -> {
+                tryToStandLeapClient();
+            }
+            case SKILL_3_GUARD, SKILL_3_CROUCH_GUARD -> {
+                tryInhaleClient();
+            }
+
+            case SKILL_4_NORMAL, SKILL_4_CROUCH, SKILL_4_GUARD, SKILL_4_CROUCH_GUARD -> {
+                doTSClient();
+            }
         }
     }
 
-    /**Star Finger Ability*/
+    public void tryInhaleClient(){
+        if (this.activePower != PowerIndex.POWER_3 && !this.getSelf().isUnderWater()) {
+            if (canExecuteMoveWithLevel(getInhaleLevel())) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
+            }
+        }
+    }
+
+
     @Override
-    public void buttonInput1(boolean keyIsDown, Options options) {
-        if ((!this.isBarrageAttacking() && this.getActivePower() != PowerIndex.BARRAGE_2) || this.getAttackTimeDuring() < 0) {
-            if (this.getSelf().level().isClientSide && !this.isClashing() && !((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
-                if (keyIsDown) {
-                    if (this.canScope()) {
-                        if (scopeTicks == -1) {
-                            scopeTicks = 6;
-                            int newLevel = scopeLevel + 1;
-                            if (newLevel > 3) {
-                                this.setScopeLevel(0);
-                            } else {
-                                this.getSelf().playSound(ModSounds.STAR_PLATINUM_SCOPE_EVENT, 1.0F, (float) (0.98F + (Math.random() * 0.04F)));
-                                this.setScopeLevel(newLevel);
-                            }
-                        }
-                    } else {
-                        if (!this.isGuarding()) {
-                            if (!hold1 && !forwardBarrage) {
-                                if (!this.isBarrageCharging() && this.getActivePower() != PowerIndex.BARRAGE_CHARGE_2) {
-                                    if (!isHoldingSneak() && !this.isBarrageAttacking() && (this.getActivePower() != PowerIndex.BARRAGE_2)) {
-                                        //Star Finger here
-                                        hold1 = true;
-                                        if (!this.onCooldown(PowerIndex.SKILL_1)) {
-                                            if (canExecuteMoveWithLevel(getFingerLevel())) {
-                                                if (this.activePower != PowerIndex.POWER_1) {
-                                                    ticksForFinger = 0;
-                                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
-                                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
-                                                }
-                                            }
-                                        }
-                                    }
-                                    super.buttonInput1(keyIsDown, options);
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    hold1 = false;
+
+    public void impaleOrFBarrageClient() {
+        if (clientForwardBarrage())
+            return;
+        if (this.canScope()){
+            doScope();
+            return;
+        }
+        super.impaleOrFBarrageClient();
+    }
+    public void starFingerOrFBarrageClient(){
+        if (clientForwardBarrage())
+            return;
+        if (this.canScope()){
+            doScope();
+            return;
+        }
+        if (hasBlock() || hasEntity())
+            return;
+        if (!this.onCooldown(PowerIndex.SKILL_1)) {
+            if (canExecuteMoveWithLevel(getFingerLevel())) {
+                if (this.activePower != PowerIndex.POWER_1) {
+                    ticksForFinger = 0;
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
                 }
             }
-        } else {
-            super.buttonInput1(keyIsDown, options);
+        }
+    }
+
+    public void tryScopeOrFBarrageClient(){
+        if (clientForwardBarrage()) {
+            return;
+        }
+        if (this.canScope()){
+            doScope();
+        }
+    }
+
+    public void doScope(){
+        if (scopeTicks == -1) {
+            scopeTicks = 6;
+            int newLevel = scopeLevel + 1;
+            if (newLevel > 3) {
+                this.setScopeLevel(0);
+            } else {
+                this.getSelf().playSound(ModSounds.STAR_PLATINUM_SCOPE_EVENT, 1.0F, (float) (0.98F + (Math.random() * 0.04F)));
+                this.setScopeLevel(newLevel);
+            }
         }
     }
 

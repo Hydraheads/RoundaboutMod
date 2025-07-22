@@ -1,4 +1,4 @@
-package net.hydra.jojomod.event.powers.stand;
+package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IMob;
@@ -15,7 +15,8 @@ import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
-import net.hydra.jojomod.event.powers.stand.presets.TWAndSPSharedPowers;
+import net.hydra.jojomod.stand.powers.elements.PowerContext;
+import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.DIOVoice;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
@@ -23,7 +24,6 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -189,45 +189,6 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         return ModSounds.STAND_THEWORLD_MUDA3_SOUND_EVENT;
     }
 
-    /**Assault Ability*/
-    @Override
-    public void buttonInput1(boolean keyIsDown, Options options) {
-        if (((!this.isBarrageAttacking() && this.getActivePower() != PowerIndex.BARRAGE_2) ||
-                this.getAttackTimeDuring() < 0) && !this.isGuarding()) {
-            if (this.getSelf().level().isClientSide && !this.isClashing() && this.getActivePower() != PowerIndex.POWER_2
-                    && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
-                    && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
-                if (!((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
-                    if (!isHoldingSneak()) {
-                        if (keyIsDown) {
-                            if (!hold1) {
-                                hold1 = true;
-                                if (!this.onCooldown(PowerIndex.SKILL_1)) {
-                                    if (!this.isGuarding()) {
-                                        if (canExecuteMoveWithLevel(getAssaultLevel())) {
-                                            if (!this.isBarrageCharging() && this.getActivePower() != PowerIndex.BARRAGE_CHARGE_2) {
-                                                if (this.activePower == PowerIndex.POWER_1 || this.activePower == PowerIndex.POWER_1_BONUS) {
-                                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
-                                                } else {
-                                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
-                                                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
-                                                }
-                                                return;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            hold1 = false;
-                        }
-                    }
-                }
-            }
-        }
-        super.buttonInput1(keyIsDown, options);
-    }
 
     @Override
     public float inputSpeedModifiers(float basis){
@@ -237,12 +198,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
 
 
-    @Override
-    public void buttonInput3(boolean keyIsDown, Options options) {
-        if (this.activePower == PowerIndex.POWER_1){
-            return;
-        }
-        super.buttonInput3(keyIsDown,options);
+    public boolean isUsingAssault(){
+        return (this.activePower == PowerIndex.POWER_1);
     }
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
@@ -853,6 +810,91 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
 
     @Override
+    public void powerActivate(PowerContext context) {
+        switch (context) {
+
+            case SKILL_1_NORMAL -> {
+                assaultOrFBarrageClient();
+            }
+            case SKILL_1_CROUCH -> {
+                impaleOrFBarrageClient();
+            }
+
+
+            case SKILL_2_NORMAL -> {
+                blockAndEntityGrabClient();
+            }
+            case SKILL_2_GUARD, SKILL_2_CROUCH_GUARD -> {
+                phaseGrabClient();
+            }
+            case SKILL_2_CROUCH -> {
+                itemGrabClient();
+            }
+
+            case SKILL_3_NORMAL -> {
+                tryToDashClient();
+            }
+            case SKILL_3_CROUCH -> {
+                tryToStandLeapClient();
+            }
+
+            case SKILL_4_NORMAL, SKILL_4_CROUCH, SKILL_4_GUARD, SKILL_4_CROUCH_GUARD -> {
+                doTSClient();
+            }
+
+        }
+    }
+
+    @Override
+    public void tryToDashClient(){
+        if (isUsingAssault())
+            return;
+        super.tryToDashClient();
+    }
+    @Override
+    public void tryToStandLeapClient(){
+        if (isUsingAssault())
+            return;
+        super.tryToStandLeapClient();
+    }
+
+    @Override
+    public void blockAndEntityGrabClient(){
+        if (doAssaultGrabClient())
+            return;
+        super.blockAndEntityGrabClient();
+    }
+    @Override
+    public void itemGrabClient(){
+        if (doAssaultGrabClient())
+            return;
+        super.itemGrabClient();
+    }
+
+    public void assaultOrFBarrageClient(){
+        if (clientForwardBarrage())
+            return;
+        if (hasBlock() || hasEntity())
+            return;
+        if (!this.onCooldown(PowerIndex.SKILL_1)) {
+            if (!this.isGuarding()) {
+                if (canExecuteMoveWithLevel(getAssaultLevel())) {
+                    if (!this.isBarrageCharging() && this.getActivePower() != PowerIndex.BARRAGE_CHARGE_2) {
+                        if (this.activePower == PowerIndex.POWER_1 || this.activePower == PowerIndex.POWER_1_BONUS) {
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                        } else {
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+                        }
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
     public void tickPower(){
 
         //Roundabout.LOGGER.info("AT: "+this.attackTime+" ATD: "+this.attackTimeDuring+" kickstarted: "+this.kickStarted+" APP: "+this.getActivePowerPhase()+" MAX:"+this.getActivePowerPhaseMax());
@@ -883,20 +925,14 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         }
     }
 
-    @Override
-    public void buttonInput2(boolean keyIsDown, Options options) {
-        if (this.getSelf().level().isClientSide && !this.isClashing()) {
-            if (keyIsDown) {
-                if (this.getActivePower() == PowerIndex.POWER_1){
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BONUS, true);
-                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_BONUS);
-                    return;
-                }
-            }
+    public boolean doAssaultGrabClient(){
+        if (this.getActivePower() == PowerIndex.POWER_1){
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BONUS, true);
+            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_BONUS);
+            return true;
         }
-        super.buttonInput2(keyIsDown,options);
+        return false;
     }
-
     @Override
     public Component getSkinName(byte skinId) {
         return getSkinNameT(skinId);

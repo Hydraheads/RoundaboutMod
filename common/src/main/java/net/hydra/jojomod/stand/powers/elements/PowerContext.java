@@ -1,4 +1,4 @@
-package net.hydra.jojomod.stand.powers;
+package net.hydra.jojomod.stand.powers.elements;
 
 public enum PowerContext {
     SKILL_1_NORMAL,

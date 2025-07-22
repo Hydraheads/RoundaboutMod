@@ -1,4 +1,4 @@
-package net.hydra.jojomod.event.powers.stand.presets;
+package net.hydra.jojomod.stand.powers.presets;
 
 import net.hydra.jojomod.access.IBoatItemAccess;
 import net.hydra.jojomod.access.IEntityAndData;
@@ -50,7 +50,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-public class BlockGrabPreset extends PunchingStand{
+public class BlockGrabPreset extends NewPunchingStand {
     public BlockGrabPreset(LivingEntity self) {
         super(self);
     }
@@ -570,57 +570,65 @@ public class BlockGrabPreset extends PunchingStand{
     }
 
     public boolean hold3 = false;
+
+    public boolean isAppropriateToGrab(){
+        if (this.getActivePower() != PowerIndex.POWER_2
+                && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
+                && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
+            return true;
+        }
+        return false;
+    }
+
+
     /**Grab ability*/
-    @Override
-    public void buttonInput2(boolean keyIsDown, Options options) {
-        if (this.getSelf().level().isClientSide && !this.isClashing()) {
-            if (keyIsDown) {
-                if (!hold3) {
-                    hold3 = true;
-                    if (!((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
-                        if (this.getActivePower() != PowerIndex.POWER_2
-                                && (this.getActivePower() != PowerIndex.POWER_2_EXTRA || this.getAttackTimeDuring() < 0) && !hasEntity()
-                                && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0) && !hasBlock()) {
-                            if (!this.onCooldown(PowerIndex.SKILL_2)) {
-                                if (!isHoldingSneak()) {
-                                    Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(),2.1F);
-                                    Entity targetEntity2 = MainUtil.getTargetEntity(this.getSelf(),5F);
-                                    if (targetEntity2 != null) {
-                                        if (targetEntity != null && canGrab(targetEntity)) {
-                                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_EXTRA, true);
-                                            ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_EXTRA, targetEntity.getId());
-                                        }
-                                    } else {
-                                        //ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, backwards);
-                                        BlockHitResult HR = getGrabBlock();
-                                        if (HR != null) {
-                                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
-                                            ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, HR.getBlockPos());
-                                        }
-                                    }
-                                } else {
-                                    ItemStack stack = this.getSelf().getMainHandItem();
-                                    if (!stack.isEmpty()) {
-                                        ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.POWER_2_SNEAK_EXTRA, true,
-                                                ((Player) this.getSelf()).getInventory().selected);
-                                        ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_SNEAK_EXTRA,
-                                                ((Player) this.getSelf()).getInventory().selected);
-                                    }
-                                }
-                            }
-                        } else {
-                            if (hasBlock() || hasEntity()) {
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
-                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
-                            }
-                        }
+    public void blockAndEntityGrabClient(){
+        if (isAppropriateToGrab()) {
+            if (!this.onCooldown(PowerIndex.SKILL_2)) {
+                Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(), 2.1F);
+                Entity targetEntity2 = MainUtil.getTargetEntity(this.getSelf(), 5F);
+                if (targetEntity2 != null) {
+                    if (targetEntity != null && canGrab(targetEntity)) {
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_EXTRA, true);
+                        ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_EXTRA, targetEntity.getId());
+                    }
+                } else {
+                    //ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, backwards);
+                    BlockHitResult HR = getGrabBlock();
+                    if (HR != null) {
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+                        ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, HR.getBlockPos());
                     }
                 }
-            } else {
-                hold3 = false;
             }
+        } else {
+            putDownClient();
         }
     }
+
+    public void itemGrabClient(){
+        if (isAppropriateToGrab()) {
+            if (!this.onCooldown(PowerIndex.SKILL_2)) {
+                ItemStack stack = this.getSelf().getMainHandItem();
+                if (!stack.isEmpty()) {
+                    ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.POWER_2_SNEAK_EXTRA, true,
+                            ((Player) this.getSelf()).getInventory().selected);
+                    ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_SNEAK_EXTRA,
+                            ((Player) this.getSelf()).getInventory().selected);
+                }
+            }
+        } else {
+            putDownClient();
+        }
+    }
+
+    public void putDownClient(){
+        if (hasBlock() || hasEntity()) {
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
+            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
+        }
+    }
+
 
     /**Block Pos ability*/
     public BlockHitResult getGrabBlock(){

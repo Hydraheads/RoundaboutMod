@@ -4,7 +4,7 @@ import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
 import net.hydra.jojomod.entity.visages.mobs.PlayerModifiedNPC;
 import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.event.powers.stand.PowersStarPlatinum;
+import net.hydra.jojomod.stand.powers.PowersStarPlatinum;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
