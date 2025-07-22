@@ -34,51 +34,14 @@ public class RattModel<T extends RattEntity> extends StandModel<T> {
 	private final ModelPart stand;
 	private final ModelPart stand2;
 	private final ModelPart head;
-	private final ModelPart Neck;
-	private final ModelPart Jaw;
-	private final ModelPart Barrel;
-	private final ModelPart Berrel2;
-	private final ModelPart IDK;
 	private final ModelPart body;
-	private final ModelPart RightLeg;
-	private final ModelPart RB;
-	private final ModelPart RBLegIsolate;
-	private final ModelPart RBPlate;
-	private final ModelPart RF;
-	private final ModelPart RFLegIsolate;
-	private final ModelPart RFPlate;
-	private final ModelPart LeftLeg;
-	private final ModelPart LB;
-	private final ModelPart LBLegIsolate;
-	private final ModelPart LBPlate;
-	private final ModelPart LF;
-	private final ModelPart LFLegIsolate;
-	private final ModelPart LFPlate;
+
 
 	public RattModel(ModelPart root) {
 		this.stand = root.getChild("stand");
 		this.stand2 = this.stand.getChild("stand2");
 		this.head = this.stand2.getChild("head");
-		this.Neck = this.head.getChild("Neck");
-		this.Jaw = this.head.getChild("Jaw");
-		this.Barrel = this.head.getChild("Barrel");
-		this.Berrel2 = this.Barrel.getChild("Berrel2");
-		this.IDK = this.head.getChild("IDK");
 		this.body = this.stand2.getChild("body");
-		this.RightLeg = this.body.getChild("RightLeg");
-		this.RB = this.RightLeg.getChild("RB");
-		this.RBLegIsolate = this.RB.getChild("RBLegIsolate");
-		this.RBPlate = this.RB.getChild("RBPlate");
-		this.RF = this.RightLeg.getChild("RF");
-		this.RFLegIsolate = this.RF.getChild("RFLegIsolate");
-		this.RFPlate = this.RF.getChild("RFPlate");
-		this.LeftLeg = this.body.getChild("LeftLeg");
-		this.LB = this.LeftLeg.getChild("LB");
-		this.LBLegIsolate = this.LB.getChild("LBLegIsolate");
-		this.LBPlate = this.LB.getChild("LBPlate");
-		this.LF = this.LeftLeg.getChild("LF");
-		this.LFLegIsolate = this.LF.getChild("LFLegIsolate");
-		this.LFPlate = this.LF.getChild("LFPlate");
 	}
 
 

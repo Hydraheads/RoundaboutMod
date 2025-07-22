@@ -136,8 +136,8 @@ public class RattDartEntity extends AbstractArrow {
             if ( ((LivingEntity)$$1).getEffect(ModEffects.MELTING) != null) {
                 stack = ((LivingEntity) $$1).getEffect(ModEffects.MELTING).getAmplifier() + 1;
             }
-            stack += charged >= PowersRatt.MaxThreshold ? 1 : 0;
-            ((LivingEntity)$$1).addEffect(new MobEffectInstance(ModEffects.MELTING, 900, stack), this);
+            stack += charged >= PowersRatt.ShotThresholds[1] ? 1 : 0;
+            ((LivingEntity)$$1).addEffect(new MobEffectInstance(ModEffects.MELTING, 900, stack),this);
             if ($$1.getType() == EntityType.ENDERMAN) {
                 return;
             }

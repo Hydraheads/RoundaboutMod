@@ -57,11 +57,7 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public StandEntity getNewStandEntity(){
-        byte sk = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-        switch(sk) {
-            case RattEntity.REDD_SKIN -> {return ModEntities.EYEBROW_RATT.create(this.getSelf().level());}
-            default -> {return ModEntities.RATT.create(this.getSelf().level());}
-        }
+        return ModEntities.RATT.create(this.getSelf().level());
     }
 
     public void setShotCooldown(int i) {
@@ -180,7 +176,10 @@ public class PowersRatt extends NewDashPreset {
             }
             case ROTATE -> {
                 if (SE != null) {
-                    SE.setYBodyRot((float) pos.y);
+                    SE.setHeadRotationY((float)pos.y);
+                    SE.setBodyRotationY((float)pos.y);
+                    SE.setHeadRotationY((float)pos.y);
+                    //SE.setYBodyRot((float) pos.y);
                 }
             }
             case PowerIndex.POWER_2 -> {
@@ -338,7 +337,7 @@ public class PowersRatt extends NewDashPreset {
                 }
             }
 
-            case SKILL_3_NORMAL -> {
+            case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 dash();
             }
         }
@@ -609,7 +608,7 @@ public class PowersRatt extends NewDashPreset {
                 RattEntity.MELON_SKIN,
                 RattEntity.SAND_SKIN,
                 RattEntity.AZTEC_SKIN,
-                RattEntity.REDD_SKIN,
+               // RattEntity.REDD_SKIN,
                 RattEntity.SNOWY_SKIN
         );
     }
