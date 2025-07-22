@@ -48,12 +48,11 @@ import javax.annotation.Nullable;
 public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
     private static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(FallenPhantom.class, EntityDataSerializers.BYTE);
 
-    private final float changeHeightBy = 0.4f;
-    private boolean goinUp = false;
-    private boolean goinDown = false;
-    private final float verticalSpeed = 0.1f;
+    public final float changeHeightBy = 0.4f;
+    public final float verticalSpeed = 0.1f;
     private final float slowSpeed = 0.04f;
     private final float nonDrivenSpeed = 0.3f;
+    public float yaccel = 0f;
 
     public FallenPhantom(EntityType<? extends PathfinderMob> $$0, Level $$1) {
         super($$0, $$1);
@@ -174,24 +173,6 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
         }
     }
 
-    public void handlePlrInput(KeyboardPilotInput kpi){
-        if(!this.getActivated()){
-            this.goinUp = false;
-            this.goinDown = false;
-        }
-        if(kpi.ctrlKeyDown){
-            this.goinUp = false;
-            this.goinDown = true;
-        } else if (kpi.jumping) {
-            this.goinUp = true;
-            this.goinDown = false;
-
-        } else{
-            this.goinUp = false;
-            this.goinDown = false;
-        }
-
-    }
 
     public double getCustomJump() {
         return 0.5F;
@@ -342,7 +323,7 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
     @Override
     protected Vec3 getRiddenInput(Player $$0, Vec3 $$1) {
         float $$2 = $$0.xxa;
-        float $$3 = 0;
+        float $$3 = yaccel;
         float $$4 = $$0.zza * 2;
         if ($$4 <= 0.0F) {
             $$4 *= 0.25F;
@@ -350,14 +331,6 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
         if(this.level().getDayTime() % 24000L < 13000){
             $$2 *= 0.2f * 0.75f;
             $$4 *= 0.2f * 0.75f;
-        }
-
-        if(this.goinUp){
-            $$3 = changeHeightBy;
-            this.goinUp = false;
-        } else if (goinDown) {
-            $$3 = -changeHeightBy;
-            this.goinDown = false;
         }
 
         return new Vec3((double) $$2, $$3, (double) $$4);

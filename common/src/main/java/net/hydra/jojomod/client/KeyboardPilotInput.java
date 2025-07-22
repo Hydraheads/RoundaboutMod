@@ -49,7 +49,17 @@ public class KeyboardPilotInput extends Input {
                     user.roundabout$getStandPowers().pilotStandControls(this,ent);
                 }
             } else if (player.isPassenger() && player.getVehicle() instanceof FallenPhantom phant) {
-                phant.handlePlrInput(this);
+                if(this.jumping && this.ctrlKeyDown) {
+                    phant.yaccel = 0;
+                }
+                else if(this.jumping){
+                    phant.yaccel = phant.changeHeightBy;
+                } else if (this.ctrlKeyDown) {
+                    phant.yaccel = -phant.changeHeightBy;
+
+                } else{
+                    phant.yaccel = 0;
+                }
                 
             }
         }
