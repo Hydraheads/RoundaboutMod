@@ -202,7 +202,9 @@ public class ClientToServerPackets {
                             }
                         }
                     });
-                } /**Justice Body Bag Usage Packet*/
+                }
+
+                /**Modification visage saving after client configuration*/
                 if (message.equals(MESSAGES.ModVisageConfigure.value)) {
                     server.execute(() -> {
                         ServerLevel world = (ServerLevel) sender.level();
