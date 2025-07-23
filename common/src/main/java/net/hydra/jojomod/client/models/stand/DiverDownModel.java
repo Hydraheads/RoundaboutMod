@@ -148,6 +148,7 @@ public class DiverDownModel<T extends DiverDownEntity> extends StandModel<T>{
 
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
+
     StandPowers Power = new PowersDiverDown(null);
 
 

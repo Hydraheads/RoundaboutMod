@@ -96,6 +96,7 @@ public class PowersDiverDown extends NewPunchingStand {
             case DiverDownEntity.RED_DIVER -> {return Component.translatable("skins.roundabout.diver_down.reddiver");}
             case DiverDownEntity.ORANGE_DIVER -> {return Component.translatable("skins.roundabout.diver_down.orangediver");}
             case DiverDownEntity.TREASURE_DIVER -> {return Component.translatable("skins.roundabout.diver_down.treasurediver");}
+            case DiverDownEntity.BIRTHDAY_DIVER -> {return Component.translatable("skins.roundabout.diver_down.birthdaydiver");}
             default -> {return Component.translatable("skins.roundabout.diver_down.base");}
         }
     }
@@ -107,7 +108,8 @@ public class PowersDiverDown extends NewPunchingStand {
                 DiverDownEntity.LAVA_DIVER,
                 DiverDownEntity.RED_DIVER,
                 DiverDownEntity.ORANGE_DIVER,
-                DiverDownEntity.TREASURE_DIVER
+                DiverDownEntity.TREASURE_DIVER,
+                DiverDownEntity.BIRTHDAY_DIVER
         );
     }
         public float standReach = 5;

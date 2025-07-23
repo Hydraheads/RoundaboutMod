@@ -14,7 +14,8 @@ public class DiverDownEntity extends FollowingStandEntity {
             LAVA_DIVER = 1,
             RED_DIVER = 2,
             ORANGE_DIVER = 3,
-            TREASURE_DIVER = 4;
+            TREASURE_DIVER = 4,
+            BIRTHDAY_DIVER = 5;
 
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState hideLeg = new AnimationState();
