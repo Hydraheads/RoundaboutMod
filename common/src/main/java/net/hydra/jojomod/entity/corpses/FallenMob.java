@@ -423,6 +423,9 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     @Override
     public void tick(){
         if (!this.level().isClientSide()) {
+            if (controller != null){
+                controller = this.level().getEntity(getController());
+            }
 
             if (this.getTarget() != null && !(this.getTarget().isAlive() || this.getTarget().isRemoved())){
                 this.setTarget(null);

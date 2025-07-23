@@ -2,6 +2,7 @@ package net.hydra.jojomod.client.models.layers;
 
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.entity.visages.JojoNPC;
@@ -31,6 +32,8 @@ public class HeyYaLayer<T extends LivingEntity, A extends HumanoidModel<T>> exte
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
         if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+            if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > - 1)
+                return;
             LivingEntity livent = entity;
             if (!entity.isInvisible()) {
                 if (entity != null) {
