@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.magicians_red;
 
 import net.hydra.jojomod.Roundabout;
 import net.minecraft.client.renderer.texture.SimpleTexture;
@@ -17,7 +17,11 @@ import java.util.Map;
 @Mixin(value = TextureManager.class, priority = 100)
 public abstract class GeckolibCompatAttempt {
 
+    /**This mixin forces the vanilla function on roundabout loaded textures as opposed to geckolib's scuffed function
+     * that makes stand fire look glitchy.*/
+
     //Geckolib destroys vanilla rendering functions so this mixin asserts the vanilla method if the namespace is roundabout
+
     @Shadow @Final private Map<ResourceLocation, AbstractTexture> byPath;
 
     @Shadow public abstract void register(ResourceLocation resourceLocation, AbstractTexture abstractTexture);

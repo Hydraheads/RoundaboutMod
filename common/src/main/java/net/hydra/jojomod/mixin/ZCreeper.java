@@ -28,21 +28,9 @@ import java.util.Collection;
 
 @Mixin(value = Creeper.class)
 public abstract class ZCreeper extends Monster implements ICreeper {
-    /**Minor code for stopping creepers in a barrage*/
-    @Shadow
-    private int oldSwell;
     @Shadow
     private int swell;
 
-    @Shadow public abstract int getSwellDir();
-
-    @Shadow protected abstract void explodeCreeper();
-
-    @Shadow private int maxSwell;
-
-    @Shadow public abstract boolean isIgnited();
-
-    @Shadow public abstract void setSwellDir(int $$0);
 
     @Override
     public int roundabout$getSwell(){
@@ -74,40 +62,5 @@ public abstract class ZCreeper extends Monster implements ICreeper {
     @Inject(method = "registerGoals()V", at = @At(value = "HEAD"))
     protected void roundabout$registerGoals(CallbackInfo ci) {
         this.goalSelector.addGoal(3, new AvoidEntityWhenFacelessGoal<>(this, Player.class, 6.0F, 1.0, 1.2));
-
-    }
-    @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$Tick(CallbackInfo ci) {
-        StandUser user = ((StandUser) this);
-
-        if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
-            /**Soft and Wet creepers don't make a sound*/
-            ci.cancel();
-            if (this.isAlive()) {
-                this.oldSwell = this.swell;
-                if (this.isIgnited()) {
-                    this.setSwellDir(1);
-                }
-
-                int $$0 = this.getSwellDir();
-                if ($$0 > 0 && this.swell == 0) {
-                    PW.creeperSpawnBubble();
-                }
-
-                this.swell += $$0;
-                if (this.swell < 0) {
-                    this.swell = 0;
-                }
-
-                if (this.swell >= this.maxSwell) {
-                    this.swell = this.maxSwell;
-                    this.explodeCreeper();
-                }
-            }
-
-            super.tick();
-        }
-
-
     }
 }

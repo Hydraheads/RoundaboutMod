@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.barrage;
 
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.entity.Mob;
@@ -10,14 +10,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(RangedAttackGoal.class)
-public class ZProjectileAtk {
-    /**Minor code, this Should prevent repeated crossbow charging on barrage*/
-    @Shadow
-    private final Mob mob;
-
-    public ZProjectileAtk(Mob mob) {
-        this.mob = mob;
-    }
+public class DazeProjectileAtk {
+    /**Minor code, this Should prevent range weapon usage from enemies on barrage*/
 
 
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
@@ -28,5 +22,17 @@ public class ZProjectileAtk {
     ) {
             ci.cancel();
         }
+    }
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    @Shadow
+    private final Mob mob;
+
+    public DazeProjectileAtk(Mob mob) {
+        this.mob = mob;
     }
 }
