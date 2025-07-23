@@ -13,6 +13,7 @@ import java.util.List;
 
 @Mixin(AreaEffectCloud.class)
 public class AccessAreaOfEffectCloud implements IAreaOfEffectCloud {
+
     /**There is no reason for these to be private or protected, we should be able to tap into them.*/
     @Unique
     @Override

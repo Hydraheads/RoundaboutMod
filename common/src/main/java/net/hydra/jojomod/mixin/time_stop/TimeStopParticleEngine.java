@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.time_stop;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import net.hydra.jojomod.access.IParticleAccess;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.mixin.access.AccessParticle;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
@@ -31,12 +32,10 @@ import java.util.Map;
 import java.util.Queue;
 
 @Mixin(ParticleEngine.class)
-public class ZParticleEngine {
-    @Shadow
-    protected ClientLevel level;
+public class TimeStopParticleEngine {
 
-    @Shadow @Final
-    private Map<ParticleRenderType, Queue<Particle>> particles;
+    /**Runs a slightly modified version of the particle engine code while time stop is activated, so
+     * particles can render frozen in time.*/
 
 
     /**When a particle is created, mark it as created in a TS or not, particles made in a TS tick*/
@@ -44,9 +43,9 @@ public class ZParticleEngine {
             method = "add(Lnet/minecraft/client/particle/Particle;)V", at = @At(value = "HEAD"))
     private Particle roundaboutMarkParticleTS(Particle $$0) {
         if ($$0 != null && level != null) {
-            if (((TimeStop) level).inTimeStopRange(new Vec3i((int) ((ZParticleAccess) $$0).roundabout$getX(),
-                    (int) ((ZParticleAccess) $$0).roundabout$getY(),
-                    (int) ((ZParticleAccess) $$0).roundabout$getZ()))) {
+            if (((TimeStop) level).inTimeStopRange(new Vec3i((int) ((AccessParticle) $$0).roundabout$getX(),
+                    (int) ((AccessParticle) $$0).roundabout$getY(),
+                    (int) ((AccessParticle) $$0).roundabout$getZ()))) {
                 ((IParticleAccess) $$0).roundabout$setRoundaboutIsTimeStopCreated(true);
             }
         }
@@ -55,7 +54,7 @@ public class ZParticleEngine {
 
     @Inject(method = "tickParticle", at = @At("HEAD"), cancellable = true)
     void doNotTickParticleWhenTimeStopped(Particle particle, CallbackInfo ci) {
-        ZParticleAccess particle1 = (ZParticleAccess) particle;
+        AccessParticle particle1 = (AccessParticle) particle;
         if (!(particle instanceof ItemPickupParticle) && particle1 != null) {
             if (!((IParticleAccess) particle1).roundabout$getRoundaboutIsTimeStopCreated() && ((TimeStop) level).inTimeStopRange(new Vec3i((int) particle1.roundabout$getX(),
                     (int) particle1.roundabout$getY(),
@@ -96,7 +95,7 @@ public class ZParticleEngine {
                     for (Particle $$10 : $$7) {
                         try {
 
-                            ZParticleAccess particle1 = ((ZParticleAccess) $$10);
+                            AccessParticle particle1 = ((AccessParticle) $$10);
                             float tickDeltaFixed = $$4;
                             if (particle1 != null && !((IParticleAccess) particle1).roundabout$getRoundaboutIsTimeStopCreated() && !($$10 instanceof ItemPickupParticle)) {
                                 Vec3i range = new Vec3i((int) particle1.roundabout$getX(),
@@ -131,4 +130,16 @@ public class ZParticleEngine {
             ci.cancel();
         }
     }
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+
+    @Shadow
+    protected ClientLevel level;
+
+    @Shadow @Final
+    private Map<ParticleRenderType, Queue<Particle>> particles;
 }
