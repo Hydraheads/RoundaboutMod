@@ -14,6 +14,9 @@ import static net.minecraft.client.renderer.block.BlockModelShaper.stateProperti
 
 @Mixin(BlockModelShaper.class)
 public abstract class ZBlockModelShaper {
+
+    /**Dynamic fog blocks mixin*/
+
 /**
     @Inject(method="stateToModelLocation(Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/world/level/block/state/BlockState;)Lnet/minecraft/client/resources/model/ModelResourceLocation;", at=@At("HEAD"), cancellable = true)
     private static void roundabout$stateToModelLocation(ResourceLocation identifier, BlockState state, CallbackInfoReturnable<ModelResourceLocation> cir)

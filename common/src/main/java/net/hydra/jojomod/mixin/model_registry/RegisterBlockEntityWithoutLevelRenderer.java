@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.model_registry;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -11,7 +11,6 @@ import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
@@ -23,22 +22,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BlockEntityWithoutLevelRenderer.class)
-public class ZBlockEntityWithoutLevelRenderer implements IBlockEntityWithoutLevelRenderer {
+public class RegisterBlockEntityWithoutLevelRenderer implements IBlockEntityWithoutLevelRenderer {
 
-    @Unique
-    private HarpoonModel roundabout$harpoonModel;
-
-    @Shadow
-    @Final
-    private EntityModelSet entityModelSet;
-
-    @Unique
-    @Override
-    public void roundabout$bakeHarpoonModel(){
-    }
-    @Inject(method = "onResourceManagerReload", at = @At(value = "TAIL"))
-    public void roundabout$render(ResourceManager $$0, CallbackInfo ci){
-    }
+    /**Difficult to explain the significance here, but the harpoon can exist without a harpoon entity
+     * and needs this to render, similar to tridents
+     * */
     @Inject(method = "renderByItem", at = @At(value = "TAIL"))
     public void roundabout$render2(ItemStack $$0, ItemDisplayContext $$1, PoseStack $$2, MultiBufferSource $$3, int $$4, int $$5, CallbackInfo ci){
 
@@ -52,5 +40,15 @@ public class ZBlockEntityWithoutLevelRenderer implements IBlockEntityWithoutLeve
             }
             $$2.popPose();
         }
+    }
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    @Unique
+    @Override
+    public void roundabout$bakeHarpoonModel(){
     }
 }

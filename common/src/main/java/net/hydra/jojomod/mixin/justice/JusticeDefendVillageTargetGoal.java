@@ -1,9 +1,8 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.justice;
 
 import net.hydra.jojomod.access.IIronGolem;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.ShapeShifts;
-import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.target.DefendVillageTargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
@@ -13,7 +12,6 @@ import net.minecraft.world.phys.AABB;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -23,17 +21,9 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 @Mixin(DefendVillageTargetGoal.class)
-public class ZDefendVillageTargetGoal {
+public class JusticeDefendVillageTargetGoal {
 
-    @Shadow
-    @Final
-    private IronGolem golem;
-    @Nullable
-    @Shadow
-    private LivingEntity potentialTarget;
-    @Shadow
-    @Final
-    private TargetingConditions attackTargeting;
+    /**Part two of the Iron Golem aggro mixin for justice morphs, helps iron golems detect or get aggro negated */
 
     @Inject(method = "start", at = @At(value = "HEAD"))
     protected void roundabout$start(CallbackInfo ci) {
@@ -60,4 +50,19 @@ public class ZDefendVillageTargetGoal {
             }
         }
     }
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    @Shadow
+    @Final
+    private IronGolem golem;
+    @Nullable
+    @Shadow
+    private LivingEntity potentialTarget;
+    @Shadow
+    @Final
+    private TargetingConditions attackTargeting;
 }

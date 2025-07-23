@@ -1,7 +1,6 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.keyboard;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.gui.NoCancelInputScreen;
@@ -18,30 +17,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Map;
 
 @Mixin(KeyMapping.class)
-public class ZKeyMapping implements IKeyMapping {
-    @Shadow
-    private InputConstants.Key key;
+public class KeysKeyMapping implements IKeyMapping {
 
-    @Unique
-    @Override
-    public InputConstants.Key roundabout$justTellMeTheKey(){
-        return key;
-    }
+    /**No cancel input screens let you continue walking and pressing buttons like jump while in a gui,
+     * they are important for active combat selection like the soft and wet bubble menu*/
 
-    @Shadow
-    @Final
-    private static Map<String, KeyMapping> ALL;
 
-    @Shadow
-    private void release(){
-
-    }
-
-    @Unique
-    @Override
-    public void roundabout$release(){
-        release();
-    }
     @Inject(method = "releaseAll()V", at = @At(value = "HEAD"), cancellable = true)
     private static void roundabout$KP1(CallbackInfo ci) {
         Minecraft placingBlocksAndSh = Minecraft.getInstance();
@@ -55,4 +36,30 @@ public class ZKeyMapping implements IKeyMapping {
             }
         }
     }
+
+    @Unique
+    @Override
+    public InputConstants.Key roundabout$justTellMeTheKey(){
+        return key;
+    }
+    @Unique
+    @Override
+    public void roundabout$release(){
+        release();
+    }
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    @Shadow
+    @Final
+    private static Map<String, KeyMapping> ALL;
+
+    @Shadow
+    private void release(){
+    }
+    @Shadow
+    private InputConstants.Key key;
+
 }

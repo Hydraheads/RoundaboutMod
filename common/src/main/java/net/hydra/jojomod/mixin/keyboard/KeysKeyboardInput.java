@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.keyboard;
 
 import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
@@ -18,15 +18,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(KeyboardInput.class)
-public abstract class ZKeyboardInput extends Input {
+public abstract class KeysKeyboardInput extends Input {
 
-    @Shadow @Final private Options options;
-
-    @Unique
-    private KeyboardPilotInput roundabout$keyPilot;
-
-    @Unique
-    private KeyboardPilotInput roundabout$keyRider;
+    /**Capture inputs for moving around entities that are not players.*/
 
     @Inject(method = "tick(ZF)V", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$tick(boolean $$0, float $$1, CallbackInfo ci) {
@@ -60,4 +54,19 @@ public abstract class ZKeyboardInput extends Input {
             }
         }
     }
+
+    @Unique
+    private KeyboardPilotInput roundabout$keyPilot;
+
+    @Unique
+    private KeyboardPilotInput roundabout$keyRider;
+
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    @Shadow @Final private Options options;
+
 }

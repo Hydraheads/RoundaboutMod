@@ -1,23 +1,16 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.gui.config.ConfigScreen;
 import net.hydra.jojomod.client.gui.config.ConfigType;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.layouts.GridLayout;
 import net.minecraft.client.gui.screens.OptionsScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
-import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -27,15 +20,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(OptionsScreen.class)
-public abstract class ZOptionsScreen extends Screen {
+public abstract class ConfigOptionsScreen extends Screen {
 
-
-    @Shadow @Final private Screen lastScreen;
-
-    protected ZOptionsScreen(Component $$0) {
-        super($$0);
-    }
-
+    /**Peacefully adds the config button to the options screen button list*/
     @Inject(method = "init", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/client/gui/layouts/GridLayout;arrangeElements()V",
             shift = At.Shift.BEFORE),
@@ -54,4 +41,14 @@ public abstract class ZOptionsScreen extends Screen {
         );
     }
 
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    @Shadow @Final private Screen lastScreen;
+
+    protected ConfigOptionsScreen(Component $$0) {
+        super($$0);
+    }
 }
