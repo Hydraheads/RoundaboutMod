@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.block_throw;
 
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -13,10 +13,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Boat.class)
-public abstract class ZBoat extends Entity{
-    public ZBoat(EntityType<?> $$0, Level $$1) {
-        super($$0, $$1);
-    }
+public abstract class ThrowBoat extends Entity{
+    /**A mixin dedicatied to preventing being pushed by boats you grab and throw.*/
 
     @Inject(method = "canCollideWith", at = @At("HEAD"), cancellable = true)
     public void roundabout$canCollideWith(Entity $$0, CallbackInfoReturnable<Boolean> cir) {
@@ -31,5 +29,13 @@ public abstract class ZBoat extends Entity{
         if ($$0 instanceof StandEntity le && le.getUser() != null && ((StandUser)le.getUser()).roundabout$getStandPowers().cancelCollision(this)){
             cir.setReturnValue(false);
         }
+    }
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    public ThrowBoat(EntityType<?> $$0, Level $$1) {
+        super($$0, $$1);
     }
 }
