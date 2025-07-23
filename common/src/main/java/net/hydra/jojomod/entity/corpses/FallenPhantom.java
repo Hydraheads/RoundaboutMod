@@ -5,13 +5,16 @@ import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.mixin.ZMinecraftClient;
 import net.minecraft.client.Minecraft;
+import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ChunkTaskPriorityQueueSorter;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -330,8 +333,9 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
             $$4 *= 0.25F;
         }
         if(this.level().getDayTime() % 24000L < 13000){
-            $$2 *= 0.2f * 0.75f;
-            $$4 *= 0.2f * 0.75f;
+            $$2 = 0;
+            $$3 = -verticalSpeed;
+            $$4 = 0;
         }
 
         return new Vec3((double) $$2, $$3, (double) $$4);
@@ -342,6 +346,9 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
             $$0.setYRot(this.getYRot());
             $$0.setXRot(this.getXRot());
             $$0.startRiding(this);
+            $$0.sendSystemMessage(Component.translatable("text.roundabout.riding_flying_creature"));
+
+
         }
     }
 
