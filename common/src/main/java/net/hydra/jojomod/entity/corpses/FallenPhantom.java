@@ -65,6 +65,10 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
     }
 
 
+    @Override
+    public boolean isNoGravity() {
+        return true;
+    }
 
     @Override
     public String getData() {
@@ -117,13 +121,10 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
             for(Entity ent : this.getPassengers()){
                 ent.unRide();
             }
-            this.setNoGravity(false);
             //Drop this dude
             if(!this.onGround() && this.level().getBlockState(new BlockPos((int) this.getX(),(int) (this.getY()-0.1),(int) this.getZ())).isAir() && !this.level().getBlockState(new BlockPos((int) this.getX(),(int) (this.getY()-0.1),(int) this.getZ())).isSolid()){
                 this.moveRelative(0.4f,new Vec3(0,-verticalSpeed,0));
             }
-        } else{
-            this.setNoGravity(true);
         }
         if (this.level().isClientSide && this.getActivated()) {
             float f = Mth.cos((float)(this.getUniqueFlapTickOffset() + this.tickCount) * 7.448451f * ((float)Math.PI / 180) + (float)Math.PI);
