@@ -2,6 +2,7 @@ package net.hydra.jojomod.client.models.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IHumanoidModelAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.StandIcons;
@@ -43,6 +44,9 @@ public class StoneLayer<T extends LivingEntity, M extends HumanoidModel<T>, A ex
     @Override
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int integ, T var4,
                        float var5, float var6, float var7, float var8, float var9, float var10) {
+        if (((IEntityAndData)var4).roundabout$getTrueInvisibility() > - 1)
+            return;
+
         transformedModel = livingEntityRenderer.getModel();
         byte curse = ((StandUser)var4).roundabout$getLocacacaCurse();
         if (curse > -1) {

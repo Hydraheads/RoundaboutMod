@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.barrage;
 
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.entity.ai.goal.RangedCrossbowAttackGoal;
@@ -12,11 +12,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(RangedCrossbowAttackGoal.class)
-public class ZCrossbowAtk<T extends Monster & CrossbowAttackMob> {
+public class DazeCrossbowAtk<T extends Monster & CrossbowAttackMob> {
     /**Minor code preventing crossbow charging on barrage*/
-    @Final
-    @Shadow
-    private T mob;
 
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$Tick(CallbackInfo ci) {
@@ -26,4 +23,12 @@ public class ZCrossbowAtk<T extends Monster & CrossbowAttackMob> {
             ci.cancel();
         }
     }
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+    @Final
+    @Shadow
+    private T mob;
 }

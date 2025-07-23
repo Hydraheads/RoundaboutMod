@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(EnderMan.class)
 public abstract class AccessEnderMan extends Monster implements NeutralMob, IEnderMan {
+
     /**A simple mixin to make endermen teleportation publicly accessible.*/
     @Unique
     public void roundabout$teleport(){

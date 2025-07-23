@@ -3,6 +3,7 @@ package net.hydra.jojomod.client.models.layers;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.client.ClientUtil;
@@ -40,6 +41,8 @@ public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
 
         if (entity != null) {
+            if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > - 1)
+                return;
             StandUser user = ((StandUser) entity);
             boolean hasMandom = (user.roundabout$getStandPowers() instanceof PowersMandom);
             boolean hasMandomOut = (user.roundabout$getActive() && hasMandom);

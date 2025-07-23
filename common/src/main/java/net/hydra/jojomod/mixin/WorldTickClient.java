@@ -13,7 +13,7 @@ import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.SetBlockInstance;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
+import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;

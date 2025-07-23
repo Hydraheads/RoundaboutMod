@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.animations;
 
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.Poses;
@@ -27,14 +27,11 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Mixin(ElytraModel.class)
-public abstract class ZElytraModel<T extends LivingEntity> extends AgeableListModel<T> {
+public abstract class AnimationsElytraModel<T extends LivingEntity> extends AgeableListModel<T> {
 
-    @Shadow
-    @Final
-    private ModelPart rightWing;
-    @Shadow
-    @Final
-    private ModelPart leftWing;
+
+    /**Ports the animation system of the modern Minecraft Hierarchical models to the Elytra,
+     * so it can be animated smoothly, and apply the same transformations as on the player.*/
 
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "HEAD"))
     public void roundabout$SetupAnim4(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
@@ -140,4 +137,19 @@ public abstract class ZElytraModel<T extends LivingEntity> extends AgeableListMo
         }
         return Optional.empty();
     }
+
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+
+
+    @Shadow
+    @Final
+    private ModelPart rightWing;
+    @Shadow
+    @Final
+    private ModelPart leftWing;
 }

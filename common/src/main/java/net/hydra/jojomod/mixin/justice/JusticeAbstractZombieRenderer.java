@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.justice;
 
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.corpses.renderers.FallenZombieRenderer;
@@ -14,7 +14,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AbstractZombieRenderer.class)
-public class ZAbstractZombieRenderer {
+public class JusticeAbstractZombieRenderer {
+
+    /**Justice makes a zombie render differently. Why? Well, you can morph into a zombie, and it uses the zombie
+     * renderer. But you can also make a zombie look like a team member with the justice team colors. Lets say you
+     * select green team- your zombie morph will look like a green team zombie.*/
 
     @Inject(method = "getTextureLocation(Lnet/minecraft/world/entity/monster/Zombie;)Lnet/minecraft/resources/ResourceLocation;", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$getTexture(Zombie $$0, CallbackInfoReturnable<ResourceLocation> cir) {

@@ -1,10 +1,9 @@
 package net.hydra.jojomod.entity.pathfinding;
 
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.projectile.ConcealedFlameObjectEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.stand.PowersMagiciansRed;
+import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -12,16 +11,10 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.UUID;
 
 public class GroundHurricaneEntity extends GroundPathfindingStandAttackEntity {
     public GroundHurricaneEntity(EntityType<? extends GroundPathfindingStandAttackEntity> $$0, Level $$1) {

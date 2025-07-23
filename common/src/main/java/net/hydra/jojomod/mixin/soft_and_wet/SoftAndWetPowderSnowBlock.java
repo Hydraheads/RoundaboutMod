@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.soft_and_wet;
 
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.entity.Entity;
@@ -10,8 +10,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PowderSnowBlock.class)
-public class ZPowderSnowBlock {
+public class SoftAndWetPowderSnowBlock {
 
+    /**With the encasement bubble, you are able to walk on powder snow.*/
     @Inject(method = "canEntityWalkOnPowderSnow(Lnet/minecraft/world/entity/Entity;)Z", at = @At(value = "HEAD"), cancellable = true)
     private static void roundabout$isEmpty(Entity $$0, CallbackInfoReturnable<Boolean> cir) {
         if ($$0 instanceof LivingEntity LE){
