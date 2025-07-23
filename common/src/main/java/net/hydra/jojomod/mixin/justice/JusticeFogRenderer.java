@@ -1,10 +1,9 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.justice;
 
 
 import com.mojang.blaze3d.shaders.FogShape;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.access.IClientLevel;
-import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -17,54 +16,21 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.material.FogType;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.List;
-
 @Mixin(FogRenderer.class)
-public class ZFogRenderer {
+public class JusticeFogRenderer {
 
-    @Final
-    @Shadow
-    private static int WATER_FOG_DISTANCE = 96;
-    @Final
-    @Shadow
-    public static float BIOME_FOG_TRANSITION_TIME = 5000.0F;
-    @Shadow
-    private static float fogRed;
-    @Shadow
-    private static float fogGreen;
-    @Shadow
-    private static float fogBlue;
-    @Shadow
-    private static int targetBiomeFog;
-    @Shadow
-    private static int previousBiomeFog;
-    @Shadow
-    private static long biomeChangedTime;
+    /**This is the main part of where the fog rendering magic, the other part happens in the ClientLevel.
+     * Vanilla fog rendering is relatively complex, so it may take a bit of examing to understand the code.
+     * Star Platinum's scoping and Justice users can see through the fog better.*/
 
-    @Unique
-    private static boolean roundabout$tempBlind = false;
-
-    @Inject(method = "setupFog(Lnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/FogRenderer$FogMode;FZF)V", at = @At(value = "TAIL"))
-    private static void roundabout$setupFogTail(Camera $$0, FogRenderer.FogMode $$1, float $$2, boolean $$3, float $$4, CallbackInfo ci) {
-        if (roundabout$tempBlind){
-            roundabout$tempBlind = false;
-            if ($$0.getEntity() instanceof Player PE){
-                PE.removeEffect(MobEffects.BLINDNESS);
-            }
-        }
-    }
     @Inject(method = "setupFog(Lnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/FogRenderer$FogMode;FZF)V", at = @At(value = "HEAD"),cancellable = true)
     private static void roundabout$setupFog(Camera $$0, FogRenderer.FogMode $$1, float $$2, boolean $$3, float $$4, CallbackInfo ci) {
         if (Minecraft.getInstance().player != null){

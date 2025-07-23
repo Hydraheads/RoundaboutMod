@@ -109,16 +109,15 @@ public abstract class TimeStopProjectile extends Entity implements IProjectileAc
         this.checkInsideBlocks();
     }
 
-    @Shadow
-    public void shoot(double $$0, double $$1, double $$2, float $$3, float $$4) {
-    }
-
-
 
     /**Shadows, ignore
      * -------------------------------------------------------------------------------------------------------------
      * */
 
+
+    @Shadow
+    public void shoot(double $$0, double $$1, double $$2, float $$3, float $$4) {
+    }
 
     @Shadow
     protected void onHit(HitResult $$0){

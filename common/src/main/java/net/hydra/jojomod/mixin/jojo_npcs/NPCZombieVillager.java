@@ -1,8 +1,7 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.jojo_npcs;
 
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;
@@ -13,28 +12,21 @@ import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.monster.ZombieVillager;
 import net.minecraft.world.entity.npc.VillagerDataHolder;
-import net.minecraft.world.entity.npc.VillagerType;
-import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ZombieVillager.class)
-public abstract class ZZombieVillager extends Zombie implements VillagerDataHolder {
-    public ZZombieVillager(EntityType<? extends Zombie> $$0, Level $$1) {
-        super($$0, $$1);
-    }
+public abstract class NPCZombieVillager extends Zombie implements VillagerDataHolder {
 
+    /**Replace naturally spawned zombie villagers with Zombie Aestheticians and Zombie versions of other JoJo NPCs*/
     @Unique
     public boolean roundabout$ceaseSound = false;
 
-    /**Replace naturally spawned zombie villagers with Zombie Aestheticians*/
     @Inject(method = "getAmbientSound", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$playAmbientSound(CallbackInfoReturnable<SoundEvent> cir) {
         if (roundabout$ceaseSound) {
@@ -56,4 +48,14 @@ public abstract class ZZombieVillager extends Zombie implements VillagerDataHold
             }
         }
     }
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    public NPCZombieVillager(EntityType<? extends Zombie> $$0, Level $$1) {
+        super($$0, $$1);
+    }
+
 }
