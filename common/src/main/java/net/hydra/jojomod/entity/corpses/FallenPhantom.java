@@ -122,7 +122,7 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
                 ent.unRide();
             }
             //Drop this dude
-            if(!this.onGround() && this.level().getBlockState(new BlockPos((int) this.getX(),(int) (this.getY()-0.1),(int) this.getZ())).isAir() && !this.level().getBlockState(new BlockPos((int) this.getX(),(int) (this.getY()-0.1),(int) this.getZ())).isSolid()){
+            if(!this.onGround() && this.level().getBlockState(new BlockPos((int) this.getX(),(int) (this.getY()-0.1),(int) this.getZ())).isAir() && !this.level().getBlockState(new BlockPos((int) this.getX(),(int) (this.getY()-0.1),(int) this.getZ())).isSolid() && this.getPassengers().isEmpty()){
                 this.moveRelative(0.4f,new Vec3(0,-verticalSpeed,0));
             }
         }
