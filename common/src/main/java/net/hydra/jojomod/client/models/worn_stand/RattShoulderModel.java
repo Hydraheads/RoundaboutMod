@@ -66,8 +66,8 @@ public class RattShoulderModel extends PsuedoHierarchicalModel {
             "textures/stand/ratt/aztec.png");
     public static ResourceLocation snowy = new ResourceLocation(Roundabout.MOD_ID,
             "textures/stand/ratt/snowy.png");
-    public static ResourceLocation redd = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/stand/ratt/redd.png");
+    public static ResourceLocation tower = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/ratt/tower.png");
 
 
     public ResourceLocation getTextureLocation(Entity context, byte skin){
@@ -79,7 +79,7 @@ public class RattShoulderModel extends PsuedoHierarchicalModel {
             case RattEntity.SAND_SKIN -> {return sand;}
             case RattEntity.AZTEC_SKIN -> {return aztec;}
             case RattEntity.SNOWY_SKIN -> {return snowy;}
-            case RattEntity.REDD_SKIN -> {return redd;}
+            case RattEntity.TOWER_SKIN -> {return tower;}
             default -> {return base;}
         }
     }

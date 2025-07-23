@@ -25,7 +25,7 @@ public class RattRenderer extends StandRenderer<RattEntity> {
     private static final ResourceLocation MELON_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/melon.png");
     private static final ResourceLocation SAND_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/sand.png");
     private static final ResourceLocation AZTEC_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/aztec.png");
-    private static final ResourceLocation REDD_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/redd.png");
+    private static final ResourceLocation TOWER_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/tower.png");
     private static final ResourceLocation SNOWY_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/snowy.png");
 
 
@@ -41,7 +41,7 @@ public class RattRenderer extends StandRenderer<RattEntity> {
             case RattEntity.MELON_SKIN -> {return MELON_SKIN;}
             case RattEntity.SAND_SKIN -> {return SAND_SKIN;}
             case RattEntity.AZTEC_SKIN -> {return AZTEC_SKIN;}
-            case RattEntity.REDD_SKIN -> {return REDD_SKIN;}
+            case RattEntity.TOWER_SKIN -> {return TOWER_SKIN;}
             case RattEntity.SNOWY_SKIN -> {return SNOWY_SKIN;}
             default -> {return ANIME_SKIN;}
         }

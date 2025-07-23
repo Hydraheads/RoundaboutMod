@@ -18,27 +18,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AnvilMenu.class)
 public abstract class ZAnvilMenu extends ItemCombinerMenu {
-    @Final
-    @Shadow
-    public static int INPUT_SLOT = 0;
-    @Final
-    @Shadow
-    public static int ADDITIONAL_SLOT = 1;
-    @Final
-    @Shadow
-    public static int RESULT_SLOT = 2;
-    @Final
-    @Shadow
-    private static Logger LOGGER = LogUtils.getLogger();
-    @Final
-    @Shadow
-    private static boolean DEBUG_COST = false;
-    @Final
-    @Shadow
-    public static int MAX_NAME_LENGTH = 50;
-    @Shadow
-    @javax.annotation.Nullable
-    private String itemName;
     private final DataSlot cost = DataSlot.standalone();
     public ZAnvilMenu(@Nullable MenuType<?> $$0, int $$1, Inventory $$2, ContainerLevelAccess $$3) {
         super($$0, $$1, $$2, $$3);

@@ -1,7 +1,6 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.barrage;
 
 import net.hydra.jojomod.event.powers.StandUser;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.SwellGoal;
 import net.minecraft.world.entity.monster.Creeper;
@@ -13,11 +12,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(SwellGoal.class)
-public abstract class ZCreeperIgnite extends Goal {
-    /**Minor code for stopping creepers in a barrage*/
-    @Final
-    @Shadow
-    private Creeper creeper;
+public abstract class DazeCreeperIgnite extends Goal {
+    /**This mixin is in relation to barrages disabling mobs from attacking or doing things.
+     * The daze that barrages inflict prevent creepers from swelling up and exploding.
+     *
+     * This mixin also makes it so when the creeper is using barrages or attacks
+     * that it shouldn't explode during, it stops. Complements the DazeCreeper Mixin.*/
 
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$Tick(CallbackInfo ci) {
@@ -28,4 +28,13 @@ public abstract class ZCreeperIgnite extends Goal {
            ci.cancel();
         }
     }
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+
+    @Final
+    @Shadow
+    private Creeper creeper;
 }

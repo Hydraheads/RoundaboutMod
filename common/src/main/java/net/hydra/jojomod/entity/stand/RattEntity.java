@@ -32,7 +32,7 @@ public class RattEntity extends StandEntity {
             MELON_SKIN = 3,
             SAND_SKIN = 4,
             AZTEC_SKIN = 5,
-            REDD_SKIN = 6,
+            TOWER_SKIN = 6,
             SNOWY_SKIN = 7;
 
 
@@ -42,7 +42,7 @@ public class RattEntity extends StandEntity {
                 MANGA_SKIN,
                 MELON_SKIN,
                 SAND_SKIN,
-                REDD_SKIN,
+                TOWER_SKIN,
                 SNOWY_SKIN
         );
     }

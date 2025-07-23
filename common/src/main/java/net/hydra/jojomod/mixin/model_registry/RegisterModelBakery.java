@@ -1,6 +1,5 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.model_registry;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ModItemModels;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.resources.model.ModelBakery;
@@ -13,23 +12,16 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Map;
 
 @Mixin(ModelBakery.class)
-public abstract class ZModelBakery {
-    @Shadow
-    protected abstract void loadTopLevel(ModelResourceLocation modelId);
+public abstract class RegisterModelBakery {
 
-    @Shadow @Final private Map<ResourceLocation, UnbakedModel> topLevelModels;
-
-    @Shadow
-    public UnbakedModel getModel(ResourceLocation $$0) {
-        return null;
-    }
-
+    /**This is the means of registering item models to the game besides the default ones that apply normally, for instance
+     * making a book have a new texture if it has a certain name
+     * */
     @Inject(method = "<init>", at = @At(value = "TAIL"))
     public void roundabout$addITEMNAME(BlockColors $$0, ProfilerFiller $$1, Map $$2, Map $$3, CallbackInfo ci) {
         this.loadTopLevel(ModItemModels.HARPOON_IN_HAND);
@@ -101,6 +93,21 @@ public abstract class ZModelBakery {
         this.topLevelModels.get(ModItemModels.STREET_SIGN_DANGER_HELD_D).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.STREET_SIGN_DANGER_HELD_D2).resolveParents(this::getModel);
     }
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    @Shadow
+    protected abstract void loadTopLevel(ModelResourceLocation modelId);
+
+    @Shadow @Final private Map<ResourceLocation, UnbakedModel> topLevelModels;
+
+    @Shadow
+    public UnbakedModel getModel(ResourceLocation $$0) {
+        return null;
+    }
+
 
     /**
     @ModifyVariable(method="getModel", at=@At("HEAD"),ordinal = 0)
