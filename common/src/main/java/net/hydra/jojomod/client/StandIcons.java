@@ -369,6 +369,8 @@ public class StandIcons {
 
     public static final ResourceLocation DIVER_DOWN_VAULT = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/diver_down/stand_ledge_grab.png");
+    public static final ResourceLocation DIVER_SELECTION = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/diver_down/diver_selection.png");
 
     public static final ResourceLocation EERIE_SKIN = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/eerie_shift.png");

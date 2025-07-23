@@ -10,6 +10,7 @@ import net.hydra.jojomod.stand.powers.PowersDiverDown;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.world.entity.Entity;
 
 public class DiverDownModel<T extends DiverDownEntity> extends StandModel<T>{
     public DiverDownModel(ModelPart root) {
@@ -148,6 +149,8 @@ public class DiverDownModel<T extends DiverDownEntity> extends StandModel<T>{
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
     StandPowers Power = new PowersDiverDown(null);
+
+
 
     @Override
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {

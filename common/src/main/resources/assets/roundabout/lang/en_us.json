@@ -898,6 +898,9 @@
   "ability.roundabout.place_invis": "Invisible Block Placement",
   "ability.roundabout.place_invis.desc": "Place blocks, passing your invisibility duration down to them. Only works while you are invisible.",
 
+  "ability.roundabout.diver_selection": "Diver Selection",
+  "ability.roundabout.diver_selection.desc": "Opens an impairment wheel which you can apply effects onto yourself",
+
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Locked",
   "ability.roundabout.locked.desc": "Unlock at Development Stage %1$s",
@@ -1119,6 +1122,11 @@
 
   "skins.roundabout.diver_down.base": "Part 6",
   "skins.roundabout.diver_down.lavadiver": "Lava Diver",
+  "skins.roundabout.diver_down.reddiver": "Red Diver",
+  "skins.roundabout.diver_down.orangediver": "Orange Diver",
+  "skins.roundabout.diver_down.treasurediver": "Treasure Diver",
+
+
 
 
   "skins.roundabout.achtung_baby.base": "Has No Form",

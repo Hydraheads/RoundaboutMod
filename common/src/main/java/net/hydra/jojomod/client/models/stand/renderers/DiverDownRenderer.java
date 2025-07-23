@@ -22,13 +22,18 @@ public class DiverDownRenderer extends StandRenderer<DiverDownEntity>{
         switch (BT) {
             case DiverDownEntity.PART_6 -> {return PART_6;}
             case DiverDownEntity.LAVA_DIVER -> {return LAVA_DIVER;}
+            case DiverDownEntity.RED_DIVER -> {return RED_DIVER;}
+            case DiverDownEntity.ORANGE_DIVER -> {return ORANGE_DIVER;}
+            case DiverDownEntity.TREASURE_DIVER -> {return TREASURE_DIVER;}
             default -> {return PART_6;}
         }
     }
 
     private static final ResourceLocation PART_6 = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/diver_down/base.png");
     private static final ResourceLocation LAVA_DIVER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/diver_down/lavadiver.png");
-
+    private static final ResourceLocation RED_DIVER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/diver_down/reddiver.png");
+    private static final ResourceLocation ORANGE_DIVER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/diver_down/orangediver.png");
+    private static final ResourceLocation TREASURE_DIVER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/diver_down/treasurediver.png");
 
     @Override
     public void render(DiverDownEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
