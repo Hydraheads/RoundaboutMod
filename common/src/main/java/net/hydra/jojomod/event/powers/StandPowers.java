@@ -2121,6 +2121,7 @@ public class StandPowers {
                 SE.roundabout$setStandSkin((skins.get(skinind)));
             }
             if (!sealed) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                 SE.roundabout$summonStand(this.getSelf().level(), true, false);
             }
         }
