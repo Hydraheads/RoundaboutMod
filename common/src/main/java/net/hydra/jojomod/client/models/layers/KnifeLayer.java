@@ -1,7 +1,9 @@
 package net.hydra.jojomod.client.models.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -29,6 +31,8 @@ public class KnifeLayer<T extends LivingEntity, M extends PlayerModel<T>>
 
     @Override
     protected void renderStuckItem(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, Entity entity, float f, float g, float h, float j) {
+        if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
+            return;
         float k = Mth.sqrt(f * f + h * h);
         KnifeEntity knife = new KnifeEntity(entity.level(), entity.getX(), entity.getY(), entity.getZ());
         knife.setYRot((float)(Math.atan2(f, h) * 57.2957763671875));

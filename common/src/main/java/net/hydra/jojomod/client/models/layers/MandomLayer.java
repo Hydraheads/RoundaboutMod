@@ -41,7 +41,7 @@ public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
 
         if (entity != null) {
-            if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > - 1)
+            if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
                 return;
             StandUser user = ((StandUser) entity);
             boolean hasMandom = (user.roundabout$getStandPowers() instanceof PowersMandom);
