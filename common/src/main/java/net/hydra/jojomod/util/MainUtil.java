@@ -399,6 +399,10 @@ public class MainUtil {
 
         }
     }
+
+    public static boolean confirmIsOre(BlockState state){
+        return (state.is(ModPacketHandler.PLATFORM_ACCESS.getOreTag()) || state.is(Blocks.ANCIENT_DEBRIS));
+    }
     public static void extractDiscData(LivingEntity ent, StandDiscItem SD, ItemStack stack){
         StandUser user = ((StandUser)ent);
         CompoundTag $$4 = stack.getTagElement("Memory");

@@ -135,7 +135,7 @@ public class PowersHeyYa extends NewDashPreset {
                     for (int z = -range; z < range; z++){
                         BlockPos pos = this.self.blockPosition().offset(new BlockPos(x,y,z));
                         BlockState blk = this.self.level().getBlockState(pos);
-                        if (blk.is(ModPacketHandler.PLATFORM_ACCESS.getOreTag())){
+                        if (MainUtil.confirmIsOre(blk)){
                             if (confirmSpace(pos.below()) || confirmSpace(pos.east()) ||
                                     confirmSpace(pos.west()) || confirmSpace(pos.north()) ||
                                     confirmSpace(pos.south()) || confirmSpace(pos.above())){

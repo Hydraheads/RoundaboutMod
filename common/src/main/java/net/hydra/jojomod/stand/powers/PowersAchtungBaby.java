@@ -364,7 +364,7 @@ public class PowersAchtungBaby extends NewDashPreset {
 
                                 // Example: Replace dirt with glowstone
                                 if (!oldState.isAir() && oldState.getBlock().isCollisionShapeFullBlock(oldState, this.self.level(), targetPos)
-                                        && this.self.level().getBlockEntity(targetPos) == null && !oldState.is(ModPacketHandler.PLATFORM_ACCESS.getOreTag())) {
+                                        && this.self.level().getBlockEntity(targetPos) == null && !MainUtil.confirmIsOre(oldState)) {
                                     BlockState replaced = sl.getBlockState(targetPos);
                                     BlockEntity replacedEntity = sl.getBlockEntity(targetPos);
                                     CompoundTag replacedTag = replacedEntity != null ? replacedEntity.saveWithFullMetadata() : null;
