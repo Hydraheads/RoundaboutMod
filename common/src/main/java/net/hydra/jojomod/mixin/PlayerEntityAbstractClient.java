@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
+import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Mob;
@@ -22,6 +23,31 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class PlayerEntityAbstractClient implements IPlayerEntityAbstractClient {
 
 
+    public boolean roundabout$switched = false;
+    @Override
+    @Unique
+    public boolean roundabout$getSwitched(){
+        return this.roundabout$switched;
+    }
+    @Override
+    @Unique
+    public void roundabout$setSwitched(boolean switched){
+        this.roundabout$switched = switched;
+    }
+
+    @Unique
+    public PlayerModel roundabout$playerModel;
+
+    @Override
+    @Unique
+    public PlayerModel roundabout$getOGModel(){
+        return this.roundabout$playerModel;
+    }
+    @Override
+    @Unique
+    public void roundabout$setOGModel(PlayerModel switched){
+        this.roundabout$playerModel = switched;
+    }
     @Unique
     Mob roundabout$shapeShift = null;
     @Unique

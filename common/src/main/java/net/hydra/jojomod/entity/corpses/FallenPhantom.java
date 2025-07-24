@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.mixin.ZMinecraftClient;
+import net.hydra.jojomod.networking.ModMessages;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -15,6 +16,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ChunkTaskPriorityQueueSorter;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -346,8 +348,10 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
             $$0.setYRot(this.getYRot());
             $$0.setXRot(this.getXRot());
             $$0.startRiding(this);
-            $$0.sendSystemMessage(Component.translatable("text.roundabout.riding_flying_creature"));
 
+            if ($$0 instanceof ServerPlayer sp){
+                sp.displayClientMessage(Component.translatable("text.roundabout.riding_flying_creature"), true);
+            }
 
         }
     }

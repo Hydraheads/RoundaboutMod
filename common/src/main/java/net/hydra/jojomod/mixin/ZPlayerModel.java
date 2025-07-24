@@ -69,6 +69,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
         return this.slim;
     }
 
+
     @Override
     @Unique
     public boolean roundabout$getRealSlim(){

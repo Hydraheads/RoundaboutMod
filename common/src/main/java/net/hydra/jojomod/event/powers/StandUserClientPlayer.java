@@ -12,4 +12,5 @@ public interface StandUserClientPlayer {
     void roundabout$setClashDisplayExtraTimestamp(long set);
     void roundabout$setLastClashPower(float set);
     int roundabout$getRoundaboutNoPlaceTSTicks();
+
 }

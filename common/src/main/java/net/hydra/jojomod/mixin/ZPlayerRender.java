@@ -11,10 +11,7 @@ import net.hydra.jojomod.entity.visages.mobs.*;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.ShapeShifts;
-import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.StandUserClient;
-import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModificationMaskItem;
@@ -25,6 +22,7 @@ import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.*;
@@ -326,7 +324,7 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
         IPlayerEntity ipe = ((IPlayerEntity) $$3);
         ItemStack visage = ipe.roundabout$getMaskSlot();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
-        roundabout$changeTheModel(visage,shift);
+        roundabout$changeTheModel($$3,visage,shift);
 
         if (roundabout$renderHandX($$0,$$1,$$2,$$3,true)){
             ci.cancel();
@@ -343,7 +341,7 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
         IPlayerEntity ipe = ((IPlayerEntity) $$3);
         ItemStack visage = ipe.roundabout$getMaskSlot();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
-        roundabout$changeTheModel(visage,shift);
+        roundabout$changeTheModel($$3,visage,shift);
 
         if (roundabout$renderHandX($$0,$$1,$$2,$$3,false)){
             ci.cancel();
@@ -646,12 +644,12 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
         }
     }
     boolean roundabout$switched = false;
-    public void roundabout$changeTheModel(ItemStack visage, ShapeShifts shifts){
+    public void roundabout$changeTheModel(AbstractClientPlayer player, ItemStack visage, ShapeShifts shifts){
         if (shifts == ShapeShifts.EERIE) {
             if (((IPlayerModel) this.model).roundabout$getSlim()) {
-                if (!roundabout$switched) {
-                    roundabout$mainModel = this.model;
-                    roundabout$switched = true;
+                if (!((IPlayerEntityAbstractClient)player).roundabout$getSwitched()) {
+                    ((IPlayerEntityAbstractClient)player).roundabout$setOGModel(this.model);
+                    ((IPlayerEntityAbstractClient)player).roundabout$setSwitched(true);
                     model = roundabout$otherModel;
                 }
             }
@@ -659,9 +657,9 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
         }
         if (shifts == ShapeShifts.OVA) {
             if (!((IPlayerModel) this.model).roundabout$getSlim()) {
-                if (!roundabout$switched) {
-                    roundabout$mainModel = this.model;
-                    roundabout$switched = true;
+                if (!((IPlayerEntityAbstractClient)player).roundabout$getSwitched()) {
+                    ((IPlayerEntityAbstractClient)player).roundabout$setOGModel(this.model);
+                    ((IPlayerEntityAbstractClient)player).roundabout$setSwitched(true);
                     model = roundabout$otherModel;
                 }
             }
@@ -672,9 +670,9 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
             if (visage.getItem() instanceof MaskItem MI) {
                 if (MI.visageData.isCharacterVisage()) {
                     if (((IPlayerModel)this.model).roundabout$getSlim() != MI.visageData.isSlim()){
-                        if (!roundabout$switched) {
-                            roundabout$mainModel = this.model;
-                            roundabout$switched = true;
+                        if (!((IPlayerEntityAbstractClient)player).roundabout$getSwitched()) {
+                            ((IPlayerEntityAbstractClient)player).roundabout$setOGModel(this.model);
+                            ((IPlayerEntityAbstractClient)player).roundabout$setSwitched(true);
                             model = roundabout$otherModel;
                         }
                     }
@@ -682,9 +680,9 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
                 }
             }
         }
-        if (roundabout$switched) {
-            roundabout$switched = false;
-            model = roundabout$mainModel;
+        if (((IPlayerEntityAbstractClient)player).roundabout$getSwitched()) {
+            ((IPlayerEntityAbstractClient)player).roundabout$setSwitched(false);
+            model = ((IPlayerEntityAbstractClient)player).roundabout$getOGModel();
         }
     }
     @Inject(method = "render(Lnet/minecraft/client/player/AbstractClientPlayer;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
@@ -695,7 +693,7 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
         IPlayerEntity ipe = ((IPlayerEntity) $$0);
         ItemStack visage = ipe.roundabout$getMaskSlot();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
-        roundabout$changeTheModel(visage,shift);
+        roundabout$changeTheModel($$0,visage,shift);
 
         if (!ClientUtil.checkIfIsFirstPerson($$0)) {
             Poses pose = Poses.getPosFromByte(ipe.roundabout$GetPoseEmote());
