@@ -114,6 +114,11 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
             if(!this.onGround() && this.level().getBlockState(new BlockPos((int) this.getX(),(int) (this.getY()-0.1),(int) this.getZ())).isAir() && !this.level().getBlockState(new BlockPos((int) this.getX(),(int) (this.getY()-0.1),(int) this.getZ())).isSolid() && this.getPassengers().isEmpty()){
                 this.moveRelative(0.4f,new Vec3(0,-verticalSpeed,0));
             }
+        } else {
+            if (!this.level().isClientSide()){
+                /**Tick into the second mount message on the actionbar*/
+                sendOutMessage();
+            }
         }
         if (this.level().isClientSide && this.getActivated()) {
             float f = Mth.cos((float)(this.getUniqueFlapTickOffset() + this.tickCount) * 7.448451f * ((float)Math.PI / 180) + (float)Math.PI);
@@ -330,21 +335,29 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
         return new Vec3((double) $$2, $$3, (double) $$4);
     }
 
+    int rideLengthTicks = 0;
+    public void sendOutMessage(){
+        Entity cpas = this.getControllingPassenger();
+        if (cpas instanceof ServerPlayer SP){
+            rideLengthTicks++;
+            if (rideLengthTicks == 40){
+                if(this.level().dimension() != Level.OVERWORLD){
+                    SP.displayClientMessage(Component.translatable("text.roundabout.riding_flying_creature.dimension").withStyle(ChatFormatting.YELLOW), true);
+                } else if (this.level().getDayTime() % 24000L < 13000){
+                    SP.displayClientMessage(Component.translatable("text.roundabout.riding_flying_creature.day").withStyle(ChatFormatting.YELLOW), true);
+                } else {
+                    SP.displayClientMessage(Component.translatable("text.roundabout.riding_flying_creature").withStyle(ChatFormatting.YELLOW), true);
+                }
+            }
+        } else {
+            rideLengthTicks = 0;
+        }
+    }
     protected void doPlayerRide(Player $$0) {
         if (!this.level().isClientSide) {
             $$0.setYRot(this.getYRot());
             $$0.setXRot(this.getXRot());
             $$0.startRiding(this);
-
-            if ($$0 instanceof ServerPlayer sp){
-                if($$0.level().dimension() != Level.OVERWORLD){
-                    sp.displayClientMessage(Component.translatable("text.roundabout.riding_flying_creature.dimension").withStyle(ChatFormatting.YELLOW), false);
-                } else if (this.level().getDayTime() % 24000L < 13000){
-                    sp.displayClientMessage(Component.translatable("text.roundabout.riding_flying_creature.day").withStyle(ChatFormatting.YELLOW), false);
-                } else {
-                    sp.displayClientMessage(Component.translatable("text.roundabout.riding_flying_creature").withStyle(ChatFormatting.YELLOW), false);
-                }
-            }
 
         }
     }

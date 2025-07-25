@@ -1,7 +1,7 @@
 {
   "text.roundabout.barrage_clash": "Clash! Hold and Release Jump!",
   "text.roundabout.launch_bubble_encased": "Encased! Use sharp object to break free!",
-  "text.roundabout.riding_flying_creature": "Hold Jump to ascend, Dash to descend",
+  "text.roundabout.riding_flying_creature": "Hold Jump to ascend, Hold Dash to descend",
   "text.roundabout.riding_flying_creature.day": "Cannot fly at day time.",
   "text.roundabout.riding_flying_creature.dimension": "Cannot fly in this dimension.",
 
