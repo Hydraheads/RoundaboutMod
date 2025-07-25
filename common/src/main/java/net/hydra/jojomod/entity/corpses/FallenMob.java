@@ -558,7 +558,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                                 this.setForcedRotation(0);
                             }
 
-                            if (!getTurned() && ClientUtil.checkIfClientHoldingBag()) {
+                            if ((!getTurned() || this.getHealth() >= this.getMaxHealth()) && ClientUtil.checkIfClientHoldingBag()) {
                                 if (this.tickCount % 5 == 0) {
                                     for (int i = 0; i < ConfigManager.getClientConfig().particleSettings.bodyBagHoldingParticlesPerFiveTicks; i++) {
                                         this.level()
@@ -620,7 +620,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
 
     @Override
     public void playerTouch(Player $$0) {
-        if (!getActivated() && !getTurned() && this.isAlive() && !this.isRemoved() && !getTicksThroughPlacer()) {
+        if (!getActivated() && (!getTurned() || this.getHealth() >= this.getMaxHealth()) && this.isAlive() && !this.isRemoved() && !getTicksThroughPlacer()) {
             if (!this.level().isClientSide) {
                 if ($$0.getMainHandItem().getItem() instanceof BodyBagItem BB){
                     if (BB.fillWithBody($$0.getMainHandItem(),this)){

@@ -786,7 +786,7 @@
   "ability.roundabout.fog_blocks": "Illusion Blocks",
   "ability.roundabout.fog_blocks.desc": "Create limitless fog blocks, on demand. When placed, they can only be seen while fog is cast, and can be walked through (as they are just illusions).",
   "ability.roundabout.corpse_army": "Corpse Army",
-  "ability.roundabout.corpse_army.desc": "Acquire corpses with Executioner's Axe or Scissors (Justice User only), and craft a body bag to store them in. You can control these corpses if they are in your fog range. Once holes appear in their body, they can no longer be picked up by a body bag. Zombies, Skeletons, Creepers, Spiders, and Villagers can become corpses. Interact with spider corpses you control to ride them. Crouch and interact with zombies to give them your held item. Note that held items trade off corpse armor piercing damage.",
+  "ability.roundabout.corpse_army.desc": "Acquire corpses with Executioner's Axe or Scissors (Justice User only), and craft a body bag to store them in. You can control these corpses if they are in your fog range. Corpses must be inactive or full health to be picked up by a body bag. Zombies, Skeletons, Creepers, Spiders, and Villagers can become corpses. Interact with spider corpses you control to ride them. Crouch and interact with zombies to give them your held item. Note that held items trade off corpse armor piercing damage.",
   "ability.roundabout.fog_clones": "Illusion Clones",
   "ability.roundabout.fog_clones.desc": "Create fake mirages of yourself. If you are attacked, perhaps it was one of the mirages that was attacked, not you...",
   "ability.roundabout.tactics": "Tactics Menu",
