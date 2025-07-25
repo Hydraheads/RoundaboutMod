@@ -30,6 +30,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
@@ -70,9 +71,9 @@ public class PowersRatt extends NewDashPreset {
 
     public static final byte
             UPDATE_POSITION = 0,
-            ROTATE = 1,
             UPDATE_SCOPE = 20,
-            UPDATE_CHARGE = 3;
+            UPDATE_CHARGE = 3,
+            ROTATE = 4;
 
     public Entity ShootTarget = null;
     public Entity getShootTarget() {return ShootTarget;}
@@ -180,6 +181,14 @@ public class PowersRatt extends NewDashPreset {
                 Placement = pos;
                 this.setCooldown(PowerIndex.SKILL_2,80);
             }
+            case ROTATE -> {
+
+                if (this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof  RattEntity RE) {
+
+                    RE.setHeadRotationX((float)pos.x);
+                    RE.setStandRotationY((float)pos.y);
+                }
+            }
         }
         return true;
     }
@@ -213,7 +222,33 @@ public class PowersRatt extends NewDashPreset {
     public void tickPower() {
         super.tickPower();
 
-        //Roundabout.LOGGER.info("A: {}, B: {}", this.getActivePower(), this.getAttackTimeDuring());
+        if (this.getSelf().level().isClientSide()) {
+            if (this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
+                Entity target = getShootTarget();
+                Vec3 targetPos = getTargetPos().getLocation();
+                if (target != null) {
+                    targetPos = target.getEyePosition(0);
+                }
+                double x = (targetPos.x() - RE.getPosition(0).x());
+                double z = (targetPos.z() - RE.getPosition(0).z());
+                float rot = (float) (Math.atan2(z,x) - Math.PI/2) ;
+
+                double hy = (targetPos.y() - (RE.getPosition(0).y()+RE.getEyeHeight()));
+                double hd = Math.sqrt(Math.pow(x,2)+Math.pow(z,2));
+                float hrot = (float) (Math.atan2(hd,hy) - Math.PI/2); // flip the sign if you want it to be armed
+
+                tryPosPower(PowersRatt.ROTATE,true,new Vec3(hrot,rot,0));
+                tryPosPowerPacket(PowersRatt.ROTATE,new Vec3(hrot,rot,0));
+            }
+        }
+
+
+
+
+
+
+
+
 
         if (shotcooldown != 0) {shotcooldown--;}
         if (shotcooldown == 0) {maxshotcooldown = 0;}
@@ -234,22 +269,13 @@ public class PowersRatt extends NewDashPreset {
 
 
                 if (isAuto()) {
-                    if (e != null) {
-                        if (e instanceof LivingEntity T) {
-                            if (!T.equals(SE)) {
-                                setShootTarget(e);
-                            }
-                        }
-                    }
+
                 } else {
-                    if (e != null) {
-                        if (e instanceof LivingEntity T) {
-                            if (!T.equals(SE)) {
-                                setShootTarget(e);
-                            }
+                    setShootTarget(null);
+                    if (e instanceof LivingEntity) {
+                        if (!e.equals(this.getSelf()) && !e.equals(this.getStandEntity(this.getSelf()))) {
+                            setShootTarget(e);
                         }
-                    } else {
-                        setShootTarget(e);
                     }
                 }
 
@@ -520,8 +546,9 @@ public class PowersRatt extends NewDashPreset {
             case PowerIndex.SKILL_1_SNEAK -> {
                 if (scopeLevel != 0) {
                     return getChargeTime() <= MinThreshold || shotcooldown != 0;
+                } else if (isPlaced()) {
+                    return !isAuto() && getShootTarget() == null;
                 }
-                return true;
             }
 
         }

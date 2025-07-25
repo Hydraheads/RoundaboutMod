@@ -142,7 +142,8 @@ public class RattModel<T extends RattEntity> extends StandModel<T> {
 
 	@Override
 	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
-		super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
-		defaultModifiers(pEntity);
+		this.head.xRot = pEntity.getHeadRotationX();
+		this.stand.yRot = pEntity.getStandRotationY();
+		//	super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
 	}
 }
