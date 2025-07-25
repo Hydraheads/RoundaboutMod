@@ -31,10 +31,7 @@ public class RattModel<T extends RattEntity> extends StandModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 //	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "ratt"), "main");
 
-	private final ModelPart stand;
 	private final ModelPart stand2;
-	private final ModelPart head;
-	private final ModelPart body;
 
 
 	public RattModel(ModelPart root) {
@@ -146,5 +143,6 @@ public class RattModel<T extends RattEntity> extends StandModel<T> {
 	@Override
 	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
 		super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
+		defaultModifiers(pEntity);
 	}
 }

@@ -856,6 +856,9 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                 );
     }
 
+    public boolean forceVisualRotation(){
+        return false;
+    }
 
     public boolean ignoreTridentSpin(){
         return true;

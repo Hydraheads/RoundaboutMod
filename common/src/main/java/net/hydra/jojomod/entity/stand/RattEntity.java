@@ -1,21 +1,9 @@
 package net.hydra.jojomod.entity.stand;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.ILivingEntityAccess;
-import net.hydra.jojomod.client.models.layers.PreRenderEntity;
-import net.hydra.jojomod.event.index.OffsetIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersRatt;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
@@ -53,7 +41,7 @@ public class RattEntity extends StandEntity {
     public void tick() {
 
 
-        if (this.level().isClientSide()) {
+        if (!this.level().isClientSide()) {
             if (this.getUser() != null) {
                 if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersRatt RE) {
                     Entity target = RE.getShootTarget();
@@ -65,10 +53,14 @@ public class RattEntity extends StandEntity {
                     double z = targetPos.z() - this.getPosition(0).z();
                     float rot = ((float) Math.atan2((float) z, (float) x) * 180 / (float) Math.PI) - 90;
                     if (targetPos.distanceTo(this.getPosition(0)) >= 0.5) {
-                        updateRotation(new Vec3(rot, rot, 0));
+                        this.setYRot(rot);
+
                     }
                 }
             }
+        } else {
+            Roundabout.LOGGER.info("yrot = "+this.getYRot());
+
         }
 
 
@@ -77,13 +69,9 @@ public class RattEntity extends StandEntity {
 
 
 
-    public void updateRotation(Vec3 v) {
-        if (this.getUser() != null){
-            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersRatt RE) {
-                RE.tryPosPower(PowersRatt.ROTATE,true,v);
-                RE.tryPosPowerPacket(PowersRatt.ROTATE,v);
-            }
-        }
+    @Override
+    public boolean forceVisualRotation(){
+        return true;
     }
 
     @Override

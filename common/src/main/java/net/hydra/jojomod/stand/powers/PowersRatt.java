@@ -174,14 +174,6 @@ public class PowersRatt extends NewDashPreset {
                     SE.setPos(pos);
                 }
             }
-            case ROTATE -> {
-                if (SE != null) {
-                    SE.setHeadRotationY((float)pos.y);
-                    SE.setBodyRotationY((float)pos.y);
-                    SE.setHeadRotationY((float)pos.y);
-                    //SE.setYBodyRot((float) pos.y);
-                }
-            }
             case PowerIndex.POWER_2 -> {
                 this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
                 active = true;

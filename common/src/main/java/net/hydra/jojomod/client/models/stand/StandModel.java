@@ -226,6 +226,28 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
             mobEntity.setStandRotationY(rotY);
             mobEntity.setStandRotationZ(rotZ);
             this.setStandRotations(rotX, rotY, rotZ);
+        } else if (mobEntity.forceVisualRotation()) {
+
+            if (mobEntity.getDisplay()) {
+                this.setStandRotations(0, 0, 0);
+                return;
+            }
+
+            float rotX = mobEntity.getStandRotationX();
+            float rotY = mobEntity.getStandRotationY();
+            float rotZ = mobEntity.getStandRotationZ();
+            float cRX = 0;
+            float cRY = 0;
+            float cRZ = 0;
+            cRX = (mobEntity.getViewXRot(tickDelta) % 360) * Mth.DEG_TO_RAD;
+            cRY = (mobEntity.getYRot() % 360) * Mth.DEG_TO_RAD;
+            rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, cRX, 0.8f);
+            rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, cRY, 0.8f);
+            rotZ = MainUtil.controlledLerpRadianDegrees(tickDelta, rotZ, cRZ, 0.8f);
+            mobEntity.setStandRotationX(rotX);
+            mobEntity.setStandRotationY(rotY);
+            mobEntity.setStandRotationZ(rotZ);
+            this.setStandRotations(rotX, rotY, rotZ);
         }
     }
     public void rotateBody(T mobEntity,  ModelPart body, float tickDelta){
@@ -272,6 +294,20 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
                 rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, 0, 0.8f);
 
             }
+            mobEntity.setBodyRotationX(rotX);
+            mobEntity.setBodyRotationY(rotY);
+            this.setBodyRotations(rotX, rotY);
+        } else if (mobEntity.forceVisualRotation()) {
+            if (mobEntity.getDisplay()) {
+                this.setBodyRotations(0, 0);
+                return;
+            }
+
+            float rotX = mobEntity.getBodyRotationX();
+            float rotY = mobEntity.getBodyRotationY();
+                rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, 0, 0.8f);
+                rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, 0, 0.8f);
+
             mobEntity.setBodyRotationX(rotX);
             mobEntity.setBodyRotationY(rotY);
             this.setBodyRotations(rotX, rotY);
