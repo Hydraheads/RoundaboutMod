@@ -56,15 +56,16 @@ public class CorpseTargetGoal extends TargetGoal {
     @Override
     public void tick() {
         if(mob instanceof FallenMob fm) {
-            if (fm.getTarget() != null) {
+            Entity target = fm.getTarget();
+            if (target != null) {
 
 
                 if (!fm.getTarget().isAlive()) {
                     stop();
                     fm.setTarget(null);
-
+                    return;
                 }
-                this.mob.lookAt(fm.getTarget(), 30.0f, 30.0f);
+                this.mob.lookAt(target, 30.0f, 30.0f);
             }
 
         }

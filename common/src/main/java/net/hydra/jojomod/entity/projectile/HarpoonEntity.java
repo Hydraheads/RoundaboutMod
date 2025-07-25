@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.projectile;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
@@ -222,6 +223,7 @@ public class HarpoonEntity extends AbstractArrow {
                 }
 
             } else if (target instanceof Phantom
+                    || target instanceof FallenPhantom
                     || target instanceof Bat){
                 skyHit = true;
                 damage += 10;

@@ -1,12 +1,6 @@
 package net.hydra.jojomod.entity.corpses;
 
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.client.KeyboardPilotInput;
-import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.mixin.ZMinecraftClient;
-import net.hydra.jojomod.networking.ModMessages;
-import net.minecraft.client.Minecraft;
-import net.minecraft.commands.Commands;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -15,7 +9,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ChunkTaskPriorityQueueSorter;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -23,26 +16,15 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.LeapAtTargetGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
-import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec2;
@@ -172,9 +154,10 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
     protected float getRiddenSpeed(Player $$0) {
         if(this.level().getDayTime() % 24000L < 13000) {
             return (float) ( this.getAttributeValue(Attributes.FLYING_SPEED) * 0.2);
-
         } else{
-            return (float) ((float) this.getAttributeValue(Attributes.FLYING_SPEED));
+            float spd =(float) ((float) this.getAttributeValue(Attributes.FLYING_SPEED));
+
+            return spd;
 
         }
     }
@@ -209,22 +192,20 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
                 this.setDeltaMovement(this.getDeltaMovement().scale(0.5));
             } else {
                 float f = 0.91f;
-                //if (this.onGround()) {
-                //    f = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getBlock().getFriction() * 0.91f;
-                //}
-                float g = 0.16277137f / (f * f * f);
-                f = 0.91f;
+                float yboost = 0.15f;
                 //if (this.onGround()) {
                 //    f = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getBlock().getFriction() * 0.91f;
                 //}
                 if(this.isVehicle() && !this.getPassengers().isEmpty()) {
-                    if(this.level().getDayTime() % 24000L > 13000) {
-                        this.moveRelative((float)this.getAttributeValue(Attributes.FLYING_SPEED), vec3);
+                    if(this.level().getDayTime() % 24000L >= 13000) {
+                        f = 0.83f;
+                        float spd = (float)this.getAttributeValue(Attributes.FLYING_SPEED);
+                        this.moveRelative(spd, vec3);
+                        this.setDeltaMovement(this.getDeltaMovement().add(0,vec3.y*yboost,0));
                     } else{
                         this.moveRelative( slowSpeed,vec3);
                     }
                 } else{
-
                     this.moveRelative(nonDrivenSpeed, vec3);
 
                 }
@@ -334,9 +315,13 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
         if ($$4 <= 0.0F) {
             $$4 *= 0.25F;
         }
-        if(this.level().getDayTime() % 24000L < 13000){
+
+        if($$0.level().dimension() != Level.OVERWORLD || this.level().getDayTime() % 24000L < 13000){
             $$2 = 0;
             $$3 = -verticalSpeed;
+            $$4 = 0;
+        } else if (this.onGround()){
+            $$2 = 0;
             $$4 = 0;
         }
 
@@ -350,7 +335,13 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
             $$0.startRiding(this);
 
             if ($$0 instanceof ServerPlayer sp){
-                sp.displayClientMessage(Component.translatable("text.roundabout.riding_flying_creature"), true);
+                if($$0.level().dimension() != Level.OVERWORLD){
+                    sp.displayClientMessage(Component.translatable("text.roundabout.riding_flying_creature.dimension").withStyle(ChatFormatting.YELLOW), false);
+                } else if (this.level().getDayTime() % 24000L < 13000){
+                    sp.displayClientMessage(Component.translatable("text.roundabout.riding_flying_creature.day").withStyle(ChatFormatting.YELLOW), false);
+                } else {
+                    sp.displayClientMessage(Component.translatable("text.roundabout.riding_flying_creature").withStyle(ChatFormatting.YELLOW), false);
+                }
             }
 
         }

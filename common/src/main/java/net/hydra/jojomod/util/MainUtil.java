@@ -12,6 +12,7 @@ import net.hydra.jojomod.client.gui.FogInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
@@ -470,7 +471,7 @@ public class MainUtil {
         };
         for (Entity value : hitEntities) {
             if (value instanceof LivingEntity mb){
-                if ((mb.isFallFlying() || mb instanceof Phantom) && !(mb instanceof StandEntity)){
+                if ((mb.isFallFlying() || mb instanceof Phantom|| mb instanceof FallenPhantom) && !(mb instanceof StandEntity)){
                     if (owner != null && owner.getUUID() == mb.getUUID()) {
                     } else {
                         return mb;
