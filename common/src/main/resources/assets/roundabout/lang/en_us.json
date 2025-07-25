@@ -1644,6 +1644,9 @@
   "config.roundabout.fogCloneCooldown.desc": "Change the cooldown of fog clone creation, by default the cooldown is 700 ticks (35 seconds) because the ability is extremely powerful defensively and lets you eat with little consequence.",
   "config.roundabout.fogChainCooldown.name": "Fog Chain Cooldown",
   "config.roundabout.fogChainCooldown.desc": "Change the cooldown of fog chains, by default the cooldown is 80 (4 seconds).",
+  "config.roundabout.phantomCorpseSpeed.name": "Phantom Riding Speed",
+  "config.roundabout.phantomCorpseSpeed.desc": "Change how fast the speed of phantom mounts are, it is 0.84 by default. Change to zero to disable the ability to ride phantom corpses in general.",
+
 
   "config.roundabout.numberOfYapLines.name": "Yap Line Count",
   "config.roundabout.numberOfYapLines.desc": "Change this if you want to add more yap lines to the lang file in a resource pack.",

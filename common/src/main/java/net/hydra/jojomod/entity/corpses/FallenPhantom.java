@@ -1,5 +1,7 @@
 package net.hydra.jojomod.entity.corpses;
 
+import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -192,13 +194,13 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
                 this.setDeltaMovement(this.getDeltaMovement().scale(0.5));
             } else {
                 float f = 0.91f;
-                float yboost = 0.15f;
+                float yboost = 0.1f;
                 //if (this.onGround()) {
                 //    f = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getBlock().getFriction() * 0.91f;
                 //}
                 if(this.isVehicle() && !this.getPassengers().isEmpty()) {
                     if(this.level().getDayTime() % 24000L >= 13000) {
-                        f = 0.83f;
+                        f = ClientNetworking.getAppropriateConfig().justiceSettings.phantomCorpseSpeed;
                         float spd = (float)this.getAttributeValue(Attributes.FLYING_SPEED);
                         this.moveRelative(spd, vec3);
                         this.setDeltaMovement(this.getDeltaMovement().add(0,vec3.y*yboost,0));
@@ -409,8 +411,9 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
         if (this.isVehicle() || !this.getActivated() || !(getController() == $$0.getId())) {
             return super.mobInteract($$0, $$1);
         } else {
-
-            this.doPlayerRide($$0);
+            if (ClientNetworking.getAppropriateConfig().justiceSettings.phantomCorpseSpeed > 0) {
+                this.doPlayerRide($$0);
+            }
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
     }
