@@ -55,6 +55,11 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
 
 
     @Override
+    protected void playStepSound(BlockPos $$0, BlockState $$1) {
+
+    }
+
+    @Override
     public boolean isNoGravity() {
         return true;
     }

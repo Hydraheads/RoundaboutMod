@@ -1,7 +1,9 @@
 package net.hydra.jojomod.client.models.corpses.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.corpses.FallenSkeleton;
 import net.hydra.jojomod.entity.corpses.FallenVillager;
 import net.hydra.jojomod.client.models.corpses.FallenVillagerModel;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -63,5 +65,22 @@ public class FallenVillagerRenderer extends MobRenderer<FallenVillager, FallenVi
         }
 
         $$1.scale($$3, $$3, $$3);
+    }
+
+    @Override
+    protected void setupRotations(FallenVillager FM, PoseStack pose, float $$2, float $$3, float $$4) {
+        super.setupRotations(FM,pose,$$2,$$3,$$4);
+        int tickTock = FM.ticksThroughPhases;
+        if (FM.getPhasesFull()){
+            tickTock = 10;
+            FM.ticksThroughPhases = 10;
+        }
+        float yes = Math.min(10, tickTock + $$4);
+        if (FM.getActivated()) {
+            yes = Math.max(0,tickTock- $$4);
+        }
+        float $$5 = (yes /10);
+        pose.mulPose(Axis.XP.rotationDegrees($$5 * 90));
+        pose.translate(0,-$$5*(0.5*FM.getBbHeight()),-($$5*0.15));
     }
 }

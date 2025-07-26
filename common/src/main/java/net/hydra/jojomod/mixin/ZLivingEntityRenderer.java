@@ -203,29 +203,6 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                     $$1.mulPose(Axis.XP.rotationDegrees($$5 * 45));
                 }
             }
-        } else if ($$0 instanceof FallenMob FM){
-            /*fog corpse / corpse control*/
-            int tickTock = FM.ticksThroughPhases;
-            if (FM.getPhasesFull()){
-                tickTock = 10;
-                FM.ticksThroughPhases = 10;
-            }
-            float yes = Math.min(10, tickTock + $$4);
-            if (FM.getActivated()) {
-                yes = Math.max(0,tickTock- $$4);
-            }
-            float $$5 = (yes /10);
-            if ($$0 instanceof FallenSpider){
-                $$1.mulPose(Axis.XP.rotationDegrees($$5 * 180));
-
-                $$1.translate(0, -$$5 * (1 * FM.getBbHeight()), 0);
-            } else if ($$0 instanceof FallenPhantom) {
-                $$1.mulPose(Axis.XP.rotationDegrees($$5 * 180));
-                $$1.translate(0,-$$5 *(6*FM.getBbHeight()),0);
-            } else {
-                $$1.mulPose(Axis.XP.rotationDegrees($$5 * 90));
-                $$1.translate(0,-$$5*(0.5*FM.getBbHeight()),-($$5*0.15));
-            }
         }
     }
 
