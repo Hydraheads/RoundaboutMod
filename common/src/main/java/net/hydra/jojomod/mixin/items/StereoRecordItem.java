@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.items;
 
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StereoBlock;
@@ -6,7 +6,6 @@ import net.hydra.jojomod.block.StereoBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.RecordItem;
@@ -21,7 +20,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(RecordItem.class)
-public class ZRecordItem {
+public class StereoRecordItem {
+
+    /**This mixin lets you eject music discs from stereos, discs only have the capacity to be ejected by jukeboxes
+     * normally*/
+
     @Inject(method = "useOn", at = @At(value = "HEAD"),cancellable = true)
     public void roundabout$ShootFromRotation(UseOnContext $$0, CallbackInfoReturnable<InteractionResult> cir) {
 

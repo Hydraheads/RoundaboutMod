@@ -1,18 +1,14 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.items;
 
-import com.google.common.collect.Sets;
 import net.hydra.jojomod.access.IItemEntityAccess;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raid;
-import net.minecraft.world.item.context.UseOnContext;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,32 +16,16 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Set;
 import java.util.UUID;
 
 @Mixin(Raid.class)
-public class ZRaid {
+public class ExecutionerAxeRaid {
     /**Reward a winner of a raid with the executioner axe template*/
-    @Shadow
-    private BlockPos center;
-    @Shadow
-    @Final
-    private Set<UUID> heroesOfTheVillage;
-    @Shadow
-    @Final
-    private ServerLevel level;
     @Unique
     public boolean roundabout$hasRewarded = false;
-    @Inject(method = "tick", at = @At(value = "HEAD"),cancellable = true)
-    public void roundabout$tick(CallbackInfo ci) {
-        if (((TimeStop)this.level).inTimeStopRange(center)){
-            ci.cancel();
-        }
-    }
-    @SuppressWarnings("deprecation")
-    @Inject(method = "tick", at = @At(value = "INVOKE",target="Lnet/minecraft/world/entity/LivingEntity;addEffect(Lnet/minecraft/world/effect/MobEffectInstance;)Z"),cancellable = true)
+    @Inject(method = "tick", at = @At(value = "INVOKE",target="Lnet/minecraft/world/entity/LivingEntity;addEffect(Lnet/minecraft/world/effect/MobEffectInstance;)Z"))
     public void roundabout$tickMid(CallbackInfo ci) {
         if (!roundabout$hasRewarded){
             roundabout$hasRewarded = true;
@@ -64,4 +44,16 @@ public class ZRaid {
             }
         }
     }
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    @Shadow
+    @Final
+    private Set<UUID> heroesOfTheVillage;
+    @Shadow
+    @Final
+    private ServerLevel level;
 }
