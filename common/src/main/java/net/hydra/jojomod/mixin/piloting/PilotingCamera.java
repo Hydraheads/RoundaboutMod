@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.piloting;
 
 import net.hydra.jojomod.access.ICamera;
 import net.hydra.jojomod.access.IEntityAndData;
@@ -20,13 +20,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Camera.class)
-public abstract class ZCamera implements ICamera {
+public abstract class PilotingCamera implements ICamera {
 
-
-    @Shadow
-    private Entity entity;
-    @Shadow
-    private BlockGetter level;
+    /**facilitates the camera acting upon the entity instead of the player in control mode.
+     * This is relatively faithful to the camera code, only with compat for more entities without
+     * needing to spectate them*/
 
     @Unique
     private Entity roundabout$povSwitch;
@@ -37,31 +35,6 @@ public abstract class ZCamera implements ICamera {
             this.roundabout$povSwitch = entity;
         }
     }
-    @Shadow
-    public void setup(BlockGetter blockGetter, Entity entity, boolean bl, boolean bl2, float f) {}
-
-
-    @Shadow private boolean initialized;
-
-    @Shadow private boolean detached;
-
-    @Shadow protected abstract void setRotation(float $$0, float $$1);
-
-    @Shadow protected abstract void setPosition(Vec3 $$0);
-    @Shadow protected abstract void setPosition(double d, double e, double f);
-
-    @Shadow protected abstract void move(double $$0, double $$1, double $$2);
-
-    @Shadow protected abstract double getMaxZoom(double $$0);
-
-    @Shadow private float yRot;
-
-    @Shadow private float xRot;
-
-    @Shadow private float eyeHeight;
-
-    @Shadow private float eyeHeightOld;
-
 
     @Unique
     public float roundabout$getViewXRot(Entity ent, float $$0) {
@@ -133,4 +106,38 @@ public abstract class ZCamera implements ICamera {
         }
     }
 
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+
+    @Shadow public void setup(BlockGetter blockGetter, Entity entity, boolean bl, boolean bl2, float f) {}
+
+    @Shadow private boolean initialized;
+
+    @Shadow private boolean detached;
+
+    @Shadow protected abstract void setRotation(float $$0, float $$1);
+
+    @Shadow protected abstract void setPosition(Vec3 $$0);
+    @Shadow protected abstract void setPosition(double d, double e, double f);
+
+    @Shadow protected abstract void move(double $$0, double $$1, double $$2);
+
+    @Shadow protected abstract double getMaxZoom(double $$0);
+
+    @Shadow private float yRot;
+
+    @Shadow private float xRot;
+
+    @Shadow private float eyeHeight;
+
+    @Shadow private float eyeHeightOld;
+
+    @Shadow
+    private Entity entity;
+    @Shadow
+    private BlockGetter level;
 }

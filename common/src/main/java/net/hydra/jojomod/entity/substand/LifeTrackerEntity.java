@@ -39,7 +39,7 @@ public class LifeTrackerEntity extends LivingEntity implements PreRenderEntity {
         boolean client = this.level().isClientSide();
         LivingEntity user = this.getUser();
         if (!client) {
-            if (isEffectivelyInWater()) {
+            if (isEffectivelyInWater() || isInWaterOrRain()) {
                 this.discard();
                 return;
             }

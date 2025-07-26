@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.soft_and_wet;
 
 import net.hydra.jojomod.access.ILevelAccess;
 import net.minecraft.client.Minecraft;
@@ -11,8 +11,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(SoundManager.class)
-public class ZSoundManager {
-
+public class SoftAndWetSoundManager {
+    /**This mixin prevents sound plundered areas from getting noise.*/
     @Inject(method = "play", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$play(SoundInstance $$0, CallbackInfo ci) {
         if (Minecraft.getInstance().player != null){
