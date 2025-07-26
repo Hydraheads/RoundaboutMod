@@ -215,7 +215,7 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
             }
         }
         if ($$0 instanceof ItemEntity) {
-            ((IItemEntityAccess)$$0).roundabout$TickPickupDelay();
+            ((IItemEntityTimeStopAccess)$$0).roundabout$TickPickupDelay();
         } else if ($$0 instanceof FishingHook){
             ((IFishingRodAccess)$$0).roundabout$UpdateRodInTS();
         }

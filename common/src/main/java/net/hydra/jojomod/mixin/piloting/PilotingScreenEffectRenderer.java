@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin.justice;
+package net.hydra.jojomod.mixin.piloting;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -20,10 +20,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import javax.annotation.Nullable;
-
 @Mixin(ScreenEffectRenderer.class)
-public class JusticeScreenEffectRenderer {
+public class PilotingScreenEffectRenderer {
 
     /**Use this to hide the block effect covering your screen when your player is suffocating during pilot*/
     /**Anti xrayx-ray measures for justice pilot mode block clipping*/

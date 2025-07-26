@@ -175,7 +175,7 @@ public class WorldTickServer {
                     ((StandUser)$$0).roundabout$getStandPowers().timeTick();
                     ((ILivingEntityAccess) $$0).roundabout$PushEntities();
                 } else if ($$0 instanceof ItemEntity) {
-                    ((IItemEntityAccess)$$0).roundabout$TickPickupDelay();
+                    ((IItemEntityTimeStopAccess)$$0).roundabout$TickPickupDelay();
                 } else if ($$0 instanceof FishingHook){
                     ((IFishingRodAccess)$$0).roundabout$UpdateRodInTS();
                 } else if ($$0 instanceof Boat){
@@ -225,7 +225,7 @@ public class WorldTickServer {
                     ((LivingEntity) $$1).hurtTime = 0;
                     ((ILivingEntityAccess) $$1).roundabout$PushEntities();
                 } else if ($$1 instanceof ItemEntity) {
-                    ((IItemEntityAccess)$$1).roundabout$TickPickupDelay();
+                    ((IItemEntityTimeStopAccess)$$1).roundabout$TickPickupDelay();
                 } else if ($$1 instanceof FishingHook){
                     ((IFishingRodAccess)$$1).roundabout$UpdateRodInTS();
                 }
