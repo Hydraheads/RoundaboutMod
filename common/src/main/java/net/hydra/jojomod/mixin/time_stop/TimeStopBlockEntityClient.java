@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.time_stop;
 
 import net.hydra.jojomod.access.IBlockEntityClientAccess;
 import net.minecraft.client.Minecraft;
@@ -7,8 +7,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(BlockEntity.class)
-public class ZBlockEntityClient implements IBlockEntityClientAccess {
-    /**Store extra data on block entities*/
+public class TimeStopBlockEntityClient implements IBlockEntityClientAccess {
+    /**A client only mixin that stores the progress into a tick, so that when time is stopped, the block entity
+     * (such as a chest) can freeze without jittering and jumping to an earlier or later state*/
 
     @Unique
     private float roundabout$PrevTick;

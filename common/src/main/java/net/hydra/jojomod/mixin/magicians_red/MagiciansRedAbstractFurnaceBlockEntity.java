@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.magicians_red;
 
 import net.hydra.jojomod.access.IAbstractFurnaceBlockEntity;
 import net.minecraft.core.BlockPos;
@@ -15,24 +15,12 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(AbstractFurnaceBlockEntity.class)
-public abstract class ZAbstractFurnaceBlockEntity extends BaseContainerBlockEntity implements
+public abstract class MagiciansRedAbstractFurnaceBlockEntity extends BaseContainerBlockEntity implements
         WorldlyContainer, RecipeHolder, StackedContentsCompatible, IAbstractFurnaceBlockEntity {
 
-
-    @Shadow
-    int litTime;
-    @Shadow
-    int litDuration;
-    @Shadow
-    int cookingProgress;
-    @Shadow
-    int cookingTotalTime;
-
-    @Shadow protected abstract boolean isLit();
-
-    protected ZAbstractFurnaceBlockEntity(BlockEntityType<?> $$0, BlockPos $$1, BlockState $$2) {
-        super($$0, $$1, $$2);
-    }
+    /**Allows the possibility of directly setting a furnace as heated, so that Magician's Red
+     * can heat furnaces up.
+     * */
 
     @Unique
     @Override
@@ -41,5 +29,21 @@ public abstract class ZAbstractFurnaceBlockEntity extends BaseContainerBlockEnti
         this.litDuration = litTime;
         this.level.setBlock(this.getBlockPos(), this.getBlockState().setValue(AbstractFurnaceBlock.LIT, Boolean.valueOf(this.isLit())), 3);
         this.setChanged();
+    }
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    @Shadow
+    int litTime;
+    @Shadow
+    int litDuration;
+
+    @Shadow protected abstract boolean isLit();
+
+    protected MagiciansRedAbstractFurnaceBlockEntity(BlockEntityType<?> $$0, BlockPos $$1, BlockState $$2) {
+        super($$0, $$1, $$2);
     }
 }
