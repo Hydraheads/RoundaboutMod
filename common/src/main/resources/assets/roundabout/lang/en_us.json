@@ -1645,7 +1645,7 @@
   "config.roundabout.fogChainCooldown.name": "Fog Chain Cooldown",
   "config.roundabout.fogChainCooldown.desc": "Change the cooldown of fog chains, by default the cooldown is 80 (4 seconds).",
   "config.roundabout.phantomCorpseSpeed.name": "Phantom Riding Speed",
-  "config.roundabout.phantomCorpseSpeed.desc": "Change how fast the speed of phantom mounts are, it is 0.84 by default. Change to zero to disable the ability to ride phantom corpses in general.",
+  "config.roundabout.phantomCorpseSpeed.desc": "Change how fast the speed of phantom mounts are, it is 0.83 by default. Change to zero to disable the ability to ride phantom corpses in general.",
 
 
   "config.roundabout.numberOfYapLines.name": "Yap Line Count",

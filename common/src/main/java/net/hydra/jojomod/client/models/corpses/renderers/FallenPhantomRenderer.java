@@ -73,6 +73,7 @@ public class FallenPhantomRenderer<T extends Phantom> extends MobRenderer<Fallen
     @Override
     protected void setupRotations(FallenPhantom FM, PoseStack pose, float $$2, float $$3, float $$4) {
         super.setupRotations(FM,pose,$$2,$$3,$$4);
+        /**
         int tickTock = FM.ticksThroughPhases;
         if (FM.getPhasesFull()){
             tickTock = 10;
@@ -85,6 +86,7 @@ public class FallenPhantomRenderer<T extends Phantom> extends MobRenderer<Fallen
         float $$5 = (yes /10);
             pose.mulPose(Axis.XP.rotationDegrees($$5 * 180));
             pose.translate(0,-$$5 *(6*FM.getBbHeight()),0);
+         **/
     }
 
 }

@@ -61,6 +61,15 @@ public class FallenPhantomModel<T extends FallenMob> extends HierarchicalModel<T
             this.rightWingTip.zRot = -this.leftWingTip.zRot;
             this.tailBase.xRot = -(5.0F + Mth.cos($$6 * 2.0F) * 5.0F) * ((float) Math.PI / 180F);
             this.tailTip.xRot = -(5.0F + Mth.cos($$6 * 2.0F) * 5.0F) * ((float) Math.PI / 180F);
+        } else {
+            float $$6 = ((float) $$0.getUniqueFlapTickOffset() + 0) * 7.448451F * ((float) Math.PI / 180F);
+            float $$7 = 16.0F;
+            this.leftWingBase.zRot = Mth.cos($$6) * 16.0F * ((float) Math.PI / 180F);
+            this.leftWingTip.zRot = Mth.cos($$6) * 16.0F * ((float) Math.PI / 180F);
+            this.rightWingBase.zRot = -this.leftWingBase.zRot;
+            this.rightWingTip.zRot = -this.leftWingTip.zRot;
+            this.tailBase.xRot = -(5.0F + Mth.cos($$6 * 2.0F) * 5.0F) * ((float) Math.PI / 180F);
+            this.tailTip.xRot = -(5.0F + Mth.cos($$6 * 2.0F) * 5.0F) * ((float) Math.PI / 180F);
         }
     }
 }
