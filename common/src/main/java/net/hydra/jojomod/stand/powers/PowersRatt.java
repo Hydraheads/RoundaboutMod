@@ -260,7 +260,6 @@ public class PowersRatt extends NewDashPreset {
     public void tickPower() {
         super.tickPower();
 
-        Roundabout.LOGGER.info("A: {}, B: {}",this.getActivePower(),this.getAttackTimeDuring());
 
         if (this.getSelf().level().isClientSide()) {
             if (this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
@@ -275,7 +274,7 @@ public class PowersRatt extends NewDashPreset {
 
                 double hy = (targetPos.y() - (RE.getPosition(0).y()+RE.getEyeHeight()));
                 double hd = Math.sqrt(Math.pow(x,2)+Math.pow(z,2));
-                float hrot = (float) (Math.atan2(hd,hy) + Math.PI/2); // flip the sign if you want it to be not armed
+                float hrot = (float) (Math.atan2(hd,hy) + Math.PI/2 - (target == null ? Math.PI*0.11 : 0 )); // flip the sign if you want it to be not armed
 
                 tryPosPower(PowersRatt.ROTATE,true,new Vec3(hrot,rot,0));
                 tryPosPowerPacket(PowersRatt.ROTATE,new Vec3(hrot,rot,0));
@@ -294,7 +293,7 @@ public class PowersRatt extends NewDashPreset {
         if (shotcooldown == 0) {maxshotcooldown = 0;}
 
         if (scopeLevel == 0) {
-            if (attackTime > 30 && this.getChargeTime() != 0) {
+            if (attackTime > 60 && this.getChargeTime() != 0) {
                 chargeTime -= 2;
             }
         }
@@ -367,11 +366,10 @@ public class PowersRatt extends NewDashPreset {
                 }
             }
         } else if (this.getActivePower() == PowersRatt.PLACE_BURST) {
-            Roundabout.LOGGER.info("{}, {}",this.getAttackTimeDuring(), this.getAttackTimeDuring() >= 10);
+            setShotCooldown(25);
             if (getAttackTimeDuring() >= 8) {
                 setPowerNone();
                 setAttackTimeDuring(-1);
-                setShotCooldown(25);
             }
             if (this.attackTimeDuring%4 == 1) {
                 tryPower(PowersRatt.PLACE_BURST_FIRE,true);
@@ -569,8 +567,7 @@ public class PowersRatt extends NewDashPreset {
                         }
                     }
                     if (this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
-                        RattDartEntity e = new RattDartEntity(RE.level(), RE, 51);
-                        Roundabout.LOGGER.info("D: {}, E: {}",RE.getHeadRotationX(),RE.getStandRotationY());
+                        RattDartEntity e = new RattDartEntity(RE.level(), this.getSelf(), 51);
                         e.shootFromRotation(RE, RE.getHeadRotationX()*180/(float)Math.PI+180, RE.getStandRotationY()*180/(float)Math.PI, -0.5F, power, 0.1F);
                         e.EnableSuperThrow();
                         RE.level().addFreshEntity(e);
