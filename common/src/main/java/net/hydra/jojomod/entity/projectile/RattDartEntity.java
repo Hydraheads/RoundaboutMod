@@ -117,14 +117,20 @@ public class RattDartEntity extends AbstractArrow {
 
         if ($$1 instanceof LivingEntity $$3) {
             int f = EnchantmentHelper.getEnchantmentLevel(Enchantments.PROJECTILE_PROTECTION, $$3);
-            $$2 = (float) ($$2 * (1-(f*0.03)));
+            float pow = 0;
+            for (int b=PowersRatt.ShotDamageTicks.length-1;b>=0;b--) {
+                if (this.charged >= PowersRatt.ShotDamageTicks[b]) {
+                    pow = PowersRatt.ShotDamageTicks[b];
+                    break;
+                }
+            }
+            $$2 = (float) ($$2 * (pow-(f*0.03)));
 
 
         }
 
         Entity $$4 = this.getOwner();
-        DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.KNIFE, $$4);
-        //   DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.MELTING, $$4);
+        DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.MELTING, $$4);
         SoundEvent $$6 = ModSounds.KNIFE_IMPACT_EVENT;
         if ($$1.hurt($$5, $$2)) {
 
