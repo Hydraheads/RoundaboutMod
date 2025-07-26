@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.time_stop;
 
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -20,22 +20,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import javax.annotation.Nullable;
 
 @Mixin(BlockEntityRenderDispatcher.class)
-public class ZBlockEntityRenderDispatcher {
+public class TimeStopBlockEntityRenderDispatcher {
 
-    @Shadow
-    public Camera camera;
-    @Shadow
-    private static void tryRender(BlockEntity $$0, Runnable $$1) {
-    }
-    @Shadow
-    private static <T extends BlockEntity> void setupAndRender(BlockEntityRenderer<T> $$0, T $$1, float $$2, PoseStack $$3, MultiBufferSource $$4) {
-
-    }
-    @Shadow
-    @Nullable
-    public <E extends BlockEntity> BlockEntityRenderer<E> getRenderer(E $$0) {
-        return null;
-    }
+    /**A mixin to freeze block entity rendering during time stop*/
     @Inject(
             method = "render",
             at = @At(value = "HEAD"), cancellable = true)
@@ -58,5 +45,25 @@ public class ZBlockEntityRenderDispatcher {
             ((IBlockEntityClientAccess)$$0).roundabout$setPreTSTick();
             ((IBlockEntityAccess)$$0).roundabout$setRoundaboutTimeInteracted(false);
         }
+    }
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    @Shadow
+    public Camera camera;
+    @Shadow
+    private static void tryRender(BlockEntity $$0, Runnable $$1) {
+    }
+    @Shadow
+    private static <T extends BlockEntity> void setupAndRender(BlockEntityRenderer<T> $$0, T $$1, float $$2, PoseStack $$3, MultiBufferSource $$4) {
+
+    }
+    @Shadow
+    @Nullable
+    public <E extends BlockEntity> BlockEntityRenderer<E> getRenderer(E $$0) {
+        return null;
     }
 }
