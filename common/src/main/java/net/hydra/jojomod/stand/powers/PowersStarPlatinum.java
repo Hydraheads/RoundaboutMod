@@ -1276,7 +1276,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                     if (!this.getSelf().onGround() && canStandRebound()) {
                         done = true;
                             if (canExecuteMoveWithLevel(getLeapLevel())) {
-                                setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM, PowerIndex.GLOBAL_DASH);
+                                setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM, PowerIndex.NO_CD);
                             } else {
                                 setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                             }
@@ -1331,7 +1331,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             } else {
                if (((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1 && !this.getSelf().onGround() && canStandRebound()) {
 
-                   setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM, PowerIndex.GLOBAL_DASH);
+                   setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM, PowerIndex.NO_CD);
                } else {
                    if (!(((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1) && !this.getSelf().onGround() && canVault()) {
                        setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
