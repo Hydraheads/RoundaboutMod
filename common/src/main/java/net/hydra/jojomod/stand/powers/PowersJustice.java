@@ -789,6 +789,8 @@ public class PowersJustice extends NewDashPreset {
             setSkillIcon(context, x, y, 4, StandIcons.JUSTICE_PILOT, PowerIndex.SKILL_4);
         }
     }
+
+
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.fog_sword",
@@ -797,23 +799,38 @@ public class PowersJustice extends NewDashPreset {
                 "instruction.roundabout.press_skill", StandIcons.JUSTICE_CAST_FOG,1,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.fog_chain",
                 "instruction.roundabout.press_skill", StandIcons.JUSTICE_FOG_CHAIN,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, getVillagerMorphLevel(), "ability.roundabout.fog_morph_2",
-                "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_DISGUISE_2,1,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, getZombieMorphLevel(), "ability.roundabout.fog_morph_3",
-                "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_DISGUISE_3,1,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, getSkeletonMorphLevel(), "ability.roundabout.fog_morph_4",
-                "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_DISGUISE_4,1,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.fog_blocks",
-                "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_FOG_BLOCKS,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0, "ability.roundabout.dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 118, 0, "ability.roundabout.fog_pilot",
-                "instruction.roundabout.press_skill", StandIcons.JUSTICE_PILOT,4,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 80, 0, "ability.roundabout.corpse_army",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.corpse_army",
                 "instruction.roundabout.passive", StandIcons.JUSTICE_CORPSE_ARMY,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 99, 0, "ability.roundabout.tactics",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.fog_pilot",
+                "instruction.roundabout.press_skill", StandIcons.JUSTICE_PILOT,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.tactics",
                 "instruction.roundabout.press_skill", StandIcons.JUSTICE_TACTICS,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 118, getFogCloneLevel(), "ability.roundabout.fog_clones",
+
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.zombie_corpse",
+                "instruction.roundabout.passive", StandIcons.FALLEN_ZOMBIE,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0, "ability.roundabout.villager_corpse",
+                "instruction.roundabout.passive", StandIcons.FALLEN_VILLAGER,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 118, 0, "ability.roundabout.skeleton_corpse",
+                "instruction.roundabout.passive", StandIcons.FALLEN_SKELETON,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 80, 0, "ability.roundabout.creeper_corpse",
+                "instruction.roundabout.passive", StandIcons.FALLEN_CREEPER,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 99, 0, "ability.roundabout.spider_corpse",
+                "instruction.roundabout.passive", StandIcons.FALLEN_SPIDER,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 118, 0, "ability.roundabout.phantom_corpse",
+                "instruction.roundabout.passive", StandIcons.FALLEN_PHANTOM,3,level,bypass));
+
+
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96, topPos + 80, getVillagerMorphLevel(), "ability.roundabout.fog_morph_2",
+                "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_DISGUISE_2,1,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96, topPos + 99, getZombieMorphLevel(), "ability.roundabout.fog_morph_3",
+                "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_DISGUISE_3,1,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96, topPos + 118, getSkeletonMorphLevel(), "ability.roundabout.fog_morph_4",
+                "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_DISGUISE_4,1,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 80, 0, "ability.roundabout.fog_blocks",
+                "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_FOG_BLOCKS,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 99, 0, "ability.roundabout.dodge",
+                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 118, getFogCloneLevel(), "ability.roundabout.fog_clones",
                 "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_FOG_CLONES,3,level,bypass));
         return $$1;
     }

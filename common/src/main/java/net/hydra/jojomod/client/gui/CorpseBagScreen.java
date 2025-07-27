@@ -7,6 +7,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
+import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.Corpses;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.Poses;
@@ -232,18 +233,12 @@ public class CorpseBagScreen extends Screen {
     }
 
     public enum corpseIcon {
-        ZOMBIE(Component.translatable("entity.minecraft.zombie"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/corpse_icons/zombie.png"),Corpses.ZOMBIE.id,-31,31),
-        SKELETON(Component.translatable("entity.minecraft.skeleton"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/corpse_icons/skeleton.png"),Corpses.SKELETON.id,0,0),
-        CREEPER(Component.translatable("entity.minecraft.creeper"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/corpse_icons/creeper.png"),Corpses.CREEPER.id,31,0),
-        VILLAGER(Component.translatable("entity.minecraft.villager"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/corpse_icons/villager.png"),Corpses.VILLAGER.id,-31,0),
-        SPIDER(Component.translatable("entity.minecraft.spider"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/corpse_icons/spider.png"),Corpses.SPIDER.id,31,31),
-        PHANTOM(Component.translatable("entity.minecraft.phantom"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/corpse_icons/phantom.png"),Corpses.PHANTOM.id,0,62),
+        ZOMBIE(Component.translatable("entity.minecraft.zombie"), StandIcons.FALLEN_ZOMBIE, Corpses.ZOMBIE.id,-31,31),
+        SKELETON(Component.translatable("entity.minecraft.skeleton"), StandIcons.FALLEN_SKELETON,Corpses.SKELETON.id,0,0),
+        CREEPER(Component.translatable("entity.minecraft.creeper"), StandIcons.FALLEN_CREEPER,Corpses.CREEPER.id,31,0),
+        VILLAGER(Component.translatable("entity.minecraft.villager"), StandIcons.FALLEN_VILLAGER,Corpses.VILLAGER.id,-31,0),
+        SPIDER(Component.translatable("entity.minecraft.spider"), StandIcons.FALLEN_SPIDER,Corpses.SPIDER.id,31,31),
+        PHANTOM(Component.translatable("entity.minecraft.phantom"), StandIcons.FALLEN_PHANTOM,Corpses.PHANTOM.id,0,62),
 
         NONE(Component.translatable("roundabout.corpse.none"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/pose_icons/jonathan.png"),Corpses.NONE.id,0,31);

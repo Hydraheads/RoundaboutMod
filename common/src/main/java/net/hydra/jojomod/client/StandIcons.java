@@ -379,4 +379,20 @@ public class StandIcons {
 
     public static final ResourceLocation OVA_ENYA_SKIN = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/visage/player_skins/enya_ova.png");
+
+
+
+
+    public static final ResourceLocation FALLEN_ZOMBIE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/corpse_icons/zombie.png");
+    public static final ResourceLocation FALLEN_SKELETON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/corpse_icons/skeleton.png");
+    public static final ResourceLocation FALLEN_SPIDER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/corpse_icons/spider.png");
+    public static final ResourceLocation FALLEN_VILLAGER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/corpse_icons/villager.png");
+    public static final ResourceLocation FALLEN_CREEPER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/corpse_icons/creeper.png");
+    public static final ResourceLocation FALLEN_PHANTOM = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/corpse_icons/phantom.png");
 }
