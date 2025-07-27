@@ -61,6 +61,12 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
 
     @Override
     public boolean isNoGravity() {
+        boolean veh = this.isVehicle() && !this.getPassengers().isEmpty();
+        if(veh) {
+            if (!(this.level().getDayTime() % 24000L >= 13000)) {
+                return false;
+            }
+        }
         return this.getActivated();
     }
 
@@ -194,6 +200,14 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
         if (!this.getActivated()){
             super.travel(vec3);
             return;
+        } else {
+            boolean veh = this.isVehicle() && !this.getPassengers().isEmpty();
+            if(veh) {
+                if (!(this.level().getDayTime() % 24000L >= 13000)) {
+                    super.travel(vec3);
+                    return;
+                }
+            }
         }
         if(navigation.isInProgress() && navigation.isStuck() && getTarget() == null){
             navigation.stop();
