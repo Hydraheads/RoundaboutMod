@@ -272,9 +272,9 @@ public class PowersRatt extends NewDashPreset {
                 double z = (targetPos.z() - RE.getPosition(0).z());
                 float rot = (float) (Math.atan2(z,x) - Math.PI/2) ;
 
-                double hy = (targetPos.y() - (RE.getPosition(0).y()+RE.getEyeHeight()));
+                double hy = (targetPos.y() - (RE.getPosition(0).y() + 0.5));
                 double hd = Math.sqrt(Math.pow(x,2)+Math.pow(z,2));
-                float hrot = (float) (Math.atan2(hd,hy) + Math.PI/2 - (target == null ? Math.PI*0.11 : 0 )); // flip the sign if you want it to be not armed
+                float hrot = (float) (Math.atan2(hd,hy) + Math.PI/2); // flip the sign if you want it to be not armed
 
                 tryPosPower(PowersRatt.ROTATE,true,new Vec3(hrot,rot,0));
                 tryPosPowerPacket(PowersRatt.ROTATE,new Vec3(hrot,rot,0));
@@ -367,7 +367,7 @@ public class PowersRatt extends NewDashPreset {
             }
         } else if (this.getActivePower() == PowersRatt.PLACE_BURST) {
             setShotCooldown(25);
-            if (getAttackTimeDuring() >= 8) {
+            if (getAttackTimeDuring() >= 7) {
                 setPowerNone();
                 setAttackTimeDuring(-1);
             }

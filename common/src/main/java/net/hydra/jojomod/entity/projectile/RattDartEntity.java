@@ -28,11 +28,13 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 public class RattDartEntity extends AbstractArrow {
 
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$SUPER_THROWN = SynchedEntityData.defineId(RattDartEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final Vec3 ShootOffset = new Vec3(0.45,-0.65,-0.45);
     private int superThrowTicks = -1;
 
     @Override
@@ -53,7 +55,14 @@ public class RattDartEntity extends AbstractArrow {
         super(ModEntities.RATT_DART, player, world);
         if ( ((StandUser) player).roundabout$getStandPowers() instanceof PowersRatt PR) {
             if (PR.getStandEntity(player) instanceof RattEntity RE) {
-                this.setPos(RE.getEyePosition(0).subtract(0,0.7,0));
+                Vec2 v = new Vec2((float) (-1*Math.cos(RE.getStandRotationY())),
+                        (float) (-1*Math.sin(RE.getStandRotationY())) );
+                Roundabout.LOGGER.info("{},{}",v.x,v.y);
+                this.setPos(RE.getEyePosition(0).add(
+                        ShootOffset.x*v.y,
+                        ShootOffset.y,
+                        ShootOffset.z*v.x
+                ));
             }
         }
         charged = i;
@@ -159,8 +168,8 @@ public class RattDartEntity extends AbstractArrow {
                 this.doPostHurtEffects($$7);
             }
             this.playSound($$6, 1.0F, (this.random.nextFloat() * 0.2F + 0.9F));
-            this.discard();
         }
+        this.discard();
 
     }
 
