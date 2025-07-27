@@ -115,6 +115,7 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
         return false;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void tick() {
         if(!this.getActivated()){
@@ -150,13 +151,13 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
                 targetY += (float) (this.getTarget().getBoundingBox().getYsize()/2);
             }
             if (targetY < this.getY()) {
-                if (this.level().getBlockState(new BlockPos((int) this.getX(), (int) (this.getY() - verticalSpeed), (int) this.getZ())).isAir()) {
+                if (!this.level().getBlockState(new BlockPos((int) this.getX(), (int) (this.getY() - verticalSpeed), (int) this.getZ())).isSolid()) {
                     //this.setPos(this.getX(),this.getY()-verticalSpeed,this.getZ());
                     this.moveRelative(slowSpeed, new Vec3(0, -verticalSpeed, 0));
                 }
 
             } else if (targetY > this.getY()) {
-                if (this.level().getBlockState(new BlockPos((int) this.getX(), (int) (this.getY() + verticalSpeed), (int) this.getZ())).isAir()) {
+                if (!this.level().getBlockState(new BlockPos((int) this.getX(), (int) (this.getY() + verticalSpeed), (int) this.getZ())).isSolid()) {
                     //this.setPos(this.getX(),this.getY()+verticalSpeed,this.getZ());
                     this.moveRelative(slowSpeed, new Vec3(0, verticalSpeed * 2, 0));
                 }
@@ -183,6 +184,11 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
 
     public double getCustomJump() {
         return 0.5F;
+    }
+
+    @Override
+    protected boolean isAffectedByFluids() {
+        return false;
     }
 
     @Override
@@ -219,16 +225,11 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
 
         }
         if (this.isControlledByLocalInstance()) {
-            if (this.isInWater()) {
-                this.moveRelative(slowSpeed, vec3);
-                this.move(MoverType.SELF, this.getDeltaMovement());
-                this.setDeltaMovement(this.getDeltaMovement().scale(0.8f));
-            } else if (this.isInLava()) {
-                this.moveRelative(slowSpeed, vec3);
-                this.move(MoverType.SELF, this.getDeltaMovement());
-                this.setDeltaMovement(this.getDeltaMovement().scale(0.5));
-            } else {
                 float f = 0.91f;
+                boolean inWA = isInWaterOrBubble() || isInLava();
+                if (inWA){
+                    f*=0.8F;
+                }
                 float yboost = 0.1f;
                 //if (this.onGround()) {
                 //    f = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getBlock().getFriction() * 0.91f;
@@ -237,6 +238,9 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
                 if(veh) {
                     if(this.level().getDayTime() % 24000L >= 13000) {
                         f = ClientNetworking.getAppropriateConfig().justiceSettings.phantomCorpseSpeed;
+                        if (inWA){
+                            f*=0.7F;
+                        }
                         float spd = (float)this.getAttributeValue(Attributes.FLYING_SPEED);
                         this.moveRelative(spd, vec3);
                         this.setDeltaMovement(this.getDeltaMovement().add(0,vec3.y*yboost,0));
@@ -254,7 +258,6 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
                     this.move(MoverType.SELF, this.getDeltaMovement());
                     this.setDeltaMovement(this.getDeltaMovement().scale(f));
                 }
-            }
         }
         this.calculateEntityAnimation(false);
     }
