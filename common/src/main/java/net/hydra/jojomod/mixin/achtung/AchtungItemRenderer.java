@@ -39,7 +39,7 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.List;
 
-@Mixin(value = ItemRenderer.class, priority = 100)
+@Mixin(value = ItemRenderer.class, priority = 101)
 public abstract class AchtungItemRenderer {
     /**
      * Code for Achtung Baby Item Rendering!
