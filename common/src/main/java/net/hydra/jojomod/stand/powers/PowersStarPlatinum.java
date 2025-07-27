@@ -478,7 +478,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (this.activePower != PowerIndex.POWER_3 && !this.getSelf().isUnderWater()) {
             if (canExecuteMoveWithLevel(getInhaleLevel())) {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
-                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
+                tryPowerPacket(PowerIndex.POWER_3);
             }
         }
     }
@@ -509,7 +509,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 if (this.activePower != PowerIndex.POWER_1) {
                     ticksForFinger = 0;
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
-                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+                    tryPowerPacket(PowerIndex.POWER_1);
                 }
             }
         }
