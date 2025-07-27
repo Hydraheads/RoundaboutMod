@@ -1,8 +1,12 @@
 package net.hydra.jojomod.client.models.corpses.renderers;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.entity.corpses.FallenSpider;
 import net.hydra.jojomod.client.models.corpses.FallenSpiderModel;
+import net.hydra.jojomod.entity.corpses.FallenZombie;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -55,6 +59,23 @@ public class FallenSpiderRenderer<T extends Spider> extends MobRenderer<FallenSp
 
     protected float getFlipDegrees(T $$0) {
         return 180.0F;
+    }
+
+    @Override
+    protected void setupRotations(FallenSpider FM, PoseStack pose, float $$2, float $$3, float $$4) {
+        super.setupRotations(FM,pose,$$2,$$3,$$4);
+        int tickTock = FM.ticksThroughPhases;
+        if (FM.getPhasesFull()){
+            tickTock = 10;
+            FM.ticksThroughPhases = 10;
+        }
+        float yes = Math.min(10, tickTock + $$4);
+        if (FM.getActivated()) {
+            yes = Math.max(0,tickTock- $$4);
+        }
+        float $$5 = (yes /10);
+            pose.mulPose(Axis.XP.rotationDegrees($$5 * 180));
+            pose.translate(0, -$$5 * (1 * FM.getBbHeight()), 0);
     }
 
 }

@@ -55,8 +55,19 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
 
 
     @Override
+    protected void playStepSound(BlockPos $$0, BlockState $$1) {
+
+    }
+
+    @Override
     public boolean isNoGravity() {
-        return true;
+        boolean veh = this.isVehicle() && !this.getPassengers().isEmpty();
+        if(veh) {
+            if (!(this.level().getDayTime() % 24000L >= 13000)) {
+                return false;
+            }
+        }
+        return this.getActivated();
     }
 
     @Override
@@ -175,16 +186,35 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
     }
 
     @Override
-    public void travel(Vec3 vec3) {
-        //if(navigation.isDone() && this.getPassengers().isEmpty()){
-         //   return;
-        //}
-        if(navigation.isInProgress() && !navigation.isDone()){
-            this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(navigation.getTargetPos().getX(), navigation.getTargetPos().getY(), navigation.getTargetPos().getZ()));
+    public void aiStep() {
+        if(navigation.isInProgress() && !navigation.isDone()) {
+            if (new Vec2(navigation.getTargetPos().getX(),navigation.getTargetPos().getZ()).distanceToSqr(new Vec2((float) this.position().x, (float) this.position().z)) > 1) {
+                this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(navigation.getTargetPos().getX(), navigation.getTargetPos().getY(), navigation.getTargetPos().getZ()));
+            }
         }
-        if(navigation.isInProgress() && !navigation.isDone() && Math.abs(this.getX() - navigation.getTargetPos().getX()) <= 0.2 && Math.abs(this.getY() - navigation.getTargetPos().getY()) <= 0.2 && Math.abs(this.getZ() - navigation.getTargetPos().getZ()) <= 0.2  ) {
+        super.aiStep();
+    }
+    @Override
+    public void travel(Vec3 vec3) {
+
+        if (!this.getActivated()){
+            super.travel(vec3);
+            return;
+        } else {
+            boolean veh = this.isVehicle() && !this.getPassengers().isEmpty();
+            if(veh) {
+                if (!(this.level().getDayTime() % 24000L >= 13000)) {
+                    super.travel(vec3);
+                    return;
+                }
+            }
+        }
+        if(navigation.isInProgress() && navigation.isStuck() && getTarget() == null){
             navigation.stop();
-            navigation.createPath(this,0);
+        }
+
+        if(navigation.isInProgress() && !navigation.isDone() && Math.abs(this.getX() - navigation.getTargetPos().getX()) <= 0.4 && Math.abs(this.getY() - navigation.getTargetPos().getY()) <= 0.4 && Math.abs(this.getZ() - navigation.getTargetPos().getZ()) <= 0.4  ) {
+            navigation.stop();
             this.setDeltaMovement(0,0,0);
 
         }
@@ -203,7 +233,8 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
                 //if (this.onGround()) {
                 //    f = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getBlock().getFriction() * 0.91f;
                 //}
-                if(this.isVehicle() && !this.getPassengers().isEmpty()) {
+                boolean veh = this.isVehicle() && !this.getPassengers().isEmpty();
+                if(veh) {
                     if(this.level().getDayTime() % 24000L >= 13000) {
                         f = ClientNetworking.getAppropriateConfig().justiceSettings.phantomCorpseSpeed;
                         float spd = (float)this.getAttributeValue(Attributes.FLYING_SPEED);
@@ -213,11 +244,16 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
                         this.moveRelative( slowSpeed,vec3);
                     }
                 } else{
-                    this.moveRelative(nonDrivenSpeed, vec3);
-
+                    if (navigation.isInProgress()) {
+                        yboost = 0.5f;
+                        this.moveRelative(nonDrivenSpeed, vec3);
+                        this.setDeltaMovement(this.getDeltaMovement().add(0, vec3.y * yboost, 0));
+                    }
                 }
-                this.move(MoverType.SELF, this.getDeltaMovement());
-                this.setDeltaMovement(this.getDeltaMovement().scale(f));
+                if (veh || navigation.isInProgress()) {
+                    this.move(MoverType.SELF, this.getDeltaMovement());
+                    this.setDeltaMovement(this.getDeltaMovement().scale(f));
+                }
             }
         }
         this.calculateEntityAnimation(false);

@@ -1,6 +1,10 @@
 package net.hydra.jojomod.client.models.corpses.renderers;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.corpses.FallenPhantom;
+import net.hydra.jojomod.entity.corpses.FallenSpider;
 import net.hydra.jojomod.entity.corpses.FallenZombie;
 import net.hydra.jojomod.client.models.corpses.FallenZombieModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -56,5 +60,23 @@ public class FallenZombieRenderer extends HumanoidMobRenderer<FallenZombie, Fall
 
     public FallenZombieRenderer(EntityRendererProvider.Context $$0, ModelLayerLocation $$1, ModelLayerLocation $$2, ModelLayerLocation $$3) {
         this($$0, new FallenZombieModel<>($$0.bakeLayer($$1)), new FallenZombieModel<>($$0.bakeLayer($$2)), new FallenZombieModel<>($$0.bakeLayer($$3)));
+    }
+
+
+    @Override
+    protected void setupRotations(FallenZombie FM, PoseStack pose, float $$2, float $$3, float $$4) {
+        super.setupRotations(FM,pose,$$2,$$3,$$4);
+        int tickTock = FM.ticksThroughPhases;
+        if (FM.getPhasesFull()){
+            tickTock = 10;
+            FM.ticksThroughPhases = 10;
+        }
+        float yes = Math.min(10, tickTock + $$4);
+        if (FM.getActivated()) {
+            yes = Math.max(0,tickTock- $$4);
+        }
+        float $$5 = (yes /10);
+            pose.mulPose(Axis.XP.rotationDegrees($$5 * 90));
+            pose.translate(0,-$$5*(0.5*FM.getBbHeight()),-($$5*0.15));
     }
 }
