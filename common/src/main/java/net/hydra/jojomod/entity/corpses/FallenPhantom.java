@@ -61,7 +61,7 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
 
     @Override
     public boolean isNoGravity() {
-        return true;
+        return this.getActivated();
     }
 
     @Override
@@ -191,6 +191,10 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
     @Override
     public void travel(Vec3 vec3) {
 
+        if (!this.getActivated()){
+            super.travel(vec3);
+            return;
+        }
         if(navigation.isInProgress() && navigation.isStuck() && getTarget() == null){
             navigation.stop();
         }

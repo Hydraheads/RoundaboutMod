@@ -836,7 +836,7 @@ public class PowersJustice extends NewDashPreset {
     }
     @Override
     public float getBonusAttackSpeed() {
-        return 1.3F;
+        return 1f + ClientNetworking.getAppropriateConfig().justiceSettings.attackSpeedBuff;
     }
 
     public int getFogCloneLevel(){
@@ -853,7 +853,7 @@ public class PowersJustice extends NewDashPreset {
     }
     @Override
     public float getBonusPassiveMiningSpeed(){
-        return 1.3F;
+        return 1f + ClientNetworking.getAppropriateConfig().justiceSettings.miningSpeedBuff;
     }
 
     @Override
