@@ -307,6 +307,7 @@ public class PowersRatt extends NewDashPreset {
             if (this.isClient()) {
                 Entity e = MainUtil.getTargetEntity(this.self, 30, 15);
 
+                if (getShootTarget() == null) {this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);}
 
                 if (isAuto()) {
                  /*   Entity f = PowersRatt.CoolerrayCastEntity(SE,60);

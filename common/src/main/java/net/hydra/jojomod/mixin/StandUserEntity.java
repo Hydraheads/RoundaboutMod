@@ -506,7 +506,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
 
             if (this.getHealth() > this.getMaxHealth()) {
-                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.MELTING),this.getHealth()-this.getMaxHealth());
+                this.setHealth(this.getMaxHealth());
             }
             if (this.getEffect(ModEffects.MELTING) != null) {
                 if (this.getEffect(ModEffects.MELTING).getAmplifier() >= 6) {
@@ -3949,6 +3949,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Shadow @Nullable public abstract AttributeInstance getAttribute(Attribute attribute);
 
     @Shadow public abstract void kill();
+
+    @Shadow public abstract void setHealth(float $$0);
 
     @Unique private boolean roundabout$isPRunning = false;
 
