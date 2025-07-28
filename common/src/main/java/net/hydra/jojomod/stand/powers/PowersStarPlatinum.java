@@ -427,7 +427,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 holdDownClick = true;
                 ticksForFinger = 101;
                 animateStand(StarPlatinumEntity.STAR_FINGER_2);
-                ModPacketHandler.PACKET_ACCESS.intToServerPacket(attackTimeDuring, PacketDataIndex.INT_UPDATE_MOVE);
+                tryIntToServerPacket(PacketDataIndex.INT_UPDATE_MOVE,attackTimeDuring);
                 this.attackTimeDuring = 26;
             }
         }
@@ -478,7 +478,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (this.activePower != PowerIndex.POWER_3 && !this.getSelf().isUnderWater()) {
             if (canExecuteMoveWithLevel(getInhaleLevel())) {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
-                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
+                tryPowerPacket(PowerIndex.POWER_3);
             }
         }
     }
@@ -509,7 +509,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 if (this.activePower != PowerIndex.POWER_1) {
                     ticksForFinger = 0;
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
-                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+                    tryPowerPacket(PowerIndex.POWER_1);
                 }
             }
         }
@@ -759,7 +759,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         };
         for (Entity value : hitEntities) {
             if (this.isPacketPlayer()){
-                ModPacketHandler.PACKET_ACCESS.intToServerPacket(value.getId(), PacketDataIndex.INT_STAND_ATTACK_2);
+                tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK_2,value.getId());
             } else {
                 fingerDamage(value);
             }

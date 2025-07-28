@@ -2619,7 +2619,18 @@ public class StandPowers {
             );
         }
     }
-
+    /**This is different than int power packet only by virtue of what functions it passes through, and is useful
+     * for calling something even if you are in a barrage clash or other conditions would otherwise interrupt your
+     * packet. Very niche, but it exists, and isn't always used in essential ways*/
+    public void tryIntToServerPacket(byte packet, int integer){
+        if (this.self.level().isClientSide()) {
+            ModMessageEvents.sendToServer(
+                    ClientToServerPackets.StandPowerPackets.MESSAGES.IntToServer.value,
+                    packet,
+                    integer
+            );
+        }
+    }
     public void eatEffectIntercept(ItemStack $$0, Level $$1, LivingEntity $$2){
     }
 
