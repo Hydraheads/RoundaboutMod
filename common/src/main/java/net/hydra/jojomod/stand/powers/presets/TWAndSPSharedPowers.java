@@ -422,7 +422,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (this.self instanceof Player){
             if (isPacketPlayer()){
                 this.setAttackTimeDuring(-20);
-                ModPacketHandler.PACKET_ACCESS.intToServerPacket(getTargetEntityId2(3), PacketDataIndex.INT_STAND_ATTACK);
+                tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,getTargetEntityId2(3));
             }
         } else {
             /*Caps how far out the punch goes*/

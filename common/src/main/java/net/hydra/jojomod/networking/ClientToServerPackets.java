@@ -6,6 +6,7 @@ import net.hydra.jojomod.event.index.Corpses;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ModificationMaskItem;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
@@ -26,6 +27,7 @@ public class ClientToServerPackets {
             TryBlockPosPower("try_block_pos_power"),
             TryHitResultPosPower("try_hit_result_pos_power"),
             TryIntPower("try_int_power"),
+            IntToServer("int_to_server"),
             TryTripleIntPower("try_triple_int_power"),
             BodyBag("body_bag"),
             ModVisageConfigure("mod_visage");
@@ -102,6 +104,15 @@ public class ClientToServerPackets {
                         int d = (int) vargs[2];
                         int e = (int) vargs[3];
                         powers.roundabout$tryIntPower(b, true, c, d, e);
+                    });
+                }
+                /**Generic int to server packet*/
+                if (message.equals(MESSAGES.IntToServer.value)) {
+                    server.execute(() -> {
+                        basicChecks(sender);
+                        byte b = (byte) vargs[0];
+                        int c = (int) vargs[1];
+                        MainUtil.handleIntPacketC2S(sender,c,b);
                     });
                 }
                 /**Justice Body Bag Usage Packet*/
