@@ -867,7 +867,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             if (isPacketPlayer()){
                 //Roundabout.LOGGER.info("Time: "+this.self.getWorld().getTime()+" ATD: "+this.attackTimeDuring+" APP"+this.activePowerPhase);
                 this.attackTimeDuring = -10;
-                ModPacketHandler.PACKET_ACCESS.intToServerPacket(getTargetEntityId(), PacketDataIndex.INT_STAND_ATTACK);
+                tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,getTargetEntityId());
             }
         } else {
             /*Caps how far out the punch goes*/
@@ -1416,7 +1416,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             } else {
                 if (this.getSelf().level().isClientSide) {
                     /*If the server is behind on the client TS time, update it to lower*/
-                    ModPacketHandler.PACKET_ACCESS.intToServerPacket(TSChargeTicks, PacketDataIndex.INT_TS_TIME);
+                    tryIntToServerPacket(PacketDataIndex.INT_TS_TIME,TSChargeTicks);
                 } else {
                     /** This code was for the time resume sfx creeping in, but it sounds very chaotic
                      * with all of the other TS sounds so I am opting out
