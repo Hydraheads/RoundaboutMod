@@ -57,7 +57,6 @@ public class RattDartEntity extends AbstractArrow {
             if (PR.getStandEntity(player) instanceof RattEntity RE) {
                 Vec2 v = new Vec2((float) (-1*Math.cos(RE.getStandRotationY())),
                         (float) (-1*Math.sin(RE.getStandRotationY())) );
-                Roundabout.LOGGER.info("{},{}",v.x,v.y);
                 this.setPos(RE.getEyePosition(0).add(
                         ShootOffset.x*v.y,
                         ShootOffset.y,

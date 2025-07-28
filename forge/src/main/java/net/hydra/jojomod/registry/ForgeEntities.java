@@ -239,7 +239,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<RattEntity>> RATT =
             ENTITY_TYPES.register("ratt", () ->
-                    EntityType.Builder.of(RattEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                    EntityType.Builder.of(RattEntity::new, MobCategory.MISC).sized(0.75f, 1.2f).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "ratt").toString())
             );

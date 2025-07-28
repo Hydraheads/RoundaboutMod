@@ -266,7 +266,12 @@ public class PowersRatt extends NewDashPreset {
                 Entity target = getShootTarget();
                 Vec3 targetPos = getTargetPos().getLocation();
                 if (target != null) {
-                    targetPos = target.getEyePosition(0);
+                    targetPos = target.getEyePosition(1);
+                    double dist = targetPos.distanceTo(RE.getPosition(1));
+                    double time = dist/ShotPowerFloats[1];
+                    time *= 1.4;
+                    Vec3 vec = target.getDeltaMovement();
+                    targetPos = targetPos.add(vec.multiply(time,time,time));
                 }
                 double x = (targetPos.x() - RE.getPosition(0).x());
                 double z = (targetPos.z() - RE.getPosition(0).z());
@@ -280,10 +285,6 @@ public class PowersRatt extends NewDashPreset {
                 tryPosPowerPacket(PowersRatt.ROTATE,new Vec3(hrot,rot,0));
             }
         }
-
-
-
-
 
 
 
@@ -348,7 +349,7 @@ public class PowersRatt extends NewDashPreset {
     @Override
     public void updateUniqueMoves() {
         if (this.getActivePower() == PowerIndex.GUARD) {
-            updateChargeTime(Mth.clamp(getChargeTime()+3,0,100));
+            updateChargeTime(Mth.clamp(getChargeTime()+(this.attackTimeDuring%2 == 0 ? 4 : 3),0,100));
 
             if (getChargeTime() == 100) {this.setPowerNone();}
             if (scopeLevel == 0) {setPowerNone();}
@@ -367,11 +368,11 @@ public class PowersRatt extends NewDashPreset {
             }
         } else if (this.getActivePower() == PowersRatt.PLACE_BURST) {
             setShotCooldown(25);
-            if (getAttackTimeDuring() >= 7) {
+            if (getAttackTimeDuring() >= 5) {
                 setPowerNone();
                 setAttackTimeDuring(-1);
             }
-            if (this.attackTimeDuring%4 == 1) {
+            if (getAttackTimeDuring() == 1) {
                 tryPower(PowersRatt.PLACE_BURST_FIRE,true);
                 tryPowerPacket(PowersRatt.PLACE_BURST_FIRE);
             }
