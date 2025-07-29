@@ -279,7 +279,7 @@ public abstract class InputEvents implements IInputEvents {
                 if (isMining) {
                     if (player.getMainHandItem().getItem() instanceof ShearsItem) {
                         standComp.roundabout$getStandPowers().tryPower(PowerIndex.NONE, true);
-                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                        powers.tryPowerPacket(PowerIndex.NONE);
                     }
                 }
 
@@ -307,7 +307,7 @@ public abstract class InputEvents implements IInputEvents {
                                 }
                             } else {
                                 standComp.roundabout$tryPower(PowerIndex.NONE, true);
-                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                                powers.tryPowerPacket(PowerIndex.NONE);
 
                                 this.gameMode.stopDestroyBlock();
                             }
@@ -1014,8 +1014,8 @@ public abstract class InputEvents implements IInputEvents {
             boolean isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING);
             if (isMining) {
                 if (player.getMainHandItem().getItem() instanceof ShearsItem) {
-                    standComp.roundabout$getStandPowers().tryPower(PowerIndex.NONE, true);
-                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                    powers.tryPower(PowerIndex.NONE, true);
+                    powers.tryPowerPacket(PowerIndex.NONE);
                 }
             }
 
@@ -1024,8 +1024,8 @@ public abstract class InputEvents implements IInputEvents {
                     roundabout$activeMining = false;
                     Minecraft.getInstance().gameMode.stopDestroyBlock();
 
-                    standComp.roundabout$getStandPowers().tryPower(PowerIndex.NONE, true);
-                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                    powers.tryPower(PowerIndex.NONE, true);
+                    powers.tryPowerPacket(PowerIndex.NONE);
                 }
             }
             if (standComp.roundabout$getActive() && !((TimeStop)player.level()).CanTimeStopEntity(player)) {
@@ -1050,7 +1050,7 @@ public abstract class InputEvents implements IInputEvents {
                                         }
                                         if (powers.canUseMiningStand()) {
                                             standComp.roundabout$tryPower(PowerIndex.MINING, true);
-                                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.MINING);
+                                            powers.tryPowerPacket(PowerIndex.MINING);
                                         }
                                         isMining = true;
                                         break;
