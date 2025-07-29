@@ -37,7 +37,7 @@ public class D4CCloneEntity extends CloneEntity implements NeutralMob {
 
     @Override
     public void tick() {
-        /* weirdly specific bug fix */
+        /* weirdly specific bug fix*/
         if (this.player == null)
         {
             this.remove(RemovalReason.DISCARDED);
