@@ -3981,7 +3981,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void DoMoldTick() {
         MoldLevel = MoldLevel + 1f;
 
-            if (MoldLevel % 5 == 0) {
+            if (MoldLevel % 3 == 0) {
 
                 if(MoldLevel > 60){
                     MoldLevel = 0;
@@ -3990,7 +3990,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     }
                 }
                 else {
-                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), (MoldLevel/5f) + 3.0f);
+                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), (MoldLevel/3f) + 2.0f);
                 }
 
             }
@@ -4007,12 +4007,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "travel", at = @At(value = "TAIL"))
     public void   MoldDetection(Vec3 movement,CallbackInfo info) {
-        if((((IPermaCasting)this.level()).roundabout$inPermaCastRange(this.getOnPos(), PermanentZoneCastInstance.MOLD_FIELD))) {
-            boolean isUser = (((IPermaCasting)this.level()).roundabout$isPermaCastingEntity(((LivingEntity)(Object) this))&& this.roundabout$getStandPowers() instanceof PowersGreenDay);
+        if(((IPermaCasting)this.level()).roundabout$inPermaCastRange(this.getOnPos(), PermanentZoneCastInstance.MOLD_FIELD)) {
+            LivingEntity glumbo = ((IPermaCasting)this.level()).roundabout$inPermaCastRangeEntity(this.getOnPos(),PermanentZoneCastInstance.MOLD_FIELD);
+            boolean isUser = this.equals(glumbo);
             boolean down = previousYpos > this.getY();
-            boolean JumpImmune = jumpImmunityTicks > 0;
             boolean isStand = (((LivingEntity)(Object) this) instanceof StandEntity);
-            if (!roundabout$getStandPowers().isStoppingTime() &&!this.roundabout$isBubbleEncased() && !isUser && !isStand && down &&!JumpImmune){
+            if (!roundabout$getStandPowers().isStoppingTime() &&!this.roundabout$isBubbleEncased() && !isUser && !isStand && down && (glumbo.getY() > this.getY()) && !isUser && jumpImmunityTicks < 1){
                 for (int i = 0; i < 3; i = i + 1) {
 
                     double width = this.getBbWidth();
@@ -4028,15 +4028,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
                 DoMoldTick();
             }
-            else {
-                if (previousYpos < this.getY()) {
-                    jumpImmunityTicks = 2;
-                }
-            }
-            if(JumpImmune){
-                jumpImmunityTicks = jumpImmunityTicks-1;
-            }
+
+
+        }
+        if (previousYpos < this.getY()){
+            jumpImmunityTicks = 6;
+        }
+        else{
+            jumpImmunityTicks = jumpImmunityTicks -1;
         }
         previousYpos = this.getY();
+
+
     }
 }
