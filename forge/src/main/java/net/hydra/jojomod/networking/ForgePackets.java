@@ -212,10 +212,6 @@ public class ForgePackets implements IPacketAccess {
     }
 
     @Override
-    public void timeStopFloat(boolean TSJump) {
-        ForgePacketHandler.sendToServer(new ForgeTSJumpPacket(TSJump));
-    }
-    @Override
     public void updatePilot(LivingEntity entity) {
         ForgePacketHandler.sendToServer(new ForgePilotPacket((float) entity.getX(),
                 (float) entity.getY(), (float) entity.getZ(),entity.getYRot(),entity.getXRot(),

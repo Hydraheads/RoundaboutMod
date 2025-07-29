@@ -292,13 +292,6 @@ public class FabricPackets implements IPacketAccess {
     }
 
     @Override
-    public void timeStopFloat(boolean TSJump) {
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-
-        buffer.writeBoolean(TSJump);
-        ClientPlayNetworking.send(ModMessages.TIME_STOP_JUMP_ID, buffer);
-    }
-    @Override
     public void updatePilot(LivingEntity entity) {
         FriendlyByteBuf buffer = PacketByteBufs.create();
 

@@ -31,7 +31,8 @@ public class ClientToServerPackets {
             SingleByteToServer("single_byte_to_server"),
             TryTripleIntPower("try_triple_int_power"),
             BodyBag("body_bag"),
-            ModVisageConfigure("mod_visage");
+            ModVisageConfigure("mod_visage"),
+            TimeStopHovering("time_stop_hovering");
 
             public final String value;
 
@@ -246,6 +247,14 @@ public class ClientToServerPackets {
                     server.execute(() -> {
                         byte context = (byte) vargs[0];
                         MainUtil.handleSingleBytePacketC2S(sender, context);
+                    });
+                }
+
+                if (message.equals(MESSAGES.TimeStopHovering.value)) {
+                    server.execute(() -> {
+                        boolean tsJump = (boolean) vargs[0];
+                        ServerLevel level = (ServerLevel) sender.level();
+                        ((StandUser) sender).roundabout$setTSJump(tsJump);
                     });
                 }
             }

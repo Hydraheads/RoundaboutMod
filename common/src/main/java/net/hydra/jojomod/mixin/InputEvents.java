@@ -24,6 +24,7 @@ import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.item.FogBlockItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
@@ -733,7 +734,7 @@ public abstract class InputEvents implements IInputEvents {
     public void roundabout$SetTSJump(boolean roundaboutTSJump){
         if (ClientNetworking.getAppropriateConfig().timeStopSettings.enableHovering){
             ((StandUser)player).roundabout$setTSJump(roundaboutTSJump);
-            ModPacketHandler.PACKET_ACCESS.timeStopFloat(roundaboutTSJump);
+            C2SPacketUtil.timeStopHoveringPacket(roundaboutTSJump);
         }
     }
 

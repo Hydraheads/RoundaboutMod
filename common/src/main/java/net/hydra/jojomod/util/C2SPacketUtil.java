@@ -76,6 +76,13 @@ public class C2SPacketUtil {
         );
     }
 
+    public static void timeStopHoveringPacket(boolean hover){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.TimeStopHovering.value,
+                hover
+        );
+    }
+
     /**reading packets from the server*/
 
 }
