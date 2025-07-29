@@ -12,7 +12,6 @@ public class ModMessages {
     public static final ResourceLocation BYTE_C2S_PACKET = new ResourceLocation(Roundabout.MOD_ID,"byte_packet");
     public static final ResourceLocation FLOAT_C2S_PACKET = new ResourceLocation(Roundabout.MOD_ID,"float_packet");
     public static final ResourceLocation INT_C2S_PACKET = new ResourceLocation(Roundabout.MOD_ID,"int_packet");
-    public static final ResourceLocation SINGLE_BYTE_C2S_PACKET = new ResourceLocation(Roundabout.MOD_ID,"single_byte_packet");
     public static final ResourceLocation INVENTORY_C2S_PACKET = new ResourceLocation(Roundabout.MOD_ID,"inventory_c2s_packet");
     public static final ResourceLocation ITEM_CONTEXT_C2S_PACKET = new ResourceLocation(Roundabout.MOD_ID,"context_c2s_packet");
     public static final ResourceLocation HANDSHAKE = new ResourceLocation(Roundabout.MOD_ID,"handshake");

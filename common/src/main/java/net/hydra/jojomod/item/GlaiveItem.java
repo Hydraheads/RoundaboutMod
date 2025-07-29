@@ -8,6 +8,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -60,7 +61,7 @@ public class GlaiveItem extends SwordItem {
             $$1.startUsingItem($$2);
                 if ($$1.getUseItem() == $$3 && $$1.getUseItemRemainingTicks() == $$1.getUseItem().getUseDuration()) {
                     if ($$0.isClientSide) {
-                        ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_GLAIVE_START_SOUND);
+                        C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_GLAIVE_START_SOUND);
                     }
                     return InteractionResultHolder.success($$3);
                 }
@@ -75,7 +76,7 @@ public class GlaiveItem extends SwordItem {
             int $$5 = this.getUseDuration($$0) - $$3;
             int itemTime = 20;
             if ($$1.isClientSide) {
-                ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_ITEM_STOP_SOUND);
+                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_ITEM_STOP_SOUND);
             }
             if ($$5 >= itemTime) {
                 if ($$1.isClientSide){

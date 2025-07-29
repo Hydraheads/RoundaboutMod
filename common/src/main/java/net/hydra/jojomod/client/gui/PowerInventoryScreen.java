@@ -19,6 +19,7 @@ import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.GraphicsStatus;
@@ -791,9 +792,9 @@ public class PowerInventoryScreen
                         scp.roundabout$setMenuTicks(5);
                         scp.roundabout$setMenuTicks(5);
                         if (standUser.roundabout$isSealed()) {
-                            ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT_SEALED);
+                            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT_SEALED);
                         } else {
-                            ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT);
+                            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT);
                         }
                     }
                     return true;
@@ -803,9 +804,9 @@ public class PowerInventoryScreen
                     if (menuTicks <= -1) {
                         scp.roundabout$setMenuTicks(5);
                         if (standUser.roundabout$isSealed()) {
-                            ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SKIN_LEFT_SEALED);
+                            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SKIN_LEFT_SEALED);
                         } else {
-                            ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SKIN_LEFT);
+                            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SKIN_LEFT);
                         }
                     }
                     return true;
@@ -817,7 +818,7 @@ public class PowerInventoryScreen
                 if (isSurelyHovering(rightXPos, bottomYPos, 7, 13, $$0, $$1)) {
                     if (menuTicks <= -1) {
                         scp.roundabout$setMenuTicks(5);
-                        ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_IDLE_RIGHT);
+                        C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_IDLE_RIGHT);
                     }
                     return true;
                 }
@@ -825,7 +826,7 @@ public class PowerInventoryScreen
                 if (isSurelyHovering(lefXPos, bottomYPos, 7, 13, $$0, $$1)) {
                     if (menuTicks <= -1) {
                         scp.roundabout$setMenuTicks(5);
-                        ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_IDLE_LEFT);
+                        C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_IDLE_LEFT);
                     }
                     return true;
                 }

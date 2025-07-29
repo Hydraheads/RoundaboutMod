@@ -435,11 +435,11 @@ public class StandPowers {
     public void setScopeLevel(int level){
         if (scopeLevel <= 0 && level > 0){
             if (this.getSelf().level().isClientSide()){
-                ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SCOPE);
+                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SCOPE);
             }
         } else if (scopeLevel > 0 && level <= 0){
             if (this.getSelf().level().isClientSide()){
-                ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SCOPE_OFF);
+                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SCOPE_OFF);
             }
         }
         scopeLevel=level;

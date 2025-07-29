@@ -16,6 +16,7 @@ import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -744,7 +745,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             if (!forwardBarrage) {
                 hold1 = true;
                 forwardBarrage = true;
-                ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_FORWARD_BARRAGE);
+                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_FORWARD_BARRAGE);
             } else {
 
             }

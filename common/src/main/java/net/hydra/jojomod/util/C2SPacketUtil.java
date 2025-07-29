@@ -69,6 +69,13 @@ public class C2SPacketUtil {
         );
     }
 
+    public static void trySingleBytePacket(byte packet){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.SingleByteToServer.value,
+                packet
+        );
+    }
+
     /**reading packets from the server*/
 
 }

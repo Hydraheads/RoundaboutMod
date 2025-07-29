@@ -13,6 +13,7 @@ import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
 import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.client.*;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.*;
@@ -594,7 +595,7 @@ public class ClientUtil {
         mc.setScreen(new JusticeMobSwitcherScreen());
     }
     public static void setJusticeBlockScreen() {
-        ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_OPEN_FOG_INVENTORY);
+        C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_OPEN_FOG_INVENTORY);
         Minecraft mc = Minecraft.getInstance();
         mc.setScreen(
                 new FogInventoryScreen(

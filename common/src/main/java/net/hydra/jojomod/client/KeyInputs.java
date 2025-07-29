@@ -5,6 +5,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.PlayerMaskSlots;
 import net.minecraft.client.Minecraft;
@@ -49,7 +50,7 @@ public class KeyInputs {
             if (!stack2.equals(((IPlayerEntity)player).roundabout$getMaskVoiceSlot())){
                 ms.setItem(1,((IPlayerEntity)player).roundabout$getMaskVoiceSlot());
             }
-            ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_OPEN_POWER_INVENTORY);
+            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_OPEN_POWER_INVENTORY);
             ((IPlayerEntity)player).roundabout$setUnlockedBonusSkin(false);
         }
         roundaboutClickCount = 2;
@@ -63,7 +64,7 @@ public class KeyInputs {
                             ConfigManager.getClientConfig().pressingAbilityKeysSummonsStands) {
                         ((StandUser) player).roundabout$setActive(true);
                         ((StandUser) player).roundabout$setSummonCD(2);
-                        ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SILENT_SUMMON);
+                        C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SILENT_SUMMON);
 
                     }
                 }

@@ -8,6 +8,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -70,7 +71,7 @@ public abstract class ZAbstractFurnaceScreen<T extends AbstractFurnaceMenu> exte
                     int leftGearPos = i + 80;
                     int topGearPos = j + 55;
                     if (roundabout$isSurelyHovering(leftGearPos, topGearPos, 19, 18, mouseX, mouseY)) {
-                        ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_SMELT);
+                        C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SMELT);
                         SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
                         soundmanager.play(SimpleSoundInstance.forUI(SoundEvents.FIRECHARGE_USE, 1.0F));
                         cir.setReturnValue(true);

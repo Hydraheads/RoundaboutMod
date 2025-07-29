@@ -28,6 +28,7 @@ import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -2305,7 +2306,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setSummonCD(8);
             roundabout$setActive(false);
             roundabout$tryPower(PowerIndex.NONE, true);
-            ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_DESUMMON);
+            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_DESUMMON);
         }
         roundabout$sealedTicks = ticks;
     }

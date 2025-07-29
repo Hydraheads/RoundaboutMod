@@ -28,6 +28,7 @@ public class ClientToServerPackets {
             TryHitResultPosPower("try_hit_result_pos_power"),
             TryIntPower("try_int_power"),
             IntToServer("int_to_server"),
+            SingleByteToServer("single_byte_to_server"),
             TryTripleIntPower("try_triple_int_power"),
             BodyBag("body_bag"),
             ModVisageConfigure("mod_visage");
@@ -218,7 +219,6 @@ public class ClientToServerPackets {
                 /**Modification visage saving after client configuration*/
                 if (message.equals(MESSAGES.ModVisageConfigure.value)) {
                     server.execute(() -> {
-                        ServerLevel world = (ServerLevel) sender.level();
                         byte chest = (byte) vargs[0];
                         ItemStack stack = (ItemStack) vargs[1];
                         Vector3f vec = (Vector3f) vargs[2];
@@ -237,6 +237,15 @@ public class ClientToServerPackets {
                             item.getOrCreateTagElement("modifications").putInt("head", (int) vec.z);
                             item.getOrCreateTagElement("modifications").putInt("chest", chest);
                         }
+                    });
+                }
+
+
+                /**A single byte message to the server*/
+                if (message.equals(MESSAGES.SingleByteToServer.value)) {
+                    server.execute(() -> {
+                        byte context = (byte) vargs[0];
+                        MainUtil.handleSingleBytePacketC2S(sender, context);
                     });
                 }
             }
