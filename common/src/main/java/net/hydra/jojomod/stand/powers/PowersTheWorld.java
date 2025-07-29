@@ -882,10 +882,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                     if (!this.isBarrageCharging() && this.getActivePower() != PowerIndex.BARRAGE_CHARGE_2) {
                         if (this.activePower == PowerIndex.POWER_1 || this.activePower == PowerIndex.POWER_1_BONUS) {
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                            tryPowerPacket(PowerIndex.NONE);
                         } else {
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+                            tryPowerPacket(PowerIndex.POWER_1);
                         }
                         return;
                     }
@@ -928,7 +928,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public boolean doAssaultGrabClient(){
         if (this.getActivePower() == PowerIndex.POWER_1){
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BONUS, true);
-            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_BONUS);
+            tryPowerPacket(PowerIndex.POWER_1_BONUS);
             return true;
         }
         return false;

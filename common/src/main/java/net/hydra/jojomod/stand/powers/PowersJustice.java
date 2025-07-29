@@ -257,12 +257,10 @@ public class PowersJustice extends NewDashPreset {
                 } else {
                     if (TE instanceof FallenMob fm && fm.getController() == this.self.getId()) {
                         this.self.playSound(ModSounds.JUSTICE_SELECT_EVENT, 200F, 1.0F);
-                       ModPacketHandler.PACKET_ACCESS.intToServerPacket(fm.getId(),
-                                    PacketDataIndex.INT_STAND_ATTACK);
+                       tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,fm.getId());
                     } else if (!ClientUtil.isPlayer(TE)){
                         this.self.playSound(ModSounds.JUSTICE_SELECT_ATTACK_EVENT, 200F, 1.0F);
-                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(TE.getId(),
-                                PacketDataIndex.INT_STAND_ATTACK);
+                        tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,TE.getId());
                     }
                 }
             }
