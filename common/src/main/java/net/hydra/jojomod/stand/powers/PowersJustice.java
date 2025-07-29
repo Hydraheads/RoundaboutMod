@@ -565,8 +565,7 @@ public class PowersJustice extends NewDashPreset {
                     } else {
                         if (TE instanceof FallenCreeper fm && fm.getController() == this.self.getId()) {
                             this.self.playSound(ModSounds.JUSTICE_SELECT_ATTACK_EVENT, 200F, 1.0F);
-                            ModPacketHandler.PACKET_ACCESS.intToServerPacket(TE.getId(),
-                                    PacketDataIndex.INT_STAND_ATTACK_2);
+                            tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK_2,TE.getId());
                             return true;
                         }
                     }
@@ -618,8 +617,7 @@ public class PowersJustice extends NewDashPreset {
                                     > getMaxPilotRange()) {
                         IPlayerEntity ipe = ((IPlayerEntity) PL);
                         ipe.roundabout$setIsControlling(0);
-                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(0,
-                                PacketDataIndex.INT_UPDATE_PILOT);
+                        tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT,0);
                         ClientUtil.setCameraEntity(null);
                     } else {
                         StandEntity SE = getStandEntity(this.self);
@@ -982,15 +980,13 @@ public class PowersJustice extends NewDashPreset {
                 IPlayerEntity ipe = ((IPlayerEntity) PE);
                 ipe.roundabout$setIsControlling(0);
             }
-            ModPacketHandler.PACKET_ACCESS.intToServerPacket(0,
-                    PacketDataIndex.INT_UPDATE_PILOT);
+            tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT,0);
         } else {
             StandEntity entity = this.getStandEntity(this.self);
             int L = 0;
             if (entity != null){L=entity.getId();}
 
-            ModPacketHandler.PACKET_ACCESS.intToServerPacket(L,
-                    PacketDataIndex.INT_UPDATE_PILOT);
+            tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT,L);
         }
     }
 

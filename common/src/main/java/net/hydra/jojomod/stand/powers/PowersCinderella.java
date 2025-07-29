@@ -98,16 +98,16 @@ public class PowersCinderella extends NewDashPreset {
         if (!this.onCooldown(PowerIndex.SKILL_2)) {
             if (this.activePower == PowerIndex.POWER_2) {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                tryPowerPacket(PowerIndex.NONE);
             } else {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
-                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2);
+                tryPowerPacket(PowerIndex.POWER_2);
             }
         }
     }
 
     public void doUIClient(){
-        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+        tryPowerPacket(PowerIndex.POWER_1);
         ClientUtil.setCinderellaUI();
         hasUIOpen = true;
     }
@@ -306,7 +306,7 @@ public class PowersCinderella extends NewDashPreset {
             if (hasUIOpen && !ClientUtil.hasCinderellaUI()){
                 hasUIOpen = false;
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                tryPowerPacket(PowerIndex.NONE);
             }
         } else {
             if (this.getActivePower() == PowerIndex.POWER_1){
@@ -478,7 +478,7 @@ public class PowersCinderella extends NewDashPreset {
         if (this.self instanceof Player){
             if (isPacketPlayer()){
                 this.setAttackTimeDuring(-15);
-                ModPacketHandler.PACKET_ACCESS.intToServerPacket(getTargetEntityId2(5), PacketDataIndex.INT_STAND_ATTACK);
+                tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,getTargetEntityId2(5));
             }
         } else {
             /*Caps how far out the punch goes*/
