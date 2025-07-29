@@ -2,6 +2,7 @@ package net.hydra.jojomod.util;
 
 import net.hydra.jojomod.networking.ClientToServerPackets;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.zetalasis.networking.message.api.ModMessageEvents;
@@ -80,6 +81,13 @@ public class C2SPacketUtil {
         ModMessageEvents.sendToServer(
                 ClientToServerPackets.StandPowerPackets.MESSAGES.TimeStopHovering.value,
                 hover
+        );
+    }
+    public static void glaiveHitPacket(int entityId, ItemStack glaiveStack){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.GlaiveHit.value,
+                entityId,
+                glaiveStack
         );
     }
 

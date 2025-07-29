@@ -180,11 +180,6 @@ public class ForgePackets implements IPacketAccess {
     }
 
     @Override
-    public void glaivePacket(ItemStack glaive, int target) {
-        ForgePacketHandler.sendToServer(new ForgeGlaivePacket(target,glaive));
-    }
-
-    @Override
     public void byteToServerPacket(byte value, byte context) {
         ForgePacketHandler.sendToServer(new ForgeByteC2SPacket(value, context));
     }

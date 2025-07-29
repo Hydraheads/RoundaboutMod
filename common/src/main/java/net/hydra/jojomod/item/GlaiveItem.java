@@ -84,7 +84,7 @@ public class GlaiveItem extends SwordItem {
                     if (((Player)$$2).isCreative()){
                         glaiveReach = 5F;
                     }
-                    ModPacketHandler.PACKET_ACCESS.glaivePacket($$0, MainUtil.getTargetEntityId($$2, glaiveReach));
+                    C2SPacketUtil.glaiveHitPacket(MainUtil.getTargetEntityId($$2, glaiveReach), $$0);
                 }
                 InteractionHand interactionhand = $$2.getUsedItemHand();
                 $$2.swing(interactionhand);

@@ -59,7 +59,6 @@ public interface IPacketAccess {
 
     void moveSyncPacket(byte forward, byte strafe);
     void standSummonPacket();
-    void glaivePacket(ItemStack glaive, int target);
     void byteToServerPacket(byte value, byte context);
     void floatToServerPacket(float value, byte context);
     void intToServerPacket(int target, byte context);

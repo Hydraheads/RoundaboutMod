@@ -353,14 +353,7 @@ public class FabricPackets implements IPacketAccess {
         buffer.writeVector3f(vec);
         ClientPlayNetworking.send(ModMessages.ITEM_CONTEXT_C2S_PACKET, buffer);
     }
-    @Override
-    public void glaivePacket(ItemStack glaive, int target){
-        FriendlyByteBuf buffer = PacketByteBufs.create();
 
-        buffer.writeInt(target);
-        buffer.writeItem(glaive);
-        ClientPlayNetworking.send(ModMessages.GLAIVE_C2S_PACKET, buffer);
-    }
 
     @Override
     public void handshake(){

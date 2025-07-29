@@ -74,23 +74,6 @@ public class UtilC2S {
 
 
     }
-    /**A generalized packet for sending ints to the server. Context is what to do with the data byte*/
-    public static void glaiveAttack(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
-                                 FriendlyByteBuf buf, PacketSender responseSender){
-        //Everything here is server only!
-        ServerLevel world = (ServerLevel) player.level();
-        int entityId = buf.readInt();
-        ItemStack context = buf.readItem();
-
-        server.execute(() -> {
-            Entity entity = world.getEntity(entityId);
-            if (context.getItem() instanceof GlaiveItem) {
-                ((GlaiveItem)context.getItem()).glaiveAttack(context,world,player,entity);
-            }
-        });
-
-
-    }
     public static void inventoryChange(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
                                     FriendlyByteBuf buf, PacketSender responseSender){
         //Everything here is server only!

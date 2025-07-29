@@ -92,11 +92,6 @@ public class ForgePacketHandler {
                 .encoder(ForgeIntC2SPacket::toBytes)
                 .consumerMainThread(ForgeIntC2SPacket::handle)
                 .add();
-        INSTANCE.messageBuilder(ForgeGlaivePacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(ForgeGlaivePacket::new)
-                .encoder(ForgeGlaivePacket::toBytes)
-                .consumerMainThread(ForgeGlaivePacket::handle)
-                .add();
         INSTANCE.messageBuilder(ForgeCreativeModeSlotPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(ForgeCreativeModeSlotPacket::new)
                 .encoder(ForgeCreativeModeSlotPacket::toBytes)

@@ -23,7 +23,6 @@ public class FabricPacketManager {
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.BYTE_C2S_PACKET, UtilC2S::UpdateByte);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.FLOAT_C2S_PACKET, UtilC2S::UpdateFloat);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.INT_C2S_PACKET, UtilC2S::UpdateInt);
-        ServerPlayNetworking.registerGlobalReceiver(ModMessages.GLAIVE_C2S_PACKET, UtilC2S::glaiveAttack);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.INVENTORY_C2S_PACKET, UtilC2S::inventoryChange);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.ITEM_CONTEXT_C2S_PACKET, UtilC2S::itemChange);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.HANDSHAKE, ConfigC2S::Handshake);
@@ -32,7 +31,6 @@ public class FabricPacketManager {
     }
     //Server to Client
     public static void registerS2CPackets(){
-        ClientPlayNetworking.registerGlobalReceiver(ModMessages.NBT_SYNC_ID, NbtSyncPacket::receive);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.POWER_COOLDOWN_SYNC_ID, CooldownSyncPacket::updateAttackCooldowns);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.SKILL_COOLDOWN_SYNC_ID, CooldownSyncPacket::updateSkillCooldowns);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.SKILL_COOLDOWN_SYNC_2_ID, CooldownSyncPacket::updateSkillCooldowns2);

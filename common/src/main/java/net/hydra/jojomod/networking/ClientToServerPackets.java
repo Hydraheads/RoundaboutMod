@@ -4,6 +4,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.index.Corpses;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ModificationMaskItem;
 import net.hydra.jojomod.util.MainUtil;
@@ -12,6 +13,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -32,7 +34,8 @@ public class ClientToServerPackets {
             TryTripleIntPower("try_triple_int_power"),
             BodyBag("body_bag"),
             ModVisageConfigure("mod_visage"),
-            TimeStopHovering("time_stop_hovering");
+            TimeStopHovering("time_stop_hovering"),
+            GlaiveHit("glaive_hit");
 
             public final String value;
 
@@ -255,6 +258,18 @@ public class ClientToServerPackets {
                         boolean tsJump = (boolean) vargs[0];
                         ServerLevel level = (ServerLevel) sender.level();
                         ((StandUser) sender).roundabout$setTSJump(tsJump);
+                    });
+                }
+                if (message.equals(MESSAGES.GlaiveHit.value)) {
+                    server.execute(() -> {
+                        int target = (int) vargs[0];
+                        ItemStack glaive = (ItemStack) vargs[1];
+                        ServerLevel world = (ServerLevel) sender.level();
+
+                        Entity entity = world.getEntity(target);
+                        if (glaive.getItem() instanceof GlaiveItem) {
+                            ((GlaiveItem)glaive.getItem()).glaiveAttack(glaive,world,sender,entity);
+                        }
                     });
                 }
             }
