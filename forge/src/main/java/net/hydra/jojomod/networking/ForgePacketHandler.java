@@ -154,11 +154,6 @@ public class ForgePacketHandler {
                 .encoder(ForgeGuardUpdatePacket::toBytes)
                 .consumerMainThread(ForgeGuardUpdatePacket::handle)
                 .add();
-        INSTANCE.messageBuilder(ForgeUpdateDazePacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ForgeUpdateDazePacket::new)
-                .encoder(ForgeUpdateDazePacket::toBytes)
-                .consumerMainThread(ForgeUpdateDazePacket::handle)
-                .add();
         INSTANCE.messageBuilder(ForgeCDSyncPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(ForgeCDSyncPacket::new)
                 .encoder(ForgeCDSyncPacket::toBytes)

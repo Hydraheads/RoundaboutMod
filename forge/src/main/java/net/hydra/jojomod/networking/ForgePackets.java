@@ -26,11 +26,6 @@ public class ForgePackets implements IPacketAccess {
     }
 
     @Override
-    public void DazeTimePacket(ServerPlayer sp, byte dazeTime) {
-        ForgePacketHandler.sendToClient(new ForgeUpdateDazePacket(dazeTime), sp);
-    }
-
-    @Override
     public void syncCooldownPacket(ServerPlayer sp, int attackTime, int attackTimeMax, int attackTimeDuring, byte activePower, byte activePowerPhase) {
         ForgePacketHandler.sendToClient(new ForgeCDSyncPacket(attackTime,attackTimeMax,attackTimeDuring,activePower,activePowerPhase), sp);
     }

@@ -55,13 +55,7 @@ public class CooldownSyncPacket {
         }
     }
 
-    public static void updateDaze(Minecraft client, ClientPacketListener handler,
-                                   FriendlyByteBuf buf, PacketSender responseSender) {
-        if (client.player != null) {
-            byte dazeTime = buf.readByte();
-            ((StandUser) client.player).roundabout$setDazeTime(dazeTime);
-        }
-    }
+
 
     public static void sendFloatPower(Minecraft client, ClientPacketListener handler,
                                   FriendlyByteBuf buf, PacketSender responseSender) {

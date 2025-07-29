@@ -24,13 +24,6 @@ public class FabricPackets implements IPacketAccess {
         buffer.writeBoolean(broken);
         ServerPlayNetworking.send(sp,ModMessages.STAND_GUARD_POINT_ID, buffer);
     }
-    @Override
-    public void DazeTimePacket(ServerPlayer sp, byte dazeTime) {
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-        buffer.writeByte(dazeTime);
-        ServerPlayNetworking.send(sp,ModMessages.DAZE_ID, buffer);
-    }
-
 
     @Override
     public void syncCooldownPacket(ServerPlayer sp, int attackTime, int attackTimeMax, int attackTimeDuring,

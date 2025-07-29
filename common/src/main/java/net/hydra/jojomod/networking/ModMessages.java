@@ -30,7 +30,6 @@ public class ModMessages {
     public static final ResourceLocation STAND_PILOT_ID = new ResourceLocation(Roundabout.MOD_ID,"stand_pilot_sync");
     public static final ResourceLocation STAND_GUARD_CANCEL_PACKET = new ResourceLocation(Roundabout.MOD_ID,"guard_cancel_packet");
     public static final ResourceLocation STAND_GUARD_POINT_ID = new ResourceLocation(Roundabout.MOD_ID,"guard_point_packet");
-    public static final ResourceLocation DAZE_ID = new ResourceLocation(Roundabout.MOD_ID,"daze_packet");
     public static final ResourceLocation SOUND_CANCEL_ID = new ResourceLocation(Roundabout.MOD_ID,"sound_cancel_packet");
     public static final ResourceLocation SOUND_PLAY_ID = new ResourceLocation(Roundabout.MOD_ID,"sound_play_packet");
     public static final ResourceLocation BARRAGE_CLASH_UPDATE_PACKET = new ResourceLocation(Roundabout.MOD_ID,"clash_update_packet");

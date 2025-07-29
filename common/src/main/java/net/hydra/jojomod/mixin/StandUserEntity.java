@@ -30,6 +30,7 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -2123,7 +2124,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public void roundabout$syncDaze(){
         if (((LivingEntity) (Object) this) instanceof Player && !((LivingEntity) (Object) this).level().isClientSide){
-            ModPacketHandler.PACKET_ACCESS.DazeTimePacket(((ServerPlayer) (Object) this),this.roundabout$dazeTime);
+            S2CPacketUtil.synchDaze((ServerPlayer) (Object) this,this.roundabout$dazeTime);
         }
     }
 

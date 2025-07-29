@@ -213,24 +213,12 @@ public class ClientUtil {
 
                     }
                 }
-                /**Render invis blocks by getting their state*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.INVIS_BLOCK_STATE.value)) {
-                    Roundabout.LOGGER.info("Yes");
-                    BlockPos pos = (BlockPos) vargs[0];
-                    CompoundTag tag = (CompoundTag) vargs[1];
-                    ClientLevel level = Minecraft.getInstance().level;
-                    if (level != null && level.getChunkSource().hasChunk(pos.getX() >> 4, pos.getZ() >> 4)) {
-                        BlockEntity be =  level.getChunkAt(pos).getBlockEntity(pos, LevelChunk.EntityCreationType.IMMEDIATE);
-                        if (be instanceof InvisiBlockEntity ivb) {
-                            Roundabout.LOGGER.info("Yeyeye");
-                            if (tag.contains("OriginalState")) {
-                                Roundabout.LOGGER.info("Yeye");
-                                BlockState state = NbtUtils.readBlockState(BuiltInRegistries.BLOCK.asLookup(), tag.getCompound("OriginalState"));
-                                ivb.setOriginal2(state);
-                            }
-                        }
-                    }
+                /**Daze Packet*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncDaze.value)) {
+                    byte dazeTime = (byte)vargs[0];
+                    ClientUtil.updateDazePacket(dazeTime);
                 }
+
             }
         });
     }

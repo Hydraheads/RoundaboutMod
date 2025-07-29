@@ -14,7 +14,7 @@ public class ServerToClientPackets {
             Chrono("chrono_vision_player"),
             MANDOM_PENALTY("mandom_penalty"),
             TRUE_INVISIBILITY("invis"),
-            INVIS_BLOCK_STATE("invis_block");
+            SyncDaze("sync_daze");
 
             public final String value;
 

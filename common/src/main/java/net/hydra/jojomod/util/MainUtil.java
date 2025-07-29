@@ -1763,8 +1763,6 @@ public class MainUtil {
                 ((IPlayerEntity) player).roundabout$setShapeShift(data);
             }
 
-        } else if (context == PacketDataIndex.BYTE_CHANGE_MORPH) {
-
         }
     }
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
