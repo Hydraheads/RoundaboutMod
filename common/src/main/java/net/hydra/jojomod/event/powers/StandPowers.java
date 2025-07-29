@@ -20,6 +20,7 @@ import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.networking.ClientToServerPackets;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -2604,19 +2605,12 @@ public class StandPowers {
 
     public void tryPowerPacket(byte packet){
         if (this.self.level().isClientSide()) {
-            ModMessageEvents.sendToServer(
-                    ClientToServerPackets.StandPowerPackets.MESSAGES.TryPower.value,
-                    packet
-            );
+            C2SPacketUtil.tryPowerPacket(packet);
         }
     }
     public void tryIntPowerPacket(byte packet, int integer){
         if (this.self.level().isClientSide()) {
-            ModMessageEvents.sendToServer(
-                    ClientToServerPackets.StandPowerPackets.MESSAGES.TryIntPower.value,
-                    packet,
-                    integer
-            );
+            C2SPacketUtil.tryIntPowerPacket(packet,integer);
         }
     }
     /**This is different than int power packet only by virtue of what functions it passes through, and is useful
@@ -2624,57 +2618,34 @@ public class StandPowers {
      * packet. Very niche, but it exists, and isn't always used in essential ways*/
     public void tryIntToServerPacket(byte packet, int integer){
         if (this.self.level().isClientSide()) {
-            ModMessageEvents.sendToServer(
-                    ClientToServerPackets.StandPowerPackets.MESSAGES.IntToServer.value,
-                    packet,
-                    integer
-            );
+            C2SPacketUtil.tryIntToServerPacket(packet,integer);
         }
-    }
-    public void eatEffectIntercept(ItemStack $$0, Level $$1, LivingEntity $$2){
     }
 
     public void tryTripleIntPacket(byte packet, int in1, int in2, int in3){
         if (this.self.level().isClientSide()) {
-            ModMessageEvents.sendToServer(
-                    ClientToServerPackets.StandPowerPackets.MESSAGES.TryTripleIntPower.value,
-                    packet,
-                    in1,
-                    in2,
-                    in3
-            );
+            C2SPacketUtil.tryTripleIntPacket(packet, in1, in2, in3);
         }
     }
     public void tryBlockPosPowerPacket(byte packet, BlockPos pos){
         if (this.self.level().isClientSide()) {
-            ModMessageEvents.sendToServer(
-                    ClientToServerPackets.StandPowerPackets.MESSAGES.TryBlockPosPower.value,
-                    packet,
-                    pos
-            );
+            C2SPacketUtil.tryBlockPosPowerPacket(packet, pos);
         }
     }
     public void tryBlockPosPowerPacket(byte packet, BlockPos pos, HitResult hitResult){
         if (this.self.level().isClientSide()) {
-            ModMessageEvents.sendToServer(
-                    ClientToServerPackets.StandPowerPackets.MESSAGES.TryHitResultPosPower.value,
-                    packet,
-                    pos,
-                    hitResult
-            );
+            C2SPacketUtil.tryBlockPosPowerPacket(packet, pos, hitResult);
+        }
+    }
+    public void tryPosPowerPacket(byte packet, Vec3 pos){
+        if (this.self.level().isClientSide()) {
+            C2SPacketUtil.tryPosPowerPacket(packet, pos);
         }
     }
     public Vec3 savedPos;
-    public void tryPosPowerPacket(byte packet, Vec3 pos){
-        if (this.self.level().isClientSide()) {
-            ModMessageEvents.sendToServer(
-                    ClientToServerPackets.StandPowerPackets.MESSAGES.TryPosPower.value,
-                    packet,
-                    pos.toVector3f()
-            );
-        }
-    }
 
+    public void eatEffectIntercept(ItemStack $$0, Level $$1, LivingEntity $$2){
+    }
     public float multiplyPowerByStandConfigPlayers(float power){
         return power;
     }
