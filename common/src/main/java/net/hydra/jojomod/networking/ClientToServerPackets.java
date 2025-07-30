@@ -35,7 +35,8 @@ public class ClientToServerPackets {
             BodyBag("body_bag"),
             ModVisageConfigure("mod_visage"),
             TimeStopHovering("time_stop_hovering"),
-            GlaiveHit("glaive_hit");
+            GlaiveHit("glaive_hit"),
+            StandSummon("stand_summon");
 
             public final String value;
 
@@ -253,6 +254,7 @@ public class ClientToServerPackets {
                     });
                 }
 
+                /**Allows you to hover ins topped time*/
                 if (message.equals(MESSAGES.TimeStopHovering.value)) {
                     server.execute(() -> {
                         boolean tsJump = (boolean) vargs[0];
@@ -260,6 +262,7 @@ public class ClientToServerPackets {
                         ((StandUser) sender).roundabout$setTSJump(tsJump);
                     });
                 }
+                /**The glaive you use and the entity you hit with it*/
                 if (message.equals(MESSAGES.GlaiveHit.value)) {
                     server.execute(() -> {
                         int target = (int) vargs[0];
@@ -271,6 +274,11 @@ public class ClientToServerPackets {
                             ((GlaiveItem)glaive.getItem()).glaiveAttack(glaive,world,sender,entity);
                         }
                     });
+                }
+                /**Summoning stands*/
+                if (message.equals(MESSAGES.StandSummon.value)) {
+                    ServerLevel world = (ServerLevel) sender.level();
+                    ((StandUser) sender).roundabout$summonStand(world, false, true);
                 }
             }
         }

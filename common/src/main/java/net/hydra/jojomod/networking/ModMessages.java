@@ -8,7 +8,6 @@ public class ModMessages {
     /** Defines packets for client and server to communicate.
      * Note that forge and Fabric handle packets quite differently.
      * Both reference this file.*/
-    public static final ResourceLocation STAND_SUMMON_PACKET = new ResourceLocation(Roundabout.MOD_ID,"summon_packet");
     public static final ResourceLocation BYTE_C2S_PACKET = new ResourceLocation(Roundabout.MOD_ID,"byte_packet");
     public static final ResourceLocation FLOAT_C2S_PACKET = new ResourceLocation(Roundabout.MOD_ID,"float_packet");
     public static final ResourceLocation INT_C2S_PACKET = new ResourceLocation(Roundabout.MOD_ID,"int_packet");

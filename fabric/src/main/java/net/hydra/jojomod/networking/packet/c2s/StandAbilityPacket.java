@@ -12,14 +12,6 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.Entity;
 
 public class StandAbilityPacket {
-    public static void summon(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
-                              FriendlyByteBuf buf, PacketSender responseSender){
-        //Everything here is server only!
-        ServerLevel world = (ServerLevel) player.level();
-        server.execute(() -> {
-            ((StandUser) player).roundabout$summonStand(world, false, true);
-        });
-    }
     public static void switchPower(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
                               FriendlyByteBuf buf, PacketSender responseSender) {
         byte power = buf.readByte();

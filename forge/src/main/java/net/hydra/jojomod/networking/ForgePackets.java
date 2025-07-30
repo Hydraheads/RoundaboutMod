@@ -174,10 +174,6 @@ public class ForgePackets implements IPacketAccess {
     public void updateClashPacket(float clashProgress, boolean clashDone) {
         ForgePacketHandler.sendToServer(new ForgeClashUpdatePacketC2S(clashProgress,clashDone));
     }
-    @Override
-    public void standSummonPacket() {
-        ForgePacketHandler.sendToServer(new ForgeSummonPacket());
-    }
 
     @Override
     public void byteToServerPacket(byte value, byte context) {

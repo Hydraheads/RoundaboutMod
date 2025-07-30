@@ -31,7 +31,7 @@ public class KeyInputs {
                     user.roundabout$setActive(true);
                     user.roundabout$setSummonCD(2);
                 }
-                ModPacketHandler.PACKET_ACCESS.standSummonPacket();
+                C2SPacketUtil.standSummonPacket();
             }
             roundaboutClickCount = 2;
         }

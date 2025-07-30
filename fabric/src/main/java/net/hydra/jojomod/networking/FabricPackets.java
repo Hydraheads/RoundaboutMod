@@ -304,10 +304,6 @@ public class FabricPackets implements IPacketAccess {
         ClientPlayNetworking.send(ModMessages.STAND_PILOT_ID, buffer);
     }
 
-    @Override
-    public void standSummonPacket(){
-        ClientPlayNetworking.send(ModMessages.STAND_SUMMON_PACKET, PacketByteBufs.create());
-    }
 
     @Override
     public void byteToServerPacket(byte value, byte context){

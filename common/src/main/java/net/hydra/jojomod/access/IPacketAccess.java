@@ -58,7 +58,6 @@ public interface IPacketAccess {
     void updateClashPacket(float clashProgress, boolean clashDone);
 
     void moveSyncPacket(byte forward, byte strafe);
-    void standSummonPacket();
     void byteToServerPacket(byte value, byte context);
     void floatToServerPacket(float value, byte context);
     void intToServerPacket(int target, byte context);

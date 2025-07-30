@@ -90,6 +90,11 @@ public class C2SPacketUtil {
                 glaiveStack
         );
     }
+    public static void standSummonPacket(){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.StandSummon.value
+        );
+    }
 
     /**reading packets from the server*/
 

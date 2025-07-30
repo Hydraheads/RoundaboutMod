@@ -10,7 +10,6 @@ public class FabricPacketManager {
 
     //Client To Server
     public static void registerC2SPackets(){
-        ServerPlayNetworking.registerGlobalReceiver(ModMessages.STAND_SUMMON_PACKET, StandAbilityPacket::summon);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.STAND_POWER_PACKET, StandAbilityPacket::switchPower);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.STAND_POS_POWER_PACKET, StandAbilityPacket::switchPosPower);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.STAND_CHARGED_POWER_PACKET, StandAbilityPacket::switchChargedPower);
