@@ -52,10 +52,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.damagesource.CombatRules;
-import net.minecraft.world.damagesource.CombatTracker;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.damagesource.*;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffectUtil;
@@ -66,6 +63,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.WanderingTrader;
@@ -4006,9 +4004,36 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.tick();
 
     }
+    @Inject(method = "dropCustomDeathLoot", at = @At(value = "TAIL"), cancellable = true)
+    public void DropHeads(DamageSource $$0, int $$1, boolean $$2,CallbackInfo info){
+        Entity cause = $$0.getEntity();
+        DamageType type = $$0.type();
+        DamageSource uh = ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION);
+        LivingEntity me = (LivingEntity) (Object) this;
+        if(type == uh.type() && Roundabout.RANDOM.nextDouble()>0.95){
+            if((LivingEntity) (Object) this instanceof Zombie){
+                spawnAtLocation(new ItemStack(Items.ZOMBIE_HEAD));
+            } else if (me instanceof Creeper) {
+                spawnAtLocation(new ItemStack(Items.CREEPER_HEAD));
+            } else if (me instanceof Skeleton) {
+                spawnAtLocation(new ItemStack(Items.SKELETON_SKULL));
+            } else if (me instanceof WitherSkeleton) {
+                spawnAtLocation(new ItemStack(Items.WITHER_SKELETON_SKULL));
+            } else if (me instanceof Player){
+
+            } else if (me instanceof Piglin){
+                spawnAtLocation(new ItemStack(Items.PIGLIN_HEAD));
+            }
+
+        }
+
+    }
+
+
 
     @Inject(method = "travel", at = @At(value = "TAIL"))
     public void   MoldDetection(Vec3 movement,CallbackInfo info) {
+
         if(((IPermaCasting)this.level()).roundabout$inPermaCastRange(this.getOnPos(), PermanentZoneCastInstance.MOLD_FIELD)) {
             LivingEntity glumbo = ((IPermaCasting)this.level()).roundabout$inPermaCastRangeEntity(this.getOnPos(),PermanentZoneCastInstance.MOLD_FIELD);
             boolean isUser = this.equals(glumbo);

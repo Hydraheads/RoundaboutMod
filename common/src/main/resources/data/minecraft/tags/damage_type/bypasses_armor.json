@@ -10,6 +10,7 @@
     "roundabout:gas_explosion",
     "roundabout:stand_virus",
     "roundabout:stand_fire",
-    "roundabout:go_beyond"
+    "roundabout:go_beyond",
+    "roundabout:disintegration"
   ]
 }
