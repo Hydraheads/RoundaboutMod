@@ -2,6 +2,7 @@ package net.hydra.jojomod.util;
 
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 

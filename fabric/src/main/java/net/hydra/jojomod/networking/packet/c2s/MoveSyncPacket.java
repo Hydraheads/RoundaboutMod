@@ -26,24 +26,4 @@ public class MoveSyncPacket {
 
     }
 
-    public static void updateStandLocation(MinecraftServer server, ServerPlayer player,
-                                           ServerGamePacketListenerImpl handler,
-                                    FriendlyByteBuf buf, PacketSender responseSender){
-        //Everything here is server only!
-        ServerLevel world = (ServerLevel) player.level();
-        //public MoveSyncPacket() {
-        //}
-        float pilotX = buf.readFloat();
-        float pilotY = buf.readFloat();
-        float pilotZ = buf.readFloat();
-        float pilotXRot = buf.readFloat();
-        float pilotZRot = buf.readFloat();
-        int pilotStand = buf.readInt();
-
-        server.execute(() -> {
-            MainUtil.handleMovePilot(pilotX,pilotY,pilotZ,pilotXRot,pilotZRot,player,pilotStand);
-        });
-
-
-    }
 }

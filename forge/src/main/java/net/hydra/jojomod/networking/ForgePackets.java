@@ -203,12 +203,6 @@ public class ForgePackets implements IPacketAccess {
     }
 
     @Override
-    public void updatePilot(LivingEntity entity) {
-        ForgePacketHandler.sendToServer(new ForgePilotPacket((float) entity.getX(),
-                (float) entity.getY(), (float) entity.getZ(),entity.getYRot(),entity.getXRot(),
-                entity.getId()));
-    }
-    @Override
     public void handshake() {
         ForgePacketHandler.sendToServer(new ForgeHandshakePacket());
     }

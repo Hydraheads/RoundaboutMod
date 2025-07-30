@@ -23,7 +23,6 @@ public class ModMessages {
     public static final ResourceLocation SKILL_COOLDOWN_SYNC_ID = new ResourceLocation(Roundabout.MOD_ID,"skill_cooldown_sync");
     public static final ResourceLocation SKILL_COOLDOWN_SYNC_2_ID = new ResourceLocation(Roundabout.MOD_ID,"skill_cooldown_sync_2");
     public static final ResourceLocation MOVE_SYNC_ID = new ResourceLocation(Roundabout.MOD_ID,"move_sync");
-    public static final ResourceLocation STAND_PILOT_ID = new ResourceLocation(Roundabout.MOD_ID,"stand_pilot_sync");
     public static final ResourceLocation STAND_GUARD_CANCEL_PACKET = new ResourceLocation(Roundabout.MOD_ID,"guard_cancel_packet");
     public static final ResourceLocation STAND_GUARD_POINT_ID = new ResourceLocation(Roundabout.MOD_ID,"guard_point_packet");
     public static final ResourceLocation SOUND_CANCEL_ID = new ResourceLocation(Roundabout.MOD_ID,"sound_cancel_packet");

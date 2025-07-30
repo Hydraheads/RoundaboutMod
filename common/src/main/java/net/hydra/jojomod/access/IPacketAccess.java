@@ -33,7 +33,6 @@ public interface IPacketAccess {
     void resumeTileEntityTSPacket(ServerPlayer sp, Vec3i vec3i);
     void sendFloatPowerPacket(ServerPlayer sp, byte activePower, float data);
 
-    void updatePilot(LivingEntity entity);
     void sendIntPowerPacket(ServerPlayer sp, byte activePower, int data);
     void sendBlipPacket(ServerPlayer sp, byte activePower, int data, Vector3f blip);
     void sendIntPacket(ServerPlayer sp, byte activePower, int data);

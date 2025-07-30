@@ -36,7 +36,8 @@ public class ClientToServerPackets {
             ModVisageConfigure("mod_visage"),
             TimeStopHovering("time_stop_hovering"),
             GlaiveHit("glaive_hit"),
-            StandSummon("stand_summon");
+            StandSummon("stand_summon"),
+            UpdatePilot("update_pilot");
 
             public final String value;
 
@@ -279,6 +280,16 @@ public class ClientToServerPackets {
                 if (message.equals(MESSAGES.StandSummon.value)) {
                     ServerLevel world = (ServerLevel) sender.level();
                     ((StandUser) sender).roundabout$summonStand(world, false, true);
+                }
+                /**Update Piloting Stand*/
+                if (message.equals(MESSAGES.UpdatePilot.value)) {
+                    float x = (float)vargs[0];
+                    float y = (float)vargs[1];
+                    float z = (float)vargs[2];
+                    float xrot = (float)vargs[3];
+                    float zrot = (float)vargs[4];
+                    int ent = (int)vargs[5];
+                    MainUtil.handleMovePilot(x,y,z,xrot,zrot,sender,ent);
                 }
             }
         }

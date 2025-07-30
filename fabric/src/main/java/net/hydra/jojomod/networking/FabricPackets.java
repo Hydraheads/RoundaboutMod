@@ -291,19 +291,6 @@ public class FabricPackets implements IPacketAccess {
         ClientPlayNetworking.send(ModMessages.MOVE_SYNC_ID, buffer);
     }
 
-    @Override
-    public void updatePilot(LivingEntity entity) {
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-
-        buffer.writeFloat((float) entity.getX());
-        buffer.writeFloat((float) entity.getY());
-        buffer.writeFloat((float) entity.getZ());
-        buffer.writeFloat(entity.getYRot());
-        buffer.writeFloat(entity.getXRot());
-        buffer.writeInt(entity.getId());
-        ClientPlayNetworking.send(ModMessages.STAND_PILOT_ID, buffer);
-    }
-
 
     @Override
     public void byteToServerPacket(byte value, byte context){

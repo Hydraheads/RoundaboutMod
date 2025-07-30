@@ -1,7 +1,11 @@
 package net.hydra.jojomod.util;
 
 import net.hydra.jojomod.networking.ClientToServerPackets;
+import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -96,6 +100,17 @@ public class C2SPacketUtil {
         );
     }
 
+    public static void updatePilot(LivingEntity pilotStand){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.UpdatePilot.value,
+                (float)pilotStand.getX(),
+                (float)pilotStand.getY(),
+                (float)pilotStand.getZ(),
+                (float)pilotStand.getYRot(),
+                (float)pilotStand.getXRot(),
+                pilotStand.getId()
+        );
+    }
     /**reading packets from the server*/
 
 }
