@@ -470,7 +470,7 @@ public class BlockGrabPreset extends NewPunchingStand {
         }
         if (!this.isGuarding() && !this.isBarraging() && !this.isClashing()) {
             ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.GUARD,true);
-            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.GUARD);
+            tryPowerPacket(PowerIndex.GUARD);
             return true;
         }
         return false;
@@ -547,7 +547,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                     }
 
                     this.tryPower(PowerIndex.ATTACK, true);
-                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.ATTACK);
+                    tryPowerPacket(PowerIndex.ATTACK);
                 }
             }
         }
@@ -629,7 +629,7 @@ public class BlockGrabPreset extends NewPunchingStand {
     public void putDownClient(){
         if (hasBlock() || hasEntity()) {
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
-            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
+            tryPowerPacket(PowerIndex.POWER_2_BONUS);
         }
     }
 

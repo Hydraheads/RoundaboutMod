@@ -151,7 +151,7 @@ public class PowersD4C extends NewPunchingStand {
                     return;
 
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BLOCK, true);
-                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_BLOCK);
+                tryPowerPacket(PowerIndex.POWER_1_BLOCK);
                 this.setCooldown(PowerIndex.SKILL_1, 20);
             }
             case SKILL_2_NORMAL -> {
@@ -160,7 +160,7 @@ public class PowersD4C extends NewPunchingStand {
                     if (isBetweenTwoThings())
                     {
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
-                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2);
+                        tryPowerPacket(PowerIndex.POWER_2);
                         this.setCooldown(PowerIndex.SKILL_2, 80);
                     }
                 }
@@ -206,7 +206,7 @@ public class PowersD4C extends NewPunchingStand {
                         ModPacketHandler.PACKET_ACCESS.intToServerPacket(targetingClone.getId(), PacketDataIndex.INT_UPDATE_MOVE);
 
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
-                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_SNEAK);
+                        tryPowerPacket(PowerIndex.POWER_2_SNEAK);
 
                         this.setCooldown(PowerIndex.SKILL_2_SNEAK, 40);
                         this.targetingClone = null;
@@ -215,7 +215,7 @@ public class PowersD4C extends NewPunchingStand {
             }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
-                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3);
+                tryPowerPacket(PowerIndex.POWER_3);
                 this.setCooldown(PowerIndex.SKILL_3, 80);
                 //insert melt dodge cooldown here
             }
@@ -223,7 +223,7 @@ public class PowersD4C extends NewPunchingStand {
                 if (isPRunning || isBetweenTwoThings(this.getSelf().blockPosition()))
                 {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BLOCK, true);
-                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_3_BLOCK);
+                    tryPowerPacket(PowerIndex.POWER_3_BLOCK);
                     this.setCooldown(PowerIndex.SKILL_EXTRA, 20);
                 }
             }
@@ -232,11 +232,11 @@ public class PowersD4C extends NewPunchingStand {
                     if (isBetweenTwoThings()) {
                         if (!isHoldingSneak()) {
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4);
+                            tryPowerPacket(PowerIndex.POWER_4);
                         } else {
                             this.setCooldown(PowerIndex.SKILL_4,6000);
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_SNEAK, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_4_SNEAK);
+                            tryPowerPacket(PowerIndex.POWER_4_SNEAK);
                         }
                     }
                 }

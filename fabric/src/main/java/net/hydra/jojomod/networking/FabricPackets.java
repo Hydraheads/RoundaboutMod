@@ -223,12 +223,6 @@ public class FabricPackets implements IPacketAccess {
         ClientPlayNetworking.send(ModMessages.STAND_GUARD_CANCEL_PACKET, PacketByteBufs.create());
     }
     @Override
-    public void StandPowerPacket(byte power){
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-        buffer.writeByte(power);
-        ClientPlayNetworking.send(ModMessages.STAND_POWER_PACKET, buffer);
-    }
-    @Override
     public void StandChargedPowerPacket(byte power, int chargeTime){
         FriendlyByteBuf buffer = PacketByteBufs.create();
         buffer.writeByte(power);

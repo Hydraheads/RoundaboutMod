@@ -138,7 +138,7 @@ public class NewDashPreset extends StandPowerRewrite {
                             (blockHit.getLocation().z - this.getSelf().getZ()) / mag
                     );
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.VAULT, true);
-                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.VAULT);
+                    tryPowerPacket(PowerIndex.VAULT);
                     return true;
                 }
                 return true;
@@ -324,14 +324,14 @@ public class NewDashPreset extends StandPowerRewrite {
                         impactBrace = false;
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.FALL_BRACE_FINISH, true);
                         if (this.getSelf().level().isClientSide && this.isPacketPlayer()) {
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.FALL_BRACE_FINISH);
+                            tryPowerPacket(PowerIndex.FALL_BRACE_FINISH);
                         }
                     } else if (this.getSelf().isInWater() || this.getSelf().hasEffect(MobEffects.LEVITATION)) {
                         impactSlowdown = -1;
                         impactBrace = false;
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                         if (this.getSelf().level().isClientSide && this.isPacketPlayer()) {
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                            tryPowerPacket(PowerIndex.NONE);
                         }
                     } else {
                         if (impactAirTime > -1) {
@@ -350,7 +350,7 @@ public class NewDashPreset extends StandPowerRewrite {
                     impactBrace = false;
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     if (this.getSelf().level().isClientSide && this.isPacketPlayer()) {
-                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                        tryPowerPacket(PowerIndex.NONE);
                     }
                 }
             }

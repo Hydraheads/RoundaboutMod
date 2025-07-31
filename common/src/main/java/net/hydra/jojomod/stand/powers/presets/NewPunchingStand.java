@@ -65,7 +65,7 @@ public class NewPunchingStand extends NewDashPreset {
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
         if (!this.isGuarding() && canGuard()) {
             ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.GUARD,true);
-            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.GUARD);
+            tryPowerPacket(PowerIndex.GUARD);
             return true;
         }
         return false;

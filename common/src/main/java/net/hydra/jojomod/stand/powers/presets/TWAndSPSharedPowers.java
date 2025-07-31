@@ -842,7 +842,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             if (this.attackTimeDuring >= 80) {
                 if (this.getSelf() instanceof Player && this.getSelf().level().isClientSide && this.isPacketPlayer()){
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                    tryPowerPacket(PowerIndex.NONE);
                 }
             } else if (this.attackTimeDuring >= maxSuperHitTime && !(this.getSelf() instanceof Player)){
                 ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.SNEAK_ATTACK, true,maxSuperHitTime);

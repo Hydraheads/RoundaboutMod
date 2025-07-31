@@ -367,7 +367,7 @@ public class StandPowers {
         if (keyIsDown) {
             if (this.canAttack()) {
                 this.tryPower(PowerIndex.ATTACK, true);
-                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.ATTACK);
+                tryPowerPacket(PowerIndex.ATTACK);
             }
         }
     }
@@ -382,7 +382,7 @@ public class StandPowers {
             if (this.getAttackTime() >= this.getAttackTimeMax() ||
                     (this.getActivePowerPhase() != this.getActivePowerPhaseMax())) {
                 this.tryPower(PowerIndex.BARRAGE_CHARGE, true);
-                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.BARRAGE_CHARGE);
+                tryPowerPacket(PowerIndex.BARRAGE_CHARGE);
             }
         }
     }

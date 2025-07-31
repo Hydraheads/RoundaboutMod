@@ -136,11 +136,7 @@ public class ForgePackets implements IPacketAccess {
         ForgePacketHandler.sendToServer(new ForgeGuardCancelPacket());
     }
 
-    @Override
-    public void StandPowerPacket(byte power) {
-        ForgePacketHandler.sendToServer(new ForgeSwitchPowerPacket(power));
 
-    }
     @Override
     public void StandPosPowerPacket(byte power, BlockPos blockPos) {
         ForgePacketHandler.sendToServer(new ForgePosPowerPacket(power,blockPos));

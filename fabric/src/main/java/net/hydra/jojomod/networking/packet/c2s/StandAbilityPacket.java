@@ -12,13 +12,6 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.Entity;
 
 public class StandAbilityPacket {
-    public static void switchPower(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
-                              FriendlyByteBuf buf, PacketSender responseSender) {
-        byte power = buf.readByte();
-        server.execute(() -> {
-            ((StandUser) player).roundabout$tryPower(power, true);
-        });
-    }
     public static void switchPosPower(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
                                    FriendlyByteBuf buf, PacketSender responseSender) {
         byte power = buf.readByte();

@@ -27,11 +27,6 @@ public class ForgePacketHandler {
             .simpleChannel();
 
         /**Client to Server Packets*/
-        INSTANCE.messageBuilder(ForgeSwitchPowerPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(ForgeSwitchPowerPacket::new)
-                .encoder(ForgeSwitchPowerPacket::toBytes)
-                .consumerMainThread(ForgeSwitchPowerPacket::handle)
-                .add();
         INSTANCE.messageBuilder(ForgePosPowerPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(ForgePosPowerPacket::new)
                 .encoder(ForgePosPowerPacket::toBytes)

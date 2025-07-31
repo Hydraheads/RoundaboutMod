@@ -759,7 +759,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                     if (this.getAttackTime() >= this.getAttackTimeMax() ||
                             (this.getActivePowerPhase() != this.getActivePowerPhaseMax())) {
                         this.tryPower(PowerIndex.BARRAGE_CHARGE_2, true);
-                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.BARRAGE_CHARGE_2);
+                        tryPowerPacket(PowerIndex.BARRAGE_CHARGE_2);
                     }
                 }
             }

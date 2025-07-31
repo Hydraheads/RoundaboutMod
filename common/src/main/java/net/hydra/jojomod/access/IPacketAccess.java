@@ -46,7 +46,6 @@ public interface IPacketAccess {
 
     /**Client To Server Packets*/
     void StandGuardCancelClientPacket();
-    void StandPowerPacket(byte power);
     void StandPosPowerPacket(byte power, BlockPos blockPos);
     void StandChargedPowerPacket(byte power, int chargeTime);
 
