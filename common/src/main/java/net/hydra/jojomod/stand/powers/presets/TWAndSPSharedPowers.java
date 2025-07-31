@@ -883,19 +883,19 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (this.self instanceof Player){
             if (isPacketPlayer()){
                 if (forwardBarrage && Objects.nonNull(stand)) {
-                    ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(getTargetEntityId2(2.7F,stand,50), this.attackTimeDuring);
+                    C2SPacketUtil.standBarrageHitPacket(getTargetEntityId2(2.7F,stand,50), this.attackTimeDuring);
                 } else {
                     List<Entity> listE = getTargetEntityList(this.self,-1);
                     int id = -1;
                     if (storeEnt != null){
                         id = storeEnt.getId();
                     }
-                        ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(id, this.attackTimeDuring);
+                    C2SPacketUtil.standBarrageHitPacket(id, this.attackTimeDuring);
                     if (!listE.isEmpty() && ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect){
                         for (int i = 0; i< listE.size(); i++){
                             if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
                                 if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
-                                    ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(listE.get(i).getId(), this.attackTimeDuring + 1000);
+                                    C2SPacketUtil.standBarrageHitPacket(listE.get(i).getId(), this.attackTimeDuring + 1000);
                                 }
                             }
                         }

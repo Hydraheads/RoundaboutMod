@@ -156,10 +156,6 @@ public class ForgePackets implements IPacketAccess {
         ForgePacketHandler.sendToServer(new ForgeChargedPowerPacket(power,chargeTime));
     }
 
-    @Override
-    public void StandBarrageHitPacket(int targetID, int ATD) {
-        ForgePacketHandler.sendToServer(new ForgeBarrageHitPacket(targetID,ATD));
-    }
 
     @Override
     public void updateClashPacket(float clashProgress, boolean clashDone) {

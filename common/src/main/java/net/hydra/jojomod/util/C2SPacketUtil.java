@@ -126,6 +126,13 @@ public class C2SPacketUtil {
                 activePowerPhase
         );
     }
+    public static void standBarrageHitPacket(int targetID, int attackTimeDuring){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.StandBarrageHit.value,
+                targetID,
+                attackTimeDuring
+        );
+    }
 
     /**reading packets from the server*/
 

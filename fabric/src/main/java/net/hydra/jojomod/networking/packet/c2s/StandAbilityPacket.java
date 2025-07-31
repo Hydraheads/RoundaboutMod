@@ -36,16 +36,6 @@ public class StandAbilityPacket {
         });
     }
 
-    public static void barrageHit(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
-                             FriendlyByteBuf buf, PacketSender responseSender){
-        //Everything here is server only!
-        Entity targetEntity = player.level().getEntity(buf.readInt());
-        int hitNumber = buf.readInt();
-        server.execute(() -> {
-            ((StandUser) player).roundabout$getStandPowers().barrageImpact(targetEntity, hitNumber);
-        });
-    }
-
 
     /**When you release right click, stops guarding.*/
     public static void guardCancel(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
