@@ -279,12 +279,6 @@ public class FabricPackets implements IPacketAccess {
 
 
     @Override
-    public void handshake(){
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-        ClientPlayNetworking.send(ModMessages.HANDSHAKE, buffer);
-    }
-
-    @Override
     public void ackRegisterWorld() {
         ClientPlayNetworking.send(ModMessages.REQUEST_TELEPORT_TO_DYNAMIC_WORLD, PacketByteBufs.create());
     }

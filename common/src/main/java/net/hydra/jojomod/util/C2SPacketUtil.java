@@ -150,6 +150,13 @@ public class C2SPacketUtil {
         );
     }
 
+    /**The client asks the server for the config essentially.*/
+    public static void handshakePacket(){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.Handshake.value
+        );
+    }
+
     /**reading packets from the server*/
 
 }

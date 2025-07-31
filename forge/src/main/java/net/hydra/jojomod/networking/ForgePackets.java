@@ -167,11 +167,6 @@ public class ForgePackets implements IPacketAccess {
     }
 
     @Override
-    public void handshake() {
-        ForgePacketHandler.sendToServer(new ForgeHandshakePacket());
-    }
-
-    @Override
     public void ackRegisterWorld() {
         ForgePacketHandler.sendToServer(new ForgeAckDynamicWorld());
     }

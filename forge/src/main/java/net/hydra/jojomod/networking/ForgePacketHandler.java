@@ -62,11 +62,6 @@ public class ForgePacketHandler {
                 .encoder(ForgeItemChangePacket::toBytes)
                 .consumerMainThread(ForgeItemChangePacket::handle)
                 .add();
-        INSTANCE.messageBuilder(ForgeHandshakePacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(ForgeHandshakePacket::new)
-                .encoder(ForgeHandshakePacket::toBytes)
-                .consumerMainThread(ForgeHandshakePacket::handle)
-                .add();
         INSTANCE.messageBuilder(ForgeAckDynamicWorld.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(ForgeAckDynamicWorld::new)
                 .encoder(ForgeAckDynamicWorld::toBytes)

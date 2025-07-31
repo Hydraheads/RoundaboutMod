@@ -42,7 +42,8 @@ public class ClientToServerPackets {
             MoveSync("moving_sync"),
             StandPunch("stand_punch"),
             StandBarrageHit("stand_barrage_hit"),
-            BarrageClashUpdate("barrage_clash_update");
+            BarrageClashUpdate("barrage_clash_update"),
+            Handshake("handshake");
 
             public final String value;
 
@@ -335,6 +336,10 @@ public class ClientToServerPackets {
                         ((StandUser) sender).roundabout$getStandPowers().setClashProgress(clashProg);
                         ((StandUser) sender).roundabout$getStandPowers().setClashDone(clashDone);
                     }
+                }
+                /**Handshake packet*/
+                if (message.equals(MESSAGES.Handshake.value)) {
+                    MainUtil.handShake(sender);
                 }
             }
         }

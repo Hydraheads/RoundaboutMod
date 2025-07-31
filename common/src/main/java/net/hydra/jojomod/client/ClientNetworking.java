@@ -2,6 +2,7 @@ package net.hydra.jojomod.client;
 
 
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.config.Config;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.Networking;
@@ -25,7 +26,7 @@ public class ClientNetworking {
         ConfigManager.deserializeConfig(ser);
     }
     public static void sendHandshake() {
-        ModPacketHandler.PACKET_ACCESS.handshake();
+        C2SPacketUtil.handshakePacket();
     }
 
     private static void requestConfigFromServer() {

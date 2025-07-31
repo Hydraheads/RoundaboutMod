@@ -17,7 +17,6 @@ public class FabricPacketManager {
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.INT_C2S_PACKET, UtilC2S::UpdateInt);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.INVENTORY_C2S_PACKET, UtilC2S::inventoryChange);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.ITEM_CONTEXT_C2S_PACKET, UtilC2S::itemChange);
-        ServerPlayNetworking.registerGlobalReceiver(ModMessages.HANDSHAKE, ConfigC2S::Handshake);
 
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.REQUEST_TELEPORT_TO_DYNAMIC_WORLD, AckDynamicWorld::teleport);
     }
