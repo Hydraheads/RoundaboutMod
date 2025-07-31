@@ -123,8 +123,9 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         }
     }
     public static final byte
-            SPTWTHROW = 1,
-            SOFTTHROW = 2;
+            SPTHROW = 1,
+            TWTHROW = 2,
+            SOFTTHROW = 3;
     public static boolean throwAnObject(LivingEntity thrower, boolean canSnipe, ItemStack item, float getShotAccuracy,
                                      float getBundleAccuracy,
                                      float getThrowAngle1, float getThrowAngle2, float getThrowAngle3,
@@ -259,7 +260,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F*mult, getShotAccuracy);
             $$11.setCritArrow(true);
             StandEntity standEntity = ((StandUser) thrower).roundabout$getStand();
-            if (standEntity != null && styleType == SPTWTHROW) {
+            if (standEntity != null && (styleType == SPTHROW || styleType == TWTHROW)) {
                 if (!standEntity.canAcquireHeldItem){
                     $$11.pickup = AbstractArrow.Pickup.DISALLOWED;
                 }
@@ -297,7 +298,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 if (canSnipe){
                     ((IAbstractArrowAccess)$$7).roundabout$starThrowInit2();
                 }
-                if (styleType == SPTWTHROW) {
+                if ((styleType == SPTHROW || styleType == TWTHROW)) {
                     $$7.isThrown = true;
                 }
                 thrower.level().addFreshEntity($$7);
@@ -609,7 +610,13 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         if (getStyle() == SOFTTHROW){
             damage*= (float) (ClientNetworking.getAppropriateConfig().softAndWetSettings.bubbleLaunchedObjectMultiplier*0.01);
             damage*= 0.75F;
-        } else if (getStyle() == SPTWTHROW){
+        } else if (getStyle() == SPTHROW){
+            damage*= (float) (ClientNetworking.getAppropriateConfig().generalStandSettings.standThrownObjectMultiplier *0.01);
+            damage*= 1.05F;
+        } else if (getStyle() == TWTHROW){
+            damage*= (float) (ClientNetworking.getAppropriateConfig().generalStandSettings.standThrownObjectMultiplier *0.01);
+            damage*= 0.9F;
+        } else {
             damage*= (float) (ClientNetworking.getAppropriateConfig().generalStandSettings.standThrownObjectMultiplier *0.01);
         }
         return damage;

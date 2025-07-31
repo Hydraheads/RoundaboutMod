@@ -229,6 +229,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
 
     @Override
+    public byte getThrowStyleType(){
+        return ThrownObjectEntity.SPTHROW;
+    }
+
+    @Override
     public float getBarrageHitStrength(Entity entity){
         float str = super.getBarrageHitStrength(entity);
         if (str > 0.005F) {
