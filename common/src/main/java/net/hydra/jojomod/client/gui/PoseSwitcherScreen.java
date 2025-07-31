@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -119,7 +120,7 @@ public class PoseSwitcherScreen extends Screen {
 
         byte ppos = ((IPlayerEntity)minecraft.player).roundabout$GetPoseEmote();
         if (pIcon.id != ppos) {
-            ModPacketHandler.PACKET_ACCESS.byteToServerPacket(pIcon.id, PacketDataIndex.BYTE_STRIKE_POSE);
+            C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_STRIKE_POSE,pIcon.id);
         }
             //ModPacketHandler.PACKET_ACCESS.byteToServerPacket(pIcon3.id, PacketDataIndex.BYTE_CHANGE_MORPH);
     }

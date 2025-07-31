@@ -13,7 +13,6 @@ public class FabricPacketManager {
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.STAND_POS_POWER_PACKET, StandAbilityPacket::switchPosPower);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.STAND_CHARGED_POWER_PACKET, StandAbilityPacket::switchChargedPower);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.STAND_GUARD_CANCEL_PACKET, StandAbilityPacket::guardCancel);
-        ServerPlayNetworking.registerGlobalReceiver(ModMessages.BYTE_C2S_PACKET, UtilC2S::UpdateByte);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.FLOAT_C2S_PACKET, UtilC2S::UpdateFloat);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.INT_C2S_PACKET, UtilC2S::UpdateInt);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.INVENTORY_C2S_PACKET, UtilC2S::inventoryChange);

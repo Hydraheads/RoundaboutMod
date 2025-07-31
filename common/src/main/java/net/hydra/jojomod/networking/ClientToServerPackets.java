@@ -30,6 +30,7 @@ public class ClientToServerPackets {
             TryHitResultPosPower("try_hit_result_pos_power"),
             TryIntPower("try_int_power"),
             IntToServer("int_to_server"),
+            ByteToServer("byte_to_server"),
             SingleByteToServer("single_byte_to_server"),
             TryTripleIntPower("try_triple_int_power"),
             BodyBag("body_bag"),
@@ -124,6 +125,15 @@ public class ClientToServerPackets {
                         byte b = (byte) vargs[0];
                         int c = (int) vargs[1];
                         MainUtil.handleIntPacketC2S(sender,c,b);
+                    });
+                }
+                /**Generic byte to server packet*/
+                if (message.equals(MESSAGES.ByteToServer.value)) {
+                    server.execute(() -> {
+                        basicChecks(sender);
+                        byte b = (byte) vargs[0];
+                        byte c = (byte) vargs[1];
+                        MainUtil.handleBytePacketC2S(sender, c, b);
                     });
                 }
                 /**Justice Body Bag Usage Packet*/

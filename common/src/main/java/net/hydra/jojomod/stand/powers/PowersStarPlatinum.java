@@ -31,6 +31,7 @@ import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
@@ -353,7 +354,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 }
             } else {
                 if (letServerKnowScopeCatchIsReady) {
-                    ModPacketHandler.PACKET_ACCESS.byteToServerPacket(PowerIndex.SKILL_EXTRA_2, PacketDataIndex.BYTE_UPDATE_COOLDOWN);
+                    C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_UPDATE_COOLDOWN,PowerIndex.SKILL_EXTRA_2);
                     letServerKnowScopeCatchIsReady = false;
                 }
             }

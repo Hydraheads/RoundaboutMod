@@ -29,6 +29,7 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
@@ -964,7 +965,7 @@ public class PowersJustice extends NewDashPreset {
 
             if (canExecuteMoveWithLevel(getFogCloneLevel())) {
                 if (this.getSelf() instanceof Player PE && ((IPlayerEntity)PE).roundabout$getShapeShift() > ShapeShifts.PLAYER.id){
-                    ModPacketHandler.PACKET_ACCESS.byteToServerPacket((byte) 0, PacketDataIndex.BYTE_CHANGE_MORPH);
+                    C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_CHANGE_MORPH,(byte) 0);
                 }
                 this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().justiceSettings.fogCloneCooldown);
                 tryPowerPacket(PowerIndex.POWER_3);

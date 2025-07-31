@@ -2618,7 +2618,7 @@ public class StandPowers {
      * packet. Very niche, but it exists, and isn't always used in essential ways*/
     public void tryIntToServerPacket(byte packet, int integer){
         if (this.self.level().isClientSide()) {
-            C2SPacketUtil.tryIntToServerPacket(packet,integer);
+            C2SPacketUtil.intToServerPacket(packet,integer);
         }
     }
 

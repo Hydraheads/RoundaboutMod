@@ -32,11 +32,19 @@ public class C2SPacketUtil {
         );
     }
 
-    public static void tryIntToServerPacket(byte packet, int integer){
+    public static void intToServerPacket(byte packet, int integer){
         ModMessageEvents.sendToServer(
                 ClientToServerPackets.StandPowerPackets.MESSAGES.IntToServer.value,
                 packet,
                 integer
+        );
+    }
+
+    public static void byteToServerPacket(byte packet, byte value){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.ByteToServer.value,
+                packet,
+                value
         );
     }
 

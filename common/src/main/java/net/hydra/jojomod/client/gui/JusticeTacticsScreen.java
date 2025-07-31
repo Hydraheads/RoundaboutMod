@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.index.Tactics;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -153,7 +154,7 @@ public class JusticeTacticsScreen extends Screen {
 
         if (pIcon.id != Tactics.NONE.id) {
             minecraft.player.playSound(ModSounds.JUSTICE_SELECT_EVENT, 200F, 1.0F);
-            ModPacketHandler.PACKET_ACCESS.byteToServerPacket(pIcon.id,PacketDataIndex.BYTE_CORPSE_TACTICS);
+            C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_CORPSE_TACTICS,pIcon.id);
         }
     }
     public boolean sameKeyOne(KeyMapping key1, Options options){

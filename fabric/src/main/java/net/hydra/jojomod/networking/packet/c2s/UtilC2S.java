@@ -18,20 +18,6 @@ import org.joml.Vector3f;
 
 public class UtilC2S {
 
-    /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
-    public static void UpdateByte(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
-                                  FriendlyByteBuf buf, PacketSender responseSender){
-        //Everything here is server only!
-        ServerLevel world = (ServerLevel) player.level();
-        byte data = buf.readByte();
-        byte context = buf.readByte();
-
-        server.execute(() -> {
-            MainUtil.handleBytePacketC2S(player, data, context);
-        });
-
-    }
-
     /**A generalized packet for sending only a byte to the server.*/
     public static void UpdateSingleByte(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
                                   FriendlyByteBuf buf, PacketSender responseSender){

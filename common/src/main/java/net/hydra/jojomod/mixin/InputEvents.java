@@ -900,7 +900,7 @@ public abstract class InputEvents implements IInputEvents {
                     options.keyLeft.isDown() || options.keyRight.isDown() || options.keyJump.isDown() ||
                     player.isUsingItem() || player.swinging || player.hurtTime > 0){
                         ((IPlayerEntity) player).roundabout$SetPos(Poses.NONE.id);
-                        ModPacketHandler.PACKET_ACCESS.byteToServerPacket(Poses.NONE.id, PacketDataIndex.BYTE_STRIKE_POSE);
+                        C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_STRIKE_POSE,Poses.NONE.id);
                     }
                 }
 

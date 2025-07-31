@@ -17,6 +17,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -171,7 +172,7 @@ public class JusticeMobSwitcherScreen extends Screen {
                 if (ShapeShifts.isSkeleton(ShapeShifts.getShiftFromByte(MobIcon3.id)) && !sp.canExecuteMoveWithLevel(pj.getSkeletonMorphLevel())) {
                     return;
                 }
-                ModPacketHandler.PACKET_ACCESS.byteToServerPacket(MobIcon3.id, PacketDataIndex.BYTE_CHANGE_MORPH);
+                C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_CHANGE_MORPH,MobIcon3.id);
             }
            // minecraft.player.connection.sendUnsignedCommand(MobIcon3.getCommand());
         }
