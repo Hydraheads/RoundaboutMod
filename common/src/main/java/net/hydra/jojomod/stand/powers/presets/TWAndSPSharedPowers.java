@@ -574,8 +574,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (!level.isClientSide()) {
             if (((TimeStop) level).isTimeStoppingEntity(this.getSelf())) {
                 float tsTimeRemaining = (float) (ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopMinimumCooldown+((this.maxChargedTSTicks-this.getChargedTSTicks())*5*(ClientNetworking.getAppropriateConfig().timeStopSettings.additionalCooldownPerSecondsUsed *0.01)));
-                if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.POWER_1_SNEAK ||
-                        this.getActivePower() == PowerIndex.SNEAK_ATTACK ||
+                if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.POWER_1_SNEAK
+                        || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE || this.getActivePower() == PowerIndex.SNEAK_ATTACK ||
                         this.getActivePower() == PowerIndex.POWER_1) && this.getAttackTimeDuring() > -1){
                     this.hasActedInTS = true;
                 }
