@@ -20,10 +20,6 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 public class ForgePackets implements IPacketAccess {
-    @Override
-    public void StandGuardPointPacket(ServerPlayer sp, float guard, boolean broken) {
-        ForgePacketHandler.sendToClient(new ForgeGuardUpdatePacket(guard,broken), sp);
-    }
 
     @Override
     public void syncCooldownPacket(ServerPlayer sp, int attackTime, int attackTimeMax, int attackTimeDuring, byte activePower, byte activePowerPhase) {
@@ -159,16 +155,7 @@ public class ForgePackets implements IPacketAccess {
     public void StandChargedPowerPacket(byte power, int chargeTime) {
         ForgePacketHandler.sendToServer(new ForgeChargedPowerPacket(power,chargeTime));
     }
-    @Override
-    public void StandPunchPacket(int targetID, byte APP) {
-        ForgePacketHandler.sendToServer(new ForgePunchPacket(targetID,APP));
 
-    }
-
-    @Override
-    public void StandBarrageHitPacket(int targetID, int ATD) {
-        ForgePacketHandler.sendToServer(new ForgeBarrageHitPacket(targetID,ATD));
-    }
 
     @Override
     public void updateClashPacket(float clashProgress, boolean clashDone) {
@@ -189,10 +176,6 @@ public class ForgePackets implements IPacketAccess {
     }
 
 
-    @Override
-    public void moveSyncPacket(byte forward, byte strafe) {
-        ForgePacketHandler.sendToServer(new ForgeMoveSyncPacket(forward, strafe));
-    }
     @Override
     public void inventoryToServer(int slotNum, ItemStack stack, byte context) {
         ForgePacketHandler.sendToServer(new ForgeCreativeModeSlotPacket(slotNum, stack, context));

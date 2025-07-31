@@ -219,6 +219,14 @@ public class ClientUtil {
                     ClientUtil.updateDazePacket(dazeTime);
                 }
 
+                /**Guard Sync Packet*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncGuard.value)) {
+                    float guardPoints = (float)vargs[0];
+                    boolean guardBroken = (boolean)vargs[1];
+                    ((StandUser) player).roundabout$setGuardPoints(guardPoints);
+                    ((StandUser)player).roundabout$setGuardBroken(guardBroken);
+                }
+
 
             }
         });

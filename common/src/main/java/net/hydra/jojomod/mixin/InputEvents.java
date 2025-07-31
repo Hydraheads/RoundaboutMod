@@ -918,7 +918,7 @@ public abstract class InputEvents implements IInputEvents {
                         if (options.keyRight.isDown()) strafe--;
 
                         if (mf != forward) {
-                            ModPacketHandler.PACKET_ACCESS.moveSyncPacket(forward,strafe);
+                            C2SPacketUtil.moveSyncPacket(forward,strafe);
                         }
                     }
                 }

@@ -27,11 +27,6 @@ public class ForgePacketHandler {
             .simpleChannel();
 
         /**Client to Server Packets*/
-        INSTANCE.messageBuilder(ForgeMoveSyncPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(ForgeMoveSyncPacket::new)
-                .encoder(ForgeMoveSyncPacket::toBytes)
-                .consumerMainThread(ForgeMoveSyncPacket::handle)
-                .add();
         INSTANCE.messageBuilder(ForgeSwitchPowerPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(ForgeSwitchPowerPacket::new)
                 .encoder(ForgeSwitchPowerPacket::toBytes)
@@ -46,16 +41,6 @@ public class ForgePacketHandler {
                 .decoder(ForgeChargedPowerPacket::new)
                 .encoder(ForgeChargedPowerPacket::toBytes)
                 .consumerMainThread(ForgeChargedPowerPacket::handle)
-                .add();
-        INSTANCE.messageBuilder(ForgePunchPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(ForgePunchPacket::new)
-                .encoder(ForgePunchPacket::toBytes)
-                .consumerMainThread(ForgePunchPacket::handle)
-                .add();
-        INSTANCE.messageBuilder(ForgeBarrageHitPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(ForgeBarrageHitPacket::new)
-                .encoder(ForgeBarrageHitPacket::toBytes)
-                .consumerMainThread(ForgeBarrageHitPacket::handle)
                 .add();
         INSTANCE.messageBuilder(ForgeGuardCancelPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(ForgeGuardCancelPacket::new)
@@ -128,11 +113,6 @@ public class ForgePacketHandler {
                 .decoder(ForgeStopSoundPacket::new)
                 .encoder(ForgeStopSoundPacket::toBytes)
                 .consumerMainThread(ForgeStopSoundPacket::handle)
-                .add();
-        INSTANCE.messageBuilder(ForgeGuardUpdatePacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ForgeGuardUpdatePacket::new)
-                .encoder(ForgeGuardUpdatePacket::toBytes)
-                .consumerMainThread(ForgeGuardUpdatePacket::handle)
                 .add();
         INSTANCE.messageBuilder(ForgeCDSyncPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(ForgeCDSyncPacket::new)

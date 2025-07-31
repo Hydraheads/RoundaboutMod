@@ -17,13 +17,6 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 public class FabricPackets implements IPacketAccess {
-    @Override
-    public void StandGuardPointPacket(ServerPlayer sp, float guard, boolean broken) {
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-        buffer.writeFloat(guard);
-        buffer.writeBoolean(broken);
-        ServerPlayNetworking.send(sp,ModMessages.STAND_GUARD_POINT_ID, buffer);
-    }
 
     @Override
     public void syncCooldownPacket(ServerPlayer sp, int attackTime, int attackTimeMax, int attackTimeDuring,
@@ -260,21 +253,6 @@ public class FabricPackets implements IPacketAccess {
     }
 
     @Override
-    public void StandPunchPacket(int targetID, byte APP){
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-        buffer.writeInt(targetID);
-        buffer.writeByte(APP);
-        ClientPlayNetworking.send(ModMessages.STAND_PUNCH_PACKET, buffer);
-    }
-    @Override
-    public void StandBarrageHitPacket(int targetID, int ATD){
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-        buffer.writeInt(targetID);
-        buffer.writeInt(ATD);
-        ClientPlayNetworking.send(ModMessages.STAND_BARRAGE_HIT_PACKET, buffer);
-    }
-
-    @Override
     public void updateClashPacket(float clashProgress, boolean clashDone){
         FriendlyByteBuf buffer = PacketByteBufs.create();
         buffer.writeFloat(clashProgress);
@@ -282,14 +260,6 @@ public class FabricPackets implements IPacketAccess {
         ClientPlayNetworking.send(ModMessages.BARRAGE_CLASH_UPDATE_PACKET, buffer);
     }
 
-    @Override
-    public void moveSyncPacket(byte forward, byte strafe){
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-
-        buffer.writeByte(forward);
-        buffer.writeByte(strafe);
-        ClientPlayNetworking.send(ModMessages.MOVE_SYNC_ID, buffer);
-    }
 
 
     @Override

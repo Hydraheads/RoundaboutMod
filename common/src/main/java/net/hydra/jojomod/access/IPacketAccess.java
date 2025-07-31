@@ -14,7 +14,6 @@ public interface IPacketAccess {
      * Every packet function must be written here.*/
 
     /**Server To Client Packets*/
-    void StandGuardPointPacket(ServerPlayer sp, float guard, boolean broken);
     void syncCooldownPacket(ServerPlayer sp, int attackTime, int attackTimeMax, int attackTimeDuring,
                             byte activePower, byte activePowerPhase);
     void syncSkillCooldownPacket(ServerPlayer sp, byte moveOnCooldown, int cooldown);
@@ -51,12 +50,9 @@ public interface IPacketAccess {
     void StandPowerPacket(byte power);
     void StandPosPowerPacket(byte power, BlockPos blockPos);
     void StandChargedPowerPacket(byte power, int chargeTime);
-    void StandPunchPacket(int targetID, byte APP);
-    void StandBarrageHitPacket(int targetID, int ATD);
 
     void updateClashPacket(float clashProgress, boolean clashDone);
 
-    void moveSyncPacket(byte forward, byte strafe);
     void byteToServerPacket(byte value, byte context);
     void floatToServerPacket(float value, byte context);
     void intToServerPacket(int target, byte context);

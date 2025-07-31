@@ -243,6 +243,15 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 str *= 0.6F;
             }
         }
+        if (entity instanceof LivingEntity){
+            if (str >= ((LivingEntity) entity).getHealth() && ClientNetworking.getAppropriateConfig().generalStandSettings.barragesOnlyKillOnLastHit){
+                if (entity instanceof Player) {
+                    str = 0.00001F;
+                } else {
+                    str = 0F;
+                }
+            }
+        }
         return str;
     }
     @Override

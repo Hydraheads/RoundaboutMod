@@ -31,6 +31,7 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -2874,12 +2875,12 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 if (targetEntity != null){
                     id = targetEntity.getId();
                 }
-                ModPacketHandler.PACKET_ACCESS.StandPunchPacket(id, this.activePowerPhase);
+                C2SPacketUtil.standPunchPacket(id, this.activePowerPhase);
                 if (!listE.isEmpty()){
                     for (int i = 0; i< listE.size(); i++){
                         if (!(targetEntity != null && listE.get(i).is(targetEntity)) && listE.get(i).distanceTo(this.self) < distMax) {
                             if (!(listE.get(i) instanceof StandEntity)) {
-                                ModPacketHandler.PACKET_ACCESS.StandPunchPacket(listE.get(i).getId(), (byte) (this.activePowerPhase + 50));
+                                C2SPacketUtil.standPunchPacket(listE.get(i).getId(), (byte) (this.activePowerPhase + 50));
                             }
                         }
                     }

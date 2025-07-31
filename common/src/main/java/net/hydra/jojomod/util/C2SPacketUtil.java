@@ -111,6 +111,29 @@ public class C2SPacketUtil {
                 pilotStand.getId()
         );
     }
+
+    public static void moveSyncPacket(byte forward, byte sideways){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.MoveSync.value,
+                forward,
+                sideways
+        );
+    }
+    public static void standPunchPacket(int targetID, byte activePowerPhase){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.StandPunch.value,
+                targetID,
+                activePowerPhase
+        );
+    }
+    public static void standBarrageHitPacket(int targetID, int attackTimeDuring){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.StandBarrageHit.value,
+                targetID,
+                attackTimeDuring
+        );
+    }
+
     /**reading packets from the server*/
 
 }

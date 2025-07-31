@@ -37,7 +37,10 @@ public class ClientToServerPackets {
             TimeStopHovering("time_stop_hovering"),
             GlaiveHit("glaive_hit"),
             StandSummon("stand_summon"),
-            UpdatePilot("update_pilot");
+            UpdatePilot("update_pilot"),
+            MoveSync("moving_sync"),
+            StandPunch("stand_punch"),
+            StandBarrageHit("stand_barrage_hit");
 
             public final String value;
 
@@ -290,6 +293,27 @@ public class ClientToServerPackets {
                     float zrot = (float)vargs[4];
                     int ent = (int)vargs[5];
                     MainUtil.handleMovePilot(x,y,z,xrot,zrot,sender,ent);
+                }
+                /**Sync movement for stand leaning animation as you walk*/
+                if (message.equals(MESSAGES.MoveSync.value)) {
+                    byte forward = (byte)vargs[0];
+                    byte strafe = (byte)vargs[1];
+                    ((StandUser) sender).roundabout$setDI(forward, strafe);
+                }
+                /**Basic stand punch packet*/
+                if (message.equals(MESSAGES.StandPunch.value)) {
+                    int targetID = (int)vargs[0];
+                    byte APP = (byte)vargs[1];
+                    Entity TE = sender.level().getEntity(targetID);
+                    ((StandUser) sender).roundabout$getStandPowers().setActivePowerPhase(APP);
+                    ((StandUser) sender).roundabout$getStandPowers().punchImpact(TE);
+                }
+                /**Basic stand barrage hit packet*/
+                if (message.equals(MESSAGES.StandBarrageHit.value)) {
+                    int targetID = (int)vargs[0];
+                    int hitNumber = (int)vargs[1];
+                    Entity TE = sender.level().getEntity(targetID);
+                    ((StandUser) sender).roundabout$getStandPowers().barrageImpact(TE, hitNumber);
                 }
             }
         }

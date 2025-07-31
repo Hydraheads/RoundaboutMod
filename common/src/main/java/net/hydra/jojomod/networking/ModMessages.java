@@ -14,17 +14,13 @@ public class ModMessages {
     public static final ResourceLocation INVENTORY_C2S_PACKET = new ResourceLocation(Roundabout.MOD_ID,"inventory_c2s_packet");
     public static final ResourceLocation ITEM_CONTEXT_C2S_PACKET = new ResourceLocation(Roundabout.MOD_ID,"context_c2s_packet");
     public static final ResourceLocation HANDSHAKE = new ResourceLocation(Roundabout.MOD_ID,"handshake");
-    public static final ResourceLocation STAND_PUNCH_PACKET = new ResourceLocation(Roundabout.MOD_ID,"punch_packet");
     public static final ResourceLocation STAND_POWER_PACKET = new ResourceLocation(Roundabout.MOD_ID,"power_packet");
     public static final ResourceLocation STAND_POS_POWER_PACKET = new ResourceLocation(Roundabout.MOD_ID,"pos_power_packet");
     public static final ResourceLocation STAND_CHARGED_POWER_PACKET = new ResourceLocation(Roundabout.MOD_ID,"charged_power_packet");
-    public static final ResourceLocation STAND_BARRAGE_HIT_PACKET = new ResourceLocation(Roundabout.MOD_ID,"barrage_hit_packet");
     public static final ResourceLocation POWER_COOLDOWN_SYNC_ID = new ResourceLocation(Roundabout.MOD_ID,"power_cooldown_sync");
     public static final ResourceLocation SKILL_COOLDOWN_SYNC_ID = new ResourceLocation(Roundabout.MOD_ID,"skill_cooldown_sync");
     public static final ResourceLocation SKILL_COOLDOWN_SYNC_2_ID = new ResourceLocation(Roundabout.MOD_ID,"skill_cooldown_sync_2");
-    public static final ResourceLocation MOVE_SYNC_ID = new ResourceLocation(Roundabout.MOD_ID,"move_sync");
     public static final ResourceLocation STAND_GUARD_CANCEL_PACKET = new ResourceLocation(Roundabout.MOD_ID,"guard_cancel_packet");
-    public static final ResourceLocation STAND_GUARD_POINT_ID = new ResourceLocation(Roundabout.MOD_ID,"guard_point_packet");
     public static final ResourceLocation SOUND_CANCEL_ID = new ResourceLocation(Roundabout.MOD_ID,"sound_cancel_packet");
     public static final ResourceLocation SOUND_PLAY_ID = new ResourceLocation(Roundabout.MOD_ID,"sound_play_packet");
     public static final ResourceLocation BARRAGE_CLASH_UPDATE_PACKET = new ResourceLocation(Roundabout.MOD_ID,"clash_update_packet");
