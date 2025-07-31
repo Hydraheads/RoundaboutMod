@@ -38,7 +38,8 @@ public class ClientToServerPackets {
             GlaiveHit("glaive_hit"),
             StandSummon("stand_summon"),
             UpdatePilot("update_pilot"),
-            MoveSync("moving_sync");
+            MoveSync("moving_sync"),
+            StandPunch("stand_punch");
 
             public final String value;
 
@@ -297,6 +298,14 @@ public class ClientToServerPackets {
                     byte forward = (byte)vargs[0];
                     byte strafe = (byte)vargs[1];
                     ((StandUser) sender).roundabout$setDI(forward, strafe);
+                }
+                /**Basic stand punch packet*/
+                if (message.equals(MESSAGES.StandPunch.value)) {
+                    int targetID = (int)vargs[0];
+                    byte APP = (byte)vargs[1];
+                    Entity TE = sender.level().getEntity(targetID);
+                    ((StandUser) sender).roundabout$getStandPowers().setActivePowerPhase(APP);
+                    ((StandUser) sender).roundabout$getStandPowers().punchImpact(TE);
                 }
             }
         }

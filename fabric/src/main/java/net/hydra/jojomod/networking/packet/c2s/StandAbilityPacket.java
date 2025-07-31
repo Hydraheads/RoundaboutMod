@@ -36,16 +36,6 @@ public class StandAbilityPacket {
         });
     }
 
-    public static void punch(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
-                             FriendlyByteBuf buf, PacketSender responseSender){
-        //Everything here is server only!
-        Entity targetEntity = player.level().getEntity(buf.readInt());
-        byte APP = buf.readByte();
-        server.execute(() -> {
-            ((StandUser) player).roundabout$getStandPowers().setActivePowerPhase(APP);
-            ((StandUser) player).roundabout$getStandPowers().punchImpact(targetEntity);
-        });
-    }
     public static void barrageHit(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
                              FriendlyByteBuf buf, PacketSender responseSender){
         //Everything here is server only!

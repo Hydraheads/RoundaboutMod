@@ -50,7 +50,6 @@ public interface IPacketAccess {
     void StandPowerPacket(byte power);
     void StandPosPowerPacket(byte power, BlockPos blockPos);
     void StandChargedPowerPacket(byte power, int chargeTime);
-    void StandPunchPacket(int targetID, byte APP);
     void StandBarrageHitPacket(int targetID, int ATD);
 
     void updateClashPacket(float clashProgress, boolean clashDone);

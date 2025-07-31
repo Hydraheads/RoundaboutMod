@@ -280,22 +280,6 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
-    public void standPunch(){
-        /*By setting this to -10, there is a delay between the stand retracting*/
-
-        if (this.self instanceof Player){
-            if (isPacketPlayer()){
-                //Roundabout.LOGGER.info("Time: "+this.self.getWorld().getTime()+" ATD: "+this.attackTimeDuring+" APP"+this.activePowerPhase);
-                this.attackTimeDuring = -10;
-                ModPacketHandler.PACKET_ACCESS.StandPunchPacket(getTargetEntityId(), this.activePowerPhase);
-            }
-        } else {
-            /*Caps how far out the punch goes*/
-            Entity targetEntity = getTargetEntity(this.self,-1);
-            punchImpact(targetEntity);
-        }
-
-    }
 
     @Override
     public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos){

@@ -253,13 +253,6 @@ public class FabricPackets implements IPacketAccess {
     }
 
     @Override
-    public void StandPunchPacket(int targetID, byte APP){
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-        buffer.writeInt(targetID);
-        buffer.writeByte(APP);
-        ClientPlayNetworking.send(ModMessages.STAND_PUNCH_PACKET, buffer);
-    }
-    @Override
     public void StandBarrageHitPacket(int targetID, int ATD){
         FriendlyByteBuf buffer = PacketByteBufs.create();
         buffer.writeInt(targetID);

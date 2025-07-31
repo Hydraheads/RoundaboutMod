@@ -119,6 +119,13 @@ public class C2SPacketUtil {
                 sideways
         );
     }
+    public static void standPunchPacket(int targetID, byte activePowerPhase){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.StandPunch.value,
+                targetID,
+                activePowerPhase
+        );
+    }
 
     /**reading packets from the server*/
 
