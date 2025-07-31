@@ -3558,7 +3558,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 ci.setReturnValue(false);
                 return;
             } if (damageSource.is(ModDamageTypes.TIME)){
-                roundabout$postTSHurtTime = 17;
+                roundabout$postTSHurtTime = ClientNetworking.getAppropriateConfig().timeStopSettings.postTSiframes;
             } else {
                 /*Knife and match code*/
                 if (roundabout$postTSHurtTime > 0 || roundabout$extraIFrames > 0) {
@@ -3567,6 +3567,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 } else {
                     if (damageSource.is(ModDamageTypes.KNIFE) || damageSource.is(ModDamageTypes.MATCH)) {
                         if (damageSource.is(ModDamageTypes.KNIFE)){
+                            roundabout$gasolineIFRAMES = 10;
+                        }
+                        if (damageSource.is(ModDamageTypes.GASOLINE_EXPLOSION) && roundabout$knifeIFrameTicks <= 0){
                             roundabout$gasolineIFRAMES = 10;
                         }
                         int knifeCap = ClientNetworking.getAppropriateConfig().itemSettings.maxKnivesInOneHit;
@@ -3587,6 +3590,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             ci.setReturnValue(false);
                             return;
                         }
+                    } else if (roundabout$knifeIFrameTicks > 0 && MainUtil.isStandDamage(damageSource)){
+                        ci.setReturnValue(false);
+                        return;
                     }
                 }
             }
