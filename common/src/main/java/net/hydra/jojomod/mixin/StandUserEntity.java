@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.mojang.authlib.GameProfile;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.BarbedWireBlock;
@@ -38,6 +39,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -4010,7 +4012,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         DamageType type = $$0.type();
         DamageSource uh = ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION);
         LivingEntity me = (LivingEntity) (Object) this;
-        if(type == uh.type() && Roundabout.RANDOM.nextDouble()>0.95){
+        if(type == uh.type() && Roundabout.RANDOM.nextDouble()>0.0){
             if((LivingEntity) (Object) this instanceof Zombie){
                 spawnAtLocation(new ItemStack(Items.ZOMBIE_HEAD));
             } else if (me instanceof Creeper) {
@@ -4019,8 +4021,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 spawnAtLocation(new ItemStack(Items.SKELETON_SKULL));
             } else if (me instanceof WitherSkeleton) {
                 spawnAtLocation(new ItemStack(Items.WITHER_SKELETON_SKULL));
-            } else if (me instanceof Player){
 
+
+
+            } else if (me instanceof ServerPlayer){
+                ItemStack skull = new ItemStack(Items.PLAYER_HEAD);
+                skull.setTag(new CompoundTag());
+                //PlayerHeadItem
+                CompoundTag tag = skull.getTag();
+                tag.putString("SkullOwner",this.getName().getString());
+                skull.setTag(tag);
+                spawnAtLocation(skull);
             } else if (me instanceof Piglin){
                 spawnAtLocation(new ItemStack(Items.PIGLIN_HEAD));
             }

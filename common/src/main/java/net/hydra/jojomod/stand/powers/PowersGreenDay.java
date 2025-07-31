@@ -147,8 +147,8 @@ public class PowersGreenDay extends NewPunchingStand {
 
     public void toggleMold(){
         if (!this.onCooldown(PowerIndex.SKILL_4)) {
-            this.setCooldown(PowerIndex.SKILL_4, 400);
-            this.setCooldown(PowerIndex.SKILL_4_GUARD, 400);
+            this.setCooldown(PowerIndex.SKILL_4, 0);
+            this.setCooldown(PowerIndex.SKILL_4_GUARD, 0);
             this.tryPower(PowerIndex.POWER_4, true);
             tryPowerPacket(PowerIndex.POWER_4);
         }
