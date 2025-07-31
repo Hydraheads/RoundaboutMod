@@ -29,4 +29,13 @@ public class S2CPacketUtil {
             );
         }
     }
+    public static void updateBarrageClashS2C(Player player, int id, float clashProgress){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.UpdateBarrageClash.value,
+                    id,
+                    clashProgress
+            );
+        }
+    }
 }

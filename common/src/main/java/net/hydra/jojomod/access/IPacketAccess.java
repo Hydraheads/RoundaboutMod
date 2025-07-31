@@ -18,7 +18,6 @@ public interface IPacketAccess {
                             byte activePower, byte activePowerPhase);
     void syncSkillCooldownPacket(ServerPlayer sp, byte moveOnCooldown, int cooldown);
     void syncSkillCooldownPacket(ServerPlayer sp, byte moveOnCooldown, int cooldown, int maxcooldown);
-    void updateClashPacket(ServerPlayer sp, int id, float clashProgress);
     void stopSoundPacket(ServerPlayer sp, int id, byte soundNo);
 
     void startSoundPacket(ServerPlayer sp, int id, byte soundNo);
@@ -50,8 +49,6 @@ public interface IPacketAccess {
     void StandPowerPacket(byte power);
     void StandPosPowerPacket(byte power, BlockPos blockPos);
     void StandChargedPowerPacket(byte power, int chargeTime);
-
-    void updateClashPacket(float clashProgress, boolean clashDone);
 
     void byteToServerPacket(byte value, byte context);
     void floatToServerPacket(float value, byte context);

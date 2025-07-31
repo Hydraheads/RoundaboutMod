@@ -36,11 +36,6 @@ public class ForgePackets implements IPacketAccess {
     }
 
     @Override
-    public void updateClashPacket(ServerPlayer sp, int id, float clashProgress) {
-        ForgePacketHandler.sendToClient(new ForgeClashUpdatePacket(id, clashProgress), sp);
-    }
-
-    @Override
     public void stopSoundPacket(ServerPlayer sp, int id, byte soundId) {
         ForgePacketHandler.sendToClient(new ForgeStopSoundPacket(id,soundId), sp);
     }
@@ -154,12 +149,6 @@ public class ForgePackets implements IPacketAccess {
     @Override
     public void StandChargedPowerPacket(byte power, int chargeTime) {
         ForgePacketHandler.sendToServer(new ForgeChargedPowerPacket(power,chargeTime));
-    }
-
-
-    @Override
-    public void updateClashPacket(float clashProgress, boolean clashDone) {
-        ForgePacketHandler.sendToServer(new ForgeClashUpdatePacketC2S(clashProgress,clashDone));
     }
 
     @Override

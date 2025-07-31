@@ -22,6 +22,7 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -1989,9 +1990,8 @@ public class StandPowers {
     }
     public void setClashProgress(float clashProgress1){
         this.clashProgress = clashProgress1;
-        if (!this.self.level().isClientSide && this.clashOp != null && this.clashOp instanceof ServerPlayer){
-            ModPacketHandler.PACKET_ACCESS.updateClashPacket((ServerPlayer) this.clashOp,
-                    this.self.getId(), this.clashProgress);
+        if (!this.self.level().isClientSide && this.clashOp != null && this.clashOp instanceof ServerPlayer SP){
+            S2CPacketUtil.updateBarrageClashS2C(SP, this.self.getId(), this.clashProgress);
         }
     }
 

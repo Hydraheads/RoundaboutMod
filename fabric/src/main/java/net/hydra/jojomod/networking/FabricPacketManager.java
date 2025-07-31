@@ -14,7 +14,6 @@ public class FabricPacketManager {
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.STAND_POS_POWER_PACKET, StandAbilityPacket::switchPosPower);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.STAND_CHARGED_POWER_PACKET, StandAbilityPacket::switchChargedPower);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.STAND_GUARD_CANCEL_PACKET, StandAbilityPacket::guardCancel);
-        ServerPlayNetworking.registerGlobalReceiver(ModMessages.BARRAGE_CLASH_UPDATE_PACKET, StandAbilityPacket::clashUpdate);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.BYTE_C2S_PACKET, UtilC2S::UpdateByte);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.FLOAT_C2S_PACKET, UtilC2S::UpdateFloat);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.INT_C2S_PACKET, UtilC2S::UpdateInt);
@@ -31,7 +30,6 @@ public class FabricPacketManager {
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.SKILL_COOLDOWN_SYNC_2_ID, CooldownSyncPacket::updateSkillCooldowns2);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.SOUND_CANCEL_ID, SoundStopPacket::stopSound);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.SOUND_PLAY_ID, SoundStopPacket::playSound);
-        ClientPlayNetworking.registerGlobalReceiver(ModMessages.BARRAGE_CLASH_UPDATE_S2C_PACKET, StandS2CPacket::clashUpdate);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.TIME_STOP_ENTITY_PACKET, TimeEventPackets::updateTSList);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.TIME_STOP_ENTITY_REMOVAL_PACKET, TimeEventPackets::updateTSRemovalList);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.PERMA_CASTING_ENTITY_PACKET, TimeEventPackets::updatePermaCastingList);

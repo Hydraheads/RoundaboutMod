@@ -48,14 +48,6 @@ public class FabricPackets implements IPacketAccess {
     }
 
     @Override
-    public void updateClashPacket(ServerPlayer sp, int id, float clashProgress){
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-        buffer.writeInt(id);
-        buffer.writeFloat(clashProgress);
-        ServerPlayNetworking.send(sp,ModMessages.BARRAGE_CLASH_UPDATE_S2C_PACKET, buffer);
-    }
-
-    @Override
     public void stopSoundPacket(ServerPlayer sp, int id, byte soundNo){
         FriendlyByteBuf buffer = PacketByteBufs.create();
         buffer.writeInt(id);
@@ -250,14 +242,6 @@ public class FabricPackets implements IPacketAccess {
         buffer.writeByte(power);
         buffer.writeBlockPos(blockPos);
         ClientPlayNetworking.send(ModMessages.STAND_POS_POWER_PACKET, buffer);
-    }
-
-    @Override
-    public void updateClashPacket(float clashProgress, boolean clashDone){
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-        buffer.writeFloat(clashProgress);
-        buffer.writeBoolean(clashDone);
-        ClientPlayNetworking.send(ModMessages.BARRAGE_CLASH_UPDATE_PACKET, buffer);
     }
 
 

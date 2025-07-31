@@ -49,17 +49,4 @@ public class StandAbilityPacket {
         });
     }
 
-    /**During a clash, updates the progress of your clash bar in real time.*/
-    public static void clashUpdate(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
-                                   FriendlyByteBuf buf, PacketSender responseSender){
-        //Everything here is server only!
-        float clashProg = buf.readFloat();
-        boolean clashDone = buf.readBoolean();
-        server.execute(() -> {
-            if (((StandUser) player).roundabout$isClashing()){
-                ((StandUser) player).roundabout$getStandPowers().setClashProgress(clashProg);
-                ((StandUser) player).roundabout$getStandPowers().setClashDone(clashDone);
-            }
-        });
-    }
 }

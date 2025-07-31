@@ -227,6 +227,13 @@ public class ClientUtil {
                     ((StandUser)player).roundabout$setGuardBroken(guardBroken);
                 }
 
+                /**Barrage Clash S2C Packet*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateBarrageClash.value)) {
+                    int clashOpID = (int)vargs[0];
+                    float progress = (float)vargs[1];
+                    ClientUtil.clashUpdatePacket(clashOpID, progress);
+                }
+
 
             }
         });

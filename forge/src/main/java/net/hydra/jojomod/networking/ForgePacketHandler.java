@@ -47,11 +47,6 @@ public class ForgePacketHandler {
                 .encoder(ForgeGuardCancelPacket::toBytes)
                 .consumerMainThread(ForgeGuardCancelPacket::handle)
                 .add();
-        INSTANCE.messageBuilder(ForgeClashUpdatePacketC2S.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(ForgeClashUpdatePacketC2S::new)
-                .encoder(ForgeClashUpdatePacketC2S::toBytes)
-                .consumerMainThread(ForgeClashUpdatePacketC2S::handle)
-                .add();
         INSTANCE.messageBuilder(ForgeByteC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(ForgeByteC2SPacket::new)
                 .encoder(ForgeByteC2SPacket::toBytes)
@@ -93,11 +88,6 @@ public class ForgePacketHandler {
                 .decoder(ForgeGenericIntPacket::new)
                 .encoder(ForgeGenericIntPacket::toBytes)
                 .consumerMainThread(ForgeGenericIntPacket::handle)
-                .add();
-        INSTANCE.messageBuilder(ForgeClashUpdatePacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ForgeClashUpdatePacket::new)
-                .encoder(ForgeClashUpdatePacket::toBytes)
-                .consumerMainThread(ForgeClashUpdatePacket::handle)
                 .add();
         INSTANCE.messageBuilder(ForgeNBTPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(ForgeNBTPacket::new)

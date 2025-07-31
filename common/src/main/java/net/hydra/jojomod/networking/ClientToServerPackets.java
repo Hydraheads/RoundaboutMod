@@ -40,7 +40,8 @@ public class ClientToServerPackets {
             UpdatePilot("update_pilot"),
             MoveSync("moving_sync"),
             StandPunch("stand_punch"),
-            StandBarrageHit("stand_barrage_hit");
+            StandBarrageHit("stand_barrage_hit"),
+            BarrageClashUpdate("barrage_clash_update");
 
             public final String value;
 
@@ -314,6 +315,16 @@ public class ClientToServerPackets {
                     int hitNumber = (int)vargs[1];
                     Entity TE = sender.level().getEntity(targetID);
                     ((StandUser) sender).roundabout$getStandPowers().barrageImpact(TE, hitNumber);
+                }
+                /**Barrage Clash packet*/
+                if (message.equals(MESSAGES.BarrageClashUpdate.value)) {
+                    float clashProg = (float)vargs[0];
+                    boolean clashDone = (boolean)vargs[1];
+
+                    if (((StandUser) sender).roundabout$isClashing()){
+                        ((StandUser) sender).roundabout$getStandPowers().setClashProgress(clashProg);
+                        ((StandUser) sender).roundabout$getStandPowers().setClashDone(clashDone);
+                    }
                 }
             }
         }

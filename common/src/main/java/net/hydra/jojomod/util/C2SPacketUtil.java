@@ -133,6 +133,14 @@ public class C2SPacketUtil {
                 attackTimeDuring
         );
     }
+    /**During a clash, updates the progress of your clash bar in real time.*/
+    public static void barrageClashUpdatePacket(float clashProgress, boolean clashDone){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.BarrageClashUpdate.value,
+                clashProgress,
+                clashDone
+        );
+    }
 
     /**reading packets from the server*/
 

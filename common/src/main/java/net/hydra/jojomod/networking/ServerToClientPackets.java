@@ -15,7 +15,8 @@ public class ServerToClientPackets {
             MANDOM_PENALTY("mandom_penalty"),
             TRUE_INVISIBILITY("invis"),
             SyncDaze("sync_daze"),
-            SyncGuard("sync_guard");
+            SyncGuard("sync_guard"),
+            UpdateBarrageClash("update_barrage_clash_s2c");
 
             public final String value;
 
