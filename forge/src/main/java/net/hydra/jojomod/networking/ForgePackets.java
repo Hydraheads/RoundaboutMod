@@ -20,10 +20,6 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 public class ForgePackets implements IPacketAccess {
-    @Override
-    public void StandGuardPointPacket(ServerPlayer sp, float guard, boolean broken) {
-        ForgePacketHandler.sendToClient(new ForgeGuardUpdatePacket(guard,broken), sp);
-    }
 
     @Override
     public void syncCooldownPacket(ServerPlayer sp, int attackTime, int attackTimeMax, int attackTimeDuring, byte activePower, byte activePowerPhase) {

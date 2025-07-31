@@ -2099,8 +2099,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Unique
     public void roundabout$syncGuard(){
-        if (((LivingEntity) (Object) this) instanceof Player && !((LivingEntity) (Object) this).level().isClientSide){
-            ModPacketHandler.PACKET_ACCESS.StandGuardPointPacket(((ServerPlayer) (Object) this),this.roundabout$getGuardPoints(),this.roundabout$getGuardBroken());
+        if (((LivingEntity) (Object) this) instanceof Player pl && !((LivingEntity) (Object) this).level().isClientSide){
+            S2CPacketUtil.synchGuard(pl,this.roundabout$getGuardPoints(),this.roundabout$getGuardBroken());
         }
     }
 

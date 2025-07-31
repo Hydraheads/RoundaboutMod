@@ -17,13 +17,6 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 public class FabricPackets implements IPacketAccess {
-    @Override
-    public void StandGuardPointPacket(ServerPlayer sp, float guard, boolean broken) {
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-        buffer.writeFloat(guard);
-        buffer.writeBoolean(broken);
-        ServerPlayNetworking.send(sp,ModMessages.STAND_GUARD_POINT_ID, buffer);
-    }
 
     @Override
     public void syncCooldownPacket(ServerPlayer sp, int attackTime, int attackTimeMax, int attackTimeDuring,

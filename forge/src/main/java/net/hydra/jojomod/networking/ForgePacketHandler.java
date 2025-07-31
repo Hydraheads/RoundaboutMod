@@ -129,11 +129,6 @@ public class ForgePacketHandler {
                 .encoder(ForgeStopSoundPacket::toBytes)
                 .consumerMainThread(ForgeStopSoundPacket::handle)
                 .add();
-        INSTANCE.messageBuilder(ForgeGuardUpdatePacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ForgeGuardUpdatePacket::new)
-                .encoder(ForgeGuardUpdatePacket::toBytes)
-                .consumerMainThread(ForgeGuardUpdatePacket::handle)
-                .add();
         INSTANCE.messageBuilder(ForgeCDSyncPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(ForgeCDSyncPacket::new)
                 .encoder(ForgeCDSyncPacket::toBytes)

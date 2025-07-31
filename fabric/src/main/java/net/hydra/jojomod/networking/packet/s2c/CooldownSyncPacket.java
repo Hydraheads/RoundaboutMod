@@ -45,16 +45,6 @@ public class CooldownSyncPacket {
         }
     }
 
-    public static void updateGuard(Minecraft client, ClientPacketListener handler,
-                                   FriendlyByteBuf buf, PacketSender responseSender) {
-        if (client.player != null) {
-            float guardPoints = buf.readFloat();
-            boolean guardBroken = buf.readBoolean();
-            ((StandUser) client.player).roundabout$setGuardPoints(guardPoints);
-            ((StandUser) client.player).roundabout$setGuardBroken(guardBroken);
-        }
-    }
-
 
 
     public static void sendFloatPower(Minecraft client, ClientPacketListener handler,
