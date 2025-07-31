@@ -37,7 +37,8 @@ public class ClientToServerPackets {
             TimeStopHovering("time_stop_hovering"),
             GlaiveHit("glaive_hit"),
             StandSummon("stand_summon"),
-            UpdatePilot("update_pilot");
+            UpdatePilot("update_pilot"),
+            MoveSync("moving_sync");
 
             public final String value;
 
@@ -290,6 +291,12 @@ public class ClientToServerPackets {
                     float zrot = (float)vargs[4];
                     int ent = (int)vargs[5];
                     MainUtil.handleMovePilot(x,y,z,xrot,zrot,sender,ent);
+                }
+                /**Sync movement for stand leaning animation as you walk*/
+                if (message.equals(MESSAGES.MoveSync.value)) {
+                    byte forward = (byte)vargs[0];
+                    byte strafe = (byte)vargs[1];
+                    ((StandUser) sender).roundabout$setDI(forward, strafe);
                 }
             }
         }

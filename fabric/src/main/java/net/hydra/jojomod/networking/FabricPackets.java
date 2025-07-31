@@ -275,14 +275,6 @@ public class FabricPackets implements IPacketAccess {
         ClientPlayNetworking.send(ModMessages.BARRAGE_CLASH_UPDATE_PACKET, buffer);
     }
 
-    @Override
-    public void moveSyncPacket(byte forward, byte strafe){
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-
-        buffer.writeByte(forward);
-        buffer.writeByte(strafe);
-        ClientPlayNetworking.send(ModMessages.MOVE_SYNC_ID, buffer);
-    }
 
 
     @Override

@@ -186,10 +186,6 @@ public class ForgePackets implements IPacketAccess {
 
 
     @Override
-    public void moveSyncPacket(byte forward, byte strafe) {
-        ForgePacketHandler.sendToServer(new ForgeMoveSyncPacket(forward, strafe));
-    }
-    @Override
     public void inventoryToServer(int slotNum, ItemStack stack, byte context) {
         ForgePacketHandler.sendToServer(new ForgeCreativeModeSlotPacket(slotNum, stack, context));
     }

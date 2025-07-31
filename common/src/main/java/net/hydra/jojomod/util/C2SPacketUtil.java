@@ -111,6 +111,15 @@ public class C2SPacketUtil {
                 pilotStand.getId()
         );
     }
+
+    public static void moveSyncPacket(byte forward, byte sideways){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.MoveSync.value,
+                forward,
+                sideways
+        );
+    }
+
     /**reading packets from the server*/
 
 }
