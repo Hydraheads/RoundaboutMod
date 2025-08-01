@@ -18,12 +18,4 @@ public class CooldownSyncPacket {
             ((StandUser) client.player).roundabout$getStandPowers().updatePowerFloat(activePower,data);
         }
     }
-    public static void sendIntPower(Minecraft client, ClientPacketListener handler,
-                                      FriendlyByteBuf buf, PacketSender responseSender) {
-        if (client.player != null) {
-            byte activePower = buf.readByte();
-            int data = buf.readInt();
-            ((StandUser) client.player).roundabout$getStandPowers().updatePowerInt(activePower,data);
-        }
-    }
 }

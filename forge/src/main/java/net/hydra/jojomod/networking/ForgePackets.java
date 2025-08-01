@@ -47,10 +47,6 @@ public class ForgePackets implements IPacketAccess {
         ForgePacketHandler.sendToClient(new ForgePowerFloatPacket(activePower,data), sp);
     }
     @Override
-    public void sendIntPowerPacket(ServerPlayer sp, byte activePower, int data) {
-        ForgePacketHandler.sendToClient(new ForgePowerIntPacket(activePower,data), sp);
-    }
-    @Override
     public void sendBundlePacket(ServerPlayer sp, byte context, byte one, byte two, byte three) {
         ForgePacketHandler.sendToClient(new ForgeBundlePacket(context,one,two,three), sp);
     }

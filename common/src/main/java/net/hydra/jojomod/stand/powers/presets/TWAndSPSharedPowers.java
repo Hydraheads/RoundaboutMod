@@ -597,7 +597,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 stopSoundsIfNearby(SoundIndex.TIME_SOUND_GROUP, 200,true);
                 stopSoundsIfNearby(SoundIndex.TIME_SOUND_GROUP, 200,false);
                 if (this.getSelf() instanceof Player) {
-                    ModPacketHandler.PACKET_ACCESS.sendIntPowerPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL_FINISH, 0);
+                    S2CPacketUtil.sendIntPowerDataPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL_FINISH, 0);
                 }
 
                 if (!(((TimeStop)level).CanTimeStopEntity(this.getSelf()))) {
@@ -828,7 +828,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 }
             } else {
                 if (this.getSelf() instanceof ServerPlayer) {
-                    ModPacketHandler.PACKET_ACCESS.sendIntPowerPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL_CHARGED, TSChargeSeconds);
+                    S2CPacketUtil.sendIntPowerDataPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL_CHARGED, TSChargeSeconds);
                 }
             }
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SPECIAL_CHARGED, true);
@@ -1484,7 +1484,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     addEXP(3+(Math.max(1,(int)(this.getChargedTSTicks()/10))));
                     ((TimeStop) this.getSelf().level()).addTimeStoppingEntity(this.getSelf());
                     if (this.getSelf() instanceof Player) {
-                        ModPacketHandler.PACKET_ACCESS.sendIntPowerPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL, maxChargeTSTime);
+                        S2CPacketUtil.sendIntPowerDataPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL, maxChargeTSTime);
                     }
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     /**

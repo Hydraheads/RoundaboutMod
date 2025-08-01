@@ -291,6 +291,13 @@ public class ClientUtil {
                             enemyOpacity,anchorPlaceAttack);
                 }
 
+                /**Syncs the active power the stand is using*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.IntPowerData.value)) {
+                    byte activePower = (byte) vargs[0];
+                    int data = (int) vargs[1];
+                    ((StandUser) player).roundabout$getStandPowers().updatePowerInt(activePower,data);
+                }
+
             }
         });
     }

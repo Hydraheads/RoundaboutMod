@@ -24,7 +24,8 @@ public class ServerToClientPackets {
             SyncCooldown("sync_cooldown"),
             SyncCooldownMax("sync_cooldown_max"),
             SyncActivePower("sync_active_power"),
-            SyncPowerInventory("sync_power_inventory");
+            SyncPowerInventory("sync_power_inventory"),
+            IntPowerData("int_power_data");
 
             public final String value;
 

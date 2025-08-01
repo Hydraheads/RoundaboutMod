@@ -119,4 +119,13 @@ public class S2CPacketUtil {
             );
         }
     }
+    public static void sendIntPowerDataPacket(Player player, byte activePower, int data){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.IntPowerData.value,
+                    activePower,
+                    data
+            );
+        }
+    }
 }
