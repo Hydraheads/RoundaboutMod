@@ -1,13 +1,16 @@
 package net.hydra.jojomod.networking;
 
+import net.hydra.jojomod.advancement.criteria.ModCriteria;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.event.index.Corpses;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ModificationMaskItem;
+import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -19,6 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.zetalasis.networking.message.impl.IMessageEvent;
+import net.zetalasis.world.DynamicWorld;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
@@ -48,7 +52,8 @@ public class ClientToServerPackets {
             Handshake("handshake"),
             Inventory("inventory"),
             ItemContext("item_context"),
-            GuardCancel("guard_cancel");
+            GuardCancel("guard_cancel"),
+            DimensionHopD4C("d4c_request_dimension_hop");
 
             public final String value;
 
@@ -375,6 +380,18 @@ public class ClientToServerPackets {
                     if (((StandUser) sender).roundabout$isGuarding() || ((StandUser) sender).roundabout$isBarraging()
                             || ((StandUser) sender).roundabout$getStandPowers().clickRelease()) {
                         ((StandUser) sender).roundabout$tryPower(PowerIndex.NONE, true);
+                    }
+                }
+
+                /**Request a d4c dimension hop*/
+                if (message.equals(MESSAGES.DimensionHopD4C.value)) {
+                    if (((StandUser) sender).roundabout$getStand() instanceof D4CEntity) {
+                        DynamicWorld world = PowersD4C.queuedWorldTransports.remove(sender.getId());
+                        if (world != null && world.getLevel() != null) {
+                            sender.teleportTo(world.getLevel(), sender.getX(), sender.getY(), sender.getZ(), sender.getYRot(), sender.getXRot());
+                            ((StandUser) sender).roundabout$summonStand(world.getLevel(), true, false);
+                            ModCriteria.DIMENSION_HOP_TRIGGER.trigger(sender);
+                        }
                     }
                 }
             }

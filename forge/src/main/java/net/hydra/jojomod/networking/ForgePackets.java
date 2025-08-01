@@ -131,8 +131,4 @@ public class ForgePackets implements IPacketAccess {
         ForgePacketHandler.sendToClient(new ForgeEjectPRunning(), sp);
     }
 
-    @Override
-    public void ackRegisterWorld() {
-        ForgePacketHandler.sendToServer(new ForgeAckDynamicWorld());
-    }
 }

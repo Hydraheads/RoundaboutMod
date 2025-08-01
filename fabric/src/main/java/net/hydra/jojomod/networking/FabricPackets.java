@@ -217,10 +217,4 @@ public class FabricPackets implements IPacketAccess {
         buffer.writeInt(anchorPlaceAttack);
         ServerPlayNetworking.send(sp, ModMessages.SEND_S2C_POWER_INVENTORY_OPTIONS, buffer);
     }
-
-
-    @Override
-    public void ackRegisterWorld() {
-        ClientPlayNetworking.send(ModMessages.REQUEST_TELEPORT_TO_DYNAMIC_WORLD, PacketByteBufs.create());
-    }
 }

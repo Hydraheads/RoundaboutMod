@@ -46,5 +46,4 @@ public interface IPacketAccess {
 
     /**Client To Server Packets*/
 
-    void ackRegisterWorld();
 }

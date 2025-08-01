@@ -1,16 +1,12 @@
 package net.hydra.jojomod.util;
 
 import net.hydra.jojomod.networking.ClientToServerPackets;
-import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.zetalasis.networking.message.api.ModMessageEvents;
-import org.joml.Vector3f;
 
 /**it is okay to have client only classes here
  *  This is where we send packets from the client to the server :O
@@ -191,6 +187,14 @@ public class C2SPacketUtil {
                 ClientToServerPackets.StandPowerPackets.MESSAGES.GuardCancel.value
         );
     }
+
+    /**Request a dimension hop with d4c*/
+    public static void d4cDimensionHopRegistryPacket(){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.DimensionHopD4C.value
+        );
+    }
+
     /**reading packets from the server*/
 
 }
