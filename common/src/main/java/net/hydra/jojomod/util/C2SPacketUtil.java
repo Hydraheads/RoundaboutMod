@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.zetalasis.networking.message.api.ModMessageEvents;
+import org.joml.Vector3f;
 
 /**it is okay to have client only classes here
  *  This is where we send packets from the client to the server :O
@@ -154,6 +155,24 @@ public class C2SPacketUtil {
     public static void handshakePacket(){
         ModMessageEvents.sendToServer(
                 ClientToServerPackets.StandPowerPackets.MESSAGES.Handshake.value
+        );
+    }
+
+    /**Sending anything in the inventory to the server*/
+    public static void inventoryToServerPacket(int slotNum, ItemStack stack, byte context){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.Inventory.value,
+                slotNum,
+                stack,
+                context
+        );
+    }
+    /**Generic Item packet management for the server*/
+    public static void itemContextToServerPacket(byte context, ItemStack stack){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.ItemContext.value,
+                context,
+                stack
         );
     }
 

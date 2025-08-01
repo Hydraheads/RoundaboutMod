@@ -46,32 +46,4 @@ public class UtilC2S {
 
 
     }
-    public static void inventoryChange(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
-                                    FriendlyByteBuf buf, PacketSender responseSender){
-        //Everything here is server only!
-        ServerLevel world = (ServerLevel) player.level();
-        int slot = buf.readInt();
-        ItemStack context = buf.readItem();
-        byte bt = buf.readByte();
-
-        server.execute(() -> {
-            MainUtil.handleSetCreativeModeSlot(player,slot,context,bt);
-        });
-    }
-
-    public static void itemChange(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
-                                       FriendlyByteBuf buf, PacketSender responseSender){
-        //Everything here is server only!
-        ServerLevel world = (ServerLevel) player.level();
-        byte bt = buf.readByte();
-        ItemStack context = buf.readItem();
-        byte bt2 = buf.readByte();
-        Vector3f vec = buf.readVector3f();
-        Roundabout.LOGGER.info("byte1: " + bt + " Byte2: " + bt2);
-        server.execute(() -> {
-            MainUtil.handleChangeItem(player,bt,context,bt2,vec);
-        });
-
-
-    }
 }

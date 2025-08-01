@@ -37,16 +37,6 @@ public class ForgePacketHandler {
                 .encoder(ForgeFloatC2SPacket::toBytes)
                 .consumerMainThread(ForgeFloatC2SPacket::handle)
                 .add();
-        INSTANCE.messageBuilder(ForgeCreativeModeSlotPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(ForgeCreativeModeSlotPacket::new)
-                .encoder(ForgeCreativeModeSlotPacket::toBytes)
-                .consumerMainThread(ForgeCreativeModeSlotPacket::handle)
-                .add();
-        INSTANCE.messageBuilder(ForgeItemChangePacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(ForgeItemChangePacket::new)
-                .encoder(ForgeItemChangePacket::toBytes)
-                .consumerMainThread(ForgeItemChangePacket::handle)
-                .add();
         INSTANCE.messageBuilder(ForgeAckDynamicWorld.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(ForgeAckDynamicWorld::new)
                 .encoder(ForgeAckDynamicWorld::toBytes)

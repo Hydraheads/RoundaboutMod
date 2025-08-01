@@ -141,16 +141,6 @@ public class ForgePackets implements IPacketAccess {
         ForgePacketHandler.sendToServer(new ForgeFloatC2SPacket(value, context));
     }
 
-
-    @Override
-    public void inventoryToServer(int slotNum, ItemStack stack, byte context) {
-        ForgePacketHandler.sendToServer(new ForgeCreativeModeSlotPacket(slotNum, stack, context));
-    }
-    @Override
-    public void itemContextToServer(byte context, ItemStack stack, byte context2, Vector3f vec3) {
-        ForgePacketHandler.sendToServer(new ForgeItemChangePacket(context, stack, context2, vec3));
-    }
-
     @Override
     public void ackRegisterWorld() {
         ForgePacketHandler.sendToServer(new ForgeAckDynamicWorld());

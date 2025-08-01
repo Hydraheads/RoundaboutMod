@@ -344,7 +344,7 @@ public class MainUtil {
         return stack;
     }
 
-    public static void handleChangeItem(Player player, byte context, ItemStack stack, byte context2, Vector3f vec) {
+    public static void handleChangeItem(Player player, byte context, ItemStack stack) {
         if (context == PacketDataIndex.ITEM_SWITCH_MAIN || context == PacketDataIndex.ITEM_SWITCH_SECONDARY) {
             boolean offh = ItemStack.isSameItemSameTags(player.getOffhandItem(),stack);
             if (player.getInventory().contains(stack) || offh){

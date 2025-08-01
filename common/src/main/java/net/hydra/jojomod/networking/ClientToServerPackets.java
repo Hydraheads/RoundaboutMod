@@ -43,7 +43,9 @@ public class ClientToServerPackets {
             StandPunch("stand_punch"),
             StandBarrageHit("stand_barrage_hit"),
             BarrageClashUpdate("barrage_clash_update"),
-            Handshake("handshake");
+            Handshake("handshake"),
+            Inventory("inventory"),
+            ItemContext("item_context");
 
             public final String value;
 
@@ -340,6 +342,20 @@ public class ClientToServerPackets {
                 /**Handshake packet*/
                 if (message.equals(MESSAGES.Handshake.value)) {
                     MainUtil.handShake(sender);
+                }
+                /**Sending anything in the inventory to the server*/
+                if (message.equals(MESSAGES.Inventory.value)) {
+                    int slotNo = (int)vargs[0];
+                    ItemStack stack = (ItemStack)vargs[1];
+                    byte cont = (byte)vargs[2];
+                    MainUtil.handleSetCreativeModeSlot(sender, slotNo, stack, cont);
+                }
+                /**Generic Item packet management for the server*/
+                if (message.equals(MESSAGES.ItemContext.value)) {
+                    MainUtil.handShake(sender);
+                    byte cont = (byte)vargs[0];
+                    ItemStack stack = (ItemStack)vargs[1];
+                    MainUtil.handleChangeItem(sender, cont, stack);
                 }
             }
         }
