@@ -1,6 +1,7 @@
 package net.hydra.jojomod.util;
 
 import net.hydra.jojomod.networking.ServerToClientPackets;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -35,6 +36,15 @@ public class S2CPacketUtil {
                     ServerToClientPackets.S2CPackets.MESSAGES.UpdateBarrageClash.value,
                     id,
                     clashProgress
+            );
+        }
+    }
+
+    public static void sendConfigPacket(Player player){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SendConfig.value,
+                    ConfigManager.serializeConfig()
             );
         }
     }

@@ -102,11 +102,7 @@ public class ForgePackets implements IPacketAccess {
             .setPrettyPrinting()
             .create();
 
-    @Override
-    public void sendConfig(ServerPlayer sp) {
-        String serialized = ConfigManager.serializeConfig();
-        ForgePacketHandler.sendToClient(new ForgeSendConfigPacket(Networking.isDedicated(),serialized), sp);
-    }
+
 
     @Override
     @SuppressWarnings("deprecation") // markWorldsDirty

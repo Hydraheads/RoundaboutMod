@@ -119,11 +119,6 @@ public class ForgePacketHandler {
                 .encoder(ForgePermaCastingEntityRemovalPacket::toBytes)
                 .consumerMainThread(ForgePermaCastingEntityRemovalPacket::handle)
                 .add();
-        INSTANCE.messageBuilder(ForgeSendConfigPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ForgeSendConfigPacket::new)
-                .encoder(ForgeSendConfigPacket::toBytes)
-                .consumerMainThread(ForgeSendConfigPacket::handle)
-                .add();
         INSTANCE.messageBuilder(ForgeDynamicWorldSync.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(ForgeDynamicWorldSync::new)
                 .encoder(ForgeDynamicWorldSync::toBytes)

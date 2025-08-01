@@ -16,7 +16,8 @@ public class ServerToClientPackets {
             TRUE_INVISIBILITY("invis"),
             SyncDaze("sync_daze"),
             SyncGuard("sync_guard"),
-            UpdateBarrageClash("update_barrage_clash_s2c");
+            UpdateBarrageClash("update_barrage_clash_s2c"),
+            SendConfig("send_config");
 
             public final String value;
 

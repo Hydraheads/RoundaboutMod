@@ -227,6 +227,12 @@ public class ClientUtil {
                     ClientUtil.clashUpdatePacket(clashOpID, progress);
                 }
 
+                /**Read in Sent config*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SendConfig.value)) {
+                    String config = (String)vargs[0];
+                    ClientNetworking.initialize(config);
+                }
+
 
             }
         });

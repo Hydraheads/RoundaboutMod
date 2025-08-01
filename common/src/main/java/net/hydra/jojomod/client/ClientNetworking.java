@@ -21,7 +21,7 @@ public class ClientNetworking {
         return Config.getLocalInstance();
     }
 
-    public static void initialize(boolean connected, String ser){
+    public static void initialize(String ser){
         isConnectedToDedicated = true;
         ConfigManager.deserializeConfig(ser);
     }

@@ -154,14 +154,6 @@ public class FabricPackets implements IPacketAccess {
     }
 
 
-    @Override
-    public void sendConfig(ServerPlayer sp) {
-        String serialized = ConfigManager.serializeConfig();
-        FriendlyByteBuf buf = PacketByteBufs.create();
-        buf.writeBoolean(Networking.isDedicated());
-        buf.writeUtf(serialized);
-        ServerPlayNetworking.send(sp, ModMessages.CONFIG_SYNC, buf);
-    }
 
     @Override
     public void sendNewDynamicWorld(ServerPlayer sp, String name, ServerLevel level, @Nullable ServerPlayer player) {
