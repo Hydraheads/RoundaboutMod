@@ -69,11 +69,6 @@ public class ForgePacketHandler {
                 .encoder(ForgeBundlePacket::toBytes)
                 .consumerMainThread(ForgeBundlePacket::handle)
                 .add();
-        INSTANCE.messageBuilder(ForgeS2CPowerInventorySettingsPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ForgeS2CPowerInventorySettingsPacket::new)
-                .encoder(ForgeS2CPowerInventorySettingsPacket::toBytes)
-                .consumerMainThread(ForgeS2CPowerInventorySettingsPacket::handle)
-                .add();
         INSTANCE.messageBuilder(ForgePermaCastingEntityPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(ForgePermaCastingEntityPacket::new)
                 .encoder(ForgePermaCastingEntityPacket::toBytes)

@@ -104,4 +104,19 @@ public class S2CPacketUtil {
             );
         }
     }
+
+    public static void sendPowerInventorySettings(Player player, int anchorPlace, float distanceOut, float idleOpacity,
+                                                  float combatOpacity, float enemyOpacity, int anchorPlaceAttack){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SyncPowerInventory.value,
+                    anchorPlace,
+                    distanceOut,
+                    idleOpacity,
+                    combatOpacity,
+                    enemyOpacity,
+                    anchorPlaceAttack
+            );
+        }
+    }
 }

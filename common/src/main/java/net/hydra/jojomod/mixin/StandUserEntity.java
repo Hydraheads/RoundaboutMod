@@ -2404,7 +2404,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             }
                             if (!this.level().isClientSide()) {
                                 IPlayerEntity ipe = ((IPlayerEntity) this);
-                                ModPacketHandler.PACKET_ACCESS.s2cPowerInventorySettings(
+                                S2CPacketUtil.sendPowerInventorySettings(
                                         ((ServerPlayer) ((Player) (Object) this)), ipe.roundabout$getAnchorPlace(),
                                         ipe.roundabout$getDistanceOut(),
                                         ipe.roundabout$getSizePercent(),

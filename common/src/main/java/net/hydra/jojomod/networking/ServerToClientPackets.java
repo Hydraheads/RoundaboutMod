@@ -23,7 +23,8 @@ public class ServerToClientPackets {
             Blip("blip"),
             SyncCooldown("sync_cooldown"),
             SyncCooldownMax("sync_cooldown_max"),
-            SyncActivePower("sync_active_power");
+            SyncActivePower("sync_active_power"),
+            SyncPowerInventory("sync_power_inventory");
 
             public final String value;
 

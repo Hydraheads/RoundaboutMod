@@ -278,6 +278,19 @@ public class ClientUtil {
                     byte power = (byte) vargs[0];
                     MainUtil.syncActivePower(player,power);
                 }
+
+                /**Syncs the power inventory settings*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPowerInventory.value)) {
+                    int anchorPlace = (int) vargs[0];
+                    float distanceOut = (float) vargs[1];
+                    float idleOpacity = (float) vargs[2];
+                    float combatOpacity = (float) vargs[3];
+                    float enemyOpacity = (float) vargs[4];
+                    int anchorPlaceAttack = (int) vargs[5];
+                    ClientUtil.handlePowerInventoryOptionsPacketS2C(player,anchorPlace,distanceOut,idleOpacity,combatOpacity,
+                            enemyOpacity,anchorPlaceAttack);
+                }
+
             }
         });
     }
@@ -900,7 +913,7 @@ public class ClientUtil {
         }
 
     }
-    public static void handlePowerInventoryOptionsPacketS2C(LocalPlayer player, int anchorPlace, float distanceOut, float idleOpacity,
+    public static void handlePowerInventoryOptionsPacketS2C(Player player, int anchorPlace, float distanceOut, float idleOpacity,
                                                             float combatOpacity, float enemyOpacity, int anchorPlaceAttack){
         IPlayerEntity ple = ((IPlayerEntity) player);
         ple.roundabout$setAnchorPlace(anchorPlace);
