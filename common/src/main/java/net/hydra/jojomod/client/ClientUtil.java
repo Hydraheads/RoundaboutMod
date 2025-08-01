@@ -298,6 +298,12 @@ public class ClientUtil {
                     ((StandUser) player).roundabout$getStandPowers().updatePowerInt(activePower,data);
                 }
 
+                /**Generic int that is sent to the client*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.IntToClient.value)) {
+                    byte context = (byte) vargs[0];
+                    int data = (int) vargs[1];
+                    ClientUtil.handleIntPacketS2C(player,data,context);
+                }
             }
         });
     }
@@ -305,7 +311,7 @@ public class ClientUtil {
     /**
      * A generalized packet for sending ints to the client. Context is what to do with the data int
      */
-    public static void handleIntPacketS2C(LocalPlayer player, int data, byte context) {
+    public static void handleIntPacketS2C(Player player, int data, byte context) {
         if (context == 1) {
             ((StandUser) player).roundabout$setGasolineTime(data);
         } else if (context == PacketDataIndex.S2C_POWER_INVENTORY) {
@@ -314,6 +320,7 @@ public class ClientUtil {
         } else if (context == PacketDataIndex.S2C_INT_OXYGEN_TANK) {
             ((StandUser) player).roundabout$getStandPowers().setAirAmount(data);
         } else if (context== PacketDataIndex.S2C_INT_GRAB_ITEM){
+            Roundabout.LOGGER.info("a");
             Entity target = player.level().getEntity(data);
             if (target instanceof ItemEntity IE) {
                 IE.getItem().shrink(1);

@@ -1806,7 +1806,7 @@ public class MainUtil {
 
             ((IPlayerEntityServer)player).roundabout$nextContainerCounter();
             int cid = ((IPlayerEntityServer)player).roundabout$getCounter();
-            ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) player), PacketDataIndex.S2C_POWER_INVENTORY,
+            S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) player), PacketDataIndex.S2C_POWER_INVENTORY,
                     cid);
             player.containerMenu = new PowerInventoryMenu(player.getInventory(), true, player,cid);
             ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);

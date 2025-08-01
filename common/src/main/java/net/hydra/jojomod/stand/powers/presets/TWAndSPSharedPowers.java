@@ -303,7 +303,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
                 if (blockPos.closerToCenterThan(userLocation, 100)) {
-                    ModPacketHandler.PACKET_ACCESS.sendIntPacket(serverPlayerEntity, PacketDataIndex.S2C_INT_GRAB_ITEM,id);
+                    S2CPacketUtil.sendGenericIntToClientPacket(serverPlayerEntity, PacketDataIndex.S2C_INT_GRAB_ITEM,id);
                 }
             }
         }

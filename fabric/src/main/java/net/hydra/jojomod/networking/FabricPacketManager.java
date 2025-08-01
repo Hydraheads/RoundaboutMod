@@ -19,7 +19,6 @@ public class FabricPacketManager {
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.PERMA_CASTING_ENTITY_PACKET, TimeEventPackets::updatePermaCastingList);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.PERMA_CASTING_ENTITY_REMOVAL_PACKET, TimeEventPackets::updatePermaCastingRemovalList);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.RESUME_TILE_ENTITY_TS_PACKET, TimeEventPackets::updateTileEntityTS);
-        ClientPlayNetworking.registerGlobalReceiver(ModMessages.SEND_INT_DATA_PACKET, GenericS2CPacket::sendInt);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.SEND_SIMPLE_BYTE_PACKET, GenericS2CPacket::sendSimpleByte);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.SEND_BUNDLE_PACKET, GenericS2CPacket::sendBundle);
 

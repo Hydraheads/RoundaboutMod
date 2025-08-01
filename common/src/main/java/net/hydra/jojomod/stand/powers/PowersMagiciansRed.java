@@ -1334,7 +1334,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         }
 
         if (!this.self.level().isClientSide() && user instanceof Player PE){
-            ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) PE),
+            S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) PE),
                     PacketDataIndex.S2C_INT_SEAL, sealTime);
         }
         user.roundabout$setActive(false);

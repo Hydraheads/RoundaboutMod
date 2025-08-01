@@ -1543,7 +1543,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public void setAirAmount(int airAmount){
         currentAir = airAmount;
         if (this.getSelf() instanceof ServerPlayer) {
-            ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+            S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
                     PacketDataIndex.S2C_INT_OXYGEN_TANK, currentAir);
         }
     }

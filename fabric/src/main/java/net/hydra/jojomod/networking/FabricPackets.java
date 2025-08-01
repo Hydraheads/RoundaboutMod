@@ -72,16 +72,6 @@ public class FabricPackets implements IPacketAccess {
     }
 
     @Override
-    public void sendIntPacket(ServerPlayer sp, byte activePower, int data) {
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-
-        buffer.writeByte(activePower);
-        buffer.writeInt(data);
-        ServerPlayNetworking.send(sp, ModMessages.SEND_INT_DATA_PACKET, buffer);
-    }
-
-
-    @Override
     public void sendBundlePacket(ServerPlayer sp, byte context, byte one, byte two, byte three) {
         FriendlyByteBuf buffer = PacketByteBufs.create();
 

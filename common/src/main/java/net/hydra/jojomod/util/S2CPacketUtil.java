@@ -128,4 +128,13 @@ public class S2CPacketUtil {
             );
         }
     }
+    public static void sendGenericIntToClientPacket(Player player, byte context, int data){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.IntToClient.value,
+                    context,
+                    data
+            );
+        }
+    }
 }

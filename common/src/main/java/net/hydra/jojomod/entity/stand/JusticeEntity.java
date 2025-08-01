@@ -120,7 +120,7 @@ public class JusticeEntity extends FollowingStandEntity {
                 user.roundabout$setSealedTicks(400);
                 user.roundabout$setDrowning(true);
                 if (!this.level().isClientSide() && user instanceof Player PE){
-                    ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) PE),
+                    S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) PE),
                             PacketDataIndex.S2C_INT_SEAL, 400);
                 }
                 user.roundabout$setActive(false);

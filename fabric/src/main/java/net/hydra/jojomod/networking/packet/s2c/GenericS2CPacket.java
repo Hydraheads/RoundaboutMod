@@ -28,13 +28,4 @@ public class GenericS2CPacket {
             ClientUtil.handleBundlePacketS2C(client.player,context,firstByte,secondByte,thirdByte);
         }
     }
-
-    public static void sendInt(Minecraft client, ClientPacketListener handler,
-                                    FriendlyByteBuf buf, PacketSender responseSender) {
-        if (client.player != null) {
-            byte activePower = buf.readByte();
-            int data = buf.readInt();
-            ClientUtil.handleIntPacketS2C(client.player,data,activePower);
-        }
-    }
 }

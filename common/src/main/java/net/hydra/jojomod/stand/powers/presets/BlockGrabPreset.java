@@ -161,7 +161,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                         standEntity.setHeldItem(ItemStack.EMPTY);
 
                         if (this.getSelf() instanceof Player) {
-                            ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+                            S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
                                     PacketDataIndex.S2C_INT_ATD, -10);
                         }
                         this.setAttackTimeDuring(-10);
@@ -175,7 +175,7 @@ public class BlockGrabPreset extends NewPunchingStand {
 
                     if (this.getSelf() instanceof Player) {
                         if (!this.getSelf().level().isClientSide) {
-                            ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+                            S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
                                     PacketDataIndex.S2C_INT_ATD, -10);
                         }
                     }
@@ -279,7 +279,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                             poseStand(OffsetIndex.FOLLOW);
                             standEntity.setHeldItem(ItemStack.EMPTY);
                             if (this.getSelf() instanceof Player) {
-                                ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+                                S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
                                         PacketDataIndex.S2C_INT_ATD, -10);
                             }
                             this.setAttackTimeDuring(-10);
@@ -371,7 +371,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                                 animateStand(StandEntity.THIRD_PUNCH);
 
                                 if (this.getSelf() instanceof Player){
-                                    ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+                                    S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
                                             PacketDataIndex.S2C_INT_ATD, -15);
                                 }
                                 poseStand(OffsetIndex.ATTACK);
@@ -381,7 +381,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                                 animateStand(StandEntity.BLOCK_THROW);
                                 poseStand(OffsetIndex.FOLLOW);
                                 if (this.getSelf() instanceof Player){
-                                    ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+                                    S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
                                             PacketDataIndex.S2C_INT_ATD, -10);
                                 }
                                 this.setAttackTimeDuring(-10);
@@ -416,7 +416,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                             animateStand(StandEntity.BLOCK_THROW);
                             poseStand(OffsetIndex.FOLLOW);
                             if (this.getSelf() instanceof Player) {
-                                ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+                                S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
                                         PacketDataIndex.S2C_INT_ATD, -10);
                             }
                             this.setAttackTimeDuring(-10);
@@ -719,7 +719,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                         MainUtil.ejectInFront(standEntity);
                         animateStand(StandEntity.BLOCK_RETRACT);
                         if (this.getSelf() instanceof Player) {
-                            ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+                            S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
                                     PacketDataIndex.S2C_INT_ATD, -10);
                         }
                         this.setAttackTimeDuring(-10);
