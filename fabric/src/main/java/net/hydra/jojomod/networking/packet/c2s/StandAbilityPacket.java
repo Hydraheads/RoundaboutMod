@@ -14,16 +14,5 @@ import net.minecraft.world.entity.Entity;
 public class StandAbilityPacket {
 
 
-    /**When you release right click, stops guarding.*/
-    public static void guardCancel(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
-                             FriendlyByteBuf buf, PacketSender responseSender){
-        //Everything here is server only!
-        server.execute(() -> {
-            if (((StandUser) player).roundabout$isGuarding() || ((StandUser) player).roundabout$isBarraging()
-                    || ((StandUser) player).roundabout$getStandPowers().clickRelease()){
-                ((StandUser) player).roundabout$tryPower(PowerIndex.NONE,true);
-            }
-        });
-    }
 
 }

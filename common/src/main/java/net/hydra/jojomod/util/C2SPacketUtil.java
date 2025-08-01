@@ -176,6 +176,13 @@ public class C2SPacketUtil {
         );
     }
 
+
+    /**Release right click to stop guarding*/
+    public static void guardCancelPacket(){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.GuardCancel.value
+        );
+    }
     /**reading packets from the server*/
 
 }

@@ -218,10 +218,6 @@ public class FabricPackets implements IPacketAccess {
         ServerPlayNetworking.send(sp, ModMessages.SEND_S2C_POWER_INVENTORY_OPTIONS, buffer);
     }
 
-    @Override
-    public void StandGuardCancelClientPacket(){
-        ClientPlayNetworking.send(ModMessages.STAND_GUARD_CANCEL_PACKET, PacketByteBufs.create());
-    }
 
     @Override
     public void floatToServerPacket(float value, byte context){

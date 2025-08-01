@@ -27,11 +27,6 @@ public class ForgePacketHandler {
             .simpleChannel();
 
         /**Client to Server Packets*/
-        INSTANCE.messageBuilder(ForgeGuardCancelPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(ForgeGuardCancelPacket::new)
-                .encoder(ForgeGuardCancelPacket::toBytes)
-                .consumerMainThread(ForgeGuardCancelPacket::handle)
-                .add();
         INSTANCE.messageBuilder(ForgeFloatC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(ForgeFloatC2SPacket::new)
                 .encoder(ForgeFloatC2SPacket::toBytes)

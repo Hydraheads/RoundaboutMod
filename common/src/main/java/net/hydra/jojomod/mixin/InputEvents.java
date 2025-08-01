@@ -1007,7 +1007,7 @@ public abstract class InputEvents implements IInputEvents {
                        standComp.roundabout$setInterruptCD(3);
                    }
                     standComp.roundabout$tryPower(PowerIndex.NONE,true);
-                   ModPacketHandler.PACKET_ACCESS.StandGuardCancelClientPacket();
+                   C2SPacketUtil.guardCancelPacket();
                 }
             }
 

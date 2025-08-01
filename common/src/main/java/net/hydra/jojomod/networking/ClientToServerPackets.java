@@ -3,6 +3,7 @@ package net.hydra.jojomod.networking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.index.Corpses;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.item.ModItems;
@@ -45,7 +46,8 @@ public class ClientToServerPackets {
             BarrageClashUpdate("barrage_clash_update"),
             Handshake("handshake"),
             Inventory("inventory"),
-            ItemContext("item_context");
+            ItemContext("item_context"),
+            GuardCancel("guard_cancel");
 
             public final String value;
 
@@ -356,6 +358,14 @@ public class ClientToServerPackets {
                     byte cont = (byte)vargs[0];
                     ItemStack stack = (ItemStack)vargs[1];
                     MainUtil.handleChangeItem(sender, cont, stack);
+                }
+
+                /**Release right click to stop guarding*/
+                if (message.equals(MESSAGES.GuardCancel.value)) {
+                    if (((StandUser) sender).roundabout$isGuarding() || ((StandUser) sender).roundabout$isBarraging()
+                            || ((StandUser) sender).roundabout$getStandPowers().clickRelease()) {
+                        ((StandUser) sender).roundabout$tryPower(PowerIndex.NONE, true);
+                    }
                 }
             }
         }
