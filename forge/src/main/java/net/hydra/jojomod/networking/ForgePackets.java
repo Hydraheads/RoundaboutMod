@@ -42,10 +42,6 @@ public class ForgePackets implements IPacketAccess {
         ForgePacketHandler.sendToClient(new ForgeBlockEntityResumeTSPacket(vec3i), sp);
     }
 
-    @Override
-    public void sendBundlePacket(ServerPlayer sp, byte context, byte one, byte two, byte three) {
-        ForgePacketHandler.sendToClient(new ForgeBundlePacket(context,one,two,three), sp);
-    }
 
     private static final Gson GSON = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .setPrettyPrinting()

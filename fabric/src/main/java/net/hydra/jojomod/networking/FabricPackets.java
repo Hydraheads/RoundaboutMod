@@ -72,19 +72,6 @@ public class FabricPackets implements IPacketAccess {
     }
 
     @Override
-    public void sendBundlePacket(ServerPlayer sp, byte context, byte one, byte two, byte three) {
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-
-        buffer.writeByte(context);
-        buffer.writeByte(one);
-        buffer.writeByte(two);
-        buffer.writeByte(three);
-        ServerPlayNetworking.send(sp, ModMessages.SEND_BUNDLE_PACKET, buffer);
-    }
-
-
-
-    @Override
     public void sendNewDynamicWorld(ServerPlayer sp, String name, ServerLevel level, @Nullable ServerPlayer player) {
         FriendlyByteBuf buf = PacketByteBufs.create();
         buf.writeUtf(name);

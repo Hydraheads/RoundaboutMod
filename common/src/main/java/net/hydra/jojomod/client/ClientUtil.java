@@ -308,6 +308,14 @@ public class ClientUtil {
                     byte context = (byte) vargs[0];
                     ClientUtil.handleSimpleBytePacketS2C(context);
                 }
+
+
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ByteBundleToClient.value)) {
+                    byte context = (byte) vargs[0];
+                    byte firstByte = (byte) vargs[1];
+                    byte secondByte = (byte) vargs[2];
+                    ClientUtil.handleBundlePacketS2C(context,firstByte,secondByte);
+                }
             }
         });
     }
@@ -842,10 +850,10 @@ public class ClientUtil {
              handleBlipPacketS2C(player,data,context,vec);
         }
     }
-    public static void handleBundlePacketS2C(byte context, byte one, byte two, byte three){
+    public static void handleBundlePacketS2C(byte context, byte one, byte two){
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            handleBundlePacketS2C(player,context,one,two,three);
+            handleBundlePacketS2C(player,context,one,two);
         }
     }
 
@@ -902,7 +910,7 @@ public class ClientUtil {
 
 
     /**A generalized packet for sending bytes to the client. Only a context is provided.*/
-    public static void handleBundlePacketS2C(LocalPlayer player, byte context, byte byte1, byte byte2, byte byte3){
+    public static void handleBundlePacketS2C(LocalPlayer player, byte context, byte byte1, byte byte2){
         if (context == PacketDataIndex.S2C_BUNDLE_POWER_INV){
             IPlayerEntity ple = ((IPlayerEntity) player);
             StandUser se = ((StandUser) player);

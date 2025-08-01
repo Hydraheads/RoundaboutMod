@@ -10,7 +10,6 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.gui.FogInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
-import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
@@ -82,7 +81,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.*;
 import net.zetalasis.networking.message.api.ModMessageEvents;
-import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -1797,8 +1795,8 @@ public class MainUtil {
                 unlocked = 1;
             }
 
-            ModPacketHandler.PACKET_ACCESS.sendBundlePacket(((ServerPlayer) player), PacketDataIndex.S2C_BUNDLE_POWER_INV,
-                    standUser.roundabout$getStandSkin(), unlocked, (byte) 0);
+            S2CPacketUtil.sendByteBundleToClientPacket(((ServerPlayer) player), PacketDataIndex.S2C_BUNDLE_POWER_INV,
+                    standUser.roundabout$getStandSkin(), unlocked);
 
             if (player.containerMenu != player.inventoryMenu) {
                 player.containerMenu = player.inventoryMenu;

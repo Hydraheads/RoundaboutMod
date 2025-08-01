@@ -144,4 +144,14 @@ public class S2CPacketUtil {
             );
         }
     }
+    public static void sendByteBundleToClientPacket(Player player, byte context, byte data1, byte data2){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.ByteBundleToClient.value,
+                    context,
+                    data1,
+                    data2
+            );
+        }
+    }
 }
