@@ -38,16 +38,6 @@ public class GenericS2CPacket {
         }
     }
 
-    public static void blip(Minecraft client, ClientPacketListener handler,
-                               FriendlyByteBuf buf, PacketSender responseSender) {
-        if (client.player != null) {
-            byte activePower = buf.readByte();
-            int data = buf.readInt();
-            Vector3f location = buf.readVector3f();
-            ClientUtil.handleBlipPacketS2C(client.player, data, activePower, location);
-        }
-    }
-
 
     public static void sendPowerInventorySettings(Minecraft client, ClientPacketListener handler,
                                   FriendlyByteBuf buf, PacketSender responseSender) {

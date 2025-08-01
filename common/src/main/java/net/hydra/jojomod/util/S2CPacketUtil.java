@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.zetalasis.networking.message.api.ModMessageEvents;
+import org.joml.Vector3f;
 
 /**it is NOT okay to have client only classes here
  *  This is where we send packets from the server to the client :O
@@ -63,6 +64,16 @@ public class S2CPacketUtil {
                     ServerToClientPackets.S2CPackets.MESSAGES.StopSound.value,
                     entID,
                     soundID
+            );
+        }
+    }
+    public static void sendBlipPacket(Player player, byte activePower, int data, Vector3f blip){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.Blip.value,
+                    data,
+                    activePower,
+                    blip
             );
         }
     }

@@ -9,7 +9,9 @@ import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -93,7 +95,7 @@ public class FogCloneEntity extends CloneEntity {
 
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
                 if (blockPos.closerToCenterThan(userLocation, 100) && !serverPlayerEntity.is(this.getPlayer())) {
-                    ModPacketHandler.PACKET_ACCESS.sendBlipPacket(serverPlayerEntity, (byte) 2, this.getPlayer().getId(),blip);
+                    S2CPacketUtil.sendBlipPacket(serverPlayerEntity, (byte) 2, this.getPlayer().getId(),blip);
                 }
             }
         }

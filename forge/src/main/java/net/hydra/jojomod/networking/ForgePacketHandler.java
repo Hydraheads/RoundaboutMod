@@ -34,11 +34,6 @@ public class ForgePacketHandler {
                 .encoder(ForgeGenericIntPacket::toBytes)
                 .consumerMainThread(ForgeGenericIntPacket::handle)
                 .add();
-        INSTANCE.messageBuilder(ForgeNBTPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ForgeNBTPacket::new)
-                .encoder(ForgeNBTPacket::toBytes)
-                .consumerMainThread(ForgeNBTPacket::handle)
-                .add();
         INSTANCE.messageBuilder(ForgeCDSyncPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(ForgeCDSyncPacket::new)
                 .encoder(ForgeCDSyncPacket::toBytes)
@@ -83,11 +78,6 @@ public class ForgePacketHandler {
                 .decoder(ForgeSimpleBytePacket::new)
                 .encoder(ForgeSimpleBytePacket::toBytes)
                 .consumerMainThread(ForgeSimpleBytePacket::handle)
-                .add();
-        INSTANCE.messageBuilder(ForgeBlipPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ForgeBlipPacket::new)
-                .encoder(ForgeBlipPacket::toBytes)
-                .consumerMainThread(ForgeBlipPacket::handle)
                 .add();
         INSTANCE.messageBuilder(ForgeBundlePacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(ForgeBundlePacket::new)

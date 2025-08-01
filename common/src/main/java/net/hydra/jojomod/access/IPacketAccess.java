@@ -29,7 +29,6 @@ public interface IPacketAccess {
     void sendFloatPowerPacket(ServerPlayer sp, byte activePower, float data);
 
     void sendIntPowerPacket(ServerPlayer sp, byte activePower, int data);
-    void sendBlipPacket(ServerPlayer sp, byte activePower, int data, Vector3f blip);
     void sendIntPacket(ServerPlayer sp, byte activePower, int data);
     void sendSimpleByte(ServerPlayer sp, byte context);
     void s2cPowerInventorySettings(ServerPlayer sp, int anchorPlace, float distanceOut, float idleOpacity,

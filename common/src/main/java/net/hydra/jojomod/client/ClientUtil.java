@@ -252,6 +252,13 @@ public class ClientUtil {
                     }
                 }
 
+                /**TS Teleport blip*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Blip.value)) {
+                    int data = (int) vargs[0];
+                    byte activePower = (byte) vargs[1];
+                    Vector3f vec = (Vector3f) vargs[2];
+                    ClientUtil.handleBlipPacketS2C(data,activePower,vec);
+                }
             }
         });
     }

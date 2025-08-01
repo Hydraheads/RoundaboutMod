@@ -165,16 +165,6 @@ public class FabricPackets implements IPacketAccess {
     }
 
     @Override
-    public void sendBlipPacket(ServerPlayer sp, byte activePower, int data, Vector3f vec) {
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-
-        buffer.writeByte(activePower);
-        buffer.writeInt(data);
-        buffer.writeVector3f(vec);
-        ServerPlayNetworking.send(sp, ModMessages.BLIP_PACKET, buffer);
-    }
-
-    @Override
     public void sendSimpleByte(ServerPlayer sp, byte context) {
         FriendlyByteBuf buffer = PacketByteBufs.create();
 

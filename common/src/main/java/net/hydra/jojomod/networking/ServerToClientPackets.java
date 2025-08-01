@@ -19,7 +19,8 @@ public class ServerToClientPackets {
             UpdateBarrageClash("update_barrage_clash_s2c"),
             SendConfig("send_config"),
             PlaySound("play_sound"),
-            StopSound("stop_sound");
+            StopSound("stop_sound"),
+            Blip("blip");
 
             public final String value;
 
