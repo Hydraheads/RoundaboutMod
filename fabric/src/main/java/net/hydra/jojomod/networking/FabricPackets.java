@@ -18,18 +18,6 @@ import org.joml.Vector3f;
 
 public class FabricPackets implements IPacketAccess {
 
-    @Override
-    public void syncCooldownPacket(ServerPlayer sp, int attackTime, int attackTimeMax, int attackTimeDuring,
-                                   byte activePower, byte activePowerPhase){
-        FriendlyByteBuf buf = PacketByteBufs.create();
-        buf.writeInt(attackTime);
-        buf.writeInt(attackTimeMax);
-        buf.writeInt(attackTimeDuring);
-        buf.writeByte(activePower);
-        buf.writeByte(activePowerPhase);
-        ServerPlayNetworking.send(sp, ModMessages.POWER_COOLDOWN_SYNC_ID, buf);
-
-    }
 
     @Override
     public void timeStoppingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range, int chargeTime, int maxChargeTime) {

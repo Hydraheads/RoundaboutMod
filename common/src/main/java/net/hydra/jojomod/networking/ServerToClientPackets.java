@@ -22,7 +22,8 @@ public class ServerToClientPackets {
             StopSound("stop_sound"),
             Blip("blip"),
             SyncCooldown("sync_cooldown"),
-            SyncCooldownMax("sync_cooldown_max");
+            SyncCooldownMax("sync_cooldown_max"),
+            SyncActivePower("sync_active_power");
 
             public final String value;
 

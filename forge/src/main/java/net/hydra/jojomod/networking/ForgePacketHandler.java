@@ -34,11 +34,6 @@ public class ForgePacketHandler {
                 .encoder(ForgeGenericIntPacket::toBytes)
                 .consumerMainThread(ForgeGenericIntPacket::handle)
                 .add();
-        INSTANCE.messageBuilder(ForgeCDSyncPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ForgeCDSyncPacket::new)
-                .encoder(ForgeCDSyncPacket::toBytes)
-                .consumerMainThread(ForgeCDSyncPacket::handle)
-                .add();
         INSTANCE.messageBuilder(ForgeTimeStoppingEntityPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(ForgeTimeStoppingEntityPacket::new)
                 .encoder(ForgeTimeStoppingEntityPacket::toBytes)

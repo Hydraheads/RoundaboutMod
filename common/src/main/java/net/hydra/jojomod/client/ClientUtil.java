@@ -260,18 +260,23 @@ public class ClientUtil {
                     ClientUtil.handleBlipPacketS2C(data,activePower,vec);
                 }
 
-                /**TS Teleport blip*/
+                /**Syncs cooldowns for skills*/
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncCooldown.value)) {
                     byte power = (byte) vargs[0];
                     int cooldown = (int) vargs[1];
                     ClientUtil.skillCDSyncPacket(power, cooldown);
                 }
-                /**TS Teleport blip*/
+                /**Syncs cooldowns for skills, includes a maximum to update with*/
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncCooldownMax.value)) {
                     byte power = (byte) vargs[0];
                     int cooldown = (int) vargs[1];
                     int maxCooldown = (int) vargs[2];
                     ClientUtil.skillMaxCDSyncPacket(power, cooldown, maxCooldown);
+                }
+                /**Syncs the active power the stand is using*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePower.value)) {
+                    byte power = (byte) vargs[0];
+                    MainUtil.syncActivePower(player,power);
                 }
             }
         });

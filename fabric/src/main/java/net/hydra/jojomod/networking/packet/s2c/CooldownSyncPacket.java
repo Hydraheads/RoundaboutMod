@@ -9,20 +9,6 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.FriendlyByteBuf;
 
 public class CooldownSyncPacket {
-    public static void updateAttackCooldowns(Minecraft client, ClientPacketListener handler,
-                                   FriendlyByteBuf buf, PacketSender responseSender) {
-        if (client.player != null) {
-            int attackTime = buf.readInt();
-            int attackTimeMax = buf.readInt();
-            int attackTimeDuring = buf.readInt();
-            byte activePower = buf.readByte();
-            byte activePowerPhase = buf.readByte();
-            MainUtil.syncCooldownsForAttacks(attackTime,attackTimeMax,attackTimeDuring,
-                    activePower,activePowerPhase,client.player);
-        }
-    }
-
-
 
     public static void sendFloatPower(Minecraft client, ClientPacketListener handler,
                                   FriendlyByteBuf buf, PacketSender responseSender) {

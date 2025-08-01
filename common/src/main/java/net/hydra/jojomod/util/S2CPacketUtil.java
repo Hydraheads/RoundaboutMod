@@ -96,4 +96,12 @@ public class S2CPacketUtil {
             );
         }
     }
+    public static void sendActivePowerPacket(Player player, byte activePower){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePower.value,
+                    activePower
+            );
+        }
+    }
 }

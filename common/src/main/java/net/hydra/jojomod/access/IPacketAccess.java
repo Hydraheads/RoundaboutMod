@@ -14,8 +14,6 @@ public interface IPacketAccess {
      * Every packet function must be written here.*/
 
     /**Server To Client Packets*/
-    void syncCooldownPacket(ServerPlayer sp, int attackTime, int attackTimeMax, int attackTimeDuring,
-                            byte activePower, byte activePowerPhase);
     void sendBundlePacket(ServerPlayer sp, byte context, byte one, byte two, byte three);
     void timeStoppingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range, int duration, int maxDuration);
     void timeStoppingEntityRemovalPacket(ServerPlayer sp, int entityID);

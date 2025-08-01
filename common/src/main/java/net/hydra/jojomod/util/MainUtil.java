@@ -2037,6 +2037,22 @@ public class MainUtil {
         player.level().addFreshEntity($$4);
     }
 
+    public static void syncActivePower(Player pl, byte activePower){
+
+        StandPowers powers = ((StandUser) pl).roundabout$getStandPowers();
+
+        if (powers.activePower != activePower){
+            if (activePower == PowerIndex.NONE){
+                powers.setAttackTimeDuring(-1);
+            } else {
+                powers.setAttackTimeDuring(0);
+            }
+        }
+        powers.updateMovesFromPacket(activePower);
+        powers.setActivePower(activePower);
+        powers.kickStartClient();
+
+    }
     public static void syncCooldownsForAttacks(int attackTime, int attackTimeMax, int attackTimeDuring,
                                                byte activePower, byte activePowerPhase, Player pl){
 

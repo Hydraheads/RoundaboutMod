@@ -3026,10 +3026,8 @@ public class StandPowers {
     }
 
     public void syncCooldowns(){
-        if (!this.self.level().isClientSide && this.self instanceof ServerPlayer){
-            ModPacketHandler.PACKET_ACCESS.syncCooldownPacket((ServerPlayer) this.self,
-                    attackTime,attackTimeMax,attackTimeDuring,
-                    activePower,activePowerPhase);
+        if (!this.self.level().isClientSide && this.self instanceof ServerPlayer SP){
+            S2CPacketUtil.sendActivePowerPacket(SP,activePower);
         }
     }
 
