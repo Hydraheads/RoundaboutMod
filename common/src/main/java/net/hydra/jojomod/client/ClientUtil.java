@@ -259,6 +259,20 @@ public class ClientUtil {
                     Vector3f vec = (Vector3f) vargs[2];
                     ClientUtil.handleBlipPacketS2C(data,activePower,vec);
                 }
+
+                /**TS Teleport blip*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncCooldown.value)) {
+                    byte power = (byte) vargs[0];
+                    int cooldown = (int) vargs[1];
+                    ClientUtil.skillCDSyncPacket(power, cooldown);
+                }
+                /**TS Teleport blip*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncCooldownMax.value)) {
+                    byte power = (byte) vargs[0];
+                    int cooldown = (int) vargs[1];
+                    int maxCooldown = (int) vargs[2];
+                    ClientUtil.skillMaxCDSyncPacket(power, cooldown, maxCooldown);
+                }
             }
         });
     }

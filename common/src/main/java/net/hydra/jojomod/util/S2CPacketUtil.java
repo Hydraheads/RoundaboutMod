@@ -77,4 +77,23 @@ public class S2CPacketUtil {
             );
         }
     }
+    public static void sendCooldownSyncPacket(Player player, byte moveOnCooldown, int cooldown){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SyncCooldown.value,
+                    moveOnCooldown,
+                    cooldown
+            );
+        }
+    }
+    public static void sendMaxCooldownSyncPacket(Player player, byte moveOnCooldown, int cooldown, int maxCooldown){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SyncCooldownMax.value,
+                    moveOnCooldown,
+                    cooldown,
+                    maxCooldown
+            );
+        }
+    }
 }

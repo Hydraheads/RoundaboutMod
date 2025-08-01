@@ -1131,7 +1131,7 @@ public class StandPowers {
                         List<CooldownInstance> CDCopy = new ArrayList<>(StandCooldowns) {
                         };
 
-                        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), cin, ci.time, ci.maxTime);
+                        S2CPacketUtil.sendMaxCooldownSyncPacket(((ServerPlayer) this.getSelf()), cin, ci.time, ci.maxTime);
                     }
                 }
             }

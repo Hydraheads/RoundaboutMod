@@ -33,6 +33,7 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -209,7 +210,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                         ((StandUser)leaded).roundabout$dropString();
                         leaded = null;
                         if (this.self instanceof ServerPlayer SP) {
-                            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(SP, PowerIndex.SKILL_1,
+                            S2CPacketUtil.sendCooldownSyncPacket(SP, PowerIndex.SKILL_1,
                                     getRedBindMissCooldown());
                         }
                     }
@@ -2387,7 +2388,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         } else if (this.getActivePower() == PowerIndex.POWER_1) {
             int cdr = getRedBindMissCooldown();
             if (this.getSelf() instanceof Player) {
-                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, cdr);
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, cdr);
             }
             this.setCooldown(PowerIndex.SKILL_1, cdr);
             return true;
@@ -2605,7 +2606,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
         if (!cancel) {
             if (this.getSelf() instanceof ServerPlayer && this.isChargingCrossfireSingle()) {
-                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
                         PowerIndex.SKILL_2,  multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.ankhFailCooldown));
             }
         }

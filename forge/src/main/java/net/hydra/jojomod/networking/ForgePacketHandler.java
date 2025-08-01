@@ -39,16 +39,6 @@ public class ForgePacketHandler {
                 .encoder(ForgeCDSyncPacket::toBytes)
                 .consumerMainThread(ForgeCDSyncPacket::handle)
                 .add();
-        INSTANCE.messageBuilder(ForgeSkillCDSyncPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ForgeSkillCDSyncPacket::new)
-                .encoder(ForgeSkillCDSyncPacket::toBytes)
-                .consumerMainThread(ForgeSkillCDSyncPacket::handle)
-                .add();
-        INSTANCE.messageBuilder(ForgeSkillCDSyncMaxPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ForgeSkillCDSyncMaxPacket::new)
-                .encoder(ForgeSkillCDSyncMaxPacket::toBytes)
-                .consumerMainThread(ForgeSkillCDSyncMaxPacket::handle)
-                .add();
         INSTANCE.messageBuilder(ForgeTimeStoppingEntityPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(ForgeTimeStoppingEntityPacket::new)
                 .encoder(ForgeTimeStoppingEntityPacket::toBytes)

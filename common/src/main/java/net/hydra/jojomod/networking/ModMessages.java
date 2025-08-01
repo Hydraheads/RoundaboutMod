@@ -9,8 +9,6 @@ public class ModMessages {
      * Note that forge and Fabric handle packets quite differently.
      * Both reference this file.*/
     public static final ResourceLocation POWER_COOLDOWN_SYNC_ID = new ResourceLocation(Roundabout.MOD_ID,"power_cooldown_sync");
-    public static final ResourceLocation SKILL_COOLDOWN_SYNC_ID = new ResourceLocation(Roundabout.MOD_ID,"skill_cooldown_sync");
-    public static final ResourceLocation SKILL_COOLDOWN_SYNC_2_ID = new ResourceLocation(Roundabout.MOD_ID,"skill_cooldown_sync_2");
     public static final ResourceLocation TIME_STOP_ENTITY_PACKET = new ResourceLocation(Roundabout.MOD_ID,"time_stop_entity_s2c_packet");
     public static final ResourceLocation TIME_STOP_ENTITY_REMOVAL_PACKET = new ResourceLocation(Roundabout.MOD_ID,"time_stop_entity_removal_s2c_packet");
     public static final ResourceLocation PERMA_CASTING_ENTITY_PACKET = new ResourceLocation(Roundabout.MOD_ID,"perma_casting_entity_s2c_packet");

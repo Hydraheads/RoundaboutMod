@@ -18,6 +18,7 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
@@ -216,7 +217,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
                             if ((stand.isTechnicallyInImpassableWall() && this.getActivePower() != PowerIndex.POWER_1_BONUS) ||
                                     stand.position().distanceTo(this.getSelf().position()) > 15){
-                                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 7);
+                                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 7);
                                 this.setCooldown(PowerIndex.SKILL_2, 5);
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                                 return;
@@ -465,7 +466,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
 
         if (this.getSelf() instanceof Player) {
-            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown);
+            S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown);
         }
         this.setCooldown(PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown);
         SoundEvent SE;
@@ -587,7 +588,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 int sendTSCooldown = Math.round(tsTimeRemaining);
                 if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative() && ClientNetworking.getAppropriateConfig().timeStopSettings.creativeModeInfiniteTimeStop))) {
                     if (this.getSelf() instanceof Player) {
-                        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, sendTSCooldown);
+                        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, sendTSCooldown);
                     }
                     this.setCooldown(PowerIndex.SKILL_4, sendTSCooldown);
                 }
@@ -1114,14 +1115,14 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         } else if (this.getActivePower() == PowerIndex.SPECIAL) {
             int cdr = ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopInterruptedCooldownv2;
             if (this.getSelf() instanceof Player) {
-                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, cdr);
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, cdr);
             }
             this.setCooldown(PowerIndex.SKILL_4, cdr);
             return true;
         } else if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
             int cdr = ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown;
             if (this.getSelf() instanceof Player) {
-                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, cdr);
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, cdr);
             }
             this.setCooldown(PowerIndex.SKILL_1_SNEAK, cdr);
             return true;

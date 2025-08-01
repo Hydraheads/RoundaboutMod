@@ -32,23 +32,6 @@ public class FabricPackets implements IPacketAccess {
     }
 
     @Override
-    public void syncSkillCooldownPacket(ServerPlayer sp, byte moveOnCooldown, int cooldown) {
-        FriendlyByteBuf buf = PacketByteBufs.create();
-        buf.writeByte(moveOnCooldown);
-        buf.writeInt(cooldown);
-        ServerPlayNetworking.send(sp, ModMessages.SKILL_COOLDOWN_SYNC_ID, buf);
-    }
-    @Override
-    public void syncSkillCooldownPacket(ServerPlayer sp, byte moveOnCooldown, int cooldown, int maxCooldown) {
-        FriendlyByteBuf buf = PacketByteBufs.create();
-        buf.writeByte(moveOnCooldown);
-        buf.writeInt(cooldown);
-        buf.writeInt(maxCooldown);
-        ServerPlayNetworking.send(sp, ModMessages.SKILL_COOLDOWN_SYNC_2_ID, buf);
-    }
-
-
-    @Override
     public void timeStoppingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range, int chargeTime, int maxChargeTime) {
         FriendlyByteBuf buffer = PacketByteBufs.create();
         buffer.writeInt(entityID);

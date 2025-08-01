@@ -16,27 +16,20 @@ public interface IPacketAccess {
     /**Server To Client Packets*/
     void syncCooldownPacket(ServerPlayer sp, int attackTime, int attackTimeMax, int attackTimeDuring,
                             byte activePower, byte activePowerPhase);
-    void syncSkillCooldownPacket(ServerPlayer sp, byte moveOnCooldown, int cooldown);
-    void syncSkillCooldownPacket(ServerPlayer sp, byte moveOnCooldown, int cooldown, int maxcooldown);
-
     void sendBundlePacket(ServerPlayer sp, byte context, byte one, byte two, byte three);
-
     void timeStoppingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range, int duration, int maxDuration);
     void timeStoppingEntityRemovalPacket(ServerPlayer sp, int entityID);
     void permaCastingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range, byte context);
     void permaCastingEntityRemovalPacket(ServerPlayer sp, int entityID);
     void resumeTileEntityTSPacket(ServerPlayer sp, Vec3i vec3i);
     void sendFloatPowerPacket(ServerPlayer sp, byte activePower, float data);
-
     void sendIntPowerPacket(ServerPlayer sp, byte activePower, int data);
     void sendIntPacket(ServerPlayer sp, byte activePower, int data);
     void sendSimpleByte(ServerPlayer sp, byte context);
     void s2cPowerInventorySettings(ServerPlayer sp, int anchorPlace, float distanceOut, float idleOpacity,
                                    float combatOpacity, float enemyOpacity, int anchorPlaceAttack);
-
     void sendNewDynamicWorld(ServerPlayer sp, String name, ServerLevel level, @Nullable ServerPlayer player);
     void deregisterDynamicWorld(ServerPlayer sp, String name);
-
     void ejectPRunning(ServerPlayer sp);
 
     /**Client To Server Packets*/

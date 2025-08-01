@@ -390,9 +390,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 ((ServerLevel) this.level()).sendParticles(ModParticles.FOG_CHAIN, this.getX(),
                         this.getY()+(this.getBbWidth()*0.6), this.getZ(),
                         14, 0.4, 0.2, 0.4, 0.35);
-                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) ((Player)(Object)this)),
-                        PowerIndex.SKILL_1_SNEAK, 20);
-                ((StandUser)this).roundabout$getStandPowers().setCooldown(PowerIndex.SKILL_1_SNEAK, 20);
             }
         }
     }
@@ -404,10 +401,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 ((ServerLevel) this.level()).sendParticles(ModParticles.FOG_CHAIN, this.getX(),
                         this.getY()+(this.getBbWidth()*0.6), this.getZ(),
                         14, 0.4, 0.2, 0.4, 0.35);
-
-                    ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) ((Player)(Object)this)),
-                            PowerIndex.SKILL_1_SNEAK, 100);
-                ((StandUser)this).roundabout$getStandPowers().setCooldown(PowerIndex.SKILL_1_SNEAK, 100);
             }
         }
     }

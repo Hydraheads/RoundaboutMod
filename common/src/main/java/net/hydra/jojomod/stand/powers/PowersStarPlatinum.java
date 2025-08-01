@@ -33,6 +33,7 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
@@ -738,7 +739,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
                         if (success){
                             int cdr = ClientNetworking.getAppropriateConfig().starPlatinumSettings.guardianCooldown;
-                            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
+                            S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
                                     PowerIndex.SKILL_EXTRA_2, cdr);
                             ((StarPlatinumEntity) stand).setScoping(false);
                             if (ClientNetworking.getAppropriateConfig().starPlatinumSettings.starPlatinumScopeUsesPotionEffectForNightVision) {
@@ -1002,7 +1003,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (this.getActivePower() == PowerIndex.POWER_1 && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
             int cdr = ClientNetworking.getAppropriateConfig().starPlatinumSettings.starFingerInterruptCooldown;
             if (this.getSelf() instanceof Player) {
-                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, cdr);
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, cdr);
             }
             this.setCooldown(PowerIndex.SKILL_1, cdr);
             return true;

@@ -20,7 +20,9 @@ public class ServerToClientPackets {
             SendConfig("send_config"),
             PlaySound("play_sound"),
             StopSound("stop_sound"),
-            Blip("blip");
+            Blip("blip"),
+            SyncCooldown("sync_cooldown"),
+            SyncCooldownMax("sync_cooldown_max");
 
             public final String value;
 

@@ -793,7 +793,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             SoundSource.PLAYERS, 0.95F, 1.3F);
                     int cdr = ClientNetworking.getAppropriateConfig().theWorldSettings.assaultCooldown;
                     if (this.getSelf() instanceof ServerPlayer) {
-                        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
+                        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
                                 PowerIndex.SKILL_1, cdr);
                     }
                     this.setCooldown(PowerIndex.SKILL_1, cdr);
@@ -993,7 +993,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (this.getActivePower() == PowerIndex.POWER_1 || this.getActivePower() == PowerIndex.POWER_1_BONUS){
             int cdr = ClientNetworking.getAppropriateConfig().theWorldSettings.assaultInterruptCooldown;
             if (this.getSelf() instanceof Player) {
-                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, cdr);
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, cdr);
             }
             this.setCooldown(PowerIndex.SKILL_1, cdr);
             return true;

@@ -31,6 +31,7 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
@@ -940,9 +941,6 @@ public class PowersJustice extends NewDashPreset {
             fogChainClient();
             return;
         }
-        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
-            ClientUtil.setJusticeBlockScreen();
-        }
     }
 
     public void dashOrTacticsScreenClient(){
@@ -1493,7 +1491,7 @@ public class PowersJustice extends NewDashPreset {
                     return true;
                 }
             }
-            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
+            S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
                     PowerIndex.SKILL_2, 10);
         }
         return true;

@@ -24,6 +24,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -533,7 +534,7 @@ public class PowersCinderella extends NewDashPreset {
         }
 
         if (this.getSelf() instanceof Player) {
-            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2,  ClientNetworking.getAppropriateConfig().cinderellaSettings.defaceAttackCooldown);
+            S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2,  ClientNetworking.getAppropriateConfig().cinderellaSettings.defaceAttackCooldown);
         }
         this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().cinderellaSettings.defaceAttackCooldown);
         SoundEvent SE;

@@ -22,29 +22,6 @@ public class CooldownSyncPacket {
         }
     }
 
-    public static void updateSkillCooldowns(Minecraft client, ClientPacketListener handler,
-                                             FriendlyByteBuf buf, PacketSender responseSender) {
-        if (client.player != null) {
-            byte standMove = buf.readByte();
-            int cooldown = buf.readInt();
-
-            StandPowers powers = ((StandUser) client.player).roundabout$getStandPowers();
-            powers.setCooldown(standMove,cooldown);
-        }
-    }
-
-    public static void updateSkillCooldowns2(Minecraft client, ClientPacketListener handler,
-                                            FriendlyByteBuf buf, PacketSender responseSender) {
-        if (client.player != null) {
-            byte standMove = buf.readByte();
-            int cooldown = buf.readInt();
-            int cooldownMax = buf.readInt();
-
-            StandPowers powers = ((StandUser) client.player).roundabout$getStandPowers();
-            powers.setCooldownMax(standMove,cooldown,cooldownMax);
-        }
-    }
-
 
 
     public static void sendFloatPower(Minecraft client, ClientPacketListener handler,

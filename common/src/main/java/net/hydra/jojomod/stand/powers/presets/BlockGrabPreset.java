@@ -16,6 +16,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.Options;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -60,7 +61,7 @@ public class BlockGrabPreset extends NewPunchingStand {
 
     public boolean throwObject(ItemStack item){
         int cdr = ClientNetworking.getAppropriateConfig().generalStandSettings.objectThrowCooldown;
-        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, cdr);
+        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, cdr);
         this.setCooldown(PowerIndex.SKILL_2, cdr);
         /***/
         return ThrownObjectEntity.throwAnObject(this.self,canSnipe(),item,getShotAccuracy(),getBundleAccuracy(),getThrowAngle(),
@@ -199,7 +200,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                     int cdr = ClientNetworking.getAppropriateConfig().generalStandSettings.mobThrowInterruptCooldown;
 
                     setCooldown(PowerIndex.SKILL_2, cdr);
-                    ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) PE), PowerIndex.SKILL_2, cdr);
+                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) PE), PowerIndex.SKILL_2, cdr);
                 }
                 stand.ejectPassengers();
             }
@@ -296,7 +297,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                             cdr = ClientNetworking.getAppropriateConfig().generalStandSettings.mobThrowCooldown;
                         }
 
-                        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, cdr);
+                        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, cdr);
                         this.setCooldown(PowerIndex.SKILL_2, cdr);
                         Entity ent = standEntity.getFirstPassenger();
 
@@ -481,7 +482,7 @@ public class BlockGrabPreset extends NewPunchingStand {
         if (standEntity != null) {
             if (!standEntity.getHeldItem().isEmpty()) {
                 if (!this.getSelf().level().isClientSide) {
-                    ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 20);
+                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 20);
                     this.setCooldown(PowerIndex.SKILL_2, 20);
                 }
                 return true;
@@ -682,7 +683,7 @@ public class BlockGrabPreset extends NewPunchingStand {
     public void addItem(StandEntity standEntity){
         addItemLight(standEntity);
 
-        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
+        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
         this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
     }
     public void addItemLight(StandEntity standEntity){
@@ -758,7 +759,7 @@ public class BlockGrabPreset extends NewPunchingStand {
 
                                         ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                                         animateStand(StandEntity.BLOCK_RETRACT);
-                                        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 10);
+                                        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 10);
                                         this.setCooldown(PowerIndex.SKILL_2, 10);
                                         return true;
                                     }
