@@ -48,4 +48,22 @@ public class S2CPacketUtil {
             );
         }
     }
+    public static void sendPlaySoundPacket(Player player, int entID, byte soundID){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.PlaySound.value,
+                    entID,
+                    soundID
+            );
+        }
+    }
+    public static void sendCancelSoundPacket(Player player, int entID, byte soundID){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.StopSound.value,
+                    entID,
+                    soundID
+            );
+        }
+    }
 }

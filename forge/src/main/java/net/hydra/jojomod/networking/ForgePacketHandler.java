@@ -39,16 +39,6 @@ public class ForgePacketHandler {
                 .encoder(ForgeNBTPacket::toBytes)
                 .consumerMainThread(ForgeNBTPacket::handle)
                 .add();
-        INSTANCE.messageBuilder(ForgePlaySoundPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ForgePlaySoundPacket::new)
-                .encoder(ForgePlaySoundPacket::toBytes)
-                .consumerMainThread(ForgePlaySoundPacket::handle)
-                .add();
-        INSTANCE.messageBuilder(ForgeStopSoundPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ForgeStopSoundPacket::new)
-                .encoder(ForgeStopSoundPacket::toBytes)
-                .consumerMainThread(ForgeStopSoundPacket::handle)
-                .add();
         INSTANCE.messageBuilder(ForgeCDSyncPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(ForgeCDSyncPacket::new)
                 .encoder(ForgeCDSyncPacket::toBytes)

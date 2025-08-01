@@ -17,7 +17,9 @@ public class ServerToClientPackets {
             SyncDaze("sync_daze"),
             SyncGuard("sync_guard"),
             UpdateBarrageClash("update_barrage_clash_s2c"),
-            SendConfig("send_config");
+            SendConfig("send_config"),
+            PlaySound("play_sound"),
+            StopSound("stop_sound");
 
             public final String value;
 

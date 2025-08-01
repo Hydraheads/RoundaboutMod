@@ -10,22 +10,4 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class SoundStopPacket {
 
-    public static void playSound(Minecraft client, ClientPacketListener handler,
-                                 FriendlyByteBuf buf, PacketSender responseSender) {
-        if (client.level != null) {
-            Entity User = client.level.getEntity(buf.readInt());
-            if (User instanceof LivingEntity){
-                ((StandUserClient)User).roundabout$clientQueSound(buf.readByte());
-            }
-        }
-    }
-    public static void stopSound(Minecraft client, ClientPacketListener handler,
-                                  FriendlyByteBuf buf, PacketSender responseSender) {
-        if (client.player != null) {
-            Entity User = client.player.level().getEntity(buf.readInt());
-            if (User instanceof LivingEntity){
-                ((StandUserClient)User).roundabout$clientQueSoundCanceling(buf.readByte());
-            }
-        }
-    }
 }

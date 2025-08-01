@@ -17,8 +17,6 @@ public class FabricPacketManager {
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.POWER_COOLDOWN_SYNC_ID, CooldownSyncPacket::updateAttackCooldowns);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.SKILL_COOLDOWN_SYNC_ID, CooldownSyncPacket::updateSkillCooldowns);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.SKILL_COOLDOWN_SYNC_2_ID, CooldownSyncPacket::updateSkillCooldowns2);
-        ClientPlayNetworking.registerGlobalReceiver(ModMessages.SOUND_CANCEL_ID, SoundStopPacket::stopSound);
-        ClientPlayNetworking.registerGlobalReceiver(ModMessages.SOUND_PLAY_ID, SoundStopPacket::playSound);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.TIME_STOP_ENTITY_PACKET, TimeEventPackets::updateTSList);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.TIME_STOP_ENTITY_REMOVAL_PACKET, TimeEventPackets::updateTSRemovalList);
         ClientPlayNetworking.registerGlobalReceiver(ModMessages.PERMA_CASTING_ENTITY_PACKET, TimeEventPackets::updatePermaCastingList);

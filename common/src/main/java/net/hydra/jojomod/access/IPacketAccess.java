@@ -18,9 +18,6 @@ public interface IPacketAccess {
                             byte activePower, byte activePowerPhase);
     void syncSkillCooldownPacket(ServerPlayer sp, byte moveOnCooldown, int cooldown);
     void syncSkillCooldownPacket(ServerPlayer sp, byte moveOnCooldown, int cooldown, int maxcooldown);
-    void stopSoundPacket(ServerPlayer sp, int id, byte soundNo);
-
-    void startSoundPacket(ServerPlayer sp, int id, byte soundNo);
 
     void sendBundlePacket(ServerPlayer sp, byte context, byte one, byte two, byte three);
 

@@ -2685,9 +2685,9 @@ public class StandPowers {
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
                 if (blockPos.closerToCenterThan(userLocation, range) && !((StandUser)serverPlayerEntity).roundabout$getStandDisc().isEmpty()) {
                     if (onSelf) {
-                        ModPacketHandler.PACKET_ACCESS.startSoundPacket(serverPlayerEntity, serverPlayerEntity.getId(), soundNo);
+                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, serverPlayerEntity.getId(), soundNo);
                     } else {
-                        ModPacketHandler.PACKET_ACCESS.startSoundPacket(serverPlayerEntity, this.self.getId(), soundNo);
+                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, this.self.getId(), soundNo);
                     }
                 }
             }
@@ -2715,9 +2715,9 @@ public class StandPowers {
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
                 if (blockPos.closerToCenterThan(userLocation, range)) {
                     if (onSelf) {
-                        ModPacketHandler.PACKET_ACCESS.startSoundPacket(serverPlayerEntity, serverPlayerEntity.getId(), soundNo);
+                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, serverPlayerEntity.getId(), soundNo);
                     } else {
-                        ModPacketHandler.PACKET_ACCESS.startSoundPacket(serverPlayerEntity, this.self.getId(), soundNo);
+                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, this.self.getId(), soundNo);
                     }
                 }
             }
@@ -2827,9 +2827,9 @@ public class StandPowers {
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
                 if (blockPos.closerToCenterThan(userLocation, range)) {
                     if (!onSelf){
-                        ModPacketHandler.PACKET_ACCESS.stopSoundPacket(serverPlayerEntity,this.self.getId(),soundNumber);
+                        S2CPacketUtil.sendCancelSoundPacket(serverPlayerEntity,this.self.getId(),soundNumber);
                     } else {
-                        ModPacketHandler.PACKET_ACCESS.stopSoundPacket(serverPlayerEntity,serverPlayerEntity.getId(),soundNumber);
+                        S2CPacketUtil.sendCancelSoundPacket(serverPlayerEntity,serverPlayerEntity.getId(),soundNumber);
                     }
                 }
             }

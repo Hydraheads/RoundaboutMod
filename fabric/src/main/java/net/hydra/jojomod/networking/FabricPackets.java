@@ -47,21 +47,6 @@ public class FabricPackets implements IPacketAccess {
         ServerPlayNetworking.send(sp, ModMessages.SKILL_COOLDOWN_SYNC_2_ID, buf);
     }
 
-    @Override
-    public void stopSoundPacket(ServerPlayer sp, int id, byte soundNo){
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-        buffer.writeInt(id);
-        buffer.writeByte(soundNo);
-        ServerPlayNetworking.send(sp,ModMessages.SOUND_CANCEL_ID, buffer);
-    }
-
-    @Override
-    public void startSoundPacket(ServerPlayer sp, int id, byte soundNo){
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-        buffer.writeInt(id);
-        buffer.writeByte(soundNo);
-        ServerPlayNetworking.send(sp,ModMessages.SOUND_PLAY_ID, buffer);
-    }
 
     @Override
     public void timeStoppingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range, int chargeTime, int maxChargeTime) {

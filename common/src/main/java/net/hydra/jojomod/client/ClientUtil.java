@@ -233,6 +233,24 @@ public class ClientUtil {
                     ClientNetworking.initialize(config);
                 }
 
+                /**Read in Sent config*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.PlaySound.value)) {
+                    int entId = (int) vargs[0];
+                    byte soundID = (byte) vargs[1];
+                    Entity User = player.level().getEntity(entId);
+                    if (User instanceof LivingEntity){
+                        ((StandUserClient)User).roundabout$clientQueSound(soundID);
+                    }
+                }
+                /**Read in Sent config*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.StopSound.value)) {
+                    int entId = (int) vargs[0];
+                    byte soundID = (byte) vargs[1];
+                    Entity User = player.level().getEntity(entId);
+                    if (User instanceof LivingEntity){
+                        ((StandUserClient)User).roundabout$clientQueSoundCanceling(soundID);
+                    }
+                }
 
             }
         });
