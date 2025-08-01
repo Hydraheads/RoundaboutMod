@@ -49,11 +49,6 @@ public class ForgePacketHandler {
                 .encoder(ForgeBlockEntityResumeTSPacket::toBytes)
                 .consumerMainThread(ForgeBlockEntityResumeTSPacket::handle)
                 .add();
-        INSTANCE.messageBuilder(ForgePowerFloatPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ForgePowerFloatPacket::new)
-                .encoder(ForgePowerFloatPacket::toBytes)
-                .consumerMainThread(ForgePowerFloatPacket::handle)
-                .add();
         INSTANCE.messageBuilder(ForgeSimpleBytePacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(ForgeSimpleBytePacket::new)
                 .encoder(ForgeSimpleBytePacket::toBytes)

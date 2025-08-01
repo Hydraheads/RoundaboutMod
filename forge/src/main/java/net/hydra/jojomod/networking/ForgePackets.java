@@ -43,10 +43,6 @@ public class ForgePackets implements IPacketAccess {
     }
 
     @Override
-    public void sendFloatPowerPacket(ServerPlayer sp, byte activePower, float data) {
-        ForgePacketHandler.sendToClient(new ForgePowerFloatPacket(activePower,data), sp);
-    }
-    @Override
     public void sendBundlePacket(ServerPlayer sp, byte context, byte one, byte two, byte three) {
         ForgePacketHandler.sendToClient(new ForgeBundlePacket(context,one,two,three), sp);
     }

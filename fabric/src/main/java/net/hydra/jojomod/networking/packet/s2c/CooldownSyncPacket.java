@@ -10,12 +10,4 @@ import net.minecraft.network.FriendlyByteBuf;
 
 public class CooldownSyncPacket {
 
-    public static void sendFloatPower(Minecraft client, ClientPacketListener handler,
-                                  FriendlyByteBuf buf, PacketSender responseSender) {
-        if (client.player != null) {
-            byte activePower = buf.readByte();
-            float data = buf.readFloat();
-            ((StandUser) client.player).roundabout$getStandPowers().updatePowerFloat(activePower,data);
-        }
-    }
 }

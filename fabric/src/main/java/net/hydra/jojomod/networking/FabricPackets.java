@@ -70,14 +70,6 @@ public class FabricPackets implements IPacketAccess {
         buffer.writeInt(vec3i.getZ());
         ServerPlayNetworking.send(sp, ModMessages.RESUME_TILE_ENTITY_TS_PACKET, buffer);
     }
-    @Override
-    public void sendFloatPowerPacket(ServerPlayer sp, byte activePower, float data) {
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-
-        buffer.writeByte(activePower);
-        buffer.writeFloat(data);
-        ServerPlayNetworking.send(sp, ModMessages.SEND_FLOAT_POWER_DATA_PACKET, buffer);
-    }
 
     @Override
     public void sendIntPacket(ServerPlayer sp, byte activePower, int data) {
