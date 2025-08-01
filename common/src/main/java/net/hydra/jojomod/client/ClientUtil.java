@@ -320,7 +320,6 @@ public class ClientUtil {
         } else if (context == PacketDataIndex.S2C_INT_OXYGEN_TANK) {
             ((StandUser) player).roundabout$getStandPowers().setAirAmount(data);
         } else if (context== PacketDataIndex.S2C_INT_GRAB_ITEM){
-            Roundabout.LOGGER.info("a");
             Entity target = player.level().getEntity(data);
             if (target instanceof ItemEntity IE) {
                 IE.getItem().shrink(1);
