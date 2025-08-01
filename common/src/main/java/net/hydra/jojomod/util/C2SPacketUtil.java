@@ -41,6 +41,14 @@ public class C2SPacketUtil {
         );
     }
 
+    public static void floatToServerPacket(byte packet, float ft){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.FloatToServer.value,
+                packet,
+                ft
+        );
+    }
+
     public static void byteToServerPacket(byte packet, byte value){
         ModMessageEvents.sendToServer(
                 ClientToServerPackets.StandPowerPackets.MESSAGES.ByteToServer.value,

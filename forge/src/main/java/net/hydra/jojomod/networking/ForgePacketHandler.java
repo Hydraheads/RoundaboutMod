@@ -27,11 +27,6 @@ public class ForgePacketHandler {
             .simpleChannel();
 
         /**Client to Server Packets*/
-        INSTANCE.messageBuilder(ForgeFloatC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(ForgeFloatC2SPacket::new)
-                .encoder(ForgeFloatC2SPacket::toBytes)
-                .consumerMainThread(ForgeFloatC2SPacket::handle)
-                .add();
         INSTANCE.messageBuilder(ForgeAckDynamicWorld.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(ForgeAckDynamicWorld::new)
                 .encoder(ForgeAckDynamicWorld::toBytes)

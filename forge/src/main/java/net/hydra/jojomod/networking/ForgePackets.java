@@ -131,12 +131,6 @@ public class ForgePackets implements IPacketAccess {
         ForgePacketHandler.sendToClient(new ForgeEjectPRunning(), sp);
     }
 
-
-    @Override
-    public void floatToServerPacket(float value, byte context) {
-        ForgePacketHandler.sendToServer(new ForgeFloatC2SPacket(value, context));
-    }
-
     @Override
     public void ackRegisterWorld() {
         ForgePacketHandler.sendToServer(new ForgeAckDynamicWorld());

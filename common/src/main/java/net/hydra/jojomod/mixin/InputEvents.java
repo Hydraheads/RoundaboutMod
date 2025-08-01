@@ -743,9 +743,9 @@ public abstract class InputEvents implements IInputEvents {
     public void roundabout$SetBonusJump(boolean bigJump, float jumpHeight, float current){
          ((StandUser)player).roundabout$setBigJump(bigJump);
          if (bigJump){
-             ModPacketHandler.PACKET_ACCESS.floatToServerPacket(current, PacketDataIndex.FLOAT_BIG_JUMP);
+             C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_BIG_JUMP,current);
          } else {
-             ModPacketHandler.PACKET_ACCESS.floatToServerPacket(current, PacketDataIndex.FLOAT_BIG_JUMP_CANCEL);
+             C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_BIG_JUMP_CANCEL,current);
          }
     }
 

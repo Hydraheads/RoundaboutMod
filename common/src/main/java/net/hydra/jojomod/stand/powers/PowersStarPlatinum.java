@@ -376,7 +376,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 StandEntity stand = getStandEntity(this.self);
                 if (Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE && SE.getFingerLength() > 1.01) {
                     if (this.getSelf() instanceof Player && isPacketPlayer()) {
-                         ModPacketHandler.PACKET_ACCESS.floatToServerPacket(1F, FLOAT_STAR_FINGER_SIZE);
+                        C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_STAR_FINGER_SIZE,1F);
                     }
                     if (!this.self.level().isClientSide()){
                         SE.setFingerLength(1F);
@@ -920,7 +920,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 if (Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE){
                     if (this.self instanceof Player) {
                         if (isPacketPlayer()) {
-                            ModPacketHandler.PACKET_ACCESS.floatToServerPacket(1F, FLOAT_STAR_FINGER_SIZE);
+                            C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_STAR_FINGER_SIZE,1F);
                         }
                     }
                 }
@@ -937,8 +937,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                         BlockHitResult dd = getAheadVec(distanceOut);
                         double maxDist = Math.max(Math.sqrt(dd.distanceTo(this.getSelf())),1);
                         double maxDist2 = Math.max(Math.sqrt(dd.distanceTo(this.getSelf()))*16-32,1);
-                        ModPacketHandler.PACKET_ACCESS.floatToServerPacket((float)
-                                maxDist2, FLOAT_STAR_FINGER_SIZE);
+                        C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_STAR_FINGER_SIZE,(float)
+                                maxDist2);
                         if (this.attackTimeDuring == 27){
                             int cdr = ClientNetworking.getAppropriateConfig().starPlatinumSettings.starFingerCooldown;
                             this.setCooldown(PowerIndex.SKILL_1, cdr);
@@ -1175,7 +1175,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             StandEntity stand = getStandEntity(this.self);
             if (Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE && SE.getFingerLength() > 1.01) {
                 if (this.getSelf() instanceof Player && isPacketPlayer()) {
-                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(1F, FLOAT_STAR_FINGER_SIZE);
+                    C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_STAR_FINGER_SIZE,1F);
                 }
                 SE.setFingerLength(1F);
             }

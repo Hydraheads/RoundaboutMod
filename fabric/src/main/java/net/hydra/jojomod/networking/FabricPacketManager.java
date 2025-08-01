@@ -10,7 +10,6 @@ public class FabricPacketManager {
 
     //Client To Server
     public static void registerC2SPackets(){
-        ServerPlayNetworking.registerGlobalReceiver(ModMessages.FLOAT_C2S_PACKET, UtilC2S::UpdateFloat);
         ServerPlayNetworking.registerGlobalReceiver(ModMessages.REQUEST_TELEPORT_TO_DYNAMIC_WORLD, AckDynamicWorld::teleport);
     }
     //Server to Client

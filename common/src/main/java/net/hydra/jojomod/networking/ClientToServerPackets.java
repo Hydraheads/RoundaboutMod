@@ -31,6 +31,7 @@ public class ClientToServerPackets {
             TryHitResultPosPower("try_hit_result_pos_power"),
             TryIntPower("try_int_power"),
             IntToServer("int_to_server"),
+            FloatToServer("float_to_server"),
             ByteToServer("byte_to_server"),
             SingleByteToServer("single_byte_to_server"),
             TryTripleIntPower("try_triple_int_power"),
@@ -130,6 +131,15 @@ public class ClientToServerPackets {
                         byte b = (byte) vargs[0];
                         int c = (int) vargs[1];
                         MainUtil.handleIntPacketC2S(sender,c,b);
+                    });
+                }
+                /**Generic float to server packet*/
+                if (message.equals(MESSAGES.FloatToServer.value)) {
+                    server.execute(() -> {
+                        basicChecks(sender);
+                        byte b = (byte) vargs[0];
+                        float c = (float) vargs[1];
+                        MainUtil.handleFloatPacketC2S(sender,c,b);
                     });
                 }
                 /**Generic byte to server packet*/

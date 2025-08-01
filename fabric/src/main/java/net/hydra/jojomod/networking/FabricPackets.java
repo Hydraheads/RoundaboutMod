@@ -220,17 +220,6 @@ public class FabricPackets implements IPacketAccess {
 
 
     @Override
-    public void floatToServerPacket(float value, byte context){
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-
-        buffer.writeFloat(value);
-        buffer.writeByte(context);
-
-        ClientPlayNetworking.send(ModMessages.FLOAT_C2S_PACKET, buffer);
-    }
-
-
-    @Override
     public void ackRegisterWorld() {
         ClientPlayNetworking.send(ModMessages.REQUEST_TELEPORT_TO_DYNAMIC_WORLD, PacketByteBufs.create());
     }

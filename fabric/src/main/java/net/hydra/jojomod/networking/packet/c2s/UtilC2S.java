@@ -17,33 +17,4 @@ import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3f;
 
 public class UtilC2S {
-
-    /**A generalized packet for sending only a byte to the server.*/
-    public static void UpdateSingleByte(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
-                                  FriendlyByteBuf buf, PacketSender responseSender){
-        //Everything here is server only!
-        ServerLevel world = (ServerLevel) player.level();
-        byte context = buf.readByte();
-
-        server.execute(() -> {
-            MainUtil.handleSingleBytePacketC2S(player, context);
-        });
-
-
-    }
-
-    /**A generalized packet for sending floats to the server. Context is what to do with the data byte*/
-    public static void UpdateFloat(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
-                                  FriendlyByteBuf buf, PacketSender responseSender){
-        //Everything here is server only!
-        ServerLevel world = (ServerLevel) player.level();
-        float data = buf.readFloat();
-        byte context = buf.readByte();
-
-        server.execute(() -> {
-            MainUtil.handleFloatPacketC2S(player, data, context);
-        });
-
-
-    }
 }

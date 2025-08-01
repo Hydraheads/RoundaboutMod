@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -82,7 +83,7 @@ public class BarbedWireBlock extends RotatedPillarBlock
                                 MainUtil.makeBleed(entity,0,200,null);
                             }
                         } else if (level.isClientSide && (entity instanceof Player || (entity.getControllingPassenger() != null && entity.getControllingPassenger() instanceof Player))){
-                            ModPacketHandler.PACKET_ACCESS.floatToServerPacket(power, PacketDataIndex.FLOAT_VELOCITY_BARBED_WIRE);
+                            C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_VELOCITY_BARBED_WIRE,power);
                         }
                         entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.7F,0.7F,0.7F));
                     }

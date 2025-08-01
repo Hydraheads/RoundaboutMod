@@ -45,7 +45,6 @@ public interface IPacketAccess {
     void ejectPRunning(ServerPlayer sp);
 
     /**Client To Server Packets*/
-    void floatToServerPacket(float value, byte context);
 
     void ackRegisterWorld();
 }
