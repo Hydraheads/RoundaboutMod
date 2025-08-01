@@ -26,7 +26,8 @@ public class ServerToClientPackets {
             SyncActivePower("sync_active_power"),
             SyncPowerInventory("sync_power_inventory"),
             IntPowerData("int_power_data"),
-            IntToClient("generic_int_to_client");
+            IntToClient("generic_int_to_client"),
+            SimpleByteToClient("simple_byte_to_client");
 
             public final String value;
 

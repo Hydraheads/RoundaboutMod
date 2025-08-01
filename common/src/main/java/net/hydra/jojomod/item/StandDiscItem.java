@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -50,7 +51,7 @@ public class StandDiscItem extends Item {
                 addItem($$1, MainUtil.saveToDiscData($$1,currentDisc.copy()));
                 ((StandUser) $$1).roundabout$getStandPowers().onStandSwitch();
                 if (!$$1.isCreative()){
-                    ModPacketHandler.PACKET_ACCESS.sendSimpleByte(
+                    S2CPacketUtil.sendSimpleByteToClientPacket(
                             ((ServerPlayer)$$1), PacketDataIndex.S2C_SIMPLE_FREEZE_STAND);
                 }
             }

@@ -3,7 +3,6 @@ package net.hydra.jojomod.util;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 import org.joml.Vector3f;
@@ -134,6 +133,14 @@ public class S2CPacketUtil {
                     ServerToClientPackets.S2CPackets.MESSAGES.IntToClient.value,
                     context,
                     data
+            );
+        }
+    }
+    public static void sendSimpleByteToClientPacket(Player player, byte context){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SimpleByteToClient.value,
+                    context
             );
         }
     }

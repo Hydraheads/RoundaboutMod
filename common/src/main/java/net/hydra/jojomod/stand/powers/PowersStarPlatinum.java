@@ -697,7 +697,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             ItemStack ii = ((IAbstractArrowAccess)ent).roundabout$GetPickupItem();
                             if (!ii.isEmpty() && !ii.isDamageableItem()) {
                                 success = true;
-                                ModPacketHandler.PACKET_ACCESS.sendSimpleByte(PE,
+                                S2CPacketUtil.sendSimpleByteToClientPacket(PE,
                                         PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK);
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                                 if (AA.pickup.equals(AbstractArrow.Pickup.ALLOWED)) {
@@ -711,7 +711,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             ItemStack ii = TO.getItem();
                             if (!ii.isEmpty()) {
                                 success = true;
-                                ModPacketHandler.PACKET_ACCESS.sendSimpleByte(PE,
+                                S2CPacketUtil.sendSimpleByteToClientPacket(PE,
                                         PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK);
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                                 if (TO.places) {
@@ -725,7 +725,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             ItemStack ii = TP.getItem();
                             if (!ii.isEmpty()) {
                                 success = true;
-                                ModPacketHandler.PACKET_ACCESS.sendSimpleByte(PE,
+                                S2CPacketUtil.sendSimpleByteToClientPacket(PE,
                                         PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK);
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                                 if (TP.getOwner() == null || TP.getOwner() instanceof Player) {

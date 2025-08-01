@@ -37,7 +37,6 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.item.BodyBagItem;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -303,6 +302,11 @@ public class ClientUtil {
                     byte context = (byte) vargs[0];
                     int data = (int) vargs[1];
                     ClientUtil.handleIntPacketS2C(player,data,context);
+                }
+                /**Generic byte that is sent to the client*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SimpleByteToClient.value)) {
+                    byte context = (byte) vargs[0];
+                    ClientUtil.handleSimpleBytePacketS2C(context);
                 }
             }
         });

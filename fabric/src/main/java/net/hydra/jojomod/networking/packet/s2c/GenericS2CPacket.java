@@ -10,13 +10,6 @@ import org.joml.Vector3f;
 
 public class GenericS2CPacket {
 
-    public static void sendSimpleByte(Minecraft client, ClientPacketListener handler,
-                               FriendlyByteBuf buf, PacketSender responseSender) {
-        if (client.player != null) {
-            byte activePower = buf.readByte();
-            ClientUtil.handleSimpleBytePacketS2C(client.player,activePower);
-        }
-    }
 
     public static void sendBundle(Minecraft client, ClientPacketListener handler,
                                       FriendlyByteBuf buf, PacketSender responseSender) {

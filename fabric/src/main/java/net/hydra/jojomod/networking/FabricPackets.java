@@ -107,12 +107,4 @@ public class FabricPackets implements IPacketAccess {
     public void ejectPRunning(ServerPlayer sp) {
         ServerPlayNetworking.send(sp, ModMessages.EJECT_PARALLEL_RUNNING, PacketByteBufs.create());
     }
-
-    @Override
-    public void sendSimpleByte(ServerPlayer sp, byte context) {
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-
-        buffer.writeByte(context);
-        ServerPlayNetworking.send(sp, ModMessages.SEND_SIMPLE_BYTE_PACKET, buffer);
-    }
 }
