@@ -136,17 +136,6 @@ public class ForgePackets implements IPacketAccess {
         ForgePacketHandler.sendToServer(new ForgeGuardCancelPacket());
     }
 
-
-    @Override
-    public void StandPosPowerPacket(byte power, BlockPos blockPos) {
-        ForgePacketHandler.sendToServer(new ForgePosPowerPacket(power,blockPos));
-
-    }
-    @Override
-    public void StandChargedPowerPacket(byte power, int chargeTime) {
-        ForgePacketHandler.sendToServer(new ForgeChargedPowerPacket(power,chargeTime));
-    }
-
     @Override
     public void floatToServerPacket(float value, byte context) {
         ForgePacketHandler.sendToServer(new ForgeFloatC2SPacket(value, context));

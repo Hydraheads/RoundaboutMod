@@ -46,9 +46,6 @@ public interface IPacketAccess {
 
     /**Client To Server Packets*/
     void StandGuardCancelClientPacket();
-    void StandPosPowerPacket(byte power, BlockPos blockPos);
-    void StandChargedPowerPacket(byte power, int chargeTime);
-
     void floatToServerPacket(float value, byte context);
     void inventoryToServer(int slotNum, ItemStack stack, byte context);
     void itemContextToServer(byte context, ItemStack stack, byte context2, Vector3f vec);

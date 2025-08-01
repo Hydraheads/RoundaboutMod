@@ -11,8 +11,6 @@ public class ModMessages {
     public static final ResourceLocation FLOAT_C2S_PACKET = new ResourceLocation(Roundabout.MOD_ID,"float_packet");
     public static final ResourceLocation INVENTORY_C2S_PACKET = new ResourceLocation(Roundabout.MOD_ID,"inventory_c2s_packet");
     public static final ResourceLocation ITEM_CONTEXT_C2S_PACKET = new ResourceLocation(Roundabout.MOD_ID,"context_c2s_packet");
-    public static final ResourceLocation STAND_POS_POWER_PACKET = new ResourceLocation(Roundabout.MOD_ID,"pos_power_packet");
-    public static final ResourceLocation STAND_CHARGED_POWER_PACKET = new ResourceLocation(Roundabout.MOD_ID,"charged_power_packet");
     public static final ResourceLocation POWER_COOLDOWN_SYNC_ID = new ResourceLocation(Roundabout.MOD_ID,"power_cooldown_sync");
     public static final ResourceLocation SKILL_COOLDOWN_SYNC_ID = new ResourceLocation(Roundabout.MOD_ID,"skill_cooldown_sync");
     public static final ResourceLocation SKILL_COOLDOWN_SYNC_2_ID = new ResourceLocation(Roundabout.MOD_ID,"skill_cooldown_sync_2");

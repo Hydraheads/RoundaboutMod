@@ -576,7 +576,7 @@ public class PowersJustice extends NewDashPreset {
                 Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
                 BlockHitResult blockHit = ent.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ent));
                 BlockPos bpos = blockHit.getBlockPos().relative(blockHit.getDirection());
-                ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_3_EXTRA, bpos);
+                tryBlockPosPowerPacket(PowerIndex.POWER_3_EXTRA, bpos);
                 this.self.playSound(ModSounds.JUSTICE_SELECT_EVENT, 200F, 1.2F);
                 this.self.level()
                         .addParticle(

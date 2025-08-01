@@ -27,16 +27,6 @@ public class ForgePacketHandler {
             .simpleChannel();
 
         /**Client to Server Packets*/
-        INSTANCE.messageBuilder(ForgePosPowerPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(ForgePosPowerPacket::new)
-                .encoder(ForgePosPowerPacket::toBytes)
-                .consumerMainThread(ForgePosPowerPacket::handle)
-                .add();
-        INSTANCE.messageBuilder(ForgeChargedPowerPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(ForgeChargedPowerPacket::new)
-                .encoder(ForgeChargedPowerPacket::toBytes)
-                .consumerMainThread(ForgeChargedPowerPacket::handle)
-                .add();
         INSTANCE.messageBuilder(ForgeGuardCancelPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(ForgeGuardCancelPacket::new)
                 .encoder(ForgeGuardCancelPacket::toBytes)

@@ -1006,8 +1006,8 @@ public class PowersMagiciansRed extends NewPunchingStand {
                             multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.igniteFireCooldown)
                     );
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
-                    ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.EXTRA, grabBlock2);
-                    ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_1_SNEAK, HR);
+                    tryBlockPosPowerPacket(PowerIndex.EXTRA, grabBlock2);
+                    tryBlockPosPowerPacket(PowerIndex.POWER_1_SNEAK, HR);
                 }
             }
         }
@@ -1080,7 +1080,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
             BlockPos HR = getGrabPos(10);
             if (HR != null) {
-                ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_3_BLOCK, HR);
+                tryBlockPosPowerPacket(PowerIndex.POWER_3_BLOCK, HR);
             }
         }
     }

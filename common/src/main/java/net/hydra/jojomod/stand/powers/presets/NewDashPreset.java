@@ -100,7 +100,7 @@ public class NewDashPreset extends StandPowerRewrite {
                                 -Mth.cos(degrees * ((float) Math.PI / 180)));
 
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.MOVEMENT, true);
-                        ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.MOVEMENT, backwards);
+                        tryIntPowerPacket(PowerIndex.MOVEMENT, backwards);
                     }
             }
         }

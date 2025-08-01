@@ -594,14 +594,14 @@ public class BlockGrabPreset extends NewPunchingStand {
                 if (targetEntity2 != null) {
                     if (targetEntity != null && canGrab(targetEntity)) {
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_EXTRA, true);
-                        ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_EXTRA, targetEntity.getId());
+                        tryIntPowerPacket(PowerIndex.POWER_2_EXTRA, targetEntity.getId());
                     }
                 } else {
                     //ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, backwards);
                     BlockHitResult HR = getGrabBlock();
                     if (HR != null) {
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
-                        ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, HR.getBlockPos());
+                        tryBlockPosPowerPacket(PowerIndex.POWER_2, HR.getBlockPos());
                     }
                 }
             }
@@ -617,7 +617,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                 if (!stack.isEmpty()) {
                     ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.POWER_2_SNEAK_EXTRA, true,
                             ((Player) this.getSelf()).getInventory().selected);
-                    ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_SNEAK_EXTRA,
+                    tryIntPowerPacket(PowerIndex.POWER_2_SNEAK_EXTRA,
                             ((Player) this.getSelf()).getInventory().selected);
                 }
             }

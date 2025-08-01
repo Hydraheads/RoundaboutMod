@@ -12,22 +12,6 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.Entity;
 
 public class StandAbilityPacket {
-    public static void switchPosPower(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
-                                   FriendlyByteBuf buf, PacketSender responseSender) {
-        byte power = buf.readByte();
-        BlockPos blockPos = buf.readBlockPos();
-        server.execute(() -> {
-            ((StandUser) player).roundabout$tryBlockPosPower(power, true, blockPos);
-        });
-    }
-    public static void switchChargedPower(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
-                                   FriendlyByteBuf buf, PacketSender responseSender) {
-        byte power = buf.readByte();
-        int charge = buf.readInt();
-        server.execute(() -> {
-            ((StandUser) player).roundabout$tryIntPower(power, true, charge);
-        });
-    }
 
 
     /**When you release right click, stops guarding.*/
