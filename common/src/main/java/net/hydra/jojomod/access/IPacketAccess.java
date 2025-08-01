@@ -50,7 +50,6 @@ public interface IPacketAccess {
     void StandChargedPowerPacket(byte power, int chargeTime);
 
     void floatToServerPacket(float value, byte context);
-    void intToServerPacket(int target, byte context);
     void inventoryToServer(int slotNum, ItemStack stack, byte context);
     void itemContextToServer(byte context, ItemStack stack, byte context2, Vector3f vec);
 

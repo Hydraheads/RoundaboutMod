@@ -46,20 +46,6 @@ public class UtilC2S {
 
 
     }
-    /**A generalized packet for sending ints to the server. Context is what to do with the data byte*/
-    public static void UpdateInt(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
-                                   FriendlyByteBuf buf, PacketSender responseSender){
-        //Everything here is server only!
-        ServerLevel world = (ServerLevel) player.level();
-        int data = buf.readInt();
-        byte context = buf.readByte();
-
-        server.execute(() -> {
-            MainUtil.handleIntPacketC2S(player, data, context);
-        });
-
-
-    }
     public static void inventoryChange(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler,
                                     FriendlyByteBuf buf, PacketSender responseSender){
         //Everything here is server only!

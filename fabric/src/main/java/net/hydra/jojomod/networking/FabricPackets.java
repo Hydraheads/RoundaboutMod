@@ -250,14 +250,6 @@ public class FabricPackets implements IPacketAccess {
         ClientPlayNetworking.send(ModMessages.FLOAT_C2S_PACKET, buffer);
     }
     @Override
-    public void intToServerPacket(int value, byte context){
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-
-        buffer.writeInt(value);
-        buffer.writeByte(context);
-        ClientPlayNetworking.send(ModMessages.INT_C2S_PACKET, buffer);
-    }
-    @Override
     public void inventoryToServer(int slotNum, ItemStack stack, byte context){
         FriendlyByteBuf buffer = PacketByteBufs.create();
 

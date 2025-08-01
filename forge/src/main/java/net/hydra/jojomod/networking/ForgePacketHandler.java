@@ -47,11 +47,6 @@ public class ForgePacketHandler {
                 .encoder(ForgeFloatC2SPacket::toBytes)
                 .consumerMainThread(ForgeFloatC2SPacket::handle)
                 .add();
-        INSTANCE.messageBuilder(ForgeIntC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(ForgeIntC2SPacket::new)
-                .encoder(ForgeIntC2SPacket::toBytes)
-                .consumerMainThread(ForgeIntC2SPacket::handle)
-                .add();
         INSTANCE.messageBuilder(ForgeCreativeModeSlotPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(ForgeCreativeModeSlotPacket::new)
                 .encoder(ForgeCreativeModeSlotPacket::toBytes)

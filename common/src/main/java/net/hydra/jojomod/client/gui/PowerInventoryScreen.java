@@ -515,7 +515,7 @@ public class PowerInventoryScreen
                         initialX = (int) (((float) 359 / 118) * initialX);
                         if (initialX != ipe.roundabout$getAnchorPlace()) {
                             ipe.roundabout$setAnchorPlace(initialX);
-                            ModPacketHandler.PACKET_ACCESS.intToServerPacket(initialX, PacketDataIndex.INT_ANCHOR_PLACE);
+                            C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_ANCHOR_PLACE,initialX);
                         }
                         return true;
                     }
@@ -591,7 +591,7 @@ public class PowerInventoryScreen
                         initialX = (int) (((float) 359 / 118) * initialX);
                         if (initialX != ipe.roundabout$getAnchorPlaceAttack()) {
                             ipe.roundabout$setAnchorPlaceAttack(initialX);
-                            ModPacketHandler.PACKET_ACCESS.intToServerPacket(initialX, PacketDataIndex.INT_ANCHOR_PLACE_ATTACK);
+                            C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_ANCHOR_PLACE_ATTACK,initialX);
                         }
                         return true;
                     }
@@ -615,7 +615,7 @@ public class PowerInventoryScreen
                         initialX = (int) (((float) 359 / 118) * initialX);
                         if (initialX != ipe.roundabout$getAnchorPlace()) {
                             ipe.roundabout$setAnchorPlace(initialX);
-                            ModPacketHandler.PACKET_ACCESS.intToServerPacket(initialX, PacketDataIndex.INT_ANCHOR_PLACE);
+                            C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_ANCHOR_PLACE,initialX);
                         }
                         sliderHeld = 1;
                         return true;
@@ -699,7 +699,7 @@ public class PowerInventoryScreen
                         initialX = (int) (((float) 359 / 118) * initialX);
                         if (initialX != ipe.roundabout$getAnchorPlaceAttack()) {
                             ipe.roundabout$setAnchorPlaceAttack(initialX);
-                            ModPacketHandler.PACKET_ACCESS.intToServerPacket(initialX, PacketDataIndex.INT_ANCHOR_PLACE_ATTACK);
+                            C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_ANCHOR_PLACE_ATTACK,initialX);
                         }
                         sliderHeld = 9;
                         return true;
@@ -741,7 +741,7 @@ public class PowerInventoryScreen
                 if (pageNumber == 1) {
                     ipe.roundabout$setAnchorPlace(55);
                     ipe.roundabout$setDistanceOut(1.07F);
-                    ModPacketHandler.PACKET_ACCESS.intToServerPacket(55, PacketDataIndex.INT_ANCHOR_PLACE);
+                    C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_ANCHOR_PLACE,55);
                     ModPacketHandler.PACKET_ACCESS.floatToServerPacket(1.07F, PacketDataIndex.FLOAT_DISTANCE_OUT);
                     ConfigManager.getClientConfig().opacitySettings.opacityOfStand = 100F;
                     ConfigManager.getClientConfig().opacitySettings.opacityWhileAttacking = 100F;
@@ -752,7 +752,7 @@ public class PowerInventoryScreen
                     ipe.roundabout$setSizePercent(1F);
                     ipe.roundabout$setIdleRotation(0F);
                     ipe.roundabout$setIdleYOffset(0.1F);
-                    ModPacketHandler.PACKET_ACCESS.intToServerPacket(55, PacketDataIndex.INT_ANCHOR_PLACE_ATTACK);
+                    C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_ANCHOR_PLACE_ATTACK,55);
                     ModPacketHandler.PACKET_ACCESS.floatToServerPacket(1F, PacketDataIndex.FLOAT_SIZE_PERCENT);
                     ModPacketHandler.PACKET_ACCESS.floatToServerPacket(0F, PacketDataIndex.FLOAT_IDLE_ROTATION);
                     ModPacketHandler.PACKET_ACCESS.floatToServerPacket(0.1F, PacketDataIndex.FLOAT_IDLE_Y_OFFSET);

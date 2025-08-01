@@ -20,6 +20,7 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.zetalasis.world.DynamicWorld;
@@ -203,7 +204,7 @@ public class PowersD4C extends NewPunchingStand {
                             return;
 
                         // there isnt a data index for what i want and im too lazy to add one so here, update move, it probably fits
-                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(targetingClone.getId(), PacketDataIndex.INT_UPDATE_MOVE);
+                        C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_UPDATE_MOVE,targetingClone.getId());
 
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
                         tryPowerPacket(PowerIndex.POWER_2_SNEAK);

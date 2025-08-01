@@ -118,7 +118,7 @@ public class ClientUtil {
 
         if (ClientUtil.isInCinderellaMobUI > -1){
             if (!ClientUtil.hasCinderellaShopUI()){
-                ModPacketHandler.PACKET_ACCESS.intToServerPacket(ClientUtil.isInCinderellaMobUI, PacketDataIndex.INT_RELLA_CANCEL);
+                C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_RELLA_CANCEL,ClientUtil.isInCinderellaMobUI);
                 ClientUtil.isInCinderellaMobUI = -1;
             }
         } if (ClientUtil.setScreenNull){
@@ -586,7 +586,7 @@ public class ClientUtil {
     public static void setCinderellaUI(boolean costs, int entid) {
         Minecraft mc = Minecraft.getInstance();
 
-        ModPacketHandler.PACKET_ACCESS.intToServerPacket(entid, PacketDataIndex.INT_RELLA_START);
+        C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_RELLA_START,entid);
         isInCinderellaMobUI = entid;
         mc.setScreen(new VisageStoreScreen(costs));
     }

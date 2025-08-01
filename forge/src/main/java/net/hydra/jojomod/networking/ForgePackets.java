@@ -151,10 +151,6 @@ public class ForgePackets implements IPacketAccess {
     public void floatToServerPacket(float value, byte context) {
         ForgePacketHandler.sendToServer(new ForgeFloatC2SPacket(value, context));
     }
-    @Override
-    public void intToServerPacket(int value, byte context) {
-        ForgePacketHandler.sendToServer(new ForgeIntC2SPacket(value, context));
-    }
 
 
     @Override
