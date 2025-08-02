@@ -53,22 +53,5 @@ public class RattEntity extends StandEntity {
     public boolean standHasGravity() {
         return true;
     }
-
-    @Override
-    public void setupAnimationStates() {
-        super.setupAnimationStates();
-       /* if (this.getUser() != null) {
-            if (this.getAnimation() == DEFACE) {
-                this.deface.startIfStopped(this.tickCount);
-            } else {
-                this.deface.stop();
-            }
-            if (this.getAnimation() == VISAGES) {
-                this.visages.startIfStopped(this.tickCount);
-            } else {
-                this.visages.stop();
-            }
-        }*/
-    }
 }
 

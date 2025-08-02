@@ -126,24 +126,29 @@ public class PowersRatt extends NewDashPreset {
                 ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
         return blockHit;
     }
-    public static Entity CoolerrayCastEntity(Entity entityX, float reach){
+    public Entity CoolerrayCastEntity(Entity entityX, float reach){
         float tickDelta = 0;
         if (entityX.level().isClientSide()) {
             tickDelta = ClientUtil.getDelta();
         }
         Vec3 vec3d = entityX.getEyePosition(tickDelta);
 
-        Vec3 vec3d2 = entityX.getViewVector(1.0f).multiply(-1,-1,-1);
-        Vec3 vec3d3 = vec3d.add(vec3d2.x * reach, vec3d2.y * reach, vec3d2.z * reach);
-        float f = 1.0f;
+        StandEntity a = this.getStandUserSelf().roundabout$getStand();
+        Vec3 vec3d3 = new Vec3(reach,reach,reach).multiply(
+                Math.cos(a.getStandRotationY()-Math.PI/2),
+                Math.sin(a.getHeadRotationX()),
+                Math.sin(a.getStandRotationY()-Math.PI/2)
+        );
         AABB box = new AABB(vec3d.x+reach, vec3d.y+reach, vec3d.z+reach, vec3d.x-reach, vec3d.y-reach, vec3d.z-reach);
 
         EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(entityX, vec3d, vec3d3, box, entity -> !entity.isSpectator() && entity.isPickable() && !entity.isInvulnerable(), reach*reach);
-        if (entityHitResult != null) {
-            return entityHitResult.getEntity();
-        } else {
-            return null;
+        if (entityHitResult != null){
+            Entity hitResult = entityHitResult.getEntity();
+            if (hitResult.isAlive() && !hitResult.isRemoved() && canActuallyHit(entityX)) {
+                return hitResult;
+            }
         }
+        return null;
     }
 
     private BlockHitResult getValidPlacement(){
@@ -223,7 +228,7 @@ public class PowersRatt extends NewDashPreset {
 
                 if (this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof  RattEntity RE) {
 
-                    RE.setHeadRotationX((float)pos.x);
+                    RE.setHeadRotationX((float) pos.x);
                     RE.setStandRotationY((float)pos.y);
                 }
             }
@@ -263,6 +268,7 @@ public class PowersRatt extends NewDashPreset {
 
         if (this.getSelf().level().isClientSide()) {
             if (this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
+
                 Entity target = getShootTarget();
                 Vec3 targetPos = getTargetPos().getLocation();
                 if (target != null) {
@@ -280,7 +286,8 @@ public class PowersRatt extends NewDashPreset {
                 double hy = (targetPos.y() - (RE.getPosition(0).y() + 0.5));
                 double hd = Math.sqrt(Math.pow(x,2)+Math.pow(z,2));
                 float hrot = (float) (Math.atan2(hd,hy) + Math.PI/2); // flip the sign if you want it to be not armed
-
+                double percent = (double) RE.getFadeOut() /RE.getMaxFade();
+                if (percent != 1) {hrot = (float) (Mth.lerp(percent,0,hrot));}
                 tryPosPower(PowersRatt.ROTATE,true,new Vec3(hrot,rot,0));
                 tryPosPowerPacket(PowersRatt.ROTATE,new Vec3(hrot,rot,0));
             }
@@ -310,12 +317,10 @@ public class PowersRatt extends NewDashPreset {
                 if (getShootTarget() == null) {this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);}
 
                 if (isAuto()) {
-                 /*   Entity f = PowersRatt.CoolerrayCastEntity(SE,60);
+                    Entity f = this.CoolerrayCastEntity(SE, 60);
                     if (f != null) {
-                        if (!f.equals(this.getSelf())) {
-                            BurstFire();
-                        }
-                    } */
+                        BurstFire();
+                    }
                 } else {
                     setShootTarget(null);
                     if (e instanceof LivingEntity) {
