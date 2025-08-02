@@ -47,10 +47,6 @@ public class ForgePackets implements IPacketAccess {
         ForgePacketHandler.sendToClient(new ForgeDynamicWorldSync(name), sp);
     }
 
-    @Override
-    public void deregisterDynamicWorld(ServerPlayer sp, String name) {
-
-    }
 
     @Override
     public void ejectPRunning(ServerPlayer sp) {

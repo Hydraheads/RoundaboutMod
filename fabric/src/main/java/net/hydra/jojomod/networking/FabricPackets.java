@@ -40,14 +40,6 @@ public class FabricPackets implements IPacketAccess {
     }
 
     @Override
-    public void deregisterDynamicWorld(ServerPlayer sp, String name) {
-        FriendlyByteBuf buf = PacketByteBufs.create();
-        buf.writeUtf(name);
-
-        ServerPlayNetworking.send(sp, ModMessages.DYNAMIC_WORLD_DEREGISTER, buf);
-    }
-
-    @Override
     public void ejectPRunning(ServerPlayer sp) {
         ServerPlayNetworking.send(sp, ModMessages.EJECT_PARALLEL_RUNNING, PacketByteBufs.create());
     }

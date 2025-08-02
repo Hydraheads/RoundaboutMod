@@ -16,7 +16,6 @@ public interface IPacketAccess {
     /**Server To Client Packets*/
     void resumeTileEntityTSPacket(ServerPlayer sp, Vec3i vec3i);
     void sendNewDynamicWorld(ServerPlayer sp, String name, ServerLevel level, @Nullable ServerPlayer player);
-    void deregisterDynamicWorld(ServerPlayer sp, String name);
     void ejectPRunning(ServerPlayer sp);
 
     /**Client To Server Packets*/

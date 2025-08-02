@@ -344,6 +344,14 @@ public class ClientUtil {
                     int entityID = (int) vargs[0];
                     ClientUtil.handlePermaCastingRemovePacket(entityID);
                 }
+
+                // theoretical deregister dynamic worlds packet
+                // String name = buf.readUtf();
+                //        ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));
+                //
+                //        if (client.player != null) {
+                //            client.player.connection.levels().remove(LEVEL_KEY);
+                //        }
             }
         });
     }
