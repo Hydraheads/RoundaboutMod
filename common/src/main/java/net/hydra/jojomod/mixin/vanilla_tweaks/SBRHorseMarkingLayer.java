@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin.sbr_horses;
+package net.hydra.jojomod.mixin.vanilla_tweaks;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.util.config.ClientConfig;

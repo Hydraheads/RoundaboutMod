@@ -15,7 +15,7 @@
     "WorldTickServer",
     "ZAbstractArrow",
     "ZAbstractFurnaceMenu",
-    "ZAbstractHorse",
+    "soft_and_wet.EncasementAbstractHorse",
     "ZAbstractSchoolingFish",
     "ZAnimal",
     "ZBlock",
@@ -121,7 +121,8 @@
     "time_stop.TimeStopProjectile",
     "time_stop.TimeStopRaid",
     "time_stop.TimeStopSlime",
-    "time_stop.TimeStopThrowableProjectile"
+    "time_stop.TimeStopThrowableProjectile",
+    "vanilla_tweaks.TameAbstractHorse"
   ],
   "client": [
     "CustomItemRendererMixin",
@@ -142,8 +143,6 @@
     "ZEntityRenderDispatcher",
     "ZGameRenderer",
     "ZHeldItemLowering",
-    "sbr_horses.SBRHorseMarkingLayer",
-    "sbr_horses.SBRHorseRenderer",
     "ZHumanoidArmorLayer",
     "ZHumanoidMobRenderer",
     "ZHumanoidModel",
@@ -199,7 +198,9 @@
     "time_stop.TimeStopBlockEntityRenderDispatcher",
     "time_stop.TimeStopParticle",
     "time_stop.TimeStopParticleEngine",
-    "time_stop.TimeStopTextureManager"
+    "time_stop.TimeStopTextureManager",
+    "vanilla_tweaks.SBRHorseMarkingLayer",
+    "vanilla_tweaks.SBRHorseRenderer"
   ],
   "server": [
   ],

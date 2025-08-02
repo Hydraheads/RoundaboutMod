@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin.sbr_horses;
+package net.hydra.jojomod.mixin.vanilla_tweaks;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.util.config.ClientConfig;
