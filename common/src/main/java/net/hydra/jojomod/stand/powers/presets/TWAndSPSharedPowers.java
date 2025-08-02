@@ -16,7 +16,9 @@ import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
@@ -215,7 +217,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
                             if ((stand.isTechnicallyInImpassableWall() && this.getActivePower() != PowerIndex.POWER_1_BONUS) ||
                                     stand.position().distanceTo(this.getSelf().position()) > 15){
-                                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 7);
+                                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 7);
                                 this.setCooldown(PowerIndex.SKILL_2, 5);
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                                 return;
@@ -301,7 +303,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
                 if (blockPos.closerToCenterThan(userLocation, 100)) {
-                    ModPacketHandler.PACKET_ACCESS.sendIntPacket(serverPlayerEntity, PacketDataIndex.S2C_INT_GRAB_ITEM,id);
+                    S2CPacketUtil.sendGenericIntToClientPacket(serverPlayerEntity, PacketDataIndex.S2C_INT_GRAB_ITEM,id);
                 }
             }
         }
@@ -464,7 +466,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
 
         if (this.getSelf() instanceof Player) {
-            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown);
+            S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown);
         }
         this.setCooldown(PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown);
         SoundEvent SE;
@@ -573,8 +575,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (!level.isClientSide()) {
             if (((TimeStop) level).isTimeStoppingEntity(this.getSelf())) {
                 float tsTimeRemaining = (float) (ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopMinimumCooldown+((this.maxChargedTSTicks-this.getChargedTSTicks())*5*(ClientNetworking.getAppropriateConfig().timeStopSettings.additionalCooldownPerSecondsUsed *0.01)));
-                if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.POWER_1_SNEAK ||
-                        this.getActivePower() == PowerIndex.SNEAK_ATTACK ||
+                if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.POWER_1_SNEAK
+                        || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE || this.getActivePower() == PowerIndex.SNEAK_ATTACK ||
                         this.getActivePower() == PowerIndex.POWER_1) && this.getAttackTimeDuring() > -1){
                     this.hasActedInTS = true;
                 }
@@ -586,7 +588,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 int sendTSCooldown = Math.round(tsTimeRemaining);
                 if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative() && ClientNetworking.getAppropriateConfig().timeStopSettings.creativeModeInfiniteTimeStop))) {
                     if (this.getSelf() instanceof Player) {
-                        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, sendTSCooldown);
+                        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, sendTSCooldown);
                     }
                     this.setCooldown(PowerIndex.SKILL_4, sendTSCooldown);
                 }
@@ -595,7 +597,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 stopSoundsIfNearby(SoundIndex.TIME_SOUND_GROUP, 200,true);
                 stopSoundsIfNearby(SoundIndex.TIME_SOUND_GROUP, 200,false);
                 if (this.getSelf() instanceof Player) {
-                    ModPacketHandler.PACKET_ACCESS.sendIntPowerPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL_FINISH, 0);
+                    S2CPacketUtil.sendIntPowerDataPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL_FINISH, 0);
                 }
 
                 if (!(((TimeStop)level).CanTimeStopEntity(this.getSelf()))) {
@@ -744,7 +746,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             if (!forwardBarrage) {
                 hold1 = true;
                 forwardBarrage = true;
-                ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_FORWARD_BARRAGE);
+                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_FORWARD_BARRAGE);
             } else {
 
             }
@@ -826,7 +828,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 }
             } else {
                 if (this.getSelf() instanceof ServerPlayer) {
-                    ModPacketHandler.PACKET_ACCESS.sendIntPowerPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL_CHARGED, TSChargeSeconds);
+                    S2CPacketUtil.sendIntPowerDataPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL_CHARGED, TSChargeSeconds);
                 }
             }
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SPECIAL_CHARGED, true);
@@ -841,7 +843,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             if (this.attackTimeDuring >= 80) {
                 if (this.getSelf() instanceof Player && this.getSelf().level().isClientSide && this.isPacketPlayer()){
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                    tryPowerPacket(PowerIndex.NONE);
                 }
             } else if (this.attackTimeDuring >= maxSuperHitTime && !(this.getSelf() instanceof Player)){
                 ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.SNEAK_ATTACK, true,maxSuperHitTime);
@@ -882,19 +884,19 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (this.self instanceof Player){
             if (isPacketPlayer()){
                 if (forwardBarrage && Objects.nonNull(stand)) {
-                    ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(getTargetEntityId2(2.7F,stand,50), this.attackTimeDuring);
+                    C2SPacketUtil.standBarrageHitPacket(getTargetEntityId2(2.7F,stand,50), this.attackTimeDuring);
                 } else {
                     List<Entity> listE = getTargetEntityList(this.self,-1);
                     int id = -1;
                     if (storeEnt != null){
                         id = storeEnt.getId();
                     }
-                        ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(id, this.attackTimeDuring);
+                    C2SPacketUtil.standBarrageHitPacket(id, this.attackTimeDuring);
                     if (!listE.isEmpty() && ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect){
                         for (int i = 0; i< listE.size(); i++){
                             if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
                                 if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
-                                    ModPacketHandler.PACKET_ACCESS.StandBarrageHitPacket(listE.get(i).getId(), this.attackTimeDuring + 1000);
+                                    C2SPacketUtil.standBarrageHitPacket(listE.get(i).getId(), this.attackTimeDuring + 1000);
                                 }
                             }
                         }
@@ -1113,14 +1115,14 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         } else if (this.getActivePower() == PowerIndex.SPECIAL) {
             int cdr = ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopInterruptedCooldownv2;
             if (this.getSelf() instanceof Player) {
-                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, cdr);
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, cdr);
             }
             this.setCooldown(PowerIndex.SKILL_4, cdr);
             return true;
         } else if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
             int cdr = ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown;
             if (this.getSelf() instanceof Player) {
-                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, cdr);
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, cdr);
             }
             this.setCooldown(PowerIndex.SKILL_1_SNEAK, cdr);
             return true;
@@ -1482,7 +1484,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     addEXP(3+(Math.max(1,(int)(this.getChargedTSTicks()/10))));
                     ((TimeStop) this.getSelf().level()).addTimeStoppingEntity(this.getSelf());
                     if (this.getSelf() instanceof Player) {
-                        ModPacketHandler.PACKET_ACCESS.sendIntPowerPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL, maxChargeTSTime);
+                        S2CPacketUtil.sendIntPowerDataPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL, maxChargeTSTime);
                     }
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     /**

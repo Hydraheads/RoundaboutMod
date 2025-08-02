@@ -23,6 +23,7 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -717,6 +718,16 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                         theWorldSettings.theWorldAttackMultOnMobs * 0.01)));
             }
         }
+
+        if (entity instanceof LivingEntity){
+            if (str >= ((LivingEntity) entity).getHealth() && ClientNetworking.getAppropriateConfig().generalStandSettings.barragesOnlyKillOnLastHit){
+                if (entity instanceof Player) {
+                    str = 0.00001F;
+                } else {
+                    str = 0F;
+                }
+            }
+        }
         return str;
     }
     @Override
@@ -782,7 +793,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             SoundSource.PLAYERS, 0.95F, 1.3F);
                     int cdr = ClientNetworking.getAppropriateConfig().theWorldSettings.assaultCooldown;
                     if (this.getSelf() instanceof ServerPlayer) {
-                        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
+                        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
                                 PowerIndex.SKILL_1, cdr);
                     }
                     this.setCooldown(PowerIndex.SKILL_1, cdr);
@@ -882,10 +893,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                     if (!this.isBarrageCharging() && this.getActivePower() != PowerIndex.BARRAGE_CHARGE_2) {
                         if (this.activePower == PowerIndex.POWER_1 || this.activePower == PowerIndex.POWER_1_BONUS) {
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                            tryPowerPacket(PowerIndex.NONE);
                         } else {
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
-                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1);
+                            tryPowerPacket(PowerIndex.POWER_1);
                         }
                         return;
                     }
@@ -928,7 +939,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public boolean doAssaultGrabClient(){
         if (this.getActivePower() == PowerIndex.POWER_1){
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BONUS, true);
-            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_1_BONUS);
+            tryPowerPacket(PowerIndex.POWER_1_BONUS);
             return true;
         }
         return false;
@@ -982,7 +993,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (this.getActivePower() == PowerIndex.POWER_1 || this.getActivePower() == PowerIndex.POWER_1_BONUS){
             int cdr = ClientNetworking.getAppropriateConfig().theWorldSettings.assaultInterruptCooldown;
             if (this.getSelf() instanceof Player) {
-                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, cdr);
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, cdr);
             }
             this.setCooldown(PowerIndex.SKILL_1, cdr);
             return true;
@@ -1317,7 +1328,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
                 if (blockPos.closerToCenterThan(userLocation, 100)) {
-                    ModPacketHandler.PACKET_ACCESS.sendBlipPacket(serverPlayerEntity, (byte) 2, this.getSelf().getId(),blip);
+                    S2CPacketUtil.sendBlipPacket(serverPlayerEntity, (byte) 2, this.getSelf().getId(),blip);
                 }
             }
         }
@@ -1532,7 +1543,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public void setAirAmount(int airAmount){
         currentAir = airAmount;
         if (this.getSelf() instanceof ServerPlayer) {
-            ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+            S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
                     PacketDataIndex.S2C_INT_OXYGEN_TANK, currentAir);
         }
     }

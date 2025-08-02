@@ -24,6 +24,7 @@ import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.item.FogBlockItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
@@ -279,7 +280,7 @@ public abstract class InputEvents implements IInputEvents {
                 if (isMining) {
                     if (player.getMainHandItem().getItem() instanceof ShearsItem) {
                         standComp.roundabout$getStandPowers().tryPower(PowerIndex.NONE, true);
-                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                        powers.tryPowerPacket(PowerIndex.NONE);
                     }
                 }
 
@@ -307,7 +308,7 @@ public abstract class InputEvents implements IInputEvents {
                                 }
                             } else {
                                 standComp.roundabout$tryPower(PowerIndex.NONE, true);
-                                ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                                powers.tryPowerPacket(PowerIndex.NONE);
 
                                 this.gameMode.stopDestroyBlock();
                             }
@@ -733,7 +734,7 @@ public abstract class InputEvents implements IInputEvents {
     public void roundabout$SetTSJump(boolean roundaboutTSJump){
         if (ClientNetworking.getAppropriateConfig().timeStopSettings.enableHovering){
             ((StandUser)player).roundabout$setTSJump(roundaboutTSJump);
-            ModPacketHandler.PACKET_ACCESS.timeStopFloat(roundaboutTSJump);
+            C2SPacketUtil.timeStopHoveringPacket(roundaboutTSJump);
         }
     }
 
@@ -742,9 +743,9 @@ public abstract class InputEvents implements IInputEvents {
     public void roundabout$SetBonusJump(boolean bigJump, float jumpHeight, float current){
          ((StandUser)player).roundabout$setBigJump(bigJump);
          if (bigJump){
-             ModPacketHandler.PACKET_ACCESS.floatToServerPacket(current, PacketDataIndex.FLOAT_BIG_JUMP);
+             C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_BIG_JUMP,current);
          } else {
-             ModPacketHandler.PACKET_ACCESS.floatToServerPacket(current, PacketDataIndex.FLOAT_BIG_JUMP_CANCEL);
+             C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_BIG_JUMP_CANCEL,current);
          }
     }
 
@@ -899,7 +900,7 @@ public abstract class InputEvents implements IInputEvents {
                     options.keyLeft.isDown() || options.keyRight.isDown() || options.keyJump.isDown() ||
                     player.isUsingItem() || player.swinging || player.hurtTime > 0){
                         ((IPlayerEntity) player).roundabout$SetPos(Poses.NONE.id);
-                        ModPacketHandler.PACKET_ACCESS.byteToServerPacket(Poses.NONE.id, PacketDataIndex.BYTE_STRIKE_POSE);
+                        C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_STRIKE_POSE,Poses.NONE.id);
                     }
                 }
 
@@ -917,7 +918,7 @@ public abstract class InputEvents implements IInputEvents {
                         if (options.keyRight.isDown()) strafe--;
 
                         if (mf != forward) {
-                            ModPacketHandler.PACKET_ACCESS.moveSyncPacket(forward,strafe);
+                            C2SPacketUtil.moveSyncPacket(forward,strafe);
                         }
                     }
                 }
@@ -1006,7 +1007,7 @@ public abstract class InputEvents implements IInputEvents {
                        standComp.roundabout$setInterruptCD(3);
                    }
                     standComp.roundabout$tryPower(PowerIndex.NONE,true);
-                   ModPacketHandler.PACKET_ACCESS.StandGuardCancelClientPacket();
+                   C2SPacketUtil.guardCancelPacket();
                 }
             }
 
@@ -1014,8 +1015,8 @@ public abstract class InputEvents implements IInputEvents {
             boolean isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING);
             if (isMining) {
                 if (player.getMainHandItem().getItem() instanceof ShearsItem) {
-                    standComp.roundabout$getStandPowers().tryPower(PowerIndex.NONE, true);
-                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                    powers.tryPower(PowerIndex.NONE, true);
+                    powers.tryPowerPacket(PowerIndex.NONE);
                 }
             }
 
@@ -1024,8 +1025,8 @@ public abstract class InputEvents implements IInputEvents {
                     roundabout$activeMining = false;
                     Minecraft.getInstance().gameMode.stopDestroyBlock();
 
-                    standComp.roundabout$getStandPowers().tryPower(PowerIndex.NONE, true);
-                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.NONE);
+                    powers.tryPower(PowerIndex.NONE, true);
+                    powers.tryPowerPacket(PowerIndex.NONE);
                 }
             }
             if (standComp.roundabout$getActive() && !((TimeStop)player.level()).CanTimeStopEntity(player)) {
@@ -1050,7 +1051,7 @@ public abstract class InputEvents implements IInputEvents {
                                         }
                                         if (powers.canUseMiningStand()) {
                                             standComp.roundabout$tryPower(PowerIndex.MINING, true);
-                                            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.MINING);
+                                            powers.tryPowerPacket(PowerIndex.MINING);
                                         }
                                         isMining = true;
                                         break;

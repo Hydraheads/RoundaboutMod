@@ -7,6 +7,7 @@ import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.stand.powers.PowersD4C;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -87,7 +88,7 @@ public class DynamicWorld {
     {
         for (ServerPlayer sp : server.getPlayerList().getPlayers())
         {
-            ModPacketHandler.PACKET_ACCESS.sendNewDynamicWorld(sp, name, level, null);
+            S2CPacketUtil.sendNewDyanmicWorldPacket(sp, name);
         }
     }
 

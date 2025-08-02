@@ -387,8 +387,8 @@
   "death.attack.glaive.item": "%1$s was skewered by %2$s using %3$s",
   "death.attack.stand_virus": "%1$s was turned into tomato sauce",
   "death.attack.stand_virus.item": "%1$s was turned into tomato sauce",
-  "death.attack,disintegration": "%1$ disintegrated",
-  "death.attack,disintegration.player": "%1$ was disintegrated by %$2s",
+  "death.attack.disintegration": "%1$ disintegrated",
+  "death.attack.disintegration.player": "%1$ was disintegrated by %$2s",
   "death.attack.melting": "%1$s became a fluid",
   "death.attack.melting.player": "%1$s was reduced to a puddle by %$2s",
 
@@ -1203,6 +1203,7 @@
   "roundabout.corpse.none": "Choose Body",
   "roundabout.corpse.tactics.none": "Tactic Select",
   "roundabout.corpse.tactics.still": "Stay Put",
+  "roundabout.corpse.tactics.hold": "Hold",
   "roundabout.corpse.tactics.select_all": "Select All",
   "roundabout.corpse.tactics.deselect_all": "Deselect All",
   "roundabout.corpse.tactics.wander": "Roam",
@@ -1836,6 +1837,9 @@
   "config.roundabout.creativeModeInfiniteTimeStop.desc": "Creative players can stop time on a dime forever, this is useful as a tool for building, stopping griefing or fire spread, taking screenshots, etc.",
   "config.roundabout.blockRangeNegativeOneIsInfinite.name": "Radius of Stopped Time",
   "config.roundabout.blockRangeNegativeOneIsInfinite.desc": "By default the ability has an 100 block radius so only players nearby feel it. If you set it to -1, it becomes global and actually stops the time of day beyond just visually.",
+  "config.roundabout.postTSiframes.name": "Invincibility Ticks",
+  "config.roundabout.postTSiframes.desc": "The amount of ticks after taking time damage in which you are immune to damage. Default is 19.",
+
 
   "config.roundabout.starPlatinumAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.starPlatinumAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",

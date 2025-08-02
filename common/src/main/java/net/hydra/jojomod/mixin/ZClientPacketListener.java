@@ -17,17 +17,6 @@ public class ZClientPacketListener {
     @Inject(method = "handleCustomPayload", at = @At("HEAD"))
     private void roundabout$handlePayload(ClientboundCustomPayloadPacket packet, CallbackInfo ci)
     {
-        if (!packet.getIdentifier().getNamespace().equals("roundabout"))
-            return;
-
-        AbstractBaseS2CPacket p = ModNetworking.getS2C(packet.getIdentifier());
-
-        if (p != null)
-        {
-            ClientPacketListener handler = (ClientPacketListener) (Object) this;
-
-            PacketArgsS2C args = new PacketArgsS2C(Minecraft.getInstance(), handler, ModNetworking.decodeBufferToVArgs(packet.getData()));
-            p.handle(args, packet.getData());
-        }
+        //see zclientgamepacketlistener instead
     }
 }

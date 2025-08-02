@@ -3,6 +3,7 @@ package net.hydra.jojomod.block;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -57,7 +58,7 @@ public class BarbedWireBundleBlock extends Block {
                                 MainUtil.makeBleed(entity,0,200,null);
                             }
                         } else if (level.isClientSide && (entity instanceof Player || (entity.getControllingPassenger() != null && entity.getControllingPassenger() instanceof Player))){
-                            ModPacketHandler.PACKET_ACCESS.floatToServerPacket(power, PacketDataIndex.FLOAT_VELOCITY_BARBED_WIRE);
+                            C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_VELOCITY_BARBED_WIRE,power);
                         }
 
                         if (!level.isClientSide && !entity.getPassengers().isEmpty()){

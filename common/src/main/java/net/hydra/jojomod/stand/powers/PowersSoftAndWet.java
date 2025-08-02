@@ -28,6 +28,7 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
@@ -759,7 +760,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                     if (this.getAttackTime() >= this.getAttackTimeMax() ||
                             (this.getActivePowerPhase() != this.getActivePowerPhaseMax())) {
                         this.tryPower(PowerIndex.BARRAGE_CHARGE_2, true);
-                        ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.BARRAGE_CHARGE_2);
+                        tryPowerPacket(PowerIndex.BARRAGE_CHARGE_2);
                     }
                 }
             }
@@ -1946,6 +1947,16 @@ public void unlockSkin(){
                         softAndWetSettings.softAndWetAttackMultOnMobs * 0.01)));
             }
         }
+
+        if (entity instanceof LivingEntity){
+            if (str >= ((LivingEntity) entity).getHealth() && ClientNetworking.getAppropriateConfig().generalStandSettings.barragesOnlyKillOnLastHit){
+                if (entity instanceof Player) {
+                    str = 0.00001F;
+                } else {
+                    str = 0F;
+                }
+            }
+        }
         return str;
     }
     @Override
@@ -2157,7 +2168,7 @@ public void unlockSkin(){
             if (isPacketPlayer()){
                 //Roundabout.LOGGER.info("Time: "+this.self.getWorld().getTime()+" ATD: "+this.attackTimeDuring+" APP"+this.activePowerPhase);
                 this.attackTimeDuring = -10;
-                ModPacketHandler.PACKET_ACCESS.intToServerPacket(getTargetEntityId(), PacketDataIndex.INT_STAND_ATTACK);
+                C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_STAND_ATTACK,getTargetEntityId());
             }
         } else {
             /*Caps how far out the punch goes*/

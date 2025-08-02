@@ -4,6 +4,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -32,7 +33,7 @@ public class EmptyStandDiscItem extends Item {
                 $$3.shrink(1);
                 ((StandUser) $$1).roundabout$getStandPowers().onStandSwitch();
                 if (!$$1.isCreative()){
-                    ModPacketHandler.PACKET_ACCESS.sendSimpleByte(
+                    S2CPacketUtil.sendSimpleByteToClientPacket(
                             ((ServerPlayer)$$1), PacketDataIndex.S2C_SIMPLE_FREEZE_STAND);
                 }
                 ((StandUser) $$1).roundabout$setStand(null);

@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.particles.ParticleTypes;
@@ -64,7 +65,7 @@ public class NewPunchingStand extends NewDashPreset {
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
         if (!this.isGuarding() && canGuard()) {
             ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.GUARD,true);
-            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.GUARD);
+            tryPowerPacket(PowerIndex.GUARD);
             return true;
         }
         return false;
@@ -327,7 +328,7 @@ public class NewPunchingStand extends NewDashPreset {
             if (isPacketPlayer()){
                 //Roundabout.LOGGER.info("Time: "+this.self.getWorld().getTime()+" ATD: "+this.attackTimeDuring+" APP"+this.activePowerPhase);
                 this.attackTimeDuring = -10;
-                ModPacketHandler.PACKET_ACCESS.StandPunchPacket(getTargetEntityId(getPunchAngle()), this.activePowerPhase);
+                C2SPacketUtil.standPunchPacket(getTargetEntityId(getPunchAngle()), this.activePowerPhase);
             }
         } else {
             /*Caps how far out the punch goes*/

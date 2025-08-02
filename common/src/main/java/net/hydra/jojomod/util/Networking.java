@@ -19,7 +19,7 @@ public abstract class Networking {
     }
 
     public static void sendConfigToPlayer(ServerPlayer player) {
-        ModPacketHandler.PACKET_ACCESS.sendConfig(((ServerPlayer) player));
+        S2CPacketUtil.sendConfigPacket(player);
     }
 
     public static void setServer(MinecraftServer server) {

@@ -3,22 +3,16 @@ package net.hydra.jojomod.client;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.mixin.object.builder.client.ModelPredicateProviderRegistryAccessor;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.block.ModBlocks;
-import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.networking.FabricPacketManager;
 import net.hydra.jojomod.particles.FabricParticlesClient;
 import net.hydra.jojomod.registry.FabricEntityClient;
 import net.hydra.jojomod.registry.FabricItems;
 import net.hydra.jojomod.registry.FabricKeyInputs;
 import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
 
 public class RoundaboutFabricClient implements ClientModInitializer {
     @Override
@@ -48,7 +42,6 @@ public class RoundaboutFabricClient implements ClientModInitializer {
                 ModBlocks.WALL_STREET_SIGN_DANGER,
                 ModBlocks.BLUE_BLOOD_SPLATTER,
                 ModBlocks.ENDER_BLOOD_SPLATTER);
-        FabricPacketManager.registerS2CPackets();
         FabricParticlesClient.registerClientParticles();
         FabricEntityClient.register();
         ClientPlayConnectionEvents.JOIN.register((clientPlayNetworkHandler, packetSender, minecraftClient) -> ClientNetworking.sendHandshake());

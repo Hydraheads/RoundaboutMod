@@ -31,7 +31,9 @@ import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
@@ -229,6 +231,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
 
     @Override
+    public byte getThrowStyleType(){
+        return ThrownObjectEntity.SPTHROW;
+    }
+
+    @Override
     public float getBarrageHitStrength(Entity entity){
         float str = super.getBarrageHitStrength(entity);
         if (str > 0.005F) {
@@ -241,6 +248,15 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             }
             if (forwardBarrage) {
                 str *= 0.6F;
+            }
+        }
+        if (entity instanceof LivingEntity){
+            if (str >= ((LivingEntity) entity).getHealth() && ClientNetworking.getAppropriateConfig().generalStandSettings.barragesOnlyKillOnLastHit){
+                if (entity instanceof Player) {
+                    str = 0.00001F;
+                } else {
+                    str = 0F;
+                }
             }
         }
         return str;
@@ -339,7 +355,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 }
             } else {
                 if (letServerKnowScopeCatchIsReady) {
-                    ModPacketHandler.PACKET_ACCESS.byteToServerPacket(PowerIndex.SKILL_EXTRA_2, PacketDataIndex.BYTE_UPDATE_COOLDOWN);
+                    C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_UPDATE_COOLDOWN,PowerIndex.SKILL_EXTRA_2);
                     letServerKnowScopeCatchIsReady = false;
                 }
             }
@@ -361,7 +377,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 StandEntity stand = getStandEntity(this.self);
                 if (Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE && SE.getFingerLength() > 1.01) {
                     if (this.getSelf() instanceof Player && isPacketPlayer()) {
-                         ModPacketHandler.PACKET_ACCESS.floatToServerPacket(1F, FLOAT_STAR_FINGER_SIZE);
+                        C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_STAR_FINGER_SIZE,1F);
                     }
                     if (!this.self.level().isClientSide()){
                         SE.setFingerLength(1F);
@@ -681,7 +697,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             ItemStack ii = ((IAbstractArrowAccess)ent).roundabout$GetPickupItem();
                             if (!ii.isEmpty() && !ii.isDamageableItem()) {
                                 success = true;
-                                ModPacketHandler.PACKET_ACCESS.sendSimpleByte(PE,
+                                S2CPacketUtil.sendSimpleByteToClientPacket(PE,
                                         PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK);
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                                 if (AA.pickup.equals(AbstractArrow.Pickup.ALLOWED)) {
@@ -695,7 +711,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             ItemStack ii = TO.getItem();
                             if (!ii.isEmpty()) {
                                 success = true;
-                                ModPacketHandler.PACKET_ACCESS.sendSimpleByte(PE,
+                                S2CPacketUtil.sendSimpleByteToClientPacket(PE,
                                         PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK);
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                                 if (TO.places) {
@@ -709,7 +725,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             ItemStack ii = TP.getItem();
                             if (!ii.isEmpty()) {
                                 success = true;
-                                ModPacketHandler.PACKET_ACCESS.sendSimpleByte(PE,
+                                S2CPacketUtil.sendSimpleByteToClientPacket(PE,
                                         PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK);
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                                 if (TP.getOwner() == null || TP.getOwner() instanceof Player) {
@@ -723,7 +739,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
                         if (success){
                             int cdr = ClientNetworking.getAppropriateConfig().starPlatinumSettings.guardianCooldown;
-                            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
+                            S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
                                     PowerIndex.SKILL_EXTRA_2, cdr);
                             ((StarPlatinumEntity) stand).setScoping(false);
                             if (ClientNetworking.getAppropriateConfig().starPlatinumSettings.starPlatinumScopeUsesPotionEffectForNightVision) {
@@ -905,7 +921,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 if (Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE){
                     if (this.self instanceof Player) {
                         if (isPacketPlayer()) {
-                            ModPacketHandler.PACKET_ACCESS.floatToServerPacket(1F, FLOAT_STAR_FINGER_SIZE);
+                            C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_STAR_FINGER_SIZE,1F);
                         }
                     }
                 }
@@ -922,8 +938,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                         BlockHitResult dd = getAheadVec(distanceOut);
                         double maxDist = Math.max(Math.sqrt(dd.distanceTo(this.getSelf())),1);
                         double maxDist2 = Math.max(Math.sqrt(dd.distanceTo(this.getSelf()))*16-32,1);
-                        ModPacketHandler.PACKET_ACCESS.floatToServerPacket((float)
-                                maxDist2, FLOAT_STAR_FINGER_SIZE);
+                        C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_STAR_FINGER_SIZE,(float)
+                                maxDist2);
                         if (this.attackTimeDuring == 27){
                             int cdr = ClientNetworking.getAppropriateConfig().starPlatinumSettings.starFingerCooldown;
                             this.setCooldown(PowerIndex.SKILL_1, cdr);
@@ -987,7 +1003,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (this.getActivePower() == PowerIndex.POWER_1 && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
             int cdr = ClientNetworking.getAppropriateConfig().starPlatinumSettings.starFingerInterruptCooldown;
             if (this.getSelf() instanceof Player) {
-                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, cdr);
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, cdr);
             }
             this.setCooldown(PowerIndex.SKILL_1, cdr);
             return true;
@@ -1160,7 +1176,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             StandEntity stand = getStandEntity(this.self);
             if (Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE && SE.getFingerLength() > 1.01) {
                 if (this.getSelf() instanceof Player && isPacketPlayer()) {
-                    ModPacketHandler.PACKET_ACCESS.floatToServerPacket(1F, FLOAT_STAR_FINGER_SIZE);
+                    C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_STAR_FINGER_SIZE,1F);
                 }
                 SE.setFingerLength(1F);
             }

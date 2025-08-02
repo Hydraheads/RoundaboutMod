@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.goals;
 
 import net.hydra.jojomod.entity.corpses.FallenSkeleton;
+import net.hydra.jojomod.event.index.Tactics;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -61,6 +62,7 @@ public class FallenRangedAttackGoal<T extends FallenSkeleton & RangedAttackMob> 
             this.mob.setAggressive(false);
             this.seeTime = 0;
             this.attackTime = -1;
+            this.mob.getMoveControl().strafe(0,0);
             this.mob.stopUsingItem();
         }
 
@@ -87,10 +89,14 @@ public class FallenRangedAttackGoal<T extends FallenSkeleton & RangedAttackMob> 
                 }
 
                 if (!($$1 > (double)this.attackRadiusSqr) && this.seeTime >= 20) {
-                    this.mob.getNavigation().stop();
+                    if(this.mob.getMovementTactic() != Tactics.HOLD.id) {
+                        this.mob.getNavigation().stop();
+                    }
                     this.strafingTime++;
                 } else {
-                    this.mob.getNavigation().moveTo($$0, this.speedModifier);
+                    if(this.mob.getMovementTactic() != Tactics.HOLD.id) {
+                        this.mob.getNavigation().moveTo($$0, this.speedModifier);
+                    }
                     this.strafingTime = -1;
                 }
 
@@ -113,7 +119,11 @@ public class FallenRangedAttackGoal<T extends FallenSkeleton & RangedAttackMob> 
                         this.strafingBackwards = true;
                     }
 
-                    this.mob.getMoveControl().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
+                    if(this.mob.getMovementTactic() != Tactics.HOLD.id) {
+                        this.mob.getMoveControl().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
+                    } else{
+                        this.mob.getMoveControl().strafe(0,0);
+                    }
                     if (this.mob.getControlledVehicle() instanceof Mob $$4) {
                         $$4.lookAt($$0, 30.0F, 30.0F);
                     }
@@ -137,6 +147,8 @@ public class FallenRangedAttackGoal<T extends FallenSkeleton & RangedAttackMob> 
                 } else if (--this.attackTime <= 0 && this.seeTime >= -60) {
                     this.mob.startUsingItem(ProjectileUtil.getWeaponHoldingHand(this.mob, Items.BOW));
                 }
+            } else{
+                this.mob.getMoveControl().strafe(0,0);
             }
         }
 }

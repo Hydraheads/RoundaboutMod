@@ -19,7 +19,8 @@ public enum Tactics {
     PEACEFUL((byte) 10),
     CHANGE_TEAM((byte) 11),
     KILL_ALL((byte) 12),
-    CACKLE((byte) 13);
+    CACKLE((byte) 13),
+    HOLD((byte) 14);
 
     public final byte id;
 

@@ -14,6 +14,7 @@ import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -179,7 +180,7 @@ public class Aesthetician extends StandUsingNPC {
                 List<Player> iteratable2 = new ArrayList<>(interactingWith);
                 for (Player value : iteratable2) {
                     if (!this.level().isClientSide() && value instanceof ServerPlayer PE && value.isAlive()) {
-                        ModPacketHandler.PACKET_ACCESS.sendSimpleByte(PE, PacketDataIndex.S2C_SIMPLE_CLOSE_THE_RELLA);
+                        S2CPacketUtil.sendSimpleByteToClientPacket(PE, PacketDataIndex.S2C_SIMPLE_CLOSE_THE_RELLA);
                     }
                 }
                 interactingWith = new ArrayList<>();
@@ -196,7 +197,7 @@ public class Aesthetician extends StandUsingNPC {
             for (Player value : iteratable) {
                 if (value == null || value.isRemoved() || !value.isAlive() || value.distanceTo(this) > 15){
                     if (!this.level().isClientSide() && value instanceof ServerPlayer PE && value.isAlive()){
-                        ModPacketHandler.PACKET_ACCESS.sendSimpleByte(PE, PacketDataIndex.S2C_SIMPLE_CLOSE_THE_RELLA);
+                        S2CPacketUtil.sendSimpleByteToClientPacket(PE, PacketDataIndex.S2C_SIMPLE_CLOSE_THE_RELLA);
                     }
                     iteratable2.remove(value);
                     interactingWith =  iteratable2;

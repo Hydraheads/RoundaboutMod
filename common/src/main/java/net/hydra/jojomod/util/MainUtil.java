@@ -10,7 +10,6 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.gui.FogInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
-import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
@@ -82,7 +81,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.*;
 import net.zetalasis.networking.message.api.ModMessageEvents;
-import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -344,7 +342,7 @@ public class MainUtil {
         return stack;
     }
 
-    public static void handleChangeItem(Player player, byte context, ItemStack stack, byte context2, Vector3f vec) {
+    public static void handleChangeItem(Player player, byte context, ItemStack stack) {
         if (context == PacketDataIndex.ITEM_SWITCH_MAIN || context == PacketDataIndex.ITEM_SWITCH_SECONDARY) {
             boolean offh = ItemStack.isSameItemSameTags(player.getOffhandItem(),stack);
             if (player.getInventory().contains(stack) || offh){
@@ -1763,8 +1761,6 @@ public class MainUtil {
                 ((IPlayerEntity) player).roundabout$setShapeShift(data);
             }
 
-        } else if (context == PacketDataIndex.BYTE_CHANGE_MORPH) {
-
         }
     }
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
@@ -1799,8 +1795,8 @@ public class MainUtil {
                 unlocked = 1;
             }
 
-            ModPacketHandler.PACKET_ACCESS.sendBundlePacket(((ServerPlayer) player), PacketDataIndex.S2C_BUNDLE_POWER_INV,
-                    standUser.roundabout$getStandSkin(), unlocked, (byte) 0);
+            S2CPacketUtil.sendByteBundleToClientPacket(((ServerPlayer) player), PacketDataIndex.S2C_BUNDLE_POWER_INV,
+                    standUser.roundabout$getStandSkin(), unlocked);
 
             if (player.containerMenu != player.inventoryMenu) {
                 player.containerMenu = player.inventoryMenu;
@@ -1808,7 +1804,7 @@ public class MainUtil {
 
             ((IPlayerEntityServer)player).roundabout$nextContainerCounter();
             int cid = ((IPlayerEntityServer)player).roundabout$getCounter();
-            ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) player), PacketDataIndex.S2C_POWER_INVENTORY,
+            S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) player), PacketDataIndex.S2C_POWER_INVENTORY,
                     cid);
             player.containerMenu = new PowerInventoryMenu(player.getInventory(), true, player,cid);
             ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
@@ -2039,6 +2035,22 @@ public class MainUtil {
         player.level().addFreshEntity($$4);
     }
 
+    public static void syncActivePower(Player pl, byte activePower){
+
+        StandPowers powers = ((StandUser) pl).roundabout$getStandPowers();
+
+        if (powers.activePower != activePower){
+            if (activePower == PowerIndex.NONE){
+                powers.setAttackTimeDuring(-1);
+            } else {
+                powers.setAttackTimeDuring(0);
+            }
+        }
+        powers.updateMovesFromPacket(activePower);
+        powers.setActivePower(activePower);
+        powers.kickStartClient();
+
+    }
     public static void syncCooldownsForAttacks(int attackTime, int attackTimeMax, int attackTimeDuring,
                                                byte activePower, byte activePowerPhase, Player pl){
 

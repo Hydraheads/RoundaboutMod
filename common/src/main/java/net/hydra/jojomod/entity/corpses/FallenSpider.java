@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.corpses;
 
+import net.hydra.jojomod.entity.goals.CorpseMeleeAttackGoal;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -76,7 +77,7 @@ public class FallenSpider extends FallenMob implements PlayerRideableJumping {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(3, new LeapAtTargetGoal(this, 0.4F));
-        this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0, false));
+        this.goalSelector.addGoal(4, new CorpseMeleeAttackGoal(this, 1.0, false));
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.addBehaviourGoals();
     }

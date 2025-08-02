@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.index.Tactics;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -153,7 +154,7 @@ public class JusticeTacticsScreen extends Screen {
 
         if (pIcon.id != Tactics.NONE.id) {
             minecraft.player.playSound(ModSounds.JUSTICE_SELECT_EVENT, 200F, 1.0F);
-            ModPacketHandler.PACKET_ACCESS.byteToServerPacket(pIcon.id,PacketDataIndex.BYTE_CORPSE_TACTICS);
+            C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_CORPSE_TACTICS,pIcon.id);
         }
     }
     public boolean sameKeyOne(KeyMapping key1, Options options){
@@ -211,8 +212,10 @@ public class JusticeTacticsScreen extends Screen {
                 "textures/gui/tactics_icons/stay_put.png"),Tactics.STAY_PUT.id,-31,40),
         ROAM(Component.translatable("roundabout.corpse.tactics.wander"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/tactics_icons/roam.png"),Tactics.ROAM.id,-31,70),
+        HOLD(Component.translatable("roundabout.corpse.tactics.hold"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/tactics_icons/hold.png"),Tactics.HOLD.id,-61,70),
         FOLLOW(Component.translatable("roundabout.corpse.tactics.follow"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/tactics_icons/follow.png"),Tactics.FOLLOW.id,-61,55),
+                "textures/gui/tactics_icons/follow.png"),Tactics.FOLLOW.id,-61,40),
         DEFEND(Component.translatable("roundabout.corpse.tactics.guard"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/tactics_icons/defend.png"),Tactics.DEFEND.id,31,40),
         HUNT_TARGET(Component.translatable("roundabout.corpse.tactics.target"), new ResourceLocation(Roundabout.MOD_ID,
@@ -236,6 +239,7 @@ public class JusticeTacticsScreen extends Screen {
                 case SELECT_ALL -> SELECT_ALL;
                 case DESELECT_ALL -> DESELECT_ALL;
                 case STAY_PUT -> STAY_PUT;
+                case HOLD -> HOLD;
                 case ROAM -> ROAM;
                 case FOLLOW -> FOLLOW;
                 case DEFEND -> DEFEND;
@@ -278,7 +282,7 @@ public class JusticeTacticsScreen extends Screen {
         }
 
         static {
-            VALUES = new tacticIcon[]{NONE,SELECT_ALL,DESELECT_ALL,STAY_PUT,ROAM,FOLLOW,
+            VALUES = new tacticIcon[]{NONE,SELECT_ALL,DESELECT_ALL,STAY_PUT,HOLD,ROAM,FOLLOW,
             FOLLOW, DEFEND, HUNT_TARGET, HUNT_MONSTERS, HUNT_PLAYERS, PEACEFUL, CHANGE_TEAM, KILL_ALL, CACKLE};
         }
     }

@@ -1,21 +1,28 @@
 package net.hydra.jojomod.networking;
 
+import net.hydra.jojomod.advancement.criteria.ModCriteria;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.event.index.Corpses;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ModificationMaskItem;
+import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.zetalasis.networking.message.impl.IMessageEvent;
+import net.zetalasis.world.DynamicWorld;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
@@ -28,9 +35,25 @@ public class ClientToServerPackets {
             TryHitResultPosPower("try_hit_result_pos_power"),
             TryIntPower("try_int_power"),
             IntToServer("int_to_server"),
+            FloatToServer("float_to_server"),
+            ByteToServer("byte_to_server"),
+            SingleByteToServer("single_byte_to_server"),
             TryTripleIntPower("try_triple_int_power"),
             BodyBag("body_bag"),
-            ModVisageConfigure("mod_visage");
+            ModVisageConfigure("mod_visage"),
+            TimeStopHovering("time_stop_hovering"),
+            GlaiveHit("glaive_hit"),
+            StandSummon("stand_summon"),
+            UpdatePilot("update_pilot"),
+            MoveSync("moving_sync"),
+            StandPunch("stand_punch"),
+            StandBarrageHit("stand_barrage_hit"),
+            BarrageClashUpdate("barrage_clash_update"),
+            Handshake("handshake"),
+            Inventory("inventory"),
+            ItemContext("item_context"),
+            GuardCancel("guard_cancel"),
+            DimensionHopD4C("d4c_request_dimension_hop");
 
             public final String value;
 
@@ -113,6 +136,24 @@ public class ClientToServerPackets {
                         byte b = (byte) vargs[0];
                         int c = (int) vargs[1];
                         MainUtil.handleIntPacketC2S(sender,c,b);
+                    });
+                }
+                /**Generic float to server packet*/
+                if (message.equals(MESSAGES.FloatToServer.value)) {
+                    server.execute(() -> {
+                        basicChecks(sender);
+                        byte b = (byte) vargs[0];
+                        float c = (float) vargs[1];
+                        MainUtil.handleFloatPacketC2S(sender,c,b);
+                    });
+                }
+                /**Generic byte to server packet*/
+                if (message.equals(MESSAGES.ByteToServer.value)) {
+                    server.execute(() -> {
+                        basicChecks(sender);
+                        byte b = (byte) vargs[0];
+                        byte c = (byte) vargs[1];
+                        MainUtil.handleBytePacketC2S(sender, c, b);
                     });
                 }
                 /**Justice Body Bag Usage Packet*/
@@ -218,7 +259,6 @@ public class ClientToServerPackets {
                 /**Modification visage saving after client configuration*/
                 if (message.equals(MESSAGES.ModVisageConfigure.value)) {
                     server.execute(() -> {
-                        ServerLevel world = (ServerLevel) sender.level();
                         byte chest = (byte) vargs[0];
                         ItemStack stack = (ItemStack) vargs[1];
                         Vector3f vec = (Vector3f) vargs[2];
@@ -238,6 +278,121 @@ public class ClientToServerPackets {
                             item.getOrCreateTagElement("modifications").putInt("chest", chest);
                         }
                     });
+                }
+
+
+                /**A single byte message to the server*/
+                if (message.equals(MESSAGES.SingleByteToServer.value)) {
+                    server.execute(() -> {
+                        byte context = (byte) vargs[0];
+                        MainUtil.handleSingleBytePacketC2S(sender, context);
+                    });
+                }
+
+                /**Allows you to hover ins topped time*/
+                if (message.equals(MESSAGES.TimeStopHovering.value)) {
+                    server.execute(() -> {
+                        boolean tsJump = (boolean) vargs[0];
+                        ServerLevel level = (ServerLevel) sender.level();
+                        ((StandUser) sender).roundabout$setTSJump(tsJump);
+                    });
+                }
+                /**The glaive you use and the entity you hit with it*/
+                if (message.equals(MESSAGES.GlaiveHit.value)) {
+                    server.execute(() -> {
+                        int target = (int) vargs[0];
+                        ItemStack glaive = (ItemStack) vargs[1];
+                        ServerLevel world = (ServerLevel) sender.level();
+
+                        Entity entity = world.getEntity(target);
+                        if (glaive.getItem() instanceof GlaiveItem) {
+                            ((GlaiveItem)glaive.getItem()).glaiveAttack(glaive,world,sender,entity);
+                        }
+                    });
+                }
+                /**Summoning stands*/
+                if (message.equals(MESSAGES.StandSummon.value)) {
+                    ServerLevel world = (ServerLevel) sender.level();
+                    ((StandUser) sender).roundabout$summonStand(world, false, true);
+                }
+                /**Update Piloting Stand*/
+                if (message.equals(MESSAGES.UpdatePilot.value)) {
+                    float x = (float)vargs[0];
+                    float y = (float)vargs[1];
+                    float z = (float)vargs[2];
+                    float xrot = (float)vargs[3];
+                    float zrot = (float)vargs[4];
+                    int ent = (int)vargs[5];
+                    MainUtil.handleMovePilot(x,y,z,xrot,zrot,sender,ent);
+                }
+                /**Sync movement for stand leaning animation as you walk*/
+                if (message.equals(MESSAGES.MoveSync.value)) {
+                    byte forward = (byte)vargs[0];
+                    byte strafe = (byte)vargs[1];
+                    ((StandUser) sender).roundabout$setDI(forward, strafe);
+                }
+                /**Basic stand punch packet*/
+                if (message.equals(MESSAGES.StandPunch.value)) {
+                    int targetID = (int)vargs[0];
+                    byte APP = (byte)vargs[1];
+                    Entity TE = sender.level().getEntity(targetID);
+                    ((StandUser) sender).roundabout$getStandPowers().setActivePowerPhase(APP);
+                    ((StandUser) sender).roundabout$getStandPowers().punchImpact(TE);
+                }
+                /**Basic stand barrage hit packet*/
+                if (message.equals(MESSAGES.StandBarrageHit.value)) {
+                    int targetID = (int)vargs[0];
+                    int hitNumber = (int)vargs[1];
+                    Entity TE = sender.level().getEntity(targetID);
+                    ((StandUser) sender).roundabout$getStandPowers().barrageImpact(TE, hitNumber);
+                }
+                /**Barrage Clash packet*/
+                if (message.equals(MESSAGES.BarrageClashUpdate.value)) {
+                    float clashProg = (float)vargs[0];
+                    boolean clashDone = (boolean)vargs[1];
+
+                    if (((StandUser) sender).roundabout$isClashing()){
+                        ((StandUser) sender).roundabout$getStandPowers().setClashProgress(clashProg);
+                        ((StandUser) sender).roundabout$getStandPowers().setClashDone(clashDone);
+                    }
+                }
+                /**Handshake packet*/
+                if (message.equals(MESSAGES.Handshake.value)) {
+                    MainUtil.handShake(sender);
+                }
+                /**Sending anything in the inventory to the server*/
+                if (message.equals(MESSAGES.Inventory.value)) {
+                    int slotNo = (int)vargs[0];
+                    ItemStack stack = (ItemStack)vargs[1];
+                    byte cont = (byte)vargs[2];
+                    MainUtil.handleSetCreativeModeSlot(sender, slotNo, stack, cont);
+                }
+                /**Generic Item packet management for the server*/
+                if (message.equals(MESSAGES.ItemContext.value)) {
+                    MainUtil.handShake(sender);
+                    byte cont = (byte)vargs[0];
+                    ItemStack stack = (ItemStack)vargs[1];
+                    MainUtil.handleChangeItem(sender, cont, stack);
+                }
+
+                /**Release right click to stop guarding*/
+                if (message.equals(MESSAGES.GuardCancel.value)) {
+                    if (((StandUser) sender).roundabout$isGuarding() || ((StandUser) sender).roundabout$isBarraging()
+                            || ((StandUser) sender).roundabout$getStandPowers().clickRelease()) {
+                        ((StandUser) sender).roundabout$tryPower(PowerIndex.NONE, true);
+                    }
+                }
+
+                /**Request a d4c dimension hop*/
+                if (message.equals(MESSAGES.DimensionHopD4C.value)) {
+                    if (((StandUser) sender).roundabout$getStand() instanceof D4CEntity) {
+                        DynamicWorld world = PowersD4C.queuedWorldTransports.remove(sender.getId());
+                        if (world != null && world.getLevel() != null) {
+                            sender.teleportTo(world.getLevel(), sender.getX(), sender.getY(), sender.getZ(), sender.getYRot(), sender.getXRot());
+                            ((StandUser) sender).roundabout$summonStand(world.getLevel(), true, false);
+                            ModCriteria.DIMENSION_HOP_TRIGGER.trigger(sender);
+                        }
+                    }
                 }
             }
         }

@@ -1,10 +1,11 @@
 package net.hydra.jojomod.entity.goals;
 
 import net.hydra.jojomod.entity.corpses.FallenZombie;
+import net.hydra.jojomod.event.index.Tactics;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.monster.Zombie;
 
-public class FallenZombieAttackGoal extends MeleeAttackGoal {
+public class FallenZombieAttackGoal extends CorpseMeleeAttackGoal {
     private final FallenZombie zombie;
     private int raiseArmTicks;
 

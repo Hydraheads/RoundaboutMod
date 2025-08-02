@@ -5,28 +5,25 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
-import net.hydra.jojomod.block.InvisiBlockEntity;
 import net.hydra.jojomod.client.gui.*;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.networking.ModMessages;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
 import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.client.*;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.LevelChunk;
 import net.zetalasis.client.shader.D4CShaderFX;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.D4CCloneEntity;
@@ -43,7 +40,6 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.item.BodyBagItem;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -72,6 +68,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Unique;
 
+import java.util.Objects;
 import java.util.StringTokenizer;
 
 
@@ -117,7 +114,7 @@ public class ClientUtil {
 
         if (ClientUtil.isInCinderellaMobUI > -1){
             if (!ClientUtil.hasCinderellaShopUI()){
-                ModPacketHandler.PACKET_ACCESS.intToServerPacket(ClientUtil.isInCinderellaMobUI, PacketDataIndex.INT_RELLA_CANCEL);
+                C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_RELLA_CANCEL,ClientUtil.isInCinderellaMobUI);
                 ClientUtil.isInCinderellaMobUI = -1;
             }
         } if (ClientUtil.setScreenNull){
@@ -212,24 +209,173 @@ public class ClientUtil {
 
                     }
                 }
-                /**Render invis blocks by getting their state*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.INVIS_BLOCK_STATE.value)) {
-                    Roundabout.LOGGER.info("Yes");
-                    BlockPos pos = (BlockPos) vargs[0];
-                    CompoundTag tag = (CompoundTag) vargs[1];
-                    ClientLevel level = Minecraft.getInstance().level;
-                    if (level != null && level.getChunkSource().hasChunk(pos.getX() >> 4, pos.getZ() >> 4)) {
-                        BlockEntity be =  level.getChunkAt(pos).getBlockEntity(pos, LevelChunk.EntityCreationType.IMMEDIATE);
-                        if (be instanceof InvisiBlockEntity ivb) {
-                            Roundabout.LOGGER.info("Yeyeye");
-                            if (tag.contains("OriginalState")) {
-                                Roundabout.LOGGER.info("Yeye");
-                                BlockState state = NbtUtils.readBlockState(BuiltInRegistries.BLOCK.asLookup(), tag.getCompound("OriginalState"));
-                                ivb.setOriginal2(state);
-                            }
-                        }
+                /**Daze Packet*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncDaze.value)) {
+                    byte dazeTime = (byte)vargs[0];
+                    ClientUtil.updateDazePacket(dazeTime);
+                }
+
+                /**Guard Sync Packet*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncGuard.value)) {
+                    float guardPoints = (float)vargs[0];
+                    boolean guardBroken = (boolean)vargs[1];
+                    ((StandUser) player).roundabout$setGuardPoints(guardPoints);
+                    ((StandUser)player).roundabout$setGuardBroken(guardBroken);
+                }
+
+                /**Barrage Clash S2C Packet*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateBarrageClash.value)) {
+                    int clashOpID = (int)vargs[0];
+                    float progress = (float)vargs[1];
+                    ClientUtil.clashUpdatePacket(clashOpID, progress);
+                }
+
+                /**Read in Sent config*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SendConfig.value)) {
+                    String config = (String)vargs[0];
+                    ClientNetworking.initialize(config);
+                }
+
+                /**Read in Sent config*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.PlaySound.value)) {
+                    int entId = (int) vargs[0];
+                    byte soundID = (byte) vargs[1];
+                    Entity User = player.level().getEntity(entId);
+                    if (User instanceof LivingEntity){
+                        ((StandUserClient)User).roundabout$clientQueSound(soundID);
                     }
                 }
+                /**Read in Sent config*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.StopSound.value)) {
+                    int entId = (int) vargs[0];
+                    byte soundID = (byte) vargs[1];
+                    Entity User = player.level().getEntity(entId);
+                    if (User instanceof LivingEntity){
+                        ((StandUserClient)User).roundabout$clientQueSoundCanceling(soundID);
+                    }
+                }
+
+                /**TS Teleport blip*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Blip.value)) {
+                    int data = (int) vargs[0];
+                    byte activePower = (byte) vargs[1];
+                    Vector3f vec = (Vector3f) vargs[2];
+                    ClientUtil.handleBlipPacketS2C(data,activePower,vec);
+                }
+
+                /**Syncs cooldowns for skills*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncCooldown.value)) {
+                    byte power = (byte) vargs[0];
+                    int cooldown = (int) vargs[1];
+                    ClientUtil.skillCDSyncPacket(power, cooldown);
+                }
+                /**Syncs cooldowns for skills, includes a maximum to update with*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncCooldownMax.value)) {
+                    byte power = (byte) vargs[0];
+                    int cooldown = (int) vargs[1];
+                    int maxCooldown = (int) vargs[2];
+                    ClientUtil.skillMaxCDSyncPacket(power, cooldown, maxCooldown);
+                }
+                /**Syncs the active power the stand is using*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePower.value)) {
+                    byte power = (byte) vargs[0];
+                    MainUtil.syncActivePower(player,power);
+                }
+
+                /**Syncs the power inventory settings*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPowerInventory.value)) {
+                    int anchorPlace = (int) vargs[0];
+                    float distanceOut = (float) vargs[1];
+                    float idleOpacity = (float) vargs[2];
+                    float combatOpacity = (float) vargs[3];
+                    float enemyOpacity = (float) vargs[4];
+                    int anchorPlaceAttack = (int) vargs[5];
+                    ClientUtil.handlePowerInventoryOptionsPacketS2C(player,anchorPlace,distanceOut,idleOpacity,combatOpacity,
+                            enemyOpacity,anchorPlaceAttack);
+                }
+
+                /**Syncs the active power the stand is using*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.IntPowerData.value)) {
+                    byte activePower = (byte) vargs[0];
+                    int data = (int) vargs[1];
+                    ((StandUser) player).roundabout$getStandPowers().updatePowerInt(activePower,data);
+                }
+
+                /**Generic int that is sent to the client*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.IntToClient.value)) {
+                    byte context = (byte) vargs[0];
+                    int data = (int) vargs[1];
+                    ClientUtil.handleIntPacketS2C(player,data,context);
+                }
+                /**Generic byte that is sent to the client*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SimpleByteToClient.value)) {
+                    byte context = (byte) vargs[0];
+                    ClientUtil.handleSimpleBytePacketS2C(context);
+                }
+
+
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ByteBundleToClient.value)) {
+                    byte context = (byte) vargs[0];
+                    byte firstByte = (byte) vargs[1];
+                    byte secondByte = (byte) vargs[2];
+                    ClientUtil.handleBundlePacketS2C(context,firstByte,secondByte);
+                }
+
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AddTSEntity.value)) {
+                    int entityID = (int) vargs[0];
+                    double x = (double) vargs[1];
+                    double y = (double) vargs[2];
+                    double z = (double) vargs[3];
+                    double range = (double) vargs[4];
+                    int duration = (int) vargs[5];
+                    int maxDuration = (int) vargs[6];
+                    ClientUtil.handleTimeStoppingEntityPacket(entityID,x,y,z,range,duration,maxDuration);
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.RemoveTSEntity.value)) {
+                    int entityID = (int) vargs[0];
+                    ClientUtil.processTSRemovePacket(entityID);
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AddPCEntity.value)) {
+                    int entityID = (int) vargs[0];
+                    double x = (double) vargs[1];
+                    double y = (double) vargs[2];
+                    double z = (double) vargs[3];
+                    double range = (double) vargs[4];
+                    byte ctext = (byte) vargs[5];
+                    ClientUtil.handlePermaCastingEntityPacket(entityID,x,y,z,range,ctext);
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.RemovePCEntity.value)) {
+                    int entityID = (int) vargs[0];
+                    ClientUtil.handlePermaCastingRemovePacket(entityID);
+                }
+
+
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ResumeTileEntityTS.value)) {
+                    int x = (int) vargs[0];
+                    int y = (int) vargs[1];
+                    int z = (int) vargs[2];
+                    ClientUtil.handleEntityResumeTsPacket(new Vec3i(x,y,z));
+                }
+
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SendNewDynamicWorld.value)) {
+                    String name = (String) vargs[0];
+                    ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));
+                    dimensionSynch(LEVEL_KEY);
+                }
+
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.EjectPRunning.value)) {
+                    if (((StandUser)player).roundabout$getStandPowers() instanceof PowersD4C d4c)
+                    {
+                        d4c.ejectParallelRunning();
+                    }
+                }
+                // theoretical deregister dynamic worlds packet
+                // String name = buf.readUtf();
+                //        ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));
+                //
+                //        if (client.player != null) {
+                //            client.player.connection.levels().remove(LEVEL_KEY);
+                //        }
             }
         });
     }
@@ -237,7 +383,7 @@ public class ClientUtil {
     /**
      * A generalized packet for sending ints to the client. Context is what to do with the data int
      */
-    public static void handleIntPacketS2C(LocalPlayer player, int data, byte context) {
+    public static void handleIntPacketS2C(Player player, int data, byte context) {
         if (context == 1) {
             ((StandUser) player).roundabout$setGasolineTime(data);
         } else if (context == PacketDataIndex.S2C_POWER_INVENTORY) {
@@ -581,7 +727,7 @@ public class ClientUtil {
     public static void setCinderellaUI(boolean costs, int entid) {
         Minecraft mc = Minecraft.getInstance();
 
-        ModPacketHandler.PACKET_ACCESS.intToServerPacket(entid, PacketDataIndex.INT_RELLA_START);
+        C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_RELLA_START,entid);
         isInCinderellaMobUI = entid;
         mc.setScreen(new VisageStoreScreen(costs));
     }
@@ -594,7 +740,7 @@ public class ClientUtil {
         mc.setScreen(new JusticeMobSwitcherScreen());
     }
     public static void setJusticeBlockScreen() {
-        ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_OPEN_FOG_INVENTORY);
+        C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_OPEN_FOG_INVENTORY);
         Minecraft mc = Minecraft.getInstance();
         mc.setScreen(
                 new FogInventoryScreen(
@@ -658,13 +804,25 @@ public class ClientUtil {
 
         return true;
     }
-    public static void dimensionSynchForge(ResourceKey<Level> LEVEL_KEY){
-        LocalPlayer localPlayer = Minecraft.getInstance().player;
-        if (localPlayer != null) {
-            localPlayer.connection.levels().add(LEVEL_KEY);
-            ModPacketHandler.PACKET_ACCESS.ackRegisterWorld();
+    public static void dimensionSynch(ResourceKey<Level> LEVEL_KEY){
+        Roundabout.LOGGER.info("Got packet for dimension {}", LEVEL_KEY.toString());
+        if (Objects.equals(ModPacketHandler.PLATFORM_ACCESS.getPlatformName(), "Forge")) {
+            if (ClientUtil.packetLocPlayCheck()) {
+                ClientUtil.dimensionSynchForge(LEVEL_KEY);
+            }
         } else {
-            packetLocPlayCheck();
+            ClientUtil.dimensionSynchFabric(Minecraft.getInstance(),LEVEL_KEY);
+        }
+    }
+    public static void dimensionSynchForge(ResourceKey<Level> LEVEL_KEY){
+        if (ClientUtil.packetLocPlayCheck()) {
+            LocalPlayer localPlayer = Minecraft.getInstance().player;
+            if (localPlayer != null) {
+                localPlayer.connection.levels().add(LEVEL_KEY);
+                C2SPacketUtil.d4cDimensionHopRegistryPacket();
+            } else {
+                packetLocPlayCheck();
+            }
         }
     }
     public static void dimensionSynchFabric(Minecraft client, ResourceKey<Level> LEVEL_KEY) {
@@ -764,10 +922,10 @@ public class ClientUtil {
              handleBlipPacketS2C(player,data,context,vec);
         }
     }
-    public static void handleBundlePacketS2C(byte context, byte one, byte two, byte three){
+    public static void handleBundlePacketS2C(byte context, byte one, byte two){
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            handleBundlePacketS2C(player,context,one,two,three);
+            handleBundlePacketS2C(player,context,one,two);
         }
     }
 
@@ -824,7 +982,7 @@ public class ClientUtil {
 
 
     /**A generalized packet for sending bytes to the client. Only a context is provided.*/
-    public static void handleBundlePacketS2C(LocalPlayer player, byte context, byte byte1, byte byte2, byte byte3){
+    public static void handleBundlePacketS2C(LocalPlayer player, byte context, byte byte1, byte byte2){
         if (context == PacketDataIndex.S2C_BUNDLE_POWER_INV){
             IPlayerEntity ple = ((IPlayerEntity) player);
             StandUser se = ((StandUser) player);
@@ -852,7 +1010,7 @@ public class ClientUtil {
         }
 
     }
-    public static void handlePowerInventoryOptionsPacketS2C(LocalPlayer player, int anchorPlace, float distanceOut, float idleOpacity,
+    public static void handlePowerInventoryOptionsPacketS2C(Player player, int anchorPlace, float distanceOut, float idleOpacity,
                                                             float combatOpacity, float enemyOpacity, int anchorPlaceAttack){
         IPlayerEntity ple = ((IPlayerEntity) player);
         ple.roundabout$setAnchorPlace(anchorPlace);

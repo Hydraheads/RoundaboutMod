@@ -9,6 +9,7 @@ import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -231,9 +232,7 @@ public abstract class PlayerEntityClient extends AbstractClientPlayer implements
 
     @Unique
     private void roundabout$updateClash(){
-        ModPacketHandler.PACKET_ACCESS.updateClashPacket(
-                ((StandUser) this).roundabout$getStandPowers().getClashProgress(),
-                ((StandUser) this).roundabout$getStandPowers().getClashDone()
-        );
+        C2SPacketUtil.barrageClashUpdatePacket(((StandUser) this).roundabout$getStandPowers().getClashProgress(),
+                ((StandUser) this).roundabout$getStandPowers().getClashDone());
     }
 }

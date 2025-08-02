@@ -12,6 +12,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.KeyMapping;
@@ -169,9 +170,9 @@ public class StandArrowRerollScreen extends Screen {
         }
 
         if (pIcon.id == 1){
-            ModPacketHandler.PACKET_ACCESS.itemContextToServer(PacketDataIndex.ITEM_SWITCH_MAIN, this.arrow, (byte)0, new Vector3f());
+            C2SPacketUtil.itemContextToServerPacket(PacketDataIndex.ITEM_SWITCH_MAIN, this.arrow);
         } else if (pIcon.id == 2){
-            ModPacketHandler.PACKET_ACCESS.itemContextToServer(PacketDataIndex.ITEM_SWITCH_SECONDARY, this.arrow, (byte)0, new Vector3f());
+            C2SPacketUtil.itemContextToServerPacket(PacketDataIndex.ITEM_SWITCH_SECONDARY, this.arrow);
 
         }
             //ModPacketHandler.PACKET_ACCESS.byteToServerPacket(pIcon3.id, PacketDataIndex.BYTE_CHANGE_MORPH);

@@ -16,6 +16,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.Options;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -60,13 +61,17 @@ public class BlockGrabPreset extends NewPunchingStand {
 
     public boolean throwObject(ItemStack item){
         int cdr = ClientNetworking.getAppropriateConfig().generalStandSettings.objectThrowCooldown;
-        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, cdr);
+        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, cdr);
         this.setCooldown(PowerIndex.SKILL_2, cdr);
         /***/
         return ThrownObjectEntity.throwAnObject(this.self,canSnipe(),item,getShotAccuracy(),getBundleAccuracy(),getThrowAngle(),
-                getThrowAngle2(),getThrowAngle3(),getCanPlace(),ThrownObjectEntity.SPTWTHROW,this.self.getXRot(),this.self.getYRot(),
+                getThrowAngle2(),getThrowAngle3(),getCanPlace(),getThrowStyleType(),this.self.getXRot(),this.self.getYRot(),
                 new Vec3(this.self.getX(), this.self.getEyeY() - 0.1F, this.self.getZ()),true,1, true);
 
+    }
+
+    public byte getThrowStyleType(){
+        return ThrownObjectEntity.TWTHROW;
     }
 
     public boolean canSnipe(){
@@ -156,7 +161,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                         standEntity.setHeldItem(ItemStack.EMPTY);
 
                         if (this.getSelf() instanceof Player) {
-                            ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+                            S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
                                     PacketDataIndex.S2C_INT_ATD, -10);
                         }
                         this.setAttackTimeDuring(-10);
@@ -170,7 +175,7 @@ public class BlockGrabPreset extends NewPunchingStand {
 
                     if (this.getSelf() instanceof Player) {
                         if (!this.getSelf().level().isClientSide) {
-                            ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+                            S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
                                     PacketDataIndex.S2C_INT_ATD, -10);
                         }
                     }
@@ -195,7 +200,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                     int cdr = ClientNetworking.getAppropriateConfig().generalStandSettings.mobThrowInterruptCooldown;
 
                     setCooldown(PowerIndex.SKILL_2, cdr);
-                    ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) PE), PowerIndex.SKILL_2, cdr);
+                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) PE), PowerIndex.SKILL_2, cdr);
                 }
                 stand.ejectPassengers();
             }
@@ -274,7 +279,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                             poseStand(OffsetIndex.FOLLOW);
                             standEntity.setHeldItem(ItemStack.EMPTY);
                             if (this.getSelf() instanceof Player) {
-                                ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+                                S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
                                         PacketDataIndex.S2C_INT_ATD, -10);
                             }
                             this.setAttackTimeDuring(-10);
@@ -292,7 +297,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                             cdr = ClientNetworking.getAppropriateConfig().generalStandSettings.mobThrowCooldown;
                         }
 
-                        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, cdr);
+                        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, cdr);
                         this.setCooldown(PowerIndex.SKILL_2, cdr);
                         Entity ent = standEntity.getFirstPassenger();
 
@@ -366,7 +371,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                                 animateStand(StandEntity.THIRD_PUNCH);
 
                                 if (this.getSelf() instanceof Player){
-                                    ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+                                    S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
                                             PacketDataIndex.S2C_INT_ATD, -15);
                                 }
                                 poseStand(OffsetIndex.ATTACK);
@@ -376,7 +381,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                                 animateStand(StandEntity.BLOCK_THROW);
                                 poseStand(OffsetIndex.FOLLOW);
                                 if (this.getSelf() instanceof Player){
-                                    ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+                                    S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
                                             PacketDataIndex.S2C_INT_ATD, -10);
                                 }
                                 this.setAttackTimeDuring(-10);
@@ -411,7 +416,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                             animateStand(StandEntity.BLOCK_THROW);
                             poseStand(OffsetIndex.FOLLOW);
                             if (this.getSelf() instanceof Player) {
-                                ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+                                S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
                                         PacketDataIndex.S2C_INT_ATD, -10);
                             }
                             this.setAttackTimeDuring(-10);
@@ -466,7 +471,7 @@ public class BlockGrabPreset extends NewPunchingStand {
         }
         if (!this.isGuarding() && !this.isBarraging() && !this.isClashing()) {
             ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.GUARD,true);
-            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.GUARD);
+            tryPowerPacket(PowerIndex.GUARD);
             return true;
         }
         return false;
@@ -477,7 +482,7 @@ public class BlockGrabPreset extends NewPunchingStand {
         if (standEntity != null) {
             if (!standEntity.getHeldItem().isEmpty()) {
                 if (!this.getSelf().level().isClientSide) {
-                    ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 20);
+                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 20);
                     this.setCooldown(PowerIndex.SKILL_2, 20);
                 }
                 return true;
@@ -543,7 +548,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                     }
 
                     this.tryPower(PowerIndex.ATTACK, true);
-                    ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.ATTACK);
+                    tryPowerPacket(PowerIndex.ATTACK);
                 }
             }
         }
@@ -590,14 +595,14 @@ public class BlockGrabPreset extends NewPunchingStand {
                 if (targetEntity2 != null) {
                     if (targetEntity != null && canGrab(targetEntity)) {
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_EXTRA, true);
-                        ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_EXTRA, targetEntity.getId());
+                        tryIntPowerPacket(PowerIndex.POWER_2_EXTRA, targetEntity.getId());
                     }
                 } else {
                     //ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, backwards);
                     BlockHitResult HR = getGrabBlock();
                     if (HR != null) {
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
-                        ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_2, HR.getBlockPos());
+                        tryBlockPosPowerPacket(PowerIndex.POWER_2, HR.getBlockPos());
                     }
                 }
             }
@@ -613,7 +618,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                 if (!stack.isEmpty()) {
                     ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.POWER_2_SNEAK_EXTRA, true,
                             ((Player) this.getSelf()).getInventory().selected);
-                    ModPacketHandler.PACKET_ACCESS.StandChargedPowerPacket(PowerIndex.POWER_2_SNEAK_EXTRA,
+                    tryIntPowerPacket(PowerIndex.POWER_2_SNEAK_EXTRA,
                             ((Player) this.getSelf()).getInventory().selected);
                 }
             }
@@ -625,7 +630,7 @@ public class BlockGrabPreset extends NewPunchingStand {
     public void putDownClient(){
         if (hasBlock() || hasEntity()) {
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
-            ModPacketHandler.PACKET_ACCESS.StandPowerPacket(PowerIndex.POWER_2_BONUS);
+            tryPowerPacket(PowerIndex.POWER_2_BONUS);
         }
     }
 
@@ -678,7 +683,7 @@ public class BlockGrabPreset extends NewPunchingStand {
     public void addItem(StandEntity standEntity){
         addItemLight(standEntity);
 
-        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
+        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
         this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
     }
     public void addItemLight(StandEntity standEntity){
@@ -714,7 +719,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                         MainUtil.ejectInFront(standEntity);
                         animateStand(StandEntity.BLOCK_RETRACT);
                         if (this.getSelf() instanceof Player) {
-                            ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) this.getSelf()),
+                            S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
                                     PacketDataIndex.S2C_INT_ATD, -10);
                         }
                         this.setAttackTimeDuring(-10);
@@ -754,7 +759,7 @@ public class BlockGrabPreset extends NewPunchingStand {
 
                                         ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                                         animateStand(StandEntity.BLOCK_RETRACT);
-                                        ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 10);
+                                        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 10);
                                         this.setCooldown(PowerIndex.SKILL_2, 10);
                                         return true;
                                     }

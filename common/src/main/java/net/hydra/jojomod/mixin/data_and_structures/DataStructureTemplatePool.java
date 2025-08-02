@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.data_and_structures;
 
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -17,13 +17,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 @Mixin(StructureTemplatePool.class)
-public class ZStructureTemplatePool {
-
-    @Shadow @Final private ObjectArrayList<StructurePoolElement> templates;
-
-    @Shadow @Final private Holder<StructureTemplatePool> fallback;
-
-    @Shadow @Final private List<Pair<StructurePoolElement, Integer>> rawTemplates;
+public class DataStructureTemplatePool {
+    /**Reconstructs the structure data pool with custom structure jsons so players can modify their
+     * rarities in the config*/
 
     @Inject(method = "<init>(Lnet/minecraft/core/Holder;Ljava/util/List;)V", at = @At(value = "RETURN"))
     protected void roundabout$init(Holder $$0, List $$1, CallbackInfo ci) {
@@ -52,30 +48,9 @@ public class ZStructureTemplatePool {
         }
 
     }
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
 
-/**
-    @Inject(method = "<init>(Lnet/minecraft/core/Holder;Ljava/util/List;Lnet/minecraft/world/level/levelgen/structure/pools/StructureTemplatePool$Projection;)V", at = @At(value = "RETURN"))
-    protected void roundabout$init2(Holder $$0, List $$1, StructureTemplatePool.Projection $$2, CallbackInfo ci) {
-        ObjectArrayList<StructurePoolElement> templates2 = new ObjectArrayList<>();
-        Roundabout.LOGGER.info("X2:");
-
-        this.templates.clear();
-        this.rawTemplates.clear();
-
-        for (Object object : $$1) {
-            Pair<Function<StructureTemplatePool.Projection, ? extends StructurePoolElement>, Integer> $$3 = (Pair) object;
-            StructurePoolElement $$4 = (StructurePoolElement) ((Function) $$3.getFirst()).apply($$2);
-            int second = $$3.getSecond();
-            Roundabout.LOGGER.info("nm: "+$$4.getProjection().getName());
-            Roundabout.LOGGER.info("ns: "+$$4.getProjection().getSerializedName());
-
-            this.rawTemplates.add(Pair.of($$4, (Integer) $$3.getSecond()));
-
-            for (int $$5 = 0; $$5 < (Integer) $$3.getSecond(); ++$$5) {
-                this.templates.add($$4);
-            }
-        }
-
-    }
-    **/
+    @Shadow @Final private ObjectArrayList<StructurePoolElement> templates;
 }

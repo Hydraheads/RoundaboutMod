@@ -8,9 +8,4 @@ import net.minecraft.network.FriendlyByteBuf;
 
 public class ConfigSyncPacket {
 
-    public static void readConfig(Minecraft client, ClientPacketListener handler,
-                                             FriendlyByteBuf buf, PacketSender responseSender) {
-
-        ClientNetworking.initialize(buf.readBoolean(),buf.readUtf());
-    }
 }

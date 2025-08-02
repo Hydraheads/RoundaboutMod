@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.VisageStoreEntry;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.KeyMapping;
@@ -159,9 +160,9 @@ public class VisageStoreScreen extends Screen {
                         soundmanager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                     } else {
                         if (costsEmeralds){
-                            ModPacketHandler.PACKET_ACCESS.intToServerPacket(ModItems.getVisageStore().indexOf(value),PacketDataIndex.INT_INDEX_OF_VISAGE_EMERALDS);
+                            C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_INDEX_OF_VISAGE_EMERALDS,ModItems.getVisageStore().indexOf(value));
                         } else {
-                            ModPacketHandler.PACKET_ACCESS.intToServerPacket(ModItems.getVisageStore().indexOf(value),PacketDataIndex.INT_INDEX_OF_VISAGE_LEVEL);
+                            C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_INDEX_OF_VISAGE_LEVEL,ModItems.getVisageStore().indexOf(value));
                         }
                         this.minecraft.setScreen(null);
                     }

@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.mojang.authlib.GameProfile;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.BarbedWireBlock;
@@ -28,7 +29,9 @@ import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -36,6 +39,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -50,10 +54,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.damagesource.CombatRules;
-import net.minecraft.world.damagesource.CombatTracker;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.damagesource.*;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffectUtil;
@@ -64,6 +65,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.WanderingTrader;
@@ -1448,7 +1450,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$gasRenderTicks++;
         }
         if (((LivingEntity) (Object) this) instanceof Player && !((LivingEntity) (Object) this).level().isClientSide()){
-            ModPacketHandler.PACKET_ACCESS.sendIntPacket(((ServerPlayer) (Object) this),(byte) 1, gasTicks);
+            S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) (Object) this),(byte) 1, gasTicks);
         }
     }
 
@@ -2099,8 +2101,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Unique
     public void roundabout$syncGuard(){
-        if (((LivingEntity) (Object) this) instanceof Player && !((LivingEntity) (Object) this).level().isClientSide){
-            ModPacketHandler.PACKET_ACCESS.StandGuardPointPacket(((ServerPlayer) (Object) this),this.roundabout$getGuardPoints(),this.roundabout$getGuardBroken());
+        if (((LivingEntity) (Object) this) instanceof Player pl && !((LivingEntity) (Object) this).level().isClientSide){
+            S2CPacketUtil.synchGuard(pl,this.roundabout$getGuardPoints(),this.roundabout$getGuardBroken());
         }
     }
 
@@ -2122,7 +2124,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public void roundabout$syncDaze(){
         if (((LivingEntity) (Object) this) instanceof Player && !((LivingEntity) (Object) this).level().isClientSide){
-            ModPacketHandler.PACKET_ACCESS.DazeTimePacket(((ServerPlayer) (Object) this),this.roundabout$dazeTime);
+            S2CPacketUtil.synchDaze((ServerPlayer) (Object) this,this.roundabout$dazeTime);
         }
     }
 
@@ -2305,7 +2307,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setSummonCD(8);
             roundabout$setActive(false);
             roundabout$tryPower(PowerIndex.NONE, true);
-            ModPacketHandler.PACKET_ACCESS.singleByteToServerPacket(PacketDataIndex.SINGLE_BYTE_DESUMMON);
+            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_DESUMMON);
         }
         roundabout$sealedTicks = ticks;
     }
@@ -2402,7 +2404,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             }
                             if (!this.level().isClientSide()) {
                                 IPlayerEntity ipe = ((IPlayerEntity) this);
-                                ModPacketHandler.PACKET_ACCESS.s2cPowerInventorySettings(
+                                S2CPacketUtil.sendPowerInventorySettings(
                                         ((ServerPlayer) ((Player) (Object) this)), ipe.roundabout$getAnchorPlace(),
                                         ipe.roundabout$getDistanceOut(),
                                         ipe.roundabout$getSizePercent(),
@@ -3556,7 +3558,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 ci.setReturnValue(false);
                 return;
             } if (damageSource.is(ModDamageTypes.TIME)){
-                roundabout$postTSHurtTime = 17;
+                roundabout$postTSHurtTime = ClientNetworking.getAppropriateConfig().timeStopSettings.postTSiframes;
             } else {
                 /*Knife and match code*/
                 if (roundabout$postTSHurtTime > 0 || roundabout$extraIFrames > 0) {
@@ -3565,6 +3567,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 } else {
                     if (damageSource.is(ModDamageTypes.KNIFE) || damageSource.is(ModDamageTypes.MATCH)) {
                         if (damageSource.is(ModDamageTypes.KNIFE)){
+                            roundabout$gasolineIFRAMES = 10;
+                        }
+                        if (damageSource.is(ModDamageTypes.GASOLINE_EXPLOSION) && roundabout$knifeIFrameTicks <= 0){
                             roundabout$gasolineIFRAMES = 10;
                         }
                         int knifeCap = ClientNetworking.getAppropriateConfig().itemSettings.maxKnivesInOneHit;
@@ -3585,6 +3590,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             ci.setReturnValue(false);
                             return;
                         }
+                    } else if (roundabout$knifeIFrameTicks > 0 && MainUtil.isStandDamage(damageSource)){
+                        ci.setReturnValue(false);
+                        return;
                     }
                 }
             }
@@ -4004,9 +4012,45 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.tick();
 
     }
+    @Inject(method = "dropCustomDeathLoot", at = @At(value = "TAIL"), cancellable = true)
+    public void DropHeads(DamageSource $$0, int $$1, boolean $$2,CallbackInfo info){
+        Entity cause = $$0.getEntity();
+        DamageType type = $$0.type();
+        DamageSource uh = ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION);
+        LivingEntity me = (LivingEntity) (Object) this;
+        if(type == uh.type() && Roundabout.RANDOM.nextDouble()>0.0){
+            if((LivingEntity) (Object) this instanceof Zombie){
+                spawnAtLocation(new ItemStack(Items.ZOMBIE_HEAD));
+            } else if (me instanceof Creeper) {
+                spawnAtLocation(new ItemStack(Items.CREEPER_HEAD));
+            } else if (me instanceof Skeleton) {
+                spawnAtLocation(new ItemStack(Items.SKELETON_SKULL));
+            } else if (me instanceof WitherSkeleton) {
+                spawnAtLocation(new ItemStack(Items.WITHER_SKELETON_SKULL));
+
+
+
+            } else if (me instanceof ServerPlayer){
+                ItemStack skull = new ItemStack(Items.PLAYER_HEAD);
+                skull.setTag(new CompoundTag());
+                //PlayerHeadItem
+                CompoundTag tag = skull.getTag();
+                tag.putString("SkullOwner",this.getName().getString());
+                skull.setTag(tag);
+                spawnAtLocation(skull);
+            } else if (me instanceof Piglin){
+                spawnAtLocation(new ItemStack(Items.PIGLIN_HEAD));
+            }
+
+        }
+
+    }
+
+
 
     @Inject(method = "travel", at = @At(value = "TAIL"))
     public void   MoldDetection(Vec3 movement,CallbackInfo info) {
+
         if(((IPermaCasting)this.level()).roundabout$inPermaCastRange(this.getOnPos(), PermanentZoneCastInstance.MOLD_FIELD)) {
             LivingEntity glumbo = ((IPermaCasting)this.level()).roundabout$inPermaCastRangeEntity(this.getOnPos(),PermanentZoneCastInstance.MOLD_FIELD);
             boolean isUser = this.equals(glumbo);

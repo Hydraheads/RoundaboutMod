@@ -8,8 +8,8 @@ import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -83,7 +83,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
     public void roundabout$tick(CallbackInfo ci) {
         if (!this.level().isClientSide() && !roundabout$initializeDataOnClient && connection !=null && connection.isAcceptingMessages()){
             IPlayerEntity ipe = ((IPlayerEntity)this);
-            ModPacketHandler.PACKET_ACCESS.s2cPowerInventorySettings(
+            S2CPacketUtil.sendPowerInventorySettings(
                     ((ServerPlayer)((Player)(Object)this)), ipe.roundabout$getAnchorPlace(),
                     ipe.roundabout$getDistanceOut(),
                     ipe.roundabout$getSizePercent(),
@@ -150,7 +150,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
             ipe.roundabout$setIdleYOffset(yOffset);
             ipe.roundabout$setTeamColor(teamColor);
             ipe.roundabout$setAnchorPlaceAttack(anchorPlaceAttack);
-            ModPacketHandler.PACKET_ACCESS.s2cPowerInventorySettings(
+            S2CPacketUtil.sendPowerInventorySettings(
                         ((ServerPlayer)((Player)(Object)this)), anchorPlace,distanceOut,
                     ipe.roundabout$getSizePercent(),
                     ipe.roundabout$getIdleRotation(),

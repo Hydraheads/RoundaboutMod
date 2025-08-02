@@ -23,6 +23,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Zombie;
 
 import java.util.Arrays;
 import java.util.List;
@@ -146,8 +147,8 @@ public class PowersGreenDay extends NewPunchingStand {
 
     public void toggleMold(){
         if (!this.onCooldown(PowerIndex.SKILL_4)) {
-            this.setCooldown(PowerIndex.SKILL_4, 400);
-            this.setCooldown(PowerIndex.SKILL_4_GUARD, 400);
+            this.setCooldown(PowerIndex.SKILL_4, 0);
+            this.setCooldown(PowerIndex.SKILL_4_GUARD, 0);
             this.tryPower(PowerIndex.POWER_4, true);
             tryPowerPacket(PowerIndex.POWER_4);
         }

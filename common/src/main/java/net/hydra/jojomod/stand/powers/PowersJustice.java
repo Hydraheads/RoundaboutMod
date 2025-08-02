@@ -29,7 +29,9 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
@@ -257,12 +259,10 @@ public class PowersJustice extends NewDashPreset {
                 } else {
                     if (TE instanceof FallenMob fm && fm.getController() == this.self.getId()) {
                         this.self.playSound(ModSounds.JUSTICE_SELECT_EVENT, 200F, 1.0F);
-                       ModPacketHandler.PACKET_ACCESS.intToServerPacket(fm.getId(),
-                                    PacketDataIndex.INT_STAND_ATTACK);
+                       tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,fm.getId());
                     } else if (!ClientUtil.isPlayer(TE)){
                         this.self.playSound(ModSounds.JUSTICE_SELECT_ATTACK_EVENT, 200F, 1.0F);
-                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(TE.getId(),
-                                PacketDataIndex.INT_STAND_ATTACK);
+                        tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,TE.getId());
                     }
                 }
             }
@@ -567,8 +567,7 @@ public class PowersJustice extends NewDashPreset {
                     } else {
                         if (TE instanceof FallenCreeper fm && fm.getController() == this.self.getId()) {
                             this.self.playSound(ModSounds.JUSTICE_SELECT_ATTACK_EVENT, 200F, 1.0F);
-                            ModPacketHandler.PACKET_ACCESS.intToServerPacket(TE.getId(),
-                                    PacketDataIndex.INT_STAND_ATTACK_2);
+                            tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK_2,TE.getId());
                             return true;
                         }
                     }
@@ -578,7 +577,7 @@ public class PowersJustice extends NewDashPreset {
                 Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
                 BlockHitResult blockHit = ent.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ent));
                 BlockPos bpos = blockHit.getBlockPos().relative(blockHit.getDirection());
-                ModPacketHandler.PACKET_ACCESS.StandPosPowerPacket(PowerIndex.POWER_3_EXTRA, bpos);
+                tryBlockPosPowerPacket(PowerIndex.POWER_3_EXTRA, bpos);
                 this.self.playSound(ModSounds.JUSTICE_SELECT_EVENT, 200F, 1.2F);
                 this.self.level()
                         .addParticle(
@@ -620,8 +619,7 @@ public class PowersJustice extends NewDashPreset {
                                     > getMaxPilotRange()) {
                         IPlayerEntity ipe = ((IPlayerEntity) PL);
                         ipe.roundabout$setIsControlling(0);
-                        ModPacketHandler.PACKET_ACCESS.intToServerPacket(0,
-                                PacketDataIndex.INT_UPDATE_PILOT);
+                        tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT,0);
                         ClientUtil.setCameraEntity(null);
                     } else {
                         StandEntity SE = getStandEntity(this.self);
@@ -943,9 +941,6 @@ public class PowersJustice extends NewDashPreset {
             fogChainClient();
             return;
         }
-        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
-            ClientUtil.setJusticeBlockScreen();
-        }
     }
 
     public void dashOrTacticsScreenClient(){
@@ -968,7 +963,7 @@ public class PowersJustice extends NewDashPreset {
 
             if (canExecuteMoveWithLevel(getFogCloneLevel())) {
                 if (this.getSelf() instanceof Player PE && ((IPlayerEntity)PE).roundabout$getShapeShift() > ShapeShifts.PLAYER.id){
-                    ModPacketHandler.PACKET_ACCESS.byteToServerPacket((byte) 0, PacketDataIndex.BYTE_CHANGE_MORPH);
+                    C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_CHANGE_MORPH,(byte) 0);
                 }
                 this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().justiceSettings.fogCloneCooldown);
                 tryPowerPacket(PowerIndex.POWER_3);
@@ -984,15 +979,13 @@ public class PowersJustice extends NewDashPreset {
                 IPlayerEntity ipe = ((IPlayerEntity) PE);
                 ipe.roundabout$setIsControlling(0);
             }
-            ModPacketHandler.PACKET_ACCESS.intToServerPacket(0,
-                    PacketDataIndex.INT_UPDATE_PILOT);
+            tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT,0);
         } else {
             StandEntity entity = this.getStandEntity(this.self);
             int L = 0;
             if (entity != null){L=entity.getId();}
 
-            ModPacketHandler.PACKET_ACCESS.intToServerPacket(L,
-                    PacketDataIndex.INT_UPDATE_PILOT);
+            tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT,L);
         }
     }
 
@@ -1124,7 +1117,7 @@ public class PowersJustice extends NewDashPreset {
                                         fm.setSelected(false);
                                     }
                                 } else if (context == Tactics.ROAM.id || context == Tactics.FOLLOW.id ||
-                                        context == Tactics.STAY_PUT.id) {
+                                        context == Tactics.STAY_PUT.id || context == Tactics.HOLD.id) {
                                     if (fm.getSelected()){
                                         fm.setMovementTactic(context);
                                     }
@@ -1498,7 +1491,7 @@ public class PowersJustice extends NewDashPreset {
                     return true;
                 }
             }
-            ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) this.getSelf()),
+            S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
                     PowerIndex.SKILL_2, 10);
         }
         return true;

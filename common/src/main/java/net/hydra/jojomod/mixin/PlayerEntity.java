@@ -19,6 +19,7 @@ import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.item.WorthyArrowItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.PlayerMaskSlots;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -389,9 +390,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 ((ServerLevel) this.level()).sendParticles(ModParticles.FOG_CHAIN, this.getX(),
                         this.getY()+(this.getBbWidth()*0.6), this.getZ(),
                         14, 0.4, 0.2, 0.4, 0.35);
-                ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) ((Player)(Object)this)),
-                        PowerIndex.SKILL_1_SNEAK, 20);
-                ((StandUser)this).roundabout$getStandPowers().setCooldown(PowerIndex.SKILL_1_SNEAK, 20);
             }
         }
     }
@@ -403,10 +401,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 ((ServerLevel) this.level()).sendParticles(ModParticles.FOG_CHAIN, this.getX(),
                         this.getY()+(this.getBbWidth()*0.6), this.getZ(),
                         14, 0.4, 0.2, 0.4, 0.35);
-
-                    ModPacketHandler.PACKET_ACCESS.syncSkillCooldownPacket(((ServerPlayer) ((Player)(Object)this)),
-                            PowerIndex.SKILL_1_SNEAK, 100);
-                ((StandUser)this).roundabout$getStandPowers().setCooldown(PowerIndex.SKILL_1_SNEAK, 100);
             }
         }
     }
@@ -770,14 +764,14 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                     if (rticks >= 30) {
                         rticks = 30;
                     }
-                    ModPacketHandler.PACKET_ACCESS.intToServerPacket(rticks, PacketDataIndex.INT_RIDE_TICKS);
+                    C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_RIDE_TICKS,rticks);
                     ((StandUser) this).roundabout$setRestrainedTicks(rticks);
                 } else {
                     rticks--;
                     if (rticks <= -1) {
                         rticks = -1;
                     }
-                    ModPacketHandler.PACKET_ACCESS.intToServerPacket(rticks, PacketDataIndex.INT_RIDE_TICKS);
+                    C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_RIDE_TICKS,rticks);
                     ((StandUser) this).roundabout$setRestrainedTicks(rticks);
                 }
             } else {

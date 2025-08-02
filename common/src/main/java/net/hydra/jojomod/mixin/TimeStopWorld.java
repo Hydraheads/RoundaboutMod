@@ -13,6 +13,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceKey;
@@ -133,7 +134,7 @@ public class TimeStopWorld implements TimeStop {
                         if ((ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1) ||
                                 MainUtil.cheapDistanceTo2(TSI.getX(),TSI.getZ(),serverPlayer.getX(),serverPlayer.getZ()) <
                                         Math.max(250,ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite)){
-                            ModPacketHandler.PACKET_ACCESS.timeStoppingEntityPacket(serverPlayer, TSI.getId(), TSI.getX(),
+                            S2CPacketUtil.addTSEntity(serverPlayer, TSI.getId(), TSI.getX(),
                                     TSI.getY(),TSI.getZ(),((StandUser) TSI).roundabout$getStandPowers().getTimestopRange(),
                                     ((StandUser) TSI).roundabout$getStandPowers().getChargedTSTicks(),
                                     ((StandUser) TSI).roundabout$getStandPowers().getMaxChargeTSTime());
@@ -150,7 +151,7 @@ public class TimeStopWorld implements TimeStop {
             for (int j = 0; j < serverWorld.players().size(); ++j) {
                 if (!this.timeStoppingEntities.isEmpty()) {
                     ServerPlayer serverPlayer = serverWorld.players().get(j);
-                    ModPacketHandler.PACKET_ACCESS.timeStoppingEntityRemovalPacket(serverPlayer, removedStoppingEntity.getId());
+                    S2CPacketUtil.removeTSEntity(serverPlayer, removedStoppingEntity.getId());
                 }
             }
         }
@@ -381,7 +382,7 @@ public class TimeStopWorld implements TimeStop {
                         /*Streams updates to nearby players*/
                         if ((ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1) ||
                                 MainUtil.cheapDistanceTo2(blockPos.getX(), blockPos.getZ(),serverPlayer.getX(),serverPlayer.getZ()) < Math.max(250,ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite)){
-                            ModPacketHandler.PACKET_ACCESS.resumeTileEntityTSPacket(serverPlayer, new Vec3i(blockPos.getX(), blockPos.getY(), blockPos.getZ()));
+                            S2CPacketUtil.resumeTileEntityTSPacket(serverPlayer, new Vec3i(blockPos.getX(), blockPos.getY(), blockPos.getZ()));
                         }
                 }
             }

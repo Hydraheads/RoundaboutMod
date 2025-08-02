@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.vanilla_tweaks;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.util.config.ClientConfig;
@@ -14,7 +14,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(HorseRenderer.class)
-public class ZHorseRenderer {
+public class SBRHorseRenderer {
+    /**Makes horses named after sbr horses have custom skins>*/
     @Unique
     ResourceLocation roundabout$slowDancerTexture = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/slow_dancer.png");
     @Unique

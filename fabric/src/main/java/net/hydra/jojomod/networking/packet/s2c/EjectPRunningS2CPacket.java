@@ -8,15 +8,4 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.FriendlyByteBuf;
 
 public class EjectPRunningS2CPacket {
-    public static void eject(Minecraft client, ClientPacketListener handler,
-                                    FriendlyByteBuf buf, PacketSender responseSender)
-    {
-        if (client.player != null)
-        {
-            if (((StandUser)client.player).roundabout$getStandPowers() instanceof PowersD4C d4c)
-            {
-                d4c.ejectParallelRunning();
-            }
-        }
-    }
 }
