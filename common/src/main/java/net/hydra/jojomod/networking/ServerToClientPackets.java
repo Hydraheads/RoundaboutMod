@@ -28,7 +28,11 @@ public class ServerToClientPackets {
             IntPowerData("int_power_data"),
             IntToClient("generic_int_to_client"),
             SimpleByteToClient("simple_byte_to_client"),
-            ByteBundleToClient("byte_bundle_to_client");
+            ByteBundleToClient("byte_bundle_to_client"),
+            AddTSEntity("add_ts_entity"),
+            RemoveTSEntity("remove_ts_entity"),
+            AddPCEntity("add_pc_entity"),
+            RemovePCEntity("remove_pc_entity");
 
             public final String value;
 

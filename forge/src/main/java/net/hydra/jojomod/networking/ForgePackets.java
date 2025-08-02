@@ -20,22 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 public class ForgePackets implements IPacketAccess {
-    @Override
-    public void timeStoppingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range, int duration, int maxDuration) {
-        ForgePacketHandler.sendToClient(new ForgeTimeStoppingEntityPacket(entityID, x,y,z, range, duration, maxDuration), sp);
-    }
-    @Override
-    public void timeStoppingEntityRemovalPacket(ServerPlayer sp, int entityID) {
-        ForgePacketHandler.sendToClient(new ForgeTimeStoppingEntityRemovalPacket(entityID), sp);
-    }
-    @Override
-    public void permaCastingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range, byte context) {
-        ForgePacketHandler.sendToClient(new ForgePermaCastingEntityPacket(entityID, x,y,z, range, context), sp);
-    }
-    @Override
-    public void permaCastingEntityRemovalPacket(ServerPlayer sp, int entityID) {
-        ForgePacketHandler.sendToClient(new ForgePermaCastingEntityRemovalPacket(entityID), sp);
-    }
+
 
     @Override
     public void resumeTileEntityTSPacket(ServerPlayer sp, Vec3i vec3i) {

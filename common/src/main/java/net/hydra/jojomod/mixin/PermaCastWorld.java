@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -138,7 +139,7 @@ public class PermaCastWorld implements IPermaCasting {
                         Entity TSI = $$1.get(i);
                         /*You only need data of perma casting mobs that are relatively close by*/
                         if (MainUtil.cheapDistanceTo2(TSI.getX(),TSI.getZ(),serverPlayer.getX(),serverPlayer.getZ()) < 250){
-                            ModPacketHandler.PACKET_ACCESS.permaCastingEntityPacket(serverPlayer, TSI.getId(), TSI.getX(),
+                            S2CPacketUtil.addPCEntity(serverPlayer, TSI.getId(), TSI.getX(),
                                     TSI.getY(),TSI.getZ(),((StandUser) TSI).roundabout$getStandPowers().getPermaCastRange(),
                                     ((StandUser) TSI).roundabout$getStandPowers().getPermaCastContext());
                         }
@@ -156,7 +157,7 @@ public class PermaCastWorld implements IPermaCasting {
                 }
                 if (!roundabout$PermaCastingEntities.isEmpty()) {
                     ServerPlayer serverPlayer = serverWorld.players().get(j);
-                    ModPacketHandler.PACKET_ACCESS.permaCastingEntityRemovalPacket(serverPlayer, removedCastingEntity.getId());
+                    S2CPacketUtil.removePCEntity(serverPlayer, removedCastingEntity.getId());
                 }
             }
         }

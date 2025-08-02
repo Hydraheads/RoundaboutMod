@@ -154,4 +154,49 @@ public class S2CPacketUtil {
             );
         }
     }
+    public static void addTSEntity(Player player, int entityID, double x, double y, double z, double range,
+                                   int duration, int maxDuration){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.AddTSEntity.value,
+                    entityID,
+                    x,
+                    y,
+                    z,
+                    range,
+                    duration,
+                    maxDuration
+            );
+        }
+    }
+    public static void removeTSEntity(Player player, int entityID){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.RemoveTSEntity.value,
+                    entityID
+            );
+        }
+    }
+    public static void addPCEntity(Player player, int entityID, double x, double y, double z, double range,
+                                   byte context){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.AddPCEntity.value,
+                    entityID,
+                    x,
+                    y,
+                    z,
+                    range,
+                    context
+            );
+        }
+    }
+    public static void removePCEntity(Player player, int entityID){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.RemovePCEntity.value,
+                    entityID
+            );
+        }
+    }
 }

@@ -29,30 +29,10 @@ public class ForgePacketHandler {
         /**Client to Server Packets*/
 
         /**Server to Client Packets*/
-        INSTANCE.messageBuilder(ForgeTimeStoppingEntityPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ForgeTimeStoppingEntityPacket::new)
-                .encoder(ForgeTimeStoppingEntityPacket::toBytes)
-                .consumerMainThread(ForgeTimeStoppingEntityPacket::handle)
-                .add();
-        INSTANCE.messageBuilder(ForgeTimeStoppingEntityRemovalPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ForgeTimeStoppingEntityRemovalPacket::new)
-                .encoder(ForgeTimeStoppingEntityRemovalPacket::toBytes)
-                .consumerMainThread(ForgeTimeStoppingEntityRemovalPacket::handle)
-                .add();
         INSTANCE.messageBuilder(ForgeBlockEntityResumeTSPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(ForgeBlockEntityResumeTSPacket::new)
                 .encoder(ForgeBlockEntityResumeTSPacket::toBytes)
                 .consumerMainThread(ForgeBlockEntityResumeTSPacket::handle)
-                .add();
-        INSTANCE.messageBuilder(ForgePermaCastingEntityPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ForgePermaCastingEntityPacket::new)
-                .encoder(ForgePermaCastingEntityPacket::toBytes)
-                .consumerMainThread(ForgePermaCastingEntityPacket::handle)
-                .add();
-        INSTANCE.messageBuilder(ForgePermaCastingEntityRemovalPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ForgePermaCastingEntityRemovalPacket::new)
-                .encoder(ForgePermaCastingEntityRemovalPacket::toBytes)
-                .consumerMainThread(ForgePermaCastingEntityRemovalPacket::handle)
                 .add();
         INSTANCE.messageBuilder(ForgeDynamicWorldSync.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(ForgeDynamicWorldSync::new)

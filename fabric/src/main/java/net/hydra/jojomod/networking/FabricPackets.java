@@ -18,49 +18,6 @@ import org.joml.Vector3f;
 
 public class FabricPackets implements IPacketAccess {
 
-
-    @Override
-    public void timeStoppingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range, int chargeTime, int maxChargeTime) {
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-        buffer.writeInt(entityID);
-        buffer.writeDouble(x);
-        buffer.writeDouble(y);
-        buffer.writeDouble(z);
-        buffer.writeDouble(range);
-        buffer.writeInt(chargeTime);
-        buffer.writeInt(maxChargeTime);
-        ServerPlayNetworking.send(sp,ModMessages.TIME_STOP_ENTITY_PACKET, buffer);
-    }
-
-    @Override
-    public void timeStoppingEntityRemovalPacket(ServerPlayer sp, int entityID) {
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-        buffer.writeInt(entityID);
-        ServerPlayNetworking.send(sp,ModMessages.TIME_STOP_ENTITY_REMOVAL_PACKET, buffer);
-    }
-
-
-
-    @Override
-    public void permaCastingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range,
-                                         byte context) {
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-        buffer.writeInt(entityID);
-        buffer.writeDouble(x);
-        buffer.writeDouble(y);
-        buffer.writeDouble(z);
-        buffer.writeDouble(range);
-        buffer.writeByte(context);
-        ServerPlayNetworking.send(sp,ModMessages.PERMA_CASTING_ENTITY_PACKET, buffer);
-    }
-
-    @Override
-    public void permaCastingEntityRemovalPacket(ServerPlayer sp, int entityID) {
-        FriendlyByteBuf buffer = PacketByteBufs.create();
-        buffer.writeInt(entityID);
-        ServerPlayNetworking.send(sp,ModMessages.PERMA_CASTING_ENTITY_REMOVAL_PACKET, buffer);
-    }
-
     @Override
     public void resumeTileEntityTSPacket(ServerPlayer sp, Vec3i vec3i) {
         FriendlyByteBuf buffer = PacketByteBufs.create();

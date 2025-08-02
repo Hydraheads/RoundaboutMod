@@ -316,6 +316,34 @@ public class ClientUtil {
                     byte secondByte = (byte) vargs[2];
                     ClientUtil.handleBundlePacketS2C(context,firstByte,secondByte);
                 }
+
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AddTSEntity.value)) {
+                    int entityID = (int) vargs[0];
+                    double x = (double) vargs[1];
+                    double y = (double) vargs[2];
+                    double z = (double) vargs[3];
+                    double range = (double) vargs[4];
+                    int duration = (int) vargs[5];
+                    int maxDuration = (int) vargs[6];
+                    ClientUtil.handleTimeStoppingEntityPacket(entityID,x,y,z,range,duration,maxDuration);
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.RemoveTSEntity.value)) {
+                    int entityID = (int) vargs[0];
+                    ClientUtil.processTSRemovePacket(entityID);
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AddPCEntity.value)) {
+                    int entityID = (int) vargs[0];
+                    double x = (double) vargs[1];
+                    double y = (double) vargs[2];
+                    double z = (double) vargs[3];
+                    double range = (double) vargs[4];
+                    byte ctext = (byte) vargs[5];
+                    ClientUtil.handlePermaCastingEntityPacket(entityID,x,y,z,range,ctext);
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.RemovePCEntity.value)) {
+                    int entityID = (int) vargs[0];
+                    ClientUtil.handlePermaCastingRemovePacket(entityID);
+                }
             }
         });
     }

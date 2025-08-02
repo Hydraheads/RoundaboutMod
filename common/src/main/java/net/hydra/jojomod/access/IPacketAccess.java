@@ -14,10 +14,6 @@ public interface IPacketAccess {
      * Every packet function must be written here.*/
 
     /**Server To Client Packets*/
-    void timeStoppingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range, int duration, int maxDuration);
-    void timeStoppingEntityRemovalPacket(ServerPlayer sp, int entityID);
-    void permaCastingEntityPacket(ServerPlayer sp, int entityID, double x, double y, double z, double range, byte context);
-    void permaCastingEntityRemovalPacket(ServerPlayer sp, int entityID);
     void resumeTileEntityTSPacket(ServerPlayer sp, Vec3i vec3i);
     void sendNewDynamicWorld(ServerPlayer sp, String name, ServerLevel level, @Nullable ServerPlayer player);
     void deregisterDynamicWorld(ServerPlayer sp, String name);
