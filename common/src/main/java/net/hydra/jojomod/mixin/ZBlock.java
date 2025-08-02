@@ -60,48 +60,5 @@ public class ZBlock {
             ((StandUser)$$1).roundabout$getStandPowers().onDestroyBlock($$0,$$1,$$2,$$3,$$4,$$5);
         }
     }
-    @SuppressWarnings("deprecation")
-    @Inject(method = "setPlacedBy", at = @At(value = "HEAD"))
-    private void roundabout$setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity $$3, ItemStack $$4, CallbackInfo ci) {
-        /**
-        if ($$3 != null && !level.isClientSide() && ((IEntityAndData)$$3).roundabout$getTrueInvisibility() > -1){
-            if (ClientNetworking.getAppropriateConfig().achtungSettings.hidesPlacedBlocks &&
-            state.getBlock().isCollisionShapeFullBlock(state, level, pos)){
-                if ($$3 instanceof Player PE && PE.isCrouching() && ((StandUser)PE).roundabout$getStandPowers() instanceof PowersAchtungBaby PB) {
-                    BlockState placed = level.getBlockState(pos);
-                    BlockEntity placedEntity = level.getBlockEntity(pos);
-                    CompoundTag placedTag = placedEntity != null ? placedEntity.saveWithFullMetadata() : null;
 
-                    // Replace with Invisiblock
-                    level.setBlock(pos, ModBlocks.INVISIBLOCK.defaultBlockState(), 3);
-
-                    BlockEntity newEntity = level.getBlockEntity(pos);
-                    if (newEntity instanceof InvisiBlockEntity inv) {
-                        inv.setOriginal(placed, placedTag, level);
-                        inv.ticksUntilRestore = ((IEntityAndData) $$3).roundabout$getTrueInvisibility();
-                        PowersAchtungBaby.spawnExplosionParticles(PE.level(), pos.getCenter(), 10, 0.2);
-                    }
-                }
-            }
-        }
-         **/
-    }
-    /**
-    Inject(method = "shouldRenderFace", at = @At(value = "HEAD"), cancellable = true)
-    private static void roundabout$shouldRenderFace(BlockState $$0, BlockGetter $$1, BlockPos $$2, Direction $$3, BlockPos $$4, CallbackInfoReturnable<Boolean> cir) {
-        if (MainUtil.hiddenBlocks.contains($$4)) {
-            if (!MainUtil.hiddenBlocks.contains($$2)) {
-                cir.setReturnValue(true);
-                return;
-            } else {
-                cir.setReturnValue(false);
-                return;
-            }
-        }
-        if (MainUtil.hiddenBlocks.contains($$2)) {
-            cir.setReturnValue(false);
-            return;
-        }
-    }
-    **/
 }

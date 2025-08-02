@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.data_and_structures;
 
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.util.config.Config;
@@ -20,13 +20,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 
 @Mixin(RandomSpreadStructurePlacement.class)
-public abstract class ZRandomSpreadStructurePlacement extends StructurePlacement {
-    /**Literally intrecept structures using their salt to change their rarity*/
-    @Shadow @Final private RandomSpreadType spreadType;
-
-    protected ZRandomSpreadStructurePlacement(Vec3i $$0, FrequencyReductionMethod $$1, float $$2, int $$3, Optional<ExclusionZone> $$4) {
-        super($$0, $$1, $$2, $$3, $$4);
-    }
+public abstract class DataRandomSpreadStructurePlacement extends StructurePlacement {
+    /**Literally intercept structures using their salt to change their rarity*/
 
     @Inject(method = "spacing", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$spacing(CallbackInfoReturnable<Integer> cir) {
@@ -114,4 +109,14 @@ public abstract class ZRandomSpreadStructurePlacement extends StructurePlacement
         int ix = this.spreadType.evaluate(worldgenrandom, k);
         return new ChunkPos(i * space + l, j * space + ix);
     }
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    protected DataRandomSpreadStructurePlacement(Vec3i $$0, FrequencyReductionMethod $$1, float $$2, int $$3, Optional<ExclusionZone> $$4) {
+        super($$0, $$1, $$2, $$3, $$4);
+    }
+    @Shadow @Final private RandomSpreadType spreadType;
 }
