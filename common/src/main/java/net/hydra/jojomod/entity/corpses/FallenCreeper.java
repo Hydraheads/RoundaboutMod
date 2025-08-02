@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.corpses;
 
+import net.hydra.jojomod.entity.goals.CorpseMeleeAttackGoal;
 import net.hydra.jojomod.entity.goals.SwellGoalFallen;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.nbt.CompoundTag;
@@ -48,7 +49,7 @@ public class FallenCreeper extends FallenMob implements PowerableMob {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(2, new SwellGoalFallen(this));
-        this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0, false));
+        this.goalSelector.addGoal(3, new CorpseMeleeAttackGoal(this, 1.0, false));
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.addBehaviourGoals();
     }

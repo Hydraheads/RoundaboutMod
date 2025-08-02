@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.corpses;
 
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.goals.CorpseMeleeAttackGoal;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -102,7 +103,7 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0, false));
+        this.goalSelector.addGoal(4, new CorpseMeleeAttackGoal(this, 1.0, false));
         this.addBehaviourGoals();
     }
 

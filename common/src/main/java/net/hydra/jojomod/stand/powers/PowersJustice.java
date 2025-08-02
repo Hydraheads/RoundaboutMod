@@ -1117,7 +1117,7 @@ public class PowersJustice extends NewDashPreset {
                                         fm.setSelected(false);
                                     }
                                 } else if (context == Tactics.ROAM.id || context == Tactics.FOLLOW.id ||
-                                        context == Tactics.STAY_PUT.id) {
+                                        context == Tactics.STAY_PUT.id || context == Tactics.HOLD.id) {
                                     if (fm.getSelected()){
                                         fm.setMovementTactic(context);
                                     }

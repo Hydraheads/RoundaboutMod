@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.corpses;
 
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.goals.CorpseMeleeAttackGoal;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
@@ -36,7 +37,7 @@ public class FallenVillager extends FallenMob{
     }
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0, true));
+        this.goalSelector.addGoal(1, new CorpseMeleeAttackGoal(this, 1.0, true));
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.addBehaviourGoals();
     }
