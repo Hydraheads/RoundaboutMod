@@ -14,9 +14,6 @@ public interface IPacketAccess {
      * Every packet function must be written here.*/
 
     /**Server To Client Packets*/
-    void resumeTileEntityTSPacket(ServerPlayer sp, Vec3i vec3i);
-    void sendNewDynamicWorld(ServerPlayer sp, String name, ServerLevel level, @Nullable ServerPlayer player);
-    void ejectPRunning(ServerPlayer sp);
 
     /**Client To Server Packets*/
 

@@ -2,9 +2,12 @@ package net.hydra.jojomod.util;
 
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.minecraft.core.Vec3i;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.zetalasis.networking.message.api.ModMessageEvents;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 /**it is NOT okay to have client only classes here
@@ -196,6 +199,31 @@ public class S2CPacketUtil {
             ModMessageEvents.sendToPlayer(SP,
                     ServerToClientPackets.S2CPackets.MESSAGES.RemovePCEntity.value,
                     entityID
+            );
+        }
+    }
+    public static void resumeTileEntityTSPacket(Player player, Vec3i vec3i){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.ResumeTileEntityTS.value,
+                    vec3i.getX(),
+                    vec3i.getY(),
+                    vec3i.getZ()
+            );
+        }
+    }
+    public static void sendNewDyanmicWorldPacket(Player player, String name){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SendNewDynamicWorld.value,
+                    name
+            );
+        }
+    }
+    public static void ejectParallelRunningPacket(Player player){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.EjectPRunning.value
             );
         }
     }

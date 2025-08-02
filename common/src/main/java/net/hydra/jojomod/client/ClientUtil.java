@@ -8,6 +8,8 @@ import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.gui.*;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.networking.ModMessages;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
 import net.hydra.jojomod.stand.powers.PowersMandom;
@@ -18,6 +20,7 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -65,6 +68,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Unique;
 
+import java.util.Objects;
 import java.util.StringTokenizer;
 
 
@@ -345,6 +349,26 @@ public class ClientUtil {
                     ClientUtil.handlePermaCastingRemovePacket(entityID);
                 }
 
+
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ResumeTileEntityTS.value)) {
+                    int x = (int) vargs[0];
+                    int y = (int) vargs[1];
+                    int z = (int) vargs[2];
+                    ClientUtil.handleEntityResumeTsPacket(new Vec3i(x,y,z));
+                }
+
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SendNewDynamicWorld.value)) {
+                    String name = (String) vargs[0];
+                    ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));
+                    dimensionSynch(LEVEL_KEY);
+                }
+
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.EjectPRunning.value)) {
+                    if (((StandUser)player).roundabout$getStandPowers() instanceof PowersD4C d4c)
+                    {
+                        d4c.ejectParallelRunning();
+                    }
+                }
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();
                 //        ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));
@@ -780,13 +804,25 @@ public class ClientUtil {
 
         return true;
     }
-    public static void dimensionSynchForge(ResourceKey<Level> LEVEL_KEY){
-        LocalPlayer localPlayer = Minecraft.getInstance().player;
-        if (localPlayer != null) {
-            localPlayer.connection.levels().add(LEVEL_KEY);
-            C2SPacketUtil.d4cDimensionHopRegistryPacket();
+    public static void dimensionSynch(ResourceKey<Level> LEVEL_KEY){
+        Roundabout.LOGGER.info("Got packet for dimension {}", LEVEL_KEY.toString());
+        if (Objects.equals(ModPacketHandler.PLATFORM_ACCESS.getPlatformName(), "Forge")) {
+            if (ClientUtil.packetLocPlayCheck()) {
+                ClientUtil.dimensionSynchForge(LEVEL_KEY);
+            }
         } else {
-            packetLocPlayCheck();
+            ClientUtil.dimensionSynchFabric(Minecraft.getInstance(),LEVEL_KEY);
+        }
+    }
+    public static void dimensionSynchForge(ResourceKey<Level> LEVEL_KEY){
+        if (ClientUtil.packetLocPlayCheck()) {
+            LocalPlayer localPlayer = Minecraft.getInstance().player;
+            if (localPlayer != null) {
+                localPlayer.connection.levels().add(LEVEL_KEY);
+                C2SPacketUtil.d4cDimensionHopRegistryPacket();
+            } else {
+                packetLocPlayCheck();
+            }
         }
     }
     public static void dimensionSynchFabric(Minecraft client, ResourceKey<Level> LEVEL_KEY) {

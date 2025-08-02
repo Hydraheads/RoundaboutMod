@@ -32,7 +32,10 @@ public class ServerToClientPackets {
             AddTSEntity("add_ts_entity"),
             RemoveTSEntity("remove_ts_entity"),
             AddPCEntity("add_pc_entity"),
-            RemovePCEntity("remove_pc_entity");
+            RemovePCEntity("remove_pc_entity"),
+            ResumeTileEntityTS("resume_tile_ent_ts"),
+            SendNewDynamicWorld("send_new_dynamic_world"),
+            EjectPRunning("eject_p_running");
 
             public final String value;
 

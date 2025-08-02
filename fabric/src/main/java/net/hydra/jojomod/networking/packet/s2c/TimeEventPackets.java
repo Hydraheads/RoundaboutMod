@@ -11,14 +11,4 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class TimeEventPackets {
 
-
-    public static void updateTileEntityTS(Minecraft client, ClientPacketListener handler,
-                                          FriendlyByteBuf buf, PacketSender responseSender){
-        if (client.player != null) {
-            BlockEntity openedBlock = client.player.level().getBlockEntity(new BlockPos(buf.readInt(),buf.readInt(),buf.readInt()) );
-            if (openedBlock != null){
-                ((TimeStop)client.player.level()).processTSBlockEntityPacket(openedBlock);
-            }
-        }
-    }
 }

@@ -22,6 +22,7 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.zetalasis.world.DynamicWorld;
 import net.minecraft.client.Minecraft;
@@ -681,7 +682,7 @@ public class PowersD4C extends NewPunchingStand {
                 Roundabout.LOGGER.info("Stopped P Running");
 
                 if (!this.getSelf().level().isClientSide)
-                    ModPacketHandler.PACKET_ACCESS.ejectPRunning((ServerPlayer) this.getSelf());
+                    S2CPacketUtil.ejectParallelRunningPacket((ServerPlayer) this.getSelf());
 
                 setCooldown(PowerIndex.SKILL_EXTRA, pRunningTimeLimit + 5);
             };
