@@ -19,6 +19,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.particle.CampfireSmokeParticle;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -274,9 +275,9 @@ public class PowersRatt extends NewDashPreset {
         if (!isClient()) {
             blipStand(pos);
         }
-  /*      ((ServerLevel) this.self.level()).sendParticles(ModParticles.FOG_CHAIN, pos.x(),
+        ((ServerLevel) this.self.level()).sendParticles(ModParticles.FOG_CHAIN, pos.x(),
                 pos.y(), pos.z(),
-                14, 0.4, 0.2, 0.4, 0.35); */
+                14, 0.4, 0.2, 0.4, 0.35);
     }
 
     public void blipStand(Vec3 pos) {
@@ -369,7 +370,7 @@ public class PowersRatt extends NewDashPreset {
 
                 setGoBeyondTarget(getShootTarget());
             } else {
-                Roundabout.LOGGER.info("A: {}",isAuto());
+              /*  Roundabout.LOGGER.info("A: {}",isAuto());
                 Vec3 pos = SE.getPosition(0).add(new Vec3(
                                 3 * Math.cos(SE.getStandRotationY()+Math.PI/2),
                                 3 * Math.sin(SE.getHeadRotationX()),
@@ -378,7 +379,7 @@ public class PowersRatt extends NewDashPreset {
                 );
                 ((ServerLevel) this.self.level()).sendParticles(ModParticles.AIR_CRACKLE, pos.x(),
                         pos.y(), pos.z(),
-                        2, 0, 0, 0, 1);
+                        2, 0, 0, 0, 1); */
             }
         } else if (active) {
             if (this.getStandUserSelf().roundabout$getActive()) {
