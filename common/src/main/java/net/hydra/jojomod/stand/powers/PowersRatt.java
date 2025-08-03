@@ -7,6 +7,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.RattDartEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -18,10 +19,12 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -29,10 +32,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class PowersRatt extends NewDashPreset {
     public PowersRatt(LivingEntity self) {
@@ -126,29 +131,56 @@ public class PowersRatt extends NewDashPreset {
                 ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
         return blockHit;
     }
-    public Entity CoolerrayCastEntity(Entity entityX, float reach){
-        float tickDelta = 0;
-        if (entityX.level().isClientSide()) {
-            tickDelta = ClientUtil.getDelta();
-        }
-        Vec3 vec3d = entityX.getEyePosition(tickDelta);
+    public Entity CoolerrayCastEntity(Level world, LivingEntity ratt, double maxDistance) {
 
-        StandEntity a = this.getStandUserSelf().roundabout$getStand();
-        Vec3 vec3d3 = new Vec3(reach,reach,reach).multiply(
-                Math.cos(a.getStandRotationY()-Math.PI/2),
-                Math.sin(a.getHeadRotationX()),
-                Math.sin(a.getStandRotationY()-Math.PI/2)
+
+        StandEntity SE = (StandEntity) ratt;
+
+        Vec3 eyePos = ratt.getEyePosition(1.0F); // player.getEyePosition(float)
+        Vec3 lookVec = new Vec3(
+                        Math.cos(SE.getStandRotationY()+Math.PI/2),
+                        Math.sin(SE.getHeadRotationX()),
+                        Math.sin(SE.getStandRotationY()+Math.PI/2)
+                );
+        Vec3 reachVec = eyePos.add(lookVec.scale(maxDistance)); // end point of the ray
+
+        // Raytrace blocks first
+        ClipContext blockContext = new ClipContext(
+                eyePos,
+                reachVec,
+                ClipContext.Block.OUTLINE,
+                ClipContext.Fluid.NONE,
+                ratt
         );
-        AABB box = new AABB(vec3d.x+reach, vec3d.y+reach, vec3d.z+reach, vec3d.x-reach, vec3d.y-reach, vec3d.z-reach);
 
-        EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(entityX, vec3d, vec3d3, box, entity -> !entity.isSpectator() && entity.isPickable() && !entity.isInvulnerable(), reach*reach);
-        if (entityHitResult != null){
-            Entity hitResult = entityHitResult.getEntity();
-            if (hitResult.isAlive() && !hitResult.isRemoved() && canActuallyHit(entityX)) {
-                return hitResult;
+        BlockHitResult blockHit = world.clip(blockContext);
+        double blockHitDistance = blockHit != null
+                ? blockHit.getLocation().distanceTo(eyePos)
+                : maxDistance;
+
+        // Search for potential target entities in bounding box
+        AABB box = ratt.getBoundingBox().expandTowards(lookVec.scale(maxDistance)).inflate(1.0);
+        List<Entity> candidates = world.getEntities(ratt, box,
+                (e) -> e instanceof Entity && e.isPickable() && e.isAlive());
+
+        Entity closest = null;
+        double closestDistance = blockHitDistance;
+
+        for (Entity entity : candidates) {
+            AABB aabb = entity.getBoundingBox().inflate(0.3); // widen the target hit box a bit
+            Optional<Vec3> hitOptional = aabb.clip(eyePos, reachVec);
+
+            if (hitOptional.isPresent()) {
+                double hitDistance = eyePos.distanceTo(hitOptional.get());
+                if (hitDistance < closestDistance && !entity.isSpectator() && MainUtil.isStandPickable(entity) && !entity.isInvulnerable()
+                        && !entity.hasPassenger(ratt)) {
+                    closestDistance = hitDistance;
+                    closest = entity;
+                }
             }
         }
-        return null;
+
+        return closest; // null if no valid hit
     }
 
     private BlockHitResult getValidPlacement(){
@@ -317,7 +349,7 @@ public class PowersRatt extends NewDashPreset {
                 if (getShootTarget() == null) {this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);}
 
                 if (isAuto()) {
-                    Entity f = this.CoolerrayCastEntity(SE, 60);
+                    Entity f = this.CoolerrayCastEntity(this.getSelf().level(),SE,60);
                     if (f != null) {
                         BurstFire();
                     }
@@ -336,6 +368,17 @@ public class PowersRatt extends NewDashPreset {
                 }
 
                 setGoBeyondTarget(getShootTarget());
+            } else {
+                Roundabout.LOGGER.info("A: {}",isAuto());
+                Vec3 pos = SE.getPosition(0).add(new Vec3(
+                                3 * Math.cos(SE.getStandRotationY()+Math.PI/2),
+                                3 * Math.sin(SE.getHeadRotationX()),
+                                3 * Math.sin(SE.getStandRotationY()+Math.PI/2)
+                        )
+                );
+                ((ServerLevel) this.self.level()).sendParticles(ModParticles.AIR_CRACKLE, pos.x(),
+                        pos.y(), pos.z(),
+                        2, 0, 0, 0, 1);
             }
         } else if (active) {
             if (this.getStandUserSelf().roundabout$getActive()) {
