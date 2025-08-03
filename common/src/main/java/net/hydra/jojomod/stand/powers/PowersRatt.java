@@ -275,9 +275,6 @@ public class PowersRatt extends NewDashPreset {
         if (!isClient()) {
             blipStand(pos);
         }
-        ((ServerLevel) this.self.level()).sendParticles(ModParticles.FOG_CHAIN, pos.x(),
-                pos.y(), pos.z(),
-                14, 0.4, 0.2, 0.4, 0.35);
     }
 
     public void blipStand(Vec3 pos) {
