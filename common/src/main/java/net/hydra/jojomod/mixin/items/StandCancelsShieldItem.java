@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.items;
 
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.InteractionHand;
@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ShieldItem.class)
-public class ZShieldOffhandOverride {
+public class StandCancelsShieldItem {
     /**Minor code that stops offhand shielding while stand is active.*/
 
     @Inject(method = "use", at = @At("HEAD"), cancellable = true)

@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.stand_users;
 
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
 @Mixin(Entity.class)
-public class ZPassengers {
+public class TeleportStandPassengers {
     /**Minor code for stand passengers*/
 
     /** Honestly, I don't know if this code actually does anything significant, but allegedly it updates
@@ -37,6 +37,10 @@ public class ZPassengers {
 
         }
     }
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
 
     @Shadow
     @Final

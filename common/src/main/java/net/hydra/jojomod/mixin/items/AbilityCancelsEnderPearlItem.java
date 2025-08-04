@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.items;
 
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.InteractionHand;
@@ -14,7 +14,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EnderpearlItem.class)
-public class ZEnderPearlItem {
+public class AbilityCancelsEnderPearlItem {
+
+    /**While in the middle of a stand ability, cannot throw an ender pearl*/
+
     @Inject(method = "use(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResultHolder;", at = @At(value = "HEAD"), cancellable = true)
     protected <E extends Entity> void roundabout$use(Level $$0, Player $$1, InteractionHand $$2, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
         if (((StandUser)$$1).roundabout$getStandPowers().getAttackTimeDuring() > -1){
