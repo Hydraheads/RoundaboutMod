@@ -77,56 +77,6 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
             }
         }
     }
-    @Inject(method = "getPlayerReputation", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$getPlayerRep(Player $$0, CallbackInfoReturnable<Integer> cir) {
-        IPlayerEntity ple = ((IPlayerEntity) $$0);
-        byte shape = ple.roundabout$getShapeShift();
-        ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
-        if (shift != ShapeShifts.PLAYER) {
-            if (ShapeShifts.isVillager(shift)) {
-                cir.setReturnValue(22);
-                return;
-            }
-        }
-        if ($$0.hasEffect(ModEffects.FACELESS)) {
-            cir.setReturnValue(
-                    Math.round (((float)this.gossips.getReputation($$0.getUUID(), ($$0x) -> {
-                        return true;
-                    })) / 2)
-            );
-            return;
-        } else if ($$0.hasEffect(ModEffects.CAPTURING_LOVE)) {
-            cir.setReturnValue(
-                    (this.gossips.getReputation($$0.getUUID(), ($$0x) -> {
-                        return true;
-                    })) + 25
-            );
-            return;
-        }
-    }
-    @Inject(method = "onReputationEventFrom", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$onReputationEventFrom(ReputationEventType $$0, Entity $$1, CallbackInfo ci) {
-        if ($$1 instanceof Player PL) {
-            IPlayerEntity ple = ((IPlayerEntity) PL);
-            byte shape = ple.roundabout$getShapeShift();
-            ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
-            if (shift != ShapeShifts.PLAYER) {
-                    ci.cancel();
-            }
-        }
-    }
-    @Inject(method = "mobInteract(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$mobInteract(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
-
-        IPlayerEntity ple = ((IPlayerEntity) $$0);
-        byte shape = ple.roundabout$getShapeShift();
-        ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
-        if (shift != ShapeShifts.PLAYER) {
-            if (ShapeShifts.isZombie(shift) || ShapeShifts.isSkeleton(shift)) {
-                cir.setReturnValue(InteractionResult.sidedSuccess(this.level().isClientSide));
-            }
-        }
-    }
 
     @Inject(method = "refreshBrain", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$refreshBrain(ServerLevel $$0,CallbackInfo ci) {
