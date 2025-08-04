@@ -147,7 +147,7 @@
     "WorldTickClient",
     "ZEntityRenderDispatcher",
     "ZHumanoidMobRenderer",
-    "ZHumanoidModel",
+    "animations.AnimationsHumanoidModel",
     "ZItemInHandLayer",
     "ZItemInHandRenderer",
     "ZLevelRenderer",

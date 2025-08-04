@@ -1,26 +1,20 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.animations;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IHumanoidModelAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.Poses;
-import net.minecraft.client.animation.AnimationDefinition;
-import net.minecraft.client.animation.KeyframeAnimations;
 import net.minecraft.client.model.AgeableListModel;
 import net.minecraft.client.model.ArmedModel;
 import net.minecraft.client.model.HeadedModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -29,35 +23,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Optional;
-
 @Mixin(HumanoidModel.class)
-public class ZHumanoidModel<T extends LivingEntity> extends AgeableListModel<T> implements ArmedModel, HeadedModel, IHumanoidModelAccess {
+public class AnimationsHumanoidModel<T extends LivingEntity> extends AgeableListModel<T> implements ArmedModel, HeadedModel, IHumanoidModelAccess {
 
-    @Shadow @Final public ModelPart head;
-    @Shadow @Final public ModelPart hat;
-    /**Add player animations, such as TS floating*/
+    /**Add player animations, such as TS floating and dodging, this mixin is not for poses, nor is it
+     * for blockbench crafted animations, just manual context sensitive animations*/
 
-    @Shadow
-    @Final
-    public ModelPart rightArm;
-    @Shadow
-    @Final
-    public ModelPart leftArm;
-    @Shadow
-    @Final
-    public ModelPart body;
-    @Shadow
-    @Final
-    public ModelPart rightLeg;
-    @Shadow
-    @Final
-    public ModelPart leftLeg;
 
-    @Shadow
-    public HumanoidModel.ArmPose leftArmPose;
-    @Shadow
-    public HumanoidModel.ArmPose rightArmPose;
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isUsingItem()Z", shift = At.Shift.BEFORE, ordinal = 0))
     public void roundabout$SetupAnim(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci){
         if ($$0 instanceof Player && ((IPlayerEntity)$$0).roundabout$GetPos() == PlayerPosIndex.TS_FLOAT) {
@@ -136,6 +108,14 @@ public class ZHumanoidModel<T extends LivingEntity> extends AgeableListModel<T> 
 
     }
 
+    @Unique
+    @Override
+    public Iterable<ModelPart> roundabout$getBodyParts(){return bodyParts();}
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
     @Shadow
     protected void setupAttackAnimation(T $$0, float $$1) {
     }
@@ -147,9 +127,6 @@ public class ZHumanoidModel<T extends LivingEntity> extends AgeableListModel<T> 
     private void poseRightArm(T $$0) {
 
     }
-    @Unique
-    @Override
-    public Iterable<ModelPart> roundabout$getBodyParts(){return bodyParts();}
 
     @Shadow
     protected Iterable<ModelPart> headParts() {
@@ -171,4 +148,26 @@ public class ZHumanoidModel<T extends LivingEntity> extends AgeableListModel<T> 
     public ModelPart getHead() {
         return null;
     }
+    @Shadow @Final public ModelPart head;
+    @Shadow @Final public ModelPart hat;
+    @Shadow
+    @Final
+    public ModelPart rightArm;
+    @Shadow
+    @Final
+    public ModelPart leftArm;
+    @Shadow
+    @Final
+    public ModelPart body;
+    @Shadow
+    @Final
+    public ModelPart rightLeg;
+    @Shadow
+    @Final
+    public ModelPart leftLeg;
+
+    @Shadow
+    public HumanoidModel.ArmPose leftArmPose;
+    @Shadow
+    public HumanoidModel.ArmPose rightArmPose;
 }
