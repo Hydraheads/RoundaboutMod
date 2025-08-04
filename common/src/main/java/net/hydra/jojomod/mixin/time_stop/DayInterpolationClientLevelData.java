@@ -1,6 +1,6 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.time_stop;
 
-import net.hydra.jojomod.access.IClientLevelData;
+import net.hydra.jojomod.access.IDayInterpolationClientLevelData;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
@@ -14,11 +14,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = ClientLevel.ClientLevelData.class)
-public abstract class ZClientLevelData implements IClientLevelData {
+public abstract class DayInterpolationClientLevelData implements IDayInterpolationClientLevelData {
 
     /**Control the visual time, so you can freeze or accelerate it clientside*/
-    @Shadow
-    private long dayTime;
 
     @Unique
     private long roundabout$DayTimeActual = 0L;
@@ -103,4 +101,10 @@ public abstract class ZClientLevelData implements IClientLevelData {
             ci.setReturnValue(roundabout$DayTimeActual);
         }
     }
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+    @Shadow
+    private long dayTime;
 }

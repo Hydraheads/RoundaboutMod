@@ -488,10 +488,10 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
      * than the custom time to tick the proper time*/
     @Inject(method = "tickTime", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$TickTime(CallbackInfo ci) {
-        if (((IClientLevelData) this.levelData).roundabout$getRoundaboutInterpolatingDaytime()) {
+        if (((IDayInterpolationClientLevelData) this.levelData).roundabout$getRoundaboutInterpolatingDaytime()) {
             this.setGameTime(this.levelData.getGameTime() + 1L);
             if (this.levelData.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
-                this.setDayTime(((IClientLevelData)this.levelData).roundabout$getRoundaboutDayTimeMinecraft() + 1L);
+                this.setDayTime(((IDayInterpolationClientLevelData)this.levelData).roundabout$getRoundaboutDayTimeMinecraft() + 1L);
                 ci.cancel();
             }
         }

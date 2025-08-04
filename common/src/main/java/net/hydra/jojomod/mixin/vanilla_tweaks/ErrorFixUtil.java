@@ -1,16 +1,15 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.vanilla_tweaks;
 
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.types.Type;
 import net.minecraft.Util;
-import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Util.class)
-public class UtilMixin {
+public class ErrorFixUtil {
     /**Cancel data fixing logging, data fixer*/
     @Inject(method = "doFetchChoiceType(Lcom/mojang/datafixers/DSL$TypeReference;Ljava/lang/String;)Lcom/mojang/datafixers/types/Type;", at = @At(value = "HEAD"), cancellable = true)
     private static void roundabout$doFetchChoiceType(DSL.TypeReference $$0, String $$1, CallbackInfoReturnable<Type<?>> cir) {

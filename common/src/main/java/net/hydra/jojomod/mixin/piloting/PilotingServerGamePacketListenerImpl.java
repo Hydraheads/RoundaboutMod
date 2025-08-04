@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.piloting;
 
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -33,16 +33,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import javax.annotation.Nullable;
 
 @Mixin(ServerGamePacketListenerImpl.class)
-public abstract class ZServerGamePacketListenerImpl {
-    @Shadow public ServerPlayer player;
-
-    @Shadow @Nullable private Vec3 awaitingPositionFromClient;
-
-    @Shadow
-    private static boolean wasBlockPlacementAttempt(ServerPlayer $$0, ItemStack $$1) {
-        return false;
-    }
-
+public abstract class PilotingServerGamePacketListenerImpl {
+    /**Piloting changes the item use function so that it instead checks for distance from the piloting entity
+     * rather than from the player*/
 
     @Inject(method = "handleUseItemOn(Lnet/minecraft/network/protocol/game/ServerboundUseItemOnPacket;)V", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$handleUseItemOn(ServerboundUseItemOnPacket $$0, CallbackInfo ci) {
@@ -105,5 +98,19 @@ public abstract class ZServerGamePacketListenerImpl {
                 }
             }
         }
+    }
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    @Shadow public ServerPlayer player;
+
+    @Shadow @Nullable private Vec3 awaitingPositionFromClient;
+
+    @Shadow
+    private static boolean wasBlockPlacementAttempt(ServerPlayer $$0, ItemStack $$1) {
+        return false;
     }
 }

@@ -1,6 +1,6 @@
 package net.hydra.jojomod.access;
 
-public interface IClientLevelData {
+public interface IDayInterpolationClientLevelData {
     long roundabout$getRoundaboutDayTimeActual();
     long roundabout$getRoundaboutDayTimeTarget();
     void roundabout$setRoundaboutDayTimeActual(long roundaboutDayTimeActual);
