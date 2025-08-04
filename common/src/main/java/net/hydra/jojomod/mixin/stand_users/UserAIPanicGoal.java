@@ -1,7 +1,6 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.stand_users;
 
 import net.hydra.jojomod.access.IMob;
-import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -26,11 +25,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import javax.annotation.Nullable;
 
 @Mixin(PanicGoal.class)
-public abstract class ZPanicGoal extends Goal {
+public abstract class UserAIPanicGoal extends Goal {
 
-    @Shadow
-    @Final
-    protected PathfinderMob mob;
+    /**Weaponize the panic goal into an attack goal when a mob is a stand user or survivor zapped*/
+
     @Final
     private static TargetingConditions roundabout$HURT_BY_TARGETING = TargetingConditions.forCombat().ignoreLineOfSight().ignoreInvisibilityTesting();
 
@@ -196,4 +194,13 @@ public abstract class ZPanicGoal extends Goal {
     protected double roundabout$getFollowDistance() {
         return this.mob.getAttributeValue(Attributes.FOLLOW_RANGE);
     }
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    @Shadow
+    @Final
+    protected PathfinderMob mob;
 }

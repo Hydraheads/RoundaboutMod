@@ -1,17 +1,11 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.stand_users;
 
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import net.hydra.jojomod.access.IMob;
-import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ReputationEventHandler;
 import net.minecraft.world.entity.ai.Brain;
@@ -19,12 +13,10 @@ import net.minecraft.world.entity.ai.behavior.VillagerGoalPackages;
 import net.minecraft.world.entity.ai.gossip.GossipContainer;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
-import net.minecraft.world.entity.ai.village.ReputationEventType;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerDataHolder;
 import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.entity.schedule.Schedule;
 import net.minecraft.world.level.Level;
@@ -35,15 +27,15 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Villager.class)
-public abstract class ZVillager extends AbstractVillager implements ReputationEventHandler, VillagerDataHolder {
-    public ZVillager(EntityType<? extends AbstractVillager> $$0, Level $$1) {
-        super($$0, $$1);
-    }
+public abstract class UserAIVillager extends AbstractVillager implements ReputationEventHandler, VillagerDataHolder {
+    /**This class sets up a mode in villager ai called fight or flight mode,
+     * it contains nuanced ai for villagers with stands to
+     * essentially start running when they get low on health (see SurvivorBrain as well),
+     * but behave differently when they have reasonable health. The goal is for stand user
+     * villagers to basically keep themselves alive, but fight whenever they can*/
 
-    @Shadow public abstract Brain<Villager> getBrain();
 
     @Unique
     public boolean roundabout$initializedViolence = false;
@@ -89,13 +81,6 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
         }
     }
 
-    @Shadow
-    private void registerBrainGoals(Brain<Villager> $$0) {
-    }
-
-    @Shadow public abstract void refreshBrain(ServerLevel $$0);
-
-    @Shadow @Final private GossipContainer gossips;
 
     @Unique
     private void roundabout$refreshBrainOG(ServerLevel $$0) {
@@ -132,4 +117,23 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
         $$0.setActiveActivityIfPossible(Activity.IDLE);
         $$0.updateActivityFromSchedule(this.level().getDayTime(), this.level().getGameTime());
     }
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    public UserAIVillager(EntityType<? extends AbstractVillager> $$0, Level $$1) {
+        super($$0, $$1);
+    }
+
+    @Shadow public abstract Brain<Villager> getBrain();
+
+    @Shadow
+    private void registerBrainGoals(Brain<Villager> $$0) {
+    }
+
+    @Shadow public abstract void refreshBrain(ServerLevel $$0);
+
+    @Shadow @Final private GossipContainer gossips;
 }

@@ -185,11 +185,6 @@ public abstract class ZMob extends LivingEntity implements IMob {
     /**Minor code, mobs in a barrage should not be attacking*/
     @Inject(method = "doHurtTarget", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$TryAttack(Entity $$0, CallbackInfoReturnable<Boolean> ci) {
-        if (((StandUser) this).roundabout$isDazed() ||
-                (((StandUser)this).roundabout$hasAStand() &&
-                        ((StandUser)this).roundabout$getStandPowers().disableMobAiAttack()) || ((StandUser) this).roundabout$isRestrained()) {
-            ci.setReturnValue(false);
-        } else {
             if (MainUtil.forceAggression(this)){
                 float $$1 = 1F;
                 if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)){
@@ -231,7 +226,6 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
                 ci.setReturnValue($$4);
             }
-        }
     }
 
     @Inject(method = "finalizeSpawn", at = @At(value = "HEAD"))

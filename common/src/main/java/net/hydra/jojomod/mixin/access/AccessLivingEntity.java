@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.access;
 
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.minecraft.world.entity.Entity;
@@ -12,41 +12,11 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin (LivingEntity.class)
-public abstract class ZLivingEntity extends Entity implements ILivingEntityAccess {
+public abstract class AccessLivingEntity extends Entity implements ILivingEntityAccess {
     /**We're using this to access protected server variables in the
      * LivingEntity class, primarily to get more up to date location tracking
      * for TS and whatnot
      */
-    @Shadow
-    protected double lerpX;
-    @Shadow
-    protected double lerpY;
-    @Shadow
-    protected double lerpZ;
-    @Shadow
-    protected double lerpXRot;
-    @Shadow
-    protected double lerpYRot;
-    @Shadow
-    protected int lerpSteps;
-
-    @Shadow
-    protected float animStep;
-    @Shadow
-    protected float animStepO;
-
-    @Shadow
-    private float swimAmount;
-    @Shadow
-    private float swimAmountO;
-    @Shadow
-    protected int fallFlyTicks;
-    @Shadow
-    protected ItemStack useItem = ItemStack.EMPTY;
-
-    public ZLivingEntity(EntityType<?> $$0, Level $$1) {
-        super($$0, $$1);
-    }
 
     @Unique
     @Override
@@ -163,18 +133,11 @@ public abstract class ZLivingEntity extends Entity implements ILivingEntityAcces
         this.lerpSteps = lerpSteps;
     }
 
-    @Shadow
-    protected void pushEntities(){
-    }
     @Override
     public void roundabout$setUseItemTicks(int ticks) {
         useItemRemaining = ticks;
     }
 
-    @Shadow
-    protected abstract int decreaseAirSupply(int $$0);
-
-    @Shadow protected int useItemRemaining;
 
     @Override
     public void roundabout$PushEntities(){
@@ -183,6 +146,46 @@ public abstract class ZLivingEntity extends Entity implements ILivingEntityAcces
     @Override
     public int roundabout$DecreaseAirSupply(int amt){
         return this.decreaseAirSupply(amt);
+    }
+
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    @Shadow
+    protected double lerpX;
+    @Shadow
+    protected double lerpY;
+    @Shadow
+    protected double lerpZ;
+    @Shadow
+    protected double lerpXRot;
+    @Shadow
+    protected double lerpYRot;
+    @Shadow
+    protected int lerpSteps;
+    @Shadow
+    protected float animStep;
+    @Shadow
+    protected float animStepO;
+    @Shadow
+    private float swimAmount;
+    @Shadow
+    private float swimAmountO;
+    @Shadow
+    protected int fallFlyTicks;
+    @Shadow
+    protected abstract int decreaseAirSupply(int $$0);
+    @Shadow
+    protected void pushEntities(){
+    }
+    @Shadow protected int useItemRemaining;
+    @Shadow
+    protected ItemStack useItem = ItemStack.EMPTY;
+    public AccessLivingEntity(EntityType<?> $$0, Level $$1) {
+        super($$0, $$1);
     }
 
 }
