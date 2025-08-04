@@ -40,7 +40,7 @@ public class TimeMovingProjectile
                 for (AABB $$7 : $$5.toAabbs()) {
                     if ($$7.move($$3).contains($$6)) {
                         if (projectile instanceof AbstractArrow) {
-                            ((IAbstractArrowAccess)projectile).roundaboutSetInGround(true);
+                            ((IAbstractArrowAccess)projectile).roundabout$SetInGround(true);
                             ((IProjectileAccess)projectile).roundabout$setRoundaboutIsTimeStopCreated(false);
                         }
                         break;
@@ -62,7 +62,7 @@ public class TimeMovingProjectile
             projectile.clearFire();
         }
 
-        if (projectile instanceof AbstractArrow && ((IAbstractArrowAccess)projectile).roundaboutGetInGround()){
+        if (projectile instanceof AbstractArrow && ((IAbstractArrowAccess)projectile).roundabout$GetInGround()){
             return;
         }
 

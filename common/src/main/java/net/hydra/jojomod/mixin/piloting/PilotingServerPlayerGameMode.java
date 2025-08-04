@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.piloting;
 
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -37,34 +37,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Objects;
 
 @Mixin(ServerPlayerGameMode.class)
-public abstract class ZServerPlayerGameMode {
+public abstract class PilotingServerPlayerGameMode {
 
-
-    @Shadow @Final protected ServerPlayer player;
-
-    @Shadow protected ServerLevel level;
-
-    @Shadow public abstract boolean isCreative();
-
-    @Shadow public abstract void destroyAndAck(BlockPos $$0, int $$1, String $$2);
-
-    @Shadow private GameType gameModeForPlayer;
-
-    @Shadow private int destroyProgressStart;
-
-    @Shadow private int gameTicks;
-
-    @Shadow private boolean isDestroyingBlock;
-
-    @Shadow private BlockPos destroyPos;
-
-    @Shadow private int lastSentState;
-
-    @Shadow private boolean hasDelayedDestroy;
-
-    @Shadow private BlockPos delayedDestroyPos;
-
-    @Shadow private int delayedTickStart;
+    /**Piloting changes the item use function so that it instead checks for distance from the piloting entity
+     * rather than from the player*/
 
     /**prevents door interactions with justice*/
     @Inject(method = "useItemOn(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;", at = @At(value = "HEAD"), cancellable = true)
@@ -200,4 +176,35 @@ public abstract class ZServerPlayerGameMode {
             }
         }
     }
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    @Shadow @Final protected ServerPlayer player;
+
+    @Shadow protected ServerLevel level;
+
+    @Shadow public abstract boolean isCreative();
+
+    @Shadow public abstract void destroyAndAck(BlockPos $$0, int $$1, String $$2);
+
+    @Shadow private GameType gameModeForPlayer;
+
+    @Shadow private int destroyProgressStart;
+
+    @Shadow private int gameTicks;
+
+    @Shadow private boolean isDestroyingBlock;
+
+    @Shadow private BlockPos destroyPos;
+
+    @Shadow private int lastSentState;
+
+    @Shadow private boolean hasDelayedDestroy;
+
+    @Shadow private BlockPos delayedDestroyPos;
+
+    @Shadow private int delayedTickStart;
 }

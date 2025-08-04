@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.model_layers;
 
 import net.hydra.jojomod.client.FacelessLayer;
 import net.hydra.jojomod.client.models.layers.HeyYaLayer;
@@ -15,17 +15,21 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(HumanoidMobRenderer.class)
-public abstract class ZHumanoidMobRenderer<T extends Mob, M extends HumanoidModel<T>> extends MobRenderer<T, M> {
-    public ZHumanoidMobRenderer(EntityRendererProvider.Context $$0, M $$1, float $$2) {
-        super($$0, $$1, $$2);
-    }
-
+public abstract class LayerHumanoidMobRenderer<T extends Mob, M extends HumanoidModel<T>> extends MobRenderer<T, M> {
+    /**All humanoid model related layers*/
     @Inject(method= "<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Lnet/minecraft/client/model/HumanoidModel;FFFF)V", at = @At(value = "RETURN"))
     private void roundabout$renderHumanoidMobRenderer(EntityRendererProvider.Context $$0, HumanoidModel $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
         this.addLayer(new FacelessLayer<>($$0, this));
         this.addLayer(new HeyYaLayer<>($$0, this));
         this.addLayer(new MandomLayer<>($$0, this));
         this.addLayer(new RattShoulderLayer<>($$0, this));
+    }
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+    public LayerHumanoidMobRenderer(EntityRendererProvider.Context $$0, M $$1, float $$2) {
+        super($$0, $$1, $$2);
     }
 
 }

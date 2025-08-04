@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.star_platinum;
 
 import net.hydra.jojomod.access.IAbstractArrowAccess;
+import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
 import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.phys.EntityHitResult;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,6 +17,6 @@ public class StarPlatinumTridentEntity {
 
     @Inject(method = "onHitEntity", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$onHitEntity(EntityHitResult $$0, CallbackInfo ci) {
-        ((IAbstractArrowAccess)this).roundabout$cancelSuperThrow();
+        ((ISuperThrownAbstractArrow)this).roundabout$cancelSuperThrow();
     }
 }

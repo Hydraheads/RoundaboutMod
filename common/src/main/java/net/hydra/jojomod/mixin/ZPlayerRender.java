@@ -69,15 +69,6 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
 
     @Inject(method="<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Z)V", at = @At(value = "RETURN"))
     private void roundaboutRenderKnives(EntityRendererProvider.Context $$0, boolean $$1, CallbackInfo ci) {
-        this.addLayer(new KnifeLayer<>($$0, this));
-        //this.addLayer(new LocacacaBeamLayer<>($$0, this));
-        this.addLayer(new StoneLayer<>($$0, this));
-        this.addLayer(new FacelessLayer<>($$0, this));
-        this.addLayer(new ShootingArmLayer<>($$0, this));
-        this.addLayer(new HeyYaLayer<>($$0, this));
-        this.addLayer(new MandomLayer<>($$0, this));
-        this.addLayer(new RattShoulderLayer<>($$0, this));
-        this.addLayer(new VisagePartLayer<>($$0, this));
         /**Access to slim and not slim models simultaneously*/
         roundabout$otherModel = new PlayerModel<>($$0.bakeLayer($$1 ? ModelLayers.PLAYER : ModelLayers.PLAYER_SLIM), !$$1);
         roundabout$mainModel = this.model;
