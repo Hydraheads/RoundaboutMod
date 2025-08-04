@@ -141,7 +141,6 @@
     "StandUserClientOnly",
     "WorldTickClient",
     "ZBlockModelShaper",
-    "ZContainerEventHandler",
     "ZEntityRenderDispatcher",
     "time_stop.TimeStopHumanoidArmorLayer",
     "ZHumanoidMobRenderer",
