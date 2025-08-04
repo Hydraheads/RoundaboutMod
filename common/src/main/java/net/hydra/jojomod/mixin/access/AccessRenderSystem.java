@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.access;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.access.IRenderSystem;
@@ -9,8 +9,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(RenderSystem.class)
-public class ZRenderSystem implements IRenderSystem {
-    @Shadow @Final private static Vector3f[] shaderLightDirections;
+public class AccessRenderSystem implements IRenderSystem {
+    /**There is no reason for these to be private or protected, we should be able to tap into them.*/
 
     @Unique
     @Override
@@ -18,4 +18,8 @@ public class ZRenderSystem implements IRenderSystem {
         return shaderLightDirections;
     }
 
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+    @Shadow @Final private static Vector3f[] shaderLightDirections;
 }

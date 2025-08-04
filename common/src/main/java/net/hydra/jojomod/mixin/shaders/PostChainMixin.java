@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.shaders;
 
 import com.mojang.blaze3d.shaders.Uniform;
 import com.mojang.blaze3d.systems.RenderSystem;

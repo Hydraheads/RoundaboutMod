@@ -1,11 +1,8 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.stand_users;
 
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.GasolineCanItem;
-import net.hydra.jojomod.item.KnifeItem;
-import net.hydra.jojomod.item.MatchItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
@@ -20,31 +17,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemInHandRenderer.class)
-public class ZHeldItemLowering {
-    /** Minor code for vanilla item rendering in first person while stand is active.*/
-
-    @Shadow
-    private float mainHandHeight;
-    @Shadow
-    private float offHandHeight;
-
-    @Shadow
-    private float oMainHandHeight;
-    @Shadow
-    private float oOffHandHeight;
-
-    @Final
-    @Shadow
-    private Minecraft minecraft;
-
-    @Shadow private ItemStack mainHandItem;
-
-    @Shadow private ItemStack offHandItem;
-
+public class LoweringItemInHandRenderer {
     /** This makes certain items lower when your stand is out. Indicates that you can't really use tools
      * like swords or pickaxes while a stand is out.
      * The reason for that design decision is mostly to prevent sword swings overriding stand attacks
-     * to mobs in a close range, and accidentally breaking blocks when attacking.*/
+     * to mobs in a close range, and accidentally breaking blocks when attacking.
+     *
+     * Also makes them lowered when in combat modes like soft and wet shooting mode or vampire punching mode.*/
     @Inject(method = "tick", at = @At(value = "TAIL"))
     public void roundabout$HeldItems(CallbackInfo ci) {
         if (this.minecraft.player != null) {
@@ -80,14 +59,6 @@ public class ZHeldItemLowering {
     public float roundabout$ticker = 0;
     @Inject(method = "tick", at = @At(value = "HEAD"),cancellable = true)
     public void roundabout$HeldItems2(CallbackInfo ci) {
-        LocalPlayer clientPlayerEntity2 = this.minecraft.player;
-        if (clientPlayerEntity2 != null && ((TimeStop)clientPlayerEntity2.level()).CanTimeStopEntity(clientPlayerEntity2)){
-            mainHandHeight = oMainHandHeight;
-            offHandHeight = oOffHandHeight;
-            ci.cancel();
-            return;
-        }
-
         if (this.minecraft.player != null && ((StandUser)this.minecraft.player).roundabout$getEffectiveCombatMode() &&
         !this.minecraft.player.isUsingItem()){
             if (roundabout$ticker == 0){
@@ -125,4 +96,27 @@ public class ZHeldItemLowering {
             roundabout$ticker = 0;
         }
     }
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    @Shadow
+    private float mainHandHeight;
+    @Shadow
+    private float offHandHeight;
+
+    @Shadow
+    private float oMainHandHeight;
+    @Shadow
+    private float oOffHandHeight;
+
+    @Final
+    @Shadow
+    private Minecraft minecraft;
+
+    @Shadow private ItemStack mainHandItem;
+
+    @Shadow private ItemStack offHandItem;
+
 }
