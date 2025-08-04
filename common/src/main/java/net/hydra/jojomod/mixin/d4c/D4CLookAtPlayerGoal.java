@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.d4c;
 
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.entity.Entity;
@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import javax.annotation.Nullable;
 
 @Mixin(LookAtPlayerGoal.class)
-public class ZLookAtPlayerGoal {
+public class D4CLookAtPlayerGoal {
     @Shadow @Nullable protected Entity lookAt;
 
     @Inject(method = "canContinueToUse", at = @At("HEAD"), cancellable = true)

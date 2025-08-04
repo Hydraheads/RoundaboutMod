@@ -1,16 +1,7 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.model_registry;
 
-import net.hydra.jojomod.Roundabout;
 import net.minecraft.client.renderer.block.BlockModelShaper;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import static net.minecraft.client.renderer.block.BlockModelShaper.statePropertiesToString;
 
 @Mixin(BlockModelShaper.class)
 public abstract class ZBlockModelShaper {

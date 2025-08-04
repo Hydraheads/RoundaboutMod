@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.effects.bleed;
 
 import net.hydra.jojomod.access.IFoodData;
 import net.hydra.jojomod.event.ModEffects;
@@ -14,18 +14,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(FoodData.class)
-public class ZFoodData implements IFoodData {
+public class BleedFoodData implements IFoodData {
     /**Bleed limits natural regen*/
-    @Shadow
-    private int foodLevel;
-    @Shadow
-    private float saturationLevel;
-    @Shadow
-    private float exhaustionLevel;
-    @Shadow
-    private int tickTimer;
-    @Shadow
-    private int lastFoodLevel;
 
     @Unique
     @Override
@@ -41,9 +31,6 @@ public class ZFoodData implements IFoodData {
     @Override
     public void roundabout$setSaturationLevel(float saturation){
         saturationLevel = saturation;
-    }
-    @Shadow
-    public void addExhaustion(float $$0) {
     }
     @Inject(method = "tick", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$foodData(Player $$0, CallbackInfo ci) {
@@ -93,5 +80,24 @@ public class ZFoodData implements IFoodData {
                 this.foodLevel = Math.max(this.foodLevel - 1, 0);
             }
         }
+    }
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    @Shadow
+    private int foodLevel;
+    @Shadow
+    private float saturationLevel;
+    @Shadow
+    private float exhaustionLevel;
+    @Shadow
+    private int tickTimer;
+    @Shadow
+    private int lastFoodLevel;
+    @Shadow
+    public void addExhaustion(float $$0) {
     }
 }
