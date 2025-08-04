@@ -1,13 +1,10 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.magicians_red;
 
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IAbstractFurnaceMenu;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -22,18 +19,18 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractFurnaceMenu;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AbstractFurnaceScreen.class)
-public abstract class ZAbstractFurnaceScreen<T extends AbstractFurnaceMenu> extends AbstractContainerScreen<T> implements RecipeUpdateListener {
-    public ZAbstractFurnaceScreen(T $$0, Inventory $$1, Component $$2) {
-        super($$0, $$1, $$2);
-    }
+public abstract class MagiciansRedAbstractFurnaceScreen<T extends AbstractFurnaceMenu> extends AbstractContainerScreen<T> implements RecipeUpdateListener {
 
-    /**Magician's Red Furnace Assist*/
+    /**Magician's Red Furnace Assist, this mixin essentially makes the furnace button appear, and allows it to
+     * be clicked on to send the message to the server to activate the furnace*/
+
     @Inject(method = "render(Lnet/minecraft/client/gui/GuiGraphics;IIF)V", at = @At(value = "TAIL"))
     private void roundabout$render(GuiGraphics context, int mouseX, int mouseY, float delta,CallbackInfo ci) {
 
@@ -80,7 +77,20 @@ public abstract class ZAbstractFurnaceScreen<T extends AbstractFurnaceMenu> exte
             }
         }
     }
+    @Unique
     protected boolean roundabout$isSurelyHovering(int p_97768_, int p_97769_, int p_97770_, int p_97771_, double p_97772_, double p_97773_) {
         return p_97772_ >= (double)(p_97768_) && p_97772_ < (double)(p_97768_ + p_97770_) && p_97773_ >= (double)(p_97769_) && p_97773_ < (double)(p_97769_ + p_97771_);
     }
+
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+
+    public MagiciansRedAbstractFurnaceScreen(T $$0, Inventory $$1, Component $$2) {
+        super($$0, $$1, $$2);
+    }
+
 }

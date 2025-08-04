@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.stand_users;
 
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -9,8 +9,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -23,14 +21,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import javax.annotation.Nullable;
 
 @Mixin(Animal.class)
-public abstract class ZAnimal extends AgeableMob {
+public abstract class WorthyAnimal extends AgeableMob {
 
-    protected ZAnimal(EntityType<? extends AgeableMob> $$0, Level $$1) {
-        super($$0, $$1);
-    }
-    @Shadow
-    public void finalizeSpawnChildFromBreeding(ServerLevel $$0, Animal $$1, @Nullable AgeableMob $$2){
-    }
 
     /**Stand User reproduction*/
     @Inject(method = "spawnChildFromBreeding", at = @At(value = "HEAD"), cancellable = true)
@@ -84,4 +76,16 @@ public abstract class ZAnimal extends AgeableMob {
         }
     }
 
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    protected WorthyAnimal(EntityType<? extends AgeableMob> $$0, Level $$1) {
+        super($$0, $$1);
+    }
+    @Shadow
+    public void finalizeSpawnChildFromBreeding(ServerLevel $$0, Animal $$1, @Nullable AgeableMob $$2){
+    }
 }

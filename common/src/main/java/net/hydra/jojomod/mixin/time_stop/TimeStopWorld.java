@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.time_stop;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -11,7 +11,6 @@ import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.BlockPos;
@@ -40,26 +39,27 @@ import java.util.List;
 
 @Mixin(Level.class)
 public class TimeStopWorld implements TimeStop {
-    /**Stropping time- uses a list of time stopping players.
-     * Use that list to determine if a block or entity SHOULD be ticked.*/
-    private ImmutableList<LivingEntity> timeStoppingEntities = ImmutableList.of();
-    private ImmutableList<TimeStopInstance> timeStoppingEntitiesClient = ImmutableList.of();
+    /**Stropping time uses a list of time stopping entities.
+     * Use that list to determine if a block or entity SHOULD be ticked.
+     *
+     * This class basically holds the list of time stoppers of a particular level/dimension
+     * It can be called to add or remove time stoppers, to check the location and range of time stops, etc.
+     * It also sends packets to client to update the list when changes occur*/
 
-    @Shadow
-    @Final
-    private ResourceKey<DimensionType> dimensionTypeId;
+    private ImmutableList<LivingEntity> roundabout$timeStoppingEntities = ImmutableList.of();
+    private ImmutableList<TimeStopInstance> roundabout$timeStoppingEntitiesClient = ImmutableList.of();
 
     /**Adds an entity to the list of time stopping entities*/
     @Override
     public void addTimeStoppingEntity(LivingEntity $$0) {
         if (!((Level) (Object) this).isClientSide) {
-            if (this.timeStoppingEntities.isEmpty()) {
-                this.timeStoppingEntities = ImmutableList.of($$0);
+            if (this.roundabout$timeStoppingEntities.isEmpty()) {
+                this.roundabout$timeStoppingEntities = ImmutableList.of($$0);
             } else {
-                if (!this.timeStoppingEntities.contains($$0)) {
-                    List<LivingEntity> $$1 = Lists.newArrayList(this.timeStoppingEntities);
+                if (!this.roundabout$timeStoppingEntities.contains($$0)) {
+                    List<LivingEntity> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntities);
                     $$1.add($$0);
-                    this.timeStoppingEntities = ImmutableList.copyOf($$1);
+                    this.roundabout$timeStoppingEntities = ImmutableList.copyOf($$1);
 
                 }
             }
@@ -70,18 +70,18 @@ public class TimeStopWorld implements TimeStop {
     @Override
     public void addTimeStoppingEntityClient(int id, double x, double y, double z, double range, int duration, int maxDuration) {
         if (((Level) (Object) this).isClientSide) {
-            if (this.timeStoppingEntitiesClient.isEmpty()) {
-                this.timeStoppingEntitiesClient = ImmutableList.of(new TimeStopInstance(id,x,y,z,range, duration, maxDuration));
+            if (this.roundabout$timeStoppingEntitiesClient.isEmpty()) {
+                this.roundabout$timeStoppingEntitiesClient = ImmutableList.of(new TimeStopInstance(id,x,y,z,range, duration, maxDuration));
             } else {
-                List<TimeStopInstance> $$0 = Lists.newArrayList(this.timeStoppingEntitiesClient);
-                List<TimeStopInstance> $$1 = Lists.newArrayList(this.timeStoppingEntitiesClient);
+                List<TimeStopInstance> $$0 = Lists.newArrayList(this.roundabout$timeStoppingEntitiesClient);
+                List<TimeStopInstance> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntitiesClient);
                 for (int i = $$0.size() - 1; i >= 0; --i) {
                     if ($$0.get(i).id == id) {
                         $$1.remove($$0.get(i));
                     }
                 }
                 $$1.add(new TimeStopInstance(id, x, y, z, range, duration, maxDuration));
-                this.timeStoppingEntitiesClient = ImmutableList.copyOf($$1);
+                this.roundabout$timeStoppingEntitiesClient = ImmutableList.copyOf($$1);
             }
         }
     }
@@ -90,15 +90,15 @@ public class TimeStopWorld implements TimeStop {
     @Override
     public void removeTimeStoppingEntity(LivingEntity $$0) {
         if (!((Level) (Object) this).isClientSide) {
-            if (!this.timeStoppingEntities.isEmpty()) {
-                List<LivingEntity> $$1 = Lists.newArrayList(this.timeStoppingEntities);
-                for (int i = this.timeStoppingEntities.size() - 1; i >= 0; --i) {
-                    if (this.timeStoppingEntities.get(i).getId() == $$0.getId()) {
-                        streamTimeStopRemovalToClients(this.timeStoppingEntities.get(i));
+            if (!this.roundabout$timeStoppingEntities.isEmpty()) {
+                List<LivingEntity> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntities);
+                for (int i = this.roundabout$timeStoppingEntities.size() - 1; i >= 0; --i) {
+                    if (this.roundabout$timeStoppingEntities.get(i).getId() == $$0.getId()) {
+                        streamTimeStopRemovalToClients(this.roundabout$timeStoppingEntities.get(i));
                         $$1.remove(i);
                     }
                 }
-                this.timeStoppingEntities = ImmutableList.copyOf($$1);
+                this.roundabout$timeStoppingEntities = ImmutableList.copyOf($$1);
             }
         }
     }
@@ -106,14 +106,14 @@ public class TimeStopWorld implements TimeStop {
     @Override
     public void removeTimeStoppingEntityClient(int id){
         if (((Level) (Object) this).isClientSide) {
-            if (!this.timeStoppingEntitiesClient.isEmpty()) {
-                List<TimeStopInstance> $$1 = Lists.newArrayList(this.timeStoppingEntitiesClient);
-                for (int i = this.timeStoppingEntitiesClient.size() - 1; i >= 0; --i) {
-                    if (this.timeStoppingEntitiesClient.get(i).id == id) {
+            if (!this.roundabout$timeStoppingEntitiesClient.isEmpty()) {
+                List<TimeStopInstance> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntitiesClient);
+                for (int i = this.roundabout$timeStoppingEntitiesClient.size() - 1; i >= 0; --i) {
+                    if (this.roundabout$timeStoppingEntitiesClient.get(i).id == id) {
                         $$1.remove(i);
                     }
                 }
-                this.timeStoppingEntitiesClient = ImmutableList.copyOf($$1);
+                this.roundabout$timeStoppingEntitiesClient = ImmutableList.copyOf($$1);
             }
         }
     }
@@ -125,9 +125,9 @@ public class TimeStopWorld implements TimeStop {
         if (!((Level) (Object) this).isClientSide) {
             ServerLevel serverWorld = ((ServerLevel) (Object) this);
             for (int j = 0; j < serverWorld.players().size(); ++j) {
-                if (!this.timeStoppingEntities.isEmpty()) {
+                if (!this.roundabout$timeStoppingEntities.isEmpty()) {
                     ServerPlayer serverPlayer = serverWorld.players().get(j);
-                    List<LivingEntity> $$1 = Lists.newArrayList(this.timeStoppingEntities);
+                    List<LivingEntity> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntities);
                     for (int i = $$1.size() - 1; i >= 0; --i) {
                         Entity TSI = $$1.get(i);
                         /*You only need data of time stopping mobs that are relatively close by*/
@@ -149,7 +149,7 @@ public class TimeStopWorld implements TimeStop {
         if (!((Level) (Object) this).isClientSide) {
             ServerLevel serverWorld = ((ServerLevel) (Object) this);
             for (int j = 0; j < serverWorld.players().size(); ++j) {
-                if (!this.timeStoppingEntities.isEmpty()) {
+                if (!this.roundabout$timeStoppingEntities.isEmpty()) {
                     ServerPlayer serverPlayer = serverWorld.players().get(j);
                     S2CPacketUtil.removeTSEntity(serverPlayer, removedStoppingEntity.getId());
                 }
@@ -188,8 +188,8 @@ public class TimeStopWorld implements TimeStop {
     /**Ticks through time stop entities list, and then removes them from the list if they are dead or gone*/
     @Override
     public void tickAllTimeStops() {
-        if (!this.timeStoppingEntities.isEmpty()) {
-            List<LivingEntity> $$1 = Lists.newArrayList(this.timeStoppingEntities);
+        if (!this.roundabout$timeStoppingEntities.isEmpty()) {
+            List<LivingEntity> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntities);
             for (int i = $$1.size() - 1; i >= 0; --i) {
                 if ($$1.get(i).isRemoved() || !$$1.get(i).isAlive() || $$1.get(i).level().dimensionTypeId() != this.dimensionTypeId){
                     if ($$1.get(i).level().dimensionTypeId() != this.dimensionTypeId &&
@@ -209,10 +209,10 @@ public class TimeStopWorld implements TimeStop {
     @Override
     public ImmutableList<LivingEntity> getTimeStoppingEntities() {
         if (!((Level) (Object) this).isClientSide) {
-            return timeStoppingEntities;
+            return roundabout$timeStoppingEntities;
         } else {
-            List<LivingEntity> $$0 = Lists.newArrayList(this.timeStoppingEntities);
-            List<TimeStopInstance> $$1 = Lists.newArrayList(this.timeStoppingEntitiesClient);
+            List<LivingEntity> $$0 = Lists.newArrayList(this.roundabout$timeStoppingEntities);
+            List<TimeStopInstance> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntitiesClient);
             for (int i = $$1.size() - 1; i >= 0; --i) {
                 Entity ent = ((Level) (Object) this).getEntity($$1.get(i).id);
                 if (ent instanceof LivingEntity) {
@@ -226,8 +226,8 @@ public class TimeStopWorld implements TimeStop {
     @Override
     public boolean inTimeStopRange(Vec3i pos){
         if (!((Level) (Object) this).isClientSide) {
-            if (!this.timeStoppingEntities.isEmpty()) {
-                List<LivingEntity> $$1 = Lists.newArrayList(this.timeStoppingEntities);
+            if (!this.roundabout$timeStoppingEntities.isEmpty()) {
+                List<LivingEntity> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntities);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     LivingEntity it = $$1.get(i);
                     if ((ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1) || MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).roundabout$getStandPowers().getTimestopRange()) {
@@ -236,8 +236,8 @@ public class TimeStopWorld implements TimeStop {
                 }
             }
         } else {
-            if (!this.timeStoppingEntitiesClient.isEmpty()) {
-                List<TimeStopInstance> $$1 = Lists.newArrayList(this.timeStoppingEntitiesClient);
+            if (!this.roundabout$timeStoppingEntitiesClient.isEmpty()) {
+                List<TimeStopInstance> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntitiesClient);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     TimeStopInstance it = $$1.get(i);
                         if ((ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1) || MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.x, it.z) <= it.range) {
@@ -258,8 +258,8 @@ public class TimeStopWorld implements TimeStop {
     /**This is how the HUD finds who is time stopping you clientside*/
     @Override
     public TimeStopInstance getTimeStopperInstanceClient(Vec3 pos){
-        if (!this.timeStoppingEntitiesClient.isEmpty()) {
-            List<TimeStopInstance> $$1 = Lists.newArrayList(this.timeStoppingEntitiesClient);
+        if (!this.roundabout$timeStoppingEntitiesClient.isEmpty()) {
+            List<TimeStopInstance> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntitiesClient);
             for (int i = $$1.size() - 1; i >= 0; --i) {
                 TimeStopInstance it = $$1.get(i);
                 if ((ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1) ||
@@ -274,8 +274,8 @@ public class TimeStopWorld implements TimeStop {
     @Override
     public LivingEntity inTimeStopRangeEntity(Vec3i pos){
         if (!((Level) (Object) this).isClientSide) {
-            if (!this.timeStoppingEntities.isEmpty()) {
-                List<LivingEntity> $$1 = Lists.newArrayList(this.timeStoppingEntities);
+            if (!this.roundabout$timeStoppingEntities.isEmpty()) {
+                List<LivingEntity> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntities);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     LivingEntity it = $$1.get(i);
                     if ((ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1) || MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).roundabout$getStandPowers().getTimestopRange()) {
@@ -284,8 +284,8 @@ public class TimeStopWorld implements TimeStop {
                 }
             }
         } else {
-            if (!this.timeStoppingEntitiesClient.isEmpty()) {
-                List<TimeStopInstance> $$1 = Lists.newArrayList(this.timeStoppingEntitiesClient);
+            if (!this.roundabout$timeStoppingEntitiesClient.isEmpty()) {
+                List<TimeStopInstance> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntitiesClient);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     TimeStopInstance it = $$1.get(i);
                     if ((ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1) || MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.x, it.z) <= it.range) {
@@ -346,8 +346,8 @@ public class TimeStopWorld implements TimeStop {
     @Override
     public boolean isTimeStoppingEntity(LivingEntity entity){
         if (!((Level) (Object) this).isClientSide) {
-            if (!this.timeStoppingEntities.isEmpty()) {
-                List<LivingEntity> $$1 = Lists.newArrayList(this.timeStoppingEntities);
+            if (!this.roundabout$timeStoppingEntities.isEmpty()) {
+                List<LivingEntity> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntities);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     if ($$1.get(i).getId() == entity.getId()) {
                         return true;
@@ -355,8 +355,8 @@ public class TimeStopWorld implements TimeStop {
                 }
             }
         } else {
-            if (!this.timeStoppingEntitiesClient.isEmpty()) {
-                List<TimeStopInstance> $$1 = Lists.newArrayList(this.timeStoppingEntitiesClient);
+            if (!this.roundabout$timeStoppingEntitiesClient.isEmpty()) {
+                List<TimeStopInstance> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntitiesClient);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     if ($$1.get(i).id == entity.getId()) {
                         return true;
@@ -376,9 +376,9 @@ public class TimeStopWorld implements TimeStop {
         if (!((Level) (Object) this).isClientSide) {
             ServerLevel serverWorld = ((ServerLevel) (Object) this);
             for (int j = 0; j < serverWorld.players().size(); ++j) {
-                if (!this.timeStoppingEntities.isEmpty()) {
+                if (!this.roundabout$timeStoppingEntities.isEmpty()) {
                     ServerPlayer serverPlayer = serverWorld.players().get(j);
-                    List<LivingEntity> $$1 = Lists.newArrayList(this.timeStoppingEntities);
+                    List<LivingEntity> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntities);
                         /*Streams updates to nearby players*/
                         if ((ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1) ||
                                 MainUtil.cheapDistanceTo2(blockPos.getX(), blockPos.getZ(),serverPlayer.getX(),serverPlayer.getZ()) < Math.max(250,ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite)){
@@ -390,7 +390,7 @@ public class TimeStopWorld implements TimeStop {
     }
 
     @Inject(method="shouldTickBlocksAt(Lnet/minecraft/core/BlockPos;)Z", at = @At(value = "HEAD"), cancellable = true)
-    private void roundaboutTickBlocksAt(BlockPos $$0, CallbackInfoReturnable<Boolean> ci) {
+    private void roundabout$TickBlocksAt(BlockPos $$0, CallbackInfoReturnable<Boolean> ci) {
 
         if (inTimeStopRange($$0) && !(((Level) (Object) this).getBlockState($$0).is(Blocks.MOVING_PISTON))){
             BlockEntity blk = ((Level) (Object) this).getBlockEntity($$0);
@@ -400,4 +400,13 @@ public class TimeStopWorld implements TimeStop {
             ci.setReturnValue(false);
         }
     }
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    @Shadow
+    @Final
+    private ResourceKey<DimensionType> dimensionTypeId;
 }

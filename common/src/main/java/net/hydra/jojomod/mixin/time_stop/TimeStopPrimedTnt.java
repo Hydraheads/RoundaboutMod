@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.time_stop;
 
 import net.hydra.jojomod.access.IEntityAndData;
 import net.minecraft.world.entity.Entity;
@@ -11,17 +11,24 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PrimedTnt.class)
-public abstract class ZPrimedTnt extends Entity {
-    public ZPrimedTnt(EntityType<?> $$0, Level $$1) {
-        super($$0, $$1);
-    }
+public abstract class TimeStopPrimedTnt extends Entity {
 
-    /**Timestop mob throw works for tnt with this*/
+    /**Timestop mob throw works for tnt with this:
+     * tnt ordinarily does not call the super tick function so it needs a custom mixin
+     * to get the entity mixin tick calls that the mod adds*/
 
     @Inject(method = "tick", at = @At(value = "TAIL"), cancellable = true)
     protected void roundabout$tick(CallbackInfo ci) {
         ((IEntityAndData)this).roundabout$universalTick();
         ((IEntityAndData)this).roundabout$tickQVec();
 
+    }
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+    public TimeStopPrimedTnt(EntityType<?> $$0, Level $$1) {
+        super($$0, $$1);
     }
 }
