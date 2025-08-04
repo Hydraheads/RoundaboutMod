@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.d4c;
 
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.entity.Entity;
@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Sensing.class)
-public class ZSensing {
+public class D4CSensing {
     @Inject(method = "hasLineOfSight", at = @At("HEAD"), cancellable = true)
     private void roundabout$hasLineOfSight(Entity entity, CallbackInfoReturnable<Boolean> cir)
     {

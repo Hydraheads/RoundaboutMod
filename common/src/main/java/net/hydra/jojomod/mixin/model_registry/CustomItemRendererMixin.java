@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.model_registry;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.client.item.CustomItemRenderer;
@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemRenderer.class)
 /* Separate mixin for adding support for custom item renderers like how Block Entity Renderers work
-* also see: ZItemRenderer */
+* also see: RegisterItemRenderer */
 public class CustomItemRendererMixin {
     @Inject(
             method = "render(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IILnet/minecraft/client/resources/model/BakedModel;)V",

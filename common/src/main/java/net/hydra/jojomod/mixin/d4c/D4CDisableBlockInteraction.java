@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.d4c;
 
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;

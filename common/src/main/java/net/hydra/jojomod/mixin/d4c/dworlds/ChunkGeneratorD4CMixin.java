@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin.dworlds;
+package net.hydra.jojomod.mixin.d4c.dworlds;
 
 import net.hydra.jojomod.Roundabout;
 import net.zetalasis.world.DynamicWorld;

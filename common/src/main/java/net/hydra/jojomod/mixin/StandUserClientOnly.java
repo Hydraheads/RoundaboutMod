@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.PlayedSoundInstance;
 import net.hydra.jojomod.client.QueueSoundInstance;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.StandUserClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
@@ -25,7 +26,7 @@ import org.spongepowered.asm.mixin.Unique;
 import java.util.List;
 
 @Mixin(LivingEntity.class)
-public abstract class StandUserClientOnly extends Entity implements net.hydra.jojomod.event.powers.StandUserClient {
+public abstract class StandUserClientOnly extends Entity implements StandUserClient {
 
     /**Mixin for data that only the client tracks on a living entity, meaning servers don't tick or strain
      * these, only the client has them present*/

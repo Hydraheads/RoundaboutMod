@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin.dworlds;
+package net.hydra.jojomod.mixin.d4c.dworlds;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
