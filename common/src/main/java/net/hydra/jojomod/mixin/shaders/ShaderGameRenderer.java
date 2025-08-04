@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Mixin(GameRenderer.class)
-public class ShaderGameRenderer implements IShaderGameRenderer {
+public abstract class ShaderGameRenderer implements IShaderGameRenderer {
 
     /**Enables handling of shader logic and access to shader related function,
      * such as time stop desaturation*/
@@ -180,7 +180,6 @@ public class ShaderGameRenderer implements IShaderGameRenderer {
     Minecraft minecraft;
 
     @Shadow @Final private Map<String, ShaderInstance> shaders;
-    @Shadow @Final private Minecraft minecraft;
 
     @Shadow public abstract Minecraft getMinecraft();
 
