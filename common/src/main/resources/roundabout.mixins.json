@@ -143,7 +143,6 @@
     "ZBlockModelShaper",
     "ZContainerEventHandler",
     "ZEntityRenderDispatcher",
-    "ZGameRenderer",
     "time_stop.TimeStopHumanoidArmorLayer",
     "ZHumanoidMobRenderer",
     "ZHumanoidModel",
