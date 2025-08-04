@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin.scissors;
+package net.hydra.jojomod.mixin.items.scissors;
 
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.sounds.SoundSource;

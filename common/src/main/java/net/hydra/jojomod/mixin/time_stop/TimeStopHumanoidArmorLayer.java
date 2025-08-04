@@ -1,24 +1,16 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.time_stop;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.item.MaskItem;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -35,15 +27,9 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(HumanoidArmorLayer.class)
-public abstract class ZHumanoidArmorLayer<T extends LivingEntity, M extends HumanoidModel<T>, A extends HumanoidModel<T>> extends RenderLayer<T, M> {
-
-    @Shadow protected abstract ResourceLocation getArmorLocation(ArmorItem $$0, boolean $$1, @Nullable String $$2);
+public abstract class TimeStopHumanoidArmorLayer<T extends LivingEntity, M extends HumanoidModel<T>, A extends HumanoidModel<T>> extends RenderLayer<T, M> {
 
     /**This class is targetted so the last piece of equipment worn before a timestop is rendered in the timestop*/
-
-    public ZHumanoidArmorLayer(RenderLayerParent<T, M> $$0) {
-        super($$0);
-    }
 
     @Unique
     public int roundabout$ArmorPhase;
@@ -63,16 +49,7 @@ public abstract class ZHumanoidArmorLayer<T extends LivingEntity, M extends Huma
             at = @At(value = "HEAD"),cancellable = true)
     public void roundabout$Render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
         roundabout$ArmorPhase = 0;
-        IEntityAndData entityAndData = ((IEntityAndData) $$3);
         StandUserClient userclient = ((StandUserClient) $$3);
-        if (entityAndData.roundabout$getTrueInvisibility() > -1
-                &&  (!ClientUtil.checkIfClientCanSeeInvisAchtung())
-                && ClientNetworking.getAppropriateConfig() != null &&
-                ClientNetworking.getAppropriateConfig().achtungSettings != null &&
-                ClientNetworking.getAppropriateConfig().achtungSettings.hidesArmor){
-            ci.cancel();
-            return;
-        }
 
         if ($$3 instanceof Player PE) {
             IPlayerEntity ipe = ((IPlayerEntity) PE);
@@ -114,13 +91,6 @@ public abstract class ZHumanoidArmorLayer<T extends LivingEntity, M extends Huma
                     userclient.roundabout$setRoundaboutRenderHead(null);
                 }
             }
-
-            if (!((IPlayerEntity)PE).roundabout$getMaskSlot().isEmpty()
-                    && ((IPlayerEntity)PE).roundabout$getMaskSlot().getItem() instanceof MaskItem ME
-            && !ME.visageData.generateVisageData(PE).rendersArmor()){
-                ci.cancel();
-            }
-
         } else {
             roundabout$ModifyEntity = false;
         }
@@ -153,8 +123,19 @@ public abstract class ZHumanoidArmorLayer<T extends LivingEntity, M extends Huma
         }
     }
 
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
     @Shadow
     public void render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9) {
 
+    }
+
+    @Shadow protected abstract ResourceLocation getArmorLocation(ArmorItem $$0, boolean $$1, @Nullable String $$2);
+
+    public TimeStopHumanoidArmorLayer(RenderLayerParent<T, M> $$0) {
+        super($$0);
     }
 }

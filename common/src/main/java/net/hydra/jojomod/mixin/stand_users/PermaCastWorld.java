@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.stand_users;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -8,7 +8,6 @@ import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersJustice;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.Vec3i;
@@ -37,9 +36,6 @@ public class PermaCastWorld implements IPermaCasting {
     @Unique
     private ImmutableList<PermanentZoneCastInstance> roundabout$PermaCastingEntitiesClient = ImmutableList.of();
 
-    @Shadow
-    @Final
-    private ResourceKey<DimensionType> dimensionTypeId;
 
     /**Adds an entity to the list of perma casting entities*/
     @Override
@@ -559,4 +555,12 @@ public class PermaCastWorld implements IPermaCasting {
         }
         return false;
     }
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    @Shadow
+    @Final
+    private ResourceKey<DimensionType> dimensionTypeId;
 }

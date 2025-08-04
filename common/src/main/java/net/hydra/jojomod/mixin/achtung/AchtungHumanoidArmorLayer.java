@@ -3,7 +3,10 @@ package net.hydra.jojomod.mixin.achtung;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.powers.StandUserClient;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -21,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(HumanoidArmorLayer.class)
+@Mixin(value =HumanoidArmorLayer.class, priority = 100)
 public abstract class AchtungHumanoidArmorLayer<T extends LivingEntity, M extends HumanoidModel<T>, A extends HumanoidModel<T>> extends RenderLayer<T, M> {
 
     /***
@@ -36,7 +39,7 @@ public abstract class AchtungHumanoidArmorLayer<T extends LivingEntity, M extend
 
     @Inject(method = "renderModel(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/item/ArmorItem;Lnet/minecraft/client/model/HumanoidModel;ZFFFLjava/lang/String;)V",
             at = @At(value = "HEAD"), cancellable = true)
-    public void roundabout$RenderAchtung(PoseStack $$0, MultiBufferSource $$1,int $$2, ArmorItem $$3, A $$4,boolean $$5,
+    public void roundabout$RenderModelAchtung(PoseStack $$0, MultiBufferSource $$1,int $$2, ArmorItem $$3, A $$4,boolean $$5,
     float $$6, float $$7, float $$8, String $$9, CallbackInfo ci){
         if (ClientUtil.getThrowFadeToTheEther() != 1) {
             VertexConsumer $$10 = $$1.getBuffer(RenderType.entityTranslucentCull(this.getArmorLocation($$3, $$5, $$9)));
@@ -45,7 +48,19 @@ public abstract class AchtungHumanoidArmorLayer<T extends LivingEntity, M extend
         }
     }
 
-
+    @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",
+            at = @At(value = "HEAD"),cancellable = true)
+    public void roundabout$Render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
+        IEntityAndData entityAndData = ((IEntityAndData) $$3);
+        if (entityAndData.roundabout$getTrueInvisibility() > -1
+                && (!ClientUtil.checkIfClientCanSeeInvisAchtung())
+                && ClientNetworking.getAppropriateConfig() != null &&
+                ClientNetworking.getAppropriateConfig().achtungSettings != null &&
+                ClientNetworking.getAppropriateConfig().achtungSettings.hidesArmor) {
+            ci.cancel();
+            return;
+        }
+    }
 
     /**Shadows, ignore
      * -------------------------------------------------------------------------------------------------------------
