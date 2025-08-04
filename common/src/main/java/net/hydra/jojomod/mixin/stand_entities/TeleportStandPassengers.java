@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin.stand_users;
+package net.hydra.jojomod.mixin.stand_entities;
 
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;

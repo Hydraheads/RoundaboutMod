@@ -13,6 +13,7 @@ import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.SetBlockInstance;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.mixin.access.AccessInventory;
 import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Minecraft;
@@ -140,7 +141,7 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
         if (livingEntity instanceof Player){
             Inventory inv = ((IPlayerEntity) livingEntity).roundabout$GetInventory();
             int idx = 0;
-            for(NonNullList<ItemStack> nonnulllist : ((ZInventoryAccess)inv).roundabout$GetCompartments()) {
+            for(NonNullList<ItemStack> nonnulllist : ((AccessInventory)inv).roundabout$GetCompartments()) {
                 for(int i = 0; i < nonnulllist.size(); ++i) {
 
                     if (!nonnulllist.get(i).isEmpty()) {

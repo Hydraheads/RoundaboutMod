@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.stand_entities;
 
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.server.level.ServerPlayer;
@@ -11,20 +11,18 @@ import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
 @Mixin(WitherBoss.class)
-public abstract class ZWitherBoss extends Monster implements PowerableMob, RangedAttackMob {
-    protected ZWitherBoss(EntityType<? extends Monster> $$0, Level $$1) {
-        super($$0, $$1);
-    }
+public abstract class StandWitherBoss extends Monster implements PowerableMob, RangedAttackMob {
 
-    @Shadow
-    public void setAlternativeTarget(int i, int j) {
-    }
+    /**Stand Entities are not targeted, their users are*/
+
+    @Unique
     private boolean roundabout$antiRecurse = false;
     @Inject(method = "setAlternativeTarget", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$setAlternativeTarget(int $$0, int $$1, CallbackInfo ci) {
@@ -52,5 +50,18 @@ public abstract class ZWitherBoss extends Monster implements PowerableMob, Range
                 }
             }
         }
+    }
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+
+    protected StandWitherBoss(EntityType<? extends Monster> $$0, Level $$1) {
+        super($$0, $$1);
+    }
+
+    @Shadow
+    public void setAlternativeTarget(int i, int j) {
     }
 }

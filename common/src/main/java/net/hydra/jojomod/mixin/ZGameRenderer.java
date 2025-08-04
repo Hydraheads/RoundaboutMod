@@ -2,9 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IGameRenderer;
-import net.hydra.jojomod.client.ClientUtil;
-import net.minecraft.client.Camera;
+import net.hydra.jojomod.access.IShaderGameRenderer;
 import net.zetalasis.client.shader.RCoreShader;
 import net.zetalasis.client.shader.RPostShaderRegistry;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
@@ -43,7 +41,7 @@ public abstract class ZGameRenderer {
         RenderCallbackRegistry.roundabout$GAME_RENDERER_FINISH(tickDelta);
 
         if (RPostShaderRegistry.DESATURATE != null) {
-            if (((IGameRenderer)Minecraft.getInstance().gameRenderer).roundabout$tsShaderStatus())
+            if (((IShaderGameRenderer)Minecraft.getInstance().gameRenderer).roundabout$tsShaderStatus())
             {
                 RPostShaderRegistry.DESATURATE.roundabout$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
                 RPostShaderRegistry.DESATURATE.roundabout$process(tickDelta);

@@ -1,7 +1,6 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.time_stop;
 
 import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.ChatFormatting;
@@ -9,24 +8,20 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Warden.class)
-public abstract class ZWarden extends Monster {
-    protected ZWarden(EntityType<? extends Monster> $$0, Level $$1) {
-        super($$0, $$1);
-    }
+public abstract class TimeStopWarden extends Monster {
+
+    /**Wardens can move in stopped time and emit clock particles as they do so*/
 
     @Unique
     private boolean roundabout$hasSentTSMessage = false;
@@ -54,10 +49,13 @@ public abstract class ZWarden extends Monster {
             }
         }
     }
-    @Inject(method = "canTargetEntity", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$canTargetEntity(Entity $$0x, CallbackInfoReturnable<Boolean> cir) {
-        if ($$0x instanceof StandEntity) {
-            cir.setReturnValue(false);
-        }
+
+
+    /**Shadows, ignore
+     * -------------------------------------------------------------------------------------------------------------
+     * */
+
+    protected TimeStopWarden(EntityType<? extends Monster> $$0, Level $$1) {
+        super($$0, $$1);
     }
 }

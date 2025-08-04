@@ -2,7 +2,7 @@ package net.hydra.jojomod.block;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import net.hydra.jojomod.access.IGameRenderer;
+import net.hydra.jojomod.access.IShaderGameRenderer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.zetalasis.client.shader.RCoreShader;
 import net.minecraft.client.Minecraft;
@@ -45,7 +45,7 @@ public class D4CLightBlockEntityRenderer implements BlockEntityRenderer<D4CLight
         RenderSystem.setShaderTexture(0, 0);
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 
-        RCoreShader.roundabout$loveTrainProgram.getUniform("FrameCount").set(((IGameRenderer)Minecraft.getInstance().gameRenderer).roundabout$getFrameCount());
+        RCoreShader.roundabout$loveTrainProgram.getUniform("FrameCount").set(((IShaderGameRenderer)Minecraft.getInstance().gameRenderer).roundabout$getFrameCount());
 
         buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX);
 
