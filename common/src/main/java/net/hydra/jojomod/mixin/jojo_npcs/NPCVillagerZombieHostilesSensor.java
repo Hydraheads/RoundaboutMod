@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin;
+package net.hydra.jojomod.mixin.jojo_npcs;
 
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
@@ -12,31 +12,19 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(VillagerHostilesSensor.class)
-public class ZVillagerHostilesSensor {
+public class NPCVillagerZombieHostilesSensor {
 
+    /**Villages/Golems consider custom zombie types as enemies*/
     @Inject(method = "isHostile", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$customServerAiStep(LivingEntity $$0, CallbackInfoReturnable<Boolean> cir) {
-        if ($$0 instanceof Player PE){
-            IPlayerEntity ple = ((IPlayerEntity) PE);
-            byte shape = ple.roundabout$getShapeShift();
-            ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
-            if (shift != ShapeShifts.PLAYER) {
-                if (ShapeShifts.isZombie(shift)) {
-                    cir.setReturnValue(true);
-                    return;
-                }
-            }
-        } if ($$0 instanceof ZombieAesthetician PE){
+        if ($$0 instanceof ZombieAesthetician PE){
             cir.setReturnValue(true);
             return;
         }
     }
     @Inject(method = "isClose", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$customServerAiStep(LivingEntity $$0, LivingEntity $$1, CallbackInfoReturnable<Boolean> cir) {
-        if ($$1 instanceof Player PE){
-            cir.setReturnValue($$1.distanceToSqr($$0) <= (double)(64));
-            return;
-        } if ($$1 instanceof ZombieAesthetician PE){
+        if ($$1 instanceof ZombieAesthetician PE){
             cir.setReturnValue($$1.distanceToSqr($$0) <= (double)(64));
             return;
         }
