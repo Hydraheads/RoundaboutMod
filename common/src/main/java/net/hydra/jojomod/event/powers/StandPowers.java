@@ -17,8 +17,6 @@ import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
-import net.hydra.jojomod.networking.ClientToServerPackets;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
@@ -69,9 +67,21 @@ import java.util.List;
 import java.util.Objects;
 
 public class StandPowers {
+
     /**StandPowers is a class that every stand has a variation of, override it
      * to define and tick through stand abilities and cooldowns.
      * Note that most generic STAND USER code is in a mixin to the livingentity class.*/
+
+
+    // OVERRIDE THIS
+    /**This is imporant, on every stand class, override this and do something like
+     *     return new PowersTheWorld(entity); */
+    public StandPowers generateStandPowers(LivingEntity entity){
+        return null;
+    }
+
+
+    // UNDERSTANDING THE MAIN VARIABLES
 
     /**Note that self refers to the stand user, and not the stand itself.*/
     public final LivingEntity self;
@@ -100,6 +110,23 @@ public class StandPowers {
      * Basically, stand attacks are clientside, but they need the server's confirmation to kickstart so you
      * can't hit targets in frozen tps*/
     public boolean kickStarted = true;
+
+
+
+    // SHARED AND SERVER SIDED FUNCTIONS TO OVERRIDE
+
+    /**Is your stand rendered on the player model like hey ya or hermit purple? If so, override
+     * worthinessType() to return HUMANOID_WORTHY instead so only mobs it can render on are worthy*/
+    public static final byte
+            ALL_WORTHY = 1,
+            HUMANOID_WORTHY = 2;
+    public byte worthinessType(){
+        return ALL_WORTHY;
+    }
+
+
+
+
     public void playerSetProperties(Player PE) {
     }
 
@@ -107,35 +134,7 @@ public class StandPowers {
         this.self = self;
     }
 
-    public StandPowers generateStandPowers(LivingEntity entity){
-        return null;
-    }
-    public StandPowers generateStandPowersPre(LivingEntity entity){
-        ((StandUser)entity).roundabout$setGuardPoints(getMaxGuardPoints());
-        return generateStandPowers(entity);
-    }
 
-    public StandUser getStandUserSelf(){
-        return ((StandUser)this.self);
-    }
-    public LivingEntity getSelf(){
-        return this.self;
-    }
-    public int getAttackTime(){
-        return this.attackTime;
-    }
-    public int getAttackTimeDuring(){
-        return this.attackTimeDuring;
-    }
-    public byte getActivePower(){
-        return this.activePower;
-    }
-    public byte getActivePowerPhase(){
-        return this.activePowerPhase;
-    }
-    public byte getActivePowerPhaseMax(){
-        return this.activePowerPhaseMax;
-    }
     public boolean hasShootingModeVisually(){
         return false;
     }
@@ -146,28 +145,7 @@ public class StandPowers {
         return null;
     }
 
-    public void setAttackTime(int attackTime){
-        this.attackTime = attackTime;
-    }
-    public void setAttackTimeDuring(int attackTimeDuring){
-        this.attackTimeDuring = attackTimeDuring;
-    }
-    public void setAttackTimeMax(int attackTimeMax){
-        this.attackTimeMax = attackTimeMax;
-    }
-    public int getAttackTimeMax(){
-        return this.attackTimeMax;
-    }
 
-    public void setMaxAttackTime(int attackTimeMax){
-        this.attackTimeMax = attackTimeMax;
-    }
-    public void setActivePower(byte activeMove){
-        this.activePower = activeMove;
-    }
-    public void setActivePowerPhase(byte activePowerPhase){
-        this.activePowerPhase = activePowerPhase;
-    }
     public float getTimestopRange(){
         return ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite;
     }
@@ -262,18 +240,7 @@ public class StandPowers {
     }
 
 
-    /**Override this to set the special move key press conditions*/
-    public void buttonInput4(boolean keyIsDown, Options options){
-    }
 
-    public void buttonInput3(boolean keyIsDown, Options options){
-    }
-
-    public void buttonInput2(boolean keyIsDown, Options options){
-    }
-
-    public void buttonInput1(boolean keyIsDown, Options options){
-    }
 
     public void onDesummon(){
 
@@ -287,40 +254,7 @@ public class StandPowers {
     }
 
     public boolean forwardBarrage = false;
-    public void preButtonInput4(boolean keyIsDown, Options options){
-        if (hasStandActive(this.getSelf()) && !this.isClashing()) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
-                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
-                buttonInput4(keyIsDown, options);
-            }
-        }
-    }
-    public void preButtonInput3(boolean keyIsDown, Options options){
-        if (hasStandActive(this.getSelf()) && !this.isClashing()) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
-                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
-                buttonInput3(keyIsDown, options);
-            }
-        }
-    }
 
-    public void preButtonInput2(boolean keyIsDown, Options options){
-        if (hasStandActive(this.getSelf()) && !this.isClashing()) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
-                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
-                buttonInput2(keyIsDown, options);
-            }
-        }
-    }
-
-    public void preButtonInput1(boolean keyIsDown, Options options){
-        if (hasStandActive(this.getSelf()) && !this.isClashing()) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
-                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
-                buttonInput1(keyIsDown, options);
-            }
-        }
-    }
 
     /** Called per frame, use for particle FX and such */
     public void visualFrameTick() {};
@@ -342,27 +276,7 @@ public class StandPowers {
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
         return false;
     }
-    public void preCheckButtonInputAttack(boolean keyIsDown, Options options) {
-        if (hasStandActive(this.getSelf()) && !this.isGuarding()) {
-            buttonInputAttack(keyIsDown, options);
-        }
-    }
-    public void preCheckButtonInputUse(boolean keyIsDown, Options options) {
-        if (hasStandActive(this.getSelf())) {
-            buttonInputUse(keyIsDown, options);
-        }
-    }
-    public void preCheckButtonInputBarrage(boolean keyIsDown, Options options) {
-        if (hasStandActive(this.getSelf())) {
-            buttonInputBarrage(keyIsDown, options);
-        }
-    }
-    public boolean preCheckButtonInputGuard(boolean keyIsDown, Options options) {
-        if (hasStandActive(this.getSelf())) {
-            return buttonInputGuard(keyIsDown, options);
-        }
-        return false;
-    }
+
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (keyIsDown) {
             if (this.canAttack()) {
@@ -505,176 +419,13 @@ public class StandPowers {
         return false;
     }
 
-    public int iconSize = 18;
-    public int iconSize2 = 16;
-    /**Override this to render stand icons*/
-    public void renderIcons(GuiGraphics context, int x, int y)
-    {
 
-    }
-
-    public void renderAttackHud(GuiGraphics context,  Player playerEntity,
-                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
-                                float flashAlpha, float otherFlashAlpha){
-
-    }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos,byte level,boolean bypas){
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         return $$1;
     }
 
-    public boolean canExecuteMoveWithLevel(int minLevel){
-        if (!ClientNetworking.getAppropriateConfig().standLevelingSettings.enableStandLeveling) {
-            return true;
-        }
 
-        if (this.getSelf() instanceof Player pl){
-            if (((IPlayerEntity)pl).roundabout$getStandLevel() >= minLevel || (!((StandUser) pl).roundabout$getStandDisc().isEmpty() &&
-                    ((StandUser) pl).roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem) ||
-                    pl.isCreative()){
-                return true;
-            }
-            return false;
-        }
-        return true;
-    }
-
-    public AbilityIconInstance drawSingleGUIIcon(GuiGraphics context, int size, int startingLeft, int startingTop, int levelToUnlock,
-                                                 String nameSTR, String instructionStr, ResourceLocation draw, int extra, byte level, boolean bypass){
-        Component name;
-        if (level < levelToUnlock && !bypass) {
-            context.blit(StandIcons.LOCKED_SQUARE_ICON, startingLeft, startingTop, 0, 0,size, size, size, size);
-            context.blit(StandIcons.LOCKED, startingLeft+2, startingTop+2, 0, 0,size-4, size-4, size-4, size-4);
-            name = Component.translatable("ability.roundabout.locked").withStyle(ChatFormatting.BOLD).
-                    withStyle(ChatFormatting.DARK_GRAY);
-        } else {
-            context.blit(StandIcons.SQUARE_ICON, startingLeft, startingTop, 0, 0,size, size, size, size);
-            context.blit(draw, startingLeft+2, startingTop+2, 0, 0,size-4, size-4, size-4, size-4);
-            name = Component.translatable(nameSTR).withStyle(ChatFormatting.BOLD).
-                    withStyle(ChatFormatting.DARK_PURPLE);
-        }
-        Component instruction;
-        if (level < levelToUnlock && !bypass){
-            instruction = Component.translatable("ability.roundabout.locked.ctrl").
-                    withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.RED);
-        } else {
-            if (extra <= 0) {
-                instruction = Component.translatable(instructionStr).withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.BLUE);
-            } else {
-                instruction = Component.translatable(instructionStr, "" + extra).withStyle(ChatFormatting.ITALIC).
-                        withStyle(ChatFormatting.BLUE);
-
-            }
-        }
-        Component description;
-        if (level < levelToUnlock && !bypass){
-            description = Component.translatable("ability.roundabout.locked.desc", "" + levelToUnlock).
-                    withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.RED);
-        } else {
-            description = Component.translatable(nameSTR+".desc");
-        }
-        return new AbilityIconInstance(size,startingLeft,startingTop,levelToUnlock,
-                name,instruction,description,extra);
-    }
-
-    public int squareHeight = 24;
-    public int squareWidth = 24;
-
-
-    public void setSkillIcon(GuiGraphics context, int x, int y, int slot, ResourceLocation rl, byte CDI){
-        setSkillIcon(context,x,y,slot,rl,CDI,false);
-    }
-    public void setSkillIcon(GuiGraphics context, int x, int y, int slot, ResourceLocation rl, byte CDI, boolean locked){
-        RenderSystem.enableBlend();
-        context.setColor(1f, 1f, 1f, 1f);
-        CooldownInstance cd = null;
-        if (CDI >= 0 && !StandCooldowns.isEmpty() && StandCooldowns.size() >= CDI){
-            cd = StandCooldowns.get(CDI);
-        }
-        x += slot * 25;
-        y-=1;
-
-        if (locked){
-            RenderSystem.enableBlend();
-            context.blit(StandIcons.LOCKED_SQUARE_ICON,x-3,y-3,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
-        } else {
-            RenderSystem.enableBlend();
-            context.blit(StandIcons.SQUARE_ICON,x-3,y-3,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
-            Font renderer = Minecraft.getInstance().font;
-            if (slot==4){
-                Component special4Key = KeyInputRegistry.abilityFourKey.getTranslatedKeyMessage();
-                special4Key = fixKey(special4Key);
-                context.drawString(renderer, special4Key,x-1,y+11,0xffffff,true);
-            }
-            else if (slot==3){
-                Component special3Key = KeyInputRegistry.abilityThreeKey.getTranslatedKeyMessage();
-                special3Key = fixKey(special3Key);
-                context.drawString(renderer, special3Key,x-1,y+11,0xffffff,true);
-            }
-            else if (slot==2){
-                Component special2Key = KeyInputRegistry.abilityTwoKey.getTranslatedKeyMessage();
-                special2Key = fixKey(special2Key);
-                context.drawString(renderer, special2Key,x-1,y+11,0xffffff,true);
-            }
-            else if (slot==1){
-                Component special1Key = KeyInputRegistry.abilityOneKey.getTranslatedKeyMessage();
-                special1Key = fixKey(special1Key);
-                context.drawString(renderer, special1Key,x-1,y+11,0xffffff,true);
-            }
-            Component special1Key = KeyInputRegistry.abilityOneKey.getTranslatedKeyMessage();
-        }
-
-
-        if ((cd != null && (cd.time >= 0)) || isAttackIneptVisually(CDI,slot)){
-            RenderSystem.enableBlend();
-            context.setColor(0.62f, 0.62f, 0.62f, 0.8f);
-            context.blit(rl, x, y, 0, 0, 18, 18, 18, 18);
-            if ((cd != null && (cd.time >= 0))) {
-                float blit = (20*(1-((float) (1+cd.time) /(1+cd.maxTime))));
-                int b = (int) Math.round(blit);
-                RenderSystem.enableBlend();
-                context.setColor(1f, 1f, 1f, 1f);
-
-                ResourceLocation COOLDOWN_TEX = StandIcons.COOLDOWN_ICON;
-
-                if (cd.isFrozen())
-                    COOLDOWN_TEX = StandIcons.FROZEN_COOLDOWN_ICON;
-
-                context.blit(COOLDOWN_TEX, x - 1, y - 1 + b, 0, b, 20, 20-b, 20, 20);
-                int num = ((int)(Math.floor((double) cd.time /20)+1));
-                int offset = x+3;
-                if (num <=9){
-                    offset = x+7;
-                }
-
-                if (!cd.isFrozen())
-                    context.drawString(Minecraft.getInstance().font, ""+num,offset,y,0xffffff,true);
-
-            }
-            context.setColor(1f, 1f, 1f, 0.9f);
-        } else {
-            RenderSystem.enableBlend();
-            context.blit(rl, x, y, 0, 0, 18, 18, 18, 18);
-        }
-    }
-    public static Component fixKey(Component textIn){
-
-        String X = textIn.getString();
-        if (X.length() > 1){
-            String[] split = X.split("\\s");
-            if (split.length > 1){
-                return Component.nullToEmpty(""+split[0].charAt(0)+split[1].charAt(0));
-            } else {
-                if (split[0].length() > 1){
-                    return Component.nullToEmpty(""+split[0].charAt(0)+split[0].charAt(1));
-                } else {
-                    return Component.nullToEmpty(""+split[0].charAt(0));
-                }
-            }
-        } else {
-            return textIn;
-        }
-    }
 
     /**Barrage sound playing and canceling involve sending a byte in a packet, then reading it from here on
      * the client level. */
@@ -812,15 +563,11 @@ public class StandPowers {
         return null;
     }
 
-    public boolean isAttackInept(byte activeP){
-        return this.self.isUsingItem() || this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
-    }
-    public boolean isAttackIneptVisually(byte activeP, int slot){
-        return this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
-    }
+    /**Override this if you need ultra specific timing on tickpower after other entity functions are called,
+     * this works the best for subtle movement tricks*/
     public void tickPowerEnd(){
-
     }
+
     public boolean tryHitBlock(BlockHitResult $$0, BlockPos pos, BlockState state, ItemStack stack){
 
         if ((state.isAir() || state.canBeReplaced()) && !((this.getSelf() instanceof Player &&
@@ -867,32 +614,7 @@ public class StandPowers {
     public void setPiloting(int ID){
     }
 
-    public int zenith = 10;
-    public int timeRewindOverlayTicks = -1;
-    public void tickOverlayTicks(){
-        if (timeRewindOverlayTicks > -1) {
-            timeRewindOverlayTicks++;
-            if (timeRewindOverlayTicks >= (zenith*2)) {
-                timeRewindOverlayTicks = -1;
-            }
-        }
-    }
 
-    float maxOverlay = 0.45f;
-
-    public float getOverlayFromOverlayTicks(float delta) {
-        // Interpolated tick value with partial tick (delta)
-        float ticks = timeRewindOverlayTicks + delta;
-
-        // Compute how far from the peak (5) we are
-        float distanceFromPeak = Math.abs(ticks - ((float)zenith));
-
-        // Normalize (distance from 5 goes from 0 to 5)
-        float normalized = 1.0f - (distanceFromPeak / ((float)zenith));
-
-        // Clamp and scale to maxOverlay
-        return Math.max(0.0f, Math.min(1.0f, normalized)) * maxOverlay;
-    }
     public void tickPower(){
         if (this.self.level().isClientSide()){
             if (this.self instanceof Player) {
@@ -981,21 +703,6 @@ public class StandPowers {
         }
     }
 
-    public static final byte
-            ALL_WORTHY = 1,
-            HUMANOID_WORTHY = 2;
-
-
-    public byte worthinessType(){
-        return ALL_WORTHY;
-    }
-
-    public boolean isWorthinessType(LivingEntity LE){
-        if (worthinessType() == HUMANOID_WORTHY){
-            return MainUtil.isHumanoid(LE);
-        }
-        return true;
-    }
 
 
     public static final byte
@@ -1005,64 +712,8 @@ public class StandPowers {
 
     }
 
-    public boolean returnFakeStandForHud(){
-        return false;
-    }
 
-    public StandEntity getStandForHUD(){
-        if (returnFakeStandForHud())
-            return getStandForHUDIfFake();
-        return getStandUserSelf().roundabout$getStand();
-    }
 
-    public StandEntity getStandForHUDIfFake(){
-        if (displayStand == null){
-            displayStand = ModEntities.SURVIVOR.create(this.getSelf().level());
-        }
-        if (this.self instanceof Player PL && ((IPlayerEntity)PL).roundabout$getStandSkin() != displayStand.getSkin()){
-            displayStand = ModEntities.SURVIVOR.create(this.getSelf().level());
-            displayStand.setSkin(((IPlayerEntity)PL).roundabout$getStandSkin());
-        }
-        return displayStand;
-    }
-    public boolean getCreative(){
-        return this.self instanceof Player PE && PE.isCreative();
-    }
-
-    public void tickDash(){
-        if (this.getSelf() instanceof Player) {
-
-            if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 0) {
-                cancelConsumableItem(this.getSelf());
-            }
-
-            if (((IPlayerEntity)this.getSelf()).roundabout$getClientDodgeTime() >= 10){
-                ((IPlayerEntity)this.getSelf()).roundabout$setClientDodgeTime(-1);
-                if (!this.getSelf().level().isClientSide){
-                    ((IPlayerEntity)this.getSelf()).roundabout$setDodgeTime(-1);
-                    byte pos = ((IPlayerEntity)this.getSelf()).roundabout$GetPos();
-                    if (pos == PlayerPosIndex.DODGE_FORWARD || pos == PlayerPosIndex.DODGE_BACKWARD) {
-                        ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.NONE);
-                    }
-                }
-            } else if (((IPlayerEntity)this.getSelf()).roundabout$getClientDodgeTime() >= 0){
-                ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(((IPlayerEntity) this.getSelf()).roundabout$getClientDodgeTime()+1);
-            }
-
-            if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 10){
-
-                ((IPlayerEntity)this.getSelf()).roundabout$setDodgeTime(-1);
-                byte pos = ((IPlayerEntity)this.getSelf()).roundabout$GetPos();
-                if (pos == PlayerPosIndex.DODGE_FORWARD || pos == PlayerPosIndex.DODGE_BACKWARD) {
-                    ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.NONE);
-                }
-            } else if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 0){
-                if (this.getSelf().level().isClientSide){
-                    ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(((IPlayerEntity) this.getSelf()).roundabout$getDodgeTime()+1);
-                }
-            }
-        }
-    }
 
 
     public boolean canUseStillStandingRecharge(byte bt){
@@ -1079,80 +730,12 @@ public class StandPowers {
     public void synchToCamera(){
     }
 
-    public void tickCooldowns(){
-        int amt = 1;
-        boolean isDrowning = false;
 
-        // Changes how fast the cooldowns should recharge
-        if (this.self instanceof Player) {
-            isDrowning = (this.self.getAirSupply() <= 0);
-
-            int idle = ((StandUser) this.getSelf()).roundabout$getIdleTime();
-            if (idle > 300) {
-                amt *= 4;
-            } else if (idle > 200) {
-                amt *= 3;
-            } else if (idle > 40) {
-                amt *= 2;
-            }
-
-            if (isDrowning && !ClientNetworking.getAppropriateConfig().generalStandSettings.canRechargeCooldownsWhileDrowning)
-            { amt = 0; }
-        }
-
-        byte cin = -1;
-        for (CooldownInstance ci : StandCooldowns){
-            cin++;
-            if (ci.time >= 0){
-                if (!canUseStillStandingRecharge(cin)){
-                    amt = 1;
-                }
-                ci.setFrozen(isDrowning && !ClientNetworking.getAppropriateConfig().generalStandSettings.canRechargeCooldownsWhileDrowning);
-
-                boolean serverControlledCooldwon = isServerControlledCooldown(ci, cin);
-                if (!(this.self.level().isClientSide() && serverControlledCooldwon)) {
-
-                    if (!ci.isFrozen()) {
-                        ci.time -= amt;
-                    }
-
-                    if (ci.time < -1) {
-                        ci.time = -1;
-                    }
-
-                    if (this.self instanceof Player) {
-                        if ((((Player) this.self).isCreative() &&
-                                ClientNetworking.getAppropriateConfig().generalStandSettings.creativeModeRefreshesCooldowns) && ci.time > 2) {
-                            ci.time = 2;
-                        }
-                    }
-
-                    if (serverControlledCooldwon && !this.self.level().isClientSide() && this.self instanceof Player) {
-                        List<CooldownInstance> CDCopy = new ArrayList<>(StandCooldowns) {
-                        };
-
-                        S2CPacketUtil.sendMaxCooldownSyncPacket(((ServerPlayer) this.getSelf()), cin, ci.time, ci.maxTime);
-                    }
-                }
-            }
-        }
-    }
     public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
         return false;
     }
 
 
-    public boolean hasCooldowns(){
-        List<CooldownInstance> CDCopy = new ArrayList<>(StandCooldowns) {
-        };
-        for (byte i = 0; i < CDCopy.size(); i++){
-            CooldownInstance ci = CDCopy.get(i);
-            if (ci.time >= 0){
-                return true;
-            }
-        }
-        return false;
-    }
 
     public boolean isClient(){
         return this.getSelf().level().isClientSide();
@@ -1215,27 +798,6 @@ public class StandPowers {
         }
     }
 
-    public void breakClash(LivingEntity winner, LivingEntity loser){
-        if (StandDamageEntityAttack(loser, this.getClashBreakStrength(loser), 0.0001F, winner)) {
-            ((StandUser)winner).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
-            ((StandUser)loser).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
-            ((StandUser)winner).roundabout$getStandPowers().playBarrageEndNoise(0, loser);
-            this.takeDeterminedKnockbackWithY(winner, loser, this.getBarrageFinisherKnockback());
-            ((StandUser)winner).roundabout$getStandPowers().animateStand(StandEntity.BARRAGE_FINISHER);
-            ((StandUser)loser).roundabout$tryPower(PowerIndex.NONE,true);
-        }
-    }
-    public void TieClash(LivingEntity user1, LivingEntity user2){
-        ((StandUser)user1).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
-        ((StandUser)user2).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
-        ((StandUser)user1).roundabout$getStandPowers().playBarrageEndNoise(0F,user2);
-        ((StandUser)user2).roundabout$getStandPowers().playBarrageEndNoise(-0.05F,user1);
-
-        user1.hurtMarked = true;
-        user2.hurtMarked = true;
-        user1.knockback(0.55f,user2.getX()-user1.getX(), user2.getZ()-user1.getZ());
-        user2.knockback(0.55f,user1.getX()-user2.getX(), user1.getZ()-user2.getZ());
-    }
 
     public float getLevelMultiplier(){
         return (float) (ClientNetworking.getAppropriateConfig().standLevelingSettings.standExperienceNeededForLevelupMultiplier *0.01);
@@ -1265,32 +827,7 @@ public class StandPowers {
         return damage;
     }
 
-    public boolean preCanInterruptPower(Entity interrupter, boolean isStandDamage){
-        boolean interrupt = false;
-        if (interrupter != null){
-            if (this.isBarraging() && ClientNetworking.getAppropriateConfig().generalStandSettings.barragesAreAlwaysInterruptable) {
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                return true;
-            } else if (isStandDamage && ClientNetworking.getAppropriateConfig().generalStandSettings.standsInterruptSomeStandAttacks){
-                interrupt = true;
-            } else if (this instanceof TWAndSPSharedPowers && this.getActivePower() == PowerIndex.SPECIAL &&
-                    ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopIsAlwaysInterruptable){
-                interrupt = true;
-            } else if (interrupter instanceof Player && ClientNetworking.getAppropriateConfig().generalStandSettings.playersInterruptSomeStandAttacks){
-                interrupt = true;
-            } else if (interrupter instanceof Mob && ClientNetworking.getAppropriateConfig().generalStandSettings.mobsInterruptSomeStandAttacks){
-                interrupt = true;
-            }
-        } else {
-            interrupt = true;
-        }
 
-        if (interrupt){
-            return canInterruptPower();
-        } else {
-            return false;
-        }
-    }
 
 
     /**Stand related things that slow you down or speed you up*/
@@ -1309,96 +846,7 @@ public class StandPowers {
         return basis;
     }
 
-    public void updateClashing(){
-        if (this.getStandEntity(this.self) != null) {
-            //Roundabout.LOGGER.info("3 " + this.getStandEntity(this.self).getPitch() + " " + this.getStandEntity(this.self).getYaw());
-        }
-        if (this.getClashOp() != null) {
-            if (this.attackTimeDuring <= 60) {
-                LivingEntity entity = this.getClashOp();
 
-                /*Rotation has to be set actively by both client and server,
-                 * because serverPitch and serverYaw are inconsistent, client overwrites stand stuff sometimes*/
-                LivingEntity standEntity = ((StandUser) entity).roundabout$getStand();
-                LivingEntity standSelf = ((StandUser) self).roundabout$getStand();
-                if (standSelf != null && standEntity != null) {
-                    if (!this.self.level().isClientSide) {
-                        standSelf.setXRot(getLookAtEntityPitch(standSelf, standEntity));
-                        standSelf.setYRot(getLookAtEntityYaw(standSelf, standEntity));
-                        standEntity.setXRot(getLookAtEntityPitch(standEntity, standSelf));
-                        standEntity.setYRot(getLookAtEntityYaw(standEntity, standSelf));
-                    }
-                }
-
-
-                if (!(this.self instanceof Player)) {
-                    this.RoundaboutEnemyClash();
-                }
-                if (!this.self.level().isClientSide) {
-
-                    if ((this.getClashDone() && ((StandUser) entity).roundabout$getStandPowers().getClashDone())
-                    || !((StandUser) this.self).roundabout$getActive() || !((StandUser) entity).roundabout$getActive()) {
-                        this.updateClashing2();
-                    } else {
-                        playBarrageNoise(this.attackTimeDuring+ clashStarter, entity);
-                    }
-                }
-            } else {
-                if (!this.self.level().isClientSide) {
-                    this.updateClashing2();
-                }
-            }
-        } else {
-            if (!this.self.level().isClientSide) {
-                ((StandUser) this.self).roundabout$tryPower(PowerIndex.CLASH_CANCEL, true);
-            }
-        }
-    }
-    private void updateClashing2(){
-        if (this.getClashOp() != null) {
-            boolean thisActive = ((StandUser) this.self).roundabout$getActive();
-            boolean opActive = ((StandUser) this.getClashOp()).roundabout$getActive();
-            if (thisActive && !opActive){
-                breakClash(this.self, this.getClashOp());
-            } else if (!thisActive && opActive){
-                breakClash(this.getClashOp(), this.self);
-            } else if (thisActive && opActive){
-                if ((this.getClashProgress() == ((StandUser) this.getClashOp()).roundabout$getStandPowers().getClashProgress())) {
-                    TieClash(this.self, this.getClashOp());
-                } else if (this.getClashProgress() > ((StandUser) this.getClashOp()).roundabout$getStandPowers().getClashProgress()) {
-                    breakClash(this.self, this.getClashOp());
-                } else {
-                    breakClash(this.getClashOp(), this.self);
-                }
-            }
-            ((StandUser) this.self).roundabout$setAttackTimeDuring(-10);
-            ((StandUser) this.getClashOp()).roundabout$setAttackTimeDuring(-10);
-            ((StandUser) this.self).roundabout$getStandPowers().syncCooldowns();
-            ((StandUser) this.getClashOp()).roundabout$getStandPowers().syncCooldowns();
-        }
-    }
-    public void updateBarrageCharge(){
-        if (this.attackTimeDuring >= this.getBarrageWindup()) {
-            ((StandUser) this.self).roundabout$tryPower(PowerIndex.BARRAGE, true);
-        }
-    }
-    public void updateBarrage(){
-        if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
-            ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
-        } else {
-            if (this.attackTimeDuring > this.getBarrageLength()) {
-                this.attackTimeDuring = -20;
-            } else {
-                if (this.attackTimeDuring > 0) {
-                    this.setAttackTime((getBarrageRecoilTime() - 1) -
-                            Math.round(((float) this.attackTimeDuring / this.getBarrageLength())
-                                    * (getBarrageRecoilTime() - 1)));
-
-                    standBarrageHit();
-                }
-            }
-        }
-    }
 
     public boolean isWip(){
         return false;
@@ -1627,16 +1075,6 @@ public class StandPowers {
         return false;
     }
 
-    public void cancelConsumableItem(LivingEntity entity){
-        ItemStack itemStack = entity.getUseItem();
-        Item item = itemStack.getItem();
-        if (item.isEdible() || item instanceof PotionItem) {
-            entity.releaseUsingItem();
-            if (entity instanceof Player) {
-                entity.stopUsingItem();
-            }
-        }
-    }
 
     public boolean knockShield2(Entity entity, int duration){
 
@@ -2156,220 +1594,6 @@ public class StandPowers {
         }
     }
 
-    public Entity getTargetEntityGenerous(LivingEntity User, float distMax, float angle){
-        /*First, attempts to hit what you are looking at*/
-        if (!(distMax >= 0)) {
-            distMax = this.getDistanceOut(User, this.getReach(), false);
-        }
-        Entity targetEntity = this.rayCastEntity(User,distMax);
-
-        if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
-         || (targetEntity != null && targetEntity.is(User))){
-            targetEntity = null;
-        }
-
-        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
-        if (targetEntity == null) {
-            float halfReach = (float) (distMax*0.5);
-            Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
-            targetEntity = StandAttackHitboxNear(User,StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
-                    pointVec.z, halfReach, halfReach, halfReach), distMax, angle),angle);
-        }
-        if (targetEntity instanceof StandEntity SE){
-
-            if (SE.getUser() != null){
-                targetEntity = SE.getUser();
-            }
-        }
-
-        return targetEntity;
-    }
-
-    public double getBlockDistanceOut(LivingEntity entity, double range){
-        Vec3 vec3dST = entity.getEyePosition(0);
-        Vec3 vec3d2ST = entity.getViewVector(0);
-        Vec3 vec3d3ST = vec3dST.add(vec3d2ST.x * range, vec3d2ST.y * range, vec3d2ST.z * range);
-
-        BlockHitResult blockHit = entity.level().clip(new ClipContext(vec3dST, vec3d3ST,
-                ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, entity));
-        double bhit = Math.sqrt(blockHit.distanceTo(entity));
-        if (bhit < range){
-            range = bhit;
-        }
-
-        return range;
-    }
-    public float getDistanceOut(LivingEntity entity, float range, boolean offset){
-        float distanceFront = this.getRayDistance(entity, range);
-        if (offset) {
-            Entity targetEntity = this.rayCastEntity(entity,distanceFront);
-            if (targetEntity != null && targetEntity.distanceTo(entity) < distanceFront) {
-                distanceFront = targetEntity.distanceTo(entity);
-            }
-            distanceFront -= 1;
-            distanceFront = Math.max(Math.min(distanceFront, 1.7F), 0.4F);
-        }
-        return distanceFront;
-    }
-
-    public float getDistanceOutAccurate(Entity entity, float range, boolean offset){
-        float distanceFront = this.getRayDistance(entity, range);
-        if (offset) {
-            Entity targetEntity = this.getTargetEntity(this.self,this.getReach());
-            if (targetEntity != null && targetEntity.distanceTo(entity) < distanceFront) {
-                distanceFront = targetEntity.distanceTo(entity);
-            }
-            distanceFront -= 1;
-            distanceFront = Math.max(Math.min(distanceFront, 1.7F), 0.4F);
-        }
-        return distanceFront;
-    }
-
-    public float getRayDistance(Entity entity, float range){
-        Vec3 vec3d = entity.getEyePosition(0);
-        Vec3 vec3d2 = entity.getViewVector(0);
-        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
-        HitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
-        if (blockHit.getType() != HitResult.Type.MISS){
-            return Mth.sqrt((float) entity.distanceToSqr(blockHit.getLocation()));
-        }
-        return range;
-    } public Vec3 getRayBlock(Entity entity, float range){
-        Vec3 vec3d = entity.getEyePosition(0);
-        Vec3 vec3d2 = entity.getViewVector(0);
-        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
-        HitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
-        return blockHit.getLocation();
-    }
-
-    public float getPivotPoint(Vector3d pointToRotate, Vector3d axisStart, Vector3d axisEnd) {
-        Vector3d d = new Vector3d(axisEnd.x-axisStart.x,axisEnd.y-axisStart.y,axisEnd.z-axisStart.z).normalize();
-        Vector3d v = new Vector3d(pointToRotate.x-axisStart.x,pointToRotate.y-axisStart.y,pointToRotate.z-axisStart.z).normalize();
-        double t = v.dot(d);
-        return (float) pointToRotate.distance(axisStart.add(d.mul(t)));
-    }
-
-    public static float angleDistance(float alpha, float beta) {
-        float phi = Math.abs(beta - alpha) % 360;       // This is either the distance or 360 - distance
-        float distance = phi > 180 ? 360 - phi : phi;
-        return distance;
-    }
-
-    /**Returns the vertical angle between two mobs*/
-    public float getLookAtEntityPitch(Entity user, Entity targetEntity) {
-        double f;
-        double d = targetEntity.getX() - user.getX();
-        double e = targetEntity.getZ() - user.getZ();
-        if (targetEntity instanceof LivingEntity) {
-            LivingEntity livingEntity = (LivingEntity)targetEntity;
-            f = livingEntity.getEyeY() - user.getEyeY();
-        } else {
-            f = (targetEntity.getBoundingBox().minY + targetEntity.getBoundingBox().maxY) / 2.0 - user.getEyeY();
-        }
-        double g = Math.sqrt(d * d + e * e);
-        return (float)(-(Mth.atan2(f, g) * 57.2957763671875));
-    }
-    /**Returns the horizontal angle between two mobs*/
-    public float getLookAtEntityYaw(Entity user, Entity targetEntity) {
-        double d = targetEntity.getX() - user.getX();
-        double e = targetEntity.getZ() - user.getZ();
-        return (float)(Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
-    }
-
-
-
-    /**Returns the vertical angle between a mob and a position*/
-    public float getLookAtPlacePitch(Entity user, Vec3 vec) {
-        double f;
-        double d = vec.x() - user.getX();
-        double e = vec.z() - user.getZ();
-        f = vec.y() - user.getEyeY();
-        double g = Math.sqrt(d * d + e * e);
-        return (float)(-(Mth.atan2(f, g) * 57.2957763671875));
-    }
-    /**Returns the horizontal angle between a mob and a position*/
-    public float getLookAtPlaceYaw(Entity user, Vec3 vec) {
-        double d = vec.x() - user.getX();
-        double e = vec.z() - user.getZ();
-        return (float)(Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
-    }
-
-
-    public BlockHitResult getAheadVec(float distOut){
-        Vec3 vec3d = this.self.getEyePosition(1);
-        Vec3 vec3d2 = this.self.getViewVector(1);
-        return this.getSelf().level().clip(new ClipContext(vec3d, vec3d.add(vec3d2.x * distOut,
-                vec3d2.y * distOut, vec3d2.z * distOut), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
-                this.getSelf()));
-    }
-    /** This code grabs an entity in front of you at the specified range, raycasting is used*/
-    public Entity rayCastEntity(LivingEntity User, float reach){
-        Entity entityHitResult = MainUtil.raytraceEntityStand(User.level(),User,reach);
-        if (entityHitResult != null){
-            if (entityHitResult.isAlive() && !entityHitResult.isRemoved() && !entityHitResult.is(User) &&
-                    !(User instanceof StandEntity SE2 && SE2.getUser() != null &&  SE2.getUser().isPassenger() &&
-                            SE2.getUser().getVehicle().getUUID() == entityHitResult.getUUID())) {
-                    return entityHitResult;
-            }
-        }
-        return null;
-    }
-
-    public List<Entity> StandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance){
-        return StandGrabHitbox(User,entities,maxDistance,25);
-    }
-    public List<Entity> StandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, float angle){
-        List<Entity> hitEntities = new ArrayList<>(entities) {
-        };
-            for (Entity value : entities) {
-                if (!value.showVehicleHealth() || (!MainUtil.isStandPickable(value) && !(value instanceof StandEntity)) || (!value.isAttackable() && !(value instanceof StandEntity)) || value.isInvulnerable() || !value.isAlive()
-                        || (User.isPassenger() && User.getVehicle().getUUID() == value.getUUID())
-                || value.is(User) || (((StandUser)User).roundabout$getStand() != null &&
-                        ((StandUser)User).roundabout$getStand().is(User)) || (User instanceof StandEntity SE && SE.getUser() !=null && SE.getUser().is(value)) ||
-                (User instanceof StandEntity SE2 && SE2.getUser() != null &&  SE2.getUser().isPassenger() && SE2.getUser().getVehicle().getUUID() == value.getUUID())){
-                    hitEntities.remove(value);
-                } else {
-                    if (!(angleDistance(getLookAtEntityYaw(User, value), (User.getYHeadRot()%360f)) <= angle && angleDistance(getLookAtEntityPitch(User, value), User.getXRot()) <= angle)){
-                        hitEntities.remove(value);
-                    } else if (!canActuallyHit(value)){
-                        hitEntities.remove(value);
-                    }
-                }
-            }
-        return hitEntities;
-    }
-
-
-    public List<Entity> arrowGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance){
-        return arrowGrabHitbox(User,entities,maxDistance,90);
-    }
-    public List<Entity> arrowGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, float angle){
-        List<Entity> hitEntities = new ArrayList<>(entities) {
-        };
-        for (Entity value : entities) {
-            if (!(value instanceof Arrow) && !(value instanceof KnifeEntity) && !(value instanceof ThrownObjectEntity)){
-                hitEntities.remove(value);
-            } else if (!(angleDistance(getLookAtEntityYaw(User, value), (User.getYHeadRot()%360f)) <= angle && angleDistance(getLookAtEntityPitch(User, value), User.getXRot()) <= angle)){
-                hitEntities.remove(value);
-            } else if (value.distanceTo(User) > maxDistance){
-                hitEntities.remove(value);
-            }
-        }
-        return hitEntities;
-    }
-    public boolean StandAttackHitbox(List<Entity> entities, float pow, float knockbackStrength){
-        boolean hitSomething = false;
-        float nearestDistance = -1;
-        Entity nearestMob;
-        if (entities != null){
-            for (Entity value : entities) {
-                if (this.StandDamageEntityAttack(value,pow, knockbackStrength, this.self)){
-                    hitSomething = true;
-                }
-            }
-        }
-        return hitSomething;
-    }
 
     public int getExpForLevelUp(int currentLevel){
         return 100;
@@ -3001,13 +2225,6 @@ public class StandPowers {
         return ((this.activePower == PowerIndex.BARRAGE_CLASH && this.attackTimeDuring > -1) || this.isBarraging());
     }
 
-    /**An easy way to throw up a new HUD*/
-    public boolean replaceHudActively(){
-        return false;
-    }
-    /**Remember to reserve client classes for a... client class. Wouldn't want server crashes in our stand powers.*/
-    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x){
-    }
     /**The AI for a stand User Mob, runs every tick. AttackTarget may be null*/
     public void tickMobAI(LivingEntity attackTarget){
     }
@@ -3065,10 +2282,6 @@ public class StandPowers {
     }
 
 
-    /**If the powers inventory should render the player instead*/
-    public boolean rendersPlayer(){
-        return false;
-    }
     public Component getPosName(byte posID){
         if (posID == 1){
             return Component.translatable(  "idle.roundabout.battle");
@@ -3127,6 +2340,7 @@ public class StandPowers {
     public void onActuallyHurt(DamageSource $$0, float $$1){
     }
 
+    /**Override this to decide which skins the stand rolls for on an entity*/
     public void rollSkin(){
 
     }
@@ -3138,5 +2352,956 @@ public class StandPowers {
         }
 
         return soundChoice;
+    }
+
+
+    /**Override this if you want to add or remove conditions that prevent moves from updating and shut
+     * them down*/
+    public boolean isAttackInept(byte activeP){
+        return this.self.isUsingItem() || this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // CLIENT FUNCTIONS LIKE UI AND WHATNOT TO OVERRIDE
+
+
+    /**Override this to render stand icons, see examples from other stands*/
+    public void renderIcons(GuiGraphics context, int x, int y) {
+    }
+
+    /**This function grays out icons for moves you can't currently use. Slot is the icon slot from 1-4,
+     * activeP is your currently active power*/
+    public boolean isAttackIneptVisually(byte activeP, int slot){
+        return this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
+    }
+
+    /**Use this to draw HUD elements, it is primarily for the middle HUD (attack cooldown bar that is
+     * blue, white, and orange), see punchingstand for examples*/
+    public void renderAttackHud(GuiGraphics context,  Player playerEntity,
+                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+                                float flashAlpha, float otherFlashAlpha){
+    }
+
+    /**An easy way to replace the EXP bar with a stand bar, see the function below this one*/
+    public boolean replaceHudActively(){
+        return false;
+    }
+    /**If the above function is set to true, this will be the code called instead of the exp bar one. Make
+     * a call to another class so too much client code doesn't unnecessarily exist in the standpowers class.*/
+    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x){
+    }
+
+
+    /**In the power inventory, the stand that displays is the one that exists while your powers are active.
+     * But if no stand is out, then it can generate a fake stand. Override to return true like survivor for
+     * a fake stand to render.*/
+    public boolean returnFakeStandForHud(){
+        return false;
+    }
+
+    /**if the above is true, override this to actually create a fake stand for the power inventory display.*/
+    public StandEntity getStandForHUDIfFake(){
+        if (displayStand == null){
+            displayStand = ModEntities.SURVIVOR.create(this.getSelf().level());
+        }
+        if (this.self instanceof Player PL && ((IPlayerEntity)PL).roundabout$getStandSkin() != displayStand.getSkin()){
+            displayStand = ModEntities.SURVIVOR.create(this.getSelf().level());
+            displayStand.setSkin(((IPlayerEntity)PL).roundabout$getStandSkin());
+        }
+        return displayStand;
+    }
+
+    /**If the powers inventory should render the player instead*/
+    public boolean rendersPlayer(){
+        return false;
+    }
+
+    /**Not meant to be overidden necessarily. use the above functions to make a different stand appear*/
+    public StandEntity getStandForHUD(){
+        if (returnFakeStandForHud())
+            return getStandForHUDIfFake();
+        return getStandUserSelf().roundabout$getStand();
+    }
+
+    /**The four key presses, made obselete by standpowerrewrwite's poweractivate function, check
+     * other stands for examples of how to use that*/
+    public void buttonInput4(boolean keyIsDown, Options options){
+    }
+    public void buttonInput3(boolean keyIsDown, Options options){
+    }
+    public void buttonInput2(boolean keyIsDown, Options options){
+    }
+    public void buttonInput1(boolean keyIsDown, Options options){
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Functions you will NOT need to override
+    // Ones you might actually use edition
+
+
+    /**Is the stand user self in creative mode?*/
+    public boolean getCreative(){
+        return this.self instanceof Player PE && PE.isCreative();
+    }
+
+    /**The most basic getters and setters*/
+    public StandUser getStandUserSelf(){
+        return ((StandUser)this.self);
+    }
+    public LivingEntity getSelf(){
+        return this.self;
+    }
+    public int getAttackTime(){
+        return this.attackTime;
+    }
+    public int getAttackTimeDuring(){
+        return this.attackTimeDuring;
+    }
+    public byte getActivePower(){
+        return this.activePower;
+    }
+    public byte getActivePowerPhase(){
+        return this.activePowerPhase;
+    }
+    public byte getActivePowerPhaseMax(){
+        return this.activePowerPhaseMax;
+    }
+
+    public void setAttackTime(int attackTime){
+        this.attackTime = attackTime;
+    }
+    public void setAttackTimeDuring(int attackTimeDuring){
+        this.attackTimeDuring = attackTimeDuring;
+    }
+    public void setAttackTimeMax(int attackTimeMax){
+        this.attackTimeMax = attackTimeMax;
+    }
+    public int getAttackTimeMax(){
+        return this.attackTimeMax;
+    }
+
+    public void setMaxAttackTime(int attackTimeMax){
+        this.attackTimeMax = attackTimeMax;
+    }
+    public void setActivePower(byte activeMove){
+        this.activePower = activeMove;
+    }
+    public void setActivePowerPhase(byte activePowerPhase){
+        this.activePowerPhase = activePowerPhase;
+    }
+
+
+    /**A basic function called to draw stand icons*/
+    public void setSkillIcon(GuiGraphics context, int x, int y, int slot, ResourceLocation rl, byte CDI){
+        setSkillIcon(context,x,y,slot,rl,CDI,false);
+    }
+    public void setSkillIcon(GuiGraphics context, int x, int y, int slot, ResourceLocation rl, byte CDI, boolean locked){
+        RenderSystem.enableBlend();
+        context.setColor(1f, 1f, 1f, 1f);
+        CooldownInstance cd = null;
+        if (CDI >= 0 && !StandCooldowns.isEmpty() && StandCooldowns.size() >= CDI){
+            cd = StandCooldowns.get(CDI);
+        }
+        x += slot * 25;
+        y-=1;
+
+        if (locked){
+            RenderSystem.enableBlend();
+            context.blit(StandIcons.LOCKED_SQUARE_ICON,x-3,y-3,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+        } else {
+            RenderSystem.enableBlend();
+            context.blit(StandIcons.SQUARE_ICON,x-3,y-3,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+            Font renderer = Minecraft.getInstance().font;
+            if (slot==4){
+                Component special4Key = KeyInputRegistry.abilityFourKey.getTranslatedKeyMessage();
+                special4Key = fixKey(special4Key);
+                context.drawString(renderer, special4Key,x-1,y+11,0xffffff,true);
+            }
+            else if (slot==3){
+                Component special3Key = KeyInputRegistry.abilityThreeKey.getTranslatedKeyMessage();
+                special3Key = fixKey(special3Key);
+                context.drawString(renderer, special3Key,x-1,y+11,0xffffff,true);
+            }
+            else if (slot==2){
+                Component special2Key = KeyInputRegistry.abilityTwoKey.getTranslatedKeyMessage();
+                special2Key = fixKey(special2Key);
+                context.drawString(renderer, special2Key,x-1,y+11,0xffffff,true);
+            }
+            else if (slot==1){
+                Component special1Key = KeyInputRegistry.abilityOneKey.getTranslatedKeyMessage();
+                special1Key = fixKey(special1Key);
+                context.drawString(renderer, special1Key,x-1,y+11,0xffffff,true);
+            }
+            Component special1Key = KeyInputRegistry.abilityOneKey.getTranslatedKeyMessage();
+        }
+
+
+        if ((cd != null && (cd.time >= 0)) || isAttackIneptVisually(CDI,slot)){
+            RenderSystem.enableBlend();
+            context.setColor(0.62f, 0.62f, 0.62f, 0.8f);
+            context.blit(rl, x, y, 0, 0, 18, 18, 18, 18);
+            if ((cd != null && (cd.time >= 0))) {
+                float blit = (20*(1-((float) (1+cd.time) /(1+cd.maxTime))));
+                int b = (int) Math.round(blit);
+                RenderSystem.enableBlend();
+                context.setColor(1f, 1f, 1f, 1f);
+
+                ResourceLocation COOLDOWN_TEX = StandIcons.COOLDOWN_ICON;
+
+                if (cd.isFrozen())
+                    COOLDOWN_TEX = StandIcons.FROZEN_COOLDOWN_ICON;
+
+                context.blit(COOLDOWN_TEX, x - 1, y - 1 + b, 0, b, 20, 20-b, 20, 20);
+                int num = ((int)(Math.floor((double) cd.time /20)+1));
+                int offset = x+3;
+                if (num <=9){
+                    offset = x+7;
+                }
+
+                if (!cd.isFrozen())
+                    context.drawString(Minecraft.getInstance().font, ""+num,offset,y,0xffffff,true);
+
+            }
+            context.setColor(1f, 1f, 1f, 0.9f);
+        } else {
+            RenderSystem.enableBlend();
+            context.blit(rl, x, y, 0, 0, 18, 18, 18, 18);
+        }
+    }
+
+
+    /**Call this to verify your stand is leveled enough to use a moe*/
+    public boolean canExecuteMoveWithLevel(int minLevel){
+        if (!ClientNetworking.getAppropriateConfig().standLevelingSettings.enableStandLeveling) {
+            return true;
+        }
+
+        if (this.getSelf() instanceof Player pl){
+            if (((IPlayerEntity)pl).roundabout$getStandLevel() >= minLevel || (!((StandUser) pl).roundabout$getStandDisc().isEmpty() &&
+                    ((StandUser) pl).roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem) ||
+                    pl.isCreative()){
+                return true;
+            }
+            return false;
+        }
+        return true;
+    }
+
+
+    /**Call this to make yourself stop using an item*/
+    public void cancelConsumableItem(LivingEntity entity){
+        ItemStack itemStack = entity.getUseItem();
+        Item item = itemStack.getItem();
+        if (item.isEdible() || item instanceof PotionItem) {
+            entity.releaseUsingItem();
+            if (entity instanceof Player) {
+                entity.stopUsingItem();
+            }
+        }
+    }
+
+    /**Lots of hitbox grabbing code*/
+    public Entity getTargetEntityGenerous(LivingEntity User, float distMax, float angle){
+        /*First, attempts to hit what you are looking at*/
+        if (!(distMax >= 0)) {
+            distMax = this.getDistanceOut(User, this.getReach(), false);
+        }
+        Entity targetEntity = this.rayCastEntity(User,distMax);
+
+        if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
+                || (targetEntity != null && targetEntity.is(User))){
+            targetEntity = null;
+        }
+
+        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
+        if (targetEntity == null) {
+            float halfReach = (float) (distMax*0.5);
+            Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
+            targetEntity = StandAttackHitboxNear(User,StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
+                    pointVec.z, halfReach, halfReach, halfReach), distMax, angle),angle);
+        }
+        if (targetEntity instanceof StandEntity SE){
+
+            if (SE.getUser() != null){
+                targetEntity = SE.getUser();
+            }
+        }
+
+        return targetEntity;
+    }
+
+    public double getBlockDistanceOut(LivingEntity entity, double range){
+        Vec3 vec3dST = entity.getEyePosition(0);
+        Vec3 vec3d2ST = entity.getViewVector(0);
+        Vec3 vec3d3ST = vec3dST.add(vec3d2ST.x * range, vec3d2ST.y * range, vec3d2ST.z * range);
+
+        BlockHitResult blockHit = entity.level().clip(new ClipContext(vec3dST, vec3d3ST,
+                ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, entity));
+        double bhit = Math.sqrt(blockHit.distanceTo(entity));
+        if (bhit < range){
+            range = bhit;
+        }
+
+        return range;
+    }
+    public float getDistanceOut(LivingEntity entity, float range, boolean offset){
+        float distanceFront = this.getRayDistance(entity, range);
+        if (offset) {
+            Entity targetEntity = this.rayCastEntity(entity,distanceFront);
+            if (targetEntity != null && targetEntity.distanceTo(entity) < distanceFront) {
+                distanceFront = targetEntity.distanceTo(entity);
+            }
+            distanceFront -= 1;
+            distanceFront = Math.max(Math.min(distanceFront, 1.7F), 0.4F);
+        }
+        return distanceFront;
+    }
+
+    public float getDistanceOutAccurate(Entity entity, float range, boolean offset){
+        float distanceFront = this.getRayDistance(entity, range);
+        if (offset) {
+            Entity targetEntity = this.getTargetEntity(this.self,this.getReach());
+            if (targetEntity != null && targetEntity.distanceTo(entity) < distanceFront) {
+                distanceFront = targetEntity.distanceTo(entity);
+            }
+            distanceFront -= 1;
+            distanceFront = Math.max(Math.min(distanceFront, 1.7F), 0.4F);
+        }
+        return distanceFront;
+    }
+
+    public float getRayDistance(Entity entity, float range){
+        Vec3 vec3d = entity.getEyePosition(0);
+        Vec3 vec3d2 = entity.getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+        HitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
+        if (blockHit.getType() != HitResult.Type.MISS){
+            return Mth.sqrt((float) entity.distanceToSqr(blockHit.getLocation()));
+        }
+        return range;
+    } public Vec3 getRayBlock(Entity entity, float range){
+        Vec3 vec3d = entity.getEyePosition(0);
+        Vec3 vec3d2 = entity.getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+        HitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
+        return blockHit.getLocation();
+    }
+
+    public float getPivotPoint(Vector3d pointToRotate, Vector3d axisStart, Vector3d axisEnd) {
+        Vector3d d = new Vector3d(axisEnd.x-axisStart.x,axisEnd.y-axisStart.y,axisEnd.z-axisStart.z).normalize();
+        Vector3d v = new Vector3d(pointToRotate.x-axisStart.x,pointToRotate.y-axisStart.y,pointToRotate.z-axisStart.z).normalize();
+        double t = v.dot(d);
+        return (float) pointToRotate.distance(axisStart.add(d.mul(t)));
+    }
+
+    public static float angleDistance(float alpha, float beta) {
+        float phi = Math.abs(beta - alpha) % 360;       // This is either the distance or 360 - distance
+        float distance = phi > 180 ? 360 - phi : phi;
+        return distance;
+    }
+
+    /**Returns the vertical angle between two mobs*/
+    public float getLookAtEntityPitch(Entity user, Entity targetEntity) {
+        double f;
+        double d = targetEntity.getX() - user.getX();
+        double e = targetEntity.getZ() - user.getZ();
+        if (targetEntity instanceof LivingEntity) {
+            LivingEntity livingEntity = (LivingEntity)targetEntity;
+            f = livingEntity.getEyeY() - user.getEyeY();
+        } else {
+            f = (targetEntity.getBoundingBox().minY + targetEntity.getBoundingBox().maxY) / 2.0 - user.getEyeY();
+        }
+        double g = Math.sqrt(d * d + e * e);
+        return (float)(-(Mth.atan2(f, g) * 57.2957763671875));
+    }
+    /**Returns the horizontal angle between two mobs*/
+    public float getLookAtEntityYaw(Entity user, Entity targetEntity) {
+        double d = targetEntity.getX() - user.getX();
+        double e = targetEntity.getZ() - user.getZ();
+        return (float)(Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
+    }
+
+
+
+    /**Returns the vertical angle between a mob and a position*/
+    public float getLookAtPlacePitch(Entity user, Vec3 vec) {
+        double f;
+        double d = vec.x() - user.getX();
+        double e = vec.z() - user.getZ();
+        f = vec.y() - user.getEyeY();
+        double g = Math.sqrt(d * d + e * e);
+        return (float)(-(Mth.atan2(f, g) * 57.2957763671875));
+    }
+    /**Returns the horizontal angle between a mob and a position*/
+    public float getLookAtPlaceYaw(Entity user, Vec3 vec) {
+        double d = vec.x() - user.getX();
+        double e = vec.z() - user.getZ();
+        return (float)(Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
+    }
+
+
+    public BlockHitResult getAheadVec(float distOut){
+        Vec3 vec3d = this.self.getEyePosition(1);
+        Vec3 vec3d2 = this.self.getViewVector(1);
+        return this.getSelf().level().clip(new ClipContext(vec3d, vec3d.add(vec3d2.x * distOut,
+                vec3d2.y * distOut, vec3d2.z * distOut), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
+                this.getSelf()));
+    }
+    /** This code grabs an entity in front of you at the specified range, raycasting is used*/
+    public Entity rayCastEntity(LivingEntity User, float reach){
+        Entity entityHitResult = MainUtil.raytraceEntityStand(User.level(),User,reach);
+        if (entityHitResult != null){
+            if (entityHitResult.isAlive() && !entityHitResult.isRemoved() && !entityHitResult.is(User) &&
+                    !(User instanceof StandEntity SE2 && SE2.getUser() != null &&  SE2.getUser().isPassenger() &&
+                            SE2.getUser().getVehicle().getUUID() == entityHitResult.getUUID())) {
+                return entityHitResult;
+            }
+        }
+        return null;
+    }
+
+    public List<Entity> StandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance){
+        return StandGrabHitbox(User,entities,maxDistance,25);
+    }
+    public List<Entity> StandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, float angle){
+        List<Entity> hitEntities = new ArrayList<>(entities) {
+        };
+        for (Entity value : entities) {
+            if (!value.showVehicleHealth() || (!MainUtil.isStandPickable(value) && !(value instanceof StandEntity)) || (!value.isAttackable() && !(value instanceof StandEntity)) || value.isInvulnerable() || !value.isAlive()
+                    || (User.isPassenger() && User.getVehicle().getUUID() == value.getUUID())
+                    || value.is(User) || (((StandUser)User).roundabout$getStand() != null &&
+                    ((StandUser)User).roundabout$getStand().is(User)) || (User instanceof StandEntity SE && SE.getUser() !=null && SE.getUser().is(value)) ||
+                    (User instanceof StandEntity SE2 && SE2.getUser() != null &&  SE2.getUser().isPassenger() && SE2.getUser().getVehicle().getUUID() == value.getUUID())){
+                hitEntities.remove(value);
+            } else {
+                if (!(angleDistance(getLookAtEntityYaw(User, value), (User.getYHeadRot()%360f)) <= angle && angleDistance(getLookAtEntityPitch(User, value), User.getXRot()) <= angle)){
+                    hitEntities.remove(value);
+                } else if (!canActuallyHit(value)){
+                    hitEntities.remove(value);
+                }
+            }
+        }
+        return hitEntities;
+    }
+
+
+    public List<Entity> arrowGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance){
+        return arrowGrabHitbox(User,entities,maxDistance,90);
+    }
+    public List<Entity> arrowGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, float angle){
+        List<Entity> hitEntities = new ArrayList<>(entities) {
+        };
+        for (Entity value : entities) {
+            if (!(value instanceof Arrow) && !(value instanceof KnifeEntity) && !(value instanceof ThrownObjectEntity)){
+                hitEntities.remove(value);
+            } else if (!(angleDistance(getLookAtEntityYaw(User, value), (User.getYHeadRot()%360f)) <= angle && angleDistance(getLookAtEntityPitch(User, value), User.getXRot()) <= angle)){
+                hitEntities.remove(value);
+            } else if (value.distanceTo(User) > maxDistance){
+                hitEntities.remove(value);
+            }
+        }
+        return hitEntities;
+    }
+    public boolean StandAttackHitbox(List<Entity> entities, float pow, float knockbackStrength){
+        boolean hitSomething = false;
+        float nearestDistance = -1;
+        Entity nearestMob;
+        if (entities != null){
+            for (Entity value : entities) {
+                if (this.StandDamageEntityAttack(value,pow, knockbackStrength, this.self)){
+                    hitSomething = true;
+                }
+            }
+        }
+        return hitSomething;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Functions you will NOT need to override
+    // And will never be needed by you
+
+    public boolean isWorthinessType(LivingEntity LE){
+        if (worthinessType() == HUMANOID_WORTHY){
+            return MainUtil.isHumanoid(LE);
+        }
+        return true;
+    }
+
+    public boolean hasCooldowns(){
+        List<CooldownInstance> CDCopy = new ArrayList<>(StandCooldowns) {
+        };
+        for (byte i = 0; i < CDCopy.size(); i++){
+            CooldownInstance ci = CDCopy.get(i);
+            if (ci.time >= 0){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public AbilityIconInstance drawSingleGUIIcon(GuiGraphics context, int size, int startingLeft, int startingTop, int levelToUnlock,
+                                                 String nameSTR, String instructionStr, ResourceLocation draw, int extra, byte level, boolean bypass){
+        Component name;
+        if (level < levelToUnlock && !bypass) {
+            context.blit(StandIcons.LOCKED_SQUARE_ICON, startingLeft, startingTop, 0, 0,size, size, size, size);
+            context.blit(StandIcons.LOCKED, startingLeft+2, startingTop+2, 0, 0,size-4, size-4, size-4, size-4);
+            name = Component.translatable("ability.roundabout.locked").withStyle(ChatFormatting.BOLD).
+                    withStyle(ChatFormatting.DARK_GRAY);
+        } else {
+            context.blit(StandIcons.SQUARE_ICON, startingLeft, startingTop, 0, 0,size, size, size, size);
+            context.blit(draw, startingLeft+2, startingTop+2, 0, 0,size-4, size-4, size-4, size-4);
+            name = Component.translatable(nameSTR).withStyle(ChatFormatting.BOLD).
+                    withStyle(ChatFormatting.DARK_PURPLE);
+        }
+        Component instruction;
+        if (level < levelToUnlock && !bypass){
+            instruction = Component.translatable("ability.roundabout.locked.ctrl").
+                    withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.RED);
+        } else {
+            if (extra <= 0) {
+                instruction = Component.translatable(instructionStr).withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.BLUE);
+            } else {
+                instruction = Component.translatable(instructionStr, "" + extra).withStyle(ChatFormatting.ITALIC).
+                        withStyle(ChatFormatting.BLUE);
+
+            }
+        }
+        Component description;
+        if (level < levelToUnlock && !bypass){
+            description = Component.translatable("ability.roundabout.locked.desc", "" + levelToUnlock).
+                    withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.RED);
+        } else {
+            description = Component.translatable(nameSTR+".desc");
+        }
+        return new AbilityIconInstance(size,startingLeft,startingTop,levelToUnlock,
+                name,instruction,description,extra);
+    }
+
+    /**Preloads guard points*/
+    public StandPowers generateStandPowersPre(LivingEntity entity){
+        ((StandUser)entity).roundabout$setGuardPoints(getMaxGuardPoints());
+        return generateStandPowers(entity);
+    }
+
+    /**Stand barrage results*/
+    public void breakClash(LivingEntity winner, LivingEntity loser){
+        if (StandDamageEntityAttack(loser, this.getClashBreakStrength(loser), 0.0001F, winner)) {
+            ((StandUser)winner).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
+            ((StandUser)loser).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
+            ((StandUser)winner).roundabout$getStandPowers().playBarrageEndNoise(0, loser);
+            this.takeDeterminedKnockbackWithY(winner, loser, this.getBarrageFinisherKnockback());
+            ((StandUser)winner).roundabout$getStandPowers().animateStand(StandEntity.BARRAGE_FINISHER);
+            ((StandUser)loser).roundabout$tryPower(PowerIndex.NONE,true);
+        }
+    }
+    public void TieClash(LivingEntity user1, LivingEntity user2){
+        ((StandUser)user1).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
+        ((StandUser)user2).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
+        ((StandUser)user1).roundabout$getStandPowers().playBarrageEndNoise(0F,user2);
+        ((StandUser)user2).roundabout$getStandPowers().playBarrageEndNoise(-0.05F,user1);
+
+        user1.hurtMarked = true;
+        user2.hurtMarked = true;
+        user1.knockback(0.55f,user2.getX()-user1.getX(), user2.getZ()-user1.getZ());
+        user2.knockback(0.55f,user1.getX()-user2.getX(), user1.getZ()-user2.getZ());
+    }
+
+    public void updateClashing(){
+        if (this.getStandEntity(this.self) != null) {
+            //Roundabout.LOGGER.info("3 " + this.getStandEntity(this.self).getPitch() + " " + this.getStandEntity(this.self).getYaw());
+        }
+        if (this.getClashOp() != null) {
+            if (this.attackTimeDuring <= 60) {
+                LivingEntity entity = this.getClashOp();
+
+                /*Rotation has to be set actively by both client and server,
+                 * because serverPitch and serverYaw are inconsistent, client overwrites stand stuff sometimes*/
+                LivingEntity standEntity = ((StandUser) entity).roundabout$getStand();
+                LivingEntity standSelf = ((StandUser) self).roundabout$getStand();
+                if (standSelf != null && standEntity != null) {
+                    if (!this.self.level().isClientSide) {
+                        standSelf.setXRot(getLookAtEntityPitch(standSelf, standEntity));
+                        standSelf.setYRot(getLookAtEntityYaw(standSelf, standEntity));
+                        standEntity.setXRot(getLookAtEntityPitch(standEntity, standSelf));
+                        standEntity.setYRot(getLookAtEntityYaw(standEntity, standSelf));
+                    }
+                }
+
+
+                if (!(this.self instanceof Player)) {
+                    this.RoundaboutEnemyClash();
+                }
+                if (!this.self.level().isClientSide) {
+
+                    if ((this.getClashDone() && ((StandUser) entity).roundabout$getStandPowers().getClashDone())
+                            || !((StandUser) this.self).roundabout$getActive() || !((StandUser) entity).roundabout$getActive()) {
+                        this.updateClashing2();
+                    } else {
+                        playBarrageNoise(this.attackTimeDuring+ clashStarter, entity);
+                    }
+                }
+            } else {
+                if (!this.self.level().isClientSide) {
+                    this.updateClashing2();
+                }
+            }
+        } else {
+            if (!this.self.level().isClientSide) {
+                ((StandUser) this.self).roundabout$tryPower(PowerIndex.CLASH_CANCEL, true);
+            }
+        }
+    }
+    private void updateClashing2(){
+        if (this.getClashOp() != null) {
+            boolean thisActive = ((StandUser) this.self).roundabout$getActive();
+            boolean opActive = ((StandUser) this.getClashOp()).roundabout$getActive();
+            if (thisActive && !opActive){
+                breakClash(this.self, this.getClashOp());
+            } else if (!thisActive && opActive){
+                breakClash(this.getClashOp(), this.self);
+            } else if (thisActive && opActive){
+                if ((this.getClashProgress() == ((StandUser) this.getClashOp()).roundabout$getStandPowers().getClashProgress())) {
+                    TieClash(this.self, this.getClashOp());
+                } else if (this.getClashProgress() > ((StandUser) this.getClashOp()).roundabout$getStandPowers().getClashProgress()) {
+                    breakClash(this.self, this.getClashOp());
+                } else {
+                    breakClash(this.getClashOp(), this.self);
+                }
+            }
+            ((StandUser) this.self).roundabout$setAttackTimeDuring(-10);
+            ((StandUser) this.getClashOp()).roundabout$setAttackTimeDuring(-10);
+            ((StandUser) this.self).roundabout$getStandPowers().syncCooldowns();
+            ((StandUser) this.getClashOp()).roundabout$getStandPowers().syncCooldowns();
+        }
+    }
+    public void updateBarrageCharge(){
+        if (this.attackTimeDuring >= this.getBarrageWindup()) {
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.BARRAGE, true);
+        }
+    }
+    public void updateBarrage(){
+        if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
+        } else {
+            if (this.attackTimeDuring > this.getBarrageLength()) {
+                this.attackTimeDuring = -20;
+            } else {
+                if (this.attackTimeDuring > 0) {
+                    this.setAttackTime((getBarrageRecoilTime() - 1) -
+                            Math.round(((float) this.attackTimeDuring / this.getBarrageLength())
+                                    * (getBarrageRecoilTime() - 1)));
+
+                    standBarrageHit();
+                }
+            }
+        }
+    }
+    /**While you can override this, it might be more sensible to just edit this base function,
+     * also veeery conditional use canInterruptPower instead*/
+    public boolean preCanInterruptPower(Entity interrupter, boolean isStandDamage){
+        boolean interrupt = false;
+        if (interrupter != null){
+            if (this.isBarraging() && ClientNetworking.getAppropriateConfig().generalStandSettings.barragesAreAlwaysInterruptable) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                return true;
+            } else if (isStandDamage && ClientNetworking.getAppropriateConfig().generalStandSettings.standsInterruptSomeStandAttacks){
+                interrupt = true;
+            } else if (this instanceof TWAndSPSharedPowers && this.getActivePower() == PowerIndex.SPECIAL &&
+                    ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopIsAlwaysInterruptable){
+                interrupt = true;
+            } else if (interrupter instanceof Player && ClientNetworking.getAppropriateConfig().generalStandSettings.playersInterruptSomeStandAttacks){
+                interrupt = true;
+            } else if (interrupter instanceof Mob && ClientNetworking.getAppropriateConfig().generalStandSettings.mobsInterruptSomeStandAttacks){
+                interrupt = true;
+            }
+        } else {
+            interrupt = true;
+        }
+
+        if (interrupt){
+            return canInterruptPower();
+        } else {
+            return false;
+        }
+    }
+
+    public void preButtonInput4(boolean keyIsDown, Options options){
+        if (hasStandActive(this.getSelf()) && !this.isClashing()) {
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
+                buttonInput4(keyIsDown, options);
+            }
+        }
+    }
+    public void preButtonInput3(boolean keyIsDown, Options options){
+        if (hasStandActive(this.getSelf()) && !this.isClashing()) {
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
+                buttonInput3(keyIsDown, options);
+            }
+        }
+    }
+
+    public void preButtonInput2(boolean keyIsDown, Options options){
+        if (hasStandActive(this.getSelf()) && !this.isClashing()) {
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
+                buttonInput2(keyIsDown, options);
+            }
+        }
+    }
+
+    public void preButtonInput1(boolean keyIsDown, Options options){
+        if (hasStandActive(this.getSelf()) && !this.isClashing()) {
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
+                buttonInput1(keyIsDown, options);
+            }
+        }
+    }
+
+
+    public static Component fixKey(Component textIn){
+
+        String X = textIn.getString();
+        if (X.length() > 1){
+            String[] split = X.split("\\s");
+            if (split.length > 1){
+                return Component.nullToEmpty(""+split[0].charAt(0)+split[1].charAt(0));
+            } else {
+                if (split[0].length() > 1){
+                    return Component.nullToEmpty(""+split[0].charAt(0)+split[0].charAt(1));
+                } else {
+                    return Component.nullToEmpty(""+split[0].charAt(0));
+                }
+            }
+        } else {
+            return textIn;
+        }
+    }
+
+    public void tickCooldowns(){
+        int amt = 1;
+        boolean isDrowning = false;
+
+        // Changes how fast the cooldowns should recharge
+        if (this.self instanceof Player) {
+            isDrowning = (this.self.getAirSupply() <= 0);
+
+            int idle = ((StandUser) this.getSelf()).roundabout$getIdleTime();
+            if (idle > 300) {
+                amt *= 4;
+            } else if (idle > 200) {
+                amt *= 3;
+            } else if (idle > 40) {
+                amt *= 2;
+            }
+
+            if (isDrowning && !ClientNetworking.getAppropriateConfig().generalStandSettings.canRechargeCooldownsWhileDrowning)
+            { amt = 0; }
+        }
+
+        byte cin = -1;
+        for (CooldownInstance ci : StandCooldowns){
+            cin++;
+            if (ci.time >= 0){
+                if (!canUseStillStandingRecharge(cin)){
+                    amt = 1;
+                }
+                ci.setFrozen(isDrowning && !ClientNetworking.getAppropriateConfig().generalStandSettings.canRechargeCooldownsWhileDrowning);
+
+                boolean serverControlledCooldwon = isServerControlledCooldown(ci, cin);
+                if (!(this.self.level().isClientSide() && serverControlledCooldwon)) {
+
+                    if (!ci.isFrozen()) {
+                        ci.time -= amt;
+                    }
+
+                    if (ci.time < -1) {
+                        ci.time = -1;
+                    }
+
+                    if (this.self instanceof Player) {
+                        if ((((Player) this.self).isCreative() &&
+                                ClientNetworking.getAppropriateConfig().generalStandSettings.creativeModeRefreshesCooldowns) && ci.time > 2) {
+                            ci.time = 2;
+                        }
+                    }
+
+                    if (serverControlledCooldwon && !this.self.level().isClientSide() && this.self instanceof Player) {
+                        List<CooldownInstance> CDCopy = new ArrayList<>(StandCooldowns) {
+                        };
+
+                        S2CPacketUtil.sendMaxCooldownSyncPacket(((ServerPlayer) this.getSelf()), cin, ci.time, ci.maxTime);
+                    }
+                }
+            }
+        }
+    }
+
+    public static final int zenith = 10;
+
+
+    public void tickDash(){
+        if (this.getSelf() instanceof Player) {
+
+            if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 0) {
+                cancelConsumableItem(this.getSelf());
+            }
+
+            if (((IPlayerEntity)this.getSelf()).roundabout$getClientDodgeTime() >= 10){
+                ((IPlayerEntity)this.getSelf()).roundabout$setClientDodgeTime(-1);
+                if (!this.getSelf().level().isClientSide){
+                    ((IPlayerEntity)this.getSelf()).roundabout$setDodgeTime(-1);
+                    byte pos = ((IPlayerEntity)this.getSelf()).roundabout$GetPos();
+                    if (pos == PlayerPosIndex.DODGE_FORWARD || pos == PlayerPosIndex.DODGE_BACKWARD) {
+                        ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.NONE);
+                    }
+                }
+            } else if (((IPlayerEntity)this.getSelf()).roundabout$getClientDodgeTime() >= 0){
+                ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(((IPlayerEntity) this.getSelf()).roundabout$getClientDodgeTime()+1);
+            }
+
+            if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 10){
+
+                ((IPlayerEntity)this.getSelf()).roundabout$setDodgeTime(-1);
+                byte pos = ((IPlayerEntity)this.getSelf()).roundabout$GetPos();
+                if (pos == PlayerPosIndex.DODGE_FORWARD || pos == PlayerPosIndex.DODGE_BACKWARD) {
+                    ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.NONE);
+                }
+            } else if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 0){
+                if (this.getSelf().level().isClientSide){
+                    ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(((IPlayerEntity) this.getSelf()).roundabout$getDodgeTime()+1);
+                }
+            }
+        }
+    }
+
+    public static final int squareHeight = 24;
+    public static final int squareWidth = 24;
+
+    public void preCheckButtonInputAttack(boolean keyIsDown, Options options) {
+        if (hasStandActive(this.getSelf()) && !this.isGuarding()) {
+            buttonInputAttack(keyIsDown, options);
+        }
+    }
+    public void preCheckButtonInputUse(boolean keyIsDown, Options options) {
+        if (hasStandActive(this.getSelf())) {
+            buttonInputUse(keyIsDown, options);
+        }
+    }
+    public void preCheckButtonInputBarrage(boolean keyIsDown, Options options) {
+        if (hasStandActive(this.getSelf())) {
+            buttonInputBarrage(keyIsDown, options);
+        }
+    }
+    public boolean preCheckButtonInputGuard(boolean keyIsDown, Options options) {
+        if (hasStandActive(this.getSelf())) {
+            return buttonInputGuard(keyIsDown, options);
+        }
+        return false;
+    }
+
+    /**Ticks through the overlays on your screen such as mandom's time rewind function*/
+    public void tickOverlayTicks(){
+        if (timeRewindOverlayTicks > -1) {
+            timeRewindOverlayTicks++;
+            if (timeRewindOverlayTicks >= (zenith*2)) {
+                timeRewindOverlayTicks = -1;
+            }
+        }
+    }
+    public int timeRewindOverlayTicks = -1;
+
+    public static final float maxOverlay = 0.45f;
+
+    public float getOverlayFromOverlayTicks(float delta) {
+        // Interpolated tick value with partial tick (delta)
+        float ticks = timeRewindOverlayTicks + delta;
+
+        // Compute how far from the peak (5) we are
+        float distanceFromPeak = Math.abs(ticks - ((float)zenith));
+
+        // Normalize (distance from 5 goes from 0 to 5)
+        float normalized = 1.0f - (distanceFromPeak / ((float)zenith));
+
+        // Clamp and scale to maxOverlay
+        return Math.max(0.0f, Math.min(1.0f, normalized)) * maxOverlay;
     }
 }
