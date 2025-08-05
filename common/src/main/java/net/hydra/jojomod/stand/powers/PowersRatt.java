@@ -295,13 +295,16 @@ public class PowersRatt extends NewDashPreset {
     public void tickPower() {
         super.tickPower();
 
+        if (getAttackTime() > 20 && getAnimation() == RattEntity.FIRE_NO_RECOIL) {
+            this.animateStand((byte) -1);
+        }
 
         if (this.getSelf().level().isClientSide()) {
             if (this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
 
                 Entity target = getShootTarget();
                 Vec3 targetPos = getTargetPos().getLocation();
-                if (target != null) {
+                if (target != null && isAuto()) {
                     targetPos = target.getEyePosition(1);
                     double dist = targetPos.distanceTo(RE.getPosition(1));
                     double time = dist/ShotPowerFloats[1];
@@ -317,7 +320,10 @@ public class PowersRatt extends NewDashPreset {
                 double hd = Math.sqrt(Math.pow(x,2)+Math.pow(z,2));
                 float hrot = (float) (Math.atan2(hd,hy) + Math.PI/2); // flip the sign if you want it to be not armed
                 double percent = (double) RE.getFadeOut() /RE.getMaxFade();
-                if (percent != 1) {hrot = (float) (Mth.lerp(percent,0,hrot));}
+                if (percent != 1) {
+                    hrot = (float) (Mth.lerp(percent,0,hrot));
+                }
+
                 tryPosPower(PowersRatt.ROTATE,true,new Vec3(hrot,rot,0));
                 tryPosPowerPacket(PowersRatt.ROTATE,new Vec3(hrot,rot,0));
             }
@@ -367,16 +373,6 @@ public class PowersRatt extends NewDashPreset {
 
                 setGoBeyondTarget(getShootTarget());
             } else {
-              /*  Roundabout.LOGGER.info("A: {}",isAuto());
-                Vec3 pos = SE.getPosition(0).add(new Vec3(
-                                3 * Math.cos(SE.getStandRotationY()+Math.PI/2),
-                                3 * Math.sin(SE.getHeadRotationX()),
-                                3 * Math.sin(SE.getStandRotationY()+Math.PI/2)
-                        )
-                );
-                ((ServerLevel) this.self.level()).sendParticles(ModParticles.AIR_CRACKLE, pos.x(),
-                        pos.y(), pos.z(),
-                        2, 0, 0, 0, 1); */
             }
         } else if (active) {
             if (this.getStandUserSelf().roundabout$getActive()) {
@@ -602,11 +598,15 @@ public class PowersRatt extends NewDashPreset {
             case PowersRatt.NET_PLACE_BURST -> {
                 this.setAttackTimeDuring(0);
                 this.setActivePower(PowersRatt.PLACE_BURST);
+                if (!isClient()) {
+                    this.animateStand((byte) -1);
+                }
             }
             case PowersRatt.PLACE_BURST_FIRE -> {
+                this.setAttackTime(-1);
                 if (isClient()) {
                 } else {
-
+                    this.animateStand(RattEntity.FIRE_NO_RECOIL);
                     float power = 0;
                     for (int b=ShotThresholds.length-1;b>=0;b--) {
                         if (51 >= ShotThresholds[b]) {
