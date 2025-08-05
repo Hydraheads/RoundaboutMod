@@ -119,7 +119,7 @@ public class StandPowers {
 
 
     // -----------------------------------------------------------------------------------------
-    // SHARED AND SERVER SIDED FUNCTIONS TO OVERRIDE
+    // FUNCTIONS TO OVERRIDE (Excluding hud stuff, see next section for that)
     // -----------------------------------------------------------------------------------------
 
     /**Is your stand rendered on the player model like hey ya or hermit purple? If so, override
@@ -131,22 +131,13 @@ public class StandPowers {
         return ALL_WORTHY;
     }
 
-
-
+    /**Holds one arm out with the player model, override if you are using a stand like soft and wet or emperor that
+     * should make the player hold their arm out in 3d person*/
     public boolean hasShootingModeVisually(){
         return false;
     }
-    public Component ifWipListDevStatus(){
-        return null;
-    }
-    public Component ifWipListDev(){
-        return null;
-    }
 
 
-    public float getTimestopRange(){
-        return ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite;
-    }
     public float getPermaCastRange(){
         return 100;
     }
@@ -173,26 +164,11 @@ public class StandPowers {
     /**The cooldown for summoning. It is mostly clientside and doesn't have to be synced*/
     public int summonCD = 0;
 
-    /**This updates when a punch is thrown, to stop the stand from throwing the same punch twice if the game lags*/
-    private byte activePowerPhaseCheck = -1;
-
     private int chargedTSTicks = 0;
     public boolean hasActedInTS = false;
 
     public int storedInt = 0;
 
-    /**This is not in powerssoftandwet because I believe if someone is using paisley or other stands they may be able
-     * to redirect it in the future*/
-    public Entity goBeyondTarget = null;
-    public Entity getGoBeyondTarget(){
-        return this.goBeyondTarget;
-    }
-    public void setGoBeyondTarget(Entity goBeyondTarget){
-        this.goBeyondTarget = goBeyondTarget;
-    }
-    public void updateGoBeyondTarget(){
-        goBeyondTarget = null;
-    }
 
     public int getChargedTSTicks(){
         return this.chargedTSTicks;
@@ -236,15 +212,6 @@ public class StandPowers {
     public void setInterruptCD(int interruptCD){
         this.interruptCD = interruptCD;
     }
-
-
-
-
-    public void onDesummon(){
-
-    }
-
-
 
 
     public int getMobRecoilTime(){
@@ -350,21 +317,7 @@ public class StandPowers {
         return Cooldowns;
     }
 
-    public List<Byte> getSkinList(){
-        List<Byte> $$1 = Lists.newArrayList();
-        $$1.add((byte) 0);
-        return $$1;
-    }
 
-    public Component getSkinName(byte skinId){
-        return Component.empty();
-    }
-    public List<Byte> getPosList(){
-        List<Byte> $$1 = Lists.newArrayList();
-        $$1.add((byte) 0);
-        $$1.add((byte) 1);
-        return $$1;
-    }
 
 
     /**Barrage sound playing and canceling involve sending a byte in a packet, then reading it from here on
@@ -480,9 +433,6 @@ public class StandPowers {
     public boolean glowingEyes(){
         return false;
     }
-    public boolean fullTSChargeBonus(){
-        return false;
-    }
     public ResourceLocation getBarrageChargeID(){
         return ModSounds.STAND_BARRAGE_WINDUP_ID;
     }
@@ -536,8 +486,38 @@ public class StandPowers {
         return false;
     }
 
-    public void setAirAmount(int airAmount){
+    /**Returns if the stand is in control/pilot mode right now*/
+    public boolean isPiloting(){
+        return false;
     }
+    /**Returns the stand entity that is going to be controlled, you most likely will not need to override this
+     * unless you are doing a multi stand type like bad company*/
+    public StandEntity getPilotingStand(){
+        return getStandEntity(this.self);
+    }
+    /**If the passed in entity id matches that of getPilotingStand (consider passing in that function directly),
+     * sets you to pilot the stand. Pass in 0, -1, etc to cancel pilot mode.*/
+    public void setPiloting(int ID){
+    }
+
+    /**Check the justice override, this is good for matching the camera up well to the piloting entity clientside*/
+    public void synchToCamera(){
+    }
+
+    /**every entity the client renders is checked against this, overrride and use it to see if they can be highlighted
+     * for detection or attack highlighting related skills*/
+    public boolean highlightsEntity(Entity ent,Player player){
+        return false;
+    }
+    /**The color id for this entity to be displayed as if the above returns true, it is in decimal rather than
+     * hexadecimal*/
+    public int highlightsEntityColor(Entity ent, Player player){
+        return 0;
+    }
+
+    /**How much bonus oxygen does the stand provide? Might be useful for stands that are more water focused,
+     * if it makes sense. Currently only applies to The World.*/
+    public void setAirAmount(int airAmount){}
     public int getAirAmount(){
         return -1;
     }
@@ -545,104 +525,11 @@ public class StandPowers {
         return ClientNetworking.getAppropriateConfig().theWorldSettings.oxygenTankAdditionalTicks;
     }
 
-    public boolean isPiloting(){
-        return false;
-    }
-    public StandEntity getPilotingStand(){
-        return getStandEntity(this.self);
-    }
-    public void setPiloting(int ID){
-    }
 
 
     public void tickPower(){
-        if (this.self.level().isClientSide()){
-            if (this.self instanceof Player) {
-                tickOverlayTicks();
-            }
-
-            if (displayStand != null){
-                if (displayStand.getFadeOut() < displayStand.MaxFade) {
-                    displayStand.incFadeOut((byte) 1);
-                }
-            }
-        }
-
-        if (this.self instanceof Player PE && PE.isSpectator()) {
-            ((StandUser) this.getSelf()).roundabout$setActive(false);
-        }
-        if (this.self.isAlive() && !this.self.isRemoved()) {
-            if (this.self.level().isClientSide){
-                updateGoBeyondTarget();
-                if (!this.kickStarted && this.getAttackTimeDuring() <= -1){
-                    this.kickStarted = true;
-                }
-            }
-            if (this.isClashing()) {
-                if (this.attackTimeDuring != -1) {
-                    this.attackTimeDuring++;
-                    this.updateClashing();
-                }
-            } else if (!this.self.level().isClientSide || kickStarted) {
-                if (this.attackTimeDuring != -1) {
-                    this.attackTimeDuring++;
-                    if (this.attackTimeDuring == -1) {
-                        ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE,true);
-                    } else {
-                        if (!this.isAttackInept(this.activePower)) {
-                            if (this.activePower == PowerIndex.ATTACK) {
-                                this.updateAttack();
-                            } else if (this.isBarraging()) {
-
-                                if (bonusBarrageConditions()) {
-                                    if (this.isBarrageCharging()) {
-                                        this.updateBarrageCharge();
-                                    } else {
-                                        this.updateBarrage();
-                                    }
-                                } else {
-                                    ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
-                                }
-                            } else {
-                                this.updateUniqueMoves();
-                            }
-                        } else {
-                            resetAttackState();
-                        }
-                    }
-                }
-                this.attackTime++;
-                if (this.attackTime > this.attackTimeMax) {
-                    this.setActivePowerPhase((byte) 0);
-                }
-                if (this.interruptCD > 0) {
-                    this.interruptCD--;
-                }
-            }
-            this.tickDash();
-            this.tickCooldowns();
-        } else {
-            StandUser user = ((StandUser)this.getSelf());
-            StandEntity stnd = user.roundabout$getStand();
-            if (stnd != null){
-                user.roundabout$setStand(null);
-            }
-        }
-        if (this.self.level().isClientSide) {
-            tickSounds();
-        }
-        if (this.scopeLevel != 0 && !this.canScope()){
-            setScopeLevel(0);
-            this.scopeTime = -1;
-        }
-        if (((StandUser)this.self).roundabout$getStandDisc().isEmpty()){
-            ((StandUser)this.self).roundabout$setStandPowers(new StandPowers(this.self));
-        }
-        if (!hasStandActive(this.self)) {
-            getStandUserSelf().roundabout$setStandAnimation(NONE);
-        }
+        baseTickPower();
     }
-
 
 
     public static final byte
@@ -652,38 +539,24 @@ public class StandPowers {
 
     }
 
-
+    /**If the cooldown slot is to be controlled by the server, return true. Consider using this if
+     * bad TPS makes a stand ability actually overpowered for the client to handle the recharging of.*/
+    public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
+        return false;
+    }
+    /**If you stand still enough, abilities recharge faster. But this could be overpowered for some abilties, so
+     * use discretion and override this to return false on abilities where this might be op.*/
     public boolean canUseStillStandingRecharge(byte bt){
         return true;
     }
 
-    public boolean highlightsEntity(Entity ent,Player player){
-        return false;
-    }
-    public int highlightsEntityColor(Entity ent, Player player){
-        return 0;
-    }
 
-    public void synchToCamera(){
-    }
-
-
-    public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
-        return false;
-    }
-
-
-
-    /**The manner in which your powers tick when you are being timestopped. Override this if the stand acts differently.
+    /**The manner in which your powers tick when you are being time stopped. Override this if the stand acts differently.
      * By technicality, you should still tick sounds.*/
     public void timeTick(){
         if (this.getSelf().level().isClientSide) {
             this.tickSounds();
         }
-    }
-
-    /**Ticks through your own timestop. This value exists in the general stand powers in case you switch stands.*/
-    public void timeTickStopPower(){
     }
 
     public void tickPermaCast(){
@@ -712,24 +585,6 @@ public class StandPowers {
     private int clashIncrement =0;
     private int clashMod =0;
 
-    private void RoundaboutEnemyClash(){
-        if (this.isClashing()) {
-            if (this.clashIncrement < 0) {
-                ++this.clashIncrement;
-                if (this.clashIncrement == 0) {
-                    this.setClashProgress(0.0f);
-                }
-            }
-            ++this.clashIncrement;
-            if (this.clashIncrement < (6 + this.clashMod)){
-                this.setClashProgress(this.clashIncrement < 10 ?
-                        (float) this.clashIncrement * 0.1f : 0.8f + 2.0f / (float) (this.clashIncrement - 9) * 0.1f);
-            } else {
-                this.setClashDone(true);
-            }
-
-        }
-    }
 
 
     public float getLevelMultiplier(){
@@ -740,25 +595,6 @@ public class StandPowers {
         return false;
     }
 
-    public float levelupDamageMod(float damage){
-        int percent = ClientNetworking.getAppropriateConfig().
-                standLevelingSettings.bonusStandDmgByMaxLevel;
-
-        if (percent > 0  && this.self instanceof Player PE && this.getMaxLevel() >= 1){
-            int maxlevel = getMaxLevel();
-            if (maxlevel > 1) {
-                int level = ((IPlayerEntity) PE).roundabout$getStandLevel();
-                ItemStack sdisc = ((StandUser)PE).roundabout$getStandDisc();
-                if (!sdisc.isEmpty() && sdisc.getItem() instanceof MaxStandDiscItem){
-                    level =maxlevel;
-                }
-                    damage *= (float) (1 +
-                            ((((maxlevel - 1) - ((float) ((maxlevel - 1) - (level - 1)))) / (maxlevel - 1) *
-                                    (0.01 * percent))));
-            }
-        }
-        return damage;
-    }
 
 
 
@@ -802,25 +638,6 @@ public class StandPowers {
     public boolean interceptDamageEvent(DamageSource $$0, float $$1){
         return false;
     }
-    public void poseStand(byte r){
-        StandEntity stand = getStandEntity(this.self);
-        if (stand instanceof FollowingStandEntity FE){
-            FE.setOffsetType(r);
-        }
-    }
-    public void animateStand(byte r){
-        StandEntity stand = getStandEntity(this.self);
-        if (Objects.nonNull(stand)){
-            stand.setAnimation(r);
-        }
-    }
-    public byte getAnimation(){
-        StandEntity stand = getStandEntity(this.self);
-        if (Objects.nonNull(stand)){
-            return stand.getAnimation();
-        }
-        return -1;
-    }
 
     public StandUser getUserData(LivingEntity User){
         return ((StandUser) User);
@@ -836,47 +653,6 @@ public class StandPowers {
         return 5;
     }
 
-    public int getTargetEntityId(){
-        Entity targetEntity = getTargetEntity(this.self, -1);
-        int id;
-        if (targetEntity != null) {
-            id = targetEntity.getId();
-        } else {
-            id = -1;
-        }
-        return id;
-    }
-
-    public int getTargetEntityId(float angle){
-        Entity targetEntity = getTargetEntity(this.self, -1, angle);
-        int id;
-        if (targetEntity != null) {
-            id = targetEntity.getId();
-        } else {
-            id = -1;
-        }
-        return id;
-    }
-    public int getTargetEntityId2(float distance){
-        Entity targetEntity = getTargetEntity(this.self, distance);
-        int id;
-        if (targetEntity != null) {
-            id = targetEntity.getId();
-        } else {
-            id = -1;
-        }
-        return id;
-    }
-    public int getTargetEntityId2(float distance,LivingEntity userr,float angle){
-        Entity targetEntity = getTargetEntityGenerous(userr, distance,angle);
-        int id;
-        if (targetEntity != null) {
-            id = targetEntity.getId();
-        } else {
-            id = -1;
-        }
-        return id;
-    }
     public void standBarrageHit(){
         if (this.self instanceof Player){
             if (isPacketPlayer()){
@@ -935,61 +711,6 @@ public class StandPowers {
 
     //((ServerWorld) this.self.getWorld()).spawnParticles(ParticleTypes.EXPLOSION,pointVec.x, pointVec.y, pointVec.z,
     //        1,0.0, 0.0, 0.0,1);
-
-
-
-    public boolean knockShield(Entity entity, int duration){
-
-        if (entity != null && entity.isAlive() && !entity.isRemoved()) {
-            if (entity instanceof LivingEntity) {
-                if (((LivingEntity) entity).isBlocking()) {
-
-                    StandUser standUser= this.getUserData((LivingEntity) entity);
-                    if (standUser.roundabout$isGuarding()) {
-                        if (!standUser.roundabout$getGuardBroken()){
-                            standUser.roundabout$breakGuard();
-                        }
-                    }
-                    if (entity instanceof Player){
-                         ItemStack itemStack = ((LivingEntity) entity).getUseItem();
-                         Item item = itemStack.getItem();
-                         if (item.getUseAnimation(itemStack) == UseAnim.BLOCK) {
-                             ((LivingEntity) entity).releaseUsingItem();
-                             ((Player) entity).stopUsingItem();
-                         }
-                        ((Player) entity).getCooldowns().addCooldown(Items.SHIELD, duration);
-                        entity.level().broadcastEntityEvent(entity, EntityEvent.SHIELD_DISABLED);
-                    }
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-
-    public boolean knockShield2(Entity entity, int duration){
-
-        if (entity != null && entity.isAlive() && !entity.isRemoved()) {
-            if (entity instanceof LivingEntity) {
-                if (((LivingEntity) entity).isBlocking()) {
-
-                    if (entity instanceof Player){
-                        ItemStack itemStack = ((LivingEntity) entity).getUseItem();
-                        Item item = itemStack.getItem();
-                        if (item.getUseAnimation(itemStack) == UseAnim.BLOCK) {
-                            ((LivingEntity) entity).releaseUsingItem();
-                            ((Player) entity).stopUsingItem();
-                        }
-                        ((Player) entity).getCooldowns().addCooldown(Items.SHIELD, duration);
-                        entity.level().broadcastEntityEvent(entity, EntityEvent.SHIELD_DISABLED);
-                    }
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 
     /**Override these methods to fine tune the attack strength of the stand*/
     public float getPunchStrength(Entity entity){
@@ -1189,84 +910,7 @@ public class StandPowers {
     public boolean moveStarted = false;
 
     public Entity storeEnt = null;
-    public List<Entity> getTargetEntityList(LivingEntity User, float distMax){
-        return getTargetEntityList(User,distMax,25);
-    }
-    public List<Entity> getTargetEntityList(LivingEntity User, float distMax, float angle){
-        /*First, attempts to hit what you are looking at*/
-        if (!(distMax >= 0)) {
-            distMax = this.getDistanceOut(User, this.getReach(), false);
-        }
-        Entity targetEntity = this.rayCastEntity(User,distMax);
 
-        if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
-        || (targetEntity != null && (!targetEntity.isAlive() || targetEntity.isRemoved()))){
-            targetEntity = null;
-        }
-
-        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
-            float halfReach = (float) (distMax*0.5);
-            Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
-            List<Entity> listE = StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
-                    pointVec.z, halfReach, halfReach, halfReach), distMax);
-        if (targetEntity == null) {
-            targetEntity = StandAttackHitboxNear(User,listE,angle);
-        }
-        if (targetEntity instanceof StandEntity SE){
-
-            if (SE.getUser() != null){
-                targetEntity = SE.getUser();
-            }
-        }
-        if (targetEntity instanceof EnderDragonPart EDP){
-            targetEntity = EDP.parentMob;
-        }
-
-        storeEnt = targetEntity;
-
-        return listE;
-    }
-
-    public Entity getTargetEntity(LivingEntity User, float distMax){
-        return getTargetEntity(User,distMax, 25);
-    }
-    public Entity getTargetEntity(LivingEntity User, float distMax, float angle){
-        /*First, attempts to hit what you are looking at*/
-        if (!(distMax >= 0)) {
-            distMax = this.getDistanceOut(User, this.getReach(), false);
-        }
-        Entity targetEntity = this.rayCastEntity(User,distMax);
-
-        if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
-                || (targetEntity != null && (!targetEntity.isAlive() || targetEntity.isRemoved()))){
-            targetEntity = null;
-        }
-
-        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
-        if (targetEntity == null) {
-            float halfReach = (float) (distMax*0.5);
-            Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
-            targetEntity = StandAttackHitboxNear(User,StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
-                    pointVec.z, halfReach, halfReach, halfReach), distMax),angle);
-        }
-        if (targetEntity instanceof StandEntity SE){
-
-            if (SE.getUser() != null){
-                targetEntity = SE.getUser();
-            }
-        }
-        if (targetEntity instanceof EnderDragonPart EDP){
-            targetEntity = EDP.parentMob;
-        }
-
-        if (targetEntity instanceof LivingEntity LE)
-        {
-            if (((StandUser)LE).roundabout$isParallelRunning())
-                return null;
-        }
-
-        return targetEntity;
-    }
     public boolean hasMoreThanOneSkin(){
         List<Byte> skinList = getSkinList();
         return (skinList != null && !skinList.isEmpty() && skinList.size() > 1);
@@ -1382,9 +1026,6 @@ public class StandPowers {
     public void updateUniqueMoves(){
     }
 
-    public void kickStartClient(){
-        this.kickStarted = true;
-    }
 
 
     public boolean interceptAttack(){
@@ -1843,21 +1484,6 @@ public class StandPowers {
     public int getMiningLevel() {
         return 0;
     }
-    public boolean setPowerClash() {
-        this.attackTimeDuring = 0;
-        this.setActivePower(PowerIndex.BARRAGE_CLASH);
-        this.poseStand(OffsetIndex.LOOSE);
-        this.setClashProgress(0f);
-        this.clashIncrement = 0;
-        this.clashMod = (int) (Math.round(Math.random()*8));
-        animateStand(StandEntity.BARRAGE);
-
-        if (this.self instanceof Player && !this.self.level().isClientSide) {
-            ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.barrage_clash"), true);
-        }
-        return true;
-        //playBarrageGuardSound();
-    }
 
     public int getBarrageRecoilTime(){
         return ClientNetworking.getAppropriateConfig().
@@ -1954,29 +1580,7 @@ public class StandPowers {
             return Component.translatable(  "idle.roundabout.passive");
         }
     }
-    @SuppressWarnings("deprecation")
-    public boolean tryPlaceBlock(BlockPos pos){
-        if (!this.self.level().isClientSide()) {
-            BlockState state = this.getSelf().level().getBlockState(pos);
-                if (state.isAir() || (state.canBeReplaced() && getIsGamemodeApproriateForGrief() && !state.liquid() &&
-                        this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
-                        !((this.getSelf() instanceof Player &&
-                                (((Player) this.getSelf()).blockActionRestricted(this.getSelf().level(), pos, ((ServerPlayer)
-                                        this.getSelf()).gameMode.getGameModeForPlayer()))) ||
-                                (this.getSelf() instanceof Player && !this.getSelf().level().mayInteract(((Player) this.getSelf()), pos))))) {
-                    if(this.self instanceof Player p){
-                        if(MainUtil.canPlaceOnClaim(p, new BlockHitResult(new Vec3(pos.relative(Direction.DOWN).getX(),pos.relative(Direction.DOWN).getY(),pos.relative(Direction.DOWN).getZ()), Direction.UP,pos.relative(Direction.DOWN),false))){
-                            return true;
-                        }
-                        else{
-                            return false;
-                        }
-                    }
-                    return true;
-                }
-        }
-        return false;
-    }
+
     public boolean heldDownSwitch = false;
     public void switchRowsKey(boolean keyIsDown, Options options){
         if (!heldDownSwitch){
@@ -1999,10 +1603,6 @@ public class StandPowers {
     public void onActuallyHurt(DamageSource $$0, float $$1){
     }
 
-    /**Override this to decide which skins the stand rolls for on an entity*/
-    public void rollSkin(){
-
-    }
     public byte getSoundCancelingGroupByte(byte soundChoice) {
         if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND){
             return SoundIndex.BARRAGE_SOUND_GROUP;
@@ -2040,7 +1640,7 @@ public class StandPowers {
 
 
     // -----------------------------------------------------------------------------------------
-    // CLIENT FUNCTIONS LIKE UI AND WHATNOT TO OVERRIDE
+    // UI/CLIENT, + SKIN FUNCTIONS TO OVERRIDE
     // Be conscious of where you use client functions and arguments since this class can't accidentally
     // call client functions on a server without crashing
     // -----------------------------------------------------------------------------------------
@@ -2055,11 +1655,36 @@ public class StandPowers {
         return this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
     }
 
+
     /**Use this to draw HUD elements, it is primarily for the middle HUD (attack cooldown bar that is
      * blue, white, and orange), see punchingstand for examples*/
     public void renderAttackHud(GuiGraphics context,  Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha){
+    }
+
+    /**The list of skins for your stand to cycle through, override, see examples, the server iterates through
+     * this as well*/
+    public List<Byte> getSkinList(){
+        List<Byte> $$1 = Lists.newArrayList();
+        $$1.add((byte) 0);
+        return $$1;
+    }
+
+    /**The name for your stand to display in the power inventory HUD*/
+    public Component getSkinName(byte skinId){
+        return Component.empty();
+    }
+
+    /**Override this to decide which skins the stand rolls for on an entity, this is done server sided*/
+    public void rollSkin(){}
+
+    /**The idle pose title for your stand to display in the power inventory HUD*/
+    public List<Byte> getPosList(){
+        List<Byte> $$1 = Lists.newArrayList();
+        $$1.add((byte) 0);
+        $$1.add((byte) 1);
+        return $$1;
     }
 
     /**An easy way to replace the EXP bar with a stand bar, see the function below this one*/
@@ -2070,7 +1695,6 @@ public class StandPowers {
      * a call to another class so too much client code doesn't unnecessarily exist in the standpowers class.*/
     public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x){
     }
-
 
     /**In the power inventory, the stand that displays is the one that exists while your powers are active.
      * But if no stand is out, then it can generate a fake stand. Override to return true like survivor for
@@ -2102,6 +1726,18 @@ public class StandPowers {
             return getStandForHUDIfFake();
         return getStandUserSelf().roundabout$getStand();
     }
+
+
+    /**Override if you are in the middle of making a stand, check other examples of overrides.
+     * Basically this makes the stand disc display that the stand is WIP and the current
+     * dev working on it*/
+    public Component ifWipListDevStatus(){
+        return null;
+    }
+    public Component ifWipListDev(){
+        return null;
+    }
+
 
     /**The four key presses, made obselete by standpowerrewrwite's poweractivate function, check
      * other stands for examples of how to use that*/
@@ -2158,6 +1794,31 @@ public class StandPowers {
     /**What side are we on?*/
     public boolean isClient(){
         return this.getSelf().level().isClientSide();
+    }
+
+    /**changes the pose of the stand, as in the position offset. For instance, if a stand is floating by you, or
+     * in front of you to block, or simply loose (on its own). Synchs if changed on the server.*/
+    public void poseStand(byte r){
+        StandEntity stand = getStandEntity(this.self);
+        if (stand instanceof FollowingStandEntity FE){
+            FE.setOffsetType(r);
+        }
+    }
+    /**changes the animation of the stand, define your animations on the standentity and model/renderer.
+     *  Synchs if changed on the server.*/
+    public void animateStand(byte r){
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)){
+            stand.setAnimation(r);
+        }
+    }
+    /**returns the current animation.*/
+    public byte getAnimation(){
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)){
+            return stand.getAnimation();
+        }
+        return -1;
     }
 
 
@@ -2422,6 +2083,31 @@ public class StandPowers {
         }
     }
 
+    /**Attempts to safely place a block in the world, adheres to gamerules, adventure mode, and claims potentially*/
+    @SuppressWarnings("deprecation")
+    public boolean tryPlaceBlock(BlockPos pos){
+        if (!this.self.level().isClientSide()) {
+            BlockState state = this.getSelf().level().getBlockState(pos);
+            if (state.isAir() || (state.canBeReplaced() && getIsGamemodeApproriateForGrief() && !state.liquid() &&
+                    this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
+                    !((this.getSelf() instanceof Player &&
+                            (((Player) this.getSelf()).blockActionRestricted(this.getSelf().level(), pos, ((ServerPlayer)
+                                    this.getSelf()).gameMode.getGameModeForPlayer()))) ||
+                            (this.getSelf() instanceof Player && !this.getSelf().level().mayInteract(((Player) this.getSelf()), pos))))) {
+                if(this.self instanceof Player p){
+                    if(MainUtil.canPlaceOnClaim(p, new BlockHitResult(new Vec3(pos.relative(Direction.DOWN).getX(),pos.relative(Direction.DOWN).getY(),pos.relative(Direction.DOWN).getZ()), Direction.UP,pos.relative(Direction.DOWN),false))){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**Returns the cooldown for an ability*/
     public CooldownInstance getCooldown(byte power){
         if (!StandCooldowns.isEmpty() && StandCooldowns.size() >= power){
@@ -2511,8 +2197,206 @@ public class StandPowers {
         return !isBlocked;
     }
 
+    /**disables stand guard amd shield guard, this is simplified in the next function*/
+    public boolean knockShield(Entity entity, int duration){
+
+        if (entity != null && entity.isAlive() && !entity.isRemoved()) {
+            if (entity instanceof LivingEntity) {
+                if (((LivingEntity) entity).isBlocking()) {
+
+                    StandUser standUser= this.getUserData((LivingEntity) entity);
+                    if (standUser.roundabout$isGuarding()) {
+                        if (!standUser.roundabout$getGuardBroken()){
+                            standUser.roundabout$breakGuard();
+                        }
+                    }
+                    if (entity instanceof Player){
+                        ItemStack itemStack = ((LivingEntity) entity).getUseItem();
+                        Item item = itemStack.getItem();
+                        if (item.getUseAnimation(itemStack) == UseAnim.BLOCK) {
+                            ((LivingEntity) entity).releaseUsingItem();
+                            ((Player) entity).stopUsingItem();
+                        }
+                        ((Player) entity).getCooldowns().addCooldown(Items.SHIELD, duration);
+                        entity.level().broadcastEntityEvent(entity, EntityEvent.SHIELD_DISABLED);
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    /**disables just shield guard because stand guard doesn't work if your shield guard is disabled*/
+    public boolean knockShield2(Entity entity, int duration){
+
+        if (entity != null && entity.isAlive() && !entity.isRemoved()) {
+            if (entity instanceof LivingEntity) {
+                if (((LivingEntity) entity).isBlocking()) {
+
+                    if (entity instanceof Player){
+                        ItemStack itemStack = ((LivingEntity) entity).getUseItem();
+                        Item item = itemStack.getItem();
+                        if (item.getUseAnimation(itemStack) == UseAnim.BLOCK) {
+                            ((LivingEntity) entity).releaseUsingItem();
+                            ((Player) entity).stopUsingItem();
+                        }
+                        ((Player) entity).getCooldowns().addCooldown(Items.SHIELD, duration);
+                        entity.level().broadcastEntityEvent(entity, EntityEvent.SHIELD_DISABLED);
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    /**Multiply damage by this to add compatibility for stand levelup config*/
+    public float levelupDamageMod(float damage){
+        int percent = ClientNetworking.getAppropriateConfig().
+                standLevelingSettings.bonusStandDmgByMaxLevel;
+
+        if (percent > 0  && this.self instanceof Player PE && this.getMaxLevel() >= 1){
+            int maxlevel = getMaxLevel();
+            if (maxlevel > 1) {
+                int level = ((IPlayerEntity) PE).roundabout$getStandLevel();
+                ItemStack sdisc = ((StandUser)PE).roundabout$getStandDisc();
+                if (!sdisc.isEmpty() && sdisc.getItem() instanceof MaxStandDiscItem){
+                    level =maxlevel;
+                }
+                damage *= (float) (1 +
+                        ((((maxlevel - 1) - ((float) ((maxlevel - 1) - (level - 1)))) / (maxlevel - 1) *
+                                (0.01 * percent))));
+            }
+        }
+        return damage;
+    }
 
     /**Lots of hitbox grabbing code*/
+
+    public List<Entity> getTargetEntityList(LivingEntity User, float distMax){
+        return getTargetEntityList(User,distMax,25);
+    }
+    public List<Entity> getTargetEntityList(LivingEntity User, float distMax, float angle){
+        /*First, attempts to hit what you are looking at*/
+        if (!(distMax >= 0)) {
+            distMax = this.getDistanceOut(User, this.getReach(), false);
+        }
+        Entity targetEntity = this.rayCastEntity(User,distMax);
+
+        if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
+                || (targetEntity != null && (!targetEntity.isAlive() || targetEntity.isRemoved()))){
+            targetEntity = null;
+        }
+
+        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
+        float halfReach = (float) (distMax*0.5);
+        Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
+        List<Entity> listE = StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
+                pointVec.z, halfReach, halfReach, halfReach), distMax);
+        if (targetEntity == null) {
+            targetEntity = StandAttackHitboxNear(User,listE,angle);
+        }
+        if (targetEntity instanceof StandEntity SE){
+
+            if (SE.getUser() != null){
+                targetEntity = SE.getUser();
+            }
+        }
+        if (targetEntity instanceof EnderDragonPart EDP){
+            targetEntity = EDP.parentMob;
+        }
+
+        storeEnt = targetEntity;
+
+        return listE;
+    }
+
+    public Entity getTargetEntity(LivingEntity User, float distMax){
+        return getTargetEntity(User,distMax, 25);
+    }
+    public Entity getTargetEntity(LivingEntity User, float distMax, float angle){
+        /*First, attempts to hit what you are looking at*/
+        if (!(distMax >= 0)) {
+            distMax = this.getDistanceOut(User, this.getReach(), false);
+        }
+        Entity targetEntity = this.rayCastEntity(User,distMax);
+
+        if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
+                || (targetEntity != null && (!targetEntity.isAlive() || targetEntity.isRemoved()))){
+            targetEntity = null;
+        }
+
+        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
+        if (targetEntity == null) {
+            float halfReach = (float) (distMax*0.5);
+            Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
+            targetEntity = StandAttackHitboxNear(User,StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
+                    pointVec.z, halfReach, halfReach, halfReach), distMax),angle);
+        }
+        if (targetEntity instanceof StandEntity SE){
+
+            if (SE.getUser() != null){
+                targetEntity = SE.getUser();
+            }
+        }
+        if (targetEntity instanceof EnderDragonPart EDP){
+            targetEntity = EDP.parentMob;
+        }
+
+        if (targetEntity instanceof LivingEntity LE)
+        {
+            if (((StandUser)LE).roundabout$isParallelRunning())
+                return null;
+        }
+
+        return targetEntity;
+    }
+
+    public int getTargetEntityId(){
+        Entity targetEntity = getTargetEntity(this.self, -1);
+        int id;
+        if (targetEntity != null) {
+            id = targetEntity.getId();
+        } else {
+            id = -1;
+        }
+        return id;
+    }
+
+    public int getTargetEntityId(float angle){
+        Entity targetEntity = getTargetEntity(this.self, -1, angle);
+        int id;
+        if (targetEntity != null) {
+            id = targetEntity.getId();
+        } else {
+            id = -1;
+        }
+        return id;
+    }
+    public int getTargetEntityId2(float distance){
+        Entity targetEntity = getTargetEntity(this.self, distance);
+        int id;
+        if (targetEntity != null) {
+            id = targetEntity.getId();
+        } else {
+            id = -1;
+        }
+        return id;
+    }
+    public int getTargetEntityId2(float distance,LivingEntity userr,float angle){
+        Entity targetEntity = getTargetEntityGenerous(userr, distance,angle);
+        int id;
+        if (targetEntity != null) {
+            id = targetEntity.getId();
+        } else {
+            id = -1;
+        }
+        return id;
+    }
+
     public Entity getTargetEntityGenerous(LivingEntity User, float distMax, float angle){
         /*First, attempts to hit what you are looking at*/
         if (!(distMax >= 0)) {
@@ -2857,6 +2741,23 @@ public class StandPowers {
     }
 
 
+    /**Sets the active power to clashing*/
+    public boolean setPowerClash() {
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.BARRAGE_CLASH);
+        this.poseStand(OffsetIndex.LOOSE);
+        this.setClashProgress(0f);
+        this.clashIncrement = 0;
+        this.clashMod = (int) (Math.round(Math.random()*8));
+        animateStand(StandEntity.BARRAGE);
+
+        if (this.self instanceof Player && !this.self.level().isClientSide) {
+            ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.barrage_clash"), true);
+        }
+        return true;
+        //playBarrageGuardSound();
+    }
+
     /**Initiates a stand barrage clash. This code should probably not be overridden, it is a very mutual event*/
     public void initiateClash(Entity entity){
         ((StandUser) entity).roundabout$getStandPowers().setClashOp(this.self);
@@ -3008,6 +2909,28 @@ public class StandPowers {
             }
         }
     }
+
+
+    /**Enemies randomize their clash power, up to on occasion the maximum for some forced at best ties*/
+    private void RoundaboutEnemyClash(){
+        if (this.isClashing()) {
+            if (this.clashIncrement < 0) {
+                ++this.clashIncrement;
+                if (this.clashIncrement == 0) {
+                    this.setClashProgress(0.0f);
+                }
+            }
+            ++this.clashIncrement;
+            if (this.clashIncrement < (6 + this.clashMod)){
+                this.setClashProgress(this.clashIncrement < 10 ?
+                        (float) this.clashIncrement * 0.1f : 0.8f + 2.0f / (float) (this.clashIncrement - 9) * 0.1f);
+            } else {
+                this.setClashDone(true);
+            }
+
+        }
+    }
+
     /**While you can override this, it might be more sensible to just edit this base function,
      * also veeery conditional use canInterruptPower instead*/
     public boolean preCanInterruptPower(Entity interrupter, boolean isStandDamage){
@@ -3338,5 +3261,120 @@ public class StandPowers {
     }
     public StandPowers(LivingEntity self) {
         this.self = self;
+    }
+    public void baseTickPower(){
+        if (this.self.level().isClientSide()){
+            if (this.self instanceof Player) {
+                tickOverlayTicks();
+            }
+
+            if (displayStand != null){
+                if (displayStand.getFadeOut() < displayStand.MaxFade) {
+                    displayStand.incFadeOut((byte) 1);
+                }
+            }
+        }
+
+        if (this.self instanceof Player PE && PE.isSpectator()) {
+            ((StandUser) this.getSelf()).roundabout$setActive(false);
+        }
+        if (this.self.isAlive() && !this.self.isRemoved()) {
+            if (this.self.level().isClientSide){
+                updateGoBeyondTarget();
+                if (!this.kickStarted && this.getAttackTimeDuring() <= -1){
+                    this.kickStarted = true;
+                }
+            }
+            if (this.isClashing()) {
+                if (this.attackTimeDuring != -1) {
+                    this.attackTimeDuring++;
+                    this.updateClashing();
+                }
+            } else if (!this.self.level().isClientSide || kickStarted) {
+                if (this.attackTimeDuring != -1) {
+                    this.attackTimeDuring++;
+                    if (this.attackTimeDuring == -1) {
+                        ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE,true);
+                    } else {
+                        if (!this.isAttackInept(this.activePower)) {
+                            if (this.activePower == PowerIndex.ATTACK) {
+                                this.updateAttack();
+                            } else if (this.isBarraging()) {
+
+                                if (bonusBarrageConditions()) {
+                                    if (this.isBarrageCharging()) {
+                                        this.updateBarrageCharge();
+                                    } else {
+                                        this.updateBarrage();
+                                    }
+                                } else {
+                                    ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
+                                }
+                            } else {
+                                this.updateUniqueMoves();
+                            }
+                        } else {
+                            resetAttackState();
+                        }
+                    }
+                }
+                this.attackTime++;
+                if (this.attackTime > this.attackTimeMax) {
+                    this.setActivePowerPhase((byte) 0);
+                }
+                if (this.interruptCD > 0) {
+                    this.interruptCD--;
+                }
+            }
+            this.tickDash();
+            this.tickCooldowns();
+        } else {
+            StandUser user = ((StandUser)this.getSelf());
+            StandEntity stnd = user.roundabout$getStand();
+            if (stnd != null){
+                user.roundabout$setStand(null);
+            }
+        }
+        if (this.self.level().isClientSide) {
+            tickSounds();
+        }
+        if (this.scopeLevel != 0 && !this.canScope()){
+            setScopeLevel(0);
+            this.scopeTime = -1;
+        }
+        if (((StandUser)this.self).roundabout$getStandDisc().isEmpty()){
+            ((StandUser)this.self).roundabout$setStandPowers(new StandPowers(this.self));
+        }
+        if (!hasStandActive(this.self)) {
+            getStandUserSelf().roundabout$setStandAnimation(NONE);
+        }
+    }
+
+    /**This plays automatically when a power is changed on the server to sync it with the client*/
+    public void kickStartClient(){
+        this.kickStarted = true;
+    }
+
+    /**Only star platinum or the world would ever need to override these*/
+    public float getTimestopRange(){
+        return ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite;
+    }
+    public boolean fullTSChargeBonus(){return false;}
+
+    /**Ticks through your own timestop. This value exists in the general stand powers in case you switch stands.*/
+    public void timeTickStopPower(){
+    }
+
+    /**This is not in powerssoftandwet because I believe if someone is using paisley or other stands they may be able
+     * to redirect it in the future*/
+    public Entity goBeyondTarget = null;
+    public Entity getGoBeyondTarget(){
+        return this.goBeyondTarget;
+    }
+    public void setGoBeyondTarget(Entity goBeyondTarget){
+        this.goBeyondTarget = goBeyondTarget;
+    }
+    public void updateGoBeyondTarget(){
+        goBeyondTarget = null;
     }
 }
