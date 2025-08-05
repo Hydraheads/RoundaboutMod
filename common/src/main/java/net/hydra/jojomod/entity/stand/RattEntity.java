@@ -21,8 +21,10 @@ public class RattEntity extends StandEntity {
             SAND_SKIN = 4,
             AZTEC_SKIN = 5,
             TOWER_SKIN = 6,
-            SNOWY_SKIN = 7;
+            SNOWY_SKIN = 7,
 
+            FIRE = 81,
+            FIRE_NO_RECOIL = 82;
 
     public List<Byte> getSkinList() {
         return Arrays.asList(
@@ -52,6 +54,27 @@ public class RattEntity extends StandEntity {
     @Override
     public boolean standHasGravity() {
         return true;
+    }
+
+
+    public final AnimationState fire = new AnimationState();
+    public final AnimationState fire_no_recoil = new AnimationState();
+
+    @Override
+    public void setupAnimationStates() {
+        if (this.getUser() != null) {
+            if (this.getAnimation() == FIRE) {
+                this.fire.startIfStopped(this.tickCount);
+            } else {
+                this.fire.stop();
+            }
+            if (this.getAnimation() == FIRE_NO_RECOIL) {
+                this.fire_no_recoil.startIfStopped(this.tickCount);
+            } else {
+                this.fire_no_recoil.stop();
+            }
+        }
+        super.setupAnimationStates();
     }
 }
 

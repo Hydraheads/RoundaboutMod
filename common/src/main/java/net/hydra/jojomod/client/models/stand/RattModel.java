@@ -6,6 +6,7 @@ package net.hydra.jojomod.client.models.stand;// Made with Blockbench 4.12.5
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.models.stand.animations.RattAnimations;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -128,7 +129,10 @@ public class RattModel<T extends RattEntity> extends StandModel<T> {
 
 	@Override
 	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+		super.setupAnim(pEntity,pLimbSwing,pLimbSwingAmount,pAgeInTicks,pNetHeadYaw,pHeadPitch);
 		this.head.xRot = pEntity.getHeadRotationX();
 		this.stand.yRot = pEntity.getStandRotationY();
-	}
+
+		this.animate(pEntity.fire, RattAnimations.Fire, pAgeInTicks, 1f);
+		this.animate(pEntity.fire_no_recoil, RattAnimations.FireNoRecoil, pAgeInTicks, 1f);}
 }
