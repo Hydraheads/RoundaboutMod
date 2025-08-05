@@ -73,7 +73,9 @@ public class StandPowers {
      * Note that most generic STAND USER code is in a mixin to the livingentity class.*/
 
 
+    // -----------------------------------------------------------------------------------------
     // OVERRIDE THIS
+    // -----------------------------------------------------------------------------------------
     /**This is imporant, on every stand class, override this and do something like
      *     return new PowersTheWorld(entity); */
     public StandPowers generateStandPowers(LivingEntity entity){
@@ -81,7 +83,9 @@ public class StandPowers {
     }
 
 
+    // -----------------------------------------------------------------------------------------
     // UNDERSTANDING THE MAIN VARIABLES
+    // -----------------------------------------------------------------------------------------
 
     /**Note that self refers to the stand user, and not the stand itself.*/
     public final LivingEntity self;
@@ -113,7 +117,10 @@ public class StandPowers {
 
 
 
+
+    // -----------------------------------------------------------------------------------------
     // SHARED AND SERVER SIDED FUNCTIONS TO OVERRIDE
+    // -----------------------------------------------------------------------------------------
 
     /**Is your stand rendered on the player model like hey ya or hermit purple? If so, override
      * worthinessType() to return HUMANOID_WORTHY instead so only mobs it can render on are worthy*/
@@ -124,15 +131,6 @@ public class StandPowers {
         return ALL_WORTHY;
     }
 
-
-
-
-    public void playerSetProperties(Player PE) {
-    }
-
-    public StandPowers(LivingEntity self) {
-        this.self = self;
-    }
 
 
     public boolean hasShootingModeVisually(){
@@ -256,7 +254,7 @@ public class StandPowers {
     public boolean forwardBarrage = false;
 
 
-    /** Called per frame, use for particle FX and such */
+    /** Called per client tick, use for particle FX and such */
     public void visualFrameTick() {};
     public void updateGuard(boolean yeet){
         if (suspendGuard) {
@@ -300,30 +298,7 @@ public class StandPowers {
             }
         }
     }
-    public void addEXP(int amt, LivingEntity ent){
-        if (!((StandUser)ent).roundabout$getStandDisc().isEmpty() && (ent instanceof Monster ||
-                ent instanceof NeutralMob)){
-            if (ent.getMaxHealth() >= 100){
-                amt = (int)( amt*0.5);
-            }
-            addEXP(amt*5);
-        } else {
-            if (ent.getMaxHealth() >= 100){
-                amt = (int)( amt*0.5);
-            }
-            addEXP(amt);
-        }
-    }
-    public void addEXP(int amt){
-        if (this.getSelf() instanceof Player PE){
-            StandUser user = ((StandUser) PE);
-            ItemStack stack = ((StandUser) PE).roundabout$getStandDisc();
-            if (!stack.isEmpty() && !(stack.getItem() instanceof MaxStandDiscItem)){
-                IPlayerEntity ipe = ((IPlayerEntity) PE);
-                ipe.roundabout$addStandExp(amt);
-            }
-        }
-    }
+
 
     public void pilotInputAttack(){
     }
@@ -390,41 +365,6 @@ public class StandPowers {
         $$1.add((byte) 1);
         return $$1;
     }
-
-    public void setCooldown(byte power, int cooldown){
-        if (!StandCooldowns.isEmpty() && StandCooldowns.size() >= power){
-            StandCooldowns.get(power).time = cooldown;
-            StandCooldowns.get(power).maxTime = cooldown;
-        }
-    }
-    public void setCooldownMax(byte power, int cooldown, int maxCooldown){
-        if (!StandCooldowns.isEmpty() && StandCooldowns.size() >= power){
-            StandCooldowns.get(power).time = cooldown;
-            StandCooldowns.get(power).maxTime = maxCooldown;
-        }
-    }
-
-
-    public CooldownInstance getCooldown(byte power){
-        if (!StandCooldowns.isEmpty() && StandCooldowns.size() >= power){
-            return StandCooldowns.get(power);
-        }
-        return null;
-    }
-
-    public boolean onCooldown(byte power){
-        if (!StandCooldowns.isEmpty() && StandCooldowns.size() >= power){
-            return (StandCooldowns.get(power).time >= 0);
-        }
-        return false;
-    }
-
-
-    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos,byte level,boolean bypas){
-        List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        return $$1;
-    }
-
 
 
     /**Barrage sound playing and canceling involve sending a byte in a packet, then reading it from here on
@@ -713,9 +653,6 @@ public class StandPowers {
     }
 
 
-
-
-
     public boolean canUseStillStandingRecharge(byte bt){
         return true;
     }
@@ -736,10 +673,6 @@ public class StandPowers {
     }
 
 
-
-    public boolean isClient(){
-        return this.getSelf().level().isClientSide();
-    }
 
     /**The manner in which your powers tick when you are being timestopped. Override this if the stand acts differently.
      * By technicality, you should still tick sounds.*/
@@ -892,13 +825,7 @@ public class StandPowers {
     public StandUser getUserData(LivingEntity User){
         return ((StandUser) User);
     }
-    public StandEntity getStandEntity(LivingEntity User){
-        return this.getUserData(User).roundabout$getStand();
-    } public boolean hasStandEntity(LivingEntity User){
-        return this.getUserData(User).roundabout$hasStandOut();
-    } public boolean hasStandActive(LivingEntity User){
-        return this.getUserData(User).roundabout$getActive();
-    }
+
 
     /**Edit this to apply special effect when stand virus is ravaging a mob with this stand.
      * Use the instance to time the effect appropriately*/
@@ -1006,45 +933,10 @@ public class StandPowers {
         }
     }
 
-    /**This function ensures the client sending attack packets is ONLY the player using the attack, prevents double attacking*/
-    public boolean isPacketPlayer(){
-        if (this.self.level().isClientSide) {
-            Minecraft mc = Minecraft.getInstance();
-            return mc.player != null && mc.player.getId() == this.self.getId();
-        }
-        return false;
-    }
     //((ServerWorld) this.self.getWorld()).spawnParticles(ParticleTypes.EXPLOSION,pointVec.x, pointVec.y, pointVec.z,
     //        1,0.0, 0.0, 0.0,1);
 
-    public boolean isDazed(LivingEntity entity){
-        return this.getUserData(entity).roundabout$isDazed();
-    }
-    public void setDazed(LivingEntity entity, byte dazeTime){
-        if ((1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)) <= 0.0) {
-            /*Warden, iron golems, and anything else knockback immmune can't be dazed**/
-            return;
-        } else if (MainUtil.isBossMob(entity)){
-            /*Bosses can't be dazed**/
-            return;
-        }
-        if (dazeTime > 0){
-            ((StandUser) entity).roundabout$tryPower(PowerIndex.NONE,true);
-            ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.HURT_BY_BARRAGE);
-        } else {
-            ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.IDLE);
-        }
-        this.getUserData(entity).roundabout$setDazed(dazeTime);
-    }
-    public void setDazedSafely(LivingEntity entity, byte dazeTime){
-        if (dazeTime > 0){
-            ((StandUser) entity).roundabout$tryPower(PowerIndex.NONE,true);
-            ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.HURT_BY_BARRAGE);
-        } else {
-            ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.IDLE);
-        }
-        this.getUserData(entity).roundabout$setDazed(dazeTime);
-    }
+
 
     public boolean knockShield(Entity entity, int duration){
 
@@ -1165,43 +1057,6 @@ public class StandPowers {
         );
     }
 
-    /**Initiates a stand barrage clash. This code should probably not be overridden, it is a very mutual event*/
-    public void initiateClash(Entity entity){
-        ((StandUser) entity).roundabout$getStandPowers().setClashOp(this.self);
-        ((StandUser) this.self).roundabout$getStandPowers().setClashOp((LivingEntity) entity);
-        this.clashStarter = 0;
-        ((StandUser) entity).roundabout$getStandPowers().clashStarter = 1;
-
-        ((StandUser) entity).roundabout$tryPower(PowerIndex.BARRAGE_CLASH, true);
-        ((StandUser) self).roundabout$tryPower(PowerIndex.BARRAGE_CLASH, true);
-
-        LivingEntity standEntity = ((StandUser) entity).roundabout$getStand();
-        LivingEntity standSelf = ((StandUser) self).roundabout$getStand();
-
-        if (standEntity != null && standSelf != null){
-            ((StandUser) entity).roundabout$getStandPowers().playBarrageClashSound();
-            ((StandUser) this.self).roundabout$getStandPowers().playBarrageClashSound();
-            Vec3 CenterPoint = entity.position().add(self.position()).scale(0.5);
-
-            Vec3 entityPoint = offsetBarrageVector(
-                    CenterPoint.subtract(((CenterPoint.subtract(entity.position())).normalize()).scale(0.95)),
-                    getLookAtEntityYaw(entity,self));
-
-
-            Vec3 selfPoint = offsetBarrageVector(
-                    CenterPoint.subtract(((CenterPoint.subtract(self.position())).normalize()).scale(0.95)),
-                    getLookAtEntityYaw(self,entity));
-
-            standEntity.setPosRaw(entityPoint.x(),entityPoint.y()+getYOffSet(standEntity),entityPoint.z());
-            standEntity.setXRot(getLookAtEntityPitch(standEntity,standSelf));
-            standEntity.setYRot(getLookAtEntityYaw(standEntity,standSelf));
-
-            standSelf.setPosRaw(selfPoint.x(),selfPoint.y()+getYOffSet(standSelf),selfPoint.z());
-            standSelf.setXRot(getLookAtEntityPitch(standSelf,standEntity));
-            standSelf.setYRot(getLookAtEntityYaw(standSelf,standEntity));
-
-        }
-    }
 
     private Vec3 offsetBarrageVector(Vec3 vec3d, float yaw){
         Vec3 vec3d2 = DamageHandler.getRotationVector(0, yaw+ 90);
@@ -1220,94 +1075,7 @@ public class StandPowers {
         return false;
     }
 
-    public void barrageImpact(Entity entity, int hitNumber){
-        if (this.isBarrageAttacking()) {
-            if (bonusBarrageConditions()) {
-                boolean sideHit = false;
-                if (hitNumber > 1000){
-                    if (!(ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect)){
-                        return;
-                    }
-                    hitNumber-=1000;
-                    sideHit = true;
-                }
-                boolean lastHit = (hitNumber >= this.getBarrageLength());
-                if (entity != null) {
-                    if (entity instanceof LivingEntity && ((StandUser) entity).roundabout$isBarraging()
-                            && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
-                        initiateClash(entity);
-                    } else {
-                        float pow;
-                        float knockbackStrength = 0;
-                        /**By saving the velocity before hitting, we can let people approach barraging foes
-                         * through shields.*/
-                        Vec3 prevVelocity = entity.getDeltaMovement();
-                        if (lastHit) {
-                            pow = this.getBarrageFinisherStrength(entity);
-                            knockbackStrength = this.getBarrageFinisherKnockback();
-                        } else {
-                            pow = this.getBarrageHitStrength(entity);
-                            float mn = this.getBarrageLength() - hitNumber;
-                            if (mn == 0) {
-                                mn = 0.015F;
-                            } else {
-                                mn = ((0.015F / (mn)));
-                            }
-                            knockbackStrength = 0.014F - mn;
-                        }
 
-                        if (sideHit){
-                            pow/=4;
-                            knockbackStrength/=6;
-                        }
-
-                        if (StandRushDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
-                            if (entity instanceof LivingEntity LE) {
-                                if (lastHit) {
-                                    setDazed((LivingEntity) entity, (byte) 0);
-
-                                    if (!sideHit) {
-                                        ((StandUser)LE).roundabout$setDestructionTrailTicks(80);
-                                        addEXP(8,LE);
-                                        playBarrageEndNoise(0, entity);
-                                    }
-                                } else {
-                                    setDazed((LivingEntity) entity, (byte) 3);
-                                    if (!sideHit) {
-                                        playBarrageNoise(hitNumber, entity);
-                                    }
-                                }
-                            }
-                            barrageImpact2(entity, lastHit, knockbackStrength);
-                        } else {
-                            if (lastHit) {
-                                knockShield2(entity, 200);
-                                if (!sideHit) {
-                                    playBarrageBlockEndNoise(0, entity);
-                                }
-                            } else {
-                                entity.setDeltaMovement(prevVelocity);
-                                playBarrageBlockNoise();
-                            }
-                        }
-                    }
-                } else {
-                    if (!sideHit) {
-                        playBarrageMissNoise(hitNumber);
-                    }
-                }
-
-                if (lastHit) {
-                    animateStand(StandEntity.BARRAGE_FINISHER);
-                    this.attackTimeDuring = -10;
-                }
-            } else {
-                ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
-            }
-        } else {
-            ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
-        }
-    }
 
     public boolean cancelSprintJump(){
         return this.isBarraging();
@@ -1328,29 +1096,7 @@ public class StandPowers {
         return true;
     }
 
-    public void takeDeterminedKnockbackWithY(LivingEntity user, Entity target, float knockbackStrength){
-        float xRot; if (!target.onGround()){xRot=user.getXRot();} else {xRot = -15;}
-        this.takeKnockbackWithY(target, knockbackStrength,
-                Mth.sin(user.getYRot() * ((float) Math.PI / 180)),
-                Mth.sin(xRot * ((float) Math.PI / 180)),
-                -Mth.cos(user.getYRot() * ((float) Math.PI / 180)));
 
-    }
-    public void takeDeterminedKnockback(LivingEntity user, Entity target, float knockbackStrength){
-
-        if (target instanceof LivingEntity && (knockbackStrength *= (float) (1.0 - ((LivingEntity)target).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
-            return;
-        }
-        target.hurtMarked = true;
-        Vec3 vec3d2 = new Vec3(Mth.sin(
-                user.getYRot() * ((float) Math.PI / 180)),
-                0,
-                -Mth.cos(user.getYRot() * ((float) Math.PI / 180))).normalize().scale(knockbackStrength);
-        target.setDeltaMovement(- vec3d2.x,
-                target.onGround() ? 0.28 : 0,
-                - vec3d2.z);
-        target.hasImpulse = true;
-    }
     public void playBarrageMissNoise(int hitNumber){
         if (!this.self.level().isClientSide()) {
             if (hitNumber%2==0) {
@@ -1602,96 +1348,9 @@ public class StandPowers {
         return 1;
     }
 
-    public boolean StandDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
-        if (attacker instanceof TamableAnimal TA){
-            if (target instanceof TamableAnimal TT && TT.getOwner() != null
-                    && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
-                return false;
-            }
-        } else if (attacker instanceof AbstractVillager){
-            if (target instanceof AbstractVillager){
-                return false;
-            }
-        }
-        if (DamageHandler.StandDamageEntity(target,pow, attacker)){
-            if (attacker instanceof LivingEntity LE){
-                LE.setLastHurtMob(target);
-            }
-            if (target instanceof LivingEntity && knockbackStrength > 0) {
-                ((LivingEntity) target).knockback(knockbackStrength * 0.5f, Mth.sin(attacker.getYRot() * ((float) Math.PI / 180)), -Mth.cos(attacker.getYRot() * ((float) Math.PI / 180)));
-            }
-            return true;
-        }
-        return false;
-    }
-    public boolean StandRushDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
-        if (attacker instanceof TamableAnimal TA){
-            if (target instanceof TamableAnimal TT && TT.getOwner() != null
-                    && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
-                return false;
-            }
-        } else if (attacker instanceof AbstractVillager){
-            if (target instanceof AbstractVillager){
-                return false;
-            }
-        }
-        if (DamageHandler.StandRushDamageEntity(target,pow, attacker)){
-            if (attacker instanceof LivingEntity LE){
-                LE.setLastHurtMob(target);
-            }
-            if (target instanceof LivingEntity && knockbackStrength > 0) {
-                ((LivingEntity) target).knockback(knockbackStrength * 0.5f, Mth.sin(attacker.getYRot() * ((float) Math.PI / 180)), -Mth.cos(attacker.getYRot() * ((float) Math.PI / 180)));
-            }
-            return true;
-        }
-        return false;
-    }
-
-    public void takeKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
-
-        if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
-            return;
-        }
-        entity.hurtMarked = true;
-        Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
-        entity.setDeltaMovement(- vec3d2.x,
-                -vec3d2.y,
-                - vec3d2.z);
-        entity.hasImpulse = true;
-    }
 
 
-    public void takeKnockbackUp(Entity entity, double strength) {
-        if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
-            return;
-        }
-        entity.hasImpulse = true;
 
-        Vec3 vec3d2 = new Vec3(0, strength, 0).normalize().scale(strength);
-        entity.setDeltaMovement(vec3d2.x,
-                vec3d2.y,
-                vec3d2.z);
-    }
-
-    /**This function is a sanity check so mobs can't be hit behind doors*/
-    public boolean canActuallyHit(Entity entity){
-        if (ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchesGoThroughDoorsAndCorners){
-            return true;
-        }
-        Vec3 from = new Vec3(this.self.getX(), this.self.getY(), this.self.getZ()); // your position
-        Vec3 to = entity.getEyePosition(1.0F); // where the entity's eyes are
-
-        BlockHitResult result = this.self.level().clip(new ClipContext(
-                from,
-                to,
-                ClipContext.Block.COLLIDER,
-                ClipContext.Fluid.NONE,
-                this.self
-        ));
-        boolean isBlocked = result.getType() != HitResult.Type.MISS &&
-                result.getLocation().distanceTo(from) < to.distanceTo(from);
-        return !isBlocked;
-    }
 
     public Entity StandAttackHitboxNear(LivingEntity User,List<Entity> entities, float angle){
         float nearestDistance = -1;
@@ -2380,8 +2039,11 @@ public class StandPowers {
 
 
 
+    // -----------------------------------------------------------------------------------------
     // CLIENT FUNCTIONS LIKE UI AND WHATNOT TO OVERRIDE
-
+    // Be conscious of where you use client functions and arguments since this class can't accidentally
+    // call client functions on a server without crashing
+    // -----------------------------------------------------------------------------------------
 
     /**Override this to render stand icons, see examples from other stands*/
     public void renderIcons(GuiGraphics context, int x, int y) {
@@ -2482,14 +2144,22 @@ public class StandPowers {
 
 
 
+    // -----------------------------------------------------------------------------------------
     // Functions you will NOT need to override
     // Ones you might actually use edition
-
+    // -----------------------------------------------------------------------------------------
 
     /**Is the stand user self in creative mode?*/
     public boolean getCreative(){
         return this.self instanceof Player PE && PE.isCreative();
     }
+
+
+    /**What side are we on?*/
+    public boolean isClient(){
+        return this.getSelf().level().isClientSide();
+    }
+
 
     /**The most basic getters and setters*/
     public StandUser getStandUserSelf(){
@@ -2537,6 +2207,14 @@ public class StandPowers {
         this.activePowerPhase = activePowerPhase;
     }
 
+    /**If you have a stand entity summoned, get that*/
+    public StandEntity getStandEntity(LivingEntity User){
+        return this.getUserData(User).roundabout$getStand();
+    } public boolean hasStandEntity(LivingEntity User){
+        return this.getUserData(User).roundabout$hasStandOut();
+    } public boolean hasStandActive(LivingEntity User){
+        return this.getUserData(User).roundabout$getActive();
+    }
 
     /**A basic function called to draw stand icons*/
     public void setSkillIcon(GuiGraphics context, int x, int y, int slot, ResourceLocation rl, byte CDI){
@@ -2646,6 +2324,193 @@ public class StandPowers {
             }
         }
     }
+
+    /**Code for triggering a damage event*/
+    public boolean StandDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
+        if (attacker instanceof TamableAnimal TA){
+            if (target instanceof TamableAnimal TT && TT.getOwner() != null
+                    && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
+                return false;
+            }
+        } else if (attacker instanceof AbstractVillager){
+            if (target instanceof AbstractVillager){
+                return false;
+            }
+        }
+        if (DamageHandler.StandDamageEntity(target,pow, attacker)){
+            if (attacker instanceof LivingEntity LE){
+                LE.setLastHurtMob(target);
+            }
+            if (target instanceof LivingEntity && knockbackStrength > 0) {
+                ((LivingEntity) target).knockback(knockbackStrength * 0.5f, Mth.sin(attacker.getYRot() * ((float) Math.PI / 180)), -Mth.cos(attacker.getYRot() * ((float) Math.PI / 180)));
+            }
+            return true;
+        }
+        return false;
+    }
+    public boolean StandRushDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
+        if (attacker instanceof TamableAnimal TA){
+            if (target instanceof TamableAnimal TT && TT.getOwner() != null
+                    && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
+                return false;
+            }
+        } else if (attacker instanceof AbstractVillager){
+            if (target instanceof AbstractVillager){
+                return false;
+            }
+        }
+        if (DamageHandler.StandRushDamageEntity(target,pow, attacker)){
+            if (attacker instanceof LivingEntity LE){
+                LE.setLastHurtMob(target);
+            }
+            if (target instanceof LivingEntity && knockbackStrength > 0) {
+                ((LivingEntity) target).knockback(knockbackStrength * 0.5f, Mth.sin(attacker.getYRot() * ((float) Math.PI / 180)), -Mth.cos(attacker.getYRot() * ((float) Math.PI / 180)));
+            }
+            return true;
+        }
+        return false;
+    }
+
+
+    /**This function ensures the client sending attack packets is ONLY the player using the attack, prevents double attacking*/
+    public boolean isPacketPlayer(){
+        if (this.self.level().isClientSide) {
+            Minecraft mc = Minecraft.getInstance();
+            return mc.player != null && mc.player.getId() == this.self.getId();
+        }
+        return false;
+    }
+
+    /**set an ability on cooldown*/
+    public void setCooldown(byte power, int cooldown){
+        if (!StandCooldowns.isEmpty() && StandCooldowns.size() >= power){
+            StandCooldowns.get(power).time = cooldown;
+            StandCooldowns.get(power).maxTime = cooldown;
+        }
+    }
+    /**set an ability on cooldown, and change the max cooldown*/
+    public void setCooldownMax(byte power, int cooldown, int maxCooldown){
+        if (!StandCooldowns.isEmpty() && StandCooldowns.size() >= power){
+            StandCooldowns.get(power).time = cooldown;
+            StandCooldowns.get(power).maxTime = maxCooldown;
+        }
+    }
+
+    /**Functions to use to make your abilities grant stand exp*/
+    public void addEXP(int amt, LivingEntity ent){
+        if (!((StandUser)ent).roundabout$getStandDisc().isEmpty() && (ent instanceof Monster ||
+                ent instanceof NeutralMob)){
+            if (ent.getMaxHealth() >= 100){
+                amt = (int)( amt*0.5);
+            }
+            addEXP(amt*5);
+        } else {
+            if (ent.getMaxHealth() >= 100){
+                amt = (int)( amt*0.5);
+            }
+            addEXP(amt);
+        }
+    }
+    public void addEXP(int amt){
+        if (this.getSelf() instanceof Player PE){
+            StandUser user = ((StandUser) PE);
+            ItemStack stack = ((StandUser) PE).roundabout$getStandDisc();
+            if (!stack.isEmpty() && !(stack.getItem() instanceof MaxStandDiscItem)){
+                IPlayerEntity ipe = ((IPlayerEntity) PE);
+                ipe.roundabout$addStandExp(amt);
+            }
+        }
+    }
+
+    /**Returns the cooldown for an ability*/
+    public CooldownInstance getCooldown(byte power){
+        if (!StandCooldowns.isEmpty() && StandCooldowns.size() >= power){
+            return StandCooldowns.get(power);
+        }
+        return null;
+    }
+
+    /**Checks if an ability is currently on cooldown*/
+    public boolean onCooldown(byte power){
+        if (!StandCooldowns.isEmpty() && StandCooldowns.size() >= power){
+            return (StandCooldowns.get(power).time >= 0);
+        }
+        return false;
+    }
+
+    /**Inflict knockback*/
+    public void takeKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
+
+        if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+            return;
+        }
+        entity.hurtMarked = true;
+        Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
+        entity.setDeltaMovement(- vec3d2.x,
+                -vec3d2.y,
+                - vec3d2.z);
+        entity.hasImpulse = true;
+    }
+
+
+    /**Inflict knockback with push upwards*/
+    public void takeKnockbackUp(Entity entity, double strength) {
+        if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+            return;
+        }
+        entity.hasImpulse = true;
+
+        Vec3 vec3d2 = new Vec3(0, strength, 0).normalize().scale(strength);
+        entity.setDeltaMovement(vec3d2.x,
+                vec3d2.y,
+                vec3d2.z);
+    }
+
+    /**Look at where these are called for context*/
+    public void takeDeterminedKnockbackWithY(LivingEntity user, Entity target, float knockbackStrength){
+        float xRot; if (!target.onGround()){xRot=user.getXRot();} else {xRot = -15;}
+        this.takeKnockbackWithY(target, knockbackStrength,
+                Mth.sin(user.getYRot() * ((float) Math.PI / 180)),
+                Mth.sin(xRot * ((float) Math.PI / 180)),
+                -Mth.cos(user.getYRot() * ((float) Math.PI / 180)));
+
+    }
+    public void takeDeterminedKnockback(LivingEntity user, Entity target, float knockbackStrength){
+
+        if (target instanceof LivingEntity && (knockbackStrength *= (float) (1.0 - ((LivingEntity)target).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+            return;
+        }
+        target.hurtMarked = true;
+        Vec3 vec3d2 = new Vec3(Mth.sin(
+                user.getYRot() * ((float) Math.PI / 180)),
+                0,
+                -Mth.cos(user.getYRot() * ((float) Math.PI / 180))).normalize().scale(knockbackStrength);
+        target.setDeltaMovement(- vec3d2.x,
+                target.onGround() ? 0.28 : 0,
+                - vec3d2.z);
+        target.hasImpulse = true;
+    }
+
+    /**This function is a sanity check so mobs can't be hit behind doors*/
+    public boolean canActuallyHit(Entity entity){
+        if (ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchesGoThroughDoorsAndCorners){
+            return true;
+        }
+        Vec3 from = new Vec3(this.self.getX(), this.self.getY(), this.self.getZ()); // your position
+        Vec3 to = entity.getEyePosition(1.0F); // where the entity's eyes are
+
+        BlockHitResult result = this.self.level().clip(new ClipContext(
+                from,
+                to,
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.NONE,
+                this.self
+        ));
+        boolean isBlocked = result.getType() != HitResult.Type.MISS &&
+                result.getLocation().distanceTo(from) < to.distanceTo(from);
+        return !isBlocked;
+    }
+
 
     /**Lots of hitbox grabbing code*/
     public Entity getTargetEntityGenerous(LivingEntity User, float distMax, float angle){
@@ -2862,6 +2727,35 @@ public class StandPowers {
         }
         return hitSomething;
     }
+    /**Functions to check/set barrage daze*/
+    public boolean isDazed(LivingEntity entity){
+        return this.getUserData(entity).roundabout$isDazed();
+    }
+    public void setDazed(LivingEntity entity, byte dazeTime){
+        if ((1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)) <= 0.0) {
+            /*Warden, iron golems, and anything else knockback immmune can't be dazed**/
+            return;
+        } else if (MainUtil.isBossMob(entity)){
+            /*Bosses can't be dazed**/
+            return;
+        }
+        if (dazeTime > 0){
+            ((StandUser) entity).roundabout$tryPower(PowerIndex.NONE,true);
+            ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.HURT_BY_BARRAGE);
+        } else {
+            ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.IDLE);
+        }
+        this.getUserData(entity).roundabout$setDazed(dazeTime);
+    }
+    public void setDazedSafely(LivingEntity entity, byte dazeTime){
+        if (dazeTime > 0){
+            ((StandUser) entity).roundabout$tryPower(PowerIndex.NONE,true);
+            ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.HURT_BY_BARRAGE);
+        } else {
+            ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.IDLE);
+        }
+        this.getUserData(entity).roundabout$setDazed(dazeTime);
+    }
 
 
 
@@ -2893,8 +2787,11 @@ public class StandPowers {
 
 
 
+    // -----------------------------------------------------------------------------------------
     // Functions you will NOT need to override
     // And will never be needed by you
+    // BASICALLY YOU CAN IGNORE EVERYTHING HERE
+    // -----------------------------------------------------------------------------------------
 
     public boolean isWorthinessType(LivingEntity LE){
         if (worthinessType() == HUMANOID_WORTHY){
@@ -2957,6 +2854,45 @@ public class StandPowers {
     public StandPowers generateStandPowersPre(LivingEntity entity){
         ((StandUser)entity).roundabout$setGuardPoints(getMaxGuardPoints());
         return generateStandPowers(entity);
+    }
+
+
+    /**Initiates a stand barrage clash. This code should probably not be overridden, it is a very mutual event*/
+    public void initiateClash(Entity entity){
+        ((StandUser) entity).roundabout$getStandPowers().setClashOp(this.self);
+        ((StandUser) this.self).roundabout$getStandPowers().setClashOp((LivingEntity) entity);
+        this.clashStarter = 0;
+        ((StandUser) entity).roundabout$getStandPowers().clashStarter = 1;
+
+        ((StandUser) entity).roundabout$tryPower(PowerIndex.BARRAGE_CLASH, true);
+        ((StandUser) self).roundabout$tryPower(PowerIndex.BARRAGE_CLASH, true);
+
+        LivingEntity standEntity = ((StandUser) entity).roundabout$getStand();
+        LivingEntity standSelf = ((StandUser) self).roundabout$getStand();
+
+        if (standEntity != null && standSelf != null){
+            ((StandUser) entity).roundabout$getStandPowers().playBarrageClashSound();
+            ((StandUser) this.self).roundabout$getStandPowers().playBarrageClashSound();
+            Vec3 CenterPoint = entity.position().add(self.position()).scale(0.5);
+
+            Vec3 entityPoint = offsetBarrageVector(
+                    CenterPoint.subtract(((CenterPoint.subtract(entity.position())).normalize()).scale(0.95)),
+                    getLookAtEntityYaw(entity,self));
+
+
+            Vec3 selfPoint = offsetBarrageVector(
+                    CenterPoint.subtract(((CenterPoint.subtract(self.position())).normalize()).scale(0.95)),
+                    getLookAtEntityYaw(self,entity));
+
+            standEntity.setPosRaw(entityPoint.x(),entityPoint.y()+getYOffSet(standEntity),entityPoint.z());
+            standEntity.setXRot(getLookAtEntityPitch(standEntity,standSelf));
+            standEntity.setYRot(getLookAtEntityYaw(standEntity,standSelf));
+
+            standSelf.setPosRaw(selfPoint.x(),selfPoint.y()+getYOffSet(standSelf),selfPoint.z());
+            standSelf.setXRot(getLookAtEntityPitch(standSelf,standEntity));
+            standSelf.setYRot(getLookAtEntityYaw(standSelf,standEntity));
+
+        }
     }
 
     /**Stand barrage results*/
@@ -3303,5 +3239,104 @@ public class StandPowers {
 
         // Clamp and scale to maxOverlay
         return Math.max(0.0f, Math.min(1.0f, normalized)) * maxOverlay;
+    }
+
+    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos,byte level,boolean bypas){
+        List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        return $$1;
+    }
+
+    /**If you override this for any reason, you should probably call the super(). Although SP and TW override
+     * this, you can probably do better*/
+    public void barrageImpact(Entity entity, int hitNumber){
+        if (this.isBarrageAttacking()) {
+            if (bonusBarrageConditions()) {
+                boolean sideHit = false;
+                if (hitNumber > 1000){
+                    if (!(ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect)){
+                        return;
+                    }
+                    hitNumber-=1000;
+                    sideHit = true;
+                }
+                boolean lastHit = (hitNumber >= this.getBarrageLength());
+                if (entity != null) {
+                    if (entity instanceof LivingEntity && ((StandUser) entity).roundabout$isBarraging()
+                            && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
+                        initiateClash(entity);
+                    } else {
+                        float pow;
+                        float knockbackStrength = 0;
+                        /**By saving the velocity before hitting, we can let people approach barraging foes
+                         * through shields.*/
+                        Vec3 prevVelocity = entity.getDeltaMovement();
+                        if (lastHit) {
+                            pow = this.getBarrageFinisherStrength(entity);
+                            knockbackStrength = this.getBarrageFinisherKnockback();
+                        } else {
+                            pow = this.getBarrageHitStrength(entity);
+                            float mn = this.getBarrageLength() - hitNumber;
+                            if (mn == 0) {
+                                mn = 0.015F;
+                            } else {
+                                mn = ((0.015F / (mn)));
+                            }
+                            knockbackStrength = 0.014F - mn;
+                        }
+
+                        if (sideHit){
+                            pow/=4;
+                            knockbackStrength/=6;
+                        }
+
+                        if (StandRushDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
+                            if (entity instanceof LivingEntity LE) {
+                                if (lastHit) {
+                                    setDazed((LivingEntity) entity, (byte) 0);
+
+                                    if (!sideHit) {
+                                        ((StandUser)LE).roundabout$setDestructionTrailTicks(80);
+                                        addEXP(8,LE);
+                                        playBarrageEndNoise(0, entity);
+                                    }
+                                } else {
+                                    setDazed((LivingEntity) entity, (byte) 3);
+                                    if (!sideHit) {
+                                        playBarrageNoise(hitNumber, entity);
+                                    }
+                                }
+                            }
+                            barrageImpact2(entity, lastHit, knockbackStrength);
+                        } else {
+                            if (lastHit) {
+                                knockShield2(entity, 200);
+                                if (!sideHit) {
+                                    playBarrageBlockEndNoise(0, entity);
+                                }
+                            } else {
+                                entity.setDeltaMovement(prevVelocity);
+                                playBarrageBlockNoise();
+                            }
+                        }
+                    }
+                } else {
+                    if (!sideHit) {
+                        playBarrageMissNoise(hitNumber);
+                    }
+                }
+
+                if (lastHit) {
+                    animateStand(StandEntity.BARRAGE_FINISHER);
+                    this.attackTimeDuring = -10;
+                }
+            } else {
+                ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
+            }
+        } else {
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
+        }
+    }
+    public StandPowers(LivingEntity self) {
+        this.self = self;
     }
 }
