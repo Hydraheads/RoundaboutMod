@@ -155,7 +155,7 @@ public class StandPowers {
     }
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (keyIsDown) { if (this.canAttack()) {
-            this.tryPower(PowerIndex.ATTACK, true);
+            this.tryPower(PowerIndex.ATTACK);
             tryPowerPacket(PowerIndex.ATTACK);
         }}
     }
@@ -187,6 +187,10 @@ public class StandPowers {
 
     /**The AI for a stand User Mob, runs every tick. AttackTarget may be null*/
     public void tickMobAI(LivingEntity attackTarget){
+    }
+    /**If you want mobs to stop doing their own attacks as well during certain abilities override this*/
+    public boolean disableMobAiAttack(){
+        return ((this.activePower == PowerIndex.BARRAGE_CLASH && this.attackTimeDuring > -1) || this.isBarraging());
     }
 
     /**Edit this to apply special effect when stand virus is ravaging a mob with this stand.
@@ -326,145 +330,7 @@ public class StandPowers {
         scopeLevel=level;
     }
 
-    /**Barrage sound playing and canceling involve sending a byte in a packet, then reading it from here on
-     * the client level. You can define your own sound bytes, try to start with id 70 onwards up to the byte limit.
-     * (otherwise it may be the same byte as one of the below?)*/
-    public SoundEvent getSoundFromByte(byte soundChoice){
-        if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND) {
-            return this.getBarrageChargeSound();
-        } else if (soundChoice == SoundIndex.GLAIVE_CHARGE) {
-            return ModSounds.GLAIVE_CHARGE_EVENT;
-        } else if (soundChoice == TIME_STOP_NOISE) {
-            return ModSounds.TIME_STOP_STAR_PLATINUM_EVENT;
-        } else if (soundChoice == TIME_STOP_NOISE_4) {
-            return ModSounds.TIME_STOP_THE_WORLD_EVENT;
-        } else if (soundChoice == TIME_STOP_NOISE_5) {
-            return ModSounds.TWAU_TIMESTOP_EVENT;
-        } else if (soundChoice == TIME_STOP_NOISE_7) {
-            return ModSounds.OVA_LONG_TS_EVENT;
-        } else if (soundChoice == TIME_STOP_NOISE_8) {
-            return ModSounds.OVA_SP_TS_EVENT;
-        } else if (soundChoice == TIME_STOP_NOISE_9) {
-            return ModSounds.OVA_SHORT_TS_EVENT;
-        } else if (soundChoice == TIME_STOP_NOISE_10) {
-            return ModSounds.ARCADE_SHORT_TS_EVENT;
-        } else if (soundChoice == TIME_STOP_NOISE_11) {
-            return ModSounds.ARCADE_TIMESTOP_EVENT;
-        } else if (soundChoice == TIME_STOP_NOISE_12) {
-            return ModSounds.ARCADE_STAR_PLATINUM_SHORT_TS_EVENT;
-        } else if (soundChoice == TIME_RESUME_NOISE){
-            return ModSounds.TIME_RESUME_EVENT;
-        } else if (soundChoice == TIME_STOP_NOISE_2) {
-            return ModSounds.TIME_STOP_THE_WORLD2_EVENT;
-        } else if (soundChoice == TIME_STOP_NOISE_3) {
-            return ModSounds.TIME_STOP_THE_WORLD3_EVENT;
-        } else if (soundChoice == SoundIndex.SPECIAL_MOVE_SOUND_2) {
-            return ModSounds.TIME_RESUME_EVENT;
-        } else if (soundChoice == TIME_RESUME_NOISE_2) {
-            return ModSounds.OVA_TIME_RESUME_EVENT;
-        } else if (soundChoice == TIME_RESUME_NOISE_3) {
-            return ModSounds.ARCADE_TIME_RESUME_EVENT;
-        } else if (soundChoice == SoundIndex.STAND_ARROW_CHARGE) {
-            return ModSounds.STAND_ARROW_CHARGE_EVENT;
-        } else if (soundChoice == SoundIndex.CACKLE) {
-            return ModSounds.CACKLE_EVENT;
-        }
-        return null;
-    }
 
-    /**Some standard bytes for sound noises, stay clear of 40-62 as they exist universally*/
-    public static final byte TIME_STOP_NOISE = 40;
-    public static final byte TIME_STOP_NOISE_2 = TIME_STOP_NOISE+1;
-    public static final byte TIME_STOP_NOISE_3 = TIME_STOP_NOISE+2;
-    public static final byte TIME_STOP_NOISE_4 = TIME_STOP_NOISE+3;
-    public static final byte TIME_STOP_NOISE_5 = TIME_STOP_NOISE+4;
-    public static final byte TIME_STOP_NOISE_6 = TIME_STOP_NOISE+5;
-    public static final byte TIME_STOP_NOISE_7 = TIME_STOP_NOISE+6;
-    public static final byte TIME_STOP_NOISE_8 = TIME_STOP_NOISE+7;
-    public static final byte TIME_STOP_NOISE_9 = TIME_STOP_NOISE+8;
-    public static final byte TIME_STOP_NOISE_10 = TIME_STOP_NOISE+9;
-    public static final byte TIME_STOP_NOISE_11 = TIME_STOP_NOISE+10;
-    public static final byte TIME_STOP_NOISE_12 = TIME_STOP_NOISE+11;
-    public static final byte TIME_STOP_TICKING = TIME_STOP_NOISE+16;
-    public static final byte TIME_RESUME_NOISE = 60;
-    public static final byte TIME_RESUME_NOISE_2 = 61;
-    public static final byte TIME_RESUME_NOISE_3 = 62;
-
-    public byte getSoundCancelingGroupByte(byte soundChoice) {
-        if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND){
-            return SoundIndex.BARRAGE_SOUND_GROUP;
-        } else if (soundChoice <= SoundIndex.GLAIVE_CHARGE) {
-            return SoundIndex.ITEM_GROUP;
-        }
-
-        return soundChoice;
-    }
-    public float getSoundPitchFromByte(byte soundChoice){
-        if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND){
-            return this.getBarrageChargePitch();
-        } else {
-            return 1F;
-        }
-    }
-    public float getSoundVolumeFromByte(byte soundChoice){
-        if (soundChoice == TIME_STOP_NOISE) {
-            return 0.7f;
-        } else if (soundChoice == SoundIndex.CACKLE) {
-                return 120f;
-        } else if (soundChoice == TIME_STOP_NOISE_4 || soundChoice == TIME_STOP_NOISE_5
-                || soundChoice == TIME_STOP_NOISE_7
-                || soundChoice == TIME_STOP_NOISE_8
-                || soundChoice == TIME_STOP_NOISE_9) {
-            return 0.7f;
-        }
-        return 1F;
-    }
-    protected Byte getSummonSound() {
-        return -1;
-    }
-
-    public void playSummonSound() {
-        if (this.self.isCrouching()){
-            return;
-        }
-        playStandUserOnlySoundsIfNearby(this.getSummonSound(), 10, false,false);
-    } //Plays the Summon sound. Happens when stand is summoned with summon key.
-
-    /**Override this function for alternate rush noises*/
-    public byte chooseBarrageSound(){
-        return 0;
-    }
-    public float getBarrageChargePitch(){
-        return 1/((float) this.getBarrageWindup() /20);
-    }
-
-    /**Realistically, you only need to override this if you're canceling sounds*/
-    public ResourceLocation getBarrageCryID(){
-        return ModSounds.STAND_THEWORLD_MUDA1_SOUND_ID;
-    }
-    public SoundEvent getBarrageChargeSound(){
-        return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
-    }
-
-    public ResourceLocation getBarrageChargeID(){
-        return ModSounds.STAND_BARRAGE_WINDUP_ID;
-    }
-    public Byte getLastHitSound(){
-        return SoundIndex.NO_SOUND;
-    }
-
-    public ResourceLocation getLastHitID(){
-        return ModSounds.STAND_THEWORLD_MUDA3_SOUND_ID;
-    }
-
-    public ResourceLocation getSoundID(byte soundNumber){
-        if (soundNumber == SoundIndex.BARRAGE_CRY_SOUND) {
-            return getBarrageCryID();
-        } else if (soundNumber == SoundIndex.BARRAGE_CHARGE_SOUND) {
-            return getBarrageChargeID();
-        }
-        return null;
-    }
 
 
     /**Returns if the stand is in control/pilot mode right now*/
@@ -582,8 +448,6 @@ public class StandPowers {
         }
     }
 
-
-
     /**A specific packet makes this happen*/
     public void updateMove(float flot){
     }
@@ -603,6 +467,9 @@ public class StandPowers {
     public boolean interceptSuccessfulDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
         return false;
     }
+    /**Similar to above but less strict on damage source and doesn't outright cancel*/
+    public void onActuallyHurt(DamageSource $$0, float $$1){
+    }
     /**When damage is dealt to you, intercept or run code based off of it, or potentially cancel it*/
     public boolean interceptDamageEvent(DamageSource $$0, float $$1){
         return false;
@@ -610,6 +477,12 @@ public class StandPowers {
     /**When you eat food, intercept or run code based off of it*/
     public void eatEffectIntercept(ItemStack $$0, Level $$1, LivingEntity $$2){
     }
+    /**When you are about to be hit by a projectile, intercept or run code based off of it, or potentially cancel it
+     * Currently it supports abstract arrows but this can be expanded*/
+    public boolean dealWithProjectile(Entity ent, HitResult res){
+        return false;
+    }
+
     /**When your stand is summoned, if you want to do anything fancy particle wise or otherwise, override this*/
     public void playSummonEffects(boolean forced){
     }
@@ -624,51 +497,6 @@ public class StandPowers {
     /**return true to cancel the onkill event*/
     public boolean onKilledEntity(ServerLevel $$0, LivingEntity $$1){
         return false;
-    }
-
-
-    public void standBarrageHit(){
-        if (this.self instanceof Player){
-            if (isPacketPlayer()){
-                List<Entity> listE = getTargetEntityList(this.self,-1);
-                int id = -1;
-                if (storeEnt != null){
-                    id = storeEnt.getId();
-                }
-                C2SPacketUtil.standBarrageHitPacket(id, this.attackTimeDuring);
-                if (!listE.isEmpty() && ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect){
-                    for (int i = 0; i< listE.size(); i++){
-                        if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
-                            if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
-                                C2SPacketUtil.standBarrageHitPacket(listE.get(i).getId(), this.attackTimeDuring + 1000);
-                            }
-                        }
-                    }
-                }
-
-                if (this.attackTimeDuring == this.getBarrageLength()){
-                    this.attackTimeDuring = -10;
-                }
-            }
-        } else {
-            /*Caps how far out the barrage hit goes*/
-            Entity targetEntity = getTargetEntity(this.self,-1);
-
-            List<Entity> listE = getTargetEntityList(this.self,-1);
-                barrageImpact(storeEnt, this.attackTimeDuring);
-            if (!listE.isEmpty()){
-                for (int i = 0; i< listE.size(); i++){
-                    if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
-                        if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
-                            barrageImpact(listE.get(i), this.attackTimeDuring + 1000);
-                        }
-                    }
-                }
-            }
-
-        }
-
-        findDeflectables();
     }
 
     public void deflectArrowsAndBullets(Entity ent){
@@ -761,12 +589,7 @@ public class StandPowers {
         );
     }
 
-
-    private Vec3 offsetBarrageVector(Vec3 vec3d, float yaw){
-        Vec3 vec3d2 = DamageHandler.getRotationVector(0, yaw+ 90);
-        return vec3d.add(vec3d2.x*0.3, 0, vec3d2.z*0.3);
-    }
-
+    /***The distance above you the stand floats*/
     private float getYOffSet(LivingEntity stand){
         float yy = 0.1F;
         if (stand.isSwimming() || stand.isVisuallyCrawling() || stand.isFallFlying()) {
@@ -775,59 +598,12 @@ public class StandPowers {
         return yy;
     }
 
+    /**Releasing right click normally stops guarding but that's something you can adjust*/
     public boolean clickRelease(){
         return false;
     }
 
-
-    public void barrageImpact2(Entity entity, boolean lastHit, float knockbackStrength){
-        if (entity instanceof LivingEntity){
-            if (lastHit) {
-                this.takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
-            } else {
-                this.takeKnockbackUp(entity,knockbackStrength);
-            }
-        }
-    }
-
-
-    public boolean bonusBarrageConditions(){
-        return true;
-    }
-
-
-    public void playBarrageMissNoise(int hitNumber){
-        if (!this.self.level().isClientSide()) {
-            if (hitNumber%2==0) {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_MISS_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
-            }
-        }
-    }
-    public void playBarrageNoise(int hitNumber, Entity entity){
-        if (!this.self.level().isClientSide()) {
-            if (hitNumber % 2 == 0) {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
-            }
-        }
-    }
-
-    public void playBarrageEndNoise(float mod, Entity entity){
-        if (!this.self.level().isClientSide()) {
-          this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_END_EVENT, SoundSource.PLAYERS, 0.95F+mod, 1f);
-        }
-    }
-    public void playBarrageBlockEndNoise(float mod, Entity entity){
-        if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_END_BLOCK_EVENT, SoundSource.PLAYERS, 0.88F+mod, 1.7f);
-        }
-    }
-    public void playBarrageBlockNoise(){
-        if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_BLOCK_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
-        }
-    }
-
-
+    /**The impact of a punch*/
     public void punchImpact(Entity entity){
     }
 
@@ -837,9 +613,8 @@ public class StandPowers {
     /**If you need to temporarily save an entity use this*/
     public Entity storeEnt = null;
 
-
-
-
+    /**If your stand is in a position to change abilities. By default, you are locked into clashing while clashing
+     * unless you forfeit the clash by desummoning your stand*/
     public boolean canChangePower(int move, boolean forced){
         if (!this.isClashing() || move == PowerIndex.CLASH_CANCEL) {
             if ((this.activePower == PowerIndex.NONE || forced) &&
@@ -852,6 +627,11 @@ public class StandPowers {
 
 
     /** Tries to use an ability of your stand. If forced is true, the ability comes out no matter what.**/
+    /** There is no reason for the function to be a boolean, that goes unused, so gradually we can convert this to
+     * a void function*/
+    public void tryPower(int move){
+        tryPower(move,true);
+    }
     public boolean tryPower(int move, boolean forced){
         if (move != PowerIndex.NONE && this.self instanceof Mob && !hasStandEntity(this.self)){
             if (canSummonStand()) {
@@ -867,27 +647,27 @@ public class StandPowers {
 
         if (canChangePower(move, forced)) {
                 if (move == PowerIndex.NONE || move == PowerIndex.CLASH_CANCEL) {
-                    return this.setPowerNone();
+                    this.setPowerNone();
                 } else if (move == PowerIndex.ATTACK) {
-                    return this.setPowerAttack();
+                    this.setPowerAttack();
                 } else if (move == PowerIndex.GUARD) {
-                    return this.setPowerGuard();
+                    this.setPowerGuard();
                 } else if (move == PowerIndex.BARRAGE_CHARGE) {
-                    return this.setPowerBarrageCharge();
+                    this.setPowerBarrageCharge();
                 } else if (move == PowerIndex.BARRAGE) {
-                    return this.setPowerBarrage();
+                    this.setPowerBarrage();
                 } else if (move == PowerIndex.BARRAGE_CLASH) {
-                    return this.setPowerClash();
+                    this.setPowerClash();
                 } else if (move == PowerIndex.SPECIAL) {
-                    return this.setPowerSpecial(move);
+                    this.setPowerSpecial(move);
                 } else if (move == PowerIndex.MOVEMENT) {
-                    return this.setPowerMovement(move);
+                    this.setPowerMovement(move);
                 } else if (move == PowerIndex.SNEAK_MOVEMENT) {
-                    return this.setPowerSneakMovement(move);
+                    this.setPowerSneakMovement(move);
                 } else if (move == PowerIndex.MINING) {
-                    return this.setPowerMining(move);
+                    this.setPowerMining(move);
                 } else {
-                    return this.setPowerOther(move, this.getActivePower());
+                    this.setPowerOther(move, this.getActivePower());
                 }
 
         }
@@ -964,145 +744,12 @@ public class StandPowers {
     }
     public Vec3 savedPos;
 
-    /**The Sound Event to cancel when your barrage is canceled*/
 
-    public final void playStandUserOnlySoundsIfNearby(byte soundNo, double range, boolean onSelf, boolean isVoice) {
-        if (isVoice && this.getSelf() instanceof Player PE &&
-                ((IPlayerEntity)PE).roundabout$getMaskInventory().getItem(1).is(ModItems.BLANK_MASK)){
-            return;
-        }
-        if (!this.self.level().isClientSide) {
-            ServerLevel serverWorld = ((ServerLevel) this.self.level());
-            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
-            for (int j = 0; j < serverWorld.players().size(); ++j) {
-                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
-
-                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
-                    continue;
-                }
-
-                BlockPos blockPos = serverPlayerEntity.blockPosition();
-                if (blockPos.closerToCenterThan(userLocation, range) && !((StandUser)serverPlayerEntity).roundabout$getStandDisc().isEmpty()) {
-                    if (onSelf) {
-                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, serverPlayerEntity.getId(), soundNo);
-                    } else {
-                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, this.self.getId(), soundNo);
-                    }
-                }
-            }
-        }
-    }
-
-    /**The Sound Event to cancel when your barrage is canceled*/
-
-
-    public final void playSoundsIfNearby(byte soundNo, double range, boolean onSelf, boolean isVoice) {
-        if (isVoice && this.getSelf() instanceof Player PE &&
-                ((IPlayerEntity) PE).roundabout$getMaskInventory().getItem(1).is(ModItems.BLANK_MASK)) {
-            return;
-        }
-        if (!this.self.level().isClientSide) {
-            ServerLevel serverWorld = ((ServerLevel) this.self.level());
-            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
-            for (int j = 0; j < serverWorld.players().size(); ++j) {
-                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
-
-                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
-                    continue;
-                }
-
-                BlockPos blockPos = serverPlayerEntity.blockPosition();
-                if (blockPos.closerToCenterThan(userLocation, range)) {
-                    if (onSelf) {
-                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, serverPlayerEntity.getId(), soundNo);
-                    } else {
-                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, this.self.getId(), soundNo);
-                    }
-                }
-            }
-        }
-    }
-
-
-
-
-    public StandEntity displayStand = null;
-    public final void spreadRadialClientPacket(double range, boolean skipSelf, String packet, Object... vargs) {
-        if (!this.self.level().isClientSide) {
-            ServerLevel serverWorld = ((ServerLevel) this.self.level());
-            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
-            for (int j = 0; j < serverWorld.players().size(); ++j) {
-                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
-
-                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
-                    continue;
-                }
-                if (skipSelf && this.self.is(serverPlayerEntity)) {
-                    continue;
-                }
-
-                BlockPos blockPos = serverPlayerEntity.blockPosition();
-                if (blockPos.closerToCenterThan(userLocation, range)) {
-                    ModMessageEvents.sendToPlayer((ServerPlayer)serverPlayerEntity, packet,vargs);
-                }
-            }
-        }
-    }
-
-    public final void playSoundsIfNearby(byte soundNo, double range, boolean onSelf) {
-        playSoundsIfNearby(soundNo,range,onSelf,false);
-    }
-    /**This is called first by the server, it chooses the sfx and sends packets to nearby players*/
-    public void playBarrageCrySound(){
-        if (!this.self.level().isClientSide()) {
-            byte barrageCrySound = this.chooseBarrageSound();
-            if (barrageCrySound != SoundIndex.NO_SOUND) {
-                playStandUserOnlySoundsIfNearby(barrageCrySound, 27, false,true);
-            }
-        }
-    }
-
-    public void playBarrageClashSound(){
-        if (!this.self.level().isClientSide()) {
-        }
-    }
-    public void playBarrageChargeSound(){
-        if (!this.self.level().isClientSide()) {
-            SoundEvent barrageChargeSound = this.getBarrageChargeSound();
-            if (barrageChargeSound != null) {
-                playSoundsIfNearby(SoundIndex.BARRAGE_CHARGE_SOUND, 27, false);
-            }
-        }
-    }
 
     public void handleStandAttack(Player player, Entity target){
     }
 
     public void handleStandAttack2(Player player, Entity target){
-    }
-
-    /**This is called fourth by the server, it sends a packet to cancel the sound.*/
-    public final void stopSoundsIfNearby(byte soundNumber, double range, boolean onSelf) {
-        if (!this.self.level().isClientSide) {
-            ServerLevel serverWorld = ((ServerLevel) this.self.level());
-            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
-            for (int j = 0; j < serverWorld.players().size(); ++j) {
-                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
-
-                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
-                    continue;
-                }
-
-                BlockPos blockPos = serverPlayerEntity.blockPosition();
-                if (blockPos.closerToCenterThan(userLocation, range)) {
-                    if (!onSelf){
-                        S2CPacketUtil.sendCancelSoundPacket(serverPlayerEntity,this.self.getId(),soundNumber);
-                    } else {
-                        S2CPacketUtil.sendCancelSoundPacket(serverPlayerEntity,serverPlayerEntity.getId(),soundNumber);
-                    }
-                }
-            }
-        }
     }
 
 
@@ -1149,8 +796,7 @@ public class StandPowers {
         return true;
     }
 
-    public boolean setPowerBarrage() {
-        return true;
+    public void setPowerBarrage() {
     }
 
     public int clashStarter = 0;
@@ -1251,20 +897,14 @@ public class StandPowers {
         }
     }
 
-
-
     public int getBarrageRecoilTime(){
         return ClientNetworking.getAppropriateConfig().
                 generalStandSettings.barrageRecoilCooldown;
     }
 
+    /**returns if you are using stand guard*/
     public boolean isGuarding(){
         return this.activePower == PowerIndex.GUARD;
-    }
-
-
-    public boolean disableMobAiAttack(){
-        return ((this.activePower == PowerIndex.BARRAGE_CLASH && this.attackTimeDuring > -1) || this.isBarraging());
     }
 
     public int getKickBarrageWindup(){
@@ -1287,63 +927,339 @@ public class StandPowers {
         }
     }
 
-    public void runExtraSoundCode(byte soundChoice) {
-    }
-
-    public boolean isHoldingSneakToggle = false;
-    public boolean isHoldingSneak(){
-        if (this.self.level().isClientSide) {
-            Minecraft mc = Minecraft.getInstance();
-            return ((mc.options.keyShift.isDown() && !isHoldingSneakToggle) || (isHoldingSneakToggle && !mc.options.keyShift.isDown()));
-        }
-        return this.getSelf().isCrouching();
-    }
-    public boolean dealWithProjectile(Entity ent, HitResult res){
-        return false;
-    }
-
-
-    public Component getPosName(byte posID){
-        if (posID == 1){
-            return Component.translatable(  "idle.roundabout.battle");
-        } else if (posID == 2){
-            return Component.translatable(  "idle.roundabout.floaty");
-        } else if (posID == 3){
-            return Component.translatable(  "idle.roundabout.star_platinum");
-        } else if (posID == 4){
-            return Component.translatable(  "idle.roundabout.arms_only");
-        } else {
-            return Component.translatable(  "idle.roundabout.passive");
-        }
-    }
-
-    public boolean heldDownSwitch = false;
-    public void switchRowsKey(boolean keyIsDown, Options options){
-        if (!heldDownSwitch){
-            if (keyIsDown){
-                heldDownSwitch = true;
-                if (isHoldingSneakToggle){
-                    isHoldingSneakToggle=false;
-                } else {
-                    isHoldingSneakToggle=true;
-                }
-            }
-        } else {
-            if (!keyIsDown){
-                heldDownSwitch = false;
-            }
-        }
-    }
-
-    /**Call this so when you get hurt something can happen*/
-    public void onActuallyHurt(DamageSource $$0, float $$1){
-    }
-
     /**Override this if you want to add or remove conditions that prevent moves from updating and shut
      * them down*/
     public boolean isAttackInept(byte activeP){
         return this.self.isUsingItem() || this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // -----------------------------------------------------------------------------------------
+    // SOUND FUNCTIONS TO USE AND OVERRIDE
+    // Sounds are represented by a byte, you get to define that byte within parameters
+    // In effect we can cancel started sounds and play some sounds to stand users only
+    // -----------------------------------------------------------------------------------------
+
+
+
+    /**Barrage sound playing and canceling involve sending a byte in a packet, then reading it from here on
+     * the client level. You can define your own sound bytes, try to start with id 70 onwards up to the byte limit.
+     * (otherwise it may be the same byte as one of the below?)*/
+    public SoundEvent getSoundFromByte(byte soundChoice){
+        if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND) {
+            return this.getBarrageChargeSound();
+        } else if (soundChoice == SoundIndex.GLAIVE_CHARGE) {
+            return ModSounds.GLAIVE_CHARGE_EVENT;
+        } else if (soundChoice == TIME_STOP_NOISE) {
+            return ModSounds.TIME_STOP_STAR_PLATINUM_EVENT;
+        } else if (soundChoice == TIME_STOP_NOISE_4) {
+            return ModSounds.TIME_STOP_THE_WORLD_EVENT;
+        } else if (soundChoice == TIME_STOP_NOISE_5) {
+            return ModSounds.TWAU_TIMESTOP_EVENT;
+        } else if (soundChoice == TIME_STOP_NOISE_7) {
+            return ModSounds.OVA_LONG_TS_EVENT;
+        } else if (soundChoice == TIME_STOP_NOISE_8) {
+            return ModSounds.OVA_SP_TS_EVENT;
+        } else if (soundChoice == TIME_STOP_NOISE_9) {
+            return ModSounds.OVA_SHORT_TS_EVENT;
+        } else if (soundChoice == TIME_STOP_NOISE_10) {
+            return ModSounds.ARCADE_SHORT_TS_EVENT;
+        } else if (soundChoice == TIME_STOP_NOISE_11) {
+            return ModSounds.ARCADE_TIMESTOP_EVENT;
+        } else if (soundChoice == TIME_STOP_NOISE_12) {
+            return ModSounds.ARCADE_STAR_PLATINUM_SHORT_TS_EVENT;
+        } else if (soundChoice == TIME_RESUME_NOISE){
+            return ModSounds.TIME_RESUME_EVENT;
+        } else if (soundChoice == TIME_STOP_NOISE_2) {
+            return ModSounds.TIME_STOP_THE_WORLD2_EVENT;
+        } else if (soundChoice == TIME_STOP_NOISE_3) {
+            return ModSounds.TIME_STOP_THE_WORLD3_EVENT;
+        } else if (soundChoice == SoundIndex.SPECIAL_MOVE_SOUND_2) {
+            return ModSounds.TIME_RESUME_EVENT;
+        } else if (soundChoice == TIME_RESUME_NOISE_2) {
+            return ModSounds.OVA_TIME_RESUME_EVENT;
+        } else if (soundChoice == TIME_RESUME_NOISE_3) {
+            return ModSounds.ARCADE_TIME_RESUME_EVENT;
+        } else if (soundChoice == SoundIndex.STAND_ARROW_CHARGE) {
+            return ModSounds.STAND_ARROW_CHARGE_EVENT;
+        } else if (soundChoice == SoundIndex.CACKLE) {
+            return ModSounds.CACKLE_EVENT;
+        }
+        return null;
+    }
+
+    /**Some standard bytes for sound noises, stay clear of 40-62 as they exist universally*/
+    public static final byte TIME_STOP_NOISE = 40;
+    public static final byte TIME_STOP_NOISE_2 = TIME_STOP_NOISE+1;
+    public static final byte TIME_STOP_NOISE_3 = TIME_STOP_NOISE+2;
+    public static final byte TIME_STOP_NOISE_4 = TIME_STOP_NOISE+3;
+    public static final byte TIME_STOP_NOISE_5 = TIME_STOP_NOISE+4;
+    public static final byte TIME_STOP_NOISE_6 = TIME_STOP_NOISE+5;
+    public static final byte TIME_STOP_NOISE_7 = TIME_STOP_NOISE+6;
+    public static final byte TIME_STOP_NOISE_8 = TIME_STOP_NOISE+7;
+    public static final byte TIME_STOP_NOISE_9 = TIME_STOP_NOISE+8;
+    public static final byte TIME_STOP_NOISE_10 = TIME_STOP_NOISE+9;
+    public static final byte TIME_STOP_NOISE_11 = TIME_STOP_NOISE+10;
+    public static final byte TIME_STOP_NOISE_12 = TIME_STOP_NOISE+11;
+    public static final byte TIME_STOP_TICKING = TIME_STOP_NOISE+16;
+    public static final byte TIME_RESUME_NOISE = 60;
+    public static final byte TIME_RESUME_NOISE_2 = 61;
+    public static final byte TIME_RESUME_NOISE_3 = 62;
+
+    public void playBarrageMissNoise(int hitNumber){
+        if (!this.self.level().isClientSide()) {
+            if (hitNumber%2==0) {
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_MISS_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
+            }
+        }
+    }
+    public void playBarrageNoise(int hitNumber, Entity entity){
+        if (!this.self.level().isClientSide()) {
+            if (hitNumber % 2 == 0) {
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
+            }
+        }
+    }
+
+    public void playBarrageEndNoise(float mod, Entity entity){
+        if (!this.self.level().isClientSide()) {
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_END_EVENT, SoundSource.PLAYERS, 0.95F+mod, 1f);
+        }
+    }
+    public void playBarrageBlockEndNoise(float mod, Entity entity){
+        if (!this.self.level().isClientSide()) {
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_END_BLOCK_EVENT, SoundSource.PLAYERS, 0.88F+mod, 1.7f);
+        }
+    }
+    public void playBarrageBlockNoise(){
+        if (!this.self.level().isClientSide()) {
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_BLOCK_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
+        }
+    }
+
+    public void runExtraSoundCode(byte soundChoice) {
+    }
+
+    public byte getSoundCancelingGroupByte(byte soundChoice) {
+        if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND){
+            return SoundIndex.BARRAGE_SOUND_GROUP;
+        } else if (soundChoice <= SoundIndex.GLAIVE_CHARGE) {
+            return SoundIndex.ITEM_GROUP;
+        }
+
+        return soundChoice;
+    }
+    public float getSoundPitchFromByte(byte soundChoice){
+        if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND){
+            return this.getBarrageChargePitch();
+        } else {
+            return 1F;
+        }
+    }
+    public float getSoundVolumeFromByte(byte soundChoice){
+        if (soundChoice == TIME_STOP_NOISE) {
+            return 0.7f;
+        } else if (soundChoice == SoundIndex.CACKLE) {
+            return 120f;
+        } else if (soundChoice == TIME_STOP_NOISE_4 || soundChoice == TIME_STOP_NOISE_5
+                || soundChoice == TIME_STOP_NOISE_7
+                || soundChoice == TIME_STOP_NOISE_8
+                || soundChoice == TIME_STOP_NOISE_9) {
+            return 0.7f;
+        }
+        return 1F;
+    }
+    protected Byte getSummonSound() {
+        return -1;
+    }
+
+    public void playSummonSound() {
+        if (this.self.isCrouching()){
+            return;
+        }
+        playStandUserOnlySoundsIfNearby(this.getSummonSound(), 10, false,false);
+    } //Plays the Summon sound. Happens when stand is summoned with summon key.
+
+    /**Override this function for alternate rush noises*/
+    public byte chooseBarrageSound(){
+        return 0;
+    }
+    public float getBarrageChargePitch(){
+        return 1/((float) this.getBarrageWindup() /20);
+    }
+
+    /**Realistically, you only need to override this if you're canceling sounds*/
+    public ResourceLocation getBarrageCryID(){
+        return ModSounds.STAND_THEWORLD_MUDA1_SOUND_ID;
+    }
+    public SoundEvent getBarrageChargeSound(){
+        return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
+    }
+
+    public ResourceLocation getBarrageChargeID(){
+        return ModSounds.STAND_BARRAGE_WINDUP_ID;
+    }
+    public Byte getLastHitSound(){
+        return SoundIndex.NO_SOUND;
+    }
+
+    public ResourceLocation getLastHitID(){
+        return ModSounds.STAND_THEWORLD_MUDA3_SOUND_ID;
+    }
+
+    public ResourceLocation getSoundID(byte soundNumber){
+        if (soundNumber == SoundIndex.BARRAGE_CRY_SOUND) {
+            return getBarrageCryID();
+        } else if (soundNumber == SoundIndex.BARRAGE_CHARGE_SOUND) {
+            return getBarrageChargeID();
+        }
+        return null;
+    }
+    /**The Sound Event to cancel when your barrage is canceled*/
+
+    public final void playStandUserOnlySoundsIfNearby(byte soundNo, double range, boolean onSelf, boolean isVoice) {
+        if (isVoice && this.getSelf() instanceof Player PE &&
+                ((IPlayerEntity)PE).roundabout$getMaskInventory().getItem(1).is(ModItems.BLANK_MASK)){
+            return;
+        }
+        if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, range) && !((StandUser)serverPlayerEntity).roundabout$getStandDisc().isEmpty()) {
+                    if (onSelf) {
+                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, serverPlayerEntity.getId(), soundNo);
+                    } else {
+                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, this.self.getId(), soundNo);
+                    }
+                }
+            }
+        }
+    }
+
+    /**This is called fourth by the server, it sends a packet to cancel the sound.*/
+    public final void stopSoundsIfNearby(byte soundNumber, double range, boolean onSelf) {
+        if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, range)) {
+                    if (!onSelf){
+                        S2CPacketUtil.sendCancelSoundPacket(serverPlayerEntity,this.self.getId(),soundNumber);
+                    } else {
+                        S2CPacketUtil.sendCancelSoundPacket(serverPlayerEntity,serverPlayerEntity.getId(),soundNumber);
+                    }
+                }
+            }
+        }
+    }
+
+    /**The Sound Event to cancel when your barrage is canceled*/
+
+
+    public final void playSoundsIfNearby(byte soundNo, double range, boolean onSelf, boolean isVoice) {
+        if (isVoice && this.getSelf() instanceof Player PE &&
+                ((IPlayerEntity) PE).roundabout$getMaskInventory().getItem(1).is(ModItems.BLANK_MASK)) {
+            return;
+        }
+        if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, range)) {
+                    if (onSelf) {
+                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, serverPlayerEntity.getId(), soundNo);
+                    } else {
+                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, this.self.getId(), soundNo);
+                    }
+                }
+            }
+        }
+    }
+
+    public final void playSoundsIfNearby(byte soundNo, double range, boolean onSelf) {
+        playSoundsIfNearby(soundNo,range,onSelf,false);
+    }
+    /**This is called first by the server, it chooses the sfx and sends packets to nearby players*/
+    public void playBarrageCrySound(){
+        if (!this.self.level().isClientSide()) {
+            byte barrageCrySound = this.chooseBarrageSound();
+            if (barrageCrySound != SoundIndex.NO_SOUND) {
+                playStandUserOnlySoundsIfNearby(barrageCrySound, 27, false,true);
+            }
+        }
+    }
+
+    public void playBarrageClashSound(){
+        if (!this.self.level().isClientSide()) {
+        }
+    }
+    public void playBarrageChargeSound(){
+        if (!this.self.level().isClientSide()) {
+            SoundEvent barrageChargeSound = this.getBarrageChargeSound();
+            if (barrageChargeSound != null) {
+                playSoundsIfNearby(SoundIndex.BARRAGE_CHARGE_SOUND, 27, false);
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1396,7 +1312,7 @@ public class StandPowers {
         return $$1;
     }
 
-    /**The name for your stand to display in the power inventory HUD*/
+    /**The name for your stand's skins to display in the power inventory HUD*/
     public Component getSkinName(byte skinId){
         return Component.empty();
     }
@@ -1410,6 +1326,20 @@ public class StandPowers {
         $$1.add((byte) 0);
         $$1.add((byte) 1);
         return $$1;
+    }
+    /**The name for your stand's poses to display in the power inventory HUD*/
+    public Component getPosName(byte posID){
+        if (posID == 1){
+            return Component.translatable(  "idle.roundabout.battle");
+        } else if (posID == 2){
+            return Component.translatable(  "idle.roundabout.floaty");
+        } else if (posID == 3){
+            return Component.translatable(  "idle.roundabout.star_platinum");
+        } else if (posID == 4){
+            return Component.translatable(  "idle.roundabout.arms_only");
+        } else {
+            return Component.translatable(  "idle.roundabout.passive");
+        }
     }
 
     /**An easy way to replace the EXP bar with a stand bar, see the function below this one*/
@@ -1439,6 +1369,7 @@ public class StandPowers {
         }
         return displayStand;
     }
+    public StandEntity displayStand = null;
 
     /**If the powers inventory should render the player instead*/
     public boolean rendersPlayer(){
@@ -2441,7 +2372,27 @@ public class StandPowers {
             }
         }
     }
+    public final void spreadRadialClientPacket(double range, boolean skipSelf, String packet, Object... vargs) {
+        if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
 
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+                if (skipSelf && this.self.is(serverPlayerEntity)) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, range)) {
+                    ModMessageEvents.sendToPlayer((ServerPlayer)serverPlayerEntity, packet,vargs);
+                }
+            }
+        }
+    }
 
 
 
@@ -2593,6 +2544,12 @@ public class StandPowers {
             standSelf.setYRot(getLookAtEntityYaw(standSelf,standEntity));
 
         }
+    }
+
+    /**The relative position of a stand compared to yours and your opponent's in a barrage clash*/
+    private Vec3 offsetBarrageVector(Vec3 vec3d, float yaw){
+        Vec3 vec3d2 = DamageHandler.getRotationVector(0, yaw+ 90);
+        return vec3d.add(vec3d2.x*0.3, 0, vec3d2.z*0.3);
     }
 
     /**Stand barrage results*/
@@ -3111,6 +3068,60 @@ public class StandPowers {
             ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
         }
     }
+    public void barrageImpact2(Entity entity, boolean lastHit, float knockbackStrength){
+        if (entity instanceof LivingEntity){
+            if (lastHit) {
+                this.takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
+            } else {
+                this.takeKnockbackUp(entity,knockbackStrength);
+            }
+        }
+    }
+    /**This happens every time a stand barrage hits, generally you dont want to override this unless
+     * your stand's barrage operates very differently*/
+    public void standBarrageHit(){
+        if (this.self instanceof Player){
+            if (isPacketPlayer()){
+                List<Entity> listE = getTargetEntityList(this.self,-1);
+                int id = -1;
+                if (storeEnt != null){
+                    id = storeEnt.getId();
+                }
+                C2SPacketUtil.standBarrageHitPacket(id, this.attackTimeDuring);
+                if (!listE.isEmpty() && ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect){
+                    for (int i = 0; i< listE.size(); i++){
+                        if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
+                            if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
+                                C2SPacketUtil.standBarrageHitPacket(listE.get(i).getId(), this.attackTimeDuring + 1000);
+                            }
+                        }
+                    }
+                }
+
+                if (this.attackTimeDuring == this.getBarrageLength()){
+                    this.attackTimeDuring = -10;
+                }
+            }
+        } else {
+            /*Caps how far out the barrage hit goes*/
+            Entity targetEntity = getTargetEntity(this.self,-1);
+
+            List<Entity> listE = getTargetEntityList(this.self,-1);
+            barrageImpact(storeEnt, this.attackTimeDuring);
+            if (!listE.isEmpty()){
+                for (int i = 0; i< listE.size(); i++){
+                    if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
+                        if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
+                            barrageImpact(listE.get(i), this.attackTimeDuring + 1000);
+                        }
+                    }
+                }
+            }
+
+        }
+
+        findDeflectables();
+    }
     public StandPowers(LivingEntity self) {
         this.self = self;
     }
@@ -3338,6 +3349,11 @@ public class StandPowers {
         }
     }
 
+    /**Just time stop barrage canceling when the time stop expires*/
+    public boolean bonusBarrageConditions(){
+        return true;
+    }
+
     /**Your stand's generalized cooldowns*/
     public List<CooldownInstance> StandCooldowns = initStandCooldowns();
     public List<CooldownInstance> initStandCooldowns(){
@@ -3371,6 +3387,34 @@ public class StandPowers {
             this.interruptCD = 3;
             ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
         }
+    }
+
+    /**Code for the button that switches your ability row*/
+    public boolean heldDownSwitch = false;
+    public void switchRowsKey(boolean keyIsDown, Options options) {
+        if (!heldDownSwitch) {
+            if (keyIsDown) {
+                heldDownSwitch = true;
+                if (isHoldingSneakToggle) {
+                    isHoldingSneakToggle = false;
+                } else {
+                    isHoldingSneakToggle = true;
+                }
+            }
+        } else {
+            if (!keyIsDown) {
+                heldDownSwitch = false;
+            }
+        }
+    }
+    /**Related code to the above*/
+    public boolean isHoldingSneakToggle = false;
+    public boolean isHoldingSneak(){
+        if (this.self.level().isClientSide) {
+            Minecraft mc = Minecraft.getInstance();
+            return ((mc.options.keyShift.isDown() && !isHoldingSneakToggle) || (isHoldingSneakToggle && !mc.options.keyShift.isDown()));
+        }
+        return this.getSelf().isCrouching();
     }
 
     /**You don't really need this*/

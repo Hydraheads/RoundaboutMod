@@ -2237,53 +2237,49 @@ public class PowersMagiciansRed extends NewPunchingStand {
         }
 
         if (this.activePower == PowerIndex.RANGED_BARRAGE_2) {
-            if (bonusBarrageConditions()) {
-                if (entity != null) {
-                    float pow;
-                    float knockbackStrength = 0;
-                    /**By saving the velocity before hitting, we can let people approach barraging foes
-                     * through shields.*/
-                    Vec3 prevVelocity = entity.getDeltaMovement();
-                        pow = this.getRangedBarrage2HitStrength(entity);
-                        knockbackStrength = 0.0003F;
+            if (entity != null) {
+                float pow;
+                float knockbackStrength = 0;
+                /**By saving the velocity before hitting, we can let people approach barraging foes
+                 * through shields.*/
+                Vec3 prevVelocity = entity.getDeltaMovement();
+                    pow = this.getRangedBarrage2HitStrength(entity);
+                    knockbackStrength = 0.0003F;
 
 
-                    if (StandRushDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
+                if (StandRushDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
 
-                        if (entity instanceof LivingEntity LE) {
-                            if (entity instanceof Player PE){
-                                ((IPlayerEntity) PE).roundabout$setCameraHits(2);
-                            }
-                            int ticks = 0;
-                            StandUser su = (StandUser) LE;
-                            if (su.roundabout$getRemainingFireTicks() > -1){
-                                ticks+=su.roundabout$getRemainingFireTicks();
-                                ticks+=2;
-                            } else {
-                                ticks+=60;
-                            }
-                            su.roundabout$setOnStandFire(this.getFireColor(), this.self);
-                            su.roundabout$setRemainingStandFireTicks(ticks);
+                    if (entity instanceof LivingEntity LE) {
+                        if (entity instanceof Player PE){
+                            ((IPlayerEntity) PE).roundabout$setCameraHits(2);
                         }
-                        entity.setDeltaMovement(prevVelocity);
-                        if (Math.abs(this.lastHurtTick-this.self.tickCount) > 6) {
-                            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_FLAME_HIT_EVENT, SoundSource.PLAYERS, 1F, 1F);
-                            this.lastHurtTick = this.self.tickCount;
+                        int ticks = 0;
+                        StandUser su = (StandUser) LE;
+                        if (su.roundabout$getRemainingFireTicks() > -1){
+                            ticks+=su.roundabout$getRemainingFireTicks();
+                            ticks+=2;
+                        } else {
+                            ticks+=60;
                         }
-                    } else {
-                       entity.setDeltaMovement(prevVelocity);
-                        if (Math.abs(this.lastHurtTick-this.self.tickCount) > 6) {
-                            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_FLAME_HIT_EVENT, SoundSource.PLAYERS, 1F, 0.8F);
-                            this.lastHurtTick = this.self.tickCount;
-                        }
+                        su.roundabout$setOnStandFire(this.getFireColor(), this.self);
+                        su.roundabout$setRemainingStandFireTicks(ticks);
+                    }
+                    entity.setDeltaMovement(prevVelocity);
+                    if (Math.abs(this.lastHurtTick-this.self.tickCount) > 6) {
+                        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_FLAME_HIT_EVENT, SoundSource.PLAYERS, 1F, 1F);
+                        this.lastHurtTick = this.self.tickCount;
+                    }
+                } else {
+                   entity.setDeltaMovement(prevVelocity);
+                    if (Math.abs(this.lastHurtTick-this.self.tickCount) > 6) {
+                        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_FLAME_HIT_EVENT, SoundSource.PLAYERS, 1F, 0.8F);
+                        this.lastHurtTick = this.self.tickCount;
                     }
                 }
+            }
 
-                if (finalHit) {
-                    this.attackTimeDuring = -10;
-                }
-            } else {
-                ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
+            if (finalHit) {
+                this.attackTimeDuring = -10;
             }
         }
     }
