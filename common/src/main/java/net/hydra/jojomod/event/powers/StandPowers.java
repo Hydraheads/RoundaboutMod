@@ -149,6 +149,31 @@ public class StandPowers {
         return true;
     }
 
+    /**If the standard left click input should be canceled while your stand is active*/
+    public boolean interceptAttack(){
+        return false;
+    }
+    public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (keyIsDown) { if (this.canAttack()) {
+            this.tryPower(PowerIndex.ATTACK, true);
+            tryPowerPacket(PowerIndex.ATTACK);
+        }}
+    }
+    /**How far do the basic attacks of your stand travel if it is a humanoid stand and overrides the above?
+     * (default is 5, 3 minecraft block range +2 meters extra from stand)*/
+    public float getReach(){
+        return 5;
+    }
+
+    /**If the standard right click input should usually be canceled while your stand is active*/
+    public boolean interceptGuard(){
+        return false;
+    }
+    public boolean buttonInputGuard(boolean keyIsDown, Options options) {
+        return false;
+    }
+
+
     /**Stuff that happens every tick while possessing the stand in general.
      * Remember to call the super when you override or some things might not function properly*/
     public void tickPower(){
@@ -164,11 +189,13 @@ public class StandPowers {
     public void tickMobAI(LivingEntity attackTarget){
     }
 
-    /**How far do the basic attacks of your stand travel if it is a humanoid stand?
-     * (default is 5, 3 minecraft block range +2 meters extra from stand)*/
-    public float getReach(){
-        return 5;
+    /**Edit this to apply special effect when stand virus is ravaging a mob with this stand.
+     * Use the instance to time the effect appropriately*/
+    public void tickStandRejection(MobEffectInstance effect){
     }
+
+    /** Called per client tick, use for particle FX and such */
+    public void visualFrameTick() {};
 
     /**Override this to determine how many points of damage your stand's guard can take before it breaks,
      * generally hooks into config settings.*/
@@ -202,28 +229,43 @@ public class StandPowers {
     /**Override if your stand can see through justice's fog, consider letting scoping moves see through it*/
     public boolean canSeeThroughFog(){return false;}
 
-    public Component getStandName(){
-        ItemStack disc = ((StandUser)this.getSelf()).roundabout$getStandDisc();
-        if (!disc.isEmpty() && disc.getItem() instanceof StandDiscItem SDI){
-            return SDI.getDisplayName2();
+    /**Stand related things that slow you down or speed you up, override and call super to make
+     * any stand ability slow you down*/
+    public float inputSpeedModifiers(float basis){
+        StandUser standUser = ((StandUser) this.getSelf());
+        if (standUser.roundabout$isDazed()) {
+            basis = 0;
+        } else if (!(this.getSelf().getVehicle() != null && this.getSelf().getControlledVehicle() == null) &&
+                (standUser.roundabout$isGuarding() && this.getSelf().getVehicle() == null)) {
+            basis*=0.3f;
+        } else if (this.isBarrageAttacking() || standUser.roundabout$isClashing()) {
+            basis*=0.2f;
+        } else if (this.isBarrageCharging()) {
+            basis*=0.5f;
         }
-        return Component.empty();
+        return basis;
+    }
+    /**Similar to the above function, but prevents the additional velocity carried over from
+     * sprint jumping if made to return true, override and call super*/
+    public boolean cancelSprintJump(){
+        return this.isBarraging();
     }
 
-    /**The cooldown for summoning. It is mostly clientside and doesn't have to be synced*/
-    public int summonCD = 0;
-
-    private int chargedTSTicks = 0;
-    public boolean hasActedInTS = false;
-
-    public int storedInt = 0;
-
-
-    public boolean canLightFurnace(){
+    /** Make a stand ability cancel you using items */
+    public boolean cancelItemUse() {
         return false;
     }
 
+    /**If a power can be interrupted, that means you can hit the person using the power to cancel it,
+     * like when someone charging a barrage gets their barrage canceled to damage*/
+    public boolean canInterruptPower(){
+        return false;
+    }
 
+    /**Probably will only apply to magician's red but leaving it in here just in case*/
+    public boolean canLightFurnace(){
+        return false;
+    }
 
     /**This value prevents you from resummoning/blocking to cheese the 3 hit combo's last hit faster*/
     public int interruptCD = 0;
@@ -239,44 +281,8 @@ public class StandPowers {
         return -30;
     }
 
-    public boolean forwardBarrage = false;
 
-
-    /** Called per client tick, use for particle FX and such */
-    public void visualFrameTick() {};
-    public void updateGuard(boolean yeet){
-        if (suspendGuard) {
-            if (!yeet) {
-                suspendGuard = false;
-            }
-        }
-    }
-    public boolean suspendGuard = false;
-    public boolean cancelItemUse() {
-        return false;
-    }
-    public boolean cancelCollision(Entity et) {
-        return false;
-    }
-
-    public boolean buttonInputGuard(boolean keyIsDown, Options options) {
-        return false;
-    }
-
-    public void buttonInputAttack(boolean keyIsDown, Options options) {
-        if (keyIsDown) {
-            if (this.canAttack()) {
-                this.tryPower(PowerIndex.ATTACK, true);
-                tryPowerPacket(PowerIndex.ATTACK);
-            }
-        }
-    }
-    /**The Guard Variation is prioritized over this for most stands but it may find niche uses*/
-    public void buttonInputUse(boolean keyIsDown, Options options) {
-        if (keyIsDown) {
-        }
-    }
-
+    /**Guard + Attack to use a barrage*/
     public void buttonInputBarrage(boolean keyIsDown, Options options){
         if (keyIsDown) {
             if (this.getAttackTime() >= this.getAttackTimeMax() ||
@@ -287,14 +293,17 @@ public class StandPowers {
         }
     }
 
+    /**This gets set to true when you begin using a forward barrage, not many stands will use this mechanic likely*/
+    public boolean forwardBarrage = false;
 
+    /**If the stand has you in a state where you cannot collide with entities at all, mark this*/
+    public boolean cancelCollision(Entity et) {
+        return false;
+    }
 
-    public void levelUp(){
-        if (!this.getSelf().level().isClientSide()){
-            ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.END_ROD,
-                    this.getSelf().getX(), this.getSelf().getY() + this.getSelf().getEyeHeight(), this.getSelf().getZ(),
-                    20, 0.4, 0.4, 0.4, 0.4);
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.LEVELUP_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
+    /**The Guard Variation is prioritized over this for most stands but it may find niche uses*/
+    public void buttonInputUse(boolean keyIsDown, Options options) {
+        if (keyIsDown) {
         }
     }
 
@@ -317,12 +326,9 @@ public class StandPowers {
         scopeLevel=level;
     }
 
-
-
-
-
     /**Barrage sound playing and canceling involve sending a byte in a packet, then reading it from here on
-     * the client level. */
+     * the client level. You can define your own sound bytes, try to start with id 70 onwards up to the byte limit.
+     * (otherwise it may be the same byte as one of the below?)*/
     public SoundEvent getSoundFromByte(byte soundChoice){
         if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND) {
             return this.getBarrageChargeSound();
@@ -365,6 +371,34 @@ public class StandPowers {
         }
         return null;
     }
+
+    /**Some standard bytes for sound noises, stay clear of 40-62 as they exist universally*/
+    public static final byte TIME_STOP_NOISE = 40;
+    public static final byte TIME_STOP_NOISE_2 = TIME_STOP_NOISE+1;
+    public static final byte TIME_STOP_NOISE_3 = TIME_STOP_NOISE+2;
+    public static final byte TIME_STOP_NOISE_4 = TIME_STOP_NOISE+3;
+    public static final byte TIME_STOP_NOISE_5 = TIME_STOP_NOISE+4;
+    public static final byte TIME_STOP_NOISE_6 = TIME_STOP_NOISE+5;
+    public static final byte TIME_STOP_NOISE_7 = TIME_STOP_NOISE+6;
+    public static final byte TIME_STOP_NOISE_8 = TIME_STOP_NOISE+7;
+    public static final byte TIME_STOP_NOISE_9 = TIME_STOP_NOISE+8;
+    public static final byte TIME_STOP_NOISE_10 = TIME_STOP_NOISE+9;
+    public static final byte TIME_STOP_NOISE_11 = TIME_STOP_NOISE+10;
+    public static final byte TIME_STOP_NOISE_12 = TIME_STOP_NOISE+11;
+    public static final byte TIME_STOP_TICKING = TIME_STOP_NOISE+16;
+    public static final byte TIME_RESUME_NOISE = 60;
+    public static final byte TIME_RESUME_NOISE_2 = 61;
+    public static final byte TIME_RESUME_NOISE_3 = 62;
+
+    public byte getSoundCancelingGroupByte(byte soundChoice) {
+        if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND){
+            return SoundIndex.BARRAGE_SOUND_GROUP;
+        } else if (soundChoice <= SoundIndex.GLAIVE_CHARGE) {
+            return SoundIndex.ITEM_GROUP;
+        }
+
+        return soundChoice;
+    }
     public float getSoundPitchFromByte(byte soundChoice){
         if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND){
             return this.getBarrageChargePitch();
@@ -372,7 +406,6 @@ public class StandPowers {
             return 1F;
         }
     }
-
     public float getSoundVolumeFromByte(byte soundChoice){
         if (soundChoice == TIME_STOP_NOISE) {
             return 0.7f;
@@ -397,8 +430,6 @@ public class StandPowers {
         playStandUserOnlySoundsIfNearby(this.getSummonSound(), 10, false,false);
     } //Plays the Summon sound. Happens when stand is summoned with summon key.
 
-
-
     /**Override this function for alternate rush noises*/
     public byte chooseBarrageSound(){
         return 0;
@@ -406,8 +437,8 @@ public class StandPowers {
     public float getBarrageChargePitch(){
         return 1/((float) this.getBarrageWindup() /20);
     }
-    /**Realistically, you only need to override this if you're canceling sounds*/
 
+    /**Realistically, you only need to override this if you're canceling sounds*/
     public ResourceLocation getBarrageCryID(){
         return ModSounds.STAND_THEWORLD_MUDA1_SOUND_ID;
     }
@@ -415,25 +446,6 @@ public class StandPowers {
         return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
     }
 
-    public static final byte TIME_STOP_NOISE = 40;
-    public static final byte TIME_STOP_NOISE_2 = TIME_STOP_NOISE+1;
-    public static final byte TIME_STOP_NOISE_3 = TIME_STOP_NOISE+2;
-    public static final byte TIME_STOP_NOISE_4 = TIME_STOP_NOISE+3;
-    public static final byte TIME_STOP_NOISE_5 = TIME_STOP_NOISE+4;
-    public static final byte TIME_STOP_NOISE_6 = TIME_STOP_NOISE+5;
-    public static final byte TIME_STOP_NOISE_7 = TIME_STOP_NOISE+6;
-    public static final byte TIME_STOP_NOISE_8 = TIME_STOP_NOISE+7;
-    public static final byte TIME_STOP_NOISE_9 = TIME_STOP_NOISE+8;
-    public static final byte TIME_STOP_NOISE_10 = TIME_STOP_NOISE+9;
-    public static final byte TIME_STOP_NOISE_11 = TIME_STOP_NOISE+10;
-    public static final byte TIME_STOP_NOISE_12 = TIME_STOP_NOISE+11;
-    public static final byte TIME_STOP_TICKING = TIME_STOP_NOISE+16;
-    public static final byte TIME_RESUME_NOISE = 60;
-    public static final byte TIME_RESUME_NOISE_2 = 61;
-    public static final byte TIME_RESUME_NOISE_3 = 62;
-    public boolean glowingEyes(){
-        return false;
-    }
     public ResourceLocation getBarrageChargeID(){
         return ModSounds.STAND_BARRAGE_WINDUP_ID;
     }
@@ -549,59 +561,69 @@ public class StandPowers {
     }
 
 
-    public void tickSounds(){
-        if (this.self.level().isClientSide) {
-            ((StandUserClient) this.self).roundabout$clientPlaySound();
-             ((StandUserClient) this.self).roundabout$clientSoundCancel();
+    /**plays every tick that the active power is set to X move, the unique moves lets you do your own packets,
+     * see examples*/
+    public void updateUniqueMoves(){
+    }
+    /**same as above but for the standard attack packet*/
+    public void updateAttack(){
+    }
+    public void updateIntMove(int in){
+    }
+
+    /**make anything apply suspendguard to make it cancel guard, override if you want
+     * some other conditions to suspend your stand guard*/
+    public boolean suspendGuard = false;
+    public void updateGuard(boolean yeet){
+        if (suspendGuard) {
+            if (!yeet) {
+                suspendGuard = false;
+            }
         }
     }
 
 
-    public boolean canInterruptPower(){
-        return false;
+
+    /**A specific packet makes this happen*/
+    public void updateMove(float flot){
     }
 
-    /**Stand related things that slow you down or speed you up*/
-    public float inputSpeedModifiers(float basis){
-            StandUser standUser = ((StandUser) this.getSelf());
-            if (standUser.roundabout$isDazed()) {
-                basis = 0;
-            } else if (!(this.getSelf().getVehicle() != null && this.getSelf().getControlledVehicle() == null) &&
-                    (standUser.roundabout$isGuarding() && this.getSelf().getVehicle() == null)) {
-                basis*=0.3f;
-            } else if (this.isBarrageAttacking() || standUser.roundabout$isClashing()) {
-                    basis*=0.2f;
-            } else if (this.isBarrageCharging()) {
-                basis*=0.5f;
-            }
-        return basis;
-    }
-
-    public void updateAttack(){
-    }
-
+    /**If you want something to happen when you spawn a projectile, this is your place.
+     * For instance, you could make every shot out arrow be super thrown, or create a penalty for throwing
+     * a knife*/
     public boolean onCreateProjectile(Projectile proj){
         return false;
     }
 
+    /**When you deal damage, intercept or run code based off of it, or potentially cancel it*/
     public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
         return false;
     }
+    /**Same as above but happens later in the damage code after a hit is already confirmed*/
     public boolean interceptSuccessfulDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
         return false;
     }
+    /**When damage is dealt to you, intercept or run code based off of it, or potentially cancel it*/
     public boolean interceptDamageEvent(DamageSource $$0, float $$1){
         return false;
     }
-
-    public StandUser getUserData(LivingEntity User){
-        return ((StandUser) User);
+    /**When you eat food, intercept or run code based off of it*/
+    public void eatEffectIntercept(ItemStack $$0, Level $$1, LivingEntity $$2){
+    }
+    /**When your stand is summoned, if you want to do anything fancy particle wise or otherwise, override this*/
+    public void playSummonEffects(boolean forced){
     }
 
-
-    /**Edit this to apply special effect when stand virus is ravaging a mob with this stand.
-     * Use the instance to time the effect appropriately*/
-    public void tickStandRejection(MobEffectInstance effect){
+    /**Stands that react to mobs setting aggro to them like hey ya and wonder of u will override this*/
+    public void reactToAggro(Mob mob){}
+    /**Can't really cancel this one, but happens when you place a block*/
+    public void onPlaceBlock(ServerPlayer $$0, BlockPos $$1, ItemStack $$2){}
+    /**Can't really cancel this one, but happens when you destroy a block, also it only applies to survival mode*/
+    public void onDestroyBlock(Level $$0, Player $$1, BlockPos $$2, BlockState $$3, BlockEntity $$4, ItemStack $$5){
+    }
+    /**return true to cancel the onkill event*/
+    public boolean onKilledEntity(ServerLevel $$0, LivingEntity $$1){
+        return false;
     }
 
 
@@ -758,11 +780,6 @@ public class StandPowers {
     }
 
 
-
-    public boolean cancelSprintJump(){
-        return this.isBarraging();
-    }
-
     public void barrageImpact2(Entity entity, boolean lastHit, float knockbackStrength){
         if (entity instanceof LivingEntity){
             if (lastHit) {
@@ -811,30 +828,18 @@ public class StandPowers {
     }
 
 
-    public void updateMove(float flot){
-    }
-    public void updateIntMove(int in){
-    }
-
-
     public void punchImpact(Entity entity){
     }
 
+    /**If you need to temporarily save a boolean for an attack state use this*/
     public boolean moveStarted = false;
 
+    /**If you need to temporarily save an entity use this*/
     public Entity storeEnt = null;
 
-    public void updateUniqueMoves(){
-    }
 
 
 
-    public boolean interceptAttack(){
-        return false;
-    }
-    public boolean interceptGuard(){
-        return false;
-    }
     public boolean canChangePower(int move, boolean forced){
         if (!this.isClashing() || move == PowerIndex.CLASH_CANCEL) {
             if ((this.activePower == PowerIndex.NONE || forced) &&
@@ -905,6 +910,8 @@ public class StandPowers {
         /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
         return true;
     }
+
+    public int storedInt = 0;
     public boolean tryIntPower(int move, boolean forced, int chargeTime){
         tryPower(move, forced);
         /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
@@ -957,11 +964,6 @@ public class StandPowers {
     }
     public Vec3 savedPos;
 
-    public void eatEffectIntercept(ItemStack $$0, Level $$1, LivingEntity $$2){
-    }
-
-    public void playSummonEffects(boolean forced){
-    }
     /**The Sound Event to cancel when your barrage is canceled*/
 
     public final void playStandUserOnlySoundsIfNearby(byte soundNo, double range, boolean onSelf, boolean isVoice) {
@@ -1023,16 +1025,6 @@ public class StandPowers {
 
 
 
-    public void onPlaceBlock(ServerPlayer $$0, BlockPos $$1, ItemStack $$2){
-        /**Can't really cancel this one*/
-    }
-    public void onDestroyBlock(Level $$0, Player $$1, BlockPos $$2, BlockState $$3, BlockEntity $$4, ItemStack $$5){
-        /**Can't really cancel this one, also it only applies to survival mode*/
-    }
-    public boolean onKilledEntity(ServerLevel $$0, LivingEntity $$1){
-        /**return true to cancel the onkill event*/
-        return false;
-    }
 
     public StandEntity displayStand = null;
     public final void spreadRadialClientPacket(double range, boolean skipSelf, String packet, Object... vargs) {
@@ -1121,13 +1113,6 @@ public class StandPowers {
         poseStand(OffsetIndex.FOLLOW);
         animateStand(StandEntity.IDLE);
         return true;
-    }
-
-    public void resetAttackState(){
-        if (shouldReset(this.getActivePower())){
-            this.interruptCD = 3;
-            ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
-        }
     }
 
 
@@ -1256,6 +1241,15 @@ public class StandPowers {
     public byte getMaxLevel(){
         return 1;
     }
+    /**Override this in general with leveling stands so you can display generic messages of what each level unlocks*/
+    public void levelUp(){
+        if (!this.getSelf().level().isClientSide()){
+            ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.END_ROD,
+                    this.getSelf().getX(), this.getSelf().getY() + this.getSelf().getEyeHeight(), this.getSelf().getZ(),
+                    20, 0.4, 0.4, 0.4, 0.4);
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.LEVELUP_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
+        }
+    }
 
 
 
@@ -1307,20 +1301,6 @@ public class StandPowers {
     public boolean dealWithProjectile(Entity ent, HitResult res){
         return false;
     }
-    public boolean getIsGamemodeApproriateForGrief(){
-        if ((!(this.getSelf() instanceof Player) || (((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() != GameType.SPECTATOR
-                && ((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() != GameType.ADVENTURE))
-                && this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
-            return true;
-        }
-        return false;
-    }
-
-
-    /**Stands that react to aggro like hey ya and wonder of u*/
-    public void reactToAggro(Mob mob){
-
-    }
 
 
     public Component getPosName(byte posID){
@@ -1358,17 +1338,6 @@ public class StandPowers {
     /**Call this so when you get hurt something can happen*/
     public void onActuallyHurt(DamageSource $$0, float $$1){
     }
-
-    public byte getSoundCancelingGroupByte(byte soundChoice) {
-        if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND){
-            return SoundIndex.BARRAGE_SOUND_GROUP;
-        } else if (soundChoice <= SoundIndex.GLAIVE_CHARGE) {
-            return SoundIndex.ITEM_GROUP;
-        }
-
-        return soundChoice;
-    }
-
 
     /**Override this if you want to add or remove conditions that prevent moves from updating and shut
      * them down*/
@@ -1557,6 +1526,10 @@ public class StandPowers {
         return this.self instanceof Player PE && PE.isCreative();
     }
 
+    /**Does the casting to stand user for you, will always work because this class needs a livingentity to exist*/
+    public StandUser getUserData(LivingEntity User){
+        return ((StandUser) User);
+    }
 
     /**What side are we on?*/
     public boolean isClient(){
@@ -1869,6 +1842,15 @@ public class StandPowers {
                 }
                 return true;
             }
+        }
+        return false;
+    }
+    /**The checks in question, has a mainutil counterpart*/
+    public boolean getIsGamemodeApproriateForGrief(){
+        if ((!(this.getSelf() instanceof Player) || (((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() != GameType.SPECTATOR
+                && ((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() != GameType.ADVENTURE))
+                && this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
+            return true;
         }
         return false;
     }
@@ -3310,6 +3292,8 @@ public class StandPowers {
     public boolean getIsTsCharging(){
         return false;
     }
+    private int chargedTSTicks = 0;
+    public boolean hasActedInTS = false;
 
     /**This is not in powerssoftandwet because I believe if someone is using paisley or other stands they may be able
      * to redirect it in the future*/
@@ -3364,10 +3348,37 @@ public class StandPowers {
         return Cooldowns;
     }
 
+    /**The stand is named on the disc so we just use that*/
+    public Component getStandName(){
+        ItemStack disc = ((StandUser)this.getSelf()).roundabout$getStandDisc();
+        if (!disc.isEmpty() && disc.getItem() instanceof StandDiscItem SDI){
+            return SDI.getDisplayName2();
+        }
+        return Component.empty();
+    }
+
+    /**Sound updates that play every tick*/
+    public void tickSounds(){
+        if (this.self.level().isClientSide) {
+            ((StandUserClient) this.self).roundabout$clientPlaySound();
+            ((StandUserClient) this.self).roundabout$clientSoundCancel();
+        }
+    }
+
+    /**If doing something like eating, cancels attack state*/
+    public void resetAttackState(){
+        if (shouldReset(this.getActivePower())){
+            this.interruptCD = 3;
+            ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
+        }
+    }
+
     /**You don't really need this*/
     public boolean setPowerSpecial(int lastMove) {return false;}
     public boolean setPowerMovement(int lastMove) {return false;}
     public boolean setPowerSneakMovement(int lastMove) {return false;}
+    /**The cooldown for summoning. It is mostly clientside and doesn't have to be synced*/
+    public int summonCD = 0;
     /**Just a sanity prevention for summoning too fast*/
     public boolean getSummonCD(){
         return this.summonCD <= 0;

@@ -909,11 +909,6 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         return hitEntities2;
     }
 
-    public boolean glowingEye = false;
-    @Override
-    public boolean glowingEyes(){
-        return glowingEye;
-    }
     public void updateStarFinger(){
         if (this.attackTimeDuring > -1) {
             StandEntity stand = getStandEntity(this.self);
