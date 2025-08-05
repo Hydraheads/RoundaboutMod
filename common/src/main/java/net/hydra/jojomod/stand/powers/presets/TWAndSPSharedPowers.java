@@ -1710,18 +1710,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
     }
     @Override
-    public void playBarrageNoise2(int hitNumber, Entity entity){
-        if (!this.getSelf().level().isClientSide()) {
-            if (!this.getSelf().level().isClientSide() && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
-                playBarrageBlockNoise();
-            } else {
-                if (hitNumber%2==0) {
-                    this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_BARRAGE_HIT2_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.9 + (Math.random() * 0.25)));
-                }
-            }
-        }
-    }
-    @Override
     public void playBarrageEndNoise(float mod, Entity entity){
         if (!this.getSelf().level().isClientSide()) {
             if (!this.getSelf().level().isClientSide() && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {

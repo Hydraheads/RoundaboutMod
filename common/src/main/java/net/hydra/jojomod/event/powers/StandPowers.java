@@ -149,27 +149,59 @@ public class StandPowers {
         return true;
     }
 
+    /**Stuff that happens every tick while possessing the stand in general.
+     * Remember to call the super when you override or some things might not function properly*/
+    public void tickPower(){
+        baseTickPower();
+    }
+
+    /**Override this if you need ultra specific timing on tickpower after other entity functions are called,
+     * this works the best for subtle movement tricks*/
+    public void tickPowerEnd(){
+    }
+
+    /**The AI for a stand User Mob, runs every tick. AttackTarget may be null*/
+    public void tickMobAI(LivingEntity attackTarget){
+    }
+
+    /**How far do the basic attacks of your stand travel if it is a humanoid stand?
+     * (default is 5, 3 minecraft block range +2 meters extra from stand)*/
+    public float getReach(){
+        return 5;
+    }
+
+    /**Override this to determine how many points of damage your stand's guard can take before it breaks,
+     * generally hooks into config settings.*/
+    public int getMaxGuardPoints(){
+        return 10;
+    }
+
+    /**Runs this code while switching out of your stand with a disc*/
+    public void onStandSwitch(){
+        getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
+    }
+
     /**Holds one arm out with the player model, override if you are using a stand like soft and wet or emperor that
      * should make the player hold their arm out in 3d person*/
     public boolean hasShootingModeVisually(){
         return false;
     }
 
+    /**If your stand is using a perma cast, which basically boils down to casting an ability over an area.
+     * Think casting a giant MR ankh, Green Day's mold field, etc.
+     * These are data structures that automatically sync across server and client so they
+     * are advisable to use for gigantic sweeeping abilities (not simple hitboxes or hitbox zones).*/
     public float getPermaCastRange(){
         return 100;
     }
     public byte getPermaCastContext(){
         return -1;
     }
-    public int getMaxGuardPoints(){
-        return 10;
-    }
-    public boolean canSeeThroughFog(){
-        return false;
-    }
-    public void onStandSwitch(){
-        getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
-    }
+    public void tickPermaCast(){}
+
+    /**Override if your stand can see through justice's fog, consider letting scoping moves see through it*/
+    public boolean canSeeThroughFog(){return false;}
+
     public Component getStandName(){
         ItemStack disc = ((StandUser)this.getSelf()).roundabout$getStandDisc();
         if (!disc.isEmpty() && disc.getItem() instanceof StandDiscItem SDI){
@@ -187,21 +219,6 @@ public class StandPowers {
     public int storedInt = 0;
 
 
-    public int getChargedTSTicks(){
-        return this.chargedTSTicks;
-    }
-    public void setChargedTSTicks(int chargedTSSeconds){
-        this.chargedTSTicks = chargedTSSeconds;
-    }
-    public int getMaxTSTime (){
-        return 0;
-    }
-    public int getMaxChargeTSTime(){
-        return 0;
-    }
-    public boolean getIsTsCharging(){
-        return false;
-    }
     public boolean canLightFurnace(){
         return false;
     }
@@ -271,17 +288,7 @@ public class StandPowers {
     }
 
 
-    public void pilotInputAttack(){
-    }
-    public boolean pilotInputInteract(){
-        return false;
-    }
-    public int getPilotMode(){
-        return 2;
-    }
-    public int getMaxPilotRange(){
-        return 100;
-    }
+
     public void levelUp(){
         if (!this.getSelf().level().isClientSide()){
             ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.END_ROD,
@@ -291,8 +298,12 @@ public class StandPowers {
         }
     }
 
+    /**Does your stand let you zoom in a lot? Override this if it does*/
+    public boolean canScope(){
+        return false;
+    }
+    public int scopeTime = -1;
     public int scopeLevel = 0;
-
     public void setScopeLevel(int level){
         if (scopeLevel <= 0 && level > 0){
             if (this.getSelf().level().isClientSide()){
@@ -305,21 +316,7 @@ public class StandPowers {
         }
         scopeLevel=level;
     }
-    public int scopeTime = -1;
 
-    public boolean canScope(){
-        return false;
-    }
-
-        public List<CooldownInstance> StandCooldowns = initStandCooldowns();
-
-    public List<CooldownInstance> initStandCooldowns(){
-        List<CooldownInstance> Cooldowns = new ArrayList<>();
-        for (byte i = 0; i < 10; i++) {
-            Cooldowns.add(new CooldownInstance(-1, -1));
-        }
-        return Cooldowns;
-    }
 
 
 
@@ -457,10 +454,6 @@ public class StandPowers {
         return null;
     }
 
-    /**Override this if you need ultra specific timing on tickpower after other entity functions are called,
-     * this works the best for subtle movement tricks*/
-    public void tickPowerEnd(){
-    }
 
     /**Returns if the stand is in control/pilot mode right now*/
     public boolean isPiloting(){
@@ -475,10 +468,28 @@ public class StandPowers {
      * sets you to pilot the stand. Pass in 0, -1, etc to cancel pilot mode.*/
     public void setPiloting(int ID){
     }
-
     /**Check the justice override, this is good for matching the camera up well to the piloting entity clientside*/
     public void synchToCamera(){
     }
+    /**Override to add controls to your pilot mode*/
+    public void pilotStandControls(KeyboardPilotInput kpi, LivingEntity entity){
+    }
+    /**What happens when you left click while in pilot mode, exists clientside like poweractivate*/
+    public void pilotInputAttack(){
+    }
+    /**What happens when you left click while in pilot mode, exists clientside like poweractivate*/
+    public boolean pilotInputInteract(){
+        return false;
+    }
+    /**return 1 for hard distance calcs, return 2 for soft/performant cubelike distance calcs*/
+    public int getPilotMode(){
+        return 2;
+    }
+    /**How far does pilot mode travel*/
+    public int getMaxPilotRange(){
+        return 100;
+    }
+
 
     /**every entity the client renders is checked against this, overrride and use it to see if they can be highlighted
      * for detection or attack highlighting related skills*/
@@ -499,12 +510,6 @@ public class StandPowers {
     }
     public int getMaxAirAmount(){
         return ClientNetworking.getAppropriateConfig().theWorldSettings.oxygenTankAdditionalTicks;
-    }
-
-
-
-    public void tickPower(){
-        baseTickPower();
     }
 
 
@@ -529,9 +534,6 @@ public class StandPowers {
         if (this.getSelf().level().isClientSide) {
             this.tickSounds();
         }
-    }
-
-    public void tickPermaCast(){
     }
 
     /**A generic function which sends a float corresponding with an active power via packets to the client from the
@@ -559,10 +561,6 @@ public class StandPowers {
         return false;
     }
 
-
-
-
-
     /**Stand related things that slow you down or speed you up*/
     public float inputSpeedModifiers(float basis){
             StandUser standUser = ((StandUser) this.getSelf());
@@ -579,13 +577,9 @@ public class StandPowers {
         return basis;
     }
 
-
-
     public void updateAttack(){
     }
 
-    public void pilotStandControls(KeyboardPilotInput kpi, LivingEntity entity){
-    }
     public boolean onCreateProjectile(Projectile proj){
         return false;
     }
@@ -610,9 +604,6 @@ public class StandPowers {
     public void tickStandRejection(MobEffectInstance effect){
     }
 
-    public float getReach(){
-        return 5;
-    }
 
     public void standBarrageHit(){
         if (this.self instanceof Player){
@@ -672,6 +663,15 @@ public class StandPowers {
 
     //((ServerWorld) this.self.getWorld()).spawnParticles(ParticleTypes.EXPLOSION,pointVec.x, pointVec.y, pointVec.z,
     //        1,0.0, 0.0, 0.0,1);
+
+
+    /**Override and use this to integrate stand general damage configs easily*/
+    public float multiplyPowerByStandConfigPlayers(float power){
+        return power;
+    }
+    public float multiplyPowerByStandConfigMobs(float power){
+        return power;
+    }
 
     /**Override these methods to fine tune the attack strength of the stand*/
     public float getPunchStrength(Entity entity){
@@ -794,13 +794,6 @@ public class StandPowers {
         }
     }
 
-    public void playBarrageNoise2(int hitNumber, Entity entity){
-        if (!this.self.level().isClientSide()) {
-            if (hitNumber%2==0) {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_HIT2_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.9 + (Math.random() * 0.25)));
-            }
-        }
-    }
     public void playBarrageEndNoise(float mod, Entity entity){
         if (!this.self.level().isClientSide()) {
           this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_END_EVENT, SoundSource.PLAYERS, 0.95F+mod, 1f);
@@ -818,8 +811,6 @@ public class StandPowers {
     }
 
 
-    public void updateMove(){
-    }
     public void updateMove(float flot){
     }
     public void updateIntMove(int in){
@@ -829,55 +820,9 @@ public class StandPowers {
     public void punchImpact(Entity entity){
     }
 
-    public void damage(Entity entity){
-
-    }
-
     public boolean moveStarted = false;
 
     public Entity storeEnt = null;
-
-    public boolean hasMoreThanOneSkin(){
-        List<Byte> skinList = getSkinList();
-        return (skinList != null && !skinList.isEmpty() && skinList.size() > 1);
-    }
-
-    public boolean hasMoreThanOnePos(){
-        List<Byte> posList = getPosList();
-        return (posList != null && !posList.isEmpty() && posList.size() > 1);
-    }
-
-
-
-
-
-
-    public Entity StandAttackHitboxNear(LivingEntity User,List<Entity> entities, float angle){
-        float nearestDistance = -1;
-        Entity nearestMob = null;
-        if (entities != null){
-            for (Entity value : entities) {
-                if (!value.isInvulnerable() && value.isAlive() && value.getUUID() != User.getUUID() && (MainUtil.isStandPickable(value) || value instanceof StandEntity)){
-                    if (!(value instanceof StandEntity SE1 && SE1.getUser() != null && SE1.getUser().is(User))) {
-                        float distanceTo = value.distanceTo(User);
-                        float range = this.getReach();
-                        if (value instanceof FollowingStandEntity SE && OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FOLLOW_STYLE) {
-                            range /= 2;
-                        }
-                        if ((nearestDistance < 0 || distanceTo < nearestDistance)
-                                && distanceTo <= range) {
-                            if (canActuallyHit(value)) {
-                                nearestDistance = distanceTo;
-                                nearestMob = value;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return nearestMob;
-    }
 
     public void updateUniqueMoves(){
     }
@@ -944,18 +889,6 @@ public class StandPowers {
         return false;
     }
 
-    public void findDeflectables(){
-
-        float halfReach = (float) (getReach()*0.5);
-        Vec3 pointVec = DamageHandler.getRayPoint(this.self, halfReach);
-        List<Entity> arrows = arrowGrabHitbox(this.self,DamageHandler.genHitbox(this.self, pointVec.x, pointVec.y,
-                pointVec.z, halfReach, halfReach, halfReach), getReach());
-        if (!arrows.isEmpty() && ClientNetworking.getAppropriateConfig().generalStandSettings.barrageDeflectsArrows) {
-            for (int i = 0; i < arrows.size(); i++) {
-                deflectArrowsAndBullets(arrows.get(i));
-            }
-        }
-    }
 
     public boolean tryPosPower(int move, boolean forced, Vec3 pos){
         tryPower(move, forced);
@@ -1025,13 +958,6 @@ public class StandPowers {
     public Vec3 savedPos;
 
     public void eatEffectIntercept(ItemStack $$0, Level $$1, LivingEntity $$2){
-    }
-    public float multiplyPowerByStandConfigPlayers(float power){
-        return power;
-    }
-
-    public float multiplyPowerByStandConfigMobs(float power){
-        return power;
     }
 
     public void playSummonEffects(boolean forced){
@@ -1347,9 +1273,6 @@ public class StandPowers {
         return ((this.activePower == PowerIndex.BARRAGE_CLASH && this.attackTimeDuring > -1) || this.isBarraging());
     }
 
-    /**The AI for a stand User Mob, runs every tick. AttackTarget may be null*/
-    public void tickMobAI(LivingEntity attackTarget){
-    }
     public int getKickBarrageWindup(){
         return ClientNetworking.getAppropriateConfig().generalStandSettings.kickBarrageWindup;
     }
@@ -2268,6 +2191,32 @@ public class StandPowers {
         return targetEntity;
     }
 
+    public Entity StandAttackHitboxNear(LivingEntity User,List<Entity> entities, float angle){
+        float nearestDistance = -1;
+        Entity nearestMob = null;
+        if (entities != null){
+            for (Entity value : entities) {
+                if (!value.isInvulnerable() && value.isAlive() && value.getUUID() != User.getUUID() && (MainUtil.isStandPickable(value) || value instanceof StandEntity)){
+                    if (!(value instanceof StandEntity SE1 && SE1.getUser() != null && SE1.getUser().is(User))) {
+                        float distanceTo = value.distanceTo(User);
+                        float range = this.getReach();
+                        if (value instanceof FollowingStandEntity SE && OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FOLLOW_STYLE) {
+                            range /= 2;
+                        }
+                        if ((nearestDistance < 0 || distanceTo < nearestDistance)
+                                && distanceTo <= range) {
+                            if (canActuallyHit(value)) {
+                                nearestDistance = distanceTo;
+                                nearestMob = value;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return nearestMob;
+    }
     public double getBlockDistanceOut(LivingEntity entity, double range){
         Vec3 vec3dST = entity.getEyePosition(0);
         Vec3 vec3d2ST = entity.getViewVector(0);
@@ -3339,13 +3288,26 @@ public class StandPowers {
         return ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite;
     }
     public boolean fullTSChargeBonus(){return false;}
-
     /**Ticks through your own timestop. This value exists in the general stand powers in case you switch stands.*/
     public void timeTickStopPower(){
     }
-
     /**Name straightforward*/
     public boolean isStoppingTime(){
+        return false;
+    }
+    public int getChargedTSTicks(){
+        return this.chargedTSTicks;
+    }
+    public void setChargedTSTicks(int chargedTSSeconds){
+        this.chargedTSTicks = chargedTSSeconds;
+    }
+    public int getMaxTSTime (){
+        return 0;
+    }
+    public int getMaxChargeTSTime(){
+        return 0;
+    }
+    public boolean getIsTsCharging(){
         return false;
     }
 
@@ -3366,6 +3328,40 @@ public class StandPowers {
     public boolean hasGoldenDisc(){
         ItemStack stack = ((StandUser)this.getSelf()).roundabout$getStandDisc();
         return !stack.isEmpty() && stack.getItem() instanceof MaxStandDiscItem;
+    }
+
+    /**Whether or not the stand has more than one skin*/
+    public boolean hasMoreThanOneSkin(){
+        List<Byte> skinList = getSkinList();
+        return (skinList != null && !skinList.isEmpty() && skinList.size() > 1);
+    }
+    /**Whether or not the stand has more than one pose*/
+    public boolean hasMoreThanOnePos(){
+        List<Byte> posList = getPosList();
+        return (posList != null && !posList.isEmpty() && posList.size() > 1);
+    }
+
+    /**gets arrows for barrage to deflect*/
+    public void findDeflectables(){
+        float halfReach = (float) (getReach()*0.5);
+        Vec3 pointVec = DamageHandler.getRayPoint(this.self, halfReach);
+        List<Entity> arrows = arrowGrabHitbox(this.self,DamageHandler.genHitbox(this.self, pointVec.x, pointVec.y,
+                pointVec.z, halfReach, halfReach, halfReach), getReach());
+        if (!arrows.isEmpty() && ClientNetworking.getAppropriateConfig().generalStandSettings.barrageDeflectsArrows) {
+            for (int i = 0; i < arrows.size(); i++) {
+                deflectArrowsAndBullets(arrows.get(i));
+            }
+        }
+    }
+
+    /**Your stand's generalized cooldowns*/
+    public List<CooldownInstance> StandCooldowns = initStandCooldowns();
+    public List<CooldownInstance> initStandCooldowns(){
+        List<CooldownInstance> Cooldowns = new ArrayList<>();
+        for (byte i = 0; i < 10; i++) {
+            Cooldowns.add(new CooldownInstance(-1, -1));
+        }
+        return Cooldowns;
     }
 
     /**You don't really need this*/
