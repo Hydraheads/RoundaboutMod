@@ -584,10 +584,6 @@ public class PowersSurvivor extends NewDashPreset {
     }
     @Override
     public int getDisplayPowerInventoryYOffset(){
-        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-        if (skn == JusticeEntity.DARK_MIRAGE){
-            return super.getDisplayPowerInventoryYOffset();
-        }
         return 7;
     }
     @Override public Component getSkinName(byte skinId) {

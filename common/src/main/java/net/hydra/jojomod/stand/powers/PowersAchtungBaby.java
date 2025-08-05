@@ -575,20 +575,6 @@ public class PowersAchtungBaby extends NewDashPreset {
         super.updateUniqueMoves();
     }
 
-
-
-    @Override
-    public int getDisplayPowerInventoryScale(){
-        return 60;
-    }
-    @Override
-    public int getDisplayPowerInventoryYOffset(){
-        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-        if (skn == JusticeEntity.DARK_MIRAGE){
-            return super.getDisplayPowerInventoryYOffset();
-        }
-        return 7;
-    }
     @Override public Component getSkinName(byte skinId) {
         return Component.translatable("skins.roundabout.achtung_baby.base");
     }

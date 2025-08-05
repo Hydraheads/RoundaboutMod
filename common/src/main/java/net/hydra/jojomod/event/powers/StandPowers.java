@@ -131,12 +131,29 @@ public class StandPowers {
         return ALL_WORTHY;
     }
 
+    /**Is your stand a main stand, or a secondary stand?*/
+    public boolean isSecondaryStand(){
+        return false;
+    }
+
+    /**If your stand has one singular entity that comes out when you summon it*/
+    public boolean canSummonStandAsEntity(){
+        return true;
+    }
+    /**Override if the above is true, and return the stand entity*/
+    public StandEntity getNewStandEntity(){
+        return null;
+    }
+    /**If you are not currently supposed to be able to activate your stand, override for sealing reasons*/
+    public boolean canSummonStand(){
+        return true;
+    }
+
     /**Holds one arm out with the player model, override if you are using a stand like soft and wet or emperor that
      * should make the player hold their arm out in 3d person*/
     public boolean hasShootingModeVisually(){
         return false;
     }
-
 
     public float getPermaCastRange(){
         return 100;
@@ -190,19 +207,6 @@ public class StandPowers {
     }
 
 
-    public int getDisplayPowerInventoryScale(){
-        return 30;
-    }
-    public int getDisplayPowerInventoryYOffset(){
-        return 0;
-    }
-    public boolean getSummonCD(){
-        return this.summonCD <= 0;
-    } public void setSummonCD(int summonCD){
-        this.summonCD = summonCD;
-    } public int getSummonCD2(){
-        return this.summonCD;
-    }
 
     /**This value prevents you from resummoning/blocking to cheese the 3 hit combo's last hit faster*/
     public int interruptCD = 0;
@@ -458,34 +462,6 @@ public class StandPowers {
     public void tickPowerEnd(){
     }
 
-    public boolean tryHitBlock(BlockHitResult $$0, BlockPos pos, BlockState state, ItemStack stack){
-
-        if ((state.isAir() || state.canBeReplaced()) && !((this.getSelf() instanceof Player &&
-                (((Player) this.getSelf()).blockActionRestricted(this.getSelf().level(), pos, ((ServerPlayer)
-                        this.getSelf()).gameMode.getGameModeForPlayer()))) ||
-                !this.getSelf().level().mayInteract(((Player) this.getSelf()), pos))){
-
-            if (stack.getItem() instanceof BlockItem) {
-                Direction direction = $$0.getDirection();
-                if (direction.getAxis() == Direction.Axis.X){
-                    direction = direction.getOpposite();
-                }
-                if (((BlockItem) stack.getItem()).getBlock() instanceof RotatedPillarBlock){
-                    direction = $$0.getDirection();
-                }
-
-                if (((BlockItem)stack.getItem()).place(new DirectionalPlaceContext(this.getSelf().level(),
-                        pos,
-                        direction, stack,
-                        direction)) != InteractionResult.FAIL){
-                    return true;
-                }
-            }
-
-        }
-        return false;
-    }
-
     /**Returns if the stand is in control/pilot mode right now*/
     public boolean isPiloting(){
         return false;
@@ -535,10 +511,6 @@ public class StandPowers {
     public static final byte
             NONE = 0;
 
-    public void tickMobAi(){
-
-    }
-
     /**If the cooldown slot is to be controlled by the server, return true. Consider using this if
      * bad TPS makes a stand ability actually overpowered for the client to handle the recharging of.*/
     public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
@@ -582,14 +554,6 @@ public class StandPowers {
         }
     }
 
-    private int clashIncrement =0;
-    private int clashMod =0;
-
-
-
-    public float getLevelMultiplier(){
-        return (float) (ClientNetworking.getAppropriateConfig().standLevelingSettings.standExperienceNeededForLevelupMultiplier *0.01);
-    }
 
     public boolean canInterruptPower(){
         return false;
@@ -617,9 +581,6 @@ public class StandPowers {
 
 
 
-    public boolean isWip(){
-        return false;
-    }
     public void updateAttack(){
     }
 
@@ -833,9 +794,6 @@ public class StandPowers {
         }
     }
 
-    public boolean isSecondaryStand(){
-        return false;
-    }
     public void playBarrageNoise2(int hitNumber, Entity entity){
         if (!this.self.level().isClientSide()) {
             if (hitNumber%2==0) {
@@ -859,15 +817,7 @@ public class StandPowers {
         }
     }
 
-    /**ClashDone is a value that makes you lock in your barrage when you are done barraging**/
-    public boolean clashDone = false;
-    public boolean getClashDone(){
-        return this.clashDone;
-    } public void setClashDone(boolean clashDone){
-        this.clashDone = clashDone;
-    }
-    public float clashProgress = 0.0f;
-    private float clashOpProgress = 0.0f;
+
     public void updateMove(){
     }
     public void updateMove(float flot){
@@ -875,30 +825,6 @@ public class StandPowers {
     public void updateIntMove(int in){
     }
 
-    /**Clash Op is the opponent you are clashing with*/
-    @Nullable
-    private LivingEntity clashOp;
-    public @Nullable LivingEntity getClashOp() {
-        return this.clashOp;
-    }
-    public void setClashOp(@Nullable LivingEntity clashOp) {
-        this.clashOp = clashOp;
-    }
-    public float getClashOpProgress(){
-        return this.clashOpProgress;
-    }
-    public void setClashOpProgress(float clashOpProgress1) {
-        this.clashOpProgress = clashOpProgress1;
-    }
-    public float getClashProgress(){
-        return this.clashProgress;
-    }
-    public void setClashProgress(float clashProgress1){
-        this.clashProgress = clashProgress1;
-        if (!this.self.level().isClientSide && this.clashOp != null && this.clashOp instanceof ServerPlayer SP){
-            S2CPacketUtil.updateBarrageClashS2C(SP, this.self.getId(), this.clashProgress);
-        }
-    }
 
     public void punchImpact(Entity entity){
     }
@@ -920,77 +846,7 @@ public class StandPowers {
         List<Byte> posList = getPosList();
         return (posList != null && !posList.isEmpty() && posList.size() > 1);
     }
-    public boolean hasGoldenDisc(){
-        ItemStack stack = ((StandUser)this.getSelf()).roundabout$getStandDisc();
-        return !stack.isEmpty() && stack.getItem() instanceof MaxStandDiscItem;
-    }
 
-    public void getSkinInDirection(boolean right, boolean sealed){
-        StandUser SE = ((StandUser)this.getSelf());
-        byte currentSkin = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-        List<Byte> skins = getSkinList();
-        if (!skins.isEmpty() && skins.size() > 1) {
-            int skinind = 0;
-            for (int i = 0; i<skins.size(); i++){
-                if (skins.get(i) == currentSkin){
-                    skinind = i;
-                }
-            }
-            if (right) {
-                skinind+=1;
-                if (skinind >= skins.size()){
-                    skinind =0;
-                }
-                SE.roundabout$setStandSkin((skins.get(skinind)));
-            } else {
-                skinind-=1;
-                if (skinind < 0){
-                    skinind =skins.size()-1;
-                }
-                SE.roundabout$setStandSkin((skins.get(skinind)));
-            }
-            if (!sealed) {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                SE.roundabout$summonStand(this.getSelf().level(), true, false);
-            }
-        }
-    }
-
-
-    public void getPoseInDirection(boolean right){
-        StandUser SE = ((StandUser)this.getSelf());
-        byte currentSkin = ((StandUser)this.getSelf()).roundabout$getIdlePos();
-        List<Byte> poses = getPosList();
-        if (!poses.isEmpty() && poses.size() > 1) {
-            int skinind = 0;
-            for (int i = 0; i<poses.size(); i++){
-                if (poses.get(i) == currentSkin){
-                    skinind = i;
-                }
-            }
-            if (right) {
-                skinind+=1;
-                if (skinind >= poses.size()){
-                    skinind =0;
-                }
-                SE.roundabout$setIdlePosX(poses.get(skinind));
-            } else {
-                skinind-=1;
-                if (skinind < 0){
-                    skinind =poses.size()-1;
-                }
-                SE.roundabout$setIdlePosX(poses.get(skinind));
-            }
-        }
-    }
-
-
-    public int getExpForLevelUp(int currentLevel){
-        return 100;
-    }
-    public byte getMaxLevel(){
-        return 1;
-    }
 
 
 
@@ -1178,15 +1034,6 @@ public class StandPowers {
         return power;
     }
 
-    public boolean canSummonStand(){
-        return true;
-    }
-    public boolean canSummonStandAsEntity(){
-        return true;
-    }
-    public StandEntity getNewStandEntity(){
-        return null;
-    }
     public void playSummonEffects(boolean forced){
     }
     /**The Sound Event to cancel when your barrage is canceled*/
@@ -1248,27 +1095,7 @@ public class StandPowers {
         }
     }
 
-    public final void spreadRadialClientPacket(double range, boolean skipSelf, String packet) {
-        if (!this.self.level().isClientSide) {
-            ServerLevel serverWorld = ((ServerLevel) this.self.level());
-            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
-            for (int j = 0; j < serverWorld.players().size(); ++j) {
-                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
 
-                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
-                    continue;
-                }
-                if (skipSelf && this.self.is(serverPlayerEntity)) {
-                    continue;
-                }
-
-                BlockPos blockPos = serverPlayerEntity.blockPosition();
-                if (blockPos.closerToCenterThan(userLocation, range)) {
-                    ModMessageEvents.sendToPlayer((ServerPlayer)serverPlayerEntity, packet);
-                }
-            }
-        }
-    }
 
     public void onPlaceBlock(ServerPlayer $$0, BlockPos $$1, ItemStack $$2){
         /**Can't really cancel this one*/
@@ -1361,6 +1188,7 @@ public class StandPowers {
     }
 
 
+    /**Sets your active power to nothing*/
     public boolean setPowerNone(){
         this.attackTimeDuring = -1;
         this.setActivePower(PowerIndex.NONE);
@@ -1417,38 +1245,52 @@ public class StandPowers {
     public int clashStarter = 0;
 
     /**Override this to set the special move*/
-    public boolean setPowerSpecial(int lastMove) {
-        return false;
-    }
-    public boolean setPowerMovement(int lastMove) {
-        return false;
-    }
-    public boolean setPowerSneakMovement(int lastMove) {
-        return false;
-    }
     public boolean setPowerOther(int move, int lastMove) {
         return false;
     }
-    public boolean setPowerMining(int lastMove) {
-        this.attackTimeDuring = 0;
-        this.setActivePower(PowerIndex.MINING);
-        this.poseStand(OffsetIndex.FIXED_STYLE);
-        animateStand(StandEntity.MINING_BARRAGE);
-        return true;
-    }
 
+
+    /**For humanoid stands that have their own mining*/
+
+    /**Adjust this function to enable the below minin functions, and intercept your mining when not holding
+     * a mining tool*/
     public boolean isMiningStand() {
         return false;
     }
 
+    /**Can you currently use the stand to mine if the above is true?*/
     public boolean canUseMiningStand() {
         return (isMiningStand() && (!(this.getSelf().getMainHandItem().getItem() instanceof DiggerItem ||
                 this.getSelf().getMainHandItem().getItem() instanceof ShearsItem) || (this.getActivePower() == PowerIndex.MINING
-        && !(this.getSelf().getMainHandItem().getItem() instanceof ShearsItem))
+                && !(this.getSelf().getMainHandItem().getItem() instanceof ShearsItem))
         ));
     }
-    public void gainExpFromStandardMining(BlockState $$1, BlockPos $$2) {
+
+    /**How fast does the block mine blocks that require pickaxes?*/
+    public float getPickMiningSpeed() {
+        return 5F;
     }
+    /**How fast does the block mine blocks that require axes?*/
+    public float getAxeMiningSpeed() {
+        return 5F;
+    }
+    /**How fast does the block mine blocks that require swords like cobwebs?*/
+    public float getSwordMiningSpeed() {
+        return 5F;
+    }
+    /**How fast does the block mine blocks that require shovels?*/
+    public float getShovelMiningSpeed() {
+        return 5F;
+    }
+    /**A general multiplier to apply across the board*/
+    public float getMiningMultiplier() {
+        return 1F;
+    }
+    /**Override with config options for your stand to be able to mine blocks*/
+    public int getMiningLevel() {
+        return 0;
+    }
+    /**The amount of exp you gain from mining blocks*/
     public void gainExpFromSpecialMining(BlockState $$1, BlockPos $$2) {
         if (!($$1.getBlock() instanceof IceBlock) && !$$1.is(Blocks.PACKED_ICE) &&
                 !($$1.getDestroySpeed(this.self.level(),$$2) < 0.1)) {
@@ -1457,33 +1299,39 @@ public class StandPowers {
             }
         }
     }
-
-    /**For enhancement stands*/
-    public float getBonusPassiveMiningSpeed(){
-        return 1F;
+    /**Sets your current ability to stand mining*/
+    public boolean setPowerMining(int lastMove) {
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.MINING);
+        this.poseStand(OffsetIndex.FIXED_STYLE);
+        animateStand(StandEntity.MINING_BARRAGE);
+        return true;
     }
+
+
+    /**For enhancement stands that adjust your normal player attack speed*/
     public float getBonusAttackSpeed() {
         return 1F;
     }
-    /**For stands with bodies*/
-    public float getPickMiningSpeed() {
-        return 5F;
-    }
-    public float getAxeMiningSpeed() {
-        return 5F;
-    }
-    public float getSwordMiningSpeed() {
-        return 5F;
-    }
-    public float getShovelMiningSpeed() {
-        return 5F;
-    }
-    public float getMiningMultiplier() {
+    /**For enhancement stands that adjust your normal player mining speed*/
+    public float getBonusPassiveMiningSpeed(){
         return 1F;
     }
-    public int getMiningLevel() {
-        return 0;
+    /**exp from standard tool mining*/
+    public void gainExpFromStandardMining(BlockState $$1, BlockPos $$2) {
     }
+
+
+    /**Override to decide how much experience is needed to levelup in general*/
+    public int getExpForLevelUp(int currentLevel){
+        return 100;
+    }
+    /**The maximum level of this particular stand, use your own discretion it can be any number*/
+    public byte getMaxLevel(){
+        return 1;
+    }
+
+
 
     public int getBarrageRecoilTime(){
         return ClientNetworking.getAppropriateConfig().
@@ -1494,18 +1342,7 @@ public class StandPowers {
         return this.activePower == PowerIndex.GUARD;
     }
 
-    public boolean isBarrageCharging(){
-        return (this.activePower == PowerIndex.BARRAGE_CHARGE);
-    }
-    public boolean isBarraging(){
-        return (this.activePower == PowerIndex.BARRAGE || this.activePower == PowerIndex.BARRAGE_CHARGE);
-    }
-    public boolean isBarrageAttacking(){
-        return this.activePower == PowerIndex.BARRAGE;
-    }
-    public boolean isClashing(){
-        return this.activePower == PowerIndex.BARRAGE_CLASH && this.attackTimeDuring > -1;
-    }
+
     public boolean disableMobAiAttack(){
         return ((this.activePower == PowerIndex.BARRAGE_CLASH && this.attackTimeDuring > -1) || this.isBarraging());
     }
@@ -1527,14 +1364,10 @@ public class StandPowers {
         return false;
     }
 
-    public void syncCooldowns(){
+    public void syncActivePower(){
         if (!this.self.level().isClientSide && this.self instanceof ServerPlayer SP){
             S2CPacketUtil.sendActivePowerPacket(SP,activePower);
         }
-    }
-
-    public boolean isStoppingTime(){
-        return false;
     }
 
     public void runExtraSoundCode(byte soundChoice) {
@@ -1727,6 +1560,14 @@ public class StandPowers {
         return getStandUserSelf().roundabout$getStand();
     }
 
+    /**how big your stand is in the power inventory*/
+    public int getDisplayPowerInventoryScale(){
+        return 30;
+    }
+    /**how high up your stand is in the power inventory, negative = higher, positive = lower*/
+    public int getDisplayPowerInventoryYOffset(){
+        return 0;
+    }
 
     /**Override if you are in the middle of making a stand, check other examples of overrides.
      * Basically this makes the stand disc display that the stand is WIP and the current
@@ -1736,6 +1577,9 @@ public class StandPowers {
     }
     public Component ifWipListDev(){
         return null;
+    }
+    public boolean isWip(){
+        return false;
     }
 
 
@@ -1963,8 +1807,7 @@ public class StandPowers {
         }
 
         if (this.getSelf() instanceof Player pl){
-            if (((IPlayerEntity)pl).roundabout$getStandLevel() >= minLevel || (!((StandUser) pl).roundabout$getStandDisc().isEmpty() &&
-                    ((StandUser) pl).roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem) ||
+            if (((IPlayerEntity)pl).roundabout$getStandLevel() >= minLevel || hasGoldenDisc() ||
                     pl.isCreative()){
                 return true;
             }
@@ -2074,9 +1917,8 @@ public class StandPowers {
     }
     public void addEXP(int amt){
         if (this.getSelf() instanceof Player PE){
-            StandUser user = ((StandUser) PE);
             ItemStack stack = ((StandUser) PE).roundabout$getStandDisc();
-            if (!stack.isEmpty() && !(stack.getItem() instanceof MaxStandDiscItem)){
+            if (!stack.isEmpty() && !(hasGoldenDisc())){
                 IPlayerEntity ipe = ((IPlayerEntity) PE);
                 ipe.roundabout$addStandExp(amt);
             }
@@ -2263,7 +2105,7 @@ public class StandPowers {
             if (maxlevel > 1) {
                 int level = ((IPlayerEntity) PE).roundabout$getStandLevel();
                 ItemStack sdisc = ((StandUser)PE).roundabout$getStandDisc();
-                if (!sdisc.isEmpty() && sdisc.getItem() instanceof MaxStandDiscItem){
+                if (hasGoldenDisc()){
                     level =maxlevel;
                 }
                 damage *= (float) (1 +
@@ -2641,7 +2483,33 @@ public class StandPowers {
         this.getUserData(entity).roundabout$setDazed(dazeTime);
     }
 
+    /**Use this to multiply the exp needed to levelup for the config option*/
+    public float getLevelMultiplier(){
+        return (float) (ClientNetworking.getAppropriateConfig().standLevelingSettings.standExperienceNeededForLevelupMultiplier *0.01);
+    }
 
+    /**Send a packet to nearby players, the string is the packet identifier, s2c*/
+    public final void spreadRadialClientPacket(double range, boolean skipSelf, String packet) {
+        if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+                if (skipSelf && this.self.is(serverPlayerEntity)) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, range)) {
+                    ModMessageEvents.sendToPlayer((ServerPlayer)serverPlayerEntity, packet);
+                }
+            }
+        }
+    }
 
 
 
@@ -2883,10 +2751,59 @@ public class StandPowers {
             }
             ((StandUser) this.self).roundabout$setAttackTimeDuring(-10);
             ((StandUser) this.getClashOp()).roundabout$setAttackTimeDuring(-10);
-            ((StandUser) this.self).roundabout$getStandPowers().syncCooldowns();
-            ((StandUser) this.getClashOp()).roundabout$getStandPowers().syncCooldowns();
+            ((StandUser) this.self).roundabout$getStandPowers().syncActivePower();
+            ((StandUser) this.getClashOp()).roundabout$getStandPowers().syncActivePower();
         }
     }
+
+    /**ClashDone is a value that makes you lock in your barrage when you are done barraging**/
+    public boolean clashDone = false;
+    public boolean getClashDone(){
+        return this.clashDone;
+    } public void setClashDone(boolean clashDone){
+        this.clashDone = clashDone;
+    }
+    public float clashProgress = 0.0f;
+    private float clashOpProgress = 0.0f;
+    /**Clash Op is the opponent you are clashing with*/
+    @Nullable
+    private LivingEntity clashOp;
+    public @Nullable LivingEntity getClashOp() {
+        return this.clashOp;
+    }
+    public void setClashOp(@Nullable LivingEntity clashOp) {
+        this.clashOp = clashOp;
+    }
+    public float getClashOpProgress(){
+        return this.clashOpProgress;
+    }
+    public void setClashOpProgress(float clashOpProgress1) {
+        this.clashOpProgress = clashOpProgress1;
+    }
+    public float getClashProgress(){
+        return this.clashProgress;
+    }
+    public void setClashProgress(float clashProgress1){
+        this.clashProgress = clashProgress1;
+        if (!this.self.level().isClientSide && this.clashOp != null && this.clashOp instanceof ServerPlayer SP){
+            S2CPacketUtil.updateBarrageClashS2C(SP, this.self.getId(), this.clashProgress);
+        }
+    }
+
+    public boolean isClashing(){
+        return this.activePower == PowerIndex.BARRAGE_CLASH && this.attackTimeDuring > -1;
+    }
+
+    public boolean isBarrageCharging(){
+        return (this.activePower == PowerIndex.BARRAGE_CHARGE);
+    }
+    public boolean isBarraging(){
+        return (this.activePower == PowerIndex.BARRAGE || this.activePower == PowerIndex.BARRAGE_CHARGE);
+    }
+    public boolean isBarrageAttacking(){
+        return this.activePower == PowerIndex.BARRAGE;
+    }
+
     public void updateBarrageCharge(){
         if (this.attackTimeDuring >= this.getBarrageWindup()) {
             ((StandUser) this.self).roundabout$tryPower(PowerIndex.BARRAGE, true);
@@ -2910,7 +2827,6 @@ public class StandPowers {
         }
     }
 
-
     /**Enemies randomize their clash power, up to on occasion the maximum for some forced at best ties*/
     private void RoundaboutEnemyClash(){
         if (this.isClashing()) {
@@ -2930,6 +2846,11 @@ public class StandPowers {
 
         }
     }
+
+    private int clashIncrement =0;
+    private int clashMod =0;
+
+
 
     /**While you can override this, it might be more sensible to just edit this base function,
      * also veeery conditional use canInterruptPower instead*/
@@ -3349,6 +3270,64 @@ public class StandPowers {
             getStandUserSelf().roundabout$setStandAnimation(NONE);
         }
     }
+    /**Iteration through skins in the power inventory*/
+    public void getSkinInDirection(boolean right, boolean sealed){
+        StandUser SE = ((StandUser)this.getSelf());
+        byte currentSkin = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        List<Byte> skins = getSkinList();
+        if (!skins.isEmpty() && skins.size() > 1) {
+            int skinind = 0;
+            for (int i = 0; i<skins.size(); i++){
+                if (skins.get(i) == currentSkin){
+                    skinind = i;
+                }
+            }
+            if (right) {
+                skinind+=1;
+                if (skinind >= skins.size()){
+                    skinind =0;
+                }
+                SE.roundabout$setStandSkin((skins.get(skinind)));
+            } else {
+                skinind-=1;
+                if (skinind < 0){
+                    skinind =skins.size()-1;
+                }
+                SE.roundabout$setStandSkin((skins.get(skinind)));
+            }
+            if (!sealed) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                SE.roundabout$summonStand(this.getSelf().level(), true, false);
+            }
+        }
+    }
+    /**Iteration through poses in the power inventory*/
+    public void getPoseInDirection(boolean right){
+        StandUser SE = ((StandUser)this.getSelf());
+        byte currentSkin = ((StandUser)this.getSelf()).roundabout$getIdlePos();
+        List<Byte> poses = getPosList();
+        if (!poses.isEmpty() && poses.size() > 1) {
+            int skinind = 0;
+            for (int i = 0; i<poses.size(); i++){
+                if (poses.get(i) == currentSkin){
+                    skinind = i;
+                }
+            }
+            if (right) {
+                skinind+=1;
+                if (skinind >= poses.size()){
+                    skinind =0;
+                }
+                SE.roundabout$setIdlePosX(poses.get(skinind));
+            } else {
+                skinind-=1;
+                if (skinind < 0){
+                    skinind =poses.size()-1;
+                }
+                SE.roundabout$setIdlePosX(poses.get(skinind));
+            }
+        }
+    }
 
     /**This plays automatically when a power is changed on the server to sync it with the client*/
     public void kickStartClient(){
@@ -3365,6 +3344,11 @@ public class StandPowers {
     public void timeTickStopPower(){
     }
 
+    /**Name straightforward*/
+    public boolean isStoppingTime(){
+        return false;
+    }
+
     /**This is not in powerssoftandwet because I believe if someone is using paisley or other stands they may be able
      * to redirect it in the future*/
     public Entity goBeyondTarget = null;
@@ -3376,5 +3360,24 @@ public class StandPowers {
     }
     public void updateGoBeyondTarget(){
         goBeyondTarget = null;
+    }
+
+    /**If they have a max disc, very niche*/
+    public boolean hasGoldenDisc(){
+        ItemStack stack = ((StandUser)this.getSelf()).roundabout$getStandDisc();
+        return !stack.isEmpty() && stack.getItem() instanceof MaxStandDiscItem;
+    }
+
+    /**You don't really need this*/
+    public boolean setPowerSpecial(int lastMove) {return false;}
+    public boolean setPowerMovement(int lastMove) {return false;}
+    public boolean setPowerSneakMovement(int lastMove) {return false;}
+    /**Just a sanity prevention for summoning too fast*/
+    public boolean getSummonCD(){
+        return this.summonCD <= 0;
+    } public void setSummonCD(int summonCD){
+        this.summonCD = summonCD;
+    } public int getSummonCD2(){
+        return this.summonCD;
     }
 }

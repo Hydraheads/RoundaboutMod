@@ -2,7 +2,6 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.mojang.authlib.GameProfile;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.BarbedWireBlock;
@@ -27,7 +26,6 @@ import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.item.*;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
@@ -39,7 +37,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -2173,7 +2170,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
     public void tryPowerStuff(){
-        this.roundabout$getStandPowers().syncCooldowns();
+        this.roundabout$getStandPowers().syncActivePower();
         if (this.level().isClientSide) {
             this.roundabout$getStandPowers().kickStarted = false;
         }
