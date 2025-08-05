@@ -632,7 +632,7 @@ public class PowersAchtungBaby extends NewDashPreset {
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.invisiburst",
                 "instruction.roundabout.press_skill", StandIcons.BURST_INVIS,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.controlled_burst",
-                "instruction.roundabout.press_skill_crouch", StandIcons.SELF_INVIS,3,level,bypass));
+                "instruction.roundabout.press_skill_crouch", StandIcons.SELF_INVIS,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
         if (ClientNetworking.getAppropriateConfig().achtungSettings.hidesPlacedBlocks) {

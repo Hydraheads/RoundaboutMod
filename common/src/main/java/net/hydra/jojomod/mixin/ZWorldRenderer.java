@@ -2,9 +2,8 @@ package net.hydra.jojomod.mixin;
 
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.access.IClientLevelData;
+import net.hydra.jojomod.access.IDayInterpolationClientLevelData;
 import net.hydra.jojomod.access.IEntityAndData;
-import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -16,9 +15,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
-import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import org.joml.Vector3d;
 import org.spongepowered.asm.mixin.Final;
@@ -129,7 +126,7 @@ public class ZWorldRenderer {
     @Inject(method = "renderLevel", at = @At(value = "HEAD"), cancellable = true)
     private void roundaboutRenderLevel(PoseStack $$0, float $$1, long $$2, boolean $$3, Camera $$4,
                                        GameRenderer $$5, LightTexture $$6, Matrix4f $$7, CallbackInfo ci){
-        IClientLevelData levelTimeData = ((IClientLevelData)this.level.getLevelData());
+        IDayInterpolationClientLevelData levelTimeData = ((IDayInterpolationClientLevelData)this.level.getLevelData());
         if (levelTimeData.roundabout$getRoundaboutInterpolatingDaytime()){
             /*If a timestop is active, don't tick through a MIH or instead interpolate back*/
             if (!levelTimeData.roundabout$getRoundaboutTimeStopInitialized()){

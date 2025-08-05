@@ -9,20 +9,14 @@ import javax.annotation.Nullable;
 
 /**This code lets me access the ZAbstractArrow Mixin externally, so I can call abstract arrow functions*/
 public interface IAbstractArrowAccess {
-    boolean roundaboutGetInGround();
+    boolean roundabout$GetInGround();
     void roundabout$resetPiercedEntities();
     void roundabout$setLastState(BlockState last);
-    void roundaboutSetInGround(boolean inGround);
+    void roundabout$SetInGround(boolean inGround);
 
-    byte roundaboutGetPierceLevel();
+    byte roundabout$GetPierceLevel();
     ItemStack roundabout$GetPickupItem();
 
-    void roundabout$cancelSuperThrow();
-    boolean roundabout$getSuperThrow();
-    int roundabout$getSuperThrowTicks();
-    void roundabout$starThrowInit();
-    void roundabout$starThrowInit2();
-    void roundabout$setSuperThrowTicks(int sTHrow);
     @Nullable
     EntityHitResult roundabout$FindHitEntity(Vec3 $$0, Vec3 $$1);
 }

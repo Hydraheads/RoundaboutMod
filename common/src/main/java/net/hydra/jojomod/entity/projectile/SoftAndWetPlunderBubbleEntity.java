@@ -1,6 +1,5 @@
 package net.hydra.jojomod.entity.projectile;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IAreaOfEffectCloud;
 import net.hydra.jojomod.access.IEnderMan;
@@ -16,7 +15,6 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlunderTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
@@ -1074,7 +1072,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
 
     @Override
     protected boolean canHitEntity(Entity $$0x) {
-        if ($$0x instanceof AbstractArrow aw && aw.pickup.equals(AbstractArrow.Pickup.ALLOWED) && ((IAbstractArrowAccess)aw).roundaboutGetInGround()){
+        if ($$0x instanceof AbstractArrow aw && aw.pickup.equals(AbstractArrow.Pickup.ALLOWED) && ((IAbstractArrowAccess)aw).roundabout$GetInGround()){
             if (getPlunderType() == PlunderTypes.ITEM.id){
                 return true;
             }

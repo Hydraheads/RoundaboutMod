@@ -79,71 +79,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 //        if (roundabout$isRenderingYellowLines)
 //            return;
 
-        /**
-        StandUser user = ((StandUser)entity);
-        float modified = MainUtil.hasModifiedPartialVisibility(entity);
-        if (modified != 1){
-            if (model instanceof AgeableListModel<?> ageableListModel)
-                ((IAlphaModel)ageableListModel).roundabout$setAlpha(0.5f);
-        }
-         **/
-
-        //boolean shouldLetVisMod = true;
         ClientUtil.savedPose = $$3.last().pose();
-
-
-        /**
-        float throwFadeToTheEther = 1f;
-
-        if (((StandUser)entity).roundabout$isParallelRunning())
-        {
-            if (entity instanceof Player player)
-            {
-                if (player != Minecraft.getInstance().player)
-                {
-                    this.shadowRadius = 0.0f;
-                    ci.cancel();
-                }
-                else
-                {
-                    throwFadeToTheEther = 0.5F;
-                }
-            }
-            else
-                ci.cancel();
-        }
-        else
-        {
-            if (entity instanceof Player)
-                    this.shadowRadius = 0.5f;
-        }
-
-
-        IEntityAndData entityAndData = ((IEntityAndData) entity);
-        if (entityAndData.roundabout$getTrueInvisibility() > -1){
-            throwFadeToTheEther = throwFadeToTheEther*0.4F;
-            shouldLetVisMod = false;
-        }
-
-
-        if (shouldLetVisMod) {
-            Minecraft $$17 = Minecraft.getInstance();
-            boolean $$18 = this.isBodyVisible(entity);
-            boolean $$19 = !$$18 && !entity.isInvisibleTo($$17.player);
-            boolean $$20 = $$17.shouldEntityAppearGlowing(entity);
-            RenderType $$21 = this.getRenderType(entity, $$18, $$19, $$20);
-            if ($$21 != null) {
-                if ($$19) {
-                    throwFadeToTheEther *= 0.15F;
-                }
-            }
-        }
-        ClientUtil.setThrowFadeToTheEther(throwFadeToTheEther);
-         **/
-
-//        if (!ci.isCancelled()) {
-//            roundabout$isRenderingYellowLines = true;
-//        }
     }
 
 

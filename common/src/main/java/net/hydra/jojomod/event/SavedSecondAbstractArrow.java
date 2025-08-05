@@ -1,19 +1,12 @@
 package net.hydra.jojomod.event;
 
 import net.hydra.jojomod.access.IAbstractArrowAccess;
-import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 public class SavedSecondAbstractArrow extends SavedSecond {
 
@@ -32,7 +25,7 @@ public class SavedSecondAbstractArrow extends SavedSecond {
         super.loadTime(ent);
 
         if (ent instanceof AbstractArrow LE) {
-            ((IAbstractArrowAccess)LE).roundaboutSetInGround(stuckInGround);
+            ((IAbstractArrowAccess)LE).roundabout$SetInGround(stuckInGround);
         }
     }
 }

@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.projectile;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
@@ -155,7 +156,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             $$7.shootFromRotation(thrower, xRot, yRot, getThrowAngle3, 2.4F*mult, getShotAccuracy);
 
             if (canSnipe){
-                ((IAbstractArrowAccess)$$7).roundabout$starThrowInit();
+                ((ISuperThrownAbstractArrow)$$7).roundabout$starThrowInit();
             }
             thrower.level().addFreshEntity($$7);
             if (playSounds){
@@ -271,7 +272,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             }
 
             if (canSnipe){
-                ((IAbstractArrowAccess)$$11).roundabout$starThrowInit();
+                ((ISuperThrownAbstractArrow)$$11).roundabout$starThrowInit();
             }
             thrower.level().addFreshEntity($$11);
             if (playSounds){
@@ -283,7 +284,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 $$7.setPos(pos);
                 $$7.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F*mult, getShotAccuracy);
                 if (canSnipe){
-                    ((IAbstractArrowAccess)$$7).roundabout$starThrowInit2();
+                    ((ISuperThrownAbstractArrow)$$7).roundabout$starThrowInit2();
                 }
                 thrower.level().addFreshEntity($$7);
                 if (playSounds){
@@ -296,7 +297,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 $$7.setPos(pos);
                 $$7.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F*mult, getShotAccuracy);
                 if (canSnipe){
-                    ((IAbstractArrowAccess)$$7).roundabout$starThrowInit2();
+                    ((ISuperThrownAbstractArrow)$$7).roundabout$starThrowInit2();
                 }
                 if ((styleType == SPTHROW || styleType == TWTHROW)) {
                     $$7.isThrown = true;

@@ -37,20 +37,15 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
         super($$0);
     }
 
+    @Unique
     public boolean roundabout$ModifyEntity;
+    @Unique
     public @Nullable ItemStack roundabout$RenderMainHand;
+    @Unique
     public @Nullable ItemStack roundabout$RenderOffHand;
+    @Unique
     public boolean dominant$Hand;
 
-
-    @Unique
-    private static final ResourceLocation roundabout$TEXTURE_1 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/shooting_bubble_1.png");
-    @Unique
-    private static final ResourceLocation roundabout$TEXTURE_2 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/shooting_bubble_2.png");
-    @Unique
-    private static final ResourceLocation roundabout$TEXTURE_3 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/shooting_bubble_3.png");
-    @Unique
-    private static final ResourceLocation roundabout$TEXTURE_4 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/shooting_bubble_4.png");
     @Inject(method = "render", at = @At(value = "HEAD"),cancellable = true)
     public void roundabout$Render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T entity, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci){
 

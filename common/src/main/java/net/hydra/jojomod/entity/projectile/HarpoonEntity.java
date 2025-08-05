@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -182,7 +183,7 @@ public class HarpoonEntity extends AbstractArrow {
 
             /**Harpoon Buff*/
             if (isThrown){
-                if (((IAbstractArrowAccess)this).roundabout$getSuperThrow()){
+                if (((ISuperThrownAbstractArrow)this).roundabout$getSuperThrow()){
                     $$2*=2F;
                 } else {
                     $$2*=1.5F;
@@ -203,7 +204,7 @@ public class HarpoonEntity extends AbstractArrow {
                     this.doPostHurtEffects($$7);
                 }
             }
-            ((IAbstractArrowAccess)this).roundabout$cancelSuperThrow();
+            ((ISuperThrownAbstractArrow)this).roundabout$cancelSuperThrow();
             this.setDeltaMovement(this.getDeltaMovement().multiply(-0.01, -0.1, -0.01));
             float $$8 = 1.0F;
             if (skyHit){
