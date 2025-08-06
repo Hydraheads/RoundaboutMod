@@ -1372,6 +1372,10 @@
   "config.roundabout.enableStandLeveling.name": "Enable Stand Leveling",
   "config.roundabout.enableStandLeveling.desc": "Stand Leveling is for unlocking skins and skills",
 
+  "config.roundabout.spiritOutInterruption.name": "Full Spirit Interrupt",
+  "config.roundabout.spiritOutInterruption.desc": "By default, you need your powers activated (or to be powerless) to interrupt attacks. This mechanic is called full spirit interrupt, and serves to make the interrupting mechanic more satisfying. Turn off this setting for classic roundabout interrupts.",
+
+
   "config.roundabout.cinderellaSpacing.name": "Cinderella Salon Spacing",
   "config.roundabout.cinderellaSpacing.desc": "How far spaced these structures are.",
   "config.roundabout.cinderellaSeparationMakeSmallerThanSpacing.name": "Cinderella Salon Separation",

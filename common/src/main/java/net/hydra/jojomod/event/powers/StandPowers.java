@@ -2739,10 +2739,22 @@ public class StandPowers {
     private int clashMod =0;
 
 
-
     /**While you can override this, it might be more sensible to just edit this base function,
      * also veeery conditional use canInterruptPower instead*/
-    public boolean preCanInterruptPower(Entity interrupter, boolean isStandDamage){
+    public boolean preCanInterruptPower(DamageSource sauce, Entity interrupter, boolean isStandDamage){
+        if (ClientNetworking.getAppropriateConfig().generalStandSettings.spiritOutInterruption){
+            if (sauce != null){
+                if (interrupter instanceof LivingEntity LE){
+                    StandUser user = ((StandUser) LE);
+                    if (user.roundabout$hasAStand()){
+                        if (!user.roundabout$getActive()){
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
         boolean interrupt = false;
         if (interrupter != null){
             if (this.isBarraging() && ClientNetworking.getAppropriateConfig().generalStandSettings.barragesAreAlwaysInterruptable) {
