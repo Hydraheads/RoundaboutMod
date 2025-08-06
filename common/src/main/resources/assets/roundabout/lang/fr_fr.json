@@ -1,6 +1,9 @@
 {
   "text.roundabout.barrage_clash": "Collision ! Maintenez puis Relachez le Saut!",
   "text.roundabout.launch_bubble_encased": "Embullé ! Utilisez un objet pointu pour vous libérez!",
+  "text.roundabout.riding_flying_creature": "Maintiens Saut pour monter, Maintiens Dash pour descendre",
+  "text.roundabout.riding_flying_creature.day": "Ne peut pas voler durant la journée.",
+  "text.roundabout.riding_flying_creature.dimension": "Ne peut pas voler dans cette dimension.",
 
   "item.roundabout.stand_arrow": "Flèche de Stand",
   "item.roundabout.stand_beetle_arrow": "Flèche scarabée",
@@ -215,6 +218,7 @@
   "entity.roundabout.fallen_zombie": "Cadavre de Zombie",
   "entity.roundabout.fallen_skeleton": "Cadavre de Squelette",
   "entity.roundabout.fallen_spider": "Cadavre d'Araignée",
+  "entity.roundabout.fallen_phantom": "Cadavre de Phantom",
   "entity.roundabout.jojo_npc_ova_enya": "Enya",
   "entity.roundabout.jojo_npc_enya": "Enya",
   "entity.roundabout.jojo_npc_avdol": "Avdol",
@@ -383,9 +387,11 @@
   "death.attack.glaive.item": "%1$s a été embroché(e) par %2$s en utilisant %3$s",
   "death.attack.stand_virus": "%1$s a été transformé(e) en sauce tomate",
   "death.attack.stand_virus.item": "%1$s a été transformé(e) en sauce tomate",
-  "death.attack,disintegration": "%1$ a été désintégrer",
-  "death.attack,disintegration.player": "%1$ a été désintégrer par %$2s",
-  "death.attack.melting": "%1$s a été transformé(e) en flaque par %2$s",
+  "death.attack.disintegration": "%1$ a été désintégrer",
+  "death.attack.disintegration.player": "%1$ a été désintégrer par %$2s",
+  "death.attack.melting": "%1$s est devenu un liquide",
+  "death.attack.melting.player": "%1$s a été transformé(e) en flaque par %2$s",
+
 
   "item.glaive.charge_power": "Chargé l'attaque",
 
@@ -422,6 +428,7 @@
   "sounds.roundabout.survivor_summon":  "Invocation de Survivor",
   "sounds.roundabout.ova_summon":  "Invocation de OAV Star Platinium",
   "sounds.roundabout.ova_summon_the_world":  "Invocation de OAV The World",
+  "sounds.roundabout.diver_down_summon":  "Invocation de Diver Down",
   "sounds.roundabout.punch_sfx1":  "Air qui siffle",
   "sounds.roundabout.punch_sfx2":  "Air qui siffle",
   "sounds.roundabout.punch_sfx3":  "Impact",
@@ -779,7 +786,20 @@
   "ability.roundabout.fog_blocks": "Blocs Illusoires",
   "ability.roundabout.fog_blocks.desc": "Crée un nombre illimité de bloc de brouillard, sur demande. Quand ils sont placés, ils ne peuvent seulement être visible dans le brouillard, et il est possible de marcher à travers (puisque ce ne sont que des illusions).",
   "ability.roundabout.corpse_army": "Armée de Cadavre",
-  "ability.roundabout.corpse_army.desc": "Récupérez des cadavres avec la Hache de bourreau ou des cisseaux (seulement en tant qu'utilisateur de Justice), et fabriquez un Sac à cadavre pour les stocker. Vous pouvez contrôler ces cadavres si ils sont à l'intérieur de votre brouillard. Une fois qu'il y a des trous dans les cadavres, Ils ne peuvent plus être récupérer dans un Sac à cadavre. Les Zombies, Squelettes, Creepers, Araignées, and Villageois (et Illageois) peuvent devenir des cadavres. Intéragissez avec un cadavre d'araignée vous contrôlez pour le monter. Accroupissez-vous et Intéragissez avec un cadavre de zombie pour lui donner votre objet tenu. Noter que ces objet sont un échange contre les dégâts ignorant l'armure que normalement font les cadavres.",
+  "ability.roundabout.corpse_army.desc": "Récupérez des cadavres avec la Hache de bourreau ou des cisseaux (seulement en tant qu'utilisateur de Justice), et fabriquez un Sac à cadavre pour les stocker. Vous pouvez contrôler ces cadavres si ils sont à l'intérieur de votre brouillard. Les cadavres doivent être sans trous ou à leur maximum de point de vie pour être ramasser avec le sac de cadavre. Les Zombies, Squelettes, Creepers, Araignées, Villageois/Illageois et Phantoms peuvent devenir des cadavres. Intéragissez avec un cadavre d'araignée ou de phantom que vous contrôlez pour le monter.  ",
+  "ability.roundabout.zombie_corpse": "Cadavre de Zombie",
+  "ability.roundabout.zombie_corpse.desc": "Les cadavres de zombie peuvent être obtenu à partir des zombies, zombies momifiés et noyés. Quand actif, iels sont la troupe la plus basique et équilibré. Si vous vous accroupissez et intéragissez avec eux, vous pouvez leur donner votre objet tenu, et/ou récupérez un objet que vous leur aviez donner. Iels peuvent poser des blocs qu'iel tiennent si un ordre leur ai donné directement en intéragissant en mode contrôle, et peuvent utilisé des outils pour casser des blocs avec les mêmes contrôles. Noter que ces objet sont un échange contre les dégâts ignorant l'armure que normalement font les cadavres.",
+  "ability.roundabout.villager_corpse": "Cadavre de Villageois",
+  "ability.roundabout.villager_corpse.desc": "Les cadavres de villageoois peuvent être obtenu à partir des villageois, sorcières, et autres illageois que vous pouvez rencontrer durant une Invasion. Iels sont similaires aux cadavres de zombie, seulement légèrement plus rapide et faible, et ne pouvant pas tenir d'objet. Leur force dissimulé ce tient dans leur plus grande résistance au projectile, faisant d'eux de superbes troupes pour charger ceux qui utilisent des armes à distance.",
+  "ability.roundabout.creeper_corpse": "Cadavre de Creeper",
+  "ability.roundabout.creeper_corpse.desc": "Les cadavres de creeper peuvent être obtenu à partir des creepers. Iels agissent comme des creepers, et donc peuvent être un peu dangereux à utiliser. Cependant, en mode contrôle, presser interaction sur eux les fait exploser. Si vous sélectionnez et déplacez le cadavre de creeper d'abord, ça peut être utiliser pour délibérément explosé un mur, ou juste vous aider à miner.",
+  "ability.roundabout.skeleton_corpse": "Cadavre de Squelette",
+  "ability.roundabout.skeleton_corpse.desc": "Les cadavres de squelette peuvent être obtenu à partir des squelettes et vagabonds. Iels sont une option à longue distance d'une écrasante efficacité. Certes n'étant pas particulièrement puissant, iels sont bons à repousser et interrompre des adversaires avec leur tirs en groupe synchronisés. Cependant soyez prudent, puisque leur flèches peuvent vous blesser vous aussi, ainsi que n'importe quel autre de vos cadavres. Donc, iels ont une bonne synergie avec les cadavres d'araignée qui sont plus petits et difficiles à toucher avec leur flèches.",
+  "ability.roundabout.spider_corpse": "Cadavre d'Araignée",
+  "ability.roundabout.spider_corpse.desc": "Les cadavres d'araignée peuvent être obtenu à partir basique, araignée de taille normal. Iels sont très rapides et difficile à attaquer. Si vous intéragissez avec un, vous pouvez le monter, et l'utilisez pour escalader un mur. Iels sont parfaits pour gagner du terrain pendant que vous mangez ou chargez votre coutille.",
+  "ability.roundabout.phantom_corpse": "Cadavre de Phantom",
+  "ability.roundabout.phantom_corpse.desc": "Les cadavres de phantom peuvent être obtenu à partir des phantoms. Iels peuvent lentement aller vers le haut ou bas pour attaquer des ennemis qui sont à une altitude différente de vous, mais leur vie est très faible et iels sont particulièment vulnérable aux harpons. C'est car leur principale utilisation est en tant que monture. Exclusivement la nuit dans l'Overworld, iels peuvent vous porter pour voler. C'est parce que le ciel nocturne leur donne de la puissance. Maintenir Espace vous fait aller plus haut, et maintenir le bouton de la capacité du Dash fait diminué votre altitude.",
+
   "ability.roundabout.fog_clones": "Clones Illusoires",
   "ability.roundabout.fog_clones.desc": "Créez des mirages brumeuses de vous-même. Si vous êtes attaquez, peut-être que c'était un de vos mirages qui a été attaqué, pas vous...",
   "ability.roundabout.tactics": "Menu Tactique",
@@ -892,6 +912,9 @@
   "ability.roundabout.controlled_burst.desc": "Une variation du débordement d'invisibilité avec une porté réduite et aucune invisibilité de blocs. Signifie un plus grand contrôle des émotions de l'utilisateur. Utile si vous ne voulez pas rendre vos adversaires invisibles.",
   "ability.roundabout.place_invis": "Placement de Bloc Invisible",
   "ability.roundabout.place_invis.desc": "Place un bloc, partageant une duré d'invisibilité avec vous. Marche seulement lorsque vous êtes invisible.",
+
+  "ability.roundabout.diver_selection": "Option de Diver",
+  "ability.roundabout.diver_selection.desc": "Ouvres une roues de modification négative dont vous pouvez faire usages sur vous-même.",
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Non débloqué",
@@ -1034,6 +1057,7 @@
   "skins.roundabout.soft_and_wet.kira": "Kira",
   "skins.roundabout.soft_and_wet.colors": "Coloré",
   "skins.roundabout.soft_and_wet.green": "Vert",
+  "skins.roundabout.soft_and_wet.knight": "Chevalier",
 
   "skins.roundabout.d4c.base": "Manga",
   "skins.roundabout.d4c.wonder_festival": "JOJOVELLER",
@@ -1049,7 +1073,6 @@
   "skins.roundabout.ratt.melon" : "Pasthèque",
   "skins.roundabout.ratt.sand" : "Sable",
   "skins.roundabout.ratt.aztec" : "Aztèque",
-  "skins.roundabout.ratt.redd" : "Redstone",
   "skins.roundabout.ratt.snowy" : "Neigeux",
 
   "skins.roundabout.cinderella.base": "Partie 4",
@@ -1081,6 +1104,7 @@
   "skins.roundabout.hey_ya.grey_ya": "Gris Ya",
   "skins.roundabout.hey_ya.angel": "Ange",
   "skins.roundabout.hey_ya.knight": "Chevalier",
+  "skins.roundabout.hey_ya.saint": "Le Saint",
 
   "skins.roundabout.mandom.manga": "Manga",
   "skins.roundabout.mandom.purple": "Violet",
@@ -1111,6 +1135,14 @@
   "skins.roundabout.killer_queen.base": "Partie 4",
 
   "skins.roundabout.diver_down.base": "Partie 6",
+  "skins.roundabout.diver_down.lavadiver": "Plongeur Infernal",
+  "skins.roundabout.diver_down.reddiver": "Rouge Diver",
+  "skins.roundabout.diver_down.orangediver": "Orange Diver",
+  "skins.roundabout.diver_down.treasurediver": "Aventurier",
+  "skins.roundabout.diver_down.birthdaydiver": "Anniversaire !",
+
+
+
 
   "skins.roundabout.achtung_baby.base": "N'a pas de Forme",
 
@@ -1308,5 +1340,116 @@
   "text.roundabout.survivor.anger_selection_off": "Mode Cupidon de la Fureur Désactivé",
 
   "text.roundabout.achtung.vision_off": "Invisi-Vision Désactivée",
-  "text.roundabout.achtung.vision_on": "Invisi-Vision Activée"
+  "text.roundabout.achtung.vision_on": "Invisi-Vision Activée",
+
+
+
+
+
+
+  "config_translatiors_note": "(Text of this string not ingame): Hello, translators of the mod! I have no expectations",
+  "config_translatiors_note_2": "of everything beneath this being translated, it is a lot of work. But if you really",
+  "config_translatiors_note_3": "have the time and drive to do so, you deserve a cookie. :)",
+
+
+
+  "config.roundabout.mountingHorsesInCreativeTamesThem.name": "Dresser une monture en Créatif",
+  "config.roundabout.mountingHorsesInCreativeTamesThem.desc": "Si vous montez un cheval en mode Créatif, vous le dressez instantanément.",
+
+
+  "config.roundabout.bonusStandDmgByMaxLevel.name": "Dégâts Bonus par Niveau monter",
+  "config.roundabout.bonusStandDmgByMaxLevel.desc": "Par défaut les stands n'ont pas de dégât bonus, parce que JoJo n'est pas un RPG. Mais si vous voulez faire du jeu un RPG, cette option est sur la table. Un pourcentage d'augmentation des dégâts pour tous les stands, distribué le long de leur monte de niveau. Si vous le mettez à 100, les dégâts seront doublé au niveau maximal.",
+  "config.roundabout.standExperienceNeededForLevelupMultiplier.name": "Multiplicateur du Dévelopment",
+  "config.roundabout.standExperienceNeededForLevelupMultiplier.desc": "Multiplie la quantité d'experience nécessaire pour monter de niveau. Augmenter ce nombre rend les monter de niveau plus lente, et vice versa.",
+  "config.roundabout.enableStandLeveling.name": "Active le Développement des Stand",
+  "config.roundabout.enableStandLeveling.desc": "Le développement des Stand est pour débloquer des cosmétiques et capacités",
+
+
+
+  "config.roundabout.onlyStandUsersCanSeeStands.name": "Sans Stand = Stands Invisibles",
+  "config.roundabout.onlyStandUsersCanSeeStands.desc": "Si vous n'avait pas de stand, cette option rends les stands pour vous invisible comme dans la séries.",
+  "config.roundabout.onlyStandUsersCanSeeVanillaGhostMobs.name": "Sans Stand = Invisible Vanilla",
+  "config.roundabout.onlyStandUsersCanSeeVanillaGhostMobs.desc": "Rend les créatures fantômes de vanilla invisible quand on a pas de stand (Ghasts, Vexes, et Allays). C'est désactivé par défaut pour ne pas changé vanilla.",
+  "config.roundabout.renderJusticeHandsWhilePiloting.name": "Rendu des Mains de Justice en 1ère Personne",
+  "config.roundabout.renderJusticeHandsWhilePiloting.desc": "Rend visibles les mains de Justice à la première personne en mode Contrôle.",
+  "config.roundabout.renderArmorOnPlayerCloneAbilities.name": "Rendu d'Armure des Clones",
+  "config.roundabout.renderArmorOnPlayerCloneAbilities.desc": "Si les clones de capacité comme les clones illusoires de Justice montre le rendu de votre armure. Peut aider pour la compabilité avec d'autres mods.",
+  "config.roundabout.maxMirrorRendersAtOnceSetToZeroToDisable.name": "Affichage Max Miroir",
+  "config.roundabout.maxMirrorRendersAtOnceSetToZeroToDisable.desc": "Le nombre maximum de miroirs qui peuvent afficher une entité sur eux. Le par défaut est très optimisé même pour les mauvais PC et ne va probablement pas impacté les fps, mais si vous avez de la puissance en surplus, senté vous libre de l'augmenter.",
+  "config.roundabout.mirrorFlipsRendering.name": "Inversement Miroir",
+  "config.roundabout.mirrorFlipsRendering.desc": "Si le mirror inverse la créature affiché comme un véritable miroir. Par défaut c'est désactivé car les boucliers s'inversent d'une manière bizarre quand c'est actif.",
+  "config.roundabout.renderGasSplatterOverlay.name": "Affichage sur l'Ecran de l'Eclaboussure de Gasoil",
+  "config.roundabout.renderGasSplatterOverlay.desc": "Pas recommandé, mais le mod a un affichage moche sur l'écran pour les éclaboussure de gasoil qui pourrait probablement être amélioré avec un pack de texture. Il a été décider qu'être asperger de gasoil serait visible avec des particules et que ça serait suffisant, mais ça a été laisser dans le mod comme une option.",
+  "config.roundabout.showCreativeTextOnWorthinessArrow.name": "Texte Uniquement pour le Mode Créatif",
+  "config.roundabout.showCreativeTextOnWorthinessArrow.desc": "Disable this to make worthiness arrows not say creative mode only if you want to distribute them in a pack.",
+  "config.roundabout.pressingAbilityKeysSummonsStands.name": "Capacité Invoque le Stand",
+  "config.roundabout.pressingAbilityKeysSummonsStands.desc": "Si pressez un bouton de capacité invoque votre stand ou pas.",
+  "config.roundabout.disableObviousExperimentalWarning.name": "Désactiver les Messages de Préventions Evident",
+  "config.roundabout.disableObviousExperimentalWarning.desc": "Désactive le message de prévention de fonction Expérimentale quand vous ouvrez un monde avec des dimensions moddées.",
+  "config.roundabout.justiceFogBrightness.name": "Luminosité du Brouillard de Justice",
+  "config.roundabout.justiceFogBrightness.desc": "Le niveau de luminosité du Brouillard que Justice crée. Va de la couleur du ciel au blanc.",
+  "config.roundabout.magiciansRedTexturesMakeItEmmissive.name": "Skins Effervescent",
+  "config.roundabout.magiciansRedTexturesMakeItEmmissive.desc": "Si certains skins pour Magicians Red et d'autres stand s'illumine dans le noir comme le poulpe luisant ou pas.",
+  "config.roundabout.magiciansRedLashesMakeItEmmissive.name": "Foué Effervescent",
+  "config.roundabout.magiciansRedLashesMakeItEmmissive.desc": "Si les fouets de flammes créé par Magician's Red sont effervescent ou pas, même sur les skin qui ne le sont pas.",
+  "config.roundabout.magiciansRedRenderOnFireInFirstPerson.name": "Feu de Stand en 1ère Personne",
+  "config.roundabout.magiciansRedRenderOnFireInFirstPerson.desc": "Si être en feu de stand rend l'affichage du feu de stand à la première personnne ou pas.",
+  "config.roundabout.mandomRewindShowsVisualEffectsToNonMandomUsers.name": "Affichage sur l'écran Partagé de Mandom",
+  "config.roundabout.mandomRewindShowsVisualEffectsToNonMandomUsers.desc": "Whether or not the visual effect of rewinding time appears on other players' screens. The ability is meant to be subtle and confusing canonically, but in the mod we didn't want people to mistake being rewound for lag or rubberbanding.",
+  "config.roundabout.mandomRewindAttemptsToSkipInterpolation.name": "Blipping du Retour dans le temps",
+  "config.roundabout.mandomRewindAttemptsToSkipInterpolation.desc": "Désactivé ceci si vous avez un mod qui rend les créatures invisible après l'utilisation de Mandom. Si le retour dans le temps essaie de sauter l'interpolation ou pas, pour que les créatures apparaissent immédiatement à leur nouvel position au lieu de visuellement glisser extrêmement vite comme les endermen se téléportent.",
+
+  "config.roundabout.renderJusticeParticlesWhilePilotingInFirstPerson.name": "Brouillard à la 1ère personne",
+  "config.roundabout.renderJusticeParticlesWhilePilotingInFirstPerson.desc": "Les particules de brouillard peuvent être désactivé pour le rendu à la première personne dans le mode contrôle de Justice.",
+  "config.roundabout.renderJusticeParticlesInFirstPerson.name": "Particules de Justice",
+  "config.roundabout.renderJusticeParticlesInFirstPerson.desc": "Justice émet passivement des particules par défaut.",
+  "config.roundabout.justiceFogParticlesPerTick.name": "Particules de Brouillard Par Tick",
+  "config.roundabout.justiceFogParticlesPerTick.desc": "Combien de particule de brouillard Justice fait apparaitre par tick ?",
+  "config.roundabout.justiceSkinFlameParticlesPerTick.name": "Particules de Flamme Par Tick",
+  "config.roundabout.justiceSkinFlameParticlesPerTick.desc": "Pareil qu'au dessus mais pour les skins secret de Justice.",
+  "config.roundabout.cfhTicksPerFlameParticle.name": "Hurricane Ticks Par Flamme",
+  "config.roundabout.cfhTicksPerFlameParticle.desc": "Combien de tick entre l'apparition de particules de flamme pour la crossfire hurricane?",
+  "config.roundabout.bodyBagHoldingParticlesPerFiveTicks.name": "Particules du Sac de Cadavre",
+  "config.roundabout.bodyBagHoldingParticlesPerFiveTicks.desc": "Quand vous tenez un sac de cadavre, combien de particules apparaissent sur les cadavres tout les 5 ticks ?",
+  "config.roundabout.magiciansRedFirestormEmbersRate.name": "Rythme d'Apparition des Braises de la Firestorm",
+  "config.roundabout.magiciansRedFirestormEmbersRate.desc": "Le rythme auquel des particules de braises apparaissent quand la firestorm est active.",
+
+  "config.roundabout.opacityOfStand.name": "Opacité des Stands",
+  "config.roundabout.opacityOfStand.desc": "Avec quel clareté vous voyez votre stand quand vous ne faites rien.",
+  "config.roundabout.opacityWhileAttacking.name": "Opacité en Attaquant",
+  "config.roundabout.opacityWhileAttacking.desc": "Avec quel clareté vous voyez votre stand pendant que vous attaquer avec.",
+  "config.roundabout.opacityOfOthers.name": "Opacité des Autres",
+  "config.roundabout.opacityOfOthers.desc": "Avec quel clareté vous voyez le stand des autres quand iels ne font rien.",
+
+  "config.roundabout.SoftAndWetCurrentlySelectedBubble.name": "Type de Bulle sélectionné",
+  "config.roundabout.SoftAndWetCurrentlySelectedBubble.desc": "Pour Soft and Wet, votre instance se souvient quel bulle est actuellement sélectionné.",
+
+  "config.roundabout.namedSBRHorseSkins.name": "Chevaux nommés de SBR",
+  "config.roundabout.namedSBRHorseSkins.desc": "Renommé un chaval d'après certains de SBR changes son apparence.",
+
+  "config.roundabout.timeStopFreezesScreen.name": "Freeze de l'écran",
+  "config.roundabout.timeStopFreezesScreen.desc": "Si l'arrêt du temps vous rend incapable de voir quoique ce soit ou pas, vu que l'écran est figé. Cette option est désactivé par défaut à cause des ennuyantes implication de ne rien voir bouger pendant 9 secondes.",
+  "config.roundabout.tsStandsSeeTSTeleportAndDontFreeze.name": "Time Seeing Stands",
+  "config.roundabout.tsStandsSeeTSTeleportAndDontFreeze.desc": "Si avoir un stand qui vois dans l'arrêt du temps (The World, Star Platinum, ou C-Moon) vous permet de voir les choses se téléporté comme un enderman au lieu de soudainement apparaitre dans leur nouvelle position ou pas. Si vous avez freeze de l'écran activé, cette option vous permet de voir l'arrêt du temps normalement.",
+  "config.roundabout.simpleTimeStopShader.name": "Simple Shader",
+  "config.roundabout.simpleTimeStopShader.desc": "Si l'arrêt du temps donne un simple shader ou pas.",
+
+  "config.roundabout.configButtonOffsetX.name": "Offset du bouton de Config X",
+  "config.roundabout.configButtonOffsetX.desc": "Adjuste la position de la config en jeu. Si vous faites une si grosse erreur que vous ne puissiez plus appuyé sur le bouton en jeu, vous pouvez changer le fichier manuellement dans le dossier config.",
+  "config.roundabout.configButtonOffsetY.name": "Offset du bouton de Config Y",
+  "config.roundabout.configButtonOffsetY.desc": "Adjuste la position de la config en jeu. Si vous faites une si grosse erreur que vous ne puissiez plus appuyé sur le bouton en jeu, vous pouvez changer le fichier manuellement dans le dossier config.",
+  "config.roundabout.shouldShowConfigButton.name": "Montrer le Bouton de Config",
+  "config.roundabout.shouldShowConfigButton.desc": "Si le bouton de config n'a besoin ou pas d'être montrer. Si vous êtes un créateur de modpack vous allez certainement vouloir désactivé ceci quand votre modpack sera pleinement configuré.",
+
+  "config.roundabout.generalSettings.name": "Configuration Général",
+  "config.roundabout.configSettings.name": "Configuration de la config",
+  "config.roundabout.particleSettings.name": "Configuration des Particules",
+  "config.roundabout.opacitySettings.name": "Configuration des Opacités",
+  "config.roundabout.dynamicSettings.name": "Dynamic Configuration",
+
+  "config.roundabout.roundaboutconfig.name": "JoJo",
+  "config.roundabout.z.name": "",
+  "config.roundabout.z.desc": "",
+  "config.roundabout.x.name": "Appliques l'effet de potion d'invisibilité",
+  "config.roundabout.x.desc": "of everything beneath this being translated, it is a lot of work. But if you really"
 }
