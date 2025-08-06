@@ -176,6 +176,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private int roundabout$leapTicks = -1;
     @Unique
+    private boolean roundabout$leapIntentionally = false;
+    @Unique
     private int roundabout$destructionModeTrailTicks = -1;
     @Unique
     private int roundabout$detectTicks = -1;
@@ -1168,10 +1170,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
             roundabout$cancelConsumableItem((LivingEntity) (Object) this);
             roundabout$leapTicks--;
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide && roundabout$leapIntentionally) {
                 ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(1f, 0.65f, 0), 1f), this.getX(), this.getY(), this.getZ(),
                         1, 0, 0, 0, 0.1);
             }
+        }
+        if (roundabout$leapTicks <= -1){
+            roundabout$leapIntentionally = false;
         }
         if (this.roundabout$destructionModeTrailTicks > -1){
             if (this.horizontalCollision || this.verticalCollision) {
@@ -1437,6 +1442,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public void roundabout$setLeapTicks(int leapTicks){
         this.roundabout$leapTicks = leapTicks;
+    }
+    @Override
+    @Unique
+    public void roundabout$setLeapIntentionally(boolean intentional){
+        this.roundabout$leapIntentionally = intentional;
     }
     @Unique
     public void roundabout$setGasolineTime(int gasTicks){

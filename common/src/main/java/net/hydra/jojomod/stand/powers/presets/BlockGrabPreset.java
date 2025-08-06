@@ -342,6 +342,10 @@ public class BlockGrabPreset extends NewPunchingStand {
                             strength = 4F;
                         }
 
+                        if (ent instanceof LivingEntity LE){
+                            ((StandUser)LE).roundabout$setLeapTicks(ClientNetworking.getAppropriateConfig().generalStandSettings.standThrownEntityFallDamageImmmunityTicks);
+                        }
+
                         float ybias = (90F - Math.abs(degreesY)) /90F;
                         if (this.getSelf() instanceof Player pl && pl.isCrouching()){
                             if (ent instanceof Player){

@@ -1374,6 +1374,8 @@
 
   "config.roundabout.spiritOutInterruption.name": "Full Spirit Interrupt",
   "config.roundabout.spiritOutInterruption.desc": "By default, you need your powers activated (or to be powerless) to interrupt attacks. This mechanic is called full spirit interrupt, and serves to make the interrupting mechanic more satisfying. Turn off this setting for classic roundabout interrupts.",
+  "config.roundabout.standThrownEntityFallDamageImmmunityTicks.name": "Thrown Fall Prot Ticks",
+  "config.roundabout.standThrownEntityFallDamageImmmunityTicks.desc": "By default, throwing an entity gives them brief fall damage immunity ticks, so you need to throw them far down something to get hurt in this manner.",
 
 
   "config.roundabout.cinderellaSpacing.name": "Cinderella Salon Spacing",

@@ -136,6 +136,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         bonusLeapCount = 3;
                         bigLeap(this.getSelf(), 20, 1);
                         ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+                        ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_MOVEMENT, true);
                         tryPowerPacket(PowerIndex.SNEAK_MOVEMENT);
                     }
@@ -650,6 +651,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 addEXP(1);
             }
             ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+            ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.98 + (Math.random() * 0.04)));
         }
         return true;
@@ -789,6 +791,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         this.getSelf().resetFallDistance();
         if (!this.getSelf().level().isClientSide()) {
             ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+            ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.5 + (Math.random() * 0.04)));
         }
         return true;
@@ -1760,6 +1763,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
         if (!this.getSelf().level().isClientSide && move == PowerIndex.SNEAK_MOVEMENT && this.isClashing()){
             ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+            ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
         }
         if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.SPECIAL) {
             this.stopSoundsIfNearby(SoundIndex.TIME_CHARGE_SOUND_GROUP, 100,true);

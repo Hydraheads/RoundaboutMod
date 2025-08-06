@@ -222,6 +222,7 @@ public interface StandUser {
     void roundabout$explodePublic(double $$1, double x, double y, double z);
     int roundabout$getLeapTicks();
     void roundabout$setLeapTicks(int leapTicks);
+    void roundabout$setLeapIntentionally(boolean intentional);
 
     int roundabout$getGasolineTime();
     int roundabout$getGasolineRenderTime();
