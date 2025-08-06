@@ -35,6 +35,7 @@ public class StarPlatinumBaseRenderer<T extends StandEntity> extends StandRender
     public static final ResourceLocation CROP = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/crop.png");
     public static final ResourceLocation VOLUME_39 = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/volume_39.png");
     public static final ResourceLocation JUMP_13 = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/jump_13.png");
+    public static final ResourceLocation TREE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/tree.png");
     public StarPlatinumBaseRenderer(EntityRendererProvider.Context context, StandModel<StarPlatinumEntity> entityModel, float f) {
         super(context, entityModel,f);
         this.addLayer(new StarPlatinumEyeLayer<>(this));
@@ -83,6 +84,8 @@ public class StarPlatinumBaseRenderer<T extends StandEntity> extends StandRender
             return JUMP_13;
         } else if (BT == StarPlatinumEntity.ARCADE_2){
             return ARCADE_SKIN_2;
+        } else if (BT == StarPlatinumEntity.TREE){
+            return TREE;
         }
         return PART_3_SKIN;
     }
