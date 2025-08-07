@@ -106,6 +106,7 @@ public class ModItems {
     public static Item POCOLOCO_MASK;
     public static Item RINGO_MASK;
     public static Item GUCCIO_MASK;
+    public static Item HATO_MASK;
     public static Item SHIZUKA_MASK;
     public static Item INTERDIMENSIONAL_KEY;
 
@@ -153,6 +154,7 @@ public class ModItems {
         addToVisageStore(RINGO_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(VALENTINE_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(JOSUKE_PART_EIGHT_MASK,1, characterCostExp, characterCostEmerald);
+        addToVisageStore(HATO_MASK,1, characterCostExp, characterCostEmerald);
         if (ClientNetworking.getAppropriateConfig().cinderellaSettings.enableJojoveinVisagesInShop){
             addToVisageStore(SHIZUKA_MASK,2, characterCostExp, characterCostEmerald);
         }

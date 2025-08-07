@@ -73,6 +73,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.AESTHETICIAN.get(), Aesthetician.createAttributes().build());
         event.put(ForgeEntities.ZOMBIE_AESTHETICIAN.get(), ZombieAesthetician.createAttributes().build());
         event.put(ForgeEntities.RINGO.get(), RingoNPC.createAttributes().build());
+        event.put(ForgeEntities.HATO.get(), HatoNPC.createAttributes().build());
         event.put(ForgeEntities.SHIZUKA.get(), ShizukaNPC.createAttributes().build());
         event.put(ForgeEntities.POCOLOCO.get(), PocolocoNPC.createAttributes().build());
         event.put(ForgeEntities.GUCCIO.get(), GuccioNPC.createAttributes().build());
@@ -300,6 +301,7 @@ public class ForgeEvents {
         ModItems.AVDOL_MASK = ForgeItems.AVDOL_MASK.get();
         ModItems.DIEGO_MASK = ForgeItems.DIEGO_MASK.get();
         ModItems.RINGO_MASK = ForgeItems.RINGO_MASK.get();
+        ModItems.HATO_MASK = ForgeItems.HATO_MASK.get();
         ModItems.SHIZUKA_MASK = ForgeItems.SHIZUKA_MASK.get();
         ModItems.POCOLOCO_MASK = ForgeItems.POCOLOCO_MASK.get();
         ModItems.TERRIER_SPAWN_EGG = ForgeItems.TERRIER_SPAWN_EGG.get();
@@ -436,6 +438,7 @@ public class ForgeEvents {
         ModEntities.POCOLOCO = ForgeEntities.POCOLOCO.get();
         ModEntities.GUCCIO = ForgeEntities.GUCCIO.get();
         ModEntities.RINGO = ForgeEntities.RINGO.get();
+        ModEntities.HATO = ForgeEntities.HATO.get();
         ModEntities.SHIZUKA = ForgeEntities.SHIZUKA.get();
         ModEntities.VALENTINE = ForgeEntities.VALENTINE.get();
         ModEntities.STEVE_NPC = ForgeEntities.STEVE_NPC.get();
