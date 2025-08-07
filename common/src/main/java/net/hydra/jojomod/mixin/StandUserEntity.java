@@ -2,7 +2,6 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.mojang.authlib.GameProfile;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.BarbedWireBlock;
@@ -27,7 +26,6 @@ import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.item.*;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
@@ -39,7 +37,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -178,6 +175,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private float speed;
     @Unique
     private int roundabout$leapTicks = -1;
+    @Unique
+    private boolean roundabout$leapIntentionally = false;
     @Unique
     private int roundabout$destructionModeTrailTicks = -1;
     @Unique
@@ -1171,10 +1170,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
             roundabout$cancelConsumableItem((LivingEntity) (Object) this);
             roundabout$leapTicks--;
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide && roundabout$leapIntentionally) {
                 ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(1f, 0.65f, 0), 1f), this.getX(), this.getY(), this.getZ(),
                         1, 0, 0, 0, 0.1);
             }
+        }
+        if (roundabout$leapTicks <= -1){
+            roundabout$leapIntentionally = false;
         }
         if (this.roundabout$destructionModeTrailTicks > -1){
             if (this.horizontalCollision || this.verticalCollision) {
@@ -1440,6 +1442,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public void roundabout$setLeapTicks(int leapTicks){
         this.roundabout$leapTicks = leapTicks;
+    }
+    @Override
+    @Unique
+    public void roundabout$setLeapIntentionally(boolean intentional){
+        this.roundabout$leapIntentionally = intentional;
     }
     @Unique
     public void roundabout$setGasolineTime(int gasTicks){
@@ -2173,7 +2180,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
     public void tryPowerStuff(){
-        this.roundabout$getStandPowers().syncCooldowns();
+        this.roundabout$getStandPowers().syncActivePower();
         if (this.level().isClientSide) {
             this.roundabout$getStandPowers().kickStarted = false;
         }
@@ -2692,7 +2699,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if ($$0.getDirectEntity() != null && !$$0.is(ModDamageTypes.STAND_FIRE)) {
-           if (this.roundabout$getStandPowers().preCanInterruptPower($$0.getDirectEntity(),MainUtil.isStandDamage($$0))) {
+           if (this.roundabout$getStandPowers().preCanInterruptPower($$0,$$0.getDirectEntity(),MainUtil.isStandDamage($$0))) {
                 this.roundabout$tryPower(PowerIndex.NONE, true);
                 if (!(((LivingEntity)(Object)this) instanceof Player)){
                     this.roundabout$setAttackTimeDuring(this.roundabout$getStandPowers().getMobRecoilTime());

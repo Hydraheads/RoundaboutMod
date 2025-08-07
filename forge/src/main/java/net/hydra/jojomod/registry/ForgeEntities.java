@@ -111,6 +111,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_ringo").toString())
             );
+    public static final RegistryObject<EntityType<HatoNPC>> HATO =
+            ENTITY_TYPES.register("jojo_npc_hato", () ->
+                    EntityType.Builder.of(HatoNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_hato").toString())
+            );
     public static final RegistryObject<EntityType<ShizukaNPC>> SHIZUKA =
             ENTITY_TYPES.register("jojo_npc_shizuka", () ->
                     EntityType.Builder.of(ShizukaNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).

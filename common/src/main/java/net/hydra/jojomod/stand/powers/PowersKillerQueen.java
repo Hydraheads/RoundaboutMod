@@ -209,7 +209,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     @Override
-    public boolean setPowerBarrage() {
+    public void setPowerBarrage() {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE);
         this.poseStand(OffsetIndex.ATTACK);
@@ -217,7 +217,6 @@ public class PowersKillerQueen extends NewPunchingStand {
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
         animateStand(StandEntity.BARRAGE);
         playBarrageCrySound();
-        return true;
     }
 
     @Override

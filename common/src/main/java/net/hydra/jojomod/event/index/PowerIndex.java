@@ -56,6 +56,7 @@ public class PowerIndex {
     public static final byte RANGED_BARRAGE_CHARGE_2 = 50;
     public static final byte RANGED_BARRAGE_2 = 51;
 
+
     /**Even more basic, refers to the buttons for cooldowns*/
     public static final byte NO_CD = -1;
     public static final byte SKILL_1 = 0;
@@ -68,6 +69,12 @@ public class PowerIndex {
     public static final byte SKILL_4_SNEAK = 7;
     public static final byte SKILL_EXTRA = 8;
     public static final byte SKILL_EXTRA_2 = 9;
+
+
+
+    /**You can define any other number after 51 in your own stand's clas if you don't want to use
+     * the old naming convention and it really doesn't matter that much as long as you are
+     * keeping track of it internally**/
     public static final byte SKILL_1_GUARD = 60;
     public static final byte SKILL_2_GUARD = 61;
     public static final byte SKILL_3_GUARD = 62;

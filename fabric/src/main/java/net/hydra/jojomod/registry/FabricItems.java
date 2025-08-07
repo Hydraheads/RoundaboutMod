@@ -72,6 +72,8 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSurvivor(null)));
     public static Item STAND_DISC_ACHTUNG = registerItem("achtung_baby_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAchtungBaby(null)));
+    public static Item STAND_DISC_WALKING_HEART = registerItem("walking_heart_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersWalkingHeart(null)));
     public static Item STAND_DISC_DIVER_DOWN = registerItem("diver_down_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
     public static Item MAX_STAND_DISC_DIVER_DOWN = registerItem("max_diver_down_disc",
@@ -128,6 +130,7 @@ public class FabricItems {
     public static Item VALENTINE_MASK = registerItem("valentine_mask", new MaskItem(new Item.Properties().stacksTo(1), new ValentineVisage(null)));
     public static Item JOSUKE_PART_EIGHT_MASK = registerItem("josuke_part_eight_mask", new MaskItem(new Item.Properties().stacksTo(1), new JosukePartEightVisage(null)));
     public static Item GUCCIO_MASK = registerItem("guccio_mask", new MaskItem(new Item.Properties().stacksTo(1), new GuccioVisage(null)));
+    public static Item HATO_MASK = registerItem("hato_mask", new MaskItem(new Item.Properties().stacksTo(1), new HatoVisage(null)));
     public static Item SHIZUKA_MASK = registerItem("shizuka_mask", new MaskItem(new Item.Properties().stacksTo(1), new ShizukaVisage(null)));
     public static Item ENYA_MASK = registerItem("enya_mask", new MaskItem(new Item.Properties().stacksTo(1), new EnyaVisage(null)));
     public static Item ENYA_OVA_MASK = registerItem("enya_ova_mask", new MaskItem(new Item.Properties().stacksTo(1), new EnyaOVAVisage(null)));
@@ -305,6 +308,7 @@ public class FabricItems {
                         entries.accept(GUCCIO_MASK);
                         entries.accept(POCOLOCO_MASK);
                         entries.accept(RINGO_MASK);
+                        entries.accept(HATO_MASK);
                         entries.accept(SHIZUKA_MASK);
 
 
@@ -356,6 +360,7 @@ public class FabricItems {
                         //entries.accept(STAND_DISC_D4C);
                         //entries.accept(MAX_STAND_DISC_D4C);
                         //entries.accept(INTERDIMENSIONAL_KEY);
+                        entries.accept(STAND_DISC_WALKING_HEART);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_RATT);
@@ -454,6 +459,7 @@ public class FabricItems {
         ModItems.STAND_DISC_MANDOM = STAND_DISC_MANDOM;
         ModItems.STAND_DISC_SURVIVOR = STAND_DISC_SURVIVOR;
         ModItems.STAND_DISC_ACHTUNG = STAND_DISC_ACHTUNG;
+        ModItems.STAND_DISC_WALKING_HEART = STAND_DISC_WALKING_HEART;
         ModItems.STAND_DISC_DIVER_DOWN = STAND_DISC_DIVER_DOWN;
         ((MaxStandDiscItem)MAX_STAND_DISC_DIVER_DOWN).baseDisc = ((StandDiscItem)STAND_DISC_DIVER_DOWN);
         ModItems.MAX_STAND_DISC_DIVER_DOWN = MAX_STAND_DISC_DIVER_DOWN;
@@ -510,6 +516,7 @@ public class FabricItems {
         ModItems.VALENTINE_MASK = VALENTINE_MASK;
         ModItems.JOSUKE_PART_EIGHT_MASK = JOSUKE_PART_EIGHT_MASK;
         ModItems.GUCCIO_MASK = GUCCIO_MASK;
+        ModItems.HATO_MASK = HATO_MASK;
         ModItems.SHIZUKA_MASK = SHIZUKA_MASK;
         ModItems.ENYA_MASK = ENYA_MASK;
         ModItems.ENYA_OVA_MASK = ENYA_OVA_MASK;

@@ -182,6 +182,8 @@ public class Config implements Cloneable {
         @BooleanOption(group = "inherit", value = true)
         public Boolean playersInterruptSomeStandAttacks;
         @BooleanOption(group = "inherit", value = true)
+        public Boolean spiritOutInterruption;
+        @BooleanOption(group = "inherit", value = true)
         public Boolean barragesAreAlwaysInterruptable;
         @BooleanOption(group = "inherit", value = true)
         public Boolean barrageHasAreaOfEffect;
@@ -197,6 +199,8 @@ public class Config implements Cloneable {
         public Integer standGuardMultiplier;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer standThrownObjectMultiplier;
+        @IntOption(group = "inherit", value = 33, min = 0, max = 72000)
+        public Integer standThrownEntityFallDamageImmmunityTicks;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer generalImpaleAttackMultiplier;
         @BooleanOption(group = "inherit", value = true)

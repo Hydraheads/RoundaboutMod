@@ -60,6 +60,7 @@
   "item.roundabout.achtung_baby_disc": "Stand Disc",
   "item.roundabout.max_ratt_disc": "Stand Disc+",
   "item.roundabout.mandom_disc": "Stand Disc",
+  "item.roundabout.walking_heart_disc": "Stand Disc",
   "item.roundabout.max_star_platinum_disc": "Stand Disc+",
   "item.roundabout.magicians_red_disc": "Stand Disc",
   "item.roundabout.killer_queen_disc": "Stand Disc",
@@ -87,6 +88,7 @@
   "item.roundabout.survivor_disc.desc": "Survivor",
   "item.roundabout.hey_ya_disc.desc": "Hey Ya!",
   "item.roundabout.mandom_disc.desc": "Mandom",
+  "item.roundabout.walking_heart_disc.desc": "Walking Heart",
   "item.roundabout.diver_down_disc.desc": "Diver Down",
   "item.roundabout.max_diver_down_disc.desc": "Diver Down",
   "item.roundabout.none_disc.desc": "None",
@@ -151,6 +153,9 @@
   "item.roundabout.josuke_part_eight_mask": "Josuke Visage",
   "item.roundabout.josuke_part_eight_mask.desc": "Josuke Higashikata (Part 8)",
   "item.roundabout.josuke_part_eight_mask.tag": "Josuke",
+  "item.roundabout.hato_mask": "Hato Visage",
+  "item.roundabout.hato_mask.desc": "Hato Higashikata",
+  "item.roundabout.hato_mask.tag": "Hato",
   "item.roundabout.shizuka_mask": "Shizuka Visage",
   "item.roundabout.shizuka_mask.desc": "Shizuka (JoJovein / JoJo Stars)",
   "item.roundabout.shizuka_mask.tag": "Shizuka",
@@ -205,6 +210,7 @@
   "entity.roundabout.soft_and_wet_king": "Soft And Wet",
   "entity.roundabout.soft_and_wet_drowned": "Soft And Wet",
   "entity.roundabout.soft_and_wet_killer_queen": "Killer Queen",
+  "entity.roundabout.walking_heart": "Walking Heart",
   "entity.roundabout.diver_down": "Diver Down",
   "entity.roundabout.harpoon": "Harpoon",
   "entity.roundabout.match": "Match",
@@ -230,6 +236,7 @@
   "entity.roundabout.jojo_npc_aya": "Aya",
   "entity.roundabout.jojo_npc_guccio": "Guccio",
   "entity.roundabout.jojo_npc_ringo": "Ringo",
+  "entity.roundabout.jojo_npc_hato": "Hato",
   "entity.roundabout.jojo_npc_shizuka": "Shizuka",
   "entity.roundabout.jojo_npc_pocoloco": "Pocoloco",
   "entity.roundabout.aesthetician": "Aesthetician",
@@ -391,6 +398,8 @@
   "death.attack.disintegration.player": "%1$ was disintegrated by %$2s",
   "death.attack.melting": "%1$s became a fluid",
   "death.attack.melting.player": "%1$s was reduced to a puddle by %$2s",
+  "death.attack.melting.item": "%1$s became a fluid",
+  "death.attack.melting.player.item": "%1$s was reduced to a puddle by %$2s",
 
 
   "item.glaive.charge_power": "Charge Attack",
@@ -988,6 +997,7 @@
   "skins.roundabout.star_platinum.crop": "Gold Spirit",
   "skins.roundabout.star_platinum.volume_39": "Vol 39",
   "skins.roundabout.star_platinum.jump_13": "Jump 13",
+  "skins.roundabout.star_platinum.tree": "Tree",
 
   "skins.roundabout.the_world.base": "Part 3",
   "skins.roundabout.the_world.manga": "Manga",
@@ -1366,6 +1376,12 @@
   "config.roundabout.standExperienceNeededForLevelupMultiplier.desc": "Multiplies the amount of experience needed to level up. Increasing this number makes levelups take longer, and vice versa.",
   "config.roundabout.enableStandLeveling.name": "Enable Stand Leveling",
   "config.roundabout.enableStandLeveling.desc": "Stand Leveling is for unlocking skins and skills",
+
+  "config.roundabout.spiritOutInterruption.name": "Full Spirit Interrupt",
+  "config.roundabout.spiritOutInterruption.desc": "By default, you need your powers activated (or to be powerless) to interrupt attacks. This mechanic is called full spirit interrupt, and serves to make the interrupting mechanic more satisfying. Turn off this setting for classic roundabout interrupts.",
+  "config.roundabout.standThrownEntityFallDamageImmmunityTicks.name": "Thrown Fall Prot Ticks",
+  "config.roundabout.standThrownEntityFallDamageImmmunityTicks.desc": "By default, throwing an entity gives them brief fall damage immunity ticks, so you need to throw them far down something to get hurt in this manner.",
+
 
   "config.roundabout.cinderellaSpacing.name": "Cinderella Salon Spacing",
   "config.roundabout.cinderellaSpacing.desc": "How far spaced these structures are.",
@@ -1773,7 +1789,7 @@
   "config.roundabout.invisiBurstBlockRange.name": "Invisiburst Block Range",
   "config.roundabout.invisiBurstBlockRange.desc": "The block radius of invisiburst, in full numbers. Set to zero to disable block invisibility.",
   "config.roundabout.invisibleBlockDepthF.name": "Invisible Block Depth",
-  "config.roundabout.invisibleBlockDepthF.desc": "How see through should invisible blocks be? By default it is 0.26 out of 1 (1 is fully visible).",
+  "config.roundabout.invisibleBlockDepthF.desc": "How see through should invisible blocks be? By default it is 0.44 out of 1 (1 is fully visible).",
   "config.roundabout.invisibleBlocksDistanceAwaySeenI.name": "Invisible Distance Seen",
   "config.roundabout.invisibleBlocksDistanceAwaySeenI.desc": "How far away can you see the invisible blocks roughly as the stand user, raising this makes mining view more obstructed but might help with combat.",
 

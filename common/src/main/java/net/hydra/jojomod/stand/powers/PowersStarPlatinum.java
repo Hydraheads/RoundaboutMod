@@ -914,11 +914,6 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         return hitEntities2;
     }
 
-    public boolean glowingEye = false;
-    @Override
-    public boolean glowingEyes(){
-        return glowingEye;
-    }
     public void updateStarFinger(){
         if (this.attackTimeDuring > -1) {
             StandEntity stand = getStandEntity(this.self);
@@ -1047,17 +1042,18 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             if (Level > 1 || bypass){
                 $$1.add(StarPlatinumEntity.MANGA_SKIN);
                 $$1.add(StarPlatinumEntity.OVA_SKIN);
-            } if (Level > 2 || bypass){
                 $$1.add(StarPlatinumEntity.FOUR_DEE);
+            } if (Level > 2 || bypass){
                 $$1.add(StarPlatinumEntity.JOJOVELLER);
                 $$1.add(StarPlatinumEntity.VOLUME_39);
-            } if (Level > 3 || bypass){
                 $$1.add(StarPlatinumEntity.GREEN_SKIN);
+            } if (Level > 3 || bypass){
                 $$1.add(StarPlatinumEntity.GREEN_2);
                 $$1.add(StarPlatinumEntity.ARCADE);
-            } if (Level > 4 || bypass){
                 $$1.add(StarPlatinumEntity.ARCADE_2);
+            } if (Level > 4 || bypass){
                 $$1.add(StarPlatinumEntity.BASEBALL_SKIN);
+                $$1.add(StarPlatinumEntity.TREE);
                 $$1.add(StarPlatinumEntity.JUMP_13);
             } if (Level > 5 || bypass){
                 $$1.add(StarPlatinumEntity.JOJONIUM_SKIN);
@@ -1776,6 +1772,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return Component.translatable(  "skins.roundabout.star_platinum.jump_13");
         } else if (skinId == StarPlatinumEntity.ARCADE_2){
             return Component.translatable(  "skins.roundabout.star_platinum.arcade_2");
+        } else if (skinId == StarPlatinumEntity.TREE){
+            return Component.translatable(  "skins.roundabout.star_platinum.tree");
         }
         return Component.translatable(  "skins.roundabout.star_platinum.base");
     }

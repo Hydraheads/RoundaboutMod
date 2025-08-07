@@ -13,7 +13,6 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
@@ -32,10 +31,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
-import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.*;
@@ -165,7 +161,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                                     PacketDataIndex.S2C_INT_ATD, -10);
                         }
                         this.setAttackTimeDuring(-10);
-                        this.syncCooldowns();
+                        this.syncActivePower();
                         return true;
                     }
                     return false;
@@ -181,7 +177,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                     }
                     this.setAttackTimeDuring(-10);
                     this.setCooldown(PowerIndex.SKILL_2, 10);
-                    this.syncCooldowns();
+                    this.syncActivePower();
                     return true;
                 }
             }
@@ -344,6 +340,10 @@ public class BlockGrabPreset extends NewPunchingStand {
                             strength = 6F;
                         } else if (ent instanceof Minecart){
                             strength = 4F;
+                        }
+
+                        if (ent instanceof LivingEntity LE){
+                            ((StandUser)LE).roundabout$setLeapTicks(ClientNetworking.getAppropriateConfig().generalStandSettings.standThrownEntityFallDamageImmmunityTicks);
                         }
 
                         float ybias = (90F - Math.abs(degreesY)) /90F;
@@ -724,7 +724,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                         }
                         this.setAttackTimeDuring(-10);
                         this.setCooldown(PowerIndex.SKILL_2, 10);
-                        this.syncCooldowns();
+                        this.syncActivePower();
                         return true;
                     }
                 }
