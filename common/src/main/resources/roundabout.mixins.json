@@ -60,6 +60,7 @@
     "data_and_structures.DataStructureTemplatePool",
     "effects.bleed.BleedFoodData",
     "effects.hex.HexItem",
+    "green_day.ZProjectile",
     "items.AbilityCancelsEnderPearlItem",
     "items.ExecutionerAxeRaid",
     "items.GasolineBucketBucketItem",
