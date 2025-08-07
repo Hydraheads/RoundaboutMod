@@ -308,9 +308,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$COMBAT_MODE = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.BOOLEAN);
-    @Unique
-    private static final EntityDataAccessor<Direction> ROUNDABOUT$GRAVITY_DIRECTION = SynchedEntityData.defineId(LivingEntity.class,
-            EntityDataSerializers.DIRECTION);
+
     @Unique
     private StandPowers roundabout$Powers;
     @Unique
@@ -2562,7 +2560,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_SKIN, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_ANIMATION, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$UNIQUE_STAND_MODE_TOGGLE, false);
-            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GRAVITY_DIRECTION, Direction.DOWN);
         }
     }
 
@@ -2781,21 +2778,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
 
-    @Unique
-    @Override
-    public void roundabout$setGravityD(Direction direction) {
-        if (this.entityData.hasItem(ROUNDABOUT$GRAVITY_DIRECTION)) {
-            this.getEntityData().set(ROUNDABOUT$GRAVITY_DIRECTION, direction);
-        }
-    }
-    @Unique
-    @Override
-    public Direction roundabout$getGravityD() {
-        if (this.entityData.hasItem(ROUNDABOUT$GRAVITY_DIRECTION)) {
-            return this.getEntityData().get(ROUNDABOUT$GRAVITY_DIRECTION);
-        }
-        return Direction.DOWN;
-    }
 
 
 

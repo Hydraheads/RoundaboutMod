@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.QueueSoundInstance;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
+import net.hydra.jojomod.util.RotationAnimation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
@@ -82,6 +83,8 @@ public abstract class StandUserClientOnly extends Entity implements StandUserCli
     public void roundabout$setRoundaboutRenderOffHand(@Nullable ItemStack offhand){
         this.roundabout$RenderOffHand = offhand;
     }
+
+
 
     @Unique
     public boolean roundabout$soundCancel = false;

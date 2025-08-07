@@ -1,6 +1,7 @@
 package net.hydra.jojomod.util.gravity;
 
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.util.RotationAnimation;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 
@@ -16,4 +17,5 @@ public class GravityAPI {
 
         return ((IEntityAndData)entity).roundabout$getGravityDirection();
     }
+
 }

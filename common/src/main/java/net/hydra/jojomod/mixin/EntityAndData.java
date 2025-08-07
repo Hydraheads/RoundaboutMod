@@ -37,6 +37,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -79,7 +80,9 @@ public abstract class EntityAndData implements IEntityAndData {
     public int roundabout$noGravityTicks = 0;
     @Unique
     public boolean roundabout$renderingExclusiveLayers = false;
-
+    @Unique
+    private static final EntityDataAccessor<Direction> ROUNDABOUT$GRAVITY_DIRECTION = SynchedEntityData.defineId(Entity.class,
+            EntityDataSerializers.DIRECTION);
 
 
     /***
@@ -111,23 +114,20 @@ public abstract class EntityAndData implements IEntityAndData {
      * so regular entities use a function in IEntityAndData instead.
      */
     @Unique
-    public Direction roundabout$gravity_direction = Direction.DOWN;
-    @Unique
     @Override
     public Direction roundabout$getGravityDirection(){
-        if (((Entity)(Object)this) instanceof LivingEntity LE){
-            return ((StandUser)LE).roundabout$getGravityD();
+        if (this.entityData.hasItem(ROUNDABOUT$GRAVITY_DIRECTION)) {
+            return this.getEntityData().get(ROUNDABOUT$GRAVITY_DIRECTION);
         }
-        return roundabout$gravity_direction;
+        return Direction.DOWN;
     }
 
     @Unique
     @Override
     public void roundabout$setGravityDirection(Direction direction){
-        if (roundabout$castEntity() instanceof LivingEntity LE){
-            ((StandUser)LE).roundabout$setGravityD(direction);
+        if (this.entityData.hasItem(ROUNDABOUT$GRAVITY_DIRECTION)) {
+            this.getEntityData().set(ROUNDABOUT$GRAVITY_DIRECTION, direction);
         }
-        roundabout$gravity_direction = direction;
     }
 
     @Unique
@@ -320,6 +320,12 @@ public abstract class EntityAndData implements IEntityAndData {
             }
             cir.setReturnValue(true);
             return;
+        }
+    }
+    @Inject(method = "<init>(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;)V", at = @At("TAIL"))
+    public void roundabout$init(EntityType $$0, Level $$1, CallbackInfo ci){
+        if (!((Entity)(Object)this).getEntityData().hasItem(ROUNDABOUT$GRAVITY_DIRECTION)) {
+            ((Entity) (Object) this).getEntityData().define(ROUNDABOUT$GRAVITY_DIRECTION, Direction.DOWN);
         }
     }
 
@@ -576,6 +582,10 @@ public abstract class EntityAndData implements IEntityAndData {
 
 
     @Shadow public abstract int getId();
+
+    @Shadow @Final protected SynchedEntityData entityData;
+
+    @Shadow public abstract SynchedEntityData getEntityData();
 
     @Override
     @Unique

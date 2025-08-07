@@ -63,6 +63,7 @@
     "gravity.GravityDirectionMixin",
     "gravity.GravityEntity",
     "gravity.GravityEntityCollisionContextMixin",
+    "gravity.client.GravityClientEntityMixin",
     "green_day.ZProjectile",
     "items.AbilityCancelsEnderPearlItem",
     "items.ExecutionerAxeRaid",
