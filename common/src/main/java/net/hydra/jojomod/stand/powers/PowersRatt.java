@@ -7,6 +7,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.RattDartEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -28,8 +29,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.ClipContext;
@@ -706,6 +709,55 @@ public class PowersRatt extends NewDashPreset {
             }
         }
         return true;
+    }
+
+    @Override
+    public void tickStandRejection(MobEffectInstance effect) {
+        if (!isClient()) {
+            if (effect.getDuration()%15 == 0) {
+                MobEffectInstance effec = this.getSelf().getEffect(ModEffects.MELTING);
+                int stack = effec != null ?  effec.getAmplifier() : 0;
+                this.getSelf().addEffect(new MobEffectInstance(ModEffects.MELTING,600,stack+2));
+                float degrees = (float) Math.random()*360;
+                MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.27F,
+                        Mth.sin(degrees * ((float) Math.PI / 180)),
+                        Mth.sin(-20 * ((float) Math.PI / 180)),
+                        -Mth.cos(degrees * ((float) Math.PI / 180)));
+            }
+        }
+    }
+
+    // for whatever reason triggers players as well
+    /*
+    @Override
+    public void tickMobAI(LivingEntity attackTarget) {
+        if (attackTarget != null) {
+            double dist =attackTarget.getPosition(0).distanceTo(this.getSelf().getPosition(0));
+            if (isPlaced()) {
+
+            } else {
+                Entity targetEntity = getTargetEntity(this.self, 50);
+                if (targetEntity != null && targetEntity.is(attackTarget)) {
+                    if (this.getActivePower() == PowerIndex.NONE && !this.onCooldown(PowerIndex.SKILL_2)) {
+                        if (dist >= 10.0) {
+                            Roundabout.LOGGER.info("ATTEMPT PLACE");
+                            Vec3 pos = this.getSelf().getPosition(0);
+                            Roundabout.LOGGER.info("A: {}",this.getSelf().getName().toString());
+                            ((StandUser) this.getSelf()).roundabout$tryPosPower(PowersRatt.NET_PLACE,true,
+                                    new Vec3(pos.x(), Math.floor(pos.y),pos.z())
+                            );
+                        }
+                    }
+
+                }
+
+            }
+        }
+    } */
+
+    // will change soon
+    public byte worthinessType(){
+        return HUMANOID_WORTHY;
     }
 
 
