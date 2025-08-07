@@ -62,6 +62,7 @@
     "effects.hex.HexItem",
     "gravity.GravityDirectionMixin",
     "gravity.GravityEntity",
+    "gravity.GravityEntityCollisionContextMixin",
     "green_day.ZProjectile",
     "items.AbilityCancelsEnderPearlItem",
     "items.ExecutionerAxeRaid",
