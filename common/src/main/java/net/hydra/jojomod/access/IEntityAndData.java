@@ -1,6 +1,7 @@
 package net.hydra.jojomod.access;
 
 import net.hydra.jojomod.event.SavedSecond;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -60,8 +61,15 @@ public interface IEntityAndData {
 
     void roundabout$resetSecondQueue();
 
+    /**Achtung*/
     void roundabout$setTrueInvisibility(int only);
     int roundabout$getTrueInvisibility();
+
+    /**Gravity*/
+    Direction roundabout$getGravityDirection();
+    void roundabout$setGravityDirection(Direction direction);
+
+
     void roundabout$universalTick();
 
 

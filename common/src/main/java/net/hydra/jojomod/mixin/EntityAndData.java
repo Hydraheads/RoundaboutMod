@@ -22,6 +22,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -104,6 +105,36 @@ public abstract class EntityAndData implements IEntityAndData {
             }
         }
     }
+
+    /***
+     * Gravity Direction for Entities. Note that only Living Entities use tracked/synched entitydata,
+     * so regular entities use a function in IEntityAndData instead.
+     */
+    @Unique
+    public Direction roundabout$gravity_direction = Direction.DOWN;
+    @Unique
+    @Override
+    public Direction roundabout$getGravityDirection(){
+        if (((Entity)(Object)this) instanceof LivingEntity LE){
+            return ((StandUser)LE).roundabout$getGravityD();
+        }
+        return roundabout$gravity_direction;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setGravityDirection(Direction direction){
+        if (roundabout$castEntity() instanceof LivingEntity LE){
+            ((StandUser)LE).roundabout$setGravityD(direction);
+        }
+        roundabout$gravity_direction = direction;
+    }
+
+    @Unique
+    public Entity roundabout$castEntity(){
+        return ((Entity)(Object)this);
+    }
+
 
     @Unique
     @Override
