@@ -2,17 +2,22 @@ package net.hydra.jojomod.mixin.gravity;
 
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
@@ -29,6 +34,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -39,7 +45,42 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 @Mixin(Entity.class)
-public abstract class GravityEntity {
+public abstract class GravityEntity implements IGravityEntity {
+
+    @Shadow public abstract SynchedEntityData getEntityData();
+
+    @Shadow @Final protected SynchedEntityData entityData;
+
+    /***
+     * Gravity Direction for Entities. Note that only Living Entities use tracked/synched entitydata,
+     * so regular entities use a function in IEntityAndData instead.
+     */
+    @Unique
+    private static final EntityDataAccessor<Direction> ROUNDABOUT$GRAVITY_DIRECTION = SynchedEntityData.defineId(Entity.class,
+            EntityDataSerializers.DIRECTION);
+
+    @Unique
+    @Override
+    public Direction roundabout$getGravityDirection(){
+        if (this.entityData.hasItem(ROUNDABOUT$GRAVITY_DIRECTION)) {
+            return this.getEntityData().get(ROUNDABOUT$GRAVITY_DIRECTION);
+        }
+        return Direction.DOWN;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setGravityDirection(Direction direction){
+        if (this.entityData.hasItem(ROUNDABOUT$GRAVITY_DIRECTION)) {
+            this.getEntityData().set(ROUNDABOUT$GRAVITY_DIRECTION, direction);
+        }
+    }
+    @Inject(method = "<init>(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;)V", at = @At("TAIL"))
+    public void roundabout$init(EntityType $$0, Level $$1, CallbackInfo ci){
+        if (!((Entity)(Object)this).getEntityData().hasItem(ROUNDABOUT$GRAVITY_DIRECTION)) {
+            ((Entity) (Object) this).getEntityData().define(ROUNDABOUT$GRAVITY_DIRECTION, Direction.DOWN);
+        }
+    }
 
     @Shadow public abstract float maxUpStep();
 

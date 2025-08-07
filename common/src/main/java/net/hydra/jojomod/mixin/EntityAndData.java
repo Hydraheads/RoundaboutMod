@@ -80,10 +80,6 @@ public abstract class EntityAndData implements IEntityAndData {
     public int roundabout$noGravityTicks = 0;
     @Unique
     public boolean roundabout$renderingExclusiveLayers = false;
-    @Unique
-    private static final EntityDataAccessor<Direction> ROUNDABOUT$GRAVITY_DIRECTION = SynchedEntityData.defineId(Entity.class,
-            EntityDataSerializers.DIRECTION);
-
 
     /***
      * Invisiblity functions for Achtung Baby. Note that only Living Entities use tracked/synched entitydata,
@@ -109,26 +105,7 @@ public abstract class EntityAndData implements IEntityAndData {
         }
     }
 
-    /***
-     * Gravity Direction for Entities. Note that only Living Entities use tracked/synched entitydata,
-     * so regular entities use a function in IEntityAndData instead.
-     */
-    @Unique
-    @Override
-    public Direction roundabout$getGravityDirection(){
-        if (this.entityData.hasItem(ROUNDABOUT$GRAVITY_DIRECTION)) {
-            return this.getEntityData().get(ROUNDABOUT$GRAVITY_DIRECTION);
-        }
-        return Direction.DOWN;
-    }
 
-    @Unique
-    @Override
-    public void roundabout$setGravityDirection(Direction direction){
-        if (this.entityData.hasItem(ROUNDABOUT$GRAVITY_DIRECTION)) {
-            this.getEntityData().set(ROUNDABOUT$GRAVITY_DIRECTION, direction);
-        }
-    }
 
     @Unique
     public Entity roundabout$castEntity(){
@@ -322,12 +299,7 @@ public abstract class EntityAndData implements IEntityAndData {
             return;
         }
     }
-    @Inject(method = "<init>(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;)V", at = @At("TAIL"))
-    public void roundabout$init(EntityType $$0, Level $$1, CallbackInfo ci){
-        if (!((Entity)(Object)this).getEntityData().hasItem(ROUNDABOUT$GRAVITY_DIRECTION)) {
-            ((Entity) (Object) this).getEntityData().define(ROUNDABOUT$GRAVITY_DIRECTION, Direction.DOWN);
-        }
-    }
+
 
     @Inject(method = "isInvisibleTo", at = @At("HEAD"), cancellable = true)
     public void roundabout$isInvisibleTo(Player pl, CallbackInfoReturnable<Boolean> cir){

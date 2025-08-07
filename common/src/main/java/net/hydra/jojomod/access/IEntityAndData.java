@@ -65,10 +65,6 @@ public interface IEntityAndData {
     void roundabout$setTrueInvisibility(int only);
     int roundabout$getTrueInvisibility();
 
-    /**Gravity*/
-    Direction roundabout$getGravityDirection();
-    void roundabout$setGravityDirection(Direction direction);
-
 
     void roundabout$universalTick();
 

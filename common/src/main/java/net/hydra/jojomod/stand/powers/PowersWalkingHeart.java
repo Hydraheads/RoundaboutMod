@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
@@ -163,7 +164,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public void switchDirections(){
-        ((IEntityAndData)this.self).roundabout$setGravityDirection(Direction.SOUTH);
+        ((IGravityEntity)this.self).roundabout$setGravityDirection(Direction.SOUTH);
     }
 
     public boolean hasUIOpen = false;
