@@ -392,7 +392,7 @@ public class PowersRatt extends NewDashPreset {
     @Override
     public void updateUniqueMoves() {
         if (this.getActivePower() == PowerIndex.GUARD) {
-            updateChargeTime(Mth.clamp(getChargeTime()+(this.attackTimeDuring%2 == 0 ? 4 : 3),0,100));
+            updateChargeTime(Mth.clamp(getChargeTime()+(this.attackTimeDuring%2 == 0 ? 4 : 4),0,100));
 
             if (getChargeTime() == 100) {this.setPowerNone();}
             if (scopeLevel == 0) {setPowerNone();}
@@ -411,11 +411,10 @@ public class PowersRatt extends NewDashPreset {
             }
         } else if (this.getActivePower() == PowersRatt.PLACE_BURST) {
             setShotCooldown(25);
-            if (getAttackTimeDuring() >= 5) {
+            if (getAttackTimeDuring() >8) {
                 setPowerNone();
                 setAttackTimeDuring(-1);
-            }
-            if (getAttackTimeDuring() == 1) {
+            } else  if (getAttackTime() == 1) {
                 tryPower(PowersRatt.PLACE_BURST_FIRE,true);
                 tryPowerPacket(PowersRatt.PLACE_BURST_FIRE);
             }
@@ -597,6 +596,7 @@ public class PowersRatt extends NewDashPreset {
             }
             case PowersRatt.NET_PLACE_BURST -> {
                 this.setAttackTimeDuring(0);
+                this.setAttackTime(-1);
                 this.setActivePower(PowersRatt.PLACE_BURST);
                 if (!isClient()) {
                     this.animateStand((byte) -1);
@@ -729,6 +729,7 @@ public class PowersRatt extends NewDashPreset {
             if (getChargeTime() >= MaxThreshold) {bartexture -= 6;}
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, bartexture, finalAmount, 6);
         }
+        super.renderAttackHud(context, playerEntity, scaledWidth, scaledHeight, ticks, vehicleHeartCount, flashAlpha, otherFlashAlpha);
     }
 
 

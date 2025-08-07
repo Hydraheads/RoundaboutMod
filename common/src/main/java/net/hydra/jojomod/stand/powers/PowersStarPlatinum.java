@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
@@ -8,6 +9,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.projectile.RattDartEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -706,6 +708,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                                     SE.canAcquireHeldItem = false;
                                 }
                                 SE.setHeldItem(ii.copyAndClear());
+                            } else if (ent instanceof RattDartEntity RD) {
+                                success = true;
+                                RD.applyEffect(this.getSelf());
                             }
                         } else if (ent instanceof ThrownObjectEntity TO) {
                             ItemStack ii = TO.getItem();

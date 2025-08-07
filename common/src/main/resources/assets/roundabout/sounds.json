@@ -713,6 +713,12 @@
       "roundabout:ratt_scope"
     ]
   },
+  "ratt_dart_impact": {
+    "subtitle": "sounds.roundabout.ratt_dart_impact",
+    "sounds": [
+      "roundabout:ratt_dart_hit"
+    ]
+  },
   "ova_summon": {
     "subtitle": "sounds.roundabout.ova_summon",
     "sounds": [

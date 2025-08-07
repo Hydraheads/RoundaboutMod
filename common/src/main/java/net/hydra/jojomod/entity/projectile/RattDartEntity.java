@@ -7,6 +7,7 @@ import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersRatt;
@@ -119,11 +120,32 @@ public class RattDartEntity extends AbstractArrow {
     }
 
     @Override
+    protected SoundEvent getDefaultHitGroundSoundEvent() {
+        return ModSounds.KNIFE_IMPACT_GROUND_EVENT;
+    }
+    public void applyEffect(LivingEntity $$1) {
+        int stack = 0;
+        if ( ((LivingEntity)$$1).getEffect(ModEffects.MELTING) != null) {
+            stack = ((LivingEntity) $$1).getEffect(ModEffects.MELTING).getAmplifier() + 1;
+        }
+        stack += charged >= PowersRatt.ShotThresholds[1] ? 1 : 0;
+        ((LivingEntity)$$1).addEffect(new MobEffectInstance(ModEffects.MELTING, 900, stack),this);
+    }
+
+    @Override
     protected void onHitEntity(EntityHitResult $$0) {
         Entity $$1 = $$0.getEntity();
         float $$2 = 2.29F;
 
         if ($$1 instanceof LivingEntity $$3) {
+            StandPowers entityPowers = ((StandUser) $$3).roundabout$getStandPowers();
+            if (entityPowers != null ) {
+                if (entityPowers.dealWithProjectile(this, $$0)) {
+                    this.discard();
+                    return;
+                }
+            }
+
             int f = EnchantmentHelper.getEnchantmentLevel(Enchantments.PROJECTILE_PROTECTION, $$3);
             float pow = 0;
             for (int b=PowersRatt.ShotDamageTicks.length-1;b>=0;b--) {
@@ -139,25 +161,22 @@ public class RattDartEntity extends AbstractArrow {
 
         Entity $$4 = this.getOwner();
         DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.MELTING, $$4);
-        SoundEvent $$6 = ModSounds.KNIFE_IMPACT_EVENT;
+        SoundEvent $$6 = ModSounds.RATT_DART_IMPACT_EVENT;
         if ($$1.hurt($$5, $$2)) {
+            Roundabout.LOGGER.info("B: " + $$1.getName().toString());
+
 
             if ($$4 instanceof LivingEntity LE) {
                 LE.setLastHurtMob($$1);
             }
 
-            int stack = 0;
-            if ( ((LivingEntity)$$1).getEffect(ModEffects.MELTING) != null) {
-                stack = ((LivingEntity) $$1).getEffect(ModEffects.MELTING).getAmplifier() + 1;
-            }
-            stack += charged >= PowersRatt.ShotThresholds[1] ? 1 : 0;
-            ((LivingEntity)$$1).addEffect(new MobEffectInstance(ModEffects.MELTING, 900, stack),this);
             if ($$1.getType() == EntityType.ENDERMAN) {
                 return;
             }
 
 
             if ($$1 instanceof LivingEntity $$7) {
+                applyEffect($$7);
                 $$1.setDeltaMovement($$1.getDeltaMovement().multiply(0.4,0.4,0.4));
                 if ($$4 instanceof LivingEntity) {
                     EnchantmentHelper.doPostHurtEffects($$7, $$4);

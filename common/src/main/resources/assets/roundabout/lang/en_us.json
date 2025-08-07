@@ -588,6 +588,7 @@
 
   "sounds.roundabout.ratt_summon":  "Stand Summoned",
   "sounds.roundabout.ratt_scope":  "Scope Whirr",
+  "sounds.roundabout.ratt_dart_impact": "Dart Impact",
 
   "sounds.roundabout.arcade_impale":  "[Arcade Impale]",
   "sounds.roundabout.arcade_long_ts":  "[Stop Time]",
