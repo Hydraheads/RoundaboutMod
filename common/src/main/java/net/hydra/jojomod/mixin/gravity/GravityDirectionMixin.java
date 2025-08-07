@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = Direction.class, priority = 1001)
 public abstract class GravityDirectionMixin {
+    /**Adjusts direction finders with current gravity*/
 
     @ModifyVariable(method = "orderedByNearest", at = @At(value = "STORE"), ordinal = 1
             )
@@ -69,11 +70,6 @@ public abstract class GravityDirectionMixin {
             };
 
         }
-    }
-
-    @Shadow
-    private static Direction[] makeDirectionArray(Direction direction, Direction direction2, Direction direction3) {
-        return null;
     }
 
 }

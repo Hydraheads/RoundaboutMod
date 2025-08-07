@@ -61,6 +61,7 @@
     "effects.bleed.BleedFoodData",
     "effects.hex.HexItem",
     "gravity.GravityDirectionMixin",
+    "gravity.GravityEntity",
     "green_day.ZProjectile",
     "items.AbilityCancelsEnderPearlItem",
     "items.ExecutionerAxeRaid",

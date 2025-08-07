@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
@@ -25,6 +26,7 @@ import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -51,10 +53,6 @@ public class PowersWalkingHeart extends NewDashPreset {
     @Override
     public StandEntity getNewStandEntity(){
         return ModEntities.CINDERELLA.create(this.getSelf().level());
-    }
-    @Override
-    public boolean canSummonStand(){
-        return true;
     }
     @Override
     public StandPowers generateStandPowers(LivingEntity entity){
@@ -110,9 +108,6 @@ public class PowersWalkingHeart extends NewDashPreset {
         ClientUtil.setCinderellaUI();
         hasUIOpen = true;
     }
-    @Override
-    public void tickPowerEnd() {
-    }
 
 
     @Override
@@ -158,7 +153,17 @@ public class PowersWalkingHeart extends NewDashPreset {
 
     @Override
     public boolean tryPower(int move, boolean forced) {
+        switch (move)
+        {
+            case PowerIndex.POWER_2 -> {
+                switchDirections();
+            }
+        }
         return super.tryPower(move,forced);
+    }
+
+    public void switchDirections(){
+        ((IEntityAndData)this.self).roundabout$setGravityDirection(Direction.SOUTH);
     }
 
     public boolean hasUIOpen = false;
@@ -201,16 +206,12 @@ public class PowersWalkingHeart extends NewDashPreset {
 
     @Override
     public void updateUniqueMoves() {
-        if (this.getActivePower() == PowerIndex.POWER_2){
-            updateDeface();
-        }
+
         super.updateUniqueMoves();
     }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
-        if (move == PowerIndex.POWER_2) {
-            return this.deface();
-        }
+
         return super.setPowerOther(move,lastMove);
     }
 
