@@ -54,7 +54,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
     @Override
     public StandEntity getNewStandEntity(){
-        return ModEntities.CINDERELLA.create(this.getSelf().level());
+        return ModEntities.WALKING_HEART.create(this.getSelf().level());
     }
     @Override
     public StandPowers generateStandPowers(LivingEntity entity){

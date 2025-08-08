@@ -291,6 +291,12 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "cinderella").toString())
             );
+    public static final RegistryObject<EntityType<WalkingHeartEntity>> WALKING_HEART =
+            ENTITY_TYPES.register("walking_heart", () ->
+                    EntityType.Builder.of(WalkingHeartEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "walking_heart").toString())
+            );
     public static final RegistryObject<EntityType<JusticePirateEntity>> JUSTICE_PIRATE =
             ENTITY_TYPES.register("justice_pirate", () ->
                     EntityType.Builder.of(JusticePirateEntity::new, MobCategory.MISC).sized(ModEntities.justiceWidth, ModEntities.justiceHeight).

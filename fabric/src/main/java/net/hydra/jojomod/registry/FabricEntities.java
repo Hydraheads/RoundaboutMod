@@ -353,6 +353,13 @@ public class FabricEntities {
                         EntityType.Builder.of(CinderellaEntity::new, MobCategory.MISC).
                                 sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":cinderella")
                 );
+        public static final EntityType<WalkingHeartEntity> WALKING_HEART =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        Roundabout.location("walking_heart"),
+                        EntityType.Builder.of(WalkingHeartEntity::new, MobCategory.MISC).
+                                sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":walking_heart")
+                );
         public static final EntityType<JusticePirateEntity> JUSTICE_PIRATE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -548,6 +555,7 @@ public class FabricEntities {
                 ModEntities.SOFT_AND_WET_KILLER_QUEEN = SOFT_AND_WET_KILLER_QUEEN;
                 ModEntities.KILLER_QUEEN = KILLER_QUEEN;
                 ModEntities.CINDERELLA = CINDERELLA;
+                ModEntities.WALKING_HEART = WALKING_HEART;
                 ModEntities.JUSTICE_PIRATE = JUSTICE_PIRATE;
                 ModEntities.DARK_MIRAGE = DARK_MIRAGE;
                 ModEntities.DIVER_DOWN = DIVER_DOWN;
@@ -655,6 +663,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(JUSTICE_PIRATE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DARK_MIRAGE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(CINDERELLA, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(WALKING_HEART, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DIVER_DOWN, StandEntity.createStandAttributes());
 
 

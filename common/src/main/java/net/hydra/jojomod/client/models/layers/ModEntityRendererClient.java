@@ -17,6 +17,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation MAGICIANS_RED_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "magicians_red"), "main");
     public static final ModelLayerLocation MAGICIANS_RED_OVA_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "magicians_red_ova"), "main");
     public static final ModelLayerLocation D4C_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "d4c"), "main");
+    public static final ModelLayerLocation WALKING_HEART_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "walking_heart"), "main");
     public static final ModelLayerLocation RATT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "ratt"), "main");
     public static final ModelLayerLocation SOFT_AND_WET_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "soft_and_wet"), "main");
     public static final ModelLayerLocation SOFT_AND_WET_KING_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "soft_and_wet_king"), "main");
