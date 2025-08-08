@@ -117,6 +117,12 @@ public class RattShoulderLayer<T extends LivingEntity, A extends HumanoidModel<T
                                     }
                                 }
                                 poseStack.scale(0.3F, 0.3F, 0.3F);
+
+                                if (user instanceof Player P) {
+                                    IPlayerEntity IPE = ((IPlayerEntity) user);
+                                    float y = IPE.roundabout$getIdleYOffset();
+                                    poseStack.translate(0,-y,0);
+                                }
                             }
                             // The first value goes to the right (negative) and left (positive)
                             // The second value is correlated with up (negative) and down (positive)
