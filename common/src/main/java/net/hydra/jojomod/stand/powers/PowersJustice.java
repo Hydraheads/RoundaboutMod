@@ -941,6 +941,7 @@ public class PowersJustice extends NewDashPreset {
             fogChainClient();
             return;
         }
+        ClientUtil.setJusticeBlockScreen();
     }
 
     public void dashOrTacticsScreenClient(){

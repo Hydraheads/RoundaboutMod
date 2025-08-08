@@ -26,6 +26,7 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -150,6 +151,19 @@ public class PowersWalkingHeart extends NewDashPreset {
             return ModSounds.CINDERELLA_VISAGE_CREATION_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
+    }
+
+    @Override
+    public boolean isWip(){
+        return true;
+    }
+    @Override
+    public Component ifWipListDevStatus(){
+        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
+    }
+    @Override
+    public Component ifWipListDev(){
+        return Component.literal(  "Hydra").withStyle(ChatFormatting.YELLOW);
     }
 
     @Override
