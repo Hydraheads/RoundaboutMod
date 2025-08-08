@@ -362,7 +362,7 @@ public class FabricItems {
                         //entries.accept(STAND_DISC_D4C);
                         //entries.accept(MAX_STAND_DISC_D4C);
                         //entries.accept(INTERDIMENSIONAL_KEY);
-                        entries.accept(STAND_DISC_WALKING_HEART);
+                        //entries.accept(STAND_DISC_WALKING_HEART);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_RATT);
