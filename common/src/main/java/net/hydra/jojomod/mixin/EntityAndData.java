@@ -22,6 +22,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -36,6 +37,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -79,8 +81,6 @@ public abstract class EntityAndData implements IEntityAndData {
     @Unique
     public boolean roundabout$renderingExclusiveLayers = false;
 
-
-
     /***
      * Invisiblity functions for Achtung Baby. Note that only Living Entities use tracked/synched entitydata,
      * so regular entities use a function in IEntityAndData instead.
@@ -104,6 +104,14 @@ public abstract class EntityAndData implements IEntityAndData {
             }
         }
     }
+
+
+
+    @Unique
+    public Entity roundabout$castEntity(){
+        return ((Entity)(Object)this);
+    }
+
 
     @Unique
     @Override
@@ -291,6 +299,7 @@ public abstract class EntityAndData implements IEntityAndData {
             return;
         }
     }
+
 
     @Inject(method = "isInvisibleTo", at = @At("HEAD"), cancellable = true)
     public void roundabout$isInvisibleTo(Player pl, CallbackInfoReturnable<Boolean> cir){
@@ -545,6 +554,10 @@ public abstract class EntityAndData implements IEntityAndData {
 
 
     @Shadow public abstract int getId();
+
+    @Shadow @Final protected SynchedEntityData entityData;
+
+    @Shadow public abstract SynchedEntityData getEntityData();
 
     @Override
     @Unique

@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Map;
 
 @Mixin(value = TextureManager.class, priority = 100)
-public abstract class GeckolibCompatAttempt {
+public abstract class GeckolibCompatMixin {
 
     /**This mixin forces the vanilla function on roundabout loaded textures as opposed to geckolib's scuffed function
      * that makes stand fire look glitchy.*/

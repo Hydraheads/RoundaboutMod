@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(AbstractFurnaceBlockEntity.class)
-public abstract class MagiciansRedAbstractFurnaceBlockEntity extends BaseContainerBlockEntity implements
+public abstract class MagiciansRedAbstractFurnaceBlockEntityMixin extends BaseContainerBlockEntity implements
         WorldlyContainer, RecipeHolder, StackedContentsCompatible, IAbstractFurnaceBlockEntity {
 
     /**Allows the possibility of directly setting a furnace as heated, so that Magician's Red
@@ -43,7 +43,7 @@ public abstract class MagiciansRedAbstractFurnaceBlockEntity extends BaseContain
 
     @Shadow protected abstract boolean isLit();
 
-    protected MagiciansRedAbstractFurnaceBlockEntity(BlockEntityType<?> $$0, BlockPos $$1, BlockState $$2) {
+    protected MagiciansRedAbstractFurnaceBlockEntityMixin(BlockEntityType<?> $$0, BlockPos $$1, BlockState $$2) {
         super($$0, $$1, $$2);
     }
 }

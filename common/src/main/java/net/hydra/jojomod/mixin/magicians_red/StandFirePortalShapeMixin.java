@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PortalShape.class)
-public class StandFirePortalShape {
+public class StandFirePortalShapeMixin {
 
     /**When the portal considers stand fire empty space, it is ready to be activated by it
      * */

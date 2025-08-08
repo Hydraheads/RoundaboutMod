@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers;
 
 
+import net.hydra.jojomod.util.RotationAnimation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 

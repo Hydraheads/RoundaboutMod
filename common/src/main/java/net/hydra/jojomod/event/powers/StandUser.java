@@ -4,6 +4,7 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
@@ -253,6 +254,10 @@ public interface StandUser {
     void roundabout$setTrueInvis(int bound);
 
     int roundabout$getTrueInvis();
+
+    /**Gravity Direction*/
+    void roundabout$setGravityD(Direction direction);
+    Direction roundabout$getGravityD();
 
     /**Soft and Wet Bubble Encasing**/
     void roundabout$setBubbleEncased(byte adj);

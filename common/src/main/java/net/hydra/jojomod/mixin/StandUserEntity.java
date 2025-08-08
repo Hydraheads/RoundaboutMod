@@ -31,6 +31,7 @@ import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -304,6 +305,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$COMBAT_MODE = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.BOOLEAN);
+
     @Unique
     private StandPowers roundabout$Powers;
     @Unique
@@ -2792,6 +2794,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         return -1;
     }
+
+
+
+
 
     @Shadow
     protected float getDamageAfterArmorAbsorb(DamageSource $$0, float $$1){

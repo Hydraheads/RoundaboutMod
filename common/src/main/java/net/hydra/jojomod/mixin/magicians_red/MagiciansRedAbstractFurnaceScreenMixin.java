@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AbstractFurnaceScreen.class)
-public abstract class MagiciansRedAbstractFurnaceScreen<T extends AbstractFurnaceMenu> extends AbstractContainerScreen<T> implements RecipeUpdateListener {
+public abstract class MagiciansRedAbstractFurnaceScreenMixin<T extends AbstractFurnaceMenu> extends AbstractContainerScreen<T> implements RecipeUpdateListener {
 
     /**Magician's Red Furnace Assist, this mixin essentially makes the furnace button appear, and allows it to
      * be clicked on to send the message to the server to activate the furnace*/
@@ -89,7 +89,7 @@ public abstract class MagiciansRedAbstractFurnaceScreen<T extends AbstractFurnac
      * */
 
 
-    public MagiciansRedAbstractFurnaceScreen(T $$0, Inventory $$1, Component $$2) {
+    public MagiciansRedAbstractFurnaceScreenMixin(T $$0, Inventory $$1, Component $$2) {
         super($$0, $$1, $$2);
     }
 
