@@ -138,6 +138,7 @@ public class ForgeEvents {
         ModBlocks.CEILING_LIGHT = ForgeBlocks.CEILING_LIGHT.get();
         ModBlocks.MIRROR = ForgeBlocks.MIRROR.get();
         ModBlocks.MINING_ALERT_BLOCK = ForgeBlocks.MINING_ALERT_BLOCK.get();
+        ModBlocks.FLESH_BLOCK = ForgeBlocks.FLESH_BLOCK.get();
         ModBlocks.FOG_DIRT = ForgeBlocks.FOG_DIRT.get();
         ModBlocks.FOG_DIRT_COATING = ForgeBlocks.FOG_DIRT_COATING.get();
         ModBlocks.FOG_CLAY = ForgeBlocks.FOG_CLAY.get();

@@ -72,6 +72,7 @@ public class FabricBlocks {
     public static final Block D4C_LIGHT_BLOCK = registerBlockItemless("d4c_light_block",ModBlocks.D4C_LIGHT_BLOCK_PROPERTIES);
 
     public static final Block STEREO = registerBlock("stereo",ModBlocks.STEREO_PROPERTIES);
+    public static final Block FLESH_BLOCK = registerBlock("flesh_block",ModBlocks.FLESH_BLOCK_PROPERTIES);
     public static final Block MINING_ALERT_BLOCK = registerBlockItemless("mining_alert_block",ModBlocks.MINING_ALERT_BLOCK_PROPERTIES);
     public static final Block STAND_FIRE = registerBlockItemless("stand_fire",ModBlocks.STAND_FIRE_PROPERTIES);
     public static final Block ORANGE_FIRE = registerBlockItemless("colored_fire_orange",ModBlocks.ORANGE_FIRE_PROPERTIES);
@@ -197,6 +198,7 @@ public class FabricBlocks {
         ModBlocks.STEREO = STEREO;
         ModBlocks.MINING_ALERT_BLOCK = MINING_ALERT_BLOCK;
         ModBlocks.BUBBLE_SCAFFOLD = BUBBLE_SCAFFOLD;
+        ModBlocks.FLESH_BLOCK = FLESH_BLOCK;
 
         ModBlocks.INVISIBLOCK = INVISIBLOCK;
         ModBlocks.STAND_FIRE = STAND_FIRE;

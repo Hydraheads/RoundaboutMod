@@ -79,6 +79,8 @@ public class ForgeBlocks {
             ModBlocks::getMirrorBlockProperties);
     public static final RegistryObject<Block> MINING_ALERT_BLOCK = BLOCKS.register("mining_alert_block",
             () -> ModBlocks.MINING_ALERT_BLOCK_PROPERTIES);
+    public static final RegistryObject<Block> FLESH_BLOCK = BLOCKS.register("flesh_block",
+            () -> ModBlocks.FLESH_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> FOG_DIRT = BLOCKS.register("fog_dirt",
             ModBlocks::getFogBlock);
     public static final RegistryObject<Block> FOG_DIRT_COATING = BLOCKS.register("fog_dirt_coating",

@@ -163,7 +163,6 @@ public class RattDartEntity extends AbstractArrow {
         DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.MELTING, $$4);
         SoundEvent $$6 = ModSounds.RATT_DART_IMPACT_EVENT;
         if ($$1.hurt($$5, $$2)) {
-            Roundabout.LOGGER.info("B: " + $$1.getName().toString());
 
 
             if ($$4 instanceof LivingEntity LE) {

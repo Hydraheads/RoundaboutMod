@@ -311,6 +311,8 @@ public class FabricItems {
                         entries.accept(HATO_MASK);
                         entries.accept(SHIZUKA_MASK);
 
+                        entries.accept(ModBlocks.FLESH_BLOCK);
+
 
                     }).build());
 

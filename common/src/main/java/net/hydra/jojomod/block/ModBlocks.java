@@ -26,6 +26,7 @@ public class ModBlocks {
     public static final BooleanProperty DECAY = BooleanProperty.create("decay");
     public static final BooleanProperty IN_FOG = BooleanProperty.create("in_fog");
     public static final IntegerProperty COLOR = IntegerProperty.create("color", 0, 12);
+    public static final IntegerProperty FLESH_LAYER = IntegerProperty.create("layers", 1, 4);
     public static Block ANCIENT_METEOR;
     public static Block METEOR_BLOCK;
     public static Block REGAL_FLOOR;
@@ -61,6 +62,8 @@ public class ModBlocks {
     public static Block MINING_ALERT_BLOCK;
     public static Block BUBBLE_SCAFFOLD;
     public static Block INVISIBLOCK;
+
+    public static Block FLESH_BLOCK;
 
     public static Block STAND_FIRE;
     public static Block ORANGE_FIRE;
@@ -355,6 +358,13 @@ public class ModBlocks {
                         return 15;
                     }).noParticlesOnBreak().
                     instrument(NoteBlockInstrument.BASS).strength(0, 0));
+    public static Block FLESH_BLOCK_PROPERTIES = new FleshBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.PODZOL)
+                    .instrument(NoteBlockInstrument.BANJO)
+                    .strength(5.0F, 6.0F)
+                    .sound(SoundType.HONEY_BLOCK)
+    );
     public static BubbleScaffoldBlock BUBBLE_SCAFFOLD_BLOCK_PROPERTIES = new BubbleScaffoldBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).noCollission().dynamicShape().speedFactor(0.7F).replaceable().instabreak().lightLevel((p_152607_) -> {
                 return 1;
