@@ -321,6 +321,7 @@ public class ForgeEvents {
 
 
         ModParticles.HIT_IMPACT = ForgeParticles.HIT_IMPACT.get();
+        ModParticles.MELTING = ForgeParticles.MELTING.get();
         ModParticles.BLOOD = ForgeParticles.BLOOD.get();
         ModParticles.BLUE_BLOOD = ForgeParticles.BLUE_BLOOD.get();
         ModParticles.ENDER_BLOOD = ForgeParticles.ENDER_BLOOD.get();

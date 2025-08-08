@@ -94,10 +94,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 
 @Mixin(LivingEntity.class)
@@ -540,6 +537,27 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 this.level().addParticle(ModParticles.CINDERELLA_GLOW, this.getRandomX(0.6D), this.getRandomY(), this.getRandomZ(0.6D), 0.0D, 0.0D, 0.0D);
             }
         }
+        if (this.getEffect(ModEffects.MELTING) != null) {
+            int stacks = this.getEffect(ModEffects.MELTING).getAmplifier();
+            int bloodticks = 8;
+            if (stacks == 3) {
+                bloodticks = 6;
+            } else if (stacks > 5) {
+                bloodticks = 4;
+            }
+            if (this.tickCount % bloodticks == 0) {
+                this.level()
+                        .addParticle(
+                                ModParticles.MELTING,
+                                this.getRandomX(0.5),
+                                this.getRandomY(),
+                                this.getRandomZ(0.5),
+                                0,
+                                0,
+                                0
+                        );
+            }
+        }
         if (this.roundabout$getBleedLevel() > -1) {
             if (((IPermaCasting)this.level()).roundabout$inPermaCastFogRange(this)){
                 this.level()
@@ -579,7 +597,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         );
             }
         }
-        if (this.roundabout$getOnlyBleeding()) {
+        if (this.roundabout$getOnlyBleeding() || this.getEffect(ModEffects.MELTING) != null) {
             ci.cancel();
         }
     }
@@ -3966,6 +3984,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Shadow public abstract void kill();
 
     @Shadow public abstract void setHealth(float $$0);
+
+    @Shadow public abstract Collection<MobEffectInstance> getActiveEffects();
 
     @Unique private boolean roundabout$isPRunning = false;
 

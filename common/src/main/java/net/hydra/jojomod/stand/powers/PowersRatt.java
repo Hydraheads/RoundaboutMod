@@ -699,7 +699,7 @@ public class PowersRatt extends NewDashPreset {
     }
 
     @Override
-    public boolean interceptGuard() {return   scopeLevel != 0;}
+    public boolean interceptGuard() {return scopeLevel != 0;}
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
         if (this.getActivePower() == PowerIndex.NONE) {
@@ -754,11 +754,6 @@ public class PowersRatt extends NewDashPreset {
             }
         }
     } */
-
-    // will change soon
-    public byte worthinessType(){
-        return HUMANOID_WORTHY;
-    }
 
 
     @Override

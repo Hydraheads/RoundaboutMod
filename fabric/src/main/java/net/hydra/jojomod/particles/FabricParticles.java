@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class FabricParticles {
     public static final SimpleParticleType HIT_IMPACT = FabricParticleTypes.simple();
+    public static final SimpleParticleType MELTING = FabricParticleTypes.simple();
     public static final SimpleParticleType BLOOD = FabricParticleTypes.simple();
     public static final SimpleParticleType POINTER = FabricParticleTypes.simple();
     public static final SimpleParticleType POINTER_SOFT = FabricParticleTypes.simple();
@@ -53,6 +54,7 @@ public class FabricParticles {
     public static final SimpleParticleType MOLD = FabricParticleTypes.simple();
     public static void registerParticles(){
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("hit_impact"), HIT_IMPACT);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("melting"), MELTING);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("blood"), BLOOD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("pointer"), POINTER);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("pointer_soft"), POINTER_SOFT);
@@ -95,6 +97,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("magic_dust"), MAGIC_DUST);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("brief_magic_dust"), BRIEF_MAGIC_DUST);
 
+        ModParticles.MELTING = MELTING;
         ModParticles.BLOOD = BLOOD;
         ModParticles.BLUE_BLOOD = BLUE_BLOOD;
         ModParticles.ENDER_BLOOD = ENDER_BLOOD;

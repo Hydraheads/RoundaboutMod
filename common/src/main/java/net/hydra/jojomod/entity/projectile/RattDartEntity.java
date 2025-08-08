@@ -121,7 +121,7 @@ public class RattDartEntity extends AbstractArrow {
 
     @Override
     protected SoundEvent getDefaultHitGroundSoundEvent() {
-        return ModSounds.KNIFE_IMPACT_GROUND_EVENT;
+        return ModSounds.RATT_DART_THUNK_EVENT;
     }
     public void applyEffect(LivingEntity $$1) {
         int stack = 0;
