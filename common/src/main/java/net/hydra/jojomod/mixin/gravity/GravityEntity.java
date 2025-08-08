@@ -19,9 +19,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
@@ -46,7 +44,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 
-import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import org.apache.commons.lang3.Validate;
@@ -623,22 +620,82 @@ public abstract class GravityEntity implements IGravityEntity {
         }
     }
 
-    @ModifyVariable(
+    @Inject(
             method = "updateFluidHeightAndDoFluidPushing(Lnet/minecraft/tags/TagKey;D)Z",
             at = @At(
-                    value = "INVOKE_ASSIGN",
-                    target = "Lnet/minecraft/world/entity/Entity;getDeltaMovement()Lnet/minecraft/world/phys/Vec3;",
-                    ordinal = 0
-            ),
-            ordinal = 1
+                    value = "HEAD"
+            ), cancellable = true
     )
-    private Vec3 roundabout$modify_updateMovementInFluid_Vec3d_0(Vec3 vec3d) {
+    private void roundabout$modify_updateMovementInFluid_Vec3d_0(TagKey<Fluid> $$0, double $$1, CallbackInfoReturnable<Boolean> cir) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN) {
-            return vec3d;
+            return;
         }
 
-        return RotationUtil.vecPlayerToWorld(vec3d, gravityDirection);
+        if (this.touchingUnloadedChunk()) {
+            cir.setReturnValue(false);
+        } else {
+            AABB $$2 = this.getBoundingBox().deflate(0.001);
+            int $$3 = Mth.floor($$2.minX);
+            int $$4 = Mth.ceil($$2.maxX);
+            int $$5 = Mth.floor($$2.minY);
+            int $$6 = Mth.ceil($$2.maxY);
+            int $$7 = Mth.floor($$2.minZ);
+            int $$8 = Mth.ceil($$2.maxZ);
+            double $$9 = 0.0;
+            boolean $$10 = this.isPushedByFluid();
+            boolean $$11 = false;
+            Vec3 $$12 = Vec3.ZERO;
+            int $$13 = 0;
+            BlockPos.MutableBlockPos $$14 = new BlockPos.MutableBlockPos();
+
+            for (int $$15 = $$3; $$15 < $$4; $$15++) {
+                for (int $$16 = $$5; $$16 < $$6; $$16++) {
+                    for (int $$17 = $$7; $$17 < $$8; $$17++) {
+                        $$14.set($$15, $$16, $$17);
+                        FluidState $$18 = this.level().getFluidState($$14);
+                        if ($$18.is($$0)) {
+                            double $$19 = (double)((float)$$16 + $$18.getHeight(this.level(), $$14));
+                            if ($$19 >= $$2.minY) {
+                                $$11 = true;
+                                $$9 = Math.max($$19 - $$2.minY, $$9);
+                                if ($$10) {
+                                    Vec3 $$20 = $$18.getFlow(this.level(), $$14);
+                                    if ($$9 < 0.4) {
+                                        $$20 = $$20.scale($$9);
+                                    }
+
+                                    $$12 = $$12.add($$20);
+                                    $$13++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if ($$12.length() > 0.0) {
+                if ($$13 > 0) {
+                    $$12 = $$12.scale(1.0 / (double)$$13);
+                }
+
+                if (!(((LivingEntity)(Object)this) instanceof Player)) {
+                    $$12 = $$12.normalize();
+                }
+
+                Vec3 $$21 = RotationUtil.vecPlayerToWorld(this.getDeltaMovement(), gravityDirection);;
+                $$12 = $$12.scale($$1 * 1.0);
+                double $$22 = 0.003;
+                if (Math.abs($$21.x) < 0.003 && Math.abs($$21.z) < 0.003 && $$12.length() < 0.0045000000000000005) {
+                    $$12 = $$12.normalize().scale(0.0045000000000000005);
+                }
+
+                this.setDeltaMovement(this.getDeltaMovement().add($$12));
+            }
+
+            this.fluidHeight.put($$0, $$9);
+            cir.setReturnValue($$11);
+        }
     }
 
     @Inject(
