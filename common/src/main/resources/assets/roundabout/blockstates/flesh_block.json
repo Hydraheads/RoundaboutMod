@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "layers=1": {
+      "model": "roundabout:block/flesh_block_height_1"
+    },
+    "layers=2": {
+      "model": "roundabout:block/flesh_block_height_2"
+    },
+    "layers=3": {
+      "model": "roundabout:block/flesh_block_height_3"
+    },
+    "layers=4": {
+      "model": "roundabout:block/flesh_block_height_4"
+    }
+  }
+}

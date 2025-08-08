@@ -4046,7 +4046,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     }
     @Inject(method = "dropCustomDeathLoot", at = @At(value = "TAIL"), cancellable = true)
-    public void DropHeads(DamageSource $$0, int $$1, boolean $$2,CallbackInfo info){
+    public void DropExtra(DamageSource $$0, int $$1, boolean $$2,CallbackInfo info){
         Entity cause = $$0.getEntity();
         DamageType type = $$0.type();
         DamageSource uh = ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION);
@@ -4075,6 +4075,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 spawnAtLocation(new ItemStack(Items.PIGLIN_HEAD));
             }
 
+        }
+
+        MobEffectInstance melting = this.getEffect(ModEffects.MELTING);
+        if (melting != null) {
+            spawnAtLocation(new ItemStack(ModBlocks.FLESH_BLOCK,Mth.clamp(melting.getAmplifier()+1,1,4)+(int)(Math.random()*1+0.5) ));
         }
 
     }
