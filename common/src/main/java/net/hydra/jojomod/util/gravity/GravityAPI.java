@@ -18,5 +18,12 @@ public class GravityAPI {
 
         return ((IGravityEntity)entity).roundabout$getGravityDirection();
     }
+    public static double getGravityStrength(Entity entity) {
+        if (entity == null) {
+            return 1;
+        }
+
+        return ((IGravityEntity)entity).roundabout$getGravityStrength();
+    }
 
 }

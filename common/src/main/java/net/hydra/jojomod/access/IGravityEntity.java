@@ -8,4 +8,7 @@ public interface IGravityEntity {
     Direction roundabout$getGravityDirection();
     void roundabout$setGravityDirection(Direction direction);
 
+    double roundabout$getGravityStrength();
+    void roundabout$setGravityStrength(double str);
+
 }

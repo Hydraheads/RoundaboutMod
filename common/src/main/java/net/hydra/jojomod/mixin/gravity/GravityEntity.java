@@ -2,7 +2,11 @@ package net.hydra.jojomod.mixin.gravity;
 
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import net.hydra.jojomod.access.IClientEntity;
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.util.GEntityTags;
+import net.hydra.jojomod.util.RotationAnimation;
+import net.hydra.jojomod.util.RotationParameters;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
@@ -41,15 +45,34 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import javax.annotation.Nullable;
+
+import net.minecraft.world.entity.AreaEffectCloud;
+import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import org.apache.commons.lang3.Validate;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
+
 import java.util.List;
 
 @Mixin(Entity.class)
 public abstract class GravityEntity implements IGravityEntity {
+    // NEW FEATURES
 
-    @Shadow public abstract SynchedEntityData getEntityData();
+    @Shadow public abstract void setPos(Vec3 vec3);
 
-    @Shadow @Final protected SynchedEntityData entityData;
+    @Shadow public double zOld;
+    @Shadow public double yOld;
+    @Shadow public double xOld;
+
+    @Shadow protected abstract AABB makeBoundingBox();
+
+    @Shadow public abstract void setBoundingBox(AABB aABB);
+
+    @Shadow public int tickCount;
+
+    @Shadow @Nullable public abstract Entity getVehicle();
 
     /***
      * Gravity Direction for Entities. Note that only Living Entities use tracked/synched entitydata,
@@ -82,27 +105,300 @@ public abstract class GravityEntity implements IGravityEntity {
         }
     }
 
-    @Shadow public abstract float maxUpStep();
 
-    @Shadow private boolean onGround;
-    @Shadow private float maxUpStep;
+    @Unique
+    private boolean roundabout$initialized = false;
 
-    @Shadow
-    public static Vec3 collideBoundingBox(@org.jetbrains.annotations.Nullable Entity entity, Vec3 vec3, AABB aABB, Level level, List<VoxelShape> list) {
-        return null;
+    // not synchronized
+    @Unique
+    private Direction roundabout$prevGravityDirection = Direction.DOWN;
+    @Unique
+    private double roundabout$prevGravityStrength = 1.0;
+
+
+    @Unique
+    @Override
+    public double roundabout$getGravityStrength(){
+        return roundabout$currGravityStrength;
     }
 
-    @Shadow public abstract Level level();
+    @Unique
+    @Override
+    public void roundabout$setGravityStrength(double str){
+        roundabout$currGravityStrength = str;
+    }
 
-    @Shadow public abstract boolean touchingUnloadedChunk();
+    // the base gravity direction
+    @Unique
+    Direction roundabout$baseGravityDirection = Direction.DOWN;
 
-    @Shadow public abstract boolean isPushedByFluid();
+    // the base gravity strength
+    @Unique
+    private static double roundabout$baseGravityStrength = 1.0;
 
-    @Shadow protected Object2DoubleMap<TagKey<Fluid>> fluidHeight;
+    @Nullable RotationParameters roundabout$currentRotationParameters = RotationParameters.getDefault();
 
-    @Shadow public abstract void setDeltaMovement(Vec3 vec3);
 
-    @Shadow protected abstract boolean isFree(AABB aABB);
+    @Unique
+    private double roundabout$currGravityStrength = 1.0;
+    @Unique
+    private double roundabout$currentEffectPriority = Double.MIN_VALUE;
+
+    // if it equals entity.tickCount,
+    // it means that the gravity update event has already fired in this tick
+    @Unique
+    private long roundabout$lastUpdateTickCount = 0;
+
+    @Inject(
+            method = "tick",
+            at = @At("TAIL"))
+    private void roundabout$tick(CallbackInfo ci) {
+        if (!roundabout$canChangeGravity()) {
+            return;
+        }
+        roundabout$updateGravityStatus();
+        roundabout$applyGravityChange();
+    }
+    @Unique
+    public void roundabout$applyGravityChange() {
+
+
+        if (!roundabout$canChangeGravity()) {
+            return;
+        }
+
+        if (roundabout$currentRotationParameters == null) {
+            roundabout$currentRotationParameters = RotationParameters.getDefault();
+        }
+
+        if (roundabout$prevGravityDirection != roundabout$getGravityDirection()) {
+            roundabout$applyGravityDirectionChange(
+                    roundabout$prevGravityDirection, roundabout$getGravityDirection(),
+                    roundabout$currentRotationParameters, false
+            );
+            roundabout$prevGravityDirection = roundabout$getGravityDirection();
+        }
+
+        if (Math.abs(roundabout$currGravityStrength - roundabout$prevGravityStrength) > 0.0001) {
+            roundabout$prevGravityStrength = roundabout$currGravityStrength;
+        }
+    }
+
+    @Unique
+    private boolean roundabout$canChangeGravity() {
+        return GEntityTags.canChangeGravity((Entity)(Object)this);
+    }
+
+    @Unique
+    public void roundabout$applyGravityDirectionChange(
+            Direction oldGravity, Direction newGravity,
+            RotationParameters rotationParameters, boolean isInitialization
+    ) {
+
+        // update bounding box
+        setBoundingBox(makeBoundingBox());
+
+        // A weird thing is that,
+        // using `entity.setPos(entity.position())` to a painting on client side
+        // make the painting move wrongly, because Painting overrides `trackingPosition()`.
+        // No entity other than Painting overrides that method.
+        // It seems to be legacy code from early versions of Minecraft.
+
+        if (isInitialization) {
+            return;
+        }
+
+        fallDistance = 0;
+
+        long timeMs = level().getGameTime() * 50;
+
+        Vec3 relativeRotationCenter = roundabout$getLocalRotationCenter(
+                ((Entity)(Object)this), oldGravity, newGravity, rotationParameters
+        );
+        Vec3 oldPos = position();
+        Vec3 oldLastTickPos = new Vec3(xOld, yOld, zOld);
+        Vec3 rotationCenter = oldPos.add(RotationUtil.vecPlayerToWorld(relativeRotationCenter, oldGravity));
+        Vec3 newPos = rotationCenter.subtract(RotationUtil.vecPlayerToWorld(relativeRotationCenter, newGravity));
+        Vec3 posTranslation = newPos.subtract(oldPos);
+        Vec3 newLastTickPos = oldLastTickPos.add(posTranslation);
+
+        this.setPos(newPos);
+        this.xo = newLastTickPos.x;
+        this.yo = newLastTickPos.y;
+        this.zo = newLastTickPos.z;
+        this.xOld = newLastTickPos.x;
+        this.yOld = newLastTickPos.y;
+        this.zOld = newLastTickPos.z;
+
+        roundabout$adjustEntityPosition(oldGravity, newGravity, getBoundingBox());
+
+        if (level().isClientSide()) {
+            RotationAnimation ani = ((IClientEntity)this).roundabout$getGravityAnimation();
+            Validate.notNull(ani, "gravity animation is null");
+
+            int rotationTimeMS = rotationParameters.rotationTimeMS();
+
+            ani.startRotationAnimation(
+                    newGravity, oldGravity,
+                    rotationTimeMS,
+                    ((Entity)(Object)this), timeMs, rotationParameters.rotateView(),
+                    relativeRotationCenter
+            );
+        }
+
+        Vec3 realWorldVelocity = roundabout$getRealWorldVelocity(((Entity)(Object)this), oldGravity);
+        if (rotationParameters.rotateVelocity()) {
+            // Rotate velocity with gravity, this will cause things to appear to take a sharp turn
+            Vector3f worldSpaceVec = realWorldVelocity.toVector3f();
+            worldSpaceVec.rotate(RotationUtil.getRotationBetween(oldGravity, newGravity));
+            setDeltaMovement(RotationUtil.vecWorldToPlayer(new Vec3(worldSpaceVec), newGravity));
+        }
+        else {
+            // Velocity will be conserved relative to the world, will result in more natural motion
+            setDeltaMovement(RotationUtil.vecWorldToPlayer(realWorldVelocity, newGravity));
+        }
+    }
+
+    // Adjust position to avoid suffocation in blocks when changing gravity
+    @Unique
+    private void roundabout$adjustEntityPosition(Direction oldGravity, Direction newGravity, AABB entityBoundingBox) {
+        Entity ent = ((Entity)(Object)this);
+        if (ent instanceof AreaEffectCloud || ent instanceof AbstractArrow || ent instanceof EndCrystal) {
+            return;
+        }
+
+        // for example, if gravity changed from down to north, move up
+        // if gravity changed from down to up, also move up
+        Direction movingDirection = oldGravity.getOpposite();
+
+        Iterable<VoxelShape> collisions = ent.level().getCollisions(
+                ent,
+                entityBoundingBox.inflate(-0.01) // shrink to avoid floating point error
+        );
+        AABB totalCollisionBox = null;
+        for (VoxelShape collision : collisions) {
+            if (!collision.isEmpty()) {
+                AABB boundingBox = collision.bounds();
+                if (totalCollisionBox == null) {
+                    totalCollisionBox = boundingBox;
+                }
+                else {
+                    totalCollisionBox = totalCollisionBox.minmax(boundingBox);
+                }
+            }
+        }
+
+        if (totalCollisionBox != null) {
+            Vec3 positionAdjustmentOffset = roundabout$getPositionAdjustmentOffset(
+                    entityBoundingBox, totalCollisionBox, movingDirection
+            );
+            ent.setPos(ent.position().add(positionAdjustmentOffset));
+        }
+    }
+    @Unique
+    private static Vec3 roundabout$getPositionAdjustmentOffset(
+            AABB entityBoundingBox, AABB nearbyCollisionUnion, Direction movingDirection
+    ) {
+        Direction.Axis axis = movingDirection.getAxis();
+        double offset = 0;
+        if (movingDirection.getAxisDirection() == Direction.AxisDirection.POSITIVE) {
+            double pushing = nearbyCollisionUnion.max(axis);
+            double pushed = entityBoundingBox.min(axis);
+            if (pushing > pushed) {
+                offset = pushing - pushed;
+            }
+        }
+        else {
+            double pushing = nearbyCollisionUnion.min(axis);
+            double pushed = entityBoundingBox.max(axis);
+            if (pushing < pushed) {
+                offset = pushed - pushing;
+            }
+        }
+
+        return new Vec3(movingDirection.step()).scale(offset);
+    }
+
+    @Unique
+    @NotNull
+    private static Vec3 roundabout$getLocalRotationCenter(
+            Entity entity,
+            Direction oldGravity, Direction newGravity, RotationParameters rotationParameters
+    ) {
+        if (entity instanceof EndCrystal) {
+            //In the middle of the block below
+            return new Vec3(0, -0.5, 0);
+        }
+
+        EntityDimensions dimensions = entity.getDimensions(entity.getPose());
+        if (newGravity.getOpposite() == oldGravity) {
+            // In the center of the hit-box
+            return new Vec3(0, dimensions.height / 2, 0);
+        }
+        else {
+            return Vec3.ZERO;
+        }
+    }
+
+    // getVelocity() does not return the actual velocity. It returns the velocity plus acceleration.
+    // Even if the entity is standing still, getVelocity() will still give a downwards vector.
+    // The real velocity is this tick position subtract last tick position
+    @Unique
+    private static Vec3 roundabout$getRealWorldVelocity(Entity entity, Direction prevGravityDirection) {
+        if (entity.isControlledByLocalInstance()) {
+            return new Vec3(
+                    entity.getX() - entity.xo,
+                    entity.getY() - entity.yo,
+                    entity.getZ() - entity.zo
+            );
+        }
+
+        return RotationUtil.vecPlayerToWorld(entity.getDeltaMovement(), prevGravityDirection);
+    }
+
+    @Unique
+    public void roundabout$updateGravityStatus() {
+
+        Direction oldGravityDirection = roundabout$getGravityDirection();
+        double oldGravityStrength = roundabout$currGravityStrength;
+
+        Entity vehicle = getVehicle();
+        if (vehicle != null) {
+            roundabout$setGravityDirection(GravityAPI.getGravityDirection(vehicle));
+            roundabout$currGravityStrength = GravityAPI.getGravityStrength(vehicle);
+        }
+        else {
+            if (roundabout$isReadyToResetGravity()){
+                roundabout$setGravityDirection(roundabout$baseGravityDirection);
+                roundabout$currGravityStrength = roundabout$baseGravityStrength;
+
+
+                if (roundabout$currentEffectPriority == Double.MIN_VALUE) {
+                    // if no effect is applied, reset the rotation parameters
+                    roundabout$currentRotationParameters = RotationParameters.getDefault();
+                }
+            }
+
+            roundabout$lastUpdateTickCount = tickCount;
+        }
+    }
+
+
+    @Unique
+    public boolean roundabout$isReadyToResetGravity(){
+        return false;
+    }
+
+
+
+
+    // THE GENERAL MIXIN STUFF
+
+
+
+
+
+
 
     @SuppressWarnings("ConstantValue")
     @Inject(
@@ -775,4 +1071,30 @@ public abstract class GravityEntity implements IGravityEntity {
 
     @Shadow
     public float fallDistance;
+
+    @Shadow public abstract SynchedEntityData getEntityData();
+
+    @Shadow @Final protected SynchedEntityData entityData;
+
+    @Shadow public abstract float maxUpStep();
+
+    @Shadow private boolean onGround;
+    @Shadow private float maxUpStep;
+
+    @Shadow
+    public static Vec3 collideBoundingBox(@org.jetbrains.annotations.Nullable Entity entity, Vec3 vec3, AABB aABB, Level level, List<VoxelShape> list) {
+        return null;
+    }
+
+    @Shadow public abstract Level level();
+
+    @Shadow public abstract boolean touchingUnloadedChunk();
+
+    @Shadow public abstract boolean isPushedByFluid();
+
+    @Shadow protected Object2DoubleMap<TagKey<Fluid>> fluidHeight;
+
+    @Shadow public abstract void setDeltaMovement(Vec3 vec3);
+
+    @Shadow protected abstract boolean isFree(AABB aABB);
 }
