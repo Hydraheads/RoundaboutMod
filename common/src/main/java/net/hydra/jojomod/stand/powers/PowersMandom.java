@@ -547,7 +547,7 @@ public class PowersMandom extends NewDashPreset {
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.watch_switch",
-                "instruction.roundabout.press_skill_crouch", StandIcons.WATCH,4,level,bypass));
+                "instruction.roundabout.press_skill_crouch", StandIcons.WATCH,3,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.clock",
                 "instruction.roundabout.passive", StandIcons.CLOCK,4,level,bypass));
         return $$1;
