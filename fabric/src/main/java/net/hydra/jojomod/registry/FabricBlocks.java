@@ -4,11 +4,13 @@ import com.mojang.datafixers.types.Type;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.*;
+import net.hydra.jojomod.item.ModFoodComponents;
 import net.minecraft.Util;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.datafix.fixes.References;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -72,7 +74,7 @@ public class FabricBlocks {
     public static final Block D4C_LIGHT_BLOCK = registerBlockItemless("d4c_light_block",ModBlocks.D4C_LIGHT_BLOCK_PROPERTIES);
 
     public static final Block STEREO = registerBlock("stereo",ModBlocks.STEREO_PROPERTIES);
-    public static final Block FLESH_BLOCK = registerBlock("flesh_block",ModBlocks.FLESH_BLOCK_PROPERTIES);
+    public static final Block FLESH_BLOCK = registerBlockFood("flesh_block",ModBlocks.FLESH_BLOCK_PROPERTIES, ModFoodComponents.FLESH_CHUNK);
     public static final Block MINING_ALERT_BLOCK = registerBlockItemless("mining_alert_block",ModBlocks.MINING_ALERT_BLOCK_PROPERTIES);
     public static final Block STAND_FIRE = registerBlockItemless("stand_fire",ModBlocks.STAND_FIRE_PROPERTIES);
     public static final Block ORANGE_FIRE = registerBlockItemless("colored_fire_orange",ModBlocks.ORANGE_FIRE_PROPERTIES);
@@ -152,6 +154,11 @@ public class FabricBlocks {
         registerBlockItem(name, block);
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
     }
+    private static Block registerBlockFood(String name, Block block, FoodProperties food) {
+        registerBlockFoodItem(name, block,food);
+        return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
+
+    }
     private static Block registerBlockUnstackable(String name, Block block, int stacksize) {
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, name),
                 new BlockItem(block, new Item.Properties().stacksTo(stacksize)));
@@ -159,6 +166,11 @@ public class FabricBlocks {
     }
     private static Block registerBlockUnstackableItemless(String name, Block block, int stacksize) {
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
+    }
+
+    private static Item registerBlockFoodItem(String name, Block block, FoodProperties food) {
+        return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, name),
+                new BlockItem(block, new Item.Properties().food(food)));
     }
 
     private static Item registerBlockItem(String name, Block block){

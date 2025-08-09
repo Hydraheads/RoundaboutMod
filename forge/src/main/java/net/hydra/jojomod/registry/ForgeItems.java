@@ -490,6 +490,10 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisageZombie(null)));
     public static final RegistryObject<Item> INTERDIMENSIONAL_KEY = ITEMS.register("interdimensional_key",
             () -> new InterdimensionalKeyItem(new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<BlockItem> FLESH_BLOCK = addToTab(ITEMS.register("flesh_block",
+            () -> new BlockItem(ForgeBlocks.FLESH_BLOCK.get(),
+                    new Item.Properties().food(ModFoodComponents.FLESH_CHUNK)
+            )));
 
     public static void assignStupidForge(){
         DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), DispenserRegistry.KNIFE);
