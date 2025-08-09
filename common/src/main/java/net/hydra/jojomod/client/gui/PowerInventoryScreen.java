@@ -524,7 +524,7 @@ public class PowerInventoryScreen
                         initialX = ((float) 2 / 118) * initialX;
                         if (initialX != ipe.roundabout$getDistanceOut()) {
                             ipe.roundabout$setDistanceOut(initialX);
-                            C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_DISTANCE_OUT,i);
+                            C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_DISTANCE_OUT,initialX);
                         }
                         return true;
                     }
