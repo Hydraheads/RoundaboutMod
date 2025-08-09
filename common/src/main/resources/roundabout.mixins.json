@@ -64,6 +64,7 @@
     "gravity.GravityEntity",
     "gravity.GravityEntityCollisionContextMixin",
     "gravity.GravityLivingEntityMixin",
+    "gravity.GravityPlayerMixin",
     "gravity.client.GravityClientEntityMixin",
     "green_day.ZProjectile",
     "items.AbilityCancelsEnderPearlItem",

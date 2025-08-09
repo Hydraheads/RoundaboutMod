@@ -339,6 +339,7 @@ public abstract class GravityLivingEntityMixin extends Entity {
     @Unique
     public Entity roundabout$augmentSource = null;
 
+
     @Inject(
             method = "hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z",
             at = @At(
