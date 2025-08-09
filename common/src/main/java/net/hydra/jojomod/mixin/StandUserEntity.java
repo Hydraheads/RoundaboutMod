@@ -98,7 +98,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.*;
 import java.util.function.Predicate;
 
-@Mixin(LivingEntity.class)
+@Mixin(value = LivingEntity.class, priority = 103)
 public abstract class StandUserEntity extends Entity implements StandUser {
     @Shadow public abstract ItemStack getItemInHand(InteractionHand $$0);
 
