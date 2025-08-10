@@ -482,6 +482,15 @@ public abstract class GravityEntity implements IGravityEntity {
         cir.setReturnValue(this.level.hasChunkAt(this.getBlockX(), this.getBlockZ()) ? this.level.getLightLevelDependentMagicValue(BlockPos.containing(this.getEyePosition())) : 0.0F);
     }
 
+
+    @Unique
+    private static boolean rdbdt$taggedForFlip;
+    @Unique
+    @Override
+    public void rdbdt$setTaggedForFlip(boolean flip){
+        rdbdt$taggedForFlip = flip;
+    }
+
     // transform move vector from local to world (the velocity is local)
     @ModifyVariable(
             method = "move(Lnet/minecraft/world/entity/MoverType;Lnet/minecraft/world/phys/Vec3;)V",
@@ -490,7 +499,13 @@ public abstract class GravityEntity implements IGravityEntity {
             argsOnly = true
     )
     private Vec3 roundabout$modify_move_Vec3d_0_0(Vec3 vec3d) {
+
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
+        if (rdbdt$taggedForFlip){
+            rdbdt$taggedForFlip = false;
+            vec3d = RotationUtil.vecWorldToPlayer(vec3d, gravityDirection);
+        }
+
         if (gravityDirection == Direction.DOWN) {
             return vec3d;
         }
