@@ -1,5 +1,6 @@
 package net.hydra.jojomod.util.gravity;
 
+import net.hydra.jojomod.access.IClientEntity;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.util.RotationAnimation;
@@ -32,6 +33,10 @@ public class GravityAPI {
      */
     public static void setWorldVelocity(Entity entity, Vec3 worldVelocity) {
         entity.setDeltaMovement(RotationUtil.vecWorldToPlayer(worldVelocity, getGravityDirection(entity)));
+    }
+
+    public static RotationAnimation getRotationAnimation(Entity entity) {
+        return ((IClientEntity)entity).roundabout$getGravityAnimation();
     }
 
 }

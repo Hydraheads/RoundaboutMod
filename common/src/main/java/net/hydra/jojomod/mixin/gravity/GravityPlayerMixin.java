@@ -238,8 +238,7 @@ public abstract class GravityPlayerMixin extends LivingEntity {
     @Inject(
             method = "isAboveGround",
             at = @At(
-                    value = "HEAD",
-                    target = "Lnet/minecraft/world/phys/AABB;move(DDD)Lnet/minecraft/world/phys/AABB;"
+                    value = "HEAD"
             ),
             cancellable = true
     )
@@ -248,9 +247,10 @@ public abstract class GravityPlayerMixin extends LivingEntity {
         if (gravityDirection == Direction.DOWN)
             return;
         Vec3 world = RotationUtil.vecPlayerToWorld(0.0, (double)(this.fallDistance - this.maxUpStep()), 0.0, gravityDirection);
+
         cir.setReturnValue(this.onGround()
                 || this.fallDistance < this.maxUpStep()
-                && !this.level().noCollision(this, this.getBoundingBox().move(world.x,world.y,world.z)));
+                && !this.level().noCollision(this, this.getBoundingBox().move(world.x, world.y, world.z)));
     }
 
     @Unique
