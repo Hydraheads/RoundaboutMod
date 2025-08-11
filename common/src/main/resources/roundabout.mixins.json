@@ -67,6 +67,7 @@
     "gravity.GravityPlayerMixin",
     "gravity.GravityServerGamePacketListenerImplMixin",
     "gravity.client.GravityClientEntityMixin",
+    "gravity.fall_distance.GravityServerPlayerFall",
     "green_day.ZProjectile",
     "items.AbilityCancelsEnderPearlItem",
     "items.ExecutionerAxeRaid",
