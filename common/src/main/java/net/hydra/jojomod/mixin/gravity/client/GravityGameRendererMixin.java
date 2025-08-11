@@ -26,7 +26,7 @@ public abstract class GravityGameRendererMixin {
     private Camera mainCamera;
 
     @Inject(
-            method = "Lnet/minecraft/client/renderer/GameRenderer;renderLevel(FJLcom/mojang/blaze3d/vertex/PoseStack;)V",
+            method = "renderLevel(FJLcom/mojang/blaze3d/vertex/PoseStack;)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionf;)V",
