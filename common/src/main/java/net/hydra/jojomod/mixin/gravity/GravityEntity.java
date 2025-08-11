@@ -418,6 +418,22 @@ public abstract class GravityEntity implements IGravityEntity {
         }
         cir.setReturnValue(RotationUtil.boxPlayerToWorld(box, gravityDirection).move(this.position));
     }
+    @Inject(
+            method = "getBoundingBoxForPose(Lnet/minecraft/world/entity/Pose;)Lnet/minecraft/world/phys/AABB;",
+            at = @At("RETURN"),
+            cancellable = true
+    )
+    private void roundabout$inject_calculateBoundsForPose(Pose pos, CallbackInfoReturnable<AABB> cir) {
+        Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
+        if (gravityDirection == Direction.DOWN) return;
+
+        AABB box = cir.getReturnValue().move(this.position.reverse());
+        box = box.inflate(-0.01); // avoid entering crouching because of floating point inaccuracy
+//        if (gravityDirection.getAxisDirection() == Direction.AxisDirection.POSITIVE) {
+//
+//        }
+        cir.setReturnValue(RotationUtil.boxPlayerToWorld(box, gravityDirection).move(this.position));
+    }
 
     @Inject(
             method = "calculateViewVector(FF)Lnet/minecraft/world/phys/Vec3;",
@@ -566,37 +582,54 @@ public abstract class GravityEntity implements IGravityEntity {
         cir.setReturnValue(blockPos);
     }
 
-    // transform the argument to local coordinate
-    @ModifyVariable(
-            method = "collide",
-            at = @At(
-                    value = "INVOKE_ASSIGN",
-                    target = "Lnet/minecraft/world/level/Level;getEntityCollisions(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/AABB;)Ljava/util/List;",
-                    ordinal = 0
-            ),
-            ordinal = 0
-    )
-    private Vec3 roundabout$modify_adjustMovementForCollisions_Vec3d_0(Vec3 vec3d) {
-        Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
-        if (gravityDirection == Direction.DOWN) {
-            return vec3d;
-        }
 
-        return RotationUtil.vecWorldToPlayer(vec3d, gravityDirection);
-    }
 
-    // transform the result to world coordinate
-    // the input to Entity.collideBoundingBox will be in local coord
+    // the argument was transformed to local coord,
+    // but bounding box stretch needs world coord
+    // the argument was transformed to local coord,
+    // but bounding box move needs world coord
     @Inject(
-            method = "collide(Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;",
-            at = @At("RETURN"),
+            method = "collide",
+            at = @At("HEAD"),
             cancellable = true
     )
-    private void roundabout$inject_adjustMovementForCollisions(CallbackInfoReturnable<Vec3> cir) {
+    private void roundabout$collide(Vec3 $$0,CallbackInfoReturnable<Vec3> cir) {
+
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN) return;
 
-        cir.setReturnValue(RotationUtil.vecPlayerToWorld(cir.getReturnValue(), gravityDirection));
+        Entity getThis = ((Entity) (Object)this);
+        AABB $$1 = this.getBoundingBox();
+        List<VoxelShape> $$2 = this.level().getEntityCollisions(getThis, $$1.expandTowards(
+                RotationUtil.vecWorldToPlayer($$0,gravityDirection)
+        ));
+        Vec3 $$3 = $$0.lengthSqr() == 0.0 ? $$0 : collideBoundingBox(getThis, $$0, $$1, this.level(), $$2);
+        boolean $$4 = $$0.x != $$3.x;
+        boolean $$5 = $$0.y != $$3.y;
+        boolean $$6 = $$0.z != $$3.z;
+        boolean $$7 = this.onGround || $$5 && $$0.y < 0.0;
+        if (this.maxUpStep() > 0.0F && $$7 && ($$4 || $$6)) {
+            Vec3 $$8 = collideBoundingBox(getThis, new Vec3($$0.x, (double)this.maxUpStep(), $$0.z), $$1, this.level(), $$2);
+            Vec3 yeah = RotationUtil.vecPlayerToWorld(new Vec3($$0.x, 0.0, $$0.z), GravityAPI.getGravityDirection((Entity) (Object) this));
+            Vec3 $$9 = collideBoundingBox(getThis, new Vec3(0.0, (double)this.maxUpStep(), 0.0), $$1.expandTowards(yeah.x,yeah.y,yeah.z), this.level(), $$2);
+            if ($$9.y < (double)this.maxUpStep) {
+                Vec3 $$10 = collideBoundingBox(getThis, new Vec3($$0.x, 0.0, $$0.z), $$1.move(RotationUtil.vecPlayerToWorld($$9, GravityAPI.getGravityDirection((Entity) (Object) this))), this.level(), $$2).add($$9);
+                if ($$10.horizontalDistanceSqr() > $$8.horizontalDistanceSqr()) {
+                    $$8 = $$10;
+                }
+            }
+
+            if ($$8.horizontalDistanceSqr() > $$3.horizontalDistanceSqr()) {
+
+                cir.setReturnValue($$8.add(collideBoundingBox(getThis, new Vec3(0.0, -$$8.y + $$0.y, 0.0), $$1.move(RotationUtil.vecPlayerToWorld($$8, GravityAPI.getGravityDirection((Entity) (Object) this))), this.level(), $$2)));
+                RotationUtil.vecPlayerToWorld(cir.getReturnValue(), gravityDirection);
+                return;
+            }
+        }
+
+        cir.setReturnValue($$3);
+        RotationUtil.vecPlayerToWorld(cir.getReturnValue(), gravityDirection);
+        return;
     }
 
     // transform back to local coord
@@ -1011,47 +1044,7 @@ public abstract class GravityEntity implements IGravityEntity {
     }
 
 
-    // the argument was transformed to local coord,
-    // but bounding box stretch needs world coord
-    // the argument was transformed to local coord,
-    // but bounding box move needs world coord
-    @Inject(
-            method = "collide",
-            at = @At("HEAD"),
-            cancellable = true
-    )
-    private void roundabout$collide(Vec3 $$0,CallbackInfoReturnable<Vec3> cir) {
 
-        Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
-        if (gravityDirection == Direction.DOWN) return;
-
-        Entity getThis = ((Entity) (Object)this);
-        AABB $$1 = this.getBoundingBox();
-        List<VoxelShape> $$2 = this.level().getEntityCollisions(getThis, $$1.expandTowards($$0));
-        Vec3 $$3 = $$0.lengthSqr() == 0.0 ? $$0 : collideBoundingBox(getThis, $$0, $$1, this.level(), $$2);
-        boolean $$4 = $$0.x != $$3.x;
-        boolean $$5 = $$0.y != $$3.y;
-        boolean $$6 = $$0.z != $$3.z;
-        boolean $$7 = this.onGround || $$5 && $$0.y < 0.0;
-        if (this.maxUpStep() > 0.0F && $$7 && ($$4 || $$6)) {
-            Vec3 $$8 = collideBoundingBox(getThis, new Vec3($$0.x, (double)this.maxUpStep(), $$0.z), $$1, this.level(), $$2);
-            Vec3 yeah = RotationUtil.vecPlayerToWorld(new Vec3($$0.x, 0.0, $$0.z), GravityAPI.getGravityDirection((Entity) (Object) this));
-            Vec3 $$9 = collideBoundingBox(getThis, new Vec3(0.0, (double)this.maxUpStep(), 0.0), $$1.expandTowards(yeah.x,yeah.y,yeah.z), this.level(), $$2);
-            if ($$9.y < (double)this.maxUpStep) {
-                Vec3 $$10 = collideBoundingBox(getThis, new Vec3($$0.x, 0.0, $$0.z), $$1.move(RotationUtil.vecPlayerToWorld($$9, GravityAPI.getGravityDirection((Entity) (Object) this))), this.level(), $$2).add($$9);
-                if ($$10.horizontalDistanceSqr() > $$8.horizontalDistanceSqr()) {
-                    $$8 = $$10;
-                }
-            }
-
-            if ($$8.horizontalDistanceSqr() > $$3.horizontalDistanceSqr()) {
-
-                cir.setReturnValue($$8.add(collideBoundingBox(getThis, new Vec3(0.0, -$$8.y + $$0.y, 0.0), $$1.move(RotationUtil.vecPlayerToWorld($$8, GravityAPI.getGravityDirection((Entity) (Object) this))), this.level(), $$2)));
-            }
-        }
-
-        cir.setReturnValue($$3);
-    }
 
 
 
