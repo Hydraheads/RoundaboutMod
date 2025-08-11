@@ -632,20 +632,7 @@ public abstract class GravityEntity implements IGravityEntity {
         return;
     }
 
-    // transform back to local coord
-    @Inject(
-            method = "collideBoundingBox(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/AABB;Lnet/minecraft/world/level/Level;Ljava/util/List;)Lnet/minecraft/world/phys/Vec3;",
-            at = @At("RETURN"),
-            cancellable = true
-    )
-    private static void roundabout$inject_adjustMovementForCollisions(Entity entity, Vec3 movement, AABB entityBoundingBox, Level world, List<VoxelShape> collisions, CallbackInfoReturnable<Vec3> cir) {
-        if (entity == null) return;
 
-        Direction gravityDirection = GravityAPI.getGravityDirection(entity);
-        if (gravityDirection == Direction.DOWN) return;
-
-        cir.setReturnValue(RotationUtil.vecWorldToPlayer(cir.getReturnValue(), gravityDirection));
-    }
 
     @Inject(
             method = "spawnSprintParticle()V",
@@ -993,18 +980,28 @@ public abstract class GravityEntity implements IGravityEntity {
             Direction gravityDirection = GravityAPI.getGravityDirection(entity);
             if (gravityDirection == Direction.DOWN) return;
 
+            movement = RotationUtil.vecPlayerToWorld(movement, gravityDirection);
+
             ImmutableList.Builder<VoxelShape> $$5 = ImmutableList.builderWithExpectedSize(collisions.size() + 1);
             if (!collisions.isEmpty()) {
                 $$5.addAll(collisions);
             }
 
             WorldBorder $$6 = $$3.getWorldBorder();
-            boolean $$7 = $$6.isInsideCloseToBorder(entity, entityBoundingBox.expandTowards(movement));
+            boolean $$7 = entity != null && $$6.isInsideCloseToBorder(entity, entityBoundingBox.expandTowards(movement));
             if ($$7) {
                 $$5.add($$6.getCollisionShape());
             }
 
             $$5.addAll($$3.getBlockCollisions(entity, entityBoundingBox.expandTowards(movement)));
+
+            if (entity == null || (gravityDirection = GravityAPI.getGravityDirection(entity)) == Direction.DOWN) {
+                Vec3 vec = collideWithShapes(movement, entityBoundingBox, $$5.build());
+                if (vec != null) {
+                    cir.setReturnValue(RotationUtil.vecWorldToPlayer(vec, gravityDirection));
+                    return;
+                }
+            }
 
             Vec3 playerMovement = RotationUtil.vecWorldToPlayer(movement, gravityDirection);
             double playerMovementX = playerMovement.x;
@@ -1039,7 +1036,10 @@ public abstract class GravityEntity implements IGravityEntity {
                 playerMovementZ = Shapes.collide(directionZ.getAxis(), entityBoundingBox, collisions, playerMovementZ * directionZ.getAxisDirection().getStep()) * directionZ.getAxisDirection().getStep();
             }
 
-            cir.setReturnValue(RotationUtil.vecPlayerToWorld(playerMovementX, playerMovementY, playerMovementZ, gravityDirection));
+            Vec3 vec = RotationUtil.vecPlayerToWorld(playerMovementX, playerMovementY, playerMovementZ, gravityDirection);
+            if (vec != null) {
+                cir.setReturnValue(RotationUtil.vecWorldToPlayer(vec, gravityDirection));
+            }
         }
     }
 
