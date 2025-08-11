@@ -10,5 +10,6 @@ public interface IGravityEntity {
 
     double roundabout$getGravityStrength();
     void roundabout$setGravityStrength(double str);
+    void rdbdt$setTaggedForFlip(boolean flip);
 
 }
