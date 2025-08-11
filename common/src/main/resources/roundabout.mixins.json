@@ -185,6 +185,7 @@
     "barrage.DazeGameRenderer",
     "d4c.D4CDisableBlockInteraction",
     "gravity.client.GravityCameraMixin",
+    "gravity.client.GravityEntityRenderDispatcherMixin",
     "gravity.client.GravityGameRendererMixin",
     "gravity.client.GravityPlayerRendererMixin",
     "gui.ConfigOptionsScreen",
