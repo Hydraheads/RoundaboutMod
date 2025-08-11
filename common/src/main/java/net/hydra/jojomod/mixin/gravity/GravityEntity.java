@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.gravity;
 
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IClientEntity;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.util.GEntityTags;
@@ -230,6 +231,7 @@ public abstract class GravityEntity implements IGravityEntity {
         roundabout$adjustEntityPosition(oldGravity, newGravity, getBoundingBox());
 
         if (level().isClientSide()) {
+            Roundabout.LOGGER.info("2");
             RotationAnimation ani = ((IClientEntity)this).roundabout$getGravityAnimation();
             Validate.notNull(ani, "gravity animation is null");
 
@@ -1050,6 +1052,33 @@ public abstract class GravityEntity implements IGravityEntity {
 
         cir.setReturnValue($$3);
     }
+
+
+
+    @Inject(
+            method = "onSyncedDataUpdated(Lnet/minecraft/network/syncher/EntityDataAccessor;)V",
+            at = @At("HEAD")
+    )
+    private void roundabout$onSyncedDataUpdated(EntityDataAccessor<?> $$0, CallbackInfo ci) {
+        if (this.level.isClientSide())
+        if (ROUNDABOUT$GRAVITY_DIRECTION.equals($$0)) {
+            Direction gdirection = roundabout$getGravityDirection();
+            if (roundabout$currentRotationParameters == null) {
+                roundabout$currentRotationParameters = RotationParameters.getDefault();
+            }
+
+
+            if (roundabout$prevGravityDirection != gdirection) {
+                roundabout$applyGravityDirectionChange(
+                        roundabout$prevGravityDirection, gdirection,
+                        roundabout$currentRotationParameters, false
+                );
+                roundabout$prevGravityDirection = gdirection;
+            }
+        }
+
+    }
+
 
 
     /**Shadows, ignore
