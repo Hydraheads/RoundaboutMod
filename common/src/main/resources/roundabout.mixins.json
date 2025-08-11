@@ -189,6 +189,7 @@
     "gravity.client.GravityClientPlayNetworkHandlerMixin",
     "gravity.client.GravityEntityRenderDispatcherMixin",
     "gravity.client.GravityGameRendererMixin",
+    "gravity.client.GravityLocalPlayerMixin",
     "gravity.client.GravityPlayerRendererMixin",
     "gui.ConfigOptionsScreen",
     "items.visages.VisageHumanoidArmorLayer",
