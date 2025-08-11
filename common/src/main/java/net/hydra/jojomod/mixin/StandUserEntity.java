@@ -4077,6 +4077,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         }
 
+    /*    if (cause instanceof Player PE) {
+            if ( ((StandUserEntity) cause).roundabout$getStandPowers() instanceof PowersRatt PR  ) {
+                if ( this.roundabout$getStandPowers() instanceof PowersTheWorld ) {
+                    ((IPlayerEntity) cause).roundabout$setUnlockedBonusSkin(true);
+                }
+            }
+        } */
+
         MobEffectInstance melting = this.getEffect(ModEffects.MELTING);
         if (melting != null) {
             spawnAtLocation(new ItemStack(ModBlocks.FLESH_BLOCK,Mth.clamp(melting.getAmplifier()+1,1,4)+(int)(Math.random()*1+0.5) ));

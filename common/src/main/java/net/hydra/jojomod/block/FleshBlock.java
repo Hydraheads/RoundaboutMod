@@ -1,17 +1,18 @@
 package net.hydra.jojomod.block;
 
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.mixin.StandUserEntity;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -22,10 +23,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -39,7 +39,7 @@ public class FleshBlock
     public static final int MAX_HEIGHT = 4;
     public static final IntegerProperty LAYERS = ModBlocks.FLESH_LAYER;
     protected static final VoxelShape[] VISUAL_SHAPE = new VoxelShape[]{Shapes.empty(), Block.box(0.0, 0.0, 0.0, 16.0, 4.0, 16.0), Block.box(0.0, 0.0, 0.0, 16.0, 8.0, 16.0), Block.box(0.0, 0.0, 0.0, 16.0, 12.0, 16.0), Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0)};
-    protected static final VoxelShape[] SHAPE_BY_LAYER = new VoxelShape[]{Shapes.empty(), Block.box(0.0, 0.0, 0.0, 16.0, 0.0, 16.0), Block.box(0.0, 0.0, 0.0, 16.0, 2.0, 16.0), Block.box(0.0, 0.0, 0.0, 16.0, 12.0, 16.0), Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0)};
+    protected static final VoxelShape[] SHAPE_BY_LAYER = new VoxelShape[]{Shapes.empty(), Block.box(0.0, 0.0, 0.0, 16.0, 0.0, 16.0), Block.box(0.0, 0.0, 0.0, 16.0, 0.0, 16.0), Block.box(0.0, 0.0, 0.0, 16.0, 0.0, 16.0), Block.box(0.0, 0.0, 0.0, 16.0, 0.0, 16.0)};
     public static final int HEIGHT_IMPASSABLE = 3;
 
     public FleshBlock(BlockBehaviour.Properties properties) {
@@ -123,7 +123,6 @@ public class FleshBlock
         BlockState blockState = blockPlaceContext.getLevel().getBlockState(blockPlaceContext.getClickedPos());
         if (blockState.is(this)) {
             int i = blockState.getValue(LAYERS);
-            Roundabout.LOGGER.info("A: "+ i);
             return (BlockState)blockState.setValue(LAYERS, Math.min(MAX_HEIGHT, i + 1));
         }
         return super.getStateForPlacement(blockPlaceContext);
@@ -153,6 +152,23 @@ public class FleshBlock
             ));
         }
         entity.resetFallDistance();
+    }
+
+    @Override
+    public InteractionResult use(BlockState $$0, Level $$1, BlockPos $$2, Player $$3, InteractionHand $$4, BlockHitResult $$5) {
+        StandPowers powers = ((StandUser)  $$3 ).roundabout$getStandPowers();
+        if (powers instanceof PowersRatt) {
+            if ($$3.isCrouching()) {
+                if (!powers.isClient()) {
+                    Level level = powers.getSelf().level();
+                    level.setBlockAndUpdate($$2, Blocks.AIR.defaultBlockState());
+                    $$3.spawnAtLocation(new ItemStack(ModBlocks.FLESH_BLOCK,$$0.getValue(LAYERS)));
+                }
+                return InteractionResult.SUCCESS;
+            }
+
+        }
+        return InteractionResult.FAIL;
     }
 }
 

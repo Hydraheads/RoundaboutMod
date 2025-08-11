@@ -20,21 +20,16 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.particle.CampfireSmokeParticle;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.*;
@@ -247,6 +242,7 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public boolean tryPosPower(int move, boolean forced, Vec3 pos) {
+        Roundabout.LOGGER.info("A: {}, B: {}",this.getSelf().getName().toString(),move);
         StandEntity SE = this.getStandEntity(this.getSelf());
         switch(move) {
             case UPDATE_POSITION -> {
@@ -256,8 +252,8 @@ public class PowersRatt extends NewDashPreset {
             }
             case PowersRatt.NET_PLACE -> {
                 this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
-                active = true;
-                Placement = pos;
+                this.active = true;
+                this.Placement = pos;
                 this.setCooldown(PowersRatt.SETPLACE,80);
             }
             case ROTATE -> {
@@ -728,28 +724,23 @@ public class PowersRatt extends NewDashPreset {
     }
 
     // for whatever reason triggers players as well
-    /*
+/*
     @Override
     public void tickMobAI(LivingEntity attackTarget) {
-        if (attackTarget != null) {
-            double dist =attackTarget.getPosition(0).distanceTo(this.getSelf().getPosition(0));
-            if (isPlaced()) {
+        if (!isClient()) {
+            if (attackTarget != null) {
+                double dist = attackTarget.getPosition(0).distanceTo(this.getSelf().getPosition(0));
+                Roundabout.LOGGER.info("B: {}",isPlaced());
+                if (isPlaced()) {
 
-            } else {
-                Entity targetEntity = getTargetEntity(this.self, 50);
-                if (targetEntity != null && targetEntity.is(attackTarget)) {
-                    if (this.getActivePower() == PowerIndex.NONE && !this.onCooldown(PowerIndex.SKILL_2)) {
-                        if (dist >= 10.0) {
-                            Roundabout.LOGGER.info("ATTEMPT PLACE");
-                            Vec3 pos = this.getSelf().getPosition(0);
-                            Roundabout.LOGGER.info("A: {}",this.getSelf().getName().toString());
-                            ((StandUser) this.getSelf()).roundabout$tryPosPower(PowersRatt.NET_PLACE,true,
-                                    new Vec3(pos.x(), Math.floor(pos.y),pos.z())
-                            );
-                        }
-                    }
-
+                } else {
+                    Roundabout.LOGGER.info("Bingus");
+                    Vec3 vec3 = this.getSelf().getPosition(0);
+                    blipStand(new Vec3(vec3.x, Math.floor(vec3.y),vec3.z));
+                 //   this.setShootTarget(attackTarget);
+                 //   this.getStandUserSelf().roundabout$setCombatMode(true);
                 }
+
 
             }
         }

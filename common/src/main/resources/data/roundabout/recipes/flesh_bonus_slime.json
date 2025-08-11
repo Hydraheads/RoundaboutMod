@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "roundabout:flesh_block"
+    },
+    {
+      "item": "roundabout:flesh_block"
+    },
+    {
+      "item": "roundabout:flesh_block"
+    },
+    {
+      "item": "minecraft:slime_ball"
+    },
+    {
+      "item": "minecraft:slime_ball"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "item": "minecraft:slime_block"
+  }
+}
