@@ -121,19 +121,22 @@ public abstract class GravityLivingEntityMixin extends Entity {
         if (gravityDirection == Direction.DOWN)
             return;
         ci.cancel();
+
+
+
         if (this.isControlledByLocalInstance()) {
-            double $$1 = 0.08* (float) Math.sqrt(GravityAPI.getGravityStrength(this));
+            double $$1 = 0.08;
             boolean $$2 = this.getDeltaMovement().y <= 0.0;
             if ($$2 && this.hasEffect(MobEffects.SLOW_FALLING)) {
-                $$1 = 0.01* (float) Math.sqrt(GravityAPI.getGravityStrength(this));
+                $$1 = 0.01;
             }
 
             FluidState $$3 = this.level().getFluidState(this.blockPosition());
             if (this.isInWater() && this.isAffectedByFluids() && !this.canStandOnFluid($$3)) {
-                double $$4 = RotationUtil.vecWorldToPlayer(position(), gravityDirection).y;;
+                double $$4 = RotationUtil.vecWorldToPlayer(position(), gravityDirection).y;
                 float $$5 = this.isSprinting() ? 0.9F : this.getWaterSlowDown();
                 float $$6 = 0.02F;
-                float $$7 = (float) EnchantmentHelper.getDepthStrider(rdbt$this());
+                float $$7 = (float)EnchantmentHelper.getDepthStrider(rdbt$this());
                 if ($$7 > 3.0F) {
                     $$7 = 3.0F;
                 }

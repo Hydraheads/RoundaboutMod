@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.gravity;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
@@ -59,8 +60,7 @@ public abstract class GravityPlayerMixin extends LivingEntity {
     @Inject(
             method = "travel",
             at = @At(
-                    value = "HEAD",
-                    target = "Lnet/minecraft/world/entity/player/Player;getLookAngle()Lnet/minecraft/world/phys/Vec3;"
+                    value = "HEAD"
             ),
             cancellable = true
     )
@@ -251,6 +251,7 @@ public abstract class GravityPlayerMixin extends LivingEntity {
         cir.setReturnValue(this.onGround()
                 || this.fallDistance < this.maxUpStep()
                 && !this.level().noCollision(this, this.getBoundingBox().move(world.x, world.y, world.z)));
+        Roundabout.LOGGER.info(""+cir.getReturnValue());
     }
 
     @Unique
@@ -346,4 +347,5 @@ public abstract class GravityPlayerMixin extends LivingEntity {
             this.level().addParticle($$0, vec3d.x,vec3d.y,vec3d.z, $$2, $$3, $$4);
         }
     }
+
 }
