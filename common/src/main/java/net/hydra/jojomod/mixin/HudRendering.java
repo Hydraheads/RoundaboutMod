@@ -380,7 +380,7 @@ public abstract class HudRendering implements IHudAccess {
             } else if (((StandUser) minecraft.player).roundabout$getGuardPoints() < ((StandUser) minecraft.player).roundabout$getMaxGuardPoints()){
                 StandHudRender.renderGuardHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
                 return true;
-            } else if (((IPlayerEntity)minecraft.player).roundabout$getDisplayExp()){
+            } else if (((IPlayerEntity)minecraft.player).roundabout$getDisplayExp() && ((StandUser)minecraft.player).roundabout$hasAStand()){
 
                 StandHudRender.renderExpHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha,removeNum);
                 if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && !user.roundabout$getEffectiveCombatMode() &&
