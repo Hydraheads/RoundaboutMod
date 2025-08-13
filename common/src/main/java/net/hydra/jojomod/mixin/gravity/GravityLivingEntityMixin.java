@@ -326,14 +326,14 @@ public abstract class GravityLivingEntityMixin extends Entity {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN) return $$1;
 
-        return RotationUtil.vecWorldToPlayer($$1 - xo, getY() - yo, getZ() - zo, gravityDirection).x + xo;
+        return RotationUtil.vecWorldToPlayer(this.getX() - xo, this.getY() - this.yo, this.getZ() - this.zo, gravityDirection).x;
     }
     @ModifyVariable(method = "tick", at = @At(value = "STORE"),ordinal = 1)
     private double roundabout$tickGravity2(double $$1) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN) return $$1;
 
-        return RotationUtil.vecWorldToPlayer(getX() - xo, getY() - yo, $$1 - zo, gravityDirection).z + zo;
+        return RotationUtil.vecWorldToPlayer(getX() - xo, getY() - yo, getZ() - zo, gravityDirection).z;
     }
 
 
