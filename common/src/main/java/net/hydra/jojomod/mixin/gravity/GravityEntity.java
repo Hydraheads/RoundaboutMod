@@ -497,6 +497,10 @@ public abstract class GravityEntity implements IGravityEntity {
     )
     private Vec3 modify_move_Vec3d_0_0(Vec3 vec3d) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
+        if (rdbdt$taggedForFlip){
+            rdbdt$taggedForFlip = false;
+            vec3d = RotationUtil.vecWorldToPlayer(vec3d, gravityDirection);
+        }
         if (gravityDirection == Direction.DOWN) {
             return vec3d;
         }
