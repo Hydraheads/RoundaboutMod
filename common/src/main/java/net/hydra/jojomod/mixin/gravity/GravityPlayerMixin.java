@@ -247,12 +247,14 @@ public abstract class GravityPlayerMixin extends LivingEntity {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN)
             return;
+
+
         Vec3 world = RotationUtil.vecPlayerToWorld(0.0, (double)(this.fallDistance - this.maxUpStep()), 0.0, gravityDirection);
 
         cir.setReturnValue(this.onGround()
                 || this.fallDistance < this.maxUpStep()
                 && !this.level().noCollision(this, this.getBoundingBox().move(world.x, world.y, world.z)));
-        Roundabout.LOGGER.info(""+cir.getReturnValue());
+        //Roundabout.LOGGER.info(""+cir.getReturnValue());
     }
 
     @Unique
