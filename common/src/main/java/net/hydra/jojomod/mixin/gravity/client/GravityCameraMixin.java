@@ -124,8 +124,7 @@ public abstract class GravityCameraMixin {
             at = @At(
                     value = "INVOKE",
                     target = "Lorg/joml/Quaternionf;rotationYXZ(FFF)Lorg/joml/Quaternionf;",
-                    shift = At.Shift.AFTER,
-                    remap = false
+                    shift = At.Shift.AFTER
             )
     )
     private void rdbt$setRotation(CallbackInfo ci) {

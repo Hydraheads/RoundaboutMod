@@ -42,10 +42,12 @@ public abstract class GravityServerPlayerFall extends Player {
 
         ci.cancel();
         if (!this.touchingUnloadedChunk()) {
+            Vec3 localVec = RotationUtil.vecWorldToPlayer($$0, $$1, $$2, gravityDirection);
+            $$1 = localVec.y;
+
             this.checkSupportingBlock($$3, new Vec3($$0, $$1, $$2));
             BlockPos $$4 = this.getOnPosLegacy();
-            Vec3 localVec = RotationUtil.vecWorldToPlayer($$0, $$1, $$2, gravityDirection);
-            super.checkFallDamage(localVec.y, $$3, this.level().getBlockState($$4), $$4);
+            super.checkFallDamage($$1, $$3, this.level().getBlockState($$4), $$4);
         }
     }
 
