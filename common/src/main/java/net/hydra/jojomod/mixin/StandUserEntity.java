@@ -4088,7 +4088,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (melting != null) {
             int amount =  Mth.clamp(melting.getAmplifier(),1,7) + (int) (Math.random() * 1 + 0.5);
             if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
-                RattDartEntity r = new RattDartEntity(this.level(),(LivingEntity) cause,5); //doesn't really matter what you put here
+                RattDartEntity r = new RattDartEntity(this.level(),(LivingEntity) ((Object) this),5); //doesn't really matter what you put here
                 r.placeFlesh(me.getOnPos(),amount);
             } else {
                 spawnAtLocation(new ItemStack(ModBlocks.FLESH_BLOCK, amount));
