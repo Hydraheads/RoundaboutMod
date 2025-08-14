@@ -13,6 +13,8 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(PlayerRenderer.class)
 public abstract class GravityPlayerRendererMixin {
+
+    /**elytra rotation fix*/
     @ModifyVariable(
             method = "setupRotations(Lnet/minecraft/client/player/AbstractClientPlayer;Lcom/mojang/blaze3d/vertex/PoseStack;FFF)V",
             at = @At(
