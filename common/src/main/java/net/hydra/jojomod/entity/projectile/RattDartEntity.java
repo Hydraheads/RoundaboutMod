@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.RattEntity;
@@ -11,6 +12,8 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -211,6 +214,59 @@ public class RattDartEntity extends AbstractArrow {
                                 this.getX(), this.getY(), this.getZ(),
                                 0, 0, 0, 0, 0);
                     }
+                }
+            }
+        }
+    }
+
+
+
+
+
+    public boolean canPlaceGoo(BlockPos pos, int offsetX, int offsetY, int offsetZ){
+        BlockPos blk =  new BlockPos(pos.getX() + offsetX, pos.getY() + offsetY, pos.getZ() + offsetZ);
+
+        if (this.level().isEmptyBlock(blk)) {
+            BlockPos $$8 = blk.below();
+            if (this.level().getBlockState($$8).isFaceSturdy(this.level(), $$8, Direction.UP)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void setGoo(BlockPos pos, int offsetX, int offsetZ, int level){
+        BlockPos blockPos = null;
+        if (canPlaceGoo(pos, offsetX, +1, offsetZ)) {
+            blockPos = new BlockPos(pos.getX() + offsetX, pos.getY() + 1, pos.getZ() + offsetZ);
+        } else if (canPlaceGoo(pos, offsetX, +2, offsetZ)){
+            blockPos = new BlockPos(pos.getX()+offsetX,pos.getY() + 2,pos.getZ()+offsetZ);
+        } else if (canPlaceGoo(pos, offsetX, 0, offsetZ)){
+            blockPos = new BlockPos(pos.getX()+offsetX,pos.getY(),pos.getZ()+offsetZ);
+        } else if (canPlaceGoo(pos, offsetX, -1, offsetZ)){
+            blockPos = new BlockPos(pos.getX()+offsetX,pos.getY()-1,pos.getZ()+offsetZ);
+        }
+        //if (this.level().getBlockState(pos).getBlock())
+        if (blockPos != null) {
+            this.level().setBlockAndUpdate(new BlockPos(blockPos.getX(), blockPos.getY(), blockPos.getZ()), ModBlocks.FLESH_BLOCK.defaultBlockState().setValue(ModBlocks.FLESH_LAYER, Integer.valueOf(level)));
+        }
+    }
+
+
+
+    public void placeFlesh(BlockPos pos, int amount) {
+        int[][] array = {
+                {0,0,0},
+                {0,1,0},
+                {0,0,0}
+        };
+        for (int i=0;i<amount;i++) {array[(int) (Math.random()*3) ][(int) (Math.random()*3)] += 1;}
+
+        for (int x=0;x<array.length;x++) {
+            for (int y=0;y<array[0].length;y++) {
+                if (array[x][y] > 0) {
+                    setGoo(pos, x, y, array[x][y]);
                 }
             }
         }

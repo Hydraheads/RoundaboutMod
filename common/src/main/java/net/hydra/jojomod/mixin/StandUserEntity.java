@@ -13,13 +13,11 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
+import net.hydra.jojomod.entity.projectile.RattDartEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.PermanentZoneCastInstance;
-import net.hydra.jojomod.event.SoftExplosion;
+import net.hydra.jojomod.event.*;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.stand.powers.*;
@@ -4085,10 +4083,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         } */
 
+
         MobEffectInstance melting = this.getEffect(ModEffects.MELTING);
         if (melting != null) {
-            spawnAtLocation(new ItemStack(ModBlocks.FLESH_BLOCK,Mth.clamp(melting.getAmplifier()+1,1,4)+(int)(Math.random()*1+0.5) ));
+            int amount =  Mth.clamp(melting.getAmplifier(),1,7) + (int) (Math.random() * 1 + 0.5);
+            if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
+                RattDartEntity r = new RattDartEntity(this.level(),(LivingEntity) cause,5); //doesn't really matter what you put here
+                r.placeFlesh(me.getOnPos(),amount);
+            } else {
+                spawnAtLocation(new ItemStack(ModBlocks.FLESH_BLOCK, amount));
+            }
         }
+
 
     }
 

@@ -35,7 +35,8 @@ public class ForgeEffects{
             );
     public static final RegistryObject<MobEffect> MELTING =
             POTION_EFFECTS.register("melting", () ->
-                    new Effect(MobEffectCategory.HARMFUL, 10329495).addAttributeModifier(Attributes.MAX_HEALTH,"7107DE5E-7CE8-4030-940E-514C1F160890",-1.1, AttributeModifier.Operation.ADDITION)
+                    new Effect(MobEffectCategory.HARMFUL, 10329495)
+                            .addAttributeModifier(Attributes.MAX_HEALTH,"6107DE5E-7CE8-4030-940E-514C1F160890",-1.1, AttributeModifier.Operation.ADDITION)
             );
 
 
