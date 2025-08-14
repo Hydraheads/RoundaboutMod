@@ -121,19 +121,22 @@ public abstract class GravityLivingEntityMixin extends Entity {
         if (gravityDirection == Direction.DOWN)
             return;
         ci.cancel();
+
+
+
         if (this.isControlledByLocalInstance()) {
-            double $$1 = 0.08* (float) Math.sqrt(GravityAPI.getGravityStrength(this));
+            double $$1 = 0.08;
             boolean $$2 = this.getDeltaMovement().y <= 0.0;
             if ($$2 && this.hasEffect(MobEffects.SLOW_FALLING)) {
-                $$1 = 0.01* (float) Math.sqrt(GravityAPI.getGravityStrength(this));
+                $$1 = 0.01;
             }
 
             FluidState $$3 = this.level().getFluidState(this.blockPosition());
             if (this.isInWater() && this.isAffectedByFluids() && !this.canStandOnFluid($$3)) {
-                double $$4 = RotationUtil.vecWorldToPlayer(position(), gravityDirection).y;;
+                double $$4 = RotationUtil.vecWorldToPlayer(position(), gravityDirection).y;
                 float $$5 = this.isSprinting() ? 0.9F : this.getWaterSlowDown();
                 float $$6 = 0.02F;
-                float $$7 = (float) EnchantmentHelper.getDepthStrider(rdbt$this());
+                float $$7 = (float)EnchantmentHelper.getDepthStrider(rdbt$this());
                 if ($$7 > 3.0F) {
                     $$7 = 3.0F;
                 }
@@ -323,14 +326,14 @@ public abstract class GravityLivingEntityMixin extends Entity {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN) return $$1;
 
-        return RotationUtil.vecWorldToPlayer($$1 - xo, getY() - yo, getZ() - zo, gravityDirection).x + xo;
+        return RotationUtil.vecWorldToPlayer(this.getX() - xo, this.getY() - this.yo, this.getZ() - this.zo, gravityDirection).x;
     }
     @ModifyVariable(method = "tick", at = @At(value = "STORE"),ordinal = 1)
     private double roundabout$tickGravity2(double $$1) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN) return $$1;
 
-        return RotationUtil.vecWorldToPlayer(getX() - xo, getY() - yo, $$1 - zo, gravityDirection).z + zo;
+        return RotationUtil.vecWorldToPlayer(getX() - xo, getY() - yo, getZ() - zo, gravityDirection).z;
     }
 
 

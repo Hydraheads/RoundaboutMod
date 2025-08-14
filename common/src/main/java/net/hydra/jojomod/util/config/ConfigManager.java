@@ -365,8 +365,9 @@ public abstract class ConfigManager {
 
     private static void save(Config config, Path path) {
         try {
-            String parsed = String.join(System.lineSeparator(), ConfigParser.parse(config));
-            Files.write(path, parsed.getBytes());
+            Files.write(path, GSON.toJson(config).getBytes());
+            //String parsed = String.join(System.lineSeparator(), ConfigParser.parse(config));
+            //Files.write(path, parsed.getBytes());
         } catch (IOException e) {
             Roundabout.LOGGER.error("Failed to save config", e);
         }

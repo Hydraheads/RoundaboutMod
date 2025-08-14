@@ -41,6 +41,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -179,6 +180,14 @@ public class PowersWalkingHeart extends NewDashPreset {
 
     public void switchDirections(){
         ((IGravityEntity)this.self).roundabout$setGravityDirection(Direction.SOUTH);
+
+        AABB $$0 = this.self.getBoundingBox().inflate(10.0, 8.0, 10.0);
+        List<? extends Entity> $$1 = this.self.level().getEntities(this.self, $$0);
+        float mindist = -1;
+
+        for (Entity $$3 : $$1) {
+            ((IGravityEntity)$$3).roundabout$setGravityDirection(Direction.SOUTH);
+        }
     }
 
     public boolean hasUIOpen = false;

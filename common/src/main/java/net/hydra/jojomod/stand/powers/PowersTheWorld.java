@@ -448,17 +448,19 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     public Vec3 assultVec = Vec3.ZERO;
     public boolean assaultGrab(){
-        StandEntity stand = getStandEntity(this.self);
-        if (Objects.nonNull(stand)){
-            this.setActivePower(PowerIndex.POWER_1_BONUS);
-            if (!this.getSelf().level().isClientSide) {
-                this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP,
-                        SoundSource.PLAYERS, 0.95F, 1.3F);
-                ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.HAPPY_VILLAGER,
-                        stand.getX(), stand.getY() + 0.3, stand.getZ(),
-                        30, 0.4, 0.4, 0.4, 0.4);
+        if (this.attackTimeDuring >= 0) {
+            StandEntity stand = getStandEntity(this.self);
+            if (Objects.nonNull(stand)) {
+                this.setActivePower(PowerIndex.POWER_1_BONUS);
+                if (!this.getSelf().level().isClientSide) {
+                    this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP,
+                            SoundSource.PLAYERS, 0.95F, 1.3F);
+                    ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.HAPPY_VILLAGER,
+                            stand.getX(), stand.getY() + 0.3, stand.getZ(),
+                            30, 0.4, 0.4, 0.4, 0.4);
+                }
+                return true;
             }
-            return true;
         }
         return false;
     }
@@ -937,7 +939,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
 
     public boolean doAssaultGrabClient(){
-        if (this.getActivePower() == PowerIndex.POWER_1){
+        if (this.getActivePower() == PowerIndex.POWER_1 && attackTimeDuring >= 0){
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BONUS, true);
             tryPowerPacket(PowerIndex.POWER_1_BONUS);
             return true;

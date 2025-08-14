@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.gravity;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
@@ -19,6 +20,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -59,8 +61,7 @@ public abstract class GravityPlayerMixin extends LivingEntity {
     @Inject(
             method = "travel",
             at = @At(
-                    value = "HEAD",
-                    target = "Lnet/minecraft/world/entity/player/Player;getLookAngle()Lnet/minecraft/world/phys/Vec3;"
+                    value = "HEAD"
             ),
             cancellable = true
     )
@@ -246,11 +247,14 @@ public abstract class GravityPlayerMixin extends LivingEntity {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN)
             return;
+
+
         Vec3 world = RotationUtil.vecPlayerToWorld(0.0, (double)(this.fallDistance - this.maxUpStep()), 0.0, gravityDirection);
 
         cir.setReturnValue(this.onGround()
                 || this.fallDistance < this.maxUpStep()
                 && !this.level().noCollision(this, this.getBoundingBox().move(world.x, world.y, world.z)));
+        //Roundabout.LOGGER.info(""+cir.getReturnValue());
     }
 
     @Unique
@@ -346,4 +350,5 @@ public abstract class GravityPlayerMixin extends LivingEntity {
             this.level().addParticle($$0, vec3d.x,vec3d.y,vec3d.z, $$2, $$3, $$4);
         }
     }
+
 }
