@@ -39,7 +39,6 @@ public abstract class GravityServerPlayerFall extends Player {
     private void rdbt$wrapCheckFallDamage(
             double $$0, double $$1, double $$2, boolean $$3, CallbackInfo ci
     ) {
-        Roundabout.LOGGER.info("og = "+$$3+" fd ="+this.fallDistance);
         ServerPlayer this_ = (ServerPlayer) (Object) this;
         Direction gravityDirection = GravityAPI.getGravityDirection(this_);
         if (gravityDirection == Direction.DOWN) return;
