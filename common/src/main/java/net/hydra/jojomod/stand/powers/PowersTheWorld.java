@@ -295,6 +295,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             } if (Level > 5 || bypass){
                 $$1.add(TheWorldEntity.PART_7_SKIN);
                 $$1.add(TheWorldEntity.PART_7_BLUE);
+                $$1.add(TheWorldEntity.THE_NETHER);
             } if (Level > 6 || bypass){
                 $$1.add(TheWorldEntity.AQUA_SKIN);
                 $$1.add(TheWorldEntity.BETA);
@@ -987,6 +988,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return Component.translatable(  "skins.roundabout.the_world.ultimate_kars");
         } else if (skinId == TheWorldEntity.SCARLET){
             return Component.translatable(  "skins.roundabout.the_world.scarlet");
+        } else if (skinId == TheWorldEntity.THE_NETHER){
+            return Component.translatable(  "skins.roundabout.the_world.the_nether");
         }
         return Component.translatable(  "skins.roundabout.the_world.base");
     }
