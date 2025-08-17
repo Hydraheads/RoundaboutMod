@@ -27,6 +27,7 @@ eclipse
 run
 runs/
 key.properties
+generated/
 
 # Files from Forge MDK
 forge*changelog.txt

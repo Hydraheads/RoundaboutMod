@@ -13,6 +13,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 
+import static net.hydra.jojomod.registry.ForgeBlocks.registerDynamicFogBlocks;
+
 @Mod(Roundabout.MOD_ID)
 public class RoundaboutModForge {
     public RoundaboutModForge() {

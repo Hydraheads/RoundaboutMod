@@ -2,15 +2,33 @@ package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.*;
+import net.hydra.jojomod.item.FogBlockItem;
+import net.hydra.jojomod.item.FogCoatBlockItem;
 import net.minecraft.Util;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.*;
+
+import static net.hydra.jojomod.block.ModBlocks.*;
+import static net.hydra.jojomod.registry.ForgeCreativeTab.FOG_TAB_ITEMS;
+import static net.hydra.jojomod.registry.ForgeCreativeTab.addToFogTab;
+import static net.hydra.jojomod.registry.ForgeItems.ITEMS;
+
+@Mod.EventBusSubscriber(modid = Roundabout.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ForgeBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Roundabout.MOD_ID);
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Roundabout.MOD_ID);
@@ -203,8 +221,106 @@ public class ForgeBlocks {
     public static final RegistryObject<BlockEntityType<D4CLightBlockEntity>> D4C_LIGHT_BLOCK_ENTITY = BLOCK_ENTITIES.register("d4c_light_block",
             () -> BlockEntityType.Builder.of(D4CLightBlockEntity::new, D4C_LIGHT_BLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "d4c_light_block")));
 
-    static
+    static boolean genned = false;
+
+    public static Map<ResourceLocation,Block> fogCoatingBlocks = new HashMap<>();
+    public static Map<ResourceLocation,Block> fogBlocks = new HashMap<>();
+    @SubscribeEvent
+    public static void registerDynamicFogBlocks(RegisterEvent event)
     {
-        //ModBlocks.registerDynamicFogBlocks();
+
+        if(event.getForgeRegistry() == null || genned){
+            return;
+        }
+
+
+        //Resource location of new fog block + instance of original block.
+
+        // TODO: dynamically generate blockstates and then it's ready for use
+        for (Block b : ForgeRegistries.BLOCKS)
+        {
+            ResourceLocation i = ForgeRegistries.BLOCKS.getKey(b);
+            // fix for not registering our own blocks as fog blocks, would result in a deadlock (or an error tbh)
+            if (!i.getNamespace().equals("minecraft") || ForgeRegistries.BLOCKS.containsKey(new ResourceLocation("roundabout", "fog_" + i.getPath())) || blockBlacklist.contains(i.getPath()) || dontGen.contains("fog_"+i.getPath())) {
+                dontGenState.add("fog_" + i.getPath());
+                continue;
+            }
+
+            //Roundabout.LOGGER.info("Registering block \"roundabout:fog_{}\"",i.getPath());
+            boolean rightSize = false;
+            try {
+                VoxelShape vshape = b.defaultBlockState().getCollisionShape(null, null);
+                rightSize = !vshape.isEmpty() && vshape.bounds().getYsize() == 1.0;
+            } catch (Exception e) {
+                try{
+                    rightSize = b.defaultBlockState().isCollisionShapeFullBlock(null,null);
+                } catch (Exception ex) {
+                    Roundabout.LOGGER.debug("Couldn't get the shape of " + i.getPath());
+                }
+            }
+            if (b.defaultBlockState().getProperties().isEmpty() && rightSize) {
+
+                ForgeRegistries.BLOCKS.register(
+                        new ResourceLocation(Roundabout.MOD_ID, "fog_" + i.getPath()),
+                        getFogBlock());
+                Block fb = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(Roundabout.MOD_ID, "fog_" + i.getPath()));
+                fogBlocks.put(new ResourceLocation(Roundabout.MOD_ID,"fog_" + i.getPath()), fb);
+
+                if(!blockBlacklist.contains("fog_" + i.getPath() + "_coating")) {
+
+                    ForgeRegistries.BLOCKS.register(
+                            new ResourceLocation(Roundabout.MOD_ID, "fog_" + i.getPath() + "_coating"),
+                            getFogCoatingBlock());
+                    Block fc = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(Roundabout.MOD_ID,"fog_" + i.getPath() + "_coating"));
+
+                    fogCoatingBlocks.put(new ResourceLocation(Roundabout.MOD_ID,"fog_" + i.getPath() + "_coating"),fc);
+                    ForgeRegistries.ITEMS.register(
+                            new ResourceLocation(Roundabout.MOD_ID,"fog_" + i.getPath() + "_coating"),
+                            (Item) new FogCoatBlockItem(fc, new Item.Properties(), b)
+                    );
+                    gennedFogItems.add(ForgeRegistries.ITEMS.getValue(new ResourceLocation(Roundabout.MOD_ID,"fog_" + i.getPath() + "_coating")));
+
+                }
+
+                ForgeRegistries.ITEMS.register(new ResourceLocation(Roundabout.MOD_ID,"fog_" + i.getPath()),
+                        (Item) new FogBlockItem(fb, new Item.Properties(), b));
+                gennedFogItems.add(ForgeRegistries.ITEMS.getValue(new ResourceLocation(Roundabout.MOD_ID,"fog_" + i.getPath())));
+
+
+            } else {
+                //Roundabout.LOGGER.warn("Skipping block {} as it has unsupported properties", i);
+                continue;
+            }
+        }
+        for (Item i : gennedFogItems){
+            FOG_TAB_ITEMS.add(() -> i);
+        }
+
+        /*
+        event.register(ForgeRegistries.Keys.BLOCKS,blockRegisterHelper -> {
+            for(Map.Entry<ResourceLocation,Block> entry : fogBlockOGs.entrySet()){
+                blockRegisterHelper.register(entry.getKey(),getFogBlock());
+                fogBlocks.put(entry.getKey(), (Block) event.getForgeRegistry().getValue(entry.getKey()));
+
+            }
+            for(Map.Entry<ResourceLocation,Block> entry : fogBlockCoatOGs.entrySet()){
+                blockRegisterHelper.register(entry.getKey(),getFogCoatingBlock());
+                fogCoatingBlocks.put(entry.getKey(), (Block) event.getForgeRegistry().getValue(entry.getKey()));
+            }
+        });
+        event.register(ForgeRegistries.Keys.ITEMS,helper->{
+            for(Map.Entry<ResourceLocation,Block> entry : fogBlocks.entrySet()){
+                helper.register(entry.getKey(), new FogBlockItem(entry.getValue(), new Item.Properties(), fogBlockOGs.get(entry.getKey())));
+            }
+            for(Map.Entry<ResourceLocation,Block> entry : fogCoatingBlocks.entrySet()){
+                helper.register(entry.getKey(), new FogCoatBlockItem(entry.getValue(), new Item.Properties(), fogBlockCoatOGs.get(entry.getKey())));
+            }
+
+        });
+
+         */
+
+
+        genned = true;
     }
 }
