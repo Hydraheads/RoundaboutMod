@@ -16,6 +16,9 @@
     "icon": "${mod_id}.png",
     "environment": "*",
     "entrypoints": {
+        "fabric-datagen": [
+            "net.hydra.jojomod.JojoModDataGenerator"
+        ],
         "main": [
             "net.hydra.jojomod.RoundaboutFabric"
         ],

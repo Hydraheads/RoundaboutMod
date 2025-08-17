@@ -1,9 +1,13 @@
 package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.item.FogBlockItem;
+import net.hydra.jojomod.item.FogCoatBlockItem;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -11,12 +15,19 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.function.ToIntFunction;
 
 public class ModBlocks {
-    /**This is where blocks are listed and called upon.
-     * Forge and fabric files must define these variables so they are not empty.**/
+    /**
+     * This is where blocks are listed and called upon.
+     * Forge and fabric files must define these variables so they are not empty.
+     **/
     public static final EnumProperty<GoddessStatuePart> GODDESS_STATUE_PART = EnumProperty.create("part", GoddessStatuePart.class);
     public static final EnumProperty<StreetSignPart> STREET_SIGN_PART = EnumProperty.create("part", StreetSignPart.class);
     public static final IntegerProperty DAMAGED = IntegerProperty.create("damaged", 0, 2);
@@ -184,13 +195,13 @@ public class ModBlocks {
 
     public static Block LOCACACA_BLOCK_PROPERTIES = new LocacacaBlock(
             BlockBehaviour.Properties.of()
-                            .mapColor(MapColor.PLANT)
-                            .noCollission()
-                            .randomTicks()
-                            .instabreak()
-                            .sound(SoundType.CROP)
-                            .pushReaction(PushReaction.DESTROY)
-            );
+                    .mapColor(MapColor.PLANT)
+                    .noCollission()
+                    .randomTicks()
+                    .instabreak()
+                    .sound(SoundType.CROP)
+                    .pushReaction(PushReaction.DESTROY)
+    );
     public static Block NEW_LOCACACA_BLOCK_PROPERTIES = new NewLocacacaBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.PLANT)
@@ -276,7 +287,8 @@ public class ModBlocks {
                     .sound(SoundType.STONE)
                     .requiresCorrectToolForDrops()
     );
-    public static StreetSignBlock getStreetSignBlockProperties(){
+
+    public static StreetSignBlock getStreetSignBlockProperties() {
         return new StreetSignBlock(
                 BlockBehaviour.Properties.of()
                         .mapColor(MapColor.STONE)
@@ -290,7 +302,8 @@ public class ModBlocks {
                         })
         );
     }
-    public static StreetWallSignBlock getWallStreetSignBlockProperties(){
+
+    public static StreetWallSignBlock getWallStreetSignBlockProperties() {
         return new StreetWallSignBlock(
                 BlockBehaviour.Properties.of()
                         .mapColor(MapColor.STONE)
@@ -305,7 +318,8 @@ public class ModBlocks {
                         })
         );
     }
-    public static MirrorBlock getMirrorBlockProperties(){
+
+    public static MirrorBlock getMirrorBlockProperties() {
         return new MirrorBlock(
                 BlockBehaviour.Properties.of()
                         .mapColor(MapColor.STONE)
@@ -320,7 +334,8 @@ public class ModBlocks {
                         })
         );
     }
-    public static FogBlock getFogBlock(){
+
+    public static FogBlock getFogBlock() {
         return new FogBlock(
                 BlockBehaviour.Properties.of()
                         .mapColor(MapColor.NONE)
@@ -332,7 +347,8 @@ public class ModBlocks {
                         .replaceable()
         );
     }
-    public static FogBlock getFogCoatingBlock(){
+
+    public static FogBlock getFogCoatingBlock() {
         return new FogCoatBlock(
                 BlockBehaviour.Properties.of()
                         .mapColor(MapColor.NONE)
@@ -344,6 +360,7 @@ public class ModBlocks {
                         .replaceable()
         );
     }
+
     public static InvisiBlock INVISIBLE_BLOCK_PROPERTIES = new InvisiBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.NONE).dynamicShape().noOcclusion().strength(-1.0F, 3600000.0F).lightLevel((p_152607_) -> {
                 return 1;
@@ -402,26 +419,17 @@ public class ModBlocks {
                 return 15;
             }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
 
-    public static void registerDynamicFogBlocks()
-    {
-        // TODO: dynamically generate blockstates and then it's ready for use
-        for (Block b : BuiltInRegistries.BLOCK)
-        {
-            ResourceLocation i = BuiltInRegistries.BLOCK.getKey(b);
-            // fix for not registering our own blocks as fog blocks, would result in a deadlock (or an error tbh)
-            if (i.getNamespace().equals("roundabout") || BuiltInRegistries.BLOCK.containsKey(new ResourceLocation("roundabout", "fog_" + i.getPath())))
-                continue;
+    public static List<String> dontGenState = new ArrayList<String>();
+    public static List<String> blockBlacklist = Arrays.asList(
+            "soul_fire", "air", "allium", "lava_cauldron", "end_gateway", "cave_air", "void_air", "infested_stone",
+            "barrier", "structure_void", "beacon", "glass","spawner","fog_crafting_table_coating","fog_smithing_table_coating",
+            "fog_cartography_table_coating","fog_dragon_egg_coating", "fog_fletching_table_coating","tinted_glass","fog_crimson_nylium_coating",
+            "fog_warped_nylium_coating"
+    );
 
-            //Roundabout.LOGGER.info("Registering block \"roundabout:fog_{}\"",i.getPath());
-
-            if (b.defaultBlockState().getProperties().isEmpty()) {
-                Registry.register(BuiltInRegistries.BLOCK,
-                        new ResourceLocation(Roundabout.MOD_ID, "fog_" + i.getPath()),
-                        getFogBlock());
-            } else {
-                //Roundabout.LOGGER.warn("Skipping block {} as it has unsupported properties", i);
-                continue;
-            }
-        }
-    }
+    public static List<String> dontGen = Arrays.asList("fog_dirt","fog_clay","fog_gravel","fog_sand","fog_oak_planks","fog_spruce_planks","fog_birch_planks",
+            "fog_jungle_planks","fog_acacia_planks","fog_dark_oak_planks","fog_mangrove_planks","fog_cherry_planks",
+            "fog_stone","fog_coal_ore","fog_iron_ore","fog_gold_ore","fog_lapis_ore","fog_diamond_ore","fog_cobblestone",
+            "fog_mossy_cobblestone","fog_stone_bricks","fog_deepslate","fog_netherrack","fog_nether_bricks");
+    public static List<Item> gennedFogItems = new ArrayList<>();
 }

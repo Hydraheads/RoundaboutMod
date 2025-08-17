@@ -19,6 +19,10 @@ dependencies {
     //modCompileOnly "curse.maven:sodium-394468:6260639"
 }
 
+fabricApi {
+    configureDataGeneration()
+}
+
 /**
 repositories {
     maven {

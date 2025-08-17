@@ -1,6 +1,7 @@
 package net.hydra.jojomod;
 
 import net.hydra.jojomod.advancement.criteria.ModCriteria;
+import net.hydra.jojomod.util.MainUtil;
 import net.zetalasis.networking.packet.impl.ModNetworking;
 import net.hydra.jojomod.platform.Services;
 import net.minecraft.resources.ResourceLocation;
@@ -29,7 +30,13 @@ public class Roundabout {
         // the platform specific approach.
 
         if (Services.PLATFORM.isModLoaded("roundabout")) {
-            LOGGER.info("Hello to roundabout");
+            String client;
+            if(MainUtil.isClient()){
+                client = " client";
+            } else{
+                client = " server";
+            }
+            LOGGER.info("Hello to roundabout on" + client);
         }
         forgeSet(isForge);
         ModCriteria.bootstrap();

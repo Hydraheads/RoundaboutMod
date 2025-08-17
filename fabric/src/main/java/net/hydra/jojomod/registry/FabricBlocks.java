@@ -4,7 +4,8 @@ import com.mojang.datafixers.types.Type;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.*;
-import net.hydra.jojomod.item.FleshChunkItem;
+import net.hydra.jojomod.item.FogBlockItem;
+import net.hydra.jojomod.item.FogCoatBlockItem;
 import net.hydra.jojomod.item.ModFoodComponents;
 import net.minecraft.Util;
 import net.minecraft.core.Registry;
@@ -19,6 +20,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.phys.shapes.VoxelShape;
+
+import static net.hydra.jojomod.block.ModBlocks.*;
 
 public class FabricBlocks {
     public static final Block ANCIENT_METEOR = registerBlock("ancient_meteor", ModBlocks.ANCIENT_METEOR_PROPERTIES
@@ -75,7 +79,7 @@ public class FabricBlocks {
     public static final Block D4C_LIGHT_BLOCK = registerBlockItemless("d4c_light_block",ModBlocks.D4C_LIGHT_BLOCK_PROPERTIES);
 
     public static final Block STEREO = registerBlock("stereo",ModBlocks.STEREO_PROPERTIES);
-    public static final Block FLESH_BLOCK = registerFleshBlockFood("flesh_block",ModBlocks.FLESH_BLOCK_PROPERTIES, ModFoodComponents.FLESH_CHUNK);
+    public static final Block FLESH_BLOCK = registerBlockFood("flesh_block",ModBlocks.FLESH_BLOCK_PROPERTIES, ModFoodComponents.FLESH_CHUNK);
     public static final Block MINING_ALERT_BLOCK = registerBlockItemless("mining_alert_block",ModBlocks.MINING_ALERT_BLOCK_PROPERTIES);
     public static final Block STAND_FIRE = registerBlockItemless("stand_fire",ModBlocks.STAND_FIRE_PROPERTIES);
     public static final Block ORANGE_FIRE = registerBlockItemless("colored_fire_orange",ModBlocks.ORANGE_FIRE_PROPERTIES);
@@ -85,49 +89,49 @@ public class FabricBlocks {
     public static final Block DREAD_FIRE = registerBlockItemless("colored_fire_dread",ModBlocks.DREAD_FIRE_PROPERTIES);
     public static final Block CREAM_FIRE = registerBlockItemless("colored_fire_cream",ModBlocks.CREAM_FIRE_PROPERTIES);
 
-    public static final Block FOG_DIRT = registerBlockItemless("fog_dirt",ModBlocks.getFogBlock());
-    public static final Block FOG_DIRT_COATING = registerBlockItemless("fog_dirt_coating",ModBlocks.getFogCoatingBlock());
-    public static final Block FOG_CLAY = registerBlockItemless("fog_clay",ModBlocks.getFogBlock());
-    public static final Block FOG_CLAY_COATING = registerBlockItemless("fog_clay_coating",ModBlocks.getFogCoatingBlock());
-    public static final Block FOG_GRAVEL = registerBlockItemless("fog_gravel",ModBlocks.getFogBlock());
-    public static final Block FOG_GRAVEL_COATING = registerBlockItemless("fog_gravel_coating",ModBlocks.getFogCoatingBlock());
-    public static final Block FOG_SAND = registerBlockItemless("fog_sand",ModBlocks.getFogBlock());
-    public static final Block FOG_SAND_COATING = registerBlockItemless("fog_sand_coating",ModBlocks.getFogCoatingBlock());
-    public static final Block FOG_STONE = registerBlockItemless("fog_stone",ModBlocks.getFogBlock());
-    public static final Block FOG_STONE_COATING = registerBlockItemless("fog_stone_coating",ModBlocks.getFogCoatingBlock());
-    public static final Block FOG_COBBLESTONE = registerBlockItemless("fog_cobblestone",ModBlocks.getFogBlock());
-    public static final Block FOG_COBBLESTONE_COATING = registerBlockItemless("fog_cobblestone_coating",ModBlocks.getFogCoatingBlock());
-    public static final Block FOG_MOSSY_COBBLESTONE = registerBlockItemless("fog_mossy_cobblestone",ModBlocks.getFogBlock());
-    public static final Block FOG_MOSSY_COBBLESTONE_COATING = registerBlockItemless("fog_mossy_cobblestone_coating",ModBlocks.getFogCoatingBlock());
-    public static final Block FOG_OAK_PLANKS = registerBlockItemless("fog_oak_planks",ModBlocks.getFogBlock());
-    public static final Block FOG_OAK_PLANKS_COATING = registerBlockItemless("fog_oak_planks_coating",ModBlocks.getFogCoatingBlock());
-    public static final Block FOG_SPRUCE_PLANKS = registerBlockItemless("fog_spruce_planks",ModBlocks.getFogBlock());
-    public static final Block FOG_SPRUCE_PLANKS_COATING = registerBlockItemless("fog_spruce_planks_coating",ModBlocks.getFogCoatingBlock());
-    public static final Block FOG_BIRCH_PLANKS = registerBlockItemless("fog_birch_planks",ModBlocks.getFogBlock());
-    public static final Block FOG_BIRCH_PLANKS_COATING = registerBlockItemless("fog_birch_planks_coating",ModBlocks.getFogCoatingBlock());
-    public static final Block FOG_JUNGLE_PLANKS = registerBlockItemless("fog_jungle_planks",ModBlocks.getFogBlock());
-    public static final Block FOG_JUNGLE_PLANKS_COATING = registerBlockItemless("fog_jungle_planks_coating",ModBlocks.getFogCoatingBlock());
-    public static final Block FOG_ACACIA_PLANKS = registerBlockItemless("fog_acacia_planks",ModBlocks.getFogBlock());
-    public static final Block FOG_ACACIA_PLANKS_COATING = registerBlockItemless("fog_acacia_planks_coating",ModBlocks.getFogCoatingBlock());
-    public static final Block FOG_DARK_OAK_PLANKS = registerBlockItemless("fog_dark_oak_planks",ModBlocks.getFogBlock());
-    public static final Block FOG_DARK_OAK_PLANKS_COATING = registerBlockItemless("fog_dark_oak_planks_coating",ModBlocks.getFogCoatingBlock());
-    public static final Block FOG_MANGROVE_PLANKS = registerBlockItemless("fog_mangrove_planks",ModBlocks.getFogBlock());
-    public static final Block FOG_MANGROVE_PLANKS_COATING = registerBlockItemless("fog_mangrove_planks_coating",ModBlocks.getFogCoatingBlock());
-    public static final Block FOG_CHERRY_PLANKS = registerBlockItemless("fog_cherry_planks",ModBlocks.getFogBlock());
-    public static final Block FOG_CHERRY_PLANKS_COATING = registerBlockItemless("fog_cherry_planks_coating",ModBlocks.getFogCoatingBlock());
-    public static final Block FOG_COAL_ORE = registerBlockItemless("fog_coal_ore",ModBlocks.getFogBlock());
-    public static final Block FOG_IRON_ORE = registerBlockItemless("fog_iron_ore",ModBlocks.getFogBlock());
-    public static final Block FOG_GOLD_ORE = registerBlockItemless("fog_gold_ore",ModBlocks.getFogBlock());
-    public static final Block FOG_LAPIS_ORE = registerBlockItemless("fog_lapis_ore",ModBlocks.getFogBlock());
-    public static final Block FOG_DIAMOND_ORE = registerBlockItemless("fog_diamond_ore",ModBlocks.getFogBlock());
-    public static final Block FOG_STONE_BRICKS = registerBlockItemless("fog_stone_bricks",ModBlocks.getFogBlock());
-    public static final Block FOG_STONE_BRICKS_COATING = registerBlockItemless("fog_stone_bricks_coating",ModBlocks.getFogCoatingBlock());
-    public static final Block FOG_DEEPSLATE = registerBlockItemless("fog_deepslate",ModBlocks.getFogBlock());
-    public static final Block FOG_DEEPSLATE_COATING = registerBlockItemless("fog_deepslate_coating",ModBlocks.getFogCoatingBlock());
-    public static final Block FOG_NETHERRACK = registerBlockItemless("fog_netherrack",ModBlocks.getFogBlock());
-    public static final Block FOG_NETHERRACK_COATING = registerBlockItemless("fog_netherrack_coating",ModBlocks.getFogCoatingBlock());
-    public static final Block FOG_NETHER_BRICKS = registerBlockItemless("fog_nether_bricks",ModBlocks.getFogBlock());
-    public static final Block FOG_NETHER_BRICKS_COATING = registerBlockItemless("fog_nether_bricks_coating",ModBlocks.getFogCoatingBlock());
+    public static final Block FOG_DIRT = registerBlockItemless("fog_dirt", getFogBlock());
+    public static final Block FOG_DIRT_COATING = registerBlockItemless("fog_dirt_coating", getFogCoatingBlock());
+    public static final Block FOG_CLAY = registerBlockItemless("fog_clay", getFogBlock());
+    public static final Block FOG_CLAY_COATING = registerBlockItemless("fog_clay_coating", getFogCoatingBlock());
+    public static final Block FOG_GRAVEL = registerBlockItemless("fog_gravel", getFogBlock());
+    public static final Block FOG_GRAVEL_COATING = registerBlockItemless("fog_gravel_coating", getFogCoatingBlock());
+    public static final Block FOG_SAND = registerBlockItemless("fog_sand", getFogBlock());
+    public static final Block FOG_SAND_COATING = registerBlockItemless("fog_sand_coating", getFogCoatingBlock());
+    public static final Block FOG_STONE = registerBlockItemless("fog_stone", getFogBlock());
+    public static final Block FOG_STONE_COATING = registerBlockItemless("fog_stone_coating", getFogCoatingBlock());
+    public static final Block FOG_COBBLESTONE = registerBlockItemless("fog_cobblestone", getFogBlock());
+    public static final Block FOG_COBBLESTONE_COATING = registerBlockItemless("fog_cobblestone_coating", getFogCoatingBlock());
+    public static final Block FOG_MOSSY_COBBLESTONE = registerBlockItemless("fog_mossy_cobblestone", getFogBlock());
+    public static final Block FOG_MOSSY_COBBLESTONE_COATING = registerBlockItemless("fog_mossy_cobblestone_coating", getFogCoatingBlock());
+    public static final Block FOG_OAK_PLANKS = registerBlockItemless("fog_oak_planks", getFogBlock());
+    public static final Block FOG_OAK_PLANKS_COATING = registerBlockItemless("fog_oak_planks_coating", getFogCoatingBlock());
+    public static final Block FOG_SPRUCE_PLANKS = registerBlockItemless("fog_spruce_planks", getFogBlock());
+    public static final Block FOG_SPRUCE_PLANKS_COATING = registerBlockItemless("fog_spruce_planks_coating", getFogCoatingBlock());
+    public static final Block FOG_BIRCH_PLANKS = registerBlockItemless("fog_birch_planks", getFogBlock());
+    public static final Block FOG_BIRCH_PLANKS_COATING = registerBlockItemless("fog_birch_planks_coating", getFogCoatingBlock());
+    public static final Block FOG_JUNGLE_PLANKS = registerBlockItemless("fog_jungle_planks", getFogBlock());
+    public static final Block FOG_JUNGLE_PLANKS_COATING = registerBlockItemless("fog_jungle_planks_coating", getFogCoatingBlock());
+    public static final Block FOG_ACACIA_PLANKS = registerBlockItemless("fog_acacia_planks", getFogBlock());
+    public static final Block FOG_ACACIA_PLANKS_COATING = registerBlockItemless("fog_acacia_planks_coating", getFogCoatingBlock());
+    public static final Block FOG_DARK_OAK_PLANKS = registerBlockItemless("fog_dark_oak_planks", getFogBlock());
+    public static final Block FOG_DARK_OAK_PLANKS_COATING = registerBlockItemless("fog_dark_oak_planks_coating", getFogCoatingBlock());
+    public static final Block FOG_MANGROVE_PLANKS = registerBlockItemless("fog_mangrove_planks", getFogBlock());
+    public static final Block FOG_MANGROVE_PLANKS_COATING = registerBlockItemless("fog_mangrove_planks_coating", getFogCoatingBlock());
+    public static final Block FOG_CHERRY_PLANKS = registerBlockItemless("fog_cherry_planks", getFogBlock());
+    public static final Block FOG_CHERRY_PLANKS_COATING = registerBlockItemless("fog_cherry_planks_coating", getFogCoatingBlock());
+    public static final Block FOG_COAL_ORE = registerBlockItemless("fog_coal_ore", getFogBlock());
+    public static final Block FOG_IRON_ORE = registerBlockItemless("fog_iron_ore", getFogBlock());
+    public static final Block FOG_GOLD_ORE = registerBlockItemless("fog_gold_ore", getFogBlock());
+    public static final Block FOG_LAPIS_ORE = registerBlockItemless("fog_lapis_ore", getFogBlock());
+    public static final Block FOG_DIAMOND_ORE = registerBlockItemless("fog_diamond_ore", getFogBlock());
+    public static final Block FOG_STONE_BRICKS = registerBlockItemless("fog_stone_bricks", getFogBlock());
+    public static final Block FOG_STONE_BRICKS_COATING = registerBlockItemless("fog_stone_bricks_coating", getFogCoatingBlock());
+    public static final Block FOG_DEEPSLATE = registerBlockItemless("fog_deepslate", getFogBlock());
+    public static final Block FOG_DEEPSLATE_COATING = registerBlockItemless("fog_deepslate_coating", getFogCoatingBlock());
+    public static final Block FOG_NETHERRACK = registerBlockItemless("fog_netherrack", getFogBlock());
+    public static final Block FOG_NETHERRACK_COATING = registerBlockItemless("fog_netherrack_coating", getFogCoatingBlock());
+    public static final Block FOG_NETHER_BRICKS = registerBlockItemless("fog_nether_bricks", getFogBlock());
+    public static final Block FOG_NETHER_BRICKS_COATING = registerBlockItemless("fog_nether_bricks_coating", getFogCoatingBlock());
 
     public static final BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY =
            registerBE("stereo",BlockEntityType.Builder.of(StereoBlockEntity::new, STEREO));
@@ -155,10 +159,8 @@ public class FabricBlocks {
         registerBlockItem(name, block);
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
     }
-    private static Block registerFleshBlockFood(String name, Block block, FoodProperties food) {
-        //lazy solution, but I don't see many new block+foods in the future
-        // I don't quite understand how to have a class as a parameter -Prisma
-        registerFleshBlockFoodItem(name, block,food);
+    private static Block registerBlockFood(String name, Block block, FoodProperties food) {
+        registerBlockFoodItem(name, block,food);
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
 
     }
@@ -171,9 +173,9 @@ public class FabricBlocks {
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
     }
 
-    private static Item registerFleshBlockFoodItem(String name, Block block, FoodProperties food) {
+    private static Item registerBlockFoodItem(String name, Block block, FoodProperties food) {
         return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, name),
-                new FleshChunkItem(block, new Item.Properties().food(food)));
+                new BlockItem(block, new Item.Properties().food(food)));
     }
 
     private static Item registerBlockItem(String name, Block block){
@@ -276,6 +278,50 @@ public class FabricBlocks {
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
 
-        //ModBlocks.registerDynamicFogBlocks();
+        registerDynamicFogBlocks();
+    }
+    public static void registerDynamicFogBlocks()
+    {
+        // TODO: dynamically generate blockstates and then it's ready for use
+        for (Block b : BuiltInRegistries.BLOCK)
+        {
+            ResourceLocation i = BuiltInRegistries.BLOCK.getKey(b);
+            // fix for not registering our own blocks as fog blocks, would result in a deadlock (or an error tbh)
+            if (!i.getNamespace().equals("minecraft") || BuiltInRegistries.BLOCK.containsKey(new ResourceLocation("roundabout", "fog_" + i.getPath())) || blockBlacklist.contains(i.getPath())) {
+                dontGenState.add("fog_" + i.getPath());
+                continue;
+            }
+            //Roundabout.LOGGER.info("Registering block \"roundabout:fog_{}\"",i.getPath());
+            boolean rightSize = false;
+            try {
+                VoxelShape vshape = b.defaultBlockState().getCollisionShape(null, null);
+                rightSize = !vshape.isEmpty() && vshape.bounds().getYsize() == 1.0;
+            } catch (Exception e) {
+                try{
+                    rightSize = b.defaultBlockState().isCollisionShapeFullBlock(null,null);
+                } catch (Exception ex) {
+                    Roundabout.LOGGER.debug("Couldn't get the shape of " + i.getPath());
+                    rightSize = true;
+                }
+            }
+            if (b.defaultBlockState().getProperties().isEmpty() && rightSize) {
+                Block fb = Registry.register(BuiltInRegistries.BLOCK,
+                        new ResourceLocation(Roundabout.MOD_ID, "fog_" + i.getPath()),
+                        getFogBlock());
+                if(!blockBlacklist.contains("fog_" + i.getPath() + "_coating")) {
+                    Block fc = Registry.register(BuiltInRegistries.BLOCK,
+                            new ResourceLocation(Roundabout.MOD_ID, "fog_" + i.getPath() + "_coating"),
+                            getFogCoatingBlock());
+                    gennedFogItems.add(Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID,"fog_" + i.getPath() + "_coating"), (Item) new FogCoatBlockItem(fc, new Item.Properties(), b)));
+                }
+                gennedFogItems.add(Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID,"fog_" + i.getPath()), (Item) new FogBlockItem(fb, new Item.Properties(), b)));
+
+
+            } else {
+                //Roundabout.LOGGER.warn("Skipping block {} as it has unsupported properties", i);
+                continue;
+            }
+        }
     }
 }
+

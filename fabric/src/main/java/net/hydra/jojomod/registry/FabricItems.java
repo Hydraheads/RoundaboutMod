@@ -421,6 +421,10 @@ public class FabricItems {
                         entries.accept(FOG_NETHERRACK_COATING);
                         entries.accept(FOG_NETHER_BRICKS_COATING);
 
+                        for(Item i : ModBlocks.gennedFogItems){
+                            entries.accept(i);
+                        }
+
                     }).build());
 
 
