@@ -1,6 +1,12 @@
 {
     "parent": "minecraft:block/cube_all",
     "textures": {
-        "all": "roundabout:block/ancient_meteor"
+        "particle": "roundabout:block/flesh_block",
+        "down": "roundabout:block/flesh_block",
+        "east": "roundabout:block/flesh_block_side",
+        "north": "roundabout:block/flesh_block_side",
+        "south": "roundabout:block/flesh_block_side",
+        "up": "roundabout:block/flesh_block",
+        "west": "roundabout:block/flesh_block_side"
     }
 }

@@ -1,18 +1,23 @@
 {
     "textures": {
-        "particle": "roundabout:block/ancient_meteor",
-        "texture": "roundabout:block/ancient_meteor"
+        "particle": "roundabout:block/flesh_block",
+        "down": "roundabout:block/flesh_block",
+        "east": "roundabout:block/flesh_block_side",
+        "north": "roundabout:block/flesh_block_side",
+        "south": "roundabout:block/flesh_block_side",
+        "up": "roundabout:block/flesh_block",
+        "west": "roundabout:block/flesh_block_side"
     },
     "elements": [
         {   "from": [ 0, 0, 0 ],
             "to": [ 16, 12, 16 ],
             "faces": {
-                "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#texture", "cullface": "down" },
-                "up":    { "uv": [ 0, 0, 16, 16 ], "texture": "#texture" },
-                "north": { "uv": [ 0, 4, 16, 16 ], "texture": "#texture", "cullface": "north" },
-                "south": { "uv": [ 0, 4, 16, 16 ], "texture": "#texture", "cullface": "south" },
-                "west":  { "uv": [ 0, 4, 16, 16 ], "texture": "#texture", "cullface": "west" },
-                "east":  { "uv": [ 0, 4, 16, 16 ], "texture": "#texture", "cullface": "east" }
+                "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#down", "cullface": "down" },
+                "up":    { "uv": [ 0, 0, 16, 16 ], "texture": "#up" },
+                "north": { "uv": [ 0, 4, 16, 16 ], "texture": "#down", "cullface": "north" },
+                "south": { "uv": [ 0, 4, 16, 16 ], "texture": "#down", "cullface": "south" },
+                "west":  { "uv": [ 0, 4, 16, 16 ], "texture": "#down", "cullface": "west" },
+                "east":  { "uv": [ 0, 4, 16, 16 ], "texture": "#down", "cullface": "east" }
             }
         }
     ]
