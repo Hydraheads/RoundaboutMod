@@ -610,7 +610,7 @@ public class ModSounds {
     public static SoundEvent RATT_DART_THUNK_EVENT = SoundEvent.createVariableRangeEvent(RATT_DART_THUNK_ID);
     public static final String RATT_DART_IMPACT = "ratt_dart_impact";
     public static final ResourceLocation RATT_DART_IMPACT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RATT_DART_IMPACT);
-    public static SoundEvent RATT_DART_IMPACT_EVENT = RATT_DART_THUNK_EVENT;//SoundEvent.createVariableRangeEvent(RATT_DART_IMPACT_ID);
+    public static SoundEvent RATT_DART_IMPACT_EVENT = SoundEvent.createVariableRangeEvent(RATT_DART_THUNK_ID);
 
     public static final String UNLOCK_SKIN = "unlock_skin";
     public static final ResourceLocation UNLOCK_SKIN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+UNLOCK_SKIN);

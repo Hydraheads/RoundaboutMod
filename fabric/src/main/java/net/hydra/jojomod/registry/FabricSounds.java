@@ -204,6 +204,8 @@ public class FabricSounds {
 
         addSound(ModSounds.RATT_SUMMON_ID, ModSounds.RATT_SUMMON_EVENT);
         addSound(ModSounds.RATT_SCOPE_ID, ModSounds.RATT_SCOPE_EVENT);
+        addSound(ModSounds.RATT_DART_THUNK_ID, ModSounds.RATT_DART_THUNK_EVENT);
+
 
 
         addSound(ModSounds.THE_WORLD_OVER_HEAVEN_ID, ModSounds.THE_WORLD_OVER_HEAVEN_EVENT);
