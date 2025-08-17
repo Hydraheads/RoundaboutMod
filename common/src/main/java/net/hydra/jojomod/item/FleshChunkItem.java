@@ -1,5 +1,6 @@
 package net.hydra.jojomod.item;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.mixin.StandUserEntity;
 import net.hydra.jojomod.stand.powers.PowersRatt;
@@ -28,7 +29,7 @@ public class FleshChunkItem extends BlockItem {
 
     @Override
     public ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity entity) {
-        ItemStack $$3 = super.finishUsingItem(itemStack, level, entity);
+        ItemStack $$3 = super.finishUsingItem(itemStack,level,entity);
         if ( (((StandUser)entity )).roundabout$getStandPowers() instanceof PowersRatt) {
             entity.removeEffect(MobEffects.HUNGER);
             FoodData f = ((Player)entity).getFoodData();

@@ -4075,18 +4075,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         }
 
-    /*    if (cause instanceof Player PE) {
-            if ( ((StandUserEntity) cause).roundabout$getStandPowers() instanceof PowersRatt PR  ) {
-                if ( this.roundabout$getStandPowers() instanceof PowersTheWorld ) {
-                    ((IPlayerEntity) cause).roundabout$setUnlockedBonusSkin(true);
-                }
-            }
-        } */
 
 
         MobEffectInstance melting = this.getEffect(ModEffects.MELTING);
         if (melting != null) {
-            int amount =  Mth.clamp(melting.getAmplifier(),1,7) + (int) (Math.random() * 1 + 0.5);
+            int amount =  Mth.clamp(melting.getAmplifier()/2,1,6) + (int) (Math.random() * 1 + 0.5);
             if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
                 RattDartEntity r = new RattDartEntity(this.level(),(LivingEntity) ((Object) this),5); //doesn't really matter what you put here
                 r.placeFlesh(me.getOnPos(),amount);
