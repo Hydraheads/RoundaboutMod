@@ -24,9 +24,12 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
     private final HashMap<String, Object> configFields = new HashMap<>();
     private final ConfigType configType;
 
+    public static int constant1 = 340;
+    public static int constant2 = constant1-40;
+
     public ConfigListWidget(ConfigScreen parent, Minecraft client, ConfigType selectedType) {
-        super(client, 240, parent.height, 20, parent.height - 40, 32);
-        this.setLeftPos((parent.width - 240) / 2);
+        super(client, constant1, parent.height, 20, parent.height - 40, 32);
+        this.setLeftPos((parent.width - constant1) / 2);
         this.parent = parent;
         this.configType = selectedType;
 
@@ -88,7 +91,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
 
     @Override
     public int getRowWidth() {
-        return 200;
+        return constant2;
     }
 
     @Override
@@ -131,7 +134,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                         } catch (IllegalAccessException e) {
                             e.printStackTrace();
                         }
-                    }).size(200, 20).build();
+                    }).size(constant2, 20).build();
         }
 
         public Component getNewValueRender(boolean newVal){
@@ -183,7 +186,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
             String display = getFieldDisplay();
             editButton = Button.builder(Component.literal(display), btn -> {
                 Minecraft.getInstance().setScreen(new EditValueScreen(ConfigListWidget.this.parent, field, instance, configType,getScrollAmount()));
-            }).size(200, 20).build();
+            }).size(constant2, 20).build();
         }
 
         private String getFieldDisplay() {
