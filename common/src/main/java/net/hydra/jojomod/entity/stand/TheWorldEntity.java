@@ -28,7 +28,8 @@ public class TheWorldEntity extends FollowingStandEntity {
             FOUR_DEE_EXPERIENCE = 15,
             ULTIMATE_SKIN = 16,
             ULTIMATE_KARS_SKIN = 17,
-            SCARLET = 18;
+            SCARLET = 18,
+            THE_NETHER = 19;
 
     public final AnimationState timeStopAnimationState = new AnimationState();
     public final AnimationState timeStopReleaseAnimation = new AnimationState();
