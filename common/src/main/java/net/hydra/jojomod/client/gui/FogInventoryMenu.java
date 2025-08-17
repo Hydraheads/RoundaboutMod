@@ -2,6 +2,7 @@ package net.hydra.jojomod.client.gui;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
@@ -130,14 +131,6 @@ public class FogInventoryMenu extends RecipeBookMenu<CraftingContainer> {
     public void slotsChanged(Container $$0) {
     }
 
-    @Override
-    public void removed(Player $$0) {
-        super.removed($$0);
-        this.resultSlots.clearContent();
-        if (!$$0.level().isClientSide) {
-            this.clearContainer($$0, this.craftSlots);
-        }
-    }
 
     @Override
     public boolean stillValid(Player $$0) {
@@ -244,5 +237,27 @@ public class FogInventoryMenu extends RecipeBookMenu<CraftingContainer> {
     @Override
     public boolean shouldMoveToInventory(int $$0) {
         return $$0 != this.getResultSlotIndex();
+    }
+
+    @Override
+    public void removed(Player $$0) {
+        super.removed($$0);
+
+        if ($$0 instanceof ServerPlayer SP) {
+            ItemStack $$1 = SP.inventoryMenu.getCarried();
+            if (!$$1.isEmpty()) {
+                if ($$0.isAlive() && !((ServerPlayer)$$0).hasDisconnected()) {
+                    $$0.getInventory().placeItemBackInInventory($$1);
+                } else {
+                    $$0.drop($$1, false);
+                }
+
+                SP.inventoryMenu.setCarried(ItemStack.EMPTY);
+            }
+        }
+        this.resultSlots.clearContent();
+        if (!$$0.level().isClientSide) {
+            this.clearContainer($$0, this.craftSlots);
+        }
     }
 }

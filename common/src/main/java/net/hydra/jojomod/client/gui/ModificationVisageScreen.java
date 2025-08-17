@@ -72,7 +72,6 @@ public class ModificationVisageScreen extends Screen {
         this.currentlyHovered = null;
         visage = stack;
 
-        Roundabout.LOGGER.info(""+stack.getItem());
         if (stack != null && !stack.isEmpty() && stack.getItem() instanceof ModificationMaskItem){
             if (stack.getOrCreateTagElement("modifications").contains("height")) {
                 visageHeight = stack.getOrCreateTagElement("modifications").getInt("height");

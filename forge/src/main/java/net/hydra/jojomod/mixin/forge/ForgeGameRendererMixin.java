@@ -1,5 +1,4 @@
-package net.hydra.jojomod.mixin.gravity.client;
-
+package net.hydra.jojomod.mixin.forge;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.RotationAnimation;
@@ -22,19 +21,18 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 
 @Mixin(GameRenderer.class)
-public abstract class GravityGameRendererMixin {
-
+public abstract class ForgeGameRendererMixin {
     @Inject(
             method = "renderLevel(FJLcom/mojang/blaze3d/vertex/PoseStack;)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionf;)V",
-                    ordinal = 3,
+                    ordinal = 4,
                     shift = At.Shift.AFTER
             )
     )
-    private void roundabout$inject_renderWorld(float tickDelta, long limitTime, PoseStack matrix, CallbackInfo ci) {
-        if (!Objects.equals(ModPacketHandler.PLATFORM_ACCESS.getPlatformName(), "Forge")) {
+    private void roundabout$inject_renderWorldForge(float tickDelta, long limitTime, PoseStack matrix, CallbackInfo ci) {
+        if (Objects.equals(ModPacketHandler.PLATFORM_ACCESS.getPlatformName(), "Forge")) {
             if (this.mainCamera.getEntity() != null) {
                 Entity focusedEntity = this.mainCamera.getEntity();
                 Direction gravityDirection = GravityAPI.getGravityDirection(focusedEntity);
@@ -55,7 +53,6 @@ public abstract class GravityGameRendererMixin {
             }
         }
     }
-
     @Shadow
     @Final
     private Camera mainCamera;

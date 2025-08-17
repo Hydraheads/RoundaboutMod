@@ -1679,11 +1679,12 @@
   "config.roundabout.fogChainCooldown.desc": "Change the cooldown of fog chains, by default the cooldown is 80 (4 seconds).",
   "config.roundabout.phantomCorpseSpeed.name": "Phantom Riding Speed",
   "config.roundabout.phantomCorpseSpeed.desc": "Change how fast the speed of phantom mounts are, it is 0.83 by default. Change to zero to disable the ability to ride phantom corpses in general.",
+  "config.roundabout.enableFogBlockInventory.name": "Enable Fog Inventory",
+  "config.roundabout.enableFogBlockInventory.desc": "Enables or disables the fog inventory skill. If the inventory is giving you trouble due to mod interactions or there are any other modded server issues with it, you can turn it off disabling it and its related code.",
   "config.roundabout.attackSpeedBuff.name": "Attack Speed Buff",
   "config.roundabout.attackSpeedBuff.desc": "Increases the speed of swinging weapons with justice active. By default, the stand increases your attack speed by 30%.",
   "config.roundabout.miningSpeedBuff.name": "Mining Speed Buff",
   "config.roundabout.miningSpeedBuff.desc": "Increases the speed of breaking blocks with justice active. By default, the stand increases your mining speed by 30%.",
-
 
   "config.roundabout.numberOfYapLines.name": "Yap Line Count",
   "config.roundabout.numberOfYapLines.desc": "Change this if you want to add more yap lines to the lang file in a resource pack.",

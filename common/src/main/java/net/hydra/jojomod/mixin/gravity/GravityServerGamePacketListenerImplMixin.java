@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin.gravity;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.network.protocol.game.ServerboundBlockEntityTagQuery;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.network.protocol.game.ServerboundMoveVehiclePacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,6 +18,7 @@ import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -45,6 +47,22 @@ public abstract class GravityServerGamePacketListenerImplMixin {
         if (gravityDirection == Direction.DOWN)
             return;
         ((IGravityEntity)this.player).rdbdt$setTaggedForFlip(true);
+    }
+
+
+    @ModifyVariable(method = "handleMovePlayer", at = @At(value = "STORE"), ordinal = 0)
+    private boolean roundabout$handleMovePlayerResetFallDistance(boolean bool,ServerboundMovePlayerPacket $$0) {
+        Direction gravityDirection = GravityAPI.getGravityDirection(this.player);
+        if (gravityDirection == Direction.DOWN)
+            return bool;
+
+        double $$2 = clampHorizontal($$0.getX(this.player.getX()));
+        double $$3 = clampVertical($$0.getY(this.player.getY()));
+        double $$4 = clampHorizontal($$0.getZ(this.player.getZ()));
+        Vec3 myPositionVec = RotationUtil.vecPlayerToWorld($$2,$$3,$$4,gravityDirection);
+        Vec3 myLastPositionVec = RotationUtil.vecPlayerToWorld(lastGoodX,lastGoodY,lastGoodZ,gravityDirection);
+
+        return (myPositionVec.y - myLastPositionVec.y > 0);
     }
 
     @Inject(

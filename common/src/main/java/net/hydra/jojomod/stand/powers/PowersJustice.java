@@ -767,7 +767,7 @@ public class PowersJustice extends NewDashPreset {
                 setSkillIcon(context, x, y, 1, StandIcons.JUSTICE_CAST_FOG, PowerIndex.NO_CD);
             }
 
-            if (isHoldingSneak()){
+            if (isHoldingSneak() && ClientNetworking.getAppropriateConfig().justiceSettings.enableFogBlockInventory){
                 setSkillIcon(context, x, y, 2, StandIcons.JUSTICE_FOG_BLOCKS, PowerIndex.SKILL_2_SNEAK);
             } else {
                 setSkillIcon(context, x, y, 2, StandIcons.JUSTICE_FOG_CHAIN, PowerIndex.SKILL_2);
@@ -824,8 +824,10 @@ public class PowersJustice extends NewDashPreset {
                 "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_DISGUISE_3,1,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96, topPos + 118, getSkeletonMorphLevel(), "ability.roundabout.fog_morph_4",
                 "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_DISGUISE_4,1,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 80, 0, "ability.roundabout.fog_blocks",
-                "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_FOG_BLOCKS,2,level,bypass));
+        if (ClientNetworking.getAppropriateConfig().justiceSettings.enableFogBlockInventory) {
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 80, 0, "ability.roundabout.fog_blocks",
+                    "instruction.roundabout.press_skill_crouch", StandIcons.JUSTICE_FOG_BLOCKS, 2, level, bypass));
+        }
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 99, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 118, getFogCloneLevel(), "ability.roundabout.fog_clones",
@@ -937,7 +939,7 @@ public class PowersJustice extends NewDashPreset {
     }
 
     public void setFogBlockScreen(){
-        if (isPiloting()) {
+        if (isPiloting() || !ClientNetworking.getAppropriateConfig().justiceSettings.enableFogBlockInventory) {
             fogChainClient();
             return;
         }
@@ -1423,7 +1425,7 @@ public class PowersJustice extends NewDashPreset {
     }
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
-        if ((slot == 2  && (!this.isHoldingSneak() || isPiloting()))){
+        if ((slot == 2  && (!this.isHoldingSneak() || isPiloting() || !ClientNetworking.getAppropriateConfig().justiceSettings.enableFogBlockInventory))){
             IPermaCasting icast = ((IPermaCasting) this.getSelf().level());
             if (!icast.roundabout$isPermaCastingEntity(this.getSelf())) {
                 return true;

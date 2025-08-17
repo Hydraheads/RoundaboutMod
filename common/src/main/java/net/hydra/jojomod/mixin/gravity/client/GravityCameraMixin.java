@@ -1,4 +1,5 @@
 package net.hydra.jojomod.mixin.gravity.client;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.util.RotationAnimation;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.minecraft.client.Camera;
@@ -81,6 +82,7 @@ public abstract class GravityCameraMixin {
             this.level = $$0;
             this.entity = focusedEntity;
             this.detached = $$2;
+
             this.setRotation(focusedEntity.getViewYRot(tickDelta), focusedEntity.getViewXRot(tickDelta));
 
 
