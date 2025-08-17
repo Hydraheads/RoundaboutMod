@@ -25,6 +25,7 @@ public class PacketDataIndex {
     public static final byte DROP_FOG_ITEM = 2;
     public static final byte ITEM_SWITCH_MAIN = 4;
     public static final byte ITEM_SWITCH_SECONDARY = 5;
+    public static final byte FOG_CHECK = 6;
 
 
     /**Int packets*/
@@ -41,6 +42,7 @@ public class PacketDataIndex {
     public static final byte INT_INDEX_OF_VISAGE_EMERALDS = 11;
     public static final byte INT_RELLA_START = 12;
     public static final byte INT_RELLA_CANCEL = 13;
+    public static final byte INT_CURRENT_ITEM = 14;
 
     /**Single Byte packets*/
     public static final byte SINGLE_BYTE_GLAIVE_START_SOUND = 1;

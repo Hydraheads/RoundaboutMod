@@ -439,6 +439,8 @@ public class Config implements Cloneable {
         public Float attackSpeedBuff;
         @FloatOption(group = "inherit", value = 0.3F, min = 0, max = 72000F)
         public Float miningSpeedBuff;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableFogBlockInventory;
     }
     public static class CinderellaSettings {
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)

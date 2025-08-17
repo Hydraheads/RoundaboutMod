@@ -128,7 +128,7 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
 
     @Override
     protected void slotClicked(@Nullable Slot $$0, int $$1, int $$2, ClickType $$3) {
-        if ($$3 == ClickType.SWAP) {
+        if ($$3 == ClickType.SWAP || $$3 == ClickType.QUICK_MOVE) {
             return;
         }
         if (this.isCreativeSlot($$0)) {
@@ -142,8 +142,7 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
             if (!this.menu.getCarried().isEmpty() && this.hasClickedOutside) {
                 if ($$2 == 0) {
                     this.minecraft.player.drop(this.menu.getCarried(), true);
-                    C2SPacketUtil.inventoryToServerPacket(-1,
-                            this.menu.getCarried(),PacketDataIndex.ADD_FOG_ITEM);
+
                     this.menu.setCarried(ItemStack.EMPTY);
                 }
 
@@ -917,6 +916,8 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
         @Override
         public void setCarried(ItemStack $$0) {
             this.inventoryMenu.setCarried($$0);
+            C2SPacketUtil.itemContextToServerPacket(PacketDataIndex.FOG_CHECK,$$0);
+
         }
 
     }
