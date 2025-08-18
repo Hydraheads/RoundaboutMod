@@ -156,51 +156,6 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         }
     }
 
-//    @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
-//            at = @At(value = "INVOKE",
-//                    target = "Lnet/minecraft/client/renderer/entity/LivingEntityRenderer;setupRotations(Lnet/minecraft/world/entity/LivingEntity;Lcom/mojang/blaze3d/vertex/PoseStack;FFF)V",
-//                    shift = At.Shift.AFTER))
-//    private void roundabout$renderYellowLines(T entity, float $$1, float $$2, PoseStack matrices, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
-//        if (roundabout$isRenderingYellowLines) {
-//            roundabout$isRenderingYellowLines = false;
-//
-//            matrices.pushPose();
-//
-//            float scale = 1.05f;
-//            float height = entity.getBbHeight();
-//
-//            matrices.translate(0, height, 0);
-//            matrices.scale(-1f, -1f, 1f);
-//            matrices.scale(scale, scale, scale);
-//
-//            RenderSystem.enableDepthTest();
-//            RenderSystem.depthMask(true);
-//            RenderSystem.enableBlend();
-//            RenderSystem.defaultBlendFunc();
-//
-//            RenderSystem.setShader(() -> RCoreShader.roundabout$loveTrainProgram);
-//            RenderSystem.setShaderTexture(0, 0);
-//            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-//
-//            RCoreShader.roundabout$loveTrainProgram.getUniform("FrameCount").set(((IGameRenderer) Minecraft.getInstance().gameRenderer).roundabout$getFrameCount());
-//
-//            Tesselator tesselator = Tesselator.getInstance();
-//            BufferBuilder buffer = tesselator.getBuilder();
-//            buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.NEW_ENTITY);
-//
-//            model.renderToBuffer(
-//                    matrices,
-//                    buffer,
-//                    $$5,
-//                    OverlayTexture.NO_OVERLAY,
-//                    1f, 1f, 0f, 1f
-//            );
-//
-//            tesselator.end();
-//
-//            matrices.popPose();
-//        }
-//    }
 
     @Inject(method = "getOverlayCoords", at = @At(value = "HEAD"), cancellable = true)
     private static void roundabout$GetOverlayCoords(LivingEntity $$0, float $$1, CallbackInfoReturnable<Integer> ci) {

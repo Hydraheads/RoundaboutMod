@@ -142,7 +142,7 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                         if (ERA instanceof LivingEntityRenderer ELA) {
                             EntityRenderer<LivingEntity> ER = (EntityRenderer<LivingEntity>) $$7.getRenderer(lv);
                             if (fire.getBlockState().hasProperty(MirrorBlock.FACING)) {
-                                matrices.pushPose();
+                                ClientUtil.pushPoseAndCooperate(matrices,3);
                                 boolean hgui = Minecraft.getInstance().options.hideGui;
                                 Minecraft.getInstance().options.hideGui = true;
                                 Direction direction = fire.getBlockState().getValue(MirrorBlock.FACING);
@@ -194,7 +194,7 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                                 RenderSystem.setShaderLights(first, second);
 
                                 Minecraft.getInstance().options.hideGui = hgui;
-                                matrices.popPose();
+                                ClientUtil.popPoseAndCooperate(matrices,3);
                             }
                         }
                     }

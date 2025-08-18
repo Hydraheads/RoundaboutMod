@@ -186,175 +186,176 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
     public void renderRightLeg(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
                                float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
         if (getParentModel().rightLeg.visible) {
-            poseStack.pushPose();
+            ClientUtil.pushPoseAndCooperate(poseStack,46);
             getParentModel().rightLeg.translateAndRotate(poseStack);
             ModStrayModels.RightLeg.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                     r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
-            poseStack.popPose();
+            ClientUtil.popPoseAndCooperate(poseStack,46);
         }
     }
     public void renderLeftLeg(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
                                float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
         if (getParentModel().leftLeg.visible) {
-            poseStack.pushPose();
+            ClientUtil.pushPoseAndCooperate(poseStack,45);
             getParentModel().leftLeg.translateAndRotate(poseStack);
             ModStrayModels.LeftLeg.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                     r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
-            poseStack.popPose();
+            ClientUtil.popPoseAndCooperate(poseStack,45);
         }
     }
     public void renderRightArm(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
                            float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
         if (getParentModel().rightArm.visible) {
-            poseStack.pushPose();
+            ClientUtil.pushPoseAndCooperate(poseStack,27);
             getParentModel().rightArm.translateAndRotate(poseStack);
             ModStrayModels.RightArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                     r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
-            poseStack.popPose();
+            ClientUtil.popPoseAndCooperate(poseStack,28);
         }
     }
     public void renderRightArmSlim(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
                                float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
         if (getParentModel().rightArm.visible) {
-            poseStack.pushPose();
+            ClientUtil.pushPoseAndCooperate(poseStack,29);
             getParentModel().rightArm.translateAndRotate(poseStack);
             ModStrayModels.RightArmSlim.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                     r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
-            poseStack.popPose();
+            ClientUtil.popPoseAndCooperate(poseStack,29);
         }
     }
     public void renderLeftArm(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
                                float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
         if (getParentModel().leftArm.visible) {
-            poseStack.pushPose();
+            ClientUtil.pushPoseAndCooperate(poseStack,30);
             getParentModel().leftArm.translateAndRotate(poseStack);
             ModStrayModels.LeftArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                     r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
-            poseStack.popPose();
+            ClientUtil.popPoseAndCooperate(poseStack,30);
         }
     }
     public void renderLeftArmSlim(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
                                    float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
         if (getParentModel().leftArm.visible) {
-            poseStack.pushPose();
+            ClientUtil.pushPoseAndCooperate(poseStack,31);
             getParentModel().leftArm.translateAndRotate(poseStack);
             ModStrayModels.LeftArmSlim.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                     r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
-            poseStack.popPose();
+            ClientUtil.popPoseAndCooperate(poseStack,31);
         }
     }
     public void renderNormalBreast(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                                    float r, float g, float b) {
-        poseStack.pushPose();
+        ClientUtil.pushPoseAndCooperate(poseStack,32);
         getParentModel().body.translateAndRotate(poseStack);
         ModStrayModels.ChestPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
-        poseStack.popPose();
+        ClientUtil.popPoseAndCooperate(poseStack,32);
     }
     public void renderSmallBreast(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                                    float r, float g, float b) {
-        poseStack.pushPose();
+        ClientUtil.pushPoseAndCooperate(poseStack,33);
         getParentModel().body.translateAndRotate(poseStack);
         ModStrayModels.SmallChestPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
-        poseStack.popPose();
+        ClientUtil.popPoseAndCooperate(poseStack,33);
     }
     public void renderPonytail(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                                    float r, float g, float b) {
 
-        poseStack.pushPose();
+        ClientUtil.pushPoseAndCooperate(poseStack,34);
         getParentModel().body.translateAndRotate(poseStack);
         ModStrayModels.PonytailPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
-        poseStack.popPose();
+        ClientUtil.popPoseAndCooperate(poseStack,34);
     }
     public void renderBigHair(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                                float r, float g, float b) {
-        poseStack.pushPose();
+        ClientUtil.pushPoseAndCooperate(poseStack,35);
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.BigHairPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
-        poseStack.popPose();
+        ClientUtil.popPoseAndCooperate(poseStack,35);
     }
     public void renderDiegoHat(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                               float r, float g, float b) {
 
-        poseStack.pushPose();
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.DiegoHatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
-        poseStack.popPose();
+        ClientUtil.popPoseAndCooperate(poseStack,36);
     }
     public void renderBasicHat(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                                float r, float g, float b) {
 
-        poseStack.pushPose();
+        ClientUtil.pushPoseAndCooperate(poseStack,37);
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.BasicHatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
-        poseStack.popPose();
+        ClientUtil.popPoseAndCooperate(poseStack,37);
     }
     public void renderSpikeyHair(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                                float r, float g, float b) {
 
-        poseStack.pushPose();
+        ClientUtil.pushPoseAndCooperate(poseStack,38);
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.SpikeyHairPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
-        poseStack.popPose();
+        ClientUtil.popPoseAndCooperate(poseStack,38);
     }
     public void renderAvdolHair(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                                  float r, float g, float b) {
 
-        poseStack.pushPose();
+        ClientUtil.pushPoseAndCooperate(poseStack,39);
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.AvdolHairPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
-        poseStack.popPose();
+        ClientUtil.popPoseAndCooperate(poseStack,39);
     }
     public void renderJosukeDecals(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                                  float r, float g, float b) {
 
-        poseStack.pushPose();
+        ClientUtil.pushPoseAndCooperate(poseStack,40);
         getParentModel().body.translateAndRotate(poseStack);
         ModStrayModels.JosukeDecalsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
-        poseStack.popPose();
+        ClientUtil.popPoseAndCooperate(poseStack,40);
     }
     public void renderTasselHat(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                                  float r, float g, float b) {
 
-        poseStack.pushPose();
+        ClientUtil.pushPoseAndCooperate(poseStack,41);
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.TasselHatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
-        poseStack.popPose();
+        ClientUtil.popPoseAndCooperate(poseStack,41);
     }
     public void renderLegCloakPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                                    float r, float g, float b) {
 
-        poseStack.pushPose();
+        ClientUtil.pushPoseAndCooperate(poseStack,42);
         getParentModel().body.translateAndRotate(poseStack);
         ModStrayModels.LegCloakPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path,-1*(Math.min(getParentModel().leftLeg.xRot,getParentModel().rightLeg.xRot)));
-        poseStack.popPose();
+
+        ClientUtil.popPoseAndCooperate(poseStack,42);
     }
     public void renderPlayerBreastPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
                                    float r, float g, float b) {
 
-        poseStack.pushPose();
+        ClientUtil.pushPoseAndCooperate(poseStack,43);
         getParentModel().body.translateAndRotate(poseStack);
         ModStrayModels.PlayerChestPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1);
-        poseStack.popPose();
+        ClientUtil.popPoseAndCooperate(poseStack,43);
     }
     public void renderSmallPlayerBreastPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
                                        float r, float g, float b) {
 
-        poseStack.pushPose();
+        ClientUtil.pushPoseAndCooperate(poseStack,44);
         getParentModel().body.translateAndRotate(poseStack);
         ModStrayModels.PlayerSmallChestPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1);
-        poseStack.popPose();
+        ClientUtil.popPoseAndCooperate(poseStack,44);
     }
 }

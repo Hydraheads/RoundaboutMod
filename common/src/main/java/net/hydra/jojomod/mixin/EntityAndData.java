@@ -58,8 +58,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
 
 @Mixin(value = Entity.class,priority = 100)
 public abstract class EntityAndData implements IEntityAndData {

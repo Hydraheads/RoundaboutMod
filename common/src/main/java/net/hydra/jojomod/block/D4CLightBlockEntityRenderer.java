@@ -30,7 +30,7 @@ public class D4CLightBlockEntityRenderer implements BlockEntityRenderer<D4CLight
         if (!ClientUtil.canSeeStands(client.player))
             return;
 
-        matrices.pushPose();
+        ClientUtil.pushPoseAndCooperate(matrices,2);
         matrices.translate(0.5, 0.5, 0.5);
 
         Matrix4f poseMatrix = matrices.last().pose();
@@ -53,7 +53,7 @@ public class D4CLightBlockEntityRenderer implements BlockEntityRenderer<D4CLight
 
         tesselator.end();
 
-        matrices.popPose();
+        ClientUtil.popPoseAndCooperate(matrices,2);
     }
 
     private void drawCoreCube(BufferBuilder buffer, Matrix4f pose, Matrix3f normal, D4CLightBlockEntity blockEntity) {

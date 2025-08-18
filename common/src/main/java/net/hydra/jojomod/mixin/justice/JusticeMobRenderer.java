@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin.justice;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.client.ClientUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -102,7 +103,7 @@ public abstract class JusticeMobRenderer<T extends Mob, M extends EntityModel<T>
     public void roundabout$renderEntityForce2(float f1, float f2, PoseStack $$3, MultiBufferSource $$4,LivingEntity $$6, int light, LivingEntity user) {
         EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
         Vec3 renderoffset = $$7.getRenderer(user).getRenderOffset(user,0);
-        $$3.pushPose();
+        ClientUtil.pushPoseAndCooperate($$3,1);
         if (!renderoffset.equals(Vec3.ZERO)){
             $$3.translate(-1*renderoffset.x,-1*renderoffset.y,-1*renderoffset.z);
         }
@@ -117,7 +118,7 @@ public abstract class JusticeMobRenderer<T extends Mob, M extends EntityModel<T>
         RenderSystem.runAsFancy(() -> $$7.render($$6, 0.0, 0.0, 0.0, f1, f2, $$3,$$4, light));
         $$7.setRenderShadow(true);
         $$7.setRenderHitBoxes(hb);
-        $$3.popPose();
+        ClientUtil.popPoseAndCooperate($$3,1);
     }
 
     /**Shadows, ignore

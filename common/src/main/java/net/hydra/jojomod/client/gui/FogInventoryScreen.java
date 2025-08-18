@@ -6,7 +6,9 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.datafixers.util.Pair;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.FogBlock;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.item.FogBlockItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.C2SPacketUtil;
@@ -100,11 +102,7 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
     private void refreshCurrentTabContents(Collection<ItemStack> $$0) {
         int $$1 = this.menu.getRowIndexForScroll(this.scrollOffs);
         this.menu.items.clear();
-        if (selectedTab.getType() == CreativeModeTab.Type.SEARCH) {
             this.refreshSearchResults();
-        } else {
-            this.menu.items.addAll($$0);
-        }
 
         this.scrollOffs = this.menu.getScrollForRowIndex($$1);
         this.menu.scrollTo(this.scrollOffs);
@@ -280,8 +278,8 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
             super.init();
             this.searchBox = new EditBox(this.font, this.leftPos + 82, this.topPos + 6, 80, 9, Component.translatable("itemGroup.search"));
             this.searchBox.setMaxLength(50);
-            this.searchBox.setBordered(false);
-            this.searchBox.setVisible(false);
+            this.searchBox.setBordered(true);
+            this.searchBox.setVisible(true);
             this.searchBox.setTextColor(16777215);
             this.addWidget(this.searchBox);
             CreativeModeTab $$0 = selectedTab;
@@ -318,8 +316,6 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
     public boolean charTyped(char $$0, int $$1) {
         if (this.ignoreTextInput) {
             return false;
-        } else if (selectedTab.getType() != CreativeModeTab.Type.SEARCH) {
-            return false;
         } else {
             String $$2 = this.searchBox.getValue();
             if (this.searchBox.charTyped($$0, $$1)) {
@@ -337,15 +333,6 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
     @Override
     public boolean keyPressed(int $$0, int $$1, int $$2) {
         this.ignoreTextInput = false;
-        if (selectedTab.getType() != CreativeModeTab.Type.SEARCH) {
-            if (this.minecraft.options.keyChat.matches($$0, $$1)) {
-                this.ignoreTextInput = true;
-                this.selectTab(CreativeModeTabs.searchTab());
-                return true;
-            } else {
-                return super.keyPressed($$0, $$1, $$2);
-            }
-        } else {
             boolean $$3 = !this.isCreativeSlot(this.hoveredSlot) || this.hoveredSlot.hasItem();
             boolean $$4 = InputConstants.getKey($$0, $$1).getNumericKeyValue().isPresent();
             if ($$3 && $$4 && this.checkHotbarKeyPressed($$0, $$1)) {
@@ -363,7 +350,6 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
                     return this.searchBox.isFocused() && this.searchBox.isVisible() && $$0 != 256 ? true : super.keyPressed($$0, $$1, $$2);
                 }
             }
-        }
     }
 
     @Override
@@ -388,7 +374,17 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
                 $$1 = this.minecraft.getSearchTree(SearchRegistry.CREATIVE_NAMES);
             }
 
-            this.menu.items.addAll($$1.search($$0.toLowerCase(Locale.ROOT)));
+
+            List<ItemStack> sift = $$1.search($$0.toLowerCase(Locale.ROOT));
+            List<ItemStack> theStacks = Lists.newArrayList();
+
+            for (ItemStack stack : sift) {
+                if (!stack.isEmpty() && stack.getItem() instanceof FogBlockItem){
+                    theStacks.add(stack);
+                }
+            }
+
+            this.menu.items.addAll(theStacks);
         }
 
         this.scrollOffs = 0.0F;
@@ -559,7 +555,6 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
             this.originalSlots = null;
         }
 
-        if (selectedTab.getType() == CreativeModeTab.Type.SEARCH) {
             this.searchBox.setVisible(true);
             this.searchBox.setCanLoseFocus(false);
             this.searchBox.setFocused(true);
@@ -568,12 +563,6 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
             }
 
             this.refreshSearchResults();
-        } else {
-            this.searchBox.setVisible(false);
-            this.searchBox.setCanLoseFocus(true);
-            this.searchBox.setFocused(false);
-            this.searchBox.setValue("");
-        }
 
         this.scrollOffs = 0.0F;
         this.menu.scrollTo(0.0F);
@@ -640,7 +629,7 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
     public List<Component> getTooltipFromContainerItem(ItemStack $$0) {
         boolean $$1 = this.hoveredSlot != null && this.hoveredSlot instanceof FogInventoryScreen.CustomCreativeSlot;
         boolean $$2 = selectedTab.getType() == CreativeModeTab.Type.CATEGORY;
-        boolean $$3 = selectedTab.getType() == CreativeModeTab.Type.SEARCH;
+        boolean $$3 = true;
         TooltipFlag.Default $$4 = this.minecraft.options.advancedItemTooltips ? TooltipFlag.Default.ADVANCED : TooltipFlag.Default.NORMAL;
         TooltipFlag $$5 = $$1 ? $$4.asCreative() : $$4;
         List<Component> $$6 = $$0.getTooltipLines(this.minecraft.player, $$5);
@@ -658,11 +647,6 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
 
             int $$8 = 1;
 
-            for (CreativeModeTab $$9 : CreativeModeTabs.tabs()) {
-                if ($$9.getType() != CreativeModeTab.Type.SEARCH && $$9.contains($$0)) {
-                    $$7.add($$8++, $$9.getDisplayName().copy().withStyle(ChatFormatting.BLUE));
-                }
-            }
 
             return $$7;
         }
@@ -750,14 +734,14 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
         }
 
         $$0.blit(CREATIVE_TABS_LOCATION, $$7, $$8, $$5, $$6, 26, 32);
-        $$0.pose().pushPose();
+        ClientUtil.pushPoseAndCooperate($$0.pose(),50);
         $$0.pose().translate(0.0F, 0.0F, 100.0F);
         $$7 += 5;
         $$8 += 8 + ($$3 ? 1 : -1);
         ItemStack $$10 = $$1.getIconItem();
         $$0.renderItem($$10, $$7, $$8);
         $$0.renderItemDecorations(this.font, $$10, $$7, $$8);
-        $$0.pose().popPose();
+        ClientUtil.popPoseAndCooperate($$0.pose(),50);
     }
 
     public boolean isInventoryOpen() {

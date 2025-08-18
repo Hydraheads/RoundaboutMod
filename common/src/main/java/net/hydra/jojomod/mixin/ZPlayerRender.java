@@ -168,41 +168,41 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
     public void roundabout$renderRightArmExtraModel(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
                                                     float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
         if (model.rightArm.visible) {
-            poseStack.pushPose();
+            ClientUtil.pushPoseAndCooperate(poseStack,8);
             model.rightArm.translateAndRotate(poseStack);
             ModStrayModels.RightArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                     r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
-            poseStack.popPose();
+            ClientUtil.popPoseAndCooperate(poseStack,8);
         }
     }
     public void roundabout$renderRightArmExtraModelSlim(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
                                    float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
         if (model.rightArm.visible) {
-            poseStack.pushPose();
+            ClientUtil.pushPoseAndCooperate(poseStack,13);
             model.rightArm.translateAndRotate(poseStack);
             ModStrayModels.RightArmSlim.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                     r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
-            poseStack.popPose();
+            ClientUtil.popPoseAndCooperate(poseStack,13);
         }
     }
     public void roundabout$renderLeftArmExtraModel(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
                               float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
         if (model.leftArm.visible) {
-            poseStack.pushPose();
+            ClientUtil.pushPoseAndCooperate(poseStack,15);
             model.leftArm.translateAndRotate(poseStack);
             ModStrayModels.LeftArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                     r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
-            poseStack.popPose();
+            ClientUtil.popPoseAndCooperate(poseStack,15);
         }
     }
     public void roundabout$renderLeftArmExtraModelSlim(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
                                   float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
         if (model.leftArm.visible) {
-            poseStack.pushPose();
+            ClientUtil.pushPoseAndCooperate(poseStack,18);
             model.leftArm.translateAndRotate(poseStack);
             ModStrayModels.LeftArmSlim.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                     r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
-            poseStack.popPose();
+            ClientUtil.popPoseAndCooperate(poseStack,18);
         }
     }
 
@@ -340,7 +340,7 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
     }
     protected void roundabout$renderNameTagSpecial(AbstractClientPlayer $$0, Component $$1, PoseStack $$2, MultiBufferSource $$3, int $$4) {
         double $$5 = this.entityRenderDispatcher.distanceToSqr($$0);
-        $$2.pushPose();
+        ClientUtil.pushPoseAndCooperate($$2,16);
         if ($$5 < 100.0) {
             Scoreboard $$6 = $$0.getScoreboard();
             Objective $$7 = $$6.getDisplayObjective(2);
@@ -354,7 +354,7 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
         }
 
         super.renderNameTag($$0, $$1, $$2, $$3, $$4);
-        $$2.popPose();
+        ClientUtil.popPoseAndCooperate($$2,16);
     }
     @Inject(method = "renderNameTag(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$renderNameTag(AbstractClientPlayer $$0, Component $$1, PoseStack $$2, MultiBufferSource $$3, int $$4, CallbackInfo ci) {
@@ -689,6 +689,7 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
         if (!ClientUtil.checkIfIsFirstPerson($$0)) {
             Poses pose = Poses.getPosFromByte(ipe.roundabout$GetPoseEmote());
             if (shift != ShapeShifts.PLAYER && shift != ShapeShifts.EERIE && shift != ShapeShifts.OVA) {
+
                 if (shift == ShapeShifts.ZOMBIE) {
                     if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof Zombie))) {
                         roundabout$setShapeShift($$0, EntityType.ZOMBIE.create(Minecraft.getInstance().level));
@@ -955,7 +956,7 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
     @Unique
     public void roundabout$renderEntityForce1(float f1, float f2, PoseStack $$3, MultiBufferSource $$4, LivingEntity $$6, Player user, int light) {
 
-
+        ClientUtil.pushPoseAndCooperate($$3,23);
         $$6.deathTime = user.deathTime;
         $$6.setHealth(user.getHealth());
         $$6.xOld = user.xOld;
@@ -999,13 +1000,14 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
         ((IEntityAndData)$$6).roundabout$setNoAAB();
 
         roundabout$renderEntityForce2(f1,f2,$$3,$$4,$$6, light, user);
+        ClientUtil.popPoseAndCooperate($$3,23);
     }
 
     @Unique
     public void roundabout$renderEntityForce2(float f1, float f2, PoseStack $$3, MultiBufferSource $$4,LivingEntity $$6, int light, LivingEntity user) {
         EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
         Vec3 renderoffset = $$7.getRenderer(user).getRenderOffset(user,0);
-        $$3.pushPose();
+
         if (!renderoffset.equals(Vec3.ZERO)){
             $$3.translate(-1*renderoffset.x,-1*renderoffset.y,-1*renderoffset.z);
         }
@@ -1029,7 +1031,7 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
          **/
         $$7.setRenderShadow(true);
         $$7.setRenderHitBoxes(hb);
-        $$3.popPose();
+
     }
     @Inject(method = "scale(Lnet/minecraft/client/player/AbstractClientPlayer;Lcom/mojang/blaze3d/vertex/PoseStack;F)V",
             at = @At(value = "HEAD"), cancellable = true)

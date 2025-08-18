@@ -362,7 +362,7 @@ public class ModBlocks {
     }
 
     public static InvisiBlock INVISIBLE_BLOCK_PROPERTIES = new InvisiBlock(
-            BlockBehaviour.Properties.of().mapColor(MapColor.NONE).dynamicShape().noOcclusion().strength(-1.0F, 3600000.0F).lightLevel((p_152607_) -> {
+            BlockBehaviour.Properties.of().mapColor(MapColor.NONE).forceSolidOn().noOcclusion().strength(-1.0F, 3600000.0F).lightLevel((p_152607_) -> {
                 return 1;
             }).noParticlesOnBreak().pushReaction(PushReaction.IGNORE).noParticlesOnBreak().sound(SoundType.EMPTY));
     public static StereoBlock STEREO_PROPERTIES = new StereoBlock(
@@ -424,12 +424,43 @@ public class ModBlocks {
             "soul_fire", "air", "allium", "lava_cauldron", "end_gateway", "cave_air", "void_air", "infested_stone",
             "barrier", "structure_void", "beacon", "glass","spawner","fog_crafting_table_coating","fog_smithing_table_coating",
             "fog_cartography_table_coating","fog_dragon_egg_coating", "fog_fletching_table_coating","tinted_glass","fog_crimson_nylium_coating",
-            "fog_warped_nylium_coating"
+            "fog_warped_nylium_coating","glass_pane",
+            "white_stained_glass_pane",
+            "orange_stained_glass_pane",
+            "magenta_stained_glass_pane",
+            "light_blue_stained_glass_pane",
+            "yellow_stained_glass_pane",
+            "lime_stained_glass_pane",
+            "pink_stained_glass_pane",
+            "gray_stained_glass_pane",
+            "light_gray_stained_glass_pane",
+            "cyan_stained_glass_pane",
+            "purple_stained_glass_pane",
+            "blue_stained_glass_pane",
+            "brown_stained_glass_pane",
+            "green_stained_glass_pane",
+            "red_stained_glass_pane",
+            "black_stained_glass_pane",
+            "white_stained_glass",
+            "orange_stained_glass",
+            "magenta_stained_glass",
+            "light_blue_stained_glass",
+            "yellow_stained_glass",
+            "lime_stained_glass",
+            "pink_stained_glass",
+            "gray_stained_glass",
+            "light_gray_stained_glass",
+            "cyan_stained_glass",
+            "purple_stained_glass",
+            "blue_stained_glass",
+            "brown_stained_glass",
+            "green_stained_glass",
+            "red_stained_glass",
+            "black_stained_glass",
+            "azalea",
+            "flowering_azalea"
     );
 
-    public static List<String> dontGen = Arrays.asList("fog_dirt","fog_clay","fog_gravel","fog_sand","fog_oak_planks","fog_spruce_planks","fog_birch_planks",
-            "fog_jungle_planks","fog_acacia_planks","fog_dark_oak_planks","fog_mangrove_planks","fog_cherry_planks",
-            "fog_stone","fog_coal_ore","fog_iron_ore","fog_gold_ore","fog_lapis_ore","fog_diamond_ore","fog_cobblestone",
-            "fog_mossy_cobblestone","fog_stone_bricks","fog_deepslate","fog_netherrack","fog_nether_bricks");
+    public static List<String> dontGen = Arrays.asList("fog_dirt");
     public static List<Item> gennedFogItems = new ArrayList<>();
 }

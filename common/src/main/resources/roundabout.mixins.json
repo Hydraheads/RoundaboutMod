@@ -90,6 +90,7 @@
     "jojo_npcs.NPCZombieVillager",
     "justice.JusticeCreeper",
     "justice.JusticeDefendVillageTargetGoal",
+    "justice.JusticeFixScreenBugInventoryScreenMixin",
     "justice.JusticeIronGolem",
     "justice.JusticeItemEntity",
     "justice.JusticeNearestAttackableTargetGoal",

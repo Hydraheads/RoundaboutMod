@@ -42,7 +42,7 @@ public class BigBubbleLayer<T extends LivingEntity, A extends EntityModel<T>> ex
         if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
             if (((StandUser)entity).roundabout$isBubbleEncased() && ((IEntityAndData)entity).roundabout$getExclusiveLayers()) {
 
-                poseStack.pushPose();
+                ClientUtil.pushPoseAndCooperate(poseStack,22);
                 float height = entity.getDimensions(Pose.STANDING).height;
                 float width = entity.getDimensions(Pose.STANDING).width;
                 if (ClientUtil.savedPose != null) {
@@ -78,7 +78,7 @@ public class BigBubbleLayer<T extends LivingEntity, A extends EntityModel<T>> ex
                 vertexConsumer.vertex(matrix, -size, size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
 
 
-                poseStack.popPose();
+                ClientUtil.popPoseAndCooperate(poseStack,22);
             }
         }
     }

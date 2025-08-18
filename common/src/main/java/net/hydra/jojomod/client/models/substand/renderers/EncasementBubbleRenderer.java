@@ -47,7 +47,7 @@ public class EncasementBubbleRenderer extends EntityRenderer<EncasementBubbleEnt
             if (((TimeStop)entity.level()).inTimeStopRange(entity)){
                 partialTicks = 0;
             }
-                poseStack.pushPose();
+                ClientUtil.pushPoseAndCooperate(poseStack,55);
 
                 // Orient the texture
                 poseStack.translate(0, entity.getBbHeight() / 2, 0);
@@ -81,7 +81,7 @@ public class EncasementBubbleRenderer extends EntityRenderer<EncasementBubbleEnt
                 vertexConsumer.vertex(matrix, -size, size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
 
 
-                poseStack.popPose();
+                ClientUtil.popPoseAndCooperate(poseStack,55);
                 super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
         }
     }

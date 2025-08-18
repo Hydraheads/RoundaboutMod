@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -67,7 +68,7 @@ public abstract class StandFireScreenEffectRendererMixin {
             float v1 = (frame + 1) * frameHeight;
 
             for (int i = 0; i < 2; ++i) {
-                pose.pushPose();
+                ClientUtil.pushPoseAndCooperate(pose,20);
                 //changed from 0.3 to -0.45 for lower fire
                 pose.translate((float) (-(i * 2 - 1)) * 0.24F, -0.45F, 0.0F);
                 pose.mulPose(Axis.YP.rotationDegrees((float) (i * 2 - 1) * 10.0F));
@@ -79,7 +80,7 @@ public abstract class StandFireScreenEffectRendererMixin {
                 bufferbuilder.vertex(matrix4f,  0.5F,  0.5F, -0.5F).color(1.0F, 1.0F, 1.0F, 0.9F).uv(u1, v0).endVertex();
                 bufferbuilder.vertex(matrix4f, -0.5F,  0.5F, -0.5F).color(1.0F, 1.0F, 1.0F, 0.9F).uv(u0, v0).endVertex();
                 BufferUploader.drawWithShader(bufferbuilder.end());
-                pose.popPose();
+                ClientUtil.popPoseAndCooperate(pose,20);
             }
 
             RenderSystem.disableBlend();

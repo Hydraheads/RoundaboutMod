@@ -42,8 +42,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.ArrayDeque;
-
 @Mixin(EntityRenderDispatcher.class)
 public abstract class ZEntityRenderDispatcher {
 
@@ -127,7 +125,7 @@ public abstract class ZEntityRenderDispatcher {
     private void roundabout$renderFlame(PoseStack $$0, MultiBufferSource $$1, LivingEntity $$2) {
         byte bt = ((StandUser) $$2).roundabout$getOnStandFire();
         if (bt > 0) {
-            $$0.pushPose();
+            ClientUtil.pushPoseAndCooperate($$0,14);
             BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
             RenderSystem.depthMask(true);
             //this only applies on stand fire
@@ -202,7 +200,7 @@ public abstract class ZEntityRenderDispatcher {
                 $$10 += 0.03F;
             }
 
-            $$0.popPose();
+            ClientUtil.popPoseAndCooperate($$0,14);
         }
     }
 

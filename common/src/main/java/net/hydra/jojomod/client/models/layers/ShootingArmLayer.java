@@ -39,7 +39,7 @@ public class ShootingArmLayer <T extends LivingEntity, A extends HumanoidModel<T
                     StandUser user = ((StandUser)livent);
                     if (user.roundabout$getCombatMode()) {
                         if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
-                            poseStack.pushPose();
+                            ClientUtil.pushPoseAndCooperate(poseStack,47);
 
                             // Translate to the right/left hand
 
@@ -61,7 +61,7 @@ public class ShootingArmLayer <T extends LivingEntity, A extends HumanoidModel<T
                             float g = isHurt ? 0.0F : 1.0F;
                             float b = isHurt ? 0.0F : 1.0F;
                             ModStrayModels.SHOOTING_ARM.render(livent, partialTicks, poseStack, bufferSource, packedLight, r, g, b, 0.8F);
-                            poseStack.popPose();
+                            ClientUtil.popPoseAndCooperate(poseStack,47);
                         }
                     }
                 }
@@ -77,7 +77,7 @@ public class ShootingArmLayer <T extends LivingEntity, A extends HumanoidModel<T
                     StandUser user = ((StandUser)entity);
                     if (user.roundabout$getCombatMode()) {
                         if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
-                            poseStack.pushPose();
+                            ClientUtil.pushPoseAndCooperate(poseStack,48);
 
                             // Translate to the right/left hand
 
@@ -99,7 +99,7 @@ public class ShootingArmLayer <T extends LivingEntity, A extends HumanoidModel<T
                             float g = isHurt ? 0.0F : 1.0F;
                             float b = isHurt ? 0.0F : 1.0F;
                             ModStrayModels.SHOOTING_ARM.render(entity, partialTicks, poseStack, bufferSource, packedLight, rr, gg, bb, 0.8F);
-                            poseStack.popPose();
+                            ClientUtil.popPoseAndCooperate(poseStack,48);
                         }
                     }
                 }

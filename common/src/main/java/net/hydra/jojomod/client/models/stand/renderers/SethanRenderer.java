@@ -3,6 +3,7 @@ package net.hydra.jojomod.client.models.stand.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -41,7 +42,7 @@ public abstract class SethanRenderer {
             double deltaXOffset = deltaX + vec3.x();
             double deltaYOffset = deltaY + vec3.y();
             double deltaZOffset = deltaZ + vec3.z();
-            poseStack.pushPose();
+            ClientUtil.pushPoseAndCooperate(poseStack,49);
             poseStack.translate(deltaXOffset, deltaYOffset, deltaZOffset);
 
             poseStack.translate(-vec3.x(), -vec3.y(), -vec3.z());
@@ -50,7 +51,7 @@ public abstract class SethanRenderer {
                     float alpha = 1F;
                     renderSethan(poseStack, multiBufferSource, castingEntity, shadowStrength, delta, castingEntity.level(), scale, alpha);
 
-            poseStack.popPose();
+            ClientUtil.popPoseAndCooperate(poseStack,49);
     }
     private static void renderSethan(PoseStack poseStack, MultiBufferSource multiBufferSource, Entity castingEntity, float shadowStrength, float delta, LevelReader levelReader, float scale, float alpha) {
         float f = scale;

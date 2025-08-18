@@ -217,6 +217,8 @@ public class PowersAchtungBaby extends NewDashPreset {
                     ItemStack stack = ((Player) this.getSelf()).getInventory().getItem(this.grabInventorySlot);
                     if (!stack.isEmpty() && stack.getItem() instanceof BlockItem BE && !(
                             BE.getBlock() instanceof ShulkerBoxBlock)) {
+
+
                         ItemStack stack2 = stack.copy();
 
                         if (placeBlock(stack2))
@@ -248,6 +250,10 @@ public class PowersAchtungBaby extends NewDashPreset {
                     BlockState state = this.getSelf().level().getBlockState(pos);
                     if (stack.getItem() instanceof BlockItem blockItem) {
                         if (MainUtil.getIsGamemodeApproriateForGrief(this.self)) {
+                            if (!blockItem.getBlock().isCollisionShapeFullBlock(
+                                    blockItem.getBlock().defaultBlockState(),this.self.level(),pos)){
+                                return false;
+                            }
                             if(this.getSelf() instanceof Player plr) {
                                 if(!MainUtil.canPlaceOnClaim(plr,$$0)){
                                     return false;
