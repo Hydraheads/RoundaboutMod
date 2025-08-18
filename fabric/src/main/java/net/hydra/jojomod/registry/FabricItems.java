@@ -147,47 +147,6 @@ public class FabricItems {
     public static Item AESTHETICIAN_MASK_ZOMBIE = registerItem("aesthetician_mask_zombie", new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisageZombie(null)));
     public static Item FOG_DIRT = registerItem("fog_dirt", (Item) new FogBlockItem(ModBlocks.FOG_DIRT, new Item.Properties(), Blocks.DIRT));
     public static Item FOG_DIRT_COATING = registerItem("fog_dirt_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_DIRT_COATING, new Item.Properties(), Blocks.DIRT));
-    public static Item FOG_CLAY = registerItem("fog_clay", (Item) new FogBlockItem(ModBlocks.FOG_CLAY, new Item.Properties(), Blocks.CLAY));
-    public static Item FOG_CLAY_COATING = registerItem("fog_clay_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_CLAY_COATING, new Item.Properties(), Blocks.CLAY));
-    public static Item FOG_GRAVEL = registerItem("fog_gravel", (Item) new FogBlockItem(ModBlocks.FOG_GRAVEL, new Item.Properties(), Blocks.GRAVEL));
-    public static Item FOG_GRAVEL_COATING = registerItem("fog_gravel_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_GRAVEL_COATING, new Item.Properties(), Blocks.GRAVEL));
-    public static Item FOG_SAND = registerItem("fog_sand", (Item) new FogBlockItem(ModBlocks.FOG_SAND, new Item.Properties(), Blocks.SAND));
-    public static Item FOG_SAND_COATING = registerItem("fog_sand_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_SAND_COATING, new Item.Properties(), Blocks.SAND));
-    public static Item FOG_OAK_PLANKS = registerItem("fog_oak_planks", (Item) new FogBlockItem(ModBlocks.FOG_OAK_PLANKS, new Item.Properties(), Blocks.OAK_PLANKS));
-    public static Item FOG_OAK_PLANKS_COATING = registerItem("fog_oak_planks_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_OAK_PLANKS_COATING, new Item.Properties(), Blocks.OAK_PLANKS));
-    public static Item FOG_SPRUCE_PLANKS = registerItem("fog_spruce_planks", (Item) new FogBlockItem(ModBlocks.FOG_SPRUCE_PLANKS, new Item.Properties(), Blocks.SPRUCE_PLANKS));
-    public static Item FOG_SPRUCE_PLANKS_COATING = registerItem("fog_spruce_planks_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_SPRUCE_PLANKS_COATING, new Item.Properties(), Blocks.SPRUCE_PLANKS));
-    public static Item FOG_BIRCH_PLANKS = registerItem("fog_birch_planks", (Item) new FogBlockItem(ModBlocks.FOG_BIRCH_PLANKS, new Item.Properties(), Blocks.BIRCH_PLANKS));
-    public static Item FOG_BIRCH_PLANKS_COATING = registerItem("fog_birch_planks_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_BIRCH_PLANKS_COATING, new Item.Properties(), Blocks.BIRCH_PLANKS));
-    public static Item FOG_JUNGLE_PLANKS = registerItem("fog_jungle_planks", (Item) new FogBlockItem(ModBlocks.FOG_JUNGLE_PLANKS, new Item.Properties(), Blocks.JUNGLE_PLANKS));
-    public static Item FOG_JUNGLE_PLANKS_COATING = registerItem("fog_jungle_planks_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_JUNGLE_PLANKS_COATING, new Item.Properties(), Blocks.JUNGLE_PLANKS));
-    public static Item FOG_ACACIA_PLANKS = registerItem("fog_acacia_planks", (Item) new FogBlockItem(ModBlocks.FOG_ACACIA_PLANKS, new Item.Properties(), Blocks.ACACIA_PLANKS));
-    public static Item FOG_ACACIA_PLANKS_COATING = registerItem("fog_acacia_planks_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_ACACIA_PLANKS_COATING, new Item.Properties(), Blocks.ACACIA_PLANKS));
-    public static Item FOG_DARK_OAK_PLANKS = registerItem("fog_dark_oak_planks", (Item) new FogBlockItem(ModBlocks.FOG_DARK_OAK_PLANKS, new Item.Properties(), Blocks.DARK_OAK_PLANKS));
-    public static Item FOG_DARK_OAK_PLANKS_COATING = registerItem("fog_dark_oak_planks_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_DARK_OAK_PLANKS_COATING, new Item.Properties(), Blocks.DARK_OAK_PLANKS));
-    public static Item FOG_MANGROVE_PLANKS = registerItem("fog_mangrove_planks", (Item) new FogBlockItem(ModBlocks.FOG_MANGROVE_PLANKS, new Item.Properties(), Blocks.MANGROVE_PLANKS));
-    public static Item FOG_MANGROVE_PLANKS_COATING = registerItem("fog_mangrove_planks_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_MANGROVE_PLANKS_COATING, new Item.Properties(), Blocks.MANGROVE_PLANKS));
-    public static Item FOG_CHERRY_PLANKS = registerItem("fog_cherry_planks", (Item) new FogBlockItem(ModBlocks.FOG_CHERRY_PLANKS, new Item.Properties(), Blocks.CHERRY_PLANKS));
-    public static Item FOG_CHERRY_PLANKS_COATING = registerItem("fog_cherry_planks_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_CHERRY_PLANKS_COATING, new Item.Properties(), Blocks.CHERRY_PLANKS));
-    public static Item FOG_STONE = registerItem("fog_stone", (Item) new FogBlockItem(ModBlocks.FOG_STONE, new Item.Properties(), Blocks.STONE));
-    public static Item FOG_STONE_COATING = registerItem("fog_stone_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_STONE_COATING, new Item.Properties(), Blocks.STONE));
-    public static Item FOG_COBBLESTONE = registerItem("fog_cobblestone", (Item) new FogBlockItem(ModBlocks.FOG_COBBLESTONE, new Item.Properties(), Blocks.COBBLESTONE));
-    public static Item FOG_COBBLESTONE_COATING = registerItem("fog_cobblestone_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_COBBLESTONE_COATING, new Item.Properties(), Blocks.COBBLESTONE));
-    public static Item FOG_MOSSY_COBBLESTONE = registerItem("fog_mossy_cobblestone", (Item) new FogBlockItem(ModBlocks.FOG_MOSSY_COBBLESTONE, new Item.Properties(), Blocks.MOSSY_COBBLESTONE));
-    public static Item FOG_MOSSY_COBBLESTONE_COATING = registerItem("fog_mossy_cobblestone_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_MOSSY_COBBLESTONE_COATING, new Item.Properties(), Blocks.MOSSY_COBBLESTONE));
-    public static Item FOG_COAL_ORE = registerItem("fog_coal_ore", (Item) new FogBlockItem(ModBlocks.FOG_COAL_ORE, new Item.Properties(), Blocks.COAL_ORE));
-    public static Item FOG_IRON_ORE = registerItem("fog_iron_ore", (Item) new FogBlockItem(ModBlocks.FOG_IRON_ORE, new Item.Properties(), Blocks.IRON_ORE));
-    public static Item FOG_GOLD_ORE = registerItem("fog_gold_ore", (Item) new FogBlockItem(ModBlocks.FOG_GOLD_ORE, new Item.Properties(), Blocks.GOLD_ORE));
-    public static Item FOG_LAPIS_ORE = registerItem("fog_lapis_ore", (Item) new FogBlockItem(ModBlocks.FOG_LAPIS_ORE, new Item.Properties(), Blocks.LAPIS_ORE));
-    public static Item FOG_DIAMOND_ORE = registerItem("fog_diamond_ore", (Item) new FogBlockItem(ModBlocks.FOG_DIAMOND_ORE, new Item.Properties(), Blocks.DIAMOND_ORE));
-    public static Item FOG_STONE_BRICKS = registerItem("fog_stone_bricks", (Item) new FogBlockItem(ModBlocks.FOG_STONE_BRICKS, new Item.Properties(), Blocks.STONE_BRICKS));
-    public static Item FOG_STONE_BRICKS_COATING = registerItem("fog_stone_bricks_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_STONE_BRICKS_COATING, new Item.Properties(), Blocks.STONE_BRICKS));
-    public static Item FOG_DEEPSLATE = registerItem("fog_deepslate", (Item) new FogBlockItem(ModBlocks.FOG_DEEPSLATE, new Item.Properties(), Blocks.DEEPSLATE));
-    public static Item FOG_DEEPSLATE_COATING = registerItem("fog_deepslate_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_DEEPSLATE_COATING, new Item.Properties(), Blocks.DEEPSLATE));
-    public static Item FOG_NETHERRACK = registerItem("fog_netherrack", (Item) new FogBlockItem(ModBlocks.FOG_NETHERRACK, new Item.Properties(), Blocks.NETHERRACK));
-    public static Item FOG_NETHERRACK_COATING = registerItem("fog_netherrack_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_NETHERRACK_COATING, new Item.Properties(), Blocks.NETHERRACK));
-    public static Item FOG_NETHER_BRICKS = registerItem("fog_nether_bricks", (Item) new FogBlockItem(ModBlocks.FOG_NETHER_BRICKS, new Item.Properties(), Blocks.NETHER_BRICKS));
-    public static Item FOG_NETHER_BRICKS_COATING = registerItem("fog_nether_bricks_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_NETHER_BRICKS_COATING, new Item.Properties(), Blocks.NETHER_BRICKS));
 
     public static Item INTERDIMENSIONAL_KEY = registerItem("interdimensional_key", new InterdimensionalKeyItem(new Item.Properties().stacksTo(1)));
 
@@ -378,48 +337,8 @@ public class FabricItems {
                     .icon(() -> new ItemStack(FOG_DIRT)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
 
-                        entries.accept(FOG_DIRT);
-                        entries.accept(FOG_CLAY);
-                        entries.accept(FOG_GRAVEL);
-                        entries.accept(FOG_SAND);
-                        entries.accept(FOG_OAK_PLANKS);
-                        entries.accept(FOG_SPRUCE_PLANKS);
-                        entries.accept(FOG_BIRCH_PLANKS);
-                        entries.accept(FOG_JUNGLE_PLANKS);
-                        entries.accept(FOG_ACACIA_PLANKS);
-                        entries.accept(FOG_DARK_OAK_PLANKS);
-                        entries.accept(FOG_MANGROVE_PLANKS);
-                        entries.accept(FOG_CHERRY_PLANKS);
-                        entries.accept(FOG_STONE);
-                        entries.accept(FOG_COBBLESTONE);
-                        entries.accept(FOG_MOSSY_COBBLESTONE);
-                        entries.accept(FOG_STONE_BRICKS);
-                        entries.accept(FOG_DEEPSLATE);
-                        entries.accept(FOG_COAL_ORE);
-                        entries.accept(FOG_IRON_ORE);
-                        entries.accept(FOG_GOLD_ORE);
-                        entries.accept(FOG_LAPIS_ORE);
-                        entries.accept(FOG_DIAMOND_ORE);
-                        entries.accept(FOG_NETHERRACK);
-                        entries.accept(FOG_NETHER_BRICKS);
                         entries.accept(FOG_DIRT_COATING);
-                        entries.accept(FOG_SAND_COATING);
-                        entries.accept(FOG_CLAY_COATING);
-                        entries.accept(FOG_GRAVEL_COATING);
-                        entries.accept(FOG_OAK_PLANKS_COATING);
-                        entries.accept(FOG_SPRUCE_PLANKS_COATING);
-                        entries.accept(FOG_BIRCH_PLANKS_COATING);
-                        entries.accept(FOG_JUNGLE_PLANKS_COATING);
-                        entries.accept(FOG_ACACIA_PLANKS_COATING);
-                        entries.accept(FOG_DARK_OAK_PLANKS_COATING);
-                        entries.accept(FOG_MANGROVE_PLANKS_COATING);
-                        entries.accept(FOG_STONE_COATING);
-                        entries.accept(FOG_STONE_BRICKS_COATING);
-                        entries.accept(FOG_COBBLESTONE_COATING);
-                        entries.accept(FOG_MOSSY_COBBLESTONE_COATING);
-                        entries.accept(FOG_DEEPSLATE_COATING);
-                        entries.accept(FOG_NETHERRACK_COATING);
-                        entries.accept(FOG_NETHER_BRICKS_COATING);
+                        entries.accept(FOG_DIRT);
 
                         for(Item i : ModBlocks.gennedFogItems){
                             entries.accept(i);

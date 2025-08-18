@@ -427,9 +427,6 @@ public class ModBlocks {
             "fog_warped_nylium_coating"
     );
 
-    public static List<String> dontGen = Arrays.asList("fog_dirt","fog_clay","fog_gravel","fog_sand","fog_oak_planks","fog_spruce_planks","fog_birch_planks",
-            "fog_jungle_planks","fog_acacia_planks","fog_dark_oak_planks","fog_mangrove_planks","fog_cherry_planks",
-            "fog_stone","fog_coal_ore","fog_iron_ore","fog_gold_ore","fog_lapis_ore","fog_diamond_ore","fog_cobblestone",
-            "fog_mossy_cobblestone","fog_stone_bricks","fog_deepslate","fog_netherrack","fog_nether_bricks");
+    public static List<String> dontGen = Arrays.asList("fog_dirt");
     public static List<Item> gennedFogItems = new ArrayList<>();
 }
