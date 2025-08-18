@@ -362,7 +362,7 @@ public class ModBlocks {
     }
 
     public static InvisiBlock INVISIBLE_BLOCK_PROPERTIES = new InvisiBlock(
-            BlockBehaviour.Properties.of().mapColor(MapColor.NONE).dynamicShape().noOcclusion().strength(-1.0F, 3600000.0F).lightLevel((p_152607_) -> {
+            BlockBehaviour.Properties.of().mapColor(MapColor.NONE).forceSolidOn().noOcclusion().strength(-1.0F, 3600000.0F).lightLevel((p_152607_) -> {
                 return 1;
             }).noParticlesOnBreak().pushReaction(PushReaction.IGNORE).noParticlesOnBreak().sound(SoundType.EMPTY));
     public static StereoBlock STEREO_PROPERTIES = new StereoBlock(
