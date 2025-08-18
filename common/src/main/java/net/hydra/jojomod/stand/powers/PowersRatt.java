@@ -46,10 +46,11 @@ public class PowersRatt extends NewDashPreset {
     public static final int MinThreshold = 30;
     public static final int MaxThreshold = 90;
     public static final int BaseShootCooldown = 10;
+    public static final int PlaceShootCooldown = 40;
     public static final int MaxShootCooldown = 30;
     public static final int[] ShotThresholds = {MinThreshold,50,MaxThreshold};
     public static final float[] ShotPowerFloats = {3,4.2F,5};
-    public static final float[] ShotDamageTicks = {0.5F,0.5F,0.5F};
+    public static final float[] ShotDamageTicks = {0F,0F,1F};
 
     public static final int[] ShotSuperthrowTicks = {4,10,15};
 
@@ -411,7 +412,7 @@ public class PowersRatt extends NewDashPreset {
                 }
                 if (getChargeTime() < 30) {
                     this.updateChargeTime(0);
-                    this.setShotCooldown(30);
+                    this.setShotCooldown(PlaceShootCooldown);
                     tryPower(PowerIndex.NONE,true);
                     tryPowerPacket(PowerIndex.NONE);
                 }
