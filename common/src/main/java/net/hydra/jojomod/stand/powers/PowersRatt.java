@@ -8,7 +8,6 @@ import net.hydra.jojomod.entity.projectile.RattDartEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -29,6 +28,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -77,7 +77,7 @@ public class PowersRatt extends NewDashPreset {
     public static final byte
 
             UPDATE_POSITION = 0,
-            ROTATE = 2,
+            ROTATE = 52,
             CHANGE_MODE = 5,
             AUTO = 7,
             SETPLACE = 8,
@@ -126,9 +126,9 @@ public class PowersRatt extends NewDashPreset {
         Vec3 vec3d = this.getSelf().getEyePosition(0);
         Vec3 vec3d2 = this.getSelf().getViewVector(0);
         Vec3 vec3d3 = vec3d.add(vec3d2.x * 60, vec3d2.y * 60, vec3d2.z * 60);
-        BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3,
+        return this.getSelf().level().clip(new ClipContext(vec3d, vec3d3,
                 ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
-        return blockHit;
+
     }
     public Entity CoolerrayCastEntity(Level world, LivingEntity ratt, double maxDistance) {
 
@@ -153,9 +153,7 @@ public class PowersRatt extends NewDashPreset {
         );
 
         BlockHitResult blockHit = world.clip(blockContext);
-        double blockHitDistance = blockHit != null
-                ? blockHit.getLocation().distanceTo(eyePos)
-                : maxDistance;
+        double blockHitDistance = blockHit.getLocation().distanceTo(eyePos);
 
         // Search for potential target entities in bounding box
         AABB box = ratt.getBoundingBox().expandTowards(lookVec.scale(maxDistance)).inflate(1.0);
@@ -242,7 +240,6 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public boolean tryPosPower(int move, boolean forced, Vec3 pos) {
-        Roundabout.LOGGER.info("A: {}, B: {}",this.getSelf().getName().toString(),move);
         StandEntity SE = this.getStandEntity(this.getSelf());
         switch(move) {
             case UPDATE_POSITION -> {
@@ -257,9 +254,7 @@ public class PowersRatt extends NewDashPreset {
                 this.setCooldown(PowersRatt.SETPLACE,80);
             }
             case ROTATE -> {
-
                 if (this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof  RattEntity RE) {
-
                     RE.setHeadRotationX((float) pos.x);
                     RE.setStandRotationY((float)pos.y);
                 }
@@ -278,7 +273,7 @@ public class PowersRatt extends NewDashPreset {
 
     public void blipStand(Vec3 pos) {
         StandEntity stand = getNewStandEntity();
-        if (stand instanceof RattEntity RE) {
+        if (stand instanceof RattEntity) {
             StandUser user = getStandUserSelf();
             stand.setSkin(user.roundabout$getStandSkin());
             stand.setMaster(this.self);
@@ -289,39 +284,53 @@ public class PowersRatt extends NewDashPreset {
     }
 
 
+    public Vec3 getRotations(Entity target) {
+
+        RattEntity RE = (RattEntity) this.getStandEntity(this.getSelf());
+
+        Vec3 targetPos = getTargetPos().getLocation();
+        if (target != null) {
+            targetPos = target.getEyePosition(1);
+            if (isAuto()) {
+                double dist = targetPos.distanceTo(RE.getPosition(1));
+                double time = dist / ShotPowerFloats[1];
+                time *= 1.4;
+                Vec3 vec = target.getDeltaMovement();
+                targetPos = targetPos.add(vec.multiply(time, time, time));
+            }
+        }
+        double x = (targetPos.x() - RE.getPosition(0).x());
+        double z = (targetPos.z() - RE.getPosition(0).z());
+        float rot = (float) (Math.atan2(z,x) - Math.PI/2) ;
+
+        double hy = (targetPos.y() - (RE.getPosition(0).y() + 0.5));
+        double hd = Math.sqrt(Math.pow(x,2)+Math.pow(z,2));
+        float hrot = (float) (Math.atan2(hd,hy) + Math.PI/2); // flip the sign if you want it to be not armed
+        double percent = (double) RE.getFadeOut() /RE.getMaxFade();
+        if (percent != 1) {
+            hrot = (float) (Mth.lerp(percent,0,hrot));
+        }
+
+        return new Vec3(rot,hrot,0);
+
+    }
+
     Vec3 Placement = null;
     @Override
     public void tickPower() {
         super.tickPower();
 
+
         if (getAttackTime() > 20 && getAnimation() == RattEntity.FIRE_NO_RECOIL) {
             this.animateStand((byte) -1);
         }
 
-        if (this.getSelf().level().isClientSide()) {
-            if (this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
+        if (this.getSelf().level().isClientSide() || (!this.isClient() && !(this.getSelf() instanceof Player) )) {
+            if (this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof RattEntity) {
 
-                Entity target = getShootTarget();
-                Vec3 targetPos = getTargetPos().getLocation();
-                if (target != null && isAuto()) {
-                    targetPos = target.getEyePosition(1);
-                    double dist = targetPos.distanceTo(RE.getPosition(1));
-                    double time = dist/ShotPowerFloats[1];
-                    time *= 1.4;
-                    Vec3 vec = target.getDeltaMovement();
-                    targetPos = targetPos.add(vec.multiply(time,time,time));
-                }
-                double x = (targetPos.x() - RE.getPosition(0).x());
-                double z = (targetPos.z() - RE.getPosition(0).z());
-                float rot = (float) (Math.atan2(z,x) - Math.PI/2) ;
-
-                double hy = (targetPos.y() - (RE.getPosition(0).y() + 0.5));
-                double hd = Math.sqrt(Math.pow(x,2)+Math.pow(z,2));
-                float hrot = (float) (Math.atan2(hd,hy) + Math.PI/2); // flip the sign if you want it to be not armed
-                double percent = (double) RE.getFadeOut() /RE.getMaxFade();
-                if (percent != 1) {
-                    hrot = (float) (Mth.lerp(percent,0,hrot));
-                }
+                Vec3 v = this.getRotations(this.getShootTarget());
+                float rot = (float) v.x;
+                float hrot = (float) v.y;
 
                 tryPosPower(PowersRatt.ROTATE,true,new Vec3(hrot,rot,0));
                 tryPosPowerPacket(PowersRatt.ROTATE,new Vec3(hrot,rot,0));
@@ -344,7 +353,7 @@ public class PowersRatt extends NewDashPreset {
 
         StandEntity SE = this.getStandEntity(this.getSelf());
 
-        if (isPlaced()) {
+        if (isPlaced() && !(this.getSelf() instanceof Mob)) {
 
             if (this.isClient()) {
                 Entity e = MainUtil.getTargetEntity(this.self, 30, 15);
@@ -371,7 +380,6 @@ public class PowersRatt extends NewDashPreset {
                 }
 
                 setGoBeyondTarget(getShootTarget());
-            } else {
             }
         } else if (active) {
             if (this.getStandUserSelf().roundabout$getActive()) {
@@ -391,13 +399,13 @@ public class PowersRatt extends NewDashPreset {
     @Override
     public void updateUniqueMoves() {
         if (this.getActivePower() == PowerIndex.GUARD) {
-            updateChargeTime(Mth.clamp(getChargeTime()+(this.attackTimeDuring%2 == 0 ? 4 : 4),0,100));
+            updateChargeTime(Mth.clamp(getChargeTime()+4,0,100));
 
             if (getChargeTime() == 100) {this.setPowerNone();}
             if (scopeLevel == 0) {setPowerNone();}
         } else if (this.getActivePower() == PowersRatt.PLAYER_BURST) {
             if (isClient()) {
-                if (this.attackTimeDuring%3 == 1) {
+                if (this.attackTimeDuring%2 == 1) {
                     tryPower(PowersRatt.PLAYER_BURST,true);
                     tryPowerPacket(PowersRatt.PLAYER_BURST);
                 }
@@ -536,6 +544,7 @@ public class PowersRatt extends NewDashPreset {
         e.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0.5F, power, acuracy);
         e.EnableSuperThrow();
         this.getSelf().level().addFreshEntity(e);
+
     }
 
     public void ToggleAuto() {
@@ -603,8 +612,7 @@ public class PowersRatt extends NewDashPreset {
             }
             case PowersRatt.PLACE_BURST_FIRE -> {
                 this.setAttackTime(-1);
-                if (isClient()) {
-                } else {
+                if (!isClient()) {
                     this.animateStand(RattEntity.FIRE_NO_RECOIL);
                     float power = 0;
                     for (int b=ShotThresholds.length-1;b>=0;b--) {
@@ -680,6 +688,7 @@ public class PowersRatt extends NewDashPreset {
             if (scopeLevel != 0 && this.chargeTime >= PowersRatt.MinThreshold) {
                 if (this.getActivePower() == PowerIndex.NONE) {
                     if (!isAttackIneptVisually(PowersRatt.CHANGE_MODE, 2)) {
+                        this.getSelf().playSound(ModSounds.RATT_FIRING_EVENT, 1.0F, (float) (0.98F + (Math.random() * 0.04F)));
                         if (isAuto()) {
                             tryPower(PowersRatt.START_PLAYER_BURST, true);
                             tryPowerPacket(PowersRatt.START_PLAYER_BURST);
@@ -723,28 +732,32 @@ public class PowersRatt extends NewDashPreset {
         }
     }
 
-    // for whatever reason triggers players as well
-/*
+
     @Override
     public void tickMobAI(LivingEntity attackTarget) {
-        if (!isClient()) {
-            if (attackTarget != null) {
-                double dist = attackTarget.getPosition(0).distanceTo(this.getSelf().getPosition(0));
-                Roundabout.LOGGER.info("B: {}",isPlaced());
-                if (isPlaced()) {
+        if (attackTarget != null) {
+            this.setShootTarget(attackTarget);
+            this.getStandUserSelf().roundabout$setCombatMode(true);
+        //    double dist = attackTarget.getPosition(0).distanceTo(this.getSelf().getPosition(0));
+            if (isPlaced()) {
+          /*      Vec3 v = this.getRotations(attackTarget);
+                Roundabout.LOGGER.info("V: {}",v.toString());
+                StandEntity SE = this.getStandEntity(this.getSelf());
+                ((StandUser) this.getSelf()).roundabout$tryPosPower(PowersRatt.ROTATE, true,v);*/
 
-                } else {
-                    Roundabout.LOGGER.info("Bingus");
-                    Vec3 vec3 = this.getSelf().getPosition(0);
-                    blipStand(new Vec3(vec3.x, Math.floor(vec3.y),vec3.z));
-                 //   this.setShootTarget(attackTarget);
-                 //   this.getStandUserSelf().roundabout$setCombatMode(true);
-                }
 
+              /*  int firecd = 30;
+                int firedelay = 3;
+                if (this.getAttackTime()%firecd == 0 || this.getAttackTime()%firecd == firedelay || this.getAttackTime()%firecd == 2*firedelay) {
+                } */
+
+            } else {
+                Vec3 vec3 = this.getSelf().getPosition(0);
+                blipStand(new Vec3(vec3.x, Math.floor(vec3.y),vec3.z));
 
             }
         }
-    } */
+    }
 
 
     @Override
@@ -765,6 +778,7 @@ public class PowersRatt extends NewDashPreset {
             int finalAmount = Math.round(amount*15);
             int bartexture = 30;
             if (getChargeTime() >= MaxThreshold) {bartexture -= 6;}
+            //file, end x, endy, x, y, width, height
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, bartexture, finalAmount, 6);
         }
         super.renderAttackHud(context, playerEntity, scaledWidth, scaledHeight, ticks, vehicleHeartCount, flashAlpha, otherFlashAlpha);
@@ -821,7 +835,6 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice){
-        byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
             return ModSounds.RATT_SUMMON_EVENT;
         }
