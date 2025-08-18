@@ -47,7 +47,7 @@ public abstract class AchtungModelPart {
             originalAlpha = ether;
             if (this.visible) {
                 if (!this.cubes.isEmpty() || !this.children.isEmpty()) {
-                    $$0.pushPose();
+                    ClientUtil.pushPoseAndCooperate($$0,13);
                     this.translateAndRotate($$0);
                     if (!this.skipDraw) {
                         this.compile($$0.last(), newConsumer, $$2, $$3, $$4, $$5, $$6, originalAlpha);
@@ -57,7 +57,7 @@ public abstract class AchtungModelPart {
                         $$8.render($$0, newConsumer, $$2, $$3, $$4, $$5, $$6, originalAlpha);
                     }
 
-                    $$0.popPose();
+                    ClientUtil.popPoseAndCooperate($$0,13);
                 }
             }
             ci.cancel();

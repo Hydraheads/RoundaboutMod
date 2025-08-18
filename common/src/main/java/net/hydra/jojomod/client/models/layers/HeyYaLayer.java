@@ -62,7 +62,7 @@ public class HeyYaLayer<T extends LivingEntity, A extends HumanoidModel<T>> exte
                             heyFull = heyTicks-fixedPartial;
                             heyFull = Math.max(heyFull/10,0);
                         }
-                        poseStack.pushPose();
+                        ClientUtil.pushPoseAndCooperate(poseStack,24);
 
                         // Translate to the body
                             getParentModel().body.translateAndRotate(poseStack);
@@ -79,7 +79,7 @@ public class HeyYaLayer<T extends LivingEntity, A extends HumanoidModel<T>> exte
                         float b = isHurt ? 0.0F : 1.0F;
                         ModStrayModels.HEY_YA.render(livent, partialTicks, poseStack, bufferSource, packedLight,
                                 r, g, b, heyFull, skin);
-                        poseStack.popPose();
+                        ClientUtil.popPoseAndCooperate(poseStack,24);
                     }
                 }
             }

@@ -62,7 +62,7 @@ public class BubbleScaffoldBlockEntityRenderer implements BlockEntityRenderer<Bu
                 partialTick = 0;
             }
             for (Vec3 value : bubbleScaffoldBlockEntity.bubbleList) {
-                poseStack.pushPose();
+                ClientUtil.pushPoseAndCooperate(poseStack,6);
 
 
                 poseStack.translate(value.x,value.y,value.z);
@@ -95,7 +95,7 @@ public class BubbleScaffoldBlockEntityRenderer implements BlockEntityRenderer<Bu
                 vertexConsumer.vertex(matrix, -size, size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
 
 
-                poseStack.popPose();
+                ClientUtil.popPoseAndCooperate(poseStack,6);
             }
         }
     }

@@ -6,6 +6,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.datafixers.util.Pair;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.FogBlock;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -750,14 +751,14 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
         }
 
         $$0.blit(CREATIVE_TABS_LOCATION, $$7, $$8, $$5, $$6, 26, 32);
-        $$0.pose().pushPose();
+        ClientUtil.pushPoseAndCooperate($$0.pose(),50);
         $$0.pose().translate(0.0F, 0.0F, 100.0F);
         $$7 += 5;
         $$8 += 8 + ($$3 ? 1 : -1);
         ItemStack $$10 = $$1.getIconItem();
         $$0.renderItem($$10, $$7, $$8);
         $$0.renderItemDecorations(this.font, $$10, $$7, $$8);
-        $$0.pose().popPose();
+        ClientUtil.popPoseAndCooperate($$0.pose(),50);
     }
 
     public boolean isInventoryOpen() {

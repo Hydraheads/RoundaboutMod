@@ -71,7 +71,7 @@ public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                             heyFull = mandomTicks - fixedPartial;
                             heyFull = Math.max(heyFull / 10, 0);
                         }
-                        poseStack.pushPose();
+                        ClientUtil.pushPoseAndCooperate(poseStack,26);
 
                         // Translate to the right/left hand
                         getParentModel().body.translateAndRotate(poseStack); // Use leftArm for off-hand
@@ -86,7 +86,7 @@ public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                         float b = isHurt ? 0.4F : 1.0F;
                         ModStrayModels.MANDOM.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                                 r, g, b, heyFull, skin);
-                        poseStack.popPose();
+                        ClientUtil.popPoseAndCooperate(poseStack,26);
                     }
                 }
             }
@@ -132,7 +132,7 @@ public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
             if (hasMandom && entity instanceof Player PL) {
                 byte style = ((IPlayerEntity) PL).roundabout$getWatchStyle();
                 if (style != PowersMandom.WATCHLESS) {
-                    poseStack.pushPose();
+                    ClientUtil.pushPoseAndCooperate(poseStack,54);
 
                     // Translate to the right/left hand
                     handarm.translateAndRotate(poseStack); // Use leftArm for off-hand
@@ -152,7 +152,7 @@ public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                         ModStrayModels.MANDOM_WATCH.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                                 r, g, b, 1, style);
                     }
-                    poseStack.popPose();
+                    ClientUtil.popPoseAndCooperate(poseStack,55);
                 }
             }
         }

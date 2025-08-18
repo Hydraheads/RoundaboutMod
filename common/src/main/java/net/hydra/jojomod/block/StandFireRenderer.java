@@ -46,7 +46,7 @@ public class StandFireRenderer implements BlockEntityRenderer<StandFireBlockEnti
 
         if (ClientUtil.canSeeStands(lp))
         {
-            matrices.pushPose();
+            ClientUtil.pushPoseAndCooperate(matrices,5);
 
             BlockState aboveState = client.level.getBlockState(fire.getBlockPos().above());
 
@@ -57,7 +57,7 @@ public class StandFireRenderer implements BlockEntityRenderer<StandFireBlockEnti
             }
 
             itemRenderer.renderBatched(StandFireType.getFireBlockByType(fire.getBlockState().getValue(StandFireBlock.COLOR).byteValue()).withPropertiesOf(fire.getBlockState()), fire.getBlockPos(), client.level, matrices, buffer.getBuffer(RenderType.cutout()), true, lp.getRandom());
-            matrices.popPose();
+            ClientUtil.popPoseAndCooperate(matrices,5);
         }
     }
 

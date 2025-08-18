@@ -34,7 +34,7 @@ public abstract class AchtungArrowRenderer<T extends AbstractArrow> extends Enti
     private void roundabout$renderArrowAchtung(T $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
         float throwfade = ClientUtil.getThrowFadeToTheEther();
         if (throwfade != 1){
-            $$3.pushPose();
+            ClientUtil.pushPoseAndCooperate($$3,7);
             $$3.mulPose(Axis.YP.rotationDegrees(Mth.lerp($$2, $$0.yRotO, $$0.getYRot()) - 90.0F));
             $$3.mulPose(Axis.ZP.rotationDegrees(Mth.lerp($$2, $$0.xRotO, $$0.getXRot())));
             int $$6 = 0;
@@ -77,7 +77,7 @@ public abstract class AchtungArrowRenderer<T extends AbstractArrow> extends Enti
                 this.roundabout$vertexAchtung($$20, $$21, $$18, -8, 2, 0, 0.0F, 0.15625F, 0, 1, 0, $$5);
             }
 
-            $$3.popPose();
+            ClientUtil.popPoseAndCooperate($$3,7);
             super.render($$0, $$1, $$2, $$3, $$4, $$5);
             ci.cancel();
         }

@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import net.hydra.jojomod.access.IParticleAccess;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.mixin.access.AccessParticle;
 import net.minecraft.CrashReport;
@@ -80,7 +81,7 @@ public class TimeStopParticleEngine {
             $$2.turnOnLightLayer();
             RenderSystem.enableDepthTest();
             PoseStack $$5 = RenderSystem.getModelViewStack();
-            $$5.pushPose();
+            ClientUtil.pushPoseAndCooperate($$5,17);
             $$5.mulPoseMatrix($$0.last().pose());
             RenderSystem.applyModelViewMatrix();
 
@@ -121,7 +122,7 @@ public class TimeStopParticleEngine {
                 }
             }
 
-            $$5.popPose();
+            ClientUtil.popPoseAndCooperate($$5,17);
             RenderSystem.applyModelViewMatrix();
             RenderSystem.depthMask(true);
             RenderSystem.disableBlend();

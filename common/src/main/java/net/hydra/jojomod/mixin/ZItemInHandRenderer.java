@@ -169,13 +169,13 @@ public abstract class ZItemInHandRenderer {
         }
 
         if (abstractClientPlayer != null && ((StandUser)abstractClientPlayer).roundabout$getEffectiveCombatMode() && !abstractClientPlayer.isUsingItem()){
-            poseStack.pushPose();
+            ClientUtil.pushPoseAndCooperate(poseStack,4);
             boolean $$10 = interactionHand == InteractionHand.MAIN_HAND;
             HumanoidArm humarm = $$10 ? abstractClientPlayer.getMainArm() : abstractClientPlayer.getMainArm().getOpposite();
             if ($$10 && !abstractClientPlayer.isInvisible()) {
                 this.renderPlayerArm(poseStack, multiBufferSource, j, i, h, humarm);
             }
-            poseStack.popPose();
+            ClientUtil.popPoseAndCooperate(poseStack,4);
             ci.cancel();
             return;
         }
@@ -204,7 +204,7 @@ public abstract class ZItemInHandRenderer {
                     float kT3 = (float) (knifeTime * 0.01);
 
                     ci.cancel();
-                    poseStack.pushPose();
+                    ClientUtil.pushPoseAndCooperate(poseStack,10);
 
                     this.applyItemArmTransform(poseStack, humanoidArm, i);
                     poseStack.translate((float) q * -0.3f, 0.25, 0.15731531f);
@@ -240,10 +240,10 @@ public abstract class ZItemInHandRenderer {
                     poseStack.mulPose(Axis.YN.rotationDegrees((float) q * 45.0f));
                     this.renderItem(abstractClientPlayer, itemStack, bl2 ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND :
                             ItemDisplayContext.FIRST_PERSON_LEFT_HAND, !bl2, poseStack, multiBufferSource, j);
-                    poseStack.popPose();
+                    ClientUtil.popPoseAndCooperate(poseStack,10);
                 } else if (itemStack.getUseAnimation() == UseAnim.BLOCK && itemStack.getItem() instanceof StandArrowItem) {
                     ci.cancel();
-                    poseStack.pushPose();
+                    ClientUtil.pushPoseAndCooperate(poseStack,11);
                     this.applyItemArmTransform(poseStack, humanoidArm, i);
                     poseStack.translate((float) q * -0.3f, 0.25, 0.15731531f);
                     float knifeTime = 5f;
@@ -268,7 +268,7 @@ public abstract class ZItemInHandRenderer {
                     poseStack.mulPose(Axis.YN.rotationDegrees((float) q * 45.0f));
                     this.renderItem(abstractClientPlayer, itemStack, bl2 ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND :
                             ItemDisplayContext.FIRST_PERSON_LEFT_HAND, !bl2, poseStack, multiBufferSource, j);
-                    poseStack.popPose();
+                    ClientUtil.popPoseAndCooperate(poseStack,11);
                 }
             } else {
                 if (itemStack.getItem() instanceof StandArrowItem SI){
@@ -281,7 +281,7 @@ public abstract class ZItemInHandRenderer {
                         boolean bl3 = bl2 = humanoidArm == HumanoidArm.RIGHT;
                         int q = bl2 ? 1 : -1;
                         ci.cancel();
-                        poseStack.pushPose();
+                        ClientUtil.pushPoseAndCooperate(poseStack,12);
 
                         this.applyItemArmTransform(poseStack, humanoidArm, i);
                         poseStack.translate((float) q * -0.28f, 0.15, 0.1);
@@ -292,7 +292,7 @@ public abstract class ZItemInHandRenderer {
                         poseStack.mulPose(Axis.XP.rotationDegrees(-30.0f-Math.abs(20F*(r*homingMod))-(14F*homingMod)));
                         this.renderItem(abstractClientPlayer, itemStack, bl2 ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND :
                                 ItemDisplayContext.FIRST_PERSON_LEFT_HAND, !bl2, poseStack, multiBufferSource, j);
-                        poseStack.popPose();
+                        ClientUtil.popPoseAndCooperate(poseStack,12);
                     }
                 }
             }

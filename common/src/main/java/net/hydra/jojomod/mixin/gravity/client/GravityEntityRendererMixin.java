@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.gravity.client;
 
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Minecraft;
@@ -47,7 +48,7 @@ public abstract class GravityEntityRendererMixin<T extends Entity>  {
             boolean $$6 = !$$0.isDiscrete();
             float $$7 = $$0.getNameTagOffsetY();
             int $$8 = "deadmau5".equals($$1.getString()) ? -10 : 0;
-            $$2.pushPose();
+            ClientUtil.pushPoseAndCooperate($$2,9);
             $$2.translate(0.0F, $$7, 0.0F);
 
             Quaternionf quaternion = new Quaternionf(RotationUtil.getCameraRotationQuaternion(gravityDirection));
@@ -66,7 +67,7 @@ public abstract class GravityEntityRendererMixin<T extends Entity>  {
                 $$12.drawInBatch($$1, $$13, (float)$$8, -1, false, $$9, $$3, Font.DisplayMode.NORMAL, 0, $$4);
             }
 
-            $$2.popPose();
+            ClientUtil.popPoseAndCooperate($$2,9);
         }
     }
 }

@@ -2,6 +2,7 @@ package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
@@ -46,7 +47,7 @@ public class StandHeldItemLayer <T extends StandEntity, M extends StandModel<T>>
 
     protected void renderArmWithItem(LivingEntity p_117185_, ItemStack p_117186_, ItemDisplayContext p_270970_, HumanoidArm p_117188_, PoseStack p_117189_, MultiBufferSource p_117190_, int p_117191_) {
         if (!p_117186_.isEmpty()) {
-            p_117189_.pushPose();
+            ClientUtil.pushPoseAndCooperate(p_117189_,25);
             float shiftZ = 1.3F;
             float shiftY = 1;
             float shiftX = 3F;
@@ -73,7 +74,7 @@ public class StandHeldItemLayer <T extends StandEntity, M extends StandModel<T>>
                 p_117189_.scale(3,3,3);
             }
             this.itemInHandRenderer.renderItem(p_117185_, p_117186_, p_270970_, flag, p_117189_, p_117190_, p_117191_);
-            p_117189_.popPose();
+            ClientUtil.popPoseAndCooperate(p_117189_,25);
         }
     }
 }

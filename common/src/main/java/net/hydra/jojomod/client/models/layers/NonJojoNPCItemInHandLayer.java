@@ -2,6 +2,7 @@ package net.hydra.jojomod.client.models.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.npcs.NonJojoNpcModel;
 import net.minecraft.client.model.ArmedModel;
 import net.minecraft.client.model.HeadedModel;
@@ -39,7 +40,7 @@ public class NonJojoNPCItemInHandLayer<T extends LivingEntity, M extends NonJojo
         ItemStack $$11 = $$10 ? $$3.getOffhandItem() : $$3.getMainHandItem();
         ItemStack $$12 = $$10 ? $$3.getMainHandItem() : $$3.getOffhandItem();
         if (!$$11.isEmpty() || !$$12.isEmpty()) {
-            $$0.pushPose();
+            ClientUtil.pushPoseAndCooperate($$0,57);
             if (this.getParentModel().young) {
                 float $$13 = 0.5F;
                 $$0.translate(0.0F, 0.75F, 0.0F);
@@ -48,7 +49,7 @@ public class NonJojoNPCItemInHandLayer<T extends LivingEntity, M extends NonJojo
 
             this.renderArmWithItem($$3, $$12, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, HumanoidArm.RIGHT, $$0, $$1, $$2);
             this.renderArmWithItem($$3, $$11, ItemDisplayContext.THIRD_PERSON_LEFT_HAND, HumanoidArm.LEFT, $$0, $$1, $$2);
-            $$0.popPose();
+            ClientUtil.popPoseAndCooperate($$0,57);
         }
     }
     @Override
@@ -57,7 +58,7 @@ public class NonJojoNPCItemInHandLayer<T extends LivingEntity, M extends NonJojo
             this.renderArmWithSpyglass($$0, $$1, $$3, $$4, $$5, $$6);
         } else {
             if (!$$1.isEmpty()) {
-                $$4.pushPose();
+                ClientUtil.pushPoseAndCooperate($$4,56);
                 this.getParentModel().translateToHand($$3, $$4);
                 $$4.mulPose(Axis.XP.rotationDegrees(-90.0F));
                 $$4.mulPose(Axis.YP.rotationDegrees(180.0F));
@@ -70,13 +71,13 @@ public class NonJojoNPCItemInHandLayer<T extends LivingEntity, M extends NonJojo
                 } else {
                     this.itemInHandRenderer.renderItem($$0, $$1, $$2, $$7, $$4, $$5, $$6);
                 }
-                $$4.popPose();
+                ClientUtil.popPoseAndCooperate($$4,56);
             }
         }
     }
 
     private void renderArmWithSpyglass(LivingEntity $$0, ItemStack $$1, HumanoidArm $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
-        $$3.pushPose();
+        ClientUtil.pushPoseAndCooperate($$3,52);
         ModelPart $$6 = this.getParentModel().getHead();
         float $$7 = $$6.xRot;
         $$6.xRot = Mth.clamp($$6.xRot, (float) (-Math.PI / 6), (float) (Math.PI / 2));
@@ -90,6 +91,6 @@ public class NonJojoNPCItemInHandLayer<T extends LivingEntity, M extends NonJojo
         } else {
             this.itemInHandRenderer.renderItem($$0, $$1, ItemDisplayContext.HEAD, false, $$3, $$4, $$5);
         }
-        $$3.popPose();
+        ClientUtil.popPoseAndCooperate($$3,52);
     }
 }

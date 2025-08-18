@@ -64,7 +64,7 @@ public abstract class AchtungItemRenderer {
         if (ClientUtil.getThrowFadeToTheEther() != 1 && !ClientUtil.isFabulous()){
             /**Sodium removes this function sometimes sooo*/
             if (!$$0.isEmpty()) {
-                $$3.pushPose();
+                ClientUtil.pushPoseAndCooperate($$3,21);
                 boolean $$8 = $$1 == ItemDisplayContext.GUI || $$1 == ItemDisplayContext.GROUND || $$1 == ItemDisplayContext.FIXED;
                 if ($$8) {
                     if ($$0.is(Items.TRIDENT)) {
@@ -88,7 +88,7 @@ public abstract class AchtungItemRenderer {
                     RenderType $$12 = ItemBlockRenderTypes.getRenderType($$0, $$10);
                     VertexConsumer $$14;
                     if (hasAnimatedTexture($$0) && $$0.hasFoil()) {
-                        $$3.pushPose();
+                        ClientUtil.pushPoseAndCooperate($$3,53);
                         PoseStack.Pose $$13 = $$3.last();
                         if ($$1 == ItemDisplayContext.GUI) {
                             MatrixUtil.mulComponentWise($$13.pose(), 0.5F);
@@ -102,7 +102,7 @@ public abstract class AchtungItemRenderer {
                             $$14 = getCompassFoilBuffer($$4, $$12, $$13);
                         }
 
-                        $$3.popPose();
+                        ClientUtil.popPoseAndCooperate($$3,53);
                     } else if ($$10) {
                         $$14 = getFoilBufferDirect($$4, $$12, true, $$0.hasFoil());
                     } else {
@@ -114,7 +114,7 @@ public abstract class AchtungItemRenderer {
                     this.blockEntityRenderer.renderByItem($$0, $$1, $$3, $$4, $$5, $$6);
                 }
 
-                $$3.popPose();
+                ClientUtil.popPoseAndCooperate($$3,21);
             }
 
             if (!$$0.isEmpty() && $$0.getItem() instanceof BlockItem BE && BE.getBlock() instanceof FogBlock) {

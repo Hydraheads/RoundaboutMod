@@ -747,6 +747,18 @@ public class ClientUtil {
                         mc.player, mc.player.connection.enabledFeatures(), mc.options.operatorItemsTab().get()
                 ));
     }
+
+
+
+    public static void pushPoseAndCooperate(PoseStack stack, int caseNumber){
+        //Roundabout.LOGGER.info("Case Push "+caseNumber);
+        stack.pushPose();
+    }
+    public static void popPoseAndCooperate(PoseStack stack, int caseNumber){
+        //Roundabout.LOGGER.info("Case Pop "+caseNumber);
+        stack.popPose();
+    }
+
     public static boolean roundabout$configButtonSelected = false;
 
     public static String[] splitIntoLine(String input, int maxCharInLine){

@@ -47,24 +47,6 @@ public class InvisiBlockEntityRenderer implements BlockEntityRenderer<InvisiBloc
     }
     public int bubbleCount = 7;
 
-    /***
-     *
-     BlockState state = blockEntity.getOriginalState();
-
-     // Render the original block as a ghost version (semi-transparent)
-     ClientUtil.setThrowFadeToTheEther(0.4f);
-     poseStack.pushPose();
-     Minecraft.getInstance().getBlockRenderer().renderSingleBlock(
-     state,
-     poseStack,
-     bufferSource,
-     packedLight,
-     packedOverlay
-     );
-     ClientUtil.setThrowFadeToTheEther(1);
-     poseStack.popPose();
-     */
-
 
     public float clampUnit(float unit){
         return ((unit - 0.5F)*0.80F)+0.05F;
@@ -195,26 +177,7 @@ public class InvisiBlockEntityRenderer implements BlockEntityRenderer<InvisiBloc
                             ModParticles.BRIEF_MAGIC_DUST, pos.x, pos.y, pos.z, 0, 0, 0);
                 }
             }
-            /**
-            if (ClientUtil.isFabulous()){
-            } else {
-
-                poseStack.pushPose();
-
-                // Move to block center
-                poseStack.translate(0.0, 0.0, 0.0);
-
-                // Get a translucent buffer (cutout or translucent depending on goal)
-                VertexConsumer buffer = bufferSource.getBuffer(RenderType.translucent());
-
-                // Define cube coordinates (from 0 to 1, full block)
-                AABB cube = new AABB(0.2, 0.2, 0.2, 0.8, 0.8, 0.8);
-
-                renderCube(poseStack, buffer, cube, new Color(200, 200, 200, ClientConfig.getLocalInstance().invisibleBlockDepth), packedLight); // light gray with alpha
-
-                poseStack.popPose();
-            }
-             **/
+            
         }
     }
 

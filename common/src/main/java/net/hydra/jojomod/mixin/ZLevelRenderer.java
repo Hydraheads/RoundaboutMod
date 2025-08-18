@@ -46,7 +46,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
-import java.util.ArrayDeque;
 
 @Mixin(LevelRenderer.class)
 public abstract class ZLevelRenderer implements ILevelRenderer {

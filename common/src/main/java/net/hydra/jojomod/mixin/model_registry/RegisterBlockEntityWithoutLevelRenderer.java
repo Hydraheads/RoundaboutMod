@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin.model_registry;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.access.IBlockEntityWithoutLevelRenderer;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModItemModels;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.client.models.projectile.HarpoonModel;
@@ -31,14 +32,14 @@ public class RegisterBlockEntityWithoutLevelRenderer implements IBlockEntityWith
     public void roundabout$render2(ItemStack $$0, ItemDisplayContext $$1, PoseStack $$2, MultiBufferSource $$3, int $$4, int $$5, CallbackInfo ci){
 
         if ($$0.is(ModItems.HARPOON)) {
-            $$2.pushPose();
+            ClientUtil.pushPoseAndCooperate($$2,19);
 
             $$2.scale(1.0F, -1.0F, -1.0F);
             if (ModItemModels.HARPOON_MODEL != null) {
                 VertexConsumer vertexconsumer1 = ItemRenderer.getFoilBufferDirect($$3, ModItemModels.HARPOON_MODEL.renderType(ModEntities.HARPOON_TEXTURE), false, $$0.hasFoil());
                 ModItemModels.HARPOON_MODEL.renderToBuffer($$2, vertexconsumer1, $$4, $$5, 1.0F, 1.0F, 1.0F, 1.0F);
             }
-            $$2.popPose();
+            ClientUtil.popPoseAndCooperate($$2,19);
         }
     }
 
