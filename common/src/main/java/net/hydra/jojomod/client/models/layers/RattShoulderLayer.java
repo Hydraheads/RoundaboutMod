@@ -24,6 +24,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -89,7 +90,7 @@ public class RattShoulderLayer<T extends LivingEntity, A extends HumanoidModel<T
                             } else {
                                 if (user.roundabout$getIdlePos() == 0) {
                                     getParentModel().body.translateAndRotate(poseStack);
-                                    poseStack.translate(0.35F, -0.4F, 0F);
+                                    poseStack.translate(0.35F* (entity.getMainArm().equals(HumanoidArm.LEFT) ? -1 : 1), -0.4F, 0F);
                                     /* additional check for armor, cancels the check if you have a visage */
                                     boolean bl1 = false;
                                     if (user instanceof Player) {
