@@ -56,6 +56,12 @@ import java.util.List;
 public abstract class GravityEntityMixin implements IGravityEntity {
     // NEW FEATURES
 
+    @Shadow protected abstract boolean isStateClimbable(BlockState blockState);
+
+    @Shadow public abstract BlockPos getOnPos();
+
+    @Shadow public float moveDist;
+
     @Shadow protected abstract Vec3 collide(Vec3 vec3);
 
     @Shadow public float walkDistO;
@@ -554,7 +560,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
             method = "move(Lnet/minecraft/world/entity/MoverType;Lnet/minecraft/world/phys/Vec3;)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/world/phys/Vec3;horizontalDistance()D",
+                    target = "Ljava/lang/Math;sqrt(D)D",
                     ordinal = 0,
                     shift = At.Shift.AFTER
             )
@@ -564,7 +570,23 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         if (gravityDirection == Direction.DOWN)
             return;
 
-        this.walkDist = this.walkDistO + (float)this.collide($$1).length() * 0.6F;
+        Vec3 collide = this.collide($$1);
+        Vec3 collide2 = collide;
+
+        BlockPos $$15 = this.getOnPos();
+        BlockState $$16 = this.level().getBlockState($$15);
+        boolean $$17 = this.isStateClimbable($$16);
+        if (!$$17) {
+            collide2 = new Vec3(collide.x,0,collide.z);
+        }
+
+        this.walkDist = this.walkDistO + (float)collide.length() * 0.6F;
+        this.moveDist = this.moveDist - (float)Math.sqrt(
+                collide2.x * collide2.x + collide2.y * collide2.y + collide2.z * collide2.z) * 0.6F;
+
+        Vec3 collideT = RotationUtil.vecPlayerToWorld(collide, gravityDirection);
+        this.moveDist = this.moveDist + (float)Math.sqrt(
+                collideT.x * collideT.x + collideT.y * collideT.y + collideT.z * collideT.z) * 0.6F;
     }
 
 
