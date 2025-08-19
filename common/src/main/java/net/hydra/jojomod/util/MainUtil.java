@@ -1148,6 +1148,7 @@ public class MainUtil {
                     || blk instanceof SkullBlock
                     || blk instanceof RodBlock
                     || blk instanceof HorizontalDirectionalBlock
+                    || blk instanceof FleshBlock
                     || (blk instanceof SimpleWaterloggedBlock && !(blk instanceof LeavesBlock))){
                 return false;
             }
