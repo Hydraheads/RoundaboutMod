@@ -209,7 +209,7 @@ public class RattDartEntity extends AbstractArrow {
                 if (superThrowTicks <= -1) {
                     this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
                 } else {
-                    if ((this.tickCount+2) % 4 == 0){
+                    if ((this.tickCount+2) == 0){
                         ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
                                 this.getX(), this.getY(), this.getZ(),
                                 0, 0, 0, 0, 0);

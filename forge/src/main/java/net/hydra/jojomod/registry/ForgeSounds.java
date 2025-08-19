@@ -310,10 +310,14 @@ public class ForgeSounds {
             register(ModSounds.RATT_SUMMON, ModSounds.RATT_SUMMON_ID);
     public static final RegistryObject<SoundEvent> RATT_SCOPE_EVENT =
             register(ModSounds.RATT_SCOPE, ModSounds.RATT_SCOPE_ID);
+    public static final RegistryObject<SoundEvent> RATT_DESCOPE =
+            register(ModSounds.RATT_DESCOPE, ModSounds.RATT_DESCOPE_ID);
     public static final RegistryObject<SoundEvent> RATT_THUNK_EVENT =
             register(ModSounds.RATT_DART_THUNK, ModSounds.RATT_DART_THUNK_ID);
     public static final RegistryObject<SoundEvent> RATT_IMPACT_EVENT =
             register(ModSounds.RATT_DART_IMPACT, ModSounds.RATT_DART_IMPACT_ID);
+    public static final RegistryObject<SoundEvent> RATT_FIRING =
+            register(ModSounds.RATT_FIRING, ModSounds.RATT_FIRING_ID);
 
 
     public static final RegistryObject<SoundEvent> THE_WORLD_OVER_HEAVEN_EVENT =

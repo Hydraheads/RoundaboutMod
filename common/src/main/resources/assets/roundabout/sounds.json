@@ -701,6 +701,7 @@
       "roundabout:cinderella_visage_creation"
     ]
   },
+
   "ratt_summon": {
     "subtitle": "sounds.roundabout.ratt_summon",
     "sounds": [
@@ -713,10 +714,16 @@
       "roundabout:ratt_scope"
     ]
   },
+  "ratt_descope": {
+    "subtitle": "sounds.roundabout.ratt_scope",
+    "sounds": [
+      "roundabout:ratt_descope"
+    ]
+  },
   "ratt_dart_impact": {
     "subtitle": "sounds.roundabout.ratt_dart_impact",
     "sounds": [
-      "roundabout:ratt_dart_hit"
+      "roundabout:ratt_dart_thunk"
     ]
   },
   "ratt_dart_thunk": {
@@ -725,6 +732,13 @@
       "roundabout:ratt_dart_thunk"
     ]
   },
+  "ratt_firing": {
+    "subtitle": "sounds.roundabout.ratt_firing",
+    "sounds": [
+      "roundabout:ratt_firing"
+    ]
+  },
+
   "ova_summon": {
     "subtitle": "sounds.roundabout.ova_summon",
     "sounds": [
