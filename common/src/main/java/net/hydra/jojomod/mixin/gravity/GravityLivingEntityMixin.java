@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.gravity;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IGravityLivingEntity;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
@@ -45,7 +46,17 @@ import java.util.Iterator;
 import java.util.Map;
 
 @Mixin(value= LivingEntity.class)
-public abstract class GravityLivingEntityMixin extends Entity {
+public abstract class GravityLivingEntityMixin extends Entity implements IGravityLivingEntity {
+
+
+    /**Unique Roundabout Code*/
+    @Unique
+    @Override
+    public void roundabout$augmentKB(Entity knockback){
+        roundabout$knockbackGravityAugmentation = true;
+        roundabout$augmentSource = knockback;
+    }
+
 
     public GravityLivingEntityMixin(EntityType<?> $$0, Level $$1) {
         super($$0, $$1);
