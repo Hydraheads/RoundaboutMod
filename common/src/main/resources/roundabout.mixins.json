@@ -61,7 +61,7 @@
     "effects.bleed.BleedFoodData",
     "effects.hex.HexItem",
     "gravity.GravityDirectionMixin",
-    "gravity.GravityEntity",
+    "gravity.GravityEntityMixin",
     "gravity.GravityEntityCollisionContextMixin",
     "gravity.GravityLivingEntityMixin",
     "gravity.GravityMobMixin",
