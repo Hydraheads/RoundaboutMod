@@ -474,9 +474,7 @@ public class PowersRatt extends NewDashPreset {
             int nl = scopeLevel + 1;
             tryIntPower(PowersRatt.NET_SCOPE, true,nl == 2 ? 0 : nl);
             tryIntPowerPacket(PowersRatt.NET_SCOPE,nl == 2 ? 0 : nl);
-            if (nl != 2) {
-                this.getSelf().playSound(ModSounds.RATT_SCOPE_EVENT, 1.0F, (float) (0.98F + (Math.random() * 0.04F)));
-            }
+            this.getSelf().playSound(nl != 2 ? ModSounds.RATT_SCOPE_EVENT : ModSounds.RATT_DESCOPE_EVENT, 1.0F, (float) (0.98F + (Math.random() * 0.04F)));
         }
 
     }
@@ -646,7 +644,7 @@ public class PowersRatt extends NewDashPreset {
     @Override
     public float inputSpeedModifiers(float basis) {
         if (scopeLevel != 0){
-            basis*=0.5f;
+            basis*=0.8f;
         }
         return super.inputSpeedModifiers(basis);
     }

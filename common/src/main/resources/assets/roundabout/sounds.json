@@ -714,6 +714,12 @@
       "roundabout:ratt_scope"
     ]
   },
+  "ratt_descope": {
+    "subtitle": "sounds.roundabout.ratt_scope",
+    "sounds": [
+      "roundabout:ratt_descope"
+    ]
+  },
   "ratt_dart_impact": {
     "subtitle": "sounds.roundabout.ratt_dart_impact",
     "sounds": [
