@@ -31,24 +31,26 @@ public abstract class GravityLocalPlayerMixin extends AbstractClientPlayer {
             at = @At(
                     value = "HEAD"
             ),
-            cancellable = true)
-    private void rdbt$redirect_wouldCollideAt_new_0(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
+            cancellable = true
+    )
+    private void rdbt$collision(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         Direction gravityDirection = GravityAPI.getGravityDirection(this);
         if (gravityDirection == Direction.DOWN)
             return;
 
+        AABB $$1 = this.getBoundingBox();
         AABB playerBox = this.getBoundingBox();
         Vec3 playerMask = RotationUtil.maskPlayerToWorld(0.0D, 1.0D, 0.0D, gravityDirection);
         AABB posBox = new AABB(pos);
         Vec3 posMask = RotationUtil.maskPlayerToWorld(1.0D, 0.0D, 1.0D, gravityDirection);
 
-        AABB newAAB = new AABB(
+        AABB $$2 = new AABB(
                 playerMask.multiply(playerBox.minX, playerBox.minY, playerBox.minZ).add(posMask.multiply(posBox.minX, posBox.minY, posBox.minZ)),
                 playerMask.multiply(playerBox.maxX, playerBox.maxY, playerBox.maxZ).add(posMask.multiply(posBox.maxX, posBox.maxY, posBox.maxZ))
-        );
-
-        cir.setReturnValue(this.level().collidesWithSuffocatingBlock(this, newAAB));
+        ).deflate(1.0E-7);
+        cir.setReturnValue(this.level().collidesWithSuffocatingBlock(this, $$2));
     }
+
 
     @Inject(
             method = "moveTowardsClosestSpace(DD)V",

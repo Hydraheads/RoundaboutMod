@@ -77,18 +77,15 @@ public abstract class GravityPlayerMixin extends LivingEntity {
         if (this.isSwimming() && !this.isPassenger()) {
             double $$4 = RotationUtil.vecWorldToPlayer(this.getLookAngle(), gravityDirection).y;
             double $$5 = $$4 < -0.2 ? 0.085 : 0.06;
-
             Vec3 rotate = new Vec3(0.0D, 1.0D - 0.1D, 0.0D);
             rotate = RotationUtil.vecPlayerToWorld(rotate, GravityAPI.getGravityDirection(this));
-
-
             if ($$4 <= 0.0
                     || this.jumping
                     || !this.level().getBlockState(BlockPos.containing(
-                    (this.getX()- rotate.x),
-                    ((this.getY() + 1.0 - 0.1) - rotate.y + (1.0D - 0.1D)),
-                    (this.getZ() - rotate.z)
-            )).getFluidState().isEmpty()) {
+                    (double) this.getX() - rotate.x,
+                    (double) (this.getY() + 1.0 - 0.1) - rotate.y + (1.0D - 0.1D),
+                    (double) this.getZ() - rotate.z)
+            ).getFluidState().isEmpty()) {
                 Vec3 $$6 = this.getDeltaMovement();
                 this.setDeltaMovement($$6.add(0.0, ($$4 - $$6.y) * $$5, 0.0));
             }
@@ -329,8 +326,7 @@ public abstract class GravityPlayerMixin extends LivingEntity {
     @Inject(
             method = "addParticlesAroundSelf",
             at = @At(
-                    value = "HEAD",
-                    target = "Lnet/minecraft/world/level/Level;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V"
+                    value = "HEAD"
             ),
             cancellable = true
     )

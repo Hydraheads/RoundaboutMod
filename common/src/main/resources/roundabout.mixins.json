@@ -190,7 +190,6 @@
     "d4c.D4CDisableBlockInteraction",
     "gravity.client.GravityCameraMixin",
     "gravity.client.GravityClientPacketListener",
-    "gravity.client.GravityClientPlayerEntityMixin",
     "gravity.client.GravityClientPlayNetworkHandlerMixin",
     "gravity.client.GravityEntityRenderDispatcherMixin",
     "gravity.client.GravityEntityRendererMixin",
