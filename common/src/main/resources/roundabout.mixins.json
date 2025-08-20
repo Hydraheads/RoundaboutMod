@@ -64,6 +64,7 @@
     "gravity.GravityDirectionMixin",
     "gravity.GravityEntityCollisionContextMixin",
     "gravity.GravityEntityMixin",
+    "gravity.GravityFoxMixin",
     "gravity.GravityLivingEntityMixin",
     "gravity.GravityMobMixin",
     "gravity.GravityPlayerMixin",
