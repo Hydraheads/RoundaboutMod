@@ -16,10 +16,13 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.Arrays;
 
 
 public class FleshPileEntity extends ThrowableItemProjectile {
@@ -34,6 +37,9 @@ public class FleshPileEntity extends ThrowableItemProjectile {
         flesh_count = amount;
     }
 
+    public FleshPileEntity(Level level, double d0, double d1, double d2) {
+        super(ModEntities.FLESH_PILE, d0, d1,d2,level);
+    }
 
 
     @Override
@@ -76,6 +82,17 @@ public class FleshPileEntity extends ThrowableItemProjectile {
         return info;
     }
 
+    public boolean[] checkHeights(BlockPos pos, int offsetX, int offsetZ, int level) {
+        boolean[] info = {false,false};
+        for (int i=-1;i<3;i++) {
+            boolean[] result = isValidLocation(pos,offsetX,i,offsetZ,level);
+            if (result[0] || result[1] ) {
+                info = result;
+            }
+        }
+        return info;
+    }
+
     public void setGoo(BlockPos pos, int offsetX, int offsetZ, int level){
         BlockPos blockPos = null;
         boolean replace = false;
@@ -107,12 +124,41 @@ public class FleshPileEntity extends ThrowableItemProjectile {
                 {0,1,0},
                 {0,0,0}
         };
-        for (int i=0;i<amount;i++) {array[(int) (Math.random()*3) ][(int) (Math.random()*3)] += 1;}
+
+        for (int x=0;x<array.length;x++) {
+            for (int y=0;y<array[0].length;y++) {
+                boolean[] result = checkHeights(pos,x-1,y-1,array[x][y]);
+                if (!(result[0] || result[1])) {
+                    array[x][y] = -1;
+                }
+             }
+        }
+
+        Roundabout.LOGGER.info("array: {}",array);
+
+        for (int i=0;i<amount-1;i++) {
+            int x = (int) (Math.random()*3);
+            int y = (int) (Math.random()*3);
+            int n = 0;
+            while(array[x][y] == -1 && n <= 10 ) {
+                x = (int) (Math.random()*3);
+                y = (int) (Math.random()*3);
+                n++;
+            }
+            if (array[x][y] != -1) {
+                array[x][y] += 1;
+            }
+        }
+
+        if (Arrays.deepEquals(array, new int[][]{{-1, -1, -1}, {-1, -1, -1}, {-1, -1, -1}})) {
+            spawnAtLocation(new ItemStack(ModBlocks.FLESH_BLOCK,4));
+            return;
+        }
 
         for (int x=0;x<array.length;x++) {
             for (int y=0;y<array[0].length;y++) {
                 if (array[x][y] > 0) {
-                    setGoo(pos, x-1, y-1, array[x][y]);
+                    setGoo(pos, x-1, y-1, Mth.clamp(0,array[x][y],4));
                 }
             }
         }
