@@ -192,6 +192,7 @@
     "barrage.BarrageBossBar",
     "barrage.DazeGameRenderer",
     "d4c.D4CDisableBlockInteraction",
+    "gravity.client.GravityBiomeAmbientSoundsHandlerMixin",
     "gravity.client.GravityCameraMixin",
     "gravity.client.GravityClientPacketListener",
     "gravity.client.GravityClientPlayNetworkHandlerMixin",
