@@ -330,6 +330,9 @@ public class ForgeItems {
             () -> new FleshChunkItem(ForgeBlocks.FLESH_BLOCK.get(),
                     new Item.Properties().food(ModFoodComponents.FLESH_CHUNK)
             )));
+    public static final RegistryObject<Item> FLESH_BUCKET = ITEMS.register("flesh_bucket",
+            () -> new FleshBucketItem(new Item.Properties().stacksTo(1)));
+
 
     public static void assignStupidForge(){
         DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), DispenserRegistry.KNIFE);

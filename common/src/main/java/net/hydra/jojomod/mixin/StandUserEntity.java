@@ -12,6 +12,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.projectile.FleshPileEntity;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.entity.projectile.RattDartEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
@@ -4081,8 +4082,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (melting != null) {
             int amount =  Mth.clamp(melting.getAmplifier()/2,1,6) + (int) (Math.random() * 1 + 0.5);
             if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
-                RattDartEntity r = new RattDartEntity(this.level(),(LivingEntity) ((Object) this),5); //doesn't really matter what you put here
-                r.placeFlesh(me.getOnPos(),amount);
+                FleshPileEntity r = new FleshPileEntity((LivingEntity) ((Object) this),this.level(),5); //doesn't really matter what you put here
+                r.setPos(this.getPosition(0));
+                this.level().addFreshEntity(r);
             } else {
                 spawnAtLocation(new ItemStack(ModBlocks.FLESH_BLOCK, amount));
             }

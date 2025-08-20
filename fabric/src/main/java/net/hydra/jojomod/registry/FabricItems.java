@@ -150,6 +150,8 @@ public class FabricItems {
 
     public static Item INTERDIMENSIONAL_KEY = registerItem("interdimensional_key", new InterdimensionalKeyItem(new Item.Properties().stacksTo(1)));
 
+    public static Item FLESH_BUCKET = registerItem("flesh_bucket", new FleshBucketItem(new Item.Properties().stacksTo(1)));
+
     public static Item MUSIC_DISC_TORTURE_DANCE = registerItem("music_disc_torture_dance",
             new RecordItem(1, ModSounds.TORTURE_DANCE_EVENT,
                     (new Item.Properties()).stacksTo(1).rarity(Rarity.RARE), 2840));
@@ -459,6 +461,7 @@ public class FabricItems {
         ModItems.MUSIC_DISC_HALLELUJAH = MUSIC_DISC_HALLELUJAH;
         ModItems.FOG_BLOCK_ITEMS = FOG_BLOCK_ITEMS;
         ModItems.INTERDIMENSIONAL_KEY = INTERDIMENSIONAL_KEY;
+        ModItems.FLESH_BUCKET = FLESH_BUCKET;
 
         ModItems.initializeVisageStore();
         //ModItems.STAND_ARROW_POOL.add((StandDiscItem)STAND_DISC_D4C);

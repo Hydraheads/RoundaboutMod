@@ -273,6 +273,8 @@ public class ForgeEvents {
 
         ModItems.INTERDIMENSIONAL_KEY = ForgeItems.INTERDIMENSIONAL_KEY.get();
 
+        ModItems.FLESH_BUCKET = ForgeItems.FLESH_BUCKET.get();
+
         ModItems.initializeVisageStore();
 
         BrewingRecipeRegistry.addRecipe(new ForgeBrewingRecipes(Potions.AWKWARD, ModItems.LOCACACA_PIT, ForgeItems.HEX_POTION.get()));
@@ -346,6 +348,7 @@ public class ForgeEvents {
         ModEntities.D4C = ForgeEntities.D4C.get();
         ModEntities.GREEN_DAY = ForgeEntities.GREEN_DAY.get();
         ModEntities.RATT = ForgeEntities.RATT.get();
+        ModEntities.FLESH_PILE = ForgeEntities.FLESH_PILE.get();
         ModEntities.SOFT_AND_WET = ForgeEntities.SOFT_AND_WET.get();
         ModEntities.SOFT_AND_WET_KING = ForgeEntities.SOFT_AND_WET_KING.get();
         ModEntities.SOFT_AND_WET_DROWNED = ForgeEntities.SOFT_AND_WET_DROWNED.get();

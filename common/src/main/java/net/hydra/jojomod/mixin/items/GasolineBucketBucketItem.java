@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.items;
 
 import net.hydra.jojomod.access.IBucketItem;
+import net.hydra.jojomod.block.FleshBlock;
 import net.hydra.jojomod.block.GasolineBlock;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.core.BlockPos;
@@ -16,6 +17,7 @@ import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -42,7 +44,7 @@ public class GasolineBucketBucketItem extends Item implements IBucketItem {
                     CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
         ItemStack itemStack = player.getItemInHand(hand);
         if (itemStack.is(Items.BUCKET)){
-            HitResult result = ProjectileUtil.getHitResultOnViewVector(player, entity -> !entity.isSpectator() && entity.isPickable(), 5);
+            HitResult result = Item.getPlayerPOVHitResult(level,player, ClipContext.Fluid.NONE);//ProjectileUtil.getHitResultOnViewVector(player, entity -> !entity.isSpectator() && entity.isPickable(), 5);
             if (result instanceof BlockHitResult) {
                 if (result.getType() == HitResult.Type.BLOCK) {
                     BlockPos blockPos = ((BlockHitResult) result).getBlockPos();
@@ -52,6 +54,28 @@ public class GasolineBucketBucketItem extends Item implements IBucketItem {
                         int levelState = state.getValue(GasolineBlock.LEVEL);
                         if (levelState < 2) {
                             ItemStack stack = new ItemStack(ModItems.GASOLINE_BUCKET);
+                            player.awardStat(Stats.ITEM_USED.get(this));
+                            player.swing(hand);
+                            if (!level.isClientSide) {
+                                level.removeBlock(blockPos, false);
+                                itemStack.shrink(1);
+                                if (itemStack.isEmpty()) {
+                                    cir.setReturnValue(InteractionResultHolder.sidedSuccess(stack, level.isClientSide()));
+                                    return;
+                                } else {
+                                    if (!player.getInventory().add(stack)) {
+                                        player.drop(stack, false);
+                                    }
+                                }
+                                SoundEvent $$6 = SoundEvents.BUCKET_FILL;
+                                level.playSound(player, blockPos, $$6, SoundSource.BLOCKS, 1F, 1.5F);
+                            }
+                            cir.setReturnValue(InteractionResultHolder.pass(itemStack));
+                        }
+                    } else if (block instanceof FleshBlock) {
+                        int levelState = state.getValue(FleshBlock.LAYERS);
+                        if (levelState == 4) {
+                            ItemStack stack = new ItemStack(ModItems.FLESH_BUCKET);
                             player.awardStat(Stats.ITEM_USED.get(this));
                             player.swing(hand);
                             if (!level.isClientSide) {
