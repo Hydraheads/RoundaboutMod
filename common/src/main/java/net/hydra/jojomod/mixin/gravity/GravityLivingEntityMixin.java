@@ -1,5 +1,7 @@
 package net.hydra.jojomod.mixin.gravity;
 
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IGravityLivingEntity;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
@@ -44,7 +46,17 @@ import java.util.Iterator;
 import java.util.Map;
 
 @Mixin(value= LivingEntity.class)
-public abstract class GravityLivingEntityMixin extends Entity {
+public abstract class GravityLivingEntityMixin extends Entity implements IGravityLivingEntity {
+
+
+    /**Unique Roundabout Code*/
+    @Unique
+    @Override
+    public void roundabout$augmentKB(Entity knockback){
+        roundabout$knockbackGravityAugmentation = true;
+        roundabout$augmentSource = knockback;
+    }
+
 
     public GravityLivingEntityMixin(EntityType<?> $$0, Level $$1) {
         super($$0, $$1);
@@ -106,8 +118,33 @@ public abstract class GravityLivingEntityMixin extends Entity {
 
     @Shadow @Final private static EntityDataAccessor<Boolean> DATA_EFFECT_AMBIENCE_ID;
 
+    @Shadow protected abstract void updateWalkAnimation(float f);
+
+    @Shadow protected boolean jumping;
+
     public LivingEntity rdbt$this(){
         return ((LivingEntity)(Object)this);
+    }
+
+    /**Fixed walking animation, base mod's was bugged*/
+    @Inject(
+            method = "calculateEntityAnimation(Z)V",
+            at = @At(
+                    value = "HEAD"
+            ),
+            cancellable = true)
+    private void roundabout$calculateEntityAnimation(boolean $$0, CallbackInfo ci) {
+        Direction gravityDirection = GravityAPI.getGravityDirection(rdbt$this());
+        if (gravityDirection == Direction.DOWN)
+            return;
+        ci.cancel();
+
+        Vec3 myPos = RotationUtil.vecPlayerToWorld(this.getX(), this.getY(),this.getZ(), gravityDirection);
+
+        Vec3 myPoso = RotationUtil.vecPlayerToWorld(xo, yo,zo, gravityDirection);
+
+        float $$1 = (float)Mth.length(myPos.x - myPoso.x, $$0 ? myPos.y - myPoso.y : 0.0, myPos.z - myPoso.z);
+        this.updateWalkAnimation($$1);
     }
 
     @Inject(

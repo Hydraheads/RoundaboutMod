@@ -49,13 +49,23 @@ import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
-import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import java.util.List;
 
 @Mixin(Entity.class)
-public abstract class GravityEntity implements IGravityEntity {
+public abstract class GravityEntityMixin implements IGravityEntity {
     // NEW FEATURES
+
+    @Shadow protected abstract boolean isStateClimbable(BlockState blockState);
+
+    @Shadow public abstract BlockPos getOnPos();
+
+    @Shadow public float moveDist;
+
+    @Shadow protected abstract Vec3 collide(Vec3 vec3);
+
+    @Shadow public float walkDistO;
+    @Shadow public float walkDist;
 
     @Shadow public abstract void setPos(Vec3 vec3);
 
@@ -546,6 +556,39 @@ public abstract class GravityEntity implements IGravityEntity {
 
         return RotationUtil.vecWorldToPlayer(vec3d, gravityDirection);
     }
+    @Inject(
+            method = "move(Lnet/minecraft/world/entity/MoverType;Lnet/minecraft/world/phys/Vec3;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Ljava/lang/Math;sqrt(D)D",
+                    ordinal = 0,
+                    shift = At.Shift.AFTER
+            )
+    )
+    private void rdbt$stepsProperly(MoverType $$0, Vec3 $$1, CallbackInfo ci) {
+        Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
+        if (gravityDirection == Direction.DOWN)
+            return;
+
+        Vec3 collide = this.collide($$1);
+        Vec3 collide2 = collide;
+
+        BlockPos $$15 = this.getOnPos();
+        BlockState $$16 = this.level().getBlockState($$15);
+        boolean $$17 = this.isStateClimbable($$16);
+        if (!$$17) {
+            collide2 = new Vec3(collide.x,0,collide.z);
+        }
+
+        this.walkDist = this.walkDistO + (float)collide.length() * 0.6F;
+        this.moveDist = this.moveDist - (float)Math.sqrt(
+                collide2.x * collide2.x + collide2.y * collide2.y + collide2.z * collide2.z) * 0.6F;
+
+        Vec3 collideT = RotationUtil.vecPlayerToWorld(collide, gravityDirection);
+        this.moveDist = this.moveDist + (float)Math.sqrt(
+                collideT.x * collideT.x + collideT.y * collideT.y + collideT.z * collideT.z) * 0.6F;
+    }
+
 
     @Inject(
             method = "getOnPosLegacy()Lnet/minecraft/core/BlockPos;",
