@@ -52,15 +52,10 @@ public class FleshBlock
 
     @Override
     public boolean isPathfindable(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, PathComputationType pathComputationType) {
-        switch (pathComputationType) {
-            case LAND: {
-                return blockState.getValue(LAYERS) < HEIGHT_IMPASSABLE;
-            }
-            case WATER, AIR: {
-                return false;
-            }
-        }
-        return false;
+        return switch (pathComputationType) {
+            case LAND -> true;
+            case WATER, AIR -> false;
+        };
     }
 
     @Override

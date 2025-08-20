@@ -134,7 +134,6 @@ public class FleshPileEntity extends ThrowableItemProjectile {
              }
         }
 
-        Roundabout.LOGGER.info("array: {}",array);
 
         for (int i=0;i<amount-1;i++) {
             int x = (int) (Math.random()*3);
