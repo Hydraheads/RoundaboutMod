@@ -46,6 +46,7 @@ public abstract class GravityCrossbowItemMixin extends ProjectileWeaponItem impl
         if (gravityDirection == Direction.DOWN)
             return;
 
+        ci.cancel();
 
         if (!$$0.isClientSide) {
             boolean $$10 = $$4.is(Items.FIREWORK_ROCKET);
