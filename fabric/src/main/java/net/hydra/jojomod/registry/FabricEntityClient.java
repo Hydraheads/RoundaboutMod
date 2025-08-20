@@ -72,6 +72,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.RATT_DART, RattDartRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_MATCH, ThrownItemRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GASOLINE_SPLATTER, ThrownItemRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.FLESH_PILE, ThrownItemRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_WATER_BOTTLE, ThrownItemRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GASOLINE_CAN, GasolineCanRenderer::new);
         EntityRendererRegistry.register(FabricEntities.CROSSFIRE_HURRICANE, CrossfireHurricaneRenderer::new);

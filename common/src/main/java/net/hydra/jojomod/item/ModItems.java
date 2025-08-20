@@ -110,6 +110,8 @@ public class ModItems {
     public static Item SHIZUKA_MASK;
     public static Item INTERDIMENSIONAL_KEY;
 
+    public static Item FLESH_BUCKET;
+
     public static CreativeModeTab FOG_BLOCK_ITEMS;
 
     public static ArrayList<StandDiscItem> STAND_ARROW_POOL = Lists.newArrayList();

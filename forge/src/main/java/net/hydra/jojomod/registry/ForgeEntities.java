@@ -249,6 +249,12 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "ratt").toString())
             );
+    public static final RegistryObject<EntityType<FleshPileEntity>> FLESH_PILE =
+            ENTITY_TYPES.register("flesh_pile", () ->
+                    EntityType.Builder.<FleshPileEntity>of(FleshPileEntity::new, MobCategory.MISC).sized(0.8f, 0.8f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "flesh_pile").toString())
+            );
     public static final RegistryObject<EntityType<SoftAndWetEntity>> SOFT_AND_WET =
             ENTITY_TYPES.register("soft_and_wet", () ->
                     EntityType.Builder.of(SoftAndWetEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).

@@ -297,6 +297,13 @@ public class FabricEntities {
                         EntityType.Builder.of(RattEntity::new, MobCategory.MISC).
                                 sized(0.75f, 1.2f).clientTrackingRange(14).build(Roundabout.MOD_ID+":ratt")
                 );
+        public static final EntityType<FleshPileEntity> FLESH_PILE =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "flesh_pile"),
+                        EntityType.Builder.<FleshPileEntity>of(FleshPileEntity::new, MobCategory.MISC).
+                                sized(0.8f, 0.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":flesh_pile")
+                );
         public static final EntityType<GreenDayEntity> GREEN_DAY =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -547,6 +554,7 @@ public class FabricEntities {
                 ModEntities.D4C = D4C;
                 ModEntities.GREEN_DAY = GREEN_DAY;
                 ModEntities.RATT = RATT;
+                ModEntities.FLESH_PILE = FLESH_PILE;
                 ModEntities.SURVIVOR = SURVIVOR;
                 ModEntities.SOFT_AND_WET = SOFT_AND_WET;
                 ModEntities.SOFT_AND_WET_DROWNED = SOFT_AND_WET_DROWNED;

@@ -255,6 +255,32 @@ public class DispenserRegistry {
                 }
             };
 
+    public static DefaultDispenseItemBehavior FLESH_BUCKET =
+            new DefaultDispenseItemBehavior() {
+                private final DefaultDispenseItemBehavior defaultDispenseItemBehavior = new DefaultDispenseItemBehavior();
+
+                public ItemStack execute(BlockSource p_123556_, ItemStack p_123557_) {
+                    Level level = p_123556_.getLevel();
+                    Direction direction = p_123556_.getBlockState().getValue(DispenserBlock.FACING);
+                    Position position = DispenserBlock.getDispensePosition(p_123556_);
+                    double d0 = position.x() + (double) ((float) direction.getStepX() * 0.3F);
+                    double d1 = position.y() + (double) ((float) direction.getStepY() * 0.3F);
+                    double d2 = position.z() + (double) ((float) direction.getStepZ() * 0.3F);
+                    RandomSource randomsource = level.random;
+                    double d3 = (randomsource.triangle((double) direction.getStepX(), 0.11485000000000001D)*0.9);
+                    double d4 = randomsource.triangle((double) direction.getStepY(), 0.11485000000000001D)*0.9;
+                    double d5 = randomsource.triangle((double) direction.getStepZ(), 0.11485000000000001D)*0.9;
+                    FleshPileEntity gas = new FleshPileEntity(level, d0, d1, d2);
+                    level.addFreshEntity(Util.make(gas, (p_123552_) -> {
+                        p_123552_.setDeltaMovement(d3,d4,d5);
+                    }));
+                    return new ItemStack(Items.BUCKET);
+                }
+                protected void playSound(BlockSource p_123554_) {
+                    p_123554_.getLevel().playSound(null, p_123554_.getPos(), SoundEvents.BUCKET_EMPTY, SoundSource.PLAYERS, 1.0F, 1.0F);
+                }
+            };
+
     public static void init(){
         DispenserBlock.registerBehavior(ModItems.KNIFE, KNIFE);
 
@@ -275,6 +301,8 @@ public class DispenserRegistry {
         DispenserBlock.registerBehavior(ModItems.STAND_BEETLE_ARROW, STAND_ARROW);
 
         DispenserBlock.registerBehavior(ModItems.WORTHY_ARROW, STAND_ARROW);
+
+        DispenserBlock.registerBehavior(ModItems.FLESH_BUCKET,FLESH_BUCKET);
 
     }
 }
