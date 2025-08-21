@@ -87,6 +87,7 @@
     "gravity.GravityLookAtPlayerGoalMixin",
     "gravity.GravityLookControlMixin",
     "gravity.GravityMobMixin",
+    "gravity.GravityPiglinMixin",
     "gravity.GravityPlayerMixin",
     "gravity.GravityServerGamePacketListenerImplMixin",
     "gravity.GravityThrownExperienceBottleMixin",
