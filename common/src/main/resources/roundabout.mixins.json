@@ -60,6 +60,7 @@
     "data_and_structures.DataStructureTemplatePool",
     "effects.bleed.BleedFoodData",
     "effects.hex.HexItem",
+    "gravity.GravityAbstractArrowMixin",
     "gravity.GravityAbstractHorseMixin",
     "gravity.GravityAbstractMinecart",
     "gravity.GravityAbstractSkeletonMixin",
