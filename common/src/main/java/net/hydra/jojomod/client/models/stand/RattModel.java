@@ -8,11 +8,15 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.stand.animations.RattAnimations;
 import net.hydra.jojomod.entity.stand.RattEntity;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 
 public class RattModel<T extends RattEntity> extends StandModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
@@ -130,8 +134,19 @@ public class RattModel<T extends RattEntity> extends StandModel<T> {
 	@Override
 	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
 		super.setupAnim(pEntity,pLimbSwing,pLimbSwingAmount,pAgeInTicks,pNetHeadYaw,pHeadPitch);
-		this.head.xRot = pEntity.getHeadRotationX();
-		this.stand.yRot = pEntity.getStandRotationY();
+
+        StandUser SU = (StandUser) ((RattEntity)pEntity).getUser();
+		if (SU != null) {
+			if (SU.roundabout$getStandPowers() instanceof PowersRatt PR) {
+				Entity target = PR.getShootTarget();
+				Vec3 v = PR.getRotations(target);
+				this.head.xRot = Mth.lerp(this.head.xRot, (float) v.x, 0.85F);
+				this.stand.yRot = Mth.lerp(this.stand.yRot, (float) v.y, 0.85F);
+			}
+		}
+
+
+
 
 		this.animate(pEntity.fire, RattAnimations.Fire, pAgeInTicks, 1f);
 		this.animate(pEntity.fire_no_recoil, RattAnimations.FireNoRecoil, pAgeInTicks, 1f);}
