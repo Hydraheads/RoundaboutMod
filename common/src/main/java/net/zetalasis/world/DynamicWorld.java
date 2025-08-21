@@ -178,8 +178,8 @@ public class DynamicWorld {
 
     public static class DynamicWorldNetMessages implements IMessageEvent {
         public enum MESSAGES {
-            ADD_WORLD("add_world"),
-            REMOVE_WORLD("remove_world");
+            ADD_WORLD("thread_hop_add_world"),
+            REMOVE_WORLD("thread_hop_remove_world");
 
             public final String value;
 

@@ -39,21 +39,21 @@ public class ClientToServerPackets {
             ByteToServer("byte_to_server"),
             SingleByteToServer("single_byte_to_server"),
             TryTripleIntPower("try_triple_int_power"),
-            BodyBag("body_bag"),
-            ModVisageConfigure("mod_visage"),
-            TimeStopHovering("time_stop_hovering"),
+            BodyBag("thread_hop_body_bag"),
+            ModVisageConfigure("thread_hop_mod_visage"),
+            TimeStopHovering("thread_hop_time_stop_hovering"),
             GlaiveHit("glaive_hit"),
-            StandSummon("stand_summon"),
-            UpdatePilot("update_pilot"),
-            MoveSync("moving_sync"),
+            StandSummon("thread_hop_stand_summon"),
+            UpdatePilot("thread_hop_update_pilot"),
+            MoveSync("thread_hop_moving_sync"),
             StandPunch("stand_punch"),
             StandBarrageHit("stand_barrage_hit"),
             BarrageClashUpdate("barrage_clash_update"),
-            Handshake("handshake"),
+            Handshake("thread_hop_handshake"),
             Inventory("inventory"),
             ItemContext("item_context"),
             GuardCancel("guard_cancel"),
-            DimensionHopD4C("d4c_request_dimension_hop");
+            DimensionHopD4C("thread_hop_d4c_request_dimension_hop");
 
             public final String value;
 

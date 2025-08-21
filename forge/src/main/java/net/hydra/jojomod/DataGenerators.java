@@ -78,10 +78,8 @@ public class DataGenerators {
                 }
             }
         } catch (Exception e) {
-            Roundabout.LOGGER.info("Fuck");
             return Optional.empty();
         }
-        Roundabout.LOGGER.info("Fuck");
         return Optional.empty();
     }
     @SubscribeEvent

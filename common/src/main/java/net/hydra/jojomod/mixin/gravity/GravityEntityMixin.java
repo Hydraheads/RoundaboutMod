@@ -262,7 +262,6 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         roundabout$adjustEntityPosition(oldGravity, newGravity, getBoundingBox());
 
         if (level().isClientSide()) {
-            Roundabout.LOGGER.info("2");
             RotationAnimation ani = ((IClientEntity)this).roundabout$getGravityAnimation();
             Validate.notNull(ani, "gravity animation is null");
 

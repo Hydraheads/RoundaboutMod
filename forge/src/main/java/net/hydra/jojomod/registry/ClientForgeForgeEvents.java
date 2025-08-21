@@ -11,18 +11,5 @@ public class ClientForgeForgeEvents {
 
     @SubscribeEvent
     public static void clientTickEvent(TickEvent.ClientTickEvent event) {
-        /***
-        Roundabout.LOGGER.info("1");
-        if (event.phase == TickEvent.Phase.END) {
-            Roundabout.LOGGER.info("2");
-            Minecraft mc = Minecraft.getInstance();
-                // Re-enable movement input
-            Roundabout.LOGGER.info("3");
-                if (mc.screen instanceof NoCancelInputScreen && mc.player != null && mc.player.input instanceof KeyboardInput keyboardInput) {
-                    keyboardInput.tick(false,1); // false = no riding jump
-                    Roundabout.LOGGER.info("4");
-                }
-        }
-         **/
     }
 }

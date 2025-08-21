@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.networking;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.minecraft.network.protocol.PacketUtils;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.zetalasis.networking.packet.api.IClientNetworking;
 import net.zetalasis.networking.packet.api.args.c2s.AbstractBaseC2SPacket;
@@ -21,6 +22,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Arrays;
+
 // C2S Networking
 @Mixin(ServerGamePacketListenerImpl.class)
 public class ZServerGamePacketListenerImpl implements IClientNetworking {
@@ -37,16 +40,34 @@ public class ZServerGamePacketListenerImpl implements IClientNetworking {
                 }
         }
     }
+
+
+    public ServerGamePacketListenerImpl rdbt$this(){
+        return ((ServerGamePacketListenerImpl)(Object)this);
+    }
     @Inject(method = "handleCustomPayload", at = @At("HEAD"))
     private void roundabout$handlePayload(ServerboundCustomPayloadPacket packet, CallbackInfo ci)
     {
-        if (!packet.getIdentifier().getNamespace().equals("roundabout"))
+        boolean rdbt = packet.getIdentifier().getNamespace().equals("roundabout");
+
+        if (!rdbt)
             return;
+
+        Object[] threadTest = ModNetworking.decodeBufferToVArgs(new FriendlyByteBuf(packet.getData().duplicate()));
+
+        if (threadTest.length == 0 || !(threadTest[0] instanceof String messageName)) {
+            Roundabout.LOGGER.warn("Invalid message data received: {}", Arrays.toString(threadTest));
+            return;
+        }
+        if (!messageName.contains("thread_hop")){
+            PacketUtils.ensureRunningOnSameThread(packet, rdbt$this(), this.player.serverLevel());
+        }
 
         AbstractBaseC2SPacket p = ModNetworking.getC2S(packet.getIdentifier());
 
         if (p != null)
         {
+
             ServerGamePacketListenerImpl handler = (ServerGamePacketListenerImpl) (Object) this;
             ServerPlayer sender = handler.player;
             MinecraftServer server = sender.server;
