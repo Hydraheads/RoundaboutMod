@@ -25,6 +25,8 @@ public class FabricEffects extends MobEffect{
             register("melting", new FabricEffects(MobEffectCategory.HARMFUL, 10329495)
                             .addAttributeModifier(Attributes.MAX_HEALTH,"6107DE5E-7CE8-4030-940E-514C1F160890",-1.1, AttributeModifier.Operation.ADDITION)
             );
+    public static final MobEffect GRAVITY_FLIP =
+            register("gravity_flip", new FabricEffects(MobEffectCategory.NEUTRAL, 4906114));
 
     protected FabricEffects(MobEffectCategory mobEffectCategory, int i) {
         super(mobEffectCategory, i);
@@ -42,5 +44,6 @@ public class FabricEffects extends MobEffect{
         ModEffects.CAPTURING_LOVE = CAPTURING_LOVE;
         ModEffects.FACELESS = FACELESS;
         ModEffects.MELTING = MELTING;
+        ModEffects.GRAVITY_FLIP = GRAVITY_FLIP;
     }
 }
