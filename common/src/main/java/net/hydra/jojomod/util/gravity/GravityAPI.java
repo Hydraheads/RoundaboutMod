@@ -34,9 +34,15 @@ public class GravityAPI {
     public static void setWorldVelocity(Entity entity, Vec3 worldVelocity) {
         entity.setDeltaMovement(RotationUtil.vecWorldToPlayer(worldVelocity, getGravityDirection(entity)));
     }
-
+    /**
+     * Returns eye position offset from feet position for the given entity
+     */
+    public static Vec3 getEyeOffset(Entity entity) {
+        return RotationUtil.vecPlayerToWorld(0, (double) entity.getEyeHeight(), 0, getGravityDirection(entity));
+    }
     public static RotationAnimation getRotationAnimation(Entity entity) {
         return ((IClientEntity)entity).roundabout$getGravityAnimation();
     }
+
 
 }
