@@ -100,6 +100,19 @@ public abstract class GravityEntityMixin implements IGravityEntity {
 
     @Unique
     @Override
+    public void roundabout$setBaseGravityDirection(Direction gravityDirection) {
+        if (!roundabout$canChangeGravity()) {
+            return;
+        }
+
+        if (roundabout$baseGravityDirection != gravityDirection) {
+            roundabout$baseGravityDirection = gravityDirection;
+            roundabout$updateGravityStatus(); // will this cause issue?
+        }
+    }
+
+    @Unique
+    @Override
     public void roundabout$setGravityDirection(Direction direction){
         if (this.entityData.hasItem(ROUNDABOUT$GRAVITY_DIRECTION)) {
             this.getEntityData().set(ROUNDABOUT$GRAVITY_DIRECTION, direction);
