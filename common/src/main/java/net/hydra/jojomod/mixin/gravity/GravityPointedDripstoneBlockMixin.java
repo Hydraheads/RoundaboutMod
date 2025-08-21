@@ -34,9 +34,7 @@ public abstract class GravityPointedDripstoneBlockMixin extends Block implements
     @Inject(
             method = "fallOn",
             at = @At(
-                    value = "HEAD",
-                    target = "Lnet/minecraft/world/level/block/state/BlockState;getValue(Lnet/minecraft/world/level/block/state/properties/Property;)Ljava/lang/Comparable;",
-                    ordinal = 0
+                    value = "HEAD"
             ),
             cancellable = true)
     private void rdbt$fallOn(Level $$0, BlockState $$1, BlockPos $$2, Entity $$3, float $$4, CallbackInfo ci) {
