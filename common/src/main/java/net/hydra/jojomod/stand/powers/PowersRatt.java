@@ -131,10 +131,10 @@ public class PowersRatt extends NewDashPreset {
 
         Vec3 eyePos = ratt.getEyePosition(1.0F);// player.getEyePosition(float)
         Vec3 lookVec = new Vec3(
-                        Math.cos(SE.getStandRotationY()+Math.PI/2),
-                        Math.sin(SE.getHeadRotationX()),
-                        Math.sin(SE.getStandRotationY()+Math.PI/2)
-                );
+                Math.cos(SE.getStandRotationY()+Math.PI/2),
+                Math.sin(SE.getHeadRotationX()),
+                Math.sin(SE.getStandRotationY()+Math.PI/2)
+        );
         Vec3 reachVec = eyePos.add(lookVec.scale(maxDistance)); // end point of the ray
 
         // Raytrace blocks first
@@ -706,7 +706,7 @@ public class PowersRatt extends NewDashPreset {
         if (scopeLevel != 0 && this.getActivePower() == PowersRatt.START_CHARGE) {
             this.setPowerNone();
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -737,7 +737,7 @@ public class PowersRatt extends NewDashPreset {
         if (attackTarget != null) {
             this.setShootTarget(attackTarget);
             this.getStandUserSelf().roundabout$setCombatMode(true);
-        //    double dist = attackTarget.getPosition(0).distanceTo(this.getSelf().getPosition(0));
+            //    double dist = attackTarget.getPosition(0).distanceTo(this.getSelf().getPosition(0));
             if (isPlaced()) {
                 if (this.shotcooldown == 0) {
                     this.shotcooldown = PlaceShootCooldown;
