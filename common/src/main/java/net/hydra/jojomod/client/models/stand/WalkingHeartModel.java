@@ -31,7 +31,11 @@ public class WalkingHeartModel<T extends WalkingHeartEntity> extends StandModel<
         PartDefinition head = stand2.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(0.0F, -24.15F, 0.0F));
 
         PartDefinition head2 = head.addOrReplaceChild("head2", CubeListBuilder.create().texOffs(0, 21).addBox(-4.0F, -7.85F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 0).addBox(-4.0F, -8.85F, -4.0F, 8.0F, 13.0F, 8.0F, new CubeDeformation(0.001F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+                .texOffs(0, 0).addBox(-4.0F, -8.85F, -4.0F, 8.0F, 13.0F, 8.0F, new CubeDeformation(0.001F))
+                .texOffs(0, 69).addBox(-4.0F, -8.75F, 3.975F, 8.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 70).addBox(-4.0F, -8.75F, -3.975F, 8.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 63).addBox(3.975F, -8.85F, -4.0F, 0.0F, 1.0F, 8.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 64).addBox(-3.95F, -8.85F, -4.0F, 0.0F, 1.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition ears = head2.addOrReplaceChild("ears", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0F, -4.4F, 1.8F, 0.3054F, 0.0F, 0.0F));
 
@@ -60,7 +64,7 @@ public class WalkingHeartModel<T extends WalkingHeartEntity> extends StandModel<
 
         PartDefinition right_arm = upper_chest.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.offset(-4.0F, -5.25F, 0.0F));
 
-        PartDefinition upper_right_arm = right_arm.addOrReplaceChild("upper_right_arm", CubeListBuilder.create().texOffs(56, 30).addBox(-6.0F, -0.85F, -2.0F, 6.0F, 0.0F, 4.0F, new CubeDeformation(0.0F))
+        PartDefinition upper_right_arm = right_arm.addOrReplaceChild("upper_right_arm", CubeListBuilder.create().texOffs(56, 30).addBox(-6.0F, -0.9F, -2.0F, 6.0F, 0.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(17, 61).addBox(-3.0F, 1.15F, -2.0F, 3.0F, 4.0F, 4.0F, new CubeDeformation(0.21F))
                 .texOffs(49, 42).addBox(-3.0F, -0.85F, -2.0F, 3.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.1F, 0.0F));
 
@@ -69,7 +73,7 @@ public class WalkingHeartModel<T extends WalkingHeartEntity> extends StandModel<
 
         PartDefinition left_arm = upper_chest.addOrReplaceChild("left_arm", CubeListBuilder.create(), PartPose.offset(4.0F, -5.25F, 0.0F));
 
-        PartDefinition upper_left_arm = left_arm.addOrReplaceChild("upper_left_arm", CubeListBuilder.create().texOffs(56, 30).addBox(0.0F, -0.75F, -2.0F, 6.0F, 0.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition upper_left_arm = left_arm.addOrReplaceChild("upper_left_arm", CubeListBuilder.create().texOffs(56, 30).addBox(0.0F, -0.8F, -2.0F, 6.0F, 0.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition lower_left_arm = left_arm.addOrReplaceChild("lower_left_arm", CubeListBuilder.create().texOffs(0, 61).addBox(-2.0F, 0.75F, -2.0F, 3.0F, 4.0F, 4.0F, new CubeDeformation(0.21F))
                 .texOffs(16, 51).addBox(-2.0F, -0.25F, -2.0F, 3.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, 5.5F, 0.0F));
