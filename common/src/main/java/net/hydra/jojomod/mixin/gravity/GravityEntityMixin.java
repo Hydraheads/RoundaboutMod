@@ -624,7 +624,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         this.moveDist = this.moveDist - (float)Math.sqrt(
                 collide2.x * collide2.x + collide2.y * collide2.y + collide2.z * collide2.z) * 0.6F;
 
-        Vec3 collideT = RotationUtil.vecPlayerToWorld(collide, gravityDirection);
+        Vec3 collideT = RotationUtil.vecWorldToPlayer(collide, gravityDirection);
         this.moveDist = this.moveDist + (float)Math.sqrt(
                 collideT.x * collideT.x + collideT.y * collideT.y + collideT.z * collideT.z) * 0.6F;
     }
