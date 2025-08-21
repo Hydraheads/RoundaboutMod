@@ -84,6 +84,8 @@
     "gravity.GravityItemMixin",
     "gravity.GravityLivingEntityMixin",
     "gravity.GravityLlamaSpitMixin",
+    "gravity.GravityLookAtPlayerGoalMixin",
+    "gravity.GravityLookControlMixin",
     "gravity.GravityMobMixin",
     "gravity.GravityPlayerMixin",
     "gravity.GravityServerGamePacketListenerImplMixin",
