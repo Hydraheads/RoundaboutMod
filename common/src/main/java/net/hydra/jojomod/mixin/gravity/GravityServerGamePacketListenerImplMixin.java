@@ -59,8 +59,8 @@ public abstract class GravityServerGamePacketListenerImplMixin {
         double $$2 = clampHorizontal($$0.getX(this.player.getX()));
         double $$3 = clampVertical($$0.getY(this.player.getY()));
         double $$4 = clampHorizontal($$0.getZ(this.player.getZ()));
-        Vec3 myPositionVec = RotationUtil.vecPlayerToWorld($$2,$$3,$$4,gravityDirection);
-        Vec3 myLastPositionVec = RotationUtil.vecPlayerToWorld(lastGoodX,lastGoodY,lastGoodZ,gravityDirection);
+        Vec3 myPositionVec = RotationUtil.vecWorldToPlayer($$2,$$3,$$4,gravityDirection);
+        Vec3 myLastPositionVec = RotationUtil.vecWorldToPlayer(lastGoodX,lastGoodY,lastGoodZ,gravityDirection);
 
         return (myPositionVec.y - myLastPositionVec.y > 0);
     }
