@@ -59,8 +59,9 @@ public class RattDartEntity extends AbstractArrow {
         super(ModEntities.RATT_DART, player, world);
         if ( ((StandUser) player).roundabout$getStandPowers() instanceof PowersRatt PR) {
             if (PR.getStandEntity(player) instanceof RattEntity RE) {
-                Vec2 v = new Vec2((float) (-1*Math.cos(RE.getStandRotationY())),
-                        (float) (-1*Math.sin(RE.getStandRotationY())) );
+                Vec3 rots = PR.getRotations(PR.getShootTarget());
+                Vec2 v = new Vec2((float) (-1*Math.cos(rots.y)),
+                        (float) (-1*Math.sin(rots.y)) );
                 this.setPos(RE.getEyePosition(0).add(
                         ShootOffset.x*v.y,
                         ShootOffset.y,
@@ -128,17 +129,24 @@ public class RattDartEntity extends AbstractArrow {
     }
     public void applyEffect(LivingEntity $$1) {
         int stack = 0;
-        if ( ((LivingEntity)$$1).getEffect(ModEffects.MELTING) != null) {
-            stack = ((LivingEntity) $$1).getEffect(ModEffects.MELTING).getAmplifier() + 1;
+        if ( $$1.getEffect(ModEffects.MELTING) != null) {
+            stack = $$1.getEffect(ModEffects.MELTING).getAmplifier() + 1;
         }
-        stack += charged >= PowersRatt.ShotThresholds[1] ? 1 : 0;
+        stack += charged >= PowersRatt.ShotThresholds[2] ? 1 : 0;
         ((LivingEntity)$$1).addEffect(new MobEffectInstance(ModEffects.MELTING, 900, stack),this);
     }
 
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
         Entity $$1 = $$0.getEntity();
-        float $$2 = 2.29F;
+
+        float pow = 0;
+        for (int b=PowersRatt.ShotDamageTicks.length-1;b>=0;b--) {
+            if (this.charged >= PowersRatt.ShotDamageTicks[b]) {
+                pow = PowersRatt.ShotDamageTicks[b];
+                break;
+            }
+        };
 
         if ($$1 instanceof LivingEntity $$3) {
             StandPowers entityPowers = ((StandUser) $$3).roundabout$getStandPowers();
@@ -149,15 +157,7 @@ public class RattDartEntity extends AbstractArrow {
                 }
             }
 
-            int f = EnchantmentHelper.getEnchantmentLevel(Enchantments.PROJECTILE_PROTECTION, $$3);
-            float pow = 0;
-            for (int b=PowersRatt.ShotDamageTicks.length-1;b>=0;b--) {
-                if (this.charged >= PowersRatt.ShotDamageTicks[b]) {
-                    pow = PowersRatt.ShotDamageTicks[b];
-                    break;
-                }
-            }
-            $$2 = (float) ($$2 * (pow-(f*0.03)));
+
 
 
         }
@@ -165,7 +165,7 @@ public class RattDartEntity extends AbstractArrow {
         Entity $$4 = this.getOwner();
         DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.MELTING, $$4);
         SoundEvent $$6 = ModSounds.RATT_DART_IMPACT_EVENT;
-        if ($$1.hurt($$5, $$2)) {
+        if ($$1.hurt($$5,pow)) {
 
 
             if ($$4 instanceof LivingEntity LE) {
