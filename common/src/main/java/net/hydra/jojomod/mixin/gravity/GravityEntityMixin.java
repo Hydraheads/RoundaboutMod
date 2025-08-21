@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IClientEntity;
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.util.GEntityTags;
 import net.hydra.jojomod.util.RotationAnimation;
 import net.hydra.jojomod.util.RotationParameters;
@@ -20,6 +21,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -386,6 +388,11 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     }
 
     @Unique
+    public Entity rdbt$this(){
+        return ((Entity) (Object) this);
+    }
+
+    @Unique
     public void roundabout$updateGravityStatus() {
 
         Direction oldGravityDirection = roundabout$getGravityDirection();
@@ -397,6 +404,26 @@ public abstract class GravityEntityMixin implements IGravityEntity {
             roundabout$currGravityStrength = GravityAPI.getGravityStrength(vehicle);
         }
         else {
+            if (!this.level.isClientSide()){
+                Direction dr = Direction.DOWN;
+                if (rdbt$this() instanceof LivingEntity LE && LE.hasEffect(ModEffects.GRAVITY_FLIP)){
+                    MobEffectInstance mi = LE.getEffect(ModEffects.GRAVITY_FLIP);
+                    if (mi != null){
+                        if (mi.getAmplifier() == 0){
+                            dr = Direction.NORTH;
+                        }if (mi.getAmplifier() == 1){
+                            dr = Direction.SOUTH;
+                        }if (mi.getAmplifier() == 2){
+                            dr = Direction.EAST;
+                        }if (mi.getAmplifier() == 3){
+                            dr = Direction.WEST;
+                        }if (mi.getAmplifier() == 4){
+                            dr = Direction.UP;
+                        }
+                    }
+                }
+                roundabout$setGravityDirection(dr);
+            }
             if (roundabout$isReadyToResetGravity()){
                 roundabout$setGravityDirection(roundabout$baseGravityDirection);
                 roundabout$currGravityStrength = roundabout$baseGravityStrength;
