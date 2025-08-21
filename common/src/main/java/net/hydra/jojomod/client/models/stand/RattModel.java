@@ -141,7 +141,9 @@ public class RattModel<T extends RattEntity> extends StandModel<T> {
 				Entity target = PR.getShootTarget();
 				Vec3 v = PR.getRotations(target);
 				this.head.xRot = Mth.lerp(this.head.xRot, (float) v.x, 0.85F);
+				pEntity.setHeadRotationX(this.head.xRot);
 				this.stand.yRot = Mth.lerp(this.stand.yRot, (float) v.y, 0.85F);
+				pEntity.setStandRotationY(this.stand.yRot);
 			}
 		}
 
