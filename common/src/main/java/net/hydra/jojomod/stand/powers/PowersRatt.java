@@ -396,6 +396,7 @@ public class PowersRatt extends NewDashPreset {
                 if (getChargeTime() < 30) {
                     this.updateChargeTime(0);
                     this.setShotCooldown(MaxShootCooldown);
+                    tryPowerPacket(PowerIndex.NONE);
                     setPowerNone();
                 }
             }
