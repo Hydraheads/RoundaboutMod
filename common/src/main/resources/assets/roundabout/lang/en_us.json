@@ -401,9 +401,7 @@
   "death.attack.disintegration": "%1$ disintegrated",
   "death.attack.disintegration.player": "%1$ was disintegrated by %$2s",
   "death.attack.melting": "%1$s became a fluid",
-  "death.attack.melting.player": "%1$s was reduced to a puddle by %$2s",
-  "death.attack.melting.item": "%1$s became a fluid",
-  "death.attack.melting.player.item": "%1$s was reduced to a puddle by %$2s",
+  "death.attack.melting.player":"%1$s was reduced to a puddle by %2$s",
 
 
   "item.glaive.charge_power": "Charge Attack",
