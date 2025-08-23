@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.gravity;
 
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IClientEntity;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -25,6 +26,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
@@ -60,6 +62,12 @@ import java.util.List;
 @Mixin(Entity.class)
 public abstract class GravityEntityMixin implements IGravityEntity {
     // NEW FEATURES
+
+    @Shadow public boolean verticalCollisionBelow;
+
+    @Shadow @Nullable public abstract LivingEntity getControllingPassenger();
+
+    @Shadow public abstract boolean isControlledByLocalInstance();
 
     @Shadow public abstract double getPassengersRidingOffset();
 
@@ -557,7 +565,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (rdbdt$taggedForFlip){
             rdbdt$taggedForFlip = false;
-            vec3d = RotationUtil.vecWorldToPlayer(vec3d, gravityDirection);
+            vec3d = RotationUtil.vecWorldToPlayer(vec3d, gravityDirection).add(0,-0.01,0);
         }
         if (gravityDirection == Direction.DOWN) {
             return vec3d;

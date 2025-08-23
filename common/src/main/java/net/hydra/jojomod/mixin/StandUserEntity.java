@@ -3084,9 +3084,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Villager call to action*/
     @Inject(method = "actuallyHurt", at = @At(value = "HEAD"), cancellable = true)
     protected void rooundabout$actuallyHurt(DamageSource $$0, float $$1, CallbackInfo ci) {
-        if (rdbt$this() instanceof Horse HE){
-            Roundabout.LOGGER.info($$0.toString());
-        }
 
         if (!this.isInvulnerableTo($$0)) {
             if (((LivingEntity)(Object)this) instanceof AbstractVillager AV && !($$0.getEntity()
