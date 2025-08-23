@@ -61,6 +61,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
@@ -1792,27 +1793,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
 
-    @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
-    public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
-        if (!this.roundabout$getStandDisc().isEmpty() || $$0.contains("roundabout.StandDisc", 10)) {
-            ItemStack discy = this.roundabout$getStandDisc();
-            CompoundTag compoundtag = new CompoundTag();
-            $$0.put("roundabout.StandDisc",MainUtil.saveToDiscData(((LivingEntity)(Object)this), discy).save(compoundtag));
-        }
-        if ((this.roundabout$getRejectionStandDisc() != null && !this.roundabout$getRejectionStandDisc().isEmpty()) || $$0.contains("roundabout.StandRejectionDisc", 10)) {
-            CompoundTag compoundtag = new CompoundTag();
-            if (roundabout$getRejectionStandDisc() == null){
-                roundabout$setRejectionStandDisc(ItemStack.EMPTY);
-            }
-            $$0.put("roundabout.StandRejectionDisc",this.roundabout$getRejectionStandDisc().save(compoundtag));
-        }
 
-        CompoundTag compoundtag = $$0.getCompound("roundabout");
-        compoundtag.putByte("bubbleEncased",roundabout$getBubbleEncased());
-        $$0.put("roundabout",compoundtag);
-
-        return $$0;
-    }
 
     @Inject(method = "onSyncedDataUpdated", at = @At(value = "TAIL"), cancellable = true)
     public void roundabout$onSyncedDataUpdated(EntityDataAccessor<?> $$0, CallbackInfo ci){
@@ -1849,6 +1830,28 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
             cir.setReturnValue(ItemStack.EMPTY);
         }
+    }
+
+    @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
+    public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
+        if (!this.roundabout$getStandDisc().isEmpty() || $$0.contains("roundabout.StandDisc", 10)) {
+            ItemStack discy = this.roundabout$getStandDisc();
+            CompoundTag compoundtag = new CompoundTag();
+            $$0.put("roundabout.StandDisc",MainUtil.saveToDiscData(((LivingEntity)(Object)this), discy).save(compoundtag));
+        }
+        if ((this.roundabout$getRejectionStandDisc() != null && !this.roundabout$getRejectionStandDisc().isEmpty()) || $$0.contains("roundabout.StandRejectionDisc", 10)) {
+            CompoundTag compoundtag = new CompoundTag();
+            if (roundabout$getRejectionStandDisc() == null){
+                roundabout$setRejectionStandDisc(ItemStack.EMPTY);
+            }
+            $$0.put("roundabout.StandRejectionDisc",this.roundabout$getRejectionStandDisc().save(compoundtag));
+        }
+
+        CompoundTag compoundtag = $$0.getCompound("roundabout");
+        compoundtag.putByte("bubbleEncased",roundabout$getBubbleEncased());
+        $$0.put("roundabout",compoundtag);
+
+        return $$0;
     }
 
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"))
@@ -3074,9 +3077,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    public LivingEntity rdbt$this(){
+        return ((LivingEntity) (Object)this);
+    }
+
     /**Villager call to action*/
     @Inject(method = "actuallyHurt", at = @At(value = "HEAD"), cancellable = true)
     protected void rooundabout$actuallyHurt(DamageSource $$0, float $$1, CallbackInfo ci) {
+        if (rdbt$this() instanceof Horse HE){
+            Roundabout.LOGGER.info($$0.toString());
+        }
+
         if (!this.isInvulnerableTo($$0)) {
             if (((LivingEntity)(Object)this) instanceof AbstractVillager AV && !($$0.getEntity()
                     instanceof AbstractVillager) && $$0.getEntity() instanceof LivingEntity LE) {
