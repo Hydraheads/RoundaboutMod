@@ -57,6 +57,10 @@ import java.util.List;
 public abstract class GravityEntityMixin implements IGravityEntity {
     // NEW FEATURES
 
+    @Shadow public abstract double getPassengersRidingOffset();
+
+    @Shadow public abstract boolean hasPassenger(Entity entity);
+
     @Shadow public abstract boolean onGround();
 
     @Shadow protected abstract boolean isStateClimbable(BlockState blockState);
@@ -629,6 +633,24 @@ public abstract class GravityEntityMixin implements IGravityEntity {
                 collideT.x * collideT.x + collideT.y * collideT.y + collideT.z * collideT.z) * 0.6F;
     }
 
+    @Inject(
+            method = "positionRider(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity$MoveFunction;)V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void rdbt$positionRider(Entity $$0, Entity.MoveFunction $$1, CallbackInfo ci) {
+        Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
+        if (gravityDirection == Direction.DOWN) return;
+        ci.cancel();
+        if (this.hasPassenger($$0)) {
+            double $$2 = this.getPassengersRidingOffset() + $$0.getMyRidingOffset();
+            Vec3 transform = RotationUtil.vecPlayerToWorld(0, $$2, 0, gravityDirection);
+            $$1.accept($$0,
+                    this.getX()+transform.x,
+                    this.getY()+transform.y,
+                    this.getZ()+transform.z);
+        }
+    }
 
     @Inject(
             method = "getOnPosLegacy()Lnet/minecraft/core/BlockPos;",
