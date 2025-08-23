@@ -31,6 +31,7 @@ public class MagiciansRedBaseRenderer<M extends StandEntity> extends StandRender
     private static final ResourceLocation BETA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red/beta.png");
     private static final ResourceLocation JOJONIUM_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red/jojonium.png");
     private static final ResourceLocation DEBUT_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red/debut.png");
+    private static final ResourceLocation SKELETAL = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/magicians_red/skeletal.png");
     public MagiciansRedBaseRenderer(EntityRendererProvider.Context context, StandModel root) {
         super(context, root,0f);
         this.addLayer(new MagiciansRedSpinEffectLayer<>(this, context.getModelSet()));
@@ -69,6 +70,8 @@ public class MagiciansRedBaseRenderer<M extends StandEntity> extends StandRender
             return JOJONIUM_SKIN;
         } else if (BT == MagiciansRedEntity.DEBUT_SKIN){
             return DEBUT_SKIN;
+        } else if (BT == MagiciansRedEntity.SKELETAL){
+            return SKELETAL;
         }
             return PART_3_SKIN;
     }

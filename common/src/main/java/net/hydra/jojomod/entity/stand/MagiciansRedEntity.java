@@ -35,7 +35,8 @@ public class MagiciansRedEntity extends FollowingStandEntity {
     public boolean emitsFlameCycle(){
         byte skn = this.getSkin();
         return switch (skn) {
-            case ABLAZE, DREAD_ABLAZE, LIGHTER_ABLAZE, BLUE_ABLAZE, PURPLE_ABLAZE, GREEN_ABLAZE, JOJONIUM_ABLAZE -> true;
+            case ABLAZE, DREAD_ABLAZE, LIGHTER_ABLAZE, BLUE_ABLAZE, PURPLE_ABLAZE, GREEN_ABLAZE, JOJONIUM_ABLAZE,
+                 SKELETAL-> true;
             default -> false;
         };
     }
@@ -59,7 +60,7 @@ public class MagiciansRedEntity extends FollowingStandEntity {
         }
         return switch (skn) {
             case ABLAZE, DREAD_ABLAZE, LIGHTER_ABLAZE, BLUE_ABLAZE, PURPLE_ABLAZE, GREEN_ABLAZE, MAGMA_SKIN,
-                    MANGA_SKIN, JOJONIUM_ABLAZE, DEBUT_SKIN -> true;
+                    MANGA_SKIN, JOJONIUM_ABLAZE, DEBUT_SKIN, SKELETAL -> true;
             default -> false;
         };
     }
@@ -90,7 +91,8 @@ public class MagiciansRedEntity extends FollowingStandEntity {
             BETA = 19,
             JOJONIUM = 20,
             JOJONIUM_ABLAZE = 21,
-            DEBUT_SKIN = 22;
+            DEBUT_SKIN = 22,
+            SKELETAL = 23;
 
     public static final byte
             FLAMETHROWER_LASH_1 = 41,

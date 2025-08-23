@@ -177,6 +177,8 @@ public class PowersMagiciansRed extends NewPunchingStand {
             return Component.translatable(  "skins.roundabout.magicians_red.jojonium_ablaze");
         } else if (skinId == MagiciansRedEntity.DEBUT_SKIN){
             return Component.translatable(  "skins.roundabout.magicians_red.debut");
+        } else if (skinId == MagiciansRedEntity.SKELETAL){
+            return Component.translatable(  "skins.roundabout.magicians_red.skeletal");
         }
         return Component.translatable(  "skins.roundabout.magicians_red.base");
     }
@@ -756,6 +758,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 $$1.add(MagiciansRedEntity.BLUE_SKIN);
                 $$1.add(MagiciansRedEntity.BLUE_ABLAZE);
                 $$1.add(MagiciansRedEntity.BLUE_ACE_SKIN);
+                $$1.add(MagiciansRedEntity.SKELETAL);
             } if (Level > 6 || bypass){
                 $$1.add(MagiciansRedEntity.JOJONIUM);
                 $$1.add(MagiciansRedEntity.JOJONIUM_ABLAZE);
@@ -1916,7 +1919,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
 
         return switch (skn) {
-            case MagiciansRedEntity.BLUE_SKIN, MagiciansRedEntity.BLUE_ACE_SKIN, MagiciansRedEntity.BLUE_ABLAZE -> ModParticles.BLUE_FLAME;
+            case MagiciansRedEntity.BLUE_SKIN, MagiciansRedEntity.BLUE_ACE_SKIN, MagiciansRedEntity.BLUE_ABLAZE, MagiciansRedEntity.SKELETAL -> ModParticles.BLUE_FLAME;
             case MagiciansRedEntity.PURPLE_SKIN, MagiciansRedEntity.PURPLE_ABLAZE -> ModParticles.PURPLE_FLAME;
             case MagiciansRedEntity.GREEN_SKIN, MagiciansRedEntity.GREEN_ABLAZE -> ModParticles.GREEN_FLAME;
             case MagiciansRedEntity.DREAD_SKIN, MagiciansRedEntity.DREAD_ABLAZE, MagiciansRedEntity.DREAD_BEAST_SKIN -> ModParticles.DREAD_FLAME;
@@ -2734,7 +2737,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
 
         return switch (skn) {
-            case MagiciansRedEntity.BLUE_SKIN, MagiciansRedEntity.BLUE_ACE_SKIN, MagiciansRedEntity.BLUE_ABLAZE -> StandFireType.BLUE.id;
+            case MagiciansRedEntity.BLUE_SKIN, MagiciansRedEntity.BLUE_ACE_SKIN, MagiciansRedEntity.BLUE_ABLAZE, MagiciansRedEntity.SKELETAL -> StandFireType.BLUE.id;
             case MagiciansRedEntity.PURPLE_SKIN, MagiciansRedEntity.PURPLE_ABLAZE -> StandFireType.PURPLE.id;
             case MagiciansRedEntity.GREEN_SKIN, MagiciansRedEntity.GREEN_ABLAZE -> StandFireType.GREEN.id;
             case MagiciansRedEntity.DREAD_SKIN, MagiciansRedEntity.DREAD_ABLAZE, MagiciansRedEntity.DREAD_BEAST_SKIN -> StandFireType.DREAD.id;
@@ -2746,7 +2749,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public Block getFireColorBlock(){
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         return switch (skn) {
-            case MagiciansRedEntity.BLUE_SKIN, MagiciansRedEntity.BLUE_ACE_SKIN, MagiciansRedEntity.BLUE_ABLAZE -> ModBlocks.BLUE_FIRE;
+            case MagiciansRedEntity.BLUE_SKIN, MagiciansRedEntity.BLUE_ACE_SKIN, MagiciansRedEntity.BLUE_ABLAZE, MagiciansRedEntity.SKELETAL -> ModBlocks.BLUE_FIRE;
             case MagiciansRedEntity.PURPLE_SKIN, MagiciansRedEntity.PURPLE_ABLAZE -> ModBlocks.PURPLE_FIRE;
             case MagiciansRedEntity.GREEN_SKIN, MagiciansRedEntity.GREEN_ABLAZE -> ModBlocks.GREEN_FIRE;
             case MagiciansRedEntity.DREAD_SKIN, MagiciansRedEntity.DREAD_ABLAZE, MagiciansRedEntity.DREAD_BEAST_SKIN -> ModBlocks.DREAD_FIRE;
