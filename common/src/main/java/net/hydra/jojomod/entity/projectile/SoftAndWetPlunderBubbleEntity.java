@@ -1052,19 +1052,21 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         } else if (this.getReturning() && !this.level().isClientSide()){
             if (this.standUser != null) {
                 if (this.distanceTo(standUser) < 1){
-                    int maxSupply = this.standUser.getMaxAirSupply();
-                    int supply = this.standUser.getAirSupply();
-                    if (supply < maxSupply){
-                        supply+= airSupply;
-                        if (supply > maxSupply){
-                            supply = maxSupply;
-                        }
-                        this.standUser.setAirSupply(supply);
+                    if (this.getPlunderType() == PlunderTypes.OXYGEN.id) {
+                        int maxSupply = this.standUser.getMaxAirSupply();
+                        int supply = this.standUser.getAirSupply();
+                        if (supply < maxSupply) {
+                            supply += airSupply;
+                            if (supply > maxSupply) {
+                                supply = maxSupply;
+                            }
+                            this.standUser.setAirSupply(supply);
 
-                        this.level().playSound(null, this.blockPosition(), ModSounds.AIR_BUBBLE_EVENT,
-                                SoundSource.PLAYERS, 2F, (float) (1.1 + (Math.random() * 0.04)));
+                            this.level().playSound(null, this.blockPosition(), ModSounds.AIR_BUBBLE_EVENT,
+                                    SoundSource.PLAYERS, 2F, (float) (1.1 + (Math.random() * 0.04)));
+                        }
+                        popBubble();
                     }
-                    popBubble();
                 }
             }
         }
