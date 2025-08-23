@@ -1065,8 +1065,8 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                             this.level().playSound(null, this.blockPosition(), ModSounds.AIR_BUBBLE_EVENT,
                                     SoundSource.PLAYERS, 2F, (float) (1.1 + (Math.random() * 0.04)));
                         }
-                        popBubble();
                     }
+                    popBubble();
                 }
             }
         }
