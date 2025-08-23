@@ -32,6 +32,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.*;
 
 import java.util.Arrays;
@@ -54,6 +55,26 @@ public class PowersRatt extends NewDashPreset {
     public static final int[] ShotSuperthrowTicks = {4,10,15};
 
 
+    public static final byte
+
+            UPDATE_POSITION = 52,
+            CHANGE_MODE = 53,
+            AUTO = 54,
+            SETPLACE = 55,
+            SCOPE = 56,
+            FIRE_DART = 57,
+            TOGGLE_BURSTING = 58,
+            START_PLAYER_BURST = 59,
+            PLAYER_BURST = 60,
+            START_PLACE_BURST = 61,
+            PLACE_BURST = 62,
+            NET_PLACE = 63,
+            NET_RECALL = 64,
+            NET_SCOPE = 65,
+            UPDATE_CHARGE = 66,
+            START_CHARGE = 67;
+
+
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
         return new PowersRatt(entity);
@@ -63,34 +84,11 @@ public class PowersRatt extends NewDashPreset {
         return ModEntities.RATT.create(this.getSelf().level());
     }
 
+    int shotcooldown = 0;
+    int maxshotcooldown = 0;
     public void setShotCooldown(int i) {
         shotcooldown = i;
-        maxshotcooldown = i;
-    }
-
-
-
-    public static final byte
-
-            UPDATE_POSITION = 0,
-            CHANGE_MODE = 5,
-            AUTO = 7,
-            SETPLACE = 8,
-            SCOPE = 9,
-            FIRE_DART =10,
-            TOGGLE_BURSTING = 11,
-            START_PLAYER_BURST = 13,
-            PLAYER_BURST = 16;
-    // skips 3, 6, 12, and 15 due to conflicts
-    public static final byte
-            START_PLACE_BURST = 17,
-            PLACE_BURST = 15,
-            NET_PLACE = 1,
-            NET_RECALL = 2,
-            NET_SCOPE = 3,
-            UPDATE_CHARGE = 4,
-            START_CHARGE = 40;
-
+        maxshotcooldown = i;}
 
 
     public Entity ShootTarget = null;
@@ -102,16 +100,13 @@ public class PowersRatt extends NewDashPreset {
     @Override
     public boolean canSummonStandAsEntity() {return false;}
 
-    int chargeTime = 0;
-    // max == 100
+    int chargeTime = 0; // max = 100
     public int getChargeTime() {return chargeTime;}
     public void updateChargeTime(int i ) {
         tryIntPower(PowersRatt.UPDATE_CHARGE,true,i);
         tryIntPowerPacket(PowersRatt.UPDATE_CHARGE,i);
     }
 
-    int shotcooldown = 0;
-    int maxshotcooldown = 0;
 
     public boolean isPlaced() {return this.getStandEntity(this.getSelf()) != null;}
     public boolean isAuto() {return this.getStandUserSelf().roundabout$getUniqueStandModeToggle();}
@@ -314,12 +309,17 @@ public class PowersRatt extends NewDashPreset {
     public void tickPower() {
         super.tickPower();
 
-        Roundabout.LOGGER.info("A: {}",this.getActivePower());
-
+        if (isPlaced()) {
+            DimensionType t = this.getStandEntity(this.getSelf()).level().dimensionType();
+            DimensionType T = this.getSelf().level().dimensionType();
+            if (t != T) {
+                RecallClient();
+            }
+        }
+       // Roundabout.LOGGER.info("A: {}, T: {}",this.getActivePower(),this.getAttackTime());
 
         if (getAttackTime() > 20 && getAnimation() == RattEntity.FIRE_NO_RECOIL) {
             this.animateStand((byte) -1);
-
         }
 
         if (this.getActivePower() == PowersRatt.START_CHARGE) {
@@ -343,10 +343,9 @@ public class PowersRatt extends NewDashPreset {
 
         if (isPlaced() && !(this.getSelf() instanceof Mob)) {
 
-            if (this.isClient()) {
+            if (isClient()) {
                 Entity e = MainUtil.getTargetEntity(this.self, 30, 15);
 
-                if (getShootTarget() == null) {this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);}
 
                 if (isAuto()) {
                     Entity f = this.CoolerrayCastEntity(this.getSelf().level(),SE,60);
@@ -361,6 +360,8 @@ public class PowersRatt extends NewDashPreset {
                         }
                     }
                 }
+
+                if (getShootTarget() == null) {this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);}
 
 
                 if (e != null) {
@@ -388,7 +389,6 @@ public class PowersRatt extends NewDashPreset {
     public void updateUniqueMoves() {
         if (this.getActivePower() == PowersRatt.PLAYER_BURST) {
             if (isClient()) {
-                Roundabout.LOGGER.info("tick?");
                 if (this.attackTimeDuring%2 == 1) {
                     tryPower(PowersRatt.PLAYER_BURST,true);
                     tryPowerPacket(PowersRatt.PLAYER_BURST);
@@ -396,13 +396,13 @@ public class PowersRatt extends NewDashPreset {
                 if (getChargeTime() < 30) {
                     this.updateChargeTime(0);
                     this.setShotCooldown(MaxShootCooldown);
-                    tryPower(PowerIndex.NONE,true);
                     tryPowerPacket(PowerIndex.NONE);
+                    setPowerNone();
                 }
             }
         } else if (this.getActivePower() == PowersRatt.PLACE_BURST) {
-            setShotCooldown(25);
-            if (getAttackTimeDuring() >8) {
+            setShotCooldown(PLACE_BURST);
+            if (getAttackTimeDuring() > 8) {
                 setPowerNone();
                 setAttackTimeDuring(-1);
             } else  if (getAttackTime() == 1) {
@@ -446,9 +446,7 @@ public class PowersRatt extends NewDashPreset {
                 }
             }
 
-            case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
-                dash();
-            }
+            case SKILL_3_NORMAL, SKILL_3_CROUCH -> dash();
         }
     }
 
@@ -472,9 +470,7 @@ public class PowersRatt extends NewDashPreset {
                 setScopeLevel(chargeTime);
                 this.getStandUserSelf().roundabout$setCombatMode(scopeLevel != 0);
             }
-            case PowersRatt.UPDATE_CHARGE -> {
-                this.chargeTime = chargeTime;
-            }
+            case PowersRatt.UPDATE_CHARGE -> this.chargeTime = chargeTime;
 
             case PowersRatt.FIRE_DART -> {
                 setShotCooldown(chargeTime >= MaxThreshold ? MaxShootCooldown : BaseShootCooldown);
@@ -566,9 +562,7 @@ public class PowersRatt extends NewDashPreset {
                 this.getStandEntity(this.getSelf()).remove(Entity.RemovalReason.DISCARDED);
                 this.setCooldown(PowersRatt.SETPLACE,40);
             }
-            case PowersRatt.FIRE_DART -> {
-                this.setCooldown(PowersRatt.CHANGE_MODE,15);
-            }
+            case PowersRatt.FIRE_DART -> this.setCooldown(PowersRatt.CHANGE_MODE,15);
             case PowersRatt.START_PLAYER_BURST -> {
                 this.setAttackTimeDuring(0);
                 this.setActivePower(PowersRatt.PLAYER_BURST);
@@ -581,9 +575,7 @@ public class PowersRatt extends NewDashPreset {
                     FireDart(51,0.4F);
                 }
             }
-            case PowersRatt.TOGGLE_BURSTING -> {
-                this.setCooldown(PowersRatt.CHANGE_MODE,10);
-            }
+            case PowersRatt.TOGGLE_BURSTING -> this.setCooldown(PowersRatt.CHANGE_MODE,10);
             case PowersRatt.START_PLACE_BURST -> {
                 this.setShotCooldown(PlaceShootCooldown);
                 this.setAttackTimeDuring(0);
@@ -618,13 +610,7 @@ public class PowersRatt extends NewDashPreset {
         return super.tryPower(move, forced);
     }
 
-    @Override
-    public boolean setPowerNone() {
-        if (!isPlaced()) {
-            return super.setPowerNone();
-        }
-        return true;
-    }
+
 
     @Override
     public float inputSpeedModifiers(float basis) {
