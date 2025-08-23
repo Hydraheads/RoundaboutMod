@@ -957,7 +957,6 @@ public class PowersMagiciansRed extends NewPunchingStand {
             return;
         }
         if (!this.onCooldown(PowerIndex.SKILL_2)) {
-            this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.ankhFailCooldown));
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
             tryPowerPacket(PowerIndex.POWER_2);
         }
