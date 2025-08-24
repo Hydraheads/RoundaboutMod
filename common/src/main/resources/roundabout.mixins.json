@@ -31,6 +31,7 @@
     "achtung.AchtungChorusPlantBlock",
     "achtung.AchtungCropBlock",
     "achtung.AchtungItemEntity",
+    "achtung.AchtungPortalShapeMixin",
     "achtung.AchtungProjectile",
     "barrage.DazeBlazeAttackGoal",
     "barrage.DazeCreeper",
