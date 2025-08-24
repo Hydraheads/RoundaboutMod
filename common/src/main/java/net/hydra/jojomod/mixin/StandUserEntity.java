@@ -2955,7 +2955,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public double roundabout$getGravity(double ogGrav){
         if (this.getEntityData().hasItem(ROUNDABOUT$ADJUSTED_GRAVITY) && this.getDeltaMovement().y <= 0){
-            double basegrav = (double) this.getEntityData().get(ROUNDABOUT$ADJUSTED_GRAVITY);
+            double basegrav = roundabout$getAdjustedGravity();
             if (basegrav >= 0) {
                 ogGrav *= (basegrav / 1000);
                 return ogGrav;
