@@ -29,6 +29,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -462,13 +463,29 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
-    /**
-     * Tick thru effects for bleed to not show potion swirls
-     */
-    @Inject(method = "tickEffects", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/network/syncher/SynchedEntityData;get(Lnet/minecraft/network/syncher/EntityDataAccessor;)Ljava/lang/Object;",
-            shift = At.Shift.AFTER, ordinal = 0), cancellable = true)
-    public void roundabout$tickEffects(CallbackInfo ci) {
+    @Override
+    @Unique
+    public boolean rdbt$tickEffectsBleedEdition(boolean grav){
+
+        Vec3 vec3d;
+        Vec3 vec3d2;
+        if (grav){
+            Direction dir = ((IGravityEntity)this).roundabout$getGravityDirection();
+            vec3d = this.position().subtract(RotationUtil.vecPlayerToWorld(this.position().subtract(this.getRandomX(0.5),
+                    this.getRandomY()+this.getBbHeight(),
+                    this.getRandomZ(0.5)), dir));
+            vec3d2 = this.position().subtract(RotationUtil.vecPlayerToWorld(this.position().subtract(this.getRandomX(0.5),
+                    this.getRandomY(),
+                    this.getRandomZ(0.5)), dir));
+        } else {
+            vec3d = new Vec3(this.getRandomX(0.5),
+                    this.getRandomY()+this.getBbHeight(),
+                    this.getRandomZ(0.5));
+            vec3d2 = new Vec3(this.getRandomX(0.5),
+                    this.getRandomY(),
+                    this.getRandomZ(0.5));
+        }
+
         if (!this.level().isClientSide) {
             int bleedlvl = -1;
             if (this.hasEffect(ModEffects.BLEED) && this.getEffect(ModEffects.BLEED).isVisible()) {
@@ -520,14 +537,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         } else {
             if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.disableBleedingAndBloodSplatters &&
                     (((IPermaCasting)this.level()).roundabout$inPermaCastFogRange(this)
-                    && this.getHealth() < this.getMaxHealth())){
+                            && this.getHealth() < this.getMaxHealth())){
 
                 this.level()
                         .addParticle(
                                 ModParticles.FOG_CHAIN,
-                                this.getRandomX(0.5),
-                                this.getRandomY()+this.getBbHeight(),
-                                this.getRandomZ(0.5),
+                                vec3d.x,
+                                vec3d.y,
+                                vec3d.z,
                                 0,
                                 0.2,
                                 0
@@ -551,9 +568,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 this.level()
                         .addParticle(
                                 ModParticles.MELTING,
-                                this.getRandomX(0.5),
-                                this.getRandomY(),
-                                this.getRandomZ(0.5),
+                                vec3d2.x,
+                                vec3d2.y,
+                                vec3d2.z,
                                 0,
                                 0,
                                 0
@@ -565,9 +582,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 this.level()
                         .addParticle(
                                 ModParticles.FOG_CHAIN,
-                                this.getRandomX(0.5),
-                                this.getRandomY()+this.getBbHeight(),
-                                this.getRandomZ(0.5),
+                                vec3d.x,
+                                vec3d.y,
+                                vec3d.z,
                                 0,
                                 0.2,
                                 0
@@ -590,9 +607,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 this.level()
                         .addParticle(
                                 bloodType,
-                                this.getRandomX(0.5),
-                                this.getRandomY(),
-                                this.getRandomZ(0.5),
+                                vec3d2.x,
+                                vec3d2.y,
+                                vec3d2.z,
                                 0,
                                 0,
                                 0
@@ -600,21 +617,40 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if (this.roundabout$getOnlyBleeding() || this.getEffect(ModEffects.MELTING) != null) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Tick thru effects for bleed to not show potion swirls
+     */
+    @Inject(method = "tickEffects", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/network/syncher/SynchedEntityData;get(Lnet/minecraft/network/syncher/EntityDataAccessor;)Ljava/lang/Object;",
+            shift = At.Shift.AFTER, ordinal = 0), cancellable = true)
+    public void roundabout$tickEffects(CallbackInfo ci) {
+        if (rdbt$tickEffectsBleedEdition(false)){
             ci.cancel();
+            ((StandUser)rdbt$this()).rdbt$setRemoveLoveSafety(true);
         }
     }
 
+    @Unique
+    @Override
+    public void rdbt$setRemoveLoveSafety(boolean yup){
+        roundabout$safeToRemoveLove = yup;
+    }
 
     @Inject(method = "tickEffects", at = @At(value = "HEAD"))
     public void roundabout$tickEffectsPre(CallbackInfo ci) {
         if (!this.level().isClientSide) {
-            roundabout$safeToRemoveLove = false;
+            rdbt$setRemoveLoveSafety(false);
         }
     }
     @Inject(method = "tickEffects", at = @At(value = "TAIL"))
     public void roundabout$tickEffectsPost(CallbackInfo ci) {
         if (!this.level().isClientSide) {
-            roundabout$safeToRemoveLove = true;
+            rdbt$setRemoveLoveSafety(true);
         }
     }
 

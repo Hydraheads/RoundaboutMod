@@ -2,6 +2,8 @@ package net.hydra.jojomod.mixin.gravity;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityLivingEntity;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.mixin.StandUserEntity;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
@@ -557,6 +559,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN) return;
         ci.cancel();
+        ((StandUser)rdbt$this()).rdbt$setRemoveLoveSafety(false);
         Iterator<MobEffect> $$0 = this.activeEffects.keySet().iterator();
 
         try {
@@ -585,6 +588,12 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
         }
 
         int $$3 = this.entityData.get(DATA_EFFECT_COLOR_ID);
+
+        if (((StandUser)rdbt$this()).rdbt$tickEffectsBleedEdition(true)){
+            ((StandUser)rdbt$this()).rdbt$setRemoveLoveSafety(true);
+            return;
+        }
+
         boolean $$4 = this.entityData.get(DATA_EFFECT_AMBIENCE_ID);
         if ($$3 > 0) {
             boolean $$5;
@@ -615,6 +624,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
                         );
             }
         }
+        ((StandUser)rdbt$this()).rdbt$setRemoveLoveSafety(true);
     }
 
 
