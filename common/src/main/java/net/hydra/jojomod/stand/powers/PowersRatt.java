@@ -101,7 +101,6 @@ public class PowersRatt extends NewDashPreset {
         return null;
     }
     public void setShootTarget(LivingEntity l) {
-        Roundabout.LOGGER.info("???: {}",l);
         if (this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
             RE.setTarget(l);
         }
@@ -136,7 +135,6 @@ public class PowersRatt extends NewDashPreset {
         StandEntity SE = (StandEntity) ratt;
 
         Vec3 vars = this.getRotations(this.getShootTarget());
-        Roundabout.LOGGER.info("??: {}",vars);
 
         Vec3 eyePos = ratt.getEyePosition(1.0F);// player.getEyePosition(float)
         Vec3 lookVec = new Vec3(
@@ -369,20 +367,23 @@ public class PowersRatt extends NewDashPreset {
                         Entity f = this.CoolerrayCastEntity(this.getSelf().level(),SE,60);
                         if (f != null) {BurstFire();}
 
-                        if (getShootTarget() != null) {
-                            if (MainUtil.getEntityIsTrulyInvisible(getShootTarget()) || ((LivingEntity)getShootTarget()).getEffect(MobEffects.INVISIBILITY) != null) {
-                                setShootTarget(null);
-                            }
-                        }
 
                     } else if (!L.equals(this.getSelf()) && !L.equals(SE)) {
                         if (!MainUtil.getEntityIsTrulyInvisible(e) && L.getEffect(MobEffects.INVISIBILITY) == null) {
                             setShootTarget(L);
                         }
                     }
+
                     if (e.distanceTo(this.getStandEntity(this.getSelf())) >= 40 ) {
                         setShootTarget(null);
                     }
+                    if (getShootTarget() != null) {
+                        if (MainUtil.getEntityIsTrulyInvisible(getShootTarget()) || ((LivingEntity)getShootTarget()).getEffect(MobEffects.INVISIBILITY) != null) {
+                            setShootTarget(null);
+                        }
+                    }
+
+
                 } else {
                     if (e == null) {
                         if(!isAuto()) {
