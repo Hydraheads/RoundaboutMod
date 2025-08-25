@@ -1201,11 +1201,19 @@ public class PowersSoftAndWet extends NewPunchingStand {
         ((StandUser) self).roundabout$setGasolineTime(-1);
         self.extinguishFire();
         this.self.level().playSound(null, this.self.blockPosition(), ModSounds.WATER_ENCASE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5 + (Math.random() * 0.04)));
+
+
+        Vec3 vec3 = new Vec3(0,this.self.getBbHeight()*0.5,0);
+        Direction direction = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+        if (direction != Direction.DOWN){
+            vec3 = RotationUtil.vecPlayerToWorld(vec3,direction);
+        }
+
         ((ServerLevel) this.self.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
                         Blocks.WATER.defaultBlockState()),
-                this.self.getX(),
-                this.self.getY() +(this.self.getBbHeight()*0.5),
-                this.self.getZ(),
+                this.self.getX()+vec3.x,
+                this.self.getY() +vec3.y,
+                this.self.getZ()+vec3.z,
                 120,width, height, width, 0.4);
         this.setWaterShieldTicks(ClientNetworking.getAppropriateConfig().softAndWetSettings.waterShieldDurationInTicks);
     }
@@ -2140,8 +2148,14 @@ public void unlockSkin(){
                                 double $$9 = (LE.level().random.nextDouble() * 2.0 - 1.0) * (double) LE.getBbWidth();
                                 double $$10 = (LE.level().random.nextDouble() * 2.0 - 1.0) * (double) LE.getBbWidth();
 
+                                Vec3 vec3 = new Vec3($$9,1.0F,$$10);
+                                Direction direction = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                                if (direction != Direction.DOWN){
+                                    vec3 = RotationUtil.vecPlayerToWorld(vec3,direction);
+                                }
+
                                 ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.SPLASH,
-                                        LE.getX() + $$9, (double) ($$4 + 1.0F), LE.getZ() + $$10,
+                                        LE.getX() + vec3.x, (double) ($$4 + vec3.y), LE.getZ() + vec3.z,
                                         30, $$2.x, $$2.y, $$2.z, 0.4);
                             }
                         }
