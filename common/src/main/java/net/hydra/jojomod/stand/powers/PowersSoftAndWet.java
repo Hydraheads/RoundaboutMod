@@ -33,6 +33,7 @@ import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -1605,8 +1606,19 @@ public class PowersSoftAndWet extends NewPunchingStand {
     }
     public void shootBubbleRandomly(SoftAndWetBubbleEntity ankh, float speed){
         ankh.setSped(speed);
-        ankh.setPos(this.self.getX(), this.self.getY()+(this.self.getEyeHeight()*0.2), this.self.getZ());
-        ankh.shootFromRotationDeltaAgnostic(this.getSelf(),-1*(float)(Math.random()*50), (float)(Math.random()*360), 1.0F, 0.25F, 0);
+        Vec3 addToPosition = new Vec3(0,this.self.getEyeHeight()*0.2,0);
+        Direction direction = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+        if (direction != Direction.DOWN){
+            addToPosition = RotationUtil.vecPlayerToWorld(addToPosition,direction);
+        }
+        ankh.setPos(this.self.getX()+addToPosition.x, this.self.getY()+addToPosition.y, this.self.getZ()+addToPosition.z);
+
+        Vec2 yavec = new Vec2(-1*(float)(Math.random()*50), (float)(Math.random()*360));
+        if (direction != Direction.DOWN) {
+            yavec = RotationUtil.rotPlayerToWorld(yavec.y, yavec.x, direction);
+        }
+
+        ankh.shootFromRotationDeltaAgnosticR(this.getSelf(),yavec.y, yavec.x, 1.0F, 0.25F, 0);
     }
 
     public boolean setPowerBubbleBarrage() {

@@ -192,6 +192,12 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
         this.entityData.define(USER_ID, -1);
         this.entityData.define(SPEED, 1F);
     }
+    public void shootFromRotationDeltaAgnosticR(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
+        float $$6 = -Mth.sin($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
+        float $$7 = -Mth.sin(($$1 + $$3) * (float) (Math.PI / 180.0));
+        float $$8 = Mth.cos($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
+        this.shoot((double)$$6, (double)$$7, (double)$$8, $$4, $$5);
+    }
     public void shootFromRotationDeltaAgnostic(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
         Direction gravityDirection = GravityAPI.getGravityDirection($$0);
         if (gravityDirection != Direction.DOWN) {
@@ -227,18 +233,6 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
         float $$7 = -Mth.sin(($$1 + $$3) * (float) (Math.PI / 180.0));
         float $$8 = Mth.cos($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
         this.shoot4((double)$$6, (double)$$7, (double)$$8, $$4);
-    }
-    public void shootFromRotationDeltaAgnosticBackwards(Entity $$0, float $$1, float $$2, float $$3, float $$4) {
-        Direction gravityDirection = GravityAPI.getGravityDirection($$0);
-        if (gravityDirection != Direction.DOWN) {
-            Vec2 vecMagic = RotationUtil.rotPlayerToWorld($$0.getYRot(), $$0.getXRot(), gravityDirection);
-            $$1 = vecMagic.y; $$2 = vecMagic.x;
-        }
-
-        float $$6 = -Mth.sin($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
-        float $$7 = -Mth.sin(($$1 + $$3) * (float) (Math.PI / 180.0));
-        float $$8 = Mth.cos($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
-        this.shoot3((double)$$6, (double)$$7, (double)$$8, $$4);
     }
 
     public void shoot2(double $$0, double $$1, double $$2, float $$3) {
