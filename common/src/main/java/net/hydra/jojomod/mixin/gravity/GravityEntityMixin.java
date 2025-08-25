@@ -5,6 +5,8 @@ import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IClientEntity;
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.util.GEntityTags;
@@ -419,6 +421,9 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         if (vehicle != null) {
             roundabout$setGravityDirection(GravityAPI.getGravityDirection(vehicle));
             roundabout$currGravityStrength = GravityAPI.getGravityStrength(vehicle);
+        } else if (rdbt$this() instanceof FollowingStandEntity SE && SE.getFollowing() != null){
+            roundabout$setGravityDirection(GravityAPI.getGravityDirection(SE.getFollowing()));
+            roundabout$currGravityStrength = GravityAPI.getGravityStrength(SE.getFollowing());
         }
         else {
             if (!this.level.isClientSide()){

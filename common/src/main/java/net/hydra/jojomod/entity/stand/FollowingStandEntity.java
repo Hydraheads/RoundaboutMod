@@ -1,11 +1,14 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.mixin.WorldTickClient;
 import net.hydra.jojomod.mixin.WorldTickServer;
+import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.core.Direction;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -141,7 +144,12 @@ public class FollowingStandEntity extends StandEntity{
         if (OffsetIndex.OffsetStyle(ot) == OffsetIndex.FOLLOW_STYLE) {
             return getIdleOffset(standUser);
         } else if (OffsetIndex.OffsetStyle(ot) == OffsetIndex.FIXED_STYLE) {
-            return getAttackOffset(standUser,ot);
+            Direction direction = ((IGravityEntity)standUser).roundabout$getGravityDirection();
+            Vec3 finalized = getAttackOffset(standUser,ot);
+            if (direction != Direction.DOWN){
+                finalized = RotationUtil.vecPlayerToWorld(finalized.subtract(standUser.position()),direction).add(standUser.position());
+            }
+            return finalized;
         }
         return new Vec3(this.getX(),this.getY(),this.getZ());
     }
@@ -214,9 +222,20 @@ public class FollowingStandEntity extends StandEntity{
             yy += 1;
         }
 
-        double x1 = standUser.getX() - -1 * (r * (Math.sin(ang / 180)));
-        double y1 = standUser.getY() + getIdleYOffset() - yy;
-        double z1 = standUser.getZ() - (r * (Math.cos(ang / 180)));
+
+        Direction dir = ((IGravityEntity)standUser).roundabout$getGravityDirection();
+        Vec3 offset = new Vec3(
+                (- (-1 * (r * (Math.sin(ang / 180))))),
+                (getIdleYOffset() - yy),
+                (-(r * (Math.cos(ang / 180))))
+        );
+        if (dir != Direction.DOWN){
+            offset = RotationUtil.vecPlayerToWorld(offset,dir);
+        }
+
+        double x1 = standUser.getX() +offset.x;
+        double y1 = standUser.getY() +offset.y;
+        double z1 = standUser.getZ() +offset.z;
 
         return new Vec3(x1, y1, z1);
     }
