@@ -111,6 +111,13 @@ public abstract class InputEvents implements IInputEvents {
                 return;
             }
 
+            if (powers instanceof PowersRatt PR) {
+                if(entity.equals(PR.getShootTarget())) {
+                    ci.setReturnValue(true);
+                    return;
+                }
+            }
+
             powers.synchToCamera();
             if (powers.highlightsEntity(entity, player)) {
                 ci.setReturnValue(true);
