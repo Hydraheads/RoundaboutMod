@@ -1893,12 +1893,19 @@ public void unlockSkin(){
     public boolean bubbleLadderPlace(){
         if (!this.self.level().isClientSide()){
 
-            if (this.self.getXRot() > 35){
+            Vec2 adjustedDir = new Vec2(this.self.getYHeadRot(),this.self.getXRot());
+
+            Direction gravdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+            if (gravdir != Direction.DOWN){
+                adjustedDir = RotationUtil.rotPlayerToWorld(adjustedDir,gravdir);
+            }
+
+            if (adjustedDir.y > 35){
                 buildingBubbleScaffoldPos = buildingBubbleScaffoldPos.below();
-            } else if (this.self.getXRot() < -35){
+            } else if (adjustedDir.y < -35){
                 buildingBubbleScaffoldPos = buildingBubbleScaffoldPos.above();
             } else {
-                buildingBubbleScaffoldPos = buildingBubbleScaffoldPos.relative(Direction.fromYRot(this.self.getYHeadRot()));
+                buildingBubbleScaffoldPos = buildingBubbleScaffoldPos.relative(Direction.fromYRot(adjustedDir.x));
             }
             if (MainUtil.tryPlaceBlock(this.self,buildingBubbleScaffoldPos,false)){
                 boolean heartAttackState = ((StandUser)this.getSelf()).roundabout$getStandSkin() == SoftAndWetEntity.KIRA;
