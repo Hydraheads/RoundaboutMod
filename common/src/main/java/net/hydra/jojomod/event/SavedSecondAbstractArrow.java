@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event;
 
 import net.hydra.jojomod.access.IAbstractArrowAccess;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -14,8 +15,8 @@ public class SavedSecondAbstractArrow extends SavedSecond {
 
 
     public SavedSecondAbstractArrow(float headYRotation, Vec2 rotationVec, Vec3 position, Vec3 deltaMovement, float fallDistance,
-            ResourceKey<DimensionType> dimensionId, boolean stuckInGround){
-        super(headYRotation,rotationVec,position,deltaMovement,fallDistance,dimensionId);
+                                    ResourceKey<DimensionType> dimensionId, Direction gravityDirection, boolean stuckInGround){
+        super(headYRotation,rotationVec,position,deltaMovement,fallDistance,dimensionId,gravityDirection);
         this.stuckInGround = stuckInGround;
     }
     @Override

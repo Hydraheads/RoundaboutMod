@@ -11,6 +11,8 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.gravity.GravityAPI;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -33,6 +35,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.LavaFluid;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -169,6 +172,11 @@ public class GasolineSplatterEntity extends ThrowableItemProjectile {
     }
 
     public void shootFromRotationWithVariance(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
+        Direction gravityDirection = GravityAPI.getGravityDirection($$0);
+        if (gravityDirection != Direction.DOWN) {
+            Vec2 vecMagic = RotationUtil.rotPlayerToWorld($$0.getYRot(), $$0.getXRot(), gravityDirection);
+            $$1 = vecMagic.y; $$2 = vecMagic.x;
+        }
         float $$6 = -Mth.sin($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
         float $$7 = -Mth.sin(($$1 + $$3) * (float) (Math.PI / 180.0));
         float $$8 = Mth.cos($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));

@@ -593,7 +593,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
                 }
 
                 if (!(((Mob) (Object) this) instanceof Enemy)
-                        && !(((Mob) (Object) this) instanceof NeutralMob) && !(isStandUser && this.roundabout$getFightOrFlight())) {
+                        && !(((Mob) (Object) this) instanceof NeutralMob) &&
+                        !(isStandUser && this.roundabout$getFightOrFlight())) {
                     if (this.getTarget() != null && this.getTarget() instanceof Player PE && PE.isCreative()){
                         this.setTarget(null);
                     }

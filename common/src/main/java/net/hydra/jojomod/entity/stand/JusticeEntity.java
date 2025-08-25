@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.ModParticles;
@@ -11,7 +12,9 @@ import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -347,9 +350,19 @@ public class JusticeEntity extends FollowingStandEntity {
                 yy += 1;
             }
 
-            double x1 = standUser.getX() - -1 * (r * (Math.sin(ang / 180)));
-            double y1 = standUser.getY() + getIdleYOffset() - yy+0.6;
-            double z1 = standUser.getZ() - (r * (Math.cos(ang / 180)));
+            Direction dir = ((IGravityEntity)standUser).roundabout$getGravityDirection();
+            Vec3 offset = new Vec3(
+                    (- (-1 * (r * (Math.sin(ang / 180))))),
+                    (getIdleYOffset() - yy+0.6),
+                    (-(r * (Math.cos(ang / 180))))
+            );
+            if (dir != Direction.DOWN){
+                offset = RotationUtil.vecPlayerToWorld(offset,dir);
+            }
+
+            double x1 = standUser.getX() + offset.x;
+            double y1 = standUser.getY() + offset.y;
+            double z1 = standUser.getZ() + offset.z;
 
             return new Vec3(x1, y1, z1);
         } else {

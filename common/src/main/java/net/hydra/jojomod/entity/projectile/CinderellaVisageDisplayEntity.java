@@ -8,6 +8,8 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersCinderella;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.gravity.GravityAPI;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -27,6 +29,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -94,13 +97,7 @@ public class CinderellaVisageDisplayEntity extends ThrowableItemProjectile imple
         }
     }
     public Vec3 storeVec;
-    public void shootFromRotationDeltaAgnostic(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
-        float $$6 = -Mth.sin($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
-        float $$7 = -Mth.sin(($$1 + $$3) * (float) (Math.PI / 180.0));
-        float $$8 = Mth.cos($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
-        this.shoot((double)$$6, (double)$$7, (double)$$8, $$4, $$5);
-        Vec3 $$9 = $$0.getDeltaMovement();
-    }
+
 
     public CinderellaVisageDisplayEntity(Level world, double p_36862_, double p_36863_, double p_36864_, ItemStack itemStack) {
         super(ModEntities.CINDERELLA_VISAGE_DISPLAY, p_36862_, p_36863_, p_36864_, world);

@@ -146,11 +146,20 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
             return;
         ci.cancel();
 
-        Vec3 myPos = RotationUtil.vecPlayerToWorld(this.getX(), this.getY(),this.getZ(), gravityDirection);
 
-        Vec3 myPoso = RotationUtil.vecPlayerToWorld(xo, yo,zo, gravityDirection);
+        Vec3 myPos = new Vec3(this.getX(), this.getY(),this.getZ());
 
-        float $$1 = (float)Mth.length(myPos.x - myPoso.x, $$0 ? myPos.y - myPoso.y : 0.0, myPos.z - myPoso.z);
+        Vec3 myPoso = new Vec3(xo, yo,zo);
+        myPos = myPos.subtract(myPoso);
+        float $$1;
+        if (gravityDirection == Direction.UP){
+            $$1 = (float)Mth.length(myPos.x, $$0 ? myPos.y : 0.0, myPos.z);
+        } else if (gravityDirection == Direction.EAST || gravityDirection == Direction.WEST){
+            $$1 = (float)Mth.length($$0 ? myPos.x : 0.0,myPos.y, myPos.z);
+        } else {
+            $$1 = (float)Mth.length(myPos.x,myPos.y, $$0 ? myPos.z : 0.0);
+        }
+
         this.updateWalkAnimation($$1);
     }
 

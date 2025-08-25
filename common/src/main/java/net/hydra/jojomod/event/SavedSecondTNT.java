@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event;
 
 import net.hydra.jojomod.access.IAbstractArrowAccess;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.PrimedTnt;
@@ -15,8 +16,8 @@ public class SavedSecondTNT extends SavedSecond {
 
 
     public SavedSecondTNT(float headYRotation, Vec2 rotationVec, Vec3 position, Vec3 deltaMovement, float fallDistance,
-                          ResourceKey<DimensionType> dimensionId, int fuse){
-        super(headYRotation,rotationVec,position,deltaMovement,fallDistance,dimensionId);
+                          ResourceKey<DimensionType> dimensionId, Direction gravityDirection, int fuse){
+        super(headYRotation,rotationVec,position,deltaMovement,fallDistance,dimensionId,gravityDirection);
         this.fuse = fuse;
     }
     @Override

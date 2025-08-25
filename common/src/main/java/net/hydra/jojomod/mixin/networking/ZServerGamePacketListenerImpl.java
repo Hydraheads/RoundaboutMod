@@ -18,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -42,7 +43,8 @@ public class ZServerGamePacketListenerImpl implements IClientNetworking {
     }
 
 
-    public ServerGamePacketListenerImpl rdbt$this(){
+    @Unique
+    public ServerGamePacketListenerImpl rdbt$thisX(){
         return ((ServerGamePacketListenerImpl)(Object)this);
     }
     @Inject(method = "handleCustomPayload", at = @At("HEAD"))
@@ -60,7 +62,7 @@ public class ZServerGamePacketListenerImpl implements IClientNetworking {
             return;
         }
         if (!messageName.contains("thread_hop")){
-            PacketUtils.ensureRunningOnSameThread(packet, rdbt$this(), this.player.serverLevel());
+            PacketUtils.ensureRunningOnSameThread(packet, rdbt$thisX(), this.player.serverLevel());
         }
 
         AbstractBaseC2SPacket p = ModNetworking.getC2S(packet.getIdentifier());

@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IBucketItem;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.BubbleScaffoldBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
@@ -32,6 +33,8 @@ import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.gravity.GravityAPI;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -1565,19 +1568,37 @@ public class PowersSoftAndWet extends NewPunchingStand {
     }
     public void shootExplosiveBubbleSpeed(SoftAndWetBubbleEntity ankh, float speed){
         ankh.setSped(speed);
-        Vec3 pos = this.self.getPosition(1).add(0,this.self.getEyeHeight()*0.8F,0).add(this.self.getForward().scale(this.self.getBbWidth()*1));
+
+        Vec3 addToPosition = new Vec3(0,this.self.getEyeHeight()*0.8F,0);
+        Direction direction = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+        if (direction != Direction.DOWN){
+            addToPosition = RotationUtil.vecPlayerToWorld(addToPosition,direction);
+        }
+        Vec3 pos = this.self.getPosition(1).add(addToPosition.x,addToPosition.y,addToPosition.z).add(this.self.getForward().scale(this.self.getBbWidth()*1));
         ankh.setPos(pos.x(), pos.y(), pos.z());
         ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, speed, 0);
     }
     public void shootExplosiveItemBubbleSpeed(SoftAndWetBubbleEntity ankh, float speed){
         ankh.setSped(speed);
-        Vec3 pos = this.self.getPosition(1).add(0,this.self.getEyeHeight()*0.8F,0).add(this.self.getForward().scale(this.self.getBbWidth()*1));
+
+        Vec3 addToPosition = new Vec3(0,this.self.getEyeHeight()*0.8F,0);
+        Direction direction = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+        if (direction != Direction.DOWN){
+            addToPosition = RotationUtil.vecPlayerToWorld(addToPosition,direction);
+        }
+        Vec3 pos = this.self.getPosition(1).add(addToPosition.x,addToPosition.y,addToPosition.z).add(this.self.getForward().scale(this.self.getBbWidth()*1));
         ankh.setPos(pos.x(), pos.y(), pos.z());
         ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, speed, 0);
     }
     public void shootBubbleSpeed(SoftAndWetBubbleEntity ankh, float speed){
         ankh.setSped(speed);
-        ankh.setPos(this.self.getX(), this.self.getY()+(this.self.getEyeHeight()*0.71), this.self.getZ());
+
+        Vec3 addToPosition = new Vec3(0,this.self.getEyeHeight()*0.71,0);
+        Direction direction = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+        if (direction != Direction.DOWN){
+            addToPosition = RotationUtil.vecPlayerToWorld(addToPosition,direction);
+        }
+        ankh.setPos(this.self.getX()+addToPosition.x, this.self.getY()+addToPosition.y, this.self.getZ()+addToPosition.z);
         ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, speed, 0);
     }
     public void shootBubbleSpeed2(SoftAndWetBubbleEntity ankh, float speed){
@@ -1585,8 +1606,19 @@ public class PowersSoftAndWet extends NewPunchingStand {
     }
     public void shootBubbleRandomly(SoftAndWetBubbleEntity ankh, float speed){
         ankh.setSped(speed);
-        ankh.setPos(this.self.getX(), this.self.getY()+(this.self.getEyeHeight()*0.2), this.self.getZ());
-        ankh.shootFromRotationDeltaAgnostic(this.getSelf(),-1*(float)(Math.random()*50), (float)(Math.random()*360), 1.0F, 0.25F, 0);
+        Vec3 addToPosition = new Vec3(0,this.self.getEyeHeight()*0.2,0);
+        Direction direction = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+        if (direction != Direction.DOWN){
+            addToPosition = RotationUtil.vecPlayerToWorld(addToPosition,direction);
+        }
+        ankh.setPos(this.self.getX()+addToPosition.x, this.self.getY()+addToPosition.y, this.self.getZ()+addToPosition.z);
+
+        Vec2 yavec = new Vec2(-1*(float)(Math.random()*50), (float)(Math.random()*360));
+        if (direction != Direction.DOWN) {
+            yavec = RotationUtil.rotPlayerToWorld(yavec.y, yavec.x, direction);
+        }
+
+        ankh.shootFromRotationDeltaAgnosticR(this.getSelf(),yavec.y, yavec.x, 1.0F, 0.25F, 0);
     }
 
     public boolean setPowerBubbleBarrage() {

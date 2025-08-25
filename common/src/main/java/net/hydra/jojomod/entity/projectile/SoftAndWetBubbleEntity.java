@@ -6,6 +6,9 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.gravity.GravityAPI;
+import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -23,6 +26,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
@@ -188,29 +192,47 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
         this.entityData.define(USER_ID, -1);
         this.entityData.define(SPEED, 1F);
     }
+    public void shootFromRotationDeltaAgnosticR(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
+        float $$6 = -Mth.sin($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
+        float $$7 = -Mth.sin(($$1 + $$3) * (float) (Math.PI / 180.0));
+        float $$8 = Mth.cos($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
+        this.shoot((double)$$6, (double)$$7, (double)$$8, $$4, $$5);
+    }
     public void shootFromRotationDeltaAgnostic(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
+        Direction gravityDirection = GravityAPI.getGravityDirection($$0);
+        if (gravityDirection != Direction.DOWN) {
+            Vec2 vecMagic = RotationUtil.rotPlayerToWorld($$0.getYRot(), $$0.getXRot(), gravityDirection);
+            $$1 = vecMagic.y; $$2 = vecMagic.x;
+        }
+
         float $$6 = -Mth.sin($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
         float $$7 = -Mth.sin(($$1 + $$3) * (float) (Math.PI / 180.0));
         float $$8 = Mth.cos($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
         this.shoot((double)$$6, (double)$$7, (double)$$8, $$4, $$5);
     }
     public void shootFromRotationDeltaAgnostic2(Entity $$0, float $$1, float $$2, float $$3, float $$4) {
+        Direction gravityDirection = GravityAPI.getGravityDirection($$0);
+        if (gravityDirection != Direction.DOWN) {
+            Vec2 vecMagic = RotationUtil.rotPlayerToWorld($$0.getYRot(), $$0.getXRot(), gravityDirection);
+            $$1 = vecMagic.y; $$2 = vecMagic.x;
+        }
+
         float $$6 = -Mth.sin($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
         float $$7 = -Mth.sin(($$1 + $$3) * (float) (Math.PI / 180.0));
         float $$8 = Mth.cos($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
         this.shoot2((double)$$6, (double)$$7, (double)$$8, $$4);
     }
     public void shootFromRotationDeltaAgnostic3(Entity $$0, float $$1, float $$2, float $$3, float $$4) {
+        Direction gravityDirection = GravityAPI.getGravityDirection($$0);
+        if (gravityDirection != Direction.DOWN) {
+            Vec2 vecMagic = RotationUtil.rotPlayerToWorld($$0.getYRot(), $$0.getXRot(), gravityDirection);
+            $$1 = vecMagic.y; $$2 = vecMagic.x;
+        }
+
         float $$6 = -Mth.sin($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
         float $$7 = -Mth.sin(($$1 + $$3) * (float) (Math.PI / 180.0));
         float $$8 = Mth.cos($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
         this.shoot4((double)$$6, (double)$$7, (double)$$8, $$4);
-    }
-    public void shootFromRotationDeltaAgnosticBackwards(Entity $$0, float $$1, float $$2, float $$3, float $$4) {
-        float $$6 = -Mth.sin($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
-        float $$7 = -Mth.sin(($$1 + $$3) * (float) (Math.PI / 180.0));
-        float $$8 = Mth.cos($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
-        this.shoot3((double)$$6, (double)$$7, (double)$$8, $$4);
     }
 
     public void shoot2(double $$0, double $$1, double $$2, float $$3) {
