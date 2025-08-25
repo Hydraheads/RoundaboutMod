@@ -1246,6 +1246,12 @@ public class PowersSoftAndWet extends NewPunchingStand {
 
 
                     Vec3 vector = Vec3.directionFromRotation(new Vec2(-52, this.self.yBodyRot - 90));
+                    Vec3 normvec = new Vec3(0,this.self.getEyeHeight() * 0.7F,0);
+                    Direction direction = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                    if (direction != Direction.DOWN){
+                        vector = RotationUtil.vecPlayerToWorld(vector,direction);
+                        normvec = RotationUtil.vecPlayerToWorld(normvec,direction);
+                    }
 
                     for (int i = 0; i < 10; ++i) {
                         double randomX = (Math.random() * 0.5) - 0.25;
@@ -1255,11 +1261,11 @@ public class PowersSoftAndWet extends NewPunchingStand {
                         byte sk = ((StandUser)this.getSelf()).roundabout$getStandSkin();
                         if (sk == SoftAndWetEntity.KIRA) {
                             ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.HEART_ATTACK_MINI,
-                                    this.getSelf().getX(), this.getSelf().getY() + this.self.getEyeHeight() * 0.7F, this.getSelf().getZ(),
+                                    this.getSelf().getX()+normvec.x, this.getSelf().getY()+normvec.y, this.getSelf().getZ()+normvec.z,
                                     0, xvec.x, xvec.y, xvec.z, 0.12);
                         } else {
                             ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PURPLE_STAR,
-                                    this.getSelf().getX(), this.getSelf().getY() + this.self.getEyeHeight() * 0.7F, this.getSelf().getZ(),
+                                    this.getSelf().getX()+normvec.x, this.getSelf().getY()+normvec.y, this.getSelf().getZ()+normvec.z,
                                     0, xvec.x, xvec.y, xvec.z, 0.12);
                         }
                     }
