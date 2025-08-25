@@ -1,5 +1,6 @@
 package net.hydra.jojomod.stand.powers.presets;
 
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -12,8 +13,10 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -279,12 +282,24 @@ public class NewDashPreset extends StandPowerRewrite {
                     } else {
                         j = 0.2F;
                     }
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
-                            this.getSelf().getX(), this.getSelf().getY()+0.1, this.getSelf().getZ(),
-                            0,
-                            Mth.sin(degrees * ((float) Math.PI / 180))*0.3,
+
+
+                    Vec3 cvec = new Vec3(0,0.1,0);
+                    Vec3 dvec = new Vec3(Mth.sin(degrees * ((float) Math.PI / 180))*0.3,
                             Mth.sin(-20 * ((float) Math.PI / 180))*-j,
-                            -Mth.cos(degrees * ((float) Math.PI / 180))*0.3,
+                            -Mth.cos(degrees * ((float) Math.PI / 180))*0.3);
+                    Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                    if (gravD != Direction.DOWN){
+                        cvec = RotationUtil.vecPlayerToWorld(cvec,gravD);
+                        dvec = RotationUtil.vecPlayerToWorld(dvec,gravD);
+                    }
+
+                    ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
+                            this.getSelf().getX()+cvec.x, this.getSelf().getY()+cvec.y, this.getSelf().getZ()+cvec.z,
+                            0,
+                            dvec.x,
+                            dvec.y,
+                            dvec.z,
                             0.8);
                 }
             }
