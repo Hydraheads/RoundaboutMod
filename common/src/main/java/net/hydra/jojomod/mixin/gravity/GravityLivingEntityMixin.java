@@ -124,7 +124,10 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
 
     @Shadow protected boolean jumping;
 
-    @Shadow protected abstract float getJumpPower();
+    @Shadow
+    protected float getJumpPower() {
+        return 0;
+    }
 
     public LivingEntity rdbt$this(){
         return ((LivingEntity)(Object)this);

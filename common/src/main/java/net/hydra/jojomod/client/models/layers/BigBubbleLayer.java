@@ -10,6 +10,8 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.gui.NoCancelInputScreen;
 import net.hydra.jojomod.client.gui.PoseSwitcherScreen;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.util.gravity.GravityAPI;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -19,6 +21,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
@@ -53,7 +56,13 @@ public class BigBubbleLayer<T extends LivingEntity, A extends EntityModel<T>> ex
                 // Orient the texture
                 poseStack.translate(0, height * 0.69F, 0);
                 poseStack.scale(this.scale, this.scale, this.scale);
-                poseStack.mulPose(Minecraft.getInstance().getEntityRenderDispatcher().cameraOrientation());
+                Direction gravityDirection = GravityAPI.getGravityDirection(entity);
+                if (gravityDirection != Direction.DOWN){
+                    poseStack.mulPose(RotationUtil.getWorldRotationQuaternion(gravityDirection));
+                    poseStack.mulPose(Minecraft.getInstance().getEntityRenderDispatcher().cameraOrientation());
+                } else {
+                    poseStack.mulPose(Minecraft.getInstance().getEntityRenderDispatcher().cameraOrientation());
+                }
                 poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
 
                 // Draw flat quad here

@@ -936,24 +936,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return -1;
     }
 
-
-    @Unique
-    public double rdbt$assertDazed(double initial){
-        if (((StandUser)this).roundabout$isDazed()) {
-            return 0;
-        } else {
-            return initial;
-        }
-    }
-    @Unique
-    private double rdbt$TravelGravity(double $$1) {
-        if (((StandUser)this).roundabout$isDazed()) {
-            return 0;
-        } else {
-            return ((StandUser)this).roundabout$getGravity($$1);
-        }
-    }
-
     public int roundabout$getZappedTicks(){
         return roundabout$zappedTicks;
     }
@@ -2962,7 +2944,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         boolean modified = false;
 
         if (roundabout$isBubbleEncased()){
-            gravityConstant *= 0.9F;
+            gravityConstant *= 0.3F;
             modified = true;
         }
 
@@ -2989,6 +2971,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return ogGrav;
     }
 
+    @SuppressWarnings("deprecation")
     @Unique
     @Override
     public void rdbt$adjGravTrav(){
@@ -3014,14 +2997,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 /**Air Drag*/
                 Vec3 $$0 = this.getDeltaMovement();
                 if (roundabout$isBubbleEncased() && !onGround()){
-                    this.setDeltaMovement($$0.x*0.95, (double)$$0.y, $$0.z*0.95);
+                    this.setDeltaMovement($$0.x*0.92, (double)$$0.y, $$0.z*0.92);
 
                 }
             }
         }
     }
 
-    @SuppressWarnings("deprecation")
     @Inject(method = "travel", at = @At(value = "HEAD"))
     public void roundabout$travelHead(CallbackInfo ci) {
 
@@ -3056,14 +3038,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Modifies the gravity influence*/
     @ModifyVariable(method = "travel(Lnet/minecraft/world/phys/Vec3;)V", at = @At(value = "STORE"),ordinal = 0)
     private double roundabout$TravelGravity(double $$1) {
-        if (this.roundabout$isDazed()) {
-            return 0;
-        } else {
-            return roundabout$getGravity($$1);
-        }
-    }
-    @ModifyVariable(method = "travel(Lnet/minecraft/world/phys/Vec3;)V", at = @At(value = "STORE"),ordinal = 1)
-    private double roundabout$TravelGravitySlowFall(double $$1) {
         if (this.roundabout$isDazed()) {
             return 0;
         } else {
