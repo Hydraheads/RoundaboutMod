@@ -16,6 +16,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -124,21 +125,46 @@ public class NewDashPreset extends StandPowerRewrite {
     @SuppressWarnings("deprecation")
     public boolean doVault(){
         if (!this.self.onGround()) {
-            Vec3 vec3d = this.getSelf().getEyePosition(0);
-            Vec3 vec3d2 = this.getSelf().getViewVector(0);
+            Vec3 vec3d = this.getSelf().getEyePosition(1);
+
+            Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+            Vec3 vec3d2 = this.getSelf().getViewVector(1);
             Vec3 vec3d3 = vec3d.add(vec3d2.x * 2, vec3d2.y * 2, vec3d2.z * 2);
             BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
-            if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && (blockHit.getBlockPos().getY() + 1) > this.getSelf().getY()
-                    && !this.getSelf().level().getBlockState(blockHit.getBlockPos().above()).isSolid()) {
+
+
+            boolean logicCheck = blockHit.getBlockPos().getY()+1 > this.getSelf().getY();
+            BlockPos aboveCheck = blockHit.getBlockPos().above();
+            if (gravD != Direction.DOWN){
+                BlockPos abv = blockHit.getBlockPos().relative(gravD.getOpposite());
+                BlockPos att = blockHit.getBlockPos();
+
+                Vec3 blockHitVec = RotationUtil.vecPlayerToWorld(new Vec3(abv.getX(),att.getY(),att.getZ()), gravD);
+                Vec3 playerVec = RotationUtil.vecPlayerToWorld(this.getSelf().position(), gravD);
+                aboveCheck = abv;
+                logicCheck = blockHitVec.y+1 > playerVec.y;
+            }
+
+            if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && logicCheck
+                    && !this.getSelf().level().getBlockState(aboveCheck).isSolid()) {
                 if (!this.onCooldown(PowerIndex.GLOBAL_DASH)) {
                     /*Stand vaulting*/
                     this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.vaultingCooldown);
                     double mag = this.getSelf().getPosition(0).distanceTo(
                             new Vec3(blockHit.getLocation().x, blockHit.getLocation().y, blockHit.getLocation().z)) * 1.68 + 1;
-                    MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
+                    Vec3 vec3 = new Vec3(
                             (blockHit.getLocation().x - this.getSelf().getX()) / mag,
-                            0.35 + Math.max((blockHit.getLocation().y - this.getSelf().getY()) / mag, 0),
+                            (blockHit.getLocation().y - this.getSelf().getY()) / mag,
                             (blockHit.getLocation().z - this.getSelf().getZ()) / mag
+                            );
+                    if (gravD != Direction.DOWN){
+                        vec3 = RotationUtil.vecWorldToPlayer(vec3,gravD);
+                    }
+
+                    MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
+                            vec3.x,
+                            0.35 + Math.max(vec3.y, 0),
+                            vec3.z
                     );
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.VAULT, true);
                     tryPowerPacket(PowerIndex.VAULT);
@@ -158,8 +184,22 @@ public class NewDashPreset extends StandPowerRewrite {
         Vec3 vec3d2 = this.getSelf().getViewVector(0);
         Vec3 vec3d3 = vec3d.add(vec3d2.x * 2, vec3d2.y * 2, vec3d2.z * 2);
         BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
-        if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && (blockHit.getBlockPos().getY()+1) > this.getSelf().getY()
-                && !this.getSelf().level().getBlockState(blockHit.getBlockPos().above()).isSolid()){
+
+        Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+        boolean logicCheck = blockHit.getBlockPos().getY()+1 > this.getSelf().getY();
+        BlockPos aboveCheck = blockHit.getBlockPos().above();
+        if (gravD != Direction.DOWN){
+            BlockPos abv = blockHit.getBlockPos().relative(gravD.getOpposite());
+            BlockPos att = blockHit.getBlockPos();
+
+            Vec3 blockHitVec = RotationUtil.vecPlayerToWorld(new Vec3(abv.getX(),att.getY(),att.getZ()), gravD);
+            Vec3 playerVec = RotationUtil.vecPlayerToWorld(this.getSelf().position(), gravD);
+            aboveCheck = abv;
+            logicCheck = blockHitVec.y+1 > playerVec.y;
+        }
+
+        if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && logicCheck
+                && !this.getSelf().level().getBlockState(aboveCheck).isSolid()){
             return true;
         } else {
             return false;
