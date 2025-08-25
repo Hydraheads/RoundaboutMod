@@ -39,6 +39,7 @@ import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -64,6 +65,8 @@ import java.util.List;
 @Mixin(Entity.class)
 public abstract class GravityEntityMixin implements IGravityEntity {
     // NEW FEATURES
+
+    @Shadow public abstract Vec2 getRotationVector();
 
     @Shadow public boolean verticalCollisionBelow;
 
@@ -854,6 +857,25 @@ public abstract class GravityEntityMixin implements IGravityEntity {
                     )
             );
         }
+    }
+
+
+    @Inject(
+            method = "getForward",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void roundabout$getForward(CallbackInfoReturnable<Vec3> cir) {
+
+        Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
+        if (gravityDirection == Direction.DOWN) return;
+
+        cir.setReturnValue(
+                RotationUtil.vecPlayerToWorld(
+                        Vec3.directionFromRotation(this.getRotationVector())
+                        ,gravityDirection
+                )
+        );
     }
 
     @Inject(
