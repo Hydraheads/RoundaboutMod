@@ -1,10 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.access.IAbstractArrowAccess;
-import net.hydra.jojomod.access.IBucketItem;
-import net.hydra.jojomod.access.IGravityEntity;
-import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.BubbleScaffoldBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -1850,7 +1847,12 @@ public void unlockSkin(){
             if (encasement != null){
 
                 encasement.bubbleNo = bubbleNumber;
-                Vec3 movevec = this.self.getPosition(0).add(0,(this.self.getEyeHeight()*0.65F),0).add(this.self.getForward().normalize().scale(0.72));
+                Vec3 cvec = new Vec3(0,(this.self.getEyeHeight()*0.65F),0);
+                Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                if (gravD != Direction.DOWN){
+                    cvec = RotationUtil.vecPlayerToWorld(cvec,gravD);
+                }
+                Vec3 movevec = this.self.getPosition(1).add(cvec.x,cvec.y,cvec.z).add(this.self.getForward().scale(this.self.getBbWidth()*2.5));
                 encasement.absMoveTo(movevec.x(), movevec.y(), movevec.z());
                 encasement.setUser(this.self);
                 encasement.lifeSpan = 200;
