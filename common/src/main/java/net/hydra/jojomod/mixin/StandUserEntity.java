@@ -29,6 +29,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -44,6 +45,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
@@ -62,6 +64,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.piglin.Piglin;
@@ -80,6 +83,7 @@ import net.minecraft.world.level.block.SweetBerryBushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -930,6 +934,24 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             return this.getEntityData().get(ROUNDABOUT$IS_ZAPPED_TO_ATTACK);
         }
         return -1;
+    }
+
+
+    @Unique
+    public double rdbt$assertDazed(double initial){
+        if (((StandUser)this).roundabout$isDazed()) {
+            return 0;
+        } else {
+            return initial;
+        }
+    }
+    @Unique
+    private double rdbt$TravelGravity(double $$1) {
+        if (((StandUser)this).roundabout$isDazed()) {
+            return 0;
+        } else {
+            return ((StandUser)this).roundabout$getGravity($$1);
+        }
     }
 
     public int roundabout$getZappedTicks(){
@@ -2954,6 +2976,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Override
     public double roundabout$getGravity(double ogGrav){
+
         if (this.getEntityData().hasItem(ROUNDABOUT$ADJUSTED_GRAVITY) && this.getDeltaMovement().y <= 0){
             double basegrav = roundabout$getAdjustedGravity();
             if (basegrav >= 0) {
@@ -2966,9 +2989,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return ogGrav;
     }
 
-    @SuppressWarnings("deprecation")
-    @Inject(method = "travel", at = @At(value = "HEAD"))
-    public void roundabout$travelHead(CallbackInfo ci) {
+    @Unique
+    @Override
+    public void rdbt$adjGravTrav(){
         roundabout$adjustGravity();
 
         if (this.isControlledByLocalInstance()) {
@@ -2996,6 +3019,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    @Inject(method = "travel", at = @At(value = "HEAD"))
+    public void roundabout$travelHead(CallbackInfo ci) {
+
+        Direction gravityDirection = GravityAPI.getGravityDirection(rdbt$this());
+        if (gravityDirection != Direction.DOWN)
+            return;
+        rdbt$adjGravTrav();
 
     }
 
@@ -3038,28 +3071,29 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
-    @ModifyVariable(method = "travel(Lnet/minecraft/world/phys/Vec3;)V", at = @At("STORE"),ordinal = 0)
-    private double roundabout$Travel3(double $$1) {
+    @Unique
+    @Override
+    public double rdbt$modelTravel(double $$1){
         float cooking = 0.2F;
         if (((LivingEntity)(Object)this) instanceof Player && ((TimeStop)((LivingEntity)(Object)this).level()).isTimeStoppingEntity((LivingEntity)(Object)this)) {
 
             boolean TSJumping = ((IPlayerEntity)this).roundabout$GetPos() == PlayerPosIndex.TS_FLOAT;
             if (TSJumping) {
-                    float cooking2 = (float) (((LivingEntity)(Object)this).getDeltaMovement().y + 0.2);
-                    if (((LivingEntity)(Object)this) instanceof Player && ((Player)(Object)this).isCrouching()) {
-                        if (cooking2 >= 0.0001) {
-                            cooking = 0.0001F;
-                        }
-                    } else {
-                        if (cooking2 >= 0.1) {
-                            cooking = 0.1F;
-                        }
+                float cooking2 = (float) (((LivingEntity)(Object)this).getDeltaMovement().y + 0.2);
+                if (((LivingEntity)(Object)this) instanceof Player && ((Player)(Object)this).isCrouching()) {
+                    if (cooking2 >= 0.0001) {
+                        cooking = 0.0001F;
                     }
-                    ((LivingEntity)(Object)this).setDeltaMovement(
-                            ((LivingEntity)(Object)this).getDeltaMovement().x,
-                            cooking,
-                            ((LivingEntity)(Object)this).getDeltaMovement().z
-                    );
+                } else {
+                    if (cooking2 >= 0.1) {
+                        cooking = 0.1F;
+                    }
+                }
+                ((LivingEntity)(Object)this).setDeltaMovement(
+                        ((LivingEntity)(Object)this).getDeltaMovement().x,
+                        cooking,
+                        ((LivingEntity)(Object)this).getDeltaMovement().z
+                );
             }
 
             boolean $$2 = ((LivingEntity)(Object)this).getDeltaMovement().y <= 0.0;
@@ -3077,6 +3111,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).resetFallDistance();
         }
         return $$1;
+    }
+
+    @ModifyVariable(method = "travel(Lnet/minecraft/world/phys/Vec3;)V", at = @At("STORE"),ordinal = 0)
+    private double rdbt$Travel3(double $$1) {
+        return rdbt$modelTravel($$1);
     }
     @Inject(method = "getVisibilityPercent", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$getVisibilityPercent(CallbackInfoReturnable<Double> cir) {
@@ -4036,6 +4075,26 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Shadow public abstract Collection<MobEffectInstance> getActiveEffects();
 
+    @Shadow public abstract boolean shouldDiscardFriction();
+
+    @Shadow public abstract void calculateEntityAnimation(boolean bl);
+
+    @Shadow public abstract Vec3 handleRelativeFrictionAndCalculateMovement(Vec3 vec3, float f);
+
+    @Shadow public abstract boolean isFallFlying();
+
+    @Shadow protected abstract SoundEvent getFallDamageSound(int i);
+
+    @Shadow protected abstract boolean isAffectedByFluids();
+
+    @Shadow public abstract boolean canStandOnFluid(FluidState fluidState);
+
+    @Shadow public abstract Vec3 getFluidFallingAdjustedMovement(double d, boolean bl, Vec3 vec3);
+
+    @Shadow public abstract float getSpeed();
+
+    @Shadow protected abstract float getWaterSlowDown();
+
     @Unique private boolean roundabout$isPRunning = false;
 
     @Override
@@ -4138,9 +4197,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
 
+    @Unique
+    @Override
+    public void rdbt$doMoldDetection(Vec3 movement){
 
-    @Inject(method = "travel", at = @At(value = "TAIL"))
-    public void   MoldDetection(Vec3 movement,CallbackInfo info) {
 
         if(((IPermaCasting)this.level()).roundabout$inPermaCastRange(this.getOnPos(), PermanentZoneCastInstance.MOLD_FIELD)) {
             LivingEntity glumbo = ((IPermaCasting)this.level()).roundabout$inPermaCastRangeEntity(this.getOnPos(),PermanentZoneCastInstance.MOLD_FIELD);
@@ -4173,7 +4233,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             jumpImmunityTicks = jumpImmunityTicks -1;
         }
         previousYpos = this.getY();
+    }
 
 
+    @Inject(method = "travel", at = @At(value = "TAIL"))
+    public void   MoldDetection(Vec3 movement,CallbackInfo info) {
+        rdbt$doMoldDetection(movement);
     }
 }

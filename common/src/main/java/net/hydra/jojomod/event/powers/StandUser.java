@@ -105,6 +105,7 @@ public interface StandUser {
     void roundabout$setRattShoulderVanishTicks(int set);
     int roundabout$getMandomVanishTicks();
     void roundabout$setMandomVanishTicks(int set);
+    void rdbt$doMoldDetection(Vec3 movement);
 
     boolean roundabout$getActive();
     boolean roundabout$getMainhandOverride();
@@ -275,6 +276,8 @@ public interface StandUser {
     void roundabout$setAdjustedGravity(int adj);
     int roundabout$getAdjustedGravity();
     double roundabout$getGravity(double baseGrav);
+    double rdbt$modelTravel(double $$1);
+    void rdbt$adjGravTrav();
     void roundabout$adjustGravity();
 
     /** D4C */

@@ -124,6 +124,8 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
 
     @Shadow protected boolean jumping;
 
+    @Shadow protected abstract float getJumpPower();
+
     public LivingEntity rdbt$this(){
         return ((LivingEntity)(Object)this);
     }
@@ -162,9 +164,10 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
         if (((StandUser)this).roundabout$isDazed()) {
             return 0;
         } else {
-            return ((StandUser)this).roundabout$getGravity($$1)/2;
+            return ((StandUser)this).roundabout$getGravity($$1);
         }
     }
+
 
     @Inject(
             method = "travel(Lnet/minecraft/world/phys/Vec3;)V",
@@ -177,17 +180,13 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
         if (gravityDirection == Direction.DOWN)
             return;
         ci.cancel();
-
-
+        ((StandUser)this).rdbt$adjGravTrav();
 
         if (this.isControlledByLocalInstance()) {
-            if (((StandUser)this).roundabout$getLeapTicks() > -1 || ((StandUser)this).roundabout$isBubbleEncased()){
-                ((LivingEntity) (Object) this).resetFallDistance();
-            }
-            double $$1 = rdbt$TravelGravity(rdbt$assertDazed(0.08));
+            double $$1 = ((StandUser)this).rdbt$modelTravel(rdbt$TravelGravity(rdbt$assertDazed(0.08)));
             boolean $$2 = this.getDeltaMovement().y <= 0.0;
             if ($$2 && this.hasEffect(MobEffects.SLOW_FALLING)) {
-                $$1 = rdbt$TravelGravity(rdbt$assertDazed(0.01));
+                $$1 = ((StandUser)this).rdbt$modelTravel(rdbt$TravelGravity(rdbt$assertDazed(0.01)));
             }
 
             FluidState $$3 = this.level().getFluidState(this.blockPosition());
@@ -291,7 +290,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
                 float $$26 = this.level().getBlockState($$25).getBlock().getFriction();
                 float $$27 = this.onGround() ? $$26 * 0.91F : 0.91F;
                 Vec3 $$28 = this.handleRelativeFrictionAndCalculateMovement($$0, $$26);
-                double $$29 = rdbt$assertDazed($$28.y);
+                double $$29 = $$28.y;
                 if (this.hasEffect(MobEffects.LEVITATION)) {
                     $$29 += (0.05 * (double)(this.getEffect(MobEffects.LEVITATION).getAmplifier() + 1) - $$28.y) * 0.2;
                 } else if (this.level().isClientSide && !this.level().hasChunkAt($$25)) {
@@ -313,6 +312,8 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
         }
 
         this.calculateEntityAnimation(this instanceof FlyingAnimal);
+
+        ((StandUser)this).rdbt$doMoldDetection($$0);
     }
 
 
