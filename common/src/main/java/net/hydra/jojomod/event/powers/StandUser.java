@@ -38,6 +38,8 @@ public interface StandUser {
     SoftAndWetPlunderBubbleEntity roundabout$getEyeSightTaken();
     LivingEntity roundabout$getEmulator();
     void roundabout$setEmulator(LivingEntity le);
+    boolean rdbt$tickEffectsBleedEdition(boolean grav);
+    void rdbt$setRemoveLoveSafety(boolean yup);
 
     void roundabout$updateStandOutPosition(FollowingStandEntity passenger);
 
@@ -103,6 +105,7 @@ public interface StandUser {
     void roundabout$setRattShoulderVanishTicks(int set);
     int roundabout$getMandomVanishTicks();
     void roundabout$setMandomVanishTicks(int set);
+    void rdbt$doMoldDetection(Vec3 movement);
 
     boolean roundabout$getActive();
     boolean roundabout$getMainhandOverride();
@@ -256,8 +259,6 @@ public interface StandUser {
     int roundabout$getTrueInvis();
 
     /**Gravity Direction*/
-    void roundabout$setGravityD(Direction direction);
-    Direction roundabout$getGravityD();
 
     /**Soft and Wet Bubble Encasing**/
     void roundabout$setBubbleEncased(byte adj);
@@ -275,6 +276,8 @@ public interface StandUser {
     void roundabout$setAdjustedGravity(int adj);
     int roundabout$getAdjustedGravity();
     double roundabout$getGravity(double baseGrav);
+    double rdbt$modelTravel(double $$1);
+    void rdbt$adjGravTrav();
     void roundabout$adjustGravity();
 
     /** D4C */

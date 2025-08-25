@@ -2,6 +2,8 @@ package net.hydra.jojomod.mixin.gravity;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityLivingEntity;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.mixin.StandUserEntity;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
@@ -122,6 +124,8 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
 
     @Shadow protected boolean jumping;
 
+    @Shadow protected abstract float getJumpPower();
+
     public LivingEntity rdbt$this(){
         return ((LivingEntity)(Object)this);
     }
@@ -147,6 +151,24 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
         this.updateWalkAnimation($$1);
     }
 
+    @Unique
+    public double rdbt$assertDazed(double initial){
+        if (((StandUser)this).roundabout$isDazed()) {
+            return 0;
+        } else {
+            return initial;
+        }
+    }
+    @Unique
+    private double rdbt$TravelGravity(double $$1) {
+        if (((StandUser)this).roundabout$isDazed()) {
+            return 0;
+        } else {
+            return ((StandUser)this).roundabout$getGravity($$1);
+        }
+    }
+
+
     @Inject(
             method = "travel(Lnet/minecraft/world/phys/Vec3;)V",
             at = @At(
@@ -158,19 +180,18 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
         if (gravityDirection == Direction.DOWN)
             return;
         ci.cancel();
-
-
+        ((StandUser)this).rdbt$adjGravTrav();
 
         if (this.isControlledByLocalInstance()) {
-            double $$1 = 0.08;
+            double $$1 = ((StandUser)this).rdbt$modelTravel(rdbt$TravelGravity(rdbt$assertDazed(0.08)));
             boolean $$2 = this.getDeltaMovement().y <= 0.0;
             if ($$2 && this.hasEffect(MobEffects.SLOW_FALLING)) {
-                $$1 = 0.01;
+                $$1 = ((StandUser)this).rdbt$modelTravel(rdbt$TravelGravity(rdbt$assertDazed(0.01)));
             }
 
             FluidState $$3 = this.level().getFluidState(this.blockPosition());
             if (this.isInWater() && this.isAffectedByFluids() && !this.canStandOnFluid($$3)) {
-                double $$4 = RotationUtil.vecWorldToPlayer(position(), gravityDirection).y;
+                double $$4 = rdbt$assertDazed(RotationUtil.vecWorldToPlayer(position(), gravityDirection).y);
                 float $$5 = this.isSprinting() ? 0.9F : this.getWaterSlowDown();
                 float $$6 = 0.02F;
                 float $$7 = (float)EnchantmentHelper.getDepthStrider(rdbt$this());
@@ -205,7 +226,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
                     this.setDeltaMovement($$9.x, 0.3F, $$9.z);
                 }
             } else if (this.isInLava() && this.isAffectedByFluids() && !this.canStandOnFluid($$3)) {
-                double $$10 = RotationUtil.vecWorldToPlayer(position(), gravityDirection).y;
+                double $$10 = rdbt$assertDazed(RotationUtil.vecWorldToPlayer(position(), gravityDirection).y);
                 this.moveRelative(0.02F, $$0);
                 this.move(MoverType.SELF, this.getDeltaMovement());
                 if (this.getFluidHeight(FluidTags.LAVA) <= this.getFluidJumpThreshold()) {
@@ -229,19 +250,19 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
                 Vec3 $$13 = this.getDeltaMovement();
                 Vec3 $$14 = RotationUtil.vecWorldToPlayer(this.getLookAngle(), gravityDirection);
                 float $$15 = this.getXRot() * (float) (Math.PI / 180.0);
-                double $$16 = Math.sqrt($$14.x * $$14.x + $$14.z * $$14.z);
-                double $$17 = $$13.horizontalDistance();
-                double $$18 = $$14.length();
-                double $$19 = Math.cos((double)$$15);
-                $$19 = $$19 * $$19 * Math.min(1.0, $$18 / 0.4);
+                double $$16 = rdbt$assertDazed(Math.sqrt($$14.x * $$14.x + $$14.z * $$14.z));
+                double $$17 = rdbt$assertDazed($$13.horizontalDistance());
+                double $$18 = rdbt$assertDazed($$14.length());
+                double $$19 = rdbt$assertDazed(Math.cos((double)$$15));
+                $$19 = rdbt$assertDazed($$19 * $$19 * Math.min(1.0, $$18 / 0.4));
                 $$13 = this.getDeltaMovement().add(0.0, $$1 * (-1.0 + $$19 * 0.75), 0.0);
                 if ($$13.y < 0.0 && $$16 > 0.0) {
-                    double $$20 = $$13.y * -0.1 * $$19;
+                    double $$20 = rdbt$assertDazed($$13.y * -0.1 * $$19);
                     $$13 = $$13.add($$14.x * $$20 / $$16, $$20, $$14.z * $$20 / $$16);
                 }
 
                 if ($$15 < 0.0F && $$16 > 0.0) {
-                    double $$21 = $$17 * (double)(-Mth.sin($$15)) * 0.04;
+                    double $$21 = rdbt$assertDazed($$17 * (double)(-Mth.sin($$15)) * 0.04);
                     $$13 = $$13.add(-$$14.x * $$21 / $$16, $$21 * 3.2, -$$14.z * $$21 / $$16);
                 }
 
@@ -252,8 +273,8 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
                 this.setDeltaMovement($$13.multiply(0.99F, 0.98F, 0.99F));
                 this.move(MoverType.SELF, this.getDeltaMovement());
                 if (this.horizontalCollision && !this.level().isClientSide) {
-                    double $$22 = this.getDeltaMovement().horizontalDistance();
-                    double $$23 = $$17 - $$22;
+                    double $$22 = rdbt$assertDazed(this.getDeltaMovement().horizontalDistance());
+                    double $$23 = rdbt$assertDazed($$17 - $$22);
                     float $$24 = (float)($$23 * 10.0 - 3.0);
                     if ($$24 > 0.0F) {
                         this.playSound(this.getFallDamageSound((int)$$24), 1.0F, 1.0F);
@@ -291,6 +312,8 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
         }
 
         this.calculateEntityAnimation(this instanceof FlyingAnimal);
+
+        ((StandUser)this).rdbt$doMoldDetection($$0);
     }
 
 
@@ -557,6 +580,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN) return;
         ci.cancel();
+        ((StandUser)rdbt$this()).rdbt$setRemoveLoveSafety(false);
         Iterator<MobEffect> $$0 = this.activeEffects.keySet().iterator();
 
         try {
@@ -585,6 +609,12 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
         }
 
         int $$3 = this.entityData.get(DATA_EFFECT_COLOR_ID);
+
+        if (((StandUser)rdbt$this()).rdbt$tickEffectsBleedEdition(true)){
+            ((StandUser)rdbt$this()).rdbt$setRemoveLoveSafety(true);
+            return;
+        }
+
         boolean $$4 = this.entityData.get(DATA_EFFECT_AMBIENCE_ID);
         if ($$3 > 0) {
             boolean $$5;
@@ -615,6 +645,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
                         );
             }
         }
+        ((StandUser)rdbt$this()).rdbt$setRemoveLoveSafety(true);
     }
 
 

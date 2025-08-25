@@ -119,6 +119,40 @@ public class MainUtil {
         return false;
     }
 
+    public static Direction getDirectionFromByte(byte bt){
+        switch (bt) {
+            case 1:
+                return Direction.NORTH;
+            case 2:
+                return Direction.SOUTH;
+            case 3:
+                return Direction.EAST;
+            case 4:
+                return Direction.WEST;
+            case 5:
+                return Direction.UP;
+            default:
+                return Direction.DOWN;
+        }
+    }
+    public static byte getByteFromDirection(Direction direction){
+        switch (direction) {
+            case NORTH:
+                return 1;
+            case SOUTH:
+                return 2;
+            case EAST:
+                return 3;
+            case WEST:
+                return 4;
+            case UP:
+                return 5;
+            default:
+                return 0;
+        }
+    }
+
+
     public static int maxGasTicks(){
         return 200;
     }

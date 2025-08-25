@@ -41,6 +41,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.DirectionalPlaceContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.SoundType;
@@ -369,7 +370,7 @@ public class PowersAchtungBaby extends NewDashPreset {
                                 BlockState oldState = this.self.level().getBlockState(targetPos);
 
                                 // Example: Replace dirt with glowstone
-                                if (!oldState.isAir() && oldState.getBlock().isCollisionShapeFullBlock(oldState, this.self.level(), targetPos)
+                                if (!oldState.isAir() && !oldState.is(Blocks.OBSIDIAN) && oldState.getBlock().isCollisionShapeFullBlock(oldState, this.self.level(), targetPos)
                                         && this.self.level().getBlockEntity(targetPos) == null && !MainUtil.confirmIsOre(oldState)) {
                                     BlockState replaced = sl.getBlockState(targetPos);
                                     BlockEntity replacedEntity = sl.getBlockEntity(targetPos);

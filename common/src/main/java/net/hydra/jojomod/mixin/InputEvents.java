@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IInputEvents;
 import net.hydra.jojomod.access.IMultiplayerGameMode;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -781,8 +782,6 @@ public abstract class InputEvents implements IInputEvents {
     @Shadow public abstract RenderBuffers renderBuffers();
 
     @Shadow @Final private RenderBuffers renderBuffers;
-    @Unique
-    private static boolean roundabout$hasHandledBinds = false;
 
     @Inject(method = "tick", at = @At(value = "INVOKE",target = "Lnet/minecraft/client/gui/screens/Screen;wrapScreenError(Ljava/lang/Runnable;Ljava/lang/String;Ljava/lang/String;)V",shift = At.Shift.BEFORE), cancellable = true)
     public void roundabout$forceGUI(CallbackInfo ci){

@@ -2,10 +2,13 @@ package net.hydra.jojomod.mixin.gravity;
 
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IClientEntity;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.util.GEntityTags;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.RotationAnimation;
 import net.hydra.jojomod.util.RotationParameters;
 import net.hydra.jojomod.util.gravity.GravityAPI;
@@ -14,6 +17,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -22,8 +26,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
@@ -56,6 +62,16 @@ import java.util.List;
 @Mixin(Entity.class)
 public abstract class GravityEntityMixin implements IGravityEntity {
     // NEW FEATURES
+
+    @Shadow public boolean verticalCollisionBelow;
+
+    @Shadow @Nullable public abstract LivingEntity getControllingPassenger();
+
+    @Shadow public abstract boolean isControlledByLocalInstance();
+
+    @Shadow public abstract double getPassengersRidingOffset();
+
+    @Shadow public abstract boolean hasPassenger(Entity entity);
 
     @Shadow public abstract boolean onGround();
 
@@ -549,7 +565,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (rdbdt$taggedForFlip){
             rdbdt$taggedForFlip = false;
-            vec3d = RotationUtil.vecWorldToPlayer(vec3d, gravityDirection);
+            vec3d = RotationUtil.vecWorldToPlayer(vec3d, gravityDirection).add(0,-0.01,0);
         }
         if (gravityDirection == Direction.DOWN) {
             return vec3d;
@@ -629,6 +645,37 @@ public abstract class GravityEntityMixin implements IGravityEntity {
                 collideT.x * collideT.x + collideT.y * collideT.y + collideT.z * collideT.z) * 0.6F;
     }
 
+    @ModifyVariable(method = "saveWithoutId(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;", at = @At(value = "RETURN"))
+    public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
+        CompoundTag compoundtag = $$0.getCompound("roundabout");
+        compoundtag.putByte("GravityDirection",MainUtil.getByteFromDirection(roundabout$getGravityDirection()));
+        return $$0;
+    }
+
+    @Inject(method = "load(Lnet/minecraft/nbt/CompoundTag;)V",
+            at = @At(value = "INVOKE",target = "Lnet/minecraft/world/entity/Entity;readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V",shift = At.Shift.AFTER))
+    public void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci){
+            roundabout$setGravityDirection(MainUtil.getDirectionFromByte($$0.getCompound("roundabout").getByte("GravityDirection")));
+    }
+
+    @Inject(
+            method = "positionRider(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity$MoveFunction;)V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void rdbt$positionRider(Entity $$0, Entity.MoveFunction $$1, CallbackInfo ci) {
+        Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
+        if (gravityDirection == Direction.DOWN) return;
+        ci.cancel();
+        if (this.hasPassenger($$0)) {
+            double $$2 = this.getPassengersRidingOffset() + $$0.getMyRidingOffset();
+            Vec3 transform = RotationUtil.vecPlayerToWorld(0, $$2, 0, gravityDirection);
+            $$1.accept($$0,
+                    this.getX()+transform.x,
+                    this.getY()+transform.y,
+                    this.getZ()+transform.z);
+        }
+    }
 
     @Inject(
             method = "getOnPosLegacy()Lnet/minecraft/core/BlockPos;",
