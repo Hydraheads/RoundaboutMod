@@ -2,6 +2,7 @@ package net.hydra.jojomod.event;
 
 import com.google.common.collect.Maps;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -31,11 +32,11 @@ public class SavedSecondLiving extends SavedSecond {
 
 
     public SavedSecondLiving(float headYRotation, Vec2 rotationVec, Vec3 position, Vec3 deltaMovement, float fallDistance,
-                             ResourceKey<DimensionType> dimensionId,
+                             ResourceKey<DimensionType> dimensionId, Direction gravityDirection,
                              Collection<MobEffectInstance> activeEffects, float health, int onFireTicks, int onStandFireTicks,
                              byte onStandFireType,
                              int gasolineTicks, int airtime, byte locacaca, int leapTicks, byte bubbleEncase){
-        super(headYRotation,rotationVec,position,deltaMovement,fallDistance,dimensionId);
+        super(headYRotation,rotationVec,position,deltaMovement,fallDistance,dimensionId,gravityDirection);
 
         List<MobEffectInstance> effects = new ArrayList<>(activeEffects.stream().toList());
         if (!effects.isEmpty()) {
