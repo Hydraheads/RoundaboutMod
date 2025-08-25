@@ -524,8 +524,13 @@ public class ClientUtil {
             StandPowers powers = standComp.roundabout$getStandPowers();
 
             if (powers.getGoBeyondTarget() != null && powers.getGoBeyondTarget().is(entity)) {
-                if (powers instanceof PowersRatt) {return 12948493;}
                 return 10978493;
+            }
+
+            if (powers instanceof PowersRatt PR) {
+                if (PR.getShootTarget().equals(entity)) {
+                    return 12948493;
+                }
             }
 
             if (powers.highlightsEntity(entity, player))

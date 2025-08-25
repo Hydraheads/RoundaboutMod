@@ -1,10 +1,11 @@
 package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,6 +36,35 @@ public class RattEntity extends StandEntity {
                 TOWER_SKIN,
                 SNOWY_SKIN
         );
+    }
+
+    protected static final EntityDataAccessor<Integer> TARGET_ID = SynchedEntityData.defineId(RattEntity.class,
+            EntityDataSerializers.INT);
+
+    public LivingEntity Target;
+    public LivingEntity getTarget() {
+        if (this.level().isClientSide){
+            return (LivingEntity) this.level().getEntity(this.entityData.get(TARGET_ID));
+        } else {
+            if (this.Target != null && this.Target.isRemoved()){
+                this.setFollowing(null);
+            }
+            return this.Target;
+        }
+    }
+    public void setTarget(LivingEntity StandSet){
+        this.Target = StandSet;
+        int standSetId = -1;
+        if (StandSet != null){
+            standSetId = StandSet.getId();
+        }
+        this.entityData.set(TARGET_ID, standSetId);
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(TARGET_ID, -1);
     }
 
     @Override
