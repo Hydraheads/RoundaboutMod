@@ -26,6 +26,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -47,13 +48,13 @@ public class PowersRatt extends NewDashPreset {
     public static final int MinThreshold = 30;
     public static final int MaxThreshold = 90;
     public static final int BaseShootCooldown = 10;
-    public static final int PlaceShootCooldown = 60;
+    public static final int PlaceShootCooldown = 40;
     public static final int MaxShootCooldown = 30;
     public static final int[] ShotThresholds = {MinThreshold,50,MaxThreshold};
     public static final float[] ShotPowerFloats = {3,4.2F,5};
     public static final float[] ShotDamageTicks = {0F,0F,1F};
     public static final int[] ShotSuperthrowTicks = {4,10,15};
-    public static final float DespawnRange = 15;
+    public static final float DespawnRange = 25;
 
 
     public static final byte
@@ -134,11 +135,14 @@ public class PowersRatt extends NewDashPreset {
 
         StandEntity SE = (StandEntity) ratt;
 
+        Vec3 vars = this.getRotations(this.getShootTarget());
+        Roundabout.LOGGER.info("??: {}",vars);
+
         Vec3 eyePos = ratt.getEyePosition(1.0F);// player.getEyePosition(float)
         Vec3 lookVec = new Vec3(
-                Math.cos(SE.getStandRotationY()+Math.PI/2),
-                Math.sin(SE.getHeadRotationX()),
-                Math.sin(SE.getStandRotationY()+Math.PI/2)
+                Math.cos(vars.y+Math.PI/2),
+                Math.sin(vars.x),
+                Math.sin(vars.y+Math.PI/2)
         );
         Vec3 reachVec = eyePos.add(lookVec.scale(maxDistance)); // end point of the ray
 
@@ -361,8 +365,18 @@ public class PowersRatt extends NewDashPreset {
                 Entity e = MainUtil.getTargetEntity(this.getSelf(),40);
 
                 if (e instanceof LivingEntity L) {
-                    if(!isAuto()) {
-                        if (!L.equals(this.getSelf()) && !L.equals(SE)) {
+                    if (isAuto()) {
+                        Entity f = this.CoolerrayCastEntity(this.getSelf().level(),SE,60);
+                        if (f != null) {BurstFire();}
+
+                        if (getShootTarget() != null) {
+                            if (MainUtil.getEntityIsTrulyInvisible(getShootTarget()) || ((LivingEntity)getShootTarget()).getEffect(MobEffects.INVISIBILITY) != null) {
+                                setShootTarget(null);
+                            }
+                        }
+
+                    } else if (!L.equals(this.getSelf()) && !L.equals(SE)) {
+                        if (!MainUtil.getEntityIsTrulyInvisible(e) && L.getEffect(MobEffects.INVISIBILITY) == null) {
                             setShootTarget(L);
                         }
                     }
@@ -376,35 +390,9 @@ public class PowersRatt extends NewDashPreset {
                         }
                     }
                 }
-
-          /*  if (isClient()) {
-                Entity e = MainUtil.getTargetEntity(this.self, 30, 15);
-
-
-                if (isAuto()) {
-                    Entity f = this.CoolerrayCastEntity(this.getSelf().level(),SE,60);
-                    if (f != null) {
-                        BurstFire();
-                    }
-                } else {
-                    setShootTarget(null);
-                    if (e instanceof LivingEntity L) {
-                        if (!e.equals(this.getSelf()) && !e.equals(this.getStandEntity(this.getSelf()))) {
-                            setShootTarget(L);
-                        }
-                    }
-                }
-
-                if (getShootTarget() == null) {this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);}
-
-
-                if (e != null) {
-                    if (e.distanceTo(SE) >= 30) {
-                        setShootTarget(null);
-                    }
-                }
-
-                setGoBeyondTarget(getShootTarget()); */
+            }
+            if (this.getShootTarget() == null) {
+                this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
             }
         } else if (active) {
             if (this.getStandUserSelf().roundabout$getActive()) {
