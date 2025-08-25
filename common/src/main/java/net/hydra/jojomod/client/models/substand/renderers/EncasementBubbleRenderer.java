@@ -4,12 +4,17 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.event.index.PlunderTypes;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.util.RotationAnimation;
+import net.hydra.jojomod.util.gravity.GravityAPI;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -17,10 +22,13 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemDisplayContext;
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 public class EncasementBubbleRenderer extends EntityRenderer<EncasementBubbleEntity> {
@@ -44,6 +52,8 @@ public class EncasementBubbleRenderer extends EntityRenderer<EncasementBubbleEnt
     @Override
     public void render(EncasementBubbleEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+
+
             if (((TimeStop)entity.level()).inTimeStopRange(entity)){
                 partialTicks = 0;
             }
@@ -52,7 +62,9 @@ public class EncasementBubbleRenderer extends EntityRenderer<EncasementBubbleEnt
                 // Orient the texture
                 poseStack.translate(0, entity.getBbHeight() / 2, 0);
                 poseStack.scale(this.scale, this.scale, this.scale);
-                poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
+
+
+                    poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
                 poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
 
                 // Draw flat quad here
