@@ -16,6 +16,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
@@ -610,6 +611,7 @@ public class PowersRatt extends NewDashPreset {
                 this.setAttackTimeDuring(0);
                 this.setAttackTime(-1);
                 this.setActivePower(PowersRatt.PLACE_BURST);
+                S2CPacketUtil.sendActivePowerPacket((Player)this.getSelf(),this.getActivePower());
                 if (!isClient()) {
                     this.animateStand((byte) -1);
                 }
