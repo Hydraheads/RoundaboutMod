@@ -1,10 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.access.IAbstractArrowAccess;
-import net.hydra.jojomod.access.IBucketItem;
-import net.hydra.jojomod.access.IGravityEntity;
-import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.BubbleScaffoldBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -1204,11 +1201,19 @@ public class PowersSoftAndWet extends NewPunchingStand {
         ((StandUser) self).roundabout$setGasolineTime(-1);
         self.extinguishFire();
         this.self.level().playSound(null, this.self.blockPosition(), ModSounds.WATER_ENCASE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5 + (Math.random() * 0.04)));
+
+
+        Vec3 vec3 = new Vec3(0,this.self.getBbHeight()*0.5,0);
+        Direction direction = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+        if (direction != Direction.DOWN){
+            vec3 = RotationUtil.vecPlayerToWorld(vec3,direction);
+        }
+
         ((ServerLevel) this.self.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
                         Blocks.WATER.defaultBlockState()),
-                this.self.getX(),
-                this.self.getY() +(this.self.getBbHeight()*0.5),
-                this.self.getZ(),
+                this.self.getX()+vec3.x,
+                this.self.getY() +vec3.y,
+                this.self.getZ()+vec3.z,
                 120,width, height, width, 0.4);
         this.setWaterShieldTicks(ClientNetworking.getAppropriateConfig().softAndWetSettings.waterShieldDurationInTicks);
     }
@@ -1249,6 +1254,12 @@ public class PowersSoftAndWet extends NewPunchingStand {
 
 
                     Vec3 vector = Vec3.directionFromRotation(new Vec2(-52, this.self.yBodyRot - 90));
+                    Vec3 normvec = new Vec3(0,this.self.getEyeHeight() * 0.7F,0);
+                    Direction direction = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                    if (direction != Direction.DOWN){
+                        vector = RotationUtil.vecPlayerToWorld(vector,direction);
+                        normvec = RotationUtil.vecPlayerToWorld(normvec,direction);
+                    }
 
                     for (int i = 0; i < 10; ++i) {
                         double randomX = (Math.random() * 0.5) - 0.25;
@@ -1258,11 +1269,11 @@ public class PowersSoftAndWet extends NewPunchingStand {
                         byte sk = ((StandUser)this.getSelf()).roundabout$getStandSkin();
                         if (sk == SoftAndWetEntity.KIRA) {
                             ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.HEART_ATTACK_MINI,
-                                    this.getSelf().getX(), this.getSelf().getY() + this.self.getEyeHeight() * 0.7F, this.getSelf().getZ(),
+                                    this.getSelf().getX()+normvec.x, this.getSelf().getY()+normvec.y, this.getSelf().getZ()+normvec.z,
                                     0, xvec.x, xvec.y, xvec.z, 0.12);
                         } else {
                             ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PURPLE_STAR,
-                                    this.getSelf().getX(), this.getSelf().getY() + this.self.getEyeHeight() * 0.7F, this.getSelf().getZ(),
+                                    this.getSelf().getX()+normvec.x, this.getSelf().getY()+normvec.y, this.getSelf().getZ()+normvec.z,
                                     0, xvec.x, xvec.y, xvec.z, 0.12);
                         }
                     }
@@ -1850,7 +1861,12 @@ public void unlockSkin(){
             if (encasement != null){
 
                 encasement.bubbleNo = bubbleNumber;
-                Vec3 movevec = this.self.getPosition(0).add(0,(this.self.getEyeHeight()*0.65F),0).add(this.self.getForward().normalize().scale(0.72));
+                Vec3 cvec = new Vec3(0,(this.self.getEyeHeight()*0.65F),0);
+                Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                if (gravD != Direction.DOWN){
+                    cvec = RotationUtil.vecPlayerToWorld(cvec,gravD);
+                }
+                Vec3 movevec = this.self.getPosition(1).add(cvec.x,cvec.y,cvec.z).add(this.self.getForward().scale(this.self.getBbWidth()*2.5));
                 encasement.absMoveTo(movevec.x(), movevec.y(), movevec.z());
                 encasement.setUser(this.self);
                 encasement.lifeSpan = 200;
@@ -1891,12 +1907,19 @@ public void unlockSkin(){
     public boolean bubbleLadderPlace(){
         if (!this.self.level().isClientSide()){
 
-            if (this.self.getXRot() > 35){
+            Vec2 adjustedDir = new Vec2(this.self.getYHeadRot(),this.self.getXRot());
+
+            Direction gravdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+            if (gravdir != Direction.DOWN){
+                adjustedDir = RotationUtil.rotPlayerToWorld(adjustedDir,gravdir);
+            }
+
+            if (adjustedDir.y > 35){
                 buildingBubbleScaffoldPos = buildingBubbleScaffoldPos.below();
-            } else if (this.self.getXRot() < -35){
+            } else if (adjustedDir.y < -35){
                 buildingBubbleScaffoldPos = buildingBubbleScaffoldPos.above();
             } else {
-                buildingBubbleScaffoldPos = buildingBubbleScaffoldPos.relative(Direction.fromYRot(this.self.getYHeadRot()));
+                buildingBubbleScaffoldPos = buildingBubbleScaffoldPos.relative(Direction.fromYRot(adjustedDir.x));
             }
             if (MainUtil.tryPlaceBlock(this.self,buildingBubbleScaffoldPos,false)){
                 boolean heartAttackState = ((StandUser)this.getSelf()).roundabout$getStandSkin() == SoftAndWetEntity.KIRA;
@@ -2125,8 +2148,14 @@ public void unlockSkin(){
                                 double $$9 = (LE.level().random.nextDouble() * 2.0 - 1.0) * (double) LE.getBbWidth();
                                 double $$10 = (LE.level().random.nextDouble() * 2.0 - 1.0) * (double) LE.getBbWidth();
 
+                                Vec3 vec3 = new Vec3($$9,1.0F,$$10);
+                                Direction direction = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                                if (direction != Direction.DOWN){
+                                    vec3 = RotationUtil.vecPlayerToWorld(vec3,direction);
+                                }
+
                                 ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.SPLASH,
-                                        LE.getX() + $$9, (double) ($$4 + 1.0F), LE.getZ() + $$10,
+                                        LE.getX() + vec3.x, (double) ($$4 + vec3.y), LE.getZ() + vec3.z,
                                         30, $$2.x, $$2.y, $$2.z, 0.4);
                             }
                         }

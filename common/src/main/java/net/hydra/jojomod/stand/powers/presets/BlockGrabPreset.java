@@ -1,7 +1,9 @@
 package net.hydra.jojomod.stand.powers.presets;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IBoatItemAccess;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IMinecartItemAccess;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.*;
@@ -16,6 +18,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Options;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -60,9 +63,19 @@ public class BlockGrabPreset extends NewPunchingStand {
         S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, cdr);
         this.setCooldown(PowerIndex.SKILL_2, cdr);
         /***/
+
+        Vec3 pos = new Vec3(this.self.getX(), this.self.getEyeY() - 0.1F, this.self.getZ());
+        Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+        if (gravD != Direction.DOWN){
+            pos = RotationUtil.vecPlayerToWorld(
+                    new Vec3(0, this.self.getEyeHeight() - 0.1F, 0
+                    ),gravD);
+            pos = new Vec3(this.self.getX()+pos.x,this.self.getY()+pos.y,this.self.getZ()+pos.z);
+        }
+
         return ThrownObjectEntity.throwAnObject(this.self,canSnipe(),item,getShotAccuracy(),getBundleAccuracy(),getThrowAngle(),
                 getThrowAngle2(),getThrowAngle3(),getCanPlace(),getThrowStyleType(),this.self.getXRot(),this.self.getYRot(),
-                new Vec3(this.self.getX(), this.self.getEyeY() - 0.1F, this.self.getZ()),true,1, true);
+                new Vec3(pos.x,pos.y,pos.z),true,1, true);
 
     }
 
@@ -592,7 +605,7 @@ public class BlockGrabPreset extends NewPunchingStand {
             if (!this.onCooldown(PowerIndex.SKILL_2)) {
                 Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(), 2.1F);
                 Entity targetEntity2 = MainUtil.getTargetEntity(this.getSelf(), 5F);
-                if (targetEntity2 != null) {
+                if (targetEntity2 != null && canGrab(targetEntity2)) {
                     if (targetEntity != null && canGrab(targetEntity)) {
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_EXTRA, true);
                         tryIntPowerPacket(PowerIndex.POWER_2_EXTRA, targetEntity.getId());
@@ -883,6 +896,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                             standEntity.canAcquireHeldItem = false;
                         }
                         if(this.getSelf().level().getBlockState(this.grabBlock).isAir() || !MainUtil.getIsGamemodeApproriateForGrief(this.getSelf())) {
+
                             standEntity.setHeldItem(state.getBlock().asItem().getDefaultInstance());
                             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                             this.setActivePower(PowerIndex.POWER_2_SNEAK);
@@ -896,6 +910,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                                     this.getSelf().level().getBlockState(this.grabBlock.east()).is(state.getBlock()) ||
                                     this.getSelf().level().getBlockState(this.grabBlock.west()).is(state.getBlock()) && !state.is(Blocks.PUMPKIN)
                                             && !(state.getBlock() instanceof StemGrownBlock) && !(state.getBlock() instanceof GlassBlock))) {
+
                                 if (!this.getSelf().level().isClientSide) {
 
                                     BlockState state1 = state;
