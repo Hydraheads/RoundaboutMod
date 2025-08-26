@@ -2553,17 +2553,17 @@ public class PowersMagiciansRed extends NewPunchingStand {
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
         Direction gravD = ((IGravityEntity)User).roundabout$getGravityDirection();
-        Vec2 lookVec = new Vec2(self.getYHeadRot()%360f, User.getXRot());
-        if (gravD != Direction.DOWN) {
-            lookVec = RotationUtil.rotPlayerToWorld(User.getYHeadRot()%360f, User.getXRot(), gravD);
-        }
         for (Entity value : entities) {
             if (!value.isRemoved() && value instanceof Projectile && !(value instanceof Fireball) && !(value instanceof UnburnableProjectile)
                     && !(value instanceof AbstractArrow aa && ((IAbstractArrowAccess)aa).roundabout$GetPickupItem() != null &&
                     ((IAbstractArrowAccess)aa).roundabout$GetPickupItem().getItem().canBeDepleted()
                     )
             ){
-                if (angleDistance(getLookAtEntityYaw(User, value), (lookVec.x)) <= angle && angleDistance(getLookAtEntityPitch(User, value), lookVec.y) <= angle){
+                Vec2 lookVec = new Vec2(getLookAtEntityYaw(User, value), getLookAtEntityPitch(User, value));
+                if (gravD != Direction.DOWN) {
+                    lookVec = RotationUtil.rotPlayerToWorld(lookVec.x, lookVec.y, gravD);
+                }
+                if (angleDistance(lookVec.x, (User.getYHeadRot()%360f)) <= angle && angleDistance(lookVec.y, User.getXRot()) <= angle){
                     hitEntities.remove(value);
                     ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SMOKE, value.getX(),
                             value.getY(), value.getZ(),

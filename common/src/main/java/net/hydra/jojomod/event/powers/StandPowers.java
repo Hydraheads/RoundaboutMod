@@ -2,6 +2,7 @@ package net.hydra.jojomod.event.powers;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -2297,6 +2298,7 @@ public class StandPowers {
     public List<Entity> StandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, float angle){
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
+
         for (Entity value : entities) {
             if (!value.showVehicleHealth() || (!MainUtil.isStandPickable(value) && !(value instanceof StandEntity)) || (!value.isAttackable() && !(value instanceof StandEntity)) || value.isInvulnerable() || !value.isAlive()
                     || (User.isPassenger() && User.getVehicle().getUUID() == value.getUUID())
@@ -2305,12 +2307,13 @@ public class StandPowers {
                     (User instanceof StandEntity SE2 && SE2.getUser() != null &&  SE2.getUser().isPassenger() && SE2.getUser().getVehicle().getUUID() == value.getUUID())){
                 hitEntities.remove(value);
             } else {
-                Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
-                Vec2 lookVec = new Vec2(User.getYHeadRot()%360f, User.getXRot());
+                Direction gravD = ((IGravityEntity)User).roundabout$getGravityDirection();
+                Vec2 lookVec = new Vec2(getLookAtEntityYaw(User, value), getLookAtEntityPitch(User, value));
                 if (gravD != Direction.DOWN) {
-                    lookVec = RotationUtil.rotPlayerToWorld(User.getYHeadRot()%360f, User.getXRot(), gravD);
+                    lookVec = RotationUtil.rotPlayerToWorld(lookVec.x, lookVec.y, gravD);
                 }
-                if (!(angleDistance(getLookAtEntityYaw(User, value), (lookVec.x)) <= angle && angleDistance(getLookAtEntityPitch(User, value), lookVec.y) <= angle)){
+                if (!(angleDistance(lookVec.x, (User.getYHeadRot()%360f)) <= angle && angleDistance(lookVec.y, User.getXRot()) <= angle)){
+
                     hitEntities.remove(value);
                 } else if (!canActuallyHit(value)){
                     hitEntities.remove(value);
@@ -2327,15 +2330,16 @@ public class StandPowers {
     public List<Entity> arrowGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, float angle){
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
-        Direction gravD = ((IGravityEntity)User).roundabout$getGravityDirection();
-        Vec2 lookVec = new Vec2(User.getYHeadRot()%360f, User.getXRot());
-        if (gravD != Direction.DOWN) {
-            lookVec = RotationUtil.rotPlayerToWorld(User.getYHeadRot()%360f, User.getXRot(), gravD);
-        }
         for (Entity value : entities) {
+            Direction gravD = ((IGravityEntity)User).roundabout$getGravityDirection();
+            Vec2 lookVec = new Vec2(getLookAtEntityYaw(User, value), getLookAtEntityPitch(User, value));
+            if (gravD != Direction.DOWN) {
+                lookVec = RotationUtil.rotPlayerToWorld(lookVec.x, lookVec.y, gravD);
+            }
+
             if (!(value instanceof Arrow) && !(value instanceof KnifeEntity) && !(value instanceof ThrownObjectEntity)){
                 hitEntities.remove(value);
-            } else if (!(angleDistance(getLookAtEntityYaw(User, value), (lookVec.x)) <= angle && angleDistance(getLookAtEntityPitch(User, value), lookVec.y) <= angle)){
+            } else if (!(angleDistance(lookVec.x, (User.getYHeadRot()%360f)) <= angle && angleDistance(lookVec.y, User.getXRot()) <= angle)){
                 hitEntities.remove(value);
             } else if (value.distanceTo(User) > maxDistance){
                 hitEntities.remove(value);

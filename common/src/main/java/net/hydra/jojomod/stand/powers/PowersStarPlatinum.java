@@ -604,20 +604,21 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             Vec3 pointVec3 = DamageHandler.getRayPoint(self, halfReach);
             List<Entity> listEnt = DamageHandler.genHitbox(self, pointVec3.x, pointVec3.y,
                     pointVec3.z, halfReach, halfReach, halfReach);
-            Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
-            Vec2 lookVec = new Vec2(self.getYHeadRot()% 360f, self.getXRot());
-            if (gravD != Direction.DOWN) {
-                lookVec = RotationUtil.rotPlayerToWorld(self.getYHeadRot()% 360f, self.getXRot(), gravD);
-            }
 
+
+            Direction gravD = ((IGravityEntity)self).roundabout$getGravityDirection();
 
             for (Entity value : listEnt) {
+                Vec2 lookVec = new Vec2(getLookAtEntityYaw(self, value), getLookAtEntityPitch(self, value));
+                if (gravD != Direction.DOWN) {
+                    lookVec = RotationUtil.rotPlayerToWorld(lookVec.x, lookVec.y, gravD);
+                }
                 if (value instanceof JusticeEntity JE) {
-                    if ((angleDistance(getLookAtEntityYaw(this.self, value), (lookVec.x)) <= 60 && angleDistance(getLookAtEntityPitch(this.self, value), lookVec.y) <= 60)) {
+                    if ((angleDistance(lookVec.x, (self.getYHeadRot()% 360f)) <= 60 && angleDistance(lookVec.y, self.getXRot()) <= 60)) {
                         JE.inhaleTick();
                     }
                 } else if (!(value instanceof StarPlatinumEntity) && !value.isInvulnerable()) {
-                    if ((angleDistance(getLookAtEntityYaw(this.self, value), (lookVec.x)) <= 60 && angleDistance(getLookAtEntityPitch(this.self, value), lookVec.y) <= 60)) {
+                    if ((angleDistance(lookVec.x, (self.getYHeadRot()% 360f)) <= 60 && angleDistance(lookVec.y, self.getXRot()) <= 60)) {
                         double strength = 0.05;
                         if (value instanceof ItemEntity || value instanceof ExperienceOrb) {
                             ((IEntityAndData) value).roundabout$setNoGravTicks(2);
@@ -901,17 +902,18 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
         Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
-        Vec2 lookVec = new Vec2(self.getYHeadRot()%360f, self.getXRot());
-        if (gravD != Direction.DOWN) {
-            lookVec = RotationUtil.rotPlayerToWorld(self.getYHeadRot()%360f, self.getXRot(), gravD);
-        }
+
         for (Entity value : entities) {
             if (value.isInvulnerable() || ((!value.isAttackable() || !MainUtil.isStandPickable(value)) && !(value instanceof StandEntity)) || !value.isAlive() || (this.self.isPassenger() && this.self.getVehicle().getUUID() == value.getUUID())
             || (value instanceof StandEntity SE && SE.getUser() !=null && SE.getUser().getUUID() == this.self.getUUID())){
                 hitEntities.remove(value);
             } else {
                 int angle = 14;
-                if (!(angleDistance(getLookAtEntityYaw(this.self, value), (lookVec.x)) <= angle && angleDistance(getLookAtEntityPitch(this.self, value), lookVec.y) <= angle)){
+                Vec2 lookVec = new Vec2(getLookAtEntityYaw(self, value), getLookAtEntityPitch(self, value));
+                if (gravD != Direction.DOWN) {
+                    lookVec = RotationUtil.rotPlayerToWorld(lookVec.x, lookVec.y, gravD);
+                }
+                if (!(angleDistance(lookVec.x, self.getYHeadRot()%360f) <= angle && angleDistance(lookVec.y, self.getXRot()) <= angle)){
                     hitEntities.remove(value);
                 }
             }

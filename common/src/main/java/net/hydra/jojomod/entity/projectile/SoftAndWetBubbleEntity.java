@@ -222,16 +222,16 @@ public class SoftAndWetBubbleEntity extends AbstractHurtingProjectile implements
         float $$8 = Mth.cos($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
         this.shoot2((double)$$6, (double)$$7, (double)$$8, $$4);
     }
-    public void shootFromRotationDeltaAgnostic3(Entity $$0, float $$1, float $$2, float $$3, float $$4) {
+    public void shootFromRotationDeltaAgnostic3(Entity $$0, float xrot, float yrot, float $$3, float $$4) {
         Direction gravityDirection = GravityAPI.getGravityDirection($$0);
         if (gravityDirection != Direction.DOWN) {
             Vec2 vecMagic = RotationUtil.rotPlayerToWorld($$0.getYRot(), $$0.getXRot(), gravityDirection);
-            $$1 = vecMagic.y; $$2 = vecMagic.x;
+            xrot = vecMagic.y; yrot = vecMagic.x;
         }
 
-        float $$6 = -Mth.sin($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
-        float $$7 = -Mth.sin(($$1 + $$3) * (float) (Math.PI / 180.0));
-        float $$8 = Mth.cos($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
+        float $$6 = -Mth.sin(yrot * (float) (Math.PI / 180.0)) * Mth.cos(xrot * (float) (Math.PI / 180.0));
+        float $$7 = -Mth.sin((xrot + $$3) * (float) (Math.PI / 180.0));
+        float $$8 = Mth.cos(yrot * (float) (Math.PI / 180.0)) * Mth.cos(xrot * (float) (Math.PI / 180.0));
         this.shoot4((double)$$6, (double)$$7, (double)$$8, $$4);
     }
 
