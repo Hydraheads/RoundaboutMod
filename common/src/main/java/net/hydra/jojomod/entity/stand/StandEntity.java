@@ -599,7 +599,7 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     }
 
     public boolean hasNoPhysics(){
-        return true;
+        return !isRemoteControlled();
     }
 
     @Override

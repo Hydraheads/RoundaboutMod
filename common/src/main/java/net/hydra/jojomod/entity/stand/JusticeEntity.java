@@ -232,45 +232,12 @@ public class JusticeEntity extends FollowingStandEntity {
 
 
     @Override
+
     protected float getFlyingSpeed() {
         return 0.10F;
     }
 
     public boolean stuck = false;
-    @Override
-    public void move(MoverType $$0, Vec3 $$1) {
-        if (this.noPhysics) {
-            Entity ent = this.getUser();
-            if (ent != null){
-                if (ent instanceof Player PE){
-                    StandUser user = ((StandUser) PE);
-                    StandPowers powers = user.roundabout$getStandPowers();
-                    if (powers.isPiloting()){
-                        Entity entX = powers.getPilotingStand();
-                        if (entX != null && entX.is(this)){
-                            BlockPos veci = BlockPos.containing(new Vec3(this.getX() + $$1.x, this.getY() + this.getEyeHeight() + $$1.y,this.getZ() + $$1.z));
-                            BlockPos veci2 = BlockPos.containing(new Vec3(this.getX() + $$1.x*2, this.getY() + this.getEyeHeight() + $$1.y*2,this.getZ() + $$1.z*2));
-                            BlockPos veci3 = BlockPos.containing(new Vec3(this.getX() + $$1.x*3, this.getY() + this.getEyeHeight() + $$1.y*2,this.getZ() + $$1.z*3));
-                            BlockState bl = this.level().getBlockState(veci);
-                            BlockState bl2 = this.level().getBlockState(veci2);
-                            BlockState bl3 = this.level().getBlockState(veci3);
-                            if (getFullBlock(bl,veci) ||
-                                    getFullBlock(bl2,veci2) ||
-                                    getFullBlock(bl3,veci3)){
-                                this.setDeltaMovement(Vec3.ZERO);
-                                if (!stuck) {
-                                    stuck = true;
-                                    this.setPos(this.getX() - $$1.x, this.getY(), this.getZ() - $$1.z);
-                                }
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        super.move($$0,$$1);
-    }
 
 
     @SuppressWarnings("deprecation")
@@ -280,43 +247,6 @@ public class JusticeEntity extends FollowingStandEntity {
                 (blk instanceof SlabBlock ||
                         blk instanceof StairBlock)));
 
-    }
-
-    @Override
-    public void travel(Vec3 vec3) {
-        if (this.isControlledByLocalInstance()) {
-            boolean bl;
-            double d = 0.08;
-            boolean bl2 = bl = this.getDeltaMovement().y <= 0.0;
-            if (bl && this.hasEffect(MobEffects.SLOW_FALLING)) {
-                d = 0.01;
-            }
-            FluidState fluidState = this.level().getFluidState(this.blockPosition());
-                BlockPos blockPos = this.getBlockPosBelowThatAffectsMyMovement();
-                float p = this.level().getBlockState(blockPos).getBlock().getFriction();
-                float f = this.onGround() ? p * 0.91f : 0.91f;
-                Vec3 vec37 = this.handleRelativeFrictionAndCalculateMovement(vec3, p);
-                double q = vec37.y;
-                if (this.hasEffect(MobEffects.LEVITATION)) {
-                    q += (0.05 * (double)(this.getEffect(MobEffects.LEVITATION).getAmplifier() + 1) - vec37.y) * 0.2;
-                } else if (!this.level().isClientSide || this.level().hasChunkAt(blockPos)) {
-                    if (!this.isNoGravity()) {
-                        q -= d;
-                    }
-                } else {
-                    q = this.getY() > (double)this.level().getMinBuildHeight() ? -0.1 : 0.0;
-                }
-                if (this.shouldDiscardFriction()) {
-                    this.setDeltaMovement(vec37.x, q, vec37.z);
-                } else {
-                    this.setDeltaMovement(vec37.x * (double)f, q * (double)0.98f, vec37.z * (double)f);
-                }
-
-            if (this.getUser() instanceof Player PE && this.level().isClientSide()) {
-                C2SPacketUtil.updatePilot(this);
-            }
-        }
-        this.calculateEntityAnimation(this instanceof FlyingAnimal);
     }
 
 
