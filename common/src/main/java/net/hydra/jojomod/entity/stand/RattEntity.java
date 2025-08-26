@@ -24,6 +24,7 @@ public class RattEntity extends StandEntity {
             TOWER_SKIN = 6,
             SNOWY_SKIN = 7,
             GUARDIAN_SKIN = 8,
+            ELDER_GUARDIAN_SKIN = 9,
 
             FIRE = 81,
             FIRE_NO_RECOIL = 82;

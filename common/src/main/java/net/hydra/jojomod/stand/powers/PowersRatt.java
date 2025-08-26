@@ -2,10 +2,12 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.RattDartEntity;
+import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -14,6 +16,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -34,6 +37,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.dimension.DimensionType;
@@ -819,16 +823,31 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public List<Byte> getSkinList() {
-        return Arrays.asList(
-                RattEntity.ANIME_SKIN,
-                RattEntity.MANGA_SKIN,
-                RattEntity.MELON_SKIN,
-                RattEntity.SAND_SKIN,
-                RattEntity.AZTEC_SKIN,
-                RattEntity.TOWER_SKIN,
-                RattEntity.SNOWY_SKIN,
-                RattEntity.GUARDIAN_SKIN
-        );
+        List<Byte> list = Lists.newArrayList();
+        list.add(RattEntity.ANIME_SKIN);
+        list.add(RattEntity.MANGA_SKIN);
+        if (this.getSelf() instanceof Player PE) {
+            byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
+            ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
+            boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+
+            if (Level >= 2 || bypass) {
+                list.add(RattEntity.MELON_SKIN);
+                list.add(RattEntity.AZTEC_SKIN);
+            }
+            if (Level >= 3 || bypass) {
+                list.add(RattEntity.TOWER_SKIN);
+            }
+            if (Level >= 4 || bypass) {
+                list.add(RattEntity.SAND_SKIN);
+                list.add(RattEntity.SNOWY_SKIN);
+            }
+            if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass) {
+            list.add(RattEntity.GUARDIAN_SKIN);
+            list.add(RattEntity.ELDER_GUARDIAN_SKIN);
+            }
+        }
+        return list;
     }
 
     @Override
@@ -845,6 +864,7 @@ public class PowersRatt extends NewDashPreset {
             case RattEntity.TOWER_SKIN -> {return Component.translatable("skins.roundabout.ratt.tower");}
             case RattEntity.SNOWY_SKIN -> {return Component.translatable("skins.roundabout.ratt.snowy");}
             case RattEntity.GUARDIAN_SKIN -> {return Component.translatable("skins.roundabout.ratt.guardian");}
+            case RattEntity.ELDER_GUARDIAN_SKIN -> {return Component.translatable("skins.roundabout.ratt.elder_guardian");}
             default -> {return Component.translatable("skins.roundabout.ratt.anime");}
         }
     }
@@ -866,7 +886,7 @@ public class PowersRatt extends NewDashPreset {
     }
 
     @Override
-    public byte getMaxLevel() {return 3;}
+    public byte getMaxLevel() {return 4;}
 
     public ResourceLocation LockedOrNot(ResourceLocation img, int level) {
         return canExecuteMoveWithLevel(level) ? img : StandIcons.LOCKED;
