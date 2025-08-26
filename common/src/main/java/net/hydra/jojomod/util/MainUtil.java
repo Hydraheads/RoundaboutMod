@@ -1272,13 +1272,13 @@ public class MainUtil {
     /**Returns the vertical angle between two mobs*/
     public static float getLookAtEntityPitch(Entity user, Entity targetEntity) {
         double f;
-        double d = targetEntity.getX() - user.getX();
-        double e = targetEntity.getZ() - user.getZ();
+        double d = targetEntity.getEyePosition().x - user.getEyePosition().x;
+        double e = targetEntity.getEyePosition().z - user.getEyePosition().z;
         if (targetEntity instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity)targetEntity;
-            f = livingEntity.getEyeY() - user.getEyeY();
+            f = livingEntity.getEyePosition().y - user.getEyePosition().y;
         } else {
-            f = (targetEntity.getBoundingBox().minY + targetEntity.getBoundingBox().maxY) / 2.0 - user.getEyeY();
+            f = (targetEntity.getBoundingBox().minY + targetEntity.getBoundingBox().maxY) / 2.0 - user.getEyePosition().y;
         }
         double g = Math.sqrt(d * d + e * e);
         return (float)(-(Mth.atan2(f, g) * 57.2957763671875));
@@ -1938,7 +1938,7 @@ public class MainUtil {
     public static boolean isVampireBurnTick(LivingEntity ent) {
         if (ent.level().isDay() && !ent.level().isClientSide) {
             float $$0 = ent.getLightLevelDependentMagicValue();
-            BlockPos $$1 = BlockPos.containing(ent.getX(), ent.getEyeY(), ent.getZ());
+            BlockPos $$1 = BlockPos.containing(ent.getEyePosition().x, ent.getEyePosition().y, ent.getEyePosition().z);
             if ($$0 > 0.5F && ent.level().random.nextFloat() * 30.0F < ($$0 - 0.4F) * 2.0F && ent.level().canSeeSky($$1)) {
                 return true;
             }
@@ -2014,7 +2014,7 @@ public class MainUtil {
         } else if (context == PacketDataIndex.INT_UPDATE_PILOT){
             StandEntity SE = ((StandUser)player).roundabout$getStand();
             if (SE != null){
-                BlockPos veci3 = BlockPos.containing(new Vec3(SE.getX(), SE.getY() + SE.getEyeHeight(), SE.getZ()));
+                BlockPos veci3 = BlockPos.containing(new Vec3(SE.getEyePosition().x, SE.getEyePosition().y, SE.getEyePosition().z));
                 BlockState bl3 = SE.level().getBlockState(veci3);
                 if (!(bl3.isSolid() && (bl3.getBlock().isCollisionShapeFullBlock(bl3,player.level(),veci3) ||
                         (bl3.getBlock() instanceof SlabBlock ||
@@ -2082,8 +2082,8 @@ public class MainUtil {
         }
     }
     public static void addItem(Player player, ItemStack stack){
-        ItemEntity $$4 = new ItemEntity(player.level(), player.getX(),
-                player.getY() + player.getEyeHeight(), player.getZ(),
+        ItemEntity $$4 = new ItemEntity(player.level(), player.getEyePosition().x,
+                player.getEyePosition().y, player.getEyePosition().z,
                 stack);
         $$4.setPickUpDelay(0);
         $$4.setThrower(player.getUUID());

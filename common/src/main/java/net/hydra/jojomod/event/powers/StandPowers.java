@@ -2,6 +2,9 @@ package net.hydra.jojomod.event.powers;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.client.*;
@@ -21,6 +24,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -891,7 +895,7 @@ public class StandPowers {
     public void levelUp(){
         if (!this.getSelf().level().isClientSide()){
             ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.END_ROD,
-                    this.getSelf().getX(), this.getSelf().getY() + this.getSelf().getEyeHeight(), this.getSelf().getZ(),
+                    this.getSelf().getEyePosition().x, this.getSelf().getEyePosition().y, this.getSelf().getEyePosition().z,
                     20, 0.4, 0.4, 0.4, 0.4);
             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.LEVELUP_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
         }
@@ -1872,6 +1876,20 @@ public class StandPowers {
         ));
         boolean isBlocked = result.getType() != HitResult.Type.MISS &&
                 result.getLocation().distanceTo(from) < to.distanceTo(from);
+        if (isBlocked){
+            from = this.self.getEyePosition(1); // your position
+            to = entity.getEyePosition(1.0F); // where the entity's eyes are
+
+            result = this.self.level().clip(new ClipContext(
+                    from,
+                    to,
+                    ClipContext.Block.COLLIDER,
+                    ClipContext.Fluid.NONE,
+                    this.self
+            ));
+            isBlocked = result.getType() != HitResult.Type.MISS &&
+                    result.getLocation().distanceTo(from) < to.distanceTo(from);
+        }
         return !isBlocked;
     }
 
@@ -2203,22 +2221,36 @@ public class StandPowers {
     /**Returns the vertical angle between two mobs*/
     public float getLookAtEntityPitch(Entity user, Entity targetEntity) {
         double f;
-        double d = targetEntity.getX() - user.getX();
-        double e = targetEntity.getZ() - user.getZ();
+        double d = targetEntity.getEyePosition().x - user.getEyePosition().x;
+        double e = targetEntity.getEyePosition().z - user.getEyePosition().z;
         if (targetEntity instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity)targetEntity;
-            f = livingEntity.getEyeY() - user.getEyeY();
+            f = livingEntity.getEyePosition().y - user.getEyePosition().y;
         } else {
-            f = (targetEntity.getBoundingBox().minY + targetEntity.getBoundingBox().maxY) / 2.0 - user.getEyeY();
+            f = ((targetEntity.getBoundingBox().minY + targetEntity.getBoundingBox().maxY) / 2.0) - (user.getEyePosition().y);
         }
-        double g = Math.sqrt(d * d + e * e);
-        return (float)(-(Mth.atan2(f, g) * 57.2957763671875));
+
+        Vec3 vec = new Vec3(d,f,e);
+        /***
+        Direction dr = ((IGravityEntity)user).roundabout$getGravityDirection();
+        if (dr != Direction.DOWN){
+            vec = RotationUtil.vecWorldToPlayer(d,f,e,dr);
+        }
+         */
+
+        double g = Math.sqrt(vec.x * vec.x + vec.z * vec.z);
+        return (float)(-(Mth.atan2(vec.y, g) * 57.2957763671875));
     }
     /**Returns the horizontal angle between two mobs*/
     public float getLookAtEntityYaw(Entity user, Entity targetEntity) {
-        double d = targetEntity.getX() - user.getX();
-        double e = targetEntity.getZ() - user.getZ();
-        return (float)(Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
+
+         Vec3 uservec = user.getEyePosition();
+
+        double d = targetEntity.getEyePosition().x - uservec.x;
+        double e = targetEntity.getEyePosition().z - uservec.z;
+
+        Vec3 vec = new Vec3(d,0,e);
+        return (float)(Mth.atan2(vec.z, vec.x) * 57.2957763671875) - 90.0f;
     }
 
 
@@ -2226,16 +2258,16 @@ public class StandPowers {
     /**Returns the vertical angle between a mob and a position*/
     public float getLookAtPlacePitch(Entity user, Vec3 vec) {
         double f;
-        double d = vec.x() - user.getX();
-        double e = vec.z() - user.getZ();
-        f = vec.y() - user.getEyeY();
+        double d = vec.x() - user.getEyePosition().x;
+        double e = vec.z() - user.getEyePosition().z;
+        f = vec.y() - user.getEyePosition().y;
         double g = Math.sqrt(d * d + e * e);
         return (float)(-(Mth.atan2(f, g) * 57.2957763671875));
     }
     /**Returns the horizontal angle between a mob and a position*/
     public float getLookAtPlaceYaw(Entity user, Vec3 vec) {
-        double d = vec.x() - user.getX();
-        double e = vec.z() - user.getZ();
+        double d = vec.x() - user.getEyePosition().x;
+        double e = vec.z() - user.getEyePosition().z;
         return (float)(Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
     }
 
@@ -2266,6 +2298,7 @@ public class StandPowers {
     public List<Entity> StandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, float angle){
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
+
         for (Entity value : entities) {
             if (!value.showVehicleHealth() || (!MainUtil.isStandPickable(value) && !(value instanceof StandEntity)) || (!value.isAttackable() && !(value instanceof StandEntity)) || value.isInvulnerable() || !value.isAlive()
                     || (User.isPassenger() && User.getVehicle().getUUID() == value.getUUID())
@@ -2274,7 +2307,13 @@ public class StandPowers {
                     (User instanceof StandEntity SE2 && SE2.getUser() != null &&  SE2.getUser().isPassenger() && SE2.getUser().getVehicle().getUUID() == value.getUUID())){
                 hitEntities.remove(value);
             } else {
-                if (!(angleDistance(getLookAtEntityYaw(User, value), (User.getYHeadRot()%360f)) <= angle && angleDistance(getLookAtEntityPitch(User, value), User.getXRot()) <= angle)){
+                Direction gravD = ((IGravityEntity)User).roundabout$getGravityDirection();
+                Vec2 lookVec = new Vec2(getLookAtEntityYaw(User, value), getLookAtEntityPitch(User, value));
+                if (gravD != Direction.DOWN) {
+                    lookVec = RotationUtil.rotPlayerToWorld(lookVec.x, lookVec.y, gravD);
+                }
+                if (!(angleDistance(lookVec.x, (User.getYHeadRot()%360f)) <= angle && angleDistance(lookVec.y, User.getXRot()) <= angle)){
+
                     hitEntities.remove(value);
                 } else if (!canActuallyHit(value)){
                     hitEntities.remove(value);
@@ -2292,9 +2331,15 @@ public class StandPowers {
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
         for (Entity value : entities) {
+            Direction gravD = ((IGravityEntity)User).roundabout$getGravityDirection();
+            Vec2 lookVec = new Vec2(getLookAtEntityYaw(User, value), getLookAtEntityPitch(User, value));
+            if (gravD != Direction.DOWN) {
+                lookVec = RotationUtil.rotPlayerToWorld(lookVec.x, lookVec.y, gravD);
+            }
+
             if (!(value instanceof Arrow) && !(value instanceof KnifeEntity) && !(value instanceof ThrownObjectEntity)){
                 hitEntities.remove(value);
-            } else if (!(angleDistance(getLookAtEntityYaw(User, value), (User.getYHeadRot()%360f)) <= angle && angleDistance(getLookAtEntityPitch(User, value), User.getXRot()) <= angle)){
+            } else if (!(angleDistance(lookVec.x, (User.getYHeadRot()%360f)) <= angle && angleDistance(lookVec.y, User.getXRot()) <= angle)){
                 hitEntities.remove(value);
             } else if (value.distanceTo(User) > maxDistance){
                 hitEntities.remove(value);
