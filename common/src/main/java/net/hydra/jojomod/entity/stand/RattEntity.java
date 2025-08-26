@@ -23,6 +23,7 @@ public class RattEntity extends StandEntity {
             AZTEC_SKIN = 5,
             TOWER_SKIN = 6,
             SNOWY_SKIN = 7,
+            GUARDIAN_SKIN = 8,
 
             FIRE = 81,
             FIRE_NO_RECOIL = 82;
@@ -34,7 +35,8 @@ public class RattEntity extends StandEntity {
                 MELON_SKIN,
                 SAND_SKIN,
                 TOWER_SKIN,
-                SNOWY_SKIN
+                SNOWY_SKIN,
+                GUARDIAN_SKIN
         );
     }
 

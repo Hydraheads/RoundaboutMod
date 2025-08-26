@@ -169,6 +169,11 @@ public class RattDartEntity extends AbstractArrow {
 
 
             if ($$4 instanceof LivingEntity LE) {
+                if ( ((StandUser)$$4).roundabout$getStandPowers() instanceof PowersRatt PR ) {
+                    if ($$1 instanceof LivingEntity l) {
+                        PR.addEXP(1,l);
+                    }
+                }
                 LE.setLastHurtMob($$1);
             }
 

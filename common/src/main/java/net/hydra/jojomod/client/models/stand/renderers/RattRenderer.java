@@ -10,6 +10,7 @@ import net.hydra.jojomod.entity.stand.CinderellaEntity;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
+import net.hydra.jojomod.util.gravity.GCUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -27,6 +28,7 @@ public class RattRenderer extends StandRenderer<RattEntity> {
     private static final ResourceLocation AZTEC_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/aztec.png");
     private static final ResourceLocation TOWER_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/tower.png");
     private static final ResourceLocation SNOWY_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/snowy.png");
+    private static final ResourceLocation GUARDIAN_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/guardian.png");
 
 
 
@@ -43,6 +45,7 @@ public class RattRenderer extends StandRenderer<RattEntity> {
             case RattEntity.AZTEC_SKIN -> {return AZTEC_SKIN;}
             case RattEntity.TOWER_SKIN -> {return TOWER_SKIN;}
             case RattEntity.SNOWY_SKIN -> {return SNOWY_SKIN;}
+            case RattEntity.GUARDIAN_SKIN -> {return GUARDIAN_SKIN;}
             default -> {return ANIME_SKIN;}
         }
     }

@@ -826,7 +826,8 @@ public class PowersRatt extends NewDashPreset {
                 RattEntity.SAND_SKIN,
                 RattEntity.AZTEC_SKIN,
                 RattEntity.TOWER_SKIN,
-                RattEntity.SNOWY_SKIN
+                RattEntity.SNOWY_SKIN,
+                RattEntity.GUARDIAN_SKIN
         );
     }
 
@@ -843,6 +844,7 @@ public class PowersRatt extends NewDashPreset {
             case RattEntity.AZTEC_SKIN -> {return Component.translatable("skins.roundabout.ratt.aztec");}
             case RattEntity.TOWER_SKIN -> {return Component.translatable("skins.roundabout.ratt.tower");}
             case RattEntity.SNOWY_SKIN -> {return Component.translatable("skins.roundabout.ratt.snowy");}
+            case RattEntity.GUARDIAN_SKIN -> {return Component.translatable("skins.roundabout.ratt.guardian");}
             default -> {return Component.translatable("skins.roundabout.ratt.anime");}
         }
     }
