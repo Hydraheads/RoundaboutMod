@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.gravity.client;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.ICamera;
 import net.hydra.jojomod.util.RotationAnimation;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.minecraft.client.Camera;
@@ -131,8 +132,17 @@ public abstract class GravityCameraMixin {
     )
     private void rdbt$setRotation(CallbackInfo ci) {
         if (this.entity != null) {
-            Direction gravityDirection = GravityAPI.getGravityDirection(this.entity);
-            RotationAnimation animation = GravityAPI.getRotationAnimation(entity);
+
+            Entity entity2 = entity;
+            Entity pov = ((ICamera)this).roundabout$getPovSwitch();
+            if (pov != null && entity != null && !pov.is(entity)) {
+                if (pov.isAlive() && !pov.isRemoved()) {
+                    entity2 = pov;
+                }
+            }
+
+            Direction gravityDirection = GravityAPI.getGravityDirection(entity2);
+            RotationAnimation animation = GravityAPI.getRotationAnimation(entity2);
             if (animation == null) {
                 return;
             }
