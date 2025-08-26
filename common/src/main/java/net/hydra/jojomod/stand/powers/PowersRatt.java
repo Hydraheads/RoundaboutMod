@@ -1,5 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 
+import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
@@ -7,6 +8,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.RattDartEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -61,21 +63,24 @@ public class PowersRatt extends NewDashPreset {
     public static final byte
 
             UPDATE_POSITION = 52,
-            CHANGE_MODE = 53,
             AUTO = 54,
-            SETPLACE = 55,
-            SCOPE = 56,
             FIRE_DART = 57,
             TOGGLE_BURSTING = 58,
             START_PLAYER_BURST = 59,
             PLAYER_BURST = 60,
             START_PLACE_BURST = 61,
-            PLACE_BURST = 62,
             NET_PLACE = 63,
             NET_RECALL = 64,
             NET_SCOPE = 65,
             UPDATE_CHARGE = 66,
-            START_CHARGE = 67;
+            START_CHARGE = 67,
+
+            PLACE_BURST = 69,
+            CHANGE_MODE = 7,
+            SETPLACE = 8,
+            SCOPE = 9;
+
+
 
 
     @Override
@@ -209,12 +214,12 @@ public class PowersRatt extends NewDashPreset {
 
         if (isPlaced()) {
             if (!getSelf().isCrouching()) {
-                setSkillIcon(context, x, y, 1, StandIcons.RATT_BURST, PowersRatt.PLACE_BURST);
+                setSkillIcon(context, x, y, 1, LockedOrNot(StandIcons.RATT_BURST,0), PowersRatt.PLACE_BURST);
             } else {
                 if (isAuto()) {
-                    setSkillIcon(context, x, y, 1, StandIcons.RATT_AUTO, PowersRatt.CHANGE_MODE);
+                    setSkillIcon(context, x, y, 1, LockedOrNot(StandIcons.RATT_AUTO, 3), PowersRatt.CHANGE_MODE);
                 } else {
-                    setSkillIcon(context, x, y, 1, StandIcons.RATT_UNAUTO, PowersRatt.CHANGE_MODE);
+                    setSkillIcon(context, x, y, 1, LockedOrNot(StandIcons.RATT_UNAUTO,3), PowersRatt.CHANGE_MODE);
                 }
             }
             if (scopeLevel == 0) {
@@ -225,14 +230,14 @@ public class PowersRatt extends NewDashPreset {
             if (scopeLevel == 1) {
                 ScopeIcon = StandIcons.RATT_SCOPE_OUT;
             }
-            setSkillIcon(context, x, y, 1, ScopeIcon, PowersRatt.SCOPE);
+            setSkillIcon(context, x, y, 1, LockedOrNot(ScopeIcon,2), PowersRatt.SCOPE);
             if (scopeLevel == 0) {
                 setSkillIcon(context, x, y, 2, StandIcons.RATT_PLACE, PowersRatt.SETPLACE);
             } else {
                 if (isAuto()) {
-                    setSkillIcon(context, x, y, 2, StandIcons.RATT_BURST, PowersRatt.CHANGE_MODE);
+                    setSkillIcon(context, x, y, 2, LockedOrNot(StandIcons.RATT_BURST,3), PowersRatt.CHANGE_MODE);
                 } else {
-                    setSkillIcon(context, x, y, 2, StandIcons.RATT_SINGLE, PowersRatt.CHANGE_MODE);
+                    setSkillIcon(context, x, y, 2, LockedOrNot(StandIcons.RATT_SINGLE,3), PowersRatt.CHANGE_MODE);
                 }
             }
         }
@@ -446,7 +451,9 @@ public class PowersRatt extends NewDashPreset {
         {
             case SKILL_1_NORMAL -> {
                 if (!isPlaced()) {
-                    RattScope();
+                    if (canExecuteMoveWithLevel(2)) {
+                        RattScope();
+                    }
                 } else {
                     BurstFire();
                 }
@@ -454,13 +461,17 @@ public class PowersRatt extends NewDashPreset {
             case SKILL_1_CROUCH -> {
                 if (isPlaced()) {
                     if (!isAttackIneptVisually(PowersRatt.AUTO, 1)) {
-                        ToggleAuto();
+                        if (canExecuteMoveWithLevel(3)) {
+                            ToggleAuto();
+                        }
                     }
                 }
             }
             case SKILL_2_NORMAL -> {
                 if (scopeLevel != 0)  {
-                    ToggleBursting();
+                    if(canExecuteMoveWithLevel(3)) {
+                        ToggleBursting();
+                    }
                 } else {
                     if (!isPlaced()) {
                         if (getValidPlacement() != null) {
@@ -586,7 +597,7 @@ public class PowersRatt extends NewDashPreset {
             case PowersRatt.NET_RECALL -> {
                 active = false;
                 this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
-                this.getStandEntity(this.getSelf()).remove(Entity.RemovalReason.DISCARDED);
+                this.getStandEntity(this.getSelf()).discard();
                 this.setCooldown(PowersRatt.SETPLACE,40);
             }
             case PowersRatt.FIRE_DART -> this.setCooldown(PowersRatt.CHANGE_MODE,15);
@@ -670,6 +681,9 @@ public class PowersRatt extends NewDashPreset {
                 return shotcooldown != 0;
             }
             case PowersRatt.CHANGE_MODE -> {
+                if (!canExecuteMoveWithLevel(3)) {
+                    return false;
+                }
                 if (scopeLevel != 0) {
                     return getChargeTime() <= MinThreshold || shotcooldown != 0;
                 } else if (isPlaced()) {
@@ -847,6 +861,35 @@ public class PowersRatt extends NewDashPreset {
             return ModSounds.RATT_SUMMON_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
+    }
+
+    @Override
+    public byte getMaxLevel() {return 3;}
+
+    public ResourceLocation LockedOrNot(ResourceLocation img, int level) {
+        return canExecuteMoveWithLevel(level) ? img : StandIcons.LOCKED;
+    }
+
+    @Override
+    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
+        List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,2, "ability.roundabout.ratt_scope",
+                "instruction.roundabout.press_skill", StandIcons.RATT_SCOPE_IN,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,2, "ability.roundabout.ratt_single",
+                "instruction.roundabout.hold_block", StandIcons.RATT_SINGLE,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,3, "ability.roundabout.ratt_burst",
+                "instruction.roundabout.press_skill", StandIcons.RATT_BURST,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.ratt_place",
+                "instruction.roundabout.press_skill", StandIcons.RATT_PLACE,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.ratt_place_burst",
+                "instruction.roundabout.press_skill", StandIcons.RATT_BURST,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,3, "ability.roundabout.ratt_auto",
+                "instruction.roundabout.press_skill_crouch", StandIcons.RATT_AUTO,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.ratt_flesh",
+                "instruction.roundabout.passive", StandIcons.RATT_BLOB,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.dodge",
+                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
+        return $$1;
     }
 
     @Override
