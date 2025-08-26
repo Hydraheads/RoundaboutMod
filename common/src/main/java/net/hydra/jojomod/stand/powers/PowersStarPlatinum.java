@@ -2,10 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IAbstractArrowAccess;
-import net.hydra.jojomod.access.IEntityAndData;
-import net.hydra.jojomod.access.IMob;
-import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -36,9 +33,11 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -73,6 +72,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -597,20 +597,27 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             ((ServerLevel) this.self.level()).sendParticles(ModParticles.VACUUM, pointVec2.x + random,
                     pointVec2.y+ random2, pointVec2.z + random3,
                     0,
-                    (this.getSelf().getX() - pointVec2.x)*1.4F, (this.getSelf().getEyeY() - pointVec2.y)*1.4F, (this.getSelf().getZ() - pointVec2.z)*1.4F,
+                    (this.getSelf().getEyePosition().x - pointVec2.x)*1.4F, (this.getSelf().getEyePosition().y - pointVec2.y)*1.4F, (this.getSelf().getEyePosition().z - pointVec2.z)*1.4F,
                     0.08);
             float dst = (float) pointVec.distanceTo(this.getSelf().position());
             float halfReach = (float) (dst*0.5);
             Vec3 pointVec3 = DamageHandler.getRayPoint(self, halfReach);
             List<Entity> listEnt = DamageHandler.genHitbox(self, pointVec3.x, pointVec3.y,
                     pointVec3.z, halfReach, halfReach, halfReach);
+            Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+            Vec2 lookVec = new Vec2(self.getYHeadRot(), self.getXRot());
+            if (gravD != Direction.DOWN) {
+                lookVec = RotationUtil.rotPlayerToWorld(self.getYRot(), self.getXRot(), gravD);
+            }
+
+
             for (Entity value : listEnt) {
                 if (value instanceof JusticeEntity JE) {
-                    if ((angleDistance(getLookAtEntityYaw(this.self, value), (this.self.getYHeadRot() % 360f)) <= 60 && angleDistance(getLookAtEntityPitch(this.self, value), this.self.getXRot()) <= 60)) {
+                    if ((angleDistance(getLookAtEntityYaw(this.self, value), (lookVec.x % 360f)) <= 60 && angleDistance(getLookAtEntityPitch(this.self, value), lookVec.y) <= 60)) {
                         JE.inhaleTick();
                     }
                 } else if (!(value instanceof StarPlatinumEntity) && !value.isInvulnerable()) {
-                    if ((angleDistance(getLookAtEntityYaw(this.self, value), (this.self.getYHeadRot() % 360f)) <= 60 && angleDistance(getLookAtEntityPitch(this.self, value), this.self.getXRot()) <= 60)) {
+                    if ((angleDistance(getLookAtEntityYaw(this.self, value), (this.self.getYHeadRot() % 360f)) <= 60 && angleDistance(getLookAtEntityPitch(this.self, value), lookVec.y) <= 60)) {
                         double strength = 0.05;
                         if (value instanceof ItemEntity || value instanceof ExperienceOrb) {
                             ((IEntityAndData) value).roundabout$setNoGravTicks(2);
@@ -620,10 +627,14 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             float degreesY = -1 * getLookAtEntityPitch(this.getSelf(), value);
                             float ybias = (90F - Math.abs(degreesY)) / 90F;
 
-                            MainUtil.takeUnresistableKnockbackWithYBias(value, strength * (0.5 + (ybias / 2)),
-                                    Mth.sin(((degrees * ((float) Math.PI / 180)))),
+                            Vec3 vec = new Vec3(Mth.sin(((degrees * ((float) Math.PI / 180)))),
                                     Mth.sin(degreesY * ((float) Math.PI / 180)),
-                                    -Mth.cos((degrees * ((float) Math.PI / 180))),
+                                    -Mth.cos((degrees * ((float) Math.PI / 180))));
+
+
+
+                            MainUtil.takeUnresistableKnockbackWithYBias(value, strength * (0.5 + (ybias / 2)),
+                                    vec.x,vec.y,vec.z,
                                     ybias);
                         } else if (!(value instanceof Projectile)) {
                             if (value instanceof LivingEntity LE && (strength *= (float) (1.0 - LE.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {

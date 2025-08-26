@@ -2,6 +2,8 @@ package net.hydra.jojomod.event.powers;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.client.*;
@@ -21,6 +23,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -2203,22 +2206,36 @@ public class StandPowers {
     /**Returns the vertical angle between two mobs*/
     public float getLookAtEntityPitch(Entity user, Entity targetEntity) {
         double f;
-        double d = targetEntity.getX() - user.getX();
-        double e = targetEntity.getZ() - user.getZ();
+        double d = targetEntity.getEyePosition().x - user.getEyePosition().x;
+        double e = targetEntity.getEyePosition().z - user.getEyePosition().z;
         if (targetEntity instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity)targetEntity;
-            f = livingEntity.getEyeY() - user.getEyeY();
+            f = livingEntity.getEyePosition().y - user.getEyePosition().y;
         } else {
-            f = (targetEntity.getBoundingBox().minY + targetEntity.getBoundingBox().maxY) / 2.0 - user.getEyeY();
+            f = ((targetEntity.getBoundingBox().minY + targetEntity.getBoundingBox().maxY) / 2.0) - (user.getEyePosition().y);
         }
-        double g = Math.sqrt(d * d + e * e);
-        return (float)(-(Mth.atan2(f, g) * 57.2957763671875));
+
+        Vec3 vec = new Vec3(d,f,e);
+        /***
+        Direction dr = ((IGravityEntity)user).roundabout$getGravityDirection();
+        if (dr != Direction.DOWN){
+            vec = RotationUtil.vecWorldToPlayer(d,f,e,dr);
+        }
+         */
+
+        double g = Math.sqrt(vec.x * vec.x + vec.z * vec.z);
+        return (float)(-(Mth.atan2(vec.y, g) * 57.2957763671875));
     }
     /**Returns the horizontal angle between two mobs*/
     public float getLookAtEntityYaw(Entity user, Entity targetEntity) {
-        double d = targetEntity.getX() - user.getX();
-        double e = targetEntity.getZ() - user.getZ();
-        return (float)(Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
+
+         Vec3 uservec = user.getEyePosition();
+
+        double d = targetEntity.getEyePosition().x - uservec.x;
+        double e = targetEntity.getEyePosition().z - uservec.z;
+
+        Vec3 vec = new Vec3(d,0,e);
+        return (float)(Mth.atan2(vec.z, vec.x) * 57.2957763671875) - 90.0f;
     }
 
 
