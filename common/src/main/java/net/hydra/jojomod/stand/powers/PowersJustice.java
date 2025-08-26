@@ -743,7 +743,7 @@ public class PowersJustice extends NewDashPreset {
         if (skn == JusticeEntity.DARK_MIRAGE){
             return super.getDisplayPowerInventoryYOffset();
         }
-        return -7;
+        return -2;
     }
 
     @Override

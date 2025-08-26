@@ -57,6 +57,11 @@ public class JusticeEntity extends FollowingStandEntity {
     }
 
     @Override
+    protected boolean isAffectedByFluids() {
+        return false;
+    }
+
+    @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(JUSTICE_SZ, 100);
@@ -283,7 +288,7 @@ public class JusticeEntity extends FollowingStandEntity {
             Direction dir = ((IGravityEntity)standUser).roundabout$getGravityDirection();
             Vec3 offset = new Vec3(
                     (- (-1 * (r * (Math.sin(ang / 180))))),
-                    (getIdleYOffset() - yy+0.6),
+                    (getIdleYOffset() - yy+2.1),
                     (-(r * (Math.cos(ang / 180))))
             );
             if (dir != Direction.DOWN){
