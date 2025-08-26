@@ -1,5 +1,6 @@
 package net.hydra.jojomod.stand.powers.presets;
 
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -19,10 +20,12 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -1555,18 +1558,32 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
 
     public void bigLeap(LivingEntity entity,float range, float mult){
-        Vec3 vec3d = entity.getEyePosition(0);
-        Vec3 vec3d2 = entity.getViewVector(0);
+        Vec3 vec3d = entity.getEyePosition(1);
+        Vec3 vec3d2 = entity.getViewVector(1);
         Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
         BlockHitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
 
         double mag = this.getSelf().getPosition(1).distanceTo(
                 new Vec3(blockHit.getLocation().x, blockHit.getLocation().y,blockHit.getLocation().z))*0.75+1;
+        Vec3 vec3 = new Vec3(
+                (blockHit.getLocation().x - this.getSelf().getX())/mag,
+                (blockHit.getLocation().y - this.getSelf().getY())/mag,
+                (blockHit.getLocation().z - this.getSelf().getZ())/mag
+        );
+        Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+        if (gravD != Direction.DOWN){
+            vec3 = RotationUtil.vecWorldToPlayer(vec3,gravD);
+        }
+        vec3= new Vec3(
+                vec3.x*mult,
+                0.6+Math.max(vec3.y,0)*mult,
+                vec3.z*mult
+        );
 
         MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
-                ((blockHit.getLocation().x - this.getSelf().getX())/mag)*mult,
-                (0.6+Math.max((blockHit.getLocation().y - this.getSelf().getY())/mag,0))*mult,
-                ((blockHit.getLocation().z - this.getSelf().getZ())/mag)*mult
+                vec3.x,
+                vec3.y,
+                vec3.z
         );
 
     }
