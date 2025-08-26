@@ -5,13 +5,17 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.RotationAnimation;
+import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -35,6 +39,11 @@ public abstract class PilotingCamera implements ICamera {
             this.roundabout$povSwitch = entity;
         }
     }
+    @Override
+    @Unique
+    public Entity roundabout$getPovSwitch(){
+        return roundabout$povSwitch;
+    }
 
     @Unique
     public float roundabout$getViewXRot(Entity ent, float $$0) {
@@ -47,6 +56,62 @@ public abstract class PilotingCamera implements ICamera {
     }
     @Unique
     public void roundabout$setup(BlockGetter blockGetter, Entity entity, boolean bl, boolean bl2, float f) {
+        if (entity != null) {
+            /**Gravity Edition*/
+            Direction gravityDirection = GravityAPI.getGravityDirection(roundabout$povSwitch);
+            RotationAnimation animation = GravityAPI.getRotationAnimation(roundabout$povSwitch);
+            if (animation != null) {
+                float partialTick = Minecraft.getInstance().getFrameTime();
+                long timeMs = entity.level().getGameTime() * 50 + (long) (partialTick * 50);
+                animation.update(timeMs);
+                if (!(gravityDirection == Direction.DOWN && !animation.isInAnimation())) {
+                    this.initialized = true;
+                    this.level = blockGetter;
+                    this.entity = entity;
+                    this.detached = bl;
+
+                    this.setRotation(roundabout$getViewYRot(roundabout$povSwitch,f),roundabout$getViewXRot(roundabout$povSwitch,f));
+
+
+                    Quaternionf gravityRotation = animation.getCurrentGravityRotation(gravityDirection, timeMs);
+
+                    double entityX = Mth.lerp((double) f, roundabout$povSwitch.xo, roundabout$povSwitch.getX());
+                    double entityY = Mth.lerp((double) f, roundabout$povSwitch.yo, roundabout$povSwitch.getY());
+                    double entityZ = Mth.lerp((double) f, roundabout$povSwitch.zo, roundabout$povSwitch.getZ());
+
+                    double currentCameraY = Mth.lerp(f, this.eyeHeightOld, this.eyeHeight);
+
+                    Vec3 eyeOffset = animation.getEyeOffset(
+                            gravityRotation,
+                            new Vec3(0, currentCameraY, 0),
+                            gravityDirection
+                    );
+
+                    this.setPosition(
+                            entityX + eyeOffset.x(),
+                            entityY + eyeOffset.y(),
+                            entityZ + eyeOffset.z()
+                    );
+                    if (bl) {
+                        if (bl2) {
+                            this.setRotation(this.yRot + 180.0F, -this.xRot);
+                        }
+
+                        this.move(-this.getMaxZoom(4.0), 0.0, 0.0);
+                    } else if (roundabout$povSwitch instanceof LivingEntity && ((LivingEntity) roundabout$povSwitch).isSleeping()) {
+                        Direction $$5 = ((LivingEntity) roundabout$povSwitch).getBedOrientation();
+                        this.setRotation($$5 != null ? $$5.toYRot() - 180.0F : 0.0F, 0.0F);
+                        this.move(0.0, 0.3, 0.0);
+                    }
+
+                    return;
+                }
+            }
+
+        }
+
+
+        /**Normal Edition*/
         this.initialized = true;
         this.level = blockGetter;
         this.entity = entity;
@@ -62,8 +127,8 @@ public abstract class PilotingCamera implements ICamera {
                 this.setRotation(this.yRot + 180.0f, -this.xRot);
             }
             this.move(-this.getMaxZoom(4.0), 0.0, 0.0);
-        } else if (entity instanceof LivingEntity && ((LivingEntity)entity).isSleeping()) {
-            Direction direction = ((LivingEntity)entity).getBedOrientation();
+        } else if (roundabout$povSwitch instanceof LivingEntity && ((LivingEntity)roundabout$povSwitch).isSleeping()) {
+            Direction direction = ((LivingEntity)roundabout$povSwitch).getBedOrientation();
             this.setRotation(direction != null ? direction.toYRot() - 180.0f : 0.0f, 0.0f);
             this.move(0.0, 0.3, 0.0);
         }
