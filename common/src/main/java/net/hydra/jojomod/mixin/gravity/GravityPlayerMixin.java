@@ -128,8 +128,6 @@ public abstract class GravityPlayerMixin extends LivingEntity {
                 this.swing(InteractionHand.MAIN_HAND);
             }
 
-            double $$3 = this.getEyeY() - 0.3F;
-
             Vec3 vec3d = this.getEyePosition()
                     .subtract(RotationUtil.vecPlayerToWorld(0.0D, 0.3D, 0.0D, gravityDirection));
 

@@ -446,8 +446,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 cir.setReturnValue(false);
                 return;
             } else {
-                Vec3 $$1 = new Vec3(this.getX(), this.getEyeY(), this.getZ());
-                Vec3 $$2 = new Vec3($$0.getX(), $$0.getEyeY(), $$0.getZ());
+                Vec3 $$1 = new Vec3(this.getEyePosition().x, this.getEyePosition().y, this.getEyePosition().z);
+                Vec3 $$2 = new Vec3($$0.getEyePosition().x, $$0.getEyePosition().y, $$0.getEyePosition().z);
                 if ($$2.distanceTo($$1) > 128.0){
                     cir.setReturnValue(false);
                     return;

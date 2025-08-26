@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.ModBlocks;
@@ -34,6 +35,7 @@ import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -78,6 +80,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
@@ -2549,13 +2552,18 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public List<Entity> burnProjectiles(LivingEntity User, List<Entity> entities, float maxDistance, float angle){
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
+        Direction gravD = ((IGravityEntity)User).roundabout$getGravityDirection();
+        Vec2 lookVec = new Vec2(self.getYHeadRot()%360f, User.getXRot());
+        if (gravD != Direction.DOWN) {
+            lookVec = RotationUtil.rotPlayerToWorld(User.getYHeadRot()%360f, User.getXRot(), gravD);
+        }
         for (Entity value : entities) {
             if (!value.isRemoved() && value instanceof Projectile && !(value instanceof Fireball) && !(value instanceof UnburnableProjectile)
                     && !(value instanceof AbstractArrow aa && ((IAbstractArrowAccess)aa).roundabout$GetPickupItem() != null &&
                     ((IAbstractArrowAccess)aa).roundabout$GetPickupItem().getItem().canBeDepleted()
                     )
             ){
-                if (angleDistance(getLookAtEntityYaw(User, value), (User.getYHeadRot()%360f)) <= angle && angleDistance(getLookAtEntityPitch(User, value), User.getXRot()) <= angle){
+                if (angleDistance(getLookAtEntityYaw(User, value), (lookVec.x)) <= angle && angleDistance(getLookAtEntityPitch(User, value), lookVec.y) <= angle){
                     hitEntities.remove(value);
                     ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SMOKE, value.getX(),
                             value.getY(), value.getZ(),

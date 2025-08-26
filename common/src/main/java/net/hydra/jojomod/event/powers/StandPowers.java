@@ -894,7 +894,7 @@ public class StandPowers {
     public void levelUp(){
         if (!this.getSelf().level().isClientSide()){
             ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.END_ROD,
-                    this.getSelf().getX(), this.getSelf().getY() + this.getSelf().getEyeHeight(), this.getSelf().getZ(),
+                    this.getSelf().getEyePosition().x, this.getSelf().getEyePosition().y, this.getSelf().getEyePosition().z,
                     20, 0.4, 0.4, 0.4, 0.4);
             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.LEVELUP_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
         }
@@ -1875,6 +1875,20 @@ public class StandPowers {
         ));
         boolean isBlocked = result.getType() != HitResult.Type.MISS &&
                 result.getLocation().distanceTo(from) < to.distanceTo(from);
+        if (isBlocked){
+            from = this.self.getEyePosition(1); // your position
+            to = entity.getEyePosition(1.0F); // where the entity's eyes are
+
+            result = this.self.level().clip(new ClipContext(
+                    from,
+                    to,
+                    ClipContext.Block.COLLIDER,
+                    ClipContext.Fluid.NONE,
+                    this.self
+            ));
+            isBlocked = result.getType() != HitResult.Type.MISS &&
+                    result.getLocation().distanceTo(from) < to.distanceTo(from);
+        }
         return !isBlocked;
     }
 
@@ -2243,16 +2257,16 @@ public class StandPowers {
     /**Returns the vertical angle between a mob and a position*/
     public float getLookAtPlacePitch(Entity user, Vec3 vec) {
         double f;
-        double d = vec.x() - user.getX();
-        double e = vec.z() - user.getZ();
-        f = vec.y() - user.getEyeY();
+        double d = vec.x() - user.getEyePosition().x;
+        double e = vec.z() - user.getEyePosition().z;
+        f = vec.y() - user.getEyePosition().y;
         double g = Math.sqrt(d * d + e * e);
         return (float)(-(Mth.atan2(f, g) * 57.2957763671875));
     }
     /**Returns the horizontal angle between a mob and a position*/
     public float getLookAtPlaceYaw(Entity user, Vec3 vec) {
-        double d = vec.x() - user.getX();
-        double e = vec.z() - user.getZ();
+        double d = vec.x() - user.getEyePosition().x;
+        double e = vec.z() - user.getEyePosition().z;
         return (float)(Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
     }
 
@@ -2291,7 +2305,12 @@ public class StandPowers {
                     (User instanceof StandEntity SE2 && SE2.getUser() != null &&  SE2.getUser().isPassenger() && SE2.getUser().getVehicle().getUUID() == value.getUUID())){
                 hitEntities.remove(value);
             } else {
-                if (!(angleDistance(getLookAtEntityYaw(User, value), (User.getYHeadRot()%360f)) <= angle && angleDistance(getLookAtEntityPitch(User, value), User.getXRot()) <= angle)){
+                Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                Vec2 lookVec = new Vec2(User.getYHeadRot()%360f, User.getXRot());
+                if (gravD != Direction.DOWN) {
+                    lookVec = RotationUtil.rotPlayerToWorld(User.getYHeadRot()%360f, User.getXRot(), gravD);
+                }
+                if (!(angleDistance(getLookAtEntityYaw(User, value), (lookVec.x)) <= angle && angleDistance(getLookAtEntityPitch(User, value), lookVec.y) <= angle)){
                     hitEntities.remove(value);
                 } else if (!canActuallyHit(value)){
                     hitEntities.remove(value);
@@ -2308,10 +2327,15 @@ public class StandPowers {
     public List<Entity> arrowGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, float angle){
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
+        Direction gravD = ((IGravityEntity)User).roundabout$getGravityDirection();
+        Vec2 lookVec = new Vec2(User.getYHeadRot()%360f, User.getXRot());
+        if (gravD != Direction.DOWN) {
+            lookVec = RotationUtil.rotPlayerToWorld(User.getYHeadRot()%360f, User.getXRot(), gravD);
+        }
         for (Entity value : entities) {
             if (!(value instanceof Arrow) && !(value instanceof KnifeEntity) && !(value instanceof ThrownObjectEntity)){
                 hitEntities.remove(value);
-            } else if (!(angleDistance(getLookAtEntityYaw(User, value), (User.getYHeadRot()%360f)) <= angle && angleDistance(getLookAtEntityPitch(User, value), User.getXRot()) <= angle)){
+            } else if (!(angleDistance(getLookAtEntityYaw(User, value), (lookVec.x)) <= angle && angleDistance(getLookAtEntityPitch(User, value), lookVec.y) <= angle)){
                 hitEntities.remove(value);
             } else if (value.distanceTo(User) > maxDistance){
                 hitEntities.remove(value);

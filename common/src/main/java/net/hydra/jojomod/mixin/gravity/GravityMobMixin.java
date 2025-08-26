@@ -54,7 +54,7 @@ public abstract class GravityMobMixin extends LivingEntity implements Targeting 
         if ($$0 instanceof LivingEntity $$5) {
             $$6 = $$0.getEyePosition().y - this.getEyePosition().y;
         } else {
-            $$6 = ($$0.getBoundingBox().minY + $$0.getBoundingBox().maxY) / 2.0 - getEyeY();
+            $$6 = ($$0.getBoundingBox().minY + $$0.getBoundingBox().maxY) / 2.0 - getEyePosition().y;
         }
 
         double $$8 = Math.sqrt($$3 * $$3 + $$4 * $$4);
