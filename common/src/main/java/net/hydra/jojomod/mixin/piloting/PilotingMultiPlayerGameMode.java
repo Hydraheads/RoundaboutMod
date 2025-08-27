@@ -31,7 +31,7 @@ public abstract class PilotingMultiPlayerGameMode {
 
     @Inject(method = "performUseItemOn", at = @At("HEAD"), cancellable = true)
     public void roundabout$performUseItemOn(LocalPlayer $$0, InteractionHand $$1, BlockHitResult $$2, CallbackInfoReturnable<InteractionResult> cir) {
-        if ($$0 != null && ((StandUser)$$0).roundabout$getStandPowers() instanceof PowersJustice PJ && PJ.isPiloting()){
+        if ($$0 != null && ((StandUser)$$0).roundabout$getStandPowers() instanceof PowersJustice PJ && PJ.isPiloting() && this.minecraft != null){
 
             BlockPos $$3 = $$2.getBlockPos();
             ItemStack $$4 = $$0.getItemInHand($$1);
@@ -80,6 +80,7 @@ public abstract class PilotingMultiPlayerGameMode {
 
     @Shadow protected abstract void startPrediction(ClientLevel $$0, PredictiveAction $$1);
 
+    @Shadow
     @Final
     private Minecraft minecraft;
     @Shadow
