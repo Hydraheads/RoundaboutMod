@@ -220,7 +220,7 @@ public class PowersRatt extends NewDashPreset {
         ClientUtil.fx.roundabout$onGUI(context);
 
         if (isPlaced()) {
-            if (!getSelf().isCrouching()) {
+            if (!isHoldingSneak()) {
                 setSkillIcon(context, x, y, 1, LockedOrNot(StandIcons.RATT_BURST,0), PowersRatt.PLACE_BURST);
             } else {
                 if (isAuto()) {
@@ -673,7 +673,7 @@ public class PowersRatt extends NewDashPreset {
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         switch (activeP) {
             case PowersRatt.AUTO -> {
-                return getShootTarget() == null && this.getSelf().isCrouching() && !isAuto() && isPlaced();
+                return getShootTarget() == null && isHoldingSneak() && !isAuto() && isPlaced();
             }
             case PowersRatt.SETPLACE -> {
                 if (isPlaced()) {
