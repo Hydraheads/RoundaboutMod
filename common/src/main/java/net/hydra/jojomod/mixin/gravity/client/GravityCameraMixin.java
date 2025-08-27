@@ -69,7 +69,6 @@ public abstract class GravityCameraMixin {
             if (animation == null) {
                 return;
             }
-
             float partialTick = Minecraft.getInstance().getFrameTime();
             long timeMs = focusedEntity.level().getGameTime() * 50 + (long) (partialTick * 50);
             animation.update(timeMs);

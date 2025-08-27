@@ -2376,7 +2376,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setSummonCD(8);
             roundabout$setActive(false);
             roundabout$tryPower(PowerIndex.NONE, true);
-            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_DESUMMON);
+            if (this.level().isClientSide()) {
+                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_DESUMMON);
+            }
         }
         roundabout$sealedTicks = ticks;
     }

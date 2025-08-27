@@ -6,6 +6,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersJustice;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -90,7 +91,8 @@ public abstract class PilotingServerPlayerGameMode {
         if (this.player != null) { StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
             StandEntity piloting = powers.getPilotingStand();
-            if (powers.isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved() && powers instanceof PowersJustice) {
+            if (powers.isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved() && powers instanceof PowersJustice
+            && MainUtil.getIsGamemodeApproriateForGrief(player)) {
                 BlockState $$6 = this.level.getBlockState($$0);
                 if (!$$6.isAir() && $$6.getBlock() instanceof FogBlock) {
                     roundabout$handleBlockBreakAction($$0,$$1,$$2,$$3,$$4);

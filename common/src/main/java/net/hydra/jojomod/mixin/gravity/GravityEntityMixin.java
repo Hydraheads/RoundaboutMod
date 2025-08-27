@@ -2,13 +2,10 @@ package net.hydra.jojomod.mixin.gravity;
 
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IClientEntity;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.util.GEntityTags;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.RotationAnimation;
@@ -28,10 +25,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
@@ -653,11 +648,10 @@ public abstract class GravityEntityMixin implements IGravityEntity {
                 collideT.x * collideT.x + collideT.y * collideT.y + collideT.z * collideT.z) * 0.6F;
     }
 
-    @ModifyVariable(method = "saveWithoutId(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;", at = @At(value = "RETURN"))
-    public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
+    @Inject(method = "saveWithoutId(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V",shift = At.Shift.AFTER))
+    public void roundabout$addAdditionalSaveData(CompoundTag $$0, CallbackInfoReturnable<CompoundTag> cir){
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         compoundtag.putByte("GravityDirection",MainUtil.getByteFromDirection(roundabout$getGravityDirection()));
-        return $$0;
     }
 
     @Inject(method = "load(Lnet/minecraft/nbt/CompoundTag;)V",

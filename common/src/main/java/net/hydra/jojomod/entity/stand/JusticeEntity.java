@@ -5,10 +5,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.networking.ModPacketHandler;
-import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -16,21 +13,17 @@ import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
 
 public class JusticeEntity extends FollowingStandEntity {
@@ -54,6 +47,11 @@ public class JusticeEntity extends FollowingStandEntity {
     } //sets leaning direction
     public int getJusticeSize() {
         return this.entityData.get(JUSTICE_SZ);
+    }
+
+    @Override
+    protected boolean isAffectedByFluids() {
+        return false;
     }
 
     @Override
@@ -115,23 +113,23 @@ public class JusticeEntity extends FollowingStandEntity {
 
 
     public void inhaleTick() {
-        int perc = getJusticeSize()-2;
-        if (perc < 0){
-            if (this.getUser() != null){
-                StandUser user = ((StandUser) this.getUser());
-                user.roundabout$setMaxSealedTicks(400);
-                user.roundabout$setSealedTicks(400);
-                user.roundabout$setDrowning(true);
-                if (!this.level().isClientSide() && user instanceof Player PE){
-                    S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) PE),
-                            PacketDataIndex.S2C_INT_SEAL, 400);
+            int perc = getJusticeSize() - 2;
+            if (perc < 0) {
+                if (this.getUser() != null) {
+                    StandUser user = ((StandUser) this.getUser());
+                    user.roundabout$setMaxSealedTicks(400);
+                    user.roundabout$setSealedTicks(400);
+                    user.roundabout$setDrowning(true);
+                    if (!this.level().isClientSide() && user instanceof Player PE) {
+                        S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) PE),
+                                PacketDataIndex.S2C_INT_SEAL, 400);
+                    }
+                    user.roundabout$setActive(false);
                 }
-                user.roundabout$setActive(false);
+                this.discard();
+                return;
             }
-            this.discard();
-
-        }
-        this.setJusticeSize(perc);
+            this.setJusticeSize(perc);
     }
     @Override
     public void playerSetProperties(Player PE) {
@@ -232,45 +230,12 @@ public class JusticeEntity extends FollowingStandEntity {
 
 
     @Override
+
     protected float getFlyingSpeed() {
         return 0.10F;
     }
 
     public boolean stuck = false;
-    @Override
-    public void move(MoverType $$0, Vec3 $$1) {
-        if (this.noPhysics) {
-            Entity ent = this.getUser();
-            if (ent != null){
-                if (ent instanceof Player PE){
-                    StandUser user = ((StandUser) PE);
-                    StandPowers powers = user.roundabout$getStandPowers();
-                    if (powers.isPiloting()){
-                        Entity entX = powers.getPilotingStand();
-                        if (entX != null && entX.is(this)){
-                            BlockPos veci = BlockPos.containing(new Vec3(this.getX() + $$1.x, this.getY() + this.getEyeHeight() + $$1.y,this.getZ() + $$1.z));
-                            BlockPos veci2 = BlockPos.containing(new Vec3(this.getX() + $$1.x*2, this.getY() + this.getEyeHeight() + $$1.y*2,this.getZ() + $$1.z*2));
-                            BlockPos veci3 = BlockPos.containing(new Vec3(this.getX() + $$1.x*3, this.getY() + this.getEyeHeight() + $$1.y*2,this.getZ() + $$1.z*3));
-                            BlockState bl = this.level().getBlockState(veci);
-                            BlockState bl2 = this.level().getBlockState(veci2);
-                            BlockState bl3 = this.level().getBlockState(veci3);
-                            if (getFullBlock(bl,veci) ||
-                                    getFullBlock(bl2,veci2) ||
-                                    getFullBlock(bl3,veci3)){
-                                this.setDeltaMovement(Vec3.ZERO);
-                                if (!stuck) {
-                                    stuck = true;
-                                    this.setPos(this.getX() - $$1.x, this.getY(), this.getZ() - $$1.z);
-                                }
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        super.move($$0,$$1);
-    }
 
 
     @SuppressWarnings("deprecation")
@@ -284,41 +249,13 @@ public class JusticeEntity extends FollowingStandEntity {
 
     @Override
     public void travel(Vec3 vec3) {
+        super.travel(vec3);
         if (this.isControlledByLocalInstance()) {
-            boolean bl;
-            double d = 0.08;
-            boolean bl2 = bl = this.getDeltaMovement().y <= 0.0;
-            if (bl && this.hasEffect(MobEffects.SLOW_FALLING)) {
-                d = 0.01;
-            }
-            FluidState fluidState = this.level().getFluidState(this.blockPosition());
-                BlockPos blockPos = this.getBlockPosBelowThatAffectsMyMovement();
-                float p = this.level().getBlockState(blockPos).getBlock().getFriction();
-                float f = this.onGround() ? p * 0.91f : 0.91f;
-                Vec3 vec37 = this.handleRelativeFrictionAndCalculateMovement(vec3, p);
-                double q = vec37.y;
-                if (this.hasEffect(MobEffects.LEVITATION)) {
-                    q += (0.05 * (double)(this.getEffect(MobEffects.LEVITATION).getAmplifier() + 1) - vec37.y) * 0.2;
-                } else if (!this.level().isClientSide || this.level().hasChunkAt(blockPos)) {
-                    if (!this.isNoGravity()) {
-                        q -= d;
-                    }
-                } else {
-                    q = this.getY() > (double)this.level().getMinBuildHeight() ? -0.1 : 0.0;
-                }
-                if (this.shouldDiscardFriction()) {
-                    this.setDeltaMovement(vec37.x, q, vec37.z);
-                } else {
-                    this.setDeltaMovement(vec37.x * (double)f, q * (double)0.98f, vec37.z * (double)f);
-                }
-
             if (this.getUser() instanceof Player PE && this.level().isClientSide()) {
                 C2SPacketUtil.updatePilot(this);
             }
         }
-        this.calculateEntityAnimation(this instanceof FlyingAnimal);
     }
-
 
 
     @Override
@@ -353,7 +290,7 @@ public class JusticeEntity extends FollowingStandEntity {
             Direction dir = ((IGravityEntity)standUser).roundabout$getGravityDirection();
             Vec3 offset = new Vec3(
                     (- (-1 * (r * (Math.sin(ang / 180))))),
-                    (getIdleYOffset() - yy+0.6),
+                    (getIdleYOffset() - yy+2.1),
                     (-(r * (Math.cos(ang / 180))))
             );
             if (dir != Direction.DOWN){

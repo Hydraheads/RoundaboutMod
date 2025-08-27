@@ -4,15 +4,20 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.util.gravity.GravityAPI;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ScreenEffectRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -62,6 +67,26 @@ public class PilotingScreenEffectRenderer {
      */
     @Unique
     private static BlockState roundabout$getViewBlockingState(LivingEntity $$0) {
+
+        Direction gravityDirection = GravityAPI.getGravityDirection($$0);
+        if (gravityDirection != Direction.DOWN) {
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
+
+        Vec3 eyePos = $$0.getEyePosition();
+        Vector3f multipliers = RotationUtil.vecPlayerToWorld($$0.getBbWidth() * 0.8F, 0.1F, $$0.getBbWidth() * 0.8F, gravityDirection);
+            for (int i = 0; i < 8; ++i) {
+            double d = eyePos.x + (double) (((float) ((i >> 0) % 2) - 0.5F) * multipliers.x());
+            double e = eyePos.y + (double) (((float) ((i >> 1) % 2) - 0.5F) * multipliers.y());
+            double f = eyePos.z + (double) (((float) ((i >> 2) % 2) - 0.5F) * multipliers.z());
+            mutable.set(d, e, f);
+            BlockState blockState = $$0.level().getBlockState(mutable);
+                if (blockState.getRenderShape() != RenderShape.INVISIBLE && blockState.isViewBlocking($$0.level(), mutable)) {
+                    return blockState;
+                }
+            }
+            return null;
+        }
+
         BlockPos.MutableBlockPos $$1 = new BlockPos.MutableBlockPos();
 
         for (int $$2 = 0; $$2 < 8; $$2++) {

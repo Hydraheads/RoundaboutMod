@@ -31,6 +31,7 @@
   "item.roundabout.match_bundle": "Allumettes",
   "item.roundabout.gasoline_can": "Bidon de gasoil",
   "item.roundabout.gasoline_bucket": "Seau d'éclaboussure de gasoil",
+  "item.roundabout.flesh_bucket": "Seau de chair fondu",
   "item.roundabout.locacaca": "Locacaca",
   "item.roundabout.locacaca_pit": "Noyau de locacaca",
   "item.roundabout.locacaca_branch": "Branche de locacaca",
@@ -183,7 +184,8 @@
   "effect.roundabout.stand_virus": "Virus des Stand",
   "effect.roundabout.capturing_love": "Beauté captivante",
   "effect.roundabout.faceless": "Sans visage",
-  "effect.roundabout.melting": "Dissous",
+  "effect.roundabout.melting": "Fondu",
+  "effect.roundabout.gravity_flip": "Gravité",
 
   "item.roundabout.creative_only.info": "Créatif Uniquement",
 
@@ -217,6 +219,7 @@
   "entity.roundabout.knife": "Couteau",
   "entity.roundabout.gasoline_can": "Bidon de gasoil",
   "entity.roundabout.gasoline_splatter": "Éclaboussure de gasoil",
+  "entity.roundabout.flesh_pile": "Tas de chair",
   "entity.roundabout.stand_arrow": "Flèche de Stand",
   "entity.roundabout.worthy_arrow": "Digne flèche",
   "entity.roundabout.fallen_creeper": "Cadavre de Creeper",
@@ -399,8 +402,6 @@
   "death.attack.disintegration.player": "%1$ a été désintégrer par %$2s",
   "death.attack.melting": "%1$s est devenu un liquide",
   "death.attack.melting.player": "%1$s a été transformé(e) en flaque par %2$s",
-  "death.attack.melting.item": "%1$s est devenu un liquide",
-  "death.attack.melting.player.item": "%1$s a été transformé(e) en flaque par %$2s",
 
 
   "item.glaive.charge_power": "Chargé l'attaque",
@@ -600,6 +601,7 @@
   "sounds.roundabout.ratt_scope":  "Bruit de viseur",
   "sounds.roundabout.ratt_dart_impact": "Impacte de dard",
   "sounds.roundabout.ratt_dart_thunk": "Dard qui touche",
+  "sounds.roundabout.ratt_firing": "Ratt tire",
 
   "sounds.roundabout.arcade_impale":  "[Arcade Empalement]",
   "sounds.roundabout.arcade_long_ts":  "[Arrêt du Temps]",
@@ -1019,6 +1021,7 @@
   "skins.roundabout.the_world.ultimate": "Ultime",
   "skins.roundabout.the_world.ultimate_kars": "Ultime K",
   "skins.roundabout.the_world.scarlet": "Ecarlate",
+  "skins.roundabout.the_world.the_nether": "Le Nether",
 
   "skins.roundabout.justice.base": "Partie 3",
   "skins.roundabout.justice.skeleton": "Squelette",
@@ -1086,7 +1089,7 @@
   "skins.roundabout.ratt.melon" : "Pasthèque",
   "skins.roundabout.ratt.sand" : "Sable",
   "skins.roundabout.ratt.aztec" : "Aztèque",
-  "skins.roundabout.ratt.redd" : "Redstone",
+  "skins.roundabout.ratt.tower" : "Tour",
   "skins.roundabout.ratt.snowy" : "Neigeux",
 
   "skins.roundabout.cinderella.base": "Partie 4",
@@ -1386,6 +1389,33 @@
 
 
 
+  "config.roundabout.levelsToGetStand.name": "Coût en niveau de la Flèche de Stand",
+  "config.roundabout.levelsToGetStand.desc": "Obtenir un Stand (principal) depuis la Flèche de Stand coûtes 15 niveaux par défaut.",
+  "config.roundabout.levelsToRerollStandWithArrow.name": "Coût en niveau pour rerouler la Flèche",
+  "config.roundabout.levelsToRerollStandWithArrow.desc": "Par défaut, ça coûte 1 niveau pour changer le Stand chargé dans la Flèche de Stand. Gardez à l'esprit qu'utilisez la flèche sur une créature la reroule aussi (et utilises 1 de durabilité).",
+  "config.roundabout.canAwakenOtherPlayersWithArrows.name": "Flèches Vs Autres Joueurs",
+  "config.roundabout.canAwakenOtherPlayersWithArrows.desc": "Par défaut, shooting another player with a stand arrow does not awaken their stand to prevent forcing someone to be stuck with something bad.",
+  "config.roundabout.canThrowVisagesOntoOtherPlayers.name": "Visages Vs Autres Joueurs",
+  "config.roundabout.canThrowVisagesOntoOtherPlayers.desc": "Si lancez avec son stand un visage peut équiper le visage sur un joueur ou pas. Existe principalement pour le débuggage.",
+  "config.roundabout.standDiscsDropWithKeepGameRuleOff.name": "Règle Disque Stand qui tombe",
+  "config.roundabout.standDiscsDropWithKeepGameRuleOff.desc": "Si la gamerule pour perdre son stand à la mort est active, vous laissez tomber votre disque stand à votre mort à la place si cette option est active.",
+  "config.roundabout.locacacaEatingCooldowns.name": "Rechargement Nouveau Locacaca",
+  "config.roundabout.locacacaEatingCooldowns.desc": "Le temps minimum entre la consommation de Nouveau Locacaca, en ticks. Par défaut, ya environ 1 minute entre chaque, à cause du grand potentiel de soin.",
+  "config.roundabout.knifeDamageOnMobs.name": "Couteau dégâts sur Créatures",
+  "config.roundabout.knifeDamageOnMobs.desc": "Un multiplicateur de dégâts pour les couteaux qui touche une créature. Les couteaux n'ignore pas l'armure, mais ils ignorent la plus grandes parties des enchantements.",
+  "config.roundabout.knifeDamageOnPlayers.name": "Couteau dégâts sur Joueurs",
+  "config.roundabout.knifeDamageOnPlayers.desc": "Un multiplicateur de dégâts pour les couteaux qui touche un Joueur. Les couteaux n'ignore pas l'armure, mais ils ignorent la plus grandes parties des enchantements.",
+  "config.roundabout.maxKnivesInOneHit.name": "Couteaux Maximum en Une Fois",
+  "config.roundabout.maxKnivesInOneHit.desc": "Le nombre maximal de couteaux qui peut toucher une créature à la fois. Par exemple, si vous arrêtez le temps et entourez une créature avec des couteaux, quel est la limite ?",
+  "config.roundabout.gasolineExplosionDamage.name": "Multiplicateur de dégât du Gasoil",
+  "config.roundabout.gasolineExplosionDamage.desc": "Un multiplicateur de dégâts pour les explosions de Gasoil.",
+  "config.roundabout.matchDamage.name": "Multiplicateur de dégât des allumettes",
+  "config.roundabout.matchDamage.desc": "Un multiplicateur de dégâts pour les allumettes lancées.",
+  "config.roundabout.switchStandDiscLength.name": "Durée du Changement de Stand par Disque",
+  "config.roundabout.switchStandDiscLength.desc": "Le temps pour changé de stand est de 100 ticks, ou 5 secondes par défaut.",
+  "config.roundabout.switchStandDiscWhileOnCooldownsLength.name": "Changement de Disques sur Rechargement",
+  "config.roundabout.switchStandDiscWhileOnCooldownsLength.desc": "Le temps pour changé de stand quand déjà sur le rechargement d'une capacité augmente à 300 ticks (15 secondes) par défaut.",
+
   "config.roundabout.worthyMobOdds.name": "Chance de créatures dignes",
   "config.roundabout.worthyMobOdds.desc": "Met le pourcentage de créatures qui sont digne d'avoir un stand si tirer dessus avec une des flèches. Par défaut, c'est 0.05, ou 5 pourcent de toute les créatures (1 sur 20). 100 pourcent serait 1.0.",
   "config.roundabout.standUserOdds.name": "Chance de créatures utilisatrice de stand",
@@ -1411,7 +1441,7 @@
   "config.roundabout.disableBleedingAndBloodSplatters.desc": "Si vous êtes sensibles au sang, cette option pourrait vous aider.",
 
   "config.roundabout.major.done": "Terminer",
-  "config.roundabout.major.reset": "Reset",
+  "config.roundabout.major.reset": "Réinitialiser",
   "config.roundabout.major.edit": "Editer",
   "config.roundabout.major.value": "Valeur",
   "config.roundabout.major.edit_value": "Editer la Valeur",
@@ -1505,7 +1535,7 @@
 
   "config.roundabout.timeStopFreezesScreen.name": "Freeze de l'écran",
   "config.roundabout.timeStopFreezesScreen.desc": "Si l'arrêt du temps vous rend incapable de voir quoique ce soit ou pas, vu que l'écran est figé. Cette option est désactivé par défaut à cause des ennuyantes implication de ne rien voir bouger pendant 9 secondes.",
-  "config.roundabout.tsStandsSeeTSTeleportAndDontFreeze.name": "Time Seeing Stands",
+  "config.roundabout.tsStandsSeeTSTeleportAndDontFreeze.name": "Stand a vision dans l'arrêt du temps",
   "config.roundabout.tsStandsSeeTSTeleportAndDontFreeze.desc": "Si avoir un stand qui vois dans l'arrêt du temps (The World, Star Platinum, ou C-Moon) vous permet de voir les choses se téléporté comme un enderman au lieu de soudainement apparaitre dans leur nouvelle position ou pas. Si vous avez freeze de l'écran activé, cette option vous permet de voir l'arrêt du temps normalement.",
   "config.roundabout.simpleTimeStopShader.name": "Simple Shader",
   "config.roundabout.simpleTimeStopShader.desc": "Si l'arrêt du temps donne un simple shader ou pas.",
