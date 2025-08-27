@@ -26,6 +26,7 @@ public class SurvivorBrain<E extends LivingEntity> {
         if (MainUtil.forceAggression($$1)) {
             if ($$1 instanceof Mob mb && mb.getTarget() != null
                     && !(mb instanceof Enemy) && (mb instanceof AbstractVillager || mb instanceof Animal)
+                    && !mb.isInWater()
             && !((IMob)mb).roundabout$getFightOrFlight()){
                 ci.cancel();
             }
