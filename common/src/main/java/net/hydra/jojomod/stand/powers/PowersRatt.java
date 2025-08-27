@@ -7,16 +7,17 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.RattDartEntity;
-import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -29,6 +30,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -866,6 +869,31 @@ public class PowersRatt extends NewDashPreset {
             case RattEntity.GUARDIAN_SKIN -> {return Component.translatable("skins.roundabout.ratt.guardian");}
             case RattEntity.ELDER_GUARDIAN_SKIN -> {return Component.translatable("skins.roundabout.ratt.elder_guardian");}
             default -> {return Component.translatable("skins.roundabout.ratt.anime");}
+        }
+    }
+
+    public void unlockSkin(){
+        Level lv = this.getSelf().level();
+        if ((this.getSelf()) instanceof Player PE){
+            StandUser user = ((StandUser)PE);
+            ItemStack stack = user.roundabout$getStandDisc();
+            if (!stack.isEmpty() && stack.is(ModItems.STAND_DISC_RATT)){
+                IPlayerEntity ipe = ((IPlayerEntity) PE);
+                if (!ipe.roundabout$getUnlockedBonusSkin()){
+                    if (!lv.isClientSide()) {
+                        ipe.roundabout$setUnlockedBonusSkin(true);
+                        lv.playSound(null, PE.getX(), PE.getY(),
+                                PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
+                        ((ServerLevel) lv).sendParticles(ModParticles.HEART_ATTACK_MINI, PE.getX(),
+                                PE.getY()+PE.getEyeHeight(), PE.getZ(),
+                                10, 0.5, 0.5, 0.5, 0.2);
+                        user.roundabout$setStandSkin(RattEntity.GUARDIAN_SKIN);
+                        user.roundabout$summonStand(this.getSelf().level(), true, false);
+                        ((ServerPlayer) ipe).displayClientMessage(
+                                Component.translatable("unlock_skin.roundabout.ratt.guardians"), true);
+                    }
+                }
+            }
         }
     }
 

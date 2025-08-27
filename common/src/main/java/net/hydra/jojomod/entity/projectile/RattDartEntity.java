@@ -204,6 +204,9 @@ public class RattDartEntity extends AbstractArrow {
         if (inGroundTime >= 160) {
             this.remove(RemovalReason.DISCARDED);
         }
+        if(this.isInWater()) {
+            this.entityData.set(ROUNDABOUT$SUPER_THROWN,false);
+        }
         super.tick();
         if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
             this.setDeltaMovement(delta);
