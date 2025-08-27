@@ -379,7 +379,7 @@ public class FabricEntities {
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "dark_mirage"),
                         EntityType.Builder.of(DarkMirageEntity::new, MobCategory.MISC).
-                                sized(0.75F, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":dark_mirage")
+                                sized(ModEntities.justiceWidth, ModEntities.justiceHeight).clientTrackingRange(14).build(Roundabout.MOD_ID+":dark_mirage")
                 );
         public static final EntityType<DiverDownEntity> DIVER_DOWN =
                 Registry.register(

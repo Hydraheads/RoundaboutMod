@@ -114,7 +114,7 @@ public class JusticeBaseRenderer extends StandRenderer<JusticeEntity> {
 
                      this.model.getHead().visible = false;
                      if (mobEntity instanceof DarkMirageEntity) {
-                         this.model.getBody().visible = false;
+                         this.model.root().visible = false;
                      } else {
                          if (!renderHand){
                              this.model.leftHand.visible = false;
@@ -129,7 +129,7 @@ public class JusticeBaseRenderer extends StandRenderer<JusticeEntity> {
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
         this.model.getHead().visible = true;
         if (mobEntity instanceof DarkMirageEntity) {
-            this.model.getBody().visible = true;
+            this.model.root().visible = true;
         } else {
             this.model.leftHand.visible = true;
             this.model.rightHand.visible = true;

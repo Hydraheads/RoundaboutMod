@@ -311,7 +311,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<DarkMirageEntity>> DARK_MIRAGE =
             ENTITY_TYPES.register("dark_mirage", () ->
-                    EntityType.Builder.of(DarkMirageEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                    EntityType.Builder.of(DarkMirageEntity::new, MobCategory.MISC).sized(ModEntities.justiceWidth, ModEntities.justiceHeight).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "dark_mirage").toString())
             );
