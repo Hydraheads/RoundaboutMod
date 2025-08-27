@@ -4153,13 +4153,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         }
 
+        if (cause != null) {
+            if ( ((LivingEntity)(Object)this) instanceof Guardian || ((LivingEntity)(Object)this) instanceof ElderGuardian) {
+                if ( this.getEffect(ModEffects.MELTING) != null) {
+                    if (((StandUserEntity) cause).roundabout$getStandPowers() instanceof PowersRatt PR) {
+                        PR.unlockSkin();
+                    }
+                }
+            }
+        }
 
 
         MobEffectInstance melting = this.getEffect(ModEffects.MELTING);
         if (melting != null) {
             int amount =  Mth.clamp(melting.getAmplifier()/2,1,6) + (int) (Math.random() * 1 + 0.5);
             if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
-                FleshPileEntity r = new FleshPileEntity((LivingEntity) ((Object) this),this.level(),5); //doesn't really matter what you put here
+                FleshPileEntity r = new FleshPileEntity((LivingEntity) ((Object) this),this.level(),5);
                 r.setPos(this.getPosition(0));
                 this.level().addFreshEntity(r);
             } else {
