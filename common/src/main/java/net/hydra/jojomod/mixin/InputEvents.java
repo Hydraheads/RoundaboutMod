@@ -450,7 +450,6 @@ public abstract class InputEvents implements IInputEvents {
     public void roundabout$doItemUseWithJustice(){
 
         if (this.rightClickDelay == 0 && this.player != null && !this.player.isUsingItem() && this.level != null) {
-
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
             StandEntity piloting = powers.getPilotingStand();
@@ -473,7 +472,7 @@ public abstract class InputEvents implements IInputEvents {
                             return;
                         }
 
-                        if ($$47 != null && $$1.getItem() instanceof FogBlockItem && MainUtil.getIsGamemodeApproriateForGrief(this.player)) {
+                        if ($$47 != null && $$1.getItem() instanceof FogBlockItem) {
                             switch ($$47.getType()) {
                                 case BLOCK:
                                     BlockHitResult $$5 = (BlockHitResult)$$47;
@@ -494,8 +493,6 @@ public abstract class InputEvents implements IInputEvents {
                                         if ($$7 == InteractionResult.FAIL) {
                                             return;
                                         }
-                                    } else{
-                                        return;
                                     }
                             }
                         }

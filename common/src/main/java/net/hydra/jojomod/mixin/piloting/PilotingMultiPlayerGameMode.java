@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.piloting;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.minecraft.client.Minecraft;
@@ -31,6 +32,7 @@ public abstract class PilotingMultiPlayerGameMode {
     @Inject(method = "performUseItemOn", at = @At("HEAD"), cancellable = true)
     public void roundabout$performUseItemOn(LocalPlayer $$0, InteractionHand $$1, BlockHitResult $$2, CallbackInfoReturnable<InteractionResult> cir) {
         if ($$0 != null && ((StandUser)$$0).roundabout$getStandPowers() instanceof PowersJustice PJ && PJ.isPiloting()){
+
             BlockPos $$3 = $$2.getBlockPos();
             ItemStack $$4 = $$0.getItemInHand($$1);
             if (this.localPlayerMode == GameType.SPECTATOR) {

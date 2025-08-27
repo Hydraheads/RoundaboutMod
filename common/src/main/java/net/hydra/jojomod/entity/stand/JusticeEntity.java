@@ -254,6 +254,15 @@ public class JusticeEntity extends FollowingStandEntity {
 
     }
 
+    @Override
+    public void travel(Vec3 vec3) {
+        super.travel(vec3);
+        if (this.isControlledByLocalInstance()) {
+            if (this.getUser() instanceof Player PE && this.level().isClientSide()) {
+                C2SPacketUtil.updatePilot(this);
+            }
+        }
+    }
 
 
     @Override
