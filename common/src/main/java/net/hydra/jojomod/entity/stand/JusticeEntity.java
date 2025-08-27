@@ -5,10 +5,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.networking.ModPacketHandler;
-import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -16,21 +13,17 @@ import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
 
 public class JusticeEntity extends FollowingStandEntity {
@@ -120,23 +113,23 @@ public class JusticeEntity extends FollowingStandEntity {
 
 
     public void inhaleTick() {
-        int perc = getJusticeSize()-2;
-        if (perc < 0){
-            if (this.getUser() != null){
-                StandUser user = ((StandUser) this.getUser());
-                user.roundabout$setMaxSealedTicks(400);
-                user.roundabout$setSealedTicks(400);
-                user.roundabout$setDrowning(true);
-                if (!this.level().isClientSide() && user instanceof Player PE){
-                    S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) PE),
-                            PacketDataIndex.S2C_INT_SEAL, 400);
+            int perc = getJusticeSize() - 2;
+            if (perc < 0) {
+                if (this.getUser() != null) {
+                    StandUser user = ((StandUser) this.getUser());
+                    user.roundabout$setMaxSealedTicks(400);
+                    user.roundabout$setSealedTicks(400);
+                    user.roundabout$setDrowning(true);
+                    if (!this.level().isClientSide() && user instanceof Player PE) {
+                        S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) PE),
+                                PacketDataIndex.S2C_INT_SEAL, 400);
+                    }
+                    user.roundabout$setActive(false);
                 }
-                user.roundabout$setActive(false);
+                this.discard();
+                return;
             }
-            this.discard();
-
-        }
-        this.setJusticeSize(perc);
+            this.setJusticeSize(perc);
     }
     @Override
     public void playerSetProperties(Player PE) {

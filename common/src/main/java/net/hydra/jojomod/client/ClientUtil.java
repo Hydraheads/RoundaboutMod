@@ -664,7 +664,7 @@ public class ClientUtil {
     }
 
     public static void handleIntPacketS2C(int data, byte context) {
-        LocalPlayer player = Minecraft.getInstance().player;
+        Player player = Minecraft.getInstance().player;
         if (player != null) {
             handleIntPacketS2C(player, data, context);
         }
