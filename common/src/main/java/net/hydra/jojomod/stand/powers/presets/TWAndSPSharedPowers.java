@@ -428,11 +428,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (this.self instanceof Player){
             if (isPacketPlayer()){
                 this.setAttackTimeDuring(-20);
-                tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,getTargetEntityId2(3));
+                tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,getTargetEntityId2(impaleRange));
             }
         } else {
             /*Caps how far out the punch goes*/
-            Entity targetEntity = getTargetEntity(this.self,3);
+            Entity targetEntity = getTargetEntity(this.self,impaleRange);
             impaleImpact(targetEntity);
         }
 
@@ -1268,6 +1268,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         this.poseStand(OffsetIndex.ATTACK);
         return true;
     }
+    public static final float impaleRange = 3.5F;
 
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
@@ -1282,7 +1283,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
         } else if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
-            Entity TE = this.getTargetEntity(playerEntity, 3F);
+            Entity TE = this.getTargetEntity(playerEntity, impaleRange);
             if (TE != null) {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
             }
