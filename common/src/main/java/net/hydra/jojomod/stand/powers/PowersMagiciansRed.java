@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPermaCasting;
@@ -488,13 +489,26 @@ public class PowersMagiciansRed extends NewPunchingStand {
             if (number == 5) {
                 distanceUp *= 0.25F;
             }
-            double x1 = entityX - -1 * (distanceOut * (Math.sin(offset / 180)));
-            double y1 = entityY + distanceUp;
-            double z1 = entityZ - (distanceOut * (Math.cos(offset / 180)));
+
+
             if (!this.self.level().isClientSide()) {
                 value.setOldPosAndRot();
                 //Roundabout.LOGGER.info("bye");
             }
+
+            Vec3 finalOffset = new Vec3(
+                    -(-1 * (distanceOut * (Math.sin(offset / 180)))),
+                    distanceUp,
+                    -(distanceOut * (Math.cos(offset / 180)))
+            );
+
+            Direction dir = ((IGravityEntity)self).roundabout$getGravityDirection();
+            if (dir != Direction.DOWN){
+                finalOffset = RotationUtil.vecPlayerToWorld(finalOffset,dir);
+            }
+            double x1 = entityX + finalOffset.x;
+            double y1 = entityY + finalOffset.y;
+            double z1 = entityZ + finalOffset.z;
             value.actuallyTick();
             value.storeVec = new Vec3(x1, y1, z1);
             if (this.self.level().isClientSide()) {

@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin.gravity.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.util.GEntityTags;
 import net.hydra.jojomod.util.RotationAnimation;
 import net.hydra.jojomod.util.gravity.GravityAPI;
@@ -54,7 +55,7 @@ public abstract class GravityEntityRenderDispatcherMixin {
             )
     )
     private void rdbt$inject_render_0(Entity entity, double x, double y, double z, float yaw, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, int light, CallbackInfo ci) {
-        if (!(entity instanceof Projectile) && !(entity instanceof ExperienceOrb) && GEntityTags.allowGravityTransformationInRendering(entity)) {
+        if ((!(entity instanceof Projectile) || entity instanceof CrossfireHurricaneEntity) && !(entity instanceof ExperienceOrb) && GEntityTags.allowGravityTransformationInRendering(entity)) {
             Direction gravityDirection = GravityAPI.getGravityDirection(entity);
 
             ClientUtil.pushPoseAndCooperate(matrices,51);
@@ -76,7 +77,7 @@ public abstract class GravityEntityRenderDispatcherMixin {
             )
     )
     private void rdbt$inject_render_1(Entity entity, double x, double y, double z, float yaw, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, int light, CallbackInfo ci) {
-        if (!(entity instanceof Projectile) && !(entity instanceof ExperienceOrb) && GEntityTags.allowGravityTransformationInRendering(entity)) {
+        if ((!(entity instanceof Projectile) || entity instanceof CrossfireHurricaneEntity) && !(entity instanceof ExperienceOrb) && GEntityTags.allowGravityTransformationInRendering(entity)) {
             Direction gravityDirection = GravityAPI.getGravityDirection(entity);
 
             ClientUtil.popPoseAndCooperate(matrices,51);
@@ -93,7 +94,7 @@ public abstract class GravityEntityRenderDispatcherMixin {
             )
     )
     private void rdbt$inject_render_2(Entity entity, double x, double y, double z, float yaw, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, int light, CallbackInfo ci) {
-        if (!(entity instanceof Projectile) && !(entity instanceof ExperienceOrb) && GEntityTags.allowGravityTransformationInRendering(entity)) {
+        if ((!(entity instanceof Projectile) || entity instanceof CrossfireHurricaneEntity) && !(entity instanceof ExperienceOrb) && GEntityTags.allowGravityTransformationInRendering(entity)) {
             Direction gravityDirection = GravityAPI.getGravityDirection(entity);
             if (gravityDirection == Direction.DOWN) return;
 
