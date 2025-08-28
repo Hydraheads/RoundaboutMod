@@ -973,7 +973,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         if (ankhShootClient()){
             return;
         }
-        if (!this.onCooldown(PowerIndex.SKILL_2)) {
+        if (!this.onCooldown(PowerIndex.SKILL_2) && !hasHurricaneSpecial()) {
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
             tryPowerPacket(PowerIndex.POWER_2);
         }
