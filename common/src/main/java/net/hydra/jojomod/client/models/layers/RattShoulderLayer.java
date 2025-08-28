@@ -82,10 +82,14 @@ public class RattShoulderLayer<T extends LivingEntity, A extends HumanoidModel<T
                         if (hasHeyYaOut) {
                             /* idlePos == 0 is shoulder, 1 is head */
                             if ((user.roundabout$getStandPowers()).scopeLevel != 0) {
-                                getParentModel().rightArm.translateAndRotate(poseStack);
+                                if (entity.getMainArm().equals(HumanoidArm.LEFT)) {
+                                    getParentModel().leftArm.translateAndRotate(poseStack);
+                                } else {
+                                    getParentModel().rightArm.translateAndRotate(poseStack);
+                                }
                                 poseStack.scale(0.35F, 0.35F, 0.35F);
                                 poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(new Vector3f(1, 0, 0), -90), 0, 0, -1);
-                                poseStack.translate(0.35F, -1.3F, 0.6F);
+                                poseStack.translate( entity.getMainArm().equals(HumanoidArm.LEFT) ? -0.35 : 0.35F, -1.3F, 0.6F);
                                 //  poseStack.translate(0.3F, 0F, -3F);
                             } else {
                                 if (user.roundabout$getIdlePos() == 0) {
