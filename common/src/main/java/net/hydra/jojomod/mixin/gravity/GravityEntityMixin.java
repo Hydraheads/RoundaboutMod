@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import net.hydra.jojomod.access.IClientEntity;
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
+import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.util.GEntityTags;
@@ -422,6 +424,12 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         } else if (rdbt$this() instanceof FollowingStandEntity SE && SE.getFollowing() != null){
             roundabout$setGravityDirection(GravityAPI.getGravityDirection(SE.getFollowing()));
             roundabout$currGravityStrength = GravityAPI.getGravityStrength(SE.getFollowing());
+        } else if (rdbt$this() instanceof CinderellaVisageDisplayEntity CD && CD.getStandUser() != null){
+            roundabout$setGravityDirection(GravityAPI.getGravityDirection(CD.getStandUser()));
+            roundabout$currGravityStrength = GravityAPI.getGravityStrength(CD.getStandUser());
+        } else if (rdbt$this() instanceof CrossfireHurricaneEntity CD && CD.getUser() != null){
+            roundabout$setGravityDirection(GravityAPI.getGravityDirection(CD.getUser()));
+            roundabout$currGravityStrength = GravityAPI.getGravityStrength(CD.getUser());
         }
         else {
             if (!this.level.isClientSide()){

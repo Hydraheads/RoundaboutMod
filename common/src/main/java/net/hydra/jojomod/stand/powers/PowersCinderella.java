@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
@@ -25,7 +26,9 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -212,9 +215,20 @@ public class PowersCinderella extends NewDashPreset {
             if (number >4) {
                 distanceUp *= 0.5F;
             }
-            double x1 = entityX - -1 * (distanceOut * (Math.sin(offset / 180)));
-            double y1 = entityY + distanceUp;
-            double z1 = entityZ - (distanceOut * (Math.cos(offset / 180)));
+            Vec3 finalOffset = new Vec3(
+                    -(-1 * (distanceOut * (Math.sin(offset / 180)))),
+                    distanceUp,
+                    -(distanceOut * (Math.cos(offset / 180)))
+            );
+
+            Direction dir = ((IGravityEntity)self).roundabout$getGravityDirection();
+            if (dir != Direction.DOWN){
+                finalOffset = RotationUtil.vecPlayerToWorld(finalOffset,dir);
+            }
+
+            double x1 = entityX + finalOffset.x;
+            double y1 = entityY + finalOffset.y;
+            double z1 = entityZ + finalOffset.z;
             if (!this.self.level().isClientSide()) {
                 value.setOldPosAndRot();
                 //Roundabout.LOGGER.info("bye");
