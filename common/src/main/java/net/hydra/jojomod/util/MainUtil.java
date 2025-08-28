@@ -385,10 +385,6 @@ public class MainUtil {
                     StandArrowItem.rerollStand(player,offh,stack,context);
                 }
             }
-        } else if (context == PacketDataIndex.FOG_CHECK){
-            if (ClientNetworking.getAppropriateConfig().justiceSettings.enableFogBlockInventory) {
-                player.inventoryMenu.setCarried(stack);
-            }
         }
     }
 
@@ -407,18 +403,7 @@ public class MainUtil {
 
                 if (!(user.roundabout$getStandPowers() instanceof PowersJustice) ||
                         (!BuiltInRegistries.ITEM.getKey(stack.getItem()).getNamespace().equals(Roundabout.MOD_ID)) && !stack.is(Items.AIR)) {
-                    if (!player.inventoryMenu.getCarried().isEmpty() &&
-                            player.inventoryMenu.getCarried().getItem().equals(stack.getItem()) &&
-                            Objects.equals(player.inventoryMenu.getCarried().getTag(), stack.getTag())) {
-                        //Pass
 
-                        player.inventoryMenu.getCarried().shrink(stack.getCount());
-                        if (player.inventoryMenu.getCarried().getCount() <= 0) {
-                            player.inventoryMenu.setCarried(ItemStack.EMPTY);
-                        }
-                    } else if (player.getInventory().contains(stack)) {
-                        //Pass
-                    } else {
                         Roundabout.LOGGER.warn("Attempted to give player {} item {}, but they failed the check! Justice User: {}",
                                 player.getName().getString(),
                                 BuiltInRegistries.ITEM.getKey(stack.getItem()),
@@ -426,7 +411,6 @@ public class MainUtil {
                         );
                         //sp.connection.disconnect(Component.literal("Exploit Detected"));
                         return;
-                    }
                 }
 
                 CompoundTag compoundtag = BlockItem.getBlockEntityData(itemstack);

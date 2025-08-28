@@ -1960,6 +1960,7 @@
   "config.roundabout.major.edit_value": "Edit Value",
   "config.roundabout.major.client_config": "Client Config",
   "config.roundabout.major.common_config": "Common Config",
+  "config.roundabout.major.close": "Close",
 
   "config.roundabout.generalStandUserMobSettings.name": "Stand User Mobs",
   "config.roundabout.vanillaMinecraftTweaks.name": "Vanilla Tweaks",

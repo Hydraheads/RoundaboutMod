@@ -10,17 +10,14 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.item.FogBlockItem;
 import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.HotbarManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.CreativeInventoryListener;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.player.inventory.Hotbar;
 import net.minecraft.client.searchtree.SearchRegistry;
 import net.minecraft.client.searchtree.SearchTree;
 import net.minecraft.core.HolderLookup;
@@ -140,7 +137,8 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
             if (!this.menu.getCarried().isEmpty() && this.hasClickedOutside) {
                 if ($$2 == 0) {
                     this.minecraft.player.drop(this.menu.getCarried(), true);
-
+                    C2SPacketUtil.inventoryToServerPacket(-1,
+                            this.menu.getCarried(),PacketDataIndex.ADD_FOG_ITEM);
                     this.menu.setCarried(ItemStack.EMPTY);
                 }
 
@@ -278,9 +276,8 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
             super.init();
             this.searchBox = new EditBox(this.font, this.leftPos + 82, this.topPos + 6, 80, 9, Component.translatable("itemGroup.search"));
             this.searchBox.setMaxLength(50);
-            this.searchBox.setBordered(true);
-            this.searchBox.setVisible(true);
-            this.searchBox.setTextColor(16777215);
+            this.searchBox.setVisible(false);
+            this.searchBox.setBordered(false);
             this.addWidget(this.searchBox);
             CreativeModeTab $$0 = selectedTab;
             selectedTab = ModItems.FOG_BLOCK_ITEMS;
@@ -288,7 +285,28 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
             this.minecraft.player.inventoryMenu.removeSlotListener(this.listener);
             this.listener = new CreativeInventoryListener(this.minecraft);
             this.minecraft.player.inventoryMenu.addSlotListener(this.listener);
+        int buttonWidth = 80;
+        int buttonHeight = 20;
+
+        int padding = 62;
+        int spacing = 10;
+        int totalWidth = 3 * buttonWidth + 2 * spacing;
+        int startX = (this.width - totalWidth) / 2;
+        int y = this.height - buttonHeight - padding;
+        this.doneButton = Button.builder(Component.translatable("config.roundabout.major.close"), btn -> {
+                    forceClose();
+                }).size(buttonWidth, buttonHeight)
+                .pos(startX + buttonWidth + spacing, y)
+                .build();
+        this.addRenderableWidget(doneButton);
     }
+
+    public void forceClose(){
+        onClose();
+        this.minecraft.setScreen(null);
+    }
+
+    private Button doneButton;
 
     @Override
     public void resize(Minecraft $$0, int $$1, int $$2) {
@@ -472,6 +490,22 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
         return super.mouseReleased($$0, $$1, $$2);
     }
 
+
+    @Override
+    protected boolean checkHotbarKeyPressed(int $$0, int $$1) {
+        return false;
+    }
+    @Override
+    public void onClose() {
+        if (!this.menu.getCarried().isEmpty()) {
+            this.minecraft.player.drop(this.menu.getCarried(), true);
+            C2SPacketUtil.inventoryToServerPacket(-1,
+                    this.menu.getCarried(), PacketDataIndex.ADD_FOG_ITEM);
+            this.menu.setCarried(ItemStack.EMPTY);
+        }
+        super.onClose();
+    }
+
     private boolean canScroll() {
         return selectedTab.canScroll() && this.menu.canScroll();
     }
@@ -482,32 +516,6 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
         this.quickCraftSlots.clear();
         this.menu.items.clear();
         this.clearDraggingState();
-        if (selectedTab.getType() == CreativeModeTab.Type.HOTBAR) {
-            HotbarManager $$2 = this.minecraft.getHotbarManager();
-
-            for (int $$3 = 0; $$3 < 9; $$3++) {
-                Hotbar $$4 = $$2.get($$3);
-                if ($$4.isEmpty()) {
-                    for (int $$5 = 0; $$5 < 9; $$5++) {
-                        if ($$5 == $$3) {
-                            ItemStack $$6 = new ItemStack(Items.PAPER);
-                            $$6.getOrCreateTagElement("CustomCreativeLock");
-                            Component $$7 = this.minecraft.options.keyHotbarSlots[$$3].getTranslatedKeyMessage();
-                            Component $$8 = this.minecraft.options.keySaveHotbarActivator.getTranslatedKeyMessage();
-                            $$6.setHoverName(Component.translatable("inventory.hotbarInfo", $$8, $$7));
-                            this.menu.items.add($$6);
-                        } else {
-                            this.menu.items.add(ItemStack.EMPTY);
-                        }
-                    }
-                } else {
-                    this.menu.items.addAll($$4);
-                }
-            }
-        } else if (selectedTab.getType() == CreativeModeTab.Type.CATEGORY) {
-            this.menu.items.addAll(selectedTab.getDisplayItems());
-        }
-
         if (selectedTab.getType() == CreativeModeTab.Type.INVENTORY) {
             AbstractContainerMenu $$9 = this.minecraft.player.inventoryMenu;
             if (this.originalSlots == null) {
@@ -549,10 +557,6 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
 
             this.destroyItemSlot = new Slot(CONTAINER, 0, 173, 112);
             this.menu.slots.add(this.destroyItemSlot);
-        } else if ($$1.getType() == CreativeModeTab.Type.INVENTORY) {
-            this.menu.slots.clear();
-            this.menu.slots.addAll(this.originalSlots);
-            this.originalSlots = null;
         }
 
             this.searchBox.setVisible(true);
@@ -656,7 +660,7 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
     protected void renderBg(GuiGraphics drawContext, float partialTick, int mouseX, int mouseY) {
 
         drawContext.blit(
-                new ResourceLocation("textures/gui/container/creative_inventory/tab_" + selectedTab.getBackgroundSuffix()),
+                new ResourceLocation(Roundabout.MOD_ID,"textures/gui/tab_inventory.png"),
                 this.leftPos,
                 this.topPos,
                 0,
@@ -748,32 +752,6 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
         return selectedTab.getType() == CreativeModeTab.Type.INVENTORY;
     }
 
-    public static void handleHotbarLoadOrSave(Minecraft $$0, int $$1, boolean $$2, boolean $$3) {
-        LocalPlayer $$4 = $$0.player;
-        HotbarManager $$5 = $$0.getHotbarManager();
-        Hotbar $$6 = $$5.get($$1);
-        if ($$2) {
-            for (int $$7 = 0; $$7 < Inventory.getSelectionSize(); $$7++) {
-                ItemStack $$8 = $$6.get($$7);
-                ItemStack $$9 = $$8.isItemEnabled($$4.level().enabledFeatures()) ? $$8.copy() : ItemStack.EMPTY;
-                $$4.getInventory().setItem($$7, $$9);
-            }
-
-            $$4.inventoryMenu.broadcastChanges();
-        } else if ($$3) {
-            for (int $$10 = 0; $$10 < Inventory.getSelectionSize(); $$10++) {
-                $$6.set($$10, $$4.getInventory().getItem($$10).copy());
-            }
-
-            Component $$11 = $$0.options.keyHotbarSlots[$$1].getTranslatedKeyMessage();
-            Component $$12 = $$0.options.keyLoadHotbarActivator.getTranslatedKeyMessage();
-            Component $$13 = Component.translatable("inventory.hotbarSaved", $$12, $$11);
-            $$0.gui.setOverlayMessage($$13, false);
-            $$0.getNarrator().sayNow($$13);
-            $$5.save();
-        }
-    }
-
     static class CustomCreativeSlot extends Slot {
         public CustomCreativeSlot(Container $$0, int $$1, int $$2, int $$3) {
             super($$0, $$1, $$2, $$3);
@@ -803,10 +781,6 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
                             new FogInventoryScreen.CustomCreativeSlot(FogInventoryScreen.CONTAINER, $$2 * 9 + $$3, 9 + $$3 * 18, 18 + $$2 * 18)
                     );
                 }
-            }
-
-            for (int $$4 = 0; $$4 < 9; $$4++) {
-                this.addSlot(new Slot($$1, $$4, 9 + $$4 * 18, 112));
             }
 
             this.scrollTo(0.0F);
@@ -900,7 +874,6 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
         @Override
         public void setCarried(ItemStack $$0) {
             this.inventoryMenu.setCarried($$0);
-            C2SPacketUtil.itemContextToServerPacket(PacketDataIndex.FOG_CHECK,$$0);
 
         }
 
