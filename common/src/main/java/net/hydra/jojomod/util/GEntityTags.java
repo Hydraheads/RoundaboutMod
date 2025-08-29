@@ -6,6 +6,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.vehicle.Minecart;
 
@@ -26,10 +27,14 @@ public class GEntityTags {
     );
 
     public static boolean canChangeGravity(Entity entity) {
+
         if (entity instanceof LivingEntity ||
                 entity instanceof Projectile ||
                 entity instanceof Minecart
         ) {
+            if (entity instanceof Shulker)
+                return false;
+
             return true;
         }
 
