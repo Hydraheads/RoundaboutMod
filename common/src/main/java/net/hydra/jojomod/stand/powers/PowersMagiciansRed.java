@@ -561,7 +561,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
                     if (this.isGuarding()) {
                         if (canExecuteMoveWithLevel(5)) {
-                            setSkillIcon(context, x, y, 1, StandIcons.LIFE_TRACKER, PowerIndex.NO_CD);
+                            setSkillIcon(context, x, y, 1, StandIcons.LIFE_TRACKER, PowerIndex.SKILL_1);
                         } else {
                             setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                         }
@@ -991,7 +991,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         return false;
     }
     public void tryRedBindClient(){
-        if (isChargingCrossfireSpecial())
+        if (isChargingCrossfireSpecial() || this.activePower == PowerIndex.POWER_1_BLOCK)
             return;
         if (isBusy() || isLockedByWater())
             return;
@@ -1011,7 +1011,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     }
 
     public void tryIgnitionClient() {
-        if (isChargingCrossfireSpecial())
+        if (isChargingCrossfireSpecial() || this.activePower == PowerIndex.POWER_1_BLOCK)
             return;
         if (isBusy() || isLockedByWater())
             return;
@@ -1043,6 +1043,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         }
         if (!isChargingCrossfire() && !hasHurricaneSingle()) {
             if (canExecuteMoveWithLevel(5)) {
+                this.setCooldown(PowerIndex.SKILL_1, 20);
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BLOCK, true);
                 tryPowerPacket(PowerIndex.POWER_1_BLOCK);
             }
