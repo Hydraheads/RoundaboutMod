@@ -1328,7 +1328,15 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 LifeTrackerEntity cross = ModEntities.LIFE_TRACKER.create(this.getSelf().level());
                 if (cross != null) {
                     tracker = cross;
-                    cross.absMoveTo(this.self.getX(), this.self.getY()+(this.self.getBbHeight()/2), this.self.getZ());
+
+                    Vec3 bam = new Vec3(0,
+                            (this.self.getBbHeight()/2),
+                            0);
+                    Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                    if (gravD != Direction.DOWN){
+                        bam = RotationUtil.vecPlayerToWorld(bam,gravD);
+                    }
+                    cross.absMoveTo(this.self.getX()+bam.x, this.self.getY()+bam.y, this.self.getZ()+bam.z);
                     cross.setUser(this.self);
                     cross.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, 0.2f, 0);
                     this.self.level().addFreshEntity(cross);
@@ -1680,7 +1688,16 @@ public class PowersMagiciansRed extends NewPunchingStand {
             StandFireballEntity fireball = new StandFireballEntity(this.self,this.self.level());
             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.FIREBALL_SHOOT_EVENT, SoundSource.PLAYERS, 1F, (float)(0.9F + Math.random()*0.2));
             if (fireball != null) {
-                Vec3 vec3dST = this.self.getEyePosition(0).subtract(0,this.self.getEyeHeight()*0.25,0);
+                Vec3 bam = new Vec3(0,
+                        this.self.getEyeHeight()*0.25,
+                        0);
+                Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                if (gravD != Direction.DOWN){
+                    bam = RotationUtil.vecPlayerToWorld(bam,gravD);
+                }
+                Vec3 vec3dST = this.self.getEyePosition(0).subtract(bam.x,bam.y,bam.z);
+
+
                 Vec3 vec3d2ST = this.self.getViewVector(0);
 
                 fireball.setUser(this.self);
@@ -2414,7 +2431,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         shootAnkhSpeed(ankh, 1.01F);
     }
     public void shootAnkhSpeed(CrossfireHurricaneEntity ankh, float speed){
-        ankh.setPos(this.self.getX(), this.self.getEyeY(), this.self.getZ());
+        ankh.setPos(this.self.getEyePosition().x, this.self.getEyePosition().y, this.self.getEyePosition().z);
         ankh.setXRot(this.getSelf().getXRot()%360);
         ankh.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), 1.0F, speed, 0);
     }
