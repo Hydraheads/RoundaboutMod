@@ -38,7 +38,7 @@ public abstract class GravityMeleeAttackGoalMixin {
         ci.cancel();
 
         double $$2 = this.getAttackReachSqr($$0);
-        if (Math.sqrt($$1) <= Math.sqrt($$2)*2.3 && this.ticksUntilNextAttack <= 0) {
+        if (Math.sqrt($$1) <= (Math.sqrt($$2)+2) && this.ticksUntilNextAttack <= 0) {
             this.resetAttackCooldown();
             this.mob.swing(InteractionHand.MAIN_HAND);
             this.mob.doHurtTarget($$0);
