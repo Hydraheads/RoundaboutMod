@@ -162,6 +162,8 @@ public class PowersCinderella extends NewDashPreset {
             return Component.translatable("skins.roundabout.cinderella.jack_in_the_box");
         } if (skinId == CinderellaEntity.BUSINESS_SKIN) {
             return Component.translatable("skins.roundabout.cinderella.business");
+        } if (skinId == CinderellaEntity.FACE_OFF) {
+            return Component.translatable("skins.roundabout.cinderella.face_off");
         }
         return Component.translatable("skins.roundabout.cinderella.base");
     }
@@ -486,6 +488,7 @@ public class PowersCinderella extends NewDashPreset {
         $$1.add(CinderellaEntity.ZOMBIE_SKIN);
         $$1.add(CinderellaEntity.JACK_SKIN);
         $$1.add(CinderellaEntity.BUSINESS_SKIN);
+        $$1.add(CinderellaEntity.FACE_OFF);
         return $$1;
     }
 
