@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.stand.powers.PowersTheWorld;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
@@ -11,6 +12,7 @@ import net.hydra.jojomod.item.StandDiscItem;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,6 +24,15 @@ import java.util.Collection;
 
 public class RoundaboutCommands {
 
+    public static int roundaboutFogTrapRange(CommandSourceStack source, ServerPlayer plr, int rangeSet){
+        if(plr instanceof StandUser se && se.roundabout$getStandPowers() instanceof PowersJustice justice){
+            justice.fogTrapRange = rangeSet;
+            source.sendSuccess(()->Component.translatable("commands.roundabout.justice_fogTrapRange",String.valueOf(rangeSet)),false);
+        } else{
+            source.sendSuccess(()->Component.translatable("commands.roundabout.justice_fogTrapRangeFail"),false);
+        }
+        return 0;
+    }
     public static int roundaboutSetStandExp(CommandSourceStack source, Collection<? extends Entity> targets, int level) {
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity) {

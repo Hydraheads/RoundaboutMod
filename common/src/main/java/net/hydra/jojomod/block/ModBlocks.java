@@ -126,6 +126,7 @@ public class ModBlocks {
     public static Block FOG_NETHERRACK_COATING;
     public static Block FOG_NETHER_BRICKS;
     public static Block FOG_NETHER_BRICKS_COATING;
+    public static Block FOG_TRAP;
 
     public static Block D4C_LIGHT_BLOCK;
 
@@ -134,6 +135,7 @@ public class ModBlocks {
     public static BlockEntityType<MirrorBlockEntity> MIRROR_BLOCK_ENTITY;
     public static BlockEntityType<BubbleScaffoldBlockEntity> BUBBLE_SCAFFOLD_BLOCK_ENTITY;
     public static BlockEntityType<InvisiBlockEntity> INVISIBLE_BLOCK_ENTITY;
+    public static BlockEntityType<FogTrapBlockEntity> FOG_TRAP_BLOCK_ENTITY;
     public static BlockEntityType<D4CLightBlockEntity> D4C_LIGHT_BLOCK_ENTITY;
     public static Block ANCIENT_METEOR_PROPERTIES = new Block(
             BlockBehaviour.Properties.of()
@@ -360,6 +362,18 @@ public class ModBlocks {
                         .replaceable()
         );
     }
+    public static FogTrapBlock getFogTrapBlock(){
+        return new FogTrapBlock(
+                BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.NONE)
+                        .noOcclusion()
+                        .pushReaction(PushReaction.DESTROY)
+                        .strength(0F, 0F)
+                        .sound(SoundType.EMPTY)
+                        .noCollission()
+                        .replaceable()
+        );
+    }
 
     public static InvisiBlock INVISIBLE_BLOCK_PROPERTIES = new InvisiBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.NONE).forceSolidOn().noOcclusion().strength(-1.0F, 3600000.0F).lightLevel((p_152607_) -> {
@@ -458,7 +472,9 @@ public class ModBlocks {
             "red_stained_glass",
             "black_stained_glass",
             "azalea",
-            "flowering_azalea"
+            "flowering_azalea",
+            "fog_trap",
+            "fog_trap_coating"
     );
 
     public static List<String> dontGen = Arrays.asList("fog_dirt");

@@ -142,6 +142,7 @@ public class ForgeEvents {
         ModBlocks.FLESH_BLOCK = ForgeBlocks.FLESH_BLOCK.get();
         ModBlocks.FOG_DIRT_COATING = ForgeBlocks.FOG_DIRT_COATING.get();
         ModBlocks.FOG_DIRT = ForgeBlocks.FOG_DIRT.get();
+        ModBlocks.FOG_TRAP = ForgeBlocks.FOG_TRAP.get();
         ModBlocks.STEREO = ForgeBlocks.STEREO.get();
         ModBlocks.STAND_FIRE = ForgeBlocks.STAND_FIRE.get();
         ModBlocks.BUBBLE_SCAFFOLD = ForgeBlocks.BUBBLE_SCAFFOLD.get();
@@ -161,6 +162,7 @@ public class ForgeEvents {
         ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY = ForgeBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY.get();
         ModBlocks.INVISIBLE_BLOCK_ENTITY = ForgeBlocks.INVISIBLE_BLOCK_ENTITY.get();
         ModBlocks.D4C_LIGHT_BLOCK_ENTITY = ForgeBlocks.D4C_LIGHT_BLOCK_ENTITY.get();
+        ModBlocks.FOG_TRAP_BLOCK_ENTITY = ForgeBlocks.FOG_TRAP_BLOCK_ENTITY.get();
 
         ModItems.STAND_ARROW = ForgeItems.STAND_ARROW.get();
         ModItems.WORTHY_ARROW = ForgeItems.WORTHY_ARROW.get();

@@ -3,12 +3,15 @@ package net.hydra.jojomod.item;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 public class FogBlockItem extends BlockItem {
     public final Block mimicking;
@@ -18,10 +21,13 @@ public class FogBlockItem extends BlockItem {
     }
     @Override
     public Component getName(ItemStack $$0) {
-        if (mimicking != null) {
+        if (mimicking != null && mimicking != Blocks.TRIPWIRE) {
             return Component.translatable("block.roundabout.fog_block.title").append(" ").
                     append(Component.translatable(mimicking.asItem().getDescriptionId(mimicking.asItem().getDefaultInstance())));
-        } else {
+        } else if(mimicking == Blocks.TRIPWIRE){
+            return Component.translatable("block.roundabout.fog_trap");
+        }
+        else {
             return super.getName($$0);
         }
     }
@@ -34,4 +40,5 @@ public class FogBlockItem extends BlockItem {
             }
         }
     }
+
 }

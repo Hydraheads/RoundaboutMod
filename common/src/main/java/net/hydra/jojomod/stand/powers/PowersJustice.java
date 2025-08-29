@@ -80,6 +80,7 @@ public class PowersJustice extends NewDashPreset {
         super(self);
     }
     private List<LivingEntity> fogControlledEntities = new ArrayList<>();
+    public int fogTrapRange = 20;
     @Override
     public StandPowers generateStandPowers(LivingEntity entity){
         return new PowersJustice(entity);

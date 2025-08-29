@@ -99,6 +99,10 @@ public class ForgeItems {
             () -> new FogBlockItem(ForgeBlocks.FOG_DIRT.get(),
                     new Item.Properties().stacksTo(64)
             , Blocks.DIRT)));
+    public static final RegistryObject<BlockItem> FOG_TRAP = addToFogTab(ITEMS.register("fog_trap",
+            () -> new FogBlockItem(ForgeBlocks.FOG_TRAP.get(),
+                    new Item.Properties().stacksTo(64)
+                    , Blocks.TRIPWIRE)));
     public static final RegistryObject<Item> LUCK_SWORD = addToTab(ITEMS.register("luck_sword",
             () -> new LuckSwordItem(Tiers.IRON, 5F, -2.8F, new Item.Properties())
             ));

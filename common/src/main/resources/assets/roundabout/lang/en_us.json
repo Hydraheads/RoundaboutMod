@@ -4,6 +4,8 @@
   "text.roundabout.riding_flying_creature": "Hold Jump to ascend, Hold Dash to descend",
   "text.roundabout.riding_flying_creature.day": "Cannot fly at day time.",
   "text.roundabout.riding_flying_creature.dimension": "Cannot fly in this dimension.",
+  "text.roundabout.warn_trap_triggered": " has been triggered!",
+  "text.roundabout.warn_unnamed_trap_triggered": "A fog trap has been triggered!",
 
   "item.roundabout.stand_arrow": "Stand Arrow",
   "item.roundabout.stand_beetle_arrow": "Stand Arrow",
@@ -279,6 +281,7 @@
   "block.roundabout.stereo": "Stereo",
   "block.roundabout.bubble_scaffold": "Bubble Path",
   "block.roundabout.fog_block": "Foggy Block",
+  "block.roundabout.fog_trap": "Fog Trap",
   "block.roundabout.fog_block.title": "Foggy",
   "block.roundabout.fog_block_coating.title": "Coating",
   "block.roundabout.stand_fire": "Stand Fire",
@@ -408,6 +411,8 @@
 
   "commands.roundabout.force_summon.multiple": "Summoned stands from %s entities",
   "commands.roundabout.force_summon.single": "Summoned stand from %s",
+  "commands.roundabout.justice_fogTrapRange": "Set your Fog Trap's aggro range to %s",
+  "commands.roundabout.justice_fogTrapRangeFail" : "You need Justice to use this command.",
 
   "commands.roundabout.heal.multiple": "Healed %s entities",
   "commands.roundabout.heal.single": "Healed %s",

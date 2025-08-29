@@ -1,0 +1,65 @@
+{
+  "variants": {
+    "in_fog=true,east=false,north=false,south=false,west=false": {
+      "model": "roundabout:block/tripwire_ns"
+    },
+    "in_fog=true,east=false,north=false,south=false,west=true": {
+      "model": "roundabout:block/tripwire_n",
+      "y": 270
+    },
+    "in_fog=true,east=false,north=false,south=true,west=false": {
+      "model": "roundabout:block/tripwire_n",
+      "y": 180
+    },
+    "in_fog=true,east=false,north=false,south=true,west=true": {
+      "model": "roundabout:block/tripwire_ne",
+      "y": 180
+    },
+    "in_fog=true,east=false,north=true,south=false,west=false": {
+      "model": "roundabout:block/tripwire_n"
+    },
+    "in_fog=true,east=false,north=true,south=false,west=true": {
+      "model": "roundabout:block/tripwire_ne",
+      "y": 270
+    },
+    "in_fog=true,east=false,north=true,south=true,west=false": {
+      "model": "roundabout:block/tripwire_ns"
+    },
+    "in_fog=true,east=false,north=true,south=true,west=true": {
+      "model": "roundabout:block/tripwire_nse",
+      "y": 180
+    },
+    "in_fog=true,east=true,north=false,south=false,west=false": {
+      "model": "roundabout:block/tripwire_n",
+      "y": 90
+    },
+    "in_fog=true,east=true,north=false,south=false,west=true": {
+      "model": "roundabout:block/tripwire_ns",
+      "y": 90
+    },
+    "in_fog=true,east=true,north=false,south=true,west=false": {
+      "model": "roundabout:block/tripwire_ne",
+      "y": 90
+    },
+    "in_fog=true,east=true,north=false,south=true,west=true": {
+      "model": "roundabout:block/tripwire_nse",
+      "y": 90
+    },
+    "in_fog=true,east=true,north=true,south=false,west=false": {
+      "model": "roundabout:block/tripwire_ne"
+    },
+    "in_fog=true,east=true,north=true,south=false,west=true": {
+      "model": "roundabout:block/tripwire_nse",
+      "y": 270
+    },
+    "in_fog=true,east=true,north=true,south=true,west=false": {
+      "model": "roundabout:block/tripwire_nse"
+    },
+    "in_fog=true,east=true,north=true,south=true,west=true": {
+      "model": "roundabout:block/tripwire_nsew"
+    },
+    "in_fog=false": {
+      "model": "roundabout:block/fog_block_invisible"
+    }
+  }
+}

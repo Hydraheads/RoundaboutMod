@@ -52,6 +52,7 @@ public class JojoModDataGenerator implements DataGeneratorEntrypoint {
 				} catch (Exception e) {
 					model = member.getValue().asArray().get(0).asObject().get("model").asString();
 				}
+                Roundabout.LOGGER.info(model);
 				try {
 					asrs = getJsonResourceStream("models/block/" + model.replace("minecraft:block/", ""));
 					for(net.zetalasis.hjson.JsonObject.Member mb2 : JsonValue.readJSON(asrs.get()).asObject().get("textures").asObject()){
@@ -82,7 +83,7 @@ public class JojoModDataGenerator implements DataGeneratorEntrypoint {
 		public void generateBlockStateModels(BlockModelGenerators bmodel) {
 			for(Block b : BuiltInRegistries.BLOCK) {
 				ResourceLocation i = BuiltInRegistries.BLOCK.getKey(b);
-				if(!i.getNamespace().equals(Roundabout.MOD_ID) || !i.getPath().contains("fog_") || ModBlocks.dontGenState.contains(i.getPath().replace("_coating",""))){
+				if(!i.getNamespace().equals(Roundabout.MOD_ID) || !i.getPath().contains("fog_") || ModBlocks.dontGenState.contains(i.getPath().replace("_coating","")) || i.getPath().contains("fog_trap")){
 					continue;
 				}
 				//For Coatings

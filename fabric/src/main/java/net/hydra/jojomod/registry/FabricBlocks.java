@@ -92,6 +92,7 @@ public class FabricBlocks {
 
     public static final Block FOG_DIRT_COATING = registerBlockItemless("fog_dirt_coating", getFogCoatingBlock());
     public static final Block FOG_DIRT = registerBlockItemless("fog_dirt", getFogBlock());
+    public static final Block FOG_TRAP = registerBlockItemless("fog_trap",getFogTrapBlock());
 
     public static final BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY =
            registerBE("stereo",BlockEntityType.Builder.of(StereoBlockEntity::new, STEREO));
@@ -103,6 +104,8 @@ public class FabricBlocks {
             registerBE("bubble_scaffold",BlockEntityType.Builder.of(BubbleScaffoldBlockEntity::new, BUBBLE_SCAFFOLD));
     public static final BlockEntityType<InvisiBlockEntity> INVISI_BLOCK_ENTITY =
             registerBE("invisible_block",BlockEntityType.Builder.of(InvisiBlockEntity::new, INVISIBLOCK));
+    public static final BlockEntityType<FogTrapBlockEntity> FOGTRAP_BLOCKENTITY =
+            registerBE("fog_trap",BlockEntityType.Builder.of(FogTrapBlockEntity::new, FOG_TRAP) );
     public static final BlockEntityType<D4CLightBlockEntity> D4C_LIGHT_BLOCK_ENTITY =
             registerBE("d4c_light_block",BlockEntityType.Builder.of(D4CLightBlockEntity::new, D4C_LIGHT_BLOCK));
 
@@ -191,10 +194,12 @@ public class FabricBlocks {
         ModBlocks.MIRROR_BLOCK_ENTITY = MIRROR_BLOCK_ENTITY;
         ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY = BUBBLE_SCAFFOLD_BLOCK_ENTITY;
         ModBlocks.INVISIBLE_BLOCK_ENTITY = INVISI_BLOCK_ENTITY;
+        FOG_TRAP_BLOCK_ENTITY = FOGTRAP_BLOCKENTITY;
         ModBlocks.D4C_LIGHT_BLOCK_ENTITY = D4C_LIGHT_BLOCK_ENTITY;
         ModBlocks.D4C_LIGHT_BLOCK = D4C_LIGHT_BLOCK;
         ModBlocks.FOG_DIRT = FOG_DIRT;
         ModBlocks.FOG_DIRT_COATING = FOG_DIRT_COATING;
+        ModBlocks.FOG_TRAP = FOG_TRAP;
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();

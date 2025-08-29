@@ -147,6 +147,7 @@ public class FabricItems {
     public static Item AESTHETICIAN_MASK_ZOMBIE = registerItem("aesthetician_mask_zombie", new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisageZombie(null)));
     public static Item FOG_DIRT = registerItem("fog_dirt", (Item) new FogBlockItem(ModBlocks.FOG_DIRT, new Item.Properties(), Blocks.DIRT));
     public static Item FOG_DIRT_COATING = registerItem("fog_dirt_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_DIRT_COATING, new Item.Properties(), Blocks.DIRT));
+    public static Item FOG_TRAP = registerItem("fog_trap", (Item) new FogBlockItem(ModBlocks.FOG_TRAP, new Item.Properties(), Blocks.TRIPWIRE));
 
     public static Item INTERDIMENSIONAL_KEY = registerItem("interdimensional_key", new InterdimensionalKeyItem(new Item.Properties().stacksTo(1)));
 
@@ -341,6 +342,7 @@ public class FabricItems {
 
                         entries.accept(FOG_DIRT_COATING);
                         entries.accept(FOG_DIRT);
+                        entries.accept(FOG_TRAP);
 
                         for(Item i : ModBlocks.gennedFogItems){
                             entries.accept(i);
