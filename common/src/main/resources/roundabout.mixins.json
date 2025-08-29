@@ -91,6 +91,7 @@
     "gravity.GravityLlamaSpitMixin",
     "gravity.GravityLookAtPlayerGoalMixin",
     "gravity.GravityLookControlMixin",
+    "gravity.GravityMeleeAttackGoalMixin",
     "gravity.GravityMobMixin",
     "gravity.GravityPiglinMixin",
     "gravity.GravityPillagerMixin",
