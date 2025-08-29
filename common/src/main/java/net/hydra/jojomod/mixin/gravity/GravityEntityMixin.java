@@ -427,7 +427,8 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         } else if (rdbt$this() instanceof CinderellaVisageDisplayEntity CD && CD.getStandUser() != null){
             roundabout$setGravityDirection(GravityAPI.getGravityDirection(CD.getStandUser()));
             roundabout$currGravityStrength = GravityAPI.getGravityStrength(CD.getStandUser());
-        } else if (rdbt$this() instanceof CrossfireHurricaneEntity CD && CD.getUser() != null){
+        } else if (rdbt$this() instanceof CrossfireHurricaneEntity CD && CD.getUser() != null
+        && CD.getCrossNumber() != 7){
             roundabout$setGravityDirection(GravityAPI.getGravityDirection(CD.getUser()));
             roundabout$currGravityStrength = GravityAPI.getGravityStrength(CD.getUser());
         }
