@@ -3730,7 +3730,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if (!this.level().isClientSide()) {
-            if (this.isInWaterRainOrBubble() || (((LivingEntity)(Object)this) instanceof Player PE && PE.isCreative())
+            if ((((LivingEntity)(Object)this) instanceof Player PE && PE.isCreative())
             || (roundabout$fireStarter != null && ((StandUser)roundabout$fireStarter).roundabout$getStandPowers() instanceof
                     PowersMagiciansRed PM && (PM.snapNumber != roundabout$fireStarterID))){
                 if (roundabout$remainingFireTicks >= 0) {
@@ -3756,14 +3756,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.STAND_FIRE), fireDamage);
                     }
 
-                    roundabout$setRemainingStandFireTicks(roundabout$remainingFireTicks - 1);
+                    int amtdown = -1;
+                    if (this.isInWaterRainOrBubble())
+                        amtdown = -6;
+                    roundabout$setRemainingStandFireTicks(roundabout$remainingFireTicks + amtdown);
 
                 }
                 if (roundabout$remainingFireTicks <= 0) {
                     if (roundabout$getOnStandFire() > 0) {
                         roundabout$setOnStandFire(StandFireType.FIRELESS.id);
                     }
-                    if (roundabout$remainingFireTicks == 0) {
+                    if (roundabout$remainingFireTicks == 0 || roundabout$remainingFireTicks < -1) {
                         roundabout$remainingFireTicks = -1;
                     }
                 }

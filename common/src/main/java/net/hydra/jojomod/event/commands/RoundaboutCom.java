@@ -6,6 +6,7 @@ import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.hydra.jojomod.RoundaboutCommands;
+import net.minecraft.world.entity.Entity;
 import net.zetalasis.world.DynamicWorld;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
@@ -93,6 +94,10 @@ public class RoundaboutCom {
                     context.getSource().sendSuccess(()->Component.translatable("commands.roundabaout.d4c_world", worldText), false);
                     return 0;
                 }));
+        dispatcher.register(Commands.literal("roundaboutFogTrapRange")
+                        .then(Commands.argument("radius",IntegerArgumentType.integer())
+                            .executes(context -> RoundaboutCommands.roundaboutFogTrapRange(context.getSource(), context.getSource().getPlayerOrException() ,IntegerArgumentType.getInteger(context,"radius")))
+                ));
     }
 
 }
