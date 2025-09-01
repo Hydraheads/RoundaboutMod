@@ -9,6 +9,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.Tag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -152,10 +153,12 @@ public class CorpseBuildBreakGoal extends Goal {
                         } else{
                             //If the block was destroyed, that means we were right to place here.
                             //So, we place
-                            block.place(new BlockPlaceContext(this.owner,this.fallenMob.swingingArm,this.fallenMob.getMainHandItem(),blockHit));
-                            this.fallenMob.getMainHandItem().setCount(this.fallenMob.getMainHandItem().getCount() - 1);
-                            this.fallenMob.swing(InteractionHand.MAIN_HAND,true);
-                            this.fallenMob.hasPlaced = 2;
+                            InteractionResult result = block.place(new BlockPlaceContext(this.owner,this.fallenMob.swingingArm,this.fallenMob.getMainHandItem(),blockHit));
+                            if (result.consumesAction()) {
+                                this.fallenMob.getMainHandItem().setCount(this.fallenMob.getMainHandItem().getCount() - 1);
+                                this.fallenMob.swing(InteractionHand.MAIN_HAND, true);
+                                this.fallenMob.hasPlaced = 2;
+                            }
                         }
 
 
@@ -192,10 +195,12 @@ public class CorpseBuildBreakGoal extends Goal {
                     if(this.fallenMob.getMainHandItem().getItem() instanceof BlockItem block){
 
                         if(MainUtil.canPlaceOnClaim(this.owner,blockHit)){
-                            block.place(new BlockPlaceContext(this.owner,this.fallenMob.swingingArm,this.fallenMob.getMainHandItem(),blockHit));
-                            this.fallenMob.getMainHandItem().setCount(this.fallenMob.getMainHandItem().getCount() - 1);
-                            this.fallenMob.swing(InteractionHand.MAIN_HAND,true);
-                            this.fallenMob.hasPlaced = 2;
+                            InteractionResult result = block.place(new BlockPlaceContext(this.owner,this.fallenMob.swingingArm,this.fallenMob.getMainHandItem(),blockHit));
+                            if (result.consumesAction()) {
+                                this.fallenMob.getMainHandItem().setCount(this.fallenMob.getMainHandItem().getCount() - 1);
+                                this.fallenMob.swing(InteractionHand.MAIN_HAND,true);
+                                this.fallenMob.hasPlaced = 2;
+                            }
                         }
 
                         this.stop();
