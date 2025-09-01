@@ -59,7 +59,7 @@ public abstract class GravityMobMixin extends LivingEntity implements Targeting 
 
         double $$8 = Math.sqrt($$3 * $$3 + $$4 * $$4);
         float $$9 = (float)(Mth.atan2($$4, $$3) * 180.0F / (float)Math.PI) - 90.0F;
-        float $$10 = (float)(-(Mth.atan2($$6, $$8) * 180.0F / (float)Math.PI));
+        float $$10 = (float)((Mth.atan2($$6, $$8) * 180.0F / (float)Math.PI));
 
         this.setXRot(this.rotlerp(this.getXRot(), $$10, $$2));
         this.setYRot(this.rotlerp(this.getYRot(), $$9, $$1));

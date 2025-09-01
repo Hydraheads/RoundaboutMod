@@ -31,6 +31,7 @@ public class LocacacaItem extends Item {
 
         if (entity.hasEffect(ModEffects.HEX)){
             ((StandUser)entity).roundabout$setLocacacaCurse(LocacacaCurseIndex.HEART);
+            return;
         }
 
         double random = Math.random();
