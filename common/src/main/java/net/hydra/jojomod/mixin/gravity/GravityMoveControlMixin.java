@@ -184,6 +184,9 @@ public abstract class GravityMoveControlMixin implements Control {
 
                         this.mob.setXRot(this.rotlerp(this.mob.getXRot(), rotVec.y, 20));
                         this.mob.setYRot(this.rotlerp(this.mob.getYRot(), rotVec.x, 20));
+                    } else {
+                        this.mob.setZza(0.0F);
+                        return;
                     }
                 } else {
                     Vec2 vec2 = new Vec2($$13,this.mob.getXRot());

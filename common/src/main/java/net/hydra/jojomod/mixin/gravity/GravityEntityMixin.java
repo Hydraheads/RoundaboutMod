@@ -63,6 +63,10 @@ import java.util.List;
 public abstract class GravityEntityMixin implements IGravityEntity {
     // NEW FEATURES
 
+    @Shadow public abstract float getBbWidth();
+
+    @Shadow public abstract Vec3 getPosition(float f);
+
     @Shadow public abstract Vec2 getRotationVector();
 
     @Shadow public boolean verticalCollisionBelow;
@@ -200,6 +204,19 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     private long roundabout$lastUpdateTickCount = 0;
 
     @Inject(
+            method = "onSyncedDataUpdated(Lnet/minecraft/network/syncher/EntityDataAccessor;)V",
+            at = @At("TAIL"))
+    private void roundabout$onSyncedDataUpdated(EntityDataAccessor<?> $$0, CallbackInfo ci) {
+        if (ROUNDABOUT$GRAVITY_DIRECTION.equals($$0)) {
+            if (!roundabout$canChangeGravity()) {
+                return;
+            }
+            roundabout$updateGravityStatus();
+            roundabout$applyGravityChange();
+        }
+    }
+
+    @Inject(
             method = "tick",
             at = @At("TAIL"))
     private void roundabout$tick(CallbackInfo ci) {
@@ -296,17 +313,29 @@ public abstract class GravityEntityMixin implements IGravityEntity {
             );
         }
 
+        Vec3 revGrav = new Vec3(0,0.1,0);
+        Vec3 revGrav2 = new Vec3(0,0.1,0);
+        revGrav = RotationUtil.vecPlayerToWorld(revGrav,oldGravity);
+        revGrav2 = RotationUtil.vecPlayerToWorld(revGrav2,oldGravity);
+
+        setDeltaMovement(getDeltaMovement().add(revGrav.x,revGrav.y,revGrav.z));
         Vec3 realWorldVelocity = roundabout$getRealWorldVelocity(((Entity)(Object)this), oldGravity);
-        if (rotationParameters.rotateVelocity()) {
+        //if (rotationParameters.rotateVelocity()) {
             // Rotate velocity with gravity, this will cause things to appear to take a sharp turn
-            Vector3f worldSpaceVec = realWorldVelocity.toVector3f();
-            worldSpaceVec.rotate(RotationUtil.getRotationBetween(oldGravity, newGravity));
-            setDeltaMovement(RotationUtil.vecWorldToPlayer(new Vec3(worldSpaceVec), newGravity));
-        }
-        else {
+            //Vector3f worldSpaceVec = realWorldVelocity.toVector3f();
+            //worldSpaceVec.rotate(RotationUtil.getRotationBetween(oldGravity, newGravity));
+            //setDeltaMovement(RotationUtil.vecWorldToPlayer(new Vec3(worldSpaceVec), newGravity));
+        //}
+        //else {
             // Velocity will be conserved relative to the world, will result in more natural motion
             setDeltaMovement(RotationUtil.vecWorldToPlayer(realWorldVelocity, newGravity));
-        }
+
+            Vec3 yes = this.getPosition(1).add(revGrav2);
+            BlockPos bpos = new BlockPos((int) yes.x, (int) yes.y, (int) yes.z);
+            if (!this.level.getBlockState(bpos).isSolid()){
+                this.setPos(yes);
+            }
+        //}
     }
 
     // Adjust position to avoid suffocation in blocks when changing gravity
