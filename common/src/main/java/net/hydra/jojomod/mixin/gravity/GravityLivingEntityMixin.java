@@ -690,7 +690,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
             ),
             cancellable = true
     )
-    private void roundabout$modify_blockedByShield_Vec3d_1(DamageSource $$0, CallbackInfoReturnable<Boolean> cir) {
+    public void isDamageSourceBlocked(DamageSource $$0, CallbackInfoReturnable<Boolean> cir) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN)
             return;
@@ -704,17 +704,17 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
             Vec3 $$4 = $$0.getSourcePosition();
             if ($$4 != null) {
                 Vec3 $$5 = RotationUtil.vecWorldToPlayer(this.getViewVector(1.0F), gravityDirection);
+
                 Vec3 $$6 = $$4.vectorTo(this.position()).normalize();
                 $$6 = new Vec3($$6.x, 0.0, $$6.z);
                 if ($$6.dot($$5) < 0.0) {
                     cir.setReturnValue(true);
+                    return;
                 }
             }
         }
 
         cir.setReturnValue(false);
-
-        return ;
     }
 
 
