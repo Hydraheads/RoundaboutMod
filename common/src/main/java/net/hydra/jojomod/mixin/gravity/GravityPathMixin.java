@@ -19,29 +19,29 @@ import java.util.List;
 
 @Mixin(Path.class)
 public class GravityPathMixin {
-//    @Shadow @Final private List<Node> nodes;
-//
-//    @Inject(
-//            method = "getEntityPosAtNode(Lnet/minecraft/world/entity/Entity;I)Lnet/minecraft/world/phys/Vec3;",
-//            at = @At(
-//                    value = "HEAD"
-//            ),
-//            cancellable = true
-//    )
-//    public void rdbt$tickTrue(Entity $$0, int $$1, CallbackInfoReturnable<Vec3> cir) {
-//        Direction dir = ((IGravityEntity)$$0).roundabout$getGravityDirection();
-//        if (dir == Direction.DOWN)
-//            return;
-//
-//        Vec3 transVec = new Vec3((double)(double)((int)($$0.getBbWidth() + 1.0F)) * 0.5,
-//                0,
-//                (double)((int)($$0.getBbWidth() + 1.0F)) * 0.5);
-//        transVec = RotationUtil.vecPlayerToWorld(transVec,dir);
-//
-//        Node $$2 = this.nodes.get($$1);
-//        double $$3 = $$2.x + transVec.x;
-//        double $$4 = (double)$$2.y + transVec.y;
-//        double $$5 = (double)$$2.z + transVec.z;
-//        cir.setReturnValue(new Vec3($$3, $$4, $$5));
-//    }
+    @Shadow @Final private List<Node> nodes;
+
+    @Inject(
+            method = "getEntityPosAtNode(Lnet/minecraft/world/entity/Entity;I)Lnet/minecraft/world/phys/Vec3;",
+            at = @At(
+                    value = "HEAD"
+            ),
+            cancellable = true
+    )
+    public void rdbt$tickTrue(Entity $$0, int $$1, CallbackInfoReturnable<Vec3> cir) {
+        Direction dir = ((IGravityEntity)$$0).roundabout$getGravityDirection();
+        if (dir == Direction.DOWN)
+            return;
+
+        Vec3 transVec = new Vec3((double)(double)((int)($$0.getBbWidth() + 1.0F)) * 0.5,
+                0,
+                (double)((int)($$0.getBbWidth() + 1.0F)) * 0.5);
+        transVec = RotationUtil.vecPlayerToWorld(transVec,dir);
+
+        Node $$2 = this.nodes.get($$1);
+        double $$3 = $$2.x + transVec.x;
+        double $$4 = (double)$$2.y + transVec.y;
+        double $$5 = (double)$$2.z + transVec.z;
+        cir.setReturnValue(new Vec3($$3, $$4, $$5));
+    }
 }

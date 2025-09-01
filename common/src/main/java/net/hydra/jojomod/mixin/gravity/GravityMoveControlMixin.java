@@ -171,7 +171,19 @@ public abstract class GravityMoveControlMixin implements Control {
                 if (debug) {
                     //this.mob.setPos(this.wantedX,this.wantedY,this.wantedZ);
                     if (entity != null) {
-                        this.mob.lookAt(entity,30,30);
+                        double $$3 = entity.getEyePosition().x - this.mob.getEyePosition().x;
+                        double $$4 = entity.getEyePosition().z - this.mob.getEyePosition().z;
+                        double $$6 = entity.getEyePosition().y - this.mob.getEyePosition().y;
+
+                        Vec3 modProperly = new Vec3($$3,$$6,$$4);
+
+                        double $$8 = Math.sqrt(modProperly.x * modProperly.x + modProperly.z * modProperly.z);
+                        float $$9 = (float)(Mth.atan2(modProperly.z, modProperly.x) * 180.0F / (float)Math.PI) - 90.0F;
+                        float $$10 = (float)(-(Mth.atan2(modProperly.y, $$8) * 180.0F / (float)Math.PI));
+                        Vec2 rotVec = new Vec2($$9,$$10);
+
+                        this.mob.setXRot(this.rotlerp(this.mob.getXRot(), rotVec.y, 20));
+                        this.mob.setYRot(this.rotlerp(this.mob.getYRot(), rotVec.x, 20));
                     }
                 } else {
                     Vec2 vec2 = new Vec2($$13,this.mob.getXRot());
