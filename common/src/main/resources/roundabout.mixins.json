@@ -115,6 +115,7 @@
     "gravity.GravityThrownExperienceBottleMixin",
     "gravity.GravityThrownPotionMixin",
     "gravity.GravityUseOnContextMixin",
+    "gravity.GravityWalkNodeEvaluatorMixin",
     "gravity.GravityWitchMixin",
     "gravity.GravityWitherBossMixin",
     "gravity.client.GravityClientEntityMixin",
