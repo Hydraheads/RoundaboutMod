@@ -2,15 +2,101 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "bonus_rolls": 0.0,
+      "bonus_rolls": 0,
       "conditions": [],
       "entries": [
         {
-          "type": "minecraft:item",
-          "name": "roundabout:flesh_block"
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:alternatives",
+              "children": [
+                {
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "block": "roundabout:flesh_block",
+                      "condition": "minecraft:block_state_property",
+                      "properties": {
+                        "layers": "1"
+                      }
+                    }
+                  ],
+                  "functions": [
+                    {
+                      "add": false,
+                      "count": 1,
+                      "function": "minecraft:set_count"
+                    }
+                  ],
+                  "name": "roundabout:flesh_block"
+                },
+                {
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "block": "roundabout:flesh_block",
+                      "condition": "minecraft:block_state_property",
+                      "properties": {
+                        "layers": "2"
+                      }
+                    }
+                  ],
+                  "functions": [
+                    {
+                      "add": false,
+                      "count": 2,
+                      "function": "minecraft:set_count"
+                    }
+                  ],
+                  "name": "roundabout:flesh_block"
+                },
+                {
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "block": "roundabout:flesh_block",
+                      "condition": "minecraft:block_state_property",
+                      "properties": {
+                        "layers": "3"
+                      }
+                    }
+                  ],
+                  "functions": [
+                    {
+                      "add": false,
+                      "count": 3,
+                      "function": "minecraft:set_count"
+                    }
+                  ],
+                  "name": "roundabout:flesh_block"
+                },
+                {
+                  "type": "minecraft:item",
+                  "conditions": [
+                    {
+                      "block": "roundabout:flesh_block",
+                      "condition": "minecraft:block_state_property",
+                      "properties": {
+                        "layers": "4"
+                      }
+                    }
+                  ],
+                  "functions": [
+                    {
+                      "add": false,
+                      "count": 4,
+                      "function": "minecraft:set_count"
+                    }
+                  ],
+                  "name": "roundabout:flesh_block"
+                }
+              ]
+            }
+          ]
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     }
   ]
 }
