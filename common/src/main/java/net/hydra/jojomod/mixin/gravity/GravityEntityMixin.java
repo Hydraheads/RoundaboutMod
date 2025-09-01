@@ -138,6 +138,12 @@ public abstract class GravityEntityMixin implements IGravityEntity {
 
     @Unique
     @Override
+    public int roundabout$getSuffocationTicks() {
+        return rdbt$noSuffocateTicks;
+    }
+
+    @Unique
+    @Override
     public void roundabout$setGravityDirection(Direction direction){
         if (this.entityData.hasItem(ROUNDABOUT$GRAVITY_DIRECTION)) {
             this.getEntityData().set(ROUNDABOUT$GRAVITY_DIRECTION, direction);
@@ -225,6 +231,9 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         }
         roundabout$updateGravityStatus();
         roundabout$applyGravityChange();
+        if (rdbt$noSuffocateTicks > 0) {
+            rdbt$noSuffocateTicks--;
+        }
     }
     @Unique
     public void roundabout$applyGravityChange() {
@@ -329,7 +338,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         //else {
             // Velocity will be conserved relative to the world, will result in more natural motion
             setDeltaMovement(RotationUtil.vecWorldToPlayer(realWorldVelocity, newGravity));
-
+        rdbt$noSuffocateTicks = 20;
             Vec3 yes = this.getPosition(1).add(revGrav2);
             BlockPos bpos = new BlockPos((int) yes.x, (int) yes.y, (int) yes.z);
             if (!this.level.getBlockState(bpos).isSolid()){
@@ -337,6 +346,8 @@ public abstract class GravityEntityMixin implements IGravityEntity {
             }
         //}
     }
+
+    public int rdbt$noSuffocateTicks = 0;
 
     // Adjust position to avoid suffocation in blocks when changing gravity
     @Unique
