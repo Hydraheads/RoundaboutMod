@@ -431,6 +431,8 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         && CD.getCrossNumber() != 7){
             roundabout$setGravityDirection(GravityAPI.getGravityDirection(CD.getUser()));
             roundabout$currGravityStrength = GravityAPI.getGravityStrength(CD.getUser());
+        } else if (rdbt$this() instanceof LivingEntity LE && LE.isSleeping()){
+            roundabout$setGravityDirection(Direction.DOWN);
         }
         else {
             if (!this.level.isClientSide()){
