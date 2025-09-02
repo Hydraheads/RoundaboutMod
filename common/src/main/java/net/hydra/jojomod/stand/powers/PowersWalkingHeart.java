@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -26,6 +27,7 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -160,10 +162,11 @@ public class PowersWalkingHeart extends NewDashPreset {
         if ((this.self.onGround() && !hasExtendedHeelsForWalking()) || (!this.self.onGround() && hasExtendedHeelsForWalking()))
             return false;
         BlockPos pos1 = this.self.getOnPos();
+        Direction gravdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
         if (this.self.level().getBlockState(pos1).isSolid()){
-            pos1 = pos1.relative(((IGravityEntity)this.self).roundabout$getGravityDirection().getOpposite());
+            pos1 = pos1.relative(gravdir.getOpposite());
         }
-        pos1 = pos1.relative(this.self.getDirection());
+        pos1 = pos1.relative(RotationUtil.getRealFacingDirection(this.self));
         if (this.self.level().getBlockState(pos1).isSolid()){
             return true;
         }
@@ -176,8 +179,9 @@ public class PowersWalkingHeart extends NewDashPreset {
             this.setCooldown(PowerIndex.SKILL_3, 20);
             if (!this.self.level().isClientSide()) {
                 getStandUserSelf().roundabout$setUniqueStandModeToggle(true);
-                setHeelDirection(this.self.getDirection());
-                ((IGravityEntity) this.self).roundabout$setGravityDirection(this.self.getDirection());
+                Direction gd = RotationUtil.getRealFacingDirection(this.self);
+                setHeelDirection(gd);
+                ((IGravityEntity) this.self).roundabout$setGravityDirection(gd);
             }
         }
     }
