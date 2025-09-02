@@ -252,6 +252,9 @@ public class FabricItems {
                         entries.accept(MUSIC_DISC_TORTURE_DANCE);
                         entries.accept(MUSIC_DISC_HALLELUJAH);
 
+                        entries.accept(ModBlocks.FLESH_BLOCK);
+                        entries.accept(ModItems.FLESH_BUCKET);
+
                         entries.accept(ModBlocks.LOCACACA_CACTUS);
                         entries.accept(ModBlocks.GODDESS_STATUE_BLOCK);
                         entries.accept(ModBlocks.STEREO);
@@ -273,7 +276,7 @@ public class FabricItems {
                         entries.accept(HATO_MASK);
                         entries.accept(SHIZUKA_MASK);
 
-                        entries.accept(ModBlocks.FLESH_BLOCK);
+
 
 
                     }).build());
