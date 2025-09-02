@@ -234,6 +234,23 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     }
 
     @Inject(
+            method = "setOnGround(Z)V",
+            at = @At("HEAD"))
+    private void roundabout$setOnGround(boolean $$0, CallbackInfo ci) {
+        if (rdbt$this() instanceof Player && !isControlledByLocalInstance() && roundabout$getGravityDirection() != Direction.DOWN){
+            Roundabout.LOGGER.info(" 1: "+$$0);
+        }
+    }
+    @Inject(
+            method = "setOnGroundWithKnownMovement(ZLnet/minecraft/world/phys/Vec3;)V",
+            at = @At("HEAD"))
+    private void roundabout$setOnGround2(boolean $$0, Vec3 $$1, CallbackInfo ci) {
+        if (rdbt$this() instanceof Player && !isControlledByLocalInstance() && roundabout$getGravityDirection() != Direction.DOWN){
+            Roundabout.LOGGER.info(" 1: "+$$0+" 2: "+$$1);
+        }
+    }
+
+    @Inject(
             method = "tick",
             at = @At("TAIL"))
     private void roundabout$tickGravTail(CallbackInfo ci) {
@@ -637,10 +654,10 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (rdbdt$taggedForFlip){
             rdbdt$taggedForFlip = false;
-            vec3d = RotationUtil.vecWorldToPlayer(vec3d, gravityDirection).add(0,-0.021,0);
+            vec3d = RotationUtil.vecWorldToPlayer(vec3d, gravityDirection).add(0,-0.012,0);
         } else {
             if (gravityDirection != Direction.DOWN) {
-                vec3d = vec3d.add(0,-0.021,0);
+                vec3d = vec3d.add(0,-0.012,0);
             }
         }
         if (gravityDirection == Direction.DOWN) {
