@@ -60,7 +60,7 @@ public class FleshPileEntity extends ThrowableItemProjectile {
                     15, 0.4, 0.4, 0.25, 0.4);
             this.playSound(SoundEvents.GENERIC_SPLASH, 1F, 1.5F);
 
-            placeFlesh($$0.getBlockPos(),this.flesh_count);
+            placeFlesh($$0.getBlockPos(),(this.flesh_count != 0 ? this.flesh_count : 4));
 
 
             this.discard();
