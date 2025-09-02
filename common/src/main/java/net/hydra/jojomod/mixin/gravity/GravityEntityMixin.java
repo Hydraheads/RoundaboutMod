@@ -33,6 +33,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.border.WorldBorder;
@@ -695,24 +696,27 @@ public abstract class GravityEntityMixin implements IGravityEntity {
                     target = "Ljava/lang/Math;sqrt(D)D",
                     ordinal = 0,
                     shift = At.Shift.AFTER
-            )
+            ),
+            locals = LocalCapture.CAPTURE_FAILHARD
     )
-    private void rdbt$stepsProperly(MoverType $$0, Vec3 $$1, CallbackInfo ci) {
+    private void rdbt$stepsProperly(MoverType $$0, Vec3 $$1, CallbackInfo ci, Vec3 $$2, double $$3, boolean $$5, boolean $$6, BlockPos $$7, BlockState $$8, Block $$10, Entity.MovementEmission $$11, double $$12, double $$13, double $$14, BlockPos $$15, BlockState $$16) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN)
             return;
 
-        Vec3 collide = this.collide($$1);
-        Vec3 collide2 = collide;
+        Vec3 collide = $$2;
+        Vec3 collide2 = $$2;
 
-        BlockPos $$15 = this.getOnPos();
-        BlockState $$16 = this.level().getBlockState($$15);
-        boolean $$17 = this.isStateClimbable($$16);
+        BlockPos bpos = this.getOnPos();
+        BlockState bstate = this.level().getBlockState(bpos);
+        boolean $$17 = this.isStateClimbable(bstate);
         if (!$$17) {
             collide2 = new Vec3(collide.x,0,collide.z);
         }
+        double leng = 0;
+        leng = Math.sqrt(collide.x * collide.x + collide.z * collide.z);
 
-        this.walkDist = this.walkDistO + (float)collide.length() * 0.6F;
+        this.walkDist = this.walkDistO + (float)leng * 0.6F;
         this.moveDist = this.moveDist - (float)Math.sqrt(
                 collide2.x * collide2.x + collide2.y * collide2.y + collide2.z * collide2.z) * 0.6F;
 

@@ -98,7 +98,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     public void dashOrWallLatch(){
         if (canLatchOntoWall())
             doWallLatchClient();
-        else
+        else if (!hasExtendedHeelsForWalking())
             dash();
     }
 
@@ -195,11 +195,19 @@ public class PowersWalkingHeart extends NewDashPreset {
             setSkillIcon(context, x, y, 2, StandIcons.GROUND_IMPLANT, PowerIndex.SKILL_2);
         else
             setSkillIcon(context, x, y, 2, StandIcons.GROUND_IMPLANT_OUT, PowerIndex.SKILL_2);
-        if (canLatchOntoWall())
+        if (canLatchOntoWall() || hasExtendedHeelsForWalking())
             setSkillIcon(context, x, y, 3, StandIcons.WALL_WALK, PowerIndex.NO_CD);
         else
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
     }
+
+    @Override
+    public boolean isAttackIneptVisually(byte activeP, int slot) {
+        if (slot == 3 && hasExtendedHeelsForWalking() && !canLatchOntoWall())
+            return true;
+        return super.isAttackIneptVisually(activeP, slot);
+    }
+
 
     @Override
     protected Byte getSummonSound() {

@@ -16,6 +16,7 @@ public class ErrorFixUtil {
         if ($$1.contains("roundabout") || $$1.contains("stereo") || $$1.contains("stand_fire") || $$1.contains("mirror")
                 || $$1.contains("invisible_block")
                 || $$1.contains("d4c")
+                || $$1.contains("fog_trap")
                 || $$1.contains("bubble_scaffold")){
             cir.setReturnValue(null);
         }
