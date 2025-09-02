@@ -68,6 +68,8 @@ import java.util.List;
 public abstract class GravityEntityMixin implements IGravityEntity {
     // NEW FEATURES
 
+    @Shadow @Deprecated public abstract BlockPos getOnPosLegacy();
+
     @Shadow protected abstract boolean isHorizontalCollisionMinor(Vec3 vec3);
 
     @Shadow public boolean minorHorizontalCollision;
@@ -706,6 +708,21 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         return RotationUtil.vecWorldToPlayer(vec3d, gravityDirection);
     }
 
+    @ModifyVariable(
+            method = "move(Lnet/minecraft/world/entity/MoverType;Lnet/minecraft/world/phys/Vec3;)V",
+            at = @At("STORE"),
+            ordinal = 1,
+            argsOnly = false
+    )
+    private BlockPos rdbt$move(BlockPos bpos) {
+        Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
+        if (gravityDirection == Direction.DOWN) {
+            return bpos;
+        }
+
+        return getOnPosLegacy();
+    }
+
     @Inject(
             method = "move(Lnet/minecraft/world/entity/MoverType;Lnet/minecraft/world/phys/Vec3;)V",
             at = @At(
@@ -726,20 +743,31 @@ public abstract class GravityEntityMixin implements IGravityEntity {
 
         BlockPos bpos = this.getOnPos();
         BlockState bstate = this.level().getBlockState(bpos);
-        boolean $$17 = this.isStateClimbable(bstate);
-        if (!$$17) {
-            collide2 = new Vec3(collide.x,0,collide.z);
-        }
+
         double leng = 0;
         leng = Math.sqrt(collide.x * collide.x + collide.z * collide.z);
 
         this.walkDist = this.walkDistO + (float)leng * 0.6F;
-        this.moveDist = this.moveDist - (float)Math.sqrt(
+
+
+        this.moveDist = this.moveDist - (float)Math.sqrt($$12 * $$12 + $$13 * $$13 + $$14 * $$14) * 0.6F;
+
+        boolean $$17 = this.isStateClimbable(bstate);
+        if (!$$17) {
+            //collide2 = RotationUtil.vecWorldToPlayer(collide2,gravityDirection);
+
+            if (gravityDirection == Direction.NORTH || gravityDirection == Direction.SOUTH){
+                collide2 = new Vec3(collide.x,collide.y,0);
+            }
+            if (gravityDirection == Direction.EAST || gravityDirection == Direction.WEST){
+                collide2 = new Vec3(0,collide.y,collide.z);
+            }
+
+            //collide2 = new Vec3(collide2.x,0,collide2.z);
+        }
+        this.moveDist = this.moveDist + (float)Math.sqrt(
                 collide2.x * collide2.x + collide2.y * collide2.y + collide2.z * collide2.z) * 0.6F;
 
-        Vec3 collideT = RotationUtil.vecWorldToPlayer(collide, gravityDirection);
-        this.moveDist = this.moveDist + (float)Math.sqrt(
-                collideT.x * collideT.x + collideT.y * collideT.y + collideT.z * collideT.z) * 0.6F;
     }
 
     @Inject(method = "saveWithoutId(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V",shift = At.Shift.AFTER))
