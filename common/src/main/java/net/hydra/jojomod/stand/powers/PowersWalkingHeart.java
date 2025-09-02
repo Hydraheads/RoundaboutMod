@@ -28,6 +28,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -87,8 +88,22 @@ public class PowersWalkingHeart extends NewDashPreset {
             case SKILL_2_NORMAL, SKILL_2_CROUCH-> {
             }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
-                dash();
+                dashOrWallLatch();
             }
+        }
+    }
+
+    public void dashOrWallLatch(){
+        if (canLatchOntoWall())
+            doWallLatchClient();
+        else
+            dash();
+    }
+
+    public void doWallLatchClient(){
+        if (!this.onCooldown(PowerIndex.SKILL_3)) {
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+            tryPowerPacket(PowerIndex.POWER_3);
         }
     }
 
@@ -129,11 +144,42 @@ public class PowersWalkingHeart extends NewDashPreset {
         return Component.translatable("skins.roundabout.cinderella.base");
     }
 
+    public Direction heelDirection = Direction.DOWN;
+
+    public Direction getHeelDirection(){
+        return heelDirection;
+    }
+    public void setHeelDirection(Direction dir){
+        heelDirection = dir;
+    }
+
     public boolean hasExtendedHeelsForWalking(){
-        return false;
+        return getStandUserSelf().roundabout$getUniqueStandModeToggle();
     }
     public boolean canLatchOntoWall(){
-        return !this.self.onGround();
+        if ((this.self.onGround() && !hasExtendedHeelsForWalking()) || (!this.self.onGround() && hasExtendedHeelsForWalking()))
+            return false;
+        BlockPos pos1 = this.self.getOnPos();
+        if (this.self.level().getBlockState(pos1).isSolid()){
+            pos1 = pos1.relative(((IGravityEntity)this.self).roundabout$getGravityDirection().getOpposite());
+        }
+        pos1 = pos1.relative(this.self.getDirection());
+        if (this.self.level().getBlockState(pos1).isSolid()){
+            return true;
+        }
+        return false;
+    }
+
+
+    public void wallLatch(){
+        if (canLatchOntoWall()){
+            this.setCooldown(PowerIndex.SKILL_3, 20);
+            if (!this.self.level().isClientSide()) {
+                getStandUserSelf().roundabout$setUniqueStandModeToggle(true);
+                setHeelDirection(this.self.getDirection());
+                ((IGravityEntity) this.self).roundabout$setGravityDirection(this.self.getDirection());
+            }
+        }
     }
 
     @Override
@@ -245,9 +291,11 @@ public class PowersWalkingHeart extends NewDashPreset {
 
         super.updateUniqueMoves();
     }
+
     @Override
     public boolean setPowerOther(int move, int lastMove) {
-
+        if (move == PowerIndex.POWER_3)
+            wallLatch();
         return super.setPowerOther(move,lastMove);
     }
 
