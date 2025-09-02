@@ -182,6 +182,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                 Direction gd = RotationUtil.getRealFacingDirection(this.self);
                 setHeelDirection(gd);
                 ((IGravityEntity) this.self).roundabout$setGravityDirection(gd);
+                justFlippedTicks = 7;
             }
         }
     }
@@ -263,32 +264,24 @@ public class PowersWalkingHeart extends NewDashPreset {
                 tryPowerPacket(PowerIndex.NONE);
             }
         } else {
-            if (this.getActivePower() == PowerIndex.POWER_1){
-
-                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PINK_SMOKE,
-                        this.getSelf().getX(), this.getSelf().getY() + 0.3, this.getSelf().getZ(),
-                        1, 2.5, 2,2.5, 0.015);
-
-                if (this.self instanceof Aesthetician aes){
-                    if (this.getStandEntity(this.self) == null || this.getStandEntity(this.self).isRemoved()){
-                        if (this.canSummonStand()){
-                            ((StandUser)this.self).roundabout$summonStand(this.self.level(),true,false);
-                        }
-                    }
-                    if (aes.interactingWith != null && aes.interactingWith.isEmpty()){
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+            if (hasExtendedHeelsForWalking()){
+                if (justFlippedTicks > 0){
+                    justFlippedTicks--;
+                } else {
+                    if (self.isSleeping() || !self.onGround() || self.getRootVehicle() != this.self){
+                        heelDirection = Direction.DOWN;
+                        getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
+                        ((IGravityEntity) this.self).roundabout$setGravityDirection(heelDirection);
+                        setHeelDirection(heelDirection);
                     }
                 }
-            } else {
-                if (this.self instanceof Aesthetician aes){
-                    if (aes.interactingWith != null && !aes.interactingWith.isEmpty()){
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
-                    }
-                }
+
             }
         }
         super.tickPower();
     }
+
+    public int justFlippedTicks = 0;
 
     @Override
     public void updateUniqueMoves() {

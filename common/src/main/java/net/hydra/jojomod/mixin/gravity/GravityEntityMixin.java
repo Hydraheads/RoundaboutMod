@@ -59,12 +59,19 @@ import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.List;
 
 @Mixin(Entity.class)
 public abstract class GravityEntityMixin implements IGravityEntity {
     // NEW FEATURES
+
+    @Shadow protected abstract boolean isHorizontalCollisionMinor(Vec3 vec3);
+
+    @Shadow public boolean minorHorizontalCollision;
+    @Shadow public boolean verticalCollision;
+    @Shadow public boolean horizontalCollision;
 
     @Shadow public abstract Vec3 getForward();
 
@@ -629,7 +636,11 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (rdbdt$taggedForFlip){
             rdbdt$taggedForFlip = false;
-            vec3d = RotationUtil.vecWorldToPlayer(vec3d, gravityDirection).add(0,-0.01,0);
+            vec3d = RotationUtil.vecWorldToPlayer(vec3d, gravityDirection).add(0,-0.015,0);
+        } else {
+            if (gravityDirection != Direction.DOWN) {
+                vec3d = vec3d.add(0,-0.015,0);
+            }
         }
         if (gravityDirection == Direction.DOWN) {
             return vec3d;
@@ -676,6 +687,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
 
         return RotationUtil.vecWorldToPlayer(vec3d, gravityDirection);
     }
+
     @Inject(
             method = "move(Lnet/minecraft/world/entity/MoverType;Lnet/minecraft/world/phys/Vec3;)V",
             at = @At(
@@ -913,7 +925,6 @@ public abstract class GravityEntityMixin implements IGravityEntity {
             );
         }
     }
-
 
     @Inject(
             method = "getForward",
