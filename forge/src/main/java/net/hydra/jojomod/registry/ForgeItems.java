@@ -204,6 +204,12 @@ public class ForgeItems {
     public static final RegistryObject<Item> MUSIC_DISC_HALLELUJAH = addToTab(ITEMS.register("music_disc_hallelujah",
             () -> new RecordItem(1, ForgeSounds.HALLELUJAH,
                     (new Item.Properties()).stacksTo(1).rarity(Rarity.RARE), 4380)));
+    public static final RegistryObject<BlockItem> FLESH_BLOCK = addToTab(ITEMS.register("flesh_block",
+            () -> new FleshChunkItem(ForgeBlocks.FLESH_BLOCK.get(),
+                    new Item.Properties().food(ModFoodComponents.FLESH_CHUNK)
+            )));
+    public static final RegistryObject<Item> FLESH_BUCKET = addToTab(ITEMS.register("flesh_bucket",
+            () -> new FleshBucketItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<ForgeSpawnEggItem> TERRIER_SPAWN_EGG = addToTab(ITEMS.register("terrier_spawn_egg",
             () -> new ForgeSpawnEggItem(ForgeEntities.TERRIER_DOG,
                     0xc9c071, 0xfffded, new Item.Properties())));
@@ -330,12 +336,6 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AestheticianVisageZombie(null)));
     public static final RegistryObject<Item> INTERDIMENSIONAL_KEY = ITEMS.register("interdimensional_key",
             () -> new InterdimensionalKeyItem(new Item.Properties().stacksTo(1)));
-    public static final RegistryObject<BlockItem> FLESH_BLOCK = addToTab(ITEMS.register("flesh_block",
-            () -> new FleshChunkItem(ForgeBlocks.FLESH_BLOCK.get(),
-                    new Item.Properties().food(ModFoodComponents.FLESH_CHUNK)
-            )));
-    public static final RegistryObject<Item> FLESH_BUCKET = ITEMS.register("flesh_bucket",
-            () -> new FleshBucketItem(new Item.Properties().stacksTo(1)));
 
 
     public static void assignStupidForge(){
