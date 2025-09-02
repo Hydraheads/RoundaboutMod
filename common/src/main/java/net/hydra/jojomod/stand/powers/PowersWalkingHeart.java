@@ -83,10 +83,8 @@ public class PowersWalkingHeart extends NewDashPreset {
         switch (context)
         {
             case SKILL_1_NORMAL, SKILL_1_CROUCH-> {
-                doUIClient();
             }
             case SKILL_2_NORMAL, SKILL_2_CROUCH-> {
-                doDefaceClient();
             }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 dash();
@@ -131,11 +129,25 @@ public class PowersWalkingHeart extends NewDashPreset {
         return Component.translatable("skins.roundabout.cinderella.base");
     }
 
+    public boolean hasExtendedHeelsForWalking(){
+        return false;
+    }
+    public boolean canLatchOntoWall(){
+        return !this.self.onGround();
+    }
+
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        setSkillIcon(context, x, y, 1, StandIcons.CINDERELLA_MASK, PowerIndex.NO_CD);
-        setSkillIcon(context, x, y, 2, StandIcons.CINDERELLA_SCALP, PowerIndex.SKILL_2);
-        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        setSkillIcon(context, x, y, 1, StandIcons.SPIKE_ATTACK_MODE, PowerIndex.SKILL_1);
+
+        if (hasExtendedHeelsForWalking())
+            setSkillIcon(context, x, y, 2, StandIcons.GROUND_IMPLANT, PowerIndex.SKILL_2);
+        else
+            setSkillIcon(context, x, y, 2, StandIcons.GROUND_IMPLANT_OUT, PowerIndex.SKILL_2);
+        if (canLatchOntoWall())
+            setSkillIcon(context, x, y, 3, StandIcons.WALL_WALK, PowerIndex.NO_CD);
+        else
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
     }
 
     @Override

@@ -281,6 +281,16 @@ public class StandIcons {
     public static final ResourceLocation JUSTICE_PILOT_EXIT = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/justice/fog_pilot_exit.png");
 
+
+    public static final ResourceLocation WALL_WALK = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/walking_heart/wall_walk.png");
+    public static final ResourceLocation GROUND_IMPLANT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/walking_heart/ground_implant.png");
+    public static final ResourceLocation GROUND_IMPLANT_OUT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/walking_heart/ground_implant_out.png");
+    public static final ResourceLocation SPIKE_ATTACK_MODE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/walking_heart/spike_attack_mode.png");
+
     public static final ResourceLocation CINDERELLA_SCALP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/cinderella/deface.png");
     public static final ResourceLocation CINDERELLA_MASK = new ResourceLocation(Roundabout.MOD_ID,
