@@ -1,6 +1,8 @@
 package net.hydra.jojomod.mixin.gravity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.RotationAnimation;
 import net.hydra.jojomod.util.gravity.GravityAPI;
@@ -23,6 +25,24 @@ import net.minecraft.world.entity.Entity;
 
 @Mixin(GameRenderer.class)
 public abstract class GravityGameRendererMixin {
+
+
+
+    @Inject(
+            method = "renderLevel(FJLcom/mojang/blaze3d/vertex/PoseStack;)V",
+            at = @At(
+                    value = "HEAD"
+            )
+    )
+    private void roundabout$inject_renderWorldHEAD(float tickDelta, long limitTime, PoseStack matrix, CallbackInfo ci) {
+        if (ClientUtil.getPlayer() != null) {
+            IGravityEntity igav = ((IGravityEntity) ClientUtil.getPlayer());
+            if (igav.roundabout$canChangeGravity()) {
+                igav.roundabout$updateGravityStatus();
+                igav.roundabout$applyGravityChange();
+            }
+        }
+    }
 
     @Inject(
             method = "renderLevel(FJLcom/mojang/blaze3d/vertex/PoseStack;)V",

@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.ILevelRenderer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.SavedSecond;
@@ -262,6 +263,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
     private void roundabout$renderLevelHead(PoseStack $$0, float $$1, long $$2, boolean $$3,
                                             Camera $$4, GameRenderer $$5, LightTexture $$6,
                                             Matrix4f $$7, CallbackInfo ci) {
+
         ClientUtil.mirrorCycles = 0;
     }
 

@@ -66,6 +66,8 @@ import java.util.List;
 public abstract class GravityEntityMixin implements IGravityEntity {
     // NEW FEATURES
 
+    @Shadow public abstract Vec3 getForward();
+
     @Shadow public abstract float getBbWidth();
 
     @Shadow public abstract Vec3 getPosition(float f);
@@ -237,6 +239,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         }
     }
     @Unique
+    @Override
     public void roundabout$applyGravityChange() {
 
 
@@ -262,7 +265,8 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     }
 
     @Unique
-    private boolean roundabout$canChangeGravity() {
+    @Override
+    public boolean roundabout$canChangeGravity() {
         return GEntityTags.canChangeGravity((Entity)(Object)this);
     }
 
@@ -453,6 +457,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     }
 
     @Unique
+    @Override
     public void roundabout$updateGravityStatus() {
 
         Direction oldGravityDirection = roundabout$getGravityDirection();
