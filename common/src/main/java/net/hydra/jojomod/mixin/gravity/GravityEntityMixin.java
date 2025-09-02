@@ -335,8 +335,8 @@ public abstract class GravityEntityMixin implements IGravityEntity {
             );
         }
 
-        Vec3 revGrav = new Vec3(0,0.1,0);
-        Vec3 revGrav2 = new Vec3(0,0.1,0);
+        Vec3 revGrav = new Vec3(0,0.002,0);
+        Vec3 revGrav2 = new Vec3(0,0.002,0);
         revGrav = RotationUtil.vecPlayerToWorld(revGrav,oldGravity);
         revGrav2 = RotationUtil.vecPlayerToWorld(revGrav2,oldGravity);
 
@@ -350,7 +350,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         //}
         //else {
             // Velocity will be conserved relative to the world, will result in more natural motion
-            setDeltaMovement(RotationUtil.vecWorldToPlayer(realWorldVelocity, newGravity));
+            setDeltaMovement(new Vec3(0,0,0));
         rdbt$noSuffocateTicks = 20;
             Vec3 yes = this.getPosition(1).add(revGrav2);
             BlockPos bpos = new BlockPos((int) yes.x, (int) yes.y, (int) yes.z);
@@ -637,10 +637,10 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (rdbdt$taggedForFlip){
             rdbdt$taggedForFlip = false;
-            vec3d = RotationUtil.vecWorldToPlayer(vec3d, gravityDirection).add(0,-0.015,0);
+            vec3d = RotationUtil.vecWorldToPlayer(vec3d, gravityDirection).add(0,-0.021,0);
         } else {
             if (gravityDirection != Direction.DOWN) {
-                vec3d = vec3d.add(0,-0.015,0);
+                vec3d = vec3d.add(0,-0.021,0);
             }
         }
         if (gravityDirection == Direction.DOWN) {

@@ -276,7 +276,19 @@ public class PowersWalkingHeart extends NewDashPreset {
                 if (justFlippedTicks > 0){
                     justFlippedTicks--;
                 } else {
-                    if (self.isSleeping() || !self.onGround() || self.getRootVehicle() != this.self){
+                    if (self.onGround()){
+                        mercyTicks = 2;
+                    } else {
+                        Vec3 newVec = new Vec3(0,0.1,0);
+                        newVec = RotationUtil.vecPlayerToWorld(newVec,((IGravityEntity)self).roundabout$getGravityDirection());
+                        BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
+                        if (self.level().getBlockState(pos).isSolid()){
+                            mercyTicks--;
+                        } else {
+                            mercyTicks = 0;
+                        }
+                    }
+                    if (self.isSleeping() || (!self.onGround()) || self.getRootVehicle() != this.self) {
                         heelDirection = Direction.DOWN;
                         getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
                         ((IGravityEntity) this.self).roundabout$setGravityDirection(heelDirection);
@@ -290,6 +302,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public int justFlippedTicks = 0;
+    public int mercyTicks = 0;
 
     @Override
     public void updateUniqueMoves() {
