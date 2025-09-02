@@ -65,6 +65,15 @@ public abstract class RotationUtil {
             return Direction.fromYRot(adjustedDir.x);
         }
     }
+    public static Direction getRealFacingDirection2(LivingEntity entity){
+        Vec2 adjustedDir = new Vec2(entity.getYHeadRot(),entity.getXRot());
+
+        Direction gravdir = ((IGravityEntity)entity).roundabout$getGravityDirection();
+        if (gravdir != Direction.DOWN){
+            adjustedDir = RotationUtil.rotPlayerToWorld(adjustedDir,gravdir);
+        }
+            return Direction.fromYRot(adjustedDir.x);
+    }
 
     public static Direction dirPlayerToWorld(Direction direction, Direction gravityDirection) {
         return DIR_PLAYER_TO_WORLD[gravityDirection.get3DDataValue()][direction.get3DDataValue()];
