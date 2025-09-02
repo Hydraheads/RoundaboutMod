@@ -163,9 +163,13 @@ public class PowersWalkingHeart extends NewDashPreset {
             return false;
         BlockPos pos1 = this.self.getOnPos();
         Direction gravdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+
         if (this.self.level().getBlockState(pos1).isSolid()){
             pos1 = pos1.relative(gravdir.getOpposite());
         }
+        Direction rd = RotationUtil.getRealFacingDirection(this.self);
+        if (rd == gravdir)
+            return false;
         pos1 = pos1.relative(RotationUtil.getRealFacingDirection(this.self));
         if (this.self.level().getBlockState(pos1).isSolid()){
             return true;
@@ -196,7 +200,7 @@ public class PowersWalkingHeart extends NewDashPreset {
         else
             setSkillIcon(context, x, y, 2, StandIcons.GROUND_IMPLANT_OUT, PowerIndex.SKILL_2);
         if (canLatchOntoWall() || hasExtendedHeelsForWalking())
-            setSkillIcon(context, x, y, 3, StandIcons.WALL_WALK, PowerIndex.NO_CD);
+            setSkillIcon(context, x, y, 3, StandIcons.WALL_WALK, PowerIndex.SKILL_3);
         else
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
     }
