@@ -2965,6 +2965,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    @Unique
+    @Override
+    public boolean rdbt$getJumping(){
+        return jumping;
+    }
+
     @Override
     public double roundabout$getGravity(double ogGrav){
 

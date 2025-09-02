@@ -233,22 +233,22 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         roundabout$applyGravityChange();
     }
 
-    @Inject(
-            method = "setOnGround(Z)V",
-            at = @At("HEAD"))
-    private void roundabout$setOnGround(boolean $$0, CallbackInfo ci) {
-        if (rdbt$this() instanceof Player && !isControlledByLocalInstance() && roundabout$getGravityDirection() != Direction.DOWN){
-            Roundabout.LOGGER.info(" 1: "+$$0);
-        }
-    }
-    @Inject(
-            method = "setOnGroundWithKnownMovement(ZLnet/minecraft/world/phys/Vec3;)V",
-            at = @At("HEAD"))
-    private void roundabout$setOnGround2(boolean $$0, Vec3 $$1, CallbackInfo ci) {
-        if (rdbt$this() instanceof Player && !isControlledByLocalInstance() && roundabout$getGravityDirection() != Direction.DOWN){
-            Roundabout.LOGGER.info(" 1: "+$$0+" 2: "+$$1);
-        }
-    }
+//    @Inject(
+//            method = "setOnGround(Z)V",
+//            at = @At("HEAD"))
+//    private void roundabout$setOnGround(boolean $$0, CallbackInfo ci) {
+//        if (rdbt$this() instanceof Player && !isControlledByLocalInstance() && roundabout$getGravityDirection() != Direction.DOWN){
+//            Roundabout.LOGGER.info(" 1: "+$$0);
+//        }
+//    }
+//    @Inject(
+//            method = "setOnGroundWithKnownMovement(ZLnet/minecraft/world/phys/Vec3;)V",
+//            at = @At("HEAD"))
+//    private void roundabout$setOnGround2(boolean $$0, Vec3 $$1, CallbackInfo ci) {
+//        if (rdbt$this() instanceof Player && !isControlledByLocalInstance() && roundabout$getGravityDirection() != Direction.DOWN){
+//            Roundabout.LOGGER.info(" 1: "+$$0+" 2: "+$$1);
+//        }
+//    }
 
     @Inject(
             method = "tick",

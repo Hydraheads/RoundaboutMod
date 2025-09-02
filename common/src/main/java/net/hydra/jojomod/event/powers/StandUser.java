@@ -28,7 +28,7 @@ public interface StandUser {
     Vec3 roundabout$frictionSave();
     void roundabout$deeplyRemoveAttackTarget();
     boolean roundabout$getQueForTargetDeletion();
-
+    boolean rdbt$getJumping();
     void roundabout$removeQueForTargetDeletion();
     void roundabout$onStandOutLookAround(StandEntity passenger);
     boolean roundabout$getUniqueStandModeToggle();

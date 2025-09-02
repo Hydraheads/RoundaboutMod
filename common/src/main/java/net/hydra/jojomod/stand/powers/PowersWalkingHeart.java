@@ -266,10 +266,12 @@ public class PowersWalkingHeart extends NewDashPreset {
 
     public void tickPower() {
         if (this.self.level().isClientSide()) {
-            if (hasUIOpen && !ClientUtil.hasCinderellaUI()){
-                hasUIOpen = false;
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                tryPowerPacket(PowerIndex.NONE);
+            if (hasExtendedHeelsForWalking() && !getStandUserSelf().rdbt$getJumping()){
+                if (!self.onGround()) {
+                    if (this.self.getDeltaMovement().y < 0){
+                        this.self.setDeltaMovement(this.self.getDeltaMovement().add(0,-0.14,0));
+                    }
+                }
             }
         } else {
             if (hasExtendedHeelsForWalking()){
@@ -277,18 +279,21 @@ public class PowersWalkingHeart extends NewDashPreset {
                     justFlippedTicks--;
                 } else {
                     if (self.onGround()){
-                        mercyTicks = 2;
+                        mercyTicks = 5;
                     } else {
-                        Vec3 newVec = new Vec3(0,0.1,0);
+                        Vec3 newVec = new Vec3(0,-0.2,0);
+                        Vec3 newVec2 = new Vec3(0,-1.0,0);
                         newVec = RotationUtil.vecPlayerToWorld(newVec,((IGravityEntity)self).roundabout$getGravityDirection());
                         BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
-                        if (self.level().getBlockState(pos).isSolid()){
+                        newVec2 = RotationUtil.vecPlayerToWorld(newVec2,((IGravityEntity)self).roundabout$getGravityDirection());
+                        BlockPos pos2 = BlockPos.containing(self.getPosition(1).add(newVec2));
+                        if (!getStandUserSelf().rdbt$getJumping() && (self.level().getBlockState(pos).isSolid() || self.level().getBlockState(pos2).isSolid())){
                             mercyTicks--;
                         } else {
                             mercyTicks = 0;
                         }
                     }
-                    if (self.isSleeping() || (!self.onGround()) || self.getRootVehicle() != this.self) {
+                    if (self.isSleeping() || (!self.onGround() && mercyTicks <= 0) || self.getRootVehicle() != this.self) {
                         heelDirection = Direction.DOWN;
                         getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
                         ((IGravityEntity) this.self).roundabout$setGravityDirection(heelDirection);
