@@ -1948,6 +1948,10 @@ public void unlockSkin(){
         bubbleScaffoldCount = 0;
         animateStand((byte) StandEntity.FIRST_PUNCH);
         buildingBubbleScaffoldPos = this.self.blockPosition();
+        if (this.self.level().getBlockState(this.self.blockPosition()).isSolid()){
+            Direction gravdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+            buildingBubbleScaffoldPos = buildingBubbleScaffoldPos.relative(gravdir.getOpposite());
+        }
         return true;
     }
     @Override

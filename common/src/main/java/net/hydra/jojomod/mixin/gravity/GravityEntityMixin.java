@@ -2,12 +2,15 @@ package net.hydra.jojomod.mixin.gravity;
 
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IClientEntity;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.GEntityTags;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.RotationAnimation;
@@ -62,6 +65,10 @@ import java.util.List;
 @Mixin(Entity.class)
 public abstract class GravityEntityMixin implements IGravityEntity {
     // NEW FEATURES
+
+    @Shadow public abstract float getBbWidth();
+
+    @Shadow public abstract Vec3 getPosition(float f);
 
     @Shadow public abstract Vec2 getRotationVector();
 
@@ -134,6 +141,12 @@ public abstract class GravityEntityMixin implements IGravityEntity {
 
     @Unique
     @Override
+    public int roundabout$getSuffocationTicks() {
+        return rdbt$noSuffocateTicks;
+    }
+
+    @Unique
+    @Override
     public void roundabout$setGravityDirection(Direction direction){
         if (this.entityData.hasItem(ROUNDABOUT$GRAVITY_DIRECTION)) {
             this.getEntityData().set(ROUNDABOUT$GRAVITY_DIRECTION, direction);
@@ -201,13 +214,27 @@ public abstract class GravityEntityMixin implements IGravityEntity {
 
     @Inject(
             method = "tick",
-            at = @At("TAIL"))
-    private void roundabout$tick(CallbackInfo ci) {
+            at = @At("HEAD"))
+    private void roundabout$tickGrav(CallbackInfo ci) {
         if (!roundabout$canChangeGravity()) {
             return;
         }
         roundabout$updateGravityStatus();
         roundabout$applyGravityChange();
+    }
+
+    @Inject(
+            method = "tick",
+            at = @At("TAIL"))
+    private void roundabout$tickGravTail(CallbackInfo ci) {
+        if (!roundabout$canChangeGravity()) {
+            return;
+        }
+        roundabout$updateGravityStatus();
+        roundabout$applyGravityChange();
+        if (rdbt$noSuffocateTicks > 0) {
+            rdbt$noSuffocateTicks--;
+        }
     }
     @Unique
     public void roundabout$applyGravityChange() {
@@ -296,18 +323,32 @@ public abstract class GravityEntityMixin implements IGravityEntity {
             );
         }
 
+        Vec3 revGrav = new Vec3(0,0.1,0);
+        Vec3 revGrav2 = new Vec3(0,0.1,0);
+        revGrav = RotationUtil.vecPlayerToWorld(revGrav,oldGravity);
+        revGrav2 = RotationUtil.vecPlayerToWorld(revGrav2,oldGravity);
+
+        setDeltaMovement(getDeltaMovement().add(revGrav.x,revGrav.y,revGrav.z));
         Vec3 realWorldVelocity = roundabout$getRealWorldVelocity(((Entity)(Object)this), oldGravity);
-        if (rotationParameters.rotateVelocity()) {
+        //if (rotationParameters.rotateVelocity()) {
             // Rotate velocity with gravity, this will cause things to appear to take a sharp turn
-            Vector3f worldSpaceVec = realWorldVelocity.toVector3f();
-            worldSpaceVec.rotate(RotationUtil.getRotationBetween(oldGravity, newGravity));
-            setDeltaMovement(RotationUtil.vecWorldToPlayer(new Vec3(worldSpaceVec), newGravity));
-        }
-        else {
+            //Vector3f worldSpaceVec = realWorldVelocity.toVector3f();
+            //worldSpaceVec.rotate(RotationUtil.getRotationBetween(oldGravity, newGravity));
+            //setDeltaMovement(RotationUtil.vecWorldToPlayer(new Vec3(worldSpaceVec), newGravity));
+        //}
+        //else {
             // Velocity will be conserved relative to the world, will result in more natural motion
             setDeltaMovement(RotationUtil.vecWorldToPlayer(realWorldVelocity, newGravity));
-        }
+        rdbt$noSuffocateTicks = 20;
+            Vec3 yes = this.getPosition(1).add(revGrav2);
+            BlockPos bpos = new BlockPos((int) yes.x, (int) yes.y, (int) yes.z);
+            if (!this.level.getBlockState(bpos).isSolid()){
+                this.setPos(yes);
+            }
+        //}
     }
+
+    public int rdbt$noSuffocateTicks = 0;
 
     // Adjust position to avoid suffocation in blocks when changing gravity
     @Unique
@@ -431,11 +472,17 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         && CD.getCrossNumber() != 7){
             roundabout$setGravityDirection(GravityAPI.getGravityDirection(CD.getUser()));
             roundabout$currGravityStrength = GravityAPI.getGravityStrength(CD.getUser());
+        } else if (rdbt$this() instanceof LivingEntity LE && LE.isSleeping()){
+            roundabout$setGravityDirection(Direction.DOWN);
         }
         else {
             if (!this.level.isClientSide()){
                 Direction dr = Direction.DOWN;
-                if (rdbt$this() instanceof LivingEntity LE && LE.hasEffect(ModEffects.GRAVITY_FLIP)){
+                if (rdbt$this() instanceof LivingEntity LE &&
+                        ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()
+                ) {
+                    dr = PW.getHeelDirection();
+                } else if (rdbt$this() instanceof LivingEntity LE && LE.hasEffect(ModEffects.GRAVITY_FLIP)){
                     MobEffectInstance mi = LE.getEffect(ModEffects.GRAVITY_FLIP);
                     if (mi != null){
                         if (mi.getAmplifier() == 0){

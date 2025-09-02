@@ -262,8 +262,8 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersHeyYa(null))));
     public static final RegistryObject<Item> STAND_DISC_MANDOM = addToDiscTab(ITEMS.register("mandom_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMandom(null))));
-    public static final RegistryObject<Item> STAND_DISC_WALKING_HEART = ITEMS.register("walking_heart_disc",
-            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersWalkingHeart(null)));
+    public static final RegistryObject<Item> STAND_DISC_WALKING_HEART = addToWIPTab(ITEMS.register("walking_heart_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersWalkingHeart(null))));
     public static final RegistryObject<Item> STAND_DISC_D4C = ITEMS.register("d4c_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
     public static final RegistryObject<Item> MAX_STAND_DISC_D4C = ITEMS.register("max_d4c_disc",
@@ -276,10 +276,10 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersRatt(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_RATT = addToWIPTab(ITEMS.register("max_ratt_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersRatt(null))));
-    public static final RegistryObject<Item> STAND_DISC_DIVER_DOWN = addToWIPTab(ITEMS.register("diver_down_disc",
-            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null))));
-    public static final RegistryObject<Item> MAX_STAND_DISC_DIVER_DOWN = addToWIPTab(ITEMS.register("max_diver_down_disc",
-            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null))));
+    public static final RegistryObject<Item> STAND_DISC_DIVER_DOWN = ITEMS.register("diver_down_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
+    public static final RegistryObject<Item> MAX_STAND_DISC_DIVER_DOWN = ITEMS.register("max_diver_down_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
     public static final RegistryObject<Item> WORTHY_ARROW = addToTab(ITEMS.register("worthy_arrow",
             () -> new WorthyArrowItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> LUCKY_LIPSTICK = addToTab(ITEMS.register("lucky_lipstick",

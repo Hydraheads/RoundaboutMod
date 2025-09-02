@@ -1121,7 +1121,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public void bigHurricaneClient(){
         if (isChargingCrossfire() || hasHurricaneSingle())
             return;
-        if (isBusy() || isLockedByWater())
+        if (isBusy())
             return;
         if (canExecuteMoveWithLevel(7) && !hasHurricaneSpecial()) {
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_SNEAK, true);
