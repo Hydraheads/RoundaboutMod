@@ -426,6 +426,10 @@ public class ForgeSounds {
             register(ModSounds.SURVIVOR_PLACE, ModSounds.SURVIVOR_PLACE_ID);
     public static final RegistryObject<SoundEvent> ACHTUNG_BURST =
             register(ModSounds.ACHTUNG_BURST, ModSounds.ACHTUNG_BURST_ID);
+    public static final RegistryObject<SoundEvent> EXTEND_SPIKES =
+            register(ModSounds.EXTEND_SPIKES, ModSounds.EXTEND_SPIKES_ID);
+    public static final RegistryObject<SoundEvent> WALL_LATCH =
+            register(ModSounds.WALL_LATCH, ModSounds.WALL_LATCH_ID);
     public static final RegistryObject<SoundEvent> SUMMON_ACHTUNG =
             register(ModSounds.SUMMON_ACHTUNG, ModSounds.SUMMON_ACHTUNG_ID);
     public static final RegistryObject<SoundEvent> SURVIVOR_REMOVE =

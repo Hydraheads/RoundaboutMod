@@ -182,13 +182,28 @@ public class PowersWalkingHeart extends NewDashPreset {
         if (canLatchOntoWall()){
             this.setCooldown(PowerIndex.SKILL_3, 20);
             if (!this.self.level().isClientSide()) {
-                getStandUserSelf().roundabout$setUniqueStandModeToggle(true);
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.WALL_LATCH_EVENT, SoundSource.PLAYERS, 1F, 1f);
+                toggleSpikes(true);
                 Direction gd = RotationUtil.getRealFacingDirection(this.self);
                 setHeelDirection(gd);
                 ((IGravityEntity) this.self).roundabout$setGravityDirection(gd);
                 justFlippedTicks = 7;
             }
         }
+    }
+
+    public void toggleSpikes(boolean toggle){
+        if (!this.self.level().isClientSide()) {
+            boolean getTog = getStandUserSelf().roundabout$getUniqueStandModeToggle();
+            if (toggle != getTog) {
+                if (toggle) {
+                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXTEND_SPIKES_EVENT, SoundSource.PLAYERS, 1F, 1f);
+                } else {
+                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXTEND_SPIKES_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
+                }
+            }
+        }
+        getStandUserSelf().roundabout$setUniqueStandModeToggle(toggle);
     }
 
     @Override
@@ -299,7 +314,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                     }
                     if (self.isSleeping() || (!self.onGround() && mercyTicks <= 0) || self.getRootVehicle() != this.self) {
                         heelDirection = Direction.DOWN;
-                        getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
+                        toggleSpikes(false);
                         ((IGravityEntity) this.self).roundabout$setGravityDirection(heelDirection);
                         setHeelDirection(heelDirection);
                     }

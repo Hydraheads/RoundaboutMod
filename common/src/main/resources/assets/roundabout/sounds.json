@@ -65,6 +65,18 @@
       "roundabout:mandom_rewind"
     ]
   },
+  "wall_latch": {
+    "subtitle": "sounds.roundabout.wall_latch",
+    "sounds": [
+      "roundabout:wall_latch"
+    ]
+  },
+  "extend_spikes": {
+    "subtitle": "sounds.roundabout.extend_spikes",
+    "sounds": [
+      "roundabout:extend_spikes"
+    ]
+  },
   "firestorm": {
     "subtitle": "sounds.roundabout.firestorm",
     "sounds": [

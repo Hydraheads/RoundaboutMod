@@ -739,6 +739,14 @@ public class ModSounds {
 
 
 
+    public static final String EXTEND_SPIKES = "extend_spikes";
+    public static final ResourceLocation EXTEND_SPIKES_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EXTEND_SPIKES);
+    public static SoundEvent EXTEND_SPIKES_EVENT = SoundEvent.createVariableRangeEvent(EXTEND_SPIKES_ID);
+    public static final String WALL_LATCH = "wall_latch";
+    public static final ResourceLocation WALL_LATCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+WALL_LATCH);
+    public static SoundEvent WALL_LATCH_EVENT = SoundEvent.createVariableRangeEvent(WALL_LATCH_ID);
+
+
     public static final String DIO_HOHO = "dio_hoho";
     public static final ResourceLocation DIO_HOHO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_HOHO);
     public static SoundEvent DIO_HOHO_EVENT = SoundEvent.createVariableRangeEvent(DIO_HOHO_ID);

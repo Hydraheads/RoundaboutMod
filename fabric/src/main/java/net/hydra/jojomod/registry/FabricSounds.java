@@ -251,6 +251,9 @@ public class FabricSounds {
         addSound(ModSounds.SUMMON_ACHTUNG_ID, ModSounds.SUMMON_ACHTUNG_EVENT);
         addSound(ModSounds.SUMMON_DIVER_DOWN_ID, ModSounds.SUMMON_DIVER_DOWN_EVENT);
 
+        addSound(ModSounds.EXTEND_SPIKES_ID, ModSounds.EXTEND_SPIKES_EVENT);
+        addSound(ModSounds.WALL_LATCH_ID, ModSounds.WALL_LATCH_EVENT);
+
         addSound(ModSounds.DIO_HOHO_ID, ModSounds.DIO_HOHO_EVENT);
         addSound(ModSounds.DIO_HOHO_2_ID, ModSounds.DIO_HOHO_2_EVENT);
         addSound(ModSounds.DIO_DEATH_ID, ModSounds.DIO_DEATH_EVENT);
