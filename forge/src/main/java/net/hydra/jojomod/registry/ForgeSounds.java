@@ -308,6 +308,8 @@ public class ForgeSounds {
 
     public static final RegistryObject<SoundEvent> RATT_SUMMON_EVENT =
             register(ModSounds.RATT_SUMMON, ModSounds.RATT_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> RATT_PLACE_EVENT =
+            register(ModSounds.RATT_PLACE, ModSounds.RATT_PLACE_ID);
     public static final RegistryObject<SoundEvent> RATT_SCOPE_EVENT =
             register(ModSounds.RATT_SCOPE, ModSounds.RATT_SCOPE_ID);
     public static final RegistryObject<SoundEvent> RATT_DESCOPE =

@@ -602,6 +602,9 @@ public class ModSounds {
     public static final String RATT_SUMMON = "ratt_summon";
     public static final ResourceLocation RATT_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RATT_SUMMON);
     public static SoundEvent RATT_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(RATT_SUMMON_ID);
+    public static final String RATT_PLACE = "ratt_place";
+    public static final ResourceLocation RATT_PLACE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RATT_PLACE);
+    public static SoundEvent RATT_PLACE_EVENT = SoundEvent.createVariableRangeEvent(RATT_PLACE_ID);
     public static final String RATT_SCOPE = "ratt_scope";
     public static final ResourceLocation RATT_SCOPE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RATT_SCOPE);
     public static SoundEvent RATT_SCOPE_EVENT = SoundEvent.createVariableRangeEvent(RATT_SCOPE_ID);

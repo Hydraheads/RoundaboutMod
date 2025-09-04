@@ -604,7 +604,8 @@
   "sounds.roundabout.cinderella_fail":  "Uh oh",
   "sounds.roundabout.cinderella_visage_creation":  "Mechanical whirl",
 
-  "sounds.roundabout.ratt_summon":  "Stand Summoned",
+  "sounds.roundabout.ratt_summon":  "Chittering Noises",
+  "sounds.roundabout.ratt_place":  "Stand Summoned",
   "sounds.roundabout.ratt_scope":  "Scope Whirr",
   "sounds.roundabout.ratt_dart_impact": "Dart Impact",
   "sounds.roundabout.ratt_dart_thunk": "Dart Lands",
