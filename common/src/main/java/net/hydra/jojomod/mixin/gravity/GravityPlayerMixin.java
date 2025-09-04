@@ -6,6 +6,10 @@ import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.stats.Stat;
+import net.minecraft.stats.Stats;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -49,6 +53,14 @@ public abstract class GravityPlayerMixin extends LivingEntity {
 
     @Shadow public abstract void checkMovementStatistics(double d, double e, double f);
 
+    @Shadow public abstract void awardStat(Stat<?> stat);
+
+    @Shadow public abstract void causeFoodExhaustion(float f);
+
+    @Shadow public abstract void awardStat(Stat<?> stat, int i);
+
+    @Shadow public abstract void awardStat(ResourceLocation resourceLocation, int i);
+
     protected GravityPlayerMixin(EntityType<? extends LivingEntity> entityType, Level world) {
         super(entityType, world);
     }
@@ -56,6 +68,75 @@ public abstract class GravityPlayerMixin extends LivingEntity {
     @Unique
     public Player rdbt$this(){
         return ((Player)(Object)this);
+    }
+
+    @Inject(
+            method = "checkMovementStatistics(DDD)V",
+            at = @At(
+                    value = "HEAD"
+            ),
+            cancellable = true
+    )
+    private void roundabout$checkMovementStatistics(double $$0, double $$1, double $$2, CallbackInfo ci) {
+        Direction gravityDirection = GravityAPI.getGravityDirection(rdbt$this());
+        if (gravityDirection == Direction.DOWN || gravityDirection == Direction.UP)
+            return;
+        ci.cancel();
+        if (gravityDirection == Direction.EAST || gravityDirection == Direction.WEST)
+            rdbt$checkMovementStatistics2($$1,$$0,$$2);
+        else
+            rdbt$checkMovementStatistics2($$0,$$2,$$1);
+    }
+
+    @Unique
+    public void rdbt$checkMovementStatistics2(double $$0, double $$1, double $$2) {
+        if (!this.isPassenger()) {
+            if (this.isSwimming()) {
+                int $$3 = Math.round((float)Math.sqrt($$0 * $$0 + $$1 * $$1 + $$2 * $$2) * 100.0F);
+                if ($$3 > 0) {
+                    this.awardStat(Stats.SWIM_ONE_CM, $$3);
+                    this.causeFoodExhaustion(0.01F * (float)$$3 * 0.01F);
+                }
+            } else if (this.isEyeInFluid(FluidTags.WATER)) {
+                int $$4 = Math.round((float)Math.sqrt($$0 * $$0 + $$1 * $$1 + $$2 * $$2) * 100.0F);
+                if ($$4 > 0) {
+                    this.awardStat(Stats.WALK_UNDER_WATER_ONE_CM, $$4);
+                    this.causeFoodExhaustion(0.01F * (float)$$4 * 0.01F);
+                }
+            } else if (this.isInWater()) {
+                int $$5 = Math.round((float)Math.sqrt($$0 * $$0 + $$2 * $$2) * 100.0F);
+                if ($$5 > 0) {
+                    this.awardStat(Stats.WALK_ON_WATER_ONE_CM, $$5);
+                    this.causeFoodExhaustion(0.01F * (float)$$5 * 0.01F);
+                }
+            } else if (this.onClimbable()) {
+                if ($$1 > 0.0) {
+                    this.awardStat(Stats.CLIMB_ONE_CM, (int)Math.round($$1 * 100.0));
+                }
+            } else if (this.onGround()) {
+                int $$6 = Math.round((float)Math.sqrt($$0 * $$0 + $$2 * $$2) * 100.0F);
+                if ($$6 > 0) {
+                    if (this.isSprinting()) {
+                        this.awardStat(Stats.SPRINT_ONE_CM, $$6);
+                        this.causeFoodExhaustion(0.1F * (float)$$6 * 0.01F);
+                    } else if (this.isCrouching()) {
+                        this.awardStat(Stats.CROUCH_ONE_CM, $$6);
+                        this.causeFoodExhaustion(0.0F * (float)$$6 * 0.01F);
+                    } else {
+                        this.awardStat(Stats.WALK_ONE_CM, $$6);
+                        this.causeFoodExhaustion(0.0F * (float)$$6 * 0.01F);
+                    }
+                }
+            } else if (this.isFallFlying()) {
+                int $$7 = Math.round((float)Math.sqrt($$0 * $$0 + $$1 * $$1 + $$2 * $$2) * 100.0F);
+                this.awardStat(Stats.AVIATE_ONE_CM, $$7);
+            } else {
+                int $$8 = Math.round((float)Math.sqrt($$0 * $$0 + $$2 * $$2) * 100.0F);
+                if ($$8 > 25) {
+                    this.awardStat(Stats.FLY_ONE_CM, $$8);
+                }
+            }
+        }
     }
 
     @Inject(
