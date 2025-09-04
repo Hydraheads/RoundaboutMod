@@ -76,6 +76,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public AchtungSettings achtungSettings;
     @NestedOption(group = "modded")
+    public WalkingHeartSettings walkingHeartSettings;
+    @NestedOption(group = "modded")
     public TheWorldSettings theWorldSettings;
     @NestedOption(group = "modded")
     public StarPlatinumSettings starPlatinumSettings;
@@ -546,6 +548,11 @@ public class Config implements Cloneable {
         public Integer survivorCupidCreativeRange;
         @BooleanOption(group = "inherit", value = false)
         public Boolean canUseSurvivorOnBossesInSurvival;
+    }
+
+    public static class WalkingHeartSettings {
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean fallProtectionOnRelease;
     }
 
     public static class AchtungSettings {

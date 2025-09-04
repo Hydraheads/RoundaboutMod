@@ -1793,6 +1793,8 @@
   "config.roundabout.canUseSurvivorOnBossesInSurvival.name": "Zap Bosses in Survival",
   "config.roundabout.canUseSurvivorOnBossesInSurvival.desc": "In survival, survivor does not work on bosses by default for balancing reasons.",
 
+  "config.roundabout.fallProtectionOnRelease.name": "Release Fall Protection",
+  "config.roundabout.fallProtectionOnRelease.desc": "When you exit a wall, grants fall immunity like a stand leap.",
 
   "config.roundabout.invisibilityPotionAsWell.name": "Apply Invis Potion",
   "config.roundabout.invisibilityPotionAsWell.desc": "If you want the invisibility power to apply the potion effect as well, turn this on. This could be useful for map mods that respect players invisibility.",
