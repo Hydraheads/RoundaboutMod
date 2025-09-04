@@ -88,12 +88,22 @@ public class PowersWalkingHeart extends NewDashPreset {
             case SKILL_1_NORMAL, SKILL_1_CROUCH-> {
             }
             case SKILL_2_NORMAL, SKILL_2_CROUCH-> {
+                extendHeels();
             }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 dashOrWallLatch();
             }
         }
     }
+
+
+    public void extendHeels(){
+        if (!this.onCooldown(PowerIndex.SKILL_3) || hasExtendedHeelsForWalking()) {
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+            tryPowerPacket(PowerIndex.POWER_2);
+        }
+    }
+
 
     public void dashOrWallLatch(){
         if (canLatchOntoWall())
@@ -109,23 +119,6 @@ public class PowersWalkingHeart extends NewDashPreset {
         }
     }
 
-    public void doDefaceClient(){
-        if (!this.onCooldown(PowerIndex.SKILL_2)) {
-            if (this.activePower == PowerIndex.POWER_2) {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                tryPowerPacket(PowerIndex.NONE);
-            } else {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
-                tryPowerPacket(PowerIndex.POWER_2);
-            }
-        }
-    }
-
-    public void doUIClient(){
-        tryPowerPacket(PowerIndex.POWER_1);
-        ClientUtil.setCinderellaUI();
-        hasUIOpen = true;
-    }
 
 
     @Override
@@ -177,10 +170,26 @@ public class PowersWalkingHeart extends NewDashPreset {
         return false;
     }
 
+    public void regularExtendHeels(){
+        boolean isAnchored = hasExtendedHeelsForWalking();
+            if (isAnchored){
+                if (!this.self.level().isClientSide()) {
+                    toggleSpikes(false);
+                }
+            } else {
+                if (self.onGround()){
+                    this.setCooldown(PowerIndex.SKILL_3, 6);
+                    if (!this.self.level().isClientSide()) {
+                        toggleSpikes(true);
+                    }
+                }
+            }
+    }
+
 
     public void wallLatch(){
         if (canLatchOntoWall()){
-            this.setCooldown(PowerIndex.SKILL_3, 20);
+            this.setCooldown(PowerIndex.SKILL_3, 6);
             if (!this.self.level().isClientSide()) {
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.WALL_LATCH_EVENT, SoundSource.PLAYERS, 1F, 1f);
                 toggleSpikes(true);
@@ -262,26 +271,14 @@ public class PowersWalkingHeart extends NewDashPreset {
         switch (move)
         {
             case PowerIndex.POWER_2 -> {
-                switchDirections();
+                regularExtendHeels();
+            }
+            case PowerIndex.POWER_3 -> {
+                wallLatch();
             }
         }
         return super.tryPower(move,forced);
     }
-
-    public void switchDirections(){
-        ((IGravityEntity)this.self).roundabout$setGravityDirection(Direction.SOUTH);
-
-        AABB $$0 = this.self.getBoundingBox().inflate(10.0, 8.0, 10.0);
-        List<? extends Entity> $$1 = this.self.level().getEntities(this.self, $$0);
-        float mindist = -1;
-
-        for (Entity $$3 : $$1) {
-            ((IGravityEntity)$$3).roundabout$setGravityDirection(Direction.SOUTH);
-        }
-    }
-
-    public boolean hasUIOpen = false;
-
 
     public void tickPower() {
         if (this.self.level().isClientSide()) {
@@ -334,13 +331,6 @@ public class PowersWalkingHeart extends NewDashPreset {
         super.updateUniqueMoves();
     }
 
-    @Override
-    public boolean setPowerOther(int move, int lastMove) {
-        if (move == PowerIndex.POWER_3)
-            wallLatch();
-        return super.setPowerOther(move,lastMove);
-    }
-
     public static final byte VISAGE_NOISE = 104;
     public static final byte IMPALE_NOISE = 105;
     public boolean deface(){
@@ -356,42 +346,7 @@ public class PowersWalkingHeart extends NewDashPreset {
         }
         return false;
     }
-    public void updateDeface(){
-        if (this.attackTimeDuring > -1) {
-            if (this.attackTimeDuring > 15) {
-                this.standImpale();
-            } else {
-                if (!this.getSelf().level().isClientSide()) {
-                    if(this.attackTimeDuring%4==0) {
-                        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MENACING,
-                                this.getSelf().getX(), this.getSelf().getY() + 0.3, this.getSelf().getZ(),
-                                1, 0.2, 0.2, 0.2, 0.05);
-                    }
-                }
-            }
-        }
-    }
 
-    @Override
-    public void tickMobAI(LivingEntity attackTarget){
-        if (attackTarget != null && attackTarget.isAlive()){
-            if ((this.getActivePower() != PowerIndex.NONE
-                    || attackTarget.distanceTo(this.getSelf()) <= 5)){
-                this.getSelf().setXRot(getLookAtEntityPitch(this.getSelf(), attackTarget));
-                float yrot = getLookAtEntityYaw(this.getSelf(), attackTarget);
-                this.getSelf().setYRot(yrot);
-                this.getSelf().setYHeadRot(yrot);
-            }
-
-            Entity targetEntity = getTargetEntity(this.self, 5);
-            if (targetEntity != null && targetEntity.is(attackTarget)) {
-                if (this.getActivePower() == PowerIndex.NONE && (!this.onCooldown(PowerIndex.SKILL_2) ||
-                        this.self instanceof IronGolem)) {
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
-                }
-            }
-        }
-    }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.visage_creation",
@@ -417,92 +372,7 @@ public class PowersWalkingHeart extends NewDashPreset {
         return $$1;
     }
 
-    public void standImpale(){
-        if (this.self instanceof Player){
-            if (isPacketPlayer()){
-                this.setAttackTimeDuring(-15);
-                tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,getTargetEntityId2(5));
-            }
-        } else {
-            /*Caps how far out the punch goes*/
-            Entity targetEntity = getTargetEntity(this.self,5);
-            defaceImpact(targetEntity);
-        }
-    }
-    public float getDefaceStrength(Entity entity){
-        if (this.getReducedDamage(entity)){
-            return levelupDamageMod(((float) ((float) 3* (ClientNetworking.getAppropriateConfig().
-                    cinderellaSettings.cinderellaAttackMultOnPlayers*0.01))));
-        } else {
-            return levelupDamageMod(((float) ((float) 9* (ClientNetworking.getAppropriateConfig().
-                    cinderellaSettings.cinderellaAttackMultOnMobs*0.01))));
-        }
-    }
-    public float getDefaceKnockback(){
-        return 0.7F;
-    }
-    public void handleStandAttack(Player player, Entity target){
-        defaceImpact(target);
-    }
-    public void defaceImpact(Entity entity){
-        this.setAttackTimeDuring(-20);
-        if (entity != null) {
-            float pow;
-            float knockbackStrength;
-            pow = getDefaceStrength(entity);
-            knockbackStrength = getDefaceKnockback();
-            if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
-                if (entity instanceof LivingEntity LE) {
-                    addEXP(5, LE);
-                    if (MainUtil.getMobBleed(entity)) {
-                        int bleedlevel = ((StandUser)LE).roundabout$getBleedLevel();
-                        if (bleedlevel < 0){
-                            MainUtil.makeFaceless(entity, 200, 0, this.getSelf());
-                            MainUtil.makeBleed(entity, 0, 200, this.getSelf());
-                        } else if (bleedlevel == 0){
-                            MainUtil.makeFaceless(entity, 250, 1, this.getSelf());
-                            MainUtil.makeBleed(entity, 1, 250, this.getSelf());
-                        } else {
-                            MainUtil.makeFaceless(entity, 300, 2, this.getSelf());
-                            MainUtil.makeBleed(entity, 2, 300, this.getSelf());
-                            MainUtil.makeMobBleed(entity);
-                        }
-                    } else {
-                        MainUtil.makeFaceless(entity, 200, 0, this.getSelf());
-                    }
-                }
-                this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
-            }
-        }
 
-        if (this.getSelf() instanceof Player) {
-            S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2,  ClientNetworking.getAppropriateConfig().cinderellaSettings.defaceAttackCooldown);
-        }
-        this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().cinderellaSettings.defaceAttackCooldown);
-        SoundEvent SE;
-        float pitch = 1F;
-        if (entity != null) {
-            SE = ModSounds.PUNCH_3_SOUND_EVENT;
-            pitch = 1.2F;
-        } else {
-            SE = ModSounds.PUNCH_2_SOUND_EVENT;
-        }
-
-        if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
-        }
-    }
-
-    @Override
-    public void tickStandRejection(MobEffectInstance effect){
-        if (!this.getSelf().level().isClientSide()) {
-            if (effect.getDuration() == 15) {
-                MainUtil.makeFaceless(this.self,800,0,this.self);
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.CINDERELLA_FAIL_EVENT,
-                        SoundSource.PLAYERS, 1F, 1F);
-            }
-        }
-    }
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
