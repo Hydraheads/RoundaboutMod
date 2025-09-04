@@ -180,6 +180,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                 if (self.onGround()){
                     this.setCooldown(PowerIndex.SKILL_3, 6);
                     if (!this.self.level().isClientSide()) {
+                        setHeelDirection(Direction.DOWN);
                         toggleSpikes(true);
                     }
                 }
@@ -329,6 +330,8 @@ public class PowersWalkingHeart extends NewDashPreset {
                     }
                 }
 
+            } else {
+                setHeelDirection(Direction.DOWN);
             }
         }
         super.tickPower();
