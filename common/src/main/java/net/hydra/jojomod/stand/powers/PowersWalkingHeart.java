@@ -299,11 +299,23 @@ public class PowersWalkingHeart extends NewDashPreset {
                     } else {
                         Vec3 newVec = new Vec3(0,-0.2,0);
                         Vec3 newVec2 = new Vec3(0,-1.0,0);
+                        Vec3 newVec4 = new Vec3(0,-0.5,0);
+                        Vec3 newVec5 = new Vec3(0,-1.1,0);
                         newVec = RotationUtil.vecPlayerToWorld(newVec,((IGravityEntity)self).roundabout$getGravityDirection());
                         BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
                         newVec2 = RotationUtil.vecPlayerToWorld(newVec2,((IGravityEntity)self).roundabout$getGravityDirection());
                         BlockPos pos2 = BlockPos.containing(self.getPosition(1).add(newVec2));
-                        if (!getStandUserSelf().rdbt$getJumping() && (self.level().getBlockState(pos).isSolid() || self.level().getBlockState(pos2).isSolid())){
+                        newVec4 = RotationUtil.vecPlayerToWorld(newVec4,((IGravityEntity)self).roundabout$getGravityDirection());
+                        BlockPos pos4 = BlockPos.containing(self.getPosition(1).add(newVec4));
+                        newVec5 = RotationUtil.vecPlayerToWorld(newVec5,((IGravityEntity)self).roundabout$getGravityDirection());
+                        BlockPos pos5 = BlockPos.containing(self.getPosition(1).add(newVec5));
+                        if (
+                                (
+                                        self.level().getBlockState(pos).isSolid()
+                                                || self.level().getBlockState(pos2).isSolid()
+                                                || self.level().getBlockState(pos4).isSolid()
+                                                || self.level().getBlockState(pos5).isSolid()
+                                )){
                             mercyTicks--;
                         } else {
                             mercyTicks = 0;

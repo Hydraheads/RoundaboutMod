@@ -2965,6 +2965,23 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+
+    @Inject(
+            method = "maxUpStep()F",
+            at = @At(
+                    value = "HEAD"
+            ),
+            cancellable = true
+    )
+    private void roundabout$maxUpStep(CallbackInfoReturnable<Float> cir) {
+        if (roundabout$getStandPowers() instanceof PowersWalkingHeart PW){
+            if (PW.hasExtendedHeelsForWalking()){
+                cir.setReturnValue(1.0F);
+                return;
+            }
+        }
+    }
+
     @Unique
     @Override
     public boolean rdbt$getJumping(){
