@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IGravityLivingEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.mixin.StandUserEntity;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
@@ -435,6 +436,10 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
             cancellable = true
     )
     private void roundabout$augmentHurtKnockaback(double $$0, double $$1, double $$2, CallbackInfo ci){
+        if (MainUtil.isKnockbackImmune(rdbt$this())){
+            ci.cancel();
+            return;
+        }
         if (roundabout$knockbackGravityAugmentation){
             roundabout$knockbackGravityAugmentation = false;
             if (roundabout$augmentSource != null) {

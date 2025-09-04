@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.particles.ParticleTypes;
@@ -304,6 +305,9 @@ public class NewPunchingStand extends NewDashPreset {
                 if (StandDamageEntityAttack(this.getSelf(), pow, 0, this.self)) {
                     this.takeDeterminedKnockback(this.self, this.getSelf(), kbs);
                     if ((kbs *= (float) (1.0 - ((LivingEntity)this.getSelf()).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+                        return;
+                    }
+                    if (MainUtil.isKnockbackImmune(this.getSelf())){
                         return;
                     }
                     this.getSelf().hurtMarked = true;

@@ -638,7 +638,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                                     vec.x,vec.y,vec.z,
                                     ybias);
                         } else if (!(value instanceof Projectile)) {
-                            if (value instanceof LivingEntity LE && (strength *= (float) (1.0 - LE.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+                            if (value instanceof LivingEntity LE && (MainUtil.isKnockbackImmune(LE) || (strength *= (float) (1.0 - LE.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0)) {
                                 strength = 0;
                             } else {
                                 if (value instanceof PrimedTnt && this.getSelf() instanceof Player PE){
