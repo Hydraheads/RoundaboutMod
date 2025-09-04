@@ -33,6 +33,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -58,6 +59,7 @@ public class PowersRatt extends NewDashPreset {
     public static final int MinThreshold = 30;
     public static final int MaxThreshold = 90;
     public static final int BaseShootCooldown = 10;
+    public static final int PlaceDelay = 0;
     public static final int PlaceShootCooldown = 40;
     public static final int MaxShootCooldown = 30;
     public static final int[] ShotThresholds = {MinThreshold,50,MaxThreshold};
@@ -144,20 +146,20 @@ public class PowersRatt extends NewDashPreset {
     }
     public Entity CoolerrayCastEntity(Level world, LivingEntity ratt, double maxDistance) {
 
+        // yoinked from mainutil
 
         StandEntity SE = (StandEntity) ratt;
 
         Vec3 vars = this.getRotations(this.getShootTarget());
 
-        Vec3 eyePos = ratt.getEyePosition(1.0F);// player.getEyePosition(float)
+        Vec3 eyePos = ratt.getEyePosition(1.0F);
         Vec3 lookVec = new Vec3(
                 Math.cos(vars.y+Math.PI/2),
                 Math.sin(vars.x),
                 Math.sin(vars.y+Math.PI/2)
         );
-        Vec3 reachVec = eyePos.add(lookVec.scale(maxDistance)); // end point of the ray
+        Vec3 reachVec = eyePos.add(lookVec.scale(maxDistance));
 
-        // Raytrace blocks first
         ClipContext blockContext = new ClipContext(
                 eyePos,
                 reachVec,
@@ -440,10 +442,10 @@ public class PowersRatt extends NewDashPreset {
             }
         } else if (this.getActivePower() == PowersRatt.PLACE_BURST) {
             setShotCooldown(PlaceShootCooldown);
-            if (getAttackTimeDuring() > 8) {
+            if (getAttackTimeDuring() > 8+PlaceDelay) {
                 setPowerNone();
                 setAttackTimeDuring(-1);
-            } else  if (getAttackTime() == 1) {
+            } else  if (getAttackTime()%3 == 1 && this.getAttackTime() > PlaceDelay) {
                 tryPower(PowersRatt.PLACE_BURST,true);
                 tryPowerPacket(PowersRatt.PLACE_BURST);
             }
@@ -577,7 +579,7 @@ public class PowersRatt extends NewDashPreset {
     public void DeployClient() {
         if (!this.onCooldown(PowersRatt.SETPLACE)) {
             updateChargeTime(0);
-            this.getSelf().playSound(ModSounds.RATT_SUMMON_EVENT, 1.0F, (float) (0.98F + (Math.random() * 0.04F)));
+            this.getSelf().playSound(ModSounds.RATT_PLACE_EVENT, 1.0F, (float) (0.98F + (Math.random() * 0.04F)));
             BlockHitResult blockHitResult = getValidPlacement();
             if (blockHitResult != null) {
                 Vec3 pos = blockHitResult.getLocation();
@@ -631,13 +633,14 @@ public class PowersRatt extends NewDashPreset {
                 this.setActivePower(PowersRatt.PLACE_BURST);
                 S2CPacketUtil.sendActivePowerPacket((Player)this.getSelf(),this.getActivePower());
                 if (!isClient()) {
-                    this.animateStand((byte) -1);
+                    this.self.level().playSound(this.getSelf(), this.self.blockPosition(), ModSounds.STAND_BARRAGE_WINDUP_EVENT,
+                            SoundSource.PLAYERS, 0.7F, 0.2F);
+                    this.animateStand(RattEntity.FIRE_NO_RECOIL);
                 }
             }
             case PowersRatt.PLACE_BURST -> {
-                this.setAttackTime(-1);
                 if (!isClient()) {
-                    this.animateStand(RattEntity.FIRE_NO_RECOIL);
+                    this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP,100,true);
                     float power = 0;
                     for (int b=ShotThresholds.length-1;b>=0;b--) {
                         if (51 >= ShotThresholds[b]) {
@@ -912,6 +915,8 @@ public class PowersRatt extends NewDashPreset {
         }
         return super.getSoundFromByte(soundChoice);
     }
+    @Override
+    protected Byte getSummonSound() {return SoundIndex.SUMMON_SOUND;}
 
     @Override
     public byte getMaxLevel() {return 4;}
