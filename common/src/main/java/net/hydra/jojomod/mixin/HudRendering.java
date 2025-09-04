@@ -96,16 +96,19 @@ public abstract class HudRendering implements IHudAccess {
                     } else {
                         overlay2 = 0.5F - ((float) (40 - Math.min(overlayR, 40)) / 40) * 0.5F;
                     }
+                    RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.GASOLINE_OVERLAY, overlay2);
                 }
             }
             if (((StandUser) this.minecraft.player ).roundabout$getStandPowers() instanceof PowersRatt) {
                 if ( ((StandUser) this.minecraft.player).roundabout$getStandPowers().scopeLevel != 0 ) {
+                    RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.RATT_SCOPE_OVERLAY, 0.99F);
                 }
             }
             if (this.minecraft.options.getCameraType().isFirstPerson()) {
                 if (user.roundabout$isBubbleEncased()){
+                    RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.IN_BUBBLE_OVERLAY, 0.99F);
                 }
                 if (user.roundabout$getLocacacaCurse() == LocacacaCurseIndex.HEAD) {
@@ -113,8 +116,10 @@ public abstract class HudRendering implements IHudAccess {
                             !((IPlayerEntity) this.minecraft.player).roundabout$getMaskSlot().isEmpty() &&
                             ((IPlayerEntity) this.minecraft.player).roundabout$getMaskSlot().getItem() instanceof MaskItem ME &&
                             ME.visageData instanceof JosukePartEightVisage){
+                        RenderSystem.enableBlend();
                         this.renderTextureOverlay($$1, StandIcons.STONE_HEAD_OVERLAY_JOSUKE, 1F);
                     } else {
+                        RenderSystem.enableBlend();
                         this.renderTextureOverlay($$1, StandIcons.STONE_HEAD_OVERLAY, 1F);
                     }
                 }
@@ -128,12 +133,14 @@ public abstract class HudRendering implements IHudAccess {
                     }
                     ticks = Mth.clamp(ticks,0,10);
                     ticks*=0.1F;
+                    RenderSystem.enableBlend();
                     roundabout$renderTextureOverlay($$1, StandIcons.SURVIVOR_ANGER, ticks*0.6F,1F,1F,1F);
                 }
             }
 
              StandPowers powers = user.roundabout$getStandPowers();
                 if (powers.timeRewindOverlayTicks > -1) {
+                    RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.TIME_REWIND, powers.getOverlayFromOverlayTicks($$0));
                 }
 
