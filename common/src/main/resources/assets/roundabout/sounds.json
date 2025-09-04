@@ -720,6 +720,12 @@
       "roundabout:ratt_summon"
     ]
   },
+  "ratt_place": {
+    "subtitle": "sounds.roundabout.ratt_place",
+    "sounds": [
+      "roundabout:ratt_place"
+    ]
+  },
   "ratt_scope": {
     "subtitle": "sounds.roundabout.ratt_scope",
     "sounds": [

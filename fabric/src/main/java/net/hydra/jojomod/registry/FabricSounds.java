@@ -203,9 +203,11 @@ public class FabricSounds {
         addSound(ModSounds.CINDERELLA_VISAGE_CREATION_ID, ModSounds.CINDERELLA_VISAGE_CREATION_EVENT);
 
         addSound(ModSounds.RATT_SUMMON_ID, ModSounds.RATT_SUMMON_EVENT);
+        addSound(ModSounds.RATT_PLACE_ID, ModSounds.RATT_PLACE_EVENT);
         addSound(ModSounds.RATT_SCOPE_ID, ModSounds.RATT_SCOPE_EVENT);
         addSound(ModSounds.RATT_DESCOPE_ID, ModSounds.RATT_DESCOPE_EVENT);
         addSound(ModSounds.RATT_DART_THUNK_ID, ModSounds.RATT_DART_THUNK_EVENT);
+        addSound(ModSounds.RATT_DART_IMPACT_ID, ModSounds.RATT_DART_IMPACT_EVENT);
         addSound(ModSounds.RATT_FIRING_ID, ModSounds.RATT_FIRING_EVENT);
 
 
