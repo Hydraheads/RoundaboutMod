@@ -252,11 +252,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     public SoundEvent getSoundFromByte(byte soundChoice){
         byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
-            return ModSounds.CINDERELLA_SUMMON_EVENT;
-        } else if (soundChoice == IMPALE_NOISE) {
-            return ModSounds.CINDERELLA_ATTACK_EVENT;
-        } else if (soundChoice == VISAGE_NOISE) {
-            return ModSounds.CINDERELLA_VISAGE_CREATION_EVENT;
+            return ModSounds.SUMMON_WALKING_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }

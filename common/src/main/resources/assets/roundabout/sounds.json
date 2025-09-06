@@ -71,6 +71,12 @@
       "roundabout:wall_latch"
     ]
   },
+  "summon_walking": {
+    "subtitle": "sounds.roundabout.summon_walking",
+    "sounds": [
+      "roundabout:summon_walking"
+    ]
+  },
   "extend_spikes": {
     "subtitle": "sounds.roundabout.extend_spikes",
     "sounds": [

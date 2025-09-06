@@ -961,6 +961,11 @@ public class ModSounds {
     public static final ResourceLocation SUMMON_DIVER_DOWN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_DIVER_DOWN);
     public static SoundEvent SUMMON_DIVER_DOWN_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_DIVER_DOWN_ID);
 
+    public static final String SUMMON_WALKING = "summon_walking";
+    public static final ResourceLocation SUMMON_WALKING_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_WALKING);
+    public static SoundEvent SUMMON_WALKING_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_WALKING_ID);
+
+
     public static void registerSoundEvents(){
     }
 
