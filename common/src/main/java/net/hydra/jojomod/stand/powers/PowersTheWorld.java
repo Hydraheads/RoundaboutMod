@@ -941,9 +941,11 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     public boolean doAssaultGrabClient(){
         if (this.getActivePower() == PowerIndex.POWER_1 && attackTimeDuring >= 0){
-            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BONUS, true);
-            tryPowerPacket(PowerIndex.POWER_1_BONUS);
-            return true;
+            if (!this.onCooldown(PowerIndex.SKILL_2)) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BONUS, true);
+                tryPowerPacket(PowerIndex.POWER_1_BONUS);
+                return true;
+            }
         }
         return false;
     }
