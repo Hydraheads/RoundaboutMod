@@ -385,7 +385,9 @@ public class PowersRatt extends NewDashPreset {
 
                     } else if (!L.equals(this.getSelf()) && !L.equals(SE)) {
                         if (!MainUtil.getEntityIsTrulyInvisible(e) && L.getEffect(MobEffects.INVISIBILITY) == null) {
-                            setShootTarget(L);
+                            if (!(L instanceof StandEntity)) {
+                                setShootTarget(L);
+                            } // this might have to be changed eventually
                         }
                     }
 
@@ -474,9 +476,13 @@ public class PowersRatt extends NewDashPreset {
                             ToggleAuto();
                         }
                     }
+                } else {
+                    if (canExecuteMoveWithLevel(2)) {
+                        RattScope();
+                    }
                 }
             }
-            case SKILL_2_NORMAL -> {
+            case SKILL_2_NORMAL, SKILL_2_CROUCH -> {
                 if (scopeLevel != 0)  {
                     if(canExecuteMoveWithLevel(3)) {
                         ToggleBursting();

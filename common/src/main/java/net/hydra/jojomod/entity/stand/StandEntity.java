@@ -533,7 +533,6 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     public boolean startStandRiding(LivingEntity entity, boolean force) {
         ((StandUser) entity).roundabout$setStand(this);
         return true;
-        //RoundaboutMod.LOGGER.info("MF");
     }
 
 
