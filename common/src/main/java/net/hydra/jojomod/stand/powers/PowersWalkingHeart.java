@@ -202,6 +202,13 @@ public class PowersWalkingHeart extends NewDashPreset {
         }
     }
 
+    public void grantFallImmunity(){
+        if (ClientNetworking.getAppropriateConfig().walkingHeartSettings.fallProtectionOnRelease) {
+            ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+            ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
+        }
+    }
+
     public void toggleSpikes(boolean toggle){
         if (!this.self.level().isClientSide()) {
             boolean getTog = getStandUserSelf().roundabout$getUniqueStandModeToggle();
@@ -245,11 +252,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     public SoundEvent getSoundFromByte(byte soundChoice){
         byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
-            return ModSounds.CINDERELLA_SUMMON_EVENT;
-        } else if (soundChoice == IMPALE_NOISE) {
-            return ModSounds.CINDERELLA_ATTACK_EVENT;
-        } else if (soundChoice == VISAGE_NOISE) {
-            return ModSounds.CINDERELLA_VISAGE_CREATION_EVENT;
+            return ModSounds.SUMMON_WALKING_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -324,6 +327,9 @@ public class PowersWalkingHeart extends NewDashPreset {
                     }
                     if (self.isSleeping() || (!self.onGround() && mercyTicks <= 0) || self.getRootVehicle() != this.self) {
                         heelDirection = Direction.DOWN;
+                        if (((IGravityEntity) this.self).roundabout$getGravityDirection() != heelDirection){
+                            grantFallImmunity();
+                        }
                         toggleSpikes(false);
                         ((IGravityEntity) this.self).roundabout$setGravityDirection(heelDirection);
                         setHeelDirection(heelDirection);

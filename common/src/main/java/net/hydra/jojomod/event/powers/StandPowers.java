@@ -1812,6 +1812,9 @@ public class StandPowers {
         if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
             return;
         }
+        if (MainUtil.isKnockbackImmune(entity)){
+            return;
+        }
         entity.hurtMarked = true;
         Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
         entity.setDeltaMovement(- vec3d2.x,
@@ -1824,6 +1827,9 @@ public class StandPowers {
     /**Inflict knockback with push upwards*/
     public void takeKnockbackUp(Entity entity, double strength) {
         if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+            return;
+        }
+        if (MainUtil.isKnockbackImmune(entity)){
             return;
         }
         entity.hasImpulse = true;
@@ -1846,6 +1852,10 @@ public class StandPowers {
     public void takeDeterminedKnockback(LivingEntity user, Entity target, float knockbackStrength){
 
         if (target instanceof LivingEntity && (knockbackStrength *= (float) (1.0 - ((LivingEntity)target).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+            return;
+        }
+
+        if (MainUtil.isKnockbackImmune(target)){
             return;
         }
         target.hurtMarked = true;
@@ -2372,6 +2382,7 @@ public class StandPowers {
             /*Bosses can't be dazed**/
             return;
         }
+
         if (dazeTime > 0){
             ((StandUser) entity).roundabout$tryPower(PowerIndex.NONE,true);
             ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.HURT_BY_BARRAGE);

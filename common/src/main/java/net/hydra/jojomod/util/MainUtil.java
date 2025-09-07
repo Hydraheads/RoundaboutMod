@@ -29,6 +29,7 @@ import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -115,6 +116,17 @@ public class MainUtil {
                     return true;
                 }
             }
+        }
+        return false;
+    }
+
+    public static boolean isKnockbackImmune(Entity ent){
+        if (ent instanceof LivingEntity LE){
+            StandUser SU = ((StandUser) LE);
+            if (SU.roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()){
+                return true;
+            }
+
         }
         return false;
     }
@@ -826,6 +838,10 @@ public class MainUtil {
         if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
             return;
         }
+
+        if (MainUtil.isKnockbackImmune(entity)){
+            return;
+        }
         takeUnresistableKnockbackWithY(entity,strength,x,y,z);
     }
     public static void takeUnresistableKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
@@ -878,6 +894,10 @@ public class MainUtil {
         if (entity instanceof LivingEntity le && (d *= 1.0 - le.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)) <= 0.0) {
             return;
         }
+        if (MainUtil.isKnockbackImmune(entity)){
+            return;
+        }
+
         entity.hasImpulse = true;
         Vec3 vec3 = entity.getDeltaMovement();
         Vec3 vec32 = new Vec3(e, 0.0, f).normalize().scale(d);
@@ -886,6 +906,9 @@ public class MainUtil {
     }
     public static void knockbackWithoutBumpUp(Entity entity, double d, double e, double f) {
         if (entity instanceof LivingEntity le && (d *= 1.0 - le.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)) <= 0.0) {
+            return;
+        }
+        if (MainUtil.isKnockbackImmune(entity)){
             return;
         }
         entity.hasImpulse = true;
