@@ -106,6 +106,11 @@ public class FollowingStandEntity extends StandEntity{
     } //returns leaning direction
 
 
+    @Override
+    public boolean redirectKnockbackToUser(){
+        return true;
+    }
+
     public final void setOffsetType(byte oft) {
         this.entityData.set(OFFSET_TYPE, oft);
     }

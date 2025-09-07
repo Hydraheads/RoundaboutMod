@@ -536,6 +536,10 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     }
 
 
+    public boolean redirectKnockbackToUser(){
+        return false;
+    }
+
     /** Stand does not take damage under normal circumstances.*/
     public boolean hurt(DamageSource source, float amount) {
         if (this.getUser() != null && MainUtil.isStandDamage(source)){

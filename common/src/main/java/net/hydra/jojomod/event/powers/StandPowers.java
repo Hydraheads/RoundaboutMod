@@ -2005,7 +2005,7 @@ public class StandPowers {
         if (targetEntity == null) {
             targetEntity = StandAttackHitboxNear(User,listE,angle);
         }
-        if (targetEntity instanceof StandEntity SE){
+        if (targetEntity instanceof StandEntity SE && SE.redirectKnockbackToUser()){
 
             if (SE.getUser() != null){
                 targetEntity = SE.getUser();
@@ -2042,7 +2042,7 @@ public class StandPowers {
             targetEntity = StandAttackHitboxNear(User,StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
                     pointVec.z, halfReach, halfReach, halfReach), distMax),angle);
         }
-        if (targetEntity instanceof StandEntity SE){
+        if (targetEntity instanceof StandEntity SE && SE.redirectKnockbackToUser()){
 
             if (SE.getUser() != null){
                 targetEntity = SE.getUser();
@@ -2122,7 +2122,7 @@ public class StandPowers {
             targetEntity = StandAttackHitboxNear(User,StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
                     pointVec.z, halfReach, halfReach, halfReach), distMax, angle),angle);
         }
-        if (targetEntity instanceof StandEntity SE){
+        if (targetEntity instanceof StandEntity SE && SE.redirectKnockbackToUser()){
 
             if (SE.getUser() != null){
                 targetEntity = SE.getUser();
