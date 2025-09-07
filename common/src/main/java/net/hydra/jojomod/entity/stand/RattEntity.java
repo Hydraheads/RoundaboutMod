@@ -1,11 +1,15 @@
 package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,6 +47,12 @@ public class RattEntity extends StandEntity {
 
     protected static final EntityDataAccessor<Integer> TARGET_ID = SynchedEntityData.defineId(RattEntity.class,
             EntityDataSerializers.INT);
+
+
+    public Vec3 getEyeP(float d) {
+        return this.getPosition(d).add(0,0.1,0);
+    }
+
 
     public LivingEntity Target;
     public LivingEntity getTarget() {
@@ -108,6 +118,19 @@ public class RattEntity extends StandEntity {
             }
         }
         super.setupAnimationStates();
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        Roundabout.LOGGER.info("pleple");
+
+        if (this.getUser() != null && MainUtil.isStandDamage(source)) {
+            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersRatt PR) {
+                PR.RecallClient();
+            }
+            return this.getUser().hurt(source, amount);
+        }
+        return false;
     }
 }
 

@@ -315,7 +315,7 @@ public class PowersRatt extends NewDashPreset {
             double z = (targetPos.z() - RE.getPosition(0).z());
             float rot = (float) (Math.atan2(z, x) - Math.PI / 2);
 
-            double hy = (targetPos.y() - (RE.getPosition(0).y() + 0.5));
+            double hy = (targetPos.y() - (RE.getEyeP(0).y() ));
             double hd = Math.sqrt(Math.pow(x, 2) + Math.pow(z, 2));
             float hrot = (float) (Math.atan2(hd, hy) + Math.PI / 2); // flip the sign if you want it to be not armed
             double percent = (double) RE.getFadeOut() / RE.getMaxFade();
