@@ -637,7 +637,9 @@ public class PowersRatt extends NewDashPreset {
                 this.setAttackTimeDuring(0);
                 this.setAttackTime(-1);
                 this.setActivePower(PowersRatt.PLACE_BURST);
-                S2CPacketUtil.sendActivePowerPacket((Player)this.getSelf(),this.getActivePower());
+                if (this.getSelf() instanceof Player) {
+                    S2CPacketUtil.sendActivePowerPacket((Player) this.getSelf(), this.getActivePower());
+                }
                 if (!isClient()) {
                     this.self.level().playSound(this.getSelf(), this.self.blockPosition(), ModSounds.STAND_BARRAGE_WINDUP_EVENT,
                             SoundSource.PLAYERS, 0.7F, 0.2F);

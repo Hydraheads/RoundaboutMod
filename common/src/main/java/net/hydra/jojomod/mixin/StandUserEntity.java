@@ -530,7 +530,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 this.setHealth(this.getMaxHealth());
             }
             if (this.getEffect(ModEffects.MELTING) != null) {
-                if (this.getEffect(ModEffects.MELTING).getAmplifier() >= 6) {
+                if (this.getEffect(ModEffects.MELTING).getAmplifier() >= 8) {
                     this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 1));
                 }
                 if (Math.abs(1.0-this.getMaxHealth()) <=0.2) {
@@ -2865,6 +2865,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Part of Registering Stand Guarding as a form of Blocking*/
     @Inject(method = "hurt", at = @At(value = "HEAD"))
     private void roundabout$RoundaboutDamage2(DamageSource source, float amount, CallbackInfoReturnable<Boolean> ci) {
+        Roundabout.LOGGER.info(this.toString());
         roundabout$logSource = source;
     }
 
