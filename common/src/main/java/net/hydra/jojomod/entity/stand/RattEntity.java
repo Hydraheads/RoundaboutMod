@@ -122,11 +122,10 @@ public class RattEntity extends StandEntity {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        Roundabout.LOGGER.info("pleple");
-
         if (this.getUser() != null && MainUtil.isStandDamage(source)) {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersRatt PR) {
-                PR.RecallClient();
+                PR.RecallClient(true);
+                PR.setCooldown(PowersRatt.SETPLACE,50);
             }
             return this.getUser().hurt(source, amount);
         }

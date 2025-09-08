@@ -341,11 +341,11 @@ public class PowersRatt extends NewDashPreset {
             DimensionType t = this.getStandEntity(this.getSelf()).level().dimensionType();
             DimensionType T = this.getSelf().level().dimensionType();
             if (t != T) {
-                RecallClient();
+                RecallClient(true);
             }
 
             if (this.getSelf().distanceTo(this.getStandEntity(this.getSelf())) > DespawnRange) {
-                RecallClient();
+                RecallClient(true);
             }
         }
 
@@ -493,7 +493,7 @@ public class PowersRatt extends NewDashPreset {
                             DeployClient();
                         }
                     } else {
-                        RecallClient();
+                        RecallClient(false);
                     }
                 }
             }
@@ -599,8 +599,8 @@ public class PowersRatt extends NewDashPreset {
     }
 
 
-    public void RecallClient() {
-        if (!this.onCooldown(PowersRatt.SETPLACE)) {
+    public void RecallClient(boolean forced) {
+        if (!this.onCooldown(PowersRatt.SETPLACE) || forced) {
             tryPower(PowersRatt.NET_RECALL,true);
             tryPowerPacket(PowersRatt.NET_RECALL);
         }
@@ -612,7 +612,7 @@ public class PowersRatt extends NewDashPreset {
             case PowersRatt.NET_RECALL -> {
                 active = false;
                 this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
-                this.getStandEntity(this.getSelf()).discard();
+                this.getStandEntity(this.getSelf()).forceDespawnSet = true;// this.getStandEntity(this.getSelf()).discard();
                 this.setCooldown(PowersRatt.SETPLACE,40);
             }
             case PowersRatt.FIRE_DART -> this.setCooldown(PowersRatt.CHANGE_MODE,15);
