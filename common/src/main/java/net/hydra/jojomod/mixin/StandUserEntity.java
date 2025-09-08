@@ -2865,7 +2865,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Part of Registering Stand Guarding as a form of Blocking*/
     @Inject(method = "hurt", at = @At(value = "HEAD"))
     private void roundabout$RoundaboutDamage2(DamageSource source, float amount, CallbackInfoReturnable<Boolean> ci) {
-        Roundabout.LOGGER.info(this.toString());
         roundabout$logSource = source;
     }
 
