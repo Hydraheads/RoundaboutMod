@@ -16,6 +16,8 @@ import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModificationMaskItem;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
+import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -60,8 +62,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 
 @Mixin(PlayerRenderer.class)
-public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> extends LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> implements IPlayerRenderer {
+public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> extends LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> implements IPlayerRenderer {
 
+
+    @Shadow protected abstract void renderHand(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, AbstractClientPlayer abstractClientPlayer, ModelPart modelPart, ModelPart modelPart2);
 
     public ZPlayerRender(EntityRendererProvider.Context $$0, PlayerModel<AbstractClientPlayer> $$1, float $$2) {
         super($$0, $$1, $$2);
@@ -83,9 +87,10 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
 
 
 
-    /**Stone Arms with locacaca first person*/
+        /**Stone Arms with locacaca first person*/
     @Inject(method = "renderRightHand", at = @At(value = "TAIL"))
     public void roundabout$renderRightHand(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, AbstractClientPlayer player, CallbackInfo ci) {
+
         byte curse = ((StandUser) player).roundabout$getLocacacaCurse();
         if (curse == LocacacaCurseIndex.RIGHT_HAND) {
             this.model.rightSleeve.xScale += 0.04F;
@@ -288,6 +293,16 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
                 buffer,integer,stack)){
             ci.cancel();
             roundabout$renderHandLayers2(stack,buffer,integer,acl,$$4,$$5);
+            return;
+        }
+
+        if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()){
+            $$6.rightLeg.copyFrom($$6.rightArm);
+            $$6.rightLeg.zRot -= 0.5F;
+            $$6.rightPants.copyFrom($$6.rightLeg);
+            $$6.leftLeg.copyFrom($$6.leftArm);
+            $$6.leftLeg.zRot += 0.5F;
+            $$6.leftPants.copyFrom($$6.leftLeg);
         }
     }
 
@@ -311,6 +326,12 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
     @Inject(method = "renderRightHand", at = @At(value = "HEAD"), cancellable = true)
     private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderRightHandX(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, CallbackInfo ci) {
 
+        if ($$3 != null && ((StandUser)$$3).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()){
+            this.renderHand($$0, $$1, $$2, $$3, this.model.rightLeg, this.model.rightLeg);
+            ci.cancel();
+            return;
+        }
+
         /**Access to slim and not slim models simultaneously*/
         IPlayerEntity ipe = ((IPlayerEntity) $$3);
         ItemStack visage = ipe.roundabout$getMaskSlot();
@@ -328,6 +349,12 @@ public class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> ext
 
     @Inject(method = "renderLeftHand", at = @At(value = "HEAD"), cancellable = true)
     private <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderLeftHandX(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, CallbackInfo ci) {
+        if ($$3 != null && ((StandUser)$$3).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()){
+            this.renderHand($$0, $$1, $$2, $$3, this.model.leftLeg, this.model.leftLeg);
+            ci.cancel();
+            return;
+        }
+
         /**Access to slim and not slim models simultaneously*/
         IPlayerEntity ipe = ((IPlayerEntity) $$3);
         ItemStack visage = ipe.roundabout$getMaskSlot();

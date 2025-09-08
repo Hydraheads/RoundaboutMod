@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModificationMaskItem;
+import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.minecraft.client.animation.AnimationChannel;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.animation.Keyframe;
@@ -170,6 +171,36 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         this.leftArm.yRot = 0.1F + this.head.yRot;
                         this.leftArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
                     }
+                } else if (user.roundabout$getStandPowers() instanceof PowersWalkingHeart){
+                    boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
+                    if ($$9) {
+                        this.rightLeg.yRot = -0.1F + this.head.yRot;
+                        this.rightLeg.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+
+                        this.rightLeg.xRot = Math.max(this.rightLeg.xRot,-2.5f);
+                        this.rightLeg.xRot -=0.2f;
+
+
+                        this.leftLeg.yRot = 0;
+                        this.leftLeg.xRot = 0;
+                        this.leftLeg.zRot = 0;
+                    } else {
+                        this.leftLeg.yRot = 0.1F + this.head.yRot;
+                        this.leftLeg.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+
+                        this.leftLeg.xRot = Math.min(this.leftLeg.xRot,-2.5f);
+                        this.leftLeg.xRot -=0.2f;
+
+                        this.rightLeg.yRot = 0;
+                        this.rightLeg.xRot = 0;
+                        this.rightLeg.zRot = 0;
+                    }
+                    this.rightArm.zRot=0.5F;
+                    this.leftArm.zRot=-0.5F;
+                    this.rightArm.xRot=0F;
+                    this.leftArm.xRot=0F;
+                    this.rightArm.yRot=0F;
+                    this.leftArm.yRot=0F;
                 }
             }
             this.hat.copyFrom(this.head);
