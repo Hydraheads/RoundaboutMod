@@ -2966,6 +2966,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
 
+    @Inject(method = "setSprinting", at = @At(value = "HEAD"), cancellable = true)
+    public void roundabout$canSprintPlayer(boolean $$0, CallbackInfo ci) {
+        if (roundabout$getStandPowers().cancelSprint()){
+            ci.cancel();
+        }
+    }
+
     @Inject(
             method = "maxUpStep()F",
             at = @At(

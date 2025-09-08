@@ -482,7 +482,12 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public boolean roundabout$getUnlockedBonusSkin(){
         return roundabout$unlockedBonusSkin;
     }
-
+    @Inject(method = "canSprint", at = @At(value = "HEAD"), cancellable = true)
+    public void roundabout$canSprintPlayer(CallbackInfoReturnable<Boolean> cir) {
+        if ( ((StandUser)this).roundabout$getStandPowers().cancelSprint()){
+            cir.setReturnValue(false);
+        }
+    }
     /**Attack Speed Decreases when your hand is stone*/
     @Inject(method = "getCurrentItemAttackStrengthDelay", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$getCurrentItemAttackStrengthDelay(CallbackInfoReturnable<Float> cir) {
@@ -922,7 +927,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     /**your shield does not take damage if the stand blocks it*/
     @Inject(method = "jumpFromGround", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$Jump(CallbackInfo ci) {
-        if (((StandUser) this).roundabout$isClashing()) {
+        if (((StandUser) this).roundabout$isClashing() || ((StandUser) this).roundabout$getStandPowers().cancelJump()) {
             ci.cancel();
         }
     }

@@ -258,6 +258,14 @@ public class StandPowers {
     public boolean cancelSprintJump(){
         return this.isBarraging();
     }
+    /**Cancel all sprinting*/
+    public boolean cancelSprint(){
+        return false;
+    }
+    /**Cancel all jumping*/
+    public boolean cancelJump(){
+        return false;
+    }
 
     /** Make a stand ability cancel you using items */
     public boolean cancelItemUse() {
