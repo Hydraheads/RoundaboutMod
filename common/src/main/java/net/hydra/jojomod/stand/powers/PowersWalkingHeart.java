@@ -44,6 +44,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -86,6 +87,7 @@ public class PowersWalkingHeart extends NewDashPreset {
         switch (context)
         {
             case SKILL_1_NORMAL, SKILL_1_CROUCH-> {
+                spikeAttackModeToggleClient();
             }
             case SKILL_2_NORMAL, SKILL_2_CROUCH-> {
                 extendHeels();
@@ -187,6 +189,16 @@ public class PowersWalkingHeart extends NewDashPreset {
             }
     }
 
+    public void spikeAttackModeToggleClient(){
+        if (!hasExtendedHeelsForWalking()) {
+            this.tryPower(PowerIndex.POWER_4, true);
+            tryPowerPacket(PowerIndex.POWER_4);
+
+            getStandUserSelf().roundabout$getStandPowers().tryPower(PowerIndex.NONE, true);
+            tryPowerPacket(PowerIndex.NONE);
+            ClientUtil.stopDestroyingBlock();
+        }
+    }
 
     public void wallLatch(){
         if (canLatchOntoWall()){
@@ -241,6 +253,8 @@ public class PowersWalkingHeart extends NewDashPreset {
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         if (slot == 3 && hasExtendedHeelsForWalking() && !canLatchOntoWall())
             return true;
+        if (slot == 1 && hasExtendedHeelsForWalking())
+            return true;
         return super.isAttackIneptVisually(activeP, slot);
     }
 
@@ -255,6 +269,33 @@ public class PowersWalkingHeart extends NewDashPreset {
             return ModSounds.SUMMON_WALKING_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
+    }
+
+    @Override
+    public float inputSpeedModifiers(float basis){
+        if (inCombatMode()) {
+            return 0;
+        }
+        return super.inputSpeedModifiers(basis);
+    }
+    public boolean inCombatMode(){
+        return getStandUserSelf().roundabout$getCombatMode();
+    }
+
+    public boolean switchModes(){
+        if (getStandUserSelf().roundabout$getCombatMode()){
+            getStandUserSelf().roundabout$setCombatMode(false);
+            if (this.self.level().isClientSide()){
+                this.self.playSound(ModSounds.EXPLOSIVE_BUBBLE_SWITCH_OFF_EVENT, 1F, 1.0F);
+            }
+        } else {
+            getStandUserSelf().roundabout$setCombatMode(true);
+            if (this.self.level().isClientSide()){
+                this.self.playSound(ModSounds.EXPLOSIVE_BUBBLE_SWITCH_EVENT, 1F, 1.0F);
+            }
+        }
+
+        return true;
     }
 
     @Override
@@ -279,6 +320,9 @@ public class PowersWalkingHeart extends NewDashPreset {
             }
             case PowerIndex.POWER_3 -> {
                 wallLatch();
+            }
+            case PowerIndex.POWER_4 -> {
+                switchModes();
             }
         }
         return super.tryPower(move,forced);
