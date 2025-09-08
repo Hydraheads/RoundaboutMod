@@ -77,6 +77,18 @@
       "roundabout:summon_walking"
     ]
   },
+  "heel_raise": {
+    "subtitle": "sounds.roundabout.heel_raise",
+    "sounds": [
+      "roundabout:heel_raise"
+    ]
+  },
+  "heel_stomp": {
+    "subtitle": "sounds.roundabout.heel_stomp",
+    "sounds": [
+      "roundabout:heel_stomp"
+    ]
+  },
   "extend_spikes": {
     "subtitle": "sounds.roundabout.extend_spikes",
     "sounds": [

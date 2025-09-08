@@ -741,6 +741,10 @@ public class ModSounds {
     public static SoundEvent ACHTUNG_BURST_EVENT = SoundEvent.createVariableRangeEvent(ACHTUNG_BURST_ID);
 
 
+    public static final String SUMMON_DIVER_DOWN = "summon_diver_down";
+    public static final ResourceLocation SUMMON_DIVER_DOWN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_DIVER_DOWN);
+    public static SoundEvent SUMMON_DIVER_DOWN_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_DIVER_DOWN_ID);
+
 
     public static final String EXTEND_SPIKES = "extend_spikes";
     public static final ResourceLocation EXTEND_SPIKES_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EXTEND_SPIKES);
@@ -748,6 +752,18 @@ public class ModSounds {
     public static final String WALL_LATCH = "wall_latch";
     public static final ResourceLocation WALL_LATCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+WALL_LATCH);
     public static SoundEvent WALL_LATCH_EVENT = SoundEvent.createVariableRangeEvent(WALL_LATCH_ID);
+
+
+    public static final String SUMMON_WALKING = "summon_walking";
+    public static final ResourceLocation SUMMON_WALKING_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_WALKING);
+    public static SoundEvent SUMMON_WALKING_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_WALKING_ID);
+
+    public static final String HEEL_RAISE = "heel_raise";
+    public static final ResourceLocation HEEL_RAISE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HEEL_RAISE);
+    public static SoundEvent HEEL_RAISE_EVENT = SoundEvent.createVariableRangeEvent(HEEL_RAISE_ID);
+    public static final String HEEL_STOMP = "heel_stomp";
+    public static final ResourceLocation HEEL_STOMP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HEEL_STOMP);
+    public static SoundEvent HEEL_STOMP_EVENT = SoundEvent.createVariableRangeEvent(HEEL_STOMP_ID);
 
 
     public static final String DIO_HOHO = "dio_hoho";
@@ -956,14 +972,6 @@ public class ModSounds {
     public static final String HALLELUJAH = "hallelujah";
     public static final ResourceLocation HALLELUJAH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HALLELUJAH);
     public static SoundEvent HALLELUJAH_EVENT = SoundEvent.createVariableRangeEvent(HALLELUJAH_ID);
-
-    public static final String SUMMON_DIVER_DOWN = "summon_diver_down";
-    public static final ResourceLocation SUMMON_DIVER_DOWN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_DIVER_DOWN);
-    public static SoundEvent SUMMON_DIVER_DOWN_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_DIVER_DOWN_ID);
-
-    public static final String SUMMON_WALKING = "summon_walking";
-    public static final ResourceLocation SUMMON_WALKING_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_WALKING);
-    public static SoundEvent SUMMON_WALKING_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_WALKING_ID);
 
 
     public static void registerSoundEvents(){

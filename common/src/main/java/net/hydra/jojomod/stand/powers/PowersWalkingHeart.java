@@ -286,12 +286,12 @@ public class PowersWalkingHeart extends NewDashPreset {
         if (getStandUserSelf().roundabout$getCombatMode()){
             getStandUserSelf().roundabout$setCombatMode(false);
             if (this.self.level().isClientSide()){
-                this.self.playSound(ModSounds.EXPLOSIVE_BUBBLE_SWITCH_OFF_EVENT, 1F, 1.0F);
+                this.self.playSound(ModSounds.HEEL_STOMP_EVENT, 1F, 1.0F);
             }
         } else {
             getStandUserSelf().roundabout$setCombatMode(true);
             if (this.self.level().isClientSide()){
-                this.self.playSound(ModSounds.EXPLOSIVE_BUBBLE_SWITCH_EVENT, 1F, 1.0F);
+                this.self.playSound(ModSounds.HEEL_RAISE_EVENT, 1F, 1.0F);
             }
         }
 

@@ -440,6 +440,10 @@ public class ForgeSounds {
             register(ModSounds.SUMMON_DIVER_DOWN, ModSounds.SUMMON_DIVER_DOWN_ID);
     public static final RegistryObject<SoundEvent> SUMMON_WALKING =
             register(ModSounds.SUMMON_WALKING, ModSounds.SUMMON_WALKING_ID);
+    public static final RegistryObject<SoundEvent> HEEL_RAISE =
+            register(ModSounds.HEEL_RAISE, ModSounds.HEEL_RAISE_ID);
+    public static final RegistryObject<SoundEvent> HEEL_STOMP =
+            register(ModSounds.HEEL_STOMP, ModSounds.HEEL_STOMP_ID);
     public static final RegistryObject<SoundEvent> DIO_HOHO =
             register(ModSounds.DIO_HOHO, ModSounds.DIO_HOHO_ID);
     public static final RegistryObject<SoundEvent> DIO_DEATH =
