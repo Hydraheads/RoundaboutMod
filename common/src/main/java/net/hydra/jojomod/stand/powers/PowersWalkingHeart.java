@@ -371,7 +371,8 @@ public class PowersWalkingHeart extends NewDashPreset {
             this.setAttackTimeDuring(-10);
             this.setActivePower(PowerIndex.POWER_4_EXTRA);
 
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXPLOSIVE_BUBBLE_SHOT_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+            this.self.level().playSound(null, this.self.blockPosition(),
+                    ModSounds.SPIKE_HIT_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
 
     }
 

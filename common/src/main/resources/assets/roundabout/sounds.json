@@ -89,6 +89,18 @@
       "roundabout:heel_stomp"
     ]
   },
+  "spike_hit": {
+    "subtitle": "sounds.roundabout.spike_hit",
+    "sounds": [
+      "roundabout:spike_hit"
+    ]
+  },
+  "spike_miss": {
+    "subtitle": "sounds.roundabout.spike_miss",
+    "sounds": [
+      "roundabout:spike_miss"
+    ]
+  },
   "extend_spikes": {
     "subtitle": "sounds.roundabout.extend_spikes",
     "sounds": [

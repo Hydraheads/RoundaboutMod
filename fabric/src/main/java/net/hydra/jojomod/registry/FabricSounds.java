@@ -255,6 +255,8 @@ public class FabricSounds {
         addSound(ModSounds.SUMMON_WALKING_ID, ModSounds.SUMMON_WALKING_EVENT);
         addSound(ModSounds.HEEL_RAISE_ID, ModSounds.HEEL_RAISE_EVENT);
         addSound(ModSounds.HEEL_STOMP_ID, ModSounds.HEEL_STOMP_EVENT);
+        addSound(ModSounds.SPIKE_HIT_ID, ModSounds.SPIKE_HIT_EVENT);
+        addSound(ModSounds.SPIKE_MISS_ID, ModSounds.SPIKE_MISS_EVENT);
 
         addSound(ModSounds.EXTEND_SPIKES_ID, ModSounds.EXTEND_SPIKES_EVENT);
         addSound(ModSounds.WALL_LATCH_ID, ModSounds.WALL_LATCH_EVENT);

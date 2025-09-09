@@ -498,6 +498,8 @@
   "sounds.roundabout.summon_walking":  "Stand Summoned",
   "sounds.roundabout.heel_raise":  "Leg raises",
   "sounds.roundabout.heel_stomp":  "Leg lowers",
+  "sounds.roundabout.spike_hit":  "Spike hit",
+  "sounds.roundabout.spike_miss":  "Spike extend",
 
   "sounds.roundabout.mandom_rewind":  "Time Rewind",
 

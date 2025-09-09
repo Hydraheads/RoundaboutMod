@@ -766,6 +766,14 @@ public class ModSounds {
     public static SoundEvent HEEL_STOMP_EVENT = SoundEvent.createVariableRangeEvent(HEEL_STOMP_ID);
 
 
+    public static final String SPIKE_HIT = "spike_hit";
+    public static final ResourceLocation SPIKE_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SPIKE_HIT);
+    public static SoundEvent SPIKE_HIT_EVENT = SoundEvent.createVariableRangeEvent(SPIKE_HIT_ID);
+    public static final String SPIKE_MISS = "spike_miss";
+    public static final ResourceLocation SPIKE_MISS_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SPIKE_MISS);
+    public static SoundEvent SPIKE_MISS_EVENT = SoundEvent.createVariableRangeEvent(SPIKE_MISS_ID);
+
+
     public static final String DIO_HOHO = "dio_hoho";
     public static final ResourceLocation DIO_HOHO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_HOHO);
     public static SoundEvent DIO_HOHO_EVENT = SoundEvent.createVariableRangeEvent(DIO_HOHO_ID);
