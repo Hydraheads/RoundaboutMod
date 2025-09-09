@@ -35,6 +35,16 @@ public abstract class GravityMeleeAttackGoalMixin {
         Direction gravityDirection2 = GravityAPI.getGravityDirection(this.mob);
         if (gravityDirection == gravityDirection2)
             return;
+
+        if (
+                (gravityDirection == Direction.DOWN && this.mob.getY() < $$0.getY()) ||
+                        (gravityDirection == Direction.UP && this.mob.getY() > $$0.getY()) ||
+                        (gravityDirection == Direction.NORTH && this.mob.getZ() < $$0.getZ()) ||
+                        (gravityDirection == Direction.SOUTH && this.mob.getZ() > $$0.getZ()) ||
+                        (gravityDirection == Direction.WEST && this.mob.getX() < $$0.getX()) ||
+                        (gravityDirection == Direction.EAST && this.mob.getX() > $$0.getX())
+        )
+            return;
         ci.cancel();
 
         double $$2 = this.getAttackReachSqr($$0);
