@@ -4,12 +4,14 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
+import net.hydra.jojomod.entity.projectile.SoftAndWetExplosiveBubbleEntity;
 import net.hydra.jojomod.entity.stand.CinderellaEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -29,6 +31,8 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -306,6 +310,18 @@ public class PowersWalkingHeart extends NewDashPreset {
         }
     }
 
+
+    public int shootTicks = 0;
+    public int getMaxShootTicks(){
+        return 10000;
+    }
+    public int getShootTicks(){
+        return shootTicks;
+    }
+    public void setShootTicks(int shootTicks){
+        this.shootTicks = Mth.clamp(shootTicks,0,getMaxShootTicks());
+
+    }
     @Override
     public boolean isWip(){
         return true;
@@ -332,8 +348,20 @@ public class PowersWalkingHeart extends NewDashPreset {
             case PowerIndex.POWER_4 -> {
                 switchModes();
             }
+            case PowerIndex.POWER_4_EXTRA -> {
+                useSpikeAttack();
+            }
         }
         return super.tryPower(move,forced);
+    }
+
+    public void useSpikeAttack(){
+        this.setCooldown(PowerIndex.SKILL_4, 3);
+            this.setAttackTimeDuring(-10);
+            this.setActivePower(PowerIndex.POWER_4_EXTRA);
+
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXPLOSIVE_BUBBLE_SHOT_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+
     }
 
     public void tickPower() {
@@ -392,7 +420,107 @@ public class PowersWalkingHeart extends NewDashPreset {
                 setHeelDirection(Direction.DOWN);
             }
         }
+
+        if (this.self instanceof Player PE && PE.isCreative()) {
+            setShootTicks(0);
+        } else if (getPauseGrowthTicks() > 0){
+            pauseGrowthTicks-=1;
+        } else {
+            if (getShootTicks() > 0) {
+                setShootTicks(getShootTicks() - getLowerTicks());
+            }
+        }
+
         super.tickPower();
+    }
+    public int pauseTicks(){
+        return 20;
+    }
+
+    public int getLowerTicks(){
+        return 50;
+    }
+
+    public boolean canShootSpikes(int useTicks){
+        if ((shootTicks+useTicks) <= getMaxShootTicks()){
+            return true;
+        }
+        return false;
+    }
+
+    public int getUseTicks(){
+        return 2499;
+    }
+
+    public boolean holdDownClick = false;
+    public boolean consumeClickInput = false;
+    @Override
+    public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (!consumeClickInput) {
+            if (holdDownClick) {
+                if (keyIsDown) {
+
+                } else {
+                    if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+                        int atd = this.getAttackTimeDuring();
+                        this.tryIntPower(PowerIndex.SNEAK_ATTACK, true, atd);
+                        tryIntPowerPacket(PowerIndex.SNEAK_ATTACK, atd);
+                    }
+                    holdDownClick = false;
+                }
+            } else {
+                if (keyIsDown) {
+                    if (inCombatMode()){
+                        if (!holdDownClick){
+                            if (!this.onCooldown(PowerIndex.SKILL_4) && ((getActivePower() == PowerIndex.NONE)
+                                    || getActivePower() == PowerIndex.POWER_4_EXTRA)) {
+                                if (confirmShot(getUseTicks())) {
+                                    if (this.self instanceof Player PE){
+                                        IPlayerEntity ipe = ((IPlayerEntity)PE);
+                                        ipe.roundabout$getBubbleShotAim().stop();
+                                        ipe.roundabout$setBubbleShotAimPoints(10);
+                                    }
+                                    this.tryPower(PowerIndex.POWER_4_EXTRA, true);
+                                    tryPowerPacket(PowerIndex.POWER_4_EXTRA);
+                                }
+                            }
+                        }
+                    } else {
+                        Minecraft mc = Minecraft.getInstance();
+
+                        if (!isHoldingSneak()) {
+                            super.buttonInputAttack(keyIsDown, options);
+                        } else {
+                            if (this.canAttack()) {
+                                this.tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
+                                holdDownClick = true;
+                                tryPowerPacket(PowerIndex.SNEAK_ATTACK_CHARGE);
+                            } else {
+                                super.buttonInputAttack(keyIsDown, options);
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            if (!keyIsDown) {
+                consumeClickInput = false;
+            }
+        }
+    }
+
+    public boolean confirmShot(int useTicks){
+        if (canShootSpikes(useTicks)){
+            pauseGrowthTicks = pauseTicks();
+            setShootTicks((shootTicks+useTicks));
+            return true;
+        }
+        return false;
+    }
+
+    public int pauseGrowthTicks = 0;
+    public int getPauseGrowthTicks(){
+        return pauseGrowthTicks;
     }
 
     public int justFlippedTicks = 0;
