@@ -8,6 +8,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
@@ -195,6 +196,8 @@ public class PowersWalkingHeart extends NewDashPreset {
 
     public void spikeAttackModeToggleClient(){
         if (!hasExtendedHeelsForWalking()) {
+            if (!inCombatMode() && getShootTicks() > 0)
+                return;
             this.tryPower(PowerIndex.POWER_4, true);
             tryPowerPacket(PowerIndex.POWER_4);
 
@@ -355,6 +358,14 @@ public class PowersWalkingHeart extends NewDashPreset {
         return super.tryPower(move,forced);
     }
 
+    public boolean replaceHudActively(){
+        return inCombatMode() || getShootTicks() > 0;
+    }
+    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x){
+        StandHudRender.renderWalkingHeartHud(context,cameraPlayer,screenWidth,screenHeight,x);
+    }
+
+
     public void useSpikeAttack(){
         this.setCooldown(PowerIndex.SKILL_4, 3);
             this.setAttackTimeDuring(-10);
@@ -423,18 +434,30 @@ public class PowersWalkingHeart extends NewDashPreset {
 
         if (this.self instanceof Player PE && PE.isCreative()) {
             setShootTicks(0);
-        } else if (getPauseGrowthTicks() > 0){
-            pauseGrowthTicks-=1;
         } else {
-            if (getShootTicks() > 0) {
-                setShootTicks(getShootTicks() - getLowerTicks());
+            if (inCombatMode()){
+                if (getShootTicks() < getMaxShootTicks()) {
+                    setShootTicks(getShootTicks() + getRaiseTicks());
+                }
+            } else {
+                if (getPauseGrowthTicks() > 0) {
+                    pauseGrowthTicks -= 1;
+                } else {
+                    if (getShootTicks() > 0) {
+                        setShootTicks(getShootTicks() - getLowerTicks());
+                    }
+                }
             }
         }
 
         super.tickPower();
     }
+
+    public int getRaiseTicks(){
+        return 40;
+    }
     public int pauseTicks(){
-        return 20;
+        return 60;
     }
 
     public int getLowerTicks(){
@@ -449,7 +472,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public int getUseTicks(){
-        return 2499;
+        return 1349;
     }
 
     public boolean holdDownClick = false;

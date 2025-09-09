@@ -13,6 +13,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -159,6 +160,44 @@ public class StandHudRender {
         k = scaledWidth/2 - 5;
         l = scaledHeight - 31 - 5;
         context.blit(StandIcons.JOJO_ICONS, k, l, u, 60, 9, 9);
+    }
+    public static void renderWalkingHeartHud(GuiGraphics context, Player playerEntity,
+                                             int scaledWidth, int scaledHeight, int x) {
+
+        StandUser standUser = ((StandUser) playerEntity);
+        if (standUser.roundabout$getStandPowers() instanceof PowersWalkingHeart PW) {
+
+            int l;
+            int k;
+            l = scaledHeight - 32 + 3;
+
+            int st = PW.getMaxShootTicks();
+            int sc = PW.getShootTicks();
+            sc = Mth.clamp(sc, 0, st);
+            int blt2 = 182 - (int) Math.floor(((double) 182 / st) * (sc));
+
+            int bleh = 10;
+            if (!PW.inCombatMode()){
+                bleh+=10;
+            }
+
+            context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, bleh, 182, 5);
+            if (blt2 > 0) {
+                bleh+=5;
+                context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, bleh, blt2, 5);
+            }
+
+            int u = 183;
+            k = scaledWidth / 2 - 5;
+            l = scaledHeight - 31 - 5;
+
+            if (PW.canShootSpikes(PW.getUseTicks())) {
+                context.blit(StandIcons.JOJO_ICONS_2, k, l, u, 0, 9, 9);
+            } else {
+                context.blit(StandIcons.JOJO_ICONS_2, k, l, u, 10, 9, 9);
+            }
+        }
+
     }
 
     public static void renderInvisibilityHUD(GuiGraphics context, Player playerEntity,
