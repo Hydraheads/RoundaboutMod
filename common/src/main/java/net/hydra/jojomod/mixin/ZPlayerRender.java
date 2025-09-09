@@ -298,10 +298,10 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
         if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()){
             $$6.rightLeg.copyFrom($$6.rightArm);
-            $$6.rightLeg.zRot -= 0.5F;
+            $$6.rightLeg.zRot -=1.1F;
             $$6.rightPants.copyFrom($$6.rightLeg);
             $$6.leftLeg.copyFrom($$6.leftArm);
-            $$6.leftLeg.zRot += 0.5F;
+            $$6.leftLeg.zRot += 1.1F;
             $$6.leftPants.copyFrom($$6.leftLeg);
         }
     }
