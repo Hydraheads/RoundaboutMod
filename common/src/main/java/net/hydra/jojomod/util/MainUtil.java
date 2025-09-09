@@ -1504,22 +1504,23 @@ public class MainUtil {
     }
 
     public static boolean canActuallyHit(Entity self, Entity entity){
-        if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.generalDetectionGoThroughDoorsAndCorners){
-            return true;
-        }
-        Vec3 from = new Vec3(self.getX(), self.getY(), self.getZ()); // your position
-        Vec3 to = entity.getEyePosition(1.0F); // where the entity's eyes are
-
-        BlockHitResult result = self.level().clip(new ClipContext(
-                from,
-                to,
-                ClipContext.Block.COLLIDER,
-                ClipContext.Fluid.NONE,
-                self
-        ));
-        boolean isBlocked = result.getType() != HitResult.Type.MISS &&
-                result.getLocation().distanceTo(from) < to.distanceTo(from);
-        return !isBlocked;
+//        if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.generalDetectionGoThroughDoorsAndCorners){
+//            return true;
+//        }
+//        Vec3 from = new Vec3(self.getX(), self.getY(), self.getZ()); // your position
+//        Vec3 to = entity.getEyePosition(1.0F); // where the entity's eyes are
+//
+//        BlockHitResult result = self.level().clip(new ClipContext(
+//                from,
+//                to,
+//                ClipContext.Block.COLLIDER,
+//                ClipContext.Fluid.NONE,
+//                self
+//        ));
+//        boolean isBlocked = result.getType() != HitResult.Type.MISS &&
+//                result.getLocation().distanceTo(from) < to.distanceTo(from);
+        // return !isBlocked
+        return canActuallyHitInvolved(self,entity);
     }
     public static boolean isStandPickable(Entity entity){
         if (entity instanceof SoftAndWetPlunderBubbleEntity sbe){
@@ -2210,6 +2211,50 @@ public class MainUtil {
                 double hitDistance = eyePos.distanceTo(hitOptional.get());
                 if (hitDistance < closestDistance && !entity.isSpectator() && MainUtil.isStandPickable(entity) && !entity.isInvulnerable()
                 && !entity.hasPassenger(player)) {
+                    closestDistance = hitDistance;
+                    closest = entity;
+                }
+            }
+        }
+
+        return closest; // null if no valid hit
+    }
+
+    public static Entity raytraceEntityStandThroughWalls(Level world, LivingEntity player, double maxDistance) {
+
+        Vec3 eyePos = player.getEyePosition(1.0F); // player.getEyePosition(float)
+        Vec3 lookVec = player.getViewVector(1.0F); // player.getViewVector(float)
+        Vec3 reachVec = eyePos.add(lookVec.scale(maxDistance)); // end point of the ray
+
+        // Raytrace blocks first
+        ClipContext blockContext = new ClipContext(
+                eyePos,
+                reachVec,
+                ClipContext.Block.OUTLINE,
+                ClipContext.Fluid.NONE,
+                player
+        );
+
+        BlockHitResult blockHit = world.clip(blockContext);
+        double blockHitDistance = maxDistance;
+
+        //
+        // Search for potential target entities in bounding box
+        AABB box = player.getBoundingBox().expandTowards(lookVec.scale(maxDistance)).inflate(1.0);
+        List<Entity> candidates = world.getEntities(player, box,
+                (e) -> e instanceof Entity && e.isPickable() && e.isAlive());
+
+        Entity closest = null;
+        double closestDistance = blockHitDistance;
+
+        for (Entity entity : candidates) {
+            AABB aabb = entity.getBoundingBox().inflate(0.3); // widen the target hit box a bit
+            Optional<Vec3> hitOptional = aabb.clip(eyePos, reachVec);
+
+            if (hitOptional.isPresent()) {
+                double hitDistance = eyePos.distanceTo(hitOptional.get());
+                if (hitDistance < closestDistance && !entity.isSpectator() && MainUtil.isStandPickable(entity) && !entity.isInvulnerable()
+                        && !entity.hasPassenger(player)) {
                     closestDistance = hitDistance;
                     closest = entity;
                 }

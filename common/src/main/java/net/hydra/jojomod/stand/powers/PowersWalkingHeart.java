@@ -604,11 +604,12 @@ public class PowersWalkingHeart extends NewDashPreset {
                                 float flashAlpha, float otherFlashAlpha) {;
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
-        if (this.getActivePower() == PowerIndex.POWER_2) {
-            Entity TE = this.getTargetEntity(playerEntity, 5F);
+        if (inCombatMode()) {
+            Entity TE = this.getTargetEntityThroughWalls(playerEntity, 7F,10);
             if (TE != null) {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
             }
         }
     }
+
 }
