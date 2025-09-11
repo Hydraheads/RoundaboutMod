@@ -176,7 +176,12 @@ public class NewPunchingStand extends NewDashPreset {
                 this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
             } else {
                 if (this.activePowerPhase >= this.activePowerPhaseMax) {
-                    knockShield2(entity, 40);
+                    if (entity instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers().interceptGuard()
+                    && LE.isBlocking() && !((StandUser) LE).roundabout$isGuarding()){
+                        knockShield2(entity, 60);
+                    } else {
+                        knockShield2(entity, 40);
+                    }
                 }
             }
         } else {
