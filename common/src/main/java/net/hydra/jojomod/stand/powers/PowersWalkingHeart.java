@@ -548,7 +548,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public int getRaiseTicks(){
-        return 40;
+        return 60;
     }
     public int pauseTicks(){
         return 60;

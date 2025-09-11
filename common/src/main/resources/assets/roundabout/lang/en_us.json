@@ -872,7 +872,7 @@
   "ability.roundabout.spike_attack_mode": "Attack Mode",
   "ability.roundabout.spike_attack_mode.desc": "Lets you press or hold the attack key to launch a spike attack, pulling mobs in with a damaging attack that inflicts bleed. If interact is held, it pushes them away instead. This mode runs on a meter that must be full to use the ability, and recharges when not using it.",
   "ability.roundabout.heel_plant": "Heel Plant",
-  "ability.roundabout.heel_plant.desc": "Extends your heel spikes into the ground, allowing you to resist most forms of knockback and walk on walls. Disables some abilities while active, deactivates when airborne or pressed again.",
+  "ability.roundabout.heel_plant.desc": "Extends your heel spikes into the ground, allowing you to resist most forms of knockback and walk on walls. Gives you a step height increase in both directions. Disables some abilities while active, deactivates when airborne or pressed again.",
 
 
   "ability.roundabout.wall_walk_move": "Wall Walking",
