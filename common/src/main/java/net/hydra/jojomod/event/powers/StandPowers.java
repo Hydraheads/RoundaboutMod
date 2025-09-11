@@ -2106,6 +2106,8 @@ public class StandPowers {
         }
         storeEnt = targetEntity;
 
+        if (!listE.contains(targetEntity) && targetEntity != null)
+            listE.add(targetEntity);
         return listE;
     }
 

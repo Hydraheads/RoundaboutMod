@@ -108,6 +108,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
 
+
     public void extendHeels(){
         if (!this.onCooldown(PowerIndex.SKILL_3) || hasExtendedHeelsForWalking()) {
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
@@ -358,6 +359,9 @@ public class PowersWalkingHeart extends NewDashPreset {
             case PowerIndex.POWER_4_EXTRA -> {
                 useSpikeAttack();
             }
+            case PowerIndex.POWER_4_SNEAK_EXTRA -> {
+                useSpikeAttack2();
+            }
             case PowerIndex.POWER_1_BONUS -> {
                 missSound();
             }
@@ -374,14 +378,21 @@ public class PowersWalkingHeart extends NewDashPreset {
             Entity ent = self.level().getEntity(chargeTime);
             if (ent != null){
 
-                HeelSpikeDamageEntityAttack(ent,10,1,ent);
+                HeelSpikeDamageEntityAttack(ent,1,0.5F,ent,false);
+                return true;
+            }
+        } if (move == PowerIndex.POWER_2_BLOCK) {
+            Entity ent = self.level().getEntity(chargeTime);
+            if (ent != null){
+
+                HeelSpikeDamageEntityAttack(ent,1,1.4F,ent,true);
                 return true;
             }
         }
         return super.tryIntPower(move, forced, chargeTime);
     }
 
-    public boolean HeelSpikeDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
+    public boolean HeelSpikeDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker, boolean rightClick){
         if (attacker instanceof TamableAnimal TA){
             if (target instanceof TamableAnimal TT && TT.getOwner() != null
                     && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
@@ -396,10 +407,22 @@ public class PowersWalkingHeart extends NewDashPreset {
             if (attacker instanceof LivingEntity LE){
                 LE.setLastHurtMob(target);
             }
-            if (target instanceof LivingEntity && knockbackStrength > 0) {
-                ((LivingEntity) target).knockback(knockbackStrength * 0.5f, Mth.sin(this.self.getYRot() * ((float) Math.PI / 180)), -Mth.cos(this.self.getYRot() * ((float) Math.PI / 180)));
+            if (target instanceof LivingEntity) {
+                float mod = -1;
+                if (rightClick){
+                    mod = 1;
+                }
+                ((LivingEntity) target).knockback(knockbackStrength * 0.5f, mod*Mth.sin(this.self.getYRot() * ((float) Math.PI / 180)), mod*-Mth.cos(this.self.getYRot() * ((float) Math.PI / 180)));
             }
             return true;
+        } else {
+            if (target instanceof LivingEntity) {
+                float mod = -1;
+                if (rightClick){
+                    mod = 1;
+                }
+                ((LivingEntity) target).knockback(knockbackStrength * 0.5f, mod*Mth.sin(this.self.getYRot() * ((float) Math.PI / 180)), mod*-Mth.cos(this.self.getYRot() * ((float) Math.PI / 180)));
+            }
         }
         return false;
     }
@@ -421,8 +444,7 @@ public class PowersWalkingHeart extends NewDashPreset {
         StandHudRender.renderWalkingHeartHud(context,cameraPlayer,screenWidth,screenHeight,x);
     }
 
-
-    public void useSpikeAttack(){
+    public void useSpikeAttackF(boolean rightClick){
         this.setCooldown(PowerIndex.SKILL_4, 3);
         this.setAttackTimeDuring(-10);
         this.setActivePower(PowerIndex.POWER_4_EXTRA);
@@ -434,11 +456,22 @@ public class PowersWalkingHeart extends NewDashPreset {
             } else {
                 tryPowerPacket(PowerIndex.POWER_1_SNEAK);
                 for (Entity value : TE) {
-                    tryIntPowerPacket(PowerIndex.POWER_1_BLOCK, value.getId());
+                    if (rightClick){
+                        tryIntPowerPacket(PowerIndex.POWER_2_BLOCK, value.getId());
+                    } else {
+                        tryIntPowerPacket(PowerIndex.POWER_1_BLOCK, value.getId());
+                    }
                 }
             }
         }
+    }
 
+    public void useSpikeAttack2(){
+        useSpikeAttackF(true);
+    }
+
+    public void useSpikeAttack(){
+        useSpikeAttackF(false);
     }
 
     public void tickPower() {
@@ -541,10 +574,24 @@ public class PowersWalkingHeart extends NewDashPreset {
         return 1349;
     }
 
+    @Override
+    public boolean interceptGuard(){
+        return inCombatMode();
+    }
+    @Override
+    public boolean buttonInputGuard(boolean keyIsDown, Options options) {
+        buttonInputSpike(keyIsDown,options,true);
+        return true;
+    }
+
+
     public boolean holdDownClick = false;
     public boolean consumeClickInput = false;
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
+        buttonInputSpike(keyIsDown,options,false);
+    }
+    public void buttonInputSpike(boolean keyIsDown, Options options, boolean rightClick) {
         if (!consumeClickInput) {
             if (holdDownClick) {
                 if (!keyIsDown) {
@@ -562,7 +609,11 @@ public class PowersWalkingHeart extends NewDashPreset {
                                         ipe.roundabout$getBubbleShotAim().stop();
                                         ipe.roundabout$setBubbleShotAimPoints(10);
                                     }
-                                    this.tryPower(PowerIndex.POWER_4_EXTRA, true);
+                                    if (rightClick){
+                                        this.tryPower(PowerIndex.POWER_4_SNEAK_EXTRA, true);
+                                    } else {
+                                        this.tryPower(PowerIndex.POWER_4_EXTRA, true);
+                                    }
                                 }
                             }
                         }
