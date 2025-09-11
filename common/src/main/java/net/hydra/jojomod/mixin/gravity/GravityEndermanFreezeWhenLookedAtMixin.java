@@ -26,7 +26,8 @@ public abstract class GravityEndermanFreezeWhenLookedAtMixin {
             method = "tick()V",
             at = @At(
                     value = "HEAD"
-            )
+            ),
+            cancellable = true
     )
     private void rdbt$redirect_tick_getEyeY_0(CallbackInfo ci) {
         Direction gravityDirection = GravityAPI.getGravityDirection(this.target);

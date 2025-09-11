@@ -363,6 +363,8 @@
   "death.attack.star_finger.item": "%1$s was turned into sashimi whilst fighting %2$s whilst using %3$s",
   "death.attack.penetrating_stand": "%1$s was retired by %2$s",
   "death.attack.penetrating_stand.item": "%1$s was retired by %2$s",
+  "death.attack.heel_spike": "%1$s was styled on by %2$s",
+  "death.attack.heel_spike.item": "%1$s was styled on by %2$s",
   "death.attack.explosive_stand": "%1$s mysteriously blew up thanks to %2$s",
   "death.attack.explosive_stand.item": "%1$s mysteriously blew up thanks to %2$s",
   "death.attack.corpse": "%1$s was brought to justice by %2$s",

@@ -605,7 +605,6 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             List<Entity> listEnt = DamageHandler.genHitbox(self, pointVec3.x, pointVec3.y,
                     pointVec3.z, halfReach, halfReach, halfReach);
 
-
             Direction gravD = ((IGravityEntity)self).roundabout$getGravityDirection();
 
             for (Entity value : listEnt) {

@@ -12,6 +12,7 @@ import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
+import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetExplosiveBubbleEntity;
 import net.hydra.jojomod.entity.stand.CinderellaEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -21,6 +22,7 @@ import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.LuckyLipstickItem;
@@ -46,7 +48,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -354,8 +358,60 @@ public class PowersWalkingHeart extends NewDashPreset {
             case PowerIndex.POWER_4_EXTRA -> {
                 useSpikeAttack();
             }
+            case PowerIndex.POWER_1_BONUS -> {
+                missSound();
+            }
+            case PowerIndex.POWER_1_SNEAK -> {
+                hitSound();
+            }
         }
         return super.tryPower(move,forced);
+    }
+
+    @Override
+    public boolean tryIntPower(int move, boolean forced, int chargeTime){
+        if (move == PowerIndex.POWER_1_BLOCK) {
+            Entity ent = self.level().getEntity(chargeTime);
+            if (ent != null){
+
+                HeelSpikeDamageEntityAttack(ent,10,1,ent);
+                return true;
+            }
+        }
+        return super.tryIntPower(move, forced, chargeTime);
+    }
+
+    public boolean HeelSpikeDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
+        if (attacker instanceof TamableAnimal TA){
+            if (target instanceof TamableAnimal TT && TT.getOwner() != null
+                    && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
+                return false;
+            }
+        } else if (attacker instanceof AbstractVillager){
+            if (target instanceof AbstractVillager){
+                return false;
+            }
+        }
+        if (DamageHandler.HeelSpikeStandDamageEntity(target,pow, attacker)){
+            if (attacker instanceof LivingEntity LE){
+                LE.setLastHurtMob(target);
+            }
+            if (target instanceof LivingEntity && knockbackStrength > 0) {
+                ((LivingEntity) target).knockback(knockbackStrength * 0.5f, Mth.sin(this.self.getYRot() * ((float) Math.PI / 180)), -Mth.cos(this.self.getYRot() * ((float) Math.PI / 180)));
+            }
+            return true;
+        }
+        return false;
+    }
+
+
+    public void hitSound(){
+        this.self.level().playSound(null, this.self.blockPosition(),
+                ModSounds.SPIKE_HIT_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+    }
+    public void missSound(){
+        this.self.level().playSound(null, this.self.blockPosition(),
+                ModSounds.SPIKE_MISS_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
     }
 
     public boolean replaceHudActively(){
@@ -368,11 +424,20 @@ public class PowersWalkingHeart extends NewDashPreset {
 
     public void useSpikeAttack(){
         this.setCooldown(PowerIndex.SKILL_4, 3);
-            this.setAttackTimeDuring(-10);
-            this.setActivePower(PowerIndex.POWER_4_EXTRA);
+        this.setAttackTimeDuring(-10);
+        this.setActivePower(PowerIndex.POWER_4_EXTRA);
 
-            this.self.level().playSound(null, this.self.blockPosition(),
-                    ModSounds.SPIKE_HIT_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+        if (this.self.level().isClientSide()){
+            List<Entity> TE = this.getTargetEntityListThroughWalls(self, 7F,10);
+            if (TE == null || TE.isEmpty()){
+                tryPowerPacket(PowerIndex.POWER_1_BONUS);
+            } else {
+                tryPowerPacket(PowerIndex.POWER_1_SNEAK);
+                for (Entity value : TE) {
+                    tryIntPowerPacket(PowerIndex.POWER_1_BLOCK, value.getId());
+                }
+            }
+        }
 
     }
 
@@ -482,14 +547,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (!consumeClickInput) {
             if (holdDownClick) {
-                if (keyIsDown) {
-
-                } else {
-                    if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
-                        int atd = this.getAttackTimeDuring();
-                        this.tryIntPower(PowerIndex.SNEAK_ATTACK, true, atd);
-                        tryIntPowerPacket(PowerIndex.SNEAK_ATTACK, atd);
-                    }
+                if (!keyIsDown) {
                     holdDownClick = false;
                 }
             } else {
@@ -505,22 +563,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                                         ipe.roundabout$setBubbleShotAimPoints(10);
                                     }
                                     this.tryPower(PowerIndex.POWER_4_EXTRA, true);
-                                    tryPowerPacket(PowerIndex.POWER_4_EXTRA);
                                 }
-                            }
-                        }
-                    } else {
-                        Minecraft mc = Minecraft.getInstance();
-
-                        if (!isHoldingSneak()) {
-                            super.buttonInputAttack(keyIsDown, options);
-                        } else {
-                            if (this.canAttack()) {
-                                this.tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
-                                holdDownClick = true;
-                                tryPowerPacket(PowerIndex.SNEAK_ATTACK_CHARGE);
-                            } else {
-                                super.buttonInputAttack(keyIsDown, options);
                             }
                         }
                     }
@@ -596,6 +639,7 @@ public class PowersWalkingHeart extends NewDashPreset {
         $$1.add(CinderellaEntity.BUSINESS_SKIN);
         return $$1;
     }
+
 
 
     @Override

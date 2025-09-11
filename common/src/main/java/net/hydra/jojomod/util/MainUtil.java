@@ -1255,6 +1255,7 @@ public class MainUtil {
                 || sauce.is(ModDamageTypes.GO_BEYOND)
                 || sauce.is(ModDamageTypes.CORPSE) || sauce.is(ModDamageTypes.CORPSE_EXPLOSION) || sauce.is(ModDamageTypes.CORPSE_ARROW)
                 || sauce.is(ModDamageTypes.MELTING)
+                || sauce.is(ModDamageTypes.HEEL_SPIKE)
         ){
             return true;
         }
