@@ -4,6 +4,8 @@
   "text.roundabout.riding_flying_creature": "Maintiens Saut pour monter, Maintiens Dash pour descendre",
   "text.roundabout.riding_flying_creature.day": "Ne peut pas voler durant la journée.",
   "text.roundabout.riding_flying_creature.dimension": "Ne peut pas voler dans cette dimension.",
+  "text.roundabout.warn_trap_triggered": " a été déclenché !",
+  "text.roundabout.warn_unnamed_trap_triggered": "Un piège brumeux a été déclenché !",
 
   "item.roundabout.stand_arrow": "Flèche de Stand",
   "item.roundabout.stand_beetle_arrow": "Flèche scarabée",
@@ -279,6 +281,7 @@
   "block.roundabout.stereo": "Stéréo",
   "block.roundabout.bubble_scaffold": "Chemin de bulle",
   "block.roundabout.fog_block": "Bloc brumeux",
+  "block.roundabout.fog_trap": "Piège brumeux",
   "block.roundabout.fog_block.title": "Brumeux(se)",
   "block.roundabout.fog_block_coating.title": "de revêtement",
   "block.roundabout.stand_fire": "Feu de Stand",
@@ -408,6 +411,8 @@
 
   "commands.roundabout.force_summon.multiple": "Stand données à %s entitées",
   "commands.roundabout.force_summon.single": "Stand donné à %s",
+  "commands.roundabout.justice_fogTrapRange": "Mis la porté d'attraction de vos pièges brumeux à %s",
+  "commands.roundabout.justice_fogTrapRangeFail" : "Vous devez avoir Justice pour utiliser cette commande",
 
   "commands.roundabout.heal.multiple": "Soigné %s entitées",
   "commands.roundabout.heal.single": "Soigné %s",
@@ -488,6 +493,8 @@
   "sounds.roundabout.soft_and_wet_barrage_2":  "ORA",
   "sounds.roundabout.water_encase":  "Splash",
   "sounds.roundabout.soft_and_wet_kick":  "Impacte",
+  "sounds.roundabout.extend_spikes":  "Pique",
+  "sounds.roundabout.wall_latch":  "Rattrapage d'un rebord",
 
   "sounds.roundabout.mandom_rewind":  "Retour dans le temps",
 
@@ -597,7 +604,8 @@
   "sounds.roundabout.cinderella_fail":  "Uh oh",
   "sounds.roundabout.cinderella_visage_creation":  "Tourbillon mécanique",
 
-  "sounds.roundabout.ratt_summon":  "Invocation de Ratt",
+  "sounds.roundabout.ratt_summon":  "Bruit de gargouillement",
+  "sounds.roundabout.ratt_place":  "Invocation de Ratt",
   "sounds.roundabout.ratt_scope":  "Bruit de viseur",
   "sounds.roundabout.ratt_dart_impact": "Impacte de dard",
   "sounds.roundabout.ratt_dart_thunk": "Dard qui touche",
@@ -927,6 +935,21 @@
   "ability.roundabout.place_invis": "Placement de Bloc Invisible",
   "ability.roundabout.place_invis.desc": "Place un bloc, partageant une duré d'invisibilité avec vous. Marche seulement lorsque vous êtes invisible.",
 
+  "ability.roundabout.ratt_scope": "Mode Viseur",
+  "ability.roundabout.ratt_scope.desc": "Tiens Ratt et vise à travers, vous permettant de tirer en vous déplaçant",
+  "ability.roundabout.ratt_single": "Tire Simple",
+  "ability.roundabout.ratt_single.desc": "Charge un dard, et utilisez Attaquer pour le tirer",
+  "ability.roundabout.ratt_burst": "Tire en Rafale",
+  "ability.roundabout.ratt_burst.desc": "Le tir prend une forme alternative, qui fait fondre plus mais inflige moins de dégâts",
+  "ability.roundabout.ratt_place": "Placer Ratt",
+  "ability.roundabout.ratt_place.desc": "Place Ratt au sol, permettant à Ratt de tirer à vos côtés",
+  "ability.roundabout.ratt_place_burst": "Tire en Rafale Placé",
+  "ability.roundabout.ratt_place_burst.desc": "Tire une rafale de 3 dards depuis la position de Ratt vers votre curseur",
+  "ability.roundabout.ratt_auto": "Mode Automatique",
+  "ability.roundabout.ratt_auto.desc": "Cible une créature en vue et Ratt va automatiquement lui tirer dessus",
+  "ability.roundabout.ratt_flesh": "Bloc/Morceau de Chair",
+  "ability.roundabout.ratt_flesh.desc": "Laisser par les créatures affecté par l'effet Fondu. Ralenti les créatures et est difficile à cassé. Cependant, avoir Ratt équipé outrepasse ces restrictions, vous permettant de bouger librement et de les ramasser instantanément avec Accroupie+Intéragir",
+
   "ability.roundabout.diver_selection": "Option de Diver",
   "ability.roundabout.diver_selection.desc": "Ouvres une roues de modification négative dont vous pouvez faire usages sur vous-même.",
 
@@ -1060,6 +1083,7 @@
   "skins.roundabout.magicians_red.jojonium": "JoJonium",
   "skins.roundabout.magicians_red.jojonium_ablaze": "JoJonium F",
   "skins.roundabout.magicians_red.debut": "Manga Début",
+  "skins.roundabout.magicians_red.skeletal": "Âme Squel",
 
   "skins.roundabout.soft_and_wet.light": "Fumi",
   "skins.roundabout.soft_and_wet.base": "Manga",
@@ -1089,14 +1113,17 @@
   "skins.roundabout.ratt.melon" : "Pasthèque",
   "skins.roundabout.ratt.sand" : "Sable",
   "skins.roundabout.ratt.aztec" : "Aztèque",
-  "skins.roundabout.ratt.tower" : "Tour",
+  "skins.roundabout.ratt.tower" : "Caverne",
   "skins.roundabout.ratt.snowy" : "Neigeux",
+  "skins.roundabout.ratt.guardian" : "Gardien",
+  "skins.roundabout.ratt.elder_guardian" : "G Gardien",
 
   "skins.roundabout.cinderella.base": "Partie 4",
   "skins.roundabout.cinderella.manga": "Manga",
   "skins.roundabout.cinderella.zombie": "Infecté",
   "skins.roundabout.cinderella.jack_in_the_box": "Clown",
   "skins.roundabout.cinderella.business": "Business",
+  "skins.roundabout.cinderella.face_off": "Sans Visage",
 
   "skins.roundabout.hey_ya.manga": "Manga",
   "skins.roundabout.hey_ya.gothic": "Gothic",
@@ -1165,9 +1192,10 @@
 
   "unlock_skin.roundabout.the_world.over_heaven": "Skin The World: Skin Over Heaven Débloqué !",
   "unlock_skin.roundabout.star_platinum.atomic": "Skin Star Platinum: Skin Atomic Débloqué !",
-  "unlock_skin.roundabout.justice.bad_bone": "Skin Justice: Skins Bad to The Bone Débloqués !",
+  "unlock_skin.roundabout.justice.bad_bone": "Skins Justice: Skins Bad to The Bone Débloqués !",
   "unlock_skin.roundabout.magicians_red.chagaroth": "Magician's : Skin de Terreur Débloqué !",
   "unlock_skin.roundabout.soft_and_wet.kira": "Skin Killer Queen 8 Débloqué !",
+  "unlock_skin.roundabout.ratt.guardians": "Skins Ratt Gardian Débloqués !",
 
   "justice.morph.player": "Joueur",
   "justice.morph.villager": "Villageois",
@@ -1388,6 +1416,22 @@
   "config.roundabout.standThrownEntityFallDamageImmmunityTicks.desc": "Par défaut, lancé une créature lui donne quelques ticks d'immunité au dégâts de chute, donc vous avez besoin de les faire avoir une longue chute pour les blesser de cette manière.",
 
 
+  "config.roundabout.cinderellaSpacing.name": "Espacement max des Salons Cinderella",
+  "config.roundabout.cinderellaSpacing.desc": "A quel point sont éloigné au maximum ces structures les unes des autres.",
+  "config.roundabout.cinderellaSeparationMakeSmallerThanSpacing.name": "Espacement min des Salons Cinderella",
+  "config.roundabout.cinderellaSeparationMakeSmallerThanSpacing.desc": "Doit être plus petit que l'espacement max, à quel point au minimum ces structures sont séparé.",
+  "config.roundabout.cinderellaWeight.name": "Salon Cinderella importance",
+  "config.roundabout.cinderellaWeight.desc": "Adjuste l'importance pour lui donné la priorité par rapport aux autres structures moddés.",
+  "config.roundabout.meteoriteWeight.name": "Météorite importance",
+  "config.roundabout.meteoriteWeight.desc": "Adjuste l'importance pour lui donné la priorité par rapport aux autres structures moddés.",
+  "config.roundabout.meteoriteSpacing.name": "Espacement max des Météorites",
+  "config.roundabout.meteoriteSpacing.desc": "A quel point sont éloigné au maximum ces structures les unes des autres.",
+  "config.roundabout.meteoriteSeparationMakeSmallerThanSpacing.name": "Espacement min des Météorites",
+  "config.roundabout.meteoriteSeparationMakeSmallerThanSpacing.desc": "Doit être plus petit que l'espacement max, à quel point au minimum ces structures sont séparé.",
+  "config.roundabout.modifyStructureWeights.name": "Modify Structure Weights",
+  "config.roundabout.modifyStructureWeights.desc": "Whether or not to modify structure weights, there is an off chance that it will conflict with other mods. (unlikely)",
+
+
 
   "config.roundabout.levelsToGetStand.name": "Coût en niveau de la Flèche de Stand",
   "config.roundabout.levelsToGetStand.desc": "Obtenir un Stand (principal) depuis la Flèche de Stand coûtes 15 niveaux par défaut.",
@@ -1429,7 +1473,7 @@
   "config.roundabout.standUserMonstersDropMeteorite.name": "Les Monstres utilisateur de stand laisse de la météorite",
   "config.roundabout.standUserMonstersDropMeteorite.desc": "Les monstres qui sont naturellement des utilisateurs de stand lâche de la météorite par défaut quand tué par un joueur.",
   "config.roundabout.bossMobsCanNaturallyHaveStands.name": "Boss Naturellement Utilisateur de stand",
-  "config.roundabout.bossMobsCanNaturallyHaveStands.desc": "Si les boss ont aussi des chances d'être des utilisateur de stand naturel. Par défaut, c'est non, Pour pas que vous vous retrouviez dans un combat injuste.",
+  "config.roundabout.bossMobsCanNaturallyHaveStands.desc": "Si les boss ont aussi des chances d'être des utilisateur de stand naturel. Par défaut, c'est non, pour pas que vous vous retrouviez dans un combat injuste.",
   "config.roundabout.standUserMobsTakePlayerDamageMultipliers.name": "Réduction de dégât sur les créatures utilisatrice de Stand",
   "config.roundabout.standUserMobsTakePlayerDamageMultipliers.desc": "Par défaut, les créatures utilisatrice de stand prennent le multiplicateur de dégât des joueurs qui est dans la config au lieu du multiplicateur de dégât pour les autres créatures pour des raisons d'équilibrage. Changer ceci leur fait se prendre les dégâts complet à la place.",
   "config.roundabout.percentOfZombieVillagersThatBecomeZombieAestheticians.name": "Taux de Zombie Esthéticienne",
