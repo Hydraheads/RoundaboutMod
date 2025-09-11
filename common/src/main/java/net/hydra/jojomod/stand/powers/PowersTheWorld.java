@@ -638,7 +638,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     @Override
     public float getFinalAttackKnockback(){
-        return (((float)this.chargedFinal/(float)maxSuperHitTime)*1.5F);
+        return (((float)this.chargedFinal/(float)maxSuperHitTime)*2.4F);
     }
     @Override
     public float getFinalPunchStrength(Entity entity){
@@ -782,9 +782,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                         !$$5.isInvulnerable() && $$5.isAlive() && !(this.self.isPassenger() &&
                         this.self.getVehicle().getUUID() == $$5.getUUID()) && stand.getSensing().hasLineOfSight($$5)){
 
-                    if (this.StandDamageEntityAttack($$5,getAssaultStrength($$5), 0.4F, this.self)){
+                    if (this.StandDamageEntityAttack($$5,getAssaultStrength($$5), 3F, this.self)){
                         addEXP(3,LE);
-                        MainUtil.makeBleed($$5,0,200,null);
+                        MainUtil.makeBleed($$5,0,100,null);
                     } else if (((LivingEntity) $$5).isBlocking()) {
                         MainUtil.knockShieldPlusStand($$5,40);
                     }
