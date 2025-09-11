@@ -93,13 +93,17 @@ public class PowersWalkingHeart extends NewDashPreset {
 
     public void extendHeels(){
         if (!this.onCooldown(PowerIndex.SKILL_3) || hasExtendedHeelsForWalking()) {
+            if (!inCombatMode()){
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
             tryPowerPacket(PowerIndex.POWER_2);
+            }
         }
     }
 
 
     public void dashOrWallLatch(){
+        if (inCombatMode())
+            return;
         if (canLatchOntoWall())
             doWallLatchClient();
         else if (!hasExtendedHeelsForWalking())
@@ -171,11 +175,13 @@ public class PowersWalkingHeart extends NewDashPreset {
                     toggleSpikes(false);
                 }
             } else {
-                if (self.onGround()){
-                    this.setCooldown(PowerIndex.SKILL_3, 6);
-                    if (!this.self.level().isClientSide()) {
-                        setHeelDirection(Direction.DOWN);
-                        toggleSpikes(true);
+                if (!inCombatMode()) {
+                    if (self.onGround()) {
+                        this.setCooldown(PowerIndex.SKILL_3, 6);
+                        if (!this.self.level().isClientSide()) {
+                            setHeelDirection(Direction.DOWN);
+                            toggleSpikes(true);
+                        }
                     }
                 }
             }
@@ -249,6 +255,8 @@ public class PowersWalkingHeart extends NewDashPreset {
             return true;
         if (slot == 1 && hasExtendedHeelsForWalking())
             return true;
+        if ((slot == 2 || slot == 3) && inCombatMode())
+            return true;
         return super.isAttackIneptVisually(activeP, slot);
     }
 
@@ -292,6 +300,9 @@ public class PowersWalkingHeart extends NewDashPreset {
                 this.self.playSound(ModSounds.HEEL_STOMP_EVENT, 1F, 1.0F);
             }
         } else {
+            if (hasExtendedHeelsForWalking())
+                return;
+
             this.self.setSprinting(false);
             getStandUserSelf().roundabout$setCombatMode(true);
             if (this.self.level().isClientSide()){
@@ -652,26 +663,22 @@ public class PowersWalkingHeart extends NewDashPreset {
 
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.visage_creation",
-                "instruction.roundabout.press_skill", StandIcons.CINDERELLA_MASK, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.face_removal",
-                "instruction.roundabout.press_skill", StandIcons.CINDERELLA_SCALP,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.spike_attack_mode",
+                "instruction.roundabout.press_skill", StandIcons.SPIKE_ATTACK_MODE, 1, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.heel_plant",
+                "instruction.roundabout.press_skill", StandIcons.GROUND_IMPLANT,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.visages",
-                "instruction.roundabout.passive", StandIcons.CINDERELLA_VISAGES,0,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.lucky_lipstick",
-                "instruction.roundabout.passive", StandIcons.CINDERELLA_LIPSTICK,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.wall_walk_move",
+                "instruction.roundabout.press_skill", StandIcons.WALL_WALK,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.firm_swing",
+                "instruction.roundabout.passive", StandIcons.FIRM_SWING,0,level,bypass));
         return $$1;
     }
     @Override
     public List<Byte> getSkinList() {
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add(CinderellaEntity.PART_4_SKIN);
-        $$1.add(CinderellaEntity.MANGA_SKIN);
-        $$1.add(CinderellaEntity.ZOMBIE_SKIN);
-        $$1.add(CinderellaEntity.JACK_SKIN);
-        $$1.add(CinderellaEntity.BUSINESS_SKIN);
         return $$1;
     }
 

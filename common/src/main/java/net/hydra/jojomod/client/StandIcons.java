@@ -282,6 +282,8 @@ public class StandIcons {
             "textures/gui/icons/justice/fog_pilot_exit.png");
 
 
+    public static final ResourceLocation FIRM_SWING = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/walking_heart/firm_swing.png");
     public static final ResourceLocation WALL_WALK = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/walking_heart/wall_walk.png");
     public static final ResourceLocation GROUND_IMPLANT = new ResourceLocation(Roundabout.MOD_ID,
