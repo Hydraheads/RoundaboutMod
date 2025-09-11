@@ -2041,7 +2041,7 @@ public void unlockSkin(){
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.3F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.4F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(4.0F));
         }
