@@ -16,10 +16,10 @@ public class right_heel<T extends Entity> extends EntityModel<T> {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition right_heel = partdefinition.addOrReplaceChild("right_heel", CubeListBuilder.create(), PartPose.offset(-4.1F, 12.0F, 0.0F));
+		PartDefinition right_heel = partdefinition.addOrReplaceChild("right_heel", CubeListBuilder.create(), PartPose.offset(0.0F, 10.975F, 1.375F));
 
-		PartDefinition cube_r1 = right_heel.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(8, 32).addBox(-1.0F, -1.0F, 0.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.1F))
-		.texOffs(8, 16).addBox(-1.0F, -1.0F, 0.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.575F, -0.025F, 1.875F, 3.1416F, 0.0F, 0.0F));
+		PartDefinition cube_r1 = right_heel.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(8, 32).addBox(-1.0F, -1.0F, 0.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.01F))
+		.texOffs(8, 16).addBox(-1.0F, -1.0F, 0.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.475F, 0.0F, 0.5F, 3.1416F, 0.0F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}

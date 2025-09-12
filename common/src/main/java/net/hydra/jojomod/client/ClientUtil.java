@@ -11,9 +11,7 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModMessages;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.networking.ServerToClientPackets;
-import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
-import net.hydra.jojomod.stand.powers.PowersMandom;
-import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.client.*;
 import net.minecraft.client.renderer.*;
@@ -37,8 +35,6 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.stand.powers.PowersD4C;
-import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.item.BodyBagItem;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 import net.hydra.jojomod.util.config.ClientConfig;
@@ -367,6 +363,14 @@ public class ClientUtil {
                     if (((StandUser)player).roundabout$getStandPowers() instanceof PowersD4C d4c)
                     {
                         d4c.ejectParallelRunning();
+                    }
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.HeelExtend.value)) {
+                    int entityID = (int) vargs[0];
+                    Entity ent = player.level().getEntity(entityID);
+                    if (ent instanceof LivingEntity LE &&
+                            ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW){
+                        PW.setHeelExtension(3);
                     }
                 }
                 // theoretical deregister dynamic worlds packet

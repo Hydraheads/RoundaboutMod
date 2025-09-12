@@ -19,10 +19,12 @@ import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
@@ -30,6 +32,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -378,7 +382,7 @@ public class PowersWalkingHeart extends NewDashPreset {
             Entity ent = self.level().getEntity(chargeTime);
             if (ent != null){
 
-                HeelSpikeDamageEntityAttack(ent,1,1.4F,ent,true);
+                HeelSpikeDamageEntityAttack(ent,1,0.7F,ent,true);
                 return true;
             }
         }
@@ -422,12 +426,32 @@ public class PowersWalkingHeart extends NewDashPreset {
         return false;
     }
 
+    public final void sendHeelPacket(double range) {
+        if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, range)) {
+                    S2CPacketUtil.heelExtend(serverPlayerEntity,self.getId());
+                }
+            }
+        }
+    }
 
     public void hitSound(){
+        sendHeelPacket(90);
         this.self.level().playSound(null, this.self.blockPosition(),
                 ModSounds.SPIKE_HIT_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
     }
     public void missSound(){
+        sendHeelPacket(90);
         this.self.level().playSound(null, this.self.blockPosition(),
                 ModSounds.SPIKE_MISS_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
     }
@@ -470,6 +494,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public void tickPower() {
+        setHeelExtension(getHeelExtension()-1);
         if (this.self.level().isClientSide()) {
             if (hasExtendedHeelsForWalking() && !getStandUserSelf().rdbt$getJumping()){
                 if (!self.onGround()) {
@@ -548,14 +573,23 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public int getRaiseTicks(){
-        return 60;
+        return 40;
     }
     public int pauseTicks(){
         return 60;
     }
 
+    public int heelExtension = 0;
+
+    public int getHeelExtension(){
+        return heelExtension;
+    }
+    public void setHeelExtension(int extNum){
+        heelExtension = Mth.clamp(extNum,0,1000);
+    }
+
     public int getLowerTicks(){
-        return 50;
+        return 60;
     }
 
     public boolean canShootSpikes(int useTicks){
@@ -566,7 +600,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public int getUseTicks(){
-        return 1349;
+        return 1300;
     }
 
     @Override

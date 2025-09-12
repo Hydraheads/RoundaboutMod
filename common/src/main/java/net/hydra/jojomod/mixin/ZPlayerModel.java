@@ -188,7 +188,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         this.leftLeg.yRot = 0.1F + this.head.yRot;
                         this.leftLeg.xRot = (float) (-Math.PI / 2) + this.head.xRot;
 
-                        this.leftLeg.xRot = Math.min(this.leftLeg.xRot,-2.5f);
+                        this.leftLeg.xRot = Math.max(this.leftLeg.xRot,-2.5f);
                         this.leftLeg.xRot -=0.2f;
 
                         this.rightLeg.yRot = 0;
