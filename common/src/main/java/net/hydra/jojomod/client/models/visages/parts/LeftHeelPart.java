@@ -6,7 +6,9 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
@@ -71,7 +73,21 @@ public class LeftHeelPart extends PsuedoHierarchicalModel {
             this.root().getAllParts().forEach(ModelPart::resetPose);
             if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
                 partialTicks = 0;
+            } else {
+                partialTicks = partialTicks % 1;
             }
+
+            if (((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW){
+                int ext = PW.getHeelExtension();
+                if (ext == 2) {
+                    bone.yScale = 1 + (116 * partialTicks);
+                } else if (ext == 1){
+                    bone.yScale = 1 + (116-(116 * partialTicks));
+                } else {
+                    bone.yScale =1;
+                }
+            }
+
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(path));
             //The number at the end is inversely proportional so 2 is half speed
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);

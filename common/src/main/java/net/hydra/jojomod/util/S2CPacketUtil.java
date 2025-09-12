@@ -24,6 +24,15 @@ public class S2CPacketUtil {
             );
         }
     }
+
+    public static void heelExtend(Player player, int entid){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.HeelExtend.value,
+                    entid
+            );
+        }
+    }
     public static void synchGuard(Player player, float guardPoints, boolean guardBroken){
         if (player instanceof ServerPlayer SP) {
             ModMessageEvents.sendToPlayer(SP,

@@ -283,6 +283,18 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         // float var5, float var6, float var7, float partialTicks, float var9, float var10)
         roundabout$renderHandLayers2(stack,buffer,integer,acl,$$4,$$5);
     }
+    @Unique
+    public void rdbt$copyTo(ModelPart $$0, ModelPart $$1) {
+        $$1.xScale = $$0.xScale;
+        $$1.yScale = $$0.yScale;
+        $$1.zScale = $$0.zScale;
+        $$1.xRot = $$0.xRot;
+        $$1.yRot = $$0.yRot;
+        $$1.zRot = $$0.zRot;
+        $$1.x = $$0.x;
+        $$1.y = $$0.y;
+        $$1.z = $$0.z;
+    }
     /**Apply hand animations to make the hand rotate*/
     @Inject(method = "renderHand", at = @At(value = "INVOKE",target = "Lnet/minecraft/client/model/PlayerModel;setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V",shift = At.Shift.AFTER), cancellable = true)
     private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderHandAnimations(PoseStack stack, MultiBufferSource buffer, int integer,
@@ -296,13 +308,56 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             return;
         }
 
-        if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()){
+        if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()) {
+
             $$6.rightLeg.copyFrom($$6.rightArm);
-            $$6.rightLeg.zRot -=1F;
+            $$6.rightLeg.zRot -= 0.8F;
+            $$6.rightLeg.yRot += 2F;
+            $$6.rightLeg.xRot = 0;
+
             $$6.rightPants.copyFrom($$6.rightLeg);
             $$6.leftLeg.copyFrom($$6.leftArm);
-            $$6.leftLeg.zRot += 1F;
+            $$6.leftLeg.zRot += 0.8F;
+            $$6.leftLeg.yRot -= 2F;
+            $$6.leftLeg.xRot = 0;
             $$6.leftPants.copyFrom($$6.leftLeg);
+
+        }
+    }
+
+    @Inject(method = "renderHand", at = @At(value = "INVOKE",target = "Lnet/minecraft/client/model/geom/ModelPart;render(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;II)V"), cancellable = true)
+    private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderHandAnimationsRender(PoseStack stack, MultiBufferSource buffer, int integer,
+                                                                                                    AbstractClientPlayer acl, ModelPart $$4, ModelPart $$5,
+                                                                                                    CallbackInfo ci) {
+        PlayerModel<AbstractClientPlayer> $$6 = this.getModel();
+        if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()){
+            $$6.rightLeg.xRot = 0.2F;
+            $$6.rightPants.copyFrom($$6.rightLeg);
+            $$6.leftLeg.xRot = 0.2F;
+            $$6.leftPants.copyFrom($$6.leftLeg);
+        }
+    }
+    @Inject(method = "renderHand", at = @At(value = "TAIL"), cancellable = true)
+    private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderHandAnimationsRenderTail(PoseStack stack, MultiBufferSource buffer, int integer,
+                                                                                                              AbstractClientPlayer acl, ModelPart $$4, ModelPart $$5,
+                                                                                                              CallbackInfo ci) {
+
+        PlayerModel<AbstractClientPlayer> $$6 = this.getModel();
+        if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()) {
+            if ($$4 == $$6.leftLeg) {
+                stack.pushPose();
+                $$6.leftLeg.translateAndRotate(stack);
+                rdbt$copyTo($$6.leftLeg, ModStrayModels.LeftHeel.root());
+                ModStrayModels.LeftHeel.render(acl, ClientUtil.getDelta(), stack, buffer, integer,
+                        1, 1, 1, 1, acl.getSkinTextureLocation());
+                stack.popPose();
+            } else {
+                stack.pushPose();
+                $$6.rightLeg.translateAndRotate(stack);
+                ModStrayModels.RightHeel.render(acl, ClientUtil.getDelta(), stack, buffer, integer,
+                        1, 1, 1, 1, acl.getSkinTextureLocation());
+                stack.popPose();
+            }
         }
     }
 

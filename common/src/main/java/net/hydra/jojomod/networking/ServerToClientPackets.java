@@ -35,7 +35,8 @@ public class ServerToClientPackets {
             RemovePCEntity("remove_pc_entity"),
             ResumeTileEntityTS("resume_tile_ent_ts"),
             SendNewDynamicWorld("send_new_dynamic_world"),
-            EjectPRunning("eject_p_running");
+            EjectPRunning("eject_p_running"),
+            HeelExtend("heel_extend");
 
             public final String value;
 
