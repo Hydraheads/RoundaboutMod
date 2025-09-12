@@ -375,18 +375,28 @@ public class PowersWalkingHeart extends NewDashPreset {
             Entity ent = self.level().getEntity(chargeTime);
             if (ent != null){
 
-                HeelSpikeDamageEntityAttack(ent,1,0.5F,ent,false);
+                HeelSpikeDamageEntityAttack(ent,getSpikeDamage(ent),0.5F,ent,false);
                 return true;
             }
         } if (move == PowerIndex.POWER_2_BLOCK) {
             Entity ent = self.level().getEntity(chargeTime);
             if (ent != null){
 
-                HeelSpikeDamageEntityAttack(ent,1,0.7F,ent,true);
+                HeelSpikeDamageEntityAttack(ent,getSpikeDamage(ent),0.7F,ent,true);
                 return true;
             }
         }
         return super.tryIntPower(move, forced, chargeTime);
+    }
+
+    public float getSpikeDamage(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod((float) ((float) 2.1F* (ClientNetworking.getAppropriateConfig().
+                    walkingHeartSettings.walkingHeartAttackMultOnPlayers*0.01)));
+        } else {
+            return levelupDamageMod((float) ((float) 3* (ClientNetworking.getAppropriateConfig().
+                    walkingHeartSettings.walkingHeartAttackMultOnMobs*0.01)));
+        }
     }
 
     public boolean HeelSpikeDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker, boolean rightClick){
