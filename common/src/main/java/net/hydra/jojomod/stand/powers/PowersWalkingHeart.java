@@ -12,6 +12,8 @@ import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.CinderellaEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.entity.stand.WalkingHeartEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -19,6 +21,7 @@ import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -42,6 +45,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -121,25 +125,6 @@ public class PowersWalkingHeart extends NewDashPreset {
         }
     }
 
-
-
-    @Override
-    public Component getSkinName(byte skinId) {
-        return getSkinNameT(skinId);
-    }
-
-    public static Component getSkinNameT(byte skinId){
-        if (skinId == CinderellaEntity.MANGA_SKIN) {
-            return Component.translatable("skins.roundabout.cinderella.manga");
-        } if (skinId == CinderellaEntity.ZOMBIE_SKIN) {
-            return Component.translatable("skins.roundabout.cinderella.zombie");
-        } if (skinId == CinderellaEntity.JACK_SKIN) {
-            return Component.translatable("skins.roundabout.cinderella.jack_in_the_box");
-        } if (skinId == CinderellaEntity.BUSINESS_SKIN) {
-            return Component.translatable("skins.roundabout.cinderella.business");
-        }
-        return Component.translatable("skins.roundabout.cinderella.base");
-    }
 
     public Direction heelDirection = Direction.DOWN;
 
@@ -722,8 +707,51 @@ public class PowersWalkingHeart extends NewDashPreset {
     @Override
     public List<Byte> getSkinList() {
         List<Byte> $$1 = Lists.newArrayList();
-        $$1.add(CinderellaEntity.PART_4_SKIN);
+        $$1.add(WalkingHeartEntity.MANGA_SKIN);
+        if (this.getSelf() instanceof Player PE) {
+            byte Level = ((IPlayerEntity) PE).roundabout$getStandLevel();
+            ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
+            boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+            if (Level > 1 || bypass) {
+                $$1.add(WalkingHeartEntity.MODEL_SKIN);
+                $$1.add(WalkingHeartEntity.PURPLE_SKIN);
+            }if (Level > 2 || bypass) {
+                $$1.add(WalkingHeartEntity.VALENTINE_SKIN);
+                $$1.add(WalkingHeartEntity.VERDANT_SKIN);
+            }if (Level > 3 || bypass) {
+                $$1.add(WalkingHeartEntity.PALE_SKIN);
+                $$1.add(WalkingHeartEntity.GOTHIC_SKIN);
+            } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
+                $$1.add(WalkingHeartEntity.SPIDER_SKIN);
+            }
+        }
         return $$1;
+    }
+
+
+    @Override
+    public Component getSkinName(byte skinId) {
+        return getSkinNameT(skinId);
+    }
+    public static Component getSkinNameT(byte skinId){
+        if (skinId == WalkingHeartEntity.MANGA_SKIN){
+            return Component.translatable(  "skins.roundabout.walking_heart.base");
+        } else if (skinId == WalkingHeartEntity.MODEL_SKIN){
+            return Component.translatable(  "skins.roundabout.walking_heart.model");
+        } else if (skinId == WalkingHeartEntity.PURPLE_SKIN){
+            return Component.translatable(  "skins.roundabout.walking_heart.purple");
+        } else if (skinId == WalkingHeartEntity.VERDANT_SKIN){
+            return Component.translatable(  "skins.roundabout.walking_heart.verdant");
+        } else if (skinId == WalkingHeartEntity.PALE_SKIN){
+            return Component.translatable(  "skins.roundabout.walking_heart.pale");
+        } else if (skinId == WalkingHeartEntity.VALENTINE_SKIN){
+            return Component.translatable(  "skins.roundabout.walking_heart.valentine");
+        } else if (skinId == WalkingHeartEntity.GOTHIC_SKIN){
+            return Component.translatable(  "skins.roundabout.walking_heart.gothic");
+        } else if (skinId == WalkingHeartEntity.SPIDER_SKIN){
+            return Component.translatable(  "skins.roundabout.walking_heart.spider");
+        }
+        return Component.translatable(  "skins.roundabout.walking_heart.base");
     }
 
 
