@@ -171,6 +171,9 @@ public class StandFireballEntity extends AbstractHurtingProjectile implements Un
             }
         }
 
+        if (forcedDeltaMovement != null){
+            setDeltaMovement(forcedDeltaMovement);
+        }
         super.tick();
         if (!client){
             if (isEffectivelyInWater()){
@@ -217,8 +220,18 @@ public class StandFireballEntity extends AbstractHurtingProjectile implements Un
         float $$7 = -Mth.sin(($$1 + $$3) * (float) (Math.PI / 180.0));
         float $$8 = Mth.cos($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
         this.shoot((double)$$6, (double)$$7, (double)$$8, $$4, $$5);
+        Vec3 force = new Vec3($$6, $$7, $$8)
+                .normalize()
+                .add(
+                        this.random.triangle(0.0, 0.0172275 * (double)$$4),
+                        this.random.triangle(0.0, 0.0172275 * (double)$$4),
+                        this.random.triangle(0.0, 0.0172275 * (double)$$4)
+                )
+                .scale((double)$$3);
+        forcedDeltaMovement = force;
         Vec3 $$9 = $$0.getDeltaMovement();
     }
+    public Vec3 forcedDeltaMovement = null;
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
             Entity $$1 = $$0.getEntity();

@@ -220,6 +220,8 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         }
         super.remove($$0);
     }
+
+    public Vec3 forcedDeltaMovement = null;
     public void tick() {
         boolean client = this.level().isClientSide();
         if (!client){
@@ -317,6 +319,9 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         } else {
         }
         saneAgeTicking = this.tickCount;
+        if (forcedDeltaMovement != null){
+            setDeltaMovement(forcedDeltaMovement);
+        }
         super.tick();
         if (!client){
             if (isEffectivelyInWater()){
@@ -409,6 +414,16 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         float $$8 = Mth.cos($$2 * (float) (Math.PI / 180.0)) * Mth.cos($$1 * (float) (Math.PI / 180.0));
         this.shoot((double)$$6, (double)$$7, (double)$$8, $$4, $$5);
         Vec3 $$9 = $$0.getDeltaMovement();
+
+        Vec3 force = new Vec3($$6, $$7, $$8)
+                .normalize()
+                .add(
+                        this.random.triangle(0.0, 0.0172275 * (double)$$4),
+                        this.random.triangle(0.0, 0.0172275 * (double)$$4),
+                        this.random.triangle(0.0, 0.0172275 * (double)$$4)
+                )
+                .scale((double)$$3);
+        forcedDeltaMovement = force;
     }
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
