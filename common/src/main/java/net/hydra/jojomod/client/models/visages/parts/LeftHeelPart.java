@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 
 public class LeftHeelPart extends PsuedoHierarchicalModel {
@@ -79,10 +80,15 @@ public class LeftHeelPart extends PsuedoHierarchicalModel {
 
             if (((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW){
                 int ext = PW.getHeelExtension();
-                if (ext == 2) {
-                    bone.yScale = 1 + (116 * partialTicks);
-                } else if (ext == 1){
-                    bone.yScale = 1 + (116-(116 * partialTicks));
+                boolean $$9 = LE.getMainArm() == HumanoidArm.LEFT;
+                if ($$9) {
+                    if (ext == 2) {
+                        bone.yScale = 1 + (116 * partialTicks);
+                    } else if (ext == 1){
+                        bone.yScale = 1 + (116-(116 * partialTicks));
+                    } else {
+                        bone.yScale =1;
+                    }
                 } else {
                     bone.yScale =1;
                 }

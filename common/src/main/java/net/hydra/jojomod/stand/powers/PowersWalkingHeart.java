@@ -382,7 +382,7 @@ public class PowersWalkingHeart extends NewDashPreset {
             Entity ent = self.level().getEntity(chargeTime);
             if (ent != null){
 
-                HeelSpikeDamageEntityAttack(ent,1,1.4F,ent,true);
+                HeelSpikeDamageEntityAttack(ent,1,0.7F,ent,true);
                 return true;
             }
         }
