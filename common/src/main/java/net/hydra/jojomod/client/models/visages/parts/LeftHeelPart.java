@@ -36,10 +36,10 @@ public class LeftHeelPart extends PsuedoHierarchicalModel {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition left_heel = partdefinition.addOrReplaceChild("bone", CubeListBuilder.create(), PartPose.offset(-0.1F, 12.0F, 0.0F));
+        PartDefinition left_heel = partdefinition.addOrReplaceChild("bone", CubeListBuilder.create(), PartPose.offset(0.0F, 10.975F, 1.375F));
 
-        PartDefinition cube_r1 = left_heel.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(8, 48).addBox(-1.0F, -1.0F, 0.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.1F))
-                .texOffs(24, 48).addBox(-1.0F, -1.0F, 0.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.575F, -0.025F, 1.875F, 3.1416F, 0.0F, 0.0F));
+        PartDefinition cube_r1 = left_heel.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(8, 48).addBox(-1.0F, -1.0F, 0.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.01F))
+                .texOffs(24, 48).addBox(-1.0F, -1.0F, 0.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.475F, 0.0F, 0.5F, 3.1416F, 0.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
