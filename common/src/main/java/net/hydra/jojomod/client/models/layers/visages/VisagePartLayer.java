@@ -17,9 +17,11 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -82,6 +84,16 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 float g = isHurt ? 0.6F : 1.0F;
                 float b = isHurt ? 0.6F : 1.0F;
                 StandUser user = ((StandUser) entity);
+
+                if (user.roundabout$getStandPowers() instanceof PowersWalkingHeart PW && (PW.inCombatMode() || PW.hasExtendedHeelsForWalking())){
+                    if (user instanceof LocalPlayer PE) {
+                        renderRightHeelPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, PE.getSkinTextureLocation(),
+                                r, g, b);
+                        renderLeftHeelPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, PE.getSkinTextureLocation(),
+                                r, g, b);
+                    }
+                }
+
                 byte curse = user.roundabout$getLocacacaCurse();
                 int muscle = user.roundabout$getZappedToID();
                 //muscle = 100;
@@ -193,6 +205,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
             ClientUtil.popPoseAndCooperate(poseStack,46);
         }
     }
+
     public void renderLeftLeg(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
                                float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
         if (getParentModel().leftLeg.visible) {
@@ -339,6 +352,25 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 r, g, b, 1, path,-1*(Math.min(getParentModel().leftLeg.xRot,getParentModel().rightLeg.xRot)));
 
         ClientUtil.popPoseAndCooperate(poseStack,42);
+    }
+    public void renderRightHeelPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, ResourceLocation path,
+                                   float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,45);
+        getParentModel().leftLeg.translateAndRotate(poseStack);
+        ModStrayModels.LeftHeel.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+
+        ClientUtil.popPoseAndCooperate(poseStack,45);
+    }
+    public void renderLeftHeelPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, ResourceLocation path,
+                                    float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,45);
+        getParentModel().rightLeg.translateAndRotate(poseStack);
+        ModStrayModels.RightHeel.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,45);
     }
     public void renderPlayerBreastPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
                                    float r, float g, float b) {
