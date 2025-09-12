@@ -4206,8 +4206,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
 
+        //ratt
         MobEffectInstance melting = this.getEffect(ModEffects.MELTING);
-        if (melting != null) {
+        if (melting != null && MainUtil.getMobBleed(rdbt$this())) {
             int amount =  Mth.clamp(melting.getAmplifier()/2,1,6) + (int) (Math.random() * 1 + 0.5);
             if ( !(this.roundabout$getStandPowers() instanceof PowersRatt) ) {
                 if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {

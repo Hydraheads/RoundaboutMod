@@ -208,6 +208,7 @@ public class FabricSounds {
         addSound(ModSounds.RATT_DESCOPE_ID, ModSounds.RATT_DESCOPE_EVENT);
         addSound(ModSounds.RATT_DART_THUNK_ID, ModSounds.RATT_DART_THUNK_EVENT);
         addSound(ModSounds.RATT_DART_IMPACT_ID, ModSounds.RATT_DART_IMPACT_EVENT);
+        addSound(ModSounds.RATT_LOADING_ID, ModSounds.RATT_LOADING_EVENT);
         addSound(ModSounds.RATT_FIRING_ID, ModSounds.RATT_FIRING_EVENT);
 
 

@@ -59,7 +59,7 @@ public class PowersRatt extends NewDashPreset {
     public static final int MinThreshold = 30;
     public static final int MaxThreshold = 90;
     public static final int BaseShootCooldown = 10;
-    public static final int PlaceDelay = 0;
+    public static final int PlaceDelay = 7;
     public static final int PlaceShootCooldown = 40;
     public static final int MaxShootCooldown = 30;
     public static final int[] ShotThresholds = {MinThreshold,50,MaxThreshold};
@@ -199,7 +199,7 @@ public class PowersRatt extends NewDashPreset {
     private BlockHitResult getValidPlacement(){
         Vec3 vec3d = this.getSelf().getEyePosition(0);
         Vec3 vec3d2 = this.getSelf().getViewVector(0);
-        Vec3 vec3d3 = vec3d.add(vec3d2.x * 5.0, vec3d2.y * 5.0, vec3d2.z * 5.0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * 8, vec3d2.y * 8, vec3d2.z * 8);
         BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3,
                 ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
         boolean cond = false;
@@ -444,12 +444,10 @@ public class PowersRatt extends NewDashPreset {
             }
         } else if (this.getActivePower() == PowersRatt.PLACE_BURST) {
             setShotCooldown(PlaceShootCooldown);
-            if (getAttackTimeDuring() > 8+PlaceDelay) {
+            if (getAttackTimeDuring() == PlaceDelay) {
                 setPowerNone();
-                setAttackTimeDuring(-1);
-            } else  if (getAttackTime()%3 == 1 && this.getAttackTime() > PlaceDelay) {
-                tryPower(PowersRatt.PLACE_BURST,true);
-                tryPowerPacket(PowersRatt.PLACE_BURST);
+                this.tryPower(PowersRatt.PLACE_BURST,true);
+                this.tryPowerPacket(PowersRatt.PLACE_BURST);
             }
         }
         super.updateUniqueMoves();
@@ -636,32 +634,37 @@ public class PowersRatt extends NewDashPreset {
                 this.setShotCooldown(PlaceShootCooldown);
                 this.setAttackTimeDuring(0);
                 this.setAttackTime(-1);
+                if (this.getActivePower() != PowersRatt.PLACE_BURST) {
+                    this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.RATT_LOADING_EVENT, SoundSource.PLAYERS);
+                }
                 this.setActivePower(PowersRatt.PLACE_BURST);
                 if (this.getSelf() instanceof Player) {
                     S2CPacketUtil.sendActivePowerPacket((Player) this.getSelf(), this.getActivePower());
                 }
+
                 if (!isClient()) {
-                    this.self.level().playSound(this.getSelf(), this.self.blockPosition(), ModSounds.STAND_BARRAGE_WINDUP_EVENT,
-                            SoundSource.PLAYERS, 0.7F, 0.2F);
                     this.animateStand(RattEntity.FIRE_NO_RECOIL);
                 }
             }
             case PowersRatt.PLACE_BURST -> {
+                this.setPowerNone();
+                this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.RATT_FIRING_EVENT,SoundSource.PLAYERS);
                 if (!isClient()) {
-                    this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP,100,true);
-                    float power = 0;
-                    for (int b=ShotThresholds.length-1;b>=0;b--) {
-                        if (51 >= ShotThresholds[b]) {
-                            power = ShotPowerFloats[b];
-                            break;
+                    for(int i=0;i<3;i++) {
+                        float power = 0;
+                        for (int b = ShotThresholds.length - 1; b >= 0; b--) {
+                            if (51 >= ShotThresholds[b]) {
+                                power = ShotPowerFloats[b];
+                                break;
+                            }
                         }
-                    }
-                    if (this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
-                        RattDartEntity e = new RattDartEntity(RE.level(), this.getSelf(), 51);
-                        Vec3 v = this.getRotations(this.getShootTarget());
-                        e.shootFromRotation(RE, (float)v.x*180/(float)Math.PI+180, (float)v.y*180/(float)Math.PI, -0.5F, power, 0.1F);
-                        e.EnableSuperThrow();
-                        RE.level().addFreshEntity(e);
+                        if (this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
+                            RattDartEntity e = new RattDartEntity(RE.level(), this.getSelf(), 51);
+                            Vec3 v = this.getRotations(this.getShootTarget());
+                            e.shootFromRotation(RE, (float) v.x * 180 / (float) Math.PI + 180, (float) v.y * 180 / (float) Math.PI, -0.5F, power, 0.84F);
+                            e.EnableSuperThrow();
+                            RE.level().addFreshEntity(e);
+                        }
                     }
 
                 }
@@ -785,7 +788,7 @@ public class PowersRatt extends NewDashPreset {
     public void tickMobAI(LivingEntity attackTarget) {
         if (attackTarget != null) {
             this.setShootTarget(attackTarget);
-            this.getStandUserSelf().roundabout$setCombatMode(true);
+           // this.getStandUserSelf().roundabout$setCombatMode(true);
             //    double dist = attackTarget.getPosition(0).distanceTo(this.getSelf().getPosition(0));
             if (isPlaced()) {
                 if (this.shotcooldown == 0) {

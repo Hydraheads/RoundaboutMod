@@ -780,6 +780,12 @@
       "roundabout:ratt_dart_thunk"
     ]
   },
+  "ratt_loading": {
+    "subtitle": "sounds.roundabout.ratt_loading",
+    "sounds": [
+      "roundabout:ratt_loading"
+    ]
+  },
   "ratt_firing": {
     "subtitle": "sounds.roundabout.ratt_firing",
     "sounds": [
