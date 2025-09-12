@@ -34,7 +34,7 @@ public class SmallChestPart extends PsuedoHierarchicalModel {
 
         PartDefinition breast = partdefinition.addOrReplaceChild("breast", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0F, 12.2F, 0.0F, 0.3578F, 0.0F, 0.0F));
 
-        PartDefinition shirt_chest_r1 = breast.addOrReplaceChild("shirt_chest_r1", CubeListBuilder.create().texOffs(1, 10).addBox(-4.0F, 0.0F, 1.0F, 8.0F, 4.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -11.702F, 1.1477F, -0.6109F, 0.0F, 0.0F));
+        PartDefinition shirt_chest_r1 = breast.addOrReplaceChild("shirt_chest_r1", CubeListBuilder.create().texOffs(1, 10).addBox(-4.0F, 0.0F, 1.0F, 8.0F, 4.0F, 3.0F, new CubeDeformation(0.1F)), PartPose.offsetAndRotation(0.0F, -11.702F, 1.1477F, -0.6109F, 0.0F, 0.0F));
 
         PartDefinition chest_r1 = breast.addOrReplaceChild("chest_r1", CubeListBuilder.create().texOffs(1, 1).addBox(-4.0F, 0.0F, 1.0F, 8.0F, 4.0F, 3.0F, new CubeDeformation(-0.15F)), PartPose.offsetAndRotation(0.0F, -11.702F, 1.1477F, -0.4363F, 0.0F, 0.0F));
 
