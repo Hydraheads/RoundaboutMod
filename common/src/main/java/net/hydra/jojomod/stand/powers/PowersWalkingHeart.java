@@ -12,6 +12,7 @@ import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -42,6 +43,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.npc.AbstractVillager;
@@ -313,6 +315,8 @@ public class PowersWalkingHeart extends NewDashPreset {
             return true;
         if (slot == 1 && hasExtendedHeelsForWalking())
             return true;
+        if (slot == 1 && isBlockedByStone())
+            return true;
         if ((slot == 2 || slot == 3) && inCombatMode())
             return true;
         return super.isAttackIneptVisually(activeP, slot);
@@ -358,7 +362,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                 this.self.playSound(ModSounds.HEEL_STOMP_EVENT, 1F, 1.0F);
             }
         } else {
-            if (hasExtendedHeelsForWalking())
+            if (hasExtendedHeelsForWalking() || isBlockedByStone())
                 return;
 
             this.self.setSprinting(false);
@@ -601,6 +605,18 @@ public class PowersWalkingHeart extends NewDashPreset {
         useSpikeAttackF(true);
     }
 
+    public boolean isBlockedByStone(){
+        byte curse = ((StandUser)self).roundabout$getLocacacaCurse();
+        if (self instanceof Player PE) {
+            if (curse == LocacacaCurseIndex.RIGHT_LEG && PE.getMainArm() == HumanoidArm.RIGHT)
+                return true;
+            if (curse == LocacacaCurseIndex.LEFT_LEG && PE.getMainArm() == HumanoidArm.LEFT)
+                return true;
+        }
+
+            return false;
+    }
+
     public void useSpikeAttack(){
         useSpikeAttackF(false);
     }
@@ -622,6 +638,11 @@ public class PowersWalkingHeart extends NewDashPreset {
                 }
             }
         } else {
+
+            if (inCombatMode() && isBlockedByStone()){
+                switchModes();
+            }
+
             if (hasExtendedHeelsForWalking()){
                 if (justFlippedTicks > 0){
                     justFlippedTicks--;
