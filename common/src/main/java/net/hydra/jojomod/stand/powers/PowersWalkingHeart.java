@@ -19,6 +19,7 @@ import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
@@ -40,6 +41,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
@@ -76,6 +79,49 @@ public class PowersWalkingHeart extends NewDashPreset {
         return $$1;
     }
 
+    @Override
+    public byte getMaxLevel(){
+        return 4;
+    }
+
+
+    @Override
+    public boolean interceptSuccessfulDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
+        if ((hasStandActive(this.getSelf()) && $$0.is(DamageTypes.PLAYER_ATTACK)) && hasExtendedHeelsForWalking()){
+            addEXP(1);
+        }
+
+        return false;
+    }
+
+    @Override
+    public int getExpForLevelUp(int currentLevel){
+        int amt;
+        if (currentLevel == 1) {
+            amt = 200;
+        } else if (currentLevel == 2){
+            amt = 400;
+        } else {
+            amt = 800;
+        }
+        amt= (int) (amt*(getLevelMultiplier()));
+        return amt;
+    }
+    @Override
+    public void levelUp(){
+        if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE){
+            IPlayerEntity ipe = ((IPlayerEntity) PE);
+            byte level = ipe.roundabout$getStandLevel();
+            if (level == 4){
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.skins").
+                        withStyle(ChatFormatting.AQUA), true);
+            } else if (level == 2 || level == 3){
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.skins").
+                        withStyle(ChatFormatting.AQUA), true);
+            }
+        }
+        super.levelUp();
+    }
 
     @Override
     public void powerActivate(PowerContext context) {
@@ -299,6 +345,20 @@ public class PowersWalkingHeart extends NewDashPreset {
 
     public int shootTicks = 0;
     public int getMaxShootTicks(){
+        if (self instanceof Player PE) {
+            byte Level = ((IPlayerEntity) PE).roundabout$getStandLevel();
+            ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
+            boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+            if (Level > 3 || bypass) {
+                return 10000;
+            }
+            if (Level > 2) {
+                return 10000-getUseTicks();
+            }if (Level > 1) {
+                return 10000-getUseTicks()-getUseTicks();
+            }
+            return 10000-getUseTicks()-getUseTicks()-getUseTicks();
+        }
         return 10000;
     }
     public int getShootTicks(){
@@ -396,6 +456,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                 LE.setLastHurtMob(target);
             }
             if (target instanceof LivingEntity LE) {
+                addEXP(3,LE);
                 float mod = -1;
                 if (rightClick){
                     mod = 1;

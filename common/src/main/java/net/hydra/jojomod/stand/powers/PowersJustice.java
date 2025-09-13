@@ -43,6 +43,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -1395,7 +1396,7 @@ public class PowersJustice extends NewDashPreset {
     }
     @Override
     public boolean interceptSuccessfulDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
-        if (hasStandActive(this.getSelf()) || $$0.is(ModDamageTypes.CORPSE)
+        if ((hasStandActive(this.getSelf()) && $$0.is(DamageTypes.PLAYER_ATTACK)) || $$0.is(ModDamageTypes.CORPSE)
                 || $$0.is(ModDamageTypes.CORPSE_ARROW) || $$0.is(ModDamageTypes.CORPSE_EXPLOSION)){
             addEXP(1);
         }
