@@ -399,7 +399,7 @@ public class Config implements Cloneable {
         public Integer ankhConcealedCooldown;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer ankhHiddenCooldown;
-        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
         public Integer ankhFailCooldown;
         @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
         public Integer hurricaneSpecialCooldown;
