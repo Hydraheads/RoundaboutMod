@@ -33,13 +33,14 @@ public class AdvancedConfig implements Cloneable {
         SERVER_OINLY_INSTANCE = config;
     }
 
-    public Set<String> standArrowPoolv2 = new HashSet<>(
+    public Set<String> standArrowPoolv3 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
                     "roundabout:justice_disc",
                     "roundabout:magicians_red_disc",
-                    "roundabout:soft_and_wet_disc"
+                    "roundabout:soft_and_wet_disc",
+                    "roundabout:walking_heart_disc"
             )
     );
     public Set<String> standArrowSecondaryPoolv5 = new HashSet<>(
