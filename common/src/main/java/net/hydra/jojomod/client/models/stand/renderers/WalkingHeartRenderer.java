@@ -23,6 +23,7 @@ public class WalkingHeartRenderer extends StandRenderer<WalkingHeartEntity> {
     private static final ResourceLocation PURPLE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/walking_heart/purple.png");
     public WalkingHeartRenderer(EntityRendererProvider.Context context) {
         super(context, new WalkingHeartModel<>(context.bakeLayer(ModEntityRendererClient.WALKING_HEART_LAYER)), 0f);
+        this.addLayer(new WalkingHeartEyeLayer<>(this));
     }
 
     @Override public ResourceLocation getTextureLocation(WalkingHeartEntity entity) {
