@@ -548,6 +548,12 @@ public class PowersWalkingHeart extends NewDashPreset {
     public void tickPower() {
         setHeelExtension(getHeelExtension()-1);
         if (this.self.level().isClientSide()) {
+            if (!inCombatMode()){
+                currentKickTicks = 0;
+            } else if (currentKickTicks < chargeKickTicks()){
+                currentKickTicks++;
+            }
+
             if (hasExtendedHeelsForWalking() && !getStandUserSelf().rdbt$getJumping()){
                 if (!self.onGround()) {
                     if (this.self.getDeltaMovement().y < 0){
@@ -673,6 +679,8 @@ public class PowersWalkingHeart extends NewDashPreset {
         buttonInputSpike(keyIsDown,options,false);
     }
     public void buttonInputSpike(boolean keyIsDown, Options options, boolean rightClick) {
+        if (currentKickTicks < chargeKickTicks())
+            return;
         if (!consumeClickInput) {
             if (holdDownClick) {
                 if (!keyIsDown) {
@@ -812,6 +820,10 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
 
+    public static int chargeKickTicks(){
+        return 8;
+    }
+    public int currentKickTicks = 0;
 
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
@@ -821,8 +833,15 @@ public class PowersWalkingHeart extends NewDashPreset {
         int k = scaledWidth / 2 - 8;
         if (inCombatMode()) {
             Entity TE = this.getTargetEntityThroughWalls(playerEntity, 7F,10);
+            float finalATime = (float) currentKickTicks / chargeKickTicks();
+            int barTexture = 0;
             if (TE != null) {
-                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+                barTexture = 18;
+            }
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            int finalATimeInt = Math.round(finalATime * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, barTexture, finalATimeInt, 6);
+            if (TE != null) {
             }
         }
     }
