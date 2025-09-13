@@ -779,7 +779,13 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     @Inject(method = "load(Lnet/minecraft/nbt/CompoundTag;)V",
             at = @At(value = "INVOKE",target = "Lnet/minecraft/world/entity/Entity;readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V",shift = At.Shift.AFTER))
     public void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci){
-            roundabout$setGravityDirection(MainUtil.getDirectionFromByte($$0.getCompound("roundabout").getByte("GravityDirection")));
+        Direction gd =MainUtil.getDirectionFromByte($$0.getCompound("roundabout").getByte("GravityDirection"));
+        roundabout$setGravityDirection(gd);
+        if (gd != Direction.DOWN && rdbt$this() instanceof LivingEntity LE &&
+                ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW) {
+            PW.setHeelDirection(gd);
+            PW.toggleSpikes(true);
+        }
     }
 
     @Inject(

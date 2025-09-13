@@ -226,7 +226,7 @@ public class PowersWalkingHeart extends NewDashPreset {
             } else {
                 if (!inCombatMode()) {
                     if (self.onGround()) {
-                        this.setCooldown(PowerIndex.SKILL_3, 6);
+                        this.setCooldown(PowerIndex.SKILL_3, 8);
                         if (!this.self.level().isClientSide()) {
                             setHeelDirection(Direction.DOWN);
                             toggleSpikes(true);
