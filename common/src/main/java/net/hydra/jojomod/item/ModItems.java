@@ -28,6 +28,8 @@ public class ModItems {
     public static Item MAX_STAND_DISC_D4C;
     public static Item STAND_DISC_RATT;
     public static Item MAX_STAND_DISC_RATT;
+    public static Item STAND_DISC_WALKING_HEART;
+    public static Item MAX_STAND_DISC_WALKING_HEART;
     public static Item STAND_DISC_GREEN_DAY;
     public static Item MAX_STAND_DISC_GREEN_DAY;
     public static Item STAND_DISC_SOFT_AND_WET;
@@ -39,7 +41,6 @@ public class ModItems {
     public static Item STAND_DISC_MANDOM;
     public static Item STAND_DISC_SURVIVOR;
     public static Item STAND_DISC_ACHTUNG;
-    public static Item STAND_DISC_WALKING_HEART;
     public static Item STAND_DISC_DIVER_DOWN;
     public static Item MAX_STAND_DISC_DIVER_DOWN;
     public static Item STAND_DISC;

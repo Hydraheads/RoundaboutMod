@@ -66,10 +66,6 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     @Override
-    public boolean isSecondaryStand(){
-        return true;
-    }
-    @Override
     public List<Byte> getPosList(){
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add((byte) 0);

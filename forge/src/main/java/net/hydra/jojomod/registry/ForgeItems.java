@@ -270,6 +270,8 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMandom(null))));
     public static final RegistryObject<Item> STAND_DISC_WALKING_HEART = addToWIPTab(ITEMS.register("walking_heart_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersWalkingHeart(null))));
+    public static final RegistryObject<Item> MAX_STAND_DISC_WALKING_HEART = addToWIPTab(ITEMS.register("max_walking_heart_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersWalkingHeart(null))));
     public static final RegistryObject<Item> STAND_DISC_D4C = ITEMS.register("d4c_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
     public static final RegistryObject<Item> MAX_STAND_DISC_D4C = ITEMS.register("max_d4c_disc",

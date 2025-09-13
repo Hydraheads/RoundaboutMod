@@ -221,6 +221,8 @@ public class ForgeEvents {
         ModItems.STAND_DISC_SURVIVOR = ForgeItems.STAND_DISC_SURVIVOR.get();
         ModItems.STAND_DISC_ACHTUNG = ForgeItems.STAND_DISC_ACHTUNG.get();
         ModItems.STAND_DISC_WALKING_HEART = ForgeItems.STAND_DISC_WALKING_HEART.get();
+        ModItems.MAX_STAND_DISC_WALKING_HEART = ForgeItems.MAX_STAND_DISC_WALKING_HEART.get();
+        ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_WALKING_HEART.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_WALKING_HEART.get());
         ModItems.STAND_DISC_DIVER_DOWN = ForgeItems.STAND_DISC_DIVER_DOWN.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_DIVER_DOWN.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_DIVER_DOWN.get());
         ModItems.MAX_STAND_DISC_DIVER_DOWN = ForgeItems.MAX_STAND_DISC_DIVER_DOWN.get();
