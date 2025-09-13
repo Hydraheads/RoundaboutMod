@@ -2985,6 +2985,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (PW.hasExtendedHeelsForWalking()){
                 cir.setReturnValue(1.0F);
                 return;
+            } else if (!(rdbt$this() instanceof Player)){
+                cir.setReturnValue(3.0F);
             }
         }
     }
