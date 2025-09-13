@@ -292,6 +292,8 @@ public class StandIcons {
             "textures/gui/icons/walking_heart/ground_implant_out.png");
     public static final ResourceLocation SPIKE_ATTACK_MODE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/walking_heart/spike_attack_mode.png");
+    public static final ResourceLocation SPIDER_SKIN = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/walking_heart/spider_skin.png");
 
     public static final ResourceLocation CINDERELLA_SCALP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/cinderella/deface.png");

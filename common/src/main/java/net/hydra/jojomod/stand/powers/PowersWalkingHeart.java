@@ -10,10 +10,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.stand.CinderellaEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
-import net.hydra.jojomod.entity.stand.WalkingHeartEntity;
+import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -35,6 +32,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -49,6 +47,8 @@ import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -136,9 +136,25 @@ public class PowersWalkingHeart extends NewDashPreset {
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 dashOrWallLatch();
             }
+            case SKILL_4_NORMAL, SKILL_4_CROUCH -> {
+                unlockSpiderClient();
+            }
         }
     }
 
+
+    public void unlockSpiderClient(){
+        if (this.getSelf() instanceof Player PE) {
+            ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
+            boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+            if (!((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() && !bypass) {
+                ItemStack stack = self.getMainHandItem();
+                if (!stack.isEmpty() && stack.is(Items.COBWEB) && stack.getCount() >= 64){
+                    tryPowerPacket(PowerIndex.POWER_3_BONUS);
+                }
+            }
+        }
+    }
 
 
     public void extendHeels(){
@@ -278,6 +294,17 @@ public class PowersWalkingHeart extends NewDashPreset {
             setSkillIcon(context, x, y, 3, StandIcons.WALL_WALK, PowerIndex.SKILL_3);
         else
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+
+        if (this.getSelf() instanceof Player PE) {
+            ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
+            boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+            if (!((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() && !bypass) {
+                ItemStack stack = self.getMainHandItem();
+                if (!stack.isEmpty() && stack.is(Items.COBWEB) && stack.getCount() >= 64){
+                    setSkillIcon(context, x, y, 4, StandIcons.SPIDER_SKIN, PowerIndex.NONE);
+                }
+            }
+        }
     }
 
     @Override
@@ -406,8 +433,41 @@ public class PowersWalkingHeart extends NewDashPreset {
             case PowerIndex.POWER_1_SNEAK -> {
                 hitSound();
             }
+
+            case PowerIndex.POWER_3_BONUS-> {
+                spiderUnlock();
+            }
+
         }
         return super.tryPower(move,forced);
+    }
+
+    public void spiderUnlock(){
+        if (this.getSelf() instanceof Player PE) {
+            Level lv = this.getSelf().level();
+            ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
+            StandUser user = ((StandUser)PE);
+            boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+            if (!((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() && !bypass) {
+                ItemStack stack = self.getMainHandItem();
+                if (!stack.isEmpty() && stack.is(Items.COBWEB) && stack.getCount() >= 64){
+                    if (!lv.isClientSide()) {
+                        IPlayerEntity ipe = ((IPlayerEntity) PE);
+                        ipe.roundabout$setUnlockedBonusSkin(true);
+                        lv.playSound(null, PE.getX(), PE.getY(),
+                                PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
+                        ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
+                                PE.getY()+PE.getEyeHeight(), PE.getZ(),
+                                10, 0.5, 0.5, 0.5, 0.2);
+                        user.roundabout$setStandSkin(WalkingHeartEntity.SPIDER_SKIN);
+                        ((ServerPlayer) ipe).displayClientMessage(
+                                Component.translatable("unlock_skin.roundabout.walking_heart.spider"), true);
+                        user.roundabout$summonStand(lv, true, false);
+                        stack.shrink(64);
+                    }
+                }
+            }
+        }
     }
 
     @Override
