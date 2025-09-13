@@ -1369,6 +1369,9 @@ public class MainUtil {
         if (LE.onClimbable()){
             return false;
         }
+        if (((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()){
+            return false;
+        }
         return !(isBossMob(LE) && ClientNetworking.getAppropriateConfig().softAndWetSettings.bossesCannotLoseFriction);
     }
     public static boolean canBeScoopedUpInBubble(LivingEntity LE){

@@ -2903,6 +2903,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     ((ILevelAccess) this.level()).roundabout$isFrictionPlunderedEntity(this)
             ) {
                 if (this.onGround()) {
+                    Direction dir = ((IGravityEntity)this).roundabout$getGravityDirection();
                     if (roundabout$frictionSave.equals(Vec3.ZERO)) {
                         if (this.getDeltaMovement().x != 0 || this.getDeltaMovement().z != 0) {
                             roundabout$frictionSave = this.getDeltaMovement();
@@ -2924,6 +2925,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         }
                         Vec3 yesVec = this.getPosition(1).add(this.getDeltaMovement());
                         BlockPos yesVec2 = new BlockPos((int) yesVec.x, (int) (this.position().y), (int) yesVec.z);
+;
+                        if (dir == Direction.NORTH || dir == Direction.SOUTH){
+                            yesVec = this.getPosition(1).add(RotationUtil.vecPlayerToWorld(this.getDeltaMovement(),dir));
+                            yesVec2 = new BlockPos((int) yesVec.x, (int) yesVec.y, (int) (this.position().z));
+                        }
+                        if (dir == Direction.EAST || dir == Direction.WEST){
+                            yesVec = this.getPosition(1).add(RotationUtil.vecPlayerToWorld(this.getDeltaMovement(),dir));
+                            yesVec2 = new BlockPos((int) (this.position().x), (int) yesVec.y, (int) yesVec.z);
+                        }
                         if (this.level().getBlockState(yesVec2).isSolid()) {
                             roundabout$frictionSave = new Vec3(Math.random() - 0.5, 0, Math.random() - 0.5);
                         }
