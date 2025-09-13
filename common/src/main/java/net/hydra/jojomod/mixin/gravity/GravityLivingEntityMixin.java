@@ -183,6 +183,8 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
     }
 
 
+    /***Also for friction in general! Use for white album and walking heart*/
+
     @Inject(
             method = "travel(Lnet/minecraft/world/phys/Vec3;)V",
             at = @At(
@@ -191,7 +193,11 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
             cancellable = true)
     private void roundabout$travelWithGravity(Vec3 $$0, CallbackInfo ci) {
         Direction gravityDirection = GravityAPI.getGravityDirection(rdbt$this());
-        if (gravityDirection == Direction.DOWN)
+        int changeContext = 0;
+        if (((StandUser)this).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()){
+            changeContext = 1;
+        }
+        if (gravityDirection == Direction.DOWN && changeContext == 0)
             return;
         ci.cancel();
         ((StandUser)this).rdbt$adjGravTrav();
@@ -302,6 +308,10 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
             } else {
                 BlockPos $$25 = this.getBlockPosBelowThatAffectsMyMovement();
                 float $$26 = this.level().getBlockState($$25).getBlock().getFriction();
+                if (changeContext == 1){
+                    $$26 = 0.6F;
+                }
+
                 float $$27 = this.onGround() ? $$26 * 0.91F : 0.91F;
                 Vec3 $$28 = this.handleRelativeFrictionAndCalculateMovement($$0, $$26);
                 double $$29 = $$28.y;
