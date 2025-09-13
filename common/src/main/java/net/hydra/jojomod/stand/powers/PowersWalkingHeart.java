@@ -384,8 +384,9 @@ public class PowersWalkingHeart extends NewDashPreset {
     public void switchModes(){
         if (getStandUserSelf().roundabout$getCombatMode()){
             getStandUserSelf().roundabout$setCombatMode(false);
-            if (this.self.level().isClientSide()){
-                this.self.playSound(ModSounds.HEEL_STOMP_EVENT, 1F, 1.0F);
+            if (!this.self.level().isClientSide()){
+                this.self.level().playSound(null, self.getX(), self.getY(),
+                        self.getZ(), ModSounds.HEEL_STOMP_EVENT, self.getSoundSource(), 1F, 1.0F);
             }
         } else {
             if (hasExtendedHeelsForWalking() || isBlockedByStone())
@@ -393,8 +394,9 @@ public class PowersWalkingHeart extends NewDashPreset {
 
             this.self.setSprinting(false);
             getStandUserSelf().roundabout$setCombatMode(true);
-            if (this.self.level().isClientSide()){
-                this.self.playSound(ModSounds.HEEL_RAISE_EVENT, 1F, 1.0F);
+            if (!this.self.level().isClientSide()){
+                this.self.level().playSound(null, self.getX(), self.getY(),
+                        self.getZ(), ModSounds.HEEL_RAISE_EVENT, self.getSoundSource(), 1F, 1.0F);
             }
         }
     }
