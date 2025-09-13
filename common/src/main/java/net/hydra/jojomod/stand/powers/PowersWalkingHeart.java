@@ -384,7 +384,7 @@ public class PowersWalkingHeart extends NewDashPreset {
             }if (Level > 1) {
                 return 10000-getUseTicks()-getUseTicks();
             }
-            return 10000-getUseTicks()-getUseTicks()-getUseTicks();
+            return 10000-getUseTicks()-getUseTicks()-getUseTicks()-getUseTicks();
         }
         return 10000;
     }

@@ -872,7 +872,7 @@
   "ability.roundabout.fire_slam.desc": "Launches Magician's Red forward, turning it into a ball of fire. It collides with extreme force and lots of flames, but in doing so your stand is sealed for a while. Only use as a last resort.",
 
   "ability.roundabout.spike_attack_mode": "Attack Mode",
-  "ability.roundabout.spike_attack_mode.desc": "Lets you press or hold the attack key to launch a spike attack, pulling mobs in with a damaging attack that inflicts bleed. If interact is held, it pushes them away instead. This mode runs on a meter that must be full to use the ability, and recharges when not using it.",
+  "ability.roundabout.spike_attack_mode.desc": "Lets you press or hold the attack key to launch a spike attack, pulling mobs in with a damaging attack that inflicts bleed. If interact is held, it pushes them away instead. This mode runs on a meter that must be full to use the ability, and recharges when not using it. Goes through walls.",
   "ability.roundabout.heel_plant": "Heel Plant",
   "ability.roundabout.heel_plant.desc": "Extends your heel spikes into the ground, allowing you to resist most forms of knockback and walk on walls. Gives you a step height increase in both directions. Disables some abilities while active, deactivates when airborne or pressed again.",
 
@@ -880,7 +880,7 @@
   "ability.roundabout.wall_walk_move": "Wall Walking",
   "ability.roundabout.wall_walk_move.desc": "Latches onto walls, allowing you to walk on them. Trigger by facing a wall while having your heels planted, or by being in the air.",
   "ability.roundabout.firm_swing": "Firm Swing",
-  "ability.roundabout.firm_swing.desc": "Increases Player Damage while your stand is active, as in melee attack strength, due to the increased force from a sturdy stance.",
+  "ability.roundabout.firm_swing.desc": "Makes all attacks critical attacks while your heel is planted, due to the increased force from a sturdy stance.",
 
 
 

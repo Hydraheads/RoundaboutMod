@@ -17,8 +17,8 @@ import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ScissorItem;
 import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.item.WorthyArrowItem;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.PlayerMaskSlots;
 import net.minecraft.core.BlockPos;
@@ -27,7 +27,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -326,6 +325,18 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
     @Unique
     public boolean roundabout$displayNamePossible = true;
+
+
+    /**Crit / Critical Hits!*/
+    @ModifyVariable(method = "attack",
+            at = @At(value = "STORE"), ordinal = 2)
+    public boolean roundabout$attackThis(boolean value) {
+        if (((StandUser)this).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()){
+            return true;
+        }
+        return value;
+    }
+
 
     @Override
     @Unique
