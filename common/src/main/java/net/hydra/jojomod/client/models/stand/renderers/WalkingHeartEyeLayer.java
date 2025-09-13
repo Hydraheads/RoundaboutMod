@@ -3,6 +3,7 @@ package net.hydra.jojomod.client.models.stand.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
@@ -15,6 +16,7 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.EyesLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 
 public class WalkingHeartEyeLayer<T extends WalkingHeartEntity, M extends StandModel<T>> extends EyesLayer<T, M> {
     private static final RenderType SPIDER_EYES = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/walking_heart/spider_eyes.png"));
@@ -25,6 +27,13 @@ public class WalkingHeartEyeLayer<T extends WalkingHeartEntity, M extends StandM
 
     @Override
     public void render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9) {
+        LivingEntity User = $$3.getUser();
+
+        if ((User != null && ((IEntityAndData)User).roundabout$getTrueInvisibility() > -1) ||
+                ((IEntityAndData)$$3).roundabout$getTrueInvisibility() > -1){
+            return;
+        }
+
         if ($$3.getSkin()== WalkingHeartEntity.SPIDER_SKIN && ClientUtil.canSeeStands(ClientUtil.getPlayer())){
             VertexConsumer $$10 = $$1.getBuffer(this.renderType());
             this.getParentModel().renderToBuffer($$0, $$10, 15728640, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
