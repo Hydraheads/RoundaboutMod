@@ -567,6 +567,8 @@ public class Config implements Cloneable {
     public static class WalkingHeartSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableWalkingHeart;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableWallWalking;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer walkingHeartAttackMultOnMobs;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
