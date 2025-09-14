@@ -83,14 +83,14 @@ public class LeftHeelPart extends PsuedoHierarchicalModel {
                 boolean $$9 = LE.getMainArm() == HumanoidArm.LEFT;
                 if ($$9) {
                     if (ext == 2) {
-                        bone.yScale = 1 + (116 * partialTicks);
+                        bone.yScale = 2 + (116 * partialTicks);
                     } else if (ext == 1){
-                        bone.yScale = 1 + (116-(116 * partialTicks));
+                        bone.yScale = 2 + (116-(116 * partialTicks));
                     } else {
-                        bone.yScale =1;
+                        bone.yScale =2;
                     }
                 } else {
-                    bone.yScale =1;
+                    bone.yScale =2;
                 }
             }
 

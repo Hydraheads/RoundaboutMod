@@ -272,7 +272,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public void spikeAttackModeToggleClient(){
-        if (!hasExtendedHeelsForWalking()) {
+        if (!hasExtendedHeelsForWalking() || ((IGravityEntity)self).roundabout$getGravityDirection() == Direction.DOWN) {
             if (!inCombatMode() && getShootTicks() > 0)
                 return;
             this.tryPower(PowerIndex.POWER_4, true);
@@ -348,9 +348,9 @@ public class PowersWalkingHeart extends NewDashPreset {
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         if (slot == 3 && hasExtendedHeelsForWalking() && !canLatchOntoWall())
             return true;
-        if (slot == 1 && hasExtendedHeelsForWalking())
+        if (slot == 1 && hasExtendedHeelsForWalking() && ((IGravityEntity)self).roundabout$getGravityDirection() != Direction.DOWN)
             return true;
-        if (slot == 1 && isBlockedByStone())
+        if (slot == 1 && (isBlockedByStone()  || (getShootTicks() > 0 && !inCombatMode())))
             return true;
         if ((slot == 2 || slot == 3) && inCombatMode())
             return true;
@@ -398,7 +398,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                         self.getZ(), ModSounds.HEEL_STOMP_EVENT, self.getSoundSource(), 1F, 1.0F);
             }
         } else {
-            if (hasExtendedHeelsForWalking() || isBlockedByStone())
+            if (((hasExtendedHeelsForWalking() && ((IGravityEntity)self).roundabout$getGravityDirection() != Direction.DOWN)) || isBlockedByStone())
                 return;
 
             this.self.setSprinting(false);
