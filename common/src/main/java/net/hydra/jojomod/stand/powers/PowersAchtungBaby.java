@@ -64,7 +64,11 @@ public class PowersAchtungBaby extends NewDashPreset {
     public StandPowers generateStandPowers(LivingEntity entity) {
         return new PowersAchtungBaby(entity);
     }
-
+    @Override
+    /**Override to add disable config*/
+    public boolean isStandEnabled(){
+        return ClientNetworking.getAppropriateConfig().achtungSettings.enableAchtungBaby;
+    }
 
     public boolean invisibleVisionOn(){
         return !getStandUserSelf().roundabout$getUniqueStandModeToggle();

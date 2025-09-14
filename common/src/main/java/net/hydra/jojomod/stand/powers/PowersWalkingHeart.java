@@ -72,6 +72,12 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     @Override
+    /**Override to add disable config*/
+    public boolean isStandEnabled(){
+        return ClientNetworking.getAppropriateConfig().walkingHeartSettings.enableWalkingHeart;
+    }
+
+    @Override
     public List<Byte> getPosList(){
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add((byte) 0);

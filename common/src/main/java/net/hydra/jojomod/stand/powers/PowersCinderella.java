@@ -53,6 +53,14 @@ public class PowersCinderella extends NewDashPreset {
     public PowersCinderella(LivingEntity self) {
         super(self);
     }
+
+
+    @Override
+    /**Override to add disable config*/
+    public boolean isStandEnabled(){
+        return ClientNetworking.getAppropriateConfig().cinderellaSettings.enableCinderella;
+    }
+
     @Override
     public StandEntity getNewStandEntity(){
         return ModEntities.CINDERELLA.create(this.getSelf().level());

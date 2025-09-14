@@ -77,7 +77,11 @@ public abstract class ConfigManager {
                 if (i.getClass() != StandDiscItem.class)
                     continue;
 
-                ModItems.STAND_ARROW_POOL.add((StandDiscItem) i);
+                if (i instanceof StandDiscItem SDI){
+                    if (SDI.standPowers.isStandEnabled()){
+                        ModItems.STAND_ARROW_POOL.add(SDI);
+                    }
+                }
             }
         }
         if (getAdvancedConfig().naturalStandUserMobPoolv4 != null)
@@ -98,7 +102,11 @@ public abstract class ConfigManager {
                 if (i.getClass() != StandDiscItem.class)
                     continue;
 
-                ModItems.STAND_ARROW_POOL_FOR_MOBS.add((StandDiscItem) i);
+                if (i instanceof StandDiscItem SDI){
+                    if (SDI.standPowers.isStandEnabled()){
+                        ModItems.STAND_ARROW_POOL_FOR_MOBS.add(SDI);
+                    }
+                }
             }
         }
         if (getAdvancedConfig().humanoidOnlyStandUserMobPoolv2 != null)
@@ -123,7 +131,12 @@ public abstract class ConfigManager {
                 if (i.getClass() != StandDiscItem.class)
                     continue;
 
-                ModItems.STAND_ARROW_POOL_FOR_HUMANOID_MOBS.add((StandDiscItem) i);
+
+                if (i instanceof StandDiscItem SDI){
+                    if (SDI.standPowers.isStandEnabled()){
+                        ModItems.STAND_ARROW_POOL_FOR_HUMANOID_MOBS.add(SDI);
+                    }
+                }
             }
         }
 
@@ -145,7 +158,11 @@ public abstract class ConfigManager {
                 if (i.getClass() != StandDiscItem.class)
                     continue;
 
-                ModItems.STAND_ARROW_SECONDARY_STAND_POOL.add((StandDiscItem) i);
+                if (i instanceof StandDiscItem SDI){
+                    if (SDI.standPowers.isStandEnabled()){
+                        ModItems.STAND_ARROW_SECONDARY_STAND_POOL.add(SDI);
+                    }
+                }
             }
         }
     }

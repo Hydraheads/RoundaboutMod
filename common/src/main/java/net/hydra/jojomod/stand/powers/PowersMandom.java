@@ -58,7 +58,11 @@ public class PowersMandom extends NewDashPreset {
     public StandPowers generateStandPowers(LivingEntity entity) {
         return new PowersMandom(entity);
     }
-
+    @Override
+    /**Override to add disable config*/
+    public boolean isStandEnabled(){
+        return ClientNetworking.getAppropriateConfig().mandomSettings.enableMandom;
+    }
 
     public boolean canSummonStandAsEntity(){
         return false;

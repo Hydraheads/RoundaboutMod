@@ -91,6 +91,12 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
 
     @Override
+    /**Override to add disable config*/
+    public boolean isStandEnabled(){
+        return ClientNetworking.getAppropriateConfig().starPlatinumSettings.enableStarPlatinum;
+    }
+
+    @Override
     protected Byte getSummonSound() {
         return SoundIndex.SUMMON_SOUND;
     }

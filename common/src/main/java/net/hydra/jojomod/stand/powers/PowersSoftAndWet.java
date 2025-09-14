@@ -84,6 +84,12 @@ public class PowersSoftAndWet extends NewPunchingStand {
     public PowersSoftAndWet(LivingEntity self) {
         super(self);
     }
+    @Override
+    /**Override to add disable config*/
+    public boolean isStandEnabled(){
+        return ClientNetworking.getAppropriateConfig().softAndWetSettings.enableSoftAndWet;
+    }
+
 
     public List<SoftAndWetBubbleEntity> bubbleList = new ArrayList<>();
     @Override

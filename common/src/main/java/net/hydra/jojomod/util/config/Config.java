@@ -274,6 +274,8 @@ public class Config implements Cloneable {
 
 
     public static class SoftAndWetSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableSoftAndWet;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer softAndWetAttackMultOnPlayers;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
@@ -355,6 +357,8 @@ public class Config implements Cloneable {
     }
     public static class MagiciansRedSettings {
 
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableMagiciansRed;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer magicianAttackMultOnMobs;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
@@ -413,6 +417,8 @@ public class Config implements Cloneable {
         public Integer magiciansRedFlamethrowerWindup;
     }
     public static class JusticeSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableJustice;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer corpseDamageMultOnPlayers;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
@@ -445,6 +451,8 @@ public class Config implements Cloneable {
         public Boolean enableFogBlockInventory;
     }
     public static class CinderellaSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableCinderella;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer cinderellaAttackMultOnMobs;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
@@ -472,6 +480,8 @@ public class Config implements Cloneable {
 
     }
     public static class HeyYaSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableHeyYa;
         @IntOption(group = "inherit", value = 35, min = 0, max = 72000)
         public Integer numberOfYapLines;
         @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
@@ -496,6 +506,8 @@ public class Config implements Cloneable {
         public Integer yapCooldown;
     }
     public static class MandomSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableMandom;
         @BooleanOption(group = "inherit", value = false)
         public Boolean timeRewindOnlySavesAndLoadsOnPlayers;
         @IntOption(group = "inherit", value = 220, min = 0, max = 72000)
@@ -514,6 +526,8 @@ public class Config implements Cloneable {
         public Boolean timeRewindStopsDeviousStrategies;
     }
     public static class SurvivorSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableSurvivor;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer SummonSurvivorCooldownV2;
         @BooleanOption(group = "inherit", value = true)
@@ -551,6 +565,8 @@ public class Config implements Cloneable {
     }
 
     public static class WalkingHeartSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableWalkingHeart;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer walkingHeartAttackMultOnMobs;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
@@ -560,6 +576,8 @@ public class Config implements Cloneable {
     }
 
     public static class AchtungSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableAchtungBaby;
         @BooleanOption(group = "inherit", value = false)
         public Boolean invisibilityPotionAsWell;
         @BooleanOption(group = "inherit", value = true)
@@ -591,6 +609,8 @@ public class Config implements Cloneable {
     }
 
     public static class TheWorldSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableTheWorld;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer theWorldAttackMultOnMobs;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
@@ -610,6 +630,8 @@ public class Config implements Cloneable {
     }
 
     public static class StarPlatinumSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableStarPlatinum;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer starPlatinumAttackMultOnMobs;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)

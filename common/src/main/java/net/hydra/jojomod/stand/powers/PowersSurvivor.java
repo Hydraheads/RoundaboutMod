@@ -45,7 +45,11 @@ public class PowersSurvivor extends NewDashPreset {
     public PowersSurvivor(LivingEntity self) {
         super(self);
     }
-
+    @Override
+    /**Override to add disable config*/
+    public boolean isStandEnabled(){
+        return ClientNetworking.getAppropriateConfig().survivorSettings.enableSurvivor;
+    }
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
         return new PowersSurvivor(entity);
