@@ -3213,24 +3213,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
 
-            if (($$0.getEntity() != null || $$0.is(DamageTypes.THROWN)) && !$$0.is(DamageTypes.THORNS)){
-                if (((IEntityAndData)this).roundabout$getTrueInvisibility() > -1 &&
-                        ClientNetworking.getAppropriateConfig().achtungSettings.revealLocationWhenDamagingOrHurt){
-                    ((IEntityAndData)this).roundabout$setTrueInvisibility(-1);
-                }
-                if ($$0.getEntity() != null){
-                    if (((IEntityAndData)$$0.getEntity()).roundabout$getTrueInvisibility() > -1 &&
-                            ClientNetworking.getAppropriateConfig().achtungSettings.revealLocationWhenDamagingOrHurt){
-                        ((IEntityAndData)$$0.getEntity()).roundabout$setTrueInvisibility(-1);
-                    }
-                }
-                if ($$0.getDirectEntity() != null){
-                    if (((IEntityAndData)$$0.getDirectEntity()).roundabout$getTrueInvisibility() > -1 &&
-                            ClientNetworking.getAppropriateConfig().achtungSettings.revealLocationWhenDamagingOrHurt){
-                        ((IEntityAndData)$$0.getDirectEntity()).roundabout$setTrueInvisibility(-1);
-                    }
-                }
-            }
+
         }
         if (roundabout$mutualActuallyHurt($$0,$$1)){
             ci.cancel();
@@ -3298,6 +3281,25 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_POP,
                                 this.getX(), this.getY() + this.getBbHeight()*0.5, this.getZ(),
                                 5, 0.25, 0.25,0.25, 0.025);
+                    }
+                }
+            }
+
+            if (($$0.getEntity() != null || $$0.is(DamageTypes.THROWN)) && !$$0.is(DamageTypes.THORNS)){
+                if (((IEntityAndData)this).roundabout$getTrueInvisibility() > -1 &&
+                        ClientNetworking.getAppropriateConfig().achtungSettings.revealLocationWhenDamagingOrHurt){
+                    ((IEntityAndData)this).roundabout$setTrueInvisibility(-1);
+                }
+                if ($$0.getEntity() != null){
+                    if (((IEntityAndData)$$0.getEntity()).roundabout$getTrueInvisibility() > -1 &&
+                            ClientNetworking.getAppropriateConfig().achtungSettings.revealLocationWhenDamagingOrHurt){
+                        ((IEntityAndData)$$0.getEntity()).roundabout$setTrueInvisibility(-1);
+                    }
+                }
+                if ($$0.getDirectEntity() != null){
+                    if (((IEntityAndData)$$0.getDirectEntity()).roundabout$getTrueInvisibility() > -1 &&
+                            ClientNetworking.getAppropriateConfig().achtungSettings.revealLocationWhenDamagingOrHurt){
+                        ((IEntityAndData)$$0.getDirectEntity()).roundabout$setTrueInvisibility(-1);
                     }
                 }
             }
