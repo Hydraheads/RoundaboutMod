@@ -73,7 +73,7 @@ public class DamageHandler {
         return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.STAR_FINGER, attacker), power);
     }
     public static boolean HeelSpikeStandDamageEntity(Entity entity, float power, Entity attacker){
-        return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.STAR_FINGER, attacker), power);
+        return entity.hurt(ModDamageTypes.of(entity.level(), ModDamageTypes.HEEL_SPIKE, attacker), power);
     }
 
 
