@@ -21,6 +21,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -58,7 +59,7 @@ public class RattDartEntity extends AbstractArrow {
                 Vec2 v = new Vec2((float) (-1*Math.cos(rots.y)),
                         (float) (-1*Math.sin(rots.y)) );
                 double ding = 0.2;
-                this.setPos(RE.getEyeP(0).add(new Vec3(Math.random()*ding-ding/2, Math.random()*ding-ding/2, Math.random()*ding-ding/2)));
+                this.setPos(RE.getEyeP(0).add(new Vec3(Math.random()*ding-ding/2, Mth.clamp(Math.random()*ding-ding/2,-0.1,ding), Math.random()*ding-ding/2)));
             }
         }
     }
@@ -73,10 +74,9 @@ public class RattDartEntity extends AbstractArrow {
 
     public RattDartEntity(Level world, LivingEntity player, int i) {
         super(ModEntities.RATT_DART, player, world);
-        alignDart(player);
-        Roundabout.LOGGER.info("?{}",i);
+       // alignDart(player);
         this.melting = i > 90 || i == -1 ? 0 : 1;
-        this.damage = i < 90 ? 0.1F : 5F;
+        this.damage = i < 90 ? 0.1F : 3.2F;
         this.charged = i;
     }
 
@@ -149,7 +149,6 @@ public class RattDartEntity extends AbstractArrow {
     protected void onHitEntity(EntityHitResult $$0) {
         Entity $$1 = $$0.getEntity();
 
-        Roundabout.LOGGER.info($$1.toString());
 
         if ($$1 instanceof LivingEntity $$3) {
             StandPowers entityPowers = ((StandUser) $$3).roundabout$getStandPowers();
@@ -160,15 +159,12 @@ public class RattDartEntity extends AbstractArrow {
                 }
             }
 
-
-
-
         }
 
         Entity $$4 = this.getOwner();
-        DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.STAND, $$4);
+        DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.MELTING, $$4);
         SoundEvent $$6 = ModSounds.RATT_DART_IMPACT_EVENT;
-        if ($$1.hurt($$5,this.damage)) {
+        if ($$1.hurt($$5,this.damage + (($$1 instanceof Mob) ? 1F : 0) )) {
 
 
             if ($$4 instanceof LivingEntity LE) {

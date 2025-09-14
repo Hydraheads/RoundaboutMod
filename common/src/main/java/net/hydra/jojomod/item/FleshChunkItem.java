@@ -33,7 +33,7 @@ public class FleshChunkItem extends BlockItem {
         if ( (((StandUser)entity )).roundabout$getStandPowers() instanceof PowersRatt) {
             entity.removeEffect(MobEffects.HUNGER);
             FoodData f = ((Player)entity).getFoodData();
-            f.setSaturation(f.getSaturationLevel()+0.4F);
+            f.setSaturation(f.getSaturationLevel()+0.6F);
             f.setFoodLevel(f.getFoodLevel()+4);
         }
         return $$3;

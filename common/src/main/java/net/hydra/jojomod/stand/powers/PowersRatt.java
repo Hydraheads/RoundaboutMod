@@ -783,6 +783,11 @@ public class PowersRatt extends NewDashPreset {
         }
     }
 
+    @Override
+    public boolean setPowerNone() {
+        if (this.getActivePower() == PowersRatt.PLACE_BURST) {setShotCooldown(20);}
+        return super.setPowerNone();
+    }
 
     @Override
     public void tickMobAI(LivingEntity attackTarget) {

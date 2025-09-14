@@ -122,8 +122,10 @@ public class RattEntity extends StandEntity {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (source.getEntity() != null) {
+        if (source.getEntity() != null && source.getEntity() != this.getUser()) {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersRatt PR) {
+                PR.tryPower(PowersRatt.NET_RECALL,true);
+                PR.tryPowerPacket(PowersRatt.NET_RECALL);
                 this.forceDespawnSet = true;
                 PR.setCooldown(PowersRatt.SETPLACE,50);
             }
