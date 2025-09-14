@@ -36,7 +36,7 @@ public class ForgeEffects{
     public static final RegistryObject<MobEffect> MELTING =
             POTION_EFFECTS.register("melting", () ->
                     new Effect(MobEffectCategory.HARMFUL, 10329495)
-                            .addAttributeModifier(Attributes.MAX_HEALTH,"6107DE5E-7CE8-4030-940E-514C1F160890",-1.1, AttributeModifier.Operation.ADDITION)
+                            .addAttributeModifier(Attributes.MAX_HEALTH,"6107DE5E-7CE8-4030-940E-514C1F160890",-0.7, AttributeModifier.Operation.ADDITION)
             );
     public static final RegistryObject<MobEffect> GRAVITY_FLIP =
             POTION_EFFECTS.register("gravity_flip", () ->

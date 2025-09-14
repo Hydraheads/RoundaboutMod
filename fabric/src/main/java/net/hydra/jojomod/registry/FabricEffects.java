@@ -23,7 +23,7 @@ public class FabricEffects extends MobEffect{
     public static final MobEffect FACELESS = register("faceless", new FabricEffects(MobEffectCategory.HARMFUL, 10329495));
     public static final MobEffect MELTING =
             register("melting", new FabricEffects(MobEffectCategory.HARMFUL, 10329495)
-                            .addAttributeModifier(Attributes.MAX_HEALTH,"6107DE5E-7CE8-4030-940E-514C1F160890",-1.1, AttributeModifier.Operation.ADDITION)
+                            .addAttributeModifier(Attributes.MAX_HEALTH,"6107DE5E-7CE8-4030-940E-514C1F160890",-0.7, AttributeModifier.Operation.ADDITION)
             );
     public static final MobEffect GRAVITY_FLIP =
             register("gravity_flip", new FabricEffects(MobEffectCategory.NEUTRAL, 4906114));
