@@ -170,7 +170,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     }
 
     @Unique
-    public void roundabout$renderRightArmExtraModel(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+    public void roundabout$renderRightArmExtraModel(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float xx, float yy, float zz, float partialTicks,
                                                     float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
         if (model.rightArm.visible) {
             ClientUtil.pushPoseAndCooperate(poseStack,8);
@@ -180,7 +180,24 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             ClientUtil.popPoseAndCooperate(poseStack,8);
         }
     }
-    public void roundabout$renderRightArmExtraModelSlim(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+    @Unique
+    public void roundabout$renderRightLegExtraModel(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float xx, float yy, float zz, float partialTicks,
+                                                    float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
+        if (model.rightLeg.visible) {
+            ModStrayModels.RightLeg.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
+        }
+    }
+    @Unique
+    public void roundabout$renderLeftLegExtraModel(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float xx, float yy, float zz, float partialTicks,
+                                                    float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
+        if (model.leftLeg.visible) {
+            ModStrayModels.LeftLeg.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, alpha, RL, xx, yy, zz, xtrans, ytrans, ztrans);
+        }
+    }
+
+    public void roundabout$renderRightArmExtraModelSlim(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float xx, float yy, float zz, float partialTicks,
                                    float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
         if (model.rightArm.visible) {
             ClientUtil.pushPoseAndCooperate(poseStack,13);
@@ -190,7 +207,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             ClientUtil.popPoseAndCooperate(poseStack,13);
         }
     }
-    public void roundabout$renderLeftArmExtraModel(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+    public void roundabout$renderLeftArmExtraModel(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float xx, float yy, float zz, float partialTicks,
                               float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
         if (model.leftArm.visible) {
             ClientUtil.pushPoseAndCooperate(poseStack,15);
@@ -344,18 +361,43 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
         PlayerModel<AbstractClientPlayer> $$6 = this.getModel();
         if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()) {
+
+            boolean isHurt = acl.hurtTime > 0;
+            float r = isHurt ? 1.0F : 1.0F;
+            float g = isHurt ? 0.6F : 1.0F;
+            float b = isHurt ? 0.6F : 1.0F;
+            StandUser user = ((StandUser) acl);
+            int muscle = user.roundabout$getZappedToID();
+            //muscle = 100;
+                float scale = 1.055F;
+                float alpha = 0.6F;
+                float delta = ClientUtil.getDelta();
+                if (((TimeStop) acl.level()).CanTimeStopEntity(acl)) {
+                    delta = 0;
+                }
+                float oscillation = Math.abs(((acl.tickCount % 10) + (delta % 1)) - 5) * 0.04F;
+                alpha += oscillation;
+
             if ($$4 == $$6.leftLeg) {
                 stack.pushPose();
                 $$6.leftLeg.translateAndRotate(stack);
                 rdbt$copyTo($$6.leftLeg, ModStrayModels.LeftHeel.root());
                 ModStrayModels.LeftHeel.render(acl, ClientUtil.getDelta(), stack, buffer, integer,
                         1, 1, 1, 1, acl.getSkinTextureLocation());
+                if (muscle > -1) {
+                        roundabout$renderRightLegExtraModel(stack, buffer, integer, acl, scale, scale, scale, delta,
+                                r, g, b, StandIcons.MUSCLE, 0.01F, 0, 0, alpha);
+                }
                 stack.popPose();
             } else {
                 stack.pushPose();
                 $$6.rightLeg.translateAndRotate(stack);
                 ModStrayModels.RightHeel.render(acl, ClientUtil.getDelta(), stack, buffer, integer,
                         1, 1, 1, 1, acl.getSkinTextureLocation());
+                if (muscle > -1) {
+                    roundabout$renderLeftLegExtraModel(stack, buffer, integer, acl, scale, scale, scale, delta,
+                            r, g, b, StandIcons.MUSCLE, 0.01F, 0, 0, alpha);
+                }
                 stack.popPose();
             }
         }
