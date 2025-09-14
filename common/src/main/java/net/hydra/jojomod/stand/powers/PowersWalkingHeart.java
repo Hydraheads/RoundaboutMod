@@ -660,8 +660,12 @@ public class PowersWalkingHeart extends NewDashPreset {
         useSpikeAttackF(false);
     }
 
+    public int lastTick = 0;
     public void tickPower() {
-        setHeelExtension(getHeelExtension()-1);
+        if (lastTick != self.tickCount){
+            setHeelExtension(getHeelExtension()-1);
+            lastTick = self.tickCount;
+        }
         if (this.self.level().isClientSide()) {
             if (!inCombatMode()){
                 currentKickTicks = 0;
