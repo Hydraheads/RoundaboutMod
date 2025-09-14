@@ -86,13 +86,14 @@ public class WalkingHeartModel<T extends WalkingHeartEntity> extends StandModel<
         PartDefinition lower_chest = torso.addOrReplaceChild("lower_chest", CubeListBuilder.create(), PartPose.offset(0.0F, 6.0F, 0.0F));
 
         PartDefinition lower_torso = lower_chest.addOrReplaceChild("lower_torso", CubeListBuilder.create().texOffs(33, 22).addBox(-3.0F, -6.0F, -2.0F, 6.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(33, 1).addBox(-4.5F, -1.0F, -2.5F, 9.0F, 6.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 6.0F, 0.0F));
+                .texOffs(100, 1).addBox(-4.5F, -3.2F, -2.5F, 9.0F, 3.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 6.0F, 0.0F));
 
         PartDefinition legs = body2.addOrReplaceChild("legs", CubeListBuilder.create(), PartPose.offset(0.0F, 12.0F, 0.0F));
 
         PartDefinition right_leg = legs.addOrReplaceChild("right_leg", CubeListBuilder.create(), PartPose.offset(-2.0F, -1.0F, 0.0F));
 
-        PartDefinition upper_right_leg = right_leg.addOrReplaceChild("upper_right_leg", CubeListBuilder.create().texOffs(32, 52).addBox(-2.0F, 1.0F, -1.9999F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.2F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition upper_right_leg = right_leg.addOrReplaceChild("upper_right_leg", CubeListBuilder.create().texOffs(32, 52).addBox(-2.0F, 1.0F, -1.9999F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.2F))
+                .texOffs(110, 22).addBox(-2.1F, 0.775F, -2.2748F, 4.0F, 4.0F, 5.0F, new CubeDeformation(0.15F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition lower_right_leg = right_leg.addOrReplaceChild("lower_right_leg", CubeListBuilder.create().texOffs(0, 40).addBox(-2.0F, -1.0F, -2.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(54, 61).addBox(-1.0F, -2.1F, -2.3F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F))
@@ -100,7 +101,8 @@ public class WalkingHeartModel<T extends WalkingHeartEntity> extends StandModel<
 
         PartDefinition left_leg = legs.addOrReplaceChild("left_leg", CubeListBuilder.create(), PartPose.offset(2.0F, -1.0F, 0.0F));
 
-        PartDefinition upper_left_leg = left_leg.addOrReplaceChild("upper_left_leg", CubeListBuilder.create().texOffs(56, 12).addBox(-2.0F, 1.0F, -1.9998F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition upper_left_leg = left_leg.addOrReplaceChild("upper_left_leg", CubeListBuilder.create().texOffs(56, 12).addBox(-2.0F, 1.0F, -1.9998F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F))
+                .texOffs(110, 12).addBox(-1.85F, 0.775F, -2.2748F, 4.0F, 4.0F, 5.0F, new CubeDeformation(0.15F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition lower_left_leg = left_leg.addOrReplaceChild("lower_left_leg", CubeListBuilder.create().texOffs(16, 40).addBox(-2.0F, -1.0F, -2.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(58, 61).addBox(-1.0F, -2.1F, -2.3F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F))
