@@ -627,7 +627,7 @@ public class PowersRatt extends NewDashPreset {
                 chargeTime -= 30;
                 if (!isClient()) {
                     if ( 30 <= chargeTime && chargeTime <= 40) {
-                        FireDart(-1,0.4F);
+                        FireDart(51,0.4F);
                     } else {
                         FireDart(51, 0.4F);
                     }
@@ -659,7 +659,7 @@ public class PowersRatt extends NewDashPreset {
                 if (!isClient()) {
                     for(int i=0;i<3;i++) {
                         if (this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
-                            RattDartEntity e = new RattDartEntity(RE.level(), this.getSelf(), i != 1 ? 1 : 0, 0.1F);
+                            RattDartEntity e = new RattDartEntity(RE.level(), this.getSelf(), i != 1 ? 1 : 1, 0.1F);
                             Vec3 v = this.getRotations(this.getShootTarget());
                             e.shootFromRotation(RE, (float) v.x * 180 / (float) Math.PI + 180, (float) v.y * 180 / (float) Math.PI, -0.5F, ShotPowerFloats[1], 0.84F);
                             e.EnableSuperThrow();
