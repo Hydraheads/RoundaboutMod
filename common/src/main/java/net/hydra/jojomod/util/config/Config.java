@@ -310,7 +310,7 @@ public class Config implements Cloneable {
         public Integer ticksBetweenSightStealsOnSameMob;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer sightStealingDurationOnMobsInTicks;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 150, min = 0, max = 72000)
         public Integer sightStealingDurationOnPlayersInTicks;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         public Integer primaryPlunderBubbleLifespanInTicks;
