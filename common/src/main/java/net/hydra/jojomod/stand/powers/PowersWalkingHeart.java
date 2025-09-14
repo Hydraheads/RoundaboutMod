@@ -562,18 +562,20 @@ public class PowersWalkingHeart extends NewDashPreset {
                 if (rightClick){
                     mod = 1;
                 }
+                LE.hurtMarked = true;
                 LE.knockback(knockbackStrength * 0.5f, mod*Mth.sin(this.self.getYRot() * ((float) Math.PI / 180)), mod*-Mth.cos(this.self.getYRot() * ((float) Math.PI / 180)));
 
                 MainUtil.makeBleed(LE,0,300,this.self);
             }
             return true;
         } else {
-            if (target instanceof LivingEntity) {
+            if (target instanceof LivingEntity LE) {
                 float mod = -1;
                 if (rightClick){
                     mod = 1;
                 }
-                ((LivingEntity) target).knockback(knockbackStrength * 0.5f, mod*Mth.sin(this.self.getYRot() * ((float) Math.PI / 180)), mod*-Mth.cos(this.self.getYRot() * ((float) Math.PI / 180)));
+                LE.hurtMarked = true;
+                LE.knockback(knockbackStrength * 0.5f, mod*Mth.sin(this.self.getYRot() * ((float) Math.PI / 180)), mod*-Mth.cos(this.self.getYRot() * ((float) Math.PI / 180)));
             }
         }
         return false;
