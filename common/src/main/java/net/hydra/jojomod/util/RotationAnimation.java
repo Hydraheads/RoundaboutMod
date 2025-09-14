@@ -1,5 +1,6 @@
 package net.hydra.jojomod.util;
 
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.util.gravity.QuaternionUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.Direction;
@@ -17,6 +18,7 @@ public class RotationAnimation {
     private Quaternionf startGravityRotation;
     private Quaternionf endGravityRotation;
     private Vec3 relativeRotationCenter = Vec3.ZERO;
+    private Entity ent;
 
     private long startTimeMs;
     private long endTimeMs;
@@ -32,6 +34,7 @@ public class RotationAnimation {
         }
 
         Validate.notNull(entity);
+        ent = entity;
 
         Vec3 newLookingDirection = getNewLookingDirection(newGravity, prevGravity, entity, rotateView);
 
@@ -109,6 +112,12 @@ public class RotationAnimation {
      * To get the rotation that applies entity, conjugate it.
      */
     public Quaternionf getCurrentGravityRotation(Direction currentGravity, long timeMs) {
+
+        if (ClientUtil.checkIfGamePaused()){
+            if (ent != null){
+                timeMs = ent.level().getGameTime() * 50;
+            }
+        }
 
         update(timeMs);
 

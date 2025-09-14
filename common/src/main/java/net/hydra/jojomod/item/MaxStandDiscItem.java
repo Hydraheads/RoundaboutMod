@@ -18,6 +18,11 @@ public class MaxStandDiscItem extends StandDiscItem{
         super($$0, standPowers);
     }
 
+    public MaxStandDiscItem(Properties properties, StandPowers standPowers, StandDiscItem baseDisc) {
+        super(properties, standPowers);
+        this.baseDisc = baseDisc;
+    }
+
     @Override
 
     public MutableComponent getDisplayName2() {

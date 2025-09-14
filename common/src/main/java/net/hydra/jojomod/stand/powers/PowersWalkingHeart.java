@@ -42,6 +42,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
@@ -226,7 +227,7 @@ public class PowersWalkingHeart extends NewDashPreset {
             } else {
                 if (!inCombatMode()) {
                     if (self.onGround()) {
-                        this.setCooldown(PowerIndex.SKILL_3, 6);
+                        this.setCooldown(PowerIndex.SKILL_3, 8);
                         if (!this.self.level().isClientSide()) {
                             setHeelDirection(Direction.DOWN);
                             toggleSpikes(true);
@@ -234,6 +235,31 @@ public class PowersWalkingHeart extends NewDashPreset {
                     }
                 }
             }
+    }
+
+    @Override
+    public void tickStandRejection(MobEffectInstance effect){
+        if (!this.getSelf().level().isClientSide()) {
+            if (effect.getDuration() == 80) {
+                MainUtil.makeBleed(this.self,0,900,this.self);
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SPIKE_HIT_EVENT, SoundSource.PLAYERS, 1F, 1);
+                if (MainUtil.getMobBleed(this.self)){
+                    MainUtil.makeMobBleed(this.self);
+                }
+            } if (effect.getDuration() == 50) {
+                MainUtil.makeBleed(this.self,1,900,this.self);
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SPIKE_HIT_EVENT, SoundSource.PLAYERS, 1F, 1);
+                if (MainUtil.getMobBleed(this.self)){
+                    MainUtil.makeMobBleed(this.self);
+                }
+            } if (effect.getDuration() == 20) {
+                MainUtil.makeBleed(this.self,2,900,this.self);
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SPIKE_HIT_EVENT, SoundSource.PLAYERS, 1F, 1);
+                if (MainUtil.getMobBleed(this.self)){
+                    MainUtil.makeMobBleed(this.self);
+                }
+            }
+        }
     }
 
     public void spikeAttackModeToggleClient(){
@@ -358,8 +384,9 @@ public class PowersWalkingHeart extends NewDashPreset {
     public void switchModes(){
         if (getStandUserSelf().roundabout$getCombatMode()){
             getStandUserSelf().roundabout$setCombatMode(false);
-            if (this.self.level().isClientSide()){
-                this.self.playSound(ModSounds.HEEL_STOMP_EVENT, 1F, 1.0F);
+            if (!this.self.level().isClientSide()){
+                this.self.level().playSound(null, self.getX(), self.getY(),
+                        self.getZ(), ModSounds.HEEL_STOMP_EVENT, self.getSoundSource(), 1F, 1.0F);
             }
         } else {
             if (hasExtendedHeelsForWalking() || isBlockedByStone())
@@ -367,8 +394,9 @@ public class PowersWalkingHeart extends NewDashPreset {
 
             this.self.setSprinting(false);
             getStandUserSelf().roundabout$setCombatMode(true);
-            if (this.self.level().isClientSide()){
-                this.self.playSound(ModSounds.HEEL_RAISE_EVENT, 1F, 1.0F);
+            if (!this.self.level().isClientSide()){
+                this.self.level().playSound(null, self.getX(), self.getY(),
+                        self.getZ(), ModSounds.HEEL_RAISE_EVENT, self.getSoundSource(), 1F, 1.0F);
             }
         }
     }

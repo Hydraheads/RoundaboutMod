@@ -3,6 +3,7 @@ package net.hydra.jojomod.client.models.stand.renderers;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.stand.StandModel;
@@ -55,6 +56,12 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
         LocalPlayer lp = Minecraft.getInstance().player;
         float maxfade = 100;
         LivingEntity User = mobEntity.getUser();
+
+        if ((User != null && ((IEntityAndData)User).roundabout$getTrueInvisibility() > -1) ||
+                ((IEntityAndData)mobEntity).roundabout$getTrueInvisibility() > -1){
+            return;
+        }
+
         if (lp !=null) {
             IPlayerEntity ipe = ((IPlayerEntity) lp);
             if (User != null && mobEntity.getUser().is(lp)) {
