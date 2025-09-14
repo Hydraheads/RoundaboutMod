@@ -199,7 +199,7 @@ public class ModItems {
 
         if (maxDisc)
             discs.add(
-                    registerItem("max_"+itemName, new MaxStandDiscItem(properties, powers))
+                    registerItem("max_"+itemName, new MaxStandDiscItem(properties, powers, (StandDiscItem) discs.get(0)))
             );
 
         return discs;
@@ -231,7 +231,7 @@ public class ModItems {
         {
             ResourceLocation maxLocation = new ResourceLocation(itemLocation.getNamespace(), "max_" + itemLocation.getPath());
             discs.add(
-                    registerItem(maxLocation, new MaxStandDiscItem(properties, powers))
+                    registerItem(maxLocation, new MaxStandDiscItem(properties, powers, (StandDiscItem) discs.get(0)))
             );
         }
 
