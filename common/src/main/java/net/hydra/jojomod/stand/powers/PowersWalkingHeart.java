@@ -434,6 +434,9 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
     public void setShootTicks(int shootTicks){
         this.shootTicks = Mth.clamp(shootTicks,0,getMaxShootTicks());
+        if (this.shootTicks >= getMaxShootTicks() && self.level().isClientSide()){
+            tryPowerPacket(PowerIndex.POWER_4);
+        }
 
     }
     @Override
