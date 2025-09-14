@@ -19,9 +19,9 @@ import net.minecraft.world.entity.LivingEntity;
 public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
     /**Override this for every stand model.*/
     private float alpha;
-    ModelPart stand;
-    ModelPart head;
-    ModelPart body;
+    public ModelPart stand;
+    public ModelPart head;
+    public ModelPart body;
     public ModelPart leftHand;
     public ModelPart rightHand;
 

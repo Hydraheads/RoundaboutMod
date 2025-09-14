@@ -59,13 +59,14 @@ public class PowersRatt extends NewDashPreset {
     public static final int MinThreshold = 30;
     public static final int MaxThreshold = 90;
     public static final int BaseShootCooldown = 10;
-    public static final int PlaceDelay = 7;
+    public static final int PlaceDelay = 10;
     public static final int PlaceShootCooldown = 40;
     public static final int MaxShootCooldown = 30;
     public static final int[] ShotThresholds = {MinThreshold,50,MaxThreshold};
     public static final float[] ShotPowerFloats = {3,4.2F,5};
-    public static final float[] ShotDamageTicks = {0F,0F,1F};
     public static final int[] ShotSuperthrowTicks = {4,10,15};
+
+
     public static final float DespawnRange = 25;
 
 
@@ -560,10 +561,12 @@ public class PowersRatt extends NewDashPreset {
     }
 
 
+
+    // -1 == 51 but with no melt
     public void FireDart(int i, float acuracy) {
         float power = 0;
         for (int b=ShotThresholds.length-1;b>=0;b--) {
-            if (i >= ShotThresholds[b]) {
+            if ( (i == -1 ? 51 : i) >= ShotThresholds[b]) {
                 power = ShotPowerFloats[b];
                 break;
             }
@@ -610,7 +613,7 @@ public class PowersRatt extends NewDashPreset {
             case PowersRatt.NET_RECALL -> {
                 active = false;
                 this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
-                this.getStandEntity(this.getSelf()).forceDespawnSet = true;// this.getStandEntity(this.getSelf()).discard();
+                this.getStandEntity(this.getSelf()).forceDespawnSet = true;
                 this.setCooldown(PowersRatt.SETPLACE,40);
             }
             case PowersRatt.FIRE_DART -> this.setCooldown(PowersRatt.CHANGE_MODE,15);
@@ -623,7 +626,11 @@ public class PowersRatt extends NewDashPreset {
                 this.setActivePower(PowersRatt.PLAYER_BURST);
                 chargeTime -= 30;
                 if (!isClient()) {
-                    FireDart(51,0.4F);
+                    if ( 30 <= chargeTime && chargeTime <= 40) {
+                        FireDart(-1,0.4F);
+                    } else {
+                        FireDart(51, 0.4F);
+                    }
                 }
             }
             case PowersRatt.TOGGLE_BURSTING -> {
@@ -651,17 +658,10 @@ public class PowersRatt extends NewDashPreset {
                 this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.RATT_FIRING_EVENT,SoundSource.PLAYERS);
                 if (!isClient()) {
                     for(int i=0;i<3;i++) {
-                        float power = 0;
-                        for (int b = ShotThresholds.length - 1; b >= 0; b--) {
-                            if (51 >= ShotThresholds[b]) {
-                                power = ShotPowerFloats[b];
-                                break;
-                            }
-                        }
                         if (this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
-                            RattDartEntity e = new RattDartEntity(RE.level(), this.getSelf(), 51);
+                            RattDartEntity e = new RattDartEntity(RE.level(), this.getSelf(), i != 1 ? 1 : 0, 0.1F);
                             Vec3 v = this.getRotations(this.getShootTarget());
-                            e.shootFromRotation(RE, (float) v.x * 180 / (float) Math.PI + 180, (float) v.y * 180 / (float) Math.PI, -0.5F, power, 0.84F);
+                            e.shootFromRotation(RE, (float) v.x * 180 / (float) Math.PI + 180, (float) v.y * 180 / (float) Math.PI, -0.5F, ShotPowerFloats[1], 0.84F);
                             e.EnableSuperThrow();
                             RE.level().addFreshEntity(e);
                         }

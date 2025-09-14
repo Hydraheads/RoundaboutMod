@@ -122,14 +122,21 @@ public class RattEntity extends StandEntity {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (this.getUser() != null && MainUtil.isStandDamage(source)) {
+        if (source.getEntity() != null) {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersRatt PR) {
-                PR.RecallClient(true);
+                this.forceDespawnSet = true;
                 PR.setCooldown(PowersRatt.SETPLACE,50);
             }
             return this.getUser().hurt(source, amount);
         }
         return false;
     }
+
+    @Override
+    public boolean isAttackable() {return true;}
+    @Override
+    public boolean isPickable() {return true;}
+    @Override
+    public boolean skipAttackInteraction(Entity $$0) {return false;}
 }
 

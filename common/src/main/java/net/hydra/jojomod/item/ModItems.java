@@ -1,15 +1,21 @@
 package net.hydra.jojomod.item;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.VisageStoreEntry;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ModItems {
 
@@ -169,4 +175,74 @@ public class ModItems {
         VISAGE_STORE_ENTRIES.add(new VisageStoreEntry(item, page, costL, costE));
     }
 
+    /// Registers a stand disc and a max stand disc by the powers and base disc item name.
+    /// @param powers The stand powers. Usually from new Powers(null);
+    /// @param itemName The stand disc name. An example being "the_world_disc"
+    /// @return Returns a list of the items created. First index is the regular stand disc, second being maximum.
+    public static <T extends StandPowers> List<Item> registerStand(T powers, String itemName)
+    {
+        return registerStand(powers, itemName, true);
+    }
+
+    /// Registers a stand disc (and a max stand disc when requested) by the powers and base disc item name.
+    /// @param powers The stand powers. Usually from new Powers(null);
+    /// @param itemName The stand disc name. An example being "the_world_disc"
+    /// @return Returns a list of the items created. First index is the regular stand disc, second being maximum.
+    public static <T extends StandPowers> List<Item> registerStand(T powers, String itemName, boolean maxDisc)
+    {
+        Item.Properties properties = new Item.Properties().stacksTo(1);
+        List<Item> discs = new ArrayList<>();
+
+        discs.add(
+                registerItem(itemName, new StandDiscItem(properties, powers))
+        );
+
+        if (maxDisc)
+            discs.add(
+                    registerItem("max_"+itemName, new MaxStandDiscItem(properties, powers, (StandDiscItem) discs.get(0)))
+            );
+
+        return discs;
+    }
+
+    /// Registers a stand disc and a max stand disc by the powers and base disc item name.
+    /// @param powers The stand powers. Usually from new Powers(null);
+    /// @param itemLocation The stand disc name. An example being <code>new ResourceLocation(Roundabout.MOD_ID, "the_world_disc")</code>
+    /// @return Returns a list of the items created. First index is the regular stand disc, second being maximum.
+    public static <T extends StandPowers> List<Item> registerStand(T powers, ResourceLocation itemLocation)
+    {
+        return registerStand(powers, itemLocation, true);
+    }
+
+    /// Registers a stand disc (and a max stand disc when requested) by the powers and base disc item name.
+    /// @param powers The stand powers. Usually from new Powers(null);
+    /// @param itemLocation The stand disc location. An example being <code>new ResourceLocation(Roundabout.MOD_ID, "the_world_disc")</code>
+    /// @return Returns a list of the items created. First index is the regular stand disc, second being maximum.
+    public static <T extends StandPowers> List<Item> registerStand(T powers, ResourceLocation itemLocation, boolean maxDisc)
+    {
+        Item.Properties properties = new Item.Properties().stacksTo(1);
+        List<Item> discs = new ArrayList<>();
+
+        discs.add(
+                registerItem(itemLocation, new StandDiscItem(properties, powers))
+        );
+
+        if (maxDisc)
+        {
+            ResourceLocation maxLocation = new ResourceLocation(itemLocation.getNamespace(), "max_" + itemLocation.getPath());
+            discs.add(
+                    registerItem(maxLocation, new MaxStandDiscItem(properties, powers, (StandDiscItem) discs.get(0)))
+            );
+        }
+
+        return discs;
+    }
+
+    private static Item registerItem(String name, Item item){
+        return Registry.register(BuiltInRegistries.ITEM, Roundabout.location(name), item);
+    }
+
+    private static Item registerItem(ResourceLocation location, Item item){
+        return Registry.register(BuiltInRegistries.ITEM, location, item);
+    }
 }

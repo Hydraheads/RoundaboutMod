@@ -13,8 +13,12 @@ import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.visages.mobs.*;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
+import org.joml.Vector2f;
 
 public class ModEntities {
     /** Entities are referenced in these files, but forge and fabric need to update
@@ -105,5 +109,18 @@ public class ModEntities {
     public static final ResourceLocation RATT_DART_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/ratt_dart.png");
     public static final ResourceLocation GASOLINE_CAN_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_gasoline_can.png");
 
-
+    /// Creates and registers the stand entity
+    /// @param location The resource location to register the entity at (support for addons)
+    /// @param factory The entity constructor. Usually entity::new
+    /// @param size The entity size. Usually <code>new Vector2f(0.75f, 2.05f)</code>
+    /// @return The stand entity
+    public static <T extends StandEntity> EntityType<T> registerStandEntity(ResourceLocation location, EntityType.EntityFactory<T> factory, Vector2f size)
+    {
+        return Registry.register(
+                BuiltInRegistries.ENTITY_TYPE,
+                location,
+                EntityType.Builder.of(factory, MobCategory.MISC).
+                        sized(size.x(), size.y()).clientTrackingRange(14).build(location.toString())
+        );
+    }
 }
