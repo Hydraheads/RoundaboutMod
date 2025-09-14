@@ -72,6 +72,15 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     @Override
+    /**Override to add disable config*/
+    public boolean isStandEnabled(){
+        return ClientNetworking.getAppropriateConfig().walkingHeartSettings.enableWalkingHeart;
+    }
+    public boolean canWallWalkConfig(){
+        return ClientNetworking.getAppropriateConfig().walkingHeartSettings.enableWallWalking;
+    }
+
+    @Override
     public List<Byte> getPosList(){
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add((byte) 0);
@@ -173,7 +182,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     public void dashOrWallLatch(){
         if (inCombatMode())
             return;
-        if (canLatchOntoWall())
+        if (canLatchOntoWall() && canWallWalkConfig())
             doWallLatchClient();
         else if (!hasExtendedHeelsForWalking())
             dash();
@@ -276,7 +285,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public void wallLatch(){
-        if (canLatchOntoWall()){
+        if (canLatchOntoWall() && canWallWalkConfig()){
             this.setCooldown(PowerIndex.SKILL_3, 6);
             if (!this.self.level().isClientSide()) {
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.WALL_LATCH_EVENT, SoundSource.PLAYERS, 1F, 1f);
@@ -318,7 +327,7 @@ public class PowersWalkingHeart extends NewDashPreset {
             setSkillIcon(context, x, y, 2, StandIcons.GROUND_IMPLANT, PowerIndex.SKILL_2);
         else
             setSkillIcon(context, x, y, 2, StandIcons.GROUND_IMPLANT_OUT, PowerIndex.SKILL_2);
-        if (canLatchOntoWall() || hasExtendedHeelsForWalking())
+        if ((canLatchOntoWall() || hasExtendedHeelsForWalking()) && canWallWalkConfig())
             setSkillIcon(context, x, y, 3, StandIcons.WALL_WALK, PowerIndex.SKILL_3);
         else
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
@@ -872,10 +881,15 @@ public class PowersWalkingHeart extends NewDashPreset {
                 "instruction.roundabout.press_skill", StandIcons.GROUND_IMPLANT,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.wall_walk_move",
-                "instruction.roundabout.press_skill", StandIcons.WALL_WALK,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.firm_swing",
-                "instruction.roundabout.passive", StandIcons.FIRM_SWING,0,level,bypass));
+        if (canWallWalkConfig()) {
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.wall_walk_move",
+                    "instruction.roundabout.press_skill", StandIcons.WALL_WALK, 3, level, bypass));
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.firm_swing",
+                    "instruction.roundabout.passive", StandIcons.FIRM_SWING, 0, level, bypass));
+        } else {
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.firm_swing",
+                    "instruction.roundabout.passive", StandIcons.FIRM_SWING, 0, level, bypass));
+        }
         return $$1;
     }
     @Override

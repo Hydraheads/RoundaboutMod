@@ -143,6 +143,7 @@ public class RoundaboutCommands {
                 ((LivingEntity) entity).setHealth(((LivingEntity) entity).getMaxHealth());
                 if (entity instanceof Player PE){
                     PE.getFoodData().setFoodLevel(20);
+                    PE.getFoodData().setSaturation(14.4F);
                 }
             }
         }

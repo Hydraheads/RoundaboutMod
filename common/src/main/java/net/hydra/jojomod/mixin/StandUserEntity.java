@@ -2990,7 +2990,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private void roundabout$maxUpStep(CallbackInfoReturnable<Float> cir) {
         if (roundabout$getStandPowers() instanceof PowersWalkingHeart PW){
             if (PW.hasExtendedHeelsForWalking()){
-                cir.setReturnValue(1.0F);
+                if (PW.canWallWalkConfig())
+                    cir.setReturnValue(1.0F);
+                else
+                    cir.setReturnValue(2.0F);
                 return;
             } else if (!(rdbt$this() instanceof Player)){
                 cir.setReturnValue(3.0F);
@@ -3272,7 +3275,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (zent != null && zent instanceof LivingEntity LE){
                 ItemStack stack = LE.getMainHandItem();
 
-                if (stack != null && !stack.isEmpty() && stack.is(ModItems.SCISSORS)) {
+                if (stack != null && !stack.isEmpty() && stack.is(ModItems.SCISSORS) && $$0.is(DamageTypes.PLAYER_ATTACK)) {
                     if (MainUtil.getMobBleed(this)) {
                         roundabout$setBleedLevel(0);
                         addEffect(new MobEffectInstance(ModEffects.BLEED, 300, 0), LE);

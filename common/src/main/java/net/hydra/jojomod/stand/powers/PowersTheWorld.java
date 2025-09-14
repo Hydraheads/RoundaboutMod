@@ -74,6 +74,12 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
 
     @Override
+    /**Override to add disable config*/
+    public boolean isStandEnabled(){
+        return ClientNetworking.getAppropriateConfig().theWorldSettings.enableTheWorld;
+    }
+
+    @Override
     public void playSummonSound() {
         if (this.self.isCrouching()){
             return;

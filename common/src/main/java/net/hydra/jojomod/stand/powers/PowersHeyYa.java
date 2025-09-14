@@ -36,6 +36,12 @@ public class PowersHeyYa extends NewDashPreset {
     }
 
     @Override
+    /**Override to add disable config*/
+    public boolean isStandEnabled(){
+        return ClientNetworking.getAppropriateConfig().heyYaSettings.enableHeyYa;
+    }
+
+    @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
         return new PowersHeyYa(entity);
     }

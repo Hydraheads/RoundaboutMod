@@ -537,6 +537,13 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public StandPowers generateStandPowers(LivingEntity entity){
         return new PowersMagiciansRed(entity);
     }
+
+    @Override
+    /**Override to add disable config*/
+    public boolean isStandEnabled(){
+        return ClientNetworking.getAppropriateConfig().magiciansRedSettings.enableMagiciansRed;
+    }
+
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         boolean secondSkillLocked =hasHurricaneSpecial() || this.isChargingCrossfire() || hasHurricaneSingle();

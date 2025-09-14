@@ -237,6 +237,11 @@ public class StandPowers {
     /**Override if your stand can see through justice's fog, consider letting scoping moves see through it*/
     public boolean canSeeThroughFog(){return false;}
 
+    /**Override to add disable config*/
+    public boolean isStandEnabled(){
+        return true;
+    }
+
     /**Stand related things that slow you down or speed you up, override and call super to make
      * any stand ability slow you down*/
     public float inputSpeedModifiers(float basis){
@@ -2650,7 +2655,10 @@ public class StandPowers {
     /**Preloads guard points*/
     public StandPowers generateStandPowersPre(LivingEntity entity){
         ((StandUser)entity).roundabout$setGuardPoints(getMaxGuardPoints());
-        return generateStandPowers(entity);
+        StandPowers powers = generateStandPowers(entity);
+
+        // If the stand powers are enabled, return them. Otherwise, return empty powers.
+        return (powers.isStandEnabled()) ? powers : new StandPowers(entity);
     }
 
 

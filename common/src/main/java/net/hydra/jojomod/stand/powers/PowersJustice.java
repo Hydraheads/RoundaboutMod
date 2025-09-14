@@ -87,6 +87,12 @@ public class PowersJustice extends NewDashPreset {
         return new PowersJustice(entity);
     }
     @Override
+    /**Override to add disable config*/
+    public boolean isStandEnabled(){
+        return ClientNetworking.getAppropriateConfig().justiceSettings.enableJustice;
+    }
+
+    @Override
     public boolean canSummonStand(){
         if (this.getSelf() instanceof Creeper || this.getSelf() instanceof Raider){
             return false;
