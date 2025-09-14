@@ -90,6 +90,11 @@ public abstract class GravityLocalPlayerMixin extends AbstractClientPlayer {
             double $$3 = this.getZ();
             super.move($$0, $$1);
             this.updateAutoJump((float) (this.getY() - $$2), (float) (this.getZ() - $$3));
+        } else {
+            double $$2 = this.getX();
+            double $$3 = this.getZ();
+            super.move($$0, $$1);
+            this.updateAutoJump((float) (this.getX() - $$2), (float) (this.getZ() - $$3));
         }
     }
 
