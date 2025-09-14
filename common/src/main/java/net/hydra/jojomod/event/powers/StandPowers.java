@@ -2656,11 +2656,9 @@ public class StandPowers {
     public StandPowers generateStandPowersPre(LivingEntity entity){
         ((StandUser)entity).roundabout$setGuardPoints(getMaxGuardPoints());
         StandPowers powers = generateStandPowers(entity);
-        if (powers.isStandEnabled()){
-            return powers;
-        } else {
-            return new StandPowers(entity);
-        }
+
+        // If the stand powers are enabled, return them. Otherwise, return empty powers.
+        return (powers.isStandEnabled()) ? powers : new StandPowers(entity);
     }
 
 
