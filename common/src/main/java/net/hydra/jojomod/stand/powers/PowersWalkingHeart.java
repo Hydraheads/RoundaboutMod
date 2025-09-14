@@ -517,14 +517,14 @@ public class PowersWalkingHeart extends NewDashPreset {
             Entity ent = self.level().getEntity(chargeTime);
             if (ent != null){
 
-                HeelSpikeDamageEntityAttack(ent,getSpikeDamage(ent),0.5F,ent,false);
+                HeelSpikeDamageEntityAttack(ent,getSpikeDamage(ent),0.5F,this.self,false);
                 return true;
             }
         } if (move == PowerIndex.POWER_2_BLOCK) {
             Entity ent = self.level().getEntity(chargeTime);
             if (ent != null){
 
-                HeelSpikeDamageEntityAttack(ent,getSpikeDamage(ent),0.7F,ent,true);
+                HeelSpikeDamageEntityAttack(ent,getSpikeDamage(ent),0.7F,this.self,true);
                 return true;
             }
         }
@@ -599,12 +599,12 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public void hitSound(){
-        sendHeelPacket(90);
+        sendHeelPacket(120);
         this.self.level().playSound(null, this.self.blockPosition(),
                 ModSounds.SPIKE_HIT_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
     }
     public void missSound(){
-        sendHeelPacket(90);
+        sendHeelPacket(120);
         this.self.level().playSound(null, this.self.blockPosition(),
                 ModSounds.SPIKE_MISS_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
     }
