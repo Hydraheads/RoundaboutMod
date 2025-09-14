@@ -2989,13 +2989,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     )
     private void roundabout$maxUpStep(CallbackInfoReturnable<Float> cir) {
         if (roundabout$getStandPowers() instanceof PowersWalkingHeart PW){
-            if (PW.hasExtendedHeelsForWalking() && PW.canWallWalkConfig()){
-                cir.setReturnValue(1.0F);
+            if (PW.hasExtendedHeelsForWalking()){
+                if (PW.canWallWalkConfig())
+                    cir.setReturnValue(1.0F);
+                else
+                    cir.setReturnValue(2.0F);
                 return;
             } else if (!(rdbt$this() instanceof Player)){
                 cir.setReturnValue(3.0F);
-            } else if (!PW.canWallWalkConfig()){
-                cir.setReturnValue(2.0F);
             }
         }
     }
