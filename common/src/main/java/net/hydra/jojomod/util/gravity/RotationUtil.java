@@ -69,10 +69,22 @@ public abstract class RotationUtil {
         Vec2 adjustedDir = new Vec2(entity.getYHeadRot(),entity.getXRot());
 
         Direction gravdir = ((IGravityEntity)entity).roundabout$getGravityDirection();
-        if (gravdir != Direction.DOWN){
-            adjustedDir = RotationUtil.rotPlayerToWorld(adjustedDir,gravdir);
+        Direction realDir = Direction.DOWN;
+
+        if (adjustedDir.y > 45){
+            realDir = Direction.DOWN;
+        } else if (adjustedDir.y < -45){
+            realDir = Direction.UP;
+        } else {
+            realDir =  Direction.fromYRot(adjustedDir.x);
         }
-            return Direction.fromYRot(adjustedDir.x);
+
+        if (gravdir != Direction.DOWN){
+            realDir = RotationUtil.dirPlayerToWorld(realDir,gravdir);
+        }
+
+
+        return realDir;
     }
 
     public static Direction dirPlayerToWorld(Direction direction, Direction gravityDirection) {

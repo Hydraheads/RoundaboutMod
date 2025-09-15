@@ -33,6 +33,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Position;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -211,16 +212,15 @@ public class PowersWalkingHeart extends NewDashPreset {
     public boolean canLatchOntoWall(){
         if ((this.self.onGround() && !hasExtendedHeelsForWalking()) || (!this.self.onGround() && hasExtendedHeelsForWalking()))
             return false;
-        BlockPos pos1 = this.self.getOnPos();
+
+        Position mpos = this.self.getPosition(1F);
+        BlockPos pos1 = BlockPos.containing(mpos);
         Direction gravdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
 
-        if (this.self.level().getBlockState(pos1).isSolid()){
-            pos1 = pos1.relative(gravdir.getOpposite());
-        }
-        Direction rd = RotationUtil.getRealFacingDirection(this.self);
+        Direction rd = RotationUtil.getRealFacingDirection2(this.self);
         if (rd == gravdir)
             return false;
-        pos1 = pos1.relative(RotationUtil.getRealFacingDirection(this.self));
+        pos1 = pos1.relative(RotationUtil.getRealFacingDirection2(this.self));
         if (this.self.level().getBlockState(pos1).isSolid()){
             return true;
         }
@@ -290,7 +290,7 @@ public class PowersWalkingHeart extends NewDashPreset {
             if (!this.self.level().isClientSide()) {
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.WALL_LATCH_EVENT, SoundSource.PLAYERS, 1F, 1f);
                 toggleSpikes(true);
-                Direction gd = RotationUtil.getRealFacingDirection(this.self);
+                Direction gd = RotationUtil.getRealFacingDirection2(this.self);
                 setHeelDirection(gd);
                 ((IGravityEntity) this.self).roundabout$setGravityDirection(gd);
                 justFlippedTicks = 7;

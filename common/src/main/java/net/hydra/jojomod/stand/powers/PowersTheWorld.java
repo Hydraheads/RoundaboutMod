@@ -792,7 +792,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                         addEXP(3,LE);
                         MainUtil.makeBleed($$5,0,100,null);
                     } else if (((LivingEntity) $$5).isBlocking()) {
-                        MainUtil.knockShieldPlusStand($$5,40);
+                        MainUtil.knockShieldPlusStand($$5,26);
                     }
 
                     stopSoundsIfNearby(ASSAULT_NOISE, 100, false);
@@ -823,9 +823,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
     public float getGrabThrowStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.85F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.1F));
         } else {
-            return levelupDamageMod(multiplyPowerByStandConfigMobs(7.5F));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(6F));
         }
     }
 
