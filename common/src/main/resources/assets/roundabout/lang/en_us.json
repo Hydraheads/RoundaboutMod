@@ -763,6 +763,8 @@
 
   "ability.roundabout.impale": "Impale",
   "ability.roundabout.impale.desc": "Winds up a deadly attack that may inflict level 3 bleed. You have to get within close range to land it.",
+  "ability.roundabout.impale_blitz": "Impale/Blitz",
+  "ability.roundabout.impale_blitz.desc": "Winds up a deadly attack that may inflict level 3 bleed. You have to get within close range to land it. Press the attack key to use the move early, this alternative version is a fast uppercut that disables shields, it is called Star Blitz.",
   "ability.roundabout.block_grab": "Power Grab (Blocks)",
   "ability.roundabout.block_grab.desc": "Grabs the block you are facing. Attack to throw, Guard to pocket. The harder the block, the more powerful it is. Useful for building in survival mode.",
   "ability.roundabout.item_grab": "Power Grab (Items)",
@@ -1973,6 +1975,10 @@
   "config.roundabout.starFingerCooldown.desc": "Change the length in between using Star Finger. (default is 80 or 4 seconds)",
   "config.roundabout.starFingerInterruptCooldown.name": "Star Finger Interrupt Cooldown",
   "config.roundabout.starFingerInterruptCooldown.desc": "Change the length of interrupt time if you are hit our of star finger. (default is 80 or 4 seconds)",
+  "config.roundabout.blitzAttackCooldown.name": "Star Blitz Cooldown",
+  "config.roundabout.blitzAttackCooldown.desc": "Change the length in between ending impale early with the attack button and using Star Blitz.",
+
+
 
   "config.roundabout.levelsToGetStand.name": "Arrow Stand Level Cost",
   "config.roundabout.levelsToGetStand.desc": "Obtaining a stand from a Stand Arrow costs 15 levels by default.",

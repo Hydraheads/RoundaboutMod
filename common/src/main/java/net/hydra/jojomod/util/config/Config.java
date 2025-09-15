@@ -650,6 +650,8 @@ public class Config implements Cloneable {
         public Integer guardianCooldown;
         @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
         public Integer starFingerCooldown;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer blitzAttackCooldown;
         @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
         public Integer starFingerInterruptCooldown;
     }

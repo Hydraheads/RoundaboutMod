@@ -429,22 +429,29 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     @Override
     public void updateIntMove(int in){
-        ticksForFinger = in;
-        stopSoundsIfNearby(STAR_FINGER, 100, false);
-        stopSoundsIfNearby(STAR_FINGER_2, 100, false);
-        stopSoundsIfNearby(STAR_FINGER_3, 100, false);
-        stopSoundsIfNearby(STAR_FINGER_SILENT, 100, false);
-        if (this.getActivePower() == PowerIndex.POWER_1) {
-            this.animateStand(StarPlatinumEntity.STAR_FINGER_2);
+        if (activePower == PowerIndex.POWER_1) {
+            ticksForFinger = in;
+            stopSoundsIfNearby(STAR_FINGER, 100, false);
+            stopSoundsIfNearby(STAR_FINGER_2, 100, false);
+            stopSoundsIfNearby(STAR_FINGER_3, 100, false);
+            stopSoundsIfNearby(STAR_FINGER_SILENT, 100, false);
+            if (this.getActivePower() == PowerIndex.POWER_1) {
+                this.animateStand(StarPlatinumEntity.STAR_FINGER_2);
+            }
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.DSP_SUMMON_EVENT, SoundSource.PLAYERS,
+                    0.5F, (float) (1.5 + (Math.random() * 0.04)));
         }
-        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.DSP_SUMMON_EVENT, SoundSource.PLAYERS,
-                0.5F, (float) (1.5 + (Math.random() * 0.04)));
     }
 
     public int ticksForFinger = 0;
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
-        if (this.getActivePower() != PowerIndex.POWER_1 || this.attackTimeDuring >= 26) {
+        if (keyIsDown && this.getActivePower() == PowerIndex.POWER_1_SNEAK && this.attackTimeDuring < 24 && attackTimeDuring > 2) {
+            holdDownClick = true;
+            animateStand(StarPlatinumEntity.IMPALE_2);
+            this.attackTimeDuring = -8;
+            tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK_2,getTargetEntityId2(impaleRange));
+        } else if ((this.getActivePower() != PowerIndex.POWER_1 || this.attackTimeDuring >= 26)) {
             super.buttonInputAttack(keyIsDown,options);
         } else {
             if (keyIsDown && ticksForFinger == 100) {
@@ -693,12 +700,57 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         return FingerGrabHitbox(DamageHandler.genHitbox(self, pointVec.x, pointVec.y,
                 pointVec.z, halfReach, halfReach, halfReach), distance);
     }
+
+
+    public float getBlitzKnockback(){
+        return 0.42F;
+    }
+    public void impaleImpact2(Entity entity){
+        this.setAttackTimeDuring(-7);
+        if (entity != null) {
+            float pow;
+            float knockbackStrength;
+            pow = getStarBlitzStrength(entity);
+            knockbackStrength = getBlitzKnockback();
+            if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
+                if (entity instanceof LivingEntity LE) {
+                    addEXP(1, LE);
+                }
+                this.takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
+                entity.setDeltaMovement(entity.getDeltaMovement().add(0,0.3,0));
+            } else {
+                knockShield2(entity, 30);
+            }
+        }
+
+        if (this.getSelf() instanceof Player) {
+            S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().starPlatinumSettings.blitzAttackCooldown);
+        }
+        this.setCooldown(PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown);
+        SoundEvent SE;
+        float pitch = 1F;
+        if (entity != null) {
+            SE = ModSounds.PUNCH_3_SOUND_EVENT;
+            pitch = 0.9F;
+        } else {
+            SE = ModSounds.PUNCH_1_SOUND_EVENT;
+        }
+
+        if (!this.self.level().isClientSide()) {
+            animateStand(StarPlatinumEntity.IMPALE_2);
+            this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+        }
+    }
+
     @Override
     public void handleStandAttack(Player player, Entity target){
             super.handleStandAttack(player,target);
     }
     @Override
     public void handleStandAttack2(Player player, Entity target){
+        if (activePower == PowerIndex.POWER_1_SNEAK) {
+            impaleImpact2(target);
+        }
         if (this.getActivePower() == PowerIndex.POWER_1){
             fingerDamage(target);
         }
@@ -1225,7 +1277,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 "instruction.roundabout.forward_barrage", StandIcons.STAR_PLATINUM_TRAVEL_BARRAGE,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80, getFingerLevel(), "ability.roundabout.star_finger",
                 "instruction.roundabout.press_skill", StandIcons.STAR_PLATINUM_FINGER,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99, getImpaleLevel(), "ability.roundabout.impale",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99, getImpaleLevel(), "ability.roundabout.impale_blitz",
                 "instruction.roundabout.press_skill_crouch", StandIcons.STAR_PLATINUM_IMPALE,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.scope",
                 "instruction.roundabout.press_skill_block", StandIcons.STAR_PLATINUM_SCOPE,1,level,bypas));
@@ -1717,6 +1769,16 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         return super.getSoundFromByte(soundChoice);
     }
 
+
+    public float getStarBlitzStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(((float) ((float) 1* (ClientNetworking.getAppropriateConfig().
+                    starPlatinumSettings.starPlatinumAttackMultOnPlayers*0.01))));
+        } else {
+            return levelupDamageMod(((float) ((float) 5* (ClientNetworking.getAppropriateConfig().
+                    starPlatinumSettings.starPlatinumAttackMultOnMobs*0.01))));
+        }
+    }
 
     @Override
     public float getImpalePunchStrength(Entity entity){

@@ -487,6 +487,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
         }
     }
+
+
     public void playImpaleConnectSoundExtra(){
 
     }

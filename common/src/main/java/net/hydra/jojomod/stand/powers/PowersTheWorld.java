@@ -792,7 +792,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                         addEXP(3,LE);
                         MainUtil.makeBleed($$5,0,100,null);
                     } else if (((LivingEntity) $$5).isBlocking()) {
-                        MainUtil.knockShieldPlusStand($$5,26);
+                        MainUtil.knockShieldPlusStand($$5,30);
                     }
 
                     stopSoundsIfNearby(ASSAULT_NOISE, 100, false);

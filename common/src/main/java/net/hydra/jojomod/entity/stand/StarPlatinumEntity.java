@@ -63,6 +63,7 @@ public class StarPlatinumEntity extends FollowingStandEntity {
     public final AnimationState kick_barrage_end = new AnimationState();
     public final AnimationState kick_barrage_windup = new AnimationState();
     public final AnimationState impale = new AnimationState();
+    public final AnimationState impale2 = new AnimationState();
     public final AnimationState starFinger = new AnimationState();
     public final AnimationState starFinger2 = new AnimationState();
     public final AnimationState finalPunch = new AnimationState();
@@ -70,7 +71,8 @@ public class StarPlatinumEntity extends FollowingStandEntity {
     public final AnimationState phaseGrab = new AnimationState();
     public static final byte
             STAR_FINGER = 82,
-            STAR_FINGER_2 = 83;
+            STAR_FINGER_2 = 83,
+            IMPALE_2 = 84;
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
@@ -169,6 +171,13 @@ public class StarPlatinumEntity extends FollowingStandEntity {
                 this.starFinger2.startIfStopped(this.tickCount);
             } else {
                 this.starFinger2.stop();
+            }
+
+
+            if (this.getAnimation() == IMPALE_2) {
+                this.impale2.startIfStopped(this.tickCount);
+            } else {
+                this.impale2.stop();
             }
 
 
