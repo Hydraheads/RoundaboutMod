@@ -213,9 +213,29 @@ public class PowersWalkingHeart extends NewDashPreset {
         if ((this.self.onGround() && !hasExtendedHeelsForWalking()) || (!this.self.onGround() && hasExtendedHeelsForWalking()))
             return false;
 
-        Position mpos = this.self.getPosition(1F);
-        BlockPos pos1 = BlockPos.containing(mpos);
+        Vec3 mpos = this.self.getPosition(1F);
         Direction gravdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+        switch (gravdir) {
+            case DOWN -> {
+                mpos = mpos.add(0,0.1F,0);
+            }
+            case UP -> {
+                mpos = mpos.add(0,-0.1F,0);
+            }
+            case NORTH -> {
+                mpos = mpos.add(0,0,0.1F);
+            }
+            case SOUTH -> {
+                mpos = mpos.add(0,0,-0.1F);
+            }
+            case WEST -> {
+                mpos = mpos.add(0.1F,0,0);
+            }
+            case EAST -> {
+                mpos = mpos.add(-0.1F,0,0);
+            }
+        }
+        BlockPos pos1 = BlockPos.containing(mpos);
 
         Direction rd = RotationUtil.getRealFacingDirection2(this.self);
         if (rd == gravdir)
