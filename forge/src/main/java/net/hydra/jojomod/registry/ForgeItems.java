@@ -258,6 +258,10 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSoftAndWet(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_SOFT_AND_WET = addToDiscTab(ITEMS.register("max_soft_and_wet_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersSoftAndWet(null))));
+    public static final RegistryObject<Item> STAND_DISC_WALKING_HEART = addToDiscTab(ITEMS.register("walking_heart_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersWalkingHeart(null))));
+    public static final RegistryObject<Item> MAX_STAND_DISC_WALKING_HEART = addToDiscTab(ITEMS.register("max_walking_heart_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersWalkingHeart(null))));
     public static final RegistryObject<Item> STAND_DISC_CINDERELLA = addToDiscTab(ITEMS.register("cinderella_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null))));
     public static final RegistryObject<Item> STAND_DISC_ACHTUNG = addToDiscTab(ITEMS.register("achtung_baby_disc",
@@ -268,10 +272,6 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersHeyYa(null))));
     public static final RegistryObject<Item> STAND_DISC_MANDOM = addToDiscTab(ITEMS.register("mandom_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMandom(null))));
-    public static final RegistryObject<Item> STAND_DISC_WALKING_HEART = addToWIPTab(ITEMS.register("walking_heart_disc",
-            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersWalkingHeart(null))));
-    public static final RegistryObject<Item> MAX_STAND_DISC_WALKING_HEART = addToWIPTab(ITEMS.register("max_walking_heart_disc",
-            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersWalkingHeart(null))));
     public static final RegistryObject<Item> STAND_DISC_D4C = ITEMS.register("d4c_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
     public static final RegistryObject<Item> MAX_STAND_DISC_D4C = ITEMS.register("max_d4c_disc",

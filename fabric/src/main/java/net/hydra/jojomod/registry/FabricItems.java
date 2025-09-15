@@ -315,6 +315,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_MAGICIANS_RED);
                         entries.accept(STAND_DISC_SOFT_AND_WET);
                         entries.accept(MAX_STAND_DISC_SOFT_AND_WET);
+                        entries.accept(STAND_DISC_WALKING_HEART);
+                        entries.accept(MAX_STAND_DISC_WALKING_HEART);
                         entries.accept(STAND_DISC_CINDERELLA);
                         entries.accept(STAND_DISC_ACHTUNG);
                         entries.accept(STAND_DISC_SURVIVOR);
@@ -333,8 +335,6 @@ public class FabricItems {
                         //entries.accept(MAX_STAND_DISC_D4C);
                         //entries.accept(INTERDIMENSIONAL_KEY);
                         //entries.accept(STAND_DISC_WALKING_HEART);
-                        entries.accept(STAND_DISC_WALKING_HEART);
-                        entries.accept(MAX_STAND_DISC_WALKING_HEART);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_RATT);

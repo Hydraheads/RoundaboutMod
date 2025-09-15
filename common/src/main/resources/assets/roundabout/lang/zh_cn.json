@@ -4,6 +4,8 @@
   "text.roundabout.riding_flying_creature": "长按跳跃上升，长按冲刺（技能）下降！",
   "text.roundabout.riding_flying_creature.day": "白天可飞不起来……",
   "text.roundabout.riding_flying_creature.dimension": "这个维度可飞不了……",
+  "text.roundabout.warn_trap_triggered": " 被触发了！",
+  "text.roundabout.warn_unnamed_trap_triggered": "迷雾陷阱被触发了！",
 
   "item.roundabout.stand_arrow": "替身箭",
   "item.roundabout.stand_beetle_arrow": "替身箭（虫形雕塑）",
@@ -64,6 +66,7 @@
   "item.roundabout.killer_queen_disc": "替身光碟",
   "item.roundabout.achtung_baby_disc": "替身光碟",
   "item.roundabout.diver_down_disc": "替身光碟",
+  "item.roundabout.max_walking_heart_disc": "满级替身光碟",
   "item.roundabout.max_ratt_disc": "满级替身光碟",
   "item.roundabout.max_star_platinum_disc": "满级替身光碟",
   "item.roundabout.max_the_world_disc": "满级替身光碟",
@@ -187,7 +190,7 @@
   "effect.roundabout.melting": "融化",
   "effect.roundabout.gravity_flip": "重力翻转",
 
-  "item.roundabout.creative_only.info": "仅创造模式方可获得",
+  "item.roundabout.creative_only.info": "仅创造模式可获得",
 
   "text.roundabout.meteorite": "陨石",
 
@@ -278,8 +281,9 @@
   "block.roundabout.mirror": "镜子",
   "block.roundabout.stereo": "立体声音响",
   "block.roundabout.bubble_scaffold": "泡泡之径",
-  "block.roundabout.fog_block": "浓雾方块",
-  "block.roundabout.fog_block.title": "浓雾",
+  "block.roundabout.fog_block": "迷雾方块",
+  "block.roundabout.fog_trap": "迷雾陷阱",
+  "block.roundabout.fog_block.title": "迷雾",
   "block.roundabout.fog_block_coating.title": "涂层",
   "block.roundabout.stand_fire": "替身之火",
   "block.roundabout.colored_fire_orange": "橙色火焰",
@@ -410,6 +414,8 @@
 
   "commands.roundabout.force_summon.multiple": "于实体 %s 强制召唤替身",
   "commands.roundabout.force_summon.single": "于%s强制召唤替身",
+  "commands.roundabout.justice_fogTrapRange": "将你的迷雾陷阱的触发范围设置为：%s",
+  "commands.roundabout.justice_fogTrapRangeFail" : "你需要拥有[正义]替身以使用此指令",
 
   "commands.roundabout.heal.multiple": "治疗实体 %s",
   "commands.roundabout.heal.single": "治疗%s",
@@ -490,6 +496,13 @@
   "sounds.roundabout.soft_and_wet_barrage_2":  "欧拉",
   "sounds.roundabout.water_encase":  "飞溅",
   "sounds.roundabout.soft_and_wet_kick":  "撞击",
+  "sounds.roundabout.extend_spikes":  "钉住",
+  "sounds.roundabout.wall_latch":  "攀墙",
+  "sounds.roundabout.summon_walking":  "替身被召唤",
+  "sounds.roundabout.heel_raise":  "腿伸长了",
+  "sounds.roundabout.heel_stomp":  "腿变短了",
+  "sounds.roundabout.spike_hit":  "高跟鞋钉住",
+  "sounds.roundabout.spike_miss":  "高跟鞋延长",
 
   "sounds.roundabout.mandom_rewind":  "时间回溯",
 
@@ -599,10 +612,13 @@
   "sounds.roundabout.cinderella_fail":  "哦 吼",
   "sounds.roundabout.cinderella_visage_creation":  "机械运作声……",
 
-  "sounds.roundabout.ratt_summon":  "替身被召唤",
-  "sounds.roundabout.ratt_scope":  "扫描嗡嗡……",
+  "sounds.roundabout.ratt_summon":  "吱~吱！",
+  "sounds.roundabout.ratt_place":  "替身被召唤",
+  "sounds.roundabout.ratt_scope":  "瞄准转轮滋滋",
   "sounds.roundabout.ratt_dart_impact": "飞针命中",
   "sounds.roundabout.ratt_dart_thunk": "飞针击中地面",
+  "sounds.roundabout.ratt_loading": "厄运转轮转动了",
+  "sounds.roundabout.ratt_firing": "溶蚀针开火",
 
   "sounds.roundabout.arcade_impale":  "[街机穿胸]",
   "sounds.roundabout.arcade_long_ts":  "[停止时间]",
@@ -855,6 +871,19 @@
   "ability.roundabout.fire_slam": "全功率火焰冲击",
   "ability.roundabout.fire_slam.desc": "让魔术师之红变为火球向前冲出，碰撞后造成高冲击并散布大范围的火焰，但使用后你将会进入较长的替身无法使用时期。请作为最后一搏。",
 
+  "ability.roundabout.spike_attack_mode": "攻击模式",
+  "ability.roundabout.spike_attack_mode.desc": "按下或是长按攻击键以延长高跟鞋底刺向敌人，对敌人造成伤害、流血并可以利用高跟鞋底将他们拉过来。如果使用时按住交互键，将会将生物推开。此模式使用计量表进行攻击，且计量表必须完成充能方可使用技能，在未使用技能是计量表会自然恢复。技能可穿墙。",
+  "ability.roundabout.heel_plant": "植入鞋跟",
+  "ability.roundabout.heel_plant.desc": "将高跟鞋鞋跟延长并插入地面（不管是哪个面的地面，只要是你脚底下都是地面），让你无视大部分的击退的同时，使你可以再墙上行走。同时，提升横向和纵向的自动跨越高度。开启时将会禁用某些能力，当在空中或是再次按下技能按钮时能力解除。",
+
+
+  "ability.roundabout.wall_walk_move": "攀墙者",
+  "ability.roundabout.wall_walk_move.desc": "让自己鞋子“抓地”上墙，使你可以再墙上行走。植入鞋跟状态下面对墙壁或是在空中时触发。",
+  "ability.roundabout.firm_swing": "坚毅打击",
+  "ability.roundabout.firm_swing.desc": "使得你在植入鞋跟期间所有的攻击都为暴击，因为你“立场坚定”。",
+
+
+
   "ability.roundabout.visage_creation": "面容制造",
   "ability.roundabout.visage_creation.desc": "允许你利用经验制造面容或是制造幸运唇膏。若是NPC使用此替身，消耗资源将变为绿宝石。",
   "ability.roundabout.face_removal": "面容剥离",
@@ -927,6 +956,21 @@
   "ability.roundabout.controlled_burst.desc": "隐匿爆发的弱化变种，降低了有效范围且不会对方块产生影响。展现了对使用者情绪更细致的控制。当你不想让你的目标隐身时很有效。",
   "ability.roundabout.place_invis": "隐形方块替换",
   "ability.roundabout.place_invis.desc": "放置方块并将自己的隐身持续时间与其共享。只在隐身时可用。",
+
+  "ability.roundabout.ratt_scope": "倍镜模式",
+  "ability.roundabout.ratt_scope.desc": "携带溶蚀针并进行缩放，使得使用者可以再移动时设计。",
+  "ability.roundabout.ratt_single": "半自动模式开火",
+  "ability.roundabout.ratt_single.desc": "加速枪膛中的毒针以让其准备好，按下攻击键即可发射。",
+  "ability.roundabout.ratt_burst": "爆发/三连发模式开火",
+  "ability.roundabout.ratt_burst.desc": "将毒针切换形态，此形态会带来更强的融化效果，然而伤害降低。",
+  "ability.roundabout.ratt_place": "放置溶蚀针",
+  "ability.roundabout.ratt_place.desc": "将溶蚀针放置下来，令其可以与你并肩作战。",
+  "ability.roundabout.ratt_place_burst": "溶蚀针爆发模式开火",
+  "ability.roundabout.ratt_place_burst.desc": "令溶蚀针向你鼠标朝向位置进行毒针三连射。",
+  "ability.roundabout.ratt_auto": "全自动模式",
+  "ability.roundabout.ratt_auto.desc": "选择视野中的目标，随后溶蚀针将会自由开火。",
+  "ability.roundabout.ratt_flesh": "血肉方块/小块",
+  "ability.roundabout.ratt_flesh.desc": "洒下已经融化了的生物。可以减速生物，同时难以破坏。然而溶蚀针使用者无视这些负面效果，使得他们能够自由移动且可以通过潜行右键收集这些血肉。",
 
   "ability.roundabout.diver_selection": "潜行者行为选择",
   "ability.roundabout.diver_selection.desc": "开启一个可以选择给自己添加buff的损坏的转轮样子的界面。",
@@ -1022,6 +1066,7 @@
   "skins.roundabout.the_world.ultimate": "究极",
   "skins.roundabout.the_world.ultimate_kars": "究极生物卡兹",
   "skins.roundabout.the_world.scarlet": "猩红",
+  "skins.roundabout.the_world.the_nether": "下界",
 
   "skins.roundabout.justice.base": "第三部",
   "skins.roundabout.justice.skeleton": "骷髅",
@@ -1083,6 +1128,15 @@
   "skins.roundabout.d4c.special": "特制版",
   "skins.roundabout.d4c.grand": "上流人物",
 
+  "skins.roundabout.walking_heart.base": "漫画版",
+  "skins.roundabout.walking_heart.model": "模特儿范",
+  "skins.roundabout.walking_heart.purple": "紫变色",
+  "skins.roundabout.walking_heart.verdant": "青翠岁月",
+  "skins.roundabout.walking_heart.pale": "苍白",
+  "skins.roundabout.walking_heart.valentine": "情人节用品",
+  "skins.roundabout.walking_heart.gothic": "哥特风",
+  "skins.roundabout.walking_heart.spider": "蛛网缠绕",
+
   "skins.roundabout.green_day.base": "Part 5",
 
   "skins.roundabout.ratt.anime" : "动漫版",
@@ -1092,12 +1146,15 @@
   "skins.roundabout.ratt.aztec" : "阿兹特克文明",
   "skins.roundabout.ratt.tower" : "高塔",
   "skins.roundabout.ratt.snowy" : "白雪皑皑",
+  "skins.roundabout.ratt.guardian" : "守卫者",
+  "skins.roundabout.ratt.elder_guardian" : "远古守卫者",
 
   "skins.roundabout.cinderella.base": "第四部",
   "skins.roundabout.cinderella.manga": "漫画版",
   "skins.roundabout.cinderella.zombie": "感染者",
   "skins.roundabout.cinderella.jack_in_the_box": "快餐杰克",
   "skins.roundabout.cinderella.business": "商务服装",
+  "skins.roundabout.cinderella.face_off": "变脸",
 
   "skins.roundabout.hey_ya.manga": "漫画版",
   "skins.roundabout.hey_ya.gothic": "哥特式",
@@ -1169,6 +1226,8 @@
   "unlock_skin.roundabout.justice.bad_bone": "正义：坏入骨髓皮肤解锁！",
   "unlock_skin.roundabout.magicians_red.chagaroth": "魔术师之红：深渊巨兽皮肤解锁！",
   "unlock_skin.roundabout.soft_and_wet.kira": "杀手皇后（第八部）皮肤解锁！",
+  "unlock_skin.roundabout.ratt.guardians": "溶蚀针：守卫者皮肤解锁！",
+  "unlock_skin.roundabout.walking_heart.spider": "缠丝之心皮肤解锁！",
 
   "justice.morph.player": "玩家",
   "justice.morph.villager": "村民",
@@ -1523,6 +1582,11 @@
   "config.roundabout.enableJojoveinVisagesInShop.name": "JoJovein面容",
   "config.roundabout.enableJojoveinVisagesInShop.desc": "面容是否包括为JoJovein(徘徊前身、使用徘徊的服务器和模组包)所制作的面容。例如，其中的静乔斯达面容的模型，来源于被收录的粉丝作品被用于JoJovein。修改后需要重启游戏。",
 
+  "config.roundabout.walkingHeartAttackMultOnPlayers.name": "对玩家伤害倍率",
+  "config.roundabout.walkingHeartAttackMultOnPlayers.desc": "对玩家和替身使者生物造成的伤害倍率。数字为百分比，即100代表伤害为100%，必须大于0，可以小于100以降低造成伤害。若高于100将会造成更高伤害。",
+  "config.roundabout.walkingHeartAttackMultOnMobs.name": "对生物伤害倍率",
+  "config.roundabout.walkingHeartAttackMultOnMobs.desc": "对普通生物造成的伤害倍率。对玩家和替身使者生物造成的伤害倍率。数字为百分比，即100代表伤害为100%，必须大于0，可以小于100以降低造成伤害。若高于100将会造成更高伤害。",
+
   "config.roundabout.softAndWetAttackMultOnPlayers.name": "对玩家伤害倍率",
   "config.roundabout.softAndWetAttackMultOnPlayers.desc": "对玩家和替身使者生物造成的伤害倍率。数字为百分比，即100代表伤害为100%，必须大于0，可以小于100以降低造成伤害。若高于100将会造成更高伤害。",
   "config.roundabout.softAndWetAttackMultOnMobs.name": "对生物伤害倍率",
@@ -1766,6 +1830,8 @@
   "config.roundabout.canUseSurvivorOnBossesInSurvival.name": "生存模式电击boss生物",
   "config.roundabout.canUseSurvivorOnBossesInSurvival.desc": "默认关闭，生存模式下，生存者对boss生物无效，因为平衡。",
 
+  "config.roundabout.fallProtectionOnRelease.name": "释放技能摔落保护",
+  "config.roundabout.fallProtectionOnRelease.desc": "当你离开墙壁开始自由落体时，给予如替身跳一样的衰落保护。",
 
   "config.roundabout.invisibilityPotionAsWell.name": "隐身添加药水效果",
   "config.roundabout.invisibilityPotionAsWell.desc": "如果你想让隐身能力同时附加隐身药水效果，将其开启吧。此举是为了对有些地图mod中对隐身玩家的特定检测。",
@@ -1942,6 +2008,7 @@
   "config.roundabout.major.edit_value": "编辑数值",
   "config.roundabout.major.client_config": "客户端配置文件",
   "config.roundabout.major.common_config": "通常配置文件",
+  "config.roundabout.major.close": "关闭",
 
   "config.roundabout.generalStandUserMobSettings.name": "替身使者生物",
   "config.roundabout.vanillaMinecraftTweaks.name": "原版调整机制",
