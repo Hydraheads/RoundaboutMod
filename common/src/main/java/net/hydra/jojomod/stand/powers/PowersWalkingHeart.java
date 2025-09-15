@@ -483,6 +483,11 @@ public class PowersWalkingHeart extends NewDashPreset {
         return super.tryPower(move,forced);
     }
 
+    /**If the standard left click input should be canceled while your stand is active*/
+    public boolean interceptAttack(){
+        return inCombatMode();
+    }
+
     public void spiderUnlock(){
         if (this.getSelf() instanceof Player PE) {
             Level lv = this.getSelf().level();
