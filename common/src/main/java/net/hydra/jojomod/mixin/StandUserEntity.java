@@ -3287,18 +3287,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
             if (($$0.getEntity() != null || $$0.is(DamageTypes.THROWN)) && !$$0.is(DamageTypes.THORNS)){
                 if (((IEntityAndData)this).roundabout$getTrueInvisibility() > -1 &&
-                        ClientNetworking.getAppropriateConfig().achtungSettings.revealLocationWhenDamagingOrHurt){
+                        ClientNetworking.getAppropriateConfig().achtungSettings.revealLocationWhenHurt){
                     ((IEntityAndData)this).roundabout$setTrueInvisibility(-1);
                 }
                 if ($$0.getEntity() != null){
                     if (((IEntityAndData)$$0.getEntity()).roundabout$getTrueInvisibility() > -1 &&
-                            ClientNetworking.getAppropriateConfig().achtungSettings.revealLocationWhenDamagingOrHurt){
+                            ClientNetworking.getAppropriateConfig().achtungSettings.revealLocationWhenDamaging){
                         ((IEntityAndData)$$0.getEntity()).roundabout$setTrueInvisibility(-1);
                     }
                 }
                 if ($$0.getDirectEntity() != null){
                     if (((IEntityAndData)$$0.getDirectEntity()).roundabout$getTrueInvisibility() > -1 &&
-                            ClientNetworking.getAppropriateConfig().achtungSettings.revealLocationWhenDamagingOrHurt){
+                            ClientNetworking.getAppropriateConfig().achtungSettings.revealLocationWhenDamaging){
                         ((IEntityAndData)$$0.getDirectEntity()).roundabout$setTrueInvisibility(-1);
                     }
                 }
