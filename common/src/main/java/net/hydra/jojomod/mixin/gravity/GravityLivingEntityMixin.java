@@ -49,7 +49,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Map;
 
-@Mixin(value= LivingEntity.class)
+@Mixin(value= LivingEntity.class,priority = 104)
 public abstract class GravityLivingEntityMixin extends Entity implements IGravityLivingEntity {
 
 

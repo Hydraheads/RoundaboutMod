@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.annotation.BooleanOption;
 import net.hydra.jojomod.util.config.annotation.FloatOption;
 import net.hydra.jojomod.util.config.annotation.IntOption;
@@ -55,6 +56,16 @@ public abstract class ConfigManager {
         loadServerConfig();
         loadAdvancedConfig();
         loaded = true;
+    }
+
+    public static void loadWalkingBlacklist()
+    {
+        if (getAdvancedConfig().walkingHeartWalkOnBlockBlacklist != null)
+        {
+
+            MainUtil.walkableBlocks.clear();
+            MainUtil.walkableBlocks.addAll(getAdvancedConfig().walkingHeartWalkOnBlockBlacklist);
+        }
     }
 
     public static void loadStandArrowPool()

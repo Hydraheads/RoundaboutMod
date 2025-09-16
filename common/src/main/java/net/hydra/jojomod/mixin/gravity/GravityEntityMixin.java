@@ -64,7 +64,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.List;
 
-@Mixin(Entity.class)
+@Mixin(value = Entity.class, priority = 100)
 public abstract class GravityEntityMixin implements IGravityEntity {
     // NEW FEATURES
 

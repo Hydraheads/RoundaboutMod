@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(EntityCollisionContext.class)
+@Mixin(value=EntityCollisionContext.class,priority = 104)
 public abstract class GravityEntityCollisionContextMixin {
 
     @Inject(

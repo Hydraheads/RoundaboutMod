@@ -1,7 +1,9 @@
 package net.hydra.jojomod.util.config;
 
+import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.util.config.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -71,4 +73,9 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
+    public Set<String> walkingHeartWalkOnBlockBlacklist = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:barrier"
+            )
+    );
 }

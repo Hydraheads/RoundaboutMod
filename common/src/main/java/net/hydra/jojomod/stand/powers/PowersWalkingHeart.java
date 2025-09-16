@@ -53,6 +53,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -241,10 +242,8 @@ public class PowersWalkingHeart extends NewDashPreset {
         if (rd == gravdir)
             return false;
         pos1 = pos1.relative(RotationUtil.getRealFacingDirection2(this.self));
-        if (this.self.level().getBlockState(pos1).isSolid()){
-            return true;
-        }
-        return false;
+        BlockState bs = this.self.level().getBlockState(pos1);
+        return bs.isSolid() && MainUtil.isBlockWalkable(bs);
     }
 
     public void regularExtendHeels(){
