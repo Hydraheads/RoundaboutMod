@@ -136,6 +136,13 @@ public class MainUtil {
         }
         return true;
     }
+    public static boolean isBlockWalkableSimplified(BlockState bs){
+        ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
+        if (walkableBlocks != null && !walkableBlocks.isEmpty() && rl != null && walkableBlocks.contains(rl.toString())){
+            return false;
+        }
+        return true;
+    }
 
     public static boolean isKnockbackImmune(Entity ent){
         if (ent instanceof LivingEntity LE){
