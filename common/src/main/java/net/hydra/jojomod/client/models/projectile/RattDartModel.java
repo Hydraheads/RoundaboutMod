@@ -23,13 +23,13 @@ public class RattDartModel extends Model {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition bone = partdefinition.addOrReplaceChild("bone", CubeListBuilder.create().texOffs(0, 5).addBox(-0.5F, -1.0F, 0.0F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
-				.texOffs(4, 5).addBox(-0.5F, -2.4F, 0.0F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
-				.texOffs(0, 6).addBox(-0.55F, -3.85F, 0.0F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-0.5F, 6.5F, 0.0F));
+		PartDefinition dart = partdefinition.addOrReplaceChild("dart", CubeListBuilder.create().texOffs(0, 0).addBox(0.0F, -4.0F, -1.0F, 0.0F, 3.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 2.0F, 1.0F));
 
-		PartDefinition cube_r1 = bone.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-0.5F, -0.5F, -1.5F, 1.0F, 1.0F, 4.0F, new CubeDeformation(0.05F)), PartPose.offsetAndRotation(0.5F, -2.2F, 0.05F, -1.5708F, 0.0F, 0.0F));
+		PartDefinition cube_r1 = dart.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(4, 4).addBox(-0.0354F, -21.0F, -0.5404F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.1F, 19.0F, -0.45F, 0.0F, -2.3562F, 0.0F));
 
-		PartDefinition cube_r2 = bone.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(4, 6).addBox(-1.0F, -0.65F, 0.0F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.45F, -0.35F, 0.0F, 0.0F, 1.5708F, 0.0F));
+		PartDefinition cube_r2 = dart.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(4, 0).addBox(0.0F, -21.0F, -1.0F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.35F, 19.0F, -0.15F, 0.0F, -0.7854F, 0.0F));
+
+		PartDefinition cube_r3 = dart.addOrReplaceChild("cube_r3", CubeListBuilder.create().texOffs(2, 0).addBox(0.0F, -23.0F, -0.5F, 0.0F, 3.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 19.0F, -0.5F, 0.0F, -1.5708F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 16, 16);
 	}
