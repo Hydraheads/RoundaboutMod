@@ -1,7 +1,6 @@
 package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.client.models.layers.PreRenderEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
