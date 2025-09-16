@@ -591,7 +591,9 @@ public class Config implements Cloneable {
         @BooleanOption(group = "inherit", value = true)
         public Boolean hidesPlacedBlocks;
         @BooleanOption(group = "inherit", value = true)
-        public Boolean revealLocationWhenDamagingOrHurt;
+        public Boolean revealLocationWhenDamaging;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean revealLocationWhenHurt;
         @BooleanOption(group = "inherit", value = true)
         public Boolean revealLocationWhenFinishedEating;
         @IntOption(group = "inherit", value = 139, min = 0, max = 72000)
