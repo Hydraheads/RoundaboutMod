@@ -1,9 +1,7 @@
 package net.hydra.jojomod.util.config;
 
-import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.util.config.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -54,7 +52,7 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:achtung_baby_disc"
             )
     );
-    public Set<String> naturalStandUserMobPoolv4 = new HashSet<>(
+    public Set<String> naturalStandUserMobPoolv5 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
