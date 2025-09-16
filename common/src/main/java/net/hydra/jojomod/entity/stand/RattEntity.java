@@ -31,7 +31,7 @@ public class RattEntity extends StandEntity {
             ELDER_GUARDIAN_SKIN = 9,
 
             FIRE = 81,
-            FIRE_NO_RECOIL = 82;
+            LOADING = 82;
 
     public List<Byte> getSkinList() {
         return Arrays.asList(
@@ -101,7 +101,7 @@ public class RattEntity extends StandEntity {
 
 
     public final AnimationState fire = new AnimationState();
-    public final AnimationState fire_no_recoil = new AnimationState();
+    public final AnimationState loading = new AnimationState();
 
     @Override
     public void setupAnimationStates() {
@@ -111,10 +111,10 @@ public class RattEntity extends StandEntity {
             } else {
                 this.fire.stop();
             }
-            if (this.getAnimation() == FIRE_NO_RECOIL) {
-                this.fire_no_recoil.startIfStopped(this.tickCount);
+            if (this.getAnimation() == LOADING) {
+                this.loading.startIfStopped(this.tickCount);
             } else {
-                this.fire_no_recoil.stop();
+                this.loading.stop();
             }
         }
         super.setupAnimationStates();

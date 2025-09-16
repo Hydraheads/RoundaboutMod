@@ -151,5 +151,5 @@ public class RattModel<T extends RattEntity> extends StandModel<T> {
 
 
 		this.animate(pEntity.fire, RattAnimations.Fire, pAgeInTicks, 1f);
-		this.animate(pEntity.fire_no_recoil, RattAnimations.FireNoRecoil, pAgeInTicks, 1f);}
+		this.animate(pEntity.loading, RattAnimations.Loading, pAgeInTicks, 1f);}
 }

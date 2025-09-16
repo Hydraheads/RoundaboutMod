@@ -52,14 +52,18 @@ public class RattDartEntity extends AbstractArrow {
         super(entity, world);
     }
 
+    double ding() {
+        double ding = 0.2;
+        return Math.random()*ding-ding/2;
+    }
+
     public void alignDart(LivingEntity player) {
         if ( ((StandUser) player).roundabout$getStandPowers() instanceof PowersRatt PR) {
             if (PR.getStandEntity(player) instanceof RattEntity RE) {
                 Vec3 rots = PR.getRotations(PR.getShootTarget());
                 Vec2 v = new Vec2((float) (-1*Math.cos(rots.y)),
                         (float) (-1*Math.sin(rots.y)) );
-                double ding = 0.2;
-                this.setPos(RE.getEyeP(0).add(new Vec3(Math.random()*ding-ding/2, Mth.clamp(Math.random()*ding-ding/2,-0.1,ding), Math.random()*ding-ding/2)));
+                this.setPos(RE.getEyeP(0).add(new Vec3(ding(), Mth.clamp(ding(),-0.1,3), ding())));
             }
         }
     }

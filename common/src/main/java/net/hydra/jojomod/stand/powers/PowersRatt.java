@@ -63,7 +63,7 @@ public class PowersRatt extends NewDashPreset {
     public static final int PlaceShootCooldown = 40;
     public static final int MaxShootCooldown = 30;
     public static final int[] ShotThresholds = {MinThreshold,50,MaxThreshold};
-    public static final float[] ShotPowerFloats = {3,4.2F,5};
+    public static final float[] ShotPowerFloats = {3,3.2F,4};
     public static final int[] ShotSuperthrowTicks = {4,10,15};
 
 
@@ -350,9 +350,7 @@ public class PowersRatt extends NewDashPreset {
             }
         }
 
-        if (getAttackTime() > 20 && getAnimation() == RattEntity.FIRE_NO_RECOIL) {
-            this.animateStand((byte) -1);
-        }
+
 
         if (this.getActivePower() == PowersRatt.START_CHARGE) {
             updateChargeTime(Mth.clamp(getChargeTime()+4,0,100));
@@ -380,10 +378,7 @@ public class PowersRatt extends NewDashPreset {
 
                 if (e instanceof LivingEntity L) {
                     if (isAuto()) {
-                        Entity f = this.CoolerrayCastEntity(this.getSelf().level(),SE,60);
-                        if (f != null) {BurstFire();}
-
-
+                        BurstFire();
                     } else if (!L.equals(this.getSelf()) && !L.equals(SE)) {
                         if (!MainUtil.getEntityIsTrulyInvisible(e) && L.getEffect(MobEffects.INVISIBILITY) == null) {
                             if (!(L instanceof StandEntity)) {
@@ -650,10 +645,11 @@ public class PowersRatt extends NewDashPreset {
                 }
 
                 if (!isClient()) {
-                    this.animateStand(RattEntity.FIRE_NO_RECOIL);
+                    this.animateStand(RattEntity.LOADING);
                 }
             }
             case PowersRatt.PLACE_BURST -> {
+                this.animateStand(RattEntity.FIRE);
                 this.setPowerNone();
                 this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.RATT_FIRING_EVENT,SoundSource.PLAYERS);
                 if (!isClient()) {
