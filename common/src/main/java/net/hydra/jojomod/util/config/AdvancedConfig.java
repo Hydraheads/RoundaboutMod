@@ -60,7 +60,8 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:magicians_red_disc",
                     "roundabout:cinderella_disc",
                     "roundabout:soft_and_wet_disc",
-                    "roundabout:achtung_baby_disc"
+                    "roundabout:achtung_baby_disc",
+                    "roundabout:walking_heart_disc"
             )
     );
     public Set<String> humanoidOnlyStandUserMobPoolv2 = new HashSet<>(
