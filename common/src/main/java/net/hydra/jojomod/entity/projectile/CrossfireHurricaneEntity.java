@@ -487,7 +487,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
                 PMR.addEXP(2,LE);
                 StandUser userLE = ((StandUser) LE);
                 int ticks = 21;
-                ticks += size*3;
+                ticks += size*2;
                 if (userLE.roundabout$getRemainingFireTicks() > -1){
                     ticks+=userLE.roundabout$getRemainingFireTicks();
                 }

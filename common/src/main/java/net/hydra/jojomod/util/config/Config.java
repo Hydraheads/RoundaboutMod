@@ -397,7 +397,7 @@ public class Config implements Cloneable {
         public Integer redBindManualReleaseCooldown;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer redBindDazeAttackCooldown;
-        @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 110, min = 0, max = 72000)
         public Integer ankhSuccessCooldown;
         @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
         public Integer ankhConcealedCooldown;

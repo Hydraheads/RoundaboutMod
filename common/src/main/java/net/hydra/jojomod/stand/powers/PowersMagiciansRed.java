@@ -2303,7 +2303,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                             ticks+=su.roundabout$getRemainingFireTicks();
                             ticks+=2;
                         } else {
-                            ticks+=60;
+                            ticks+=40;
                         }
                         su.roundabout$setOnStandFire(this.getFireColor(), this.self);
                         su.roundabout$setRemainingStandFireTicks(ticks);
