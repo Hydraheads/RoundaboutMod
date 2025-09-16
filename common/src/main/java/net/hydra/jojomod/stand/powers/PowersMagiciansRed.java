@@ -2878,7 +2878,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.15F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.2F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(3.5F));
         }
@@ -2886,7 +2886,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.5F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.55F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(4.5F));
         }
