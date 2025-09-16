@@ -243,7 +243,7 @@ public class PowersWalkingHeart extends NewDashPreset {
             return false;
         pos1 = pos1.relative(RotationUtil.getRealFacingDirection2(this.self));
         BlockState bs = this.self.level().getBlockState(pos1);
-        return bs.isSolid() && MainUtil.isBlockWalkable(bs);
+        return MainUtil.isBlockWalkable(bs);
     }
 
     public void regularExtendHeels(){
@@ -731,10 +731,10 @@ public class PowersWalkingHeart extends NewDashPreset {
                         BlockPos pos5 = BlockPos.containing(self.getPosition(1).add(newVec5));
                         if (
                                 (
-                                        self.level().getBlockState(pos).isSolid()
-                                                || self.level().getBlockState(pos2).isSolid()
-                                                || self.level().getBlockState(pos4).isSolid()
-                                                || self.level().getBlockState(pos5).isSolid()
+                                        MainUtil.isBlockWalkable(self.level().getBlockState(pos))
+                                                || MainUtil.isBlockWalkable(self.level().getBlockState(pos2))
+                                                || MainUtil.isBlockWalkable(self.level().getBlockState(pos4))
+                                                || MainUtil.isBlockWalkable(self.level().getBlockState(pos5))
                                 )){
                             mercyTicks--;
                         } else {

@@ -127,8 +127,10 @@ public class MainUtil {
     public static ArrayList<String> walkableBlocks = Lists.newArrayList();
 
     public static boolean isBlockWalkable(BlockState bs){
+        if (!bs.isSolid()){
+            return false;
+        }
         ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
-        Roundabout.LOGGER.info("1: "+rl.toString());
         if (walkableBlocks != null && !walkableBlocks.isEmpty() && rl != null && walkableBlocks.contains(rl.toString())){
             return false;
         }
