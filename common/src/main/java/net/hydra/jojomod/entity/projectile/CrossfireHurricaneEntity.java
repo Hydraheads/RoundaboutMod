@@ -1,25 +1,21 @@
 package net.hydra.jojomod.entity.projectile;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.FireProjectile;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
-import net.hydra.jojomod.client.models.layers.PreRenderEntity;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -47,11 +43,10 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implements PreRenderEntity, UnburnableProjectile, FireProjectile {
+public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implements UnburnableProjectile, FireProjectile {
     public CrossfireHurricaneEntity(EntityType<? extends CrossfireHurricaneEntity> $$0, Level $$1) {
         super($$0, $$1);
     }
@@ -581,45 +576,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         }
         return 1;
     }
-    public boolean preRender(Entity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6){
-        if (ent instanceof CrossfireHurricaneEntity cfhe) {
 
-            if (((TimeStop)ent.level()).inTimeStopRange(ent)){
-                $$4 = 0;
-            }
-            LivingEntity user = cfhe.getStandUser();
-            if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
-                if (cfhe.getCrossNumber() > 0) {
-                    if (cfhe.getCrossNumber() < 5) {
-                        if (PMR.hurricaneSpecial == null) {
-                            PMR.hurricaneSpecial = new ArrayList<>();
-                        }
-                        List<CrossfireHurricaneEntity> hurricaneSpecial2 = new ArrayList<>(PMR.hurricaneSpecial) {
-                        };
-                        if (!hurricaneSpecial2.isEmpty()) {
-                            PMR.spinint = PMR.lastSpinInt + ($$4 * PMR.maxSpinint);
-                            int totalnumber = hurricaneSpecial2.size();
-                            double lerpX = (user.getX() * $$4) + (user.xOld * (1.0f - $$4));
-                            double lerpY = (user.getY() * $$4) + (user.yOld * (1.0f - $$4));
-                            double lerpZ = (user.getZ() * $$4) + (user.zOld * (1.0f - $$4));
-                            PMR.transformHurricane(cfhe, totalnumber, lerpX,
-                                    lerpY, lerpZ, getRenderSize());
-                        }
-                    } else if (cfhe.getCrossNumber() == 5){
-
-                        double lerpX = (user.getX() * $$4) + (user.xOld * (1.0f - $$4));
-                        double lerpY = (user.getY() * $$4) + (user.yOld * (1.0f - $$4));
-                        double lerpZ = (user.getZ() * $$4) + (user.zOld * (1.0f - $$4));
-                        PMR.transformHurricane(cfhe, 1, lerpX,
-                                lerpY, lerpZ, getRenderSize());
-                    } else if (cfhe.getCrossNumber() == 6){
-                        PMR.transformGiantHurricane(cfhe);
-                    }
-                }
-            }
-        }
-        return false;
-    }
     @Override
     protected boolean shouldBurn() {
         return false;

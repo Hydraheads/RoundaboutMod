@@ -1,12 +1,7 @@
 package net.hydra.jojomod.entity.stand;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.ILivingEntityAccess;
-import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.client.models.layers.PreRenderEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -14,7 +9,6 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersSurvivor;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -42,7 +36,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
-public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity {
+public class SurvivorEntity extends MultipleTypeStand {
     /**
      * Initialize Stands
      *
@@ -255,15 +249,8 @@ public class SurvivorEntity extends MultipleTypeStand implements PreRenderEntity
     }
 
     /**it instantly rotates towards its server rotation instead of awkwardly spinning for a few seconds*/
-    @Override
-    public boolean preRender(Entity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
-        float lerpYRot = (float) ((ILivingEntityAccess)ent).roundabout$getLerpYRot();
-        ent.yRotO = lerpYRot;
-        ent.setYRot(lerpYRot);
-        ent.setYBodyRot(lerpYRot);
-        ent.setYHeadRot(lerpYRot);
-        return false;
-    }
+
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();

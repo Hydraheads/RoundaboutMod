@@ -123,7 +123,8 @@ public class MainUtil {
     public static boolean isKnockbackImmune(Entity ent){
         if (ent instanceof LivingEntity LE){
             StandUser SU = ((StandUser) LE);
-            if (SU.roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()){
+            if (SU.roundabout$getStandPowers() instanceof PowersWalkingHeart PW && (PW.hasExtendedHeelsForWalking()
+            || (SU.roundabout$getActive() && ent instanceof Mob mb && mb.onGround()))){
                 return true;
             }
 

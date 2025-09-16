@@ -6,6 +6,9 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.gui.*;
+import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
+import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
+import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModMessages;
@@ -64,6 +67,8 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Unique;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.StringTokenizer;
 
@@ -125,6 +130,78 @@ public class ClientUtil {
             }
         }
     }
+    public static void preRenderLifeTracker(LifeTrackerEntity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
+        ent.travelAheadRender($$4);
+    }
+    public static void preRenderCrossfire(CrossfireHurricaneEntity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6){
+            if (((TimeStop)ent.level()).inTimeStopRange(ent)){
+                $$4 = 0;
+            }
+            LivingEntity user = ent.getStandUser();
+            if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+                if (ent.getCrossNumber() > 0) {
+                    if (ent.getCrossNumber() < 5) {
+                        if (PMR.hurricaneSpecial == null) {
+                            PMR.hurricaneSpecial = new ArrayList<>();
+                        }
+                        List<CrossfireHurricaneEntity> hurricaneSpecial2 = new ArrayList<>(PMR.hurricaneSpecial) {
+                        };
+                        if (!hurricaneSpecial2.isEmpty()) {
+                            PMR.spinint = PMR.lastSpinInt + ($$4 * PMR.maxSpinint);
+                            int totalnumber = hurricaneSpecial2.size();
+                            double lerpX = (user.getX() * $$4) + (user.xOld * (1.0f - $$4));
+                            double lerpY = (user.getY() * $$4) + (user.yOld * (1.0f - $$4));
+                            double lerpZ = (user.getZ() * $$4) + (user.zOld * (1.0f - $$4));
+                            PMR.transformHurricane(ent, totalnumber, lerpX,
+                                    lerpY, lerpZ, ent.getRenderSize());
+                        }
+                    } else if (ent.getCrossNumber() == 5){
+
+                        double lerpX = (user.getX() * $$4) + (user.xOld * (1.0f - $$4));
+                        double lerpY = (user.getY() * $$4) + (user.yOld * (1.0f - $$4));
+                        double lerpZ = (user.getZ() * $$4) + (user.zOld * (1.0f - $$4));
+                        PMR.transformHurricane(ent, 1, lerpX,
+                                lerpY, lerpZ, ent.getRenderSize());
+                    } else if (ent.getCrossNumber() == 6){
+                        PMR.transformGiantHurricane(ent);
+                    }
+                }
+            }
+    }
+
+    public static void preRenderSurvivor(Entity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
+        float lerpYRot = (float) ((ILivingEntityAccess)ent).roundabout$getLerpYRot();
+        ent.yRotO = lerpYRot;
+        ent.setYRot(lerpYRot);
+        ent.setYBodyRot(lerpYRot);
+        ent.setYHeadRot(lerpYRot);
+    }
+
+    public static void preRenderCinderellaMask(CinderellaVisageDisplayEntity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
+
+
+        if (((TimeStop) ent.level()).inTimeStopRange(ent)) {
+            $$4 = 0;
+        }
+        LivingEntity user = ent.getStandUser();
+        if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersCinderella PCR) {
+            if (PCR.floatingVisages == null) {
+                PCR.floatingVisages = new ArrayList<>();
+            }
+            List<CinderellaVisageDisplayEntity> hurricaneSpecial2 = new ArrayList<>(PCR.floatingVisages) {
+            };
+            if (!hurricaneSpecial2.isEmpty()) {
+                PCR.spinint = PCR.lastSpinInt + ($$4 * PCR.maxSpinint);
+                int totalnumber = hurricaneSpecial2.size();
+                double lerpX = (user.getX() * $$4) + (user.xOld * (1.0f - $$4));
+                double lerpY = (user.getY() * $$4) + (user.yOld * (1.0f - $$4));
+                double lerpZ = (user.getZ() * $$4) + (user.zOld * (1.0f - $$4));
+                PCR.transformFloatingVisages(ent, totalnumber, lerpX,
+                        lerpY, lerpZ, ent.getRenderSize());
+            }
+        }
+    }
+
     public static @Nullable Connection getC2SConnection()
     {
         Minecraft client = Minecraft.getInstance();
