@@ -815,10 +815,17 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         return false;
     }
     public float getAssaultStrength(Entity entity){
+        float mult = 1;
+        if (getAttackTimeDuring() > 95){
+            mult = 1.5F;
+        } else if (getAttackTimeDuring() > 70){
+            mult = 1.25F;
+        }
+
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.7F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.7F*mult));
         } else {
-            return levelupDamageMod(multiplyPowerByStandConfigMobs(7F));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(7F*mult));
         }
     }
     public float getGrabThrowStrength(Entity entity){
