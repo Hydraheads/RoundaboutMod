@@ -76,4 +76,12 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:barrier"
             )
     );
+
+
+    public Set<String> standBlockGrabBlacklist = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:crying_obsidian",
+                    "minecraft:ancient_debris"
+            )
+    );
 }

@@ -125,7 +125,15 @@ public class MainUtil {
 
 
     public static ArrayList<String> walkableBlocks = Lists.newArrayList();
+    public static ArrayList<String> standBlockGrabBlacklist = Lists.newArrayList();
 
+    public static boolean isBlockBlacklisted(BlockState bs){
+        ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
+        if (standBlockGrabBlacklist != null && !standBlockGrabBlacklist.isEmpty() && rl != null && standBlockGrabBlacklist.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
     public static boolean isBlockWalkable(BlockState bs){
         if (!bs.isSolid()){
             return false;

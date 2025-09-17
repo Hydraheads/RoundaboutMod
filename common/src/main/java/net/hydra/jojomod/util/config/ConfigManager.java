@@ -62,9 +62,13 @@ public abstract class ConfigManager {
     {
         if (getAdvancedConfig().walkingHeartWalkOnBlockBlacklist != null)
         {
-
             MainUtil.walkableBlocks.clear();
             MainUtil.walkableBlocks.addAll(getAdvancedConfig().walkingHeartWalkOnBlockBlacklist);
+        }
+        if (getAdvancedConfig().standBlockGrabBlacklist != null)
+        {
+            MainUtil.standBlockGrabBlacklist.clear();
+            MainUtil.standBlockGrabBlacklist.addAll(getAdvancedConfig().standBlockGrabBlacklist);
         }
     }
 

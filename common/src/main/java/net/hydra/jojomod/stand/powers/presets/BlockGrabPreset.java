@@ -873,8 +873,9 @@ public class BlockGrabPreset extends NewPunchingStand {
 
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
                 BlockState state = this.getSelf().level().getBlockState(this.grabBlock);
-                if (this.grabBlock != null &&
-                        grabBlock.distSqr(this.getSelf().getOnPos()) <= getGrabRange()
+                if (this.grabBlock != null && !MainUtil.isBlockBlacklisted(state)
+                        && !MainUtil.confirmIsOre(state)
+                        && grabBlock.distSqr(this.getSelf().getOnPos()) <= getGrabRange()
                         && state.getBlock().isCollisionShapeFullBlock(state, this.getSelf().level(), this.grabBlock)
                         && !state.is(Blocks.REINFORCED_DEEPSLATE)
                         && !(state.getBlock() instanceof InfestedBlock)
@@ -953,7 +954,8 @@ public class BlockGrabPreset extends NewPunchingStand {
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved() &&
                     this.getSelf() instanceof Player) {
                 ItemStack stack = ((Player)this.getSelf()).getInventory().getItem(this.grabInventorySlot);
-                if (!stack.isEmpty() && !(stack.getItem() instanceof BlockItem &&
+                if (!stack.isEmpty() && !(stack.getItem() instanceof BlockItem
+                        && !MainUtil.isBlockBlacklisted(((BlockItem)stack.getItem()).getBlock().defaultBlockState()) &&
                         ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock)) {
                     /**Boat throw*/
                     if (stack.getItem() instanceof BoatItem BE
