@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPermaCasting;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -13,8 +14,10 @@ import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 
@@ -23,7 +26,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
 import java.util.List;
@@ -101,9 +109,13 @@ public class PowersGreenDay extends NewPunchingStand {
         /**Making dash usable on both key presses*/
         switch (context)
         {
-            case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
+            case SKILL_3_NORMAL -> {
                 Roundabout.LOGGER.info("dash");
                 dash();
+            }
+            case SKILL_3_CROUCH -> {
+                Roundabout.LOGGER.info("Separation_Leap");
+                tryToStandLeapClient();
             }
             case SKILL_4_CROUCH, SKILL_4_CROUCH_GUARD -> {
                 Stitch();
@@ -134,6 +146,9 @@ public class PowersGreenDay extends NewPunchingStand {
     public void tickPower() {
         moldShenanigans();
         super.tickPower();
+        if(crawlTimer > 0){
+            forceCrawl();
+        }
     }
 
     public void Stitch(){
@@ -154,8 +169,61 @@ public class PowersGreenDay extends NewPunchingStand {
         }
 
     }
+    public int getLeapLevel(){
+        return 3;
+    }
+    public int bonusLeapCount = -1;
+    public int crawlTimer = 0;
+    public void bigLeap(LivingEntity entity,float range, float mult){
+        Vec3 vec3d = entity.getEyePosition(0);
+        Vec3 vec3d2 = entity.getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+        BlockHitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
+
+        double mag = this.getSelf().getPosition(1).distanceTo(
+                new Vec3(blockHit.getLocation().x, blockHit.getLocation().y,blockHit.getLocation().z))*0.75+1;
+
+        MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
+                ((blockHit.getLocation().x - this.getSelf().getX())/mag)*mult,
+                (0.6+Math.max((blockHit.getLocation().y - this.getSelf().getY())/mag,0))*mult,
+                ((blockHit.getLocation().z - this.getSelf().getZ())/mag)*mult
+        );
+
+    }
+    public void tryToStandLeapClient() {
+
+        if (vaultOrFallBraceFails()) {
+            if (this.getSelf().onGround()) {
+                boolean jojoveinLikeKeys = !ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpAndDashShareCooldown;
+                if ((jojoveinLikeKeys && !this.onCooldown(PowerIndex.SKILL_3)) ||
+                        (!jojoveinLikeKeys && !this.onCooldown(PowerIndex.GLOBAL_DASH))) {
+                    if (canExecuteMoveWithLevel(getLeapLevel())) {
+                        if (jojoveinLikeKeys) {
+                            this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
+                        } else {
+                            this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
+                        }
+                        crawlTimer = 120;
+                        bonusLeapCount = 3;
+                        bigLeap(this.getSelf(), 20, 1);
+                        ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+                        ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_MOVEMENT, true);
+                        tryPowerPacket(PowerIndex.SNEAK_MOVEMENT);
+                    }
+                }
+            }
+        }
+    }
+
+    public void forceCrawl(){
+        this.self.setSwimming(true);
+        this.self.setPose(Pose.SWIMMING);
+        crawlTimer --;
+        
 
 
+    }
     public boolean StitchHeal(float hp, LivingEntity entity) {
 
         if(!isClient()) {
@@ -228,36 +296,6 @@ public class PowersGreenDay extends NewPunchingStand {
                             0,1,-1,1,0.12);
 
                 }
-
-
-                //List<Entity> entityList = DamageHandler.genHitbox(this.getSelf(), this.getSelf().getX(), this.getSelf().getY(),
-                 //       this.getSelf().getZ(), 50, 50, 50);
-               // if (!entityList.isEmpty()){
-             //       for (Entity value : entityList) {
-           //             if (!value.is(this.self)){
-         //                   if (value instanceof LivingEntity){
-       //                         LivingEntity creature = (LivingEntity) value;
-     //                           if(value.getY() < this.self.getY() && (value.getDeltaMovement().y<-0.0784000015258789)) {
-   //                                 for (int i = 0; i < 3; i = i + 1) {
-
-                              //          double width = value.getBbWidth();
-                             //           double height = value.getBbHeight();
-                             //           double randomX = Roundabout.RANDOM.nextDouble(0 - (width / 2), width / 2);
-                             //           double randomY = Roundabout.RANDOM.nextDouble(0 - (height / 2), height / 2);
-                             //           double randomZ = Roundabout.RANDOM.nextDouble(0 - (width / 2), width / 2);
-                             //           ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MOLD,
-                            //                    value.getX() + randomX, (value.getY() + height / 2) + randomY, value.getZ() + randomZ,
-                            //                    0, value.getDeltaMovement().x, value.getDeltaMovement().y, value.getDeltaMovement().z,
-                            //                    0.12);
-
-                          //          }
-                        //        }
-
-                      //      }
-
-                    //    }
-                  //  }
-                //}
 
             }
         }
