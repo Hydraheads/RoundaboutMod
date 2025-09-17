@@ -265,9 +265,9 @@ public class BlockGrabPreset extends NewPunchingStand {
 
     public float getGrabThrowStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return 2;
+            return 1.1F;
         } else {
-            return 7;
+            return 6;
         }
     }
 
@@ -436,6 +436,10 @@ public class BlockGrabPreset extends NewPunchingStand {
                         }
 
                         return true;
+                    } else {
+                        this.setAttackTime(0);
+                        this.setActivePowerPhase(getActivePowerPhaseMax());
+                        this.setAttackTimeMax(24);
                     }
                     return false;
                 }
