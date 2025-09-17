@@ -874,7 +874,6 @@ public class BlockGrabPreset extends NewPunchingStand {
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
                 BlockState state = this.getSelf().level().getBlockState(this.grabBlock);
                 if (this.grabBlock != null && !MainUtil.isBlockBlacklisted(state)
-                        && !MainUtil.confirmIsOre(state)
                         && grabBlock.distSqr(this.getSelf().getOnPos()) <= getGrabRange()
                         && state.getBlock().isCollisionShapeFullBlock(state, this.getSelf().level(), this.grabBlock)
                         && !state.is(Blocks.REINFORCED_DEEPSLATE)
