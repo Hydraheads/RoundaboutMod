@@ -644,7 +644,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     @Override
     public float getFinalAttackKnockback(){
-        return (((float)this.chargedFinal/(float)maxSuperHitTime)*2.4F);
+        return (((float)this.chargedFinal/(float)maxSuperHitTime)*2.0F);
     }
     @Override
     public float getFinalPunchStrength(Entity entity){
@@ -788,11 +788,11 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                         !$$5.isInvulnerable() && $$5.isAlive() && !(this.self.isPassenger() &&
                         this.self.getVehicle().getUUID() == $$5.getUUID()) && stand.getSensing().hasLineOfSight($$5)){
 
-                    if (this.StandDamageEntityAttack($$5,getAssaultStrength($$5), 3F, this.self)){
+                    if (this.StandDamageEntityAttack($$5,getAssaultStrength($$5), 0.4F, this.self)){
                         addEXP(3,LE);
                         MainUtil.makeBleed($$5,0,100,null);
                     } else if (((LivingEntity) $$5).isBlocking()) {
-                        MainUtil.knockShieldPlusStand($$5,30);
+                        MainUtil.knockShieldPlusStand($$5,40);
                     }
 
                     stopSoundsIfNearby(ASSAULT_NOISE, 100, false);
@@ -815,10 +815,17 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         return false;
     }
     public float getAssaultStrength(Entity entity){
+        float mult = 1;
+        if (getAttackTimeDuring() > 95){
+            mult = 1.5F;
+        } else if (getAttackTimeDuring() > 70){
+            mult = 1.25F;
+        }
+
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.7F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.7F*mult));
         } else {
-            return levelupDamageMod(multiplyPowerByStandConfigMobs(7F));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(7F*mult));
         }
     }
     public float getGrabThrowStrength(Entity entity){

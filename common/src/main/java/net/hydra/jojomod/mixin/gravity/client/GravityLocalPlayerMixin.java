@@ -28,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Iterator;
 import java.util.stream.StreamSupport;
 
-@Mixin(LocalPlayer.class)
+@Mixin(value=LocalPlayer.class,priority = 104)
 public abstract class GravityLocalPlayerMixin extends AbstractClientPlayer {
     public GravityLocalPlayerMixin(ClientLevel world, GameProfile profile) {
         super(world, profile);

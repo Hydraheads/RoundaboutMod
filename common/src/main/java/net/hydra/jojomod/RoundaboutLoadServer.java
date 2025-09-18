@@ -11,6 +11,7 @@ public class RoundaboutLoadServer {
     {
         Networking.setServer(server);
         ConfigManager.loadStandArrowPool();
+        ConfigManager.loadWalkingBlacklist();
         DynamicWorld.loadDynamicWorlds(server);
     }
 }

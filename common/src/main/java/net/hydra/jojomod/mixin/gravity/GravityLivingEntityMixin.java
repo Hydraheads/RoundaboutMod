@@ -34,6 +34,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 import org.jetbrains.annotations.Nullable;
@@ -49,7 +50,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Map;
 
-@Mixin(value= LivingEntity.class)
+@Mixin(value= LivingEntity.class,priority = 104)
 public abstract class GravityLivingEntityMixin extends Entity implements IGravityLivingEntity {
 
 
@@ -720,10 +721,18 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
         if (!$$0.is(DamageTypeTags.BYPASSES_SHIELD) && this.isBlocking() && !$$2) {
             Vec3 $$4 = $$0.getSourcePosition();
             if ($$4 != null) {
-                Vec3 $$5 = RotationUtil.vecWorldToPlayer(this.getViewVector(1.0F), gravityDirection);
+
+                Vec2 rah = RotationUtil.rotPlayerToWorld(this.getViewYRot(1f), this.getViewXRot(1.0F), gravityDirection);
+                Vec3 $$5 = RotationUtil.vecWorldToPlayer(this.calculateViewVector(rah.y, rah.x),gravityDirection);
 
                 Vec3 $$6 = $$4.vectorTo(this.position()).normalize();
                 $$6 = new Vec3($$6.x, 0.0, $$6.z);
+                if (gravityDirection == Direction.NORTH || gravityDirection == Direction.SOUTH){
+                    $$6 = new Vec3($$6.x, $$6.y, 0.0);
+                } if (gravityDirection == Direction.EAST || gravityDirection == Direction.WEST){
+                    $$6 = new Vec3(0.0, $$6.y, $$6.z);
+                }
+
                 if ($$6.dot($$5) < 0.0) {
                     cir.setReturnValue(true);
                     return;

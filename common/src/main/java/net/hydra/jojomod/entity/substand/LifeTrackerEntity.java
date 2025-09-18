@@ -1,8 +1,6 @@
 package net.hydra.jojomod.entity.substand;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.client.models.layers.PreRenderEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -10,7 +8,6 @@ import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -32,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class LifeTrackerEntity extends LivingEntity implements PreRenderEntity {
+public class LifeTrackerEntity extends LivingEntity {
     public LifeTrackerEntity(EntityType<LifeTrackerEntity> $$0, Level $$1) {
         super($$0, $$1);
     }
@@ -83,12 +80,7 @@ public class LifeTrackerEntity extends LivingEntity implements PreRenderEntity {
         travelAhead();
     }
 
-    public boolean preRender(Entity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
-        if (ent instanceof LifeTrackerEntity tracker) {
-            tracker.travelAheadRender($$4);
-        }
-        return false;
-    }
+
     public void travelAhead(){
         if (!mustBePushed() && this.getUser() != null) {
             Vec3 junkPos = MainUtil.getAheadVec(this.getUser(), 3).getLocation();

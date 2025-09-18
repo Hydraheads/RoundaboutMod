@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(Mob.class)
+@Mixin(value=Mob.class,priority = 104)
 public abstract class GravityMobMixin extends LivingEntity implements Targeting {
 
     @Shadow protected abstract float rotlerp(float f, float g, float h);

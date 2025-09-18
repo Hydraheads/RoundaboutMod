@@ -8,6 +8,10 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.ILevelRenderer;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
+import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
+import net.hydra.jojomod.entity.stand.SurvivorEntity;
+import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.SavedSecond;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -103,12 +107,19 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
         }
 
         if (!roundabout$recurse) {
-            if (entity instanceof PreRenderEntity pre) {
-                if (pre.preRender(entity, cameraX, cameraY, cameraZ, partialTick, stack, buffer)) {
-                    ci.cancel();
-                    ((IEntityAndData) entity).roundabout$setExclusiveLayers(false);
+            if (entity.level().isClientSide()) {
+                if (entity instanceof CinderellaVisageDisplayEntity pre) {
+                    ClientUtil.preRenderCinderellaMask(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
+                } else if (entity instanceof SurvivorEntity pre) {
+                    ClientUtil.preRenderSurvivor(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
+                } else if (entity instanceof CrossfireHurricaneEntity pre) {
+                    ClientUtil.preRenderCrossfire(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
+                } else if (entity instanceof LifeTrackerEntity pre) {
+                    ClientUtil.preRenderLifeTracker(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
                 }
             }
+            //ci.cancel();
+            //((IEntityAndData) entity).roundabout$setExclusiveLayers(false);
         }
     }
     @Inject(method = "renderEntity(Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V",

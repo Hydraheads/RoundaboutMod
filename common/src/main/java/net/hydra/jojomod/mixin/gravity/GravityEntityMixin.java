@@ -64,7 +64,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.List;
 
-@Mixin(Entity.class)
+@Mixin(value = Entity.class, priority = 100)
 public abstract class GravityEntityMixin implements IGravityEntity {
     // NEW FEATURES
 
@@ -1059,9 +1059,14 @@ public abstract class GravityEntityMixin implements IGravityEntity {
             cancellable = true
     )
     private void roundabout$updateFluidHeightAndDoFluidPushing(TagKey<Fluid> $$0, double $$1, CallbackInfoReturnable<Boolean> cir) {
+        boolean counterPushing = false;
+        if (rdbt$this() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW
+        && PW.hasExtendedHeelsForWalking()){
+            counterPushing = true;
+        }
 
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
-        if (gravityDirection == Direction.DOWN) return;
+        if (gravityDirection == Direction.DOWN && !counterPushing) return;
 
         if (this.touchingUnloadedChunk()) {
             cir.setReturnValue(false);
@@ -1075,6 +1080,9 @@ public abstract class GravityEntityMixin implements IGravityEntity {
             int $$8 = Mth.ceil($$2.maxZ);
             double $$9 = 0.0;
             boolean $$10 = this.isPushedByFluid();
+            if (counterPushing){
+                $$10 = false;
+            }
             boolean $$11 = false;
             Vec3 $$12 = Vec3.ZERO;
             int $$13 = 0;

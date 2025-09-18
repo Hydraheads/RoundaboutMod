@@ -1,23 +1,16 @@
 package net.hydra.jojomod.entity.projectile;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
-import net.hydra.jojomod.client.models.layers.PreRenderEntity;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersCinderella;
 import net.hydra.jojomod.util.MainUtil;
-import net.hydra.jojomod.util.gravity.GravityAPI;
-import net.hydra.jojomod.util.gravity.RotationUtil;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -29,14 +22,11 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
-public class CinderellaVisageDisplayEntity extends ThrowableItemProjectile implements UnburnableProjectile, PreRenderEntity {
+public class CinderellaVisageDisplayEntity extends ThrowableItemProjectile implements UnburnableProjectile {
 
     @Override
     protected float getGravity() {
@@ -278,32 +268,5 @@ public class CinderellaVisageDisplayEntity extends ThrowableItemProjectile imple
 
     public float getAccrualRate(){
         return 1;
-    }
-    @Override
-    public boolean preRender(Entity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
-        if (ent instanceof CinderellaVisageDisplayEntity cfhe) {
-
-            if (((TimeStop)ent.level()).inTimeStopRange(ent)){
-                $$4 = 0;
-            }
-            LivingEntity user = cfhe.getStandUser();
-            if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersCinderella PCR) {
-                        if (PCR.floatingVisages == null) {
-                            PCR.floatingVisages = new ArrayList<>();
-                        }
-                        List<CinderellaVisageDisplayEntity> hurricaneSpecial2 = new ArrayList<>(PCR.floatingVisages) {
-                        };
-                        if (!hurricaneSpecial2.isEmpty()) {
-                            PCR.spinint = PCR.lastSpinInt + ($$4 * PCR.maxSpinint);
-                            int totalnumber = hurricaneSpecial2.size();
-                            double lerpX = (user.getX() * $$4) + (user.xOld * (1.0f - $$4));
-                            double lerpY = (user.getY() * $$4) + (user.yOld * (1.0f - $$4));
-                            double lerpZ = (user.getZ() * $$4) + (user.zOld * (1.0f - $$4));
-                            PCR.transformFloatingVisages(cfhe, totalnumber, lerpX,
-                                    lerpY, lerpZ, getRenderSize());
-                        }
-            }
-        }
-        return false;
     }
 }

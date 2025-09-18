@@ -52,7 +52,7 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:achtung_baby_disc"
             )
     );
-    public Set<String> naturalStandUserMobPoolv4 = new HashSet<>(
+    public Set<String> naturalStandUserMobPoolv5 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
@@ -71,4 +71,17 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
+    public Set<String> walkingHeartWalkOnBlockBlacklist = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:barrier"
+            )
+    );
+
+
+    public Set<String> standBlockGrabBlacklist = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:crying_obsidian",
+                    "minecraft:ancient_debris"
+            )
+    );
 }

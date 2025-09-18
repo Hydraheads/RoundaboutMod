@@ -1,6 +1,7 @@
 package net.hydra.jojomod.util;
 
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.primitives.Floats;
 import net.hydra.jojomod.Roundabout;
@@ -36,6 +37,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -120,10 +122,41 @@ public class MainUtil {
         return false;
     }
 
+
+
+    public static ArrayList<String> walkableBlocks = Lists.newArrayList();
+    public static ArrayList<String> standBlockGrabBlacklist = Lists.newArrayList();
+
+    public static boolean isBlockBlacklisted(BlockState bs){
+        ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
+        if (standBlockGrabBlacklist != null && !standBlockGrabBlacklist.isEmpty() && rl != null && standBlockGrabBlacklist.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isBlockWalkable(BlockState bs){
+        if (!bs.isSolid()){
+            return false;
+        }
+        ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
+        if (walkableBlocks != null && !walkableBlocks.isEmpty() && rl != null && walkableBlocks.contains(rl.toString())){
+            return false;
+        }
+        return true;
+    }
+    public static boolean isBlockWalkableSimplified(BlockState bs){
+        ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
+        if (walkableBlocks != null && !walkableBlocks.isEmpty() && rl != null && walkableBlocks.contains(rl.toString())){
+            return false;
+        }
+        return true;
+    }
+
     public static boolean isKnockbackImmune(Entity ent){
         if (ent instanceof LivingEntity LE){
             StandUser SU = ((StandUser) LE);
-            if (SU.roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()){
+            if (SU.roundabout$getStandPowers() instanceof PowersWalkingHeart PW && (PW.hasExtendedHeelsForWalking()
+            || (SU.roundabout$getActive() && ent instanceof Mob mb && mb.onGround()))){
                 return true;
             }
 

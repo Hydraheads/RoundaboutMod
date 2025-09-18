@@ -53,6 +53,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -241,10 +242,8 @@ public class PowersWalkingHeart extends NewDashPreset {
         if (rd == gravdir)
             return false;
         pos1 = pos1.relative(RotationUtil.getRealFacingDirection2(this.self));
-        if (this.self.level().getBlockState(pos1).isSolid()){
-            return true;
-        }
-        return false;
+        BlockState bs = this.self.level().getBlockState(pos1);
+        return MainUtil.isBlockWalkable(bs);
     }
 
     public void regularExtendHeels(){
@@ -715,34 +714,46 @@ public class PowersWalkingHeart extends NewDashPreset {
                 if (justFlippedTicks > 0){
                     justFlippedTicks--;
                 } else {
-                    if (self.onGround()){
+                    Vec3 newVec = new Vec3(0,-0.2,0);
+                    Vec3 newVec2 = new Vec3(0,-1.0,0);
+                    Vec3 newVec4 = new Vec3(0,-0.5,0);
+                    Vec3 newVec5 = new Vec3(0,-1.1,0);
+
+                    newVec = RotationUtil.vecPlayerToWorld(newVec,((IGravityEntity)self).roundabout$getGravityDirection());
+                    BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
+                    newVec2 = RotationUtil.vecPlayerToWorld(newVec2,((IGravityEntity)self).roundabout$getGravityDirection());
+                    BlockPos pos2 = BlockPos.containing(self.getPosition(1).add(newVec2));
+                    newVec4 = RotationUtil.vecPlayerToWorld(newVec4,((IGravityEntity)self).roundabout$getGravityDirection());
+                    BlockPos pos4 = BlockPos.containing(self.getPosition(1).add(newVec4));
+                    newVec5 = RotationUtil.vecPlayerToWorld(newVec5,((IGravityEntity)self).roundabout$getGravityDirection());
+                    BlockPos pos5 = BlockPos.containing(self.getPosition(1).add(newVec5));
+
+                    BlockState state1 = self.level().getBlockState(pos);
+                    BlockState state2 = self.level().getBlockState(pos2);
+                    BlockState state4 = self.level().getBlockState(pos4);
+                    BlockState state5 = self.level().getBlockState(pos5);
+                    boolean isOnValidBlock =  MainUtil.isBlockWalkableSimplified(state1)
+                            && MainUtil.isBlockWalkableSimplified(state2)
+                            && MainUtil.isBlockWalkableSimplified(state4)
+                            && MainUtil.isBlockWalkableSimplified(state5);
+
+                    if (self.onGround() && MainUtil.isBlockWalkableSimplified(self.getBlockStateOn())
+                    && isOnValidBlock){
                         mercyTicks = 5;
                     } else {
-                        Vec3 newVec = new Vec3(0,-0.2,0);
-                        Vec3 newVec2 = new Vec3(0,-1.0,0);
-                        Vec3 newVec4 = new Vec3(0,-0.5,0);
-                        Vec3 newVec5 = new Vec3(0,-1.1,0);
-                        newVec = RotationUtil.vecPlayerToWorld(newVec,((IGravityEntity)self).roundabout$getGravityDirection());
-                        BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
-                        newVec2 = RotationUtil.vecPlayerToWorld(newVec2,((IGravityEntity)self).roundabout$getGravityDirection());
-                        BlockPos pos2 = BlockPos.containing(self.getPosition(1).add(newVec2));
-                        newVec4 = RotationUtil.vecPlayerToWorld(newVec4,((IGravityEntity)self).roundabout$getGravityDirection());
-                        BlockPos pos4 = BlockPos.containing(self.getPosition(1).add(newVec4));
-                        newVec5 = RotationUtil.vecPlayerToWorld(newVec5,((IGravityEntity)self).roundabout$getGravityDirection());
-                        BlockPos pos5 = BlockPos.containing(self.getPosition(1).add(newVec5));
                         if (
                                 (
-                                        self.level().getBlockState(pos).isSolid()
-                                                || self.level().getBlockState(pos2).isSolid()
-                                                || self.level().getBlockState(pos4).isSolid()
-                                                || self.level().getBlockState(pos5).isSolid()
+                                        MainUtil.isBlockWalkable(self.level().getBlockState(pos))
+                                                || MainUtil.isBlockWalkable(self.level().getBlockState(pos2))
+                                                || MainUtil.isBlockWalkable(self.level().getBlockState(pos4))
+                                                || MainUtil.isBlockWalkable(self.level().getBlockState(pos5))
                                 )){
                             mercyTicks--;
                         } else {
                             mercyTicks = 0;
                         }
                     }
-                    if (self.isSleeping() || (!self.onGround() && mercyTicks <= 0) || self.getRootVehicle() != this.self) {
+                    if (self.isSleeping() || ((!self.onGround() || !isOnValidBlock) && mercyTicks <= 0) || self.getRootVehicle() != this.self) {
                         heelDirection = Direction.DOWN;
                         if (((IGravityEntity) this.self).roundabout$getGravityDirection() != heelDirection){
                             grantFallImmunity();

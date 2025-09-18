@@ -2239,7 +2239,7 @@ public class StandPowers {
                         float distanceTo = value.distanceTo(User);
                         float range = this.getReach();
                         if (value instanceof FollowingStandEntity SE && OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FOLLOW_STYLE) {
-                            range /= 2.5;
+                            range = 0;
                         }
                         if ((nearestDistance < 0 || distanceTo < nearestDistance)
                                 && distanceTo <= range) {

@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.annotation.BooleanOption;
 import net.hydra.jojomod.util.config.annotation.FloatOption;
 import net.hydra.jojomod.util.config.annotation.IntOption;
@@ -57,6 +58,20 @@ public abstract class ConfigManager {
         loaded = true;
     }
 
+    public static void loadWalkingBlacklist()
+    {
+        if (getAdvancedConfig().walkingHeartWalkOnBlockBlacklist != null)
+        {
+            MainUtil.walkableBlocks.clear();
+            MainUtil.walkableBlocks.addAll(getAdvancedConfig().walkingHeartWalkOnBlockBlacklist);
+        }
+        if (getAdvancedConfig().standBlockGrabBlacklist != null)
+        {
+            MainUtil.standBlockGrabBlacklist.clear();
+            MainUtil.standBlockGrabBlacklist.addAll(getAdvancedConfig().standBlockGrabBlacklist);
+        }
+    }
+
     public static void loadStandArrowPool()
     {
         if (getAdvancedConfig().standArrowPoolv3 != null)
@@ -84,11 +99,11 @@ public abstract class ConfigManager {
                 }
             }
         }
-        if (getAdvancedConfig().naturalStandUserMobPoolv4 != null)
+        if (getAdvancedConfig().naturalStandUserMobPoolv5 != null)
         {
             ModItems.STAND_ARROW_POOL_FOR_MOBS.clear();
 
-            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv4)
+            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv5)
             {
                 String[] split = disc.split(":");
 
