@@ -4245,25 +4245,27 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
 
         if(((IPermaCasting)this.level()).roundabout$inPermaCastRange(this.getOnPos(), PermanentZoneCastInstance.MOLD_FIELD)) {
-            LivingEntity glumbo = ((IPermaCasting)this.level()).roundabout$inPermaCastRangeEntity(this.getOnPos(),PermanentZoneCastInstance.MOLD_FIELD);
-            boolean isUser = this.equals(glumbo);
-            boolean down = previousYpos > this.getY();
-            boolean isStand = (((LivingEntity)(Object) this) instanceof StandEntity);
-            if (!roundabout$getStandPowers().isStoppingTime() &&!this.roundabout$isBubbleEncased() && !isUser && !isStand && down && (glumbo.getY() > this.getY()) && !isUser && jumpImmunityTicks < 1){
-                for (int i = 0; i < 3; i = i + 1) {
+            LivingEntity MoldFieldCaster = ((IPermaCasting)this.level()).roundabout$inPermaCastRangeEntity(this.getOnPos(),PermanentZoneCastInstance.MOLD_FIELD);
+            if (MoldFieldCaster != null) {
+                boolean isUser = this.equals(MoldFieldCaster);
+                boolean down = previousYpos > this.getY();
+                boolean isStand = (((LivingEntity) (Object) this) instanceof StandEntity);
+                if (!roundabout$getStandPowers().isStoppingTime() && !this.roundabout$isBubbleEncased() && !isUser && !isStand && down && (MoldFieldCaster.getY() > this.getY()) && !isUser && jumpImmunityTicks < 1) {
+                    for (int i = 0; i < 3; i = i + 1) {
 
-                    double width = this.getBbWidth();
-                    double height = this.getBbHeight();
-                    double randomX = Roundabout.RANDOM.nextDouble(0 - (width / 2), width / 2);
-                    double randomY = Roundabout.RANDOM.nextDouble(0 - (height / 2), height / 2);
-                    double randomZ = Roundabout.RANDOM.nextDouble(0 - (width / 2), width / 2);
-                    (this.level()).addParticle(ModParticles.MOLD,
-                            this.getX() + randomX, (this.getY() + height / 2) + randomY, this.getZ() + randomZ,
-                            this.getDeltaMovement().x, this.getDeltaMovement().y, this.getDeltaMovement().z
-                    );
+                        double width = this.getBbWidth();
+                        double height = this.getBbHeight();
+                        double randomX = Roundabout.RANDOM.nextDouble(0 - (width / 2), width / 2);
+                        double randomY = Roundabout.RANDOM.nextDouble(0 - (height / 2), height / 2);
+                        double randomZ = Roundabout.RANDOM.nextDouble(0 - (width / 2), width / 2);
+                        (this.level()).addParticle(ModParticles.MOLD,
+                                this.getX() + randomX, (this.getY() + height / 2) + randomY, this.getZ() + randomZ,
+                                this.getDeltaMovement().x, this.getDeltaMovement().y, this.getDeltaMovement().z
+                        );
 
+                    }
+                    DoMoldTick();
                 }
-                DoMoldTick();
             }
 
 
