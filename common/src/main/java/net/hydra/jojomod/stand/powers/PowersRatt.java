@@ -405,7 +405,6 @@ public class PowersRatt extends NewDashPreset {
                     }
                 }
             }
-            Roundabout.LOGGER.info(String.valueOf(this.getShootTarget() != null ? this.getShootTarget().getHealth() : 0));
             if (isAuto()) {
                 if (true) {
                     BurstFire();
