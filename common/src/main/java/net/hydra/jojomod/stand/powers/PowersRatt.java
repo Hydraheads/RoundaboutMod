@@ -84,6 +84,7 @@ public class PowersRatt extends NewDashPreset {
             NET_SCOPE = 65,
             UPDATE_CHARGE = 66,
             START_CHARGE = 67,
+            CHECK_AUTO = 68,
 
             PLACE_BURST = 69,
             CHANGE_MODE = 7,
@@ -378,7 +379,6 @@ public class PowersRatt extends NewDashPreset {
 
                 if (e instanceof LivingEntity L) {
                     if (isAuto()) {
-                        BurstFire();
                     } else if (!L.equals(this.getSelf()) && !L.equals(SE)) {
                         if (!MainUtil.getEntityIsTrulyInvisible(e) && L.getEffect(MobEffects.INVISIBILITY) == null) {
                             if (!(L instanceof StandEntity)) {
@@ -405,8 +405,18 @@ public class PowersRatt extends NewDashPreset {
                     }
                 }
             }
-            if (this.getShootTarget() == null) {
-                this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
+            Roundabout.LOGGER.info(String.valueOf(this.getShootTarget() != null ? this.getShootTarget().getHealth() : 0));
+            if (isAuto()) {
+                if (true) {
+                    BurstFire();
+                }
+                if(getShootTarget() != null) {
+                    if (getShootTarget().getHealth() == 0) {
+                        this.setShootTarget(null);
+                    }
+                } else if(isAuto()) {
+                    this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
+                }
             }
         } else if (active) {
             if (this.getStandUserSelf().roundabout$getActive()) {
@@ -605,6 +615,9 @@ public class PowersRatt extends NewDashPreset {
     @Override
     public boolean tryPower(int move, boolean forced) {
         switch (move) {
+            case PowersRatt.CHECK_AUTO -> {
+                this.setShootTarget(null);
+            }
             case PowersRatt.NET_RECALL -> {
                 active = false;
                 this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
