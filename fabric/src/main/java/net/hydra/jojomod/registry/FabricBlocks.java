@@ -16,9 +16,7 @@ import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.FireBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -94,6 +92,9 @@ public class FabricBlocks {
     public static final Block FOG_DIRT = registerBlockItemless("fog_dirt", getFogBlock());
     public static final Block FOG_TRAP = registerBlockItemless("fog_trap",getFogTrapBlock());
 
+    public static final Block EQUIPPABLE_STONE_MASK = registerStoneMask("stone_mask", ModBlocks.EQUIPPABLE_STONE_MASK_PROPERTIES);
+
+
     public static final BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY =
            registerBE("stereo",BlockEntityType.Builder.of(StereoBlockEntity::new, STEREO));
     public static final BlockEntityType<StandFireBlockEntity> STAND_FIRE_BLOCK_ENTITY =
@@ -145,6 +146,15 @@ public class FabricBlocks {
     private static Item registerBlockItem(String name, Block block){
         return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, name),
                 new BlockItem(block, new Item.Properties()));
+    }
+
+    private static Block registerStoneMask(String name, Block block) {
+        registerStoneMaskBlockItem(name, block);
+        return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
+    }
+    private static Item registerStoneMaskBlockItem(String name, Block block){
+        return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, name),
+                new BlockItem(block, new Item.Properties().stacksTo(1)));
     }
 
     public static void register(){
@@ -200,6 +210,7 @@ public class FabricBlocks {
         ModBlocks.FOG_DIRT = FOG_DIRT;
         ModBlocks.FOG_DIRT_COATING = FOG_DIRT_COATING;
         ModBlocks.FOG_TRAP = FOG_TRAP;
+        ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK = EQUIPPABLE_STONE_MASK;
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();

@@ -1,13 +1,6 @@
 package net.hydra.jojomod.block;
 
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.item.FogBlockItem;
-import net.hydra.jojomod.item.FogCoatBlockItem;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -15,11 +8,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.function.ToIntFunction;
 
@@ -85,48 +76,9 @@ public class ModBlocks {
     public static Block CREAM_FIRE;
     public static Block FOG_DIRT;
     public static Block FOG_DIRT_COATING;
-    public static Block FOG_CLAY;
-    public static Block FOG_CLAY_COATING;
-    public static Block FOG_GRAVEL;
-    public static Block FOG_GRAVEL_COATING;
-    public static Block FOG_SAND;
-    public static Block FOG_SAND_COATING;
-    public static Block FOG_OAK_PLANKS;
-    public static Block FOG_OAK_PLANKS_COATING;
-    public static Block FOG_SPRUCE_PLANKS;
-    public static Block FOG_SPRUCE_PLANKS_COATING;
-    public static Block FOG_BIRCH_PLANKS;
-    public static Block FOG_BIRCH_PLANKS_COATING;
-    public static Block FOG_JUNGLE_PLANKS;
-    public static Block FOG_JUNGLE_PLANKS_COATING;
-    public static Block FOG_ACACIA_PLANKS;
-    public static Block FOG_ACACIA_PLANKS_COATING;
-    public static Block FOG_DARK_OAK_PLANKS;
-    public static Block FOG_DARK_OAK_PLANKS_COATING;
-    public static Block FOG_MANGROVE_PLANKS;
-    public static Block FOG_MANGROVE_PLANKS_COATING;
-    public static Block FOG_CHERRY_PLANKS;
-    public static Block FOG_CHERRY_PLANKS_COATING;
-    public static Block FOG_STONE;
-    public static Block FOG_STONE_COATING;
-    public static Block FOG_COBBLESTONE;
-    public static Block FOG_COBBLESTONE_COATING;
-    public static Block FOG_MOSSY_COBBLESTONE;
-    public static Block FOG_MOSSY_COBBLESTONE_COATING;
-    public static Block FOG_DEEPSLATE;
-    public static Block FOG_DEEPSLATE_COATING;
-    public static Block FOG_COAL_ORE;
-    public static Block FOG_IRON_ORE;
-    public static Block FOG_GOLD_ORE;
-    public static Block FOG_LAPIS_ORE;
-    public static Block FOG_DIAMOND_ORE;
-    public static Block FOG_STONE_BRICKS;
-    public static Block FOG_STONE_BRICKS_COATING;
-    public static Block FOG_NETHERRACK;
-    public static Block FOG_NETHERRACK_COATING;
-    public static Block FOG_NETHER_BRICKS;
-    public static Block FOG_NETHER_BRICKS_COATING;
     public static Block FOG_TRAP;
+
+    public static Block EQUIPPABLE_STONE_MASK_BLOCK;
 
     public static Block D4C_LIGHT_BLOCK;
 
@@ -432,6 +384,9 @@ public class ModBlocks {
             BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).replaceable().noCollission().instabreak().lightLevel((p_152607_) -> {
                 return 15;
             }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
+
+    public static EquippableStoneMaskBlock EQUIPPABLE_STONE_MASK_PROPERTIES = new EquippableStoneMaskBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(1.0F).sound(SoundType.WOOD).pushReaction(PushReaction.DESTROY));
 
     public static List<String> dontGenState = new ArrayList<String>();
     public static List<String> blockBlacklist = Arrays.asList(
