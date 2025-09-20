@@ -226,6 +226,10 @@ public class ForgeEvents {
         ModItems.STAND_DISC_DIVER_DOWN = ForgeItems.STAND_DISC_DIVER_DOWN.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_DIVER_DOWN.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_DIVER_DOWN.get());
         ModItems.MAX_STAND_DISC_DIVER_DOWN = ForgeItems.MAX_STAND_DISC_DIVER_DOWN.get();
+        ModItems.STAND_DISC_THE_GRATEFUL_DEAD = ForgeItems.STAND_DISC_THE_GRATEFUL_DEAD.get();
+        ModItems.MAX_STAND_DISC_THE_GRATEFUL_DEAD = ForgeItems.MAX_STAND_DISC_THE_GRATEFUL_DEAD.get();
+        ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_THE_GRATEFUL_DEAD.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_THE_GRATEFUL_DEAD.get());
+
         ModItems.COFFEE_GUM = ForgeItems.COFFEE_GUM.get();
 
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_DIO.get()).referenceItem = ForgeItems.STREET_SIGN_DIO_BLOCK_ITEM.get().getDefaultInstance();

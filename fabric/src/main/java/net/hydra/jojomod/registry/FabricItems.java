@@ -84,6 +84,10 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
     public static Item MAX_STAND_DISC_DIVER_DOWN = registerItem("max_diver_down_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
+    public static Item STAND_DISC_THE_GRATEFUL_DEAD = registerItem("the_grateful_dead_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersTheGratefulDead(null)));
+    public static Item MAX_STAND_DISC_THE_GRATEFUL_DEAD = registerItem("max_the_grateful_dead_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersTheGratefulDead(null)));
     public static Item LUCK_UPGRADE = registerItem("luck_upgrade",
         new SmithingTemplateItem(SmithingTemplates.LUCK_UPGRADE_APPLIES_TO, SmithingTemplates.LUCK_UPGRADE_INGREDIENTS, SmithingTemplates.LUCK_UPGRADE, SmithingTemplates.LUCK_UPGRADE_BASE_SLOT_DESCRIPTION, SmithingTemplates.LUCK_UPGRADE_ADDITIONS_SLOT_DESCRIPTION, SmithingTemplates.createLuckUpgradeIconList(), SmithingTemplates.createLuckMatIconList())
     );
@@ -341,6 +345,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_RATT);
                         //entries.accept(STAND_DISC_DIVER_DOWN);
                         //entries.accept(MAX_STAND_DISC_DIVER_DOWN);
+                        entries.accept(STAND_DISC_THE_GRATEFUL_DEAD);
+                        entries.accept(MAX_STAND_DISC_THE_GRATEFUL_DEAD);
 
 
                     }).build());
@@ -404,6 +410,9 @@ public class FabricItems {
         ModItems.STAND_DISC_DIVER_DOWN = STAND_DISC_DIVER_DOWN;
         ((MaxStandDiscItem)MAX_STAND_DISC_DIVER_DOWN).baseDisc = ((StandDiscItem)STAND_DISC_DIVER_DOWN);
         ModItems.MAX_STAND_DISC_DIVER_DOWN = MAX_STAND_DISC_DIVER_DOWN;
+        ModItems.STAND_DISC_THE_GRATEFUL_DEAD = STAND_DISC_THE_GRATEFUL_DEAD;
+        ModItems.MAX_STAND_DISC_THE_GRATEFUL_DEAD = MAX_STAND_DISC_THE_GRATEFUL_DEAD;
+        ((MaxStandDiscItem)MAX_STAND_DISC_THE_GRATEFUL_DEAD).baseDisc = ((StandDiscItem)STAND_DISC_THE_GRATEFUL_DEAD);
         ModItems.LUCK_UPGRADE = LUCK_UPGRADE;
         ModItems.EXECUTION_UPGRADE = EXECUTION_UPGRADE;
         ModItems.LUCK_SWORD = LUCK_SWORD;

@@ -288,6 +288,10 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
     public static final RegistryObject<Item> MAX_STAND_DISC_DIVER_DOWN = ITEMS.register("max_diver_down_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
+    public static final RegistryObject<Item> STAND_DISC_THE_GRATEFUL_DEAD = addToWIPTab(ITEMS.register("the_grateful_dead_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersTheGratefulDead(null))));
+    public static final RegistryObject<Item> MAX_STAND_DISC_THE_GRATEFUL_DEAD = addToWIPTab(ITEMS.register("max_the_grateful_dead_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersTheGratefulDead(null))));
     public static final RegistryObject<Item> WORTHY_ARROW = addToTab(ITEMS.register("worthy_arrow",
             () -> new WorthyArrowItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> LUCKY_LIPSTICK = addToTab(ITEMS.register("lucky_lipstick",
