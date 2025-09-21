@@ -50,6 +50,7 @@ public class ModEntities {
     public static EntityType<DarkMirageEntity> DARK_MIRAGE;
     public static EntityType<StarPlatinumBaseballEntity> STAR_PLATINUM_BASEBALL;
     public static EntityType<DiverDownEntity> DIVER_DOWN;
+    public static EntityType<TheGratefulDeadEntity> THE_GRATEFUL_DEAD;
     public static EntityType<HarpoonEntity> THROWN_HARPOON;
     public static EntityType<RattDartEntity> RATT_DART;
     public static EntityType<KnifeEntity> THROWN_KNIFE;
