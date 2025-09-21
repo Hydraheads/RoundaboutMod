@@ -27,7 +27,13 @@
   // If project_start_to_heightmap is present, the y value chosen in start_height will be added to the terrain's y value.
   // So a start height that gives -5 will sink the structure 5 blocks into the terrain. Here, we will spawn this structure 60 blocks above the terrain.
   "start_height": {
-    "absolute": -1
+    "type": "minecraft:uniform",
+    "min_inclusive": {
+      "absolute": 60
+    },
+    "max_inclusive": {
+      "absolute": 80
+    }
   },
 
   // Makes our sky fan structure take the terrain's top y value and add it to the start_height y value above.

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "roundabout:block/impact_mound",
+    "side": "roundabout:block/impact_mound",
+    "top": "roundabout:block/impact_mound"
+  }
+}

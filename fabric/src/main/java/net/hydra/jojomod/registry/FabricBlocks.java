@@ -26,6 +26,8 @@ import static net.hydra.jojomod.block.ModBlocks.*;
 public class FabricBlocks {
     public static final Block ANCIENT_METEOR = registerBlock("ancient_meteor", ModBlocks.ANCIENT_METEOR_PROPERTIES
     );
+    public static final Block IMPACT_MOUND = registerBlock("impact_mound", IMPACT_MOUND_PROPERTIES
+    );
     public static final Block METEOR_BLOCK = registerBlock("meteor_block", ModBlocks.METEOR_BLOCK_PROPERTIES
     );
     public static final Block REGAL_FLOOR = registerBlock("regal_floor", ModBlocks.REGAL_FLOOR_PROPERTIES
@@ -159,6 +161,7 @@ public class FabricBlocks {
 
     public static void register(){
         ModBlocks.ANCIENT_METEOR = ANCIENT_METEOR;
+        ModBlocks.IMPACT_MOUND = IMPACT_MOUND;
         ModBlocks.METEOR_BLOCK = METEOR_BLOCK;
         ModBlocks.REGAL_FLOOR = REGAL_FLOOR;
         ModBlocks.REGAL_WALL = REGAL_WALL;
