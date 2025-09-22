@@ -83,9 +83,9 @@ public class the_grateful_dead<T extends Entity> extends EntityModel<T> {
 
 		PartDefinition chest = torso.addOrReplaceChild("chest", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition upper_chest = chest.addOrReplaceChild("upper_chest", CubeListBuilder.create().texOffs(0, 52).addBox(-4.5F, -6.0F, -3.0F, 9.0F, 6.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 6.0F, 0.0F));
+		PartDefinition upper_chest = chest.addOrReplaceChild("upper_chest", CubeListBuilder.create().texOffs(0, 53).addBox(-4.5F, -6.0F, -3.0F, 9.0F, 5.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 6.0F, 0.0F));
 
-		PartDefinition lower_chest = chest.addOrReplaceChild("lower_chest", CubeListBuilder.create().texOffs(31, 55).addBox(-3.5F, 0.0F, -3.0F, 7.0F, 3.0F, 6.0F, new CubeDeformation(0.0F))
+		PartDefinition lower_chest = chest.addOrReplaceChild("lower_chest", CubeListBuilder.create().texOffs(32, 55).addBox(-4.0F, -1.0F, -2.5F, 8.0F, 4.0F, 5.0F, new CubeDeformation(0.0F))
 		.texOffs(0, 16).addBox(-3.5F, 3.0F, -1.0F, 7.0F, 6.0F, 0.0F, new CubeDeformation(0.0F))
 		.texOffs(14, 16).addBox(-3.5F, 3.0F, 1.0F, 7.0F, 6.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 6.0F, 0.0F));
 
@@ -94,7 +94,8 @@ public class the_grateful_dead<T extends Entity> extends EntityModel<T> {
 		PartDefinition right_upper = right_arm.addOrReplaceChild("right_upper", CubeListBuilder.create().texOffs(29, 0).addBox(-4.0F, -1.0F, -2.0F, 4.0F, 8.0F, 4.0F, new CubeDeformation(0.0F))
 		.texOffs(22, -2).mirror().addBox(-4.25F, 0.0F, -1.0F, 0.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition right_lower = right_arm.addOrReplaceChild("right_lower", CubeListBuilder.create().texOffs(29, 12).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 10.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.0F, 7.0F, 0.0F));
+		PartDefinition right_lower = right_arm.addOrReplaceChild("right_lower", CubeListBuilder.create().texOffs(29, 12).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 10.0F, 4.0F, new CubeDeformation(0.0F))
+		.texOffs(22, -2).mirror().addBox(-2.25F, -1.0F, -1.0F, 0.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-2.0F, 7.0F, 0.0F));
 
 		PartDefinition right_finger1 = right_lower.addOrReplaceChild("right_finger1", CubeListBuilder.create().texOffs(0, 22).mirror().addBox(-1.0F, -1.0F, -4.0F, 2.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(0.0F, 10.0F, -2.0F));
 
@@ -111,7 +112,8 @@ public class the_grateful_dead<T extends Entity> extends EntityModel<T> {
 		PartDefinition left_upper = left_arm.addOrReplaceChild("left_upper", CubeListBuilder.create().texOffs(45, 0).addBox(0.0F, -1.0F, -2.0F, 4.0F, 8.0F, 4.0F, new CubeDeformation(0.0F))
 		.texOffs(22, -2).addBox(4.25F, 0.0F, -1.0F, 0.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition left_lower = left_arm.addOrReplaceChild("left_lower", CubeListBuilder.create().texOffs(45, 12).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 10.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, 7.0F, 0.0F));
+		PartDefinition left_lower = left_arm.addOrReplaceChild("left_lower", CubeListBuilder.create().texOffs(45, 12).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 10.0F, 4.0F, new CubeDeformation(0.0F))
+		.texOffs(22, -2).addBox(2.25F, -1.0F, -1.0F, 0.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, 7.0F, 0.0F));
 
 		PartDefinition left_finger1 = left_lower.addOrReplaceChild("left_finger1", CubeListBuilder.create().texOffs(0, 22).addBox(-1.0F, -1.0F, -4.0F, 2.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 10.0F, -2.0F));
 
@@ -167,4 +169,4 @@ public class the_grateful_dead<T extends Entity> extends EntityModel<T> {
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
 		stand.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
-}s
+}
