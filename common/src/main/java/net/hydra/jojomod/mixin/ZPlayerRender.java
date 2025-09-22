@@ -248,7 +248,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         // ratt scope spyglass hand position
         if ($$1.equals(InteractionHand.MAIN_HAND)) {
             if (((StandUser) (Player) $$0).roundabout$getStandPowers() instanceof PowersRatt) {
-                if (((StandUser) (Player) $$0).roundabout$getStandPowers().scopeLevel != 0) {
+                if (((StandUser) (Player) $$0).roundabout$getStandPowers().getStandUserSelf().roundabout$getCombatMode()) {
                     ci.setReturnValue(HumanoidModel.ArmPose.SPYGLASS);
                 }
             }

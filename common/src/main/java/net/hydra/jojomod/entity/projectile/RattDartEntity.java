@@ -15,6 +15,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -153,6 +154,8 @@ public class RattDartEntity extends AbstractArrow {
     protected void onHitEntity(EntityHitResult $$0) {
         Entity $$1 = $$0.getEntity();
 
+        if ($$1.equals(this.getOwner())) {return;}
+
 
         if ($$1 instanceof LivingEntity $$3) {
             StandPowers entityPowers = ((StandUser) $$3).roundabout$getStandPowers();
@@ -166,7 +169,7 @@ public class RattDartEntity extends AbstractArrow {
         }
 
         Entity $$4 = this.getOwner();
-        DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.MELTING, $$4);
+        DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.STAND, $$4);
         SoundEvent $$6 = ModSounds.RATT_DART_IMPACT_EVENT;
         if ($$1.hurt($$5,this.damage + (($$1 instanceof Mob) ? 1F : 0) )) {
 

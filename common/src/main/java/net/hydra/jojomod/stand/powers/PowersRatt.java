@@ -60,10 +60,10 @@ public class PowersRatt extends NewDashPreset {
     public static final int MaxThreshold = 90;
     public static final int BaseShootCooldown = 10;
     public static final int PlaceDelay = 10;
-    public static final int PlaceShootCooldown = 40;
+    public static final int PlaceShootCooldown = 55;
     public static final int MaxShootCooldown = 30;
     public static final int[] ShotThresholds = {MinThreshold,50,MaxThreshold};
-    public static final float[] ShotPowerFloats = {3,3.2F,4};
+    public static final float[] ShotPowerFloats = {2.5F,3.5F,3.5F};
     public static final int[] ShotSuperthrowTicks = {4,10,15};
 
 
@@ -356,8 +356,13 @@ public class PowersRatt extends NewDashPreset {
         if (this.getActivePower() == PowersRatt.START_CHARGE) {
             updateChargeTime(Mth.clamp(getChargeTime()+4,0,100));
 
-            if (getChargeTime() == 100) {this.setPowerNone();}
-            if (scopeLevel == 0) {setPowerNone();}
+            if (getChargeTime() == 100 || scopeLevel == 0) {this.setPowerNone();}
+
+        }
+        if (this.getStandEntity(this.getSelf()) != null) {
+            if (this.getStandEntity(this.getSelf()).forceDespawnSet) {
+                setPowerNone();
+            }
         }
 
         if (shotcooldown != 0) {shotcooldown--;}
@@ -620,7 +625,9 @@ public class PowersRatt extends NewDashPreset {
             case PowersRatt.NET_RECALL -> {
                 active = false;
                 this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
-                this.getStandEntity(this.getSelf()).forceDespawnSet = true;
+                if (this.getStandEntity(this.getSelf()) != null) {
+                    this.getStandEntity(this.getSelf()).forceDespawnSet = true;
+                }
                 this.setCooldown(PowersRatt.SETPLACE,40);
             }
             case PowersRatt.FIRE_DART -> this.setCooldown(PowersRatt.CHANGE_MODE,15);
@@ -809,8 +816,10 @@ public class PowersRatt extends NewDashPreset {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowersRatt.START_PLACE_BURST, true);
                 }
             } else {
-                Vec3 vec3 = this.getSelf().getPosition(0);
-                blipStand(new Vec3(vec3.x, Math.floor(vec3.y),vec3.z));
+                if (!onCooldown(PowersRatt.SETPLACE)){
+                    Vec3 vec3 = this.getSelf().getPosition(0);
+                    blipStand(new Vec3(vec3.x, Math.floor(vec3.y), vec3.z));
+                }
             }
         }
     }
