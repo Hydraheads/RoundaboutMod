@@ -31,6 +31,7 @@ public class ModBlocks {
     public static final IntegerProperty FLESH_LAYER = IntegerProperty.create("layers", 1, 4);
     public static Block ANCIENT_METEOR;
     public static Block METEOR_BLOCK;
+    public static Block IMPACT_MOUND;
     public static Block REGAL_FLOOR;
     public static Block REGAL_WALL;
     public static Block WOODEN_MANOR_TABLE;
@@ -97,6 +98,7 @@ public class ModBlocks {
                     .strength(5.0F, 6.0F)
                     .sound(SoundType.METAL)
     );
+    public static Block IMPACT_MOUND_PROPERTIES = new SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DIRT).strength(0.5F).sound(SoundType.GRAVEL));
 
     private static ToIntFunction<BlockState> litBlockEmission(int p_50760_) {
         return (p_50763_) -> {

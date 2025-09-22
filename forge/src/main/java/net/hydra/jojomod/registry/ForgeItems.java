@@ -62,6 +62,10 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.ANCIENT_METEOR.get(),
                     new Item.Properties()
             )));
+    public static final RegistryObject<BlockItem> IMPACT_MOUND_ITEM = addToTab(ITEMS.register("impact_mound",
+            () -> new BlockItem(ForgeBlocks.IMPACT_MOUND.get(),
+                    new Item.Properties()
+            )));
     public static final RegistryObject<BlockItem> METEOR_BLOCK_ITEM = addToTab(ITEMS.register("meteor_block",
             () -> new BlockItem(ForgeBlocks.METEOR_BLOCK.get(),
                     new Item.Properties()
