@@ -241,6 +241,8 @@ public class Config implements Cloneable {
         public Integer mobThrowCooldown;
         @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
         public Integer mobThrowInterruptCooldown;
+        @IntOption(group = "inherit", value = 28, min = 0, max = 72000)
+        public Integer mobThrowRecoilTicks;
         @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
         public Integer mobThrowAttackCooldown;
         @BooleanOption(group = "inherit", value = true)
@@ -627,7 +629,7 @@ public class Config implements Cloneable {
         public Integer getMiningTierTheWorld;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer oxygenTankAdditionalTicks;
-        @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
         public Integer assaultCooldown;
         @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
         public Integer assaultInterruptCooldown;
@@ -650,11 +652,11 @@ public class Config implements Cloneable {
         public Boolean starPlatinumScopeUsesPotionEffectForNightVision;
         @IntOption(group = "inherit", value = 160, min = 0, max = 72000)
         public Integer guardianCooldown;
-        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer starFingerCooldown;
         @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
         public Integer blitzAttackCooldown;
-        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer starFingerInterruptCooldown;
     }
     public static class TimeStopSettings {

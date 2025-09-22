@@ -2127,6 +2127,9 @@
   "config.roundabout.SoftAndWetCurrentlySelectedBubble.name": "Selected Bubble Type",
   "config.roundabout.SoftAndWetCurrentlySelectedBubble.desc": "For Soft and Wet, your client remembers what bubble is presently selected.",
 
+  "config.roundabout.mobThrowRecoilTicks.name": "Mob Throw Recoil",
+  "config.roundabout.mobThrowRecoilTicks.desc": "How many ticks after throwing a mob you can attack with basic punches again.",
+
   "config.roundabout.namedSBRHorseSkins.name": "Named SBR Horses",
   "config.roundabout.namedSBRHorseSkins.desc": "Naming horses after select SBR ones changes their skins.",
 

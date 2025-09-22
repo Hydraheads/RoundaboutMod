@@ -596,7 +596,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                             }
                             AABB BB2 = stand.getBoundingBox();
-                            if (this.attackTimeDuring > 10) {
+                            if (this.attackTimeDuring > 11) {
                                 if (this.getActivePower() != PowerIndex.POWER_1_BONUS){
                                     tryAssaultHit(stand, BB1, BB2);
                                 }
