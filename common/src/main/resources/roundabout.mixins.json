@@ -161,6 +161,7 @@
     "soft_and_wet.SoftAndWetCalibratedSculkSensorBlockEntity",
     "soft_and_wet.SoftAndWetCreeper",
     "soft_and_wet.SoftAndWetNearestAttackableTargetGoal",
+    "soft_and_wet.SoftAndWetPiglinAiMixin",
     "soft_and_wet.SoftAndWetPowderSnowBlock",
     "soft_and_wet.SoftAndWetSculkSensorBlockEntity",
     "soft_and_wet.SoftAndWetSculkShriekerBlockEntity",

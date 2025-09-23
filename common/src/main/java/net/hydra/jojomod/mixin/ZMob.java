@@ -457,6 +457,18 @@ public abstract class ZMob extends LivingEntity implements IMob {
             if (this.targetSelector != null) {
                 Stream<WrappedGoal> wrappedGoalStream = this.targetSelector.getRunningGoals();
                 wrappedGoalStream.forEach(this::roundabout$removeGoalTarget);
+
+
+                Optional<? extends ExpirableValue<?>> $$1 = brain.getMemories().get(MemoryModuleType.ATTACK_TARGET);
+                if ($$1 != null) {
+                    if (((LivingEntity)(Object)this) instanceof Piglin){
+                        brain.eraseMemory(MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLIN);
+                        brain.eraseMemory(MemoryModuleType.AVOID_TARGET);
+                        brain.eraseMemory(MemoryModuleType.HURT_BY_ENTITY);
+                        brain.eraseMemory(MemoryModuleType.ANGRY_AT);
+                        brain.eraseMemory(MemoryModuleType.ATTACK_TARGET);
+                    }
+                }
             }
     }
     @Unique
