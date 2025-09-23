@@ -376,6 +376,7 @@ public abstract class EntityAndData implements IEntityAndData {
                  if (((StandUser)this).roundabout$getStand() != null){
                      StandEntity stand = ((StandUser)this).roundabout$getStand();
                      if (!stand.getHeldItem().isEmpty()) {
+
                          if (stand.canAcquireHeldItem) {
                              double $$3 = stand.getEyeY() - 0.3F;
                              ItemEntity $$4 = new ItemEntity(this.level(), stand.getX(), $$3, stand.getZ(), stand.getHeldItem().copy());
@@ -383,6 +384,9 @@ public abstract class EntityAndData implements IEntityAndData {
                              $$4.setThrower(stand.getUUID());
                              this.level().addFreshEntity($$4);
                              stand.setHeldItem(ItemStack.EMPTY);
+                         }
+                         if (!stand.getPassengers().isEmpty()){
+                             stand.ejectPassengers();
                          }
                      }
                  }

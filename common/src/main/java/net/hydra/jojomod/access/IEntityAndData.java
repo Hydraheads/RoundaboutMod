@@ -1,9 +1,7 @@
 package net.hydra.jojomod.access;
 
 import net.hydra.jojomod.event.SavedSecond;
-import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
