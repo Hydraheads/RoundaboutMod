@@ -703,7 +703,7 @@ public class MainUtil {
     }
 
     public static float gasDamageMultiplier(){
-        return (float) (0.83F * (ClientNetworking.getAppropriateConfig().itemSettings.gasolineExplosionDamage *0.01));
+        return (float) (0.78F * (ClientNetworking.getAppropriateConfig().itemSettings.gasolineExplosionDamage *0.01));
     }
 
     public static void makeBleed(Entity entity, int level, int ticks, Entity source){

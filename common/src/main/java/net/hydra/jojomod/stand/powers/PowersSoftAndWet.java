@@ -1635,7 +1635,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
             yavec = RotationUtil.rotPlayerToWorld(yavec.y, yavec.x, direction);
         }
 
-        ankh.shootFromRotationDeltaAgnosticR(this.getSelf(),yavec.y, yavec.x, 1.0F, 0.25F, 0);
+        ankh.shootFromRotationDeltaAgnosticR(this.getSelf(),yavec.x, yavec.y, 1.0F, 0.25F, 0);
     }
 
     public boolean setPowerBubbleBarrage() {
