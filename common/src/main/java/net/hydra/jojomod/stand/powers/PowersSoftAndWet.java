@@ -2118,6 +2118,10 @@ public void unlockSkin(){
     public void kickAttackImpact(Entity entity){
         this.setAttackTimeDuring(-20);
         if (entity != null) {
+            if (chargedFinal < maxSuperHitTime) {
+                hitParticlesCenter(entity);
+            }
+
             float pow;
             float knockbackStrength;
             pow = getKickAttackStrength(entity);
