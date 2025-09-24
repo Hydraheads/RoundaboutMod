@@ -2750,9 +2750,9 @@ public class StandPowers {
         if (this.getStandEntity(this.self) != null) {
             //Roundabout.LOGGER.info("3 " + this.getStandEntity(this.self).getPitch() + " " + this.getStandEntity(this.self).getYaw());
         }
-        if (this.getClashOp() != null) {
+        LivingEntity entity = this.getClashOp();
+        if (entity != null && entity.isAlive() && this.self.isAlive()) {
             if (this.attackTimeDuring <= 60) {
-                LivingEntity entity = this.getClashOp();
 
                 /*Rotation has to be set actively by both client and server,
                  * because serverPitch and serverYaw are inconsistent, client overwrites stand stuff sometimes*/
@@ -2786,11 +2786,21 @@ public class StandPowers {
                 }
             }
         } else {
-            if (!this.self.level().isClientSide) {
+            endClash();
+        }
+    }
+
+    public void endClash(){
+        if (!this.self.level().isClientSide) {
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.CLASH_CANCEL, true);
+            LivingEntity entity = this.getClashOp();
+            if (entity != null){
                 ((StandUser) this.self).roundabout$tryPower(PowerIndex.CLASH_CANCEL, true);
             }
         }
     }
+
+
     private void updateClashing2(){
         if (this.getClashOp() != null) {
             boolean thisActive = ((StandUser) this.self).roundabout$getActive();
