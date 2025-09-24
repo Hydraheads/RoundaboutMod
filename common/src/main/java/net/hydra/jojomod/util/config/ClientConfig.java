@@ -117,6 +117,8 @@ public class ClientConfig implements Cloneable {
         public Integer bodyBagHoldingParticlesPerFiveTicks;
         @FloatOption(group = "inherit", value = 0.01F, min = 0, max = 1)
         public Float magiciansRedFirestormEmbersRate;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean meteorsEmitParticles;
 
     }
 

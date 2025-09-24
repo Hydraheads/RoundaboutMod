@@ -1688,6 +1688,10 @@
   "config.roundabout.waterShieldBucketCooldown.name": "Water Shield Bucket Cooldown",
   "config.roundabout.waterShieldBucketCooldown.desc": "The cooldown of the situational water shield ability, if you have a bucket to use. The default is 40 ticks, or 2 seconds.",
 
+  "config.roundabout.meteorsEmitParticles.name": "Meteors Emit Particles",
+  "config.roundabout.meteorsEmitParticles.desc": "If ancient meteors emit particles when touching an impact mound.",
+
+
   "config.roundabout.itemBubbleShotCooldown.name": "Item Bubble Cooldown",
   "config.roundabout.itemBubbleShotCooldown.desc": "The time between creating explosive item bubbles in shooting mode. The default is 60 ticks, or 4 second.",
   "config.roundabout.basicBubbleShotCooldown.name": "Basic Bubble Cooldown",

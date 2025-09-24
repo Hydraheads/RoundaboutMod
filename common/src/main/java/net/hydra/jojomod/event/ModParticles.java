@@ -19,6 +19,9 @@ public class ModParticles {
     public static SimpleParticleType ENERGY_DISTORTION;
     public static SimpleParticleType PURPLE_STAR;
 
+
+    public static SimpleParticleType METEOR_DUST;
+
     public static SimpleParticleType FOG_CHAIN;
     public static SimpleParticleType BUBBLE_TRAIL;
     public static SimpleParticleType WARDEN_CLOCK;
