@@ -447,6 +447,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public void impaleImpact(Entity entity){
         this.setAttackTimeDuring(-20);
         if (entity != null) {
+            hitParticlesCenter(entity);
+
             float pow;
             float knockbackStrength;
             pow = getImpalePunchStrength(entity);
@@ -968,11 +970,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                             && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
                         initiateClash(entity);
                     } else {
-                        Vec3 vec = getRandPos(entity);
-                        ((ServerLevel) this.self.level()).sendParticles(
-                                getImpactParticle(),
-                                vec.x, vec.y, vec.z,
-                                1, 0.0, 0.0, 0.0, 1);
+                        hitParticles(entity);
 
                         float pow;
                         float knockbackStrength = 0;
@@ -1774,6 +1772,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public void finalAttackImpact(Entity entity){
         this.setAttackTimeDuring(-20);
         if (entity != null) {
+            hitParticlesCenter(entity);
             float pow;
             float knockbackStrength;
             pow = getFinalPunchStrength(entity);

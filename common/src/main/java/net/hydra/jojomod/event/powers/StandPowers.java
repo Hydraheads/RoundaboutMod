@@ -3176,7 +3176,7 @@ public class StandPowers {
     public Vec3 getRandPos(Entity ent){
         return new Vec3(
                 ent.getRandomX(1),
-                getRandomY(ent,0.33)+(ent.getBbHeight()*0.63),
+                getRandomY(ent,0.33)+(ent.getBbHeight()*0.65),
                 ent.getRandomZ(1)
         );
     }
@@ -3199,6 +3199,19 @@ public class StandPowers {
         return punchpart;
     }
 
+    public void hitParticles(Entity entity){
+        Vec3 vec = getRandPos(entity);
+        ((ServerLevel) this.self.level()).sendParticles(
+                getImpactParticle(),
+                vec.x,vec.y,vec.z,
+                1, 0.0, 0.0, 0.0, 1);
+    }
+    public void hitParticlesCenter(Entity entity){
+        ((ServerLevel) this.self.level()).sendParticles(
+                getImpactParticle(),
+                entity.getX(),entity.getY()+(entity.getBbHeight()*0.65),entity.getZ(),
+                1, 0.0, 0.0, 0.0, 1);
+    }
 
     /**If you override this for any reason, you should probably call the super(). Although SP and TW override
      * this, you can probably do better*/
@@ -3219,11 +3232,7 @@ public class StandPowers {
                             && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
                         initiateClash(entity);
                     } else {
-                            Vec3 vec = getRandPos(entity);
-                            ((ServerLevel) this.self.level()).sendParticles(
-                                    getImpactParticle(),
-                                    vec.x, vec.y, vec.z,
-                                    1, 0.0, 0.0, 0.0, 1);
+                        hitParticles(entity);
 
                         float pow;
                         float knockbackStrength = 0;

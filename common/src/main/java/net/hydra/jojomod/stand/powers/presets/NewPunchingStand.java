@@ -222,11 +222,7 @@ public class NewPunchingStand extends NewDashPreset {
 
         if (!this.self.level().isClientSide()) {
             if (entity != null) {
-                Vec3 vec = getRandPos(entity);
-                ((ServerLevel) this.self.level()).sendParticles(
-                        getImpactParticle(),
-                        vec.x,vec.y,vec.z,
-                        1, 0.0, 0.0, 0.0, 1);
+                hitParticles(entity);
             } else {
             }
             this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);

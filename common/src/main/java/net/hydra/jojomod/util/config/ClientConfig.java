@@ -119,7 +119,10 @@ public class ClientConfig implements Cloneable {
         public Float magiciansRedFirestormEmbersRate;
         @BooleanOption(group = "inherit", value = true)
         public Boolean meteorsEmitParticles;
-
+        @FloatOption(group = "inherit", value = 0.46F, min = 0, max = 10)
+        public Float punchImpactSize;
+        @FloatOption(group = "inherit", value = 0.82F, min = 0, max = 1)
+        public Float punchImpactOpacity;
     }
 
     public static class OpacitySettings {

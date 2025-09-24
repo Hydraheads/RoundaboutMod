@@ -1,6 +1,7 @@
 package net.hydra.jojomod.particles;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
@@ -18,7 +19,9 @@ public class PunchImpactParticle extends TextureSheetParticle {
         super($$0, $$1, $$2, $$3, 0.0, 0.0, 0.0);
         this.age = 0;
         this.lifetime = 6;
-        this.quadSize = 0.5F;
+        if (ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().particleSettings != null){
+            this.quadSize = ConfigManager.getClientConfig().particleSettings.punchImpactSize;
+        }
         this.sprites = $$7;
         this.setSpriteFromAge($$7);
     }
@@ -128,7 +131,10 @@ public class PunchImpactParticle extends TextureSheetParticle {
         public Particle createParticle(SimpleParticleType $$0, ClientLevel $$1, double $$2, double $$3, double $$4, double $$5, double $$6, double $$7) {
             PunchImpactParticle part = new PunchImpactParticle($$1, $$2, $$3, $$4, $$5,$$6,$$7, this.sprites);
             part.setColor(0.9F, 0.9F, 0.9F);
-            part.setAlpha(0.9F);
+
+            if (ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().particleSettings != null){
+                part.setAlpha(ConfigManager.getClientConfig().particleSettings.punchImpactOpacity);
+            }
             return part;
         }
     }

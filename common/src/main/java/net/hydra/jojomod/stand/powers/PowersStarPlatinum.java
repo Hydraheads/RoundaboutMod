@@ -708,6 +708,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public void impaleImpact2(Entity entity){
         this.setAttackTimeDuring(-7);
         if (entity != null) {
+            hitParticles(entity);
             float pow;
             float knockbackStrength;
             pow = getStarBlitzStrength(entity);
@@ -883,6 +884,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             pow*=(1 - ((float) (26-ticksForFinger) /26));
         }
 
+        hitParticlesCenter(entity);
         if(ticksForFinger < 26){
             if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
                 this.takeDeterminedKnockback(this.self, entity, knockbackStrength);

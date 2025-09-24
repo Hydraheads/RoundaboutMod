@@ -788,6 +788,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                         !$$5.isInvulnerable() && $$5.isAlive() && !(this.self.isPassenger() &&
                         this.self.getVehicle().getUUID() == $$5.getUUID()) && stand.getSensing().hasLineOfSight($$5)){
 
+                    hitParticlesCenter(LE);
                     if (this.StandDamageEntityAttack($$5,getAssaultStrength($$5), 0.4F, this.self)){
                         addEXP(3,LE);
                         MainUtil.makeBleed($$5,0,100,null);
