@@ -233,30 +233,7 @@ public class NewPunchingStand extends NewDashPreset {
         }
     }
 
-    public SimpleParticleType getImpactParticle(){
-        SimpleParticleType punchpart;
-        float random = (float) (Math.random()*3);
-        if (random > 2){
-            punchpart = ModParticles.PUNCH_IMPACT_A;
-        } else if (random > 1){
-            punchpart = ModParticles.PUNCH_IMPACT_B;
-        } else {
-            punchpart = ModParticles.PUNCH_IMPACT_B;
-        }
-        return punchpart;
-    }
 
-    public Vec3 getRandPos(Entity ent){
-        return new Vec3(
-                ent.getRandomX(1),
-                getRandomY(ent,0.3)+(ent.getBbHeight()/2),
-                ent.getRandomZ(1)
-        );
-    }
-
-    public double getRandomY(Entity ent, double $$0) {
-        return ent.getY((2.0 * Math.random() - 1.0) * $$0);
-    }
 
     @Override
     public boolean setPowerBarrageCharge() {

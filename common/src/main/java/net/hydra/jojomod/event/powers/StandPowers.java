@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModGamerules;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.item.MaxStandDiscItem;
@@ -33,6 +34,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -3171,6 +3173,33 @@ public class StandPowers {
         return $$1;
     }
 
+    public Vec3 getRandPos(Entity ent){
+        return new Vec3(
+                ent.getRandomX(1),
+                getRandomY(ent,0.33)+(ent.getBbHeight()*0.63),
+                ent.getRandomZ(1)
+        );
+    }
+
+    public double getRandomY(Entity ent, double $$0) {
+        return ent.getY((2.0 * Math.random() - 1.0) * $$0);
+    }
+
+
+    public SimpleParticleType getImpactParticle(){
+        SimpleParticleType punchpart;
+        float random = (float) (Math.random()*3);
+        if (random > 2){
+            punchpart = ModParticles.PUNCH_IMPACT_A;
+        } else if (random > 1){
+            punchpart = ModParticles.PUNCH_IMPACT_B;
+        } else {
+            punchpart = ModParticles.PUNCH_IMPACT_B;
+        }
+        return punchpart;
+    }
+
+
     /**If you override this for any reason, you should probably call the super(). Although SP and TW override
      * this, you can probably do better*/
     public void barrageImpact(Entity entity, int hitNumber){
@@ -3190,6 +3219,12 @@ public class StandPowers {
                             && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
                         initiateClash(entity);
                     } else {
+                            Vec3 vec = getRandPos(entity);
+                            ((ServerLevel) this.self.level()).sendParticles(
+                                    getImpactParticle(),
+                                    vec.x, vec.y, vec.z,
+                                    1, 0.0, 0.0, 0.0, 1);
+
                         float pow;
                         float knockbackStrength = 0;
                         /**By saving the velocity before hitting, we can let people approach barraging foes

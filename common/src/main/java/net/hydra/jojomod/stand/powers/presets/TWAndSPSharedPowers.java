@@ -968,6 +968,12 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                             && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
                         initiateClash(entity);
                     } else {
+                        Vec3 vec = getRandPos(entity);
+                        ((ServerLevel) this.self.level()).sendParticles(
+                                getImpactParticle(),
+                                vec.x, vec.y, vec.z,
+                                1, 0.0, 0.0, 0.0, 1);
+
                         float pow;
                         float knockbackStrength = 0;
                         /**By saving the velocity before hitting, we can let people approach barraging foes
