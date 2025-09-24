@@ -2397,7 +2397,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     @Unique
     public boolean roundabout$isSealed(){
-        return roundabout$sealedTicks > -1;
+        return roundabout$sealedTicks > -1 || (rdbt$this() instanceof Player PE && PE.isSpectator());
     }
     @Override
     @Unique
