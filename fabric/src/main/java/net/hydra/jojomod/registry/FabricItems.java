@@ -6,7 +6,6 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StreetSignBlock;
 import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.event.powers.visagedata.aesthetician.*;
 import net.hydra.jojomod.item.*;
@@ -478,6 +477,7 @@ public class FabricItems {
         ModItems.FOG_BLOCK_ITEMS = FOG_BLOCK_ITEMS;
         ModItems.INTERDIMENSIONAL_KEY = INTERDIMENSIONAL_KEY;
         ModItems.FLESH_BUCKET = FLESH_BUCKET;
+
 
         ModItems.initializeVisageStore();
         //ModItems.STAND_ARROW_POOL.add((StandDiscItem)STAND_DISC_D4C);
