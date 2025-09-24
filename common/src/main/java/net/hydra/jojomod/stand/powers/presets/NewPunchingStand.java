@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
@@ -15,6 +16,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -219,8 +221,41 @@ public class NewPunchingStand extends NewDashPreset {
         }
 
         if (!this.self.level().isClientSide()) {
+            if (entity != null) {
+                Vec3 vec = getRandPos(entity);
+                ((ServerLevel) this.self.level()).sendParticles(
+                        getImpactParticle(),
+                        vec.x,vec.y,vec.z,
+                        1, 0.0, 0.0, 0.0, 1);
+            } else {
+            }
             this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
         }
+    }
+
+    public SimpleParticleType getImpactParticle(){
+        SimpleParticleType punchpart;
+        float random = (float) (Math.random()*3);
+        if (random > 2){
+            punchpart = ModParticles.PUNCH_IMPACT_A;
+        } else if (random > 1){
+            punchpart = ModParticles.PUNCH_IMPACT_B;
+        } else {
+            punchpart = ModParticles.PUNCH_IMPACT_B;
+        }
+        return punchpart;
+    }
+
+    public Vec3 getRandPos(Entity ent){
+        return new Vec3(
+                ent.getRandomX(1),
+                getRandomY(ent,0.3)+(ent.getBbHeight()/2),
+                ent.getRandomZ(1)
+        );
+    }
+
+    public double getRandomY(Entity ent, double $$0) {
+        return ent.getY((2.0 * Math.random() - 1.0) * $$0);
     }
 
     @Override

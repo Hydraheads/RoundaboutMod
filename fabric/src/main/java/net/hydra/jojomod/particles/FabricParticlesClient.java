@@ -6,6 +6,9 @@ import net.minecraft.client.particle.*;
 public class FabricParticlesClient {
     public static void registerClientParticles(){
         ParticleFactoryRegistry.getInstance().register(FabricParticles.HIT_IMPACT, ExplodeParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.PUNCH_IMPACT_A, PunchImpactParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.PUNCH_IMPACT_B, PunchImpactParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.PUNCH_IMPACT_C, PunchImpactParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.MELTING, BloodParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.BLOOD, BloodParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.BLUE_BLOOD, BloodParticle.Provider::new);

@@ -197,6 +197,9 @@ public class ClientForgeEvents {
     @SubscribeEvent
     public static void registerParticleStuff(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(ForgeParticles.HIT_IMPACT.get(), ExplodeParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.PUNCH_IMPACT_A.get(), PunchImpactParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.PUNCH_IMPACT_B.get(), PunchImpactParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.PUNCH_IMPACT_C.get(), PunchImpactParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.MELTING.get(), BloodParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.BLOOD.get(), BloodParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.BLUE_BLOOD.get(), BloodParticle.Provider::new);
