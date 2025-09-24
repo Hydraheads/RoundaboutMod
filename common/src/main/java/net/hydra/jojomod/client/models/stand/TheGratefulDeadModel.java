@@ -1,6 +1,9 @@
 package net.hydra.jojomod.client.models.stand;
 
+import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.entity.stand.TheGratefulDeadEntity;
+import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.stand.powers.PowersTheGratefulDead;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
@@ -81,7 +84,7 @@ public class TheGratefulDeadModel<T extends TheGratefulDeadEntity> extends Stand
 
         PartDefinition BAM = stand2.addOrReplaceChild("BAM", CubeListBuilder.create(), PartPose.offset(0.0F, -13.5F, 0.0F));
 
-        PartDefinition RightArmBAM1 = BAM.addOrReplaceChild("RightArmBAM1", CubeListBuilder.create(), PartPose.offset(-13.5F, -7.25F, 0.0F));
+        PartDefinition RightArmBAM1 = BAM.addOrReplaceChild("RightArmBAM", CubeListBuilder.create(), PartPose.offset(-13.5F, -7.25F, 0.0F));
 
         PartDefinition cube_r5 = RightArmBAM1.addOrReplaceChild("cube_r5", CubeListBuilder.create().texOffs(31, 40).mirror().addBox(-1.0F, -0.5F, -2.0F, 2.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(4.0F, 0.0F, -4.25F, -1.5708F, 0.0F, 1.5708F));
 
@@ -112,6 +115,15 @@ public class TheGratefulDeadModel<T extends TheGratefulDeadEntity> extends Stand
         PartDefinition cube_r16 = RightArmBAM3.addOrReplaceChild("cube_r16", CubeListBuilder.create().texOffs(31, 40).mirror().addBox(-1.0F, -0.5F, -2.0F, 2.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(4.0F, 0.0F, -4.25F, -1.5708F, 0.0F, 1.5708F));
 
         return LayerDefinition.create(meshdefinition, 64, 64);
+    }
+    StandPowers Power = new PowersTheGratefulDead(null);
+    @Override
+    public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch){
+        super.setupAnim(pEntity,pLimbSwing ,pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
+        defaultModifiers(pEntity);
+        defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
+
+        this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1F);
     }
 
     @Override

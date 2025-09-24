@@ -12,4 +12,6 @@ public class TheGratefulDeadEntity extends FollowingStandEntity{
     public static final byte
         ANIME_THE_GRATEFUL_DEAD = 0,
         MANGA_THE_GRATEFUL_DEAD = 1;
+
+    public final AnimationState hideFists = new AnimationState();
 }
