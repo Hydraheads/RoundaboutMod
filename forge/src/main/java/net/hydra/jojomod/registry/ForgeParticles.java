@@ -91,6 +91,10 @@ public class ForgeParticles {
             "punch_impact_a",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> PUNCH_MISS = PARTICLES.register(
+            "punch_miss",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> PUNCH_IMPACT_B = PARTICLES.register(
             "punch_impact_b",
             () -> new SimpleParticleType(true)

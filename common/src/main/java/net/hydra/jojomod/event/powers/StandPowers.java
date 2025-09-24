@@ -3194,7 +3194,7 @@ public class StandPowers {
         } else if (random > 1){
             punchpart = ModParticles.PUNCH_IMPACT_B;
         } else {
-            punchpart = ModParticles.PUNCH_IMPACT_B;
+            punchpart = ModParticles.PUNCH_IMPACT_C;
         }
         return punchpart;
     }

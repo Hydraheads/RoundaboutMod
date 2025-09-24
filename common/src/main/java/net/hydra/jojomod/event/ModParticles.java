@@ -23,6 +23,7 @@ public class ModParticles {
     public static SimpleParticleType PUNCH_IMPACT_B;
     public static SimpleParticleType PUNCH_IMPACT_C;
 
+    public static SimpleParticleType PUNCH_MISS;
 
     public static SimpleParticleType FOG_CHAIN;
     public static SimpleParticleType BUBBLE_TRAIL;

@@ -6,6 +6,7 @@ import net.minecraft.client.particle.*;
 public class FabricParticlesClient {
     public static void registerClientParticles(){
         ParticleFactoryRegistry.getInstance().register(FabricParticles.HIT_IMPACT, ExplodeParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.PUNCH_MISS, PunchMissParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PUNCH_IMPACT_A, PunchImpactParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PUNCH_IMPACT_B, PunchImpactParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PUNCH_IMPACT_C, PunchImpactParticle.Provider::new);

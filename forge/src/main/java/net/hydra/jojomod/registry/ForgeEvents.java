@@ -312,6 +312,7 @@ public class ForgeEvents {
         ModParticles.PUNCH_IMPACT_A = ForgeParticles.PUNCH_IMPACT_A.get();
         ModParticles.PUNCH_IMPACT_B = ForgeParticles.PUNCH_IMPACT_B.get();
         ModParticles.PUNCH_IMPACT_C = ForgeParticles.PUNCH_IMPACT_C.get();
+        ModParticles.PUNCH_MISS = ForgeParticles.PUNCH_MISS.get();
         ModParticles.BUBBLE_TRAIL = ForgeParticles.BUBBLE_TRAIL.get();
         ModParticles.WARDEN_CLOCK = ForgeParticles.WARDEN_CLOCK.get();
         ModParticles.CLOCK = ForgeParticles.CLOCK.get();
