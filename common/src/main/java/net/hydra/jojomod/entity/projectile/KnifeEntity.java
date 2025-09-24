@@ -121,6 +121,12 @@ public class KnifeEntity extends AbstractArrow {
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
         Entity $$1 = $$0.getEntity();
+        if ($$1 instanceof LivingEntity LE){
+            if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectile(this,$$0)){
+                this.discard();
+                return;
+            }
+        }
         float $$2;
 
         if ($$1 instanceof Player) {
