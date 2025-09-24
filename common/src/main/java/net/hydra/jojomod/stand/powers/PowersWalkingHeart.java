@@ -565,7 +565,17 @@ public class PowersWalkingHeart extends NewDashPreset {
         }
     }
 
+    @Override
+    public boolean interceptAllInteractions(){
+        return inCombatMode();
+    }
+
     public boolean HeelSpikeDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker, boolean rightClick){
+        if (target == null)
+            return false;
+
+        hitParticlesCenter(target);
+
         if (attacker instanceof TamableAnimal TA){
             if (target instanceof TamableAnimal TT && TT.getOwner() != null
                     && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){

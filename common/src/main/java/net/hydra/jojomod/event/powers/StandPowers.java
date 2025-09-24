@@ -175,6 +175,10 @@ public class StandPowers {
     public boolean interceptGuard(){
         return false;
     }
+    /**The above, but for canceling all right click interactions like villager interactions etc*/
+    public boolean interceptAllInteractions(){
+        return false;
+    }
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
         return false;
     }
@@ -3174,10 +3178,15 @@ public class StandPowers {
     }
 
     public Vec3 getRandPos(Entity ent){
+        Vec3 funnyVec = new Vec3(0,(ent.getBbHeight()*0.65),0);
+        Direction gd = ((IGravityEntity)ent).roundabout$getGravityDirection();
+        if (gd != Direction.DOWN){
+            funnyVec = RotationUtil.vecPlayerToWorld(funnyVec,gd);
+        }
         return new Vec3(
-                ent.getRandomX(1),
-                getRandomY(ent,0.33)+(ent.getBbHeight()*0.65),
-                ent.getRandomZ(1)
+                ent.getRandomX(1)+funnyVec.x,
+                getRandomY(ent,0.33)+funnyVec.y,
+                ent.getRandomZ(1)+funnyVec.z
         );
     }
 
@@ -3207,9 +3216,14 @@ public class StandPowers {
                 1, 0.0, 0.0, 0.0, 1);
     }
     public void hitParticlesCenter(Entity entity){
+        Vec3 funnyVec = new Vec3(0,(entity.getBbHeight()*0.65),0);
+        Direction gd = ((IGravityEntity)entity).roundabout$getGravityDirection();
+        if (gd != Direction.DOWN){
+            funnyVec = RotationUtil.vecPlayerToWorld(funnyVec,gd);
+        }
         ((ServerLevel) this.self.level()).sendParticles(
                 getImpactParticle(),
-                entity.getX(),entity.getY()+(entity.getBbHeight()*0.65),entity.getZ(),
+                entity.getX()+funnyVec.x,entity.getY()+funnyVec.y,entity.getZ()+funnyVec.z,
                 1, 0.0, 0.0, 0.0, 1);
     }
 

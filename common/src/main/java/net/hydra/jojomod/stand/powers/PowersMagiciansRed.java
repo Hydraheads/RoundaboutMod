@@ -3190,6 +3190,10 @@ public class PowersMagiciansRed extends NewPunchingStand {
         }
         this.setAttackTimeDuring(-10);
         if (entity != null) {
+            if (!this.self.level().isClientSide) {
+                ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SMOKE, entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
+                        5, 0.1, 0.1, 0.1, 0.5);
+            }
             float pow;
             float knockbackStrength;
             boolean lasthit = false;

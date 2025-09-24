@@ -525,6 +525,12 @@ public abstract class InputEvents implements IInputEvents {
 
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
+
+            if (powers.interceptAllInteractions()) {
+                roundabout$TryGuard();
+                ci.cancel();
+                return;
+            }
             if (powers.isPiloting()){
                 ci.cancel();
                 if (powers instanceof PowersJustice){
