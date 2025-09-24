@@ -2130,6 +2130,9 @@
   "config.roundabout.mobThrowRecoilTicks.name": "Mob Throw Recoil",
   "config.roundabout.mobThrowRecoilTicks.desc": "How many ticks after throwing a mob you can attack with basic punches again.",
 
+  "config.roundabout.wallPassingHitboxes.name": "Some Abilities Pass Walls",
+  "config.roundabout.wallPassingHitboxes.desc": "Some abilities in the mod like Walking Heart's heel spikes go through walls. If this poses a cheesing problem in your pack, turn this off.",
+
   "config.roundabout.namedSBRHorseSkins.name": "Named SBR Horses",
   "config.roundabout.namedSBRHorseSkins.desc": "Naming horses after select SBR ones changes their skins.",
 

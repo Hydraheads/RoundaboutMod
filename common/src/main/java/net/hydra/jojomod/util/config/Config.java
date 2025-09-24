@@ -160,6 +160,8 @@ public class Config implements Cloneable {
     public static class MiscSettings {
         @BooleanOption(group = "inherit", value = false)
         public Boolean generalDetectionGoThroughDoorsAndCorners;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean wallPassingHitboxes;
 
         @BooleanOption(group = "inherit", value = false)
         public Boolean disableBleedingAndBloodSplatters;

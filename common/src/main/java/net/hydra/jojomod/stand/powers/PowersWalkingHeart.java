@@ -648,7 +648,12 @@ public class PowersWalkingHeart extends NewDashPreset {
         this.setActivePower(PowerIndex.POWER_4_EXTRA);
 
         if (this.self.level().isClientSide()){
-            List<Entity> TE = this.getTargetEntityListThroughWalls(self, 7F,10);
+            List<Entity> TE;
+            if (!ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxes){
+                TE = this.getTargetEntityList(self, 7F,10);
+            } else {
+                TE = this.getTargetEntityListThroughWalls(self, 7F,10);
+            }
             if (TE == null || TE.isEmpty()){
                 tryPowerPacket(PowerIndex.POWER_1_BONUS);
             } else {
