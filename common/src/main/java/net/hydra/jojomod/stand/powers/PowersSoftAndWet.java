@@ -163,7 +163,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                     tryIntPowerPacket(PowerIndex.SPECIAL_TRACKER, getGoBeyondTarget().getId());
                     this.setGoBeyondTarget(null);
                     this.setGoBeyondChargeTicks(0);
-                    this.setShootTicks(0);
+                    this.setShootTicks(getMaxShootTicks());
                 }
             }
             return true;
