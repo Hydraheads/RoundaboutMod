@@ -32,7 +32,7 @@ public class ShootingArmLayer <T extends LivingEntity, A extends HumanoidModel<T
     private static final ResourceLocation TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/large_bubble.png");
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
-        if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+        if (ClientUtil.canSeeStands(ClientUtil.getPlayer()) && !entity.isUsingItem()) {
             LivingEntity livent = entity;
             if (!entity.isInvisible()) {
                 if (entity!= null) {
