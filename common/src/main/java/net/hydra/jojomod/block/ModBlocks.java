@@ -98,7 +98,7 @@ public class ModBlocks {
                     .strength(5.0F, 6.0F)
                     .sound(SoundType.METAL)
     );
-    public static Block IMPACT_MOUND_PROPERTIES = new SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DIRT).strength(0.5F).sound(SoundType.GRAVEL));
+    public static Block IMPACT_MOUND_PROPERTIES = new SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DIRT).speedFactor(0.7f).strength(0.5F).sound(SoundType.GRAVEL));
 
     private static ToIntFunction<BlockState> litBlockEmission(int p_50760_) {
         return (p_50763_) -> {
