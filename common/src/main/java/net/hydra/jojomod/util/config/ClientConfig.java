@@ -58,6 +58,15 @@ public class ClientConfig implements Cloneable {
     public Float invisibleBlockDepthF;
     @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
     public Integer invisibleBlocksDistanceAwaySeenI;
+
+
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean abilityIconHudIsAnimated;
+    @IntOption(group = "inherit", value = 174, min = 0, max = 72000)
+    public Integer abilityIconHudX;
+    @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
+    public Integer abilityIconHudY;
+
     @NestedOption(group = "modded")
     public ClientConfig.ConfigSettings configSettings;
     @NestedOption(group = "modded")

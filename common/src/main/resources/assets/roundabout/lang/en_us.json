@@ -1696,6 +1696,13 @@
   "config.roundabout.punchImpactOpacity.name": "Punch Impact Opacity",
   "config.roundabout.punchImpactOpacity.desc": "How see through punch impact particles are.",
 
+  "config.roundabout.abilityIconHudX.name": "Ability Icon Hud X",
+  "config.roundabout.abilityIconHudX.desc": "The X position of the ability icons that slide in when your stand/powers are active.",
+  "config.roundabout.abilityIconHudY.name": "Ability Icon Hud Y",
+  "config.roundabout.abilityIconHudY.desc": "The Y position of the ability icons that slide in when your stand/powers are active.",
+  "config.roundabout.abilityIconHudIsAnimated.name": "Ability Icons Animated",
+  "config.roundabout.abilityIconHudIsAnimated.desc": "Whether or not of the ability icons that slide in when your stand/powers are active actually slide, or just jump immediately to the spot.",
+
 
   "config.roundabout.itemBubbleShotCooldown.name": "Item Bubble Cooldown",
   "config.roundabout.itemBubbleShotCooldown.desc": "The time between creating explosive item bubbles in shooting mode. The default is 60 ticks, or 4 second.",

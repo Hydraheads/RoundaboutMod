@@ -15,6 +15,7 @@ import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -30,10 +31,17 @@ public class StandHudRender {
 
 
     private static final int guiSize = 174;
-    private static float animated = 0;
+    private static float presentX = 0;
+
+    public static boolean configIsLoaded(){
+        return ConfigManager.getClientConfig() != null;
+    }
+
     public static void renderStandHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                       int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                       float flashAlpha, float otherFlashAlpha) {
+        if (!configIsLoaded())
+            return;
         if (playerEntity != null) {
             RenderSystem.enableBlend();
             int x = 0;
@@ -47,20 +55,28 @@ public class StandHudRender {
 
             int iconHeight = 18;
             int iconWidth = 18;
-            x = (int) (-20-guiSize+animated);
+            x = (int) (-20-guiSize+ presentX);
             //x = (int) (-20);
-            y = 5;
+            y = ConfigManager.getClientConfig().abilityIconHudY;
             Minecraft mc = Minecraft.getInstance();
             float tickDelta = mc.getDeltaFrameTime();
 
             boolean standOn = ((StandUser) playerEntity).roundabout$getActive();
-            if (standOn || animated > 0.1){
+            if (standOn || presentX > 0.1){
                 if (!standOn){
-                    animated = Math.max(controlledLerp(tickDelta, animated,0,0.5f),0);
+                    if (ConfigManager.getClientConfig().abilityIconHudIsAnimated){
+                        presentX = Math.max(controlledLerp(tickDelta, presentX,0,0.5f),0);
+                    } else {
+                        presentX = 0;
+                    }
                 } else {
-                    if (animated < guiSize) {
-                        animated++;
-                        animated = Math.min(controlledLerp(tickDelta, animated,guiSize,0.5f),guiSize);
+                    if (ConfigManager.getClientConfig().abilityIconHudIsAnimated) {
+                        if (presentX < ConfigManager.getClientConfig().abilityIconHudX) {
+                            presentX++;
+                            presentX = Math.min(controlledLerp(tickDelta, presentX, ConfigManager.getClientConfig().abilityIconHudX, 0.5f), ConfigManager.getClientConfig().abilityIconHudX);
+                        }
+                    } else {
+                        presentX = ConfigManager.getClientConfig().abilityIconHudX;
                     }
                 }
                 context.setColor(1.0f, 1.0f, 1.0f, 0.9f);
