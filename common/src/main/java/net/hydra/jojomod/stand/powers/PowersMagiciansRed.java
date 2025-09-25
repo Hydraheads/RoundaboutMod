@@ -3192,7 +3192,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         if (entity != null) {
             if (!this.self.level().isClientSide) {
                 ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SMOKE, entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
-                        5, 0.1, 0.1, 0.1, 0.5);
+                        4, 0.1, 0.1, 0.1, 0.3);
             }
             float pow;
             float knockbackStrength;

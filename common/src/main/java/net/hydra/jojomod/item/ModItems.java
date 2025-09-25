@@ -13,6 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.ComposterBlock;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -167,6 +168,9 @@ public class ModItems {
         if (ClientNetworking.getAppropriateConfig().cinderellaSettings.enableJojoveinVisagesInShop){
             addToVisageStore(SHIZUKA_MASK,2, characterCostExp, characterCostEmerald);
         }
+        ComposterBlock.COMPOSTABLES.put(LOCACACA_PIT, 0.3f);
+        ComposterBlock.COMPOSTABLES.put(NEW_LOCACACA, 0.65f);
+        ComposterBlock.COMPOSTABLES.put(LOCACACA, 0.65f);
     }
     public static void addToVisageStore(Item item, int page, int costL, int costE){
         VISAGE_STORE_ENTRIES.add(new VisageStoreEntry(item.getDefaultInstance(), page, costL, costE));
