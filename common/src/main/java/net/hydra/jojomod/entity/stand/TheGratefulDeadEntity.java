@@ -14,4 +14,16 @@ public class TheGratefulDeadEntity extends FollowingStandEntity{
         MANGA_THE_GRATEFUL_DEAD = 1;
 
     public final AnimationState hideFists = new AnimationState();
+
+    @Override
+    public void setupAnimationStates(){
+        super.setupAnimationStates();
+        if (this.getUser() != null){
+            if (this.getAnimation() != 12) {
+                this.hideFists.startIfStopped(this.tickCount);
+            } else {
+                this.hideFists.stop();
+            }
+        }
+    }
 }

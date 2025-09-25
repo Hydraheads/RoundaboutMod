@@ -117,6 +117,7 @@ public class TheGratefulDeadModel<T extends TheGratefulDeadEntity> extends Stand
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
     StandPowers Power = new PowersTheGratefulDead(null);
+
     @Override
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch){
         super.setupAnim(pEntity,pLimbSwing ,pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
