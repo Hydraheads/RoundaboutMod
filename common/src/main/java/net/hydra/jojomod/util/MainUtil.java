@@ -126,10 +126,18 @@ public class MainUtil {
 
     public static ArrayList<String> walkableBlocks = Lists.newArrayList();
     public static ArrayList<String> standBlockGrabBlacklist = Lists.newArrayList();
+    public static ArrayList<String> naturalStandUserMobBlacklist = Lists.newArrayList();
 
     public static boolean isBlockBlacklisted(BlockState bs){
         ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
         if (standBlockGrabBlacklist != null && !standBlockGrabBlacklist.isEmpty() && rl != null && standBlockGrabBlacklist.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isMobStandUserBlacklisted(Entity ent){
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        if (naturalStandUserMobBlacklist != null && !naturalStandUserMobBlacklist.isEmpty() && rl != null && naturalStandUserMobBlacklist.contains(rl.toString())){
             return true;
         }
         return false;
@@ -343,7 +351,7 @@ public class MainUtil {
 
     public static double getWorthyOdds(Mob mob) {
         if ((isBossMob(mob) && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
-        || mob instanceof JojoNPC){
+        || mob instanceof JojoNPC || isMobStandUserBlacklisted(mob)){
             return 0;
         }
         return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.worthyMobOdds;
@@ -365,7 +373,7 @@ public class MainUtil {
     public static double getStandUserOdds(Mob mob) {
         if ((isBossMob(mob) && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
                 || mob instanceof JojoNPC
-                || mob instanceof Vex){
+        || isMobStandUserBlacklisted(mob)){
             return 0;
         } else if (mob instanceof AbstractVillager){
             return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.standUserVillagerOdds;

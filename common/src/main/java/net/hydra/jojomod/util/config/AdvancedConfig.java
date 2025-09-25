@@ -84,4 +84,11 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:ancient_debris"
             )
     );
+
+    public Set<String> naturalStandUserMobBlacklist = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:zombie_horse",
+                    "minecraft:vex"
+            )
+    );
 }
