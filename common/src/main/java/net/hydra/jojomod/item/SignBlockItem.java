@@ -37,27 +37,6 @@ public class SignBlockItem extends BlockItem {
     public float getDamage() {
         return 9.2F;
     }
-    @Override
-    public boolean hurtEnemy(ItemStack $$0, LivingEntity $$1, LivingEntity $$2) {
-        if (!$$1.level().isClientSide()) {
-            if (MainUtil.getMobBleed($$1)){
-                MainUtil.makeBleed($$1,1,100,$$2);
-            }
-            CompoundTag ct = $$0.getOrCreateTagElement("BlockStateTag");
-            int ctd = ct.getInt("damaged");
-            ctd++;
-            if (ctd > 2) {
-                $$1.level().playSound(null, $$1.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS,
-                        1F, 1);
-                $$0.shrink(1);
-            } else {
-                $$1.level().playSound(null, $$1.blockPosition(), ModSounds.SIGN_HIT_EVENT, SoundSource.PLAYERS,
-                        1F, 1);
-                ct.putInt("damaged", ctd);
-            }
-        }
-        return true;
-    }
 
     public String getDescriptionId() {
         return this.getOrCreateDescriptionId();
