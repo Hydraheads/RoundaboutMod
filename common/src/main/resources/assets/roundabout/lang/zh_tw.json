@@ -1717,7 +1717,7 @@
   "config.roundabout.projectileBurnCooldown.name": "焚毀投射物冷卻",
   "config.roundabout.projectileBurnCooldown.desc": "焚毀投射物技能的冷卻。默認100刻，即5秒",
   "config.roundabout.flameCrashCooldown.name": "最後一搏冷卻",
-  "config.roundabout.flameCrashCooldown.desc": "使用最後一搏技能時自動給予的冷卻，無論是否被取消或命中。 默認400刻，即20秒。",
+  "config.roundabout.Cooldown.desc": "使用最後一搏技能時自動給予的冷卻，無論是否被取消或命中。 默認400刻，即20秒。",
   "config.roundabout.magiciansRedFireballsWindup.name": "火球連射蓄力時間",
   "config.roundabout.magiciansRedFireballsWindup.desc": "火球發射前的蓄力時間。以刻表示。",
   "config.roundabout.magiciansRedFlamethrowerWindup.name": "噴火器蓄力時間",
