@@ -3494,7 +3494,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if ($$0.getDirectEntity() != null) {
             if (($$0.getDirectEntity() instanceof Player PE && (PE.getMainHandItem().is(ModItems.EXECUTIONER_AXE)
             || (PE.getMainHandItem().is(ModItems.SCISSORS) && ((StandUser)PE).roundabout$getStandPowers()
-            instanceof PowersJustice))) && $$0.is(DamageTypes.PLAYER_ATTACK)) {
+            instanceof PowersJustice))) && ($$0.is(DamageTypes.PLAYER_ATTACK) || $$0.is(DamageTypes.MOB_ATTACK))) {
                 LivingEntity ths = ((LivingEntity)(Object)this);
                 boolean marked = false;
                 FallenMob mb = null;
