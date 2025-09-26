@@ -562,7 +562,7 @@ public class Config implements Cloneable {
         public Float bonusDamageWhenPunching;
         @IntOption(group = "inherit", value = 8, min = 0, max = 72000)
         public Integer survivorRange;
-        @IntOption(group = "inherit", value = 8, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
         public Integer survivorCupidRange;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer survivorCupidCreativeRange;
