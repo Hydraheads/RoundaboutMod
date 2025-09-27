@@ -6,7 +6,7 @@ import net.minecraft.client.animation.Keyframe;
 import net.minecraft.client.animation.KeyframeAnimations;
 
 public class TheGratefulDeadAnimations {
-    public static final AnimationDefinition idle = AnimationDefinition.Builder.withLength(0.0F)
+    public static final AnimationDefinition IDLE = AnimationDefinition.Builder.withLength(0.0F)
             .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(10.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))

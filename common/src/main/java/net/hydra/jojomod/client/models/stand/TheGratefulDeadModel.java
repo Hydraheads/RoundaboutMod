@@ -1,6 +1,7 @@
 package net.hydra.jojomod.client.models.stand;
 
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
+import net.hydra.jojomod.client.models.stand.animations.TheGratefulDeadAnimations;
 import net.hydra.jojomod.entity.stand.TheGratefulDeadEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.stand.powers.PowersTheGratefulDead;
@@ -124,6 +125,8 @@ public class TheGratefulDeadModel<T extends TheGratefulDeadEntity> extends Stand
         defaultModifiers(pEntity);
         defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
 
+        this.animate(pEntity.idleAnimationState, TheGratefulDeadAnimations.IDLE, pAgeInTicks, 1F);
+        this.animate(pEntity.idleAnimationState2, StandAnimations.FLOATY_IDLE, pAgeInTicks, 1F);
         this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1F);
     }
 

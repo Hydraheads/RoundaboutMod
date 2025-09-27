@@ -1,5 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 
+import com.google.common.collect.Lists;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -51,5 +52,26 @@ public class PowersTheGratefulDead extends NewPunchingStand {
         return Arrays.asList(
                 ANIME_THE_GRATEFUL_DEAD
         );
+    }
+
+
+
+    // UI things (?)
+
+    @Override
+    public List<Byte> getPosList(){
+        List<Byte> $$1 = Lists.newArrayList();
+        $$1.add((byte) 0);
+        $$1.add((byte) 2);
+        return $$1;
+    }
+
+    @Override
+    public Component getPosName(byte posID){
+        if (posID == 2){
+            return Component.translatable(  "idle.roundabout.floaty");
+        } else {
+            return Component.translatable(  "idle.roundabout.passive");
+        }
     }
 }
