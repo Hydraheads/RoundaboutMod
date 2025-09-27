@@ -73,6 +73,8 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     ShapeShifts shift = ShapeShifts.getShiftFromByte(pl.roundabout$getShapeShift());
                     if (shift == ShapeShifts.OVA) {
                         visage = ModItems.ENYA_OVA_MASK.getDefaultInstance();
+                    } else if (shift == ShapeShifts.EERIE) {
+                        visage = null;
                     }
                 } else if (entity instanceof JojoNPC jnpc) {
                     visage = jnpc.getBasis();

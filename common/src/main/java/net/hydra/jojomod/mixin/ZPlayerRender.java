@@ -14,6 +14,7 @@ import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ModificationMaskItem;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
@@ -760,25 +761,13 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     }
     boolean roundabout$switched = false;
     public void roundabout$changeTheModel(AbstractClientPlayer player, ItemStack visage, ShapeShifts shifts){
-        if (shifts == ShapeShifts.EERIE) {
-            if (((IPlayerModel) this.model).roundabout$getSlim()) {
-                if (!((IPlayerEntityAbstractClient)player).roundabout$getSwitched()) {
-                    ((IPlayerEntityAbstractClient)player).roundabout$setOGModel(this.model);
-                    ((IPlayerEntityAbstractClient)player).roundabout$setSwitched(true);
-                    model = roundabout$otherModel;
-                }
-            }
-            return;
-        }
+
+        IPlayerEntity pl = ((IPlayerEntity) player);
+        visage = pl.roundabout$getMaskSlot();
         if (shifts == ShapeShifts.OVA) {
-            if (!((IPlayerModel) this.model).roundabout$getSlim()) {
-                if (!((IPlayerEntityAbstractClient)player).roundabout$getSwitched()) {
-                    ((IPlayerEntityAbstractClient)player).roundabout$setOGModel(this.model);
-                    ((IPlayerEntityAbstractClient)player).roundabout$setSwitched(true);
-                    model = roundabout$otherModel;
-                }
-            }
-            return;
+            visage = ModItems.ENYA_OVA_MASK.getDefaultInstance();
+        } else if (shifts == ShapeShifts.EERIE) {
+            visage = null;
         }
 
         if (visage != null && !visage.isEmpty()) {
@@ -1162,6 +1151,14 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     public void roundabout$scale(AbstractClientPlayer $$0, PoseStack $$1, float $$2, CallbackInfo ci) {
         IPlayerEntity ple = ((IPlayerEntity) $$0);
         ItemStack visage = ple.roundabout$getMaskSlot();
+        ShapeShifts shift = ShapeShifts.getShiftFromByte(ple.roundabout$getShapeShift());
+        if (shift == ShapeShifts.OVA) {
+            visage = ModItems.ENYA_OVA_MASK.getDefaultInstance();
+        } else if (shift == ShapeShifts.EERIE) {
+            visage = null;
+        }
+
+
         if (visage != null && !visage.isEmpty()) {
             if (visage.getItem() instanceof MaskItem MI) {
                 if (MI instanceof ModificationMaskItem MD){
