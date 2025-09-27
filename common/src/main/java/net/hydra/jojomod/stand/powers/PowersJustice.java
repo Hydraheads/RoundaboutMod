@@ -1339,8 +1339,8 @@ public class PowersJustice extends NewDashPreset {
             fclone2.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
             fclone.setPlayer(PE);
             fclone2.setPlayer(PE);
-            fclone.setTimer(100);
-            fclone2.setTimer(101);
+            fclone.setTimer(200);
+            fclone2.setTimer(201);
             float first = ((this.getSelf().getYHeadRot()-25)%360);
             float second = ((this.getSelf().getYHeadRot()+25)%360);
             fclone.setYRot(first);
