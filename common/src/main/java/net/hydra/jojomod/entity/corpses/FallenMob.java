@@ -653,17 +653,19 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
 
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(CONTROLLER, -1);
-        this.entityData.define(TICKS_THROUGH_PLACER, false);
-        this.entityData.define(PHASES_FULL, false);
-        this.entityData.define(IS_ACTIVATED, false);
-        this.entityData.define(IS_TURNED, false);
-        this.entityData.define(FORCED_ROTATION, 0F);
-        this.entityData.define(SELECTED, false);
-        this.entityData.define(TARGET_TACTIC, (byte)0);
-        this.entityData.define(MOVEMENT_TACTIC, (byte)0);
-        this.entityData.define(TEAM_COLOR, (byte)0);
+        if (!this.entityData.hasItem(CONTROLLER)) {
+            super.defineSynchedData();
+            this.entityData.define(CONTROLLER, -1);
+            this.entityData.define(TICKS_THROUGH_PLACER, false);
+            this.entityData.define(PHASES_FULL, false);
+            this.entityData.define(IS_ACTIVATED, false);
+            this.entityData.define(IS_TURNED, false);
+            this.entityData.define(FORCED_ROTATION, 0F);
+            this.entityData.define(SELECTED, false);
+            this.entityData.define(TARGET_TACTIC, (byte) 0);
+            this.entityData.define(MOVEMENT_TACTIC, (byte) 0);
+            this.entityData.define(TEAM_COLOR, (byte) 0);
+        }
     }
     protected FallenMob(EntityType<? extends PathfinderMob> $$0, Level $$1) {
         super($$0, $$1);

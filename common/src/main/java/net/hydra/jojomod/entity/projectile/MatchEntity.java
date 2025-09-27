@@ -165,8 +165,10 @@ public class MatchEntity extends ThrowableItemProjectile {
 
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(ROUNDABOUT$SUPER_THROWN, false);
+        if (!this.entityData.hasItem(ROUNDABOUT$SUPER_THROWN)) {
+            super.defineSynchedData();
+            this.entityData.define(ROUNDABOUT$SUPER_THROWN, false);
+        }
     }
 
     @Override

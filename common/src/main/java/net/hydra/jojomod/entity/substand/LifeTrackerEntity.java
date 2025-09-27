@@ -230,8 +230,10 @@ public class LifeTrackerEntity extends LivingEntity {
     }
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(USER_ID, -1);
+        if (!this.entityData.hasItem(USER_ID)) {
+            super.defineSynchedData();
+            this.entityData.define(USER_ID, -1);
+        }
     }
 
     @Override

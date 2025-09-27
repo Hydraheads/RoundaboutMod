@@ -426,8 +426,8 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
     protected static final EntityDataAccessor<CompoundTag> DATA_SHOULDER_LEFT = SynchedEntityData.defineId(JojoNPC.class, EntityDataSerializers.COMPOUND_TAG);
     protected static final EntityDataAccessor<CompoundTag> DATA_SHOULDER_RIGHT = SynchedEntityData.defineId(JojoNPC.class, EntityDataSerializers.COMPOUND_TAG);
     protected void defineSynchedData() {
-        super.defineSynchedData();
         if (!this.entityData.hasItem(ROUNDABOUT$SKIN_NUMBER)) {
+            super.defineSynchedData();
             this.entityData.define(DATA_UNHAPPY_COUNTER, 0);
             this.entityData.define(ROUNDABOUT$POS, (byte) 0);
             this.entityData.define(DATA_PLAYER_ABSORPTION_ID, 0.0F);

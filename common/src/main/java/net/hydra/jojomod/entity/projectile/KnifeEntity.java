@@ -74,8 +74,10 @@ public class KnifeEntity extends AbstractArrow {
 
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(ID_FOIL, false);
+        if (!this.entityData.hasItem(ID_FOIL)) {
+            super.defineSynchedData();
+            this.entityData.define(ID_FOIL, false);
+        }
     }
     public boolean isFoil() {
         return this.entityData.get(ID_FOIL);

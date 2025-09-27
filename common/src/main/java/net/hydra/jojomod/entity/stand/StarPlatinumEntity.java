@@ -216,9 +216,11 @@ public class StarPlatinumEntity extends FollowingStandEntity {
     }
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(FINGER_LENGTH, 1F);
-        this.entityData.define(IS_SCOPING, false);
+        if (!this.entityData.hasItem(FINGER_LENGTH)) {
+            super.defineSynchedData();
+            this.entityData.define(FINGER_LENGTH, 1F);
+            this.entityData.define(IS_SCOPING, false);
+        }
     }
 
     public int tsReleaseTime = 0;

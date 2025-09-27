@@ -72,8 +72,8 @@ public class ZombieAesthetician extends Zombie {
     }
 
     protected void defineSynchedData() {
-        super.defineSynchedData();
         if (!this.entityData.hasItem(ROUNDABOUT$SKIN_NUMBER)) {
+            super.defineSynchedData();
             this.entityData.define(DATA_CONVERTING_ID, false);
             this.entityData.define(ROUNDABOUT$SKIN_NUMBER, 1);
         }

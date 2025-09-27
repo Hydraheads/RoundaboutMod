@@ -78,8 +78,10 @@ public class GroundPathfindingStandAttackEntity extends PathfinderMob {
     }
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(USER_ID, -1);
+        if (!this.entityData.hasItem(USER_ID)) {
+            super.defineSynchedData();
+            this.entityData.define(USER_ID, -1);
+        }
     }
     @Override
     public boolean hurt(DamageSource source, float amount) {

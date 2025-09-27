@@ -163,9 +163,11 @@ public class ConcealedFlameObjectEntity extends ThrowableItemProjectile implemen
 
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(SIZE, 0);
-        this.entityData.define(USER_ID, -1);
+        if (!this.entityData.hasItem(USER_ID)) {
+            super.defineSynchedData();
+            this.entityData.define(SIZE, 0);
+            this.entityData.define(USER_ID, -1);
+        }
     }
     @Override
     protected Item getDefaultItem() {
