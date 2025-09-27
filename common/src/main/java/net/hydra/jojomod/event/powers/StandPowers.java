@@ -64,6 +64,8 @@ import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
+import net.zetalasis.hjson.JsonObject;
+import net.zetalasis.hjson.JsonValue;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
@@ -71,6 +73,7 @@ import org.joml.Vector3d;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class StandPowers {
 
@@ -3024,61 +3027,66 @@ public class StandPowers {
     }
 
     public void tickCooldowns(){
-        int amt = 1;
-        boolean isDrowning = false;
+        try {
+            int amt = 1;
+            boolean isDrowning = false;
 
-        // Changes how fast the cooldowns should recharge
-        if (this.self instanceof Player) {
-            isDrowning = (this.self.getAirSupply() <= 0);
+            // Changes how fast the cooldowns should recharge
+            if (this.self instanceof Player) {
+                isDrowning = (this.self.getAirSupply() <= 0);
 
-            int idle = ((StandUser) this.getSelf()).roundabout$getIdleTime();
-            if (idle > 300) {
-                amt *= 4;
-            } else if (idle > 200) {
-                amt *= 3;
-            } else if (idle > 40) {
-                amt *= 2;
+                int idle = ((StandUser) this.getSelf()).roundabout$getIdleTime();
+                if (idle > 300) {
+                    amt *= 4;
+                } else if (idle > 200) {
+                    amt *= 3;
+                } else if (idle > 40) {
+                    amt *= 2;
+                }
+
+                if (isDrowning && !ClientNetworking.getAppropriateConfig().generalStandSettings.canRechargeCooldownsWhileDrowning)
+                { amt = 0; }
             }
 
-            if (isDrowning && !ClientNetworking.getAppropriateConfig().generalStandSettings.canRechargeCooldownsWhileDrowning)
-            { amt = 0; }
-        }
-
-        byte cin = -1;
-        for (CooldownInstance ci : StandCooldowns){
-            cin++;
-            if (ci.time >= 0){
-                if (!canUseStillStandingRecharge(cin)){
-                    amt = 1;
-                }
-                ci.setFrozen(isDrowning && !ClientNetworking.getAppropriateConfig().generalStandSettings.canRechargeCooldownsWhileDrowning);
-
-                boolean serverControlledCooldwon = isServerControlledCooldown(ci, cin);
-                if (!(this.self.level().isClientSide() && serverControlledCooldwon)) {
-
-                    if (!ci.isFrozen()) {
-                        ci.time -= amt;
+            byte cin = -1;
+            for (CooldownInstance ci : StandCooldowns){
+                cin++;
+                if (ci.time >= 0){
+                    if (!canUseStillStandingRecharge(cin)){
+                        amt = 1;
                     }
+                    ci.setFrozen(isDrowning && !ClientNetworking.getAppropriateConfig().generalStandSettings.canRechargeCooldownsWhileDrowning);
 
-                    if (ci.time < -1) {
-                        ci.time = -1;
-                    }
+                    boolean serverControlledCooldwon = isServerControlledCooldown(ci, cin);
+                    if (!(this.self.level().isClientSide() && serverControlledCooldwon)) {
 
-                    if (this.self instanceof Player) {
-                        if ((((Player) this.self).isCreative() &&
-                                ClientNetworking.getAppropriateConfig().generalStandSettings.creativeModeRefreshesCooldowns) && ci.time > 2) {
-                            ci.time = 2;
+                        if (!ci.isFrozen()) {
+                            ci.time -= amt;
+                        }
+
+                        if (ci.time < -1) {
+                            ci.time = -1;
+                        }
+
+                        if (this.self instanceof Player) {
+                            if ((((Player) this.self).isCreative() &&
+                                    ClientNetworking.getAppropriateConfig().generalStandSettings.creativeModeRefreshesCooldowns) && ci.time > 2) {
+                                ci.time = 2;
+                            }
+                        }
+
+                        if (serverControlledCooldwon && !this.self.level().isClientSide() && this.self instanceof Player) {
+                            List<CooldownInstance> CDCopy = new ArrayList<>(StandCooldowns) {
+                            };
+
+                            S2CPacketUtil.sendMaxCooldownSyncPacket(((ServerPlayer) this.getSelf()), cin, ci.time, ci.maxTime);
                         }
                     }
-
-                    if (serverControlledCooldwon && !this.self.level().isClientSide() && this.self instanceof Player) {
-                        List<CooldownInstance> CDCopy = new ArrayList<>(StandCooldowns) {
-                        };
-
-                        S2CPacketUtil.sendMaxCooldownSyncPacket(((ServerPlayer) this.getSelf()), cin, ci.time, ci.maxTime);
-                    }
                 }
             }
+        } catch (Exception e){
+            //I very much doubt this will error
+            Roundabout.LOGGER.info("???");
         }
     }
 
