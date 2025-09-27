@@ -1,10 +1,16 @@
 package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -41,5 +47,13 @@ public class MaskItem extends Item {
                     Component.translatable("item.roundabout.creative_only.info").withStyle(ChatFormatting.GOLD)
             );
         }
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
+        if ($$0.isClientSide()){
+            ClientUtil.setCheck();
+        }
+        return super.use($$0,$$1,$$2);
     }
 }

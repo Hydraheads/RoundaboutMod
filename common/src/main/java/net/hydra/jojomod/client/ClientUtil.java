@@ -85,6 +85,12 @@ public class ClientUtil {
      * Not a perfect solution but it should help.*/
     public static int skipInterpolationFixAccidentTicks = -1;
 
+
+    public static void setCheck(){
+        //Right-clicking a visage opens the power inventory (see inputevents mixin for another use case)
+        KeyInputs.menuKey(Minecraft.getInstance().player, Minecraft.getInstance());
+        checkthis = 1;
+    }
     public static boolean isPlayerOrCamera(Entity ent){
         Minecraft mc = Minecraft.getInstance();
         if (!(mc.getCameraEntity() != null && ent.is(mc.getCameraEntity())) &&
