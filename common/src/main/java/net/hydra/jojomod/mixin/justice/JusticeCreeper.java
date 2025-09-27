@@ -5,6 +5,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
@@ -23,7 +24,9 @@ public abstract class JusticeCreeper extends Monster implements IJusticeCreeper 
 
     @Inject(method = "defineSynchedData", at = @At(value = "HEAD"))
     protected void roundabout$DefineSyncedData(CallbackInfo ci) {
-        this.entityData.define(roundabout$IS_TRANSFORMED, false);
+        if (!((LivingEntity)(Object)this).getEntityData().hasItem(roundabout$IS_TRANSFORMED)) {
+            this.entityData.define(roundabout$IS_TRANSFORMED, false);
+        }
     }
     @Unique
     public boolean roundabout$isTransformed(){
