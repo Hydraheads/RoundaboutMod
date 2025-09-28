@@ -98,6 +98,7 @@ public class ModItems {
     public static Item MODIFICATION_MASK;
     public static Item JOTARO_MASK;
     public static Item JOTARO_4_MASK;
+    public static Item JOTARO_6_MASK;
     public static Item DIO_MASK;
     public static Item ENYA_MASK;
     public static Item ENYA_OVA_MASK;
@@ -156,6 +157,7 @@ public class ModItems {
         int characterCostEmerald = ClientNetworking.getAppropriateConfig().cinderellaSettings.emeraldCostCharacterVisage;
         addToVisageStore(JOTARO_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(JOTARO_4_MASK,1, characterCostExp, characterCostEmerald);
+        addToVisageStore(JOTARO_6_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(AVDOL_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(DIO_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(ENYA_MASK,1, characterCostExp, characterCostEmerald);
