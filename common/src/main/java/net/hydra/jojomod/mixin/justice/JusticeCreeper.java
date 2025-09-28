@@ -24,7 +24,7 @@ public abstract class JusticeCreeper extends Monster implements IJusticeCreeper 
 
     @Inject(method = "defineSynchedData", at = @At(value = "HEAD"))
     protected void roundabout$DefineSyncedData(CallbackInfo ci) {
-        if (!((LivingEntity)(Object)this).getEntityData().hasItem(roundabout$IS_TRANSFORMED)) {
+        if (!((Creeper)(Object)this).getEntityData().hasItem(roundabout$IS_TRANSFORMED)) {
             this.entityData.define(roundabout$IS_TRANSFORMED, false);
         }
     }

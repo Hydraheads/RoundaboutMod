@@ -155,7 +155,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
     private void initDataTrackerRoundabout(CallbackInfo ci) {
-        if (!((LivingEntity)(Object)this).getEntityData().hasItem(ROUNDABOUT$IS_WORTHY)) {
+        if (!((Mob)(Object)this).getEntityData().hasItem(ROUNDABOUT$IS_WORTHY)) {
             this.getEntityData().define(ROUNDABOUT$IS_WORTHY, false);
         }
     }

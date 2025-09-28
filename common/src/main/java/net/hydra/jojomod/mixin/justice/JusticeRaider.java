@@ -27,7 +27,7 @@ public abstract class JusticeRaider extends PatrollingMonster implements IRaider
     }
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
     protected void roundabout$DefineSyncedData(CallbackInfo ci) {
-        if (!((LivingEntity)(Object)this).getEntityData().hasItem(roundabout$IS_TRANSFORMED)) {
+        if (!((Raider)(Object)this).getEntityData().hasItem(roundabout$IS_TRANSFORMED)) {
             this.entityData.define(roundabout$IS_TRANSFORMED, false);
         }
 

@@ -68,7 +68,7 @@ public abstract class StarPlatinumAbstractArrow extends Entity implements ISuper
     }
     @Inject(method = "defineSynchedData", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$defineSynchedData(CallbackInfo ci) {
-        if (!((LivingEntity)(Object)this).getEntityData().hasItem(ROUNDABOUT$SUPER_THROWN)) {
+        if (!((AbstractArrow)(Object)this).getEntityData().hasItem(ROUNDABOUT$SUPER_THROWN)) {
             this.entityData.define(ROUNDABOUT$SUPER_THROWN, false);
         }
     }
