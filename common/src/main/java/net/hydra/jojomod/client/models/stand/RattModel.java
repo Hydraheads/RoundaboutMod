@@ -9,7 +9,9 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.stand.animations.RattAnimations;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
@@ -133,16 +135,25 @@ public class RattModel<T extends RattEntity> extends StandModel<T> {
 
 	@Override
 	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+		Minecraft mc = Minecraft.getInstance();
+
+		Vec3 rots = new Vec3(this.head.xRot,this.stand.yRot,0);
+
 		super.setupAnim(pEntity,pLimbSwing,pLimbSwingAmount,pAgeInTicks,pNetHeadYaw,pHeadPitch);
 
-        StandUser SU = (StandUser) ((RattEntity)pEntity).getUser();
+		StandUser SU = (StandUser) ((RattEntity)pEntity).getUser();
 		if (SU != null) {
 			if (SU.roundabout$getStandPowers() instanceof PowersRatt PR) {
-				Entity target = PR.getShootTarget();
-				Vec3 v = PR.getRotations(target);
-				this.head.xRot = Mth.lerp(this.head.xRot, (float) v.x, 0.85F);
+				if (!mc.isPaused() && !(((TimeStop) pEntity.level()).CanTimeStopEntity(pEntity.getUser()))) {
+                    Entity target = PR.getShootTarget();
+					Vec3 v = PR.getRotations(target);
+					this.head.xRot = Mth.lerp(this.head.xRot, (float) v.x, 0.85F);
+					this.stand.yRot = Mth.lerp(this.stand.yRot, (float) v.y, 0.85F);
+				} else {
+					this.head.xRot = (float)rots.x;
+					this.stand.yRot =(float)rots.y;
+				}
 				pEntity.setHeadRotationX(this.head.xRot);
-				this.stand.yRot = Mth.lerp(this.stand.yRot, (float) v.y, 0.85F);
 				pEntity.setStandRotationY(this.stand.yRot);
 			}
 		}
