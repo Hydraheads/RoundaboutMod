@@ -121,12 +121,11 @@ public class TheGratefulDeadModel<T extends TheGratefulDeadEntity> extends Stand
 
     @Override
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch){
-        super.setupAnim(pEntity,pLimbSwing ,pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
+        super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
+        //DONT ADD DEFAULT ANIMATIONS, OR DONT MAKE THEM OVERLAP
         defaultModifiers(pEntity);
-        defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
 
         this.animate(pEntity.idleAnimationState, TheGratefulDeadAnimations.IDLE, pAgeInTicks, 1F);
-        this.animate(pEntity.idleAnimationState2, StandAnimations.FLOATY_IDLE, pAgeInTicks, 1F);
         this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1F);
     }
 
