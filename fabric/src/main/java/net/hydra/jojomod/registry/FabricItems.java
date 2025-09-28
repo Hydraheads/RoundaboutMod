@@ -129,6 +129,7 @@ public class FabricItems {
     public static Item BLANK_MASK = registerItem("blank_mask", new MaskItem(new Item.Properties().stacksTo(1), new NonCharacterVisage(null)));
     public static Item MODIFICATION_MASK = registerItem("modification_mask", new ModificationMaskItem(new Item.Properties().stacksTo(1), new ModificationVisage(null)));
     public static Item JOTARO_MASK = registerItem("jotaro_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroVisage(null)));
+    public static Item JOTARO_4_MASK = registerItem("jotaro_4_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroFourVisage(null)));
     public static Item DIO_MASK = registerItem("dio_mask", new MaskItem(new Item.Properties().stacksTo(1), new DIOVisage(null)));
     public static Item AVDOL_MASK = registerItem("avdol_mask", new MaskItem(new Item.Properties().stacksTo(1), new AvdolVisage(null)));
     public static Item DIEGO_MASK = registerItem("diego_mask", new MaskItem(new Item.Properties().stacksTo(1), new DiegoVisage(null)));
@@ -268,6 +269,7 @@ public class FabricItems {
                         entries.accept(BLANK_MASK);
                         entries.accept(MODIFICATION_MASK);
                         entries.accept(JOTARO_MASK);
+                        entries.accept(JOTARO_4_MASK);
                         entries.accept(DIO_MASK);
                         entries.accept(ENYA_MASK);
                         entries.accept(AVDOL_MASK);
@@ -450,6 +452,7 @@ public class FabricItems {
         ModItems.BLANK_MASK = BLANK_MASK;
         ModItems.MODIFICATION_MASK = MODIFICATION_MASK;
         ModItems.JOTARO_MASK = JOTARO_MASK;
+        ModItems.JOTARO_4_MASK = JOTARO_4_MASK;
         ModItems.DIO_MASK = DIO_MASK;
         ModItems.AVDOL_MASK = AVDOL_MASK;
         ModItems.DIEGO_MASK = DIEGO_MASK;
