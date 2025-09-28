@@ -106,6 +106,12 @@
   "item.roundabout.jotaro_mask": "承太郎面容",
   "item.roundabout.jotaro_mask.desc": "空条承太郎（第三部）",
   "item.roundabout.jotaro_mask.tag": "承太郎",
+  "item.roundabout.jotaro_4_mask": "承太郎面容",
+  "item.roundabout.jotaro_4_mask.desc": "空条承太郎（第四部）",
+  "item.roundabout.jotaro_4_mask.tag": "承太郎",
+  "item.roundabout.jotaro_6_mask": "承太郎面容",
+  "item.roundabout.jotaro_6_mask.desc": "空条承太郎（第六部）",
+  "item.roundabout.jotaro_6_mask.tag": "承太郎",
   "item.roundabout.dio_mask": "DIO面容",
   "item.roundabout.dio_mask.desc": "DIO (第三部)",
   "item.roundabout.dio_mask.tag": "DIO",
@@ -164,7 +170,7 @@
   "item.roundabout.shizuka_mask.desc": "静·乔斯达(JoJovein / JoJo Stars)",
   "item.roundabout.shizuka_mask.tag": "静",
 
-  "item.roundabout.stand_arrow.fail": "你需要更多的经验值！",
+  "item.roundabout.stand_arrow.fail": "你需要更多级经验！",
 
   "item.roundabout.d4c.lost_emeralds": "你失去了%s个绿宝石。",
 
@@ -265,7 +271,9 @@
   "block.roundabout.regal_wall": "豪华墙",
   "block.roundabout.regal_floor": "豪华地板",
   "block.roundabout.wooden_manor_table": "木制西式庄园桌",
+  "block.roundabout.impact_mound": "陨击土",
   "block.roundabout.ancient_meteor": "古老陨石",
+  "block.roundabout.stone_mask": "石鬼面",
   "block.roundabout.locacaca_cactus": "缠根仙人掌",
   "block.roundabout.locacaca_plant": "洛卡卡卡植株",
   "block.roundabout.new_locacaca_plant": "新洛卡卡卡植株",
@@ -305,8 +313,8 @@
   "itemgroup.justice_fog_items": "[正义]的幻象方块",
   "roundabout.dev_status.dev_status": "创作者状态：",
   "roundabout.dev_status.active": "活跃",
-  "roundabout.dev_status.paused": "暂停",
-  "roundabout.dev_status.dropped": "放弃",
+  "roundabout.dev_status.paused": "暂停中",
+  "roundabout.dev_status.dropped": "已放弃",
   "roundabout.dev_status.dev_name": "创作者：",
 
   "key.roundabout.summon.stand": "召唤替身",
@@ -318,7 +326,7 @@
   "key.roundabout.bonus_guard": "使用副手物品/一键防御",
   "key.roundabout.switch_rows": "切换潜行技能栏",
   "key.roundabout.show_exp": "切换替身经验显示",
-  "key.roundabout.pose": "选择姿势",
+  "key.roundabout.pose": "摆出JOJO立",
 
   "roundabout:item.roundabout.smithing_template.execution_upgrade.applies_to": "铁斧",
   "roundabout:item.roundabout.smithing_template.execution_upgrade.base_slot_description": "Add to iron axe",
@@ -406,7 +414,7 @@
   "death.attack.disintegration.player": "%1$被%$2s弄得稀碎",
   "death.attack.melting": "%1$s和史莱姆当了兄弟",
   "death.attack.melting.player": "%1$s被%$2s变成了一滩液体",
-  "death.attack.melting.item": "%1$s和史莱姆当了兄弟",
+  "death.attack.melting.item": "%1$s成了史莱姆的兄弟",
   "death.attack.melting.player.item": "%1$s被%$2s变成了一滩液体",
 
 
@@ -501,8 +509,8 @@
   "sounds.roundabout.summon_walking":  "替身被召唤",
   "sounds.roundabout.heel_raise":  "腿伸长了",
   "sounds.roundabout.heel_stomp":  "腿变短了",
-  "sounds.roundabout.spike_hit":  "高跟鞋钉住",
-  "sounds.roundabout.spike_miss":  "高跟鞋延长",
+  "sounds.roundabout.spike_hit":  "高跟鞋钉住了",
+  "sounds.roundabout.spike_miss":  "高跟鞋伸的过长",
 
   "sounds.roundabout.mandom_rewind":  "时间回溯",
 
@@ -529,8 +537,8 @@
   "sounds.roundabout.fireball_shoot":  "火球射出",
   "sounds.roundabout.fireball_hit":  "火球爆炸",
   "sounds.roundabout.firestorm":  "火风暴",
-  "sounds.roundabout.lasso": "套索声",
-  "sounds.roundabout.dread_summon": "怪异的尖叫声",
+  "sounds.roundabout.lasso": "绳索收紧",
+  "sounds.roundabout.dread_summon": "怪异的尖叫",
 
   "sounds.roundabout.unlock_skin":  "皮肤解锁！",
   "sounds.roundabout.ova_platinum_barrage":  "欧拉",
@@ -758,11 +766,13 @@
   "ability.roundabout.kick_barrage": "连踢",
   "ability.roundabout.kick_barrage.desc": "蓄力时间更短的连打，然而没有压制效果。",
 
-  "ability.roundabout.forward_barrage": "连打漂浮",
-  "ability.roundabout.forward_barrage.desc": "连打时使用此技能替身将向前缓慢移动。",
+  "ability.roundabout.forward_barrage": "前进连打",
+  "ability.roundabout.forward_barrage.desc": "连打时可使用此技能。长按时，替身将向前缓慢移动直到攻击到目标。",
 
-  "ability.roundabout.impale": "穿胸",
-  "ability.roundabout.impale.desc": "蓄力一次可造成3级流血的致命攻击。 为了命中，你需要站的近一些……",
+  "ability.roundabout.impale": "穿胸重拳",
+  "ability.roundabout.impale.desc": "蓄力一次可造成3级流血的致命攻击。为了命中，你需要站的近一些……",
+  "ability.roundabout.impale_blitz": "穿胸重拳/闪击",
+  "ability.roundabout.impale_blitz.desc": "蓄力一次可造成3级流血的致命攻击。为了命中，你需要站的近一些。蓄力过程中再次按下技能键将会释放一次破盾的上勾拳，即为流星闪击。",
   "ability.roundabout.block_grab": "强力抓取（方块）",
   "ability.roundabout.block_grab.desc": "拿取你面向的方块。使用攻击键扔出，防御键收集。 越坚固的方块造成的伤害越高。在生存模式建筑时很有用。",
   "ability.roundabout.item_grab": "强力抓取（物品）",
@@ -872,14 +882,14 @@
   "ability.roundabout.fire_slam.desc": "让魔术师之红变为火球向前冲出，碰撞后造成高冲击并散布大范围的火焰，但使用后你将会进入较长的替身无法使用时期。请作为最后一搏。",
 
   "ability.roundabout.spike_attack_mode": "攻击模式",
-  "ability.roundabout.spike_attack_mode.desc": "按下或是长按攻击键以延长高跟鞋底刺向敌人，对敌人造成伤害、流血并可以利用高跟鞋底将他们拉过来。如果使用时按住交互键，将会将生物推开。此模式使用计量表进行攻击，且计量表必须完成充能方可使用技能，在未使用技能是计量表会自然恢复。技能可穿墙。",
+  "ability.roundabout.spike_attack_mode.desc": "进入攻击模式，缓慢消耗计量槽。模式下按下或是长按攻击键以延长高跟鞋底刺向敌人，对敌人造成伤害、流血并可以利用高跟鞋底将他们拉过来。如果使用时按住交互键，将会将生物推开。此模式攻击时消耗计量槽。结束技能后计量槽必须充满方可使用技能，在未使用技能时计量表会自然恢复。攻击可穿墙。",
   "ability.roundabout.heel_plant": "植入鞋跟",
-  "ability.roundabout.heel_plant.desc": "将高跟鞋鞋跟延长并插入地面（不管是哪个面的地面，只要是你脚底下都是地面），让你无视大部分的击退的同时，使你可以再墙上行走。同时，提升横向和纵向的自动跨越高度。开启时将会禁用某些能力，当在空中或是再次按下技能按钮时能力解除。",
+  "ability.roundabout.heel_plant.desc": "将高跟鞋鞋跟延长并插入地面（不管是哪个面的地面，只要是你脚底下都是地面），让你无视大部分的击退的同时，使你可以在墙上行走。同时，提升横向和纵向的自动跨越高度。开启时将会禁用某些能力，当在空中或是再次按下技能按钮时能力解除。",
 
 
   "ability.roundabout.wall_walk_move": "攀墙者",
-  "ability.roundabout.wall_walk_move.desc": "让自己鞋子“抓地”上墙，使你可以再墙上行走。植入鞋跟状态下面对墙壁或是在空中时触发。",
-  "ability.roundabout.firm_swing": "坚毅打击",
+  "ability.roundabout.wall_walk_move.desc": "让自己鞋子“抓地”上墙，使你可以在墙上行走。植入鞋跟状态下面对墙壁或是在空中时触发。",
+  "ability.roundabout.firm_swing": "出手稳重",
   "ability.roundabout.firm_swing.desc": "使得你在植入鞋跟期间所有的攻击都为暴击，因为你“立场坚定”。",
 
 
@@ -958,19 +968,19 @@
   "ability.roundabout.place_invis.desc": "放置方块并将自己的隐身持续时间与其共享。只在隐身时可用。",
 
   "ability.roundabout.ratt_scope": "倍镜模式",
-  "ability.roundabout.ratt_scope.desc": "携带溶蚀针并进行缩放，使得使用者可以再移动时设计。",
+  "ability.roundabout.ratt_scope.desc": "携带溶蚀针并进行缩放，使得使用者可以在移动时射击。",
   "ability.roundabout.ratt_single": "半自动模式开火",
-  "ability.roundabout.ratt_single.desc": "加速枪膛中的毒针以让其准备好，按下攻击键即可发射。",
+  "ability.roundabout.ratt_single.desc": "加速枪膛中的毒针以增强其杀伤力，蓄力完成后按下攻击键即可发射。",
   "ability.roundabout.ratt_burst": "爆发/三连发模式开火",
-  "ability.roundabout.ratt_burst.desc": "将毒针切换形态，此形态会带来更强的融化效果，然而伤害降低。",
+  "ability.roundabout.ratt_burst.desc": "切换开火模式和毒针形态，此形态毒针会带来更强的融化效果，然而伤害降低。",
   "ability.roundabout.ratt_place": "放置溶蚀针",
   "ability.roundabout.ratt_place.desc": "将溶蚀针放置下来，令其可以与你并肩作战。",
   "ability.roundabout.ratt_place_burst": "溶蚀针爆发模式开火",
   "ability.roundabout.ratt_place_burst.desc": "令溶蚀针向你鼠标朝向位置进行毒针三连射。",
-  "ability.roundabout.ratt_auto": "全自动模式",
-  "ability.roundabout.ratt_auto.desc": "选择视野中的目标，随后溶蚀针将会自由开火。",
+  "ability.roundabout.ratt_auto": "自由开火",
+  "ability.roundabout.ratt_auto.desc": "选择视野中的目标，随后溶蚀针将会持续攻击目标直至地方死亡。",
   "ability.roundabout.ratt_flesh": "血肉方块/小块",
-  "ability.roundabout.ratt_flesh.desc": "洒下已经融化了的生物。可以减速生物，同时难以破坏。然而溶蚀针使用者无视这些负面效果，使得他们能够自由移动且可以通过潜行右键收集这些血肉。",
+  "ability.roundabout.ratt_flesh.desc": "溶蚀针击杀而融化的生物将会在原地生成血肉块。可以减速生物，同时难以破坏。溶蚀针使用者无视这些负面效果，能够在其中自由移动且可以通过潜行右键收集这些血肉。",
 
   "ability.roundabout.diver_selection": "潜行者行为选择",
   "ability.roundabout.diver_selection.desc": "开启一个可以选择给自己添加buff的损坏的转轮样子的界面。",
@@ -1430,9 +1440,31 @@
   "config_translatiors_note_3": "have the time and drive to do so, you deserve a cookie. :)",
 
 
+  "config.roundabout.enableMagiciansRed.name": "启用该替身",
+  "config.roundabout.enableMagiciansRed.desc": "开启或关闭该替身的获取，若关闭，将无法使用替身光碟获取，替身池中也不会出现该替身。",
+  "config.roundabout.enableSoftAndWet.name": "启用该替身",
+  "config.roundabout.enableSoftAndWet.desc": "开启或关闭该替身的获取，若关闭，将无法使用替身光碟获取，替身池中也不会出现该替身。",
+  "config.roundabout.enableStarPlatinum.name": "启用该替身",
+  "config.roundabout.enableStarPlatinum.desc": "开启或关闭该替身的获取，若关闭，将无法使用替身光碟获取，替身池中也不会出现该替身。",
+  "config.roundabout.enableTheWorld.name": "启用该替身",
+  "config.roundabout.enableTheWorld.desc": "开启或关闭该替身的获取，若关闭，将无法使用替身光碟获取，替身池中也不会出现该替身。",
+  "config.roundabout.enableJustice.name": "启用该替身",
+  "config.roundabout.enableJustice.desc": "开启或关闭该替身的获取，若关闭，将无法使用替身光碟获取，替身池中也不会出现该替身。",
+  "config.roundabout.enableWalkingHeart.name": "启用该替身",
+  "config.roundabout.enableWalkingHeart.desc": "开启或关闭该替身的获取，若关闭，将无法使用替身光碟获取，替身池中也不会出现该替身。",
+  "config.roundabout.enableMandom.name": "启用该替身",
+  "config.roundabout.enableMandom.desc": "开启或关闭该替身的获取，若关闭，将无法使用替身光碟获取，替身池中也不会出现该替身。",
+  "config.roundabout.enableAchtungBaby.name": "启用该替身",
+  "config.roundabout.enableAchtungBaby.desc": "开启或关闭该替身的获取，若关闭，将无法使用替身光碟获取，替身池中也不会出现该替身。",
+  "config.roundabout.enableHeyYa.name": "启用该替身",
+  "config.roundabout.enableHeyYa.desc": "开启或关闭该替身的获取，若关闭，将无法使用替身光碟获取，替身池中也不会出现该替身。",
+  "config.roundabout.enableCinderella.name": "启用该替身",
+  "config.roundabout.enableCinderella.desc": "开启或关闭该替身的获取，若关闭，将无法使用替身光碟获取，替身池中也不会出现该替身。",
+  "config.roundabout.enableSurvivor.name": "启用该替身",
+  "config.roundabout.enableSurvivor.desc": "开启或关闭该替身的获取，若关闭，将无法使用替身光碟获取，替身池中也不会出现该替身。",
 
   "config.roundabout.mountingHorsesInCreativeTamesThem.name": "创造骑乘驯服",
-  "config.roundabout.mountingHorsesInCreativeTamesThem.desc": "创造模式下你骑乘马匹会立刻驯服它。",
+  "config.roundabout.mountingHorsesInCreativeTamesThem.desc": "创造模式下你骑乘马匹后会立刻驯服它。",
 
 
   "config.roundabout.bonusStandDmgByMaxLevel.name": "等级伤害加成",
@@ -1442,8 +1474,8 @@
   "config.roundabout.enableStandLeveling.name": "开启替身等级",
   "config.roundabout.enableStandLeveling.desc": "开启替身等级机制，此机制将用于解锁技能和皮肤",
 
-  "config.roundabout.spiritOutInterruption.name": "全力才可打断",
-  "config.roundabout.spiritOutInterruption.desc": "默认情况下，玩家需要开启替身（或是无替身）才能打断攻击。此机制被称为“全神贯注打断”，目的是让打断机制更好用。关闭后将回归原先的打断机制（啥事都能给你断了）。",
+  "config.roundabout.spiritOutInterruption.name": "全神贯注打断",
+  "config.roundabout.spiritOutInterruption.desc": "默认情况下，玩家需要开启替身并使用替身攻击（或是非替身使者，此时普通攻击也行）才能打断攻击。此机制被称为“全神贯注打断”，目的是让打断机制更令人满意，避免替身使者无脑左键打断。关闭后将回归原先的打断机制（啥事都能给你断了）。",
   "config.roundabout.standThrownEntityFallDamageImmmunityTicks.name": "投掷摔落保护刻",
   "config.roundabout.standThrownEntityFallDamageImmmunityTicks.desc": "默认情况下，将实体扔出会给予他们一个短暂的摔落伤害免疫，以避免短程投掷即可造成伤害的无脑投掷行为。",
 
@@ -1474,19 +1506,19 @@
   "config.roundabout.playersInterruptSomeStandAttacks.name": "玩家打断攻击",
   "config.roundabout.playersInterruptSomeStandAttacks.desc": "让玩家的攻击可以打断一些特定的替身攻击。",
   "config.roundabout.barragesAreAlwaysInterruptable.name": "可被打断的连打",
-  "config.roundabout.barragesAreAlwaysInterruptable.desc": "让连打能被以上所有的攻击打断。",
+  "config.roundabout.barragesAreAlwaysInterruptable.desc": "让连打能被以上所有的攻击打断。若为否，则连打无论如何都不会被打断。",
   "config.roundabout.barrageHasAreaOfEffect.name": "范围连打",
-  "config.roundabout.barrageHasAreaOfEffect.desc": "让连打攻击能一次性攻击范围内的所有目标，然而对非主要目标存在不小伤害衰减。",
+  "config.roundabout.barrageHasAreaOfEffect.desc": "让连打攻击能一次性攻击范围内的所有目标，然而对非主要目标存在不小伤害衰减，伤害仅为1/3。",
   "config.roundabout.barragesOnlyKillOnLastHit.name": "连打最后一击击杀",
   "config.roundabout.barragesOnlyKillOnLastHit.desc": "让被连打的生物在最后一击命中时才会被击杀，就像漫画一样被击飞并死亡。（推荐关闭，锁血锁血皮硬要等不说，上面的连打打断很容易导致你打群打不死被群殴）",
   "config.roundabout.barrageDeflectsArrows.name": "连打偏转箭矢",
   "config.roundabout.barrageDeflectsArrows.desc": "使连打可以偏转箭矢。",
   "config.roundabout.standPunchesGoThroughDoorsAndCorners.name": "替身攻击穿墙",
-  "config.roundabout.standPunchesGoThroughDoorsAndCorners.desc": "开启后替身攻击将会穿过墙角和门（算是个老特性），默认关闭。同时也会让一些其他的东西能够穿墙，比如超越泡泡的高光。",
+  "config.roundabout.standPunchesGoThroughDoorsAndCorners.desc": "开启后替身攻击将会穿过墙角和门（算是个老特性），默认关闭。同时也会让一些其他的东西能够穿墙，比如高亮的超越泡泡。",
   "config.roundabout.standGuardDelayTicks.name": "防御延迟刻",
   "config.roundabout.standGuardDelayTicks.desc": "你按下防御键到防御起效的时间。原版盾牌起效时间是5刻，因此替身防御的默认起效时间是3刻。",
-  "config.roundabout.standGuardMultiplier.name": "替身防御次数倍率",
-  "config.roundabout.standGuardMultiplier.desc": "根据当前数值调整你防御的次数以应对更高难度的模组包",
+  "config.roundabout.standGuardMultiplier.name": "替身防御槽倍率",
+  "config.roundabout.standGuardMultiplier.desc": "根据当前数值调整你防御槽的上限以应对更高难度的模组包",
   "config.roundabout.crouchingStopsStandsFromMiningOres.name": "潜行挖掘取消",
   "config.roundabout.crouchingStopsStandsFromMiningOres.desc": "替身挖掘将会在你挖到矿石时默认停止。因为默认设置中，替身的挖掘等级只有0级（手挖）。",
   "config.roundabout.barrageWindup.name": "连打蓄力时长",
@@ -1526,7 +1558,7 @@
   "config.roundabout.mobThrowAttackCooldown.name": "抓取攻击冷却",
   "config.roundabout.mobThrowAttackCooldown.desc": "攻击抓取的生物的共享技能冷却",
   "config.roundabout.creativeModeRefreshesCooldowns.name": "创造冷却无视",
-  "config.roundabout.creativeModeRefreshesCooldowns.desc": "开关创造有无冷却",
+  "config.roundabout.creativeModeRefreshesCooldowns.desc": "开关创造模式下技能有无冷却",
   "config.roundabout.canRechargeCooldownsWhileDrowning.name": "溺水时可技能充能",
   "config.roundabout.canRechargeCooldownsWhileDrowning.desc": "关闭此功能将会让替身在溺水时无法对技能进行充能。",
 
@@ -1659,6 +1691,25 @@
   "config.roundabout.bubbleScaffoldingCooldown.desc": "创造泡泡脚手架技能的冷却。如果你将其降低，将可以尝试持续在空中行走。",
   "config.roundabout.waterShieldCooldown.name": "水之盾冷却时间",
   "config.roundabout.waterShieldCooldown.desc": "水盾能力的冷却时间。默认为40刻，即为2秒。",
+  "config.roundabout.waterShieldBucketCooldown.name": "水桶触发水之盾冷却时间",
+  "config.roundabout.waterShieldBucketCooldown.desc": "当使用水桶触发此技能石，水盾能力的冷却时间。默认为40刻，即为2秒。",
+
+  "config.roundabout.meteorsEmitParticles.name": "陨石散发粒子",
+  "config.roundabout.meteorsEmitParticles.desc": "古老陨石是否会在与陨击土接触时散发粒子。",
+
+  "config.roundabout.punchImpactSize.name": "拳击命中粒子大小",
+  "config.roundabout.punchImpactSize.desc": "拳击命中时粒子的大小。",
+  "config.roundabout.punchImpactOpacity.name": "拳击命中粒子透明度",
+  "config.roundabout.punchImpactOpacity.desc": "拳击命中产生粒子的透明度",
+
+  "config.roundabout.abilityIconHudX.name": "能力图标X轴坐标",
+  "config.roundabout.abilityIconHudX.desc": "替身/能力开启时，技能图标的X轴位置。",
+  "config.roundabout.abilityIconHudY.name": "能力图标Y轴坐标",
+  "config.roundabout.abilityIconHudY.desc": "替身/能力开启时，技能图标的Y轴位置。",
+  "config.roundabout.abilityIconHudIsAnimated.name": "动态能力图标",
+  "config.roundabout.abilityIconHudIsAnimated.desc": "能力图标是在开启时有飞入或是渐变效果，还是直接显现，没有铺垫。",
+
+
   "config.roundabout.itemBubbleShotCooldown.name": "物品泡泡冷却",
   "config.roundabout.itemBubbleShotCooldown.desc": "在射击模式制造下一个物品泡泡前所需的时间。默认为60刻，即为3秒。",
   "config.roundabout.basicBubbleShotCooldown.name": "基础泡泡冷却",
@@ -1800,7 +1851,7 @@
   "config.roundabout.SummonSurvivorCooldownCooldownUsesServerLatency.name": "替身召唤冷却与延迟挂钩",
   "config.roundabout.SummonSurvivorCooldownCooldownUsesServerLatency.desc": "让服务器本身完全独立计算生存者召唤的冷却。这样就不会因为一次大延迟让整个服务器被突如其来生成的大量生存者冲击。",
   "config.roundabout.canonSurvivorHasNoRageCupid.name": "无狂怒丘比特",
-  "config.roundabout.canonSurvivorHasNoRageCupid.desc": "DIO曾经对生存者无法区分队友和敌人的特点评价很差，因此你可以选择按原作所说关闭狂怒丘比特，让愤怒真正变成无差别而非导向性。",
+  "config.roundabout.canonSurvivorHasNoRageCupid.desc": "DIO曾经因为生存者无法区分队友和敌人的特点对其评价很差，因此你可以选择按原作所说关闭狂怒丘比特，让愤怒真正变成无差别而非导向性。",
   "config.roundabout.rageCupidCooldown.name": "狂怒丘比特冷却",
   "config.roundabout.rageCupidCooldown.desc": "狂怒丘比特的冷却时间",
   "config.roundabout.rageCupidCooldownCooldownUsesServerLatency.name": "狂怒丘比特冷却与延迟挂钩",
@@ -1832,6 +1883,8 @@
 
   "config.roundabout.fallProtectionOnRelease.name": "释放技能摔落保护",
   "config.roundabout.fallProtectionOnRelease.desc": "当你离开墙壁开始自由落体时，给予如替身跳一样的衰落保护。",
+  "config.roundabout.enableWallWalking.name": "开启攀墙功能",
+  "config.roundabout.enableWallWalking.desc": "允许使用者旋转视角以在墙上行走。通常情况下，此开关默认开启，但是如果你使用的模组包会使其出现bug或是无法正常触发此功能，就关闭此开关。关闭攀墙能力时，使用植入鞋跟的替身使者将会获得额外一格的自动攀登距离（即为从自动爬上1格变为自动爬上两格高）。",
 
   "config.roundabout.invisibilityPotionAsWell.name": "隐身添加药水效果",
   "config.roundabout.invisibilityPotionAsWell.desc": "如果你想让隐身能力同时附加隐身药水效果，将其开启吧。此举是为了对有些地图mod中对隐身玩家的特定检测。",
@@ -1843,8 +1896,10 @@
   "config.roundabout.hidesPlacedBlocks.desc": "开启后将会隐藏那些你在隐身时按下技能3（潜行模式或者切换技能栏）放下的方块。",
   "config.roundabout.hidesShotProjectiles.name": "隐藏发射的物品",
   "config.roundabout.hidesShotProjectiles.desc": "让隐身对自己投出、射出、扔出等的物品起效",
-  "config.roundabout.revealLocationWhenDamagingOrHurt.name": "伤害显行",
-  "config.roundabout.revealLocationWhenDamagingOrHurt.desc": "如果造成伤害或是收到其他实体的伤害将会解除隐形。",
+  "config.roundabout.revealLocationWhenHurt.name": "收到伤害自我显行",
+  "config.roundabout.revealLocationWhenHurt.desc": "当收到来自实体的伤害时是否解除自己的隐身。",
+  "config.roundabout.revealLocationWhenDamaging.name": "造成伤害自我显行",
+  "config.roundabout.revealLocationWhenDamaging.desc": "当对实体造成伤害时是否解除自己的隐身。",
   "config.roundabout.revealLocationWhenFinishedEating.name": "食用显行",
   "config.roundabout.revealLocationWhenFinishedEating.desc": "如果食用一个物品并完成，将会解除自身隐形。",
   "config.roundabout.invisiBurstCooldown.name": "隐身冷却",
@@ -1949,6 +2004,10 @@
   "config.roundabout.starFingerCooldown.desc": "修改流星指刺的冷却。（默认为80刻，4秒）",
   "config.roundabout.starFingerInterruptCooldown.name": "流星指刺被打断冷却",
   "config.roundabout.starFingerInterruptCooldown.desc": "修改流星指刺蓄力阶段被打断后的冷却。（默认为80刻，4秒）",
+  "config.roundabout.blitzAttackCooldown.name": "流星闪击冷却",
+  "config.roundabout.blitzAttackCooldown.desc": "改变提前使用重拳以进行流星闪击时，穿胸重拳的冷却时间。",
+
+
 
   "config.roundabout.levelsToGetStand.name": "替身箭获取替身消耗等级",
   "config.roundabout.levelsToGetStand.desc": "使用替身箭获取替身消耗的等级，默认为15级。",
@@ -1975,7 +2034,7 @@
   "config.roundabout.switchStandDiscLength.name": "替身光碟切换时长",
   "config.roundabout.switchStandDiscLength.desc": "切换替身光碟后替身光碟的冷却时间。默认为100刻，5秒。",
   "config.roundabout.switchStandDiscWhileOnCooldownsLength.name": "技能冷却时光碟替换冷却",
-  "config.roundabout.switchStandDiscWhileOnCooldownsLength.desc": "当替身存在技能处于冷却中时替换光碟，光碟冷却使用此值。默认为300刻，即为15秒。",
+  "config.roundabout.switchStandDiscWhileOnCooldownsLength.desc": "当替身存在技能处于冷却中时替换光碟，光碟冷却使用的值。默认为300刻，即为15秒。",
 
   "config.roundabout.worthyMobOdds.name": "[才能]生物生成概率",
   "config.roundabout.worthyMobOdds.desc": "设置有[才能]，可以被替身箭赋予替身的生物的生成概率。默认为0.05，即为5%，1/20。若设置为1则为100%",
@@ -2030,6 +2089,7 @@
   "config.roundabout.theWorldSettings.name": "世界",
   "config.roundabout.starPlatinumSettings.name": "白金之星",
   "config.roundabout.timeStopSettings.name": "时间停止菜单",
+
 
 
 
@@ -2091,6 +2151,12 @@
 
   "config.roundabout.SoftAndWetCurrentlySelectedBubble.name": "保存选择的泡泡种类",
   "config.roundabout.SoftAndWetCurrentlySelectedBubble.desc": "对软又湿替身使用者，你的客户端将会记忆当前你选择的泡泡种类。",
+
+  "config.roundabout.mobThrowRecoilTicks.name": "生物投掷后保护",
+  "config.roundabout.mobThrowRecoilTicks.desc": "在投掷生物后需要多少刻，生物才可以被替身拳击攻击。",
+
+  "config.roundabout.wallPassingHitboxes.name": "替身能力穿墙",
+  "config.roundabout.wallPassingHitboxes.desc": "模组中有些替身能力可以穿过方块进行攻击。如果此功能在你的包里变成了逃课玩法，将此关闭。",
 
   "config.roundabout.namedSBRHorseSkins.name": "SBR马匹命名系统",
   "config.roundabout.namedSBRHorseSkins.desc": "将马匹命名为SBR马匹名将会改变其样貌。",
