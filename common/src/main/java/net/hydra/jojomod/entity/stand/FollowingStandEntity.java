@@ -287,16 +287,18 @@ public class FollowingStandEntity extends StandEntity{
     }
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(FOLLOWING_ID, -1);
-        this.entityData.define(OFFSET_TYPE, (byte) 0);
-        this.entityData.define(ANCHOR_PLACE, 55);
-        this.entityData.define(ANCHOR_PLACE_ATTACK, 55);
-        this.entityData.define(DISTANCE_OUT, 1.07F);
-        this.entityData.define(MOVE_FORWARD, (byte) 0);
-        this.entityData.define(SIZE_PERCENT, 1F);
-        this.entityData.define(IDLE_ROTATION, 0F);
-        this.entityData.define(IDLE_Y_OFFSET, 0.1F);
+        if (!this.entityData.hasItem(FOLLOWING_ID)) {
+            super.defineSynchedData();
+            this.entityData.define(FOLLOWING_ID, -1);
+            this.entityData.define(OFFSET_TYPE, (byte) 0);
+            this.entityData.define(ANCHOR_PLACE, 55);
+            this.entityData.define(ANCHOR_PLACE_ATTACK, 55);
+            this.entityData.define(DISTANCE_OUT, 1.07F);
+            this.entityData.define(MOVE_FORWARD, (byte) 0);
+            this.entityData.define(SIZE_PERCENT, 1F);
+            this.entityData.define(IDLE_ROTATION, 0F);
+            this.entityData.define(IDLE_Y_OFFSET, 0.1F);
+        }
     }
 
 

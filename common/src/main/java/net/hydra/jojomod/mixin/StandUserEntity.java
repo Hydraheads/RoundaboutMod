@@ -4,10 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
-import net.hydra.jojomod.block.BarbedWireBlock;
-import net.hydra.jojomod.block.FogBlock;
-import net.hydra.jojomod.block.GoddessStatueBlock;
-import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
@@ -3263,12 +3260,32 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (zent != null && zent instanceof LivingEntity LE){
                 ItemStack stack = LE.getMainHandItem();
 
-                if (stack != null && !stack.isEmpty() && stack.is(ModItems.SCISSORS) && $$0.is(DamageTypes.PLAYER_ATTACK)) {
+                if (stack != null && !stack.isEmpty() && stack.is(ModItems.SCISSORS) && ($$0.is(DamageTypes.PLAYER_ATTACK) || $$0.is(DamageTypes.MOB_ATTACK))) {
                     if (MainUtil.getMobBleed(this)) {
                         roundabout$setBleedLevel(0);
                         addEffect(new MobEffectInstance(ModEffects.BLEED, 300, 0), LE);
                     }
                     stack.hurtAndBreak(1, LE, $$0x -> $$0x.broadcastBreakEvent(EquipmentSlot.MAINHAND));
+                }
+
+                if (stack != null && !stack.isEmpty() && stack.getItem() instanceof SignBlockItem && ($$0.is(DamageTypes.PLAYER_ATTACK) || $$0.is(DamageTypes.MOB_ATTACK))) {
+                    if (!level().isClientSide()) {
+                        if (MainUtil.getMobBleed(rdbt$this())){
+                            MainUtil.makeBleed(rdbt$this(),1,100,zent);
+                        }
+                        CompoundTag ct = stack.getOrCreateTagElement("BlockStateTag");
+                        int ctd = ct.getInt("damaged");
+                        ctd++;
+                        if (ctd > 2) {
+                            level().playSound(null, blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS,
+                                    1F, 1);
+                            stack.shrink(1);
+                        } else {
+                            level().playSound(null, blockPosition(), ModSounds.SIGN_HIT_EVENT, SoundSource.PLAYERS,
+                                    1F, 1);
+                            ct.putInt("damaged", ctd);
+                        }
+                    }
                 }
             }
             /**Big bubble pops*/
@@ -3315,6 +3332,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (bound != null && ($$0.getEntity() != null || $$0.is(DamageTypes.MAGIC) || $$0.is(DamageTypes.EXPLOSION)) && !$$0.is(ModDamageTypes.STAND_FIRE)){
                 roundabout$dropString();
             }
+
+
+
         }
         return false;
     }
@@ -3474,7 +3494,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if ($$0.getDirectEntity() != null) {
             if (($$0.getDirectEntity() instanceof Player PE && (PE.getMainHandItem().is(ModItems.EXECUTIONER_AXE)
             || (PE.getMainHandItem().is(ModItems.SCISSORS) && ((StandUser)PE).roundabout$getStandPowers()
-            instanceof PowersJustice))) && $$0.is(DamageTypes.PLAYER_ATTACK)) {
+            instanceof PowersJustice))) && ($$0.is(DamageTypes.PLAYER_ATTACK) || $$0.is(DamageTypes.MOB_ATTACK))) {
                 LivingEntity ths = ((LivingEntity)(Object)this);
                 boolean marked = false;
                 FallenMob mb = null;

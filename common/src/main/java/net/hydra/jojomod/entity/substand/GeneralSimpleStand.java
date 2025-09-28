@@ -54,7 +54,9 @@ public class GeneralSimpleStand extends Entity {
 
     @Override
     protected void defineSynchedData() {
-        this.entityData.define(USER_ID, -1);
+        if (!this.entityData.hasItem(USER_ID)) {
+            this.entityData.define(USER_ID, -1);
+        }
     }
 
     @Override

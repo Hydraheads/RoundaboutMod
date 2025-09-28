@@ -132,8 +132,10 @@ public class D4CCloneEntity extends CloneEntity implements NeutralMob {
 
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(SELECTED, false);
+        if (!this.entityData.hasItem(SELECTED)) {
+            super.defineSynchedData();
+            this.entityData.define(SELECTED, false);
+        }
     }
 
     private Vector3f sizeOffset = new Vector3f(0.f, 0.f, 0.f);

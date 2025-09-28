@@ -179,11 +179,13 @@ public class CinderellaVisageDisplayEntity extends ThrowableItemProjectile imple
     }
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(SIZE, 0);
-        this.entityData.define(USER_ID, -1);
-        this.entityData.define(CROSS_NUMBER, 0);
-        this.entityData.define(MAX_SIZE, 0);
+        if (!this.entityData.hasItem(SIZE)) {
+            super.defineSynchedData();
+            this.entityData.define(SIZE, 0);
+            this.entityData.define(USER_ID, -1);
+            this.entityData.define(CROSS_NUMBER, 0);
+            this.entityData.define(MAX_SIZE, 0);
+        }
     }
     @Override
     protected Item getDefaultItem() {

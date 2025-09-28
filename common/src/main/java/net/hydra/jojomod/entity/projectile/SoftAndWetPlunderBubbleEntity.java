@@ -1290,8 +1290,8 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     }
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
         if (!this.entityData.hasItem(PLUNDER_TYPE)){
+            super.defineSynchedData();
             this.entityData.define(PLUNDER_TYPE, (byte)0);
             this.entityData.define(BLOCK_POS, BlockPos.ZERO);
             this.entityData.define(FINISHED, false);
