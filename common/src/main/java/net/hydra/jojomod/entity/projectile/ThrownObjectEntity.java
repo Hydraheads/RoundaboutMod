@@ -641,6 +641,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 this.discard();
                 return;
             }
+        } else if ($$1 instanceof SoftAndWetPlunderBubbleEntity){
+            return;
         }
 
         Entity $$4 = this.getOwner();
