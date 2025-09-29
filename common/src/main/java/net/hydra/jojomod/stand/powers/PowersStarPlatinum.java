@@ -426,7 +426,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         }
         //Star Finger Slows You down
         if (this.activePower == POWER_STAR_FINGER && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
-            basis *= 0.55f;
+            basis *= 0.54f;
         }
         //Inhale Slows You down
         if (this.activePower == POWER_INHALE && !(this.getSelf() instanceof Creeper)){
@@ -982,7 +982,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             || (value instanceof StandEntity SE && SE.getUser() !=null && SE.getUser().getUUID() == this.self.getUUID())){
                 hitEntities.remove(value);
             } else {
-                int angle = 17;
+                int angle = 18;
                 Vec2 lookVec = new Vec2(getLookAtEntityYaw(self, value), getLookAtEntityPitch(self, value));
                 if (gravD != Direction.DOWN) {
                     lookVec = RotationUtil.rotPlayerToWorld(lookVec.x, lookVec.y, gravD);

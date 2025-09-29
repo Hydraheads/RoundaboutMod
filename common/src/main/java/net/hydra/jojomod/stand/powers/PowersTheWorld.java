@@ -789,11 +789,21 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                         this.self.getVehicle().getUUID() == $$5.getUUID()) && stand.getSensing().hasLineOfSight($$5)){
 
                     hitParticlesCenter(LE);
+
+
                     if (this.StandDamageEntityAttack($$5,getAssaultStrength($$5), 0.4F, this.self)){
                         addEXP(3,LE);
-                        MainUtil.makeBleed($$5,0,100,null);
+                        if (!getAssaultEarlyTime()) {
+                            MainUtil.makeBleed($$5, 0, 100, null);
+                        } else {
+                            MainUtil.makeBleed($$5, 0, 50, null);
+                        }
                     } else if (((LivingEntity) $$5).isBlocking()) {
-                        MainUtil.knockShieldPlusStand($$5,40);
+                        if (!getAssaultEarlyTime()) {
+                            MainUtil.knockShieldPlusStand($$5,40);
+                        } else {
+                            MainUtil.knockShieldPlusStand($$5,30);
+                        }
                     }
 
                     stopSoundsIfNearby(ASSAULT_NOISE, 100, false);
@@ -815,15 +825,22 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         }
         return false;
     }
+
+    public boolean getAssaultEarlyTime(){
+        return getAttackTimeDuring() < 20;
+    }
     public float getAssaultStrength(Entity entity){
         float mult = 1;
+        boolean isReduced = this.getReducedDamage(entity);
         if (getAttackTimeDuring() > 95){
             mult = 1.5F;
         } else if (getAttackTimeDuring() > 70){
             mult = 1.25F;
+        } else if (getAssaultEarlyTime() && isReduced){
+            mult = 0.75F;
         }
 
-        if (this.getReducedDamage(entity)){
+        if (isReduced){
             return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.7F*mult));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(7F*mult));
