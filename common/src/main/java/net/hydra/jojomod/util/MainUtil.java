@@ -1503,6 +1503,9 @@ public class MainUtil {
         return basis;
     }
     public static boolean canActuallyHitInvolved(Entity self, Entity entity){
+        if (entity instanceof SoftAndWetPlunderBubbleEntity){
+            return false;
+        }
         if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.generalDetectionGoThroughDoorsAndCorners){
             return true;
         }
