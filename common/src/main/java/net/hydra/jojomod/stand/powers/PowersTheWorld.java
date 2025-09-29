@@ -833,9 +833,11 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         float mult = 1;
         boolean isReduced = this.getReducedDamage(entity);
         if (getAttackTimeDuring() > 95){
-            mult = 1.5F;
+            mult = 1.7F;
         } else if (getAttackTimeDuring() > 70){
-            mult = 1.25F;
+            mult = 1.4F;
+        } else if (getAttackTimeDuring() > 45){
+            mult = 1.2F;
         } else if (getAssaultEarlyTime() && isReduced){
             mult = 0.75F;
         }
