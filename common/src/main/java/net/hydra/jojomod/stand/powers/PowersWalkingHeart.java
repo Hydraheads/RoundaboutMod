@@ -1001,7 +1001,7 @@ public class PowersWalkingHeart extends NewDashPreset {
 
 
     public static int chargeKickTicks(){
-        return 8;
+        return 9;
     }
     public int currentKickTicks = 0;
 
