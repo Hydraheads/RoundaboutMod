@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
@@ -92,6 +93,8 @@ public class BladedBowlerHatEntity extends AbstractArrow {
 
     @Override
         public void tick() {
+            Vec3 $$26 = this.getDeltaMovement();
+            this.setDeltaMovement($$26.x, $$26.y + (double)0.01F, $$26.z);
             super.tick();
 
             if (level().isClientSide) {

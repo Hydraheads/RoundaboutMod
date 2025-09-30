@@ -53,7 +53,7 @@ public class BowlerHatItem extends TieredItem implements Vanishable {
 
     @Override
     public UseAnim getUseAnimation(ItemStack $$0) {
-        return UseAnim.BLOCK;
+        return UseAnim.NONE;
     }
 
     @Override
@@ -88,8 +88,9 @@ public class BowlerHatItem extends TieredItem implements Vanishable {
             int chargeTime = this.getUseDuration(stack) - timeLeft;
 
             if (chargeTime >= 10) {
+                player.getCooldowns().addCooldown(stack.getItem(), 60);
                 BladedBowlerHatEntity $$7 = new BladedBowlerHatEntity(dimension, livingEntity, stack.copy());
-                $$7.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 2.5F, 1.0F);
+                $$7.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.5F, 1.0F);
                 dimension.addFreshEntity($$7);
                 stack.shrink(1);
             }
