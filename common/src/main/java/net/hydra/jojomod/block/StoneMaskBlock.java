@@ -9,11 +9,11 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -21,15 +21,29 @@ import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.block.state.pattern.BlockPattern;
 import net.minecraft.world.level.block.state.pattern.BlockPatternBuilder;
 import net.minecraft.world.level.block.state.predicate.BlockStatePredicate;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
 
 
-public class StoneMaskBlock extends HorizontalDirectionalBlock{
+public class StoneMaskBlock extends HorizontalDirectionalBlock  implements SimpleWaterloggedBlock {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+    protected static final VoxelShape EAST_AABB = Block.box(0.0, 4, 3.5, 5.5, 12, 12.5);
+    protected static final VoxelShape WEST_AABB = Block.box(10.5, 4, 3.5, 16.0, 12, 12.5);
+    protected static final VoxelShape SOUTH_AABB = Block.box(3.5, 4, 0.0, 12.5, 12, 5.5);
+    protected static final VoxelShape NORTH_AABB = Block.box(3.5, 4, 10.5, 12.5, 12, 16.0);
+
     @Nullable
     private BlockPattern snowGolemBase;
     @Nullable
@@ -42,125 +56,110 @@ public class StoneMaskBlock extends HorizontalDirectionalBlock{
 
     protected StoneMaskBlock(BlockBehaviour.Properties $$0) {
         super($$0);
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
     }
-
     @Override
-    public void onPlace(BlockState $$0, Level $$1, BlockPos $$2, BlockState $$3, boolean $$4) {
-        if (!$$3.is($$0.getBlock())) {
-            this.trySpawnGolem($$1, $$2);
+    public BlockState updateShape(BlockState $$0, Direction $$1, BlockState $$2, LevelAccessor $$3, BlockPos $$4, BlockPos $$5) {
+        if ($$1.getOpposite() == $$0.getValue(FACING) && !$$0.canSurvive($$3, $$4)) {
+            return Blocks.AIR.defaultBlockState();
+        } else {
+            if ((Boolean)$$0.getValue(WATERLOGGED)) {
+                $$3.scheduleTick($$4, Fluids.WATER, Fluids.WATER.getTickDelay($$3));
+            }
+
+            return super.updateShape($$0, $$1, $$2, $$3, $$4, $$5);
         }
     }
 
-    public boolean canSpawnGolem(LevelReader $$0, BlockPos $$1) {
-        return this.getOrCreateSnowGolemBase().find($$0, $$1) != null || this.getOrCreateIronGolemBase().find($$0, $$1) != null;
+    public BlockState rotate(BlockState $$0, Rotation $$1) {
+        return (BlockState)$$0.setValue(FACING, $$1.rotate((Direction)$$0.getValue(FACING)));
     }
 
-    private void trySpawnGolem(Level $$0, BlockPos $$1) {
-        BlockPattern.BlockPatternMatch $$2 = this.getOrCreateSnowGolemFull().find($$0, $$1);
-        if ($$2 != null) {
-            SnowGolem $$3 = EntityType.SNOW_GOLEM.create($$0);
-            if ($$3 != null) {
-                spawnGolemInWorld($$0, $$2, $$3, $$2.getBlock(0, 2, 0).getPos());
+    @SuppressWarnings("deprecation")
+    private boolean canAttachTo(BlockGetter $$0, BlockPos $$1, Direction $$2) {
+        BlockState $$3 = $$0.getBlockState($$1);
+        return $$3.isSolid();
+    }
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean canSurvive(BlockState $$0, LevelReader $$1, BlockPos $$2) {
+        Direction $$3 = (Direction)$$0.getValue(FACING);
+        return this.canAttachTo($$1, $$2.relative($$3.getOpposite()), $$3);
+    }
+    @Override
+    public BlockState mirror(BlockState $$0, Mirror $$1) {
+        return $$0.rotate($$1.getRotation((Direction)$$0.getValue(FACING)));
+    }
+    @Nullable
+    public BlockState getStateForPlacement(BlockPlaceContext $$0) {
+        BlockState $$2;
+        if (!$$0.replacingClickedOnBlock()) {
+            $$2 = $$0.getLevel().getBlockState($$0.getClickedPos().relative($$0.getClickedFace().getOpposite()));
+            if ($$2.is(this) && $$2.getValue(FACING) == $$0.getClickedFace()) {
+                return null;
             }
-        } else {
-            BlockPattern.BlockPatternMatch $$4 = this.getOrCreateIronGolemFull().find($$0, $$1);
-            if ($$4 != null) {
-                IronGolem $$5 = EntityType.IRON_GOLEM.create($$0);
-                if ($$5 != null) {
-                    $$5.setPlayerCreated(true);
-                    spawnGolemInWorld($$0, $$4, $$5, $$4.getBlock(1, 2, 0).getPos());
+        }
+
+        $$2 = this.defaultBlockState();
+        LevelReader $$3 = $$0.getLevel();
+        BlockPos $$4 = $$0.getClickedPos();
+        FluidState $$5 = $$0.getLevel().getFluidState($$0.getClickedPos());
+        Direction[] var6 = $$0.getNearestLookingDirections();
+        int var7 = var6.length;
+
+        for (int var8 = 0; var8 < var7; ++var8) {
+            Direction $$6 = var6[var8];
+            if ($$6.getAxis().isHorizontal()) {
+                $$2 = (BlockState) $$2.setValue(FACING, $$6.getOpposite());
+                if ($$2.canSurvive($$3, $$4)) {
+                    return (BlockState) $$2.setValue(WATERLOGGED, $$5.getType() == Fluids.WATER);
                 }
             }
         }
+
+        return null;
     }
 
-    private static void spawnGolemInWorld(Level $$0, BlockPattern.BlockPatternMatch $$1, Entity $$2, BlockPos $$3) {
-        clearPatternBlocks($$0, $$1);
-        $$2.moveTo((double)$$3.getX() + 0.5, (double)$$3.getY() + 0.05, (double)$$3.getZ() + 0.5, 0.0F, 0.0F);
-        $$0.addFreshEntity($$2);
-
-        for (ServerPlayer $$4 : $$0.getEntitiesOfClass(ServerPlayer.class, $$2.getBoundingBox().inflate(5.0))) {
-            CriteriaTriggers.SUMMONED_ENTITY.trigger($$4, $$2);
-        }
-
-        updatePatternBlocks($$0, $$1);
-    }
-
-    public static void clearPatternBlocks(Level $$0, BlockPattern.BlockPatternMatch $$1) {
-        for (int $$2 = 0; $$2 < $$1.getWidth(); $$2++) {
-            for (int $$3 = 0; $$3 < $$1.getHeight(); $$3++) {
-                BlockInWorld $$4 = $$1.getBlock($$2, $$3, 0);
-                $$0.setBlock($$4.getPos(), Blocks.AIR.defaultBlockState(), 2);
-                $$0.levelEvent(2001, $$4.getPos(), Block.getId($$4.getState()));
-            }
-        }
-    }
-
-    public static void updatePatternBlocks(Level $$0, BlockPattern.BlockPatternMatch $$1) {
-        for (int $$2 = 0; $$2 < $$1.getWidth(); $$2++) {
-            for (int $$3 = 0; $$3 < $$1.getHeight(); $$3++) {
-                BlockInWorld $$4 = $$1.getBlock($$2, $$3, 0);
-                $$0.blockUpdated($$4.getPos(), Blocks.AIR);
-            }
-        }
-    }
-
+    @SuppressWarnings("deprecation")
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext $$0) {
-        return this.defaultBlockState().setValue(FACING, $$0.getHorizontalDirection().getOpposite());
+    public boolean useShapeForLightOcclusion(BlockState state) {
+        return true; // Ensures custom occlusion shape is used (if applicable)
+    }
+    @SuppressWarnings("deprecation")
+    @Override
+    public VoxelShape getShape(BlockState $$0, BlockGetter $$1, BlockPos $$2, CollisionContext $$3) {
+        switch ((Direction)$$0.getValue(FACING)) {
+            case NORTH:
+                return NORTH_AABB;
+            case SOUTH:
+                return SOUTH_AABB;
+            case WEST:
+                return WEST_AABB;
+            case EAST:
+            default:
+                return EAST_AABB;
+        }
     }
 
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean skipRendering(BlockState p_53972_, BlockState p_53973_, Direction p_53974_) {
+        return false;
+    }
+    @SuppressWarnings("deprecation")
+    @Override
+    public VoxelShape getOcclusionShape(BlockState $$0, BlockGetter $$1, BlockPos $$2) {
+        return Shapes.empty();
+    }
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> $$0) {
-        $$0.add(FACING);
+        $$0.add(FACING, WATERLOGGED);
     }
 
-    private BlockPattern getOrCreateSnowGolemBase() {
-        if (this.snowGolemBase == null) {
-            this.snowGolemBase = BlockPatternBuilder.start()
-                    .aisle(" ", "#", "#")
-                    .where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.SNOW_BLOCK)))
-                    .build();
-        }
-
-        return this.snowGolemBase;
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean isPathfindable(BlockState $$0, BlockGetter $$1, BlockPos $$2, PathComputationType $$3) {
+        return true;
     }
 
-    private BlockPattern getOrCreateSnowGolemFull() {
-        if (this.snowGolemFull == null) {
-            this.snowGolemFull = BlockPatternBuilder.start()
-                    .aisle("^", "#", "#")
-                    .where('^', BlockInWorld.hasState(PUMPKINS_PREDICATE))
-                    .where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.SNOW_BLOCK)))
-                    .build();
-        }
-
-        return this.snowGolemFull;
-    }
-
-    private BlockPattern getOrCreateIronGolemBase() {
-        if (this.ironGolemBase == null) {
-            this.ironGolemBase = BlockPatternBuilder.start()
-                    .aisle("~ ~", "###", "~#~")
-                    .where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.IRON_BLOCK)))
-                    .where('~', $$0 -> $$0.getState().isAir())
-                    .build();
-        }
-
-        return this.ironGolemBase;
-    }
-
-    private BlockPattern getOrCreateIronGolemFull() {
-        if (this.ironGolemFull == null) {
-            this.ironGolemFull = BlockPatternBuilder.start()
-                    .aisle("~^~", "###", "~#~")
-                    .where('^', BlockInWorld.hasState(PUMPKINS_PREDICATE))
-                    .where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.IRON_BLOCK)))
-                    .where('~', $$0 -> $$0.getState().isAir())
-                    .build();
-        }
-
-        return this.ironGolemFull;
-    }
 }
