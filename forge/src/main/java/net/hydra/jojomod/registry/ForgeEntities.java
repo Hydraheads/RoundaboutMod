@@ -345,6 +345,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "harpoon").toString())
             );
+    public static final RegistryObject<EntityType<BladedBowlerHatEntity>> BLADED_BOWLER_HAT =
+            ENTITY_TYPES.register("bowler_hat", () ->
+                    EntityType.Builder.<BladedBowlerHatEntity>of(BladedBowlerHatEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "bladed_bowler_hat").toString())
+            );
     public static final RegistryObject<EntityType<MatchEntity>> THROWN_MATCH =
             ENTITY_TYPES.register("match", () ->
                     EntityType.Builder.<MatchEntity>of(MatchEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).

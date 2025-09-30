@@ -662,6 +662,13 @@ public class ModSounds {
     public static final ResourceLocation HARPOON_RETURN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HARPOON_RETURN);
     public static SoundEvent HARPOON_RETURN_EVENT = SoundEvent.createVariableRangeEvent(HARPOON_RETURN_ID);
 
+    public static final String BOWLER_HAT_AIM_SOUND = "bowler_hat_aim";
+    public static final ResourceLocation BOWLER_HAT_AIM_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BOWLER_HAT_AIM_SOUND);
+    public static SoundEvent BOWLER_HAT_AIM_SOUND_EVENT = SoundEvent.createVariableRangeEvent(BOWLER_HAT_AIM_ID);
+    public static final String BOWLER_HAT_FLY_SOUND = "bowler_hat_fly";
+    public static final ResourceLocation BOWLER_HAT_FLY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BOWLER_HAT_FLY_SOUND);
+    public static SoundEvent BOWLER_HAT_FLY_SOUND_EVENT = SoundEvent.createVariableRangeEvent(BOWLER_HAT_FLY_ID);
+
     public static final String GLAIVE_CHARGE = "glaive_charge";
     public static final ResourceLocation GLAIVE_CHARGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GLAIVE_CHARGE);
     public static SoundEvent GLAIVE_CHARGE_EVENT = SoundEvent.createVariableRangeEvent(GLAIVE_CHARGE_ID);

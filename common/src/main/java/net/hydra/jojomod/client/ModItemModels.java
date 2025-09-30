@@ -1,6 +1,8 @@
 package net.hydra.jojomod.client;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.models.projectile.BladedBowlerHatModel;
+import net.hydra.jojomod.client.models.projectile.BowlerHatModel;
 import net.hydra.jojomod.client.models.projectile.HarpoonModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 
@@ -55,5 +57,8 @@ public class ModItemModels {
             new ModelResourceLocation(Roundabout.MOD_ID, "dread_book", "inventory");
 
     public static HarpoonModel HARPOON_MODEL;
+
+    public static BowlerHatModel BOWLER_HAT_MODEL;
+    public static BladedBowlerHatModel BLADED_BOWLER_HAT_MODEL;
 
 }

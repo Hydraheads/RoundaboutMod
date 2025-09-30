@@ -1,11 +1,14 @@
 package net.hydra.jojomod.client;
 
+import net.hydra.jojomod.client.models.projectile.BowlerHatModel;
 import net.hydra.jojomod.client.models.visages.parts.*;
 import net.hydra.jojomod.client.models.worn_stand.*;
+import net.hydra.jojomod.item.BowlerHatItem;
 
 public class ModStrayModels {
     public static SoftAndWetShootingArmModel SHOOTING_ARM;
     public static HeyYaModel HEY_YA;
+    public static BowlerHatModel BOWLER_HAT;
     public static RattShoulderModel RATT_SHOULDER;
     public static MandomModel MANDOM;
     public static WatchModel MANDOM_WATCH;

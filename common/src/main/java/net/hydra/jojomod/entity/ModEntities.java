@@ -51,6 +51,7 @@ public class ModEntities {
     public static EntityType<StarPlatinumBaseballEntity> STAR_PLATINUM_BASEBALL;
     public static EntityType<DiverDownEntity> DIVER_DOWN;
     public static EntityType<HarpoonEntity> THROWN_HARPOON;
+    public static EntityType<BladedBowlerHatEntity> BLADED_BOWLER_HAT;
     public static EntityType<RattDartEntity> RATT_DART;
     public static EntityType<KnifeEntity> THROWN_KNIFE;
     public static EntityType<MatchEntity> THROWN_MATCH;
@@ -105,6 +106,7 @@ public class ModEntities {
     public static EntityType<FallenPhantom> FALLEN_PHANTOM;
     public static EntityType<FallenCreeper> FALLEN_CREEPER;
     public static final ResourceLocation HARPOON_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_harpoon.png");
+    public static final ResourceLocation BLADED_BOWLER_HAT_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/bladed_bowler_hat.png");
     public static final ResourceLocation KNIFE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_knife.png");
     public static final ResourceLocation RATT_DART_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/ratt_dart.png");
     public static final ResourceLocation GASOLINE_CAN_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_gasoline_can.png");

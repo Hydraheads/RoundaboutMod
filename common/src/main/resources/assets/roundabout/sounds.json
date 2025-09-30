@@ -1651,6 +1651,18 @@
       "roundabout:harpoon_crit"
     ]
   },
+  "bowler_hat_aim": {
+    "subtitle": "sounds.roundabout.bowler_hat_aim",
+    "sounds": [
+      "roundabout:bowler_hat_aim"
+    ]
+  },
+  "bowler_hat_fly": {
+    "subtitle": "sounds.roundabout.bowler_hat_fly",
+    "sounds": [
+      "roundabout:bowler_hat_fly"
+    ]
+  },
   "glaive_charge": {
     "subtitle": "sounds.roundabout.glaive_charge",
     "sounds": [

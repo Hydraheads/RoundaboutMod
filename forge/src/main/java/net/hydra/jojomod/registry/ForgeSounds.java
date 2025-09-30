@@ -390,6 +390,10 @@ public class ForgeSounds {
             register(ModSounds.HARPOON_GROUND, ModSounds.HARPOON_GROUND_ID);
     public static final RegistryObject<SoundEvent> HARPOON_RETURN =
             register(ModSounds.HARPOON_RETURN, ModSounds.HARPOON_RETURN_ID);
+    public static final RegistryObject<SoundEvent> BOWLER_HAT_AIM =
+            register(ModSounds.BOWLER_HAT_AIM_SOUND, ModSounds.BOWLER_HAT_AIM_ID);
+    public static final RegistryObject<SoundEvent> BOWLER_HAT_FLY =
+            register(ModSounds.BOWLER_HAT_FLY_SOUND, ModSounds.BOWLER_HAT_FLY_ID);
     public static final RegistryObject<SoundEvent> GLAIVE_CHARGE =
             register(ModSounds.GLAIVE_CHARGE, ModSounds.GLAIVE_CHARGE_ID);
     public static final RegistryObject<SoundEvent> GLAIVE_ATTACK =

@@ -7,6 +7,7 @@ public class SoundIndex {
     public static final byte NO_SOUND = -1;
     public static final byte ALL_SOUNDS = 0;
     public static final byte GLAIVE_CHARGE = -2;
+    public static final byte BOWLER_HAT_AIM_SOUND = -5;
     public static final byte STAND_ARROW_CHARGE = -3;
     public static final byte CACKLE = -4;
     public static final byte BARRAGE_CHARGE_SOUND = 1;

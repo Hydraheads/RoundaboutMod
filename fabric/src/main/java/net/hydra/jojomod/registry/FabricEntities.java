@@ -4,7 +4,6 @@ import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
@@ -395,6 +394,13 @@ public class FabricEntities {
                         EntityType.Builder.<HarpoonEntity>of(HarpoonEntity::new, MobCategory.MISC).
                                 sized(0.5f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":harpoon")
                 );
+        public static final EntityType<BladedBowlerHatEntity> BLADED_BOWLER_HAT =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "bladed_bowler_hat"),
+                        EntityType.Builder.<BladedBowlerHatEntity>of(BladedBowlerHatEntity::new, MobCategory.MISC).
+                                sized(0.5f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":bladed_bowler_hat")
+                );
         public static final EntityType<KnifeEntity> THROWN_KNIFE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -568,6 +574,7 @@ public class FabricEntities {
                 ModEntities.DARK_MIRAGE = DARK_MIRAGE;
                 ModEntities.DIVER_DOWN = DIVER_DOWN;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
+                ModEntities.BLADED_BOWLER_HAT = BLADED_BOWLER_HAT;
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
                 ModEntities.RATT_DART = RATT_DART;
                 ModEntities.THROWN_MATCH = THROWN_MATCH;

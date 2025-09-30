@@ -31,6 +31,7 @@ public abstract class LayerPlayerRendererMixin<T extends LivingEntity, M extends
         this.addLayer(new MandomLayer<>($$0, this));
         this.addLayer(new RattShoulderLayer<>($$0, this));
         this.addLayer(new VisagePartLayer<>($$0, this));
+        this.addLayer(new BowlerHatLayer<>($$0, this));
     }
 
     /**Shadows, ignore

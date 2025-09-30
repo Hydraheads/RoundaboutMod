@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin.time_stop;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.item.BowlerHatItem;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
@@ -74,6 +75,7 @@ public class TimeStopGameRenderer {
                     roundabout$cleared = false;
                 }
                 ci.cancel();
+                return;
             }
         }
     }

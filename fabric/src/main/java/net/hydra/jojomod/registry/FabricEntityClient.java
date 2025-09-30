@@ -69,6 +69,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.DIVER_DOWN, DiverDownRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_HARPOON, HarpoonRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_KNIFE, KnifeRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.BLADED_BOWLER_HAT, BladedBowlerHatRenderer::new);
         EntityRendererRegistry.register(FabricEntities.RATT_DART, RattDartRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_MATCH, ThrownItemRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GASOLINE_SPLATTER, ThrownItemRenderer::new);
@@ -141,6 +142,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DARK_MIRAGE_LAYER, DarkMirageModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DIVER_DOWN_LAYER, DiverDownModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.HARPOON_LAYER, HarpoonModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.BLADED_BOWLER_HAT_LAYER, BladedBowlerHatModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KNIFE_LAYER, KnifeModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.RATT_DART_LAYER, RattDartModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CROSSFIRE_LAYER, CrossfireHurricaneModel::createBodyLayer);
@@ -162,6 +164,7 @@ public class FabricEntityClient {
 
         ModStrayModels.SHOOTING_ARM = new SoftAndWetShootingArmModel();
         ModStrayModels.HEY_YA = new HeyYaModel();
+        ModStrayModels.BOWLER_HAT = new BowlerHatModel();
         ModStrayModels.MANDOM = new MandomModel();
         ModStrayModels.RATT_SHOULDER = new RattShoulderModel();
         ModStrayModels.MANDOM_WATCH = new WatchModel();
