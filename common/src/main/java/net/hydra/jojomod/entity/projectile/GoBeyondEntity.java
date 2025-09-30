@@ -151,11 +151,6 @@ public class GoBeyondEntity extends SoftAndWetBubbleEntity implements NoHitboxRe
 
         super.tick();
         if (!this.level().isClientSide()) {
-            if (this.tickCount % 40 == 9) {
-                ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
-                        this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(),
-                        0, 0, 0, 0, 0.015);
-            }
 
             if (!isRemoved()) {
 
@@ -178,6 +173,12 @@ public class GoBeyondEntity extends SoftAndWetBubbleEntity implements NoHitboxRe
                 for (Entity e : level().getEntities(this, box, this::canHitEntity)) {
                     this.onHitEntity(new EntityHitResult(e));
                 }
+            }
+        } else {
+            if (this.tickCount % 40 == 9) {
+                this.level().addAlwaysVisibleParticle(ModParticles.AIR_CRACKLE, true,
+                        this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(),
+                        0, 0, 0);
             }
         }
     }
