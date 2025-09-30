@@ -508,6 +508,11 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         }
     }
 
+
+    public boolean canBeSeenAsEnemy() {
+        return false;
+    }
+
     public UUID validationUUID = null;
     public void validateUUID(){
         if (!this.level().isClientSide) {
