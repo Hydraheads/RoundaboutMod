@@ -64,9 +64,11 @@ public class HarpoonEntity extends AbstractArrow {
 
         @Override
         protected void defineSynchedData() {
-            super.defineSynchedData();
-            this.entityData.define(ID_LOYALTY, (byte)0);
-            this.entityData.define(ID_FOIL, false);
+            if (!this.entityData.hasItem(ID_LOYALTY)) {
+                super.defineSynchedData();
+                this.entityData.define(ID_LOYALTY, (byte) 0);
+                this.entityData.define(ID_FOIL, false);
+            }
         }
 
         @Override

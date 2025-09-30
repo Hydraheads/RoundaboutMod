@@ -251,6 +251,8 @@ public class ForgeEvents {
         ModItems.BLANK_MASK = ForgeItems.BLANK_MASK.get();
         ModItems.MODIFICATION_MASK = ForgeItems.MODIFICATION_MASK.get();
         ModItems.JOTARO_MASK = ForgeItems.JOTARO_MASK.get();
+        ModItems.JOTARO_4_MASK = ForgeItems.JOTARO_4_MASK.get();
+        ModItems.JOTARO_6_MASK = ForgeItems.JOTARO_6_MASK.get();
         ModItems.DIO_MASK = ForgeItems.DIO_MASK.get();
         ModItems.GUCCIO_MASK = ForgeItems.GUCCIO_MASK.get();
         ModItems.ENYA_MASK = ForgeItems.ENYA_MASK.get();
@@ -309,6 +311,10 @@ public class ForgeEvents {
         ModParticles.HEART_ATTACK_MINI = ForgeParticles.HEART_ATTACK_MINI.get();
         ModParticles.ENERGY_DISTORTION = ForgeParticles.ENERGY_DISTORTION.get();
         ModParticles.PURPLE_STAR = ForgeParticles.PURPLE_STAR.get();
+        ModParticles.PUNCH_IMPACT_A = ForgeParticles.PUNCH_IMPACT_A.get();
+        ModParticles.PUNCH_IMPACT_B = ForgeParticles.PUNCH_IMPACT_B.get();
+        ModParticles.PUNCH_IMPACT_C = ForgeParticles.PUNCH_IMPACT_C.get();
+        ModParticles.PUNCH_MISS = ForgeParticles.PUNCH_MISS.get();
         ModParticles.BUBBLE_TRAIL = ForgeParticles.BUBBLE_TRAIL.get();
         ModParticles.WARDEN_CLOCK = ForgeParticles.WARDEN_CLOCK.get();
         ModParticles.CLOCK = ForgeParticles.CLOCK.get();

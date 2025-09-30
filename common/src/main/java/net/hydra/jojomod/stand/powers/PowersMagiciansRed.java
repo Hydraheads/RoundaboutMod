@@ -2086,6 +2086,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public void kickAttackImpact(Entity entity){
         this.setAttackTimeDuring(-20);
         if (entity != null) {
+            hitParticlesCenter(entity);
             float pow;
             float knockbackStrength;
             pow = getKickAttackStrength(entity);
@@ -2121,7 +2122,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
             float halfReach = (float) (distMax * 0.5);
             Vec3 pointVec = DamageHandler.getRayPoint(self, halfReach);
             if (!this.self.level().isClientSide) {
-                ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.EXPLOSION, pointVec.x, pointVec.y, pointVec.z,
+                ((ServerLevel) this.self.level()).sendParticles(ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
                         1, 0.0, 0.0, 0.0, 1);
             }
         }
@@ -3189,6 +3190,10 @@ public class PowersMagiciansRed extends NewPunchingStand {
         }
         this.setAttackTimeDuring(-10);
         if (entity != null) {
+            if (!this.self.level().isClientSide) {
+                ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SMOKE, entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
+                        4, 0.1, 0.1, 0.1, 0.3);
+            }
             float pow;
             float knockbackStrength;
             boolean lasthit = false;

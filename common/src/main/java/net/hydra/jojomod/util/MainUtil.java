@@ -126,10 +126,18 @@ public class MainUtil {
 
     public static ArrayList<String> walkableBlocks = Lists.newArrayList();
     public static ArrayList<String> standBlockGrabBlacklist = Lists.newArrayList();
+    public static ArrayList<String> naturalStandUserMobBlacklist = Lists.newArrayList();
 
     public static boolean isBlockBlacklisted(BlockState bs){
         ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
         if (standBlockGrabBlacklist != null && !standBlockGrabBlacklist.isEmpty() && rl != null && standBlockGrabBlacklist.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isMobStandUserBlacklisted(Entity ent){
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        if (naturalStandUserMobBlacklist != null && !naturalStandUserMobBlacklist.isEmpty() && rl != null && naturalStandUserMobBlacklist.contains(rl.toString())){
             return true;
         }
         return false;
@@ -343,7 +351,7 @@ public class MainUtil {
 
     public static double getWorthyOdds(Mob mob) {
         if ((isBossMob(mob) && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
-        || mob instanceof JojoNPC){
+        || mob instanceof JojoNPC || isMobStandUserBlacklisted(mob)){
             return 0;
         }
         return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.worthyMobOdds;
@@ -365,7 +373,7 @@ public class MainUtil {
     public static double getStandUserOdds(Mob mob) {
         if ((isBossMob(mob) && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
                 || mob instanceof JojoNPC
-                || mob instanceof Vex){
+        || isMobStandUserBlacklisted(mob)){
             return 0;
         } else if (mob instanceof AbstractVillager){
             return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.standUserVillagerOdds;
@@ -446,16 +454,17 @@ public class MainUtil {
                 }
 
 
-                if (!(user.roundabout$getStandPowers() instanceof PowersJustice) ||
-                        (!BuiltInRegistries.ITEM.getKey(stack.getItem()).getNamespace().equals(Roundabout.MOD_ID)) && !stack.is(Items.AIR)) {
+                if (stack == null || stack.isEmpty() || stack.getItem() instanceof AirItem)
+                    return;
 
-                        Roundabout.LOGGER.warn("Attempted to give player {} item {}, but they failed the check! Justice User: {}",
-                                player.getName().getString(),
-                                BuiltInRegistries.ITEM.getKey(stack.getItem()),
-                                (user.roundabout$getStandPowers() instanceof PowersJustice)
-                        );
-                        //sp.connection.disconnect(Component.literal("Exploit Detected"));
-                        return;
+                if (!(stack.getItem() instanceof FogBlockItem)) {
+                    Roundabout.LOGGER.warn("Attempted to give player {} item {}, but they failed the check! Justice User: {}",
+                            player.getName().getString(),
+                            BuiltInRegistries.ITEM.getKey(stack.getItem()),
+                            (user.roundabout$getStandPowers() instanceof PowersJustice)
+                    );
+                    //sp.connection.disconnect(Component.literal("Exploit Detected"));
+                    return;
                 }
 
                 CompoundTag compoundtag = BlockItem.getBlockEntityData(itemstack);
@@ -571,7 +580,7 @@ public class MainUtil {
             return Mob instanceof Zombie || (Mob instanceof Animal && !(Mob instanceof SkeletonHorse) && !(Mob instanceof ZombieHorse))
                     || Mob instanceof Villager || Mob instanceof WaterAnimal || Mob instanceof WanderingTrader || Mob instanceof Witch
                     || Mob instanceof AbstractIllager || Mob instanceof Creeper || Mob instanceof Player || Mob instanceof AbstractPiglin
-                    || Mob instanceof JojoNPC
+                    || Mob instanceof JojoNPC || Mob instanceof Zoglin
                     || Mob instanceof Spider || Mob instanceof EnderDragon || Mob instanceof EnderMan;
         }
         return false;
@@ -1494,6 +1503,9 @@ public class MainUtil {
         return basis;
     }
     public static boolean canActuallyHitInvolved(Entity self, Entity entity){
+        if (entity instanceof SoftAndWetPlunderBubbleEntity){
+            return false;
+        }
         if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.generalDetectionGoThroughDoorsAndCorners){
             return true;
         }

@@ -58,7 +58,7 @@ public abstract class ConfigManager {
         loaded = true;
     }
 
-    public static void loadWalkingBlacklist()
+    public static void loadBlacklists()
     {
         if (getAdvancedConfig().walkingHeartWalkOnBlockBlacklist != null)
         {
@@ -69,6 +69,11 @@ public abstract class ConfigManager {
         {
             MainUtil.standBlockGrabBlacklist.clear();
             MainUtil.standBlockGrabBlacklist.addAll(getAdvancedConfig().standBlockGrabBlacklist);
+        }
+        if (getAdvancedConfig().naturalStandUserMobBlacklist != null)
+        {
+            MainUtil.naturalStandUserMobBlacklist.clear();
+            MainUtil.naturalStandUserMobBlacklist.addAll(getAdvancedConfig().naturalStandUserMobBlacklist);
         }
     }
 

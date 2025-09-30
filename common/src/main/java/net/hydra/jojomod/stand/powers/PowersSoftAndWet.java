@@ -163,7 +163,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                     tryIntPowerPacket(PowerIndex.SPECIAL_TRACKER, getGoBeyondTarget().getId());
                     this.setGoBeyondTarget(null);
                     this.setGoBeyondChargeTicks(0);
-                    this.setShootTicks(0);
+                    this.setShootTicks(getMaxShootTicks());
                 }
             }
             return true;
@@ -1158,43 +1158,42 @@ public class PowersSoftAndWet extends NewPunchingStand {
     }
     @SuppressWarnings("deprecation")
     public boolean useWaterShield(){
-        if (this.self instanceof Player PL && !PL.level().isClientSide()) {
+
+        boolean isBucketSpawned = false;
+        if (this.self instanceof Player PL) {
             ItemStack stack = this.getSelf().getMainHandItem();
+            ItemStack stack2 = this.getSelf().getOffhandItem();
             if ((!stack.isEmpty() && stack.getItem() instanceof PotionItem PI && PotionUtils.getPotion(stack) == Potions.WATER)) {
                 if (!PL.getAbilities().instabuild) {
                     stack.shrink(1);
                     PL.getInventory().add(new ItemStack(Items.GLASS_BOTTLE));
                 }
-                splashWaterShield();
-                return true;
-            }
-            if ((!stack.isEmpty() && stack.getItem() instanceof BucketItem BI && ((IBucketItem)BI).roundabout$getContents().is(FluidTags.WATER))) {
-                if (!PL.getAbilities().instabuild) {
-                    stack.shrink(1);
-                    PL.getInventory().add(new ItemStack(Items.BUCKET));
-                }
-                splashWaterShield();
-                return true;
-            }
-            ItemStack stack2 = this.getSelf().getOffhandItem();
-            if ((!stack2.isEmpty() && stack2.getItem() instanceof PotionItem PI2 && PotionUtils.getPotion(stack2) == Potions.WATER)) {
+                if (!PL.level().isClientSide())
+                    splashWaterShield();
+            } else if ((!stack.isEmpty() && stack.getItem() instanceof BucketItem BI && ((IBucketItem)BI).roundabout$getContents().is(FluidTags.WATER))) {
+                isBucketSpawned = true;
+                if (!PL.level().isClientSide())
+                    splashWaterShield();
+            } else if ((!stack2.isEmpty() && stack2.getItem() instanceof PotionItem PI2 && PotionUtils.getPotion(stack2) == Potions.WATER)) {
                 if (!PL.getAbilities().instabuild) {
                     stack2.shrink(1);
                     PL.getInventory().add(new ItemStack(Items.GLASS_BOTTLE));
                 }
-                splashWaterShield();
-            }
-            if ((!stack2.isEmpty() && stack2.getItem() instanceof BucketItem BI && ((IBucketItem)BI).roundabout$getContents().is(FluidTags.WATER))) {
-                if (!PL.getAbilities().instabuild) {
-                    stack2.shrink(1);
-                    PL.getInventory().add(new ItemStack(Items.BUCKET));
-                }
-                splashWaterShield();
-                return true;
+                if (!PL.level().isClientSide())
+                    splashWaterShield();
+            } else if ((!stack2.isEmpty() && stack2.getItem() instanceof BucketItem BI && ((IBucketItem)BI).roundabout$getContents().is(FluidTags.WATER))) {
+
+                isBucketSpawned = true;
+                if (!PL.level().isClientSide())
+                    splashWaterShield();
             }
         }
 
-        this.setCooldown(PowerIndex.SKILL_4_SNEAK, ClientNetworking.getAppropriateConfig().softAndWetSettings.waterShieldCooldown);
+        if (isBucketSpawned){
+            this.setCooldown(PowerIndex.SKILL_4_SNEAK, ClientNetworking.getAppropriateConfig().softAndWetSettings.waterShieldBucketCooldown);
+        } else {
+            this.setCooldown(PowerIndex.SKILL_4_SNEAK, ClientNetworking.getAppropriateConfig().softAndWetSettings.waterShieldCooldown);
+        }
 
         return true;
     }
@@ -2086,7 +2085,7 @@ public void unlockSkin(){
 
     public float getExplosiveBubbleStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigPlayers(1.5F)));
+            return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigPlayers(1.35F)));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigMobs(3F)));
         }
@@ -2119,6 +2118,10 @@ public void unlockSkin(){
     public void kickAttackImpact(Entity entity){
         this.setAttackTimeDuring(-20);
         if (entity != null) {
+            if (chargedFinal < maxSuperHitTime) {
+                hitParticlesCenter(entity);
+            }
+
             float pow;
             float knockbackStrength;
             pow = getKickAttackStrength(entity);
@@ -2191,7 +2194,7 @@ public void unlockSkin(){
             float halfReach = (float) (distMax * 0.5);
             Vec3 pointVec = DamageHandler.getRayPoint(self, halfReach);
             if (!this.self.level().isClientSide) {
-                ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.EXPLOSION, pointVec.x, pointVec.y, pointVec.z,
+                ((ServerLevel) this.self.level()).sendParticles(ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
                         1, 0.0, 0.0, 0.0, 1);
             }
         }

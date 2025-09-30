@@ -352,8 +352,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
         if (!this.getEntityData().hasItem(ROUNDABOUT$SUPER_THROWN)) {
+            super.defineSynchedData();
             this.getEntityData().define(ROUNDABOUT$SUPER_THROWN, false);
             this.getEntityData().define(ROUNDABOUT$STYLE, (byte)0);
         }
@@ -641,6 +641,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 this.discard();
                 return;
             }
+        } else if ($$1 instanceof SoftAndWetPlunderBubbleEntity){
+            return;
         }
 
         Entity $$4 = this.getOwner();

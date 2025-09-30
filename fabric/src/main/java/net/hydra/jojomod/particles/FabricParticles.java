@@ -10,6 +10,10 @@ import net.minecraft.resources.ResourceLocation;
 
 public class FabricParticles {
     public static final SimpleParticleType HIT_IMPACT = FabricParticleTypes.simple();
+    public static final SimpleParticleType PUNCH_MISS = FabricParticleTypes.simple();
+    public static final SimpleParticleType PUNCH_IMPACT_A = FabricParticleTypes.simple();
+    public static final SimpleParticleType PUNCH_IMPACT_B = FabricParticleTypes.simple();
+    public static final SimpleParticleType PUNCH_IMPACT_C = FabricParticleTypes.simple();
     public static final SimpleParticleType MELTING = FabricParticleTypes.simple();
     public static final SimpleParticleType BLOOD = FabricParticleTypes.simple();
     public static final SimpleParticleType POINTER = FabricParticleTypes.simple();
@@ -54,6 +58,10 @@ public class FabricParticles {
     public static final SimpleParticleType MOLD = FabricParticleTypes.simple();
     public static void registerParticles(){
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("hit_impact"), HIT_IMPACT);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("punch_miss"), PUNCH_MISS);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("punch_impact_a"), PUNCH_IMPACT_A);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("punch_impact_b"), PUNCH_IMPACT_B);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("punch_impact_c"), PUNCH_IMPACT_C);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("melting"), MELTING);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("blood"), BLOOD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("pointer"), POINTER);
@@ -104,6 +112,10 @@ public class FabricParticles {
         ModParticles.HIT_IMPACT = HIT_IMPACT;
         ModParticles.AIR_CRACKLE = AIR_CRACKLE;
         ModParticles.MENACING = MENACING;
+        ModParticles.PUNCH_IMPACT_A = PUNCH_IMPACT_A;
+        ModParticles.PUNCH_IMPACT_B = PUNCH_IMPACT_B;
+        ModParticles.PUNCH_IMPACT_C = PUNCH_IMPACT_C;
+        ModParticles.PUNCH_MISS = PUNCH_MISS;
         ModParticles.VACUUM = VACUUM;
         ModParticles.STAR = STAR;
         ModParticles.HEART_ATTACK_MINI = HEART_ATTACK_MINI;

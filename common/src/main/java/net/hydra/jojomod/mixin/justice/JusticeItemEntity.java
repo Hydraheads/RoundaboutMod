@@ -22,8 +22,8 @@ public abstract class JusticeItemEntity extends Entity {
     @Inject(method = "tick", at = @At(value = "HEAD"))
     protected void roundabout$tick(CallbackInfo ci) {
         if (getItem().getItem() instanceof FogBlockItem){
-            if (this.age < 5940){
-                this.age = 5940;
+            if (this.age < 5840){
+                this.age = 5840;
             }
 
             if (!this.level().isClientSide()){

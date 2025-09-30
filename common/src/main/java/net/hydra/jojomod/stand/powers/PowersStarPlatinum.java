@@ -352,6 +352,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             playSoundsIfNearby(TIME_STOP_NOISE, 100, true);
         }
     }
+
+    public static final byte POWER_STAR_FINGER = PowerIndex.POWER_1;
+    public static final byte POWER_EARLY_STAR_FINGER = PowerIndex.POWER_1_SNEAK;
+    public static final byte POWER_INHALE = PowerIndex.POWER_3;
+
     boolean letServerKnowScopeCatchIsReady = false;
     @Override
     public void tickPower() {
@@ -381,7 +386,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         }
         super.tickPower();
         if (this.self.isAlive() && !this.self.isRemoved()) {
-            if (this.getActivePower() != PowerIndex.POWER_1){
+            if (this.getActivePower() != POWER_STAR_FINGER){
                 StandEntity stand = getStandEntity(this.self);
                 if (Objects.nonNull(stand) && stand instanceof StarPlatinumEntity SE && SE.getFingerLength() > 1.01) {
                     if (this.getSelf() instanceof Player && isPacketPlayer()) {
@@ -415,27 +420,37 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
        ))));
     }
     public float inputSpeedModifiers(float basis){
+        //Scope Slows You down
         if (this.scopeLevel > -1){
             basis *= 0.85f;
         }
-        if (this.activePower == PowerIndex.POWER_1 && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
-            basis *= 0.74f;
+        //Star Finger Slows You down
+        if (this.activePower == POWER_STAR_FINGER && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
+            basis *= 0.54f;
         }
-        if (this.activePower == PowerIndex.POWER_3 && !(this.getSelf() instanceof Creeper)){
+        //Inhale Slows You down
+        if (this.activePower == POWER_INHALE && !(this.getSelf() instanceof Creeper)){
             basis *= 0.5f;
         }
         return super.inputSpeedModifiers(basis);
     }
 
     @Override
+    public boolean cancelJump(){
+        if (this.activePower == POWER_STAR_FINGER && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26)
+            return true;
+        return false;
+    }
+
+    @Override
     public void updateIntMove(int in){
-        if (activePower == PowerIndex.POWER_1) {
+        if (activePower == POWER_STAR_FINGER) {
             ticksForFinger = in;
             stopSoundsIfNearby(STAR_FINGER, 100, false);
             stopSoundsIfNearby(STAR_FINGER_2, 100, false);
             stopSoundsIfNearby(STAR_FINGER_3, 100, false);
             stopSoundsIfNearby(STAR_FINGER_SILENT, 100, false);
-            if (this.getActivePower() == PowerIndex.POWER_1) {
+            if (this.getActivePower() == POWER_STAR_FINGER) {
                 this.animateStand(StarPlatinumEntity.STAR_FINGER_2);
             }
             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.DSP_SUMMON_EVENT, SoundSource.PLAYERS,
@@ -446,12 +461,12 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public int ticksForFinger = 0;
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
-        if (keyIsDown && this.getActivePower() == PowerIndex.POWER_1_SNEAK && this.attackTimeDuring < 24 && attackTimeDuring > 2) {
+        if (keyIsDown && this.getActivePower() == POWER_EARLY_STAR_FINGER && this.attackTimeDuring < 24 && attackTimeDuring > 2) {
             holdDownClick = true;
             animateStand(StarPlatinumEntity.IMPALE_2);
             this.attackTimeDuring = -8;
             tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK_2,getTargetEntityId2(impaleRange));
-        } else if ((this.getActivePower() != PowerIndex.POWER_1 || this.attackTimeDuring >= 26)) {
+        } else if ((this.getActivePower() != POWER_STAR_FINGER || this.attackTimeDuring >= 26)) {
             super.buttonInputAttack(keyIsDown,options);
         } else {
             if (keyIsDown && ticksForFinger == 100) {
@@ -506,10 +521,10 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
 
     public void tryInhaleClient(){
-        if (this.activePower != PowerIndex.POWER_3 && !this.getSelf().isUnderWater()) {
+        if (this.activePower != POWER_INHALE && !this.getSelf().isUnderWater()) {
             if (canExecuteMoveWithLevel(getInhaleLevel())) {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
-                tryPowerPacket(PowerIndex.POWER_3);
+                ((StandUser) this.getSelf()).roundabout$tryPower(POWER_INHALE, true);
+                tryPowerPacket(POWER_INHALE);
             }
         }
     }
@@ -537,10 +552,10 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return;
         if (!this.onCooldown(PowerIndex.SKILL_1)) {
             if (canExecuteMoveWithLevel(getFingerLevel())) {
-                if (this.activePower != PowerIndex.POWER_1) {
+                if (this.activePower != POWER_STAR_FINGER) {
                     ticksForFinger = 0;
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
-                    tryPowerPacket(PowerIndex.POWER_1);
+                    ((StandUser) this.getSelf()).roundabout$tryPower(POWER_STAR_FINGER, true);
+                    tryPowerPacket(POWER_STAR_FINGER);
                 }
             }
         }
@@ -582,9 +597,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public void updateUniqueMoves() {
         /*Tick through Time Stop Charge*/
-        if (this.getActivePower() == PowerIndex.POWER_1) {
+        if (this.getActivePower() == POWER_STAR_FINGER) {
             this.updateStarFinger();
-        } else if (this.getActivePower() == PowerIndex.POWER_3) {
+        } else if (this.getActivePower() == POWER_INHALE) {
             this.updateInhale();
         }
         super.updateUniqueMoves();
@@ -708,6 +723,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public void impaleImpact2(Entity entity){
         this.setAttackTimeDuring(-7);
         if (entity != null) {
+            hitParticles(entity);
             float pow;
             float knockbackStrength;
             pow = getStarBlitzStrength(entity);
@@ -748,10 +764,10 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
     @Override
     public void handleStandAttack2(Player player, Entity target){
-        if (activePower == PowerIndex.POWER_1_SNEAK) {
+        if (activePower == POWER_EARLY_STAR_FINGER) {
             impaleImpact2(target);
         }
-        if (this.getActivePower() == PowerIndex.POWER_1){
+        if (this.getActivePower() == POWER_STAR_FINGER){
             fingerDamage(target);
         }
     }
@@ -883,6 +899,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             pow*=(1 - ((float) (26-ticksForFinger) /26));
         }
 
+        hitParticlesCenter(entity);
         if(ticksForFinger < 26){
             if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
                 this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
@@ -965,7 +982,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             || (value instanceof StandEntity SE && SE.getUser() !=null && SE.getUser().getUUID() == this.self.getUUID())){
                 hitEntities.remove(value);
             } else {
-                int angle = 14;
+                int angle = 18;
                 Vec2 lookVec = new Vec2(getLookAtEntityYaw(self, value), getLookAtEntityPitch(self, value));
                 if (gravD != Direction.DOWN) {
                     lookVec = RotationUtil.rotPlayerToWorld(lookVec.x, lookVec.y, gravD);
@@ -1057,9 +1074,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     }
     @Override
     public boolean cancelSprintJump(){
-        if (this.getActivePower() == PowerIndex.POWER_1  && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
+        if (this.getActivePower() == POWER_STAR_FINGER  && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
             return true;
-        } else if (this.getActivePower() == PowerIndex.POWER_3){
+        } else if (this.getActivePower() == POWER_INHALE){
             return true;
         }
         return super.cancelSprintJump();
@@ -1075,7 +1092,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     @Override
     public boolean canInterruptPower(){
-        if (this.getActivePower() == PowerIndex.POWER_1 && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
+        if (this.getActivePower() == POWER_STAR_FINGER && this.getAttackTimeDuring() >= 0 && this.getAttackTimeDuring() <= 26){
             int cdr = ClientNetworking.getAppropriateConfig().starPlatinumSettings.starFingerInterruptCooldown;
             if (this.getSelf() instanceof Player) {
                 S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, cdr);
@@ -1091,7 +1108,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
-        if (this.getActivePower() == PowerIndex.POWER_1){
+        if (this.getActivePower() == POWER_STAR_FINGER){
             float distanceOut = 8;
             BlockHitResult dd = getAheadVec(distanceOut);
             List<Entity> fingerTargets = doFinger((float) Math.sqrt(dd.distanceTo(this.getSelf())));
@@ -1164,10 +1181,10 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             double dist = attackTarget.distanceTo(this.getSelf());
             boolean isCreeper = this.getSelf() instanceof Creeper;
             if (isCreeper) {
-                boolean inhaling = this.getActivePower() == PowerIndex.POWER_3;
+                boolean inhaling = this.getActivePower() == POWER_INHALE;
                 if (dist <= 8) {
                     if (!inhaling){
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+                        ((StandUser) this.getSelf()).roundabout$tryPower(POWER_INHALE, true);
                     }
                 } else {
                     if (inhaling){
@@ -1202,7 +1219,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                                 wentForCharge = false;
                             } else {
                                 if (!onCooldown(PowerIndex.SKILL_1_SNEAK) && RNG >= 0.85 && dist <= 3 && !wentForCharge) {
-                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
+                                    ((StandUser) this.getSelf()).roundabout$tryPower(POWER_EARLY_STAR_FINGER, true);
                                     wentForCharge = true;
                                 } else {
                                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.ATTACK, true);
@@ -1214,7 +1231,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             || this.getSelf() instanceof JotaroNPC
                             || this.getSelf() instanceof AbstractVillager) && dist <= 8 && dist >= 5) {
                         if (!onCooldown(PowerIndex.SKILL_1)) {
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                            ((StandUser) this.getSelf()).roundabout$tryPower(POWER_STAR_FINGER, true);
                         }
                     } else if ((this.getSelf() instanceof Spider || this.getSelf() instanceof Slime
                             || this.getSelf() instanceof JotaroNPC
@@ -1244,7 +1261,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public boolean tryPower(int move, boolean forced) {
 
-        if (this.getActivePower() == PowerIndex.POWER_1){
+        if (this.getActivePower() == POWER_STAR_FINGER){
             stopSoundsIfNearby(STAR_FINGER, 100, false);
             stopSoundsIfNearby(STAR_FINGER_2, 100, false);
             stopSoundsIfNearby(STAR_FINGER_3, 100, false);
@@ -1456,7 +1473,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     @Override
     public boolean clickRelease(){
-        if (this.getActivePower() == PowerIndex.POWER_3){
+        if (this.getActivePower() == POWER_INHALE){
             return true;
         }
         return super.clickRelease();
@@ -1467,7 +1484,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (suspendGuard) {
             return false;
         }
-        if (this.activePower == PowerIndex.POWER_3) {
+        if (this.activePower == POWER_INHALE) {
             return false;
         }
         return super.buttonInputGuard(keyIsDown,options);
@@ -1475,9 +1492,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     @Override
     public boolean setPowerOther(int move, int lastMove) {
-        if (move == PowerIndex.POWER_1) {
+        if (move == POWER_STAR_FINGER) {
             return this.starFinger();
-        } else if (move == PowerIndex.POWER_3) {
+        } else if (move == POWER_INHALE) {
             return this.inhale();
         }
         return super.setPowerOther(move,lastMove);
@@ -1492,7 +1509,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (Objects.nonNull(stand) && !((TimeStop)this.getSelf().level()).inTimeStopRange(this.self))
         {
             this.setAttackTimeDuring(0);
-            this.setActivePower(PowerIndex.POWER_3);
+            this.setActivePower(POWER_INHALE);
             this.animateStand((byte)15);
             this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
             return true;
@@ -1516,7 +1533,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         ticksForFinger = 100;
         if (Objects.nonNull(stand)){
             this.setAttackTimeDuring(0);
-            this.setActivePower(PowerIndex.POWER_1);
+            this.setActivePower(POWER_STAR_FINGER);
             double rand = Math.random();
             byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
             if (skn == StarPlatinumEntity.OVA_SKIN ||

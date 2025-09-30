@@ -160,6 +160,8 @@ public class Config implements Cloneable {
     public static class MiscSettings {
         @BooleanOption(group = "inherit", value = false)
         public Boolean generalDetectionGoThroughDoorsAndCorners;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean wallPassingHitboxes;
 
         @BooleanOption(group = "inherit", value = false)
         public Boolean disableBleedingAndBloodSplatters;
@@ -312,7 +314,7 @@ public class Config implements Cloneable {
         public Integer ticksBetweenSightStealsOnSameMob;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer sightStealingDurationOnMobsInTicks;
-        @IntOption(group = "inherit", value = 150, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 130, min = 0, max = 72000)
         public Integer sightStealingDurationOnPlayersInTicks;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         public Integer primaryPlunderBubbleLifespanInTicks;
@@ -350,7 +352,9 @@ public class Config implements Cloneable {
         public Integer bubbleScaffoldingCooldown;
         @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
         public Integer waterShieldCooldown;
-        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
+        public Integer waterShieldBucketCooldown;
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
         public Integer itemBubbleShotCooldown;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer basicBubbleShotCooldown;
@@ -441,7 +445,7 @@ public class Config implements Cloneable {
         public Boolean zombieCorpsesCanMineAndPlaceBlocksWithGivenItems;
         @FloatOption(group = "inherit", value = 0.83F, min = 0, max = 72000F)
         public Float phantomCorpseSpeed;
-        @IntOption(group = "inherit", value = 700, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
         public Integer fogCloneCooldown;
         @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
         public Integer fogChainCooldown;
@@ -558,7 +562,7 @@ public class Config implements Cloneable {
         public Float bonusDamageWhenPunching;
         @IntOption(group = "inherit", value = 8, min = 0, max = 72000)
         public Integer survivorRange;
-        @IntOption(group = "inherit", value = 8, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
         public Integer survivorCupidRange;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer survivorCupidCreativeRange;

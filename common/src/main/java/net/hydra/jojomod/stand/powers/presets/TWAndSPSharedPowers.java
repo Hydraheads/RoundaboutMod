@@ -447,6 +447,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public void impaleImpact(Entity entity){
         this.setAttackTimeDuring(-20);
         if (entity != null) {
+            hitParticlesCenter(entity);
+
             float pow;
             float knockbackStrength;
             pow = getImpalePunchStrength(entity);
@@ -968,6 +970,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                             && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
                         initiateClash(entity);
                     } else {
+                        hitParticles(entity);
+
                         float pow;
                         float knockbackStrength = 0;
                         /**By saving the velocity before hitting, we can let people approach barraging foes
@@ -1768,6 +1772,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public void finalAttackImpact(Entity entity){
         this.setAttackTimeDuring(-20);
         if (entity != null) {
+            hitParticlesCenter(entity);
             float pow;
             float knockbackStrength;
             pow = getFinalPunchStrength(entity);
@@ -1791,7 +1796,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             float halfReach = (float) (distMax * 0.5);
             Vec3 pointVec = DamageHandler.getRayPoint(self, halfReach);
             if (!this.self.level().isClientSide) {
-                ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.EXPLOSION, pointVec.x, pointVec.y, pointVec.z,
+                ((ServerLevel) this.self.level()).sendParticles(ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
                         1, 0.0, 0.0, 0.0, 1);
             }
         }

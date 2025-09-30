@@ -76,8 +76,10 @@ public class RattEntity extends StandEntity {
 
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(TARGET_ID, -1);
+        if (!this.entityData.hasItem(TARGET_ID)) {
+            super.defineSynchedData();
+            this.entityData.define(TARGET_ID, -1);
+        }
     }
 
     @Override

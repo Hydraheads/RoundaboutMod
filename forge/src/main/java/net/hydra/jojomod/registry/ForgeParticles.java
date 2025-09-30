@@ -87,6 +87,22 @@ public class ForgeParticles {
             "purple_star",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> PUNCH_IMPACT_A = PARTICLES.register(
+            "punch_impact_a",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> PUNCH_MISS = PARTICLES.register(
+            "punch_miss",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> PUNCH_IMPACT_B = PARTICLES.register(
+            "punch_impact_b",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> PUNCH_IMPACT_C = PARTICLES.register(
+            "punch_impact_c",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> BUBBLE_TRAIL = PARTICLES.register(
             "bubble_trail",
             () -> new SimpleParticleType(true)

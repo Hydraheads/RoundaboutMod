@@ -18,7 +18,7 @@ public class AirCrackleParticle extends TextureSheetParticle {
         super($$0, $$1, $$2, $$3, 0.0, 0.0, 0.0);
         this.age = 0;
         this.lifetime = 8;
-        this.quadSize = 0.4F;
+        this.quadSize = 0.35F;
         this.sprites = $$7;
         this.setSpriteFromAge($$7);
     }

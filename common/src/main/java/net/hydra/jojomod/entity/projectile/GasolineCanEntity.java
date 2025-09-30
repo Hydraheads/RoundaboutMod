@@ -246,8 +246,10 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
 
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.getEntityData().define(ROUNDABOUT$SUPER_THROWN, false);
+        if (!this.entityData.hasItem(ROUNDABOUT$SUPER_THROWN)) {
+            super.defineSynchedData();
+            this.getEntityData().define(ROUNDABOUT$SUPER_THROWN, false);
+        }
     }
 
     public void scatterGoo(BlockPos pos){

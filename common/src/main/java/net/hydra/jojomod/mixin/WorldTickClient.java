@@ -154,12 +154,14 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
             }
         }
 
-
-        ((ILivingEntityAccess) livingEntity).roundabout$setAnimStepO(((ILivingEntityAccess) livingEntity).roundabout$getAnimStep());
-        livingEntity.setOldPosAndRot();
-        livingEntity.yBodyRotO = livingEntity.yBodyRot;
-        livingEntity.yHeadRotO = livingEntity.yHeadRot;
-        livingEntity.oAttackAnim = livingEntity.attackAnim;
+        //if (!livingEntity.isPassenger())
+            ((ILivingEntityAccess) livingEntity).roundabout$setAnimStepO(((ILivingEntityAccess) livingEntity).roundabout$getAnimStep());
+            livingEntity.setOldPosAndRot();
+        //if (!livingEntity.isPassenger()){
+            livingEntity.yBodyRotO = livingEntity.yBodyRot;
+            livingEntity.yHeadRotO = livingEntity.yHeadRot;
+            livingEntity.oAttackAnim = livingEntity.attackAnim;
+        //}
         //livingEntity.lastLimbDistance = livingEntity.limbDistance;
 
         if (livingEntity instanceof StandEntity){
@@ -168,11 +170,14 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
         } else {
             int LS = ((ILivingEntityAccess) livingEntity).roundabout$getLerpSteps();
             if (LS > 0) {
-                double LX = livingEntity.getX() + (((ILivingEntityAccess) livingEntity).roundabout$getLerpX() - livingEntity.getX()) / (double) LS;
-                double LY = livingEntity.getY() + (((ILivingEntityAccess) livingEntity).roundabout$getLerpY() - livingEntity.getY()) / (double) LS;
-                double LZ = livingEntity.getZ() + (((ILivingEntityAccess) livingEntity).roundabout$getLerpZ() - livingEntity.getZ()) / (double) LS;
-                ((ILivingEntityAccess) livingEntity).roundabout$setLerpSteps(LS - 1);
-                livingEntity.setPos(LX, LY, LZ);
+                //if (!livingEntity.isPassenger())
+                    //{
+                        double LX = livingEntity.getX() + (((ILivingEntityAccess) livingEntity).roundabout$getLerpX() - livingEntity.getX()) / (double) LS;
+                        double LY = livingEntity.getY() + (((ILivingEntityAccess) livingEntity).roundabout$getLerpY() - livingEntity.getY()) / (double) LS;
+                        double LZ = livingEntity.getZ() + (((ILivingEntityAccess) livingEntity).roundabout$getLerpZ() - livingEntity.getZ()) / (double) LS;
+                        ((ILivingEntityAccess) livingEntity).roundabout$setLerpSteps(LS - 1);
+                        livingEntity.setPos(LX, LY, LZ);
+                    //}
             }
 
             ((ILivingEntityAccess) livingEntity).roundabout$PushEntities();

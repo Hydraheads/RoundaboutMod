@@ -56,9 +56,11 @@ public class JusticeEntity extends FollowingStandEntity {
 
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(JUSTICE_SZ, 100);
-        this.entityData.define(JUSTICE_TEAM, (byte) 0);
+        if (!this.entityData.hasItem(JUSTICE_SZ)) {
+            super.defineSynchedData();
+            this.entityData.define(JUSTICE_SZ, 100);
+            this.entityData.define(JUSTICE_TEAM, (byte) 0);
+        }
     }
     @Override
     public boolean isNoGravity() {

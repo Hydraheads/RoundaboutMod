@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.corpses;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -32,6 +33,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
@@ -44,6 +46,7 @@ import net.minecraft.world.scores.Team;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 public class FallenMob extends PathfinderMob implements NeutralMob {
     public int ticksThroughPhases = 0;
@@ -337,8 +340,6 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
         super.aiStep();
     }
 
-
-
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0, true));
@@ -618,6 +619,17 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
         return "zombie";
     }
 
+    public void dropOnDeath(){
+        if (this instanceof FallenZombie && !this.getMainHandItem().isEmpty()){
+            double $$3 = this.getEyeY() - 0.3F;
+            ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), this.getMainHandItem().copyAndClear());
+            $$4.setPickUpDelay(40);
+            $$4.setThrower(this.getUUID());
+            this.level().addFreshEntity($$4);
+            this.setItemInHand(InteractionHand.MAIN_HAND,ItemStack.EMPTY);
+        }
+    }
+
     @Override
     public void playerTouch(Player $$0) {
         if (!getActivated() && (!getTurned() || this.getHealth() >= this.getMaxHealth()) && this.isAlive() && !this.isRemoved() && !getTicksThroughPlacer()) {
@@ -625,12 +637,13 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                 if ($$0.getMainHandItem().getItem() instanceof BodyBagItem BB){
                     if (BB.fillWithBody($$0.getMainHandItem(),this)){
                         this.level().playSound(null, this.blockPosition(), ModSounds.BODY_BAG_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
-
+                        dropOnDeath();
                         this.discard();
                     }
                 } else if ($$0.getOffhandItem().getItem() instanceof BodyBagItem BB){
                     if (BB.fillWithBody($$0.getOffhandItem(),this)){
                         this.level().playSound(null, this.blockPosition(), ModSounds.BODY_BAG_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
+                        dropOnDeath();
                         this.discard();
                     }
                 }
@@ -640,17 +653,19 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
 
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(CONTROLLER, -1);
-        this.entityData.define(TICKS_THROUGH_PLACER, false);
-        this.entityData.define(PHASES_FULL, false);
-        this.entityData.define(IS_ACTIVATED, false);
-        this.entityData.define(IS_TURNED, false);
-        this.entityData.define(FORCED_ROTATION, 0F);
-        this.entityData.define(SELECTED, false);
-        this.entityData.define(TARGET_TACTIC, (byte)0);
-        this.entityData.define(MOVEMENT_TACTIC, (byte)0);
-        this.entityData.define(TEAM_COLOR, (byte)0);
+        if (!this.entityData.hasItem(CONTROLLER)) {
+            super.defineSynchedData();
+            this.entityData.define(CONTROLLER, -1);
+            this.entityData.define(TICKS_THROUGH_PLACER, false);
+            this.entityData.define(PHASES_FULL, false);
+            this.entityData.define(IS_ACTIVATED, false);
+            this.entityData.define(IS_TURNED, false);
+            this.entityData.define(FORCED_ROTATION, 0F);
+            this.entityData.define(SELECTED, false);
+            this.entityData.define(TARGET_TACTIC, (byte) 0);
+            this.entityData.define(MOVEMENT_TACTIC, (byte) 0);
+            this.entityData.define(TEAM_COLOR, (byte) 0);
+        }
     }
     protected FallenMob(EntityType<? extends PathfinderMob> $$0, Level $$1) {
         super($$0, $$1);

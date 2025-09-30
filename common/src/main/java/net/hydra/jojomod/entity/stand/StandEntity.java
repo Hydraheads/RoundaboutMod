@@ -453,14 +453,16 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
      */
     @Override
     protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(FADE_OUT, (byte) 0);
-        this.entityData.define(FADE_PERCENT, 100);
-        this.entityData.define(USER_ID, -1);
-        this.entityData.define(ANIMATION, (byte) 0);
-        this.entityData.define(IDLE_ANIMATION, (byte) 0);
-        this.entityData.define(HELD_ITEM, ItemStack.EMPTY);
-        this.entityData.define(SKIN, (byte) 0);
+        if (!this.entityData.hasItem(FADE_OUT)) {
+            super.defineSynchedData();
+            this.entityData.define(FADE_OUT, (byte) 0);
+            this.entityData.define(FADE_PERCENT, 100);
+            this.entityData.define(USER_ID, -1);
+            this.entityData.define(ANIMATION, (byte) 0);
+            this.entityData.define(IDLE_ANIMATION, (byte) 0);
+            this.entityData.define(HELD_ITEM, ItemStack.EMPTY);
+            this.entityData.define(SKIN, (byte) 0);
+        }
     }
 
 
@@ -504,6 +506,11 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         } else {
             return this.User;
         }
+    }
+
+
+    public boolean canBeSeenAsEnemy() {
+        return false;
     }
 
     public UUID validationUUID = null;

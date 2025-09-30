@@ -140,6 +140,7 @@
     "jojo_npcs.NPCZombie",
     "jojo_npcs.NPCZombieVillager",
     "justice.JusticeCreeper",
+    "justice.JusticeDamageSourceMixin",
     "justice.JusticeDefendVillageTargetGoal",
     "justice.JusticeFixScreenBugInventoryScreenMixin",
     "justice.JusticeIronGolem",

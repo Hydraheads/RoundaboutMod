@@ -366,6 +366,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                             } else {
                                 strength *= 0.6F;
                             }
+                            hitParticlesCenter(ent);
                             if (DamageHandler.PenetratingStandDamageEntity(ent, getGrabThrowStrength(ent), this.getSelf())){
                                 if ((ent instanceof Player || ((TimeStop) this.getSelf().level()).CanTimeStopEntity(ent))) {
                                     ((IEntityAndData)ent).roundabout$setQVec(new Vec3(Mth.sin(((degrees * ((float) Math.PI / 180)))),

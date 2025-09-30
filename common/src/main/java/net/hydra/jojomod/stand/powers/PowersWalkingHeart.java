@@ -565,7 +565,17 @@ public class PowersWalkingHeart extends NewDashPreset {
         }
     }
 
+    @Override
+    public boolean interceptAllInteractions(){
+        return inCombatMode();
+    }
+
     public boolean HeelSpikeDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker, boolean rightClick){
+        if (target == null)
+            return false;
+
+        hitParticlesCenter(target);
+
         if (attacker instanceof TamableAnimal TA){
             if (target instanceof TamableAnimal TT && TT.getOwner() != null
                     && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
@@ -648,7 +658,12 @@ public class PowersWalkingHeart extends NewDashPreset {
         this.setActivePower(PowerIndex.POWER_4_EXTRA);
 
         if (this.self.level().isClientSide()){
-            List<Entity> TE = this.getTargetEntityListThroughWalls(self, 7F,10);
+            List<Entity> TE;
+            if (!ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxes){
+                TE = this.getTargetEntityList(self, 7F,10);
+            } else {
+                TE = this.getTargetEntityListThroughWalls(self, 7F,10);
+            }
             if (TE == null || TE.isEmpty()){
                 tryPowerPacket(PowerIndex.POWER_1_BONUS);
             } else {

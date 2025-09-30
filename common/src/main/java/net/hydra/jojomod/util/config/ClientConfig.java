@@ -58,6 +58,15 @@ public class ClientConfig implements Cloneable {
     public Float invisibleBlockDepthF;
     @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
     public Integer invisibleBlocksDistanceAwaySeenI;
+
+
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean abilityIconHudIsAnimated;
+    @IntOption(group = "inherit", value = 174, min = 0, max = 72000)
+    public Integer abilityIconHudX;
+    @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
+    public Integer abilityIconHudY;
+
     @NestedOption(group = "modded")
     public ClientConfig.ConfigSettings configSettings;
     @NestedOption(group = "modded")
@@ -117,7 +126,12 @@ public class ClientConfig implements Cloneable {
         public Integer bodyBagHoldingParticlesPerFiveTicks;
         @FloatOption(group = "inherit", value = 0.01F, min = 0, max = 1)
         public Float magiciansRedFirestormEmbersRate;
-
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean meteorsEmitParticles;
+        @FloatOption(group = "inherit", value = 0.46F, min = 0, max = 10)
+        public Float punchImpactSize;
+        @FloatOption(group = "inherit", value = 0.82F, min = 0, max = 1)
+        public Float punchImpactOpacity;
     }
 
     public static class OpacitySettings {

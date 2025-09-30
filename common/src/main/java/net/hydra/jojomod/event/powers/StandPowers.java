@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModGamerules;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.item.MaxStandDiscItem;
@@ -33,6 +34,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -62,6 +64,8 @@ import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
+import net.zetalasis.hjson.JsonObject;
+import net.zetalasis.hjson.JsonValue;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
@@ -69,6 +73,7 @@ import org.joml.Vector3d;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class StandPowers {
 
@@ -171,6 +176,10 @@ public class StandPowers {
 
     /**If the standard right click input should usually be canceled while your stand is active*/
     public boolean interceptGuard(){
+        return false;
+    }
+    /**The above, but for canceling all right click interactions like villager interactions etc*/
+    public boolean interceptAllInteractions(){
         return false;
     }
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
@@ -2750,9 +2759,9 @@ public class StandPowers {
         if (this.getStandEntity(this.self) != null) {
             //Roundabout.LOGGER.info("3 " + this.getStandEntity(this.self).getPitch() + " " + this.getStandEntity(this.self).getYaw());
         }
-        if (this.getClashOp() != null) {
+        LivingEntity entity = this.getClashOp();
+        if (entity != null && entity.isAlive() && this.self.isAlive()) {
             if (this.attackTimeDuring <= 60) {
-                LivingEntity entity = this.getClashOp();
 
                 /*Rotation has to be set actively by both client and server,
                  * because serverPitch and serverYaw are inconsistent, client overwrites stand stuff sometimes*/
@@ -2786,11 +2795,21 @@ public class StandPowers {
                 }
             }
         } else {
-            if (!this.self.level().isClientSide) {
+            endClash();
+        }
+    }
+
+    public void endClash(){
+        if (!this.self.level().isClientSide) {
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.CLASH_CANCEL, true);
+            LivingEntity entity = this.getClashOp();
+            if (entity != null){
                 ((StandUser) this.self).roundabout$tryPower(PowerIndex.CLASH_CANCEL, true);
             }
         }
     }
+
+
     private void updateClashing2(){
         if (this.getClashOp() != null) {
             boolean thisActive = ((StandUser) this.self).roundabout$getActive();
@@ -3008,61 +3027,66 @@ public class StandPowers {
     }
 
     public void tickCooldowns(){
-        int amt = 1;
-        boolean isDrowning = false;
+        try {
+            int amt = 1;
+            boolean isDrowning = false;
 
-        // Changes how fast the cooldowns should recharge
-        if (this.self instanceof Player) {
-            isDrowning = (this.self.getAirSupply() <= 0);
+            // Changes how fast the cooldowns should recharge
+            if (this.self instanceof Player) {
+                isDrowning = (this.self.getAirSupply() <= 0);
 
-            int idle = ((StandUser) this.getSelf()).roundabout$getIdleTime();
-            if (idle > 300) {
-                amt *= 4;
-            } else if (idle > 200) {
-                amt *= 3;
-            } else if (idle > 40) {
-                amt *= 2;
+                int idle = ((StandUser) this.getSelf()).roundabout$getIdleTime();
+                if (idle > 300) {
+                    amt *= 4;
+                } else if (idle > 200) {
+                    amt *= 3;
+                } else if (idle > 40) {
+                    amt *= 2;
+                }
+
+                if (isDrowning && !ClientNetworking.getAppropriateConfig().generalStandSettings.canRechargeCooldownsWhileDrowning)
+                { amt = 0; }
             }
 
-            if (isDrowning && !ClientNetworking.getAppropriateConfig().generalStandSettings.canRechargeCooldownsWhileDrowning)
-            { amt = 0; }
-        }
-
-        byte cin = -1;
-        for (CooldownInstance ci : StandCooldowns){
-            cin++;
-            if (ci.time >= 0){
-                if (!canUseStillStandingRecharge(cin)){
-                    amt = 1;
-                }
-                ci.setFrozen(isDrowning && !ClientNetworking.getAppropriateConfig().generalStandSettings.canRechargeCooldownsWhileDrowning);
-
-                boolean serverControlledCooldwon = isServerControlledCooldown(ci, cin);
-                if (!(this.self.level().isClientSide() && serverControlledCooldwon)) {
-
-                    if (!ci.isFrozen()) {
-                        ci.time -= amt;
+            byte cin = -1;
+            for (CooldownInstance ci : StandCooldowns){
+                cin++;
+                if (ci.time >= 0){
+                    if (!canUseStillStandingRecharge(cin)){
+                        amt = 1;
                     }
+                    ci.setFrozen(isDrowning && !ClientNetworking.getAppropriateConfig().generalStandSettings.canRechargeCooldownsWhileDrowning);
 
-                    if (ci.time < -1) {
-                        ci.time = -1;
-                    }
+                    boolean serverControlledCooldwon = isServerControlledCooldown(ci, cin);
+                    if (!(this.self.level().isClientSide() && serverControlledCooldwon)) {
 
-                    if (this.self instanceof Player) {
-                        if ((((Player) this.self).isCreative() &&
-                                ClientNetworking.getAppropriateConfig().generalStandSettings.creativeModeRefreshesCooldowns) && ci.time > 2) {
-                            ci.time = 2;
+                        if (!ci.isFrozen()) {
+                            ci.time -= amt;
+                        }
+
+                        if (ci.time < -1) {
+                            ci.time = -1;
+                        }
+
+                        if (this.self instanceof Player) {
+                            if ((((Player) this.self).isCreative() &&
+                                    ClientNetworking.getAppropriateConfig().generalStandSettings.creativeModeRefreshesCooldowns) && ci.time > 2) {
+                                ci.time = 2;
+                            }
+                        }
+
+                        if (serverControlledCooldwon && !this.self.level().isClientSide() && this.self instanceof Player) {
+                            List<CooldownInstance> CDCopy = new ArrayList<>(StandCooldowns) {
+                            };
+
+                            S2CPacketUtil.sendMaxCooldownSyncPacket(((ServerPlayer) this.getSelf()), cin, ci.time, ci.maxTime);
                         }
                     }
-
-                    if (serverControlledCooldwon && !this.self.level().isClientSide() && this.self instanceof Player) {
-                        List<CooldownInstance> CDCopy = new ArrayList<>(StandCooldowns) {
-                        };
-
-                        S2CPacketUtil.sendMaxCooldownSyncPacket(((ServerPlayer) this.getSelf()), cin, ci.time, ci.maxTime);
-                    }
                 }
             }
+        } catch (Exception e){
+            //I very much doubt this will error
+            Roundabout.LOGGER.info("???");
         }
     }
 
@@ -3161,6 +3185,56 @@ public class StandPowers {
         return $$1;
     }
 
+    public Vec3 getRandPos(Entity ent){
+        Vec3 funnyVec = new Vec3(0,(ent.getBbHeight()*0.65),0);
+        Direction gd = ((IGravityEntity)ent).roundabout$getGravityDirection();
+        if (gd != Direction.DOWN){
+            funnyVec = RotationUtil.vecPlayerToWorld(funnyVec,gd);
+        }
+        return new Vec3(
+                ent.getRandomX(1)+funnyVec.x,
+                getRandomY(ent,0.33)+funnyVec.y,
+                ent.getRandomZ(1)+funnyVec.z
+        );
+    }
+
+    public double getRandomY(Entity ent, double $$0) {
+        return ent.getY((2.0 * Math.random() - 1.0) * $$0);
+    }
+
+
+    public SimpleParticleType getImpactParticle(){
+        SimpleParticleType punchpart;
+        float random = (float) (Math.random()*3);
+        if (random > 2){
+            punchpart = ModParticles.PUNCH_IMPACT_A;
+        } else if (random > 1){
+            punchpart = ModParticles.PUNCH_IMPACT_B;
+        } else {
+            punchpart = ModParticles.PUNCH_IMPACT_C;
+        }
+        return punchpart;
+    }
+
+    public void hitParticles(Entity entity){
+        Vec3 vec = getRandPos(entity);
+        ((ServerLevel) this.self.level()).sendParticles(
+                getImpactParticle(),
+                vec.x,vec.y,vec.z,
+                1, 0.0, 0.0, 0.0, 1);
+    }
+    public void hitParticlesCenter(Entity entity){
+        Vec3 funnyVec = new Vec3(0,(entity.getBbHeight()*0.65),0);
+        Direction gd = ((IGravityEntity)entity).roundabout$getGravityDirection();
+        if (gd != Direction.DOWN){
+            funnyVec = RotationUtil.vecPlayerToWorld(funnyVec,gd);
+        }
+        ((ServerLevel) this.self.level()).sendParticles(
+                getImpactParticle(),
+                entity.getX()+funnyVec.x,entity.getY()+funnyVec.y,entity.getZ()+funnyVec.z,
+                1, 0.0, 0.0, 0.0, 1);
+    }
+
     /**If you override this for any reason, you should probably call the super(). Although SP and TW override
      * this, you can probably do better*/
     public void barrageImpact(Entity entity, int hitNumber){
@@ -3180,6 +3254,8 @@ public class StandPowers {
                             && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
                         initiateClash(entity);
                     } else {
+                        hitParticles(entity);
+
                         float pow;
                         float knockbackStrength = 0;
                         /**By saving the velocity before hitting, we can let people approach barraging foes
