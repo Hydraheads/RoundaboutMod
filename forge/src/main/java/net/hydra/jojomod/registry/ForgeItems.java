@@ -141,6 +141,9 @@ public class ForgeItems {
     public static final RegistryObject<Item> HARPOON = addToTab(ITEMS.register("harpoon",
             () -> new HarpoonItem((new Item.Properties()).durability(250))
     ));
+    public static final RegistryObject<Item> BOWLER_HAT = addToTab(ITEMS.register("bowler_hat",
+            () -> new BowlerHatItem(Tiers.IRON, 0F, -1.6F, new Item.Properties())
+    ));
 
 
 

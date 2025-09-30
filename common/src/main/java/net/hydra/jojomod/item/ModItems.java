@@ -82,6 +82,7 @@ public class ModItems {
 
     public static Item HARPOON;
     public static Item SCISSORS;
+    public static Item BOWLER_HAT;
     public static Item EXECUTIONER_AXE;
     public static Item BODY_BAG;
     public static Item CREATIVE_BODY_BAG;

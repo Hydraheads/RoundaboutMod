@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": {
+      "item": "minecraft:leather"
+    },
+    "I":
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    "G":
+    {
+      "item": "minecraft:gold_nugget"
+    }
+  },
+  "pattern": [
+    "GCG",
+    "CIC",
+    "I I"
+  ],
+  "result": {
+    "count": 1,
+    "item": "roundabout:bowler_hat"
+  },
+  "show_notification": true
+}

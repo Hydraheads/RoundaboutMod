@@ -11,6 +11,10 @@ import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.item.ModItems;
+import jdk.jfr.Category;
+import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
+import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.sounds.SoundSource;
 import net.hydra.jojomod.networking.ModMessages;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.networking.ServerToClientPackets;
@@ -1298,7 +1302,9 @@ public class ClientUtil {
         );
     }
 
-
+    public static void handleBowlerHatFlySound(Entity entity) {
+        Minecraft.getInstance().getSoundManager().play(new BowlerHatFlyingSound(ModSounds.BOWLER_HAT_FLY_SOUND_EVENT, SoundSource.PLAYERS, 1, 0, entity));
+    }
 
     public static void applyJusticeFogBlockTextureOverlayInInventory(ItemStack $$0, ItemDisplayContext $$1, boolean $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, int $$6,
                                                                      ItemModelShaper shaper, BlockEntityWithoutLevelRenderer renderer, ItemRenderer itemRenderer){

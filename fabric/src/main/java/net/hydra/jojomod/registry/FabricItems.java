@@ -93,6 +93,8 @@ public class FabricItems {
     public static Item SCISSORS = registerItem("scissors", new ScissorItem(Tiers.IRON, 0F, -1.6F, new Item.Properties()));
     public static Item HARPOON = registerItem("harpoon", new HarpoonItem((new Item.Properties()).durability(250)));
 
+    public static Item BOWLER_HAT = registerItem("bowler_hat", new BowlerHatItem(Tiers.IRON, 0F, -1.6F, new Item.Properties()));
+
     public static Item WOODEN_GLAIVE = registerItem("wooden_glaive", new GlaiveItem(Tiers.WOOD, 4F, -2.9F, new Item.Properties(),4));
     public static Item STONE_GLAIVE = registerItem("stone_glaive", new GlaiveItem(Tiers.STONE, 4F, -2.9F, new Item.Properties(),6));
     public static Item IRON_GLAIVE = registerItem("iron_glaive", new GlaiveItem(Tiers.IRON, 4F, -2.9F, new Item.Properties(),7));
@@ -217,6 +219,7 @@ public class FabricItems {
                         entries.accept(BODY_BAG);
                         entries.accept(CREATIVE_BODY_BAG);
                         entries.accept(HARPOON);
+                        entries.accept(BOWLER_HAT);
                         entries.accept(KNIFE);
                         entries.accept(KNIFE_BUNDLE);
                         entries.accept(MATCH);
@@ -423,6 +426,7 @@ public class FabricItems {
         ModItems.BODY_BAG = BODY_BAG;
         ModItems.CREATIVE_BODY_BAG = CREATIVE_BODY_BAG;
         ModItems.HARPOON = HARPOON;
+        ModItems.BOWLER_HAT = BOWLER_HAT;
         ModItems.KNIFE = KNIFE;
         ModItems.KNIFE_BUNDLE = KNIFE_BUNDLE;
         ModItems.MATCH = MATCH;
