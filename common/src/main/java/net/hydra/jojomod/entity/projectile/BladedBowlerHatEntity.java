@@ -10,6 +10,7 @@ import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.BowlerHatItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -115,9 +116,13 @@ public class BladedBowlerHatEntity extends AbstractArrow {
             // Timer that calls back the hat when it's been flying for too long
             if (!level().isClientSide && this.tickCount >= 200) {
                 Entity entity = this.getOwner();
-                if (entity instanceof Player player) {
+                if (entity instanceof Player player && player.isAlive()) {
                     if (!player.getInventory().add(this.getPickupItem())) {
                         player.drop(this.getPickupItem(), false);
+                    }
+                } else if (entity instanceof Player player && !player.isAlive()) {
+                    if (this instanceof BladedBowlerHatEntity) {
+
                     }
                 }
                 this.discard();
@@ -201,7 +206,7 @@ public class BladedBowlerHatEntity extends AbstractArrow {
 
     private boolean isAcceptibleReturnOwner() {
             Entity $$0 = this.getOwner();
-            return $$0 == null || !$$0.isAlive() ? false : !($$0 instanceof ServerPlayer) || !$$0.isSpectator();
+            return $$0 == null ? false : !($$0 instanceof ServerPlayer) || !$$0.isSpectator();
         }
 
     @Override
