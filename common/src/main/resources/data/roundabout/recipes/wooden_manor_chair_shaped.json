@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "L":
+    {
+      "tag": "minecraft:logs"
+    },
+    "P":
+    {
+      "tag": "minecraft:planks"
+    },
+    "W":
+    {
+      "tag": "minecraft:wool"
+    }
+  },
+  "pattern": [
+    " W ",
+    "LLL",
+    "P P"
+  ],
+  "result": {
+    "count": 4,
+    "item": "roundabout:wooden_manor_chair"
+  },
+  "show_notification": true
+}

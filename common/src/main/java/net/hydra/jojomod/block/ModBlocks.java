@@ -141,6 +141,12 @@ public class ModBlocks {
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(2.0F).sound(SoundType.WOOD).ignitedByLava()
     );
+    public static Block WOODEN_MANOR_CHAIR_PROPERTIES = new ManorChairBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(2.0F).sound(SoundType.WOOD).ignitedByLava()
+    );
 
     public static Block LOCACACA_CACTUS_PROPERTIES = new LocacacaCactusBlock(
             BlockBehaviour.Properties.of()
