@@ -7,6 +7,7 @@ import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.Direction;
@@ -92,7 +93,9 @@ public class BladedBowlerHatEntity extends AbstractArrow {
 
                 if (isFlying) {
                     if (this.tickCount%80 ==1) {
-                        ClientUtil.handleBowlerHatFlySound(this);
+                        if (!((TimeStop) this.level()).inTimeStopRange(this)) {
+                            ClientUtil.handleBowlerHatFlySound(this);
+                        }
                     }
                 }
             }
