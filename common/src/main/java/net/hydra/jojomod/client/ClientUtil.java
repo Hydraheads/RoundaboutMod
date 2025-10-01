@@ -93,7 +93,6 @@ public class ClientUtil {
     public static void setCheck(){
         //Right-clicking a visage opens the power inventory (see inputevents mixin for another use case)
         KeyInputs.menuKey(Minecraft.getInstance().player, Minecraft.getInstance());
-        checkthis = 1;
     }
     public static boolean isPlayerOrCamera(Entity ent){
         Minecraft mc = Minecraft.getInstance();
