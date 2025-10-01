@@ -153,7 +153,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.KNIFE_LAYER, KnifeModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.RATT_DART_LAYER, RattDartModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.HARPOON_LAYER, HarpoonModel::createBodyLayer);
-        event.registerLayerDefinition(ModEntityRendererClient.BLADED_BOWLER_HAT_LAYER, BowlerHatModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.BLADED_BOWLER_HAT_LAYER, BladedBowlerHatModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.CROSSFIRE_LAYER, CrossfireHurricaneModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.CROSSFIRE_FIRESTORM_LAYER, CrossfireFirestormModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.LIFE_DETECTOR, LifeTrackerModel::createBodyLayer);
