@@ -1,5 +1,6 @@
 package net.hydra.jojomod.client;
 
+import net.hydra.jojomod.client.models.WornStoneMaskModel;
 import net.hydra.jojomod.client.models.projectile.BowlerHatModel;
 import net.hydra.jojomod.client.models.visages.parts.*;
 import net.hydra.jojomod.client.models.worn_stand.*;
@@ -9,6 +10,7 @@ public class ModStrayModels {
     public static SoftAndWetShootingArmModel SHOOTING_ARM;
     public static HeyYaModel HEY_YA;
     public static BowlerHatModel BOWLER_HAT;
+    public static WornStoneMaskModel WORN_STONE_MASK;
     public static RattShoulderModel RATT_SHOULDER;
     public static MandomModel MANDOM;
     public static WatchModel MANDOM_WATCH;
