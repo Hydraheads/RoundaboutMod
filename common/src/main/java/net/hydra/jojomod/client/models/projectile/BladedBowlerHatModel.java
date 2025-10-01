@@ -21,7 +21,7 @@ public class BladedBowlerHatModel<T extends Entity> extends Model {
 	private final ModelPart hat;
 
 	public BladedBowlerHatModel(ModelPart root) {
-        super(RenderType::entityCutout);
+        super(RenderType::entityTranslucent);
         this.hat = root.getChild("hat");
         ModItemModels.BLADED_BOWLER_HAT_MODEL = this;
 	}
