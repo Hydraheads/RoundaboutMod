@@ -607,7 +607,7 @@
   "sounds.roundabout.timestop_impact":  "Time Impact",
   "sounds.roundabout.timestop_impact2":  "Time Impact",
   "sounds.roundabout.harpoon_hit":  "Projectile cuts",
-  "sounds.roundabout.harpoon_crit":  "Projectile snipes air target",
+  "sounds.roundabout.harpoon_crit":  "Projectile sound",
   "sounds.roundabout.harpoon_ground":  "Projectile collides",
   "sounds.roundabout.harpoon_return":  "Projectile returns",
   "sounds.roundabout.harpoon_throw":  "Projectile thrown",
