@@ -1,8 +1,5 @@
 package net.hydra.jojomod.entity.projectile;
 
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IAbstractArrowAccess;
-import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
@@ -10,8 +7,6 @@ import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.item.BowlerHatItem;
-import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.Direction;
@@ -19,10 +14,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -35,15 +27,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -120,10 +109,12 @@ public class BladedBowlerHatEntity extends AbstractArrow {
                     if (!player.getInventory().add(this.getPickupItem())) {
                         player.drop(this.getPickupItem(), false);
                     }
-                } else if (entity instanceof Player player && !player.isAlive()) {
-                    if (this instanceof BladedBowlerHatEntity) {
-
-                    }
+                } else {
+                    ItemEntity $$4 = new ItemEntity(this.level(), this.getX(),
+                            this.getY() + this.getEyeHeight(), this.getZ(),
+                            this.getPickupItem());
+                    $$4.setPickUpDelay(0);
+                    this.level().addFreshEntity($$4);
                 }
                 this.discard();
                 return;
@@ -307,6 +298,8 @@ public class BladedBowlerHatEntity extends AbstractArrow {
         @Override
         protected void onHitEntity(EntityHitResult $$0) {
             Entity $$1 = $$0.getEntity();
+            if ($$1 instanceof SoftAndWetBubbleEntity)
+                return;
             float $$2 = 4.0F;
 
             Entity $$4 = this.getOwner();
