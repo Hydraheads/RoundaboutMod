@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.items;
 
 import net.hydra.jojomod.event.powers.visagedata.DiegoVisage;
 import net.hydra.jojomod.item.BowlerHatItem;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;

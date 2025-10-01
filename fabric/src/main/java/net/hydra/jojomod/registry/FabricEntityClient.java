@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.client.models.WornStoneMaskModel;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
 import net.hydra.jojomod.client.models.projectile.*;
 import net.hydra.jojomod.client.models.projectile.renderers.*;
@@ -165,6 +166,7 @@ public class FabricEntityClient {
         ModStrayModels.SHOOTING_ARM = new SoftAndWetShootingArmModel();
         ModStrayModels.HEY_YA = new HeyYaModel();
         ModStrayModels.BOWLER_HAT = new BowlerHatModel();
+        ModStrayModels.WORN_STONE_MASK = new WornStoneMaskModel<>();
         ModStrayModels.MANDOM = new MandomModel();
         ModStrayModels.RATT_SHOULDER = new RattShoulderModel();
         ModStrayModels.MANDOM_WATCH = new WatchModel();

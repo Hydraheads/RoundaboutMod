@@ -491,6 +491,16 @@ public class MainUtil {
         }
     }
 
+    public static boolean isWearingStoneMask(Entity ent){
+        if (ent instanceof LivingEntity LE){
+            ItemStack stack = LE.getItemBySlot(EquipmentSlot.HEAD);
+            if (stack != null && !stack.isEmpty()){
+                return stack.is(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem());
+            }
+        }
+        return false;
+    }
+
     public static boolean confirmIsOre(BlockState state){
         return (state.is(ModPacketHandler.PLATFORM_ACCESS.getOreTag()) || state.is(Blocks.ANCIENT_DEBRIS));
     }
