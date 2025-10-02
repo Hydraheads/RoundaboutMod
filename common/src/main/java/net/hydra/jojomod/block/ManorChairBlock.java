@@ -1,14 +1,21 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.util.SittingState;
+import net.hydra.jojomod.mixin.sitting_state.SittingStateMixin;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -50,5 +57,19 @@ public class ManorChairBlock extends Block {
     @Override
     public VoxelShape getOcclusionShape(BlockState $$0, BlockGetter $$1, BlockPos $$2) {
         return Shapes.empty();
+    }
+
+    @Override
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+
+        if (!level.isClientSide) {
+            SittingState sittingPlayer = (SittingState) player;
+            if (!sittingPlayer.isSitting()) {
+                ((SittingState) player).setSitting(true);
+            } else {
+                ((SittingState) player).setSitting(false);
+            }
+        }
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 }

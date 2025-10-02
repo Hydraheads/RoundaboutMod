@@ -160,6 +160,7 @@
     "networking.ZServerGamePacketListenerImpl",
     "piloting.PilotingServerGamePacketListenerImpl",
     "piloting.PilotingServerPlayerGameMode",
+    "sitting_state.SittingStateMixin",
     "soft_and_wet.EncasementAbstractHorse",
     "soft_and_wet.SoftAndWetAllaySounds",
     "soft_and_wet.SoftAndWetBowItem",

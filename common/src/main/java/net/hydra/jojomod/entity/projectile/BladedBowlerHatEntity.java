@@ -82,10 +82,20 @@ public class BladedBowlerHatEntity extends AbstractArrow {
     boolean isHoldingItem;
     int holdingCheck;
 
+    boolean gravModified;
+
+    int modCount = 0;
+
     @Override
         public void tick() {
-            Vec3 $$26 = this.getDeltaMovement();
-            this.setDeltaMovement($$26.x, $$26.y + (double)0.01F, $$26.z);
+            if (modCount < 1) {
+                modCount += 1;
+                gravModified = true;
+            }
+            if (gravModified) {
+                Vec3 $$26 = this.getDeltaMovement();
+                this.setDeltaMovement($$26.x, $$26.y + (double)0.01F, $$26.z);
+            }
             super.tick();
 
             if (level().isClientSide) {
@@ -159,6 +169,7 @@ public class BladedBowlerHatEntity extends AbstractArrow {
                 LivingEntity targetMob = MainUtil.homeOnFlier(this.level(), this.position(), 13, this.getOwner());
                 if (targetMob != null && !(this.getOwner() != null && this.getOwner().getUUID() == targetMob.getUUID())) {
                     if (!this.isNoPhysics()) {
+                        gravModified = false;
                         double ln = targetMob.getDeltaMovement().multiply(1.2F, 1.2F, 1.2F).length();
                         if (this.getDeltaMovement().length() > ln) {
                             ln = this.getDeltaMovement().multiply(1.2F, 1.2F, 1.2F).length();
