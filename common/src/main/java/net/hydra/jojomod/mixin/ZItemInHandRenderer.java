@@ -241,7 +241,7 @@ public abstract class ZItemInHandRenderer {
                     this.renderItem(abstractClientPlayer, itemStack, bl2 ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND :
                             ItemDisplayContext.FIRST_PERSON_LEFT_HAND, !bl2, poseStack, multiBufferSource, j);
                     ClientUtil.popPoseAndCooperate(poseStack,10);
-                } else if (itemStack.getUseAnimation() == UseAnim.BLOCK && itemStack.getItem() instanceof StandArrowItem) {
+                } else if (itemStack.getUseAnimation() == UseAnim.BOW && itemStack.getItem() instanceof StandArrowItem) {
                     ci.cancel();
                     ClientUtil.pushPoseAndCooperate(poseStack,11);
                     this.applyItemArmTransform(poseStack, humanoidArm, i);
