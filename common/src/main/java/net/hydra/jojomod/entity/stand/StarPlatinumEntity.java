@@ -43,7 +43,8 @@ public class StarPlatinumEntity extends FollowingStandEntity {
             VOLUME_39 = 18,
             JUMP_13 = 19,
             ARCADE_2 = 20,
-            TREE = 21;
+            TREE = 21,
+            NETHER = 22;
 
 
 

@@ -160,7 +160,9 @@ public class FleshBlock
                 }
             }
         }
-        entity.resetFallDistance();
+        if (entity.fallDistance > entity.getMaxFallDistance()) {
+            entity.resetFallDistance();
+        }
     }
 
     @Override

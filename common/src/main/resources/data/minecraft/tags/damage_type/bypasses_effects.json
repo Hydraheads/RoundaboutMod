@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "roundabout:time",
-    "roundabout:go_beyond"
+    "roundabout:go_beyond",
+    "roundabout:dagger"
   ]
 }

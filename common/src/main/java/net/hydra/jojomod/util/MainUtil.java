@@ -590,7 +590,7 @@ public class MainUtil {
             return Mob instanceof Zombie || (Mob instanceof Animal && !(Mob instanceof SkeletonHorse) && !(Mob instanceof ZombieHorse))
                     || Mob instanceof Villager || Mob instanceof WaterAnimal || Mob instanceof WanderingTrader || Mob instanceof Witch
                     || Mob instanceof AbstractIllager || Mob instanceof Creeper || Mob instanceof Player || Mob instanceof AbstractPiglin
-                    || Mob instanceof JojoNPC || Mob instanceof Zoglin
+                    || Mob instanceof JojoNPC || Mob instanceof Zoglin || Mob instanceof Ravager
                     || Mob instanceof Spider || Mob instanceof EnderDragon || Mob instanceof EnderMan;
         }
         return false;

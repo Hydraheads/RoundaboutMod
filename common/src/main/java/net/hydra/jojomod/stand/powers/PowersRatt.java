@@ -63,11 +63,11 @@ public class PowersRatt extends NewDashPreset {
     public static final int PlaceShootCooldown = 55;
     public static final int MaxShootCooldown = 30;
     public static final int[] ShotThresholds = {MinThreshold,50,MaxThreshold};
-    public static final float[] ShotPowerFloats = {2.5F,3.5F,3.5F};
+    public static final float[] ShotPowerFloats = {3.55F,4F,4F};
     public static final int[] ShotSuperthrowTicks = {4,10,15};
 
 
-    public static final float DespawnRange = 25;
+    public static final float DespawnRange = 35;
 
 
     public static final byte
@@ -123,7 +123,8 @@ public class PowersRatt extends NewDashPreset {
         }
     }
 
-    boolean active = false;
+    public boolean active = false;
+    public boolean immuneWhileReturning = false;
     @Override
     public boolean canSummonStandAsEntity() {return false;}
 
@@ -198,22 +199,30 @@ public class PowersRatt extends NewDashPreset {
         return closest; // null if no valid hit
     }
 
-    private BlockHitResult getValidPlacement(){
+    private Vec3 getValidPlacement(){
         Vec3 vec3d = this.getSelf().getEyePosition(0);
         Vec3 vec3d2 = this.getSelf().getViewVector(0);
         Vec3 vec3d3 = vec3d.add(vec3d2.x * 8, vec3d2.y * 8, vec3d2.z * 8);
         BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3,
                 ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
-        boolean cond = false;
-        if (blockHit.getDirection() != Direction.UP && blockHit.getDirection() != Direction.DOWN) {
-            BlockPos pos = blockHit.getBlockPos();
-            if (this.getSelf().level().getBlockState(pos.above()).isAir()) {
-                cond = true;
+        Vec3 location = blockHit.getLocation();
+        if (blockHit.getBlockPos() instanceof BlockPos.MutableBlockPos) {
+            if (blockHit.getDirection() == Direction.UP) {
+                return blockHit.getLocation();
+            } else if (blockHit.getDirection() == Direction.DOWN) {
+                if (this.getSelf().level().getBlockState(blockHit.getBlockPos().above(2)).isAir()) {
+                    return new Vec3(location.x(), ((int) location.y()) + 1, location.z());
+                }
+            } else {
+                for (int oy = 0; oy < 3; oy++) {
+                    if (this.getSelf().level().getBlockState(blockHit.getBlockPos().above(oy)).isAir()) {
+                        return new Vec3(location.x(), ((int) location.y()) + oy, location.z());
+                    }
+                }
+
             }
         }
-        if (blockHit.getType() == HitResult.Type.BLOCK && (blockHit.getDirection() == Direction.UP || cond) ) {
-            return blockHit;
-        }
+
         return null;
     }
 
@@ -268,6 +277,7 @@ public class PowersRatt extends NewDashPreset {
             case PowersRatt.NET_PLACE -> {
                 this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
                 this.active = true;
+                this.immuneWhileReturning = false;
                 this.Placement = pos;
                 this.setCooldown(PowersRatt.SETPLACE,80);
             }
@@ -411,8 +421,10 @@ public class PowersRatt extends NewDashPreset {
                 }
             }
             if (isAuto()) {
-                if (true) {
-                    BurstFire();
+                if (isClient()) {
+                    if (true) { // TODO change this
+                        BurstFire();
+                    }
                 }
                 if(getShootTarget() != null) {
                     if (getShootTarget().getHealth() == 0) {
@@ -455,12 +467,31 @@ public class PowersRatt extends NewDashPreset {
         } else if (this.getActivePower() == PowersRatt.PLACE_BURST) {
             setShotCooldown(PlaceShootCooldown);
             if (getAttackTimeDuring() == PlaceDelay) {
+                this.setAttackTimeDuring(PlaceDelay+5);
                 setPowerNone();
-                this.tryPower(PowersRatt.PLACE_BURST,true);
-                this.tryPowerPacket(PowersRatt.PLACE_BURST);
+                if (!this.isClient()) {
+                    placeBurst();
+                }
+
             }
         }
         super.updateUniqueMoves();
+    }
+
+    public void placeBurst() {
+        this.animateStand(RattEntity.FIRE);
+        this.setPowerNone();
+        this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.RATT_FIRING_EVENT,SoundSource.PLAYERS);
+        for (int i = 0; i < 3; i++) {
+            if (this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
+                RattDartEntity e = new RattDartEntity(RE.level(), this.getSelf(), 1, 0.1F);
+                Vec3 v = this.getRotations(this.getShootTarget());
+                e.shootFromRotation(RE, (float) v.x * 180 / (float) Math.PI + 180, (float) v.y * 180 / (float) Math.PI, -0.5F, ShotPowerFloats[1], 0.84F);
+                e.EnableSuperThrow();
+                RE.level().addFreshEntity(e);
+            }
+        }
+
     }
 
     @Override
@@ -596,14 +627,10 @@ public class PowersRatt extends NewDashPreset {
         if (!this.onCooldown(PowersRatt.SETPLACE)) {
             updateChargeTime(0);
             this.getSelf().playSound(ModSounds.RATT_PLACE_EVENT, 1.0F, (float) (0.98F + (Math.random() * 0.04F)));
-            BlockHitResult blockHitResult = getValidPlacement();
+            Vec3 blockHitResult = getValidPlacement();
             if (blockHitResult != null) {
-                Vec3 pos = blockHitResult.getLocation();
-                if (blockHitResult.getDirection() != Direction.UP && blockHitResult.getDirection() != Direction.DOWN) {
-                    pos = new Vec3(pos.x(), ((int) pos.y()) + 1, pos.z());
-                }
-                tryPosPower(PowersRatt.NET_PLACE, true, pos);
-                tryPosPowerPacket(PowersRatt.NET_PLACE, pos);
+                tryPosPower(PowersRatt.NET_PLACE, true, blockHitResult);
+                tryPosPowerPacket(PowersRatt.NET_PLACE, blockHitResult);
             }
         }
     }
@@ -624,6 +651,7 @@ public class PowersRatt extends NewDashPreset {
             }
             case PowersRatt.NET_RECALL -> {
                 active = false;
+                immuneWhileReturning = true;
                 this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
                 if (this.getStandEntity(this.getSelf()) != null) {
                     this.getStandEntity(this.getSelf()).forceDespawnSet = true;
@@ -665,23 +693,6 @@ public class PowersRatt extends NewDashPreset {
 
                 if (!isClient()) {
                     this.animateStand(RattEntity.LOADING);
-                }
-            }
-            case PowersRatt.PLACE_BURST -> {
-                this.animateStand(RattEntity.FIRE);
-                this.setPowerNone();
-                this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.RATT_FIRING_EVENT,SoundSource.PLAYERS);
-                if (!isClient()) {
-                    for(int i=0;i<3;i++) {
-                        if (this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
-                            RattDartEntity e = new RattDartEntity(RE.level(), this.getSelf(), i != 1 ? 1 : 1, 0.1F);
-                            Vec3 v = this.getRotations(this.getShootTarget());
-                            e.shootFromRotation(RE, (float) v.x * 180 / (float) Math.PI + 180, (float) v.y * 180 / (float) Math.PI, -0.5F, ShotPowerFloats[1], 0.84F);
-                            e.EnableSuperThrow();
-                            RE.level().addFreshEntity(e);
-                        }
-                    }
-
                 }
             }
         }

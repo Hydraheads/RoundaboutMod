@@ -6,6 +6,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
@@ -126,12 +127,12 @@ public class RattEntity extends StandEntity {
     public boolean hurt(DamageSource source, float amount) {
         if (source.getEntity() != null && source.getEntity() != this.getUser()) {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersRatt PR) {
-                PR.tryPower(PowersRatt.NET_RECALL,true);
-                PR.tryPowerPacket(PowersRatt.NET_RECALL);
+                if (PR.immuneWhileReturning) {return false;}
+                PR.active = false;
                 this.forceDespawnSet = true;
                 PR.setCooldown(PowersRatt.SETPLACE,50);
             }
-            return this.getUser().hurt(source, amount);
+            return this.getUser().hurt(source, Mth.clamp(amount*0.5F,0,6));
         }
         return false;
     }

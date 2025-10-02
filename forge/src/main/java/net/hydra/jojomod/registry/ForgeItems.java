@@ -132,6 +132,9 @@ public class ForgeItems {
     public static final RegistryObject<Item> NETHERITE_GLAIVE = addToTab(ITEMS.register("netherite_glaive",
             () -> new GlaiveItem(Tiers.NETHERITE, 4F, -2.9F, new Item.Properties(),12)
     ));
+    public static final RegistryObject<Item> SACRIFICIAL_DAGGER = addToTab(ITEMS.register("sacrificial_dagger",
+            () -> new SacrificialDaggerItem(Tiers.IRON, 0.5F, -1.9F, new Item.Properties())
+    ));
     public static final RegistryObject<Item> SCISSORS = addToTab(ITEMS.register("scissors",
             () -> new ScissorItem(Tiers.IRON, 0F, -1.6F, new Item.Properties())
     ));

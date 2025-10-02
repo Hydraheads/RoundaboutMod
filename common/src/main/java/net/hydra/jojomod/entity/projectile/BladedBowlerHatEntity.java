@@ -82,20 +82,15 @@ public class BladedBowlerHatEntity extends AbstractArrow {
     boolean isHoldingItem;
     int holdingCheck;
 
-    boolean gravModified;
-
-    int modCount = 0;
-
     @Override
         public void tick() {
-            if (modCount < 1) {
-                modCount += 1;
-                gravModified = true;
-            }
-            if (gravModified) {
-                Vec3 $$26 = this.getDeltaMovement();
-                this.setDeltaMovement($$26.x, $$26.y + (double)0.01F, $$26.z);
-            }
+
+        Entity $$0 = this.getOwner();
+        int $$1 = 2;
+        Vec3 $$26 = this.getDeltaMovement();
+        if (!($$1 > 0 && (this.dealtDamage || this.isNoPhysics()) && $$0 != null)) {
+            this.setDeltaMovement($$26.x, $$26.y + (double)0.01F, $$26.z);
+        }
             super.tick();
 
             if (level().isClientSide) {
@@ -166,26 +161,11 @@ public class BladedBowlerHatEntity extends AbstractArrow {
             }
 
             if (!this.level().isClientSide) {
-                LivingEntity targetMob = MainUtil.homeOnFlier(this.level(), this.position(), 13, this.getOwner());
-                if (targetMob != null && !(this.getOwner() != null && this.getOwner().getUUID() == targetMob.getUUID())) {
-                    if (!this.isNoPhysics()) {
-                        gravModified = false;
-                        double ln = targetMob.getDeltaMovement().multiply(1.2F, 1.2F, 1.2F).length();
-                        if (this.getDeltaMovement().length() > ln) {
-                            ln = this.getDeltaMovement().multiply(1.2F, 1.2F, 1.2F).length();
-                        }
-                        this.setDeltaMovement(
-                                targetMob.position().add(0, targetMob.getEyeHeight(), 0).subtract(this.position()).normalize().scale(ln)
-                        );
-                    }
-                }
 
                 if (this.inGroundTime > 0.1F) {
                     this.dealtDamage = true;
                 }
 
-                Entity $$0 = this.getOwner();
-                int $$1 = 2;
                 if ($$1 > 0 && (this.dealtDamage || this.isNoPhysics()) && $$0 != null) {
                     if (!this.isAcceptibleReturnOwner()) {
                         if (this.pickup == Pickup.DISALLOWED) {
@@ -357,23 +337,6 @@ public class BladedBowlerHatEntity extends AbstractArrow {
         }
 
         public float addSkyAndBounceDamage(Entity target, float damage){
-            if (target instanceof Player){
-                if (((Player)target).isFallFlying()){
-                    skyHit = true;
-                    damage += 3;
-                }
-
-            } else if (target instanceof Phantom
-                    || target instanceof FallenPhantom
-                    || target instanceof Bat){
-                skyHit = true;
-                damage += 3;
-            }
-
-            if (!target.onGround() && !target.isInWater() && !target.isSwimming() && !target.isPassenger()){
-                damage += 2;
-                skyHit = true;
-            }
 
             if (critBounceCount == 1) {
                 damage += 6;

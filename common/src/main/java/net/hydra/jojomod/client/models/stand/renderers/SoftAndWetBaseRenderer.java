@@ -25,6 +25,10 @@ public class SoftAndWetBaseRenderer<M extends StandEntity> extends StandRenderer
     private static final ResourceLocation COLORS = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/colors.png");
     private static final ResourceLocation GREEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/green.png");
     private static final ResourceLocation KNIGHT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/knight.png");
+    private static final ResourceLocation MORIOH = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/morioh.png");
+    private static final ResourceLocation NATURE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/nature.png");
+    private static final ResourceLocation ART = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/art.png");
+    private static final ResourceLocation MELON = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/melon.png");
 
     public SoftAndWetBaseRenderer(EntityRendererProvider.Context context, StandModel root) {
         super(context, root,0f);
@@ -44,6 +48,10 @@ public class SoftAndWetBaseRenderer<M extends StandEntity> extends StandRenderer
             case (SoftAndWetEntity.COLORS) -> COLORS;
             case (SoftAndWetEntity.GREEN) -> GREEN;
             case (SoftAndWetEntity.KNIGHT) -> KNIGHT;
+            case (SoftAndWetEntity.MORIOH) -> MORIOH;
+            case (SoftAndWetEntity.NATURE) -> NATURE;
+            case (SoftAndWetEntity.ART) -> ART;
+            case (SoftAndWetEntity.MELON) -> MELON;
             default -> LIGHT_SKIN;
         };
     }
