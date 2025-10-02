@@ -280,9 +280,10 @@ public class PowersWalkingHeart extends NewDashPreset {
             }
         }
     }
-    public boolean interceptDamageEvent(DamageSource $$0, float $$1){
-        hitHeelExtendedState();
-        return false;
+    public void onActuallyHurt(DamageSource $$0, float $$1){
+        if ($$0.getEntity() != null) {
+            hitHeelExtendedState();
+        }
     }
 
     public int hitsSinceAttached = 0;
