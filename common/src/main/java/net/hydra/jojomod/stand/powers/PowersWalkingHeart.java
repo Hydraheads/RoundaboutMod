@@ -81,6 +81,12 @@ public class PowersWalkingHeart extends NewDashPreset {
     public boolean canWallWalkConfig(){
         return ClientNetworking.getAppropriateConfig().walkingHeartSettings.enableWallWalking;
     }
+    public int walkingCDPerHit(){
+        return ClientNetworking.getAppropriateConfig().walkingHeartSettings.walkingHeartCooldownPerHit;
+    }
+    public int walkingMaxHits(){
+        return ClientNetworking.getAppropriateConfig().walkingHeartSettings.walkingHeartMaxHits;
+    }
 
     @Override
     public List<Byte> getPosList(){
@@ -172,7 +178,7 @@ public class PowersWalkingHeart extends NewDashPreset {
 
 
     public void extendHeels(){
-        if (!this.onCooldown(PowerIndex.SKILL_3) || hasExtendedHeelsForWalking()) {
+        if ((!this.onCooldown(PowerIndex.SKILL_3) && !onCooldown(PowerIndex.SKILL_2)) || hasExtendedHeelsForWalking()) {
             if (!inCombatMode()){
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
             tryPowerPacket(PowerIndex.POWER_2);
@@ -191,7 +197,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public void doWallLatchClient(){
-        if (!this.onCooldown(PowerIndex.SKILL_3)) {
+        if (!this.onCooldown(PowerIndex.SKILL_3) && !onCooldown(PowerIndex.SKILL_2)) {
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
             tryPowerPacket(PowerIndex.POWER_3);
         }
@@ -211,6 +217,9 @@ public class PowersWalkingHeart extends NewDashPreset {
         return getStandUserSelf().roundabout$getUniqueStandModeToggle();
     }
     public boolean canLatchOntoWall(){
+        if (onCooldown(PowerIndex.SKILL_2))
+            return false;
+
         if ((this.self.onGround() && !hasExtendedHeelsForWalking()) || (!this.self.onGround() && hasExtendedHeelsForWalking()))
             return false;
 
@@ -245,6 +254,38 @@ public class PowersWalkingHeart extends NewDashPreset {
         BlockState bs = this.self.level().getBlockState(pos1);
         return MainUtil.isBlockWalkable(bs);
     }
+
+
+
+    public void setHeelAttachCooldown(){
+        int attachment = getHeelUnattachCooldown();
+        if (attachment > 0) {
+            this.setCooldown(PowerIndex.SKILL_2, getHeelUnattachCooldown());
+            S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
+                    PowerIndex.SKILL_2, getHeelUnattachCooldown());
+        }
+    }
+
+    public int getHeelUnattachCooldown(){
+        return hitsSinceAttached*walkingCDPerHit();
+    }
+    public void hitHeelExtendedState(){
+        if (hasExtendedHeelsForWalking()) {
+            int maxhits = walkingMaxHits();
+            if (maxhits >= 0) {
+                hitsSinceAttached++;
+                if (hitsSinceAttached > maxhits) {
+                    toggleSpikes(false);
+                }
+            }
+        }
+    }
+    public boolean interceptDamageEvent(DamageSource $$0, float $$1){
+        hitHeelExtendedState();
+        return false;
+    }
+
+    public int hitsSinceAttached = 0;
 
     public void regularExtendHeels(){
         boolean isAnchored = hasExtendedHeelsForWalking();
@@ -331,6 +372,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                 if (toggle) {
                     this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXTEND_SPIKES_EVENT, SoundSource.PLAYERS, 1F, 1f);
                 } else {
+                    setHeelAttachCooldown();
                     this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXTEND_SPIKES_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
                 }
             }
@@ -782,6 +824,10 @@ public class PowersWalkingHeart extends NewDashPreset {
             } else {
                 setHeelDirection(Direction.DOWN);
             }
+
+            if (!hasExtendedHeelsForWalking()){
+                hitsSinceAttached = 0;
+            }
         }
 
         if (this.self instanceof Player PE && PE.isCreative()) {
@@ -845,7 +891,6 @@ public class PowersWalkingHeart extends NewDashPreset {
         buttonInputSpike(keyIsDown,options,true);
         return true;
     }
-
 
     public boolean holdDownClick = false;
     public boolean consumeClickInput = false;

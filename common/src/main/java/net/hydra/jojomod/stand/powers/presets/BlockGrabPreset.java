@@ -16,6 +16,7 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -851,6 +852,9 @@ public class BlockGrabPreset extends NewPunchingStand {
                 && !(entity instanceof MinecartCommandBlock)
                 && !(entity instanceof MinecartSpawner)
                 && !(entity instanceof Projectile)
+                && !(entity instanceof LivingEntity lv &&
+                ((StandUser)lv).roundabout$getStandPowers() instanceof PowersWalkingHeart PW &&
+                PW.hasExtendedHeelsForWalking())
                 && !(entity instanceof StandEntity)){
             if (entity instanceof Player pl && this.getSelf().getVehicle() != null && ((StandUser) pl).roundabout$getStand() != null &&
                     ((StandUser) pl).roundabout$getStand().is(this.getSelf().getVehicle())){

@@ -2175,6 +2175,12 @@
   "config.roundabout.simpleTimeStopShader.name": "Simple Shader",
   "config.roundabout.simpleTimeStopShader.desc": "Whether or not stopping time renders a simple shader.",
 
+  "config.roundabout.walkingHeartMaxHits.name": "Max Planted Hits",
+  "config.roundabout.walkingHeartMaxHits.desc": "How many hits can you take in heel planted/wall walking mode before you are knocked out of that state.",
+
+  "config.roundabout.walkingHeartCooldownPerHit.name": "Cooldown Per Hit",
+  "config.roundabout.walkingHeartCooldownPerHit.desc": "How many cooldown ticks per hit in heel planted/wall walking mode.",
+
   "config.roundabout.configButtonOffsetX.name": "Config Button X Offset",
   "config.roundabout.configButtonOffsetX.desc": "Adjust the position of the ingame config. If you mess this up too badly to press the button ingame, you can change the file manually in the config folder.",
   "config.roundabout.configButtonOffsetY.name": "Config Button Y Offset",
