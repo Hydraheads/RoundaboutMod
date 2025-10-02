@@ -9,6 +9,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -77,6 +78,13 @@ public class SacrificialDaggerItem extends TieredItem implements Vanishable {
                 int $$5 = this.getUseDuration($$0) - $$3;
                 int itemTime = 5;
                 if ($$5 >= itemTime) {
+                    if ($$2 instanceof ServerPlayer SP){
+                        $$0.hurt(1,$$2.level().getRandom(),SP);
+                    } else {
+                        $$0.hurt(1,$$2.level().getRandom(),null);
+                    }
+                    MainUtil.makeMobBleed($$2);
+                    MainUtil.makeBleed($$2,0,400,$$2);
                     $$1.playSound(null, $$2, ModSounds.KNIFE_IMPACT_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                     $$2.hurt(ModDamageTypes.of($$1, ModDamageTypes.DAGGER), 2.01F);
                 }
