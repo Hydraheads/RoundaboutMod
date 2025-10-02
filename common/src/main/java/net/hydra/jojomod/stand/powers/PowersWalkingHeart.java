@@ -281,7 +281,7 @@ public class PowersWalkingHeart extends NewDashPreset {
         }
     }
     public void onActuallyHurt(DamageSource $$0, float $$1){
-        if ($$0.getEntity() != null) {
+        if ($$0.getEntity() != null && !$$0.is(DamageTypes.THORNS)) {
             hitHeelExtendedState();
         }
     }
