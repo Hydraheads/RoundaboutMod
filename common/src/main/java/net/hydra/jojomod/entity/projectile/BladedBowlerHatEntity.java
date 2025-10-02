@@ -334,23 +334,6 @@ public class BladedBowlerHatEntity extends AbstractArrow {
         }
 
         public float addSkyAndBounceDamage(Entity target, float damage){
-            if (target instanceof Player){
-                if (((Player)target).isFallFlying()){
-                    skyHit = true;
-                    damage += 3;
-                }
-
-            } else if (target instanceof Phantom
-                    || target instanceof FallenPhantom
-                    || target instanceof Bat){
-                skyHit = true;
-                damage += 3;
-            }
-
-            if (!target.onGround() && !target.isInWater() && !target.isSwimming() && !target.isPassenger()){
-                damage += 2;
-                skyHit = true;
-            }
 
             if (critBounceCount == 1) {
                 damage += 6;
