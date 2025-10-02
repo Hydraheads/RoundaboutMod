@@ -14,9 +14,7 @@ import net.hydra.jojomod.client.models.stand.renderers.StandRenderer;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.item.GlaiveItem;
-import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.item.StandArrowItem;
+import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.MainUtil;
@@ -241,6 +239,35 @@ public abstract class ZItemInHandRenderer {
                     this.renderItem(abstractClientPlayer, itemStack, bl2 ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND :
                             ItemDisplayContext.FIRST_PERSON_LEFT_HAND, !bl2, poseStack, multiBufferSource, j);
                     ClientUtil.popPoseAndCooperate(poseStack,10);
+                } else if (itemStack.getUseAnimation() == UseAnim.BOW && itemStack.getItem() instanceof SacrificialDaggerItem) {
+                    ci.cancel();
+                    ClientUtil.pushPoseAndCooperate(poseStack,11);
+                    this.applyItemArmTransform(poseStack, humanoidArm, i);
+                    poseStack.translate((float) q * -0.3f, 0.25, 0.15731531f);
+                    float knifeTime = 5f;
+                    float kT2 = (float) (knifeTime * 0.1);
+                    float kT3 = (float) (knifeTime * 0.01);
+                    poseStack.mulPose(Axis.XP.rotationDegrees(30.0f));
+                    poseStack.mulPose(Axis.YP.rotationDegrees((float) q * -35.3f));
+                    poseStack.mulPose(Axis.ZP.rotationDegrees((float) q * -9.785f));
+                    float r = (float) itemStack.getUseDuration() - ((float) this.minecraft.player.getUseItemRemainingTicks() - ff + kT2);
+                    float l = r / knifeTime;
+                    l/=2;
+                    if (l > kT2) {
+                        l = kT2;
+                    }
+                    if (l > kT3) {
+                        float m = Mth.sin((r - kT3) * 1.3f);
+                        float n = l - kT3;
+                        float o = m * n;
+                        poseStack.translate(o * 0.0f, o * 0.004f, o * 0.0f);
+                    }
+                    poseStack.translate(0.0f, l * -0.6, l * -0.1f);
+                    poseStack.scale(1.0f, 1.0f, 1.0f);
+                    poseStack.mulPose(Axis.YN.rotationDegrees((float) q * 45.0f));
+                    this.renderItem(abstractClientPlayer, itemStack, bl2 ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND :
+                            ItemDisplayContext.FIRST_PERSON_LEFT_HAND, !bl2, poseStack, multiBufferSource, j);
+                    ClientUtil.popPoseAndCooperate(poseStack,11);
                 } else if (itemStack.getUseAnimation() == UseAnim.BOW && itemStack.getItem() instanceof StandArrowItem) {
                     ci.cancel();
                     ClientUtil.pushPoseAndCooperate(poseStack,11);

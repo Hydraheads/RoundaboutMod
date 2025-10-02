@@ -4,7 +4,10 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.ChatFormatting;
@@ -41,7 +44,7 @@ public class SacrificialDaggerItem extends TieredItem implements Vanishable {
 
     public SacrificialDaggerItem(Tier $$0, float $$1, float $$2, Properties $$3) {
         super($$0, $$3);
-        $$3.defaultDurability(100);
+        $$3.defaultDurability(40);
         this.attackDamage = $$1 + $$0.getAttackDamageBonus();
         ImmutableMultimap.Builder<Attribute, AttributeModifier> $$4 = ImmutableMultimap.builder();
         $$4.put(
@@ -71,7 +74,12 @@ public class SacrificialDaggerItem extends TieredItem implements Vanishable {
     public void releaseUsing(ItemStack $$0, Level $$1, LivingEntity $$2, int $$3) {
         if (!$$1.isClientSide) {
             if (!($$0.getDamageValue() >= $$0.getMaxDamage())) {
-
+                int $$5 = this.getUseDuration($$0) - $$3;
+                int itemTime = 5;
+                if ($$5 >= itemTime) {
+                    $$1.playSound(null, $$2, ModSounds.KNIFE_IMPACT_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    $$2.hurt(ModDamageTypes.of($$1, ModDamageTypes.DAGGER), 2.01F);
+                }
             }
         }
     }
