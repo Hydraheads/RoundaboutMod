@@ -156,18 +156,6 @@ public class BladedBowlerHatEntity extends AbstractArrow {
             }
 
             if (!this.level().isClientSide) {
-                LivingEntity targetMob = MainUtil.homeOnFlier(this.level(), this.position(), 13, this.getOwner());
-                if (targetMob != null && !(this.getOwner() != null && this.getOwner().getUUID() == targetMob.getUUID())) {
-                    if (!this.isNoPhysics()) {
-                        double ln = targetMob.getDeltaMovement().multiply(1.2F, 1.2F, 1.2F).length();
-                        if (this.getDeltaMovement().length() > ln) {
-                            ln = this.getDeltaMovement().multiply(1.2F, 1.2F, 1.2F).length();
-                        }
-                        this.setDeltaMovement(
-                                targetMob.position().add(0, targetMob.getEyeHeight(), 0).subtract(this.position()).normalize().scale(ln)
-                        );
-                    }
-                }
 
                 if (this.inGroundTime > 0.1F) {
                     this.dealtDamage = true;
