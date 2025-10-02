@@ -2,13 +2,23 @@ package net.hydra.jojomod.item;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
+import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -58,8 +68,24 @@ public class SacrificialDaggerItem extends TieredItem implements Vanishable {
     }
 
     @Override
+    public void releaseUsing(ItemStack $$0, Level $$1, LivingEntity $$2, int $$3) {
+        if (!$$1.isClientSide) {
+            if (!($$0.getDamageValue() >= $$0.getMaxDamage())) {
+
+            }
+        }
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
+        ItemStack $$3 = $$1.getItemInHand($$2);
+        $$1.startUsingItem($$2);
+        return InteractionResultHolder.fail($$3);
+    }
+
+    @Override
     public UseAnim getUseAnimation(ItemStack $$0) {
-        return UseAnim.BLOCK;
+        return UseAnim.BOW;
     }
 
     @Override
