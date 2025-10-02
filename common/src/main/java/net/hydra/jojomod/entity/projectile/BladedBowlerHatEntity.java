@@ -84,8 +84,13 @@ public class BladedBowlerHatEntity extends AbstractArrow {
 
     @Override
         public void tick() {
-            Vec3 $$26 = this.getDeltaMovement();
+
+        Entity $$0 = this.getOwner();
+        int $$1 = 2;
+        Vec3 $$26 = this.getDeltaMovement();
+        if (!($$1 > 0 && (this.dealtDamage || this.isNoPhysics()) && $$0 != null)) {
             this.setDeltaMovement($$26.x, $$26.y + (double)0.01F, $$26.z);
+        }
             super.tick();
 
             if (level().isClientSide) {
@@ -161,8 +166,6 @@ public class BladedBowlerHatEntity extends AbstractArrow {
                     this.dealtDamage = true;
                 }
 
-                Entity $$0 = this.getOwner();
-                int $$1 = 2;
                 if ($$1 > 0 && (this.dealtDamage || this.isNoPhysics()) && $$0 != null) {
                     if (!this.isAcceptibleReturnOwner()) {
                         if (this.pickup == Pickup.DISALLOWED) {
