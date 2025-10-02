@@ -50,6 +50,7 @@
   "item.roundabout.street_sign_danger_item": "Street Sign: Danger",
   "item.roundabout.lucky_lipstick": "Lucky Lipstick",
   "item.roundabout.lucky_lipstick.desc": "For better trades, apply until you sleep",
+  "item.roundabout.sacrificial_dagger": "Sacrificial Dagger",
 
   "item.roundabout.star_platinum_disc": "Stand Disc",
   "item.roundabout.the_world_disc": "Stand Disc",
@@ -421,6 +422,8 @@
   "death.attack.disintegration.player": "%1$ was disintegrated by %$2s",
   "death.attack.melting": "%1$s became a fluid",
   "death.attack.melting.player":"%1$s was reduced to a puddle by %2$s",
+  "death.attack.dagger": "%1$s became a human sacrifice",
+  "death.attack.dagger.item": "%1$s became a human sacrifice",
 
 
   "item.glaive.charge_power": "Charge Attack",
@@ -891,7 +894,7 @@
   "ability.roundabout.spike_attack_mode": "Attack Mode",
   "ability.roundabout.spike_attack_mode.desc": "Lets you press or hold the attack key to launch a spike attack, pulling mobs in with a damaging attack that inflicts bleed. If interact is held, it pushes them away instead. This mode runs on a meter that must be full to use the ability, and recharges when not using it. Goes through walls.",
   "ability.roundabout.heel_plant": "Heel Plant",
-  "ability.roundabout.heel_plant.desc": "Extends your heel spikes into the ground, allowing you to resist most forms of knockback and walk on walls. Gives you a step height increase in both directions. Disables some abilities while active, deactivates when airborne or pressed again.",
+  "ability.roundabout.heel_plant.desc": "Extends your heel spikes into the ground, allowing you to resist most forms of knockback and walk on walls. Gives you a step height increase in both directions. Disables some abilities while active, deactivates when airborne or pressed again. It is canceled after enough enemy hits.",
 
 
   "ability.roundabout.wall_walk_move": "Wall Walking",
@@ -1064,6 +1067,7 @@
   "skins.roundabout.star_platinum.volume_39": "Vol 39",
   "skins.roundabout.star_platinum.jump_13": "Jump 13",
   "skins.roundabout.star_platinum.tree": "Tree",
+  "skins.roundabout.star_platinum.nether": "Nether",
 
   "skins.roundabout.the_world.base": "Part 3",
   "skins.roundabout.the_world.manga": "Manga",
@@ -1137,6 +1141,10 @@
   "skins.roundabout.soft_and_wet.colors": "Colors",
   "skins.roundabout.soft_and_wet.green": "Green",
   "skins.roundabout.soft_and_wet.knight": "Knight",
+  "skins.roundabout.soft_and_wet.morioh": "Morioh",
+  "skins.roundabout.soft_and_wet.melon": "Melon",
+  "skins.roundabout.soft_and_wet.nature": "Nature",
+  "skins.roundabout.soft_and_wet.art": "Art",
 
   "skins.roundabout.d4c.base": "Manga",
   "skins.roundabout.d4c.wonder_festival": "JOJOVELLER",
@@ -2174,6 +2182,12 @@
   "config.roundabout.tsStandsSeeTSTeleportAndDontFreeze.desc": "Whether or not having a time stop seeing stand (The World, Star Platinum, or C-Moon) will allow you to see things teleport like endermen instead of blipping into a new location. If you have screen freeze on, this setting instead makes you see time stop normally.",
   "config.roundabout.simpleTimeStopShader.name": "Simple Shader",
   "config.roundabout.simpleTimeStopShader.desc": "Whether or not stopping time renders a simple shader.",
+
+  "config.roundabout.walkingHeartMaxHits.name": "Max Planted Hits",
+  "config.roundabout.walkingHeartMaxHits.desc": "How many hits can you take in heel planted/wall walking mode before you are knocked out of that state.",
+
+  "config.roundabout.walkingHeartCooldownPerHit.name": "Cooldown Per Hit",
+  "config.roundabout.walkingHeartCooldownPerHit.desc": "How many cooldown ticks per hit in heel planted/wall walking mode.",
 
   "config.roundabout.configButtonOffsetX.name": "Config Button X Offset",
   "config.roundabout.configButtonOffsetX.desc": "Adjust the position of the ingame config. If you mess this up too badly to press the button ingame, you can change the file manually in the config folder.",

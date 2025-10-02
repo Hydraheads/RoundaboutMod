@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.stand.CinderellaEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
@@ -537,13 +538,18 @@ public class PowersCinderella extends NewDashPreset {
             knockbackStrength = getDefaceKnockback();
             if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
                 if (entity instanceof LivingEntity LE) {
-                    addEXP(5, LE);
+                    MobEffectInstance instance = LE.getEffect(ModEffects.FACELESS);
+                    int lvlFace = -1;
+                    if (instance != null) {
+                        lvlFace = instance.getAmplifier(); // 0-based (0 = level I)
+                    }
+
                     if (MainUtil.getMobBleed(entity)) {
-                        int bleedlevel = ((StandUser)LE).roundabout$getBleedLevel();
-                        if (bleedlevel < 0){
+
+                        if (lvlFace < 0){
                             MainUtil.makeFaceless(entity, 200, 0, this.getSelf());
                             MainUtil.makeBleed(entity, 0, 200, this.getSelf());
-                        } else if (bleedlevel == 0){
+                        } else if (lvlFace == 0){
                             MainUtil.makeFaceless(entity, 250, 1, this.getSelf());
                             MainUtil.makeBleed(entity, 1, 250, this.getSelf());
                         } else {

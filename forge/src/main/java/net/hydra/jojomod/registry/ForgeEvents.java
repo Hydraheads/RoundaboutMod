@@ -179,6 +179,7 @@ public class ForgeEvents {
         ModItems.DIAMOND_GLAIVE = ForgeItems.DIAMOND_GLAIVE.get();
         ModItems.NETHERITE_GLAIVE = ForgeItems.NETHERITE_GLAIVE.get();
         ModItems.SCISSORS = ForgeItems.SCISSORS.get();
+        ModItems.SACRIFICIAL_DAGGER = ForgeItems.SACRIFICIAL_DAGGER.get();
         ModItems.EXECUTIONER_AXE = ForgeItems.EXECUTIONER_AXE.get();
         ModItems.BOWLER_HAT = ForgeItems.BOWLER_HAT.get();
         ModItems.BODY_BAG = ForgeItems.BODY_BAG.get();

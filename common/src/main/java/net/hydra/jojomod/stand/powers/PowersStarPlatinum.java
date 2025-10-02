@@ -1146,6 +1146,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             } if (Level > 4 || bypass){
                 $$1.add(StarPlatinumEntity.BASEBALL_SKIN);
                 $$1.add(StarPlatinumEntity.TREE);
+                $$1.add(StarPlatinumEntity.NETHER);
                 $$1.add(StarPlatinumEntity.JUMP_13);
             } if (Level > 5 || bypass){
                 $$1.add(StarPlatinumEntity.JOJONIUM_SKIN);
@@ -1876,6 +1877,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return Component.translatable(  "skins.roundabout.star_platinum.arcade_2");
         } else if (skinId == StarPlatinumEntity.TREE){
             return Component.translatable(  "skins.roundabout.star_platinum.tree");
+        } else if (skinId == StarPlatinumEntity.NETHER){
+            return Component.translatable(  "skins.roundabout.star_platinum.nether");
         }
         return Component.translatable(  "skins.roundabout.star_platinum.base");
     }

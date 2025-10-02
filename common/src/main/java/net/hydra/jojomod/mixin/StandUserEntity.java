@@ -3259,31 +3259,40 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             Entity zent = $$0.getEntity();
             if (zent != null && zent instanceof LivingEntity LE){
                 ItemStack stack = LE.getMainHandItem();
-
-                if (stack != null && !stack.isEmpty() && stack.is(ModItems.SCISSORS) && ($$0.is(DamageTypes.PLAYER_ATTACK) || $$0.is(DamageTypes.MOB_ATTACK))) {
-                    if (MainUtil.getMobBleed(this)) {
-                        roundabout$setBleedLevel(0);
-                        addEffect(new MobEffectInstance(ModEffects.BLEED, 300, 0), LE);
-                    }
-                    stack.hurtAndBreak(1, LE, $$0x -> $$0x.broadcastBreakEvent(EquipmentSlot.MAINHAND));
-                }
-
-                if (stack != null && !stack.isEmpty() && stack.getItem() instanceof SignBlockItem && ($$0.is(DamageTypes.PLAYER_ATTACK) || $$0.is(DamageTypes.MOB_ATTACK))) {
-                    if (!level().isClientSide()) {
-                        if (MainUtil.getMobBleed(rdbt$this())){
-                            MainUtil.makeBleed(rdbt$this(),1,100,zent);
+                if (stack != null && !stack.isEmpty()) {
+                    if (stack.is(ModItems.SCISSORS) && ($$0.is(DamageTypes.PLAYER_ATTACK) || $$0.is(DamageTypes.MOB_ATTACK))) {
+                        if (MainUtil.getMobBleed(this)) {
+                            roundabout$setBleedLevel(0);
+                            addEffect(new MobEffectInstance(ModEffects.BLEED, 300, 0), LE);
                         }
-                        CompoundTag ct = stack.getOrCreateTagElement("BlockStateTag");
-                        int ctd = ct.getInt("damaged");
-                        ctd++;
-                        if (ctd > 2) {
-                            level().playSound(null, blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS,
-                                    1F, 1);
-                            stack.shrink(1);
-                        } else {
-                            level().playSound(null, blockPosition(), ModSounds.SIGN_HIT_EVENT, SoundSource.PLAYERS,
-                                    1F, 1);
-                            ct.putInt("damaged", ctd);
+                        stack.hurtAndBreak(1, LE, $$0x -> $$0x.broadcastBreakEvent(EquipmentSlot.MAINHAND));
+                    }
+
+                    if (stack.is(ModItems.SACRIFICIAL_DAGGER) && ($$0.is(DamageTypes.PLAYER_ATTACK) || $$0.is(DamageTypes.MOB_ATTACK))) {
+                        if (MainUtil.getMobBleed(this)) {
+                            roundabout$setBleedLevel(0);
+                            addEffect(new MobEffectInstance(ModEffects.BLEED, 300, 0), LE);
+                        }
+                        stack.hurtAndBreak(1, LE, $$0x -> $$0x.broadcastBreakEvent(EquipmentSlot.MAINHAND));
+                    }
+
+                    if (stack.getItem() instanceof SignBlockItem && ($$0.is(DamageTypes.PLAYER_ATTACK) || $$0.is(DamageTypes.MOB_ATTACK))) {
+                        if (!level().isClientSide()) {
+                            if (MainUtil.getMobBleed(rdbt$this())) {
+                                MainUtil.makeBleed(rdbt$this(), 1, 100, zent);
+                            }
+                            CompoundTag ct = stack.getOrCreateTagElement("BlockStateTag");
+                            int ctd = ct.getInt("damaged");
+                            ctd++;
+                            if (ctd > 2) {
+                                level().playSound(null, blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS,
+                                        1F, 1);
+                                stack.shrink(1);
+                            } else {
+                                level().playSound(null, blockPosition(), ModSounds.SIGN_HIT_EVENT, SoundSource.PLAYERS,
+                                        1F, 1);
+                                ct.putInt("damaged", ctd);
+                            }
                         }
                     }
                 }

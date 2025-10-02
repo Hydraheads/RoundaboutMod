@@ -18,6 +18,7 @@ import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
@@ -160,15 +161,15 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             renderBigHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersDiegoHat() && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
+                        if (vd.rendersDiegoHat() && !MainUtil.isWearingStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
                             renderDiegoHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersBasicHat() && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
+                        if (vd.rendersBasicHat() && !MainUtil.isWearingStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
                             renderBasicHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersSpikeyHair() && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
+                        if (vd.rendersSpikeyHair() && !MainUtil.isWearingStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
                             renderSpikeyHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
