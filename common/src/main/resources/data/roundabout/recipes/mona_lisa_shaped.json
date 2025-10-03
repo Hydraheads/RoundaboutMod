@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "P": {
+      "item": "minecraft:painting"
+    },
+    "R": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "C": {
+      "item": "minecraft:crimson_fungus"
+    },
+    "X": {
+      "item": "minecraft:warped_fungus"
+    },
+    "N": {
+      "item": "minecraft:end_crystal"
+    },
+    "S": {
+      "item": "minecraft:acacia_sapling"
+    }
+  },
+  "pattern": [
+    "SRS",
+    "RPR",
+    "CNX"
+  ],
+  "result": {
+    "count": 1,
+    "item": "roundabout:painting_mona_lisa"
+  },
+  "show_notification": true
+}

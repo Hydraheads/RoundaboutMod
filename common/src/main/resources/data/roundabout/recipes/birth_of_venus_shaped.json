@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "P": {
+      "item": "minecraft:painting"
+    },
+    "R": {
+      "item": "minecraft:rose_bush"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "G": {
+      "item": "minecraft:enchanted_golden_apple"
+    },
+    "N": {
+      "item": "minecraft:nether_star"
+    },
+    "W": {
+      "item": "minecraft:wither_rose"
+    }
+  },
+  "pattern": [
+    "DGD",
+    "RPW",
+    "DND"
+  ],
+  "result": {
+    "count": 1,
+    "item": "roundabout:painting_venus"
+  },
+  "show_notification": true
+}
