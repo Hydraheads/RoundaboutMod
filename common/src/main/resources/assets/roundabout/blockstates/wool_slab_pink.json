@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "roundabout:block/wool_slab_pink" },
+    "facing=south": { "model": "roundabout:block/wool_slab_pink", "y": 180 },
+    "facing=west":  { "model": "roundabout:block/wool_slab_pink", "y": 270 },
+    "facing=east":  { "model": "roundabout:block/wool_slab_pink", "y": 90 }
+  }
+}

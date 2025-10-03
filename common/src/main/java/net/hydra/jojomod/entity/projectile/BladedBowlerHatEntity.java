@@ -349,9 +349,19 @@ public class BladedBowlerHatEntity extends AbstractArrow {
                 skyHit = true;
             }
 
-            if (MainUtil.getMobBleed(target)){
-                ((StandUser)target).roundabout$setBleedLevel(1);
-                ((LivingEntity)target).addEffect(new MobEffectInstance(ModEffects.BLEED, 400, 0), this);
+            if (MainUtil.getMobBleed(target)) {
+                LivingEntity livingEntity = (LivingEntity) target;
+
+                float healthBefore = livingEntity.getHealth();
+
+                boolean didHurt = livingEntity.hurt(ModDamageTypes.of(level(), ModDamageTypes.BLADED_BOWLER_HAT, this, getOwner()), damage);
+
+                float healthAfter = livingEntity.getHealth();
+
+                if (didHurt && healthAfter < healthBefore) {
+                    ((StandUser) target).roundabout$setBleedLevel(1);
+                    livingEntity.addEffect(new MobEffectInstance(ModEffects.BLEED, 400, 0), this);
+                }
             }
 
             return damage;

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "W": {
+      "item": "minecraft:green_wool"
+    }
+  },
+  "pattern": [
+    "  W",
+    " WW",
+    "WWW"
+  ],
+  "result": {
+    "count": 4,
+    "item": "roundabout:wool_stairs_dark_green"
+  },
+  "show_notification": true
+}

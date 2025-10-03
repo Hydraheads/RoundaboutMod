@@ -40,6 +40,68 @@ public class FabricBlocks {
     );
     public static final Block WOOL_SLAB_WHITE = registerBlock("wool_slab_white", ModBlocks.WOOL_SLAB_WHITE_PROPERTIES
     );
+    public static final Block WOOL_SLAB_BLACK = registerBlock("wool_slab_black", ModBlocks.WOOL_SLAB_BLACK_PROPERTIES
+    );
+    public static final Block WOOL_SLAB_RED = registerBlock("wool_slab_red", ModBlocks.WOOL_SLAB_RED_PROPERTIES
+    );
+    public static final Block WOOL_SLAB_LIGHT_GREY = registerBlock("wool_slab_light_grey", ModBlocks.WOOL_SLAB_LIGHT_GREY_PROPERTIES
+    );
+    public static final Block WOOL_SLAB_BROWN = registerBlock("wool_slab_brown", ModBlocks.WOOL_SLAB_BROWN_PROPERTIES
+    );
+    public static final Block WOOL_SLAB_BLUE = registerBlock("wool_slab_blue", ModBlocks.WOOL_SLAB_BLUE_PROPERTIES
+    );
+    public static final Block WOOL_SLAB_CYAN = registerBlock("wool_slab_cyan", ModBlocks.WOOL_SLAB_CYAN_PROPERTIES
+    );
+    public static final Block WOOL_SLAB_DARK_GREEN = registerBlock("wool_slab_dark_green", ModBlocks.WOOL_SLAB_DARK_GREEN_PROPERTIES
+    );
+    public static final Block WOOL_SLAB_DARK_GREY = registerBlock("wool_slab_dark_grey", ModBlocks.WOOL_SLAB_DARK_GREY_PROPERTIES
+    );
+    public static final Block WOOL_SLAB_GREEN = registerBlock("wool_slab_green", ModBlocks.WOOL_SLAB_GREEN_PROPERTIES
+    );
+    public static final Block WOOL_SLAB_LIGHT_BLUE = registerBlock("wool_slab_light_blue", ModBlocks.WOOL_SLAB_LIGHT_BLUE_PROPERTIES
+    );
+    public static final Block WOOL_SLAB_MAGENTA = registerBlock("wool_slab_magenta", ModBlocks.WOOL_SLAB_MAGENTA_PROPERTIES
+    );
+    public static final Block WOOL_SLAB_ORANGE = registerBlock("wool_slab_orange", ModBlocks.WOOL_SLAB_ORANGE_PROPERTIES
+    );
+    public static final Block WOOL_SLAB_PURPLE = registerBlock("wool_slab_purple", ModBlocks.WOOL_SLAB_PURPLE_PROPERTIES
+    );
+    public static final Block WOOL_SLAB_PINK = registerBlock("wool_slab_pink", ModBlocks.WOOL_SLAB_PINK_PROPERTIES
+    );
+    public static final Block WOOL_SLAB_YELLOW = registerBlock("wool_slab_yellow", ModBlocks.WOOL_SLAB_YELLOW_PROPERTIES
+    );
+    public static final Block WOOL_STAIRS_WHITE = registerBlock("wool_stairs_white", ModBlocks.WOOL_STAIRS_WHITE_PROPERTIES
+    );
+    public static final Block WOOL_STAIRS_BLUE = registerBlock("wool_stairs_blue", ModBlocks.WOOL_STAIRS_BLUE_PROPERTIES
+    );
+    public static final Block WOOL_STAIRS_CYAN = registerBlock("wool_stairs_cyan", ModBlocks.WOOL_STAIRS_CYAN_PROPERTIES
+    );
+    public static final Block WOOL_STAIRS_DARK_GREEN = registerBlock("wool_stairs_dark_green", ModBlocks.WOOL_STAIRS_DARK_GREEN_PROPERTIES
+    );
+    public static final Block WOOL_STAIRS_DARK_GREY = registerBlock("wool_stairs_dark_grey", ModBlocks.WOOL_STAIRS_DARK_GREY_PROPERTIES
+    );
+    public static final Block WOOL_STAIRS_GREEN = registerBlock("wool_stairs_green", ModBlocks.WOOL_STAIRS_GREEN_PROPERTIES
+    );
+    public static final Block WOOL_STAIRS_LIGHT_BLUE = registerBlock("wool_stairs_light_blue", ModBlocks.WOOL_STAIRS_LIGHT_BLUE_PROPERTIES
+    );
+    public static final Block WOOL_STAIRS_MAGENTA = registerBlock("wool_stairs_magenta", ModBlocks.WOOL_STAIRS_MAGENTA_PROPERTIES
+    );
+    public static final Block WOOL_STAIRS_ORANGE = registerBlock("wool_stairs_orange", ModBlocks.WOOL_STAIRS_ORANGE_PROPERTIES
+    );
+    public static final Block WOOL_STAIRS_PURPLE = registerBlock("wool_stairs_purple", ModBlocks.WOOL_STAIRS_PURPLE_PROPERTIES
+    );
+    public static final Block WOOL_STAIRS_PINK = registerBlock("wool_stairs_pink", ModBlocks.WOOL_STAIRS_PINK_PROPERTIES
+    );
+    public static final Block WOOL_STAIRS_RED = registerBlock("wool_stairs_red", ModBlocks.WOOL_STAIRS_RED_PROPERTIES
+    );
+    public static final Block WOOL_STAIRS_YELLOW = registerBlock("wool_stairs_yellow", ModBlocks.WOOL_STAIRS_YELLOW_PROPERTIES
+    );
+    public static final Block WOOL_STAIRS_LIGHT_GREY = registerBlock("wool_stairs_light_grey", ModBlocks.WOOL_STAIRS_LIGHT_GREY_PROPERTIES
+    );
+    public static final Block WOOL_STAIRS_BLACK = registerBlock("wool_stairs_black", ModBlocks.WOOL_STAIRS_BLACK_PROPERTIES
+    );
+    public static final Block WOOL_STAIRS_BROWN = registerBlock("wool_stairs_brown", ModBlocks.WOOL_STAIRS_BROWN_PROPERTIES
+    );
     public static final Block LOCACACA_CACTUS = registerBlock("locacaca_cactus", ModBlocks.LOCACACA_CACTUS_PROPERTIES
     );
     public static final Block LOCACACA_BLOCK = registerBlock("locacaca_plant", ModBlocks.LOCACACA_BLOCK_PROPERTIES
