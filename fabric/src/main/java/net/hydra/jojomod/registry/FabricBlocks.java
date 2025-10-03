@@ -38,6 +38,8 @@ public class FabricBlocks {
     );
     public static final Block WOODEN_MANOR_CHAIR = registerBlock("wooden_manor_chair", ModBlocks.WOODEN_MANOR_CHAIR_PROPERTIES
     );
+    public static final Block WOOL_SLAB_WHITE = registerBlock("wool_slab_white", ModBlocks.WOOL_SLAB_WHITE_PROPERTIES
+    );
     public static final Block LOCACACA_CACTUS = registerBlock("locacaca_cactus", ModBlocks.LOCACACA_CACTUS_PROPERTIES
     );
     public static final Block LOCACACA_BLOCK = registerBlock("locacaca_plant", ModBlocks.LOCACACA_BLOCK_PROPERTIES

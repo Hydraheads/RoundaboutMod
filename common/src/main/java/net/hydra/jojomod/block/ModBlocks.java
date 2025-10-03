@@ -147,6 +147,12 @@ public class ModBlocks {
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(2.0F).sound(SoundType.WOOD).ignitedByLava()
     );
+    public static Block WOOL_SLAB_WHITE_PROPERTIES = new SlabWoolWhiteBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOL)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
+    );
 
     public static Block LOCACACA_CACTUS_PROPERTIES = new LocacacaCactusBlock(
             BlockBehaviour.Properties.of()
