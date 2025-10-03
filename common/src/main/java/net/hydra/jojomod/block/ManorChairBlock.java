@@ -1,15 +1,17 @@
 package net.hydra.jojomod.block;
 
-import net.hydra.jojomod.util.SittingState;
-import net.hydra.jojomod.mixin.sitting_state.SittingStateMixin;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -22,10 +24,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class ManorChairBlock extends Block {
 
-    // The property to hold the block’s direction
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
-    protected static final VoxelShape SHAPE = Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0);
+    protected static final VoxelShape SHAPE = Block.box(0.0, 0.0, 0.0, 16.0, 13.0, 16.0);
 
     public ManorChairBlock(Properties properties) {
         super(properties);
@@ -34,7 +35,6 @@ public class ManorChairBlock extends Block {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        // Makes the chair face the player when placed
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
@@ -53,6 +53,7 @@ public class ManorChairBlock extends Block {
     public boolean skipRendering(BlockState p_53972_, BlockState p_53973_, Direction p_53974_) {
         return false;
     }
+
     @SuppressWarnings("deprecation")
     @Override
     public VoxelShape getOcclusionShape(BlockState $$0, BlockGetter $$1, BlockPos $$2) {
@@ -61,15 +62,28 @@ public class ManorChairBlock extends Block {
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-
         if (!level.isClientSide) {
-            SittingState sittingPlayer = (SittingState) player;
-            if (!sittingPlayer.isSitting()) {
-                ((SittingState) player).setSitting(true);
-            } else {
-                ((SittingState) player).setSitting(false);
+            double x = pos.getX() + 0.5;
+            double y = pos.getY() + 1.0;
+            double z = pos.getZ() + 0.5;
+
+            float yaw = state.getValue(FACING).toYRot();
+            BlockPos blockAbove = pos.above();
+            if (level.getBlockState(blockAbove).isAir()) {
+                if (player instanceof ServerPlayer serverPlayer) {
+                    serverPlayer.connection.teleport(x, y, z, yaw, serverPlayer.getXRot());
+                    serverPlayer.setYHeadRot(yaw);
+                    serverPlayer.setYBodyRot(yaw);
+                    IPlayerEntity ipe = ((IPlayerEntity) player);
+                    ipe.roundabout$SetPoseEmote((byte) 11);
+                } else {
+                    player.teleportTo(x,y,z);
+                    player.setYRot(yaw);
+                    player.setYHeadRot(yaw);
+                    player.setYBodyRot(yaw);
+                }
             }
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.FAIL;
     }
 }

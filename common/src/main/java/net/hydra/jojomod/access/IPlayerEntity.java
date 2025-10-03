@@ -86,6 +86,7 @@ public interface IPlayerEntity {
     AnimationState getGiorno();
     AnimationState getKoichi();
     AnimationState getOhNo();
+    AnimationState getSitting();
     AnimationState getJoseph();
     AnimationState getTortureDance();
     AnimationState getWamuu();

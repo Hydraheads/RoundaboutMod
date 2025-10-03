@@ -52,6 +52,7 @@ public abstract class AnimationsElytraModel<T extends LivingEntity> extends Agea
             this.roundabout$animate(ipe.getJotaro(), Poses.JOTARO.ad, $$3, 1f);
             this.roundabout$animate(ipe.getJonathan(), Poses.JONATHAN.ad, $$3, 1f);
             this.roundabout$animate(ipe.getWatch(), Poses.WATCH.ad, $$3, 1f);
+            this.roundabout$animate(ipe.getSitting(), Poses.SITTING.ad, $$3, 1f);
         }
     }
 

@@ -138,9 +138,12 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
         if ($$0 instanceof Player) {
             IPlayerEntity ipe = ((IPlayerEntity) $$0);
-            boolean pose = ipe.roundabout$GetPoseEmote() != Poses.NONE.id;
+            byte poseEmote = ipe.roundabout$GetPoseEmote();
+            boolean pose = poseEmote != Poses.NONE.id;
             if (pose) {
-                this.head.resetPose();
+                if (poseEmote != Poses.SITTING.id) {
+                    this.head.resetPose();
+                }
                 this.body.resetPose();
                 this.rightLeg.resetPose();
                 this.leftLeg.resetPose();
@@ -158,6 +161,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             this.roundabout$animate(ipe.getJotaro(), Poses.JOTARO.ad, $$3, 1f);
             this.roundabout$animate(ipe.getJonathan(), Poses.JONATHAN.ad, $$3, 1f);
             this.roundabout$animate(ipe.getWatch(), Poses.WATCH.ad, $$3, 1f);
+            this.roundabout$animate(ipe.getSitting(), Poses.SITTING.ad, $$3, 1f);
 
             /**Shoot mode aiming*/
             StandUser user = ((StandUser)$$0);
@@ -225,6 +229,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 this.roundabout$animate2(ipe.getJotaro(), Poses.JOTARO.ad, $$3, 1f);
                 this.roundabout$animate2(ipe.getJonathan(), Poses.JONATHAN.ad, $$3, 1f);
                 this.roundabout$animate2(ipe.getWatch(), Poses.WATCH.ad, $$3, 1f);
+                this.roundabout$animate2(ipe.getSitting(), Poses.SITTING.ad, $$3, 1f);
                 if ($$0.getItemBySlot(EquipmentSlot.CHEST).isEmpty()) {
                         this.cloak.z += 0.0F;
                         this.cloak.y += 0.0F;
@@ -391,18 +396,19 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
     @Unique
     public Optional<ModelPart> roundabout$getAnyDescendantWithName(String $$0) {
-        if (Objects.equals($$0, "body")){
+        boolean firstPerson = net.minecraft.client.Minecraft.getInstance().options.getCameraType().isFirstPerson();
+        if (Objects.equals($$0, "body")) {
             return Optional.of(this.body);
-        } else if (Objects.equals($$0, "head")){
+        } else if (Objects.equals($$0, "head")) {
             return Optional.of(this.head);
-        } else if (Objects.equals($$0, "right_leg")){
+        } else if (Objects.equals($$0, "right_leg")) {
             return Optional.of(this.rightLeg);
-        } else if (Objects.equals($$0, "left_leg")){
+        } else if (Objects.equals($$0, "left_leg")) {
             return Optional.of(this.leftLeg);
-        } else if (Objects.equals($$0, "right_arm")){
-            return Optional.of(this.rightArm);
-        } else if (Objects.equals($$0, "left_arm")){
-            return Optional.of(this.leftArm);
+        } else if (Objects.equals($$0, "right_arm")) {
+            return firstPerson ? Optional.empty() : Optional.of(this.rightArm);
+        } else if (Objects.equals($$0, "left_arm")) {
+            return firstPerson ? Optional.empty() : Optional.of(this.leftArm);
         }
         return Optional.empty();
     }

@@ -666,9 +666,12 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public final AnimationState roundabout$OH_NO = new AnimationState();
     @Unique
     @Override
-    public AnimationState getOhNo(){
-        return roundabout$OH_NO;
-    }
+    public AnimationState getOhNo(){return roundabout$OH_NO;}
+    @Unique
+    public final AnimationState roundabout$SITTING = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState getSitting(){return roundabout$SITTING;}
     @Unique
     public final AnimationState roundabout$TORTURE_DANCE = new AnimationState();
     @Unique
@@ -758,6 +761,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             this.roundabout$WATCH.startIfStopped(this.tickCount);
         } else {
             this.roundabout$WATCH.stop();
+        }
+        if (roundabout$GetPoseEmote() == Poses.SITTING.id) {
+            this.roundabout$SITTING.startIfStopped(this.tickCount);
+        } else {
+            this.roundabout$SITTING.stop();
         }
     }
 
