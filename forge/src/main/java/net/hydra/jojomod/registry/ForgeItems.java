@@ -1,9 +1,13 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.event.powers.visagedata.aesthetician.*;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.item.paintings.BirthOfVenusPaintingItem;
+import net.hydra.jojomod.item.paintings.MonaLisaPaintingItem;
+import net.hydra.jojomod.item.paintings.VanGoughPaintingItem;
 import net.hydra.jojomod.stand.powers.*;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.*;
@@ -90,6 +94,15 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.LOCACACA_CACTUS.get(),
                     new Item.Properties()
             )));
+    public static final RegistryObject<Item> PAINTING_VAN_GOUGH = addToTab(ITEMS.register("painting_van_gough",
+            () -> new VanGoughPaintingItem(new Item.Properties().stacksTo(1))
+    ));
+    public static final RegistryObject<Item> PAINTING_MONA_LISA = addToTab(ITEMS.register("painting_mona_lisa",
+            () -> new MonaLisaPaintingItem(new Item.Properties().stacksTo(1))
+    ));
+    public static final RegistryObject<Item> PAINTING_BIRTH_OF_VENUS = addToTab(ITEMS.register("painting_venus",
+            () -> new BirthOfVenusPaintingItem(new Item.Properties().stacksTo(1))
+    ));
     public static final RegistryObject<BlockItem> GODDESS_STATUE_ITEM = addToTab(ITEMS.register("goddess_statue",
             () -> new BlockItem(ForgeBlocks.GODDESS_STATUE_BLOCK.get(),
                     new Item.Properties().stacksTo(1)

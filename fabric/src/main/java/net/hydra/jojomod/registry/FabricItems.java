@@ -5,10 +5,14 @@ import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StreetSignBlock;
+import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.event.powers.visagedata.aesthetician.*;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.item.paintings.BirthOfVenusPaintingItem;
+import net.hydra.jojomod.item.paintings.MonaLisaPaintingItem;
+import net.hydra.jojomod.item.paintings.VanGoughPaintingItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.*;
 import net.minecraft.core.Registry;
@@ -16,6 +20,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.Potions;
@@ -163,6 +168,10 @@ public class FabricItems {
 
     public static Item FLESH_BUCKET = registerItem("flesh_bucket", new FleshBucketItem(new Item.Properties().stacksTo(1)));
 
+    public static Item PAINTING_BIRTH_OF_VENUS = registerItem("painting_venus", new BirthOfVenusPaintingItem(new Item.Properties().stacksTo(1)));
+    public static Item PAINTING_VAN_GOUGH = registerItem("painting_van_gough", new VanGoughPaintingItem(new Item.Properties().stacksTo(1)));
+    public static Item PAINTING_MONA_LISA = registerItem("painting_mona_lisa", new MonaLisaPaintingItem(new Item.Properties().stacksTo(1)));
+
     public static Item MUSIC_DISC_TORTURE_DANCE = registerItem("music_disc_torture_dance",
             new RecordItem(1, ModSounds.TORTURE_DANCE_EVENT,
                     (new Item.Properties()).stacksTo(1).rarity(Rarity.RARE), 2840));
@@ -269,6 +278,9 @@ public class FabricItems {
 
                         entries.accept(ModBlocks.LOCACACA_CACTUS);
                         entries.accept(ModBlocks.GODDESS_STATUE_BLOCK);
+                        entries.accept(PAINTING_VAN_GOUGH);
+                        entries.accept(PAINTING_MONA_LISA);
+                        entries.accept(PAINTING_BIRTH_OF_VENUS);
                         entries.accept(ModBlocks.STEREO);
                         entries.accept(WORTHY_ARROW);
                         entries.accept(LUCKY_LIPSTICK);
@@ -491,6 +503,9 @@ public class FabricItems {
         ModItems.INTERDIMENSIONAL_KEY = INTERDIMENSIONAL_KEY;
         ModItems.FLESH_BUCKET = FLESH_BUCKET;
 
+        ModItems.PAINTING_VAN_GOUGH = PAINTING_VAN_GOUGH;
+        ModItems.PAINTING_MONA_LISA = PAINTING_MONA_LISA;
+        ModItems.PAINTING_BIRTH_OF_VENUS = PAINTING_BIRTH_OF_VENUS;
 
         ModItems.initializeVisageStore();
         //ModItems.STAND_ARROW_POOL.add((StandDiscItem)STAND_DISC_D4C);
