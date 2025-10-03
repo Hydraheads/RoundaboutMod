@@ -331,8 +331,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @ModifyVariable(method = "attack",
             at = @At(value = "STORE"), ordinal = 2)
     public boolean roundabout$attackThis(boolean value) {
-        if (((StandUser)this).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()
-        && !isSprinting()){
+        if (((StandUser)this).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()){
             return true;
         }
         return value;
