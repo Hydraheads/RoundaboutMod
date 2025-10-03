@@ -11,6 +11,9 @@ import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
+import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
+import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
+import net.hydra.jojomod.entity.paintings.VanGoughPainting;
 import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
@@ -546,6 +549,30 @@ public class FabricEntities {
                                 sized(EncasementBubbleEntity.eWidth, EncasementBubbleEntity.eHeight).
                                 clientTrackingRange(10).build(Roundabout.MOD_ID+":encasement_bubble")
                 );
+        public static final EntityType<VanGoughPainting> VAN_GOUGH_PAINTING =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "painting_van_gough"),
+                        EntityType.Builder.<VanGoughPainting>of(VanGoughPainting::new, MobCategory.MISC).
+                                sized(0.5F, 0.5F).updateInterval(Integer.MAX_VALUE).
+                                clientTrackingRange(10).build(Roundabout.MOD_ID+":painting_van_gough")
+                );
+        public static final EntityType<BirthOfVenusPainting> VENUS_PAINTING =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "painting_venus"),
+                        EntityType.Builder.<BirthOfVenusPainting>of(BirthOfVenusPainting::new, MobCategory.MISC).
+                                sized(0.5F, 0.5F).updateInterval(Integer.MAX_VALUE).
+                                clientTrackingRange(10).build(Roundabout.MOD_ID+":painting_venus")
+                );
+        public static final EntityType<MonaLisaPainting> MONA_LISA_PAINTING =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "mona_lisa"),
+                        EntityType.Builder.<MonaLisaPainting>of(MonaLisaPainting::new, MobCategory.MISC).
+                                sized(0.5F, 0.5F).updateInterval(Integer.MAX_VALUE).
+                                clientTrackingRange(10).build(Roundabout.MOD_ID+":mona_lisa")
+                );
 
         public static void register() {
                 /*Common Code Bridge*/
@@ -624,7 +651,10 @@ public class FabricEntities {
                 ModEntities.ALEX_NPC = ALEX_NPC;
                 ModEntities.MODIFIED_NPC = MODIFIED_NPC;
                 ModEntities.FOG_CLONE = FOG_CLONE;
-                ModEntities.D4C_CLONE = D4C_CLONE;
+
+                ModEntities.VAN_GOUGH_PAINTING = VAN_GOUGH_PAINTING;
+                ModEntities.MONA_LISA_PAINTING = MONA_LISA_PAINTING;
+                ModEntities.BIRTH_OF_VENUS_PAINTING = VENUS_PAINTING;
 
                 /*Attributes*/
                 FabricDefaultAttributeRegistry.register(TERRIER_DOG, Wolf.createAttributes());

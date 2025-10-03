@@ -273,6 +273,9 @@ public class ForgeEvents {
         ModItems.RINGO_MASK = ForgeItems.RINGO_MASK.get();
         ModItems.HATO_MASK = ForgeItems.HATO_MASK.get();
         ModItems.SHIZUKA_MASK = ForgeItems.SHIZUKA_MASK.get();
+        ModItems.PAINTING_VAN_GOUGH = ForgeItems.PAINTING_VAN_GOUGH.get();
+        ModItems.PAINTING_MONA_LISA = ForgeItems.PAINTING_MONA_LISA.get();
+        ModItems.PAINTING_BIRTH_OF_VENUS = ForgeItems.PAINTING_BIRTH_OF_VENUS.get();
         ModItems.POCOLOCO_MASK = ForgeItems.POCOLOCO_MASK.get();
         ModItems.TERRIER_SPAWN_EGG = ForgeItems.TERRIER_SPAWN_EGG.get();
         ModItems.AESTHETICIAN_SPAWN_EGG = ForgeItems.AESTHETICIAN_SPAWN_EGG.get();
@@ -352,6 +355,10 @@ public class ForgeEvents {
         ModEffects.GRAVITY_FLIP = ForgeEffects.GRAVITY_FLIP.get();
 
 
+
+        ModEntities.VAN_GOUGH_PAINTING = ForgeEntities.VAN_GOUGH_PAINTING.get();
+        ModEntities.MONA_LISA_PAINTING = ForgeEntities.MONA_LISA_PAINTING.get();
+        ModEntities.BIRTH_OF_VENUS_PAINTING = ForgeEntities.BIRTH_OF_VENUS_PAINTING.get();
         ModEntities.THE_WORLD = ForgeEntities.THE_WORLD.get();
         ModEntities.THE_WORLD_ULTIMATE = ForgeEntities.THE_WORLD_ULTIMATE.get();
         ModEntities.TERRIER_DOG = ForgeEntities.TERRIER_DOG.get();
@@ -405,6 +412,7 @@ public class ForgeEvents {
         ModEntities.FALLEN_VILLAGER = ForgeEntities.FALLEN_VILLAGER.get();
         ModEntities.FALLEN_CREEPER = ForgeEntities.FALLEN_CREEPER.get();
         ModEntities.FALLEN_PHANTOM = ForgeEntities.FALLEN_PHANTOM.get();
+
 
         ModEntities.OVA_ENYA = ForgeEntities.OVA_ENYA.get();
         ModEntities.ENYA = ForgeEntities.ENYA.get();

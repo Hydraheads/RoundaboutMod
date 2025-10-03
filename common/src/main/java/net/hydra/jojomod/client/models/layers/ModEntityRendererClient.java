@@ -47,5 +47,9 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation MR_SPIN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "magiicans_red_spin"), "main");
     public static final ModelLayerLocation GREEN_DAY_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "green_day"), "main");
 
+    public static final ModelLayerLocation PAINTING_VAN_GOUGH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "van_gough"), "main");
+    public static final ModelLayerLocation MONA_LISA_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "mona_lisa"), "main");
+    public static final ModelLayerLocation BIRTH_OF_VENUS_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "venus"), "main");
+
 
 }
