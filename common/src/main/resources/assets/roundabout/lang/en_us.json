@@ -2182,6 +2182,11 @@
   "config.roundabout.namedSBRHorseSkins.name": "Named SBR Horses",
   "config.roundabout.namedSBRHorseSkins.desc": "Naming horses after select SBR ones changes their skins.",
 
+
+  "config.roundabout.skeletonFireInterval.name": "Skeleton Fire Interval",
+  "config.roundabout.skeletonFireInterval.desc": "How long in between the skeleton corpses' synchronized shots for Justice's corpse army.",
+
+
   "config.roundabout.timeStopFreezesScreen.name": "Screen Freeze",
   "config.roundabout.timeStopFreezesScreen.desc": "Whether or not time stop makes you unable to see anything happening, as the screen is frozen. This option is off by default because of the unexciting implications of seeing nothing moving for 9 seconds.",
   "config.roundabout.tsStandsSeeTSTeleportAndDontFreeze.name": "Time Seeing Stands",

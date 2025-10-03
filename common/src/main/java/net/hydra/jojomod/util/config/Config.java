@@ -439,6 +439,8 @@ public class Config implements Cloneable {
         public Integer maxCorpses;
         @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
         public Integer standUserMobMinionCount;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer skeletonFireInterval;
         @BooleanOption(group = "inherit", value = true)
         public Boolean corpsesUseOwnerTeam;
         @BooleanOption(group = "inherit", value = true)
@@ -449,7 +451,7 @@ public class Config implements Cloneable {
         public Float phantomCorpseSpeed;
         @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
         public Integer fogCloneCooldown;
-        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer fogChainCooldown;
         @FloatOption(group = "inherit", value = 0.3F, min = 0, max = 72000F)
         public Float attackSpeedBuff;
