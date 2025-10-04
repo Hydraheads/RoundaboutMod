@@ -180,97 +180,97 @@ public class ModBlocks {
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(2.0F).sound(SoundType.WOOD).ignitedByLava()
     );
-    public static Block WOOL_SLAB_WHITE_PROPERTIES = new SlabWoolWhiteBlock(
+    public static Block WOOL_SLAB_WHITE_PROPERTIES = new SlabBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_SLAB_BLACK_PROPERTIES = new SlabWoolBlackBlock(
+    public static Block WOOL_SLAB_BLACK_PROPERTIES = new SlabBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_SLAB_RED_PROPERTIES = new SlabWoolRedBlock(
+    public static Block WOOL_SLAB_RED_PROPERTIES = new SlabBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_SLAB_LIGHT_GREY_PROPERTIES = new SlabWoolLightGreyBlock(
+    public static Block WOOL_SLAB_LIGHT_GREY_PROPERTIES = new SlabBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_SLAB_BROWN_PROPERTIES = new SlabWoolBrownBlock(
+    public static Block WOOL_SLAB_BROWN_PROPERTIES = new SlabBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_SLAB_BLUE_PROPERTIES = new SlabWoolBlueBlock(
+    public static Block WOOL_SLAB_BLUE_PROPERTIES = new SlabBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_SLAB_CYAN_PROPERTIES = new SlabWoolCyanBlock(
+    public static Block WOOL_SLAB_CYAN_PROPERTIES = new SlabBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_SLAB_DARK_GREEN_PROPERTIES = new SlabWoolDarkGreenBlock(
+    public static Block WOOL_SLAB_DARK_GREEN_PROPERTIES = new SlabBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_SLAB_DARK_GREY_PROPERTIES = new SlabWoolDarkGreyBlock(
+    public static Block WOOL_SLAB_DARK_GREY_PROPERTIES = new SlabBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_SLAB_GREEN_PROPERTIES = new SlabWoolGreenBlock(
+    public static Block WOOL_SLAB_GREEN_PROPERTIES = new SlabBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_SLAB_LIGHT_BLUE_PROPERTIES = new SlabWoolLightBlueBlock(
+    public static Block WOOL_SLAB_LIGHT_BLUE_PROPERTIES = new SlabBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_SLAB_MAGENTA_PROPERTIES = new SlabWoolMagentaBlock(
+    public static Block WOOL_SLAB_MAGENTA_PROPERTIES = new SlabBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_SLAB_ORANGE_PROPERTIES = new SlabWoolOrangeBlock(
+    public static Block WOOL_SLAB_ORANGE_PROPERTIES = new SlabBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_SLAB_PURPLE_PROPERTIES = new SlabWoolPurpleBlock(
+    public static Block WOOL_SLAB_PURPLE_PROPERTIES = new SlabBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_SLAB_PINK_PROPERTIES = new SlabWoolPinkBlock(
+    public static Block WOOL_SLAB_PINK_PROPERTIES = new SlabBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_SLAB_YELLOW_PROPERTIES = new SlabWoolYellowBlock(
+    public static Block WOOL_SLAB_YELLOW_PROPERTIES = new SlabBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)

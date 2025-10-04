@@ -2249,6 +2249,9 @@
   "config.roundabout.shouldShowConfigButton.name": "Show Config Button",
   "config.roundabout.shouldShowConfigButton.desc": "Whether or not the config button needs to be shown at all. If you are a modpack dev you will most likely want to turn this off when your pack is fully configured.",
 
+  "config.roundabout.banDirectionalBlockPlacingFailure.name": "2 Percent Incompat Fix",
+  "config.roundabout.banDirectionalBlockPlacingFailure.desc": "Dungeons now loading 2 Percent has a bug that makes block placement return false even if the block places, leading stand block place/throw to infinitely item dupes. Turn this on only if you have that mod installed because it means failed placements delete the blocks instead of duping them.",
+
   "config.roundabout.generalSettings.name": "General Settings",
   "config.roundabout.configSettings.name": "Config Settings",
   "config.roundabout.particleSettings.name": "Particle Settings",
