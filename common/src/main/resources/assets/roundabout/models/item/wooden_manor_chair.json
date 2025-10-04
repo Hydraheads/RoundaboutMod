@@ -1,6 +1,6 @@
 
 {
-  "parent": "roundabout:block/wooden_manor_chair_lower",
+  "parent": "roundabout:block/wooden_manor_chair_inventory",
   "display": {
     "thirdperson_righthand": {
       "rotation": [ 0, 0, 0 ],
@@ -10,12 +10,12 @@
     "firstperson_righthand": {
       "rotation": [ 0, 45, 0 ],
       "translation": [ 0, 3.2, 0 ],
-      "scale": [ 0.40, 0.40, 0.40 ]
+      "scale": [ 0.3, 0.3, 0.3 ]
     },
     "gui": {
       "rotation": [ 30, 160, 0 ],
-      "translation": [ 0, 0, 0],
-      "scale":[ 0.5625, 0.5625, 0.5625]
+      "translation": [ 0, -2.5, 0],
+      "scale":[ 0.4, 0.4, 0.4]
     },
     "ground": {
       "rotation": [ 0, 0, 0 ],

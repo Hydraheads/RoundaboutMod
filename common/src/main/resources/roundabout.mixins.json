@@ -291,6 +291,7 @@
     "piloting.PilotingScreenEffectRenderer",
     "shaders.PostChainMixin",
     "shaders.ShaderGameRenderer",
+    "SittingCameraMixin",
     "soft_and_wet.SoftAndWetSoundManager",
     "stand_users.LoweringItemInHandRenderer",
     "stand_users.PowersMultiPlayerGameMode",

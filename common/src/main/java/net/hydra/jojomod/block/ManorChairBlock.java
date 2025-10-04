@@ -1,5 +1,6 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -153,13 +154,29 @@ public class ManorChairBlock extends Block {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                 InteractionHand hand, BlockHitResult hit) {
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        BlockPos targetPos = pos;
+        BlockState targetState = state;
+
         if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
+            targetPos = pos.below();
+            targetState = level.getBlockState(targetPos);
+
+            if (!(targetState.getBlock() == state.getBlock() &&
+                    targetState.getValue(HALF) == DoubleBlockHalf.LOWER)) {
+                return InteractionResult.PASS;
+            }
+        }
+
+        if (((IGravityEntity) player).roundabout$getGravityDirection() != Direction.DOWN) {
             return InteractionResult.PASS;
         }
 
         if (player.isShiftKeyDown()) {
+            return InteractionResult.PASS;
+        }
+
+        if (hit.getDirection() == Direction.DOWN) {
             return InteractionResult.PASS;
         }
 
@@ -171,12 +188,20 @@ public class ManorChairBlock extends Block {
             float yaw = state.getValue(FACING).toYRot();
 
             if (player instanceof ServerPlayer sp) {
+                if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
+                    y -= 1.0;
+                }
+
                 sp.connection.teleport(x, y, z, yaw, sp.getXRot());
                 sp.setYHeadRot(yaw);
                 sp.setYBodyRot(yaw);
                 IPlayerEntity ipe = (IPlayerEntity) player;
                 ipe.roundabout$SetPoseEmote((byte) 11);
             } else {
+                if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
+                    y -= 1.0;
+                }
+
                 player.teleportTo(x, y, z);
                 player.setYRot(yaw);
                 player.setYHeadRot(yaw);

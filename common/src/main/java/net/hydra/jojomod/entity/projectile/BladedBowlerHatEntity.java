@@ -23,6 +23,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -293,6 +294,8 @@ public class BladedBowlerHatEntity extends AbstractArrow {
         protected void onHitEntity(EntityHitResult $$0) {
             Entity $$1 = $$0.getEntity();
             if ($$1 instanceof SoftAndWetBubbleEntity)
+                return;
+            if ($$1 instanceof PrimedTnt)
                 return;
             float $$2 = 4.0F;
 
