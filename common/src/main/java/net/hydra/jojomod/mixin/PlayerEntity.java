@@ -555,7 +555,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
     @Inject(method = "actuallyHurt(Lnet/minecraft/world/damagesource/DamageSource;F)V", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$actuallyHurt(DamageSource $$0, float $$1, CallbackInfo ci) {
-        if (!this.isInvulnerableTo($$0)) {
+        if (!this.isInvulnerableTo($$0) && $$1 > 0) {
 
 
             if ($$0.getEntity() instanceof Player pe && !$$0.isIndirect()
