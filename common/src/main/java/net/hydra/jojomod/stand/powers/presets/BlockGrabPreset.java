@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IBoatItemAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IMinecartItemAccess;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -767,6 +768,12 @@ public class BlockGrabPreset extends NewPunchingStand {
                                     if(this.getSelf() instanceof Player plr) {
                                         if(!MainUtil.canPlaceOnClaim(plr,$$0)){
                                             ItemEntity itemDrop = new ItemEntity(this.getSelf().level(),this.getSelf().getX(),this.getSelf().getY(),this.getSelf().getZ(),standEntity.getHeldItem());
+                                            standEntity.setHeldItem(ItemStack.EMPTY);
+
+                                            ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                                            animateStand(StandEntity.BLOCK_RETRACT);
+                                            S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 10);
+                                            this.setCooldown(PowerIndex.SKILL_2, 10);
                                             this.getSelf().level().addFreshEntity(itemDrop);
                                             return true;
 
@@ -807,12 +814,15 @@ public class BlockGrabPreset extends NewPunchingStand {
                 if (((BlockItem) standEntity.getHeldItem().getItem()).getBlock() instanceof RotatedPillarBlock){
                     direction = $$0.getDirection();
                 }
-
                 if (((BlockItem)standEntity.getHeldItem().getItem()).place(new DirectionalPlaceContext(this.getSelf().level(),
                         pos,
                         direction, standEntity.getHeldItem(),
                         direction)) != InteractionResult.FAIL){
                     return true;
+                } else {
+                    if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.banDirectionalBlockPlacingFailure){
+                        return true;
+                    }
                 }
             }
 

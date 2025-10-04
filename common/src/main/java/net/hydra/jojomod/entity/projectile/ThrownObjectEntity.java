@@ -420,6 +420,10 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                                 direction)) != InteractionResult.FAIL){
                             this.tempDirection = direction;
                             return true;
+                        } else {
+                            if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.banDirectionalBlockPlacingFailure){
+                                return true;
+                            }
                         }
                     }
                 } catch(Exception e) {
