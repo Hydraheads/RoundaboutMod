@@ -1,5 +1,6 @@
 package net.hydra.jojomod.access;
 
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
 import net.hydra.jojomod.util.PlayerMaskSlots;
@@ -7,11 +8,13 @@ import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 
 public interface IPlayerEntity {
     Inventory roundabout$GetInventory();
     boolean roundabout$getBlinded();
     byte roundabout$getModChest();
+    float rdbt$mutualMiningSpeedFunction(BlockState $$0, StandPowers powers);
     void roundabout$setModChest(byte chestType);
     void roundabout$setBlinded(boolean blinded);
     void roundabout$SetPos(byte Pos);
