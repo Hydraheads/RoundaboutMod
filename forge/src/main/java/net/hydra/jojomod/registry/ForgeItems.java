@@ -323,6 +323,8 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new NonCharacterVisage(null))));
     public static final RegistryObject<Item> MODIFICATION_MASK = addToTab(ITEMS.register("modification_mask",
             () -> new ModificationMaskItem(new Item.Properties().stacksTo(1), new ModificationVisage(null))));
+    public static final RegistryObject<Item> SPEEDWAGON_MASK = addToTab(ITEMS.register("speedwagon_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new SpeedwagonVisage(null))));
     public static final RegistryObject<Item> JOTARO_MASK = addToTab(ITEMS.register("jotaro_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new JotaroVisage(null))));
     public static final RegistryObject<Item> JOTARO_4_MASK = addToTab(ITEMS.register("jotaro_4_mask",
