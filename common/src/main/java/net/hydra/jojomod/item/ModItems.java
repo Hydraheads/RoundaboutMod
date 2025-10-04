@@ -102,6 +102,8 @@ public class ModItems {
     public static Item JOTARO_4_MASK;
     public static Item JOTARO_6_MASK;
     public static Item DIO_MASK;
+    public static Item DIO_VAMPIRE_MASK;
+    public static Item SPEEDWAGON_MASK;
     public static Item ENYA_MASK;
     public static Item ENYA_OVA_MASK;
     public static Item AVDOL_MASK;
@@ -161,22 +163,25 @@ public class ModItems {
                 ClientNetworking.getAppropriateConfig().cinderellaSettings.emeraldCostModificationVisage);
         int characterCostExp = ClientNetworking.getAppropriateConfig().cinderellaSettings.levelCostCharacterVisage;
         int characterCostEmerald = ClientNetworking.getAppropriateConfig().cinderellaSettings.emeraldCostCharacterVisage;
+
+        addToVisageStore(DIO_VAMPIRE_MASK,1, characterCostExp, characterCostEmerald);
+        addToVisageStore(SPEEDWAGON_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(JOTARO_MASK,1, characterCostExp, characterCostEmerald);
-        addToVisageStore(JOTARO_4_MASK,1, characterCostExp, characterCostEmerald);
-        addToVisageStore(JOTARO_6_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(AVDOL_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(DIO_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(ENYA_MASK,1, characterCostExp, characterCostEmerald);
+        addToVisageStore(JOTARO_4_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(AYA_MASK,1, characterCostExp, characterCostEmerald);
+        addToVisageStore(JOTARO_6_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(GUCCIO_MASK,1, characterCostExp, characterCostEmerald);
-        addToVisageStore(DIEGO_MASK,1, characterCostExp, characterCostEmerald);
-        addToVisageStore(POCOLOCO_MASK,1, characterCostExp, characterCostEmerald);
-        addToVisageStore(RINGO_MASK,1, characterCostExp, characterCostEmerald);
-        addToVisageStore(VALENTINE_MASK,1, characterCostExp, characterCostEmerald);
-        addToVisageStore(JOSUKE_PART_EIGHT_MASK,1, characterCostExp, characterCostEmerald);
-        addToVisageStore(HATO_MASK,1, characterCostExp, characterCostEmerald);
+        addToVisageStore(DIEGO_MASK,2, characterCostExp, characterCostEmerald);
+        addToVisageStore(POCOLOCO_MASK,2, characterCostExp, characterCostEmerald);
+        addToVisageStore(RINGO_MASK,2, characterCostExp, characterCostEmerald);
+        addToVisageStore(VALENTINE_MASK,2, characterCostExp, characterCostEmerald);
+        addToVisageStore(JOSUKE_PART_EIGHT_MASK,2, characterCostExp, characterCostEmerald);
+        addToVisageStore(HATO_MASK,2, characterCostExp, characterCostEmerald);
         if (ClientNetworking.getAppropriateConfig().cinderellaSettings.enableJojoveinVisagesInShop){
-            addToVisageStore(SHIZUKA_MASK,2, characterCostExp, characterCostEmerald);
+            addToVisageStore(SHIZUKA_MASK,3, characterCostExp, characterCostEmerald);
         }
         ComposterBlock.COMPOSTABLES.put(LOCACACA_PIT, 0.3f);
         ComposterBlock.COMPOSTABLES.put(NEW_LOCACACA, 0.65f);
