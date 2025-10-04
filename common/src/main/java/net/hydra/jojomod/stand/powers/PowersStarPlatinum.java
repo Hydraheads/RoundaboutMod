@@ -1133,18 +1133,20 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass){
                 $$1.add(StarPlatinumEntity.MANGA_SKIN);
+                $$1.add(StarPlatinumEntity.FIRST_SKIN);
                 $$1.add(StarPlatinumEntity.OVA_SKIN);
                 $$1.add(StarPlatinumEntity.FOUR_DEE);
             } if (Level > 2 || bypass){
                 $$1.add(StarPlatinumEntity.JOJOVELLER);
                 $$1.add(StarPlatinumEntity.VOLUME_39);
                 $$1.add(StarPlatinumEntity.GREEN_SKIN);
-            } if (Level > 3 || bypass){
                 $$1.add(StarPlatinumEntity.GREEN_2);
+            } if (Level > 3 || bypass){
                 $$1.add(StarPlatinumEntity.ARCADE);
                 $$1.add(StarPlatinumEntity.ARCADE_2);
-            } if (Level > 4 || bypass){
                 $$1.add(StarPlatinumEntity.BASEBALL_SKIN);
+            } if (Level > 4 || bypass){
+                $$1.add(StarPlatinumEntity.LIGHT);
                 $$1.add(StarPlatinumEntity.TREE);
                 $$1.add(StarPlatinumEntity.NETHER);
                 $$1.add(StarPlatinumEntity.JUMP_13);
@@ -1155,7 +1157,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             } if (Level > 6 || bypass){
                 $$1.add(StarPlatinumEntity.PART_6_SKIN);
                 $$1.add(StarPlatinumEntity.MANGA_PURPLE_SKIN);
-                $$1.add(StarPlatinumEntity.FIRST_SKIN);
+                $$1.add(StarPlatinumEntity.PHANTOM);
                 $$1.add(StarPlatinumEntity.BETA);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
                 $$1.add(StarPlatinumEntity.ATOMIC_SKIN);
@@ -1879,6 +1881,10 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return Component.translatable(  "skins.roundabout.star_platinum.tree");
         } else if (skinId == StarPlatinumEntity.NETHER){
             return Component.translatable(  "skins.roundabout.star_platinum.nether");
+        } else if (skinId == StarPlatinumEntity.LIGHT){
+            return Component.translatable(  "skins.roundabout.star_platinum.light");
+        } else if (skinId == StarPlatinumEntity.PHANTOM){
+            return Component.translatable(  "skins.roundabout.star_platinum.phantom");
         }
         return Component.translatable(  "skins.roundabout.star_platinum.base");
     }
