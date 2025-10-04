@@ -841,6 +841,9 @@ public class PowersRatt extends NewDashPreset {
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
 
+        if (getValidPlacement() != null && !isPlaced()) {
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+        }
 
         if (shotcooldown != 0) {
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
