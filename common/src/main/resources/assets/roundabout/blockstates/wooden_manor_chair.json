@@ -1,8 +1,13 @@
 {
   "variants": {
-    "facing=north": { "model": "roundabout:block/wooden_manor_chair" },
-    "facing=south": { "model": "roundabout:block/wooden_manor_chair", "y": 180 },
-    "facing=west":  { "model": "roundabout:block/wooden_manor_chair", "y": 270 },
-    "facing=east":  { "model": "roundabout:block/wooden_manor_chair", "y": 90 }
+    "facing=north,half=lower": { "model": "roundabout:block/wooden_manor_chair_lower" },
+    "facing=east,half=lower":  { "model": "roundabout:block/wooden_manor_chair_lower", "y": 90 },
+    "facing=south,half=lower": { "model": "roundabout:block/wooden_manor_chair_lower", "y": 180 },
+    "facing=west,half=lower":  { "model": "roundabout:block/wooden_manor_chair_lower", "y": 270 },
+
+    "facing=north,half=upper": { "model": "roundabout:block/wooden_manor_chair_upper" },
+    "facing=east,half=upper":  { "model": "roundabout:block/wooden_manor_chair_upper", "y": 90 },
+    "facing=south,half=upper": { "model": "roundabout:block/wooden_manor_chair_upper", "y": 180 },
+    "facing=west,half=upper":  { "model": "roundabout:block/wooden_manor_chair_upper", "y": 270 }
   }
 }

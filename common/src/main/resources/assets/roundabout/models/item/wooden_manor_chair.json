@@ -1,6 +1,6 @@
 
 {
-  "parent": "roundabout:block/wooden_manor_chair",
+  "parent": "roundabout:block/wooden_manor_chair_lower",
   "display": {
     "thirdperson_righthand": {
       "rotation": [ 0, 0, 0 ],

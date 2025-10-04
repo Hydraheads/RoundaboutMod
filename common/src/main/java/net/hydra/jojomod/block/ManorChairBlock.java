@@ -8,6 +8,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -16,7 +17,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -27,68 +31,120 @@ public class ManorChairBlock extends Block {
 
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
-    protected static final VoxelShape SHAPE = Shapes.or(
-            Block.box(0, 0, 0, 1, 11, 2),       // leg front-left
-            Block.box(15, 16, 0, 16, 17, 14),   // top rail right
-            Block.box(15, 13, 1, 16, 16, 2),    // small vertical bit
-            Block.box(0, 16, 0, 1, 17, 14),     // top rail left
-            Block.box(0, 13, 1, 1, 16, 2),      // small vertical bit left
-            Block.box(0, 11, 0, 16, 13, 16),    // seat
-            Block.box(4, 30, 14, 12, 31, 16),   // backrest slat
-            Block.box(14, 30, 14, 16, 32, 16),  // back post right top
-            Block.box(0, 30, 14, 2, 32, 16),    // back post left top
-            Block.box(14, 20, 14, 16, 22, 16),  // mid back post right
-            Block.box(0, 20, 14, 2, 22, 16),    // mid back post left
-            Block.box(14, 22, 14, 16, 30, 16),  // long back post right
-            Block.box(0, 22, 14, 2, 30, 16),    // long back post left
-            Block.box(14, 13, 14, 16, 20, 16),  // back post bottom right
-            Block.box(0, 13, 14, 2, 20, 16),    // back post bottom left
-            Block.box(2, 13, 14, 14, 30, 16),   // big backboard
-            Block.box(15, 0, 14, 16, 11, 16),   // back leg right
-            Block.box(14, 0, 0, 15, 11, 1),     // front-right leg
-            Block.box(15, 0, 0, 16, 11, 2),     // front-right leg adjacent
-            Block.box(0, 0, 14, 1, 11, 16),     // back leg left
-            Block.box(14, 0, 15, 15, 11, 16),   // inner back leg right
-            Block.box(1, 0, 15, 2, 11, 16),     // inner back leg left
-            Block.box(1, 0, 0, 2, 11, 1)
+    private static final VoxelShape LOWER_BASE = Shapes.or(
+            Block.box(14,      0,   0, 16, 10,  2), // leg right bottom
+            Block.box(14,     12,   0, 16, 16,  2), // leg right top
+            Block.box( 0,      0,   0,  2, 10,  2), // leg left bottom
+            Block.box( 0,     12,   0,  2, 16,  2), // leg left top
+            Block.box( 0,  13.95,1.875,  2,15.95,13.875), // left side rail
+            Block.box( 0,     12,  14, 16, 16, 16), // back rail
+            Block.box( 0,     10,   0, 16, 12, 16), // seat support
+            Block.box(14.025, 14,1.975, 16, 16,13.975),  // right side rail
+            Block.box( 0,      0,  14,  2, 10, 16), // back-left leg bottom
+            Block.box(14,      0,  14, 16, 10, 16) // back-right leg bottom
     );
 
-    private static final VoxelShape NORTH_SHAPE = SHAPE;
-    private static final VoxelShape EAST_SHAPE = rotateShape(SHAPE, Direction.EAST);
-    private static final VoxelShape SOUTH_SHAPE = rotateShape(SHAPE, Direction.SOUTH);
-    private static final VoxelShape WEST_SHAPE = rotateShape(SHAPE, Direction.WEST);
+    private static final VoxelShape UPPER_BASE =
+            Block.box(0, 0, 14, 16, 14, 16);
+
+    private static final VoxelShape LOWER_N = LOWER_BASE;
+    private static final VoxelShape LOWER_E = rotateShape(LOWER_BASE, Direction.EAST);
+    private static final VoxelShape LOWER_S = rotateShape(LOWER_BASE, Direction.SOUTH);
+    private static final VoxelShape LOWER_W = rotateShape(LOWER_BASE, Direction.WEST);
+
+    private static final VoxelShape UPPER_N = UPPER_BASE;
+    private static final VoxelShape UPPER_E = rotateShape(UPPER_BASE, Direction.EAST);
+    private static final VoxelShape UPPER_S = rotateShape(UPPER_BASE, Direction.SOUTH);
+    private static final VoxelShape UPPER_W = rotateShape(UPPER_BASE, Direction.WEST);
+
+    public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
+
 
     public ManorChairBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HALF, DoubleBlockHalf.LOWER));
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+        BlockPos pos = context.getClickedPos();
+        Level level = context.getLevel();
+
+        if (pos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockState(pos.above()).canBeReplaced(context)) {
+            return this.defaultBlockState()
+                    .setValue(FACING, context.getHorizontalDirection().getOpposite())
+                    .setValue(HALF, DoubleBlockHalf.LOWER);
+        }
+        return null;
     }
+
+    @Override
+    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
+        if (state.getValue(HALF) == DoubleBlockHalf.LOWER) {
+            BlockPos above = pos.above();
+            if (level.getBlockState(above).isAir()) {
+                level.setBlock(above, state.setValue(HALF, DoubleBlockHalf.UPPER), 3);
+            }
+        }
+    }
+
+    @Override
+    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        DoubleBlockHalf half = state.getValue(HALF);
+        BlockPos otherPos = (half == DoubleBlockHalf.LOWER) ? pos.above() : pos.below();
+        BlockState otherState = level.getBlockState(otherPos);
+
+        if (otherState.is(this) && otherState.getValue(HALF) != half) {
+            level.destroyBlock(otherPos, !player.isCreative());
+        }
+
+        super.playerWillDestroy(level, pos, state, player);
+    }
+
+
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
+        builder.add(FACING, HALF);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return switch (state.getValue(FACING)) {
-            case NORTH -> NORTH_SHAPE;
-            case EAST -> EAST_SHAPE;
-            case SOUTH -> SOUTH_SHAPE;
-            case WEST -> WEST_SHAPE;
-            default -> NORTH_SHAPE;
-        };
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext ctx) {
+        Direction f = state.getValue(FACING);
+        if (state.getValue(HALF) == DoubleBlockHalf.LOWER) {
+            return switch (f) {
+                case NORTH -> LOWER_N;
+                case EAST  -> LOWER_E;
+                case SOUTH -> LOWER_S;
+                case WEST  -> LOWER_W;
+                default    -> LOWER_N;
+            };
+        } else {
+            return switch (f) {
+                case NORTH -> UPPER_N;
+                case EAST  -> UPPER_E;
+                case SOUTH -> UPPER_S;
+                case WEST  -> UPPER_W;
+                default    -> UPPER_N;
+            };
+        }
     }
+
 
     @SuppressWarnings("deprecation")
     @Override
-    public boolean skipRendering(BlockState p_53972_, BlockState p_53973_, Direction p_53974_) {
-        return false;
+    public boolean skipRendering(BlockState state, BlockState neighbor, Direction side) {
+        if (neighbor.getBlock() == this && state.getValue(FACING) == neighbor.getValue(FACING)) {
+            if (state.getValue(HALF) == DoubleBlockHalf.LOWER
+                    && neighbor.getValue(HALF) == DoubleBlockHalf.UPPER
+                    && side == Direction.UP) return true;
+            if (state.getValue(HALF) == DoubleBlockHalf.UPPER
+                    && neighbor.getValue(HALF) == DoubleBlockHalf.LOWER
+                    && side == Direction.DOWN) return true;
+        }
+        return super.skipRendering(state, neighbor, side);
     }
+
 
     @SuppressWarnings("deprecation")
     @Override
@@ -97,31 +153,39 @@ public class ManorChairBlock extends Block {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
+                                 InteractionHand hand, BlockHitResult hit) {
+        if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
+            return InteractionResult.PASS;
+        }
+
+        if (player.isShiftKeyDown()) {
+            return InteractionResult.PASS;
+        }
+
         if (!level.isClientSide) {
             double x = pos.getX() + 0.5;
             double y = pos.getY() + 1.0;
             double z = pos.getZ() + 0.5;
 
             float yaw = state.getValue(FACING).toYRot();
-            BlockPos blockAbove = pos.above();
-            if (level.getBlockState(blockAbove).isAir()) {
-                if (player instanceof ServerPlayer serverPlayer) {
-                    serverPlayer.connection.teleport(x, y, z, yaw, serverPlayer.getXRot());
-                    serverPlayer.setYHeadRot(yaw);
-                    serverPlayer.setYBodyRot(yaw);
-                    IPlayerEntity ipe = ((IPlayerEntity) player);
-                    ipe.roundabout$SetPoseEmote((byte) 11);
-                } else {
-                    player.teleportTo(x, y, z);
-                    player.setYRot(yaw);
-                    player.setYHeadRot(yaw);
-                    player.setYBodyRot(yaw);
-                }
+
+            if (player instanceof ServerPlayer sp) {
+                sp.connection.teleport(x, y, z, yaw, sp.getXRot());
+                sp.setYHeadRot(yaw);
+                sp.setYBodyRot(yaw);
+                IPlayerEntity ipe = (IPlayerEntity) player;
+                ipe.roundabout$SetPoseEmote((byte) 11);
+            } else {
+                player.teleportTo(x, y, z);
+                player.setYRot(yaw);
+                player.setYHeadRot(yaw);
+                player.setYBodyRot(yaw);
             }
         }
-        return InteractionResult.FAIL;
+        return InteractionResult.CONSUME;
     }
+
 
     private static VoxelShape rotateShape(VoxelShape shape, Direction to) {
         VoxelShape rotated = shape;
