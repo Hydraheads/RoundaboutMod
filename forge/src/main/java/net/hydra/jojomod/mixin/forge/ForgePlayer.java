@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.forge;
 
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -128,35 +129,8 @@ public abstract class ForgePlayer extends LivingEntity {
         StandPowers powers = ((StandUser) this).roundabout$getStandPowers();
         if (standActive) {
             if (((StandUser) this).roundabout$getStandPowers().canUseMiningStand()) {
-                float mspeed;
-                if (!$$0.is(BlockTags.MINEABLE_WITH_PICKAXE)){
-                    if ($$0.is(BlockTags.MINEABLE_WITH_SHOVEL)) {
-                        mspeed = powers.getShovelMiningSpeed() / 2;
 
-                    } else if ($$0.is(BlockTags.MINEABLE_WITH_AXE)){
-                            mspeed= powers.getAxeMiningSpeed()/2;
-                    } else {
-                        mspeed= powers.getSwordMiningSpeed()/4;
-                    }
-                } else {
-                    mspeed= powers.getPickMiningSpeed()*3;
-                }
-
-
-                if (this.isEyeInFluid(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(this)) {
-                    mspeed /= 5.0F;
-                }
-
-                if (!this.onGround()) {
-                    mspeed /= 5.0F;
-                }
-
-                if (this.isCrouching() && $$0.getBlock() instanceof DropExperienceBlock && ClientNetworking.getAppropriateConfig().generalStandSettings.crouchingStopsStandsFromMiningOres) {
-                    mspeed = 0.0F;
-                }
-
-                mspeed *= powers.getMiningMultiplier();
-                cir.setReturnValue(mspeed);
+                cir.setReturnValue(((IPlayerEntity)this).rdbt$mutualMiningSpeedFunction($$0,powers));
             }
         }
     }

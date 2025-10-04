@@ -38,6 +38,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -976,39 +977,70 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     protected void roundabout$getDestroySpeed2(BlockState $$0, CallbackInfoReturnable<Float> cir) {
         StandPowers powers = ((StandUser) this).roundabout$getStandPowers();
         if (((StandUser) this).roundabout$getActive() && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()) {
-            float mspeed;
-            if (!$$0.is(BlockTags.MINEABLE_WITH_PICKAXE)){
-                if ($$0.is(BlockTags.MINEABLE_WITH_SHOVEL)) {
-                    mspeed = powers.getShovelMiningSpeed() / 2;
-                } else if ($$0.is(BlockTags.MINEABLE_WITH_AXE)){
-                    mspeed = powers.getAxeMiningSpeed() / 2;
-                } else {
-                    mspeed= powers.getSwordMiningSpeed()/4;
-                }
-            } else {
-                mspeed= powers.getPickMiningSpeed()*3;
-            }
 
-
-            if (this.isEyeInFluid(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(this)) {
-                mspeed /= 5.0F;
-            }
-
-            if (!this.onGround()) {
-                mspeed /= 5.0F;
-            }
-
-            if (this.isCrouching() && $$0.getBlock() instanceof DropExperienceBlock && ClientNetworking.getAppropriateConfig().generalStandSettings.crouchingStopsStandsFromMiningOres) {
-                mspeed = 0.0F;
-            }
-
-            if ($$0.is(Blocks.COBWEB)){
-                mspeed *= 5.0F;
-            }
-            mspeed *= powers.getMiningMultiplier();
-
-            cir.setReturnValue(mspeed);
+            cir.setReturnValue(rdbt$mutualMiningSpeedFunction($$0,powers));
         }
+    }
+
+    @Override
+    @Unique
+    public float rdbt$mutualMiningSpeedFunction(BlockState $$0,StandPowers powers){
+        float mspeed;
+        if (!$$0.is(BlockTags.MINEABLE_WITH_PICKAXE)){
+            if ($$0.is(BlockTags.MINEABLE_WITH_SHOVEL)) {
+                mspeed = powers.getShovelMiningSpeed() / 2;
+            } else if ($$0.is(BlockTags.MINEABLE_WITH_AXE)){
+                mspeed = powers.getAxeMiningSpeed() / 2;
+            } else {
+                mspeed= powers.getSwordMiningSpeed()/4;
+            }
+        } else {
+            mspeed= powers.getPickMiningSpeed()*3;
+        }
+
+
+        if (this.isEyeInFluid(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(this)) {
+            mspeed /= 5.0F;
+        }
+
+        if (!this.onGround()) {
+            mspeed /= 5.0F;
+        }
+
+        if (this.isCrouching() && $$0.getBlock() instanceof DropExperienceBlock && ClientNetworking.getAppropriateConfig().generalStandSettings.crouchingStopsStandsFromMiningOres) {
+            mspeed = 0.0F;
+        }
+
+        if ($$0.is(Blocks.COBWEB)){
+            mspeed *= 5.0F;
+        }
+
+        if (MobEffectUtil.hasDigSpeed(this)) {
+            mspeed *= 1.0F + (float)(MobEffectUtil.getDigSpeedAmplification(this) + 1) * 0.2F;
+        }
+
+        if (this.hasEffect(MobEffects.DIG_SLOWDOWN)) {
+            float f1;
+            switch (this.getEffect(MobEffects.DIG_SLOWDOWN).getAmplifier()) {
+                case 0:
+                    f1 = 0.3F;
+                    break;
+                case 1:
+                    f1 = 0.09F;
+                    break;
+                case 2:
+                    f1 = 0.0027F;
+                    break;
+                case 3:
+                default:
+                    f1 = 8.1E-4F;
+            }
+
+            mspeed *= f1;
+        }
+
+        mspeed *= powers.getMiningMultiplier();
+        return  mspeed;
     }
 
     /**If you are in a barrage, does not play the hurt sound*/
