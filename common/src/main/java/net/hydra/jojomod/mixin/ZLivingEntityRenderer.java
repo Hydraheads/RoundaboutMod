@@ -13,10 +13,14 @@ import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.entity.corpses.FallenSpider;
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
+import net.hydra.jojomod.entity.visages.mobs.JosukePartEightNPC;
 import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
 import net.hydra.jojomod.entity.visages.mobs.PlayerSteveNPC;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.visagedata.JosukePartEightVisage;
+import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.AgeableListModel;
@@ -32,6 +36,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -153,6 +158,14 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                     1.0f+offset.y,
                     1.0f+offset.z
             );
+        }
+        if (entity instanceof Player pl && pl.isSleeping()){
+            ItemStack stack = ((IPlayerEntity) pl).roundabout$getMaskSlot();
+            if (stack !=null && !stack.isEmpty() && stack.is(ModItems.JOSUKE_PART_EIGHT_MASK)){
+                matrices.translate(0,-0.4,0);
+            }
+        } else if (entity instanceof JosukePartEightNPC jp && jp.isSleeping()){
+            matrices.translate(0,-0.4,0);
         }
     }
 

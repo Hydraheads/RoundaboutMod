@@ -122,6 +122,10 @@ public class ModItems {
     public static Item SHIZUKA_MASK;
     public static Item INTERDIMENSIONAL_KEY;
 
+    public static Item PAINTING_VAN_GOUGH;
+    public static Item PAINTING_MONA_LISA;
+    public static Item PAINTING_BIRTH_OF_VENUS;
+
     public static Item FLESH_BUCKET;
 
     public static CreativeModeTab FOG_BLOCK_ITEMS;

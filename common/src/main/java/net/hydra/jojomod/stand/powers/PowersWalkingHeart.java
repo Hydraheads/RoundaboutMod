@@ -600,7 +600,7 @@ public class PowersWalkingHeart extends NewDashPreset {
 
     public float getSpikeDamage(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 2.1F* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod((float) ((float) 1.8F* (ClientNetworking.getAppropriateConfig().
                     walkingHeartSettings.walkingHeartAttackMultOnPlayers*0.01)));
         } else {
             return levelupDamageMod((float) ((float) 3* (ClientNetworking.getAppropriateConfig().

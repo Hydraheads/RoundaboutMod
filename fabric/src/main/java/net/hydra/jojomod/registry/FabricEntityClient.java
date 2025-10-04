@@ -6,6 +6,9 @@ import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.models.WornStoneMaskModel;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
+import net.hydra.jojomod.client.models.paintings.MonaLisaPaintingRenderer;
+import net.hydra.jojomod.client.models.paintings.VanGoghPaintingRenderer;
+import net.hydra.jojomod.client.models.paintings.VenusPaintingRenderer;
 import net.hydra.jojomod.client.models.projectile.*;
 import net.hydra.jojomod.client.models.projectile.renderers.*;
 import net.hydra.jojomod.client.models.stand.*;
@@ -118,6 +121,9 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.FALLEN_VILLAGER, FallenVillagerRenderer::new);
         EntityRendererRegistry.register(FabricEntities.FALLEN_CREEPER, FallenCreeperRenderer::new);
         EntityRendererRegistry.register(FabricEntities.FALLEN_PHANTOM,FallenPhantomRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.VAN_GOUGH_PAINTING, VanGoghPaintingRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.VENUS_PAINTING, VenusPaintingRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.MONA_LISA_PAINTING, MonaLisaPaintingRenderer::new);
         /*Models*/
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.WOLF_LAYER, TerrierEntityModel::createBodyLayerTerrier);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);
@@ -162,6 +168,7 @@ public class FabricEntityClient {
         BlockEntityRenderers.register(ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY, BubbleScaffoldBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlocks.INVISIBLE_BLOCK_ENTITY, InvisiBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlocks.D4C_LIGHT_BLOCK_ENTITY, D4CLightBlockEntityRenderer::new);
+
 
         ModStrayModels.SHOOTING_ARM = new SoftAndWetShootingArmModel();
         ModStrayModels.HEY_YA = new HeyYaModel();

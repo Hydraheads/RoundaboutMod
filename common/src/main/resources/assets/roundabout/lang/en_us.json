@@ -206,6 +206,10 @@
   "item.roundabout.aesthetician_spawn_egg": "Aesthetician Spawn Egg",
   "item.roundabout.zombie_aesthetician_spawn_egg": "Zombie Aesthetician Spawn Egg",
 
+  "item.roundabout.painting_van_gough": "Van Gough's Self-Portrait",
+  "item.roundabout.painting_mona_lisa": "Mona Lisa",
+  "item.roundabout.painting_venus": "Birth of Venus",
+
   "entity.roundabout.terrier": "Boston Terrier",
   "entity.roundabout.the_world": "The World",
   "entity.roundabout.the_world_ultimate": "The World",
@@ -424,6 +428,8 @@
   "death.attack.melting.player":"%1$s was reduced to a puddle by %2$s",
   "death.attack.dagger": "%1$s became a human sacrifice",
   "death.attack.dagger.item": "%1$s became a human sacrifice",
+  "death.attack.dagger.player": "%1$s became a human sacrifice",
+  "death.attack.dagger.player.item": "%1$s became a human sacrifice",
 
 
   "item.glaive.charge_power": "Charge Attack",
@@ -1068,6 +1074,8 @@
   "skins.roundabout.star_platinum.jump_13": "Jump 13",
   "skins.roundabout.star_platinum.tree": "Tree",
   "skins.roundabout.star_platinum.nether": "Nether",
+  "skins.roundabout.star_platinum.light": "Shining",
+  "skins.roundabout.star_platinum.phantom": "Phantom",
 
   "skins.roundabout.the_world.base": "Part 3",
   "skins.roundabout.the_world.manga": "Manga",
@@ -2175,6 +2183,11 @@
 
   "config.roundabout.namedSBRHorseSkins.name": "Named SBR Horses",
   "config.roundabout.namedSBRHorseSkins.desc": "Naming horses after select SBR ones changes their skins.",
+
+
+  "config.roundabout.skeletonFireInterval.name": "Skeleton Fire Interval",
+  "config.roundabout.skeletonFireInterval.desc": "How long in between the skeleton corpses' synchronized shots for Justice's corpse army.",
+
 
   "config.roundabout.timeStopFreezesScreen.name": "Screen Freeze",
   "config.roundabout.timeStopFreezesScreen.desc": "Whether or not time stop makes you unable to see anything happening, as the screen is frozen. This option is off by default because of the unexciting implications of seeing nothing moving for 9 seconds.",

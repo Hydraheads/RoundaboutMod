@@ -6,6 +6,9 @@ import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
+import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
+import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
+import net.hydra.jojomod.entity.paintings.VanGoughPainting;
 import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
@@ -80,6 +83,10 @@ public class ModEntities {
     public static EntityType<EnyaNPC> ENYA;
 
     public static EntityType<JotaroNPC> JOTARO;
+
+    public static EntityType<VanGoughPainting> VAN_GOUGH_PAINTING;
+    public static EntityType<MonaLisaPainting> MONA_LISA_PAINTING;
+    public static EntityType<BirthOfVenusPainting> BIRTH_OF_VENUS_PAINTING;
 
     public static EntityType<DIONPC> DIO;
     public static EntityType<AvdolNPC> AVDOL;

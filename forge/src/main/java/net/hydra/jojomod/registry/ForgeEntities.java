@@ -8,6 +8,9 @@ import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
+import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
+import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
+import net.hydra.jojomod.entity.paintings.VanGoughPainting;
 import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
@@ -189,6 +192,22 @@ public class ForgeEntities {
                     EntityType.Builder.of(FallenPhantom::new, MobCategory.MISC).sized(0.8F, 0.5F).clientTrackingRange(8).
                             build(new ResourceLocation(Roundabout.MOD_ID, "fallen_phantom").toString())
             );
+    public static final RegistryObject<EntityType<VanGoughPainting>> VAN_GOUGH_PAINTING =
+            ENTITY_TYPES.register("painting_van_gough", () ->
+                    EntityType.Builder.of(VanGoughPainting::new, MobCategory.MISC).sized(0.5F, 0.5F).updateInterval(Integer.MAX_VALUE).clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "painting_van_gough").toString())
+            );
+    public static final RegistryObject<EntityType<MonaLisaPainting>> MONA_LISA_PAINTING =
+            ENTITY_TYPES.register("painting_mona_lisa", () ->
+                    EntityType.Builder.of(MonaLisaPainting::new, MobCategory.MISC).sized(0.5F, 0.5F).updateInterval(Integer.MAX_VALUE).clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "painting_mona_lisa").toString())
+            );
+    public static final RegistryObject<EntityType<BirthOfVenusPainting>> BIRTH_OF_VENUS_PAINTING =
+            ENTITY_TYPES.register("painting_venus", () ->
+                    EntityType.Builder.of(BirthOfVenusPainting::new, MobCategory.MISC).sized(0.5F, 0.5F).updateInterval(Integer.MAX_VALUE).clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "painting_venus").toString())
+            );
+
     public static final RegistryObject<EntityType<TheWorldEntity>> THE_WORLD =
             ENTITY_TYPES.register("the_world", () ->
                     EntityType.Builder.of(TheWorldEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).

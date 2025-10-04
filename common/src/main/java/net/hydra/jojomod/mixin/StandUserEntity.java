@@ -3254,7 +3254,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     @Unique
     public boolean roundabout$mutualActuallyHurt(DamageSource $$0, float $$1){
-        if (!this.isInvulnerableTo($$0)) {
+        if (!this.isInvulnerableTo($$0) && $$1 > 0) {
 
             Entity zent = $$0.getEntity();
             if (zent != null && zent instanceof LivingEntity LE){

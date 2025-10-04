@@ -2,7 +2,9 @@ package net.hydra.jojomod.client.models.layers;
 
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.item.BowlerHatItem;
 import net.hydra.jojomod.util.MainUtil;
@@ -30,6 +32,8 @@ public class WornStoneMaskLayer<T extends LivingEntity, A extends HumanoidModel<
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
         if (MainUtil.isWearingStoneMask(entity)) {
+            if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
+                return;
             LivingEntity livent = entity;
             float heyFull = 1;
 
