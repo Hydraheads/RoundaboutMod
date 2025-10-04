@@ -179,6 +179,7 @@ public class ModBlocks {
                     .mapColor(MapColor.WOOD)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(2.0F).sound(SoundType.WOOD).ignitedByLava()
+                    .pushReaction(PushReaction.BLOCK)
     );
     public static Block WOOL_SLAB_WHITE_PROPERTIES = new SlabBlock(
             BlockBehaviour.Properties.of()

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "roundabout:wool_slab_dark_green"
+        "recipe": "roundabout:wool_slab_dark_green_shaped"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "roundabout:wool_slab_dark_green"
+      "roundabout:wool_slab_dark_green_shaped"
     ]
   },
   "sends_telemetry_event": false

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "roundabout:wool_stairs_magenta"
+        "recipe": "roundabout:wool_stairs_magenta_shaped"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "roundabout:wool_stairs_magenta"
+      "roundabout:wool_stairs_magenta_shaped"
     ]
   },
   "sends_telemetry_event": false
