@@ -140,6 +140,7 @@ public class FabricItems {
     public static Item JOTARO_4_MASK = registerItem("jotaro_4_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroFourVisage(null)));
     public static Item JOTARO_6_MASK = registerItem("jotaro_6_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroSixVisage(null)));
     public static Item DIO_MASK = registerItem("dio_mask", new MaskItem(new Item.Properties().stacksTo(1), new DIOVisage(null)));
+    public static Item DIO_VAMPIRE_MASK = registerItem("dio_vampire_mask", new MaskItem(new Item.Properties().stacksTo(1), new DioVampireVisage(null)));
     public static Item AVDOL_MASK = registerItem("avdol_mask", new MaskItem(new Item.Properties().stacksTo(1), new AvdolVisage(null)));
     public static Item DIEGO_MASK = registerItem("diego_mask", new MaskItem(new Item.Properties().stacksTo(1), new DiegoVisage(null)));
     public static Item VALENTINE_MASK = registerItem("valentine_mask", new MaskItem(new Item.Properties().stacksTo(1), new ValentineVisage(null)));
@@ -286,19 +287,20 @@ public class FabricItems {
                         entries.accept(LUCKY_LIPSTICK);
                         entries.accept(BLANK_MASK);
                         entries.accept(MODIFICATION_MASK);
+                        entries.accept(DIO_VAMPIRE_MASK);
                         entries.accept(JOTARO_MASK);
-                        entries.accept(JOTARO_4_MASK);
-                        entries.accept(JOTARO_6_MASK);
+                        entries.accept(AVDOL_MASK);
                         entries.accept(DIO_MASK);
                         entries.accept(ENYA_MASK);
-                        entries.accept(AVDOL_MASK);
-                        entries.accept(DIEGO_MASK);
-                        entries.accept(VALENTINE_MASK);
-                        entries.accept(JOSUKE_PART_EIGHT_MASK);
+                        entries.accept(JOTARO_4_MASK);
                         entries.accept(AYA_MASK);
+                        entries.accept(JOTARO_6_MASK);
                         entries.accept(GUCCIO_MASK);
+                        entries.accept(DIEGO_MASK);
                         entries.accept(POCOLOCO_MASK);
                         entries.accept(RINGO_MASK);
+                        entries.accept(VALENTINE_MASK);
+                        entries.accept(JOSUKE_PART_EIGHT_MASK);
                         entries.accept(HATO_MASK);
                         entries.accept(SHIZUKA_MASK);
 
@@ -476,6 +478,7 @@ public class FabricItems {
         ModItems.JOTARO_4_MASK = JOTARO_4_MASK;
         ModItems.JOTARO_6_MASK = JOTARO_6_MASK;
         ModItems.DIO_MASK = DIO_MASK;
+        ModItems.DIO_VAMPIRE_MASK = DIO_VAMPIRE_MASK;
         ModItems.AVDOL_MASK = AVDOL_MASK;
         ModItems.DIEGO_MASK = DIEGO_MASK;
         ModItems.POCOLOCO_MASK = POCOLOCO_MASK;
