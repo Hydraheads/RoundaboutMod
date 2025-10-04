@@ -277,97 +277,113 @@ public class ModBlocks {
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
 
-    public static Block WOOL_STAIRS_WHITE_PROPERTIES = new StairsWoolWhiteBlock(
+    public static Block WOOL_STAIRS_WHITE_PROPERTIES = new RoundaboutStairs(
+            Blocks.WHITE_WOOL.defaultBlockState(),
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_STAIRS_BLUE_PROPERTIES = new StairsWoolBlueBlock(
+    public static Block WOOL_STAIRS_BLUE_PROPERTIES = new RoundaboutStairs(
+            Blocks.BLUE_WOOL.defaultBlockState(),
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_STAIRS_CYAN_PROPERTIES = new StairsWoolCyanBlock(
+    public static Block WOOL_STAIRS_CYAN_PROPERTIES = new RoundaboutStairs(
+            Blocks.CYAN_WOOL.defaultBlockState(),
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_STAIRS_DARK_GREEN_PROPERTIES = new StairsWoolDarkGreenBlock(
+    public static Block WOOL_STAIRS_DARK_GREEN_PROPERTIES = new RoundaboutStairs(
+            Blocks.GREEN_WOOL.defaultBlockState(),
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_STAIRS_DARK_GREY_PROPERTIES = new StairsWoolDarkGreyBlock(
+    public static Block WOOL_STAIRS_DARK_GREY_PROPERTIES = new RoundaboutStairs(
+            Blocks.GRAY_WOOL.defaultBlockState(),
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_STAIRS_GREEN_PROPERTIES = new StairsWoolGreenBlock(
+    public static Block WOOL_STAIRS_GREEN_PROPERTIES = new RoundaboutStairs(
+            Blocks.GREEN_WOOL.defaultBlockState(),
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_STAIRS_LIGHT_BLUE_PROPERTIES = new StairsWoolLightBlueBlock(
+    public static Block WOOL_STAIRS_LIGHT_BLUE_PROPERTIES = new RoundaboutStairs(
+            Blocks.LIGHT_BLUE_WOOL.defaultBlockState(),
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_STAIRS_MAGENTA_PROPERTIES = new StairsWoolMagentaBlock(
+    public static Block WOOL_STAIRS_MAGENTA_PROPERTIES = new RoundaboutStairs(
+            Blocks.MAGENTA_WOOL.defaultBlockState(),
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_STAIRS_ORANGE_PROPERTIES = new StairsWoolOrangeBlock(
+    public static Block WOOL_STAIRS_ORANGE_PROPERTIES = new RoundaboutStairs(
+            Blocks.ORANGE_WOOL.defaultBlockState(),
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_STAIRS_PURPLE_PROPERTIES = new StairsWoolPurpleBlock(
+    public static Block WOOL_STAIRS_PURPLE_PROPERTIES = new RoundaboutStairs(
+            Blocks.PURPLE_WOOL.defaultBlockState(),
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_STAIRS_PINK_PROPERTIES = new StairsWoolPinkBlock(
+    public static Block WOOL_STAIRS_PINK_PROPERTIES = new RoundaboutStairs(
+            Blocks.PINK_WOOL.defaultBlockState(),
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_STAIRS_RED_PROPERTIES = new StairsWoolRedBlock(
+    public static Block WOOL_STAIRS_RED_PROPERTIES = new RoundaboutStairs(
+            Blocks.RED_WOOL.defaultBlockState(),
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_STAIRS_YELLOW_PROPERTIES = new StairsWoolYellowBlock(
+    public static Block WOOL_STAIRS_YELLOW_PROPERTIES = new RoundaboutStairs(
+            Blocks.YELLOW_WOOL.defaultBlockState(),
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_STAIRS_LIGHT_GREY_PROPERTIES = new StairsWoolLightGreyBlock(
+    public static Block WOOL_STAIRS_LIGHT_GREY_PROPERTIES = new RoundaboutStairs(
+            Blocks.LIGHT_GRAY_WOOL.defaultBlockState(),
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_STAIRS_BROWN_PROPERTIES = new StairsWoolBrownBlock(
+    public static Block WOOL_STAIRS_BROWN_PROPERTIES = new RoundaboutStairs(
+            Blocks.BROWN_WOOL.defaultBlockState(),
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
-    public static Block WOOL_STAIRS_BLACK_PROPERTIES = new StairsWoolBlackBlock(
+    public static Block WOOL_STAIRS_BLACK_PROPERTIES = new RoundaboutStairs(
+            Blocks.BLACK_WOOL.defaultBlockState(),
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
                     .instrument(NoteBlockInstrument.HARP)
