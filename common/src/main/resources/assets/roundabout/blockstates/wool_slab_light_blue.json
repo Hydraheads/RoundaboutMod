@@ -1,15 +1,13 @@
 {
   "variants": {
-    "type=bottom,facing=north": { "model": "roundabout:block/wool_slab_light_blue" },
-    "type=bottom,facing=south": { "model": "roundabout:block/wool_slab_light_blue", "y": 180 },
-    "type=bottom,facing=west":  { "model": "roundabout:block/wool_slab_light_blue", "y": 270 },
-    "type=bottom,facing=east":  { "model": "roundabout:block/wool_slab_light_blue", "y": 90 },
-
-    "type=top,facing=north": { "model": "roundabout:block/wool_slab_light_blue", "x": 180 },
-    "type=top,facing=south": { "model": "roundabout:block/wool_slab_light_blue", "x": 180, "y": 180 },
-    "type=top,facing=west":  { "model": "roundabout:block/wool_slab_light_blue", "x": 180, "y": 270 },
-    "type=top,facing=east":  { "model": "roundabout:block/wool_slab_light_blue", "x": 180, "y": 90 },
-
-    "type=double": { "model": "roundabout:block/wool_slab_light_blue" }
+    "type=bottom": {
+      "model": "roundabout:block/wool_slab_light_blue"
+    },
+    "type=double": {
+      "model": "minecraft:block/light_blue_wool"
+    },
+    "type=top": {
+      "model": "roundabout:block/wool_slab_light_blue_top"
+    }
   }
 }
