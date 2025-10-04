@@ -25,6 +25,7 @@ public class ForgeCreativeTab {
 
     public static final List<Supplier<? extends ItemLike>> EXAMPLE_TAB_ITEMS = new ArrayList<>();
     public static final List<Supplier<? extends ItemLike>> DISC_TAB_ITEMS = new ArrayList<>();
+    public static final List<Supplier<? extends ItemLike>> BUILDING_TAB_ITEMS = new ArrayList<>();
     public static final List<Supplier<? extends ItemLike>> WIP_TAB_ITEMS = new ArrayList<>();
     public static final List<Supplier<? extends ItemLike>> FOG_TAB_ITEMS = new ArrayList<>();
 
@@ -43,6 +44,15 @@ public class ForgeCreativeTab {
                     .icon(ForgeItems.STAND_DISC_STAR_PLATINUM.get()::getDefaultInstance)
                     .displayItems((displayParams, output) ->
                             DISC_TAB_ITEMS.forEach(itemLike -> output.accept(itemLike.get())))
+                    .withSearchBar()
+                    .build()
+    );
+    public static final RegistryObject<CreativeModeTab> JOJO_BUILDING_GROUP = TABS.register("jojo_building_blocks",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemgroup.jojo_building_blocks"))
+                    .icon(ForgeItems.WOODEN_MANOR_TABLE_ITEM.get()::getDefaultInstance)
+                    .displayItems((displayParams, output) ->
+                            BUILDING_TAB_ITEMS.forEach(itemLike -> output.accept(itemLike.get())))
                     .withSearchBar()
                     .build()
     );
@@ -72,6 +82,11 @@ public class ForgeCreativeTab {
 
     public static <T extends Item> RegistryObject<T> addToDiscTab(RegistryObject<T> itemLike) {
         DISC_TAB_ITEMS.add(itemLike);
+        return itemLike;
+    }
+
+    public static <T extends Item> RegistryObject<T> addToBuildingTab(RegistryObject<T> itemLike) {
+        BUILDING_TAB_ITEMS.add(itemLike);
         return itemLike;
     }
 

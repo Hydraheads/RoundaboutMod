@@ -50,27 +50,27 @@ public class ForgeItems {
             () -> new GasolineCanItem(new Item.Properties().stacksTo(16))));
     public static final RegistryObject<Item> GASOLINE_BUCKET = addToTab(ITEMS.register("gasoline_bucket",
             () -> new GasolineBucketItem(new Item.Properties().stacksTo(1))));
-    public static final RegistryObject<BlockItem> WIRE_TRAP = addToTab(ITEMS.register("wire_trap",
+    public static final RegistryObject<BlockItem> WIRE_TRAP = addToBuildingTab(ITEMS.register("wire_trap",
             () -> new BlockItem(ForgeBlocks.WIRE_TRAP.get(),
                     new Item.Properties()
             )));
-    public static final RegistryObject<BlockItem> BARBED_WIRE = addToTab(ITEMS.register("barbed_wire",
+    public static final RegistryObject<BlockItem> BARBED_WIRE = addToBuildingTab(ITEMS.register("barbed_wire",
             () -> new BlockItem(ForgeBlocks.BARBED_WIRE.get(),
                     new Item.Properties()
             )));
-    public static final RegistryObject<BlockItem> WIRE_BUNDLE = addToTab(ITEMS.register("barbed_wire_bundle",
+    public static final RegistryObject<BlockItem> WIRE_BUNDLE = addToBuildingTab(ITEMS.register("barbed_wire_bundle",
             () -> new BlockItem(ForgeBlocks.BARBED_WIRE_BUNDLE.get(),
                     new Item.Properties()
             )));
-    public static final RegistryObject<BlockItem> ANCIENT_METEOR_ITEM = addToTab(ITEMS.register("ancient_meteor",
+    public static final RegistryObject<BlockItem> ANCIENT_METEOR_ITEM = addToBuildingTab(ITEMS.register("ancient_meteor",
             () -> new BlockItem(ForgeBlocks.ANCIENT_METEOR.get(),
                     new Item.Properties()
             )));
-    public static final RegistryObject<BlockItem> IMPACT_MOUND_ITEM = addToTab(ITEMS.register("impact_mound",
+    public static final RegistryObject<BlockItem> IMPACT_MOUND_ITEM = addToBuildingTab(ITEMS.register("impact_mound",
             () -> new BlockItem(ForgeBlocks.IMPACT_MOUND.get(),
                     new Item.Properties()
             )));
-    public static final RegistryObject<BlockItem> METEOR_BLOCK_ITEM = addToTab(ITEMS.register("meteor_block",
+    public static final RegistryObject<BlockItem> METEOR_BLOCK_ITEM = addToBuildingTab(ITEMS.register("meteor_block",
             () -> new BlockItem(ForgeBlocks.METEOR_BLOCK.get(),
                     new Item.Properties()
             )));
@@ -78,32 +78,156 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.EQUIPPABLE_STONE_MASK_BLOCK.get(),
                     new Item.Properties().stacksTo(1)
             )));
-    public static final RegistryObject<BlockItem> REGAL_WALL_ITEM = addToTab(ITEMS.register("regal_wall",
+    public static final RegistryObject<BlockItem> REGAL_WALL_ITEM = addToBuildingTab(ITEMS.register("regal_wall",
             () -> new BlockItem(ForgeBlocks.REGAL_WALL.get(),
                     new Item.Properties()
             )));
-    public static final RegistryObject<BlockItem> REGAL_FLOOR_ITEM = addToTab(ITEMS.register("regal_floor",
+    public static final RegistryObject<BlockItem> REGAL_FLOOR_ITEM = addToBuildingTab(ITEMS.register("regal_floor",
             () -> new BlockItem(ForgeBlocks.REGAL_FLOOR.get(),
                     new Item.Properties()
             )));
-    public static final RegistryObject<BlockItem> WOODEN_MANOR_TABLE_ITEM = addToTab(ITEMS.register("wooden_manor_table",
+    public static final RegistryObject<BlockItem> WOODEN_MANOR_TABLE_ITEM = addToBuildingTab(ITEMS.register("wooden_manor_table",
             () -> new BlockItem(ForgeBlocks.WOODEN_MANOR_TABLE.get(),
                     new Item.Properties()
             )));
-    public static final RegistryObject<BlockItem> LOCACACA_CACTUS_ITEM = addToTab(ITEMS.register("locacaca_cactus",
+    public static final RegistryObject<BlockItem> WOODEN_MANOR_CHAIR_ITEM = addToBuildingTab(ITEMS.register("wooden_manor_chair",
+            () -> new BlockItem(ForgeBlocks.WOODEN_MANOR_CHAIR.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_SLAB_WHITE_ITEM = addToBuildingTab(ITEMS.register("wool_slab_white",
+            () -> new BlockItem(ForgeBlocks.WOOL_SLAB_WHITE.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_SLAB_BLACK_ITEM = addToBuildingTab(ITEMS.register("wool_slab_black",
+            () -> new BlockItem(ForgeBlocks.WOOL_SLAB_BLACK.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_SLAB_BLUE_ITEM = addToBuildingTab(ITEMS.register("wool_slab_blue",
+            () -> new BlockItem(ForgeBlocks.WOOL_SLAB_BLUE.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_SLAB_CYAN_ITEM = addToBuildingTab(ITEMS.register("wool_slab_cyan",
+            () -> new BlockItem(ForgeBlocks.WOOL_SLAB_CYAN.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_SLAB_DARK_GREEN_ITEM = addToBuildingTab(ITEMS.register("wool_slab_dark_green",
+            () -> new BlockItem(ForgeBlocks.WOOL_SLAB_DARK_GREEN.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_SLAB_DARK_GREY_ITEM = addToBuildingTab(ITEMS.register("wool_slab_dark_grey",
+            () -> new BlockItem(ForgeBlocks.WOOL_SLAB_DARK_GREY.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_SLAB_GREEN_ITEM = addToBuildingTab(ITEMS.register("wool_slab_green",
+            () -> new BlockItem(ForgeBlocks.WOOL_SLAB_GREEN.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_SLAB_LIGHT_BLUE_ITEM = addToBuildingTab(ITEMS.register("wool_slab_light_blue",
+            () -> new BlockItem(ForgeBlocks.WOOL_SLAB_LIGHT_BLUE.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_SLAB_LIGHT_GREY_ITEM = addToBuildingTab(ITEMS.register("wool_slab_light_grey",
+            () -> new BlockItem(ForgeBlocks.WOOL_SLAB_LIGHT_GREY.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_SLAB_MAGNETA_ITEM = addToBuildingTab(ITEMS.register("wool_slab_magenta",
+            () -> new BlockItem(ForgeBlocks.WOOL_SLAB_MAGENTA.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_SLAB_ORANGE_ITEM = addToBuildingTab(ITEMS.register("wool_slab_orange",
+            () -> new BlockItem(ForgeBlocks.WOOL_SLAB_ORANGE.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_SLAB_PURPLE_ITEM = addToBuildingTab(ITEMS.register("wool_slab_purple",
+            () -> new BlockItem(ForgeBlocks.WOOL_SLAB_PURPLE.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_SLAB_PINK_ITEM = addToBuildingTab(ITEMS.register("wool_slab_pink",
+            () -> new BlockItem(ForgeBlocks.WOOL_SLAB_PINK.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_SLAB_RED_ITEM = addToBuildingTab(ITEMS.register("wool_slab_red",
+            () -> new BlockItem(ForgeBlocks.WOOL_SLAB_RED.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_SLAB_YELLOW_ITEM = addToBuildingTab(ITEMS.register("wool_slab_yellow",
+            () -> new BlockItem(ForgeBlocks.WOOL_SLAB_YELLOW.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_STAIRS_WHITE_ITEM = addToBuildingTab(ITEMS.register("wool_stairs_white",
+            () -> new BlockItem(ForgeBlocks.WOOL_STAIRS_WHITE.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_STAIRS_BLACK_ITEM = addToBuildingTab(ITEMS.register("wool_stairs_black",
+            () -> new BlockItem(ForgeBlocks.WOOL_STAIRS_BLACK.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_STAIRS_BLUE_ITEM = addToBuildingTab(ITEMS.register("wool_stairs_blue",
+            () -> new BlockItem(ForgeBlocks.WOOL_STAIRS_BLUE.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_STAIRS_CYAN_ITEM = addToBuildingTab(ITEMS.register("wool_stairs_cyan",
+            () -> new BlockItem(ForgeBlocks.WOOL_STAIRS_CYAN.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_STAIRS_DARK_GREEN_ITEM = addToBuildingTab(ITEMS.register("wool_stairs_dark_green",
+            () -> new BlockItem(ForgeBlocks.WOOL_STAIRS_DARK_GREEN.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_STAIRS_DARK_GREY_ITEM = addToBuildingTab(ITEMS.register("wool_stairs_dark_grey",
+            () -> new BlockItem(ForgeBlocks.WOOL_STAIRS_DARK_GREY.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_STAIRS_GREEN_ITEM = addToBuildingTab(ITEMS.register("wool_stairs_green",
+            () -> new BlockItem(ForgeBlocks.WOOL_STAIRS_GREEN.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_STAIRS_LIGHT_BLUE_ITEM = addToBuildingTab(ITEMS.register("wool_stairs_light_blue",
+            () -> new BlockItem(ForgeBlocks.WOOL_STAIRS_LIGHT_BLUE.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_STAIRS_LIGHT_GREY_ITEM = addToBuildingTab(ITEMS.register("wool_stairs_light_grey",
+            () -> new BlockItem(ForgeBlocks.WOOL_STAIRS_LIGHT_GREY.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_STAIRS_MAGNETA_ITEM = addToBuildingTab(ITEMS.register("wool_stairs_magenta",
+            () -> new BlockItem(ForgeBlocks.WOOL_STAIRS_MAGENTA.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_STAIRS_ORANGE_ITEM = addToBuildingTab(ITEMS.register("wool_stairs_orange",
+            () -> new BlockItem(ForgeBlocks.WOOL_STAIRS_ORANGE.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_STAIRS_PURPLE_ITEM = addToBuildingTab(ITEMS.register("wool_stairs_purple",
+            () -> new BlockItem(ForgeBlocks.WOOL_STAIRS_PURPLE.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_STAIRS_PINK_ITEM = addToBuildingTab(ITEMS.register("wool_stairs_pink",
+            () -> new BlockItem(ForgeBlocks.WOOL_STAIRS_PINK.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_STAIRS_RED_ITEM = addToBuildingTab(ITEMS.register("wool_stairs_red",
+            () -> new BlockItem(ForgeBlocks.WOOL_STAIRS_RED.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_STAIRS_YELLOW_ITEM = addToBuildingTab(ITEMS.register("wool_stairs_yellow",
+            () -> new BlockItem(ForgeBlocks.WOOL_STAIRS_YELLOW.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> LOCACACA_CACTUS_ITEM = addToBuildingTab(ITEMS.register("locacaca_cactus",
             () -> new BlockItem(ForgeBlocks.LOCACACA_CACTUS.get(),
                     new Item.Properties()
             )));
-    public static final RegistryObject<Item> PAINTING_VAN_GOUGH = addToTab(ITEMS.register("painting_van_gough",
+    public static final RegistryObject<Item> PAINTING_VAN_GOUGH = addToBuildingTab(ITEMS.register("painting_van_gough",
             () -> new VanGoughPaintingItem(new Item.Properties().stacksTo(1))
     ));
-    public static final RegistryObject<Item> PAINTING_MONA_LISA = addToTab(ITEMS.register("painting_mona_lisa",
+    public static final RegistryObject<Item> PAINTING_MONA_LISA = addToBuildingTab(ITEMS.register("painting_mona_lisa",
             () -> new MonaLisaPaintingItem(new Item.Properties().stacksTo(1))
     ));
-    public static final RegistryObject<Item> PAINTING_BIRTH_OF_VENUS = addToTab(ITEMS.register("painting_venus",
+    public static final RegistryObject<Item> PAINTING_BIRTH_OF_VENUS = addToBuildingTab(ITEMS.register("painting_venus",
             () -> new BirthOfVenusPaintingItem(new Item.Properties().stacksTo(1))
     ));
-    public static final RegistryObject<BlockItem> GODDESS_STATUE_ITEM = addToTab(ITEMS.register("goddess_statue",
+    public static final RegistryObject<BlockItem> GODDESS_STATUE_ITEM = addToBuildingTab(ITEMS.register("goddess_statue",
             () -> new BlockItem(ForgeBlocks.GODDESS_STATUE_BLOCK.get(),
                     new Item.Properties().stacksTo(1)
             )));
@@ -181,39 +305,39 @@ public class ForgeItems {
     () -> new BlockItem(ForgeBlocks.WALL_STREET_SIGN_DIO.get(),
                     new Item.Properties()
                             )));
-    public static final RegistryObject<Item> WALL_STREET_SIGN_RIGHT_BLOCK_ITEM = addToTab(ITEMS.register("wall_street_sign_right",
+    public static final RegistryObject<Item> WALL_STREET_SIGN_RIGHT_BLOCK_ITEM = addToBuildingTab(ITEMS.register("wall_street_sign_right",
             () -> new BlockItem(ForgeBlocks.WALL_STREET_SIGN_RIGHT.get(),
                     new Item.Properties()
             )));
-    public static final RegistryObject<Item> WALL_STREET_SIGN_STOP_BLOCK_ITEM = addToTab(ITEMS.register("wall_street_sign_stop",
+    public static final RegistryObject<Item> WALL_STREET_SIGN_STOP_BLOCK_ITEM = addToBuildingTab(ITEMS.register("wall_street_sign_stop",
             () -> new BlockItem(ForgeBlocks.WALL_STREET_SIGN_STOP.get(),
                     new Item.Properties()
             )));
-    public static final RegistryObject<Item> WALL_STREET_SIGN_YIELD_BLOCK_ITEM = addToTab(ITEMS.register("wall_street_sign_yield",
+    public static final RegistryObject<Item> WALL_STREET_SIGN_YIELD_BLOCK_ITEM = addToBuildingTab(ITEMS.register("wall_street_sign_yield",
             () -> new BlockItem(ForgeBlocks.WALL_STREET_SIGN_YIELD.get(),
                     new Item.Properties()
             )));
-    public static final RegistryObject<Item> WALL_STREET_SIGN_DANGER_BLOCK_ITEM = addToTab(ITEMS.register("wall_street_sign_danger",
+    public static final RegistryObject<Item> WALL_STREET_SIGN_DANGER_BLOCK_ITEM = addToBuildingTab(ITEMS.register("wall_street_sign_danger",
             () -> new BlockItem(ForgeBlocks.WALL_STREET_SIGN_DANGER.get(),
                     new Item.Properties()
             )));
-    public static final RegistryObject<Item> STREET_SIGN_DIO_BLOCK_ITEM = addToTab(ITEMS.register("street_sign_dio_item",
+    public static final RegistryObject<Item> STREET_SIGN_DIO_BLOCK_ITEM = addToBuildingTab(ITEMS.register("street_sign_dio_item",
             () -> new SignBlockItem(ForgeBlocks.STREET_SIGN_DIO.get(), new Item.Properties().stacksTo(1))));
-    public static final RegistryObject<Item> STREET_SIGN_RIGHT_BLOCK_ITEM = addToTab(ITEMS.register("street_sign_right_item",
+    public static final RegistryObject<Item> STREET_SIGN_RIGHT_BLOCK_ITEM = addToBuildingTab(ITEMS.register("street_sign_right_item",
             () -> new SignBlockItem(ForgeBlocks.STREET_SIGN_RIGHT.get(), new Item.Properties().stacksTo(1))));
-    public static final RegistryObject<Item> STREET_SIGN_STOP_BLOCK_ITEM = addToTab(ITEMS.register("street_sign_stop_item",
+    public static final RegistryObject<Item> STREET_SIGN_STOP_BLOCK_ITEM = addToBuildingTab(ITEMS.register("street_sign_stop_item",
             () -> new SignBlockItem(ForgeBlocks.STREET_SIGN_STOP.get(), new Item.Properties().stacksTo(1))));
-    public static final RegistryObject<Item> STREET_SIGN_YIELD_BLOCK_ITEM = addToTab(ITEMS.register("street_sign_yield_item",
+    public static final RegistryObject<Item> STREET_SIGN_YIELD_BLOCK_ITEM = addToBuildingTab(ITEMS.register("street_sign_yield_item",
             () -> new SignBlockItem(ForgeBlocks.STREET_SIGN_YIELD.get(), new Item.Properties().stacksTo(1))));
-    public static final RegistryObject<Item> STREET_SIGN_DANGER_BLOCK_ITEM = addToTab(ITEMS.register("street_sign_danger_item",
+    public static final RegistryObject<Item> STREET_SIGN_DANGER_BLOCK_ITEM = addToBuildingTab(ITEMS.register("street_sign_danger_item",
             () -> new SignBlockItem(ForgeBlocks.STREET_SIGN_DANGER.get(), new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> LIGHT_BULB = addToTab(ITEMS.register("light_bulb",
             () -> new Item(new Item.Properties())));
-    public static final RegistryObject<Item> CEILING_LIGHT_BLOCK_ITEM = addToTab(ITEMS.register("ceiling_light",
+    public static final RegistryObject<Item> CEILING_LIGHT_BLOCK_ITEM = addToBuildingTab(ITEMS.register("ceiling_light",
             () -> new BlockItem(ForgeBlocks.CEILING_LIGHT.get(),
                     new Item.Properties()
             )));
-    public static final RegistryObject<Item> MIRROR_ITEM = addToTab(ITEMS.register("mirror",
+    public static final RegistryObject<Item> MIRROR_ITEM = addToBuildingTab(ITEMS.register("mirror",
             () -> new BlockItem(ForgeBlocks.MIRROR.get(),
                     new Item.Properties()
             )));
@@ -231,11 +355,11 @@ public class ForgeItems {
     public static final RegistryObject<Item> MUSIC_DISC_HALLELUJAH = addToTab(ITEMS.register("music_disc_hallelujah",
             () -> new RecordItem(1, ForgeSounds.HALLELUJAH,
                     (new Item.Properties()).stacksTo(1).rarity(Rarity.RARE), 4380)));
-    public static final RegistryObject<BlockItem> FLESH_BLOCK = addToTab(ITEMS.register("flesh_block",
+    public static final RegistryObject<BlockItem> FLESH_BLOCK = addToBuildingTab(ITEMS.register("flesh_block",
             () -> new FleshChunkItem(ForgeBlocks.FLESH_BLOCK.get(),
                     new Item.Properties().food(ModFoodComponents.FLESH_CHUNK)
             )));
-    public static final RegistryObject<Item> FLESH_BUCKET = addToTab(ITEMS.register("flesh_bucket",
+    public static final RegistryObject<Item> FLESH_BUCKET = addToBuildingTab(ITEMS.register("flesh_bucket",
             () -> new FleshBucketItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<ForgeSpawnEggItem> TERRIER_SPAWN_EGG = addToTab(ITEMS.register("terrier_spawn_egg",
             () -> new ForgeSpawnEggItem(ForgeEntities.TERRIER_DOG,

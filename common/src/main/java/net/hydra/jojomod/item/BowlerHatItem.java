@@ -5,7 +5,6 @@ import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.event.index.*;
-import net.hydra.jojomod.event.powers.visagedata.DiegoVisage;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;

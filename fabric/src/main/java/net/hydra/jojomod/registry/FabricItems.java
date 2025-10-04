@@ -239,50 +239,21 @@ public class FabricItems {
                         entries.accept(MATCH_BUNDLE);
                         entries.accept(GASOLINE_CAN);
                         entries.accept(GASOLINE_BUCKET);
-                        entries.accept(ModBlocks.WIRE_TRAP);
-                        entries.accept(ModBlocks.BARBED_WIRE);
-                        entries.accept(ModBlocks.BARBED_WIRE_BUNDLE);
                         entries.accept(AESTHETICIAN_SPAWN_EGG);
                         entries.accept(ZOMBIE_AESTHETICIAN_SPAWN_EGG);
                         entries.accept(TERRIER_SPAWN_EGG);
                         entries.accept(COFFEE_GUM);
+                        entries.accept(LIGHT_BULB);
                         entries.accept(LOCACACA_PIT.asItem());
                         entries.accept(LOCACACA);
                         entries.accept(LOCACACA_BRANCH.asItem());
                         entries.accept(NEW_LOCACACA);
-                        entries.accept(ModBlocks.WALL_STREET_SIGN_DIO);
-                        entries.accept(ModBlocks.WALL_STREET_SIGN_RIGHT);
-                        entries.accept(ModBlocks.WALL_STREET_SIGN_STOP);
-                        entries.accept(ModBlocks.WALL_STREET_SIGN_YIELD);
-                        entries.accept(ModBlocks.WALL_STREET_SIGN_DANGER);
-                        entries.accept(STREET_SIGN_DIO_BLOCK_ITEM);
-                        entries.accept(STREET_SIGN_RIGHT_BLOCK_ITEM);
-                        entries.accept(STREET_SIGN_STOP_BLOCK_ITEM);
-                        entries.accept(STREET_SIGN_YIELD_BLOCK_ITEM);
-                        entries.accept(STREET_SIGN_DANGER_BLOCK_ITEM);
-                        entries.accept(LIGHT_BULB);
-                        entries.accept(ModBlocks.CEILING_LIGHT);
-                        entries.accept(ModBlocks.MIRROR);
-                        entries.accept(ModBlocks.ANCIENT_METEOR);
                         entries.accept(METEORITE);
                         entries.accept(METEORITE_INGOT);
-                        entries.accept(ModBlocks.METEOR_BLOCK);
-                        entries.accept(ModBlocks.IMPACT_MOUND);
-                        entries.accept(ModBlocks.REGAL_FLOOR);
-                        entries.accept(ModBlocks.REGAL_WALL);
-                        entries.accept(ModBlocks.WOODEN_MANOR_TABLE);
 
                         entries.accept(MUSIC_DISC_TORTURE_DANCE);
                         entries.accept(MUSIC_DISC_HALLELUJAH);
 
-                        entries.accept(ModBlocks.FLESH_BLOCK);
-                        entries.accept(ModItems.FLESH_BUCKET);
-
-                        entries.accept(ModBlocks.LOCACACA_CACTUS);
-                        entries.accept(ModBlocks.GODDESS_STATUE_BLOCK);
-                        entries.accept(PAINTING_VAN_GOUGH);
-                        entries.accept(PAINTING_MONA_LISA);
-                        entries.accept(PAINTING_BIRTH_OF_VENUS);
                         entries.accept(ModBlocks.STEREO);
                         entries.accept(WORTHY_ARROW);
                         entries.accept(LUCKY_LIPSTICK);
@@ -310,6 +281,75 @@ public class FabricItems {
 
 
                     }).build());
+
+    public static final CreativeModeTab JOJO_BUILDING_GROUP = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
+            new ResourceLocation(Roundabout.MOD_ID, "jojo_building_blocks"),
+            FabricItemGroup.builder().title(Component.translatable("itemgroup.jojo_building_blocks"))
+                    .icon(() -> new ItemStack(ModBlocks.WOODEN_MANOR_TABLE)).displayItems((displayContext, entries) -> {
+                        entries.accept(ModBlocks.WOODEN_MANOR_TABLE);
+                        entries.accept(ModBlocks.WOODEN_MANOR_CHAIR);
+                        entries.accept(ModBlocks.WOOL_SLAB_WHITE);
+                        entries.accept(ModBlocks.WOOL_SLAB_BLACK);
+                        entries.accept(ModBlocks.WOOL_SLAB_BLUE);
+                        entries.accept(ModBlocks.WOOL_SLAB_BROWN);
+                        entries.accept(ModBlocks.WOOL_SLAB_CYAN);
+                        entries.accept(ModBlocks.WOOL_SLAB_DARK_GREEN);
+                        entries.accept(ModBlocks.WOOL_SLAB_DARK_GREY);
+                        entries.accept(ModBlocks.WOOL_SLAB_GREEN);
+                        entries.accept(ModBlocks.WOOL_SLAB_LIGHT_BLUE);
+                        entries.accept(ModBlocks.WOOL_SLAB_LIGHT_GREY);
+                        entries.accept(ModBlocks.WOOL_SLAB_MAGENTA);
+                        entries.accept(ModBlocks.WOOL_SLAB_ORANGE);
+                        entries.accept(ModBlocks.WOOL_SLAB_PURPLE);
+                        entries.accept(ModBlocks.WOOL_SLAB_PINK);
+                        entries.accept(ModBlocks.WOOL_SLAB_RED);
+                        entries.accept(ModBlocks.WOOL_SLAB_YELLOW);
+                        entries.accept(ModBlocks.WOOL_STAIRS_WHITE);
+                        entries.accept(ModBlocks.WOOL_STAIRS_BLACK);
+                        entries.accept(ModBlocks.WOOL_STAIRS_BLUE);
+                        entries.accept(ModBlocks.WOOL_STAIRS_BROWN);
+                        entries.accept(ModBlocks.WOOL_STAIRS_CYAN);
+                        entries.accept(ModBlocks.WOOL_STAIRS_DARK_GREEN);
+                        entries.accept(ModBlocks.WOOL_STAIRS_DARK_GREY);
+                        entries.accept(ModBlocks.WOOL_STAIRS_GREEN);
+                        entries.accept(ModBlocks.WOOL_STAIRS_LIGHT_BLUE);
+                        entries.accept(ModBlocks.WOOL_STAIRS_LIGHT_GREY);
+                        entries.accept(ModBlocks.WOOL_STAIRS_MAGENTA);
+                        entries.accept(ModBlocks.WOOL_STAIRS_ORANGE);
+                        entries.accept(ModBlocks.WOOL_STAIRS_PURPLE);
+                        entries.accept(ModBlocks.WOOL_STAIRS_PINK);
+                        entries.accept(ModBlocks.WOOL_STAIRS_RED);
+                        entries.accept(ModBlocks.WOOL_STAIRS_YELLOW);
+                        entries.accept(ModBlocks.METEOR_BLOCK);
+                        entries.accept(ModBlocks.IMPACT_MOUND);
+                        entries.accept(ModBlocks.REGAL_FLOOR);
+                        entries.accept(ModBlocks.REGAL_WALL);
+                        entries.accept(ModBlocks.GODDESS_STATUE_BLOCK);
+                        entries.accept(ModBlocks.WALL_STREET_SIGN_DIO);
+                        entries.accept(ModBlocks.WALL_STREET_SIGN_RIGHT);
+                        entries.accept(ModBlocks.WALL_STREET_SIGN_STOP);
+                        entries.accept(ModBlocks.WALL_STREET_SIGN_YIELD);
+                        entries.accept(ModBlocks.WALL_STREET_SIGN_DANGER);
+                        entries.accept(STREET_SIGN_DIO_BLOCK_ITEM);
+                        entries.accept(STREET_SIGN_RIGHT_BLOCK_ITEM);
+                        entries.accept(STREET_SIGN_STOP_BLOCK_ITEM);
+                        entries.accept(STREET_SIGN_YIELD_BLOCK_ITEM);
+                        entries.accept(STREET_SIGN_DANGER_BLOCK_ITEM);
+                        entries.accept(ModBlocks.CEILING_LIGHT);
+                        entries.accept(ModBlocks.MIRROR);
+                        entries.accept(ModBlocks.ANCIENT_METEOR);
+                        entries.accept(ModBlocks.BARBED_WIRE);
+                        entries.accept(PAINTING_VAN_GOUGH);
+                        entries.accept(PAINTING_MONA_LISA);
+                        entries.accept(PAINTING_BIRTH_OF_VENUS);
+                        entries.accept(ModBlocks.FLESH_BLOCK);
+                        entries.accept(ModItems.FLESH_BUCKET);
+                        entries.accept(ModBlocks.WIRE_TRAP);
+                        entries.accept(ModBlocks.BARBED_WIRE_BUNDLE);
+                        entries.accept(ModBlocks.LOCACACA_CACTUS);
+
+                    }).build());
+
 
     public static void putDiscNBT(Item IT, CreativeModeTab.Output entries){
         if (IT instanceof StandDiscItem SE){
