@@ -404,6 +404,13 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
         p_35425_.updateActivityFromSchedule(this.level().getDayTime(), this.level().getGameTime());
     }
 
+    public ItemStack truebasis = ItemStack.EMPTY;
+    public ItemStack getTrueBasis(){
+        return truebasis;
+    }public void setTrueBasis(ItemStack basis){
+        truebasis = basis;
+    }
+
     protected void ageBoundaryReached() {
         super.ageBoundaryReached();
         if (this.level() instanceof ServerLevel) {
