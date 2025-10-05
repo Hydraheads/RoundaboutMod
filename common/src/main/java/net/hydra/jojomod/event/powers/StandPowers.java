@@ -48,6 +48,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.boss.EnderDragonPart;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
@@ -2504,6 +2505,16 @@ public class StandPowers {
             return;
         }
 
+        /**Stand Drops item when user is dazed*/
+        StandEntity stand = getStandEntity(entity);
+        if (stand != null && !stand.getHeldItem().isEmpty()){
+            double $$3 = stand.getEyeY() - 0.3F;
+            ItemEntity $$4 = new ItemEntity(stand.level(), stand.getX(), $$3, stand.getZ(), stand.getHeldItem());
+            $$4.setPickUpDelay(40);
+            $$4.setThrower(stand.getUUID());
+            stand.level().addFreshEntity($$4);
+            stand.setHeldItem(ItemStack.EMPTY);
+        }
         if (dazeTime > 0){
             ((StandUser) entity).roundabout$tryPower(PowerIndex.NONE,true);
             ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.HURT_BY_BARRAGE);
