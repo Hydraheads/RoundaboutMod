@@ -151,17 +151,21 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 this.leftArm.resetPose();
             }
 
-            this.roundabout$animate(ipe.getWry(), Poses.WRY.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getGiorno(), Poses.GIORNO.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getJoseph(), Poses.JOSEPH.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getKoichi(), Poses.KOICHI.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getOhNo(), Poses.OH_NO.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getTortureDance(), Poses.TORTURE_DANCE.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getWamuu(), Poses.WAMUU.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getJotaro(), Poses.JOTARO.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getJonathan(), Poses.JONATHAN.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getWatch(), Poses.WATCH.ad, $$3, 1f);
-            this.roundabout$animate(ipe.getSitting(), Poses.SITTING.ad, $$3, 1f);
+            boolean firstPerson = net.minecraft.client.Minecraft.getInstance().options.getCameraType().isFirstPerson();
+            Player mainP = ClientUtil.getPlayer();
+            if (!firstPerson || !(mainP != null && $$0.is(mainP))){
+                this.roundabout$animate(ipe.getWry(), Poses.WRY.ad, $$3, 1f);
+                this.roundabout$animate(ipe.getGiorno(), Poses.GIORNO.ad, $$3, 1f);
+                this.roundabout$animate(ipe.getJoseph(), Poses.JOSEPH.ad, $$3, 1f);
+                this.roundabout$animate(ipe.getKoichi(), Poses.KOICHI.ad, $$3, 1f);
+                this.roundabout$animate(ipe.getOhNo(), Poses.OH_NO.ad, $$3, 1f);
+                this.roundabout$animate(ipe.getTortureDance(), Poses.TORTURE_DANCE.ad, $$3, 1f);
+                this.roundabout$animate(ipe.getWamuu(), Poses.WAMUU.ad, $$3, 1f);
+                this.roundabout$animate(ipe.getJotaro(), Poses.JOTARO.ad, $$3, 1f);
+                this.roundabout$animate(ipe.getJonathan(), Poses.JONATHAN.ad, $$3, 1f);
+                this.roundabout$animate(ipe.getWatch(), Poses.WATCH.ad, $$3, 1f);
+                this.roundabout$animate(ipe.getSitting(), Poses.SITTING.ad, $$3, 1f);
+            }
 
             /**Shoot mode aiming*/
             StandUser user = ((StandUser)$$0);
@@ -396,7 +400,6 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
     @Unique
     public Optional<ModelPart> roundabout$getAnyDescendantWithName(String $$0) {
-        boolean firstPerson = net.minecraft.client.Minecraft.getInstance().options.getCameraType().isFirstPerson();
         if (Objects.equals($$0, "body")) {
             return Optional.of(this.body);
         } else if (Objects.equals($$0, "head")) {
@@ -406,9 +409,9 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
         } else if (Objects.equals($$0, "left_leg")) {
             return Optional.of(this.leftLeg);
         } else if (Objects.equals($$0, "right_arm")) {
-            return firstPerson ? Optional.empty() : Optional.of(this.rightArm);
+            return Optional.of(this.rightArm);
         } else if (Objects.equals($$0, "left_arm")) {
-            return firstPerson ? Optional.empty() : Optional.of(this.leftArm);
+            return Optional.of(this.leftArm);
         }
         return Optional.empty();
     }
