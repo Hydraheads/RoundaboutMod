@@ -198,25 +198,23 @@ public class ManorChairBlock extends Block implements SimpleWaterloggedBlock {
 
             float yaw = state.getValue(FACING).toYRot();
 
-            if (player instanceof ServerPlayer sp) {
-                if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
-                    y -= 1.0;
-                }
+            if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
+                y -= 1.0;
+            }
+            if (player.getEyePosition().y > y) {
+                if (player instanceof ServerPlayer sp) {
 
-                sp.connection.teleport(x, y, z, yaw, sp.getXRot());
-                sp.setYHeadRot(yaw);
-                sp.setYBodyRot(yaw);
-                IPlayerEntity ipe = (IPlayerEntity) player;
-                ipe.roundabout$SetPoseEmote((byte) 11);
-            } else {
-                if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
-                    y -= 1.0;
+                    sp.connection.teleport(x, y, z, yaw, sp.getXRot());
+                    sp.setYHeadRot(yaw);
+                    sp.setYBodyRot(yaw);
+                    IPlayerEntity ipe = (IPlayerEntity) player;
+                    ipe.roundabout$SetPoseEmote((byte) 11);
+                } else {
+                    player.teleportTo(x, y, z);
+                    player.setYRot(yaw);
+                    player.setYHeadRot(yaw);
+                    player.setYBodyRot(yaw);
                 }
-
-                player.teleportTo(x, y, z);
-                player.setYRot(yaw);
-                player.setYHeadRot(yaw);
-                player.setYBodyRot(yaw);
             }
         }
         return InteractionResult.CONSUME;
