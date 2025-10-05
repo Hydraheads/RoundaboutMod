@@ -49,7 +49,7 @@ public class ForgeCreativeTab {
     );
     public static final RegistryObject<CreativeModeTab> JOJO_BUILDING_GROUP = TABS.register("jojo_building_blocks",
             () -> CreativeModeTab.builder()
-                    .title(Component.translatable("itemgroup.jojo_building_blocks"))
+                    .title(Component.translatable("itemgroup.jojo_building_blocks")).hideTitle()
                     .icon(ForgeItems.WOODEN_MANOR_TABLE_ITEM.get()::getDefaultInstance)
                     .displayItems((displayParams, output) ->
                             BUILDING_TAB_ITEMS.forEach(itemLike -> output.accept(itemLike.get())))
