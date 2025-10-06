@@ -68,7 +68,7 @@ public class RattDartEntity extends AbstractArrow {
                 Vec3 rots = PR.getRotations(PR.getShootTarget());
                 Vec2 v = new Vec2((float) (-1*Math.cos(rots.y)),
                         (float) (-1*Math.sin(rots.y)) );
-                this.setPos(RE.getEyeP(0).add(new Vec3(ding(), Mth.clamp(ding(),-0.1,3), ding())));
+                this.setPos(RE.getEyeP(0).add(new Vec3(ding(), Mth.clamp(ding(),0,3), ding())));
             }
         }
     }
