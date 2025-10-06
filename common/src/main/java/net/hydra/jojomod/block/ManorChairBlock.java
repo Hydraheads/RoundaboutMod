@@ -15,6 +15,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -31,7 +32,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class ManorChairBlock extends Block {
+public class ManorChairBlock extends Block implements SimpleWaterloggedBlock {
 
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
@@ -87,7 +88,7 @@ public class ManorChairBlock extends Block {
     public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
         if (state.getValue(HALF) == DoubleBlockHalf.LOWER) {
             BlockPos above = pos.above();
-            if (level.getBlockState(above).isAir()) {
+            if (level.getBlockState(above).canBeReplaced()) {
                 FluidState fluid = level.getFluidState(above);
                 level.setBlock(above, state.setValue(HALF, DoubleBlockHalf.UPPER).setValue(WATERLOGGED, fluid.getType() == Fluids.WATER), 3);
             }
@@ -197,25 +198,23 @@ public class ManorChairBlock extends Block {
 
             float yaw = state.getValue(FACING).toYRot();
 
-            if (player instanceof ServerPlayer sp) {
-                if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
-                    y -= 1.0;
-                }
+            if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
+                y -= 1.0;
+            }
+            if (player.getEyePosition().y > y) {
+                if (player instanceof ServerPlayer sp) {
 
-                sp.connection.teleport(x, y, z, yaw, sp.getXRot());
-                sp.setYHeadRot(yaw);
-                sp.setYBodyRot(yaw);
-                IPlayerEntity ipe = (IPlayerEntity) player;
-                ipe.roundabout$SetPoseEmote((byte) 11);
-            } else {
-                if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
-                    y -= 1.0;
+                    sp.connection.teleport(x, y, z, yaw, sp.getXRot());
+                    sp.setYHeadRot(yaw);
+                    sp.setYBodyRot(yaw);
+                    IPlayerEntity ipe = (IPlayerEntity) player;
+                    ipe.roundabout$SetPoseEmote((byte) 11);
+                } else {
+                    player.teleportTo(x, y, z);
+                    player.setYRot(yaw);
+                    player.setYHeadRot(yaw);
+                    player.setYBodyRot(yaw);
                 }
-
-                player.teleportTo(x, y, z);
-                player.setYRot(yaw);
-                player.setYHeadRot(yaw);
-                player.setYBodyRot(yaw);
             }
         }
         return InteractionResult.CONSUME;

@@ -180,6 +180,9 @@ public class ModBlocks {
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(2.0F).sound(SoundType.WOOD).ignitedByLava()
                     .pushReaction(PushReaction.BLOCK)
+                    .lightLevel((L) -> {
+                        return 1;
+                    })
     );
     public static Block WOOL_SLAB_WHITE_PROPERTIES = new SlabBlock(
             BlockBehaviour.Properties.of()
@@ -686,7 +689,14 @@ public class ModBlocks {
             "azalea",
             "flowering_azalea",
             "fog_trap",
-            "fog_trap_coating"
+            "fog_trap_coating",
+            "infested_stone_bricks",
+            "infested_mossy_stone_bricks",
+            "infested_stone",
+            "infested_cobblestone",
+            "infested_chiseled_stone_bricks",
+            "infested_cracked_stone_bricks",
+            "infested_mossy_stone"
     );
 
     public static List<String> dontGen = Arrays.asList("fog_dirt");

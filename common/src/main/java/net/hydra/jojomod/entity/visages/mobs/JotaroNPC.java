@@ -22,6 +22,10 @@ public class JotaroNPC extends StandUsingNPC {
     }
 
     public ItemStack getBasis(){
+        if (!getTrueBasis().isEmpty()){
+                return getTrueBasis();
+        }
         return ModItems.JOTARO_MASK.getDefaultInstance();
     }
+
 }
