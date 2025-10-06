@@ -93,6 +93,7 @@ public class RattDartEntity extends AbstractArrow {
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
         this.DisableSuperThrow();
+        particles = false;
         super.onHitBlock($$0);
     }
 
@@ -154,6 +155,7 @@ public class RattDartEntity extends AbstractArrow {
             ((LivingEntity) $$1).addEffect(new MobEffectInstance(ModEffects.MELTING, 900, stack), this);
         }
     }
+
 
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
