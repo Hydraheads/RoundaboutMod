@@ -63,7 +63,7 @@ public class PowersRatt extends NewDashPreset {
     public static final int PlaceShootCooldown = 55;
     public static final int MaxShootCooldown = 30;
     public static final int[] ShotThresholds = {MinThreshold,50,MaxThreshold};
-    public static final float[] ShotPowerFloats = {3.55F,4F,4F};
+    public static final float[] ShotPowerFloats = {3.55F,3.5F,4F};
     public static final int[] ShotSuperthrowTicks = {4,10,15};
 
 
@@ -378,12 +378,6 @@ public class PowersRatt extends NewDashPreset {
         if (shotcooldown != 0) {shotcooldown--;}
         if (shotcooldown == 0) {maxshotcooldown = 0;}
 
-        if (scopeLevel == 0) {
-            if (attackTime > 60 && this.getChargeTime() != 0) {
-                chargeTime -= 2;
-            }
-        }
-
 
         StandEntity SE = this.getStandEntity(this.getSelf());
 
@@ -560,6 +554,7 @@ public class PowersRatt extends NewDashPreset {
                 this.setAttackTime(-1);
                 setScopeLevel(chargeTime);
                 this.getStandUserSelf().roundabout$setCombatMode(scopeLevel != 0);
+                this.getStandUserSelf().roundabout$setUniqueStandModeToggle(true);
             }
             case PowersRatt.UPDATE_CHARGE -> this.chargeTime = chargeTime;
 
@@ -807,6 +802,12 @@ public class PowersRatt extends NewDashPreset {
                         -Mth.cos(degrees * ((float) Math.PI / 180)));
             }
         }
+    }
+
+    @Override
+    public boolean shouldReset(byte activeP) {
+        if (activeP == PowersRatt.PLACE_BURST && this.getSelf().isUsingItem()) {return false;}
+        return super.shouldReset(activeP);
     }
 
     @Override

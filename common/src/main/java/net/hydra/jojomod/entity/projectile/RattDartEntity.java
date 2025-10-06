@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -31,6 +32,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 public class RattDartEntity extends AbstractArrow {
 
@@ -48,6 +50,8 @@ public class RattDartEntity extends AbstractArrow {
     int melting = 0;
     float damage = 0;
     int charged = 0;
+
+    boolean particles = false;
 
     public RattDartEntity(EntityType<? extends RattDartEntity> entity,  Level world) {
         super(entity, world);
@@ -75,6 +79,7 @@ public class RattDartEntity extends AbstractArrow {
         this.melting = m;
         this.damage = d;
         this.charged = 51;
+        this.particles = true;
     }
 
     public RattDartEntity(Level world, LivingEntity player, int i) {
@@ -218,17 +223,11 @@ public class RattDartEntity extends AbstractArrow {
             this.setDeltaMovement(delta);
         }
         if (!this.level().isClientSide()) {
-            if (superThrowTicks > -1) {
-                superThrowTicks--;
-                if (superThrowTicks <= -1) {
-                    this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
-                } else {
-                    if ((this.tickCount+2) == 0){
-                        ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
-                                this.getX(), this.getY(), this.getZ(),
-                                0, 0, 0, 0, 0);
-                    }
-                }
+            if (this.particles) {
+                ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.86F, 0.28F, 0.48F
+                        ), 1f),
+                        this.getX(), this.getY(), this.getZ(),
+                        0, 0, 0, 0, 0);
             }
         }
     }
