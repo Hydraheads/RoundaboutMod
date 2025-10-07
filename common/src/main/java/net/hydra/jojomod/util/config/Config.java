@@ -585,7 +585,7 @@ public class Config implements Cloneable {
         public Integer walkingHeartAttackMultOnMobs;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer walkingHeartAttackMultOnPlayers;
-        @IntOption(group = "inherit", value = 24, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
         public Integer walkingHeartCooldownPerHit;
         @IntOption(group = "inherit", value = 5, min = -1, max = 72000)
         public Integer walkingHeartMaxHits;
