@@ -1708,7 +1708,7 @@ public class StandPowers {
         return false;
     }
     public boolean StandRushDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
-    ceof TamableAnimal TA){
+        if (attacker instanceof TamableAnimal TA){
             if (target instanceof TamableAnimal TT && TT.getOwner() != null
                     && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
                 return false;
@@ -1724,7 +1724,7 @@ public class StandPowers {
             }
             if (target instanceof LivingEntity && knockbackStrength > 0) {
                 ((LivingEntity) target).knockback(knockbackStrength * 0.5f, Mth.sin(attacker.getYRot() * ((float) Math.PI / 180)), -Mth.cos(attacker.getYRot() * ((float) Math.PI / 180)));
-            }    if (attacker instan
+            }
             return true;
         }
         return false;
