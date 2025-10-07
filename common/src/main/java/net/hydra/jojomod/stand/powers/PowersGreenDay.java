@@ -15,15 +15,18 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.mixin.StandUserEntity;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 
 import net.minecraft.network.chat.Component;
 
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
@@ -146,9 +149,7 @@ public class PowersGreenDay extends NewPunchingStand {
     public void tickPower() {
         moldShenanigans();
         super.tickPower();
-        if(crawlTimer > 0){
-            forceCrawl();
-        }
+
     }
 
     public void Stitch(){
@@ -203,7 +204,7 @@ public class PowersGreenDay extends NewPunchingStand {
                         } else {
                             this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
                         }
-                        crawlTimer = 120;
+                        ((StandUser)this.self).rdbt$SetCrawlTicks(120);
                         bonusLeapCount = 3;
                         bigLeap(this.getSelf(), 20, 1);
                         ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
@@ -216,14 +217,12 @@ public class PowersGreenDay extends NewPunchingStand {
         }
     }
 
-    public void forceCrawl(){
-        this.self.setSwimming(true);
-        this.self.setPose(Pose.SWIMMING);
-        crawlTimer --;
-        
 
 
-    }
+
+
+
+
     public boolean StitchHeal(float hp, LivingEntity entity) {
 
         if(!isClient()) {

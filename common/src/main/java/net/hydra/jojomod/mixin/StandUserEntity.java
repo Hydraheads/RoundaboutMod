@@ -4276,8 +4276,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     @Override
     public void rdbt$doMoldDetection(Vec3 movement){
-
-
         if(((IPermaCasting)this.level()).roundabout$inPermaCastRange(this.getOnPos(), PermanentZoneCastInstance.MOLD_FIELD)) {
             LivingEntity MoldFieldCaster = ((IPermaCasting)this.level()).roundabout$inPermaCastRangeEntity(this.getOnPos(),PermanentZoneCastInstance.MOLD_FIELD);
             if (MoldFieldCaster != null) {
@@ -4312,6 +4310,23 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         previousYpos = this.getY();
     }
+    public int CrawlTicks = 0;
+    @Inject(method = "travel", at = @At(value = "HEAD"))
+    public void rdbt$crawltick(Vec3 movement, CallbackInfo ci) {
+                if (CrawlTicks > 0) {
+                    this.setPose(Pose.SWIMMING);
+                    this.setSwimming(true);
+                    CrawlTicks --;
+                }
+    }
+
+    @Unique
+    @Override
+    public int rdbt$SetCrawlTicks(int ticks){
+        CrawlTicks = ticks;
+        return ticks;
+    }
+
 
 
     @Inject(method = "travel", at = @At(value = "TAIL"))
