@@ -1690,9 +1690,10 @@ public class StandPowers {
                     && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
                 return false;
             }
-        } else if (attacker instanceof AbstractVillager){
-            if (target instanceof AbstractVillager){
-                return false;
+        } else if (attacker instanceof AbstractVillager av1){
+            if (target instanceof AbstractVillager av2){
+                if (!(av1.getTarget() != null && av1.getTarget().is(av2)) && !(av2.getTarget() != null && av2.getTarget().is(av1)))
+                    return false;
             }
         }
         if (DamageHandler.StandDamageEntity(target,pow, attacker)){
@@ -1707,7 +1708,7 @@ public class StandPowers {
         return false;
     }
     public boolean StandRushDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
-        if (attacker instanceof TamableAnimal TA){
+    ceof TamableAnimal TA){
             if (target instanceof TamableAnimal TT && TT.getOwner() != null
                     && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
                 return false;
@@ -1723,7 +1724,7 @@ public class StandPowers {
             }
             if (target instanceof LivingEntity && knockbackStrength > 0) {
                 ((LivingEntity) target).knockback(knockbackStrength * 0.5f, Mth.sin(attacker.getYRot() * ((float) Math.PI / 180)), -Mth.cos(attacker.getYRot() * ((float) Math.PI / 180)));
-            }
+            }    if (attacker instan
             return true;
         }
         return false;
