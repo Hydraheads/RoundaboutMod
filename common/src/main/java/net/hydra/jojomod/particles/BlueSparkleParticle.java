@@ -6,6 +6,7 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.util.Mth;
 
 public class BlueSparkleParticle extends SimpleAnimatedParticle {
     private final SpriteSet sprites;
@@ -13,14 +14,14 @@ public class BlueSparkleParticle extends SimpleAnimatedParticle {
     protected BlueSparkleParticle(ClientLevel $$0, double $$1, double $$2, double $$3, double $$4, double $$5, double $$6, SpriteSet $$7) {
         super($$0, $$1, $$2, $$3, $$7, 1f);
         this.age = 0;
-        this.lifetime = 10;
+        this.lifetime = 14;
         this.xd = this.xd * 0.01F + $$4;
         this.yd = this.yd * 0.01F + $$5;
         this.zd = this.zd * 0.01F + $$6;
         this.quadSize *= 1f;
         this.sprites = $$7;
         this.gravity = 0;
-        this.scale(3.0F);
+        this.scale(2.7F);
         //this.setFadeColor(15916745);
         this.setSpriteFromAge($$7);
     }
@@ -70,6 +71,20 @@ public class BlueSparkleParticle extends SimpleAnimatedParticle {
             part.setAlpha(0.7F);
             return part;
         }
+    }
+    @Override
+    public int getLightColor(float $$0) {
+        float $$1 = ((float)this.age + $$0) / (float)this.lifetime;
+        $$1 = Mth.clamp($$1, 0.0F, 1.0F);
+        int $$2 = super.getLightColor($$0);
+        int $$3 = $$2 & 0xFF;
+        int $$4 = $$2 >> 16 & 0xFF;
+        $$3 += (int)($$1 * 15.0F * 16.0F);
+        if ($$3 > 240) {
+            $$3 = 240;
+        }
+
+        return $$3 | $$4 << 16;
     }
 }
 

@@ -19,6 +19,7 @@ import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.event.powers.visagedata.JosukePartEightVisage;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -110,6 +111,10 @@ public abstract class HudRendering implements IHudAccess {
                 if (user.roundabout$isBubbleEncased()){
                     RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.IN_BUBBLE_OVERLAY, 0.99F);
+                }
+                if (MainUtil.isWearingStoneMask(this.minecraft.player)){
+                    RenderSystem.enableBlend();
+                    this.renderTextureOverlay($$1, StandIcons.STONE_MASK_OVERLAY, 0.7F);
                 }
                 if (user.roundabout$getLocacacaCurse() == LocacacaCurseIndex.HEAD) {
                     if (((IPlayerEntity) this.minecraft.player).roundabout$getMaskSlot() != null &&
