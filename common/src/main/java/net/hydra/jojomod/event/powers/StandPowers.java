@@ -1690,9 +1690,10 @@ public class StandPowers {
                     && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
                 return false;
             }
-        } else if (attacker instanceof AbstractVillager){
-            if (target instanceof AbstractVillager){
-                return false;
+        } else if (attacker instanceof AbstractVillager av1){
+            if (target instanceof AbstractVillager av2){
+                if (!(av1.getTarget() != null && av1.getTarget().is(av2)) && !(av2.getTarget() != null && av2.getTarget().is(av1)))
+                    return false;
             }
         }
         if (DamageHandler.StandDamageEntity(target,pow, attacker)){

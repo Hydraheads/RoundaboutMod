@@ -1021,7 +1021,7 @@
   "ability.roundabout.controlled_burst": "Controlled Burst",
   "ability.roundabout.controlled_burst.desc": "A variation of Invisiburst with decreased range and no block invisibility. Signifies greater control of the user's emotions. Useful if you don't want to accidentally make your opponents invisible.",
   "ability.roundabout.place_invis": "Invisible Block Placement",
-  "ability.roundabout.place_invis.desc": "Place blocks, passing your invisibility duration down to them. Only works while you are invisible.",
+  "ability.roundabout.place_invis.desc": "Place blocks, passing your invisibility duration down to them. Only works while you are invisible. To activate this skill, you must be holding a block and invisible.",
 
   "ability.roundabout.ratt_scope": "Scoped Mode",
   "ability.roundabout.ratt_scope.desc": "Hold Ratt and scope in, allowing you to shoot while moving",

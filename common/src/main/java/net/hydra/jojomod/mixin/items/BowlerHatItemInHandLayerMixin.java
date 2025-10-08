@@ -2,9 +2,7 @@ package net.hydra.jojomod.mixin.items;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.item.BowlerHatItem;
-import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemDisplayContext;
