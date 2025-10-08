@@ -75,7 +75,7 @@ public class ForgeItems {
                     new Item.Properties()
             )));
     public static final RegistryObject<BlockItem> EQUIPPABLE_STONE_MASK_ITEM = addToWIPTab(ITEMS.register("stone_mask",
-            () -> new BlockItem(ForgeBlocks.EQUIPPABLE_STONE_MASK_BLOCK.get(),
+            () -> new StoneMaskBlockItem(ForgeBlocks.EQUIPPABLE_STONE_MASK_BLOCK.get(),
                     new Item.Properties().stacksTo(1)
             )));
     public static final RegistryObject<BlockItem> REGAL_WALL_ITEM = addToBuildingTab(ITEMS.register("regal_wall",

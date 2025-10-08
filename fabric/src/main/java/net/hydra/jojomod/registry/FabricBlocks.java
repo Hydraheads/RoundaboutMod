@@ -4,10 +4,7 @@ import com.mojang.datafixers.types.Type;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.*;
-import net.hydra.jojomod.item.FleshChunkItem;
-import net.hydra.jojomod.item.FogBlockItem;
-import net.hydra.jojomod.item.FogCoatBlockItem;
-import net.hydra.jojomod.item.ModFoodComponents;
+import net.hydra.jojomod.item.*;
 import net.minecraft.Util;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -222,7 +219,7 @@ public class FabricBlocks {
     }
     private static Item registerStoneMaskBlockItem(String name, Block block){
         return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, name),
-                new BlockItem(block, new Item.Properties().stacksTo(1)));
+                new StoneMaskBlockItem(block, new Item.Properties().stacksTo(1)));
     }
 
     public static void register(){
