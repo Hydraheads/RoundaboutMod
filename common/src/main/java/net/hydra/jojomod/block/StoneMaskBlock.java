@@ -157,6 +157,39 @@ public class StoneMaskBlock extends HorizontalDirectionalBlock implements Simple
         }
     }
 
+    public void convertToRegularMask2(Level level, BlockPos pos, BlockState state){
+        if (state.getBlock() instanceof BloodyStoneMaskBlock){
+            level.setBlockAndUpdate(pos,ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.defaultBlockState().
+                    setValue(FACING,state.getValue(FACING)).
+                    setValue(WATERLOGGED,state.getValue(WATERLOGGED)));
+        }
+    }
+    public void convertToRegularMask2(LevelAccessor level, BlockPos pos, BlockState state){
+        if (state.getBlock() instanceof BloodyStoneMaskBlock){
+            level.setBlock(pos,ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.defaultBlockState().
+                    setValue(FACING,state.getValue(FACING)).
+                    setValue(WATERLOGGED,state.getValue(WATERLOGGED)),4);
+        }
+    }
+    public void convertToBloodyMask(Level level, BlockPos pos, BlockState state){
+        if (state.getBlock() instanceof EquippableStoneMaskBlock &&
+                !(state.getBlock() instanceof BloodyStoneMaskBlock)
+        ){
+            level.setBlockAndUpdate(pos,ModBlocks.BLOODY_STONE_MASK_BLOCK.defaultBlockState().
+                    setValue(FACING,state.getValue(FACING)).
+                    setValue(WATERLOGGED,true));
+        }
+    }
+    public void convertToBloodyMask(LevelAccessor level, BlockPos pos, BlockState state){
+        if (state.getBlock() instanceof EquippableStoneMaskBlock &&
+                !(state.getBlock() instanceof BloodyStoneMaskBlock)
+        ){
+            level.setBlock(pos,ModBlocks.BLOODY_STONE_MASK_BLOCK.defaultBlockState().
+                    setValue(FACING,state.getValue(FACING)).
+                    setValue(WATERLOGGED,true),4);
+        }
+    }
+
     @SuppressWarnings("deprecation")
     @Override
     public boolean skipRendering(BlockState p_53972_, BlockState p_53973_, Direction p_53974_) {
