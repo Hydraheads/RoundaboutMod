@@ -38,6 +38,8 @@ public class StandIcons {
             "textures/misc/in_bubble.png");
     public static final ResourceLocation STONE_MASK_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/mask_blur.png");
+    public static final ResourceLocation BLOODY_MASK_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/misc/bloody_mask_blur.png");
     public static final ResourceLocation RATT_SCOPE_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/ratt_scope.png");
     public static final ResourceLocation TIME_REWIND = new ResourceLocation(Roundabout.MOD_ID,
