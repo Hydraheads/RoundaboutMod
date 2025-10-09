@@ -1,5 +1,6 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.item.BloodyStoneMaskBlockItem;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -36,7 +37,7 @@ import java.util.function.Predicate;
 
 
 
-public class StoneMaskBlock extends HorizontalDirectionalBlock  implements SimpleWaterloggedBlock {
+public class StoneMaskBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     protected static final VoxelShape EAST_AABB = Block.box(0.0, 4, 3.5, 5.5, 12, 12.5);
@@ -141,6 +142,21 @@ public class StoneMaskBlock extends HorizontalDirectionalBlock  implements Simpl
         }
     }
 
+    public void convertToRegularMask(Level level, BlockPos pos, BlockState state){
+        if (state.getBlock() instanceof BloodyStoneMaskBlock){
+            level.setBlockAndUpdate(pos,ModBlocks.BLOODY_STONE_MASK_BLOCK.defaultBlockState().
+                    setValue(FACING,state.getValue(FACING)).
+                    setValue(WATERLOGGED,state.getValue(WATERLOGGED)));
+        }
+    }
+    public void convertToRegularMask(LevelAccessor level, BlockPos pos, BlockState state){
+        if (state.getBlock() instanceof BloodyStoneMaskBlock){
+            level.setBlock(pos,ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.defaultBlockState().
+                    setValue(FACING,state.getValue(FACING)).
+                    setValue(WATERLOGGED,true),4);
+        }
+    }
+
     @SuppressWarnings("deprecation")
     @Override
     public boolean skipRendering(BlockState p_53972_, BlockState p_53973_, Direction p_53974_) {
@@ -161,5 +177,8 @@ public class StoneMaskBlock extends HorizontalDirectionalBlock  implements Simpl
     public boolean isPathfindable(BlockState $$0, BlockGetter $$1, BlockPos $$2, PathComputationType $$3) {
         return true;
     }
-
+    @Override
+    public FluidState getFluidState(BlockState $$0) {
+        return $$0.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState($$0);
+    }
 }
