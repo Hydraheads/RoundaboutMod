@@ -144,9 +144,9 @@ public class StoneMaskBlock extends HorizontalDirectionalBlock implements Simple
 
     public void convertToRegularMask(Level level, BlockPos pos, BlockState state){
         if (state.getBlock() instanceof BloodyStoneMaskBlock){
-            level.setBlockAndUpdate(pos,ModBlocks.BLOODY_STONE_MASK_BLOCK.defaultBlockState().
+            level.setBlockAndUpdate(pos,ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.defaultBlockState().
                     setValue(FACING,state.getValue(FACING)).
-                    setValue(WATERLOGGED,state.getValue(WATERLOGGED)));
+                    setValue(WATERLOGGED,true));
         }
     }
     public void convertToRegularMask(LevelAccessor level, BlockPos pos, BlockState state){
