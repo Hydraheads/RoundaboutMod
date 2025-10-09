@@ -806,6 +806,10 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                                     MainUtil.randomChorusTeleport(LE);
                                 }
                                 finishedUsingLiquid = true;
+                            } else if (getLiquidStolen() == 4) {
+                                if ($$0.getEntity() instanceof LivingEntity LE && MainUtil.isWearingStoneMask(LE)){
+                                    MainUtil.activateStoneMask(LE);
+                                }
                             }
                             super.onHitEntity($$0);
                         }
