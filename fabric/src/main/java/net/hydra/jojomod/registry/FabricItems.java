@@ -401,6 +401,7 @@ public class FabricItems {
                         //entries.accept(INTERDIMENSIONAL_KEY);
                         //entries.accept(STAND_DISC_WALKING_HEART);
                         entries.accept(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK);
+                        entries.accept(ModBlocks.BLOODY_STONE_MASK_BLOCK);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_RATT);

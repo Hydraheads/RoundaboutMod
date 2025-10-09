@@ -113,6 +113,7 @@ public class ModBlocks {
     public static Block FOG_TRAP;
 
     public static Block EQUIPPABLE_STONE_MASK_BLOCK;
+    public static Block BLOODY_STONE_MASK_BLOCK;
 
     public static Block D4C_LIGHT_BLOCK;
 
@@ -644,6 +645,10 @@ public class ModBlocks {
             }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
 
     public static EquippableStoneMaskBlock EQUIPPABLE_STONE_MASK_PROPERTIES = new EquippableStoneMaskBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(0.35F).sound(SoundType.STONE).pushReaction(PushReaction.DESTROY).lightLevel((L) -> {
+                return 1;
+            }));
+    public static BloodyStoneMaskBlock BLOODY_STONE_MASK_PROPERTIES = new BloodyStoneMaskBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(0.35F).sound(SoundType.STONE).pushReaction(PushReaction.DESTROY).lightLevel((L) -> {
                 return 1;
             }));

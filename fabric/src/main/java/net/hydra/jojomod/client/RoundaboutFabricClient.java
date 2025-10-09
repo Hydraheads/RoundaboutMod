@@ -43,6 +43,7 @@ public class RoundaboutFabricClient implements ClientModInitializer {
                 ModBlocks.BLUE_BLOOD_SPLATTER,
                 ModBlocks.ENDER_BLOOD_SPLATTER,
                 ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK,
+                ModBlocks.BLOODY_STONE_MASK_BLOCK,
                 ModBlocks.FOG_TRAP);
         FabricParticlesClient.registerClientParticles();
         FabricEntityClient.register();
