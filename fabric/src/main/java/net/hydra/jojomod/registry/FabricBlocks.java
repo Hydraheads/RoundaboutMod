@@ -158,7 +158,7 @@ public class FabricBlocks {
     public static final Block FOG_TRAP = registerBlockItemless("fog_trap",getFogTrapBlock());
 
     public static final Block EQUIPPABLE_STONE_MASK = registerStoneMask("stone_mask", ModBlocks.EQUIPPABLE_STONE_MASK_PROPERTIES);
-    public static final Block BLOODY_STONE_MASK = registerStoneMask("bloody_stone_mask", BLOODY_STONE_MASK_PROPERTIES);
+    public static final Block BLOODY_STONE_MASK = registerStoneMaskBloody("bloody_stone_mask", BLOODY_STONE_MASK_PROPERTIES);
 
 
     public static final BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY =

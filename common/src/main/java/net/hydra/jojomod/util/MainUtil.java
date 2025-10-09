@@ -505,10 +505,25 @@ public class MainUtil {
                 ItemStack stack2 = ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem().getDefaultInstance();
                 stack2.setTag(stack.getTag());
                 LE.setItemSlot(EquipmentSlot.HEAD,stack2);
-                Roundabout.LOGGER.info("yes");
             }
         }
+    }
+    public static void clearStoneMask(Entity ent){
+        if (ent instanceof LivingEntity LE){
+            ItemStack stack = LE.getItemBySlot(EquipmentSlot.HEAD);
+            if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())){
+                ItemStack stack2 = ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem().getDefaultInstance();
+                stack2.setTag(stack.getTag());
+                LE.setItemSlot(EquipmentSlot.HEAD,stack2);
+            }
 
+            stack = LE.getItemBySlot(EquipmentSlot.OFFHAND);
+            if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())){
+                ItemStack stack2 = ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem().getDefaultInstance();
+                stack2.setTag(stack.getTag());
+                LE.setItemSlot(EquipmentSlot.OFFHAND,stack2);
+            }
+        }
     }
     public static boolean isWearingStoneMask(Entity ent){
         if (ent instanceof LivingEntity LE){

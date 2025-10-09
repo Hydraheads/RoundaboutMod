@@ -79,7 +79,7 @@ public class ForgeItems {
                     new Item.Properties().stacksTo(1)
             )));
     public static final RegistryObject<BlockItem> BLOODY_STONE_MASK_ITEM = addToWIPTab(ITEMS.register("bloody_stone_mask",
-            () -> new StoneMaskBlockItem(ForgeBlocks.BLOODY_STONE_MASK_BLOCK.get(),
+            () -> new BloodyStoneMaskBlockItem(ForgeBlocks.BLOODY_STONE_MASK_BLOCK.get(),
                     new Item.Properties().stacksTo(1)
             )));
     public static final RegistryObject<BlockItem> REGAL_WALL_ITEM = addToBuildingTab(ITEMS.register("regal_wall",
