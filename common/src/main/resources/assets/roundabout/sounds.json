@@ -113,6 +113,12 @@
       "roundabout:firestorm"
     ]
   },
+  "stone_mask_activate": {
+    "subtitle": "sounds.roundabout.stone_mask_activate",
+    "sounds": [
+      "roundabout:stone_mask_activate"
+    ]
+  },
   "go_beyond_hit": {
     "subtitle": "sounds.roundabout.go_beyond_hit",
     "sounds": [

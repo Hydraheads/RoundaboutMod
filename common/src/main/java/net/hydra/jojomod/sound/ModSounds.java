@@ -764,6 +764,11 @@ public class ModSounds {
     public static SoundEvent WALL_LATCH_EVENT = SoundEvent.createVariableRangeEvent(WALL_LATCH_ID);
 
 
+    public static final String STONE_MASK_ACTIVATE = "stone_mask_activate";
+    public static final ResourceLocation STONE_MASK_ACTIVATE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+STONE_MASK_ACTIVATE);
+    public static SoundEvent STONE_MASK_ACTIVATE_EVENT = SoundEvent.createVariableRangeEvent(STONE_MASK_ACTIVATE_ID);
+
+
     public static final String SUMMON_WALKING = "summon_walking";
     public static final ResourceLocation SUMMON_WALKING_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_WALKING);
     public static SoundEvent SUMMON_WALKING_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_WALKING_ID);

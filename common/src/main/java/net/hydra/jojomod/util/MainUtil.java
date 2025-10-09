@@ -499,7 +499,7 @@ public class MainUtil {
     }
 
     public static void activateStoneMask(Entity ent){
-        if (ent instanceof LivingEntity LE){
+        if (ent instanceof LivingEntity LE && !ent.isInWater()){
             ItemStack stack = LE.getItemBySlot(EquipmentSlot.HEAD);
             if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem())){
                 ItemStack stack2 = ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem().getDefaultInstance();

@@ -438,6 +438,8 @@ public class ForgeSounds {
             register(ModSounds.EXTEND_SPIKES, ModSounds.EXTEND_SPIKES_ID);
     public static final RegistryObject<SoundEvent> WALL_LATCH =
             register(ModSounds.WALL_LATCH, ModSounds.WALL_LATCH_ID);
+    public static final RegistryObject<SoundEvent> STONE_MASK_ACTIVATE =
+            register(ModSounds.STONE_MASK_ACTIVATE, ModSounds.STONE_MASK_ACTIVATE_ID);
     public static final RegistryObject<SoundEvent> SUMMON_ACHTUNG =
             register(ModSounds.SUMMON_ACHTUNG, ModSounds.SUMMON_ACHTUNG_ID);
     public static final RegistryObject<SoundEvent> SURVIVOR_REMOVE =

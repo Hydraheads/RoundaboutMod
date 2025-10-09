@@ -264,6 +264,7 @@ public class FabricSounds {
 
         addSound(ModSounds.EXTEND_SPIKES_ID, ModSounds.EXTEND_SPIKES_EVENT);
         addSound(ModSounds.WALL_LATCH_ID, ModSounds.WALL_LATCH_EVENT);
+        addSound(ModSounds.STONE_MASK_ACTIVATE_ID, ModSounds.STONE_MASK_ACTIVATE_EVENT);
 
         addSound(ModSounds.DIO_HOHO_ID, ModSounds.DIO_HOHO_EVENT);
         addSound(ModSounds.DIO_HOHO_2_ID, ModSounds.DIO_HOHO_2_EVENT);
