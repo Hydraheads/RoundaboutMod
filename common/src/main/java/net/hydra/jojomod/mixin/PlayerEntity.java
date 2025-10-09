@@ -94,6 +94,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT$WATCH_STYLE = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.BYTE);
+    @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$FATE = SynchedEntityData.defineId(Player.class,
+            EntityDataSerializers.BYTE);
 
     @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$DODGE_TIME = SynchedEntityData.defineId(Player.class,
@@ -151,22 +154,47 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     @Override
     public void roundabout$setTeamColor(byte color){
-        ((Player) (Object) this).getEntityData().set(ROUNDABOUT$TEAM_COLOR, color);
+        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$TEAM_COLOR)) {
+            ((Player) (Object) this).getEntityData().set(ROUNDABOUT$TEAM_COLOR, color);
+        }
     }
     @Unique
     @Override
     public byte roundabout$getTeamColor(){
-        return this.entityData.get(ROUNDABOUT$TEAM_COLOR);
+        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$TEAM_COLOR)) {
+            return this.entityData.get(ROUNDABOUT$TEAM_COLOR);
+        }
+        return 0;
     }
     @Unique
     @Override
     public void roundabout$setWatchStyle(byte style){
-        ((Player) (Object) this).getEntityData().set(ROUNDABOUT$WATCH_STYLE, style);
+        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$WATCH_STYLE)) {
+            ((Player) (Object) this).getEntityData().set(ROUNDABOUT$WATCH_STYLE, style);
+        }
     }
     @Unique
     @Override
     public byte roundabout$getWatchStyle(){
-        return this.entityData.get(ROUNDABOUT$WATCH_STYLE);
+        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$WATCH_STYLE)) {
+            return this.entityData.get(ROUNDABOUT$WATCH_STYLE);
+        }
+        return 0;
+    }
+    @Unique
+    @Override
+    public void roundabout$setFate(byte style){
+        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$FATE)) {
+            this.getEntityData().set(ROUNDABOUT$FATE, style);
+        }
+    }
+    @Unique
+    @Override
+    public byte roundabout$getFate(){
+        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$FATE)) {
+            return this.entityData.get(ROUNDABOUT$FATE);
+        }
+        return 0;
     }
     @Unique
     private PlayerMaskSlots roundabout$maskInventory = new PlayerMaskSlots(((Player)(Object)this));
@@ -1250,6 +1278,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_CONTROLLING, 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$TEAM_COLOR, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$WATCH_STYLE, (byte) 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$FATE, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BLINDED, false);
         }
     }
