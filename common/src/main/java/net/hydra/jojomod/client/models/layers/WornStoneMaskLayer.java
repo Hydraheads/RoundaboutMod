@@ -31,7 +31,9 @@ public class WornStoneMaskLayer<T extends LivingEntity, A extends HumanoidModel<
     float scale = 1;
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
-        if (MainUtil.isWearingStoneMask(entity)) {
+        boolean stoneMask = (MainUtil.isWearingStoneMask(entity));
+        boolean bloodyMask = (MainUtil.isWearingBloodyStoneMask(entity));
+        if (stoneMask || bloodyMask) {
             if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
                 return;
             LivingEntity livent = entity;
@@ -45,8 +47,13 @@ public class WornStoneMaskLayer<T extends LivingEntity, A extends HumanoidModel<
             float r = isHurt ? 1.0F : 1.0F;
             float g = isHurt ? 0.0F : 1.0F;
             float b = isHurt ? 0.0F : 1.0F;
-            ModStrayModels.WORN_STONE_MASK.render(livent, partialTicks, poseStack, bufferSource, packedLight,
-                    r, g, b, heyFull);
+            if (bloodyMask){
+                ModStrayModels.WORN_BLOODY_STONE_MASK.render(livent, partialTicks, poseStack, bufferSource, packedLight,
+                        r, g, b, heyFull);
+            } else {
+                ModStrayModels.WORN_STONE_MASK.render(livent, partialTicks, poseStack, bufferSource, packedLight,
+                        r, g, b, heyFull);
+            }
             poseStack.popPose();
 
         }

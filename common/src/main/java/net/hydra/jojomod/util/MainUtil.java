@@ -494,6 +494,22 @@ public class MainUtil {
         }
     }
 
+    public static boolean isWearingEitherStoneMask(Entity ent){
+        return isWearingStoneMask(ent) || isWearingBloodyStoneMask(ent);
+    }
+
+    public static void activateStoneMask(Entity ent){
+        if (ent instanceof LivingEntity LE){
+            ItemStack stack = LE.getItemBySlot(EquipmentSlot.HEAD);
+            if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem())){
+                ItemStack stack2 = ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem().getDefaultInstance();
+                stack2.setTag(stack.getTag());
+                LE.setItemSlot(EquipmentSlot.HEAD,stack2);
+                Roundabout.LOGGER.info("yes");
+            }
+        }
+
+    }
     public static boolean isWearingStoneMask(Entity ent){
         if (ent instanceof LivingEntity LE){
             ItemStack stack = LE.getItemBySlot(EquipmentSlot.HEAD);
@@ -742,6 +758,12 @@ public class MainUtil {
             return;
         }
         if (getMobBleed(entity)){
+            if (source != null && isWearingEitherStoneMask(source) && source.distanceTo(entity) < 5){
+                activateStoneMask(source);
+            } else if (isWearingStoneMask(entity)){
+                activateStoneMask(entity);
+            }
+
             ((StandUser)entity).roundabout$setBleedLevel(level);
             ((LivingEntity)entity).addEffect(new MobEffectInstance(ModEffects.BLEED, ticks, level), source);
         }
