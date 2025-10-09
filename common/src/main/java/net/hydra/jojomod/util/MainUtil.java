@@ -1415,12 +1415,11 @@ public class MainUtil {
 
     /**Is it a potion effect that should not be easily discarded or plundered, or has special particles*/
     public static boolean isSpecialEffect(MobEffectInstance value){
-        return value.getEffect().equals(ModEffects.BLEED) || value.getEffect().equals(ModEffects.FACELESS) ||
-                value.getEffect().equals(ModEffects.CAPTURING_LOVE);
+        return isSpecialEffect(value.getEffect());
     }
     public static boolean isSpecialEffect(MobEffect value){
         return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS) ||
-                value.equals(ModEffects.CAPTURING_LOVE);
+                value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING);
     }
     public static boolean canHaveFrictionTaken(LivingEntity LE){
         if (LE.onClimbable()){
