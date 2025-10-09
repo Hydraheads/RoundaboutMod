@@ -773,10 +773,12 @@ public class MainUtil {
             return;
         }
         if (getMobBleed(entity)){
-            if (source != null && isWearingEitherStoneMask(source) && source.distanceTo(entity) < 5){
-                activateStoneMask(source);
-            } else if (isWearingStoneMask(entity)){
-                activateStoneMask(entity);
+            if (!hasEnderBlood(entity) && !hasBlueBlood(entity)) {
+                if (source != null && isWearingEitherStoneMask(source) && source.distanceTo(entity) < 5) {
+                    activateStoneMask(source);
+                } else if (isWearingStoneMask(entity)) {
+                    activateStoneMask(entity);
+                }
             }
 
             ((StandUser)entity).roundabout$setBleedLevel(level);
