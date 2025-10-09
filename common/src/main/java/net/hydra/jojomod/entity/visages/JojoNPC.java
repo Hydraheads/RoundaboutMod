@@ -113,6 +113,7 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
 
     public final AnimationState JOTARO = new AnimationState();
     public final AnimationState JONATHAN = new AnimationState();
+    public final AnimationState VAMPIRE = new AnimationState();
 
     public boolean isSimple(){
         return false;
@@ -163,6 +164,11 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
             this.JOSEPH.startIfStopped(this.tickCount);
         } else {
             this.JOSEPH.stop();
+        }
+        if (standPos == Poses.VAMPIRE_TRANSFORMATION) {
+            this.VAMPIRE.startIfStopped(this.tickCount);
+        } else {
+            this.VAMPIRE.stop();
         }
     }
     public ItemStack getBasis(){

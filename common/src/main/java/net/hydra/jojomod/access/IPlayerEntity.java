@@ -96,5 +96,6 @@ public interface IPlayerEntity {
     AnimationState getJonathan();
     AnimationState getJotaro();
     AnimationState getWatch();
+    AnimationState getVampire();
 
 }

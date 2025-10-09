@@ -670,8 +670,13 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     public final AnimationState roundabout$SITTING = new AnimationState();
     @Unique
+    public final AnimationState roundabout$VAMPIRE = new AnimationState();
+    @Unique
     @Override
     public AnimationState getSitting(){return roundabout$SITTING;}
+    @Unique
+    @Override
+    public AnimationState getVampire(){return roundabout$VAMPIRE;}
     @Unique
     public final AnimationState roundabout$TORTURE_DANCE = new AnimationState();
     @Unique
@@ -766,6 +771,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             this.roundabout$SITTING.startIfStopped(this.tickCount);
         } else {
             this.roundabout$SITTING.stop();
+        }
+        if (roundabout$GetPoseEmote() == Poses.VAMPIRE_TRANSFORMATION.id) {
+            this.roundabout$VAMPIRE.startIfStopped(this.tickCount);
+        } else {
+            this.roundabout$VAMPIRE.stop();
         }
     }
 

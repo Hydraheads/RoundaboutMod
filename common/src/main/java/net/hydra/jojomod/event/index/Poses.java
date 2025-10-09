@@ -17,7 +17,8 @@ public enum Poses {
     JOTARO((byte) 8, PoseAnimations.JOTARO),
     JONATHAN((byte) 9, PoseAnimations.Jonathan),
     WATCH((byte) 10, PoseAnimations.watch),
-    SITTING((byte) 11, PoseAnimations.SITTING);
+    SITTING((byte) 11, PoseAnimations.SITTING),
+    VAMPIRE_TRANSFORMATION((byte) 12, PoseAnimations.VAMPIRE);
 
     public final byte id;
 
@@ -51,6 +52,8 @@ public enum Poses {
             return WATCH;
         } if (bt== SITTING.id) {
             return SITTING;
+        } if (bt== VAMPIRE_TRANSFORMATION.id) {
+            return VAMPIRE_TRANSFORMATION;
         }
         return NONE;
     }
