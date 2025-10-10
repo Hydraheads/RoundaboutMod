@@ -305,7 +305,7 @@ public class ForgeItems {
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> METEORITE_INGOT = addToTab(ITEMS.register("meteorite_ingot",
             () -> new Item(new Item.Properties())));
-    public static final RegistryObject<Item> WALL_STREET_SIGN_DIO_BLOCK_ITEM = addToTab(ITEMS.register("wall_street_sign_dio",
+    public static final RegistryObject<Item> WALL_STREET_SIGN_DIO_BLOCK_ITEM = addToBuildingTab(ITEMS.register("wall_street_sign_dio",
     () -> new BlockItem(ForgeBlocks.WALL_STREET_SIGN_DIO.get(),
                     new Item.Properties()
                             )));
