@@ -9,7 +9,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -20,6 +20,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Player.class)
 public abstract class FatePlayerMixin extends LivingEntity implements IFatePlayer {
@@ -76,6 +77,17 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
             ((ServerLevel) this.level()).sendParticles(ModParticles.BLUE_SPARKLE,
                     vecpos.x,vecpos.y,vecpos.z,
                     0, randomX, randomY, randomZ, 3.5);
+        }
+    }
+
+    /**You cannot get hurt while transformed*/
+    @Inject(method = "hurt", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$hurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> cir) {
+        if (!this.level().isClientSide()) {
+            if (rdbt$vampireTransformation >= 0){
+                cir.setReturnValue(false);
+                return;
+            }
         }
     }
 
