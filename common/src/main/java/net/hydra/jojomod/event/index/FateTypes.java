@@ -22,18 +22,6 @@ public enum FateTypes {
     private FateTypes(byte $$0) {
         this.id = $$0;
     }
-    public static boolean isHuman(LivingEntity entity){
-        if (entity instanceof Player PE){
-            return ((IPlayerEntity)PE).roundabout$getFate() <= HUMAN.id;
-        }
-        return false;
-    }
-    public static boolean isVampire(LivingEntity entity){
-        if (entity instanceof Player PE){
-            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.id;
-        }
-        return false;
-    }
     public static FateTypes getFateFromByte(byte bt){
         if (bt == VAMPIRE.id)
             return VAMPIRE;
@@ -56,5 +44,27 @@ public enum FateTypes {
         if (bt == PLANKTON_COLONY.id)
             return PLANKTON_COLONY;
         return HUMAN;
+    }
+    public static boolean isHuman(LivingEntity entity){
+        if (entity instanceof Player PE){
+            return ((IPlayerEntity)PE).roundabout$getFate() <= HUMAN.id;
+        }
+        return false;
+    }
+    public static boolean isVampire(LivingEntity entity){
+        if (entity instanceof Player PE){
+            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.id;
+        }
+        return false;
+    }
+    public static void setVampire(LivingEntity entity){
+        if (entity instanceof Player PE){
+            ((IPlayerEntity)PE).roundabout$setFate(VAMPIRE.id);
+        }
+    }
+    public static void setHuman(LivingEntity entity){
+        if (entity instanceof Player PE){
+            ((IPlayerEntity)PE).roundabout$setFate(HUMAN.id);
+        }
     }
 }

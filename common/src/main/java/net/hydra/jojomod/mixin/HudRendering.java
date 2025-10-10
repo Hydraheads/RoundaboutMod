@@ -118,7 +118,7 @@ public abstract class HudRendering implements IHudAccess {
                 }
                 if (MainUtil.isWearingBloodyStoneMask(this.minecraft.player)){
                     RenderSystem.enableBlend();
-                    this.renderTextureOverlay($$1, StandIcons.BLOODY_MASK_OVERLAY, 0.7F);
+                    this.renderTextureOverlay($$1, StandIcons.BLOODY_MASK_OVERLAY, 0.55F);
                 }
                 if (user.roundabout$getLocacacaCurse() == LocacacaCurseIndex.HEAD) {
                     if (((IPlayerEntity) this.minecraft.player).roundabout$getMaskSlot() != null &&

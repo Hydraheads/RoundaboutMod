@@ -505,6 +505,45 @@ public class MainUtil {
                 ItemStack stack2 = ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem().getDefaultInstance();
                 stack2.setTag(stack.getTag());
                 LE.setItemSlot(EquipmentSlot.HEAD,stack2);
+                if (ent instanceof Player PE){
+                    IFatePlayer ifp = (IFatePlayer) PE;
+                    if (FateTypes.isHuman(PE)){
+                        ifp.rdbt$startVampireTransformation();
+                    }
+                }
+            }
+        }
+    }
+    public static void popOffStoneMask(Entity ent){
+        if (ent instanceof LivingEntity LE){
+            ItemStack helmet = LE.getItemBySlot(EquipmentSlot.HEAD);
+            if (helmet != null && !helmet.isEmpty() && helmet.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())){
+
+                    Level level = ent.level();
+
+                    // Do nothing if no helmet
+                    if (helmet.isEmpty()) return;
+
+                    // Remove the helmet
+                    ent.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
+
+                    if (!level.isClientSide) {
+                        // Drop item slightly above the player’s head
+                        Vec3 pos = ent.position().add(0, ent.getBbHeight() * 0.8, 0);
+                        ItemEntity drop = new ItemEntity(level, pos.x, pos.y, pos.z, helmet.copy());
+
+                        // Give it some small random velocity like a pop effect
+                        drop.setDeltaMovement(
+                                (level.random.nextDouble() - 0.5) * 0.2,
+                                0.3 + level.random.nextDouble() * 0.2,
+                                (level.random.nextDouble() - 0.5) * 0.2
+                        );
+
+                        level.addFreshEntity(drop);
+                    }
+
+                    // Shrink the player's inventory copy only after spawning the entity
+                    helmet.shrink(helmet.getCount());
             }
         }
     }
