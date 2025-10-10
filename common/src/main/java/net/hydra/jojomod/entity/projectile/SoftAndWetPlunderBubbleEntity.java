@@ -856,6 +856,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                 $$4.setPickUpDelay(40);
                 this.level().addFreshEntity($$4);
             }
+            this.setHeldItem(ItemStack.EMPTY);
         }
     }
 
@@ -867,6 +868,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             $$4.setPickUpDelay(40);
             $$4.setThrower(this.getUUID());
             this.level().addFreshEntity($$4);
+            this.setHeldItem(ItemStack.EMPTY);
             hasDitchedItem = true;
         }
     }
@@ -891,6 +893,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                 $$4.setPickUpDelay(40);
                 this.level().addFreshEntity($$4);
             }
+            this.setHeldItem(ItemStack.EMPTY);
         }
     }
 
