@@ -1,7 +1,10 @@
 package net.hydra.jojomod.mixin.forge;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -12,6 +15,7 @@ import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodData;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,8 +27,36 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ForgeGui.class)
 public abstract class ForgeForgeGui extends Gui {
 
+    @Shadow public int rightHeight;
+
     public ForgeForgeGui(Minecraft p_232355_, ItemRenderer p_232356_) {
         super(p_232355_, p_232356_);
+    }
+
+    @Inject(method = "renderFood(IILnet/minecraft/client/gui/GuiGraphics;)V", at = @At(value = "HEAD"), remap = false, cancellable = true)
+    public void roundabout$renderFood(int width, int height, GuiGraphics guiGraphics, CallbackInfo ci) {
+        Player player = (Player) this.minecraft.getCameraEntity();
+        if (player != null){
+            if (FateTypes.isVampire(player)){
+                ci.cancel();
+                minecraft.getProfiler().push("food");
+                RenderSystem.enableBlend();
+
+                FoodData stats = minecraft.player.getFoodData();
+                int level = stats.getFoodLevel();
+
+                int left = width / 2 + 91;
+                int top = height - rightHeight;
+                rightHeight += 10;
+
+
+                ClientUtil.renderHungerStuff(guiGraphics,player,left,top,
+                        this.random.nextInt(3),level,this.tickCount);
+
+                RenderSystem.disableBlend();
+                minecraft.getProfiler().pop();
+            }
+        }
     }
 
     @Inject(method = "renderAir(IILnet/minecraft/client/gui/GuiGraphics;)V", at = @At(value = "INVOKE",
