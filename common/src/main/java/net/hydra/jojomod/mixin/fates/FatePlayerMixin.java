@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -28,6 +29,7 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
     @Inject(method = "tick", at = @At(value = "HEAD"))
     protected void roundabout$Tick(CallbackInfo ci) {
         if (!this.level().isClientSide()) {
+            rdbt$tickThroughVampire();
             rdbt$tickThroughVampireChange();
         }
     }
@@ -42,6 +44,18 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
         rdbt$vampireTransformation = 0;
         ((StandUser)this).roundabout$setDazed((byte) 120);
         level().playSound(null, this, ModSounds.STONE_MASK_ACTIVATE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+    }
+    @Unique
+    public void rdbt$tickThroughVampire(){
+        if (FateTypes.isVampire(this)){
+            if (level().canSeeSky(this.getOnPos()) &&
+                    this.level().dimension().location().getPath().equals("overworld") &&
+                    this.level().isDay()
+            ){
+                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth()*2);
+            }
+        }
+        //This can move into a dedicated fate class eventually
     }
     @Unique
     public void rdbt$tickThroughVampireChange(){
