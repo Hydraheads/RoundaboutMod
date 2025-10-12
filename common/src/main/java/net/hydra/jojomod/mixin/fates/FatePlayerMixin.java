@@ -2,12 +2,15 @@ package net.hydra.jojomod.mixin.fates;
 
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
@@ -39,20 +42,39 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
     public int rdbt$vampireTransformation = -1;
 
     @Unique
+    @Override
     public void rdbt$startVampireTransformation(){
         //starts the animation
         rdbt$vampireTransformation = 0;
         ((StandUser)this).roundabout$setDazed((byte) 120);
         level().playSound(null, this, ModSounds.STONE_MASK_ACTIVATE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
     }
+
+    @Unique
+    @Override
+    public boolean rdbt$isTransforming(){
+        return rdbt$vampireTransformation > -1 ||
+                (FateTypes.isHuman(this) && MainUtil.isWearingBloodyStoneMask(this));
+    }
     @Unique
     public void rdbt$tickThroughVampire(){
         if (FateTypes.isVampire(this)){
-            if (level().canSeeSky(this.getOnPos()) &&
+            Vec3 yes = this.getEyePosition();
+            Vec3 yes2 = this.position();
+            BlockPos atVec = BlockPos.containing(yes);
+            BlockPos atVec2 = BlockPos.containing(yes2);
+            if ((level().canSeeSky(atVec) || level().canSeeSky(atVec2)) &&
                     this.level().dimension().location().getPath().equals("overworld") &&
                     this.level().isDay()
             ){
                 this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth()*2);
+            }
+        } else if (FateTypes.isHuman(this)){
+            if (MainUtil.isWearingBloodyStoneMask(this) && rdbt$vampireTransformation < 0){
+                rdbt$startVampireTransformation();
+            }
+            if (MainUtil.isWearingStoneMask(this) && hasEffect(ModEffects.BLEED)){
+                MainUtil.activateStoneMask(this);
             }
         }
         //This can move into a dedicated fate class eventually

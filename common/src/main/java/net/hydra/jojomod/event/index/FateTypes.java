@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.index;
 
+import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -54,6 +55,12 @@ public enum FateTypes {
     public static boolean isVampire(LivingEntity entity){
         if (entity instanceof Player PE){
             return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.id;
+        }
+        return false;
+    }
+    public static boolean isTransforming(LivingEntity entity){
+        if (entity instanceof Player PE){
+            return ((IFatePlayer)PE).rdbt$isTransforming();
         }
         return false;
     }

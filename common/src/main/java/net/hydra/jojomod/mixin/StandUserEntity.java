@@ -2973,7 +2973,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "setSprinting", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$canSprintPlayer(boolean $$0, CallbackInfo ci) {
-        if (roundabout$getStandPowers().cancelSprint()){
+        if (roundabout$getStandPowers().cancelSprint() || FateTypes.isTransforming(rdbt$this())){
             ci.cancel();
         }
     }
@@ -3077,7 +3077,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**This code stops a barrage target from losing velocity, preventing lag spikes from causing them to drop.*/
     @ModifyVariable(method = "travel(Lnet/minecraft/world/phys/Vec3;)V", at = @At("STORE"))
     private double roundabout$Travel2(double $$1) {
-        if (this.roundabout$isDazed()) {
+        if (this.roundabout$isDazed() && !FateTypes.isTransforming(rdbt$this())) {
             return 0;
         } else {
             return $$1;
@@ -3087,7 +3087,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Modifies the gravity influence*/
     @ModifyVariable(method = "travel(Lnet/minecraft/world/phys/Vec3;)V", at = @At(value = "STORE"),ordinal = 0)
     private double roundabout$TravelGravity(double $$1) {
-        if (this.roundabout$isDazed()) {
+        if (this.roundabout$isDazed() && !FateTypes.isTransforming(rdbt$this())) {
             return 0;
         } else {
             return roundabout$getGravity($$1);
