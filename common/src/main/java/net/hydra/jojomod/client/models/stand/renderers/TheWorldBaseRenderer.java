@@ -32,6 +32,8 @@ public class TheWorldBaseRenderer<M extends StandEntity> extends StandRenderer<T
     private static final ResourceLocation ULTIMATE_KARS_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/ultimate_kars.png");
     private static final ResourceLocation SCARLET = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/scarlet.png");
     private static final ResourceLocation THE_NETHER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/the_nether.png");
+    private static final ResourceLocation BRONZE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/bronze.png");
+    private static final ResourceLocation SHADE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/shade.png");
     public TheWorldBaseRenderer(EntityRendererProvider.Context context, StandModel root) {
         super(context, root,0f);
         this.addLayer(new TheWorldOverHeavenEyeLayer<>(this));
@@ -78,6 +80,8 @@ public class TheWorldBaseRenderer<M extends StandEntity> extends StandRenderer<T
             return SCARLET;
         } else if (BT == TheWorldEntity.THE_NETHER){
             return THE_NETHER;
+        } else if (BT == TheWorldEntity.BRONZE){
+            return BRONZE;
         }
         return PART_3_SKIN;
     }

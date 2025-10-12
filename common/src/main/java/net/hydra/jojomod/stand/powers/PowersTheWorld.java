@@ -280,22 +280,23 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public List<Byte> getSkinList(){
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add(TheWorldEntity.PART_3_SKIN);
+        $$1.add(TheWorldEntity.MANGA_SKIN);
         if (this.getSelf() instanceof Player PE){
             byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
             ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass){
-                $$1.add(TheWorldEntity.MANGA_SKIN);
                 $$1.add(TheWorldEntity.BLACK_SKIN);
-            } if (Level > 2 || bypass){
                 $$1.add(TheWorldEntity.OVA_SKIN);
-                $$1.add(TheWorldEntity.FOUR_DEE_EXPERIENCE);
-            } if (Level > 3 || bypass){
+            } if (Level > 2 || bypass){
                 $$1.add(TheWorldEntity.HERITAGE_SKIN);
                 $$1.add(TheWorldEntity.ARCADE_SKIN);
                 $$1.add(TheWorldEntity.ARCADE_SKIN_2);
-            } if (Level > 4 || bypass){
+            } if (Level > 3 || bypass){
                 $$1.add(TheWorldEntity.DARK_SKIN);
+                $$1.add(TheWorldEntity.BRONZE);
+                $$1.add(TheWorldEntity.FOUR_DEE_EXPERIENCE);
+            } if (Level > 4 || bypass){
                 $$1.add(TheWorldEntity.AGOGO_SKIN);
                 $$1.add(TheWorldEntity.SCARLET);
             } if (Level > 5 || bypass){
@@ -1025,6 +1026,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return Component.translatable(  "skins.roundabout.the_world.scarlet");
         } else if (skinId == TheWorldEntity.THE_NETHER){
             return Component.translatable(  "skins.roundabout.the_world.the_nether");
+        } else if (skinId == TheWorldEntity.BRONZE){
+            return Component.translatable(  "skins.roundabout.the_world.bronze");
         }
         return Component.translatable(  "skins.roundabout.the_world.base");
     }
