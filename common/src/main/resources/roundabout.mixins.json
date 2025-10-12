@@ -62,6 +62,7 @@
     "effects.bleed.BleedFoodData",
     "effects.hex.HexItem",
     "fates.FatePlayerMixin",
+    "fates.FatesMobEffect",
     "gravity.GravityAbstractArrowMixin",
     "gravity.GravityAbstractHorseMixin",
     "gravity.GravityAbstractMinecart",

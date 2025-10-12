@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.gui.*;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.item.ModItems;
@@ -1347,10 +1348,10 @@ public class ClientUtil {
                 int $$25 = 238;
                 int $$26 = 238;
                 int sizey2 = 0;
-                if (player.hasEffect(MobEffects.HUNGER)) {
+                if (player.hasEffect(ModEffects.BLEED)) {
                     $$25 = 229;
                     $$26 = 229;
-                    sizey2 = 9;
+                    sizey2 = 0;
                 }
 
                 if (player.getFoodData().getSaturationLevel() <= 0.0F && tickCount % (foodlevel * 3 + 1) == 0) {

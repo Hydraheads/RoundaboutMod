@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
@@ -919,6 +920,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         compoundtag.putFloat("sizePercent",roundabout$sizePercent);
         compoundtag.putByte("teamColor",roundabout$getTeamColor());
         compoundtag.putByte("watchStyle",roundabout$getWatchStyle());
+        compoundtag.putByte("fate",roundabout$getFate());
         $$0.put("roundabout",compoundtag);
 
         return $$0;
@@ -964,6 +966,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
         if (compoundtag2.contains("watchStyle")) {
             roundabout$setWatchStyle(compoundtag2.getByte("watchStyle"));
+        }
+        if (compoundtag2.contains("fate")) {
+            roundabout$setFate(compoundtag2.getByte("fate"));
         }
 
         //roundabout$maskInventory.addItem()

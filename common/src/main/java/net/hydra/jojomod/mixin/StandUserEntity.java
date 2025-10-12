@@ -27,6 +27,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -3868,6 +3869,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Stone Heart and Potion Ticks*/
     @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;tickEffects()V", shift = At.Shift.BEFORE))
     protected void roundabout$baseTick(CallbackInfo ci) {
+
+        /**Makes bleed work for vamps against their hunger*/
+        if (!this.level().isClientSide() && rdbt$this() instanceof  Player PE) {
+            if (FateTypes.isVampire(PE)) {
+                if (hasEffect(ModEffects.BLEED)) {
+                    MobEffectInstance ei = getEffect(ModEffects.BLEED);
+                    if (ei != null){
+                        PE.causeFoodExhaustion(0.005F * (float) (ei.getAmplifier() + 1));
+                    }
+                }
+            }
+        }
 
         byte curse = this.roundabout$getLocacacaCurse();
         if (curse > -1) {
