@@ -18,7 +18,8 @@ public enum Poses {
     JONATHAN((byte) 9, PoseAnimations.Jonathan),
     WATCH((byte) 10, PoseAnimations.watch),
     SITTING((byte) 11, PoseAnimations.SITTING),
-    VAMPIRE_TRANSFORMATION((byte) 12, PoseAnimations.VAMPIRE);
+    VAMPIRE_TRANSFORMATION((byte) 12, PoseAnimations.VAMPIRE),
+    SITTING_CHAIR((byte) 12, PoseAnimations.SITTING);
 
     public final byte id;
 
