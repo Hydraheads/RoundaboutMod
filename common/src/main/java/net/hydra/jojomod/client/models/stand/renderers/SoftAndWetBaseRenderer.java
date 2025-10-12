@@ -29,6 +29,8 @@ public class SoftAndWetBaseRenderer<M extends StandEntity> extends StandRenderer
     private static final ResourceLocation NATURE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/nature.png");
     private static final ResourceLocation ART = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/art.png");
     private static final ResourceLocation MELON = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/melon.png");
+    private static final ResourceLocation WHEEL = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/wheel.png");
+    private static final ResourceLocation ACTION = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/action.png");
 
     public SoftAndWetBaseRenderer(EntityRendererProvider.Context context, StandModel root) {
         super(context, root,0f);
@@ -52,6 +54,8 @@ public class SoftAndWetBaseRenderer<M extends StandEntity> extends StandRenderer
             case (SoftAndWetEntity.NATURE) -> NATURE;
             case (SoftAndWetEntity.ART) -> ART;
             case (SoftAndWetEntity.MELON) -> MELON;
+            case (SoftAndWetEntity.WHEEL) -> WHEEL;
+            case (SoftAndWetEntity.ACTION) -> ACTION;
             default -> LIGHT_SKIN;
         };
     }

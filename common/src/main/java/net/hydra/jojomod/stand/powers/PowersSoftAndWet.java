@@ -435,12 +435,14 @@ public class PowersSoftAndWet extends NewPunchingStand {
                 $$1.add(SoftAndWetEntity.FIGURE_SKIN);
                 $$1.add(SoftAndWetEntity.COLORS);
             } if (Level > 4 || bypass){
-                $$1.add(SoftAndWetEntity.KNIGHT);
+                $$1.add(SoftAndWetEntity.ACTION);
                 $$1.add(SoftAndWetEntity.MELON);
+                $$1.add(SoftAndWetEntity.WHEEL);
             } if (Level > 5 || bypass){
                 $$1.add(SoftAndWetEntity.DROWNED_SKIN);
                 $$1.add(SoftAndWetEntity.DROWNED_SKIN_2);
             } if (Level > 6 || bypass){
+                $$1.add(SoftAndWetEntity.KNIGHT);
                 $$1.add(SoftAndWetEntity.KING_SKIN);
                 $$1.add(SoftAndWetEntity.BETA_SKIN);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
@@ -2541,6 +2543,8 @@ public void unlockSkin(){
             case SoftAndWetEntity.MORIOH -> Component.translatable("skins.roundabout.soft_and_wet.morioh");
             case SoftAndWetEntity.ART -> Component.translatable("skins.roundabout.soft_and_wet.art");
             case SoftAndWetEntity.NATURE -> Component.translatable("skins.roundabout.soft_and_wet.nature");
+            case SoftAndWetEntity.WHEEL -> Component.translatable("skins.roundabout.soft_and_wet.wheel");
+            case SoftAndWetEntity.ACTION -> Component.translatable("skins.roundabout.soft_and_wet.action");
             default -> Component.translatable("skins.roundabout.soft_and_wet.light");
         };
     }
