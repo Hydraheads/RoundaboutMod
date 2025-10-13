@@ -227,6 +227,9 @@ public class StandPowers {
     public void onStandSwitch(){
         getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
     }
+    /**Runs this code while switching into stand with a disc*/
+    public void onStandSwitchInto(){
+    }
 
     /**Holds one arm out with the player model, override if you are using a stand like soft and wet or emperor that
      * should make the player hold their arm out in 3d person*/

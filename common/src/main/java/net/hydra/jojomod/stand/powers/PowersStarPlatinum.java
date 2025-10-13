@@ -125,6 +125,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         }
     }
 
+
     @Override
     public float getMiningMultiplier() {
         return (float) (1F*(ClientNetworking.getAppropriateConfig().

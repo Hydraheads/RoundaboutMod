@@ -1343,6 +1343,25 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
 
 
+    @Override
+    public void onStandSwitchInto(){
+        float tsTimeRemaining = (float) (ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopMinimumCooldown+((this.getMaxChargeTSTime())*5*(ClientNetworking.getAppropriateConfig().timeStopSettings.additionalCooldownPerSecondsUsed *0.01)));
+        tsTimeRemaining+=ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopBonusActionsCooldown;
+
+        int sendTSCooldown = Math.round(tsTimeRemaining);
+        if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative() && ClientNetworking.getAppropriateConfig().timeStopSettings.creativeModeInfiniteTimeStop))) {
+            if (this.getSelf() instanceof Player) {
+                if (!isClient()) {
+                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, sendTSCooldown);
+                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
+                }
+            }
+            this.setCooldown(PowerIndex.SKILL_4, sendTSCooldown);
+            this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
+        }
+        super.onStandSwitchInto();
+    }
+
     public static final byte KICK_BARRAGE_NOISE = 106;
     public static final byte KICK_BARRAGE_NOISE_2 = KICK_BARRAGE_NOISE+1;
     public static final byte KICK_BARRAGE_NOISE_3 = KICK_BARRAGE_NOISE+2;

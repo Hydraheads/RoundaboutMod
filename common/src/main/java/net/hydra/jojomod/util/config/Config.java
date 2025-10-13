@@ -126,8 +126,6 @@ public class Config implements Cloneable {
         public Boolean canThrowVisagesOntoOtherPlayers;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer switchStandDiscLength;
-        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
-        public Integer switchStandDiscWhileOnCooldownsLength;
         @BooleanOption(group = "inherit", value = false)
         public Boolean standDiscsDropWithKeepGameRuleOff;
         @IntOption(group = "inherit", value = 1200, min = 0, max = 72000)

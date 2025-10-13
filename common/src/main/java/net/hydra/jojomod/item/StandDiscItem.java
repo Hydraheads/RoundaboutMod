@@ -60,6 +60,7 @@ public class StandDiscItem extends Item {
                 ((StandUser) $$1).roundabout$setActive(false);
                 ((StandUser) $$1).roundabout$setStandDisc($$3.copy());
                 SI.generateStandPowers($$1);
+                ((StandUser) $$1).roundabout$getStandPowers().onStandSwitchInto();
             }
             $$3.shrink(1);
         }
