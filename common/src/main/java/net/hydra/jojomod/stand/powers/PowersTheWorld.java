@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -24,6 +25,7 @@ import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -61,6 +63,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
@@ -480,10 +483,17 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             playSoundsIfNearby(ASSAULT_NOISE, 27, false);
             this.animateStand(TheWorldEntity.ASSAULT);
             this.poseStand(OffsetIndex.LOOSE);
-            stand.setYRot(this.getSelf().getYHeadRot() % 360);
-            stand.setXRot(this.getSelf().getXRot());
+
+            Vec2 twoVec = new Vec2((this.getSelf().getYHeadRot() % 360),(this.getSelf().getXRot()));
+            Direction gdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+            Vec2 twoVecGrav = RotationUtil.rotPlayerToWorld(twoVec,gdir);
+            Vec3 threeVec = new Vec3(0,0.25,0);
+            threeVec = RotationUtil.vecPlayerToWorld(threeVec,gdir);
+
+            stand.setYRot(twoVec.x);
+            stand.setXRot(twoVec.y);
             assultVec = DamageHandler.getRotationVector(
-                    this.getSelf().getXRot(), (float) (this.getSelf().getYRot())).scale(1.8).add(0,0.25,0);
+                    twoVecGrav.y, (float) (twoVecGrav.x)).scale(1.8).add(threeVec.x,threeVec.y,threeVec.z);
             stand.setPos(this.getSelf().position().add(assultVec));
             return true;
         }
@@ -574,8 +584,14 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                                 stand.setYRot(this.getSelf().getYHeadRot() % 360);
                                 stand.setXRot(this.getSelf().getXRot());
                             } else {
-                                stand.setYRot(getLookAtPlaceYaw(stand,blockCenterPlus));
-                                stand.setXRot(getLookAtPlacePitch(stand,blockCenterPlus));
+
+                                Direction gdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                                Vec2 grot = new Vec2(getLookAtPlaceYaw(stand,blockCenterPlus),
+                                        getLookAtPlacePitch(stand,blockCenterPlus)
+                                        );
+                                grot =  RotationUtil.rotWorldToPlayer(grot,gdir);
+                                stand.setYRot(grot.x);
+                                stand.setXRot(grot.y);
                             }
                             if (post < 0.4){
                                 stand.setPos(blockHit.getBlockPos().getCenter());

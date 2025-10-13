@@ -44,6 +44,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -210,8 +211,13 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                                 stand.setYRot(this.getSelf().getYHeadRot() % 360);
                                 stand.setXRot(this.getSelf().getXRot());
                             } else {
-                                stand.setYRot(getLookAtPlaceYaw(stand,vec3d3));
-                                stand.setXRot(getLookAtPlacePitch(stand,vec3d3));
+                                Direction gdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                                Vec2 grot = new Vec2(getLookAtPlaceYaw(stand,vec3d3),
+                                        getLookAtPlacePitch(stand,vec3d3)
+                                );
+                                grot =  RotationUtil.rotWorldToPlayer(grot,gdir);
+                                stand.setYRot(grot.x);
+                                stand.setXRot(grot.y);
                             }
                             if (post < 0.4){
                                 stand.setPos(vec3d3);
@@ -1257,10 +1263,17 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             stand.setFadePercent(50);
             this.setActivePower(PowerIndex.POWER_2_BLOCK);
             this.poseStand(OffsetIndex.LOOSE);
-            stand.setYRot(this.getSelf().getYHeadRot() % 360);
-            stand.setXRot(this.getSelf().getXRot());
+
+            Vec2 twoVec = new Vec2((this.getSelf().getYHeadRot() % 360),(this.getSelf().getXRot()));
+            Direction gdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+            Vec2 twoVecGrav = RotationUtil.rotPlayerToWorld(twoVec,gdir);
+            Vec3 threeVec = new Vec3(0,0.25,0);
+            threeVec = RotationUtil.vecPlayerToWorld(threeVec,gdir);
+
+            stand.setYRot(twoVec.x);
+            stand.setXRot(twoVec.y);
             moveVec = DamageHandler.getRotationVector(
-                    this.getSelf().getXRot(), (float) (this.getSelf().getYRot())).scale(1.8).add(0, 0.25, 0);
+                    twoVecGrav.y, (float) (twoVecGrav.x)).scale(1.8).add(threeVec.x,threeVec.y,threeVec.z);
             stand.setPos(this.getSelf().position().add(moveVec));
             return true;
         }
