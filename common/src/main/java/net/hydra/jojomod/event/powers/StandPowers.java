@@ -2759,12 +2759,24 @@ public class StandPowers {
                     getLookAtEntityYaw(self,entity));
 
             standEntity.setPosRaw(entityPoint.x(),entityPoint.y()+getYOffSet(standEntity),entityPoint.z());
-            standEntity.setXRot(getLookAtEntityPitch(standEntity,standSelf));
-            standEntity.setYRot(getLookAtEntityYaw(standEntity,standSelf));
+
+            Direction gdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+            Vec2 grot = new Vec2(getLookAtEntityYaw(standEntity,standSelf),
+                    getLookAtEntityPitch(standEntity,standSelf)
+            );
+            grot =  RotationUtil.rotWorldToPlayer(grot,gdir);
+
+            standEntity.setXRot(grot.y);
+            standEntity.setYRot(grot.x);
+
+            grot = new Vec2(getLookAtEntityYaw(standSelf,standEntity),
+                    getLookAtEntityPitch(standSelf,standEntity)
+            );
+            grot =  RotationUtil.rotWorldToPlayer(grot,gdir);
 
             standSelf.setPosRaw(selfPoint.x(),selfPoint.y()+getYOffSet(standSelf),selfPoint.z());
-            standSelf.setXRot(getLookAtEntityPitch(standSelf,standEntity));
-            standSelf.setYRot(getLookAtEntityYaw(standSelf,standEntity));
+            standSelf.setXRot(grot.y);
+            standSelf.setYRot(grot.x);
 
         }
     }
