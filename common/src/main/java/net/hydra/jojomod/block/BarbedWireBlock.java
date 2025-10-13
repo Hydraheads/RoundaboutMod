@@ -79,8 +79,10 @@ public class BarbedWireBlock extends RotatedPillarBlock
                         power*= this.wirePower;
                         /**Velocity for players is clientside so it requires additional packet*/
                         if (!level.isClientSide && !(entity instanceof Player) && !(entity.getControllingPassenger() != null && entity.getControllingPassenger() instanceof Player)) {
-                            if (entity.hurt(ModDamageTypes.of(level, ModDamageTypes.BARBED_WIRE), power)){
-                                MainUtil.makeBleed(entity,0,200,null);
+                            if (!(entity instanceof LivingEntity LE && MainUtil.isBossMob(LE))) {
+                                if (entity.hurt(ModDamageTypes.of(level, ModDamageTypes.BARBED_WIRE), power)) {
+                                    MainUtil.makeBleed(entity, 0, 200, null);
+                                }
                             }
                         } else if (level.isClientSide && (entity instanceof Player || (entity.getControllingPassenger() != null && entity.getControllingPassenger() instanceof Player))){
                             C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_VELOCITY_BARBED_WIRE,power);
