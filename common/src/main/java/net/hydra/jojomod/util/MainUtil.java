@@ -170,6 +170,17 @@ public class MainUtil {
         return true;
     }
 
+    public static void clearCooldowns(Entity ent){
+        if (ent instanceof LivingEntity LE){
+            StandUser SU = ((StandUser) LE);
+            StandPowers powers = SU.roundabout$getStandPowers();
+            powers.refreshCooldowns();
+            if (ent instanceof ServerPlayer SP){
+                S2CPacketUtil.refreshCooldowns(SP);
+            }
+        }
+    }
+
     public static boolean isKnockbackImmune(Entity ent){
         if (ent instanceof LivingEntity LE){
             StandUser SU = ((StandUser) LE);

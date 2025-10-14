@@ -463,6 +463,9 @@ public class ClientUtil {
                         PW.setHeelExtension(3);
                     }
                 }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.RefreshAllCooldowns.value)) {
+                    MainUtil.clearCooldowns(player);
+                }
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();
                 //        ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));

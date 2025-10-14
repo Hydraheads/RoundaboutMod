@@ -2669,6 +2669,16 @@ public class StandPowers {
         return false;
     }
 
+    public void refreshCooldowns(){
+        List<CooldownInstance> CDCopy = new ArrayList<>(StandCooldowns) {
+        };
+        for (byte i = 0; i < CDCopy.size(); i++){
+            CooldownInstance ci = CDCopy.get(i);
+            ci.time = -1;
+        }
+        StandCooldowns = CDCopy;
+    }
+
     public AbilityIconInstance drawSingleGUIIcon(GuiGraphics context, int size, int startingLeft, int startingTop, int levelToUnlock,
                                                  String nameSTR, String instructionStr, ResourceLocation draw, int extra, byte level, boolean bypass){
         Component name;
