@@ -138,6 +138,13 @@ public class MainUtil {
         }
         return false;
     }
+    public static boolean isItemGrabBlacklisted(ItemStack stack){
+        ResourceLocation rl = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        if (standBlockGrabBlacklist != null && !standBlockGrabBlacklist.isEmpty() && rl != null && standBlockGrabBlacklist.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
     public static boolean isMobStandUserBlacklisted(Entity ent){
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
         if (naturalStandUserMobBlacklist != null && !naturalStandUserMobBlacklist.isEmpty() && rl != null && naturalStandUserMobBlacklist.contains(rl.toString())){

@@ -1298,8 +1298,11 @@ public class PowersSoftAndWet extends NewPunchingStand {
     /**Explosive Item Bubble Shooting*/
     public boolean itemBubbleShot() {
         ItemStack stack = ((Player) this.getSelf()).getInventory().getItem(this.grabInventorySlot);
-        if (!stack.isEmpty() && !(stack.getItem() instanceof BlockItem &&
-                ((BlockItem) stack.getItem()).getBlock() instanceof ShulkerBoxBlock)) {
+        if (!stack.isEmpty() &&
+                !(MainUtil.isItemGrabBlacklisted(stack)) &&
+                !(stack.getItem() instanceof BlockItem
+                        && (MainUtil.isBlockBlacklisted(((BlockItem)stack.getItem()).getBlock().defaultBlockState()) ||
+                        ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock))) {
             this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().softAndWetSettings.itemBubbleShotCooldown);
             if (!this.self.level().isClientSide()) {
 
