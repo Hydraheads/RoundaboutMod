@@ -658,7 +658,9 @@ public abstract class GravityEntityMixin implements IGravityEntity {
             rdbdt$taggedForFlip = false;
             vec3d = RotationUtil.vecWorldToPlayer(vec3d, gravityDirection).add(0,-0.012,0);
         } else {
-            if (gravityDirection != Direction.DOWN) {
+            if (gravityDirection != Direction.DOWN && (rdbt$this() instanceof Player PE &&
+                    !(PE.isFallFlying() || PE.getAbilities().flying
+                    || PE.isSpectator()))) {
                 vec3d = vec3d.add(0,-0.012,0);
             }
         }
