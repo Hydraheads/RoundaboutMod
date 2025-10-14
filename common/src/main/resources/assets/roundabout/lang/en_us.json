@@ -1552,6 +1552,9 @@
   "config.roundabout.standThrownEntityFallDamageImmmunityTicks.name": "Thrown Fall Prot Ticks",
   "config.roundabout.standThrownEntityFallDamageImmmunityTicks.desc": "By default, throwing an entity gives them brief fall damage immunity ticks, so you need to throw them far down something to get hurt in this manner.",
 
+  "config.roundabout.enableBowlerHatRender.name": "Enable Bowler Hat Render",
+  "config.roundabout.enableBowlerHatRender.desc": "Whether or not the bowler hat renders on your head while holding it.",
+
 
   "config.roundabout.cinderellaSpacing.name": "Cinderella Salon Spacing",
   "config.roundabout.cinderellaSpacing.desc": "How far spaced these structures are.",

@@ -83,8 +83,6 @@ public class Config implements Cloneable {
     public StarPlatinumSettings starPlatinumSettings;
     @NestedOption(group = "modded")
     public TimeStopSettings timeStopSettings;
-    @NestedOption(group = "modded")
-    public BowlerHatSettings bowlerHatSettings;
 
     public static class VanillaMCTweaks {
         @BooleanOption(group = "inherit", value = true)
@@ -719,9 +717,5 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 19, min = 0, max = 100)
         public Integer postTSiframes;
 
-    }
-    public static class BowlerHatSettings {
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean enableHatRender;
     }
 }
