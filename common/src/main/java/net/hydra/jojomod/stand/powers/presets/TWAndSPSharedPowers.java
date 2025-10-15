@@ -44,6 +44,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -210,8 +211,13 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                                 stand.setYRot(this.getSelf().getYHeadRot() % 360);
                                 stand.setXRot(this.getSelf().getXRot());
                             } else {
-                                stand.setYRot(getLookAtPlaceYaw(stand,vec3d3));
-                                stand.setXRot(getLookAtPlacePitch(stand,vec3d3));
+                                Direction gdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                                Vec2 grot = new Vec2(getLookAtPlaceYaw(stand,vec3d3),
+                                        getLookAtPlacePitch(stand,vec3d3)
+                                );
+                                grot =  RotationUtil.rotWorldToPlayer(grot,gdir);
+                                stand.setYRot(grot.x);
+                                stand.setXRot(grot.y);
                             }
                             if (post < 0.4){
                                 stand.setPos(vec3d3);
@@ -1257,10 +1263,17 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             stand.setFadePercent(50);
             this.setActivePower(PowerIndex.POWER_2_BLOCK);
             this.poseStand(OffsetIndex.LOOSE);
-            stand.setYRot(this.getSelf().getYHeadRot() % 360);
-            stand.setXRot(this.getSelf().getXRot());
+
+            Vec2 twoVec = new Vec2((this.getSelf().getYHeadRot() % 360),(this.getSelf().getXRot()));
+            Direction gdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+            Vec2 twoVecGrav = RotationUtil.rotPlayerToWorld(twoVec,gdir);
+            Vec3 threeVec = new Vec3(0,0.25,0);
+            threeVec = RotationUtil.vecPlayerToWorld(threeVec,gdir);
+
+            stand.setYRot(twoVec.x);
+            stand.setXRot(twoVec.y);
             moveVec = DamageHandler.getRotationVector(
-                    this.getSelf().getXRot(), (float) (this.getSelf().getYRot())).scale(1.8).add(0, 0.25, 0);
+                    twoVecGrav.y, (float) (twoVecGrav.x)).scale(1.8).add(threeVec.x,threeVec.y,threeVec.z);
             stand.setPos(this.getSelf().position().add(moveVec));
             return true;
         }
@@ -1329,6 +1342,25 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
     }
 
+
+    @Override
+    public void onStandSwitchInto(){
+        float tsTimeRemaining = (float) (ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopMinimumCooldown+((this.getMaxChargeTSTime())*5*(ClientNetworking.getAppropriateConfig().timeStopSettings.additionalCooldownPerSecondsUsed *0.01)));
+        tsTimeRemaining+=ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopBonusActionsCooldown;
+
+        int sendTSCooldown = Math.round(tsTimeRemaining);
+        if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative() && ClientNetworking.getAppropriateConfig().timeStopSettings.creativeModeInfiniteTimeStop))) {
+            if (this.getSelf() instanceof Player) {
+                if (!isClient()) {
+                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, sendTSCooldown);
+                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
+                }
+            }
+            this.setCooldown(PowerIndex.SKILL_4, sendTSCooldown);
+            this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
+        }
+        super.onStandSwitchInto();
+    }
 
     public static final byte KICK_BARRAGE_NOISE = 106;
     public static final byte KICK_BARRAGE_NOISE_2 = KICK_BARRAGE_NOISE+1;

@@ -438,6 +438,19 @@ public class PowersJustice extends NewDashPreset {
         }
     }
 
+    @Override
+    public void onStandSwitchInto(){
+        if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative()))) {
+            if (this.getSelf() instanceof Player) {
+                if (!isClient()) {
+                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().justiceSettings.fogCloneCooldown);
+                }
+            }
+            this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().justiceSettings.fogCloneCooldown);
+        }
+        super.onStandSwitchInto();
+    }
+
     public LivingEntity rollCorpse(){
         LivingEntity corpse = null;
         if (this.getSelf() instanceof Skeleton){

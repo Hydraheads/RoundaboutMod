@@ -1841,6 +1841,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         Item tem = BuiltInRegistries.ITEM.get(rl);
                         if (tem != null) {
                             roundabout$standDisc = tem.getDefaultInstance();
+                            if (this.roundabout$getStandPowers() != null && this.level().isClientSide())
+                                this.roundabout$getStandPowers().onStandSwitchInto();
                         }
                     }
                 }

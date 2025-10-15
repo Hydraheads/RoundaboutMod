@@ -138,6 +138,13 @@ public class MainUtil {
         }
         return false;
     }
+    public static boolean isItemGrabBlacklisted(ItemStack stack){
+        ResourceLocation rl = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        if (standBlockGrabBlacklist != null && !standBlockGrabBlacklist.isEmpty() && rl != null && standBlockGrabBlacklist.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
     public static boolean isMobStandUserBlacklisted(Entity ent){
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
         if (naturalStandUserMobBlacklist != null && !naturalStandUserMobBlacklist.isEmpty() && rl != null && naturalStandUserMobBlacklist.contains(rl.toString())){
@@ -161,6 +168,17 @@ public class MainUtil {
             return false;
         }
         return true;
+    }
+
+    public static void clearCooldowns(Entity ent){
+        if (ent instanceof LivingEntity LE){
+            StandUser SU = ((StandUser) LE);
+            StandPowers powers = SU.roundabout$getStandPowers();
+            powers.refreshCooldowns();
+            if (ent instanceof ServerPlayer SP){
+                S2CPacketUtil.refreshCooldowns(SP);
+            }
+        }
     }
 
     public static boolean isKnockbackImmune(Entity ent){

@@ -20,6 +20,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -229,6 +230,21 @@ public class PowersMandom extends NewDashPreset {
             }
         }
         return true;
+    }
+
+    @Override
+    public void onStandSwitchInto(){
+        if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative()))) {
+            if (this.getSelf() instanceof Player) {
+                if (!isClient()) {
+                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownv2
+                    + ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownExtraCondition);
+                }
+            }
+            this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownv2
+                    + ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownExtraCondition);
+        }
+        super.onStandSwitchInto();
     }
 
 

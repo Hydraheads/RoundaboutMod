@@ -33,6 +33,13 @@ public class S2CPacketUtil {
             );
         }
     }
+    public static void refreshCooldowns(Player player){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.RefreshAllCooldowns.value
+            );
+        }
+    }
     public static void synchGuard(Player player, float guardPoints, boolean guardBroken){
         if (player instanceof ServerPlayer SP) {
             ModMessageEvents.sendToPlayer(SP,

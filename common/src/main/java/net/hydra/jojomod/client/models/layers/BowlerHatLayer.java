@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.item.BowlerHatItem;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -48,7 +49,8 @@ public class BowlerHatLayer<T extends LivingEntity, A extends HumanoidModel<T>> 
 
         boolean isHoldingBowlerHat = (held.getItem() instanceof BowlerHatItem) || (offHeld.getItem() instanceof BowlerHatItem);
 
-        if (!isHoldingBowlerHat || !ClientNetworking.getAppropriateConfig().bowlerHatSettings.enableHatRender) {
+        if (!isHoldingBowlerHat || !(ConfigManager.getClientConfig() != null &&
+                ConfigManager.getClientConfig().enableBowlerHatRender)) {
             return;
         }
 

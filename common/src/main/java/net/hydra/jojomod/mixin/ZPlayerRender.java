@@ -255,6 +255,8 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             }
         }
     }
+
+
     @ModifyVariable(method = "getArmPose", at = @At(value = "STORE"),ordinal = 0)
     private static ItemStack roundabout$GetArmPose2(ItemStack $$0) {
         if (IH == InteractionHand.MAIN_HAND && ((StandUserClient)ACP).roundabout$getRoundaboutRenderMainHand() != null){
@@ -326,7 +328,8 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             return;
         }
 
-        if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()) {
+        if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()
+        ) {
 
             $$6.rightLeg.copyFrom($$6.rightArm);
             $$6.rightLeg.zRot -= 0.8F;

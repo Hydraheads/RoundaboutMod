@@ -1,7 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPermaCasting;
@@ -29,7 +28,6 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
@@ -3292,6 +3290,21 @@ public class PowersMagiciansRed extends NewPunchingStand {
             return true;
         }
         return super.isAttackIneptVisually(activeP,slot);
+    }
+
+    @Override
+    public void onStandSwitchInto(){
+        if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative()))) {
+            if (this.getSelf() instanceof Player) {
+                if (!isClient()) {
+                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2_SNEAK, ClientNetworking.getAppropriateConfig().magiciansRedSettings.hurricaneSpecialCooldown);
+                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().magiciansRedSettings.flameCrashCooldown);
+                }
+            }
+            this.setCooldown(PowerIndex.SKILL_2_SNEAK, ClientNetworking.getAppropriateConfig().magiciansRedSettings.hurricaneSpecialCooldown);
+            this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().magiciansRedSettings.flameCrashCooldown);
+        }
+        super.onStandSwitchInto();
     }
 
     public boolean isInRain() {

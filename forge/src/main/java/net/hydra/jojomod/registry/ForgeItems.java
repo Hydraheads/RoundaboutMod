@@ -110,6 +110,10 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.WOOL_SLAB_BLUE.get(),
                     new Item.Properties()
             )));
+    public static final RegistryObject<BlockItem> WOOL_SLAB_BROWN_ITEM = addToBuildingTab(ITEMS.register("wool_slab_brown",
+            () -> new BlockItem(ForgeBlocks.WOOL_SLAB_BROWN.get(),
+                    new Item.Properties()
+            )));
     public static final RegistryObject<BlockItem> WOOL_SLAB_CYAN_ITEM = addToBuildingTab(ITEMS.register("wool_slab_cyan",
             () -> new BlockItem(ForgeBlocks.WOOL_SLAB_CYAN.get(),
                     new Item.Properties()
@@ -216,6 +220,10 @@ public class ForgeItems {
             )));
     public static final RegistryObject<BlockItem> WOOL_STAIRS_YELLOW_ITEM = addToBuildingTab(ITEMS.register("wool_stairs_yellow",
             () -> new BlockItem(ForgeBlocks.WOOL_STAIRS_YELLOW.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_STAIRS_BROWN_ITEM = addToBuildingTab(ITEMS.register("wool_stairs_brown",
+            () -> new BlockItem(ForgeBlocks.WOOL_STAIRS_BROWN.get(),
                     new Item.Properties()
             )));
     public static final RegistryObject<BlockItem> LOCACACA_CACTUS_ITEM = addToBuildingTab(ITEMS.register("locacaca_cactus",

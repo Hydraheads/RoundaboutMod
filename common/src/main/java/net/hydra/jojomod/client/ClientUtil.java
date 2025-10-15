@@ -463,6 +463,9 @@ public class ClientUtil {
                         PW.setHeelExtension(3);
                     }
                 }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.RefreshAllCooldowns.value)) {
+                    MainUtil.clearCooldowns(player);
+                }
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();
                 //        ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));
@@ -1125,20 +1128,11 @@ public class ClientUtil {
         if (context == 1) {
             ((StandUser) player).roundabout$setGasolineTime(context);
         } else if (context == PacketDataIndex.S2C_SIMPLE_FREEZE_STAND) {
-            if (((StandUser)player).roundabout$getStandPowers().hasCooldowns() ||
-                    ((StandUser)player).roundabout$isSealed()) {
-                int punishTicks = ClientNetworking.getAppropriateConfig().itemSettings.switchStandDiscWhileOnCooldownsLength;
-                if (punishTicks > 0){
-                    ((StandUser) player).roundabout$setMaxSealedTicks(punishTicks);
-                    ((StandUser) player).roundabout$setSealedTicks(punishTicks);
-                }
-            } else {
                 int switchTicks = ClientNetworking.getAppropriateConfig().itemSettings.switchStandDiscLength;
                 if (switchTicks > 0){
                     ((StandUser) player).roundabout$setMaxSealedTicks(switchTicks);
                     ((StandUser) player).roundabout$setSealedTicks(switchTicks);
                 }
-            }
         } else if (context == PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK) {
             ((StandUser) player).roundabout$getStandPowers().suspendGuard = true;
             ((StandUser) player).roundabout$getStandPowers().scopeLevel = 0;
