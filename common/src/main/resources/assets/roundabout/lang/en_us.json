@@ -1028,11 +1028,11 @@
   "ability.roundabout.place_invis.desc": "Place blocks, passing your invisibility duration down to them. Only works while you are invisible. To activate this skill, you must be holding a block and invisible.",
 
   "ability.roundabout.ratt_scope": "Scoped Mode",
-  "ability.roundabout.ratt_scope.desc": "Hold Ratt and scope in, allowing you to shoot while moving",
+  "ability.roundabout.ratt_scope.desc": "Hold Ratt and scope in, allowing you to shoot while moving. The darts in this form bounce on surfaces",
   "ability.roundabout.ratt_single": "Single Fire",
-  "ability.roundabout.ratt_single.desc": "Charge up a dart, and attack to fire it",
+  "ability.roundabout.ratt_single.desc": "Shoots an alternate form instead, which does less melt but more damage",
   "ability.roundabout.ratt_burst": "Burst Fire",
-  "ability.roundabout.ratt_burst.desc": "Shoots an alternate form instead, which does more melt but less damage",
+  "ability.roundabout.ratt_burst.desc": "Charge up a volley of three darts, each which inflict melt",
   "ability.roundabout.ratt_place": "Ratt Place",
   "ability.roundabout.ratt_place.desc": "Place Ratt down, allowing Ratt to fire alongside you",
   "ability.roundabout.ratt_place_burst": "Placed Burst Fire",
@@ -1041,6 +1041,8 @@
   "ability.roundabout.ratt_auto.desc": "Target an entity in sight and Ratt will automatically fire at it",
   "ability.roundabout.ratt_flesh": "Flesh Blocks/Chunks",
   "ability.roundabout.ratt_flesh.desc": "Drops from melting creatures. Slows mobs and is difficult to break. However, having Ratt equipped bypasses these restrictions, allowing you to move freely and pick them up instantly by shift+clicking",
+  "ability.roundabout.ratt_leap": "Ratt Leap",
+  "ability.roundabout.ratt_leap.desc": "Launches Ratt in a direction, allowing you to quickly reposition them",
 
   "ability.roundabout.diver_selection": "Diver Selection",
   "ability.roundabout.diver_selection.desc": "Opens an impairment wheel which you can apply effects onto yourself",

@@ -340,6 +340,8 @@ public class StandIcons {
     public static final ResourceLocation RATT_UNAUTO = Roundabout.location("textures/gui/icons/ratt/ratt_auto.png");
     public static final ResourceLocation RATT_AUTO = Roundabout.location("textures/gui/icons/ratt/ratt_unauto.png");
     public static final ResourceLocation RATT_BLOB = Roundabout.location("textures/item/flesh_chunk.png");
+    public static final ResourceLocation RATT_LEAP = Roundabout.location("textures/gui/icons/ratt/ratt_leap.png");
+
 
 
     public static final ResourceLocation SOFT_AND_WET_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
