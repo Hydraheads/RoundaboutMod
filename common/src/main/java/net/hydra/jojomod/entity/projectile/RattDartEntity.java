@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -173,6 +174,12 @@ public class RattDartEntity extends AbstractArrow {
         return ModSounds.RATT_DART_THUNK_EVENT;
     }
     public void applyEffect(LivingEntity $$1) {
+        if (MainUtil.isBossMob($$1)) {
+            DamageSource DS = ModDamageTypes.of($$1.level(), ModDamageTypes.STAND, this.getOwner());
+            $$1.hurt(DS,1);
+            return;
+        }
+
         int stack = -1;
         if ( $$1.getEffect(ModEffects.MELTING) != null) {
             stack = $$1.getEffect(ModEffects.MELTING).getAmplifier() + this.melting;
