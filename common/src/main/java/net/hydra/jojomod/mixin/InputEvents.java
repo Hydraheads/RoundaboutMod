@@ -48,6 +48,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
@@ -116,6 +117,14 @@ public abstract class InputEvents implements IInputEvents {
                 if(entity.equals(PR.getShootTarget())) {
                     ci.setReturnValue(true);
                     return;
+                }
+            }
+            if (entity instanceof RattEntity RE) {
+                if(RE.getUser() == player) {
+                    if(powers.isHoldingSneak()) {
+                        ci.setReturnValue(true);
+                        return;
+                    }
                 }
             }
 
@@ -398,20 +407,6 @@ public abstract class InputEvents implements IInputEvents {
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     public void roundabout$tickTick(CallbackInfo ci) {
         ClientUtil.tickClientUtilStuff();
-
-        if (this.player != null){
-            //copy cooldowns on dimension switch code
-            if (roundabout$playerlev == null){
-                roundabout$playerlev = this.player.level();
-            }
-
-            if (this.player.level() != roundabout$playerlev){
-                ((StandUser)this.player).roundabout$getStandPowers().StandCooldowns = roundabout$StandCooldownsBackup;
-                roundabout$playerlev = this.player.level();
-            } else {
-                roundabout$StandCooldownsBackup = ((StandUser)this.player).roundabout$getStandPowers().StandCooldowns;
-            }
-        }
 
         if (ClientUtil.getScreenFreeze()) {
             if (player != null && level != null) {
@@ -942,17 +937,19 @@ public abstract class InputEvents implements IInputEvents {
 
                 ((StandUser)player).roundabout$getStandPowers().visualFrameTick();
 
-                    KeyInputs.MoveKey1(player,((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.abilityOneKey),
-                        this.options);
-
-                    KeyInputs.MoveKey2(player,((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.abilityTwoKey),
-                        this.options);
-
-                    KeyInputs.MoveKey3(player,((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.abilityThreeKey),
-                        this.options);
-
-                    KeyInputs.MoveKey4(player,((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.abilityFourKey),
+                if (rdbt$isInitialized(player)) {
+                    KeyInputs.MoveKey1(player, ((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.abilityOneKey),
                             this.options);
+
+                    KeyInputs.MoveKey2(player, ((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.abilityTwoKey),
+                            this.options);
+
+                    KeyInputs.MoveKey3(player, ((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.abilityThreeKey),
+                            this.options);
+
+                    KeyInputs.MoveKey4(player, ((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.abilityFourKey),
+                            this.options);
+                }
 
                 KeyInputs.showEXPKey(player,((Minecraft) (Object) this), roundabout$sameKeyThree(KeyInputRegistry.showExp),
                         this.options);
@@ -1072,17 +1069,28 @@ public abstract class InputEvents implements IInputEvents {
                 }
 
 
+                if (rdbt$isInitialized(player)) {
                 powers.preCheckButtonInputUse(this.options.keyUse.isDown(),this.options);
+                }
                 if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {
-                    powers.preCheckButtonInputAttack(this.options.keyAttack.isDown(),this.options);
+                    if (rdbt$isInitialized(player)) {
+                        powers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
+                    }
                 }
 
                 if (!isMining && standComp.roundabout$isGuarding() && !standComp.roundabout$isBarraging()){
-                    powers.preCheckButtonInputBarrage(this.options.keyAttack.isDown(),this.options);
+                    if (rdbt$isInitialized(player)) {
+                        powers.preCheckButtonInputBarrage(this.options.keyAttack.isDown(), this.options);
+                    }
                 }
             }
                 //this.handleStandRush(this.currentScreen == null && this.options.attackKey.isPressed());
         }
+    }
+
+    @Unique
+    public boolean rdbt$isInitialized(Player pl){
+        return (((IPlayerEntity)pl).rdbt$getCooldownQuery());
     }
 
     @Override

@@ -63,6 +63,10 @@ public class StandDiscItem extends Item {
                 ((StandUser) $$1).roundabout$getStandPowers().onStandSwitchInto();
             }
             $$3.shrink(1);
+        } else {
+            if ($$1 !=  null){
+                ((StandUser)$$1).roundabout$setInteractedWithDisc(true);
+            }
         }
         return InteractionResultHolder.consume($$3);
     }

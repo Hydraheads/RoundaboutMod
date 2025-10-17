@@ -8,6 +8,7 @@ import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.gui.*;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
+import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -465,6 +466,8 @@ public class ClientUtil {
                 }
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.RefreshAllCooldowns.value)) {
                     MainUtil.clearCooldowns(player);
+                }if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AffirmAllCooldowns.value)) {
+                    ((IPlayerEntity)player).rdbt$setCooldownQuery(true);
                 }
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();
@@ -627,6 +630,13 @@ public class ClientUtil {
             if (powers instanceof PowersRatt PR) {
                 if (PR.getShootTarget() != null) {
                     if (PR.getShootTarget().equals(entity)) {
+                        return 12948493;
+                    }
+                }
+            }
+            if (entity instanceof RattEntity RE) {
+                if(powers.getSelf() == RE.getUser()) {
+                    if(powers.isHoldingSneak()) {
                         return 12948493;
                     }
                 }

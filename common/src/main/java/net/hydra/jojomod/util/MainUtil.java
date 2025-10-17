@@ -567,6 +567,8 @@ public class MainUtil {
     }
     public static void clearStoneMask(Entity ent){
         if (ent instanceof LivingEntity LE){
+            if (FateTypes.isTransforming(LE))
+                return;
             ItemStack stack = LE.getItemBySlot(EquipmentSlot.HEAD);
             if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())){
                 ItemStack stack2 = ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem().getDefaultInstance();
@@ -1949,6 +1951,12 @@ public class MainUtil {
     public static void handShake(ServerPlayer player){
         Networking.sendConfigToPlayer(player);
     }
+
+    public static void handShakeCooldowns(ServerPlayer player){
+        ((StandUser)player).roundabout$getStandPowers().syncAllCooldowns();
+        S2CPacketUtil.affirmCooldownsS2C(player);
+    }
+
 
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
 

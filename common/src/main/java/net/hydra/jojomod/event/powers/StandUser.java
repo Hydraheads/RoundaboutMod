@@ -129,6 +129,9 @@ public interface StandUser {
     ItemStack roundabout$getRejectionStandDisc();
     void roundabout$setRejectionStandDisc(ItemStack disc);
 
+    boolean roundabout$getInteractedWithDisc();
+    void roundabout$setInteractedWithDisc(boolean discInteract);
+
     void roundabout$setStandPowers(StandPowers standPowers);
     void roundabout$setAttackTimeDuring(int attackTimeDuring);
     void roundabout$setInterruptCD(int interruptCD);

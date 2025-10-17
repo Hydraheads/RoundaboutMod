@@ -53,6 +53,7 @@ public class ClientToServerPackets {
             Inventory("inventory"),
             ItemContext("item_context"),
             GuardCancel("guard_cancel"),
+            HandshakeCooldowns("handshake_cooldowns"),
             DimensionHopD4C("thread_hop_d4c_request_dimension_hop");
 
             public final String value;
@@ -360,6 +361,10 @@ public class ClientToServerPackets {
                 if (message.equals(MESSAGES.Handshake.value)) {
                     MainUtil.handShake(sender);
                 }
+                /**Handshake Cooldown packet*/
+                if (message.equals(MESSAGES.HandshakeCooldowns.value)) {
+                    MainUtil.handShakeCooldowns(sender);
+                }
                 /**Sending anything in the inventory to the server*/
                 if (message.equals(MESSAGES.Inventory.value)) {
                     int slotNo = (int)vargs[0];
@@ -369,7 +374,6 @@ public class ClientToServerPackets {
                 }
                 /**Generic Item packet management for the server*/
                 if (message.equals(MESSAGES.ItemContext.value)) {
-                    MainUtil.handShake(sender);
                     byte cont = (byte)vargs[0];
                     ItemStack stack = (ItemStack)vargs[1];
                     MainUtil.handleChangeItem(sender, cont, stack);
