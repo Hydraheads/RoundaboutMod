@@ -130,6 +130,61 @@ public class MainUtil {
     public static ArrayList<String> walkableBlocks = Lists.newArrayList();
     public static ArrayList<String> standBlockGrabBlacklist = Lists.newArrayList();
     public static ArrayList<String> naturalStandUserMobBlacklist = Lists.newArrayList();
+    public static Set<String> foodThatGivesBloodList = Set.of();
+    Map<String, FoodBloodStats> foodThatGivesBloodMap;
+
+    public record FoodBloodStats(String id, int hunger, float saturation) {}
+
+    public static Map<String, FoodBloodStats> parseFoodList(Set<String> entries) {
+        Map<String, FoodBloodStats> map = new HashMap<>();
+
+        for (String entry : entries) {
+            String[] parts = entry.split(":");
+            if (parts.length < 4) continue; // safety check
+
+            // Recombine the namespaced ID ("minecraft:beef" = parts[0] + ":" + parts[1])
+            String id = parts[0] + ":" + parts[1];
+            int hunger = Integer.parseInt(parts[2]);
+            float saturation = Float.parseFloat(parts[3].replace("F", "")); // remove trailing F
+
+            map.put(id, new FoodBloodStats(id, hunger, saturation));
+        }
+
+        return map;
+    }
+
+    public static Map<String, FoodBloodStats> foodMap;
+
+
+    public static int getBloodAmount(ItemStack stack) {
+        if (foodMap != null && !foodMap.isEmpty()) {
+            // Get the registry name of the item
+            ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+            if (id != null) {
+                FoodBloodStats stats = foodMap.get(id.toString());
+                if (stats != null) {
+                    // You can use either hunger, saturation, or a combination
+                    return stats.hunger(); // or stats.saturation(), depending on what you need
+                }
+            }
+        }
+        return 0;
+    }
+
+    public static float getSaturationAmount(ItemStack stack) {
+        if (foodMap != null && !foodMap.isEmpty()) {
+            // Get the registry name of the item
+            ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+            if (id != null) {
+                FoodBloodStats stats = foodMap.get(id.toString());
+                if (stats != null) {
+                    // You can use either hunger, saturation, or a combination
+                    return stats.saturation(); // or stats.saturation(), depending on what you need
+                }
+            }
+        }
+        return 0;
+    }
 
     public static boolean isBlockBlacklisted(BlockState bs){
         ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());

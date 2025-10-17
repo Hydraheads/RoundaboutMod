@@ -64,6 +64,20 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:walking_heart_disc"
             )
     );
+
+
+    public Set<String> foodThatGivesBloodList = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:beef:3:0.8F",
+                    "minecraft:chicken:2:0.6F",
+                    "minecraft:cod:2:0.6F",
+                    "minecraft:mutton:2:0.8F",
+                    "minecraft:porkchop:3:0.8F",
+                    "minecraft:rabbit:3:0.6F",
+                    "minecraft:salmon:2:0.8F"
+            )
+    );
+
     public Set<String> humanoidOnlyStandUserMobPoolv2 = new HashSet<>(
             Arrays.asList(
                     "roundabout:hey_ya_disc",

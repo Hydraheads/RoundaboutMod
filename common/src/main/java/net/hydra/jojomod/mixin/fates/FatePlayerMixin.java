@@ -7,19 +7,21 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.access.AccessFateFoodData;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -29,8 +31,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Player.class)
 public abstract class FatePlayerMixin extends LivingEntity implements IFatePlayer {
 
+    @Shadow public abstract FoodData getFoodData();
+
     @Inject(method = "tick", at = @At(value = "HEAD"))
     protected void roundabout$Tick(CallbackInfo ci) {
+        ((AccessFateFoodData)getFoodData()).rdbt$setPlayer((Player) (Object) this);
         if (!this.level().isClientSide()) {
             rdbt$tickThroughVampire();
             rdbt$tickThroughVampireChange();
@@ -73,10 +78,11 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
             if (MainUtil.isWearingBloodyStoneMask(this) && rdbt$vampireTransformation < 0){
                 rdbt$startVampireTransformation();
             }
-            if (MainUtil.isWearingStoneMask(this) && hasEffect(ModEffects.BLEED)){
-                MainUtil.activateStoneMask(this);
-            }
         }
+        if (MainUtil.isWearingStoneMask(this) && hasEffect(ModEffects.BLEED)){
+            MainUtil.activateStoneMask(this);
+        }
+
         //This can move into a dedicated fate class eventually
     }
     @Unique

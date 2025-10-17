@@ -61,6 +61,7 @@
     "data_and_structures.DataStructureTemplatePool",
     "effects.bleed.BleedFoodData",
     "effects.hex.HexItem",
+    "fates.FateFoodDataMixin",
     "fates.FatePlayerMixin",
     "fates.FatesMobEffectMixin",
     "gravity.GravityAbstractArrowMixin",

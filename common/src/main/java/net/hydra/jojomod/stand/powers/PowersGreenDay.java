@@ -119,12 +119,18 @@ public class PowersGreenDay extends NewPunchingStand {
             case SKILL_3_CROUCH -> {
                 Roundabout.LOGGER.info("Separation_Leap");
                 tryToStandLeapClient();
+                setcrawlserver(this.self);
+
+
             }
             case SKILL_4_CROUCH, SKILL_4_CROUCH_GUARD -> {
                 Stitch();
             }
             case SKILL_4_NORMAL -> {
                 toggleMold();
+            }
+            case SKILL_1_NORMAL -> {
+              setcrawlserver(this.self);
             }
         }
     }
@@ -134,19 +140,27 @@ public class PowersGreenDay extends NewPunchingStand {
     public boolean setPowerOther(int move, int lastMove) {
         switch (move)
         {
-
             case PowerIndex.POWER_4_SNEAK -> {
                 return StitchHeal(1.0f, this.self);
+                //return this.setcrawlserver(this.self);
+                
             }
             case PowerIndex.POWER_4 -> {
                 return toggleMoldField();
             }
-
+            case PowerIndex.POWER_3_EXTRA -> {
+                return moldLeapServer();
+            }
         }
         return super.setPowerOther(move,lastMove);
     }
     @Override
     public void tickPower() {
+        if(false) {
+            if (!isClient()) {
+                setcrawlserver(this.self);
+            }
+        }
         moldShenanigans();
         super.tickPower();
 
@@ -174,8 +188,8 @@ public class PowersGreenDay extends NewPunchingStand {
         return 3;
     }
     public int bonusLeapCount = -1;
-    public int crawlTimer = 0;
     public void bigLeap(LivingEntity entity,float range, float mult){
+
         Vec3 vec3d = entity.getEyePosition(0);
         Vec3 vec3d2 = entity.getViewVector(0);
         Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
@@ -204,7 +218,8 @@ public class PowersGreenDay extends NewPunchingStand {
                         } else {
                             this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
                         }
-                        ((StandUser)this.self).rdbt$SetCrawlTicks(120);
+                        ((StandUser)this.self).rdbt$SetCrawlTicks(240);
+                        tryPowerPacket(PowerIndex.POWER_3_EXTRA);
                         bonusLeapCount = 3;
                         bigLeap(this.getSelf(), 20, 1);
                         ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
@@ -217,7 +232,27 @@ public class PowersGreenDay extends NewPunchingStand {
         }
     }
 
+    public boolean moldLeapServer() {
+        for(int i = 0; i < 11; i = i + 1) {
+            double randX = Roundabout.RANDOM.nextDouble(-0.5, 0.5);
+            double randY = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
+            double randZ = Roundabout.RANDOM.nextDouble(-0.5, 0.5);
+            ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MOLD,
+                    this.getSelf().getX(),
+                    this.getSelf().getY() + 1 ,
+                    this.getSelf().getZ(),
+                    1,randX,randY,randZ,0.12);
+        }
+        setcrawlserver(this.self);
+        return true;
+    }
 
+    public boolean setcrawlserver(LivingEntity entity) {
+        if(!this.self.level().isClientSide()) {
+            ((StandUser) entity).rdbt$SetCrawlTicks(240);
+        }
+        return true;
+    }
 
 
 

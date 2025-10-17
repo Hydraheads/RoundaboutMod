@@ -314,7 +314,7 @@ public abstract class HudRendering implements IHudAccess {
 
         Player $$1 = this.getCameraPlayer();
         if ($$1 != null) {
-            if (!FateTypes.isVampire($$1))
+            if (!FateTypes.hasBloodHunger($$1))
                 return;
             ci.cancel();
             int $$2 = Mth.ceil($$1.getHealth());

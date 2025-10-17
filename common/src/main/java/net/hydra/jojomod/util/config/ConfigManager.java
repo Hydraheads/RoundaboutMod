@@ -75,6 +75,10 @@ public abstract class ConfigManager {
             MainUtil.naturalStandUserMobBlacklist.clear();
             MainUtil.naturalStandUserMobBlacklist.addAll(getAdvancedConfig().naturalStandUserMobBlacklist);
         }
+        if (getAdvancedConfig().foodThatGivesBloodList != null)
+        {
+            MainUtil.foodMap = MainUtil.parseFoodList(getAdvancedConfig().foodThatGivesBloodList);
+        }
     }
 
     public static void loadStandArrowPool()
