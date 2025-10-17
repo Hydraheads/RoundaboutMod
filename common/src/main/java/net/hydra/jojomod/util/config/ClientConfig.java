@@ -67,6 +67,10 @@ public class ClientConfig implements Cloneable {
     @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
     public Integer abilityIconHudY;
 
+    @BooleanOption(group = "inherit", value = true)
+    public Boolean enableBowlerHatRender;
+
+
     @NestedOption(group = "modded")
     public ClientConfig.ConfigSettings configSettings;
     @NestedOption(group = "modded")

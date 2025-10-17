@@ -84,7 +84,9 @@ public class JusticeEntity extends FollowingStandEntity {
             PIRATE = 11,
             BLUE_FLAMED = 12,
             DARK_MIRAGE = 13,
-            JOJONIUM = 14;
+            JOJONIUM = 14,
+            PUMPKIN = 15,
+            JACK = 16;
 
     public final AnimationState idleAnimation = new AnimationState();
     public final AnimationState idleAnimation2 = new AnimationState();

@@ -200,10 +200,21 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                             if (MainUtil.getIsGamemodeApproriateForGrief(this.standUser) &&
                                     ClientNetworking.getAppropriateConfig().softAndWetSettings.moistureWithStandGriefingTakesLiquidBlocks) {
                                 this.level().setBlockAndUpdate($$0.getBlockPos().relative($$0.getDirection()), this.level().getBlockState($$0.getBlockPos().relative($$0.getDirection())).setValue(BlockStateProperties.WATERLOGGED, Boolean.valueOf(false)));
-                                    stolenPhysicalLiquid = true;
+                                stolenPhysicalLiquid = true;
                             }
                             this.setLiquidStolen(2);
                             setFloating();
+                        } else if (this.level().getBlockState($$0.getBlockPos()).is(ModBlocks.BLOODY_STONE_MASK_BLOCK)){
+                            BlockState state = this.level().getBlockState($$0.getBlockPos());
+                            if (MainUtil.getIsGamemodeApproriateForGrief(this.standUser)){
+                                this.level().setBlockAndUpdate($$0.getBlockPos(), ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.
+                                        defaultBlockState().
+                                        setValue(StoneMaskBlock.FACING,state.getValue(StoneMaskBlock.FACING)).
+                                        setValue(StoneMaskBlock.WATERLOGGED,state.getValue(StoneMaskBlock.WATERLOGGED))
+                                );
+                                this.setLiquidStolen(4);
+                                setFloating();
+                            }
                         } else {
                             super.onHitBlock($$0);
                         }
@@ -265,10 +276,18 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                                 finishedUsingLiquid = true;
                             } else if (getLiquidStolen() == 4) {
                                 BlockPos bpos = $$0.getBlockPos().relative($$0.getDirection());
-                                if (MainUtil.tryPlaceBlock(this.standUser, bpos, true)) {
+                                BlockPos bpos2 = $$0.getBlockPos();
+                                BlockState state = this.level().getBlockState(bpos2);
+                                if (state.getBlock() instanceof StoneMaskBlock &&
+                                        !(state.getBlock() instanceof BloodyStoneMaskBlock) &&
+                                MainUtil.getIsGamemodeApproriateForGrief(this.standUser)){
+                                    this.level().setBlockAndUpdate(bpos2, ModBlocks.BLOODY_STONE_MASK_BLOCK.
+                                            defaultBlockState().
+                                            setValue(StoneMaskBlock.FACING,state.getValue(StoneMaskBlock.FACING)).
+                                            setValue(StoneMaskBlock.WATERLOGGED,state.getValue(StoneMaskBlock.WATERLOGGED))
+                                    );
+                                } else if (MainUtil.tryPlaceBlock(this.standUser, bpos, true)) {
                                     this.level().setBlockAndUpdate(bpos, ModBlocks.BLOOD_SPLATTER.defaultBlockState());
-                                } else {
-                                    splashLava();
                                 }
                                 finishedUsingLiquid = true;
                             } else if (getLiquidStolen() == 5) {
@@ -787,6 +806,10 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                                     MainUtil.randomChorusTeleport(LE);
                                 }
                                 finishedUsingLiquid = true;
+                            } else if (getLiquidStolen() == 4) {
+                                if ($$0.getEntity() instanceof LivingEntity LE && MainUtil.isWearingStoneMask(LE)){
+                                    MainUtil.activateStoneMask(LE);
+                                }
                             }
                             super.onHitEntity($$0);
                         }
@@ -833,6 +856,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                 $$4.setPickUpDelay(40);
                 this.level().addFreshEntity($$4);
             }
+            this.setHeldItem(ItemStack.EMPTY);
         }
     }
 
@@ -844,6 +868,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             $$4.setPickUpDelay(40);
             $$4.setThrower(this.getUUID());
             this.level().addFreshEntity($$4);
+            this.setHeldItem(ItemStack.EMPTY);
             hasDitchedItem = true;
         }
     }
@@ -868,6 +893,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                 $$4.setPickUpDelay(40);
                 this.level().addFreshEntity($$4);
             }
+            this.setHeldItem(ItemStack.EMPTY);
         }
     }
 

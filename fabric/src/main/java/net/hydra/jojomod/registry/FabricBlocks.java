@@ -158,6 +158,7 @@ public class FabricBlocks {
     public static final Block FOG_TRAP = registerBlockItemless("fog_trap",getFogTrapBlock());
 
     public static final Block EQUIPPABLE_STONE_MASK = registerStoneMask("stone_mask", ModBlocks.EQUIPPABLE_STONE_MASK_PROPERTIES);
+    public static final Block BLOODY_STONE_MASK = registerStoneMaskBloody("bloody_stone_mask", BLOODY_STONE_MASK_PROPERTIES);
 
 
     public static final BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY =
@@ -220,6 +221,14 @@ public class FabricBlocks {
     private static Item registerStoneMaskBlockItem(String name, Block block){
         return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, name),
                 new StoneMaskBlockItem(block, new Item.Properties().stacksTo(1)));
+    }
+    private static Block registerStoneMaskBloody(String name, Block block) {
+        registerStoneMaskBloodyBlockItem(name, block);
+        return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
+    }
+    private static Item registerStoneMaskBloodyBlockItem(String name, Block block){
+        return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, name),
+                new BloodyStoneMaskBlockItem(block, new Item.Properties().stacksTo(1)));
     }
 
     public static void register(){
@@ -310,6 +319,7 @@ public class FabricBlocks {
         ModBlocks.FOG_DIRT_COATING = FOG_DIRT_COATING;
         ModBlocks.FOG_TRAP = FOG_TRAP;
         ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK = EQUIPPABLE_STONE_MASK;
+        ModBlocks.BLOODY_STONE_MASK_BLOCK = BLOODY_STONE_MASK;
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();

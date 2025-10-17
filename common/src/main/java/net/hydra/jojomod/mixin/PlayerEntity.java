@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
@@ -55,6 +56,7 @@ import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.apache.http.client.utils.DateUtils;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -76,7 +78,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
     @Shadow public abstract float getDestroySpeed(BlockState $$0);
 
-
     @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT$POS = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.BYTE);
@@ -93,6 +94,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             EntityDataSerializers.BYTE);
     @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT$WATCH_STYLE = SynchedEntityData.defineId(Player.class,
+            EntityDataSerializers.BYTE);
+    @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$FATE = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.BYTE);
 
     @Unique
@@ -149,24 +153,70 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     private float roundabout$idleYOffset = 0.1F;
 
     @Unique
+    protected boolean rdbt$cooldownQuery = false;
+    @Unique
+    protected boolean rdbt$attemptedQuery = false;
+
+    @Unique
+    @Override
+    public void rdbt$queryServerForCooldowns(){
+
+    }
+    @Unique
+    @Override
+    public boolean rdbt$getCooldownQuery(){
+        return rdbt$cooldownQuery;
+    }
+    @Unique
+    @Override
+    public void rdbt$setCooldownQuery(boolean query){
+        rdbt$cooldownQuery = query;
+    }
+
+    @Unique
     @Override
     public void roundabout$setTeamColor(byte color){
-        ((Player) (Object) this).getEntityData().set(ROUNDABOUT$TEAM_COLOR, color);
+        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$TEAM_COLOR)) {
+            ((Player) (Object) this).getEntityData().set(ROUNDABOUT$TEAM_COLOR, color);
+        }
     }
     @Unique
     @Override
     public byte roundabout$getTeamColor(){
-        return this.entityData.get(ROUNDABOUT$TEAM_COLOR);
+        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$TEAM_COLOR)) {
+            return this.entityData.get(ROUNDABOUT$TEAM_COLOR);
+        }
+        return 0;
     }
     @Unique
     @Override
     public void roundabout$setWatchStyle(byte style){
-        ((Player) (Object) this).getEntityData().set(ROUNDABOUT$WATCH_STYLE, style);
+        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$WATCH_STYLE)) {
+            ((Player) (Object) this).getEntityData().set(ROUNDABOUT$WATCH_STYLE, style);
+        }
     }
     @Unique
     @Override
     public byte roundabout$getWatchStyle(){
-        return this.entityData.get(ROUNDABOUT$WATCH_STYLE);
+        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$WATCH_STYLE)) {
+            return this.entityData.get(ROUNDABOUT$WATCH_STYLE);
+        }
+        return 0;
+    }
+    @Unique
+    @Override
+    public void roundabout$setFate(byte style){
+        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$FATE)) {
+            this.getEntityData().set(ROUNDABOUT$FATE, style);
+        }
+    }
+    @Unique
+    @Override
+    public byte roundabout$getFate(){
+        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$FATE)) {
+            return this.entityData.get(ROUNDABOUT$FATE);
+        }
+        return 0;
     }
     @Unique
     private PlayerMaskSlots roundabout$maskInventory = new PlayerMaskSlots(((Player)(Object)this));
@@ -670,8 +720,13 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     public final AnimationState roundabout$SITTING = new AnimationState();
     @Unique
+    public final AnimationState roundabout$VAMPIRE = new AnimationState();
+    @Unique
     @Override
     public AnimationState getSitting(){return roundabout$SITTING;}
+    @Unique
+    @Override
+    public AnimationState getVampire(){return roundabout$VAMPIRE;}
     @Unique
     public final AnimationState roundabout$TORTURE_DANCE = new AnimationState();
     @Unique
@@ -766,6 +821,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             this.roundabout$SITTING.startIfStopped(this.tickCount);
         } else {
             this.roundabout$SITTING.stop();
+        }
+        if (roundabout$GetPoseEmote() == Poses.VAMPIRE_TRANSFORMATION.id) {
+            this.roundabout$VAMPIRE.startIfStopped(this.tickCount);
+        } else {
+            this.roundabout$VAMPIRE.stop();
         }
     }
 
@@ -881,6 +941,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         compoundtag.putFloat("sizePercent",roundabout$sizePercent);
         compoundtag.putByte("teamColor",roundabout$getTeamColor());
         compoundtag.putByte("watchStyle",roundabout$getWatchStyle());
+        compoundtag.putByte("fate",roundabout$getFate());
         $$0.put("roundabout",compoundtag);
 
         return $$0;
@@ -927,6 +988,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (compoundtag2.contains("watchStyle")) {
             roundabout$setWatchStyle(compoundtag2.getByte("watchStyle"));
         }
+        if (compoundtag2.contains("fate")) {
+            roundabout$setFate(compoundtag2.getByte("fate"));
+        }
 
         //roundabout$maskInventory.addItem()
     }
@@ -947,7 +1011,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     /**your shield does not take damage if the stand blocks it*/
     @Inject(method = "jumpFromGround", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$Jump(CallbackInfo ci) {
-        if (((StandUser) this).roundabout$isClashing() || ((StandUser) this).roundabout$getStandPowers().cancelJump()) {
+        if (((StandUser) this).roundabout$isClashing() || ((StandUser) this).roundabout$getStandPowers().cancelJump()
+        || FateTypes.isTransforming(this)) {
             ci.cancel();
         }
     }
@@ -1091,6 +1156,13 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
         if (this.level().isClientSide()) {
             roundabout$setupAnimationStates();
+            if (!rdbt$getCooldownQuery()){
+                if (!rdbt$attemptedQuery){
+                    rdbt$attemptedQuery = true;
+                    C2SPacketUtil.handShakeCooldownPacket();
+                }
+
+            }
         }
         if (!(this.getVehicle() != null && this.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted())) {
             ((StandUser) this).roundabout$setRestrainedTicks(-1);
@@ -1240,6 +1312,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_CONTROLLING, 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$TEAM_COLOR, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$WATCH_STYLE, (byte) 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$FATE, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BLINDED, false);
         }
     }

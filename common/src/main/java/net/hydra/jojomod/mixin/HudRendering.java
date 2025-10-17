@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -21,6 +22,7 @@ import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
@@ -29,9 +31,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PlayerRideableJumping;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodData;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -115,6 +120,10 @@ public abstract class HudRendering implements IHudAccess {
                 if (MainUtil.isWearingStoneMask(this.minecraft.player)){
                     RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.STONE_MASK_OVERLAY, 0.7F);
+                }
+                if (MainUtil.isWearingBloodyStoneMask(this.minecraft.player)){
+                    RenderSystem.enableBlend();
+                    this.renderTextureOverlay($$1, StandIcons.BLOODY_MASK_OVERLAY, 0.55F);
                 }
                 if (user.roundabout$getLocacacaCurse() == LocacacaCurseIndex.HEAD) {
                     if (((IPlayerEntity) this.minecraft.player).roundabout$getMaskSlot() != null &&
@@ -298,9 +307,108 @@ public abstract class HudRendering implements IHudAccess {
            }
         }
     }
-    @Inject(method = "renderPlayerHealth", at = @At(value = "TAIL"), cancellable = true)
-    public void roundabout$renderHealth2(GuiGraphics $$0, CallbackInfo ci){
 
+
+    @Inject(method = "renderPlayerHealth", at = @At(value = "HEAD"), cancellable = true)
+    private void rdbt$renderPlayerHealthX(GuiGraphics $$0, CallbackInfo ci) {
+
+        Player $$1 = this.getCameraPlayer();
+        if ($$1 != null) {
+            if (!FateTypes.isVampire($$1))
+                return;
+            ci.cancel();
+            int $$2 = Mth.ceil($$1.getHealth());
+            boolean $$3 = this.healthBlinkTime > (long)this.tickCount && (this.healthBlinkTime - (long)this.tickCount) / 3L % 2L == 1L;
+            long $$4 = Util.getMillis();
+            if ($$2 < this.lastHealth && $$1.invulnerableTime > 0) {
+                this.lastHealthTime = $$4;
+                this.healthBlinkTime = (long)(this.tickCount + 20);
+            } else if ($$2 > this.lastHealth && $$1.invulnerableTime > 0) {
+                this.lastHealthTime = $$4;
+                this.healthBlinkTime = (long)(this.tickCount + 10);
+            }
+
+            if ($$4 - this.lastHealthTime > 1000L) {
+                this.lastHealth = $$2;
+                this.displayHealth = $$2;
+                this.lastHealthTime = $$4;
+            }
+
+            this.lastHealth = $$2;
+            int $$5 = this.displayHealth;
+            this.random.setSeed((long)(this.tickCount * 312871));
+            FoodData $$6 = $$1.getFoodData();
+            int $$7 = $$6.getFoodLevel();
+            int $$8 = this.screenWidth / 2 - 91;
+            int $$9 = this.screenWidth / 2 + 91;
+            int $$10 = this.screenHeight - 39;
+            float $$11 = Math.max((float)$$1.getAttributeValue(Attributes.MAX_HEALTH), (float)Math.max($$5, $$2));
+            int $$12 = Mth.ceil($$1.getAbsorptionAmount());
+            int $$13 = Mth.ceil(($$11 + (float)$$12) / 2.0F / 10.0F);
+            int $$14 = Math.max(10 - ($$13 - 2), 3);
+            int $$15 = $$10 - ($$13 - 1) * $$14 - 10;
+            int $$16 = $$10 - 10;
+            int $$17 = $$1.getArmorValue();
+            int $$18 = -1;
+            if ($$1.hasEffect(MobEffects.REGENERATION)) {
+                $$18 = this.tickCount % Mth.ceil($$11 + 5.0F);
+            }
+
+            this.minecraft.getProfiler().push("armor");
+
+            for (int $$19 = 0; $$19 < 10; $$19++) {
+                if ($$17 > 0) {
+                    int $$20 = $$8 + $$19 * 8;
+                    if ($$19 * 2 + 1 < $$17) {
+                        $$0.blit(GUI_ICONS_LOCATION, $$20, $$15, 34, 9, 9, 9);
+                    }
+
+                    if ($$19 * 2 + 1 == $$17) {
+                        $$0.blit(GUI_ICONS_LOCATION, $$20, $$15, 25, 9, 9, 9);
+                    }
+
+                    if ($$19 * 2 + 1 > $$17) {
+                        $$0.blit(GUI_ICONS_LOCATION, $$20, $$15, 16, 9, 9, 9);
+                    }
+                }
+            }
+
+            this.minecraft.getProfiler().popPush("health");
+            this.renderHearts($$0, $$1, $$8, $$10, $$14, $$18, $$11, $$2, $$5, $$12, $$3);
+            LivingEntity $$21 = this.getPlayerVehicleWithHealth();
+            int $$22 = this.getVehicleMaxHearts($$21);
+            if ($$22 == 0) {
+                this.minecraft.getProfiler().popPush("food");
+                ClientUtil.renderHungerStuff($$0,$$1,$$9,$$10,this.random.nextInt(3),$$7,this.tickCount);
+
+                $$16 -= 10;
+            }
+
+            this.minecraft.getProfiler().popPush("air");
+            int $$28 = $$1.getMaxAirSupply();
+            int $$29 = Math.min($$1.getAirSupply(), $$28);
+            if ($$1.isEyeInFluid(FluidTags.WATER) || $$29 < $$28) {
+                int $$30 = this.getVisibleVehicleHeartRows($$22) - 1;
+                $$16 -= $$30 * 10;
+                int $$31 = Mth.ceil((double)($$29 - 2) * 10.0 / (double)$$28);
+                int $$32 = Mth.ceil((double)$$29 * 10.0 / (double)$$28) - $$31;
+
+                for (int $$33 = 0; $$33 < $$31 + $$32; $$33++) {
+                    if ($$33 < $$31) {
+                        $$0.blit(GUI_ICONS_LOCATION, $$9 - $$33 * 8 - 9, $$16, 16, 18, 9, 9);
+                    } else {
+                        $$0.blit(GUI_ICONS_LOCATION, $$9 - $$33 * 8 - 9, $$16, 25, 18, 9, 9);
+                    }
+                }
+            }
+
+            this.minecraft.getProfiler().pop();
+        }
+        rdbt$renderHealth2Common($$0);
+    }
+
+    @Unique
+    public void rdbt$renderHealth2Common(GuiGraphics $$0){
         if (minecraft.player != null && minecraft.level != null){
             int oxygenBonus = ((StandUser)minecraft.player).roundabout$getStandPowers().getAirAmount();
             int maxOxygenBonus = ((StandUser)minecraft.player).roundabout$getStandPowers().getMaxAirAmount();
@@ -329,6 +437,12 @@ public abstract class HudRendering implements IHudAccess {
                 }
             }
         }
+    }
+
+
+    @Inject(method = "renderPlayerHealth", at = @At(value = "TAIL"))
+    public void roundabout$renderHealth2(GuiGraphics $$0, CallbackInfo ci){
+        rdbt$renderHealth2Common($$0);
     }
 
     @Unique
@@ -446,6 +560,16 @@ public abstract class HudRendering implements IHudAccess {
     }
 
     @Shadow public abstract Font getFont();
+
+    @Shadow private long healthBlinkTime;
+
+    @Shadow private int lastHealth;
+
+    @Shadow private long lastHealthTime;
+
+    @Shadow private int displayHealth;
+
+    @Shadow @Final private static ResourceLocation GUI_ICONS_LOCATION;
 
     @Override
     public void roundabout$setFlashAlpha(float flashAlpha) {

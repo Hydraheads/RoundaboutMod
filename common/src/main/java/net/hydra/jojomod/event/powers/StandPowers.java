@@ -25,6 +25,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -70,6 +71,7 @@ import net.zetalasis.hjson.JsonValue;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -224,6 +226,9 @@ public class StandPowers {
     /**Runs this code while switching out of your stand with a disc*/
     public void onStandSwitch(){
         getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
+    }
+    /**Runs this code while switching into stand with a disc*/
+    public void onStandSwitchInto(){
     }
 
     /**Holds one arm out with the player model, override if you are using a stand like soft and wet or emperor that
@@ -2389,6 +2394,35 @@ public class StandPowers {
         return (float)(Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
     }
 
+    public void forceLook(Entity stand, Vec3 blockCenterPlus) {
+        Direction gravityDirection2 = GravityAPI.getGravityDirection(stand);
+        if (gravityDirection2 == Direction.DOWN)
+            return;
+
+        double $$3 = blockCenterPlus.x - stand.getEyePosition().x;
+        double $$4 = blockCenterPlus.z - stand.getEyePosition().z;
+        double $$6 = blockCenterPlus.y - stand.getEyePosition().y;
+
+        double $$8 = Math.sqrt($$3 * $$3 + $$4 * $$4);
+        float $$9 = (float)(Mth.atan2($$4, $$3) * 180.0F / (float)Math.PI) - 90.0F;
+        float $$10 = (float)(-(Mth.atan2($$6, $$8) * 180.0F / (float)Math.PI));
+
+        stand.setXRot(rotlerp(stand.getXRot(), $$10, 30f));
+        stand.setYRot(rotlerp(stand.getYRot(), $$9, 30f));
+    }
+    private float rotlerp( float $$0, float $$1, float $$2) {
+        float $$3 = Mth.wrapDegrees($$1 - $$0);
+        if ($$3 > $$2) {
+            $$3 = $$2;
+        }
+
+        if ($$3 < -$$2) {
+            $$3 = -$$2;
+        }
+
+        return $$0 + $$3;
+    }
+
 
     public BlockHitResult getAheadVec(float distOut){
         Vec3 vec3d = this.self.getEyePosition(1);
@@ -2635,6 +2669,16 @@ public class StandPowers {
         return false;
     }
 
+    public void refreshCooldowns(){
+        List<CooldownInstance> CDCopy = new ArrayList<>(StandCooldowns) {
+        };
+        for (byte i = 0; i < CDCopy.size(); i++){
+            CooldownInstance ci = CDCopy.get(i);
+            ci.time = -1;
+        }
+        StandCooldowns = CDCopy;
+    }
+
     public AbilityIconInstance drawSingleGUIIcon(GuiGraphics context, int size, int startingLeft, int startingTop, int levelToUnlock,
                                                  String nameSTR, String instructionStr, ResourceLocation draw, int extra, byte level, boolean bypass){
         Component name;
@@ -2728,12 +2772,24 @@ public class StandPowers {
                     getLookAtEntityYaw(self,entity));
 
             standEntity.setPosRaw(entityPoint.x(),entityPoint.y()+getYOffSet(standEntity),entityPoint.z());
-            standEntity.setXRot(getLookAtEntityPitch(standEntity,standSelf));
-            standEntity.setYRot(getLookAtEntityYaw(standEntity,standSelf));
+
+            Direction gdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+            Vec2 grot = new Vec2(getLookAtEntityYaw(standEntity,standSelf),
+                    getLookAtEntityPitch(standEntity,standSelf)
+            );
+            grot =  RotationUtil.rotWorldToPlayer(grot,gdir);
+
+            standEntity.setXRot(grot.y);
+            standEntity.setYRot(grot.x);
+
+            grot = new Vec2(getLookAtEntityYaw(standSelf,standEntity),
+                    getLookAtEntityPitch(standSelf,standEntity)
+            );
+            grot =  RotationUtil.rotWorldToPlayer(grot,gdir);
 
             standSelf.setPosRaw(selfPoint.x(),selfPoint.y()+getYOffSet(standSelf),selfPoint.z());
-            standSelf.setXRot(getLookAtEntityPitch(standSelf,standEntity));
-            standSelf.setYRot(getLookAtEntityYaw(standSelf,standEntity));
+            standSelf.setXRot(grot.y);
+            standSelf.setYRot(grot.x);
 
         }
     }
@@ -3035,6 +3091,21 @@ public class StandPowers {
             }
         } else {
             return textIn;
+        }
+    }
+
+    public void syncAllCooldowns(){
+        try {
+            if (this.self instanceof ServerPlayer sp) {
+                byte cin = -1;
+                for (CooldownInstance ci : StandCooldowns){
+                    cin++;
+                    S2CPacketUtil.sendMaxCooldownSyncPacket(sp, cin, ci.time, ci.maxTime);
+                }
+            }
+        } catch (Exception e){
+            //I very much doubt this will error
+            Roundabout.LOGGER.info("???");
         }
     }
 

@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.items;
 
 import net.hydra.jojomod.access.ICamera;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.Poses;
 import net.minecraft.client.Camera;
 import net.minecraft.world.entity.Entity;
@@ -27,12 +28,14 @@ public abstract class ChairCameraMixin implements ICamera {
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     private void roundabout$tick(CallbackInfo ci) {
         if (entity instanceof Player player) {
-            IPlayerEntity ipe = (IPlayerEntity) player;
-            byte poseEmote = ipe.roundabout$GetPoseEmote();
-            if (poseEmote == Poses.SITTING.id) {
-                this.eyeHeightOld = this.eyeHeight;
-                this.eyeHeight += (this.entity.getEyeHeight() - this.eyeHeight) * 0.5F;
-                ci.cancel();
+            if (ClientUtil.checkIfFirstPerson()) {
+                IPlayerEntity ipe = (IPlayerEntity) player;
+                byte poseEmote = ipe.roundabout$GetPoseEmote();
+                if (poseEmote == Poses.SITTING.id) {
+                    this.eyeHeightOld = this.eyeHeight;
+                    this.eyeHeight += (this.entity.getEyeHeight() - this.eyeHeight) * 0.5F;
+                    ci.cancel();
+                }
             }
         }
     }
@@ -40,13 +43,15 @@ public abstract class ChairCameraMixin implements ICamera {
     @Inject(method = "setup", at = @At("RETURN"))
     private void roundabout$setup(BlockGetter level, Entity entity, boolean detached, boolean thirdPersonReverse, float partialTick, CallbackInfo ci) {
         if (entity instanceof Player player) {
-            IPlayerEntity ipe = (IPlayerEntity) player;
-            byte poseEmote = ipe.roundabout$GetPoseEmote();
-            if (poseEmote == Poses.SITTING.id) {
-                Camera self = (Camera)(Object)this;
-                Vec3 pos = self.getPosition();
-                double loweredY = pos.y - (player.getEyeHeight() * 0.35F);
-                this.setPosition(pos.x, loweredY, pos.z);
+            if (ClientUtil.checkIfFirstPerson()) {
+                IPlayerEntity ipe = (IPlayerEntity) player;
+                byte poseEmote = ipe.roundabout$GetPoseEmote();
+                if (poseEmote == Poses.SITTING.id) {
+                    Camera self = (Camera) (Object) this;
+                    Vec3 pos = self.getPosition();
+                    double loweredY = pos.y - (player.getEyeHeight() * 0.35F);
+                    this.setPosition(pos.x, loweredY, pos.z);
+                }
             }
         }
     }

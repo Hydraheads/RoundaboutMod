@@ -133,6 +133,17 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
         }
         return false;
     }
+
+    @Unique
+    public boolean rdbt$isNotPosing(LivingEntity player){
+        if (player instanceof Player PE){
+            IPlayerEntity ipe = ((IPlayerEntity) player);
+            Poses pose = Poses.getPosFromByte(ipe.roundabout$GetPoseEmote());
+            return pose == Poses.NONE;
+        }
+        return true;
+    }
+
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/geom/ModelPart;copyFrom(Lnet/minecraft/client/model/geom/ModelPart;)V", shift = At.Shift.BEFORE, ordinal = 0))
     public void roundabout$SetupAnim2(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
 
@@ -165,50 +176,53 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 this.roundabout$animate(ipe.getJonathan(), Poses.JONATHAN.ad, $$3, 1f);
                 this.roundabout$animate(ipe.getWatch(), Poses.WATCH.ad, $$3, 1f);
                 this.roundabout$animate(ipe.getSitting(), Poses.SITTING.ad, $$3, 1f);
+                this.roundabout$animate(ipe.getVampire(), Poses.VAMPIRE_TRANSFORMATION.ad, $$3, 1f);
             }
 
             /**Shoot mode aiming*/
             StandUser user = ((StandUser)$$0);
-            if (user.roundabout$getEffectiveCombatMode() && !$$0.isUsingItem()){
-                if (user.roundabout$rotateArmToShoot()){
-                    boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
-                    if ($$9) {
-                        this.rightArm.yRot = -0.1F + this.head.yRot;
-                        this.rightArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
-                    } else {
-                        this.leftArm.yRot = 0.1F + this.head.yRot;
-                        this.leftArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+            if (rdbt$isNotPosing($$0)) {
+                if (user.roundabout$getEffectiveCombatMode() && !$$0.isUsingItem()) {
+                    if (user.roundabout$rotateArmToShoot()) {
+                        boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
+                        if ($$9) {
+                            this.rightArm.yRot = -0.1F + this.head.yRot;
+                            this.rightArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+                        } else {
+                            this.leftArm.yRot = 0.1F + this.head.yRot;
+                            this.leftArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+                        }
+                    } else if (user.roundabout$getStandPowers() instanceof PowersWalkingHeart) {
+                        boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
+                        if ($$9) {
+                            this.rightLeg.yRot = -0.1F + this.head.yRot;
+                            this.rightLeg.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+
+                            this.rightLeg.xRot = Math.max(this.rightLeg.xRot, -2.5f);
+                            this.rightLeg.xRot -= 0.2f;
+
+
+                            this.leftLeg.yRot = 0;
+                            this.leftLeg.xRot = 0;
+                            this.leftLeg.zRot = 0;
+                        } else {
+                            this.leftLeg.yRot = 0.1F + this.head.yRot;
+                            this.leftLeg.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+
+                            this.leftLeg.xRot = Math.max(this.leftLeg.xRot, -2.5f);
+                            this.leftLeg.xRot -= 0.2f;
+
+                            this.rightLeg.yRot = 0;
+                            this.rightLeg.xRot = 0;
+                            this.rightLeg.zRot = 0;
+                        }
+                        this.rightArm.zRot = 0.5F;
+                        this.leftArm.zRot = -0.5F;
+                        this.rightArm.xRot = 0F;
+                        this.leftArm.xRot = 0F;
+                        this.rightArm.yRot = 0F;
+                        this.leftArm.yRot = 0F;
                     }
-                } else if (user.roundabout$getStandPowers() instanceof PowersWalkingHeart){
-                    boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
-                    if ($$9) {
-                        this.rightLeg.yRot = -0.1F + this.head.yRot;
-                        this.rightLeg.xRot = (float) (-Math.PI / 2) + this.head.xRot;
-
-                        this.rightLeg.xRot = Math.max(this.rightLeg.xRot,-2.5f);
-                        this.rightLeg.xRot -=0.2f;
-
-
-                        this.leftLeg.yRot = 0;
-                        this.leftLeg.xRot = 0;
-                        this.leftLeg.zRot = 0;
-                    } else {
-                        this.leftLeg.yRot = 0.1F + this.head.yRot;
-                        this.leftLeg.xRot = (float) (-Math.PI / 2) + this.head.xRot;
-
-                        this.leftLeg.xRot = Math.max(this.leftLeg.xRot,-2.5f);
-                        this.leftLeg.xRot -=0.2f;
-
-                        this.rightLeg.yRot = 0;
-                        this.rightLeg.xRot = 0;
-                        this.rightLeg.zRot = 0;
-                    }
-                    this.rightArm.zRot=0.5F;
-                    this.leftArm.zRot=-0.5F;
-                    this.rightArm.xRot=0F;
-                    this.leftArm.xRot=0F;
-                    this.rightArm.yRot=0F;
-                    this.leftArm.yRot=0F;
                 }
             }
             this.hat.copyFrom(this.head);
@@ -234,6 +248,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 this.roundabout$animate2(ipe.getJonathan(), Poses.JONATHAN.ad, $$3, 1f);
                 this.roundabout$animate2(ipe.getWatch(), Poses.WATCH.ad, $$3, 1f);
                 this.roundabout$animate2(ipe.getSitting(), Poses.SITTING.ad, $$3, 1f);
+                this.roundabout$animate2(ipe.getVampire(), Poses.VAMPIRE_TRANSFORMATION.ad, $$3, 1f);
                 if ($$0.getItemBySlot(EquipmentSlot.CHEST).isEmpty()) {
                         this.cloak.z += 0.0F;
                         this.cloak.y += 0.0F;

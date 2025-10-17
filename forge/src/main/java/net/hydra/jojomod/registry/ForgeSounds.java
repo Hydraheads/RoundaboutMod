@@ -438,6 +438,8 @@ public class ForgeSounds {
             register(ModSounds.EXTEND_SPIKES, ModSounds.EXTEND_SPIKES_ID);
     public static final RegistryObject<SoundEvent> WALL_LATCH =
             register(ModSounds.WALL_LATCH, ModSounds.WALL_LATCH_ID);
+    public static final RegistryObject<SoundEvent> STONE_MASK_ACTIVATE =
+            register(ModSounds.STONE_MASK_ACTIVATE, ModSounds.STONE_MASK_ACTIVATE_ID);
     public static final RegistryObject<SoundEvent> SUMMON_ACHTUNG =
             register(ModSounds.SUMMON_ACHTUNG, ModSounds.SUMMON_ACHTUNG_ID);
     public static final RegistryObject<SoundEvent> SURVIVOR_REMOVE =
@@ -454,6 +456,7 @@ public class ForgeSounds {
             register(ModSounds.SPIKE_HIT, ModSounds.SPIKE_HIT_ID);
     public static final RegistryObject<SoundEvent> SPIKE_MISS =
             register(ModSounds.SPIKE_MISS, ModSounds.SPIKE_MISS_ID);
+
     public static final RegistryObject<SoundEvent> DIO_HOHO =
             register(ModSounds.DIO_HOHO, ModSounds.DIO_HOHO_ID);
     public static final RegistryObject<SoundEvent> DIO_DEATH =
@@ -510,6 +513,57 @@ public class ForgeSounds {
             register(ModSounds.DIO_JOTARO, ModSounds.DIO_JOTARO_ID);
     public static final RegistryObject<SoundEvent> DIO_JOTARO_2 =
             register(ModSounds.DIO_JOTARO_2, ModSounds.DIO_JOTARO_2_ID);
+
+
+    public static final RegistryObject<SoundEvent> DIEGO_HOHO =
+            register(ModSounds.DIEGO_HO, ModSounds.DIEGO_HO_ID);
+    public static final RegistryObject<SoundEvent> DIEGO_DEATH =
+            register(ModSounds.DIEGO_DEATH, ModSounds.DIEGO_DEATH_ID);
+    public static final RegistryObject<SoundEvent> DIEGO_HOHO_2 =
+            register(ModSounds.DIEGO_HO_2, ModSounds.DIEGO_HO_2_ID);
+    public static final RegistryObject<SoundEvent> DIEGO_DEATH_2 =
+            register(ModSounds.DIEGO_DEATH_2, ModSounds.DIEGO_DEATH_2_ID);
+    public static final RegistryObject<SoundEvent> DIEGO_KUREI =
+            register(ModSounds.DIEGO_KUREI, ModSounds.DIEGO_KUREI_ID);
+    public static final RegistryObject<SoundEvent> DIEGO_HURT_1 =
+            register(ModSounds.DIEGO_HURT_1, ModSounds.DIEGO_HURT_1_ID);
+    public static final RegistryObject<SoundEvent> DIEGO_HURT_2 =
+            register(ModSounds.DIEGO_HURT_2, ModSounds.DIEGO_HURT_2_ID);
+    public static final RegistryObject<SoundEvent> DIEGO_HURT_3 =
+            register(ModSounds.DIEGO_HURT_3, ModSounds.DIEGO_HURT_3_ID);
+    public static final RegistryObject<SoundEvent> DIEGO_HURT_4 =
+            register(ModSounds.DIEGO_HURT_4, ModSounds.DIEGO_HURT_4_ID);
+    public static final RegistryObject<SoundEvent> DIEGO_LAUGH =
+            register(ModSounds.DIEGO_LAUGH, ModSounds.DIEGO_LAUGH_ID);
+    public static final RegistryObject<SoundEvent> DIEGO_WRY =
+            register(ModSounds.DIEGO_WRY, ModSounds.DIEGO_WRY_ID);
+    public static final RegistryObject<SoundEvent> DIEGO_SHINE =
+            register(ModSounds.DIEGO_SHINE, ModSounds.DIEGO_SHINE_ID);
+    public static final RegistryObject<SoundEvent> DIEGO_CHECKMATE =
+            register(ModSounds.DIEGO_CHECKMATE, ModSounds.DIEGO_CHECKMATE_ID);
+    public static final RegistryObject<SoundEvent> DIEGO_NANI =
+            register(ModSounds.DIEGO_NANI, ModSounds.DIEGO_NANI_ID);
+    public static final RegistryObject<SoundEvent> DIEGO_KONO_DIO =
+            register(ModSounds.DIEGO_KONO_DIO, ModSounds.DIEGO_KONO_DIEGO_ID);
+    public static final RegistryObject<SoundEvent> DIEGO_NO_WAY =
+            register(ModSounds.DIEGO_NO_WAY, ModSounds.DIEGO_NO_WAY_ID);
+    public static final RegistryObject<SoundEvent> DIEGO_ATTACK =
+            register(ModSounds.DIEGO_ATTACK, ModSounds.DIEGO_ATTACK_ID);
+    public static final RegistryObject<SoundEvent> DIEGO_ATTACK_2 =
+            register(ModSounds.DIEGO_ATTACK_2, ModSounds.DIEGO_ATTACK_2_ID);
+    public static final RegistryObject<SoundEvent> DIEGO_THE_WORLD =
+            register(ModSounds.DIEGO_THE_WORLD, ModSounds.DIEGO_THE_WORLD_ID);
+    public static final RegistryObject<SoundEvent> DIEGO_THE_WORLD_2 =
+            register(ModSounds.DIEGO_THE_WORLD_2, ModSounds.DIEGO_THE_WORLD_2_ID);
+    public static final RegistryObject<SoundEvent> DIEGO_THE_WORLD_3 =
+            register(ModSounds.DIEGO_THE_WORLD_3, ModSounds.DIEGO_THE_WORLD_3_ID);
+    public static final RegistryObject<SoundEvent> DIEGO_THE_WORLD_4 =
+            register(ModSounds.DIEGO_THE_WORLD_4, ModSounds.DIEGO_THE_WORLD_4_ID);
+    public static final RegistryObject<SoundEvent> DIEGO_TAUNT =
+            register(ModSounds.DIEGO_TAUNT, ModSounds.DIEGO_TAUNT_ID);
+    public static final RegistryObject<SoundEvent> DIEGO_INTERESTING =
+            register(ModSounds.DIEGO_INTERESTING, ModSounds.DIEGO_INTERESTING_ID);
+
     public static final RegistryObject<SoundEvent> JOTARO_HURT_1 =
             register(ModSounds.JOTARO_HURT_1, ModSounds.JOTARO_HURT_1_ID);
     public static final RegistryObject<SoundEvent> JOTARO_HURT_2 =

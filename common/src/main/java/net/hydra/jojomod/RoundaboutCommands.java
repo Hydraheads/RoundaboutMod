@@ -9,6 +9,7 @@ import net.hydra.jojomod.stand.powers.PowersTheWorld;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -144,6 +145,7 @@ public class RoundaboutCommands {
                 if (entity instanceof Player PE){
                     PE.getFoodData().setFoodLevel(20);
                     PE.getFoodData().setSaturation(14.4F);
+                    MainUtil.clearCooldowns(PE);
                 }
             }
         }

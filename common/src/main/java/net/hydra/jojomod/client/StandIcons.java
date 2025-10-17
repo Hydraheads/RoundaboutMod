@@ -38,6 +38,8 @@ public class StandIcons {
             "textures/misc/in_bubble.png");
     public static final ResourceLocation STONE_MASK_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/mask_blur.png");
+    public static final ResourceLocation BLOODY_MASK_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/misc/bloody_mask_blur.png");
     public static final ResourceLocation RATT_SCOPE_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/ratt_scope.png");
     public static final ResourceLocation TIME_REWIND = new ResourceLocation(Roundabout.MOD_ID,
@@ -338,6 +340,8 @@ public class StandIcons {
     public static final ResourceLocation RATT_UNAUTO = Roundabout.location("textures/gui/icons/ratt/ratt_auto.png");
     public static final ResourceLocation RATT_AUTO = Roundabout.location("textures/gui/icons/ratt/ratt_unauto.png");
     public static final ResourceLocation RATT_BLOB = Roundabout.location("textures/item/flesh_chunk.png");
+    public static final ResourceLocation RATT_LEAP = Roundabout.location("textures/gui/icons/ratt/ratt_leap.png");
+
 
 
     public static final ResourceLocation SOFT_AND_WET_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,

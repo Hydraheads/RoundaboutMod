@@ -430,6 +430,7 @@ public class  PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> im
         this.animate($$0.WAMUU, Poses.WAMUU.ad, $$3, 1f);
         this.animate($$0.JOTARO, Poses.JOTARO.ad, $$3, 1f);
         this.animate($$0.JONATHAN, Poses.JONATHAN.ad, $$3, 1f);
+        this.animate($$0.VAMPIRE, Poses.VAMPIRE_TRANSFORMATION.ad, $$3, 1f);
 
 
         StandUser user = ((StandUser)$$0);

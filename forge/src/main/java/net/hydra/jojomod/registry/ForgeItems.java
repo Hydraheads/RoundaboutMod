@@ -78,6 +78,10 @@ public class ForgeItems {
             () -> new StoneMaskBlockItem(ForgeBlocks.EQUIPPABLE_STONE_MASK_BLOCK.get(),
                     new Item.Properties().stacksTo(1)
             )));
+    public static final RegistryObject<BlockItem> BLOODY_STONE_MASK_ITEM = addToWIPTab(ITEMS.register("bloody_stone_mask",
+            () -> new BloodyStoneMaskBlockItem(ForgeBlocks.BLOODY_STONE_MASK_BLOCK.get(),
+                    new Item.Properties().stacksTo(1)
+            )));
     public static final RegistryObject<BlockItem> REGAL_WALL_ITEM = addToBuildingTab(ITEMS.register("regal_wall",
             () -> new BlockItem(ForgeBlocks.REGAL_WALL.get(),
                     new Item.Properties()
@@ -104,6 +108,10 @@ public class ForgeItems {
             )));
     public static final RegistryObject<BlockItem> WOOL_SLAB_BLUE_ITEM = addToBuildingTab(ITEMS.register("wool_slab_blue",
             () -> new BlockItem(ForgeBlocks.WOOL_SLAB_BLUE.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> WOOL_SLAB_BROWN_ITEM = addToBuildingTab(ITEMS.register("wool_slab_brown",
+            () -> new BlockItem(ForgeBlocks.WOOL_SLAB_BROWN.get(),
                     new Item.Properties()
             )));
     public static final RegistryObject<BlockItem> WOOL_SLAB_CYAN_ITEM = addToBuildingTab(ITEMS.register("wool_slab_cyan",
@@ -214,6 +222,10 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.WOOL_STAIRS_YELLOW.get(),
                     new Item.Properties()
             )));
+    public static final RegistryObject<BlockItem> WOOL_STAIRS_BROWN_ITEM = addToBuildingTab(ITEMS.register("wool_stairs_brown",
+            () -> new BlockItem(ForgeBlocks.WOOL_STAIRS_BROWN.get(),
+                    new Item.Properties()
+            )));
     public static final RegistryObject<BlockItem> LOCACACA_CACTUS_ITEM = addToBuildingTab(ITEMS.register("locacaca_cactus",
             () -> new BlockItem(ForgeBlocks.LOCACACA_CACTUS.get(),
                     new Item.Properties()
@@ -301,7 +313,7 @@ public class ForgeItems {
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> METEORITE_INGOT = addToTab(ITEMS.register("meteorite_ingot",
             () -> new Item(new Item.Properties())));
-    public static final RegistryObject<Item> WALL_STREET_SIGN_DIO_BLOCK_ITEM = addToTab(ITEMS.register("wall_street_sign_dio",
+    public static final RegistryObject<Item> WALL_STREET_SIGN_DIO_BLOCK_ITEM = addToBuildingTab(ITEMS.register("wall_street_sign_dio",
     () -> new BlockItem(ForgeBlocks.WALL_STREET_SIGN_DIO.get(),
                     new Item.Properties()
                             )));

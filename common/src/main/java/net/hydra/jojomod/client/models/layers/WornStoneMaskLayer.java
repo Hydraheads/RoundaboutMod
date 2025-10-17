@@ -3,6 +3,7 @@ package net.hydra.jojomod.client.models.layers;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
@@ -16,6 +17,7 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Map;
@@ -31,7 +33,9 @@ public class WornStoneMaskLayer<T extends LivingEntity, A extends HumanoidModel<
     float scale = 1;
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
-        if (MainUtil.isWearingStoneMask(entity)) {
+        boolean stoneMask = (MainUtil.isWearingStoneMask(entity));
+        boolean bloodyMask = (MainUtil.isWearingBloodyStoneMask(entity));
+        if (stoneMask || bloodyMask) {
             if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
                 return;
             LivingEntity livent = entity;
@@ -45,8 +49,18 @@ public class WornStoneMaskLayer<T extends LivingEntity, A extends HumanoidModel<
             float r = isHurt ? 1.0F : 1.0F;
             float g = isHurt ? 0.0F : 1.0F;
             float b = isHurt ? 0.0F : 1.0F;
-            ModStrayModels.WORN_STONE_MASK.render(livent, partialTicks, poseStack, bufferSource, packedLight,
-                    r, g, b, heyFull);
+            if (bloodyMask){
+                if (entity instanceof Player PE && ((IPlayerEntity)PE).roundabout$GetPoseEmote() == 12){
+                    ModStrayModels.WORN_BLOODY_STONE_MASK.render(livent, partialTicks, poseStack, bufferSource, 15728880,
+                            r, g, b, heyFull);
+                } else {
+                    ModStrayModels.WORN_BLOODY_STONE_MASK.render(livent, partialTicks, poseStack, bufferSource, packedLight,
+                            r, g, b, heyFull);
+                }
+            } else {
+                ModStrayModels.WORN_STONE_MASK.render(livent, partialTicks, poseStack, bufferSource, packedLight,
+                        r, g, b, heyFull);
+            }
             poseStack.popPose();
 
         }

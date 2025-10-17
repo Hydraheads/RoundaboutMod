@@ -3,6 +3,7 @@ package net.hydra.jojomod.registry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.client.models.WornBloodyStoneMaskModel;
 import net.hydra.jojomod.client.models.WornStoneMaskModel;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
 import net.hydra.jojomod.client.models.paintings.MonaLisaPaintingRenderer;
@@ -178,6 +179,7 @@ public class ClientForgeEvents {
         ModStrayModels.HEY_YA = new HeyYaModel();
         ModStrayModels.BOWLER_HAT = new BowlerHatModel();
         ModStrayModels.WORN_STONE_MASK = new WornStoneMaskModel();
+        ModStrayModels.WORN_BLOODY_STONE_MASK = new WornBloodyStoneMaskModel();
         ModStrayModels.RATT_SHOULDER = new RattShoulderModel();
         ModStrayModels.MANDOM = new MandomModel();
         ModStrayModels.MANDOM_WATCH = new WatchModel();

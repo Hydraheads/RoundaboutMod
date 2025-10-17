@@ -138,6 +138,13 @@ public class MainUtil {
         }
         return false;
     }
+    public static boolean isItemGrabBlacklisted(ItemStack stack){
+        ResourceLocation rl = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        if (standBlockGrabBlacklist != null && !standBlockGrabBlacklist.isEmpty() && rl != null && standBlockGrabBlacklist.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
     public static boolean isMobStandUserBlacklisted(Entity ent){
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
         if (naturalStandUserMobBlacklist != null && !naturalStandUserMobBlacklist.isEmpty() && rl != null && naturalStandUserMobBlacklist.contains(rl.toString())){
@@ -161,6 +168,17 @@ public class MainUtil {
             return false;
         }
         return true;
+    }
+
+    public static void clearCooldowns(Entity ent){
+        if (ent instanceof LivingEntity LE){
+            StandUser SU = ((StandUser) LE);
+            StandPowers powers = SU.roundabout$getStandPowers();
+            powers.refreshCooldowns();
+            if (ent instanceof ServerPlayer SP){
+                S2CPacketUtil.refreshCooldowns(SP);
+            }
+        }
     }
 
     public static boolean isKnockbackImmune(Entity ent){
@@ -494,11 +512,92 @@ public class MainUtil {
         }
     }
 
+    public static boolean isWearingEitherStoneMask(Entity ent){
+        return isWearingStoneMask(ent) || isWearingBloodyStoneMask(ent);
+    }
+
+    public static void activateStoneMask(Entity ent){
+        if (ent instanceof LivingEntity LE && !ent.isInWater()){
+            ItemStack stack = LE.getItemBySlot(EquipmentSlot.HEAD);
+            if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem())){
+                ItemStack stack2 = ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem().getDefaultInstance();
+                stack2.setTag(stack.getTag());
+                LE.setItemSlot(EquipmentSlot.HEAD,stack2);
+                if (ent instanceof Player PE){
+                    IFatePlayer ifp = (IFatePlayer) PE;
+                    if (FateTypes.isHuman(PE)){
+                        ifp.rdbt$startVampireTransformation();
+                    }
+                }
+            }
+        }
+    }
+    public static void popOffStoneMask(Entity ent){
+        if (ent instanceof LivingEntity LE){
+            ItemStack helmet = LE.getItemBySlot(EquipmentSlot.HEAD);
+            if (helmet != null && !helmet.isEmpty() && helmet.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())){
+
+                    Level level = ent.level();
+
+                    // Do nothing if no helmet
+                    if (helmet.isEmpty()) return;
+
+                    // Remove the helmet
+                    ent.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
+
+                    if (!level.isClientSide) {
+                        // Drop item slightly above the player’s head
+                        Vec3 pos = ent.position().add(0, ent.getBbHeight() * 0.8, 0);
+                        ItemEntity drop = new ItemEntity(level, pos.x, pos.y, pos.z, helmet.copy());
+
+                        // Give it some small random velocity like a pop effect
+                        drop.setDeltaMovement(
+                                (level.random.nextDouble() - 0.5) * 0.2,
+                                0.3 + level.random.nextDouble() * 0.2,
+                                (level.random.nextDouble() - 0.5) * 0.2
+                        );
+
+                        level.addFreshEntity(drop);
+                    }
+
+                    // Shrink the player's inventory copy only after spawning the entity
+                    helmet.shrink(helmet.getCount());
+            }
+        }
+    }
+    public static void clearStoneMask(Entity ent){
+        if (ent instanceof LivingEntity LE){
+            if (FateTypes.isTransforming(LE))
+                return;
+            ItemStack stack = LE.getItemBySlot(EquipmentSlot.HEAD);
+            if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())){
+                ItemStack stack2 = ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem().getDefaultInstance();
+                stack2.setTag(stack.getTag());
+                LE.setItemSlot(EquipmentSlot.HEAD,stack2);
+            }
+
+            stack = LE.getItemBySlot(EquipmentSlot.OFFHAND);
+            if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())){
+                ItemStack stack2 = ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem().getDefaultInstance();
+                stack2.setTag(stack.getTag());
+                LE.setItemSlot(EquipmentSlot.OFFHAND,stack2);
+            }
+        }
+    }
     public static boolean isWearingStoneMask(Entity ent){
         if (ent instanceof LivingEntity LE){
             ItemStack stack = LE.getItemBySlot(EquipmentSlot.HEAD);
             if (stack != null && !stack.isEmpty()){
                 return stack.is(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem());
+            }
+        }
+        return false;
+    }
+    public static boolean isWearingBloodyStoneMask(Entity ent){
+        if (ent instanceof LivingEntity LE){
+            ItemStack stack = LE.getItemBySlot(EquipmentSlot.HEAD);
+            if (stack != null && !stack.isEmpty()){
+                return stack.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem());
             }
         }
         return false;
@@ -733,6 +832,14 @@ public class MainUtil {
             return;
         }
         if (getMobBleed(entity)){
+            if (!hasEnderBlood(entity) && !hasBlueBlood(entity)) {
+                if (source != null && isWearingEitherStoneMask(source) && source.distanceTo(entity) < 5) {
+                    activateStoneMask(source);
+                } else if (isWearingStoneMask(entity)) {
+                    activateStoneMask(entity);
+                }
+            }
+
             ((StandUser)entity).roundabout$setBleedLevel(level);
             ((LivingEntity)entity).addEffect(new MobEffectInstance(ModEffects.BLEED, ticks, level), source);
         }
@@ -1844,6 +1951,12 @@ public class MainUtil {
     public static void handShake(ServerPlayer player){
         Networking.sendConfigToPlayer(player);
     }
+
+    public static void handShakeCooldowns(ServerPlayer player){
+        ((StandUser)player).roundabout$getStandPowers().syncAllCooldowns();
+        S2CPacketUtil.affirmCooldownsS2C(player);
+    }
+
 
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
 

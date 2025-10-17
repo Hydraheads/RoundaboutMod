@@ -285,7 +285,7 @@ public class FabricItems {
     public static final CreativeModeTab JOJO_BUILDING_GROUP = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
             new ResourceLocation(Roundabout.MOD_ID, "jojo_building_blocks"),
             FabricItemGroup.builder().title(Component.translatable("itemgroup.jojo_building_blocks"))
-                    .icon(() -> new ItemStack(ModBlocks.WOODEN_MANOR_TABLE)).displayItems((displayContext, entries) -> {
+                    .icon(() -> new ItemStack(ModBlocks.GODDESS_STATUE_BLOCK)).displayItems((displayContext, entries) -> {
                         entries.accept(ModBlocks.WOODEN_MANOR_TABLE);
                         entries.accept(ModBlocks.WOODEN_MANOR_CHAIR);
                         entries.accept(ModBlocks.WOOL_SLAB_WHITE);
@@ -401,6 +401,7 @@ public class FabricItems {
                         //entries.accept(INTERDIMENSIONAL_KEY);
                         //entries.accept(STAND_DISC_WALKING_HEART);
                         entries.accept(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK);
+                        entries.accept(ModBlocks.BLOODY_STONE_MASK_BLOCK);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_RATT);

@@ -2,8 +2,9 @@ package net.hydra.jojomod.event.powers.visagedata;
 
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.hydra.jojomod.event.powers.visagedata.voicedata.DiegoVoice;
+import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
@@ -37,5 +38,13 @@ public class DiegoVisage extends VisageData {
 
     public boolean rendersDiegoHat(){
         return true;
+    }
+    public boolean hasVoices(){
+        return true;
+    }
+
+    @Override
+    public VoiceData voiceData(LivingEntity slef){
+        return new DiegoVoice(slef);
     }
 }

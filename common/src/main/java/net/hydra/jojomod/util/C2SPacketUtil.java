@@ -162,6 +162,13 @@ public class C2SPacketUtil {
         );
     }
 
+    /**The client asks the server for cooldowns essentially.*/
+    public static void handshakeCooldownPacket(){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.Handshake.value
+        );
+    }
+
     /**Sending anything in the inventory to the server*/
     public static void inventoryToServerPacket(int slotNum, ItemStack stack, byte context){
         ModMessageEvents.sendToServer(
@@ -185,6 +192,13 @@ public class C2SPacketUtil {
     public static void guardCancelPacket(){
         ModMessageEvents.sendToServer(
                 ClientToServerPackets.StandPowerPackets.MESSAGES.GuardCancel.value
+        );
+    }
+
+    /**Release right click to stop guarding*/
+    public static void handShakeCooldownPacket(){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.HandshakeCooldowns.value
         );
     }
 

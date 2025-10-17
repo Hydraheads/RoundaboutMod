@@ -11,7 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "roundabout:wool_stairs_grey"
+          "name": "roundabout:wool_stairs_light_grey"
         }
       ],
       "rolls": 1.0

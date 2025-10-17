@@ -113,6 +113,12 @@
       "roundabout:firestorm"
     ]
   },
+  "stone_mask_activate": {
+    "subtitle": "sounds.roundabout.stone_mask_activate",
+    "sounds": [
+      "roundabout:stone_mask_activate"
+    ]
+  },
   "go_beyond_hit": {
     "subtitle": "sounds.roundabout.go_beyond_hit",
     "sounds": [
@@ -435,6 +441,156 @@
     "subtitle": "sounds.roundabout.dio_jotaro_2",
     "sounds": [
       "roundabout:dio_jotaro_2"
+    ]
+  },
+  "diego_attack": {
+    "subtitle": "sounds.roundabout.diego_attack",
+    "sounds": [
+      "roundabout:diego_attack"
+    ]
+  },
+  "diego_attack_2": {
+    "subtitle": "sounds.roundabout.diego_attack_2",
+    "sounds": [
+      "roundabout:diego_attack_2"
+    ]
+  },
+  "diego_checkmate": {
+    "subtitle": "sounds.roundabout.diego_checkmate",
+    "sounds": [
+      "roundabout:diego_checkmate"
+    ]
+  },
+  "diego_death": {
+    "subtitle": "sounds.roundabout.diego_death",
+    "sounds": [
+      "roundabout:diego_death"
+    ]
+  },
+  "diego_death_2": {
+    "subtitle": "sounds.roundabout.diego_death_2",
+    "sounds": [
+      "roundabout:diego_death_2"
+    ]
+  },
+  "diego_ho": {
+    "subtitle": "sounds.roundabout.diego_ho",
+    "sounds": [
+      "roundabout:diego_ho"
+    ]
+  },
+  "diego_ho_2": {
+    "subtitle": "sounds.roundabout.diego_ho_2",
+    "sounds": [
+      "roundabout:diego_ho_2"
+    ]
+  },
+  "diego_hurt_1": {
+    "subtitle": "sounds.roundabout.diego_hurt_1",
+    "sounds": [
+      "roundabout:diego_hurt_1"
+    ]
+  },
+  "diego_hurt_2": {
+    "subtitle": "sounds.roundabout.diego_hurt_2",
+    "sounds": [
+      "roundabout:diego_hurt_2"
+    ]
+  },
+  "diego_hurt_3": {
+    "subtitle": "sounds.roundabout.diego_hurt_3",
+    "sounds": [
+      "roundabout:diego_hurt_3"
+    ]
+  },
+  "diego_hurt_4": {
+    "subtitle": "sounds.roundabout.diego_hurt_4",
+    "sounds": [
+      "roundabout:diego_hurt_4"
+    ]
+  },
+  "diego_interesting": {
+    "subtitle": "sounds.roundabout.diego_interesting",
+    "sounds": [
+      "roundabout:diego_interesting"
+    ]
+  },
+  "diego_kata": {
+    "subtitle": "sounds.roundabout.diego_kata",
+    "sounds": [
+      "roundabout:diego_kata"
+    ]
+  },
+  "diego_kurei": {
+    "subtitle": "sounds.roundabout.diego_kurei",
+    "sounds": [
+      "roundabout:diego_kurei"
+    ]
+  },
+  "diego_kureit": {
+    "subtitle": "sounds.roundabout.diego_kureit",
+    "sounds": [
+      "roundabout:diego_kureit"
+    ]
+  },
+  "diego_laugh": {
+    "subtitle": "sounds.roundabout.diego_laugh",
+    "sounds": [
+      "roundabout:diego_laugh"
+    ]
+  },
+  "diego_nani": {
+    "subtitle": "sounds.roundabout.diego_nani",
+    "sounds": [
+      "roundabout:diego_nani"
+    ]
+  },
+  "diego_no_way": {
+    "subtitle": "sounds.roundabout.diego_no_way",
+    "sounds": [
+      "roundabout:diego_no_way"
+    ]
+  },
+  "diego_shine": {
+    "subtitle": "sounds.roundabout.diego_shine",
+    "sounds": [
+      "roundabout:diego_shine"
+    ]
+  },
+  "diego_taunt": {
+    "subtitle": "sounds.roundabout.diego_taunt",
+    "sounds": [
+      "roundabout:diego_taunt"
+    ]
+  },
+  "diego_the_world": {
+    "subtitle": "sounds.roundabout.diego_the_world",
+    "sounds": [
+      "roundabout:diego_the_world"
+    ]
+  },
+  "diego_the_world_2": {
+    "subtitle": "sounds.roundabout.diego_the_world_2",
+    "sounds": [
+      "roundabout:diego_the_world_2"
+    ]
+  },
+  "diego_the_world_3": {
+    "subtitle": "sounds.roundabout.diego_the_world_3",
+    "sounds": [
+      "roundabout:diego_the_world_3"
+    ]
+  },
+  "diego_the_world_4": {
+    "subtitle": "sounds.roundabout.diego_the_world_4",
+    "sounds": [
+      "roundabout:diego_the_world_4"
+    ]
+  },
+  "diego_wry": {
+    "subtitle": "sounds.roundabout.diego_wry",
+    "sounds": [
+      "roundabout:diego_wry"
     ]
   },
   "jotaro_yare_yare": {

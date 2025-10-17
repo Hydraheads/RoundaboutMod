@@ -42,6 +42,7 @@ public class ModDamageTypes {
         public static final ResourceKey<DamageType> MELTING = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "melting"));
         public static final ResourceKey<DamageType> HEEL_SPIKE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "heel_spike"));
         public static final ResourceKey<DamageType> DAGGER = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "dagger"));
+        public static final ResourceKey<DamageType> SUNLIGHT = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "sunlight"));
         public static DamageSource of(Level world, ResourceKey<DamageType> key, Entity attacker) {
             return new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(key), attacker, attacker);
         }

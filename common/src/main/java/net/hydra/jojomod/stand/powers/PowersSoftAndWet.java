@@ -435,12 +435,14 @@ public class PowersSoftAndWet extends NewPunchingStand {
                 $$1.add(SoftAndWetEntity.FIGURE_SKIN);
                 $$1.add(SoftAndWetEntity.COLORS);
             } if (Level > 4 || bypass){
-                $$1.add(SoftAndWetEntity.KNIGHT);
+                $$1.add(SoftAndWetEntity.ACTION);
                 $$1.add(SoftAndWetEntity.MELON);
+                $$1.add(SoftAndWetEntity.WHEEL);
             } if (Level > 5 || bypass){
                 $$1.add(SoftAndWetEntity.DROWNED_SKIN);
                 $$1.add(SoftAndWetEntity.DROWNED_SKIN_2);
             } if (Level > 6 || bypass){
+                $$1.add(SoftAndWetEntity.KNIGHT);
                 $$1.add(SoftAndWetEntity.KING_SKIN);
                 $$1.add(SoftAndWetEntity.BETA_SKIN);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
@@ -1259,7 +1261,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                     this.bubbleList.add(bubble);
                     this.getSelf().level().addFreshEntity(bubble);
 
-                        this.self.level().playSound(bubble, bubble.blockPosition(), ModSounds.GO_BEYOND_LAUNCH_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+                    this.self.level().playSound(bubble, bubble.blockPosition(), ModSounds.GO_BEYOND_LAUNCH_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
 
 
                     Vec3 vector = Vec3.directionFromRotation(new Vec2(-52, this.self.yBodyRot - 90));
@@ -1296,8 +1298,11 @@ public class PowersSoftAndWet extends NewPunchingStand {
     /**Explosive Item Bubble Shooting*/
     public boolean itemBubbleShot() {
         ItemStack stack = ((Player) this.getSelf()).getInventory().getItem(this.grabInventorySlot);
-        if (!stack.isEmpty() && !(stack.getItem() instanceof BlockItem &&
-                ((BlockItem) stack.getItem()).getBlock() instanceof ShulkerBoxBlock)) {
+        if (!stack.isEmpty() &&
+                !(MainUtil.isItemGrabBlacklisted(stack)) &&
+                !(stack.getItem() instanceof BlockItem
+                        && (MainUtil.isBlockBlacklisted(((BlockItem)stack.getItem()).getBlock().defaultBlockState()) ||
+                        ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock))) {
             this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().softAndWetSettings.itemBubbleShotCooldown);
             if (!this.self.level().isClientSide()) {
 
@@ -2541,6 +2546,8 @@ public void unlockSkin(){
             case SoftAndWetEntity.MORIOH -> Component.translatable("skins.roundabout.soft_and_wet.morioh");
             case SoftAndWetEntity.ART -> Component.translatable("skins.roundabout.soft_and_wet.art");
             case SoftAndWetEntity.NATURE -> Component.translatable("skins.roundabout.soft_and_wet.nature");
+            case SoftAndWetEntity.WHEEL -> Component.translatable("skins.roundabout.soft_and_wet.wheel");
+            case SoftAndWetEntity.ACTION -> Component.translatable("skins.roundabout.soft_and_wet.action");
             default -> Component.translatable("skins.roundabout.soft_and_wet.light");
         };
     }

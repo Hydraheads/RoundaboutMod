@@ -502,6 +502,12 @@ public class BlockGrabPreset extends NewPunchingStand {
         if (standEntity != null) {
             if (!standEntity.getHeldItem().isEmpty()) {
                 if (!this.getSelf().level().isClientSide) {
+                    if (standEntity.canAcquireHeldItem) {
+                        this.addItem(standEntity);
+                    }
+                    standEntity.setHeldItem(ItemStack.EMPTY);
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                    animateStand(StandEntity.IDLE);
                     S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 20);
                     this.setCooldown(PowerIndex.SKILL_2, 20);
                 }
@@ -968,9 +974,11 @@ public class BlockGrabPreset extends NewPunchingStand {
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved() &&
                     this.getSelf() instanceof Player) {
                 ItemStack stack = ((Player)this.getSelf()).getInventory().getItem(this.grabInventorySlot);
-                if (!stack.isEmpty() && !(stack.getItem() instanceof BlockItem
-                        && !MainUtil.isBlockBlacklisted(((BlockItem)stack.getItem()).getBlock().defaultBlockState()) &&
-                        ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock)) {
+                if (!stack.isEmpty() &&
+                        !(MainUtil.isItemGrabBlacklisted(stack)) &&
+                        !(stack.getItem() instanceof BlockItem
+                        && (MainUtil.isBlockBlacklisted(((BlockItem)stack.getItem()).getBlock().defaultBlockState()) ||
+                        ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock))) {
                     /**Boat throw*/
                     if (stack.getItem() instanceof BoatItem BE
                             && !(((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() == GameType.ADVENTURE)) {

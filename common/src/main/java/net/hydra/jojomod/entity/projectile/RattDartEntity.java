@@ -10,6 +10,8 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -51,7 +53,8 @@ public class RattDartEntity extends AbstractArrow {
     float damage = 0;
     int charged = 0;
 
-    boolean particles = false;
+    boolean particles = true;
+    int bounces = 0;
 
     public RattDartEntity(EntityType<? extends RattDartEntity> entity,  Level world) {
         super(entity, world);
@@ -79,7 +82,6 @@ public class RattDartEntity extends AbstractArrow {
         this.melting = m;
         this.damage = d;
         this.charged = 51;
-        this.particles = true;
     }
 
     public RattDartEntity(Level world, LivingEntity player, int i) {
@@ -88,13 +90,38 @@ public class RattDartEntity extends AbstractArrow {
         this.melting = i > 90 || i == -1 ? 0 : 1;
         this.damage = i < 90 ? 0.1F : 3.2F;
         this.charged = i;
+        this.bounces = 1;
     }
 
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
-        this.DisableSuperThrow();
-        particles = false;
-        super.onHitBlock($$0);
+        if (bounces > 0) {
+            bounces--;
+
+            // yoinked from BladedBowlerHatEntity
+            Vec3 velocity = this.getDeltaMovement();
+            Direction hitDir = $$0.getDirection();
+            Vec3 normal = Vec3.atLowerCornerOf(hitDir.getNormal());
+
+            // Makes it bounce
+            Vec3 reflected = velocity.subtract(normal.scale(2 * velocity.dot(normal)));
+
+            // Slowly stops it bouncing
+            reflected = reflected.scale(0.5); // less bounce / more bounce :)
+
+            this.setDeltaMovement(reflected);
+
+            Vec3 hitLoc = $$0.getLocation();
+            Vec3 pushOut = normal.scale(0.5);
+            this.setPos(hitLoc.x + pushOut.x, hitLoc.y + pushOut.y, hitLoc.z + pushOut.z);
+
+        } else {
+            this.DisableSuperThrow();
+            particles = false;
+            super.onHitBlock($$0);
+
+        }
+
     }
 
     public void shootWithVariance(double $$0, double $$1, double $$2, float $$3, float $$4) {
@@ -147,6 +174,12 @@ public class RattDartEntity extends AbstractArrow {
         return ModSounds.RATT_DART_THUNK_EVENT;
     }
     public void applyEffect(LivingEntity $$1) {
+        if (MainUtil.isBossMob($$1)) {
+            DamageSource DS = ModDamageTypes.of($$1.level(), ModDamageTypes.STAND, this.getOwner());
+            $$1.hurt(DS,1);
+            return;
+        }
+
         int stack = -1;
         if ( $$1.getEffect(ModEffects.MELTING) != null) {
             stack = $$1.getEffect(ModEffects.MELTING).getAmplifier() + this.melting;

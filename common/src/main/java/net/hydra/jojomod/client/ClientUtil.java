@@ -9,11 +9,14 @@ import net.hydra.jojomod.client.gui.*;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.item.ModItems;
 import jdk.jfr.Category;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
 import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.sounds.SoundSource;
 import net.hydra.jojomod.networking.ModMessages;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -28,6 +31,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.zetalasis.client.shader.D4CShaderFX;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
@@ -458,6 +462,11 @@ public class ClientUtil {
                             ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW){
                         PW.setHeelExtension(3);
                     }
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.RefreshAllCooldowns.value)) {
+                    MainUtil.clearCooldowns(player);
+                }if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AffirmAllCooldowns.value)) {
+                    ((IPlayerEntity)player).rdbt$setCooldownQuery(true);
                 }
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();
@@ -1121,20 +1130,11 @@ public class ClientUtil {
         if (context == 1) {
             ((StandUser) player).roundabout$setGasolineTime(context);
         } else if (context == PacketDataIndex.S2C_SIMPLE_FREEZE_STAND) {
-            if (((StandUser)player).roundabout$getStandPowers().hasCooldowns() ||
-                    ((StandUser)player).roundabout$isSealed()) {
-                int punishTicks = ClientNetworking.getAppropriateConfig().itemSettings.switchStandDiscWhileOnCooldownsLength;
-                if (punishTicks > 0){
-                    ((StandUser) player).roundabout$setMaxSealedTicks(punishTicks);
-                    ((StandUser) player).roundabout$setSealedTicks(punishTicks);
-                }
-            } else {
                 int switchTicks = ClientNetworking.getAppropriateConfig().itemSettings.switchStandDiscLength;
                 if (switchTicks > 0){
                     ((StandUser) player).roundabout$setMaxSealedTicks(switchTicks);
                     ((StandUser) player).roundabout$setSealedTicks(switchTicks);
                 }
-            }
         } else if (context == PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK) {
             ((StandUser) player).roundabout$getStandPowers().suspendGuard = true;
             ((StandUser) player).roundabout$getStandPowers().scopeLevel = 0;
@@ -1330,6 +1330,40 @@ public class ClientUtil {
             }
 
             $$3.popPose();
+        }
+    }
+
+
+    /**Simulating Blood Bar and whatnot*/
+    public static void renderHungerStuff(GuiGraphics graphics, Player player, int width, int height, int rand,
+                                         int foodlevel, int tickCount){
+
+        if (FateTypes.isVampire(player)){
+            for (int $$23 = 0; $$23 < 10; $$23++) {
+                int $$24 = height;
+                int $$25 = 238;
+                int $$26 = 238;
+                int sizey2 = 0;
+                if (player.hasEffect(ModEffects.BLEED)) {
+                    $$25 = 229;
+                    $$26 = 229;
+                    sizey2 = 0;
+                }
+
+                if (player.getFoodData().getSaturationLevel() <= 0.0F && tickCount % (foodlevel * 3 + 1) == 0) {
+                    $$24 = height + (rand - 1);
+                }
+
+                int $$27 = width - $$23 * 8 - 9;
+                graphics.blit(StandIcons.JOJO_ICONS_2, $$27, $$24, $$26, 18, 9, 9);
+                if ($$23 * 2 + 1 < foodlevel) {
+                    graphics.blit(StandIcons.JOJO_ICONS_2, $$27, $$24, $$25, sizey2, 9, 9);
+                }
+
+                if ($$23 * 2 + 1 == foodlevel) {
+                    graphics.blit(StandIcons.JOJO_ICONS_2, $$27, $$24, $$25, sizey2+9, 9, 9);
+                }
+            }
         }
     }
 }

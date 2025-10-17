@@ -27,6 +27,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -1171,6 +1172,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 roundabout$zappedTicks--;
             }
 
+            //**Stone Mask Clearing*/
+            if (isInWater())
+                MainUtil.clearStoneMask(rdbt$this());
 
             if (this.roundabout$getActive() &&this.roundabout$getStandPowers().canSummonStand()&&this.roundabout$getStandPowers().canSummonStandAsEntity()  && (this.roundabout$getStand() == null ||
                     (this.roundabout$getStand().level().dimensionTypeId() != this.level().dimensionTypeId() &&
@@ -1824,6 +1828,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
 
+    @Unique
+    public boolean roundabout$hasInteractedWithDisc = false;
+    @Unique
+    @Override
+    public boolean roundabout$getInteractedWithDisc(){
+        return roundabout$hasInteractedWithDisc;
+    };
+    @Unique
+    @Override
+    public void roundabout$setInteractedWithDisc(boolean discInteract){
+        roundabout$hasInteractedWithDisc = discInteract;
+    };
 
 
     @Inject(method = "onSyncedDataUpdated", at = @At(value = "TAIL"), cancellable = true)
@@ -1837,6 +1853,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         Item tem = BuiltInRegistries.ITEM.get(rl);
                         if (tem != null) {
                             roundabout$standDisc = tem.getDefaultInstance();
+                            if (this.roundabout$getStandPowers() != null && this.level().isClientSide()
+                            && roundabout$getInteractedWithDisc()){
+                                this.roundabout$getStandPowers().onStandSwitchInto();
+                                roundabout$setInteractedWithDisc(false);
+                            }
                         }
                     }
                 }
@@ -1880,6 +1901,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         compoundtag.putByte("bubbleEncased",roundabout$getBubbleEncased());
+
+        StandPowers powers = roundabout$getStandPowers();
+        List<CooldownInstance> CDCopy = new ArrayList<>(powers.StandCooldowns) {
+        };
+        if (!CDCopy.isEmpty()) {
+            for (byte i = 0; i < CDCopy.size(); i++) {
+                CooldownInstance ci = CDCopy.get(i);
+                compoundtag.putInt("cooldown_" + i, ci.time);
+                compoundtag.putInt("cooldown_" + i + "_max", ci.maxTime);
+            }
+        }
+
+
         $$0.put("roundabout",compoundtag);
 
         return $$0;
@@ -1906,6 +1940,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         roundabout$setBubbleEncased(compoundtag.getByte("bubbleEncased"));
+
+        StandPowers powers = roundabout$getStandPowers();
+        List<CooldownInstance> CDCopy = new ArrayList<>(powers.StandCooldowns) {
+        };
+        if (!CDCopy.isEmpty()) {
+            for (byte i = 0; i < CDCopy.size(); i++) {
+                CooldownInstance instance = CDCopy.get(i);
+                if (compoundtag.contains("cooldown_" + i)) {
+                    instance.time = compoundtag.getInt("cooldown_" + i);
+                    instance.maxTime = compoundtag.getInt("cooldown_" + i + "_max");
+                }
+            }
+        }
     }
     @ModifyVariable(method = "checkAutoSpinAttack(Lnet/minecraft/world/phys/AABB;Lnet/minecraft/world/phys/AABB;)V", at = @At("STORE"), ordinal = 0)
     public List<Entity> roundabout$checkAutoSpin(List<Entity> list){
@@ -2969,7 +3016,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "setSprinting", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$canSprintPlayer(boolean $$0, CallbackInfo ci) {
-        if (roundabout$getStandPowers().cancelSprint()){
+        if (roundabout$getStandPowers().cancelSprint() || FateTypes.isTransforming(rdbt$this())){
             ci.cancel();
         }
     }
@@ -3073,7 +3120,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**This code stops a barrage target from losing velocity, preventing lag spikes from causing them to drop.*/
     @ModifyVariable(method = "travel(Lnet/minecraft/world/phys/Vec3;)V", at = @At("STORE"))
     private double roundabout$Travel2(double $$1) {
-        if (this.roundabout$isDazed()) {
+        if (this.roundabout$isDazed() && !FateTypes.isTransforming(rdbt$this())) {
             return 0;
         } else {
             return $$1;
@@ -3083,7 +3130,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Modifies the gravity influence*/
     @ModifyVariable(method = "travel(Lnet/minecraft/world/phys/Vec3;)V", at = @At(value = "STORE"),ordinal = 0)
     private double roundabout$TravelGravity(double $$1) {
-        if (this.roundabout$isDazed()) {
+        if (this.roundabout$isDazed() && !FateTypes.isTransforming(rdbt$this())) {
             return 0;
         } else {
             return roundabout$getGravity($$1);
@@ -3152,7 +3199,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**This code prevents you from swimming upwards while barrage clashing*/
     @Inject(method = "jumpInLiquid", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$swimUpward(TagKey<Fluid> $$0, CallbackInfo ci) {
-        if (this.roundabout$isClashing()) {
+        if (this.roundabout$isClashing() || (FateTypes.isTransforming(rdbt$this()))) {
             ci.cancel();
         }
     }
@@ -3865,6 +3912,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Stone Heart and Potion Ticks*/
     @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;tickEffects()V", shift = At.Shift.BEFORE))
     protected void roundabout$baseTick(CallbackInfo ci) {
+
+        /**Makes bleed work for vamps against their hunger*/
+        if (!this.level().isClientSide() && rdbt$this() instanceof  Player PE) {
+            if (FateTypes.isVampire(PE)) {
+                if (hasEffect(ModEffects.BLEED)) {
+                    MobEffectInstance ei = getEffect(ModEffects.BLEED);
+                    if (ei != null){
+                        PE.causeFoodExhaustion(0.005F * (float) (ei.getAmplifier() + 1));
+                    }
+                }
+            }
+        }
 
         byte curse = this.roundabout$getLocacacaCurse();
         if (curse > -1) {

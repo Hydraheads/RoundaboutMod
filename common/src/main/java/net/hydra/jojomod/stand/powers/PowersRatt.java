@@ -28,6 +28,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -46,8 +47,8 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.*;
+import org.joml.Vector3f;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,7 +62,7 @@ public class PowersRatt extends NewDashPreset {
     public static final int BaseShootCooldown = 10;
     public static final int PlaceDelay = 10;
     public static final int PlaceShootCooldown = 55;
-    public static final int MaxShootCooldown = 30;
+    public static final int MaxShootCooldown = 20;
     public static final int[] ShotThresholds = {MinThreshold,50,MaxThreshold};
     public static final float[] ShotPowerFloats = {3.55F,3.5F,4F};
     public static final int[] ShotSuperthrowTicks = {4,10,15};
@@ -89,7 +90,8 @@ public class PowersRatt extends NewDashPreset {
             PLACE_BURST = 69,
             CHANGE_MODE = 7,
             SETPLACE = 8,
-            SCOPE = 9;
+            SCOPE = 9,
+            RATT_LEAP = 5;
 
 
 
@@ -151,7 +153,6 @@ public class PowersRatt extends NewDashPreset {
 
         // yoinked from mainutil
 
-        StandEntity SE = (StandEntity) ratt;
 
         Vec3 vars = this.getRotations(this.getShootTarget());
 
@@ -210,7 +211,7 @@ public class PowersRatt extends NewDashPreset {
             if (blockHit.getDirection() == Direction.UP) {
                 return blockHit.getLocation();
             } else if (blockHit.getDirection() == Direction.DOWN) {
-                if (this.getSelf().level().getBlockState(blockHit.getBlockPos().above(2)).isAir()) {
+                if (this.getSelf().level().getBlockState(blockHit.getBlockPos().above(1)).isAir()) {
                     return new Vec3(location.x(), ((int) location.y()) + 1, location.z());
                 }
             } else {
@@ -262,6 +263,9 @@ public class PowersRatt extends NewDashPreset {
             }
         }
         setSkillIcon(context,x,y,3,StandIcons.DODGE,PowerIndex.GLOBAL_DASH);
+
+        setSkillIcon(context, x, y, 4, LockedOrNot(StandIcons.RATT_LEAP,4), PowersRatt.RATT_LEAP);
+
     }
 
 
@@ -383,7 +387,17 @@ public class PowersRatt extends NewDashPreset {
 
         if (isPlaced() && !(this.getSelf() instanceof Mob)) {
 
+
+
             if (!this.isClient()) {
+
+                if (!SE.onGround()) {
+                    ((ServerLevel) this.getSelf().level()).sendParticles(new DustParticleOptions(new Vector3f(0.86F, 0.28F, 0.48F
+                            ), 1f),
+                            SE.getX(), ((RattEntity)SE).getEyeP(0F).y(), SE.getZ(),
+                            0, 0, 0, 0, 0);
+                }
+
                 Entity e = MainUtil.getTargetEntity(this.getSelf(),40);
 
                 if (e instanceof LivingEntity L) {
@@ -475,7 +489,7 @@ public class PowersRatt extends NewDashPreset {
     public void placeBurst() {
         this.animateStand(RattEntity.FIRE);
         this.setPowerNone();
-        this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.RATT_FIRING_EVENT,SoundSource.PLAYERS);
+        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.RATT_FIRING_EVENT, SoundSource.PLAYERS, 1.7F, 0.9F+(float)Math.random()*0.2F);
         for (int i = 0; i < 3; i++) {
             if (this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
                 RattDartEntity e = new RattDartEntity(RE.level(), this.getSelf(), 1, 0.1F);
@@ -530,11 +544,18 @@ public class PowersRatt extends NewDashPreset {
                     }
                 }
             }
-
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> dash();
+
+            case SKILL_4_NORMAL, SKILL_4_CROUCH -> RattLeap();
         }
     }
 
+    public void RattLeap() {
+        if (!onCooldown(PowersRatt.RATT_LEAP)) {
+            tryPower(PowersRatt.RATT_LEAP);
+            tryPowerPacket(PowersRatt.RATT_LEAP);
+        }
+    }
     public void RattScope() {
         if (!this.onCooldown(PowersRatt.SCOPE)) {
             int nl = scopeLevel + 1;
@@ -690,6 +711,16 @@ public class PowersRatt extends NewDashPreset {
                     this.animateStand(RattEntity.LOADING);
                 }
             }
+
+            case PowersRatt.RATT_LEAP -> {
+                this.setCooldown(PowersRatt.RATT_LEAP,120);
+                Vec3 dir = this.getSelf().getViewVector(1);
+                if (this.getStandEntity(this.getSelf()) != null) {
+                    dir = dir.scale(1.1);
+                    Vec3 vec3 = new Vec3(dir.x, dir.y+0.1F, dir.z);
+                    this.getStandEntity(this.getSelf()).setDeltaMovement(vec3);
+                }
+            }
         }
         return super.tryPower(move, forced);
     }
@@ -731,6 +762,15 @@ public class PowersRatt extends NewDashPreset {
                 } else if (isPlaced()) {
                     return !isAuto() && getShootTarget() == null;
                 }
+            }
+
+            case PowersRatt.RATT_LEAP -> {
+                if (isPlaced()) {
+                    if(this.getStandEntity(this.getSelf()).onGround()) {
+                        return false;
+                    }
+                }
+                return true;
             }
 
         }
@@ -892,7 +932,7 @@ public class PowersRatt extends NewDashPreset {
             if (Level >= 3 || bypass) {
                 list.add(RattEntity.TOWER_SKIN);
             }
-            if (Level >= 4 || bypass) {
+            if (Level >= 3 || bypass) {
                 list.add(RattEntity.SAND_SKIN);
                 list.add(RattEntity.SNOWY_SKIN);
             }
@@ -988,9 +1028,11 @@ public class PowersRatt extends NewDashPreset {
                 "instruction.roundabout.press_skill", StandIcons.RATT_BURST,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,3, "ability.roundabout.ratt_auto",
                 "instruction.roundabout.press_skill_crouch", StandIcons.RATT_AUTO,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.ratt_flesh",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,4, "ability.roundabout.ratt_leap",
+                "instruction.roundabout.press_skill", StandIcons.RATT_LEAP,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.ratt_flesh",
                 "instruction.roundabout.passive", StandIcons.RATT_BLOB,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.dodge",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
         return $$1;
     }

@@ -151,6 +151,10 @@ public class PowersJustice extends NewDashPreset {
             return Component.translatable(  "skins.roundabout.justice.dark_mirage");
         } else if (skinId == JusticeEntity.JOJONIUM){
             return Component.translatable(  "skins.roundabout.justice.jojonium");
+        } else if (skinId == JusticeEntity.PUMPKIN){
+            return Component.translatable(  "skins.roundabout.justice.pumpkin");
+        } else if (skinId == JusticeEntity.JACK){
+            return Component.translatable(  "skins.roundabout.justice.jack");
         }
         return Component.translatable(  "skins.roundabout.justice.base");
     }
@@ -432,6 +436,19 @@ public class PowersJustice extends NewDashPreset {
         } else  {
 
         }
+    }
+
+    @Override
+    public void onStandSwitchInto(){
+        if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative()))) {
+            if (this.getSelf() instanceof Player) {
+                if (!isClient()) {
+                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().justiceSettings.fogCloneCooldown);
+                }
+            }
+            this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().justiceSettings.fogCloneCooldown);
+        }
+        super.onStandSwitchInto();
     }
 
     public LivingEntity rollCorpse(){
@@ -879,9 +896,11 @@ public class PowersJustice extends NewDashPreset {
             } if (Level > 2 || bypass){
                 $$1.add(JusticeEntity.STRAY_SKIN);
                 $$1.add(JusticeEntity.BOGGED);
-            } if (Level > 3 || bypass){
                 $$1.add(JusticeEntity.WITHER);
                 $$1.add(JusticeEntity.TWILIGHT);
+            } if (Level > 3 || bypass){
+                $$1.add(JusticeEntity.PUMPKIN);
+                $$1.add(JusticeEntity.JACK);
                 $$1.add(JusticeEntity.JOJONIUM);
             } if (Level > 4 || bypass){
                 $$1.add(JusticeEntity.TAROT);
