@@ -886,7 +886,7 @@ public class MainUtil {
         if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.disableBleedingAndBloodSplatters){
             return;
         }
-        if (getMobBleed(entity)){
+        if (getMobBleed(entity) && !(entity instanceof LivingEntity LE && FateTypes.hasBloodHunger(LE))){
             if (!hasEnderBlood(entity) && !hasBlueBlood(entity)) {
                 if (source != null && isWearingEitherStoneMask(source) && source.distanceTo(entity) < 5) {
                     activateStoneMask(source);
