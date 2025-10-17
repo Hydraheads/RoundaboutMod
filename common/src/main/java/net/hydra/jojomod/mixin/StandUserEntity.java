@@ -3199,7 +3199,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**This code prevents you from swimming upwards while barrage clashing*/
     @Inject(method = "jumpInLiquid", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$swimUpward(TagKey<Fluid> $$0, CallbackInfo ci) {
-        if (this.roundabout$isClashing()) {
+        if (this.roundabout$isClashing() || (FateTypes.isTransforming(rdbt$this()))) {
             ci.cancel();
         }
     }

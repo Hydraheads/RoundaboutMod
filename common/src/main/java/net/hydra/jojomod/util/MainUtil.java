@@ -567,6 +567,8 @@ public class MainUtil {
     }
     public static void clearStoneMask(Entity ent){
         if (ent instanceof LivingEntity LE){
+            if (FateTypes.isTransforming(LE))
+                return;
             ItemStack stack = LE.getItemBySlot(EquipmentSlot.HEAD);
             if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())){
                 ItemStack stack2 = ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem().getDefaultInstance();
