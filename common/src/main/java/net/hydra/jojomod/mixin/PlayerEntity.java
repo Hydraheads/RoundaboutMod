@@ -78,7 +78,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
     @Shadow public abstract float getDestroySpeed(BlockState $$0);
 
-
     @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT$POS = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.BYTE);
@@ -152,6 +151,27 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     private float roundabout$idleRotation = 0;
     @Unique
     private float roundabout$idleYOffset = 0.1F;
+
+    @Unique
+    protected boolean rdbt$cooldownQuery = false;
+    @Unique
+    protected boolean rdbt$attemptedQuery = false;
+
+    @Unique
+    @Override
+    public void rdbt$queryServerForCooldowns(){
+
+    }
+    @Unique
+    @Override
+    public boolean rdbt$getCooldownQuery(){
+        return rdbt$cooldownQuery;
+    }
+    @Unique
+    @Override
+    public void rdbt$setCooldownQuery(boolean query){
+        rdbt$cooldownQuery = query;
+    }
 
     @Unique
     @Override
@@ -1136,6 +1156,13 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
         if (this.level().isClientSide()) {
             roundabout$setupAnimationStates();
+            if (!rdbt$getCooldownQuery()){
+                if (!rdbt$attemptedQuery){
+                    rdbt$attemptedQuery = true;
+                    C2SPacketUtil.handShakeCooldownPacket();
+                }
+
+            }
         }
         if (!(this.getVehicle() != null && this.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted())) {
             ((StandUser) this).roundabout$setRestrainedTicks(-1);

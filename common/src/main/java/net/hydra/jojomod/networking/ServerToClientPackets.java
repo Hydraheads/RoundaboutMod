@@ -37,7 +37,8 @@ public class ServerToClientPackets {
             SendNewDynamicWorld("send_new_dynamic_world"),
             EjectPRunning("eject_p_running"),
             HeelExtend("heel_extend"),
-            RefreshAllCooldowns("refresh_cooldowns");
+            RefreshAllCooldowns("refresh_cooldowns"),
+            AffirmAllCooldowns("affirm_cooldown_sync");
 
             public final String value;
 

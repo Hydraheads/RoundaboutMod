@@ -1828,6 +1828,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
 
+    @Unique
+    public boolean roundabout$hasInteractedWithDisc = false;
+    @Unique
+    @Override
+    public boolean roundabout$getInteractedWithDisc(){
+        return roundabout$hasInteractedWithDisc;
+    };
+    @Unique
+    @Override
+    public void roundabout$setInteractedWithDisc(boolean discInteract){
+        roundabout$hasInteractedWithDisc = discInteract;
+    };
 
 
     @Inject(method = "onSyncedDataUpdated", at = @At(value = "TAIL"), cancellable = true)
@@ -1841,8 +1853,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         Item tem = BuiltInRegistries.ITEM.get(rl);
                         if (tem != null) {
                             roundabout$standDisc = tem.getDefaultInstance();
-                            if (this.roundabout$getStandPowers() != null && this.level().isClientSide())
+                            if (this.roundabout$getStandPowers() != null && this.level().isClientSide()
+                            && roundabout$getInteractedWithDisc()){
                                 this.roundabout$getStandPowers().onStandSwitchInto();
+                                roundabout$setInteractedWithDisc(false);
+                            }
                         }
                     }
                 }
@@ -1886,6 +1901,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         compoundtag.putByte("bubbleEncased",roundabout$getBubbleEncased());
+
+        StandPowers powers = roundabout$getStandPowers();
+        List<CooldownInstance> CDCopy = new ArrayList<>(powers.StandCooldowns) {
+        };
+        if (!CDCopy.isEmpty()) {
+            for (byte i = 0; i < CDCopy.size(); i++) {
+                CooldownInstance ci = CDCopy.get(i);
+                compoundtag.putInt("cooldown_" + i, ci.time);
+                compoundtag.putInt("cooldown_" + i + "_max", ci.maxTime);
+            }
+        }
+
+
         $$0.put("roundabout",compoundtag);
 
         return $$0;
@@ -1912,6 +1940,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         roundabout$setBubbleEncased(compoundtag.getByte("bubbleEncased"));
+
+        StandPowers powers = roundabout$getStandPowers();
+        List<CooldownInstance> CDCopy = new ArrayList<>(powers.StandCooldowns) {
+        };
+        if (!CDCopy.isEmpty()) {
+            for (byte i = 0; i < CDCopy.size(); i++) {
+                CooldownInstance instance = CDCopy.get(i);
+                if (compoundtag.contains("cooldown_" + i)) {
+                    instance.time = compoundtag.getInt("cooldown_" + i);
+                    instance.maxTime = compoundtag.getInt("cooldown_" + i + "_max");
+                }
+            }
+        }
     }
     @ModifyVariable(method = "checkAutoSpinAttack(Lnet/minecraft/world/phys/AABB;Lnet/minecraft/world/phys/AABB;)V", at = @At("STORE"), ordinal = 0)
     public List<Entity> roundabout$checkAutoSpin(List<Entity> list){

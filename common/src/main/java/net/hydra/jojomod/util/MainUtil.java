@@ -1950,6 +1950,12 @@ public class MainUtil {
         Networking.sendConfigToPlayer(player);
     }
 
+    public static void handShakeCooldowns(ServerPlayer player){
+        ((StandUser)player).roundabout$getStandPowers().syncAllCooldowns();
+        S2CPacketUtil.affirmCooldownsS2C(player);
+    }
+
+
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
 
     public static void handleBytePacketC2S(Player player, byte data, byte context){

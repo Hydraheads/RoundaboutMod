@@ -58,6 +58,13 @@ public class S2CPacketUtil {
             );
         }
     }
+    public static void affirmCooldownsS2C(Player player){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.AffirmAllCooldowns.value
+            );
+        }
+    }
 
     public static void sendConfigPacket(Player player){
         if (player instanceof ServerPlayer SP) {

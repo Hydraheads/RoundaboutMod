@@ -465,6 +465,8 @@ public class ClientUtil {
                 }
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.RefreshAllCooldowns.value)) {
                     MainUtil.clearCooldowns(player);
+                }if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AffirmAllCooldowns.value)) {
+                    ((IPlayerEntity)player).rdbt$setCooldownQuery(true);
                 }
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();

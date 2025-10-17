@@ -235,14 +235,16 @@ public class PowersMandom extends NewDashPreset {
     @Override
     public void onStandSwitchInto(){
         if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative()))) {
-            if (this.getSelf() instanceof Player) {
-                if (!isClient()) {
-                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownv2
-                    + ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownExtraCondition);
+            if (!isClient() || !ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownUsesServerLatency) {
+                if (this.getSelf() instanceof Player) {
+                    if (!isClient()) {
+                        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownv2
+                                + ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownExtraCondition);
+                    }
                 }
+                this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownv2
+                        + ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownExtraCondition);
             }
-            this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownv2
-                    + ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownExtraCondition);
         }
         super.onStandSwitchInto();
     }

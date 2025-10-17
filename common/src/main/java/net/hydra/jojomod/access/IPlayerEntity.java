@@ -36,6 +36,10 @@ public interface IPlayerEntity {
     void roundabout$setFate(byte style);
     byte roundabout$getFate();
 
+    void rdbt$queryServerForCooldowns();
+    boolean rdbt$getCooldownQuery();
+    void rdbt$setCooldownQuery(boolean query);
+
     void roundabout$setShapeShiftExtraData(byte level);
     byte roundabout$getShapeShift();
     byte roundabout$getShapeShiftExtraData();

@@ -3094,6 +3094,21 @@ public class StandPowers {
         }
     }
 
+    public void syncAllCooldowns(){
+        try {
+            if (this.self instanceof ServerPlayer sp) {
+                byte cin = -1;
+                for (CooldownInstance ci : StandCooldowns){
+                    cin++;
+                    S2CPacketUtil.sendMaxCooldownSyncPacket(sp, cin, ci.time, ci.maxTime);
+                }
+            }
+        } catch (Exception e){
+            //I very much doubt this will error
+            Roundabout.LOGGER.info("???");
+        }
+    }
+
     public void tickCooldowns(){
         try {
             int amt = 1;
