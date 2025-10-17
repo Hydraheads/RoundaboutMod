@@ -295,6 +295,31 @@ public class FabricSounds {
         addSound(ModSounds.DIO_JOTARO_ID, ModSounds.DIO_JOTARO_EVENT);
         addSound(ModSounds.DIO_JOTARO_2_ID, ModSounds.DIO_JOTARO_2_EVENT);
 
+        addSound(ModSounds.DIEGO_HO_ID, ModSounds.DIEGO_HO_EVENT);
+        addSound(ModSounds.DIEGO_HO_2_ID, ModSounds.DIEGO_HO_2_EVENT);
+        addSound(ModSounds.DIEGO_DEATH_ID, ModSounds.DIEGO_DEATH_EVENT);
+        addSound(ModSounds.DIEGO_DEATH_2_ID, ModSounds.DIEGO_DEATH_2_EVENT);
+        addSound(ModSounds.DIEGO_KUREI_ID, ModSounds.DIEGO_KUREI_EVENT);
+        addSound(ModSounds.DIEGO_HURT_1_ID, ModSounds.DIEGO_HURT_1_EVENT);
+        addSound(ModSounds.DIEGO_HURT_2_ID, ModSounds.DIEGO_HURT_2_EVENT);
+        addSound(ModSounds.DIEGO_HURT_3_ID, ModSounds.DIEGO_HURT_3_EVENT);
+        addSound(ModSounds.DIEGO_HURT_4_ID, ModSounds.DIEGO_HURT_4_EVENT);
+        addSound(ModSounds.DIEGO_LAUGH_ID, ModSounds.DIEGO_LAUGH_EVENT);
+        addSound(ModSounds.DIEGO_WRY_ID, ModSounds.DIEGO_WRY_EVENT);
+        addSound(ModSounds.DIEGO_SHINE_ID, ModSounds.DIEGO_SHINE_EVENT);
+        addSound(ModSounds.DIEGO_CHECKMATE_ID, ModSounds.DIEGO_CHECKMATE_EVENT);
+        addSound(ModSounds.DIEGO_NANI_ID, ModSounds.DIEGO_NANI_EVENT);
+        addSound(ModSounds.DIEGO_KONO_DIEGO_ID, ModSounds.DIEGO_KONO_DIEGO_EVENT);
+        addSound(ModSounds.DIEGO_NO_WAY_ID, ModSounds.DIEGO_NO_WAY_EVENT);
+        addSound(ModSounds.DIEGO_ATTACK_ID, ModSounds.DIEGO_ATTACK_EVENT);
+        addSound(ModSounds.DIEGO_ATTACK_2_ID, ModSounds.DIEGO_ATTACK_2_EVENT);
+        addSound(ModSounds.DIEGO_THE_WORLD_ID, ModSounds.DIEGO_THE_WORLD_EVENT);
+        addSound(ModSounds.DIEGO_THE_WORLD_2_ID, ModSounds.DIEGO_THE_WORLD_2_EVENT);
+        addSound(ModSounds.DIEGO_THE_WORLD_3_ID, ModSounds.DIEGO_THE_WORLD_3_EVENT);
+        addSound(ModSounds.DIEGO_THE_WORLD_4_ID, ModSounds.DIEGO_THE_WORLD_4_EVENT);
+        addSound(ModSounds.DIEGO_TAUNT_ID, ModSounds.DIEGO_TAUNT_EVENT);
+        addSound(ModSounds.DIEGO_INTERESTING_ID, ModSounds.DIEGO_INTERESTING_EVENT);
+
         addSound(ModSounds.JOTARO_GRUNT_ID, ModSounds.JOTARO_GRUNT_EVENT);
         addSound(ModSounds.JOTARO_OI_OI_ID, ModSounds.JOTARO_OI_OI_EVENT);
         addSound(ModSounds.JOTARO_PISSED_OFF_ID, ModSounds.JOTARO_PISSED_OFF_EVENT);

@@ -890,6 +890,92 @@ public class ModSounds {
     public static SoundEvent DIO_INTERESTING_EVENT = SoundEvent.createVariableRangeEvent(DIO_INTERESTING_ID);
 
 
+    public static final String DIEGO_HO = "diego_hoho";
+    public static final ResourceLocation DIEGO_HO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIEGO_HO);
+    public static SoundEvent DIEGO_HO_EVENT = SoundEvent.createVariableRangeEvent(DIEGO_HO_ID);
+
+    public static final String DIEGO_DEATH = "diego_death";
+    public static final ResourceLocation DIEGO_DEATH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIEGO_DEATH);
+    public static SoundEvent DIEGO_DEATH_EVENT = SoundEvent.createVariableRangeEvent(DIEGO_DEATH_ID);
+    public static final String DIEGO_HO_2 = "diego_hoho_2";
+    public static final ResourceLocation DIEGO_HO_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIEGO_HO_2);
+    public static SoundEvent DIEGO_HO_2_EVENT = SoundEvent.createVariableRangeEvent(DIEGO_HO_2_ID);
+
+    public static final String DIEGO_DEATH_2 = "diego_death_2";
+    public static final ResourceLocation DIEGO_DEATH_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIEGO_DEATH_2);
+    public static SoundEvent DIEGO_DEATH_2_EVENT = SoundEvent.createVariableRangeEvent(DIEGO_DEATH_2_ID);
+
+    public static final String DIEGO_LAUGH = "diego_laugh";
+    public static final ResourceLocation DIEGO_LAUGH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIEGO_LAUGH);
+    public static SoundEvent DIEGO_LAUGH_EVENT = SoundEvent.createVariableRangeEvent(DIEGO_LAUGH_ID);
+
+    public static final String DIEGO_KUREI = "diego_kurei";
+    public static final ResourceLocation DIEGO_KUREI_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIEGO_KUREI);
+    public static SoundEvent DIEGO_KUREI_EVENT = SoundEvent.createVariableRangeEvent(DIEGO_KUREI_ID);
+
+    public static final String DIEGO_HURT_1 = "diego_hurt_1";
+    public static final ResourceLocation DIEGO_HURT_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIEGO_HURT_1);
+    public static SoundEvent DIEGO_HURT_1_EVENT = SoundEvent.createVariableRangeEvent(DIEGO_HURT_1_ID);
+
+    public static final String DIEGO_HURT_2 = "diego_hurt_2";
+    public static final ResourceLocation DIEGO_HURT_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIEGO_HURT_2);
+    public static SoundEvent DIEGO_HURT_2_EVENT = SoundEvent.createVariableRangeEvent(DIEGO_HURT_2_ID);
+
+    public static final String DIEGO_HURT_3 = "diego_hurt_3";
+    public static final ResourceLocation DIEGO_HURT_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIEGO_HURT_3);
+    public static SoundEvent DIEGO_HURT_3_EVENT = SoundEvent.createVariableRangeEvent(DIEGO_HURT_3_ID);
+
+    public static final String DIEGO_HURT_4 = "diego_hurt_4";
+    public static final ResourceLocation DIEGO_HURT_4_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIEGO_HURT_4);
+    public static SoundEvent DIEGO_HURT_4_EVENT = SoundEvent.createVariableRangeEvent(DIEGO_HURT_4_ID);
+
+
+    public static final String DIEGO_WRY = "diego_wry";
+    public static final ResourceLocation DIEGO_WRY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIEGO_WRY);
+    public static SoundEvent DIEGO_WRY_EVENT = SoundEvent.createVariableRangeEvent(DIEGO_WRY_ID);
+
+    public static final String DIEGO_SHINE = "diego_shine";
+    public static final ResourceLocation DIEGO_SHINE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIEGO_SHINE);
+    public static SoundEvent DIEGO_SHINE_EVENT = SoundEvent.createVariableRangeEvent(DIEGO_SHINE_ID);
+    public static final String DIEGO_CHECKMATE = "diego_checkmate";
+    public static final ResourceLocation DIEGO_CHECKMATE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIEGO_CHECKMATE);
+    public static SoundEvent DIEGO_CHECKMATE_EVENT = SoundEvent.createVariableRangeEvent(DIEGO_CHECKMATE_ID);
+    public static final String DIEGO_NANI = "diego_nani";
+    public static final ResourceLocation DIEGO_NANI_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIEGO_NANI);
+    public static SoundEvent DIEGO_NANI_EVENT = SoundEvent.createVariableRangeEvent(DIEGO_NANI_ID);
+    public static final String DIEGO_KONO_DIO = "diego_kono_diego";
+    public static final ResourceLocation DIEGO_KONO_DIEGO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIEGO_KONO_DIO);
+    public static SoundEvent DIEGO_KONO_DIEGO_EVENT = SoundEvent.createVariableRangeEvent(DIEGO_KONO_DIEGO_ID);
+    public static final String DIEGO_NO_WAY = "diego_no_way";
+    public static final ResourceLocation DIEGO_NO_WAY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIEGO_NO_WAY);
+    public static SoundEvent DIEGO_NO_WAY_EVENT = SoundEvent.createVariableRangeEvent(DIEGO_NO_WAY_ID);
+    public static final String DIEGO_ATTACK = "diego_attack";
+    public static final ResourceLocation DIEGO_ATTACK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIEGO_ATTACK);
+    public static SoundEvent DIEGO_ATTACK_EVENT = SoundEvent.createVariableRangeEvent(DIEGO_ATTACK_ID);
+    public static final String DIEGO_ATTACK_2 = "diego_attack_2";
+    public static final ResourceLocation DIEGO_ATTACK_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIEGO_ATTACK_2);
+    public static SoundEvent DIEGO_ATTACK_2_EVENT = SoundEvent.createVariableRangeEvent(DIEGO_ATTACK_2_ID);
+
+    public static final String DIEGO_TAUNT = "diego_taunt";
+    public static final ResourceLocation DIEGO_TAUNT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIEGO_TAUNT);
+    public static SoundEvent DIEGO_TAUNT_EVENT = SoundEvent.createVariableRangeEvent(DIEGO_TAUNT_ID);
+    public static final String DIEGO_THE_WORLD = "diego_the_world";
+    public static final ResourceLocation DIEGO_THE_WORLD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIEGO_THE_WORLD);
+    public static SoundEvent DIEGO_THE_WORLD_EVENT = SoundEvent.createVariableRangeEvent(DIEGO_THE_WORLD_ID);
+    public static final String DIEGO_THE_WORLD_2 = "diego_the_world_2";
+    public static final ResourceLocation DIEGO_THE_WORLD_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIEGO_THE_WORLD_2);
+    public static SoundEvent DIEGO_THE_WORLD_2_EVENT = SoundEvent.createVariableRangeEvent(DIEGO_THE_WORLD_2_ID);
+    public static final String DIEGO_THE_WORLD_3 = "diego_the_world_3";
+    public static final ResourceLocation DIEGO_THE_WORLD_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIEGO_THE_WORLD_3);
+    public static SoundEvent DIEGO_THE_WORLD_3_EVENT = SoundEvent.createVariableRangeEvent(DIEGO_THE_WORLD_3_ID);
+    public static final String DIEGO_THE_WORLD_4 = "diego_the_world_4";
+    public static final ResourceLocation DIEGO_THE_WORLD_4_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIEGO_THE_WORLD_4);
+    public static SoundEvent DIEGO_THE_WORLD_4_EVENT = SoundEvent.createVariableRangeEvent(DIEGO_THE_WORLD_4_ID);
+   public static final String DIEGO_INTERESTING = "diego_interesting";
+    public static final ResourceLocation DIEGO_INTERESTING_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIEGO_INTERESTING);
+    public static SoundEvent DIEGO_INTERESTING_EVENT = SoundEvent.createVariableRangeEvent(DIEGO_INTERESTING_ID);
+
+
     public static final String JOTARO_YARE_YARE = "jotaro_yare_yare";
     public static final ResourceLocation JOTARO_YARE_YARE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JOTARO_YARE_YARE);
     public static SoundEvent JOTARO_YARE_YARE_EVENT = SoundEvent.createVariableRangeEvent(JOTARO_YARE_YARE_ID);

@@ -16,6 +16,8 @@ import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.event.powers.visagedata.DiegoVisage;
+import net.hydra.jojomod.event.powers.visagedata.voicedata.DiegoVoice;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.DIOVoice;
@@ -90,6 +92,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
         if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DIOVoice DV){
             DV.playSummon();
+        } else if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DiegoVoice DV){
+            DV.playSummon();
         }
         playStandUserOnlySoundsIfNearby(this.getSummonSound(), 10, false,false);
     }
@@ -119,7 +123,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public void playTheLastHitSound(){
         Byte LastHitSound = this.getLastHitSound();
-        if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DIOVoice DV){
+        if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DIOVoice DV) {
+            DV.playSoundIfPossible(getSoundFromByte(LastHitSound), 20, 1, 2);
+        } else if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DiegoVoice DV){
             DV.playSoundIfPossible( getSoundFromByte(LastHitSound),20,1,2);
         } else {
             this.playStandUserOnlySoundsIfNearby(LastHitSound, 15, false,
@@ -132,6 +138,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (!this.self.level().isClientSide()) {
             if (this.self instanceof Player pe && ((IPlayerEntity) pe).roundabout$getVoiceData() instanceof DIOVoice DV) {
                 DV.playSoundIfPossible(ModSounds.DIO_SHINE_EVENT,22,1,2);
+            } else if (this.self instanceof Player pe && ((IPlayerEntity) pe).roundabout$getVoiceData() instanceof DiegoVoice DV) {
+                DV.playSoundIfPossible(ModSounds.DIEGO_SHINE_EVENT,22,1,2);
             }
         }
     }
@@ -147,6 +155,15 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                         playSoundsIfNearby(barrageCrySound, 27, false, true);
                     }
                 }
+            } else if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DiegoVoice DV) {
+
+                    if (!DV.inTheMiddleOfTalking()) {
+                        DV.forceTalkingTicks(70);
+                        byte barrageCrySound = this.chooseBarrageSound();
+                        if (barrageCrySound != SoundIndex.NO_SOUND) {
+                            playSoundsIfNearby(barrageCrySound, 27, false, true);
+                        }
+                    }
             } else {
                 byte barrageCrySound = this.chooseBarrageSound();
                 if (barrageCrySound != SoundIndex.NO_SOUND) {
@@ -225,6 +242,21 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (!this.self.level().isClientSide()) {
             byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
             if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DIOVoice DV) {
+                DV.forceTalkingTicks(70);
+                if (skn == TheWorldEntity.ARCADE_SKIN || skn == TheWorldEntity.ARCADE_SKIN_2) {
+                    playSoundsIfNearby(BARRAGE_NOISE_8, 27, false);
+                    return;
+                }
+                if (skn == TheWorldEntity.OVA_SKIN) {
+                    playSoundsIfNearby(BARRAGE_NOISE_5, 27, false);
+                    return;
+                }
+                if (skn == TheWorldEntity.PART_7_SKIN || skn == TheWorldEntity.PART_7_BLUE) {
+                    playSoundsIfNearby(BARRAGE_NOISE_3, 27, false);
+                    return;
+                }
+                playSoundsIfNearby(BARRAGE_NOISE_2, 27, false);
+            } else if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DiegoVoice DV) {
                 DV.forceTalkingTicks(70);
                 if (skn == TheWorldEntity.ARCADE_SKIN || skn == TheWorldEntity.ARCADE_SKIN_2){
                     playSoundsIfNearby(BARRAGE_NOISE_8, 27, false);
@@ -1456,6 +1488,31 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                         playSoundsIfNearby(barrageCrySound, 32, false, true);
                     }
                 }
+            } else if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DiegoVoice DV) {
+
+                if (!DV.inTheMiddleOfTalking()) {
+                    DV.forceTalkingTicks(70);
+                    byte bt = ((StandUser) this.getSelf()).roundabout$getStandSkin();
+                    if (bt == TheWorldEntity.ARCADE_SKIN || bt == TheWorldEntity.ARCADE_SKIN_2) {
+                        playSoundsIfNearby(BARRAGE_NOISE_7, 32, false, true);
+                        return;
+                    }
+                    if (bt == TheWorldEntity.OVA_SKIN) {
+                        return;
+                    }
+                    if (bt == TheWorldEntity.PART_7_BLUE || bt == TheWorldEntity.PART_7_SKIN) {
+                        playSoundsIfNearby(KICK_BARRAGE_NOISE_3, 32, false, true);
+                    } else {
+                        double rand = Math.random();
+                        byte barrageCrySound;
+                        if (rand > 0.5) {
+                            barrageCrySound = KICK_BARRAGE_NOISE;
+                        } else {
+                            barrageCrySound = KICK_BARRAGE_NOISE_2;
+                        }
+                        playSoundsIfNearby(barrageCrySound, 32, false, true);
+                    }
+                }
             } else {
                 byte bt = ((StandUser) this.getSelf()).roundabout$getStandSkin();
                 if (bt == TheWorldEntity.ARCADE_SKIN || bt == TheWorldEntity.ARCADE_SKIN_2) {
@@ -1477,6 +1534,11 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public void playTSVoiceSound(){
         if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DIOVoice DV) {
+            if (!DV.inTheMiddleOfTalking()) {
+                DV.forceTalkingTicks(40);
+                playSoundsIfNearby(getTSVoice(), 100, false, true);
+            }
+        } else if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DiegoVoice DV) {
             if (!DV.inTheMiddleOfTalking()) {
                 DV.forceTalkingTicks(40);
                 playSoundsIfNearby(getTSVoice(), 100, false, true);
