@@ -213,6 +213,18 @@ public class RattDartEntity extends AbstractArrow {
         SoundEvent $$6 = ModSounds.RATT_DART_IMPACT_EVENT;
         if ($$1.hurt($$5,this.damage + (($$1 instanceof Mob) ? 1F : 0) )) {
 
+            float degrees = MainUtil.getLookAtEntityYaw(this, $$1);
+            float force = 0.9F;
+            if (this.charged >= 61) {
+                force = 0.8F;
+                if (this.charged >= PowersRatt.MaxThreshold) {
+                    force = 1.35F;
+                }
+            }
+            MainUtil.takeKnockbackWithY($$1, force,
+                    Mth.sin(degrees * ((float) Math.PI / 180)),
+                    Mth.sin(-35 * ((float) Math.PI / 180)),
+                    -Mth.cos(degrees * ((float) Math.PI / 180)));
 
             if ($$4 instanceof LivingEntity LE) {
                 if ( ((StandUser)$$4).roundabout$getStandPowers() instanceof PowersRatt PR ) {

@@ -119,6 +119,14 @@ public abstract class InputEvents implements IInputEvents {
                     return;
                 }
             }
+            if (entity instanceof RattEntity RE) {
+                if(RE.getUser() == player) {
+                    if(powers.isHoldingSneak()) {
+                        ci.setReturnValue(true);
+                        return;
+                    }
+                }
+            }
 
             powers.synchToCamera();
             if (powers.highlightsEntity(entity, player)) {

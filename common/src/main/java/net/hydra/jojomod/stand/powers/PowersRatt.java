@@ -61,7 +61,7 @@ public class PowersRatt extends NewDashPreset {
     public static final int MaxThreshold = 90;
     public static final int BaseShootCooldown = 10;
     public static final int PlaceDelay = 10;
-    public static final int PlaceShootCooldown = 55;
+    public static final int PlaceShootCooldown = 30;
     public static final int MaxShootCooldown = 20;
     public static final int[] ShotThresholds = {MinThreshold,50,MaxThreshold};
     public static final float[] ShotPowerFloats = {3.55F,3.5F,4F};
@@ -324,6 +324,10 @@ public class PowersRatt extends NewDashPreset {
                     double time = dist / ShotPowerFloats[1];
                     time *= 1.4;
                     Vec3 vec = target.getDeltaMovement();
+                   if (target instanceof Player) {
+                        Roundabout.LOGGER.info(vec.toString());
+                        if(Math.abs(vec.y) < 3 ) {vec = new Vec3(vec.x,0,vec.z);}
+                    }
                     targetPos = targetPos.add(vec.multiply(time, time, time));
                 }
             }
@@ -385,6 +389,7 @@ public class PowersRatt extends NewDashPreset {
 
         StandEntity SE = this.getStandEntity(this.getSelf());
 
+
         if (isPlaced() && !(this.getSelf() instanceof Mob)) {
 
 
@@ -397,6 +402,8 @@ public class PowersRatt extends NewDashPreset {
                             SE.getX(), ((RattEntity)SE).getEyeP(0F).y(), SE.getZ(),
                             0, 0, 0, 0, 0);
                 }
+                immuneWhileReturning = SE.onGround();
+
 
                 Entity e = MainUtil.getTargetEntity(this.getSelf(),40);
 
@@ -487,6 +494,7 @@ public class PowersRatt extends NewDashPreset {
     }
 
     public void placeBurst() {
+        chargeTime += 30;
         this.animateStand(RattEntity.FIRE);
         this.setPowerNone();
         this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.RATT_FIRING_EVENT, SoundSource.PLAYERS, 1.7F, 0.9F+(float)Math.random()*0.2F);
@@ -641,7 +649,6 @@ public class PowersRatt extends NewDashPreset {
 
     public void DeployClient() {
         if (!this.onCooldown(PowersRatt.SETPLACE)) {
-            updateChargeTime(0);
             this.getSelf().playSound(ModSounds.RATT_PLACE_EVENT, 1.0F, (float) (0.98F + (Math.random() * 0.04F)));
             Vec3 blockHitResult = getValidPlacement();
             if (blockHitResult != null) {
@@ -667,7 +674,6 @@ public class PowersRatt extends NewDashPreset {
             }
             case PowersRatt.NET_RECALL -> {
                 active = false;
-                immuneWhileReturning = true;
                 this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
                 if (this.getStandEntity(this.getSelf()) != null) {
                     this.getStandEntity(this.getSelf()).forceDespawnSet = true;
@@ -684,11 +690,7 @@ public class PowersRatt extends NewDashPreset {
                 this.setActivePower(PowersRatt.PLAYER_BURST);
                 chargeTime -= 30;
                 if (!isClient()) {
-                    if ( 30 <= chargeTime && chargeTime <= 40) {
-                        FireDart(51,0.4F);
-                    } else {
-                        FireDart(51, 0.4F);
-                    }
+                    FireDart(61,0.4F);
                 }
             }
             case PowersRatt.TOGGLE_BURSTING -> {
@@ -733,6 +735,12 @@ public class PowersRatt extends NewDashPreset {
             basis*=0.7f;
         }
         return super.inputSpeedModifiers(basis);
+    }
+
+    @Override
+    public boolean isAttackInept(byte activeP) {
+        if (this.getSelf().isUsingItem()) { return false;}
+        return super.isAttackInept(activeP);
     }
 
     @Override
@@ -846,14 +854,8 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public boolean shouldReset(byte activeP) {
-        if (activeP == PowersRatt.PLACE_BURST && this.getSelf().isUsingItem()) {return false;}
+    //    if (this.getSelf().isUsingItem()) {Roundabout.LOGGER.info("CANCELLED");return false;}
         return super.shouldReset(activeP);
-    }
-
-    @Override
-    public boolean setPowerNone() {
-        if (this.getActivePower() == PowersRatt.PLACE_BURST) {setShotCooldown(20);}
-        return super.setPowerNone();
     }
 
     @Override
