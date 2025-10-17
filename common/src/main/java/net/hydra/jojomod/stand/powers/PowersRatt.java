@@ -102,6 +102,12 @@ public class PowersRatt extends NewDashPreset {
     }
     @Override
     public StandEntity getNewStandEntity(){
+        if (((StandUser)this.getSelf()).roundabout$getStandSkin() == RattEntity.REDD_SKIN){
+            return ModEntities.REDD.create(this.getSelf().level());
+        } else if (((StandUser)this.getSelf()).roundabout$getStandSkin() == RattEntity.RAT_SKIN) {
+            return ModEntities.CHAIR_RATT.create(this.getSelf().level());
+        }
+
         return ModEntities.RATT.create(this.getSelf().level());
     }
 
@@ -933,15 +939,18 @@ public class PowersRatt extends NewDashPreset {
             }
             if (Level >= 3 || bypass) {
                 list.add(RattEntity.TOWER_SKIN);
+             //   list.add(RattEntity.REDD_SKIN);
             }
             if (Level >= 3 || bypass) {
                 list.add(RattEntity.SAND_SKIN);
                 list.add(RattEntity.SNOWY_SKIN);
+                list.add(RattEntity.GUARDIAN_SKIN);
+                list.add(RattEntity.ELDER_GUARDIAN_SKIN);
             }
             if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass) {
-            list.add(RattEntity.GUARDIAN_SKIN);
-            list.add(RattEntity.ELDER_GUARDIAN_SKIN);
+
             }
+           // list.add(RattEntity.RAT_SKIN);
         }
         return list;
     }
@@ -958,9 +967,11 @@ public class PowersRatt extends NewDashPreset {
             case RattEntity.SAND_SKIN -> {return Component.translatable("skins.roundabout.ratt.sand");}
             case RattEntity.AZTEC_SKIN -> {return Component.translatable("skins.roundabout.ratt.aztec");}
             case RattEntity.TOWER_SKIN -> {return Component.translatable("skins.roundabout.ratt.tower");}
+            case RattEntity.REDD_SKIN -> {return Component.translatable("skins.roundabout.ratt.redd");}
             case RattEntity.SNOWY_SKIN -> {return Component.translatable("skins.roundabout.ratt.snowy");}
             case RattEntity.GUARDIAN_SKIN -> {return Component.translatable("skins.roundabout.ratt.guardian");}
             case RattEntity.ELDER_GUARDIAN_SKIN -> {return Component.translatable("skins.roundabout.ratt.elder_guardian");}
+            case RattEntity.RAT_SKIN -> {return Component.translatable("skins.roundabout.ratt.rat");}
             default -> {return Component.translatable("skins.roundabout.ratt.anime");}
         }
     }
@@ -983,7 +994,7 @@ public class PowersRatt extends NewDashPreset {
                         user.roundabout$setStandSkin(RattEntity.GUARDIAN_SKIN);
                         user.roundabout$summonStand(this.getSelf().level(), true, false);
                         ((ServerPlayer) ipe).displayClientMessage(
-                                Component.translatable("unlock_skin.roundabout.ratt.guardians"), true);
+                                Component.translatable("unlock_skin.roundabout.ratt.rat"), true);
                     }
                 }
             }

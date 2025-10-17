@@ -14,6 +14,8 @@ public class ModStrayModels {
     public static WornStoneMaskModel WORN_STONE_MASK;
     public static WornBloodyStoneMaskModel WORN_BLOODY_STONE_MASK;
     public static RattShoulderModel RATT_SHOULDER;
+    public static ReddShoulderModel REDD_SHOULDER;
+    public static ChairRattShoulderModel CHAIR_RATT_SHOULDER;
     public static MandomModel MANDOM;
     public static WatchModel MANDOM_WATCH;
     public static SmallWatchModel MANDOM_WATCH_SMALL;
