@@ -16,7 +16,7 @@ public class FatesMobEffectMixin {
     @Inject(method = "applyEffectTick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$applyEffectTick(LivingEntity $$0, int $$1, CallbackInfo ci) {
         if (!$$0.level().isClientSide()) {
-            if (FateTypes.isVampire($$0)) {
+            if (FateTypes.hasBloodHunger($$0)) {
                 if (((MobEffect) (Object) this) == MobEffects.HUNGER) {
                     $$0.removeEffect(MobEffects.HUNGER);
                 }

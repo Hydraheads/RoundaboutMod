@@ -1338,7 +1338,7 @@ public class ClientUtil {
     public static void renderHungerStuff(GuiGraphics graphics, Player player, int width, int height, int rand,
                                          int foodlevel, int tickCount){
 
-        if (FateTypes.isVampire(player)){
+        if (FateTypes.hasBloodHunger(player)){
             for (int $$23 = 0; $$23 < 10; $$23++) {
                 int $$24 = height;
                 int $$25 = 238;

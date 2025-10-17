@@ -58,6 +58,12 @@ public enum FateTypes {
         }
         return false;
     }
+    public static boolean hasBloodHunger(LivingEntity entity){
+        if (entity instanceof Player PE){
+            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.id;
+        }
+        return false;
+    }
     public static boolean isTransforming(LivingEntity entity){
         if (entity instanceof Player PE){
             return ((IFatePlayer)PE).rdbt$isTransforming();

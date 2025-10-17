@@ -3915,7 +3915,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         /**Makes bleed work for vamps against their hunger*/
         if (!this.level().isClientSide() && rdbt$this() instanceof  Player PE) {
-            if (FateTypes.isVampire(PE)) {
+            if (FateTypes.hasBloodHunger(PE)) {
                 if (hasEffect(ModEffects.BLEED)) {
                     MobEffectInstance ei = getEffect(ModEffects.BLEED);
                     if (ei != null){

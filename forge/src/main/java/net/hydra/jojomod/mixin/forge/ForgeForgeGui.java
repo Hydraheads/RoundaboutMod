@@ -37,7 +37,7 @@ public abstract class ForgeForgeGui extends Gui {
     public void roundabout$renderFood(int width, int height, GuiGraphics guiGraphics, CallbackInfo ci) {
         Player player = (Player) this.minecraft.getCameraEntity();
         if (player != null){
-            if (FateTypes.isVampire(player)){
+            if (FateTypes.hasBloodHunger(player)){
                 ci.cancel();
                 minecraft.getProfiler().push("food");
                 RenderSystem.enableBlend();
