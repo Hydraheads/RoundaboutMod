@@ -2,18 +2,23 @@ package net.hydra.jojomod.mixin.fates;
 
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.access.AccessFateFoodData;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(FoodData.class)
-public class FateFoodDataMixin implements AccessFateFoodData {
+public abstract class FateFoodDataMixin implements AccessFateFoodData {
+    @Shadow public abstract void eat(int i, float f);
+
     /**Makes vampires not replen from food*/
     @Unique
     public Player rdbt$player = null;
@@ -27,6 +32,9 @@ public class FateFoodDataMixin implements AccessFateFoodData {
     protected void roundabout$eat(Item $$0, ItemStack $$1, CallbackInfo ci) {
         if (rdbt$player != null){
             if (FateTypes.hasBloodHunger(rdbt$player)){
+                if ($$0.isEdible()) {
+                    this.eat(MainUtil.getBloodAmount($$1), MainUtil.getSaturationAmount($$1));
+                }
                 ci.cancel();
             }
         }
