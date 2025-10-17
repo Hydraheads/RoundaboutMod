@@ -1255,9 +1255,11 @@
   "skins.roundabout.ratt.sand" : "Sand",
   "skins.roundabout.ratt.aztec" : "Aztec",
   "skins.roundabout.ratt.tower" : "Cavern",
+  "skins.roundabout.ratt.redd" : "Redd",
   "skins.roundabout.ratt.snowy" : "Snowy",
   "skins.roundabout.ratt.guardian" : "Guardian",
   "skins.roundabout.ratt.elder_guardian" : "Elder Guardian",
+  "skins.roundabout.ratt.rat" : "Rat?",
 
   "skins.roundabout.cinderella.base": "Part 4",
   "skins.roundabout.cinderella.manga": "Manga",
@@ -1336,7 +1338,7 @@
   "unlock_skin.roundabout.justice.bad_bone": "Justice: Bad to The Bone Skin Unlocked!",
   "unlock_skin.roundabout.magicians_red.chagaroth": "Magician's Dread Skin Unlocked!",
   "unlock_skin.roundabout.soft_and_wet.kira": "Killer Queen 8 Skin Unlocked!",
-  "unlock_skin.roundabout.ratt.guardians": "Ratt Guardian Skins Unlocked!",
+  "unlock_skin.roundabout.ratt.rat": "Rat Unlocked?!",
   "unlock_skin.roundabout.walking_heart.spider": "Webbing Heart Skin Unlocked!",
 
   "justice.morph.player": "Player",

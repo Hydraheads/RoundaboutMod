@@ -1,6 +1,7 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.models.stand.renderers.ChairRattRenderer;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
@@ -267,6 +268,18 @@ public class ForgeEntities {
                     EntityType.Builder.of(RattEntity::new, MobCategory.MISC).sized(0.75f, 1.2f).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "ratt").toString())
+            );
+    public static final RegistryObject<EntityType<ReddEntity>> REDD =
+            ENTITY_TYPES.register("redd", () ->
+                    EntityType.Builder.of(ReddEntity::new, MobCategory.MISC).sized(0.75f, 1.2f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "redd").toString())
+            );
+    public static final RegistryObject<EntityType<ChairRattEntity>> CHAIR_RAT =
+            ENTITY_TYPES.register("chair_ratt", () ->
+                    EntityType.Builder.of(ChairRattEntity::new, MobCategory.MISC).sized(0.75f, 1.2f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "chair_ratt").toString())
             );
     public static final RegistryObject<EntityType<FleshPileEntity>> FLESH_PILE =
             ENTITY_TYPES.register("flesh_pile", () ->
