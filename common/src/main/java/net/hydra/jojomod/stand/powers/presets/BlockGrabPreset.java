@@ -502,6 +502,12 @@ public class BlockGrabPreset extends NewPunchingStand {
         if (standEntity != null) {
             if (!standEntity.getHeldItem().isEmpty()) {
                 if (!this.getSelf().level().isClientSide) {
+                    if (standEntity.canAcquireHeldItem) {
+                        this.addItem(standEntity);
+                    }
+                    standEntity.setHeldItem(ItemStack.EMPTY);
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                    animateStand(StandEntity.IDLE);
                     S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 20);
                     this.setCooldown(PowerIndex.SKILL_2, 20);
                 }
