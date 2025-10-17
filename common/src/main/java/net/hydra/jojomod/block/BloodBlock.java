@@ -2,9 +2,11 @@ package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.access.AccessFateFoodData;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -139,6 +141,8 @@ public class BloodBlock extends Block {
             if (FateTypes.hasBloodHunger(PE)){
                 level.removeBlock(blockPos, false);
                 PE.getFoodData().eat(1,1.5f);
+                level.playSound(null, blockPos, ModSounds.VAMPIRE_DRAIN_EVENT,
+                        SoundSource.PLAYERS, 1F, (float)(0.9F + Math.random()*0.2));
             }
         }
     }

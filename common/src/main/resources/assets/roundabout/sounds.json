@@ -287,6 +287,12 @@
       "roundabout:air_bubble"
     ]
   },
+  "vampire_drain": {
+    "subtitle": "sounds.roundabout.vampire_drain",
+    "sounds": [
+      "roundabout:vampire_drain"
+    ]
+  },
   "dio_kurei": {
     "subtitle": "sounds.roundabout.dio_kurei",
     "sounds": [

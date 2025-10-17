@@ -767,6 +767,7 @@ public class MainUtil {
     }
 
     public static void makeMobBleed(Entity target) {
+        if (!(target instanceof LivingEntity LE && FateTypes.hasBloodHunger(LE))) {
             int variety = (int) Math.round(Math.random() * 4);
             Block modBlock = ModBlocks.BLOOD_SPLATTER;
             if (MainUtil.hasBlueBlood(target)) {
@@ -787,6 +788,7 @@ public class MainUtil {
                 MainUtil.setSplatter(target.level(), target.getOnPos(), (int) Math.floor(Math.random() * 3) - 1, 1, modBlock.defaultBlockState().
                         setValue(ModBlocks.BLOOD_LEVEL, Integer.valueOf((int) Math.round(Math.random() * 3))));
             }
+        }
     }
     public static boolean hasBlueBlood(Entity target){
         if (target instanceof Spider || target instanceof Bee || target instanceof Silverfish  || target instanceof Squid){
@@ -886,7 +888,7 @@ public class MainUtil {
         if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.disableBleedingAndBloodSplatters){
             return;
         }
-        if (getMobBleed(entity) && !(entity instanceof LivingEntity LE && FateTypes.hasBloodHunger(LE))){
+        if (getMobBleed(entity)){
             if (!hasEnderBlood(entity) && !hasBlueBlood(entity)) {
                 if (source != null && isWearingEitherStoneMask(source) && source.distanceTo(entity) < 5) {
                     activateStoneMask(source);

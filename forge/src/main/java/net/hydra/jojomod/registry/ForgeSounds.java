@@ -456,6 +456,8 @@ public class ForgeSounds {
             register(ModSounds.SPIKE_HIT, ModSounds.SPIKE_HIT_ID);
     public static final RegistryObject<SoundEvent> SPIKE_MISS =
             register(ModSounds.SPIKE_MISS, ModSounds.SPIKE_MISS_ID);
+    public static final RegistryObject<SoundEvent> VAMPIRE_DRAIN =
+            register(ModSounds.VAMPIRE_DRAIN, ModSounds.VAMPIRE_DRAIN_ID);
 
     public static final RegistryObject<SoundEvent> DIO_HOHO =
             register(ModSounds.DIO_HOHO, ModSounds.DIO_HOHO_ID);
