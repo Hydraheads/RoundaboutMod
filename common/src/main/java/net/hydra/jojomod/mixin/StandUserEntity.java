@@ -4329,25 +4329,32 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         previousYpos = this.getY();
     }
     public int CrawlTicks = 0;
-    @Inject(method = "travel", at = @At(value = "HEAD"))
+
+    @Unique
+    @Override
+    public boolean rdbt$isForceCrawl() {
+        return CrawlTicks > 0;
+    }
+
+    @Inject(method = "travel", at = @At(value = "HEAD"),cancellable = true)
     public void rdbt$crawltick(Vec3 movement, CallbackInfo ci) {
-                if (CrawlTicks > 0) {
-                    this.setPose(Pose.SWIMMING);
-                    this.setSwimming(true);
-                    CrawlTicks --;
-                }
+        if (this.rdbt$isForceCrawl()) {
+            this.setPose(Pose.SWIMMING);
+            this.setSwimming(true);
+            CrawlTicks--;
+        }
+
     }
 
     @Unique
     @Override
-    public int rdbt$SetCrawlTicks(int ticks){
+    public void rdbt$SetCrawlTicks(int ticks) {
         CrawlTicks = ticks;
-        return ticks;
     }
 
 
 
-    @Inject(method = "travel", at = @At(value = "TAIL"))
+    @Inject(method = "travel", at = @At(value = "TAIL"),cancellable = true)
     public void   MoldDetection(Vec3 movement,CallbackInfo info) {
         rdbt$doMoldDetection(movement);
     }
