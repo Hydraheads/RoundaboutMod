@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.stand.ChairRattModel;
 import net.hydra.jojomod.client.models.stand.ReddModel;
+import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.model.geom.ModelPart;
@@ -47,12 +48,15 @@ public class ChairRattShoulderModel extends PsuedoHierarchicalModel {
     public void setupAnim(Entity var1, float pAgeInTicks) {
     }
 
-    public static ResourceLocation base = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation chair = new ResourceLocation(Roundabout.MOD_ID,
             "textures/stand/ratt/chair.png");
+    public static ResourceLocation king_chair = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/ratt/king_chair.png");
 
 
     public ResourceLocation getTextureLocation(Entity context, byte skin){
-        return base;
+        if (skin == RattEntity.KING_RAT_SKIN) {return king_chair;}
+        return chair;
     }
 
 

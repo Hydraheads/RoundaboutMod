@@ -4302,15 +4302,32 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         }
 
+
+        // not finished atm
+        /*Roundabout.LOGGER.info("?");
         if (cause != null) {
-            if ( ((LivingEntity)(Object)this) instanceof Guardian || ((LivingEntity)(Object)this) instanceof ElderGuardian) {
-                if ( this.getEffect(ModEffects.MELTING) != null) {
-                    if (((StandUserEntity) cause).roundabout$getStandPowers() instanceof PowersRatt PR) {
+            Roundabout.LOGGER.info("??");
+            if (this.getEffect(ModEffects.MELTING) != null) {
+                Roundabout.LOGGER.info("???");
+                if (((StandUserEntity) cause).roundabout$getStandPowers() instanceof PowersRatt PR) {
+                    RattEntity RE = (RattEntity) PR.getStandEntity((LivingEntity) cause);
+                    Vec3 vec3 = RE.getPosition(1);
+                    BlockPos bp = new BlockPos(
+                            (int)(Math.floor(vec3.x())+1),
+                            (int)Math.ceil(vec3.y()),
+                            (int)vec3.z()).below();
+                    Roundabout.LOGGER.info(RE.getPosition(0).toString());
+                    Roundabout.LOGGER.info(bp.toString());
+                    Roundabout.LOGGER.info(cause.level().getBlockState(bp).toString());
+                    if (cause.level().getBlockState(bp).is(ModBlocks.WOODEN_MANOR_CHAIR) ||
+                        cause.level().getBlockState(bp.above()).is(ModBlocks.WOODEN_MANOR_CHAIR))
+                    {
                         PR.unlockSkin();
                     }
+
                 }
             }
-        }
+        } */
 
 
         //ratt

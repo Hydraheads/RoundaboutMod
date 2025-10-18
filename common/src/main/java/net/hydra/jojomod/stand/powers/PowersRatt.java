@@ -102,9 +102,10 @@ public class PowersRatt extends NewDashPreset {
     }
     @Override
     public StandEntity getNewStandEntity(){
-        if (((StandUser)this.getSelf()).roundabout$getStandSkin() == RattEntity.REDD_SKIN){
+        byte skin = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (skin == RattEntity.REDD_SKIN){
             return ModEntities.REDD.create(this.getSelf().level());
-        } else if (((StandUser)this.getSelf()).roundabout$getStandSkin() == RattEntity.RAT_SKIN) {
+        } else if (skin == RattEntity.CHAIR_RAT_SKIN || skin == RattEntity.KING_RAT_SKIN) {
             return ModEntities.CHAIR_RATT.create(this.getSelf().level());
         }
 
@@ -305,13 +306,13 @@ public class PowersRatt extends NewDashPreset {
 
     public void blipStand(Vec3 pos) {
         StandEntity stand = getNewStandEntity();
-        if (stand instanceof RattEntity) {
+        if (stand instanceof RattEntity RE) {
             StandUser user = getStandUserSelf();
-            stand.setSkin(user.roundabout$getStandSkin());
-            stand.setMaster(this.self);
-            stand.absMoveTo(pos.x(),pos.y(),pos.z());
-            this.getStandUserSelf().roundabout$standMount(stand);
-            this.self.level().addFreshEntity(stand);
+            RE.setMaster(this.self);
+            RE.absMoveTo(pos.x(),pos.y(),pos.z());
+            RE.setSavedSkin( ((StandUser)this.getSelf()).roundabout$getStandSkin() );
+            this.getStandUserSelf().roundabout$standMount(RE);
+            this.self.level().addFreshEntity(RE);
         }
     }
 
@@ -343,9 +344,14 @@ public class PowersRatt extends NewDashPreset {
 
             double hy = (targetPos.y() - (RE.getEyeP(0).y() ));
             double hd = Math.sqrt(Math.pow(x, 2) + Math.pow(z, 2));
-            float hrot = (float) (Math.atan2(hd, hy) + Math.PI / 2); // flip the sign if you want it to be not armed
+            double bonus = Math.PI/2;
+
+            float hrot = (float) (Math.atan2(hd, hy) + Math.PI/2); // flip the sign if you want it to be not armed
+
+
+
             double percent = (double) RE.getFadeOut() / RE.getMaxFade();
-            if (percent != 1) {
+            if (percent != 1 && RE.getSavedSkin() < RattEntity.CHAIR_RAT_SKIN) {
                 hrot = (float) (Mth.lerp(percent, 0, hrot));
             }
 
@@ -356,6 +362,7 @@ public class PowersRatt extends NewDashPreset {
         return new Vec3(0,0,0);
 
     }
+
 
     Vec3 Placement = null;
     @Override
@@ -585,7 +592,7 @@ public class PowersRatt extends NewDashPreset {
     public boolean tryIntPower(int move, boolean forced, int chargeTime) {
         switch (move) {
             case PowersRatt.NET_SCOPE -> {
-                this.setCooldown(PowersRatt.SCOPE,10);
+                this.setCooldown(PowersRatt.SCOPE,5);
                 this.setAttackTime(-1);
                 setScopeLevel(chargeTime);
                 this.getStandUserSelf().roundabout$setCombatMode(scopeLevel != 0);
@@ -936,21 +943,20 @@ public class PowersRatt extends NewDashPreset {
             if (Level >= 2 || bypass) {
                 list.add(RattEntity.MELON_SKIN);
                 list.add(RattEntity.AZTEC_SKIN);
-            }
-            if (Level >= 3 || bypass) {
-                list.add(RattEntity.TOWER_SKIN);
-             //   list.add(RattEntity.REDD_SKIN);
-            }
-            if (Level >= 3 || bypass) {
-                list.add(RattEntity.SAND_SKIN);
-                list.add(RattEntity.SNOWY_SKIN);
                 list.add(RattEntity.GUARDIAN_SKIN);
                 list.add(RattEntity.ELDER_GUARDIAN_SKIN);
             }
-            if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass) {
+            if (Level >= 3 || bypass) {
+                list.add(RattEntity.TOWER_SKIN);
+                list.add(RattEntity.REDD_SKIN);
 
+                list.add(RattEntity.SAND_SKIN);
+                list.add(RattEntity.SNOWY_SKIN);
             }
-           // list.add(RattEntity.RAT_SKIN);
+            if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass) {
+                list.add(RattEntity.CHAIR_RAT_SKIN);
+                list.add(RattEntity.KING_RAT_SKIN);
+            }
         }
         return list;
     }
@@ -971,7 +977,8 @@ public class PowersRatt extends NewDashPreset {
             case RattEntity.SNOWY_SKIN -> {return Component.translatable("skins.roundabout.ratt.snowy");}
             case RattEntity.GUARDIAN_SKIN -> {return Component.translatable("skins.roundabout.ratt.guardian");}
             case RattEntity.ELDER_GUARDIAN_SKIN -> {return Component.translatable("skins.roundabout.ratt.elder_guardian");}
-            case RattEntity.RAT_SKIN -> {return Component.translatable("skins.roundabout.ratt.rat");}
+            case RattEntity.CHAIR_RAT_SKIN -> {return Component.translatable("skins.roundabout.ratt.rat_chair");}
+            case RattEntity.KING_RAT_SKIN -> {return Component.translatable("skins.roundabout.ratt.king_rat");}
             default -> {return Component.translatable("skins.roundabout.ratt.anime");}
         }
     }
@@ -991,7 +998,7 @@ public class PowersRatt extends NewDashPreset {
                         ((ServerLevel) lv).sendParticles(ModParticles.HEART_ATTACK_MINI, PE.getX(),
                                 PE.getY()+PE.getEyeHeight(), PE.getZ(),
                                 10, 0.5, 0.5, 0.5, 0.2);
-                        user.roundabout$setStandSkin(RattEntity.GUARDIAN_SKIN);
+                        user.roundabout$setStandSkin(RattEntity.CHAIR_RAT_SKIN);
                         user.roundabout$summonStand(this.getSelf().level(), true, false);
                         ((ServerPlayer) ipe).displayClientMessage(
                                 Component.translatable("unlock_skin.roundabout.ratt.rat"), true);

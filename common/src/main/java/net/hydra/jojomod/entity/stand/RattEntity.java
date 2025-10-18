@@ -31,7 +31,8 @@ public class RattEntity extends StandEntity {
             GUARDIAN_SKIN = 8,
             ELDER_GUARDIAN_SKIN = 9,
             REDD_SKIN = 10,
-            RAT_SKIN = 11,
+            CHAIR_RAT_SKIN = 11,
+            KING_RAT_SKIN = 12,
 
             FIRE = 81,
             LOADING = 82;
@@ -47,17 +48,20 @@ public class RattEntity extends StandEntity {
                 REDD_SKIN,
                 GUARDIAN_SKIN,
                 ELDER_GUARDIAN_SKIN,
-                RAT_SKIN
+                CHAIR_RAT_SKIN,
+                KING_RAT_SKIN
 
         );
     }
 
-    protected static final EntityDataAccessor<Integer> TARGET_ID = SynchedEntityData.defineId(RattEntity.class,
-            EntityDataSerializers.INT);
+
 
 
     public Vec3 getEyeP(float d) {
-        return this.getPosition(d).add(0,0.1,0);
+        if (this.getSavedSkin() == CHAIR_RAT_SKIN || this.getSavedSkin() == KING_RAT_SKIN) {
+            return this.getPosition(d).add(0,0.65,0);
+        }
+        return this.getPosition(d).add(0,0.15,0);
     }
 
 
@@ -80,12 +84,19 @@ public class RattEntity extends StandEntity {
         }
         this.entityData.set(TARGET_ID, standSetId);
     }
+    public void setSavedSkin(byte skin) {this.entityData.set(SAVED_SKIN,skin);}
+    public byte getSavedSkin() {return this.entityData.get(SAVED_SKIN);}
 
+    protected static final EntityDataAccessor<Integer> TARGET_ID = SynchedEntityData.defineId(RattEntity.class,
+            EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Byte> SAVED_SKIN = SynchedEntityData.defineId(RattEntity.class,
+            EntityDataSerializers.BYTE);
     @Override
     protected void defineSynchedData() {
         if (!this.entityData.hasItem(TARGET_ID)) {
             super.defineSynchedData();
             this.entityData.define(TARGET_ID, -1);
+            this.entityData.define(SAVED_SKIN,(byte)0);
         }
     }
 

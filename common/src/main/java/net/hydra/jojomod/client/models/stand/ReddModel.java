@@ -40,7 +40,6 @@ public class ReddModel<T extends ReddEntity> extends StandModel<T> {
 
 
 	public static LayerDefinition getTexturedModelData() {
-
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
@@ -73,12 +72,16 @@ public class ReddModel<T extends ReddEntity> extends StandModel<T> {
 
         PartDefinition Berrel3 = Barrel2.addOrReplaceChild("Berrel3", CubeListBuilder.create().texOffs(2, 51).addBox(-1.0F, -1.7F, -9.6F, 2.0F, 2.0F, 10.0F, new CubeDeformation(0.0F))
                 .texOffs(41, 45).addBox(-0.5F, -2.75F, -9.5F, 1.0F, 1.0F, 8.0F, new CubeDeformation(0.0F))
-                .texOffs(12, 63).addBox(-0.5F, -1.25F, 0.4F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.25F, 10.0F));
+                .texOffs(12, 63).addBox(-0.5F, -1.25F, 0.65F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.25F, 10.0F));
 
         PartDefinition IDK = head.addOrReplaceChild("IDK", CubeListBuilder.create().texOffs(44, 25).addBox(-0.5F, 0.5F, -1.0F, 1.0F, 3.0F, 1.0F, new CubeDeformation(0.0F))
                 .texOffs(16, 33).addBox(-0.5F, 2.5F, 0.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
+        PartDefinition redstonetorhc = head.addOrReplaceChild("redstonetorhc", CubeListBuilder.create().texOffs(54, 58).addBox(-0.5F, -5.0F, -0.5F, 1.0F, 5.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(33, 55).addBox(-1.0F, -6.9F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(3, 56).addBox(-0.75F, -0.9F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(-3.5F, -4.0F, 0.4F));
 
+        PartDefinition cube_r2 = redstonetorhc.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(35, 60).addBox(-0.5F, -1.5F, -0.5F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -4.9F, 0.0F, 0.0F, -1.5708F, 0.0F));
 
         PartDefinition eyebrows = head.addOrReplaceChild("eyebrows", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
@@ -87,11 +90,6 @@ public class ReddModel<T extends ReddEntity> extends StandModel<T> {
         PartDefinition eyebrow_r2 = eyebrows.addOrReplaceChild("eyebrow_r2", CubeListBuilder.create().texOffs(33, 63).addBox(-2.0F, -1.0F, -0.6F, 4.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.2F, -4.0F, -3.0F, 0.0F, 0.0F, 0.1309F));
 
         PartDefinition body = stand2.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
-
-        PartDefinition redstonetorhc = head.addOrReplaceChild("redstonetorhc", CubeListBuilder.create().texOffs(54, 58).addBox(-0.5F, -5.0F, -0.5F, 1.0F, 5.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(33, 55).addBox(-1.0F, -6.9F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(3, 56).addBox(-0.75F, -0.9F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(-3.5F, -4.0F, 0.4F));
-        PartDefinition cube_r2 = redstonetorhc.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(35, 60).addBox(-0.5F, -1.5F, -0.5F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -4.9F, 0.0F, 0.0F, -1.5708F, 0.0F));
 
         PartDefinition RightLeg = body.addOrReplaceChild("RightLeg", CubeListBuilder.create(), PartPose.offset(-4.0F, -10.0F, 0.75F));
 
@@ -181,7 +179,7 @@ public class ReddModel<T extends ReddEntity> extends StandModel<T> {
 
         torch.xRot = -this.head.xRot;
 
-        
+
 
 		this.animate(pEntity.fire, RattAnimations.Fire, pAgeInTicks, 1f);
 		this.animate(pEntity.loading, RattAnimations.Loading, pAgeInTicks, 1f);}
