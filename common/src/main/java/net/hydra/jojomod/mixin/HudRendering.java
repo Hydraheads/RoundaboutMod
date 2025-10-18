@@ -119,7 +119,7 @@ public abstract class HudRendering implements IHudAccess {
                 }
                 if (MainUtil.isWearingStoneMask(this.minecraft.player)){
                     RenderSystem.enableBlend();
-                    this.renderTextureOverlay($$1, StandIcons.STONE_MASK_OVERLAY, 0.7F);
+                    this.renderTextureOverlay($$1, StandIcons.STONE_MASK_OVERLAY, 0.6F);
                 }
                 if (MainUtil.isWearingBloodyStoneMask(this.minecraft.player)){
                     RenderSystem.enableBlend();

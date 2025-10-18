@@ -66,6 +66,14 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
         if (FateTypes.isVampire(this)){
             Vec3 yes = this.getEyePosition();
             Vec3 yes2 = this.position();
+
+            for (var i = 0; i < 100; i++){
+                if (level().getBlockState(BlockPos.containing(yes)).liquid()){
+                    yes = yes.add(0,1,0);
+                } else {
+                    i = 100;
+                }
+            }
             BlockPos atVec = BlockPos.containing(yes);
             BlockPos atVec2 = BlockPos.containing(yes2);
             if ((level().canSeeSky(atVec) || level().canSeeSky(atVec2)) &&
