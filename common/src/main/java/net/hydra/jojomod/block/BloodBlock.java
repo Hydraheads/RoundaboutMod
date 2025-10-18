@@ -140,7 +140,7 @@ public class BloodBlock extends Block {
         if (!entity.isCrouching() && entity instanceof Player PE && !level.isClientSide()) {
             if (FateTypes.hasBloodHunger(PE)){
                 level.removeBlock(blockPos, false);
-                PE.getFoodData().eat(1,1.5f);
+                PE.getFoodData().eat(1,2f);
                 level.playSound(null, blockPos, ModSounds.VAMPIRE_DRAIN_EVENT,
                         SoundSource.PLAYERS, 1F, (float)(0.9F + Math.random()*0.2));
             }
