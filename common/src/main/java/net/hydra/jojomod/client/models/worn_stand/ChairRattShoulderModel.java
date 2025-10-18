@@ -52,11 +52,16 @@ public class ChairRattShoulderModel extends PsuedoHierarchicalModel {
             "textures/stand/ratt/chair.png");
     public static ResourceLocation king_chair = new ResourceLocation(Roundabout.MOD_ID,
             "textures/stand/ratt/king_chair.png");
+    public static ResourceLocation mech_chair = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/ratt/mech_chair.png");
 
 
     public ResourceLocation getTextureLocation(Entity context, byte skin){
-        if (skin == RattEntity.KING_RAT_SKIN) {return king_chair;}
-        return chair;
+        return switch (skin) {
+            case RattEntity.KING_RAT_SKIN -> king_chair;
+            case RattEntity.MECH_RAT_SKIN -> mech_chair;
+            default -> chair;
+        };
     }
 
 

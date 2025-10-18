@@ -147,7 +147,7 @@ public class RattShoulderLayer<T extends LivingEntity, A extends HumanoidModel<T
                                 if (skin == RattEntity.REDD_SKIN) {
                                     ModStrayModels.REDD_SHOULDER.render(livent,partialTicks,poseStack,bufferSource,packedLight,
                                             r, g, b, heyFull, skin);
-                                } else if(skin == RattEntity.CHAIR_RAT_SKIN || skin == RattEntity.KING_RAT_SKIN) {
+                                } else if(skin >= RattEntity.CHAIR_RAT_SKIN) {
                                     poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,180),0,0,0);
                                     ModStrayModels.CHAIR_RATT_SHOULDER.render(livent,partialTicks,poseStack,bufferSource,packedLight,
                                             r, g, b, heyFull, skin);

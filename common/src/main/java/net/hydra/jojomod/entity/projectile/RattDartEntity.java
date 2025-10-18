@@ -39,21 +39,23 @@ import org.joml.Vector3f;
 public class RattDartEntity extends AbstractArrow {
 
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$SUPER_THROWN = SynchedEntityData.defineId(RattDartEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> PARTICLE_TRAILS = SynchedEntityData.defineId(RattDartEntity.class, EntityDataSerializers.BOOLEAN);
     private int superThrowTicks = -1;
-
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         if (!this.getEntityData().hasItem(ROUNDABOUT$SUPER_THROWN)) {
             this.getEntityData().define(ROUNDABOUT$SUPER_THROWN, false);
+            this.getEntityData().define(PARTICLE_TRAILS, false);
         }
     }
+
+    public void setParticleTrails(boolean b) {this.entityData.set(PARTICLE_TRAILS,b);}
+    public boolean getParticleTrails() {return this.entityData.get(PARTICLE_TRAILS);}
 
     int melting = 0;
     float damage = 0;
     int charged = 0;
-
-    boolean particles = true;
     int bounces = 0;
 
     public RattDartEntity(EntityType<? extends RattDartEntity> entity,  Level world) {
@@ -117,7 +119,7 @@ public class RattDartEntity extends AbstractArrow {
 
         } else {
             this.DisableSuperThrow();
-            particles = false;
+            setParticleTrails(false);
             super.onHitBlock($$0);
 
         }
@@ -270,7 +272,7 @@ public class RattDartEntity extends AbstractArrow {
             this.setDeltaMovement(delta);
         }
         if (!this.level().isClientSide()) {
-            if (this.particles) {
+            if (this.getParticleTrails()) {
                 ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.86F, 0.28F, 0.48F
                         ), 1f),
                         this.getX(), this.getY(), this.getZ(),

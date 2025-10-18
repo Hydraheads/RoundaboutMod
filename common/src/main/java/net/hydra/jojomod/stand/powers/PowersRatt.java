@@ -105,7 +105,7 @@ public class PowersRatt extends NewDashPreset {
         byte skin = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (skin == RattEntity.REDD_SKIN){
             return ModEntities.REDD.create(this.getSelf().level());
-        } else if (skin == RattEntity.CHAIR_RAT_SKIN || skin == RattEntity.KING_RAT_SKIN) {
+        } else if (skin >= RattEntity.CHAIR_RAT_SKIN) {
             return ModEntities.CHAIR_RATT.create(this.getSelf().level());
         }
 
@@ -517,6 +517,7 @@ public class PowersRatt extends NewDashPreset {
                 Vec3 v = this.getRotations(this.getShootTarget());
                 e.shootFromRotation(RE, (float) v.x * 180 / (float) Math.PI + 180, (float) v.y * 180 / (float) Math.PI, -0.5F, ShotPowerFloats[1], 0.84F);
                 e.EnableSuperThrow();
+                e.setParticleTrails(true);
                 RE.level().addFreshEntity(e);
             }
         }
@@ -651,6 +652,7 @@ public class PowersRatt extends NewDashPreset {
         RattDartEntity e = new RattDartEntity(this.getSelf().level(),this.getSelf(),i);
         e.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0.5F, power, acuracy);
         e.EnableSuperThrow();
+        e.setParticleTrails(true);
         this.getSelf().level().addFreshEntity(e);
 
     }
@@ -956,6 +958,7 @@ public class PowersRatt extends NewDashPreset {
             if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass) {
                 list.add(RattEntity.CHAIR_RAT_SKIN);
                 list.add(RattEntity.KING_RAT_SKIN);
+                list.add(RattEntity.MECH_RAT_SKIN);
             }
         }
         return list;
@@ -977,8 +980,9 @@ public class PowersRatt extends NewDashPreset {
             case RattEntity.SNOWY_SKIN -> {return Component.translatable("skins.roundabout.ratt.snowy");}
             case RattEntity.GUARDIAN_SKIN -> {return Component.translatable("skins.roundabout.ratt.guardian");}
             case RattEntity.ELDER_GUARDIAN_SKIN -> {return Component.translatable("skins.roundabout.ratt.elder_guardian");}
-            case RattEntity.CHAIR_RAT_SKIN -> {return Component.translatable("skins.roundabout.ratt.rat_chair");}
+            case RattEntity.CHAIR_RAT_SKIN -> {return Component.translatable("skins.roundabout.ratt.chair_rat");}
             case RattEntity.KING_RAT_SKIN -> {return Component.translatable("skins.roundabout.ratt.king_rat");}
+            case RattEntity.MECH_RAT_SKIN -> {return Component.translatable("skins.roundabout.ratt.mech_rat");}
             default -> {return Component.translatable("skins.roundabout.ratt.anime");}
         }
     }

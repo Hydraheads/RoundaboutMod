@@ -1260,9 +1260,10 @@
   "skins.roundabout.ratt.redd" : "Redd",
   "skins.roundabout.ratt.snowy" : "Snowy",
   "skins.roundabout.ratt.guardian" : "Guardian",
-  "skins.roundabout.ratt.elder_guardian" : "Elder Guardian",
-  "skins.roundabout.ratt.rat_chair" : "Rat?",
+  "skins.roundabout.ratt.elder_guardian" : "E. Guardian",
+  "skins.roundabout.ratt.chair_rat" : "Rat?",
   "skins.roundabout.ratt.king_rat" : "The King",
+  "skins.roundabout.ratt.mech_rat" : "Cyborg Rat",
 
   "skins.roundabout.cinderella.base": "Part 4",
   "skins.roundabout.cinderella.manga": "Manga",

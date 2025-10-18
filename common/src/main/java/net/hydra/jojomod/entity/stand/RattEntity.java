@@ -33,6 +33,7 @@ public class RattEntity extends StandEntity {
             REDD_SKIN = 10,
             CHAIR_RAT_SKIN = 11,
             KING_RAT_SKIN = 12,
+            MECH_RAT_SKIN = 13,
 
             FIRE = 81,
             LOADING = 82;
@@ -49,7 +50,8 @@ public class RattEntity extends StandEntity {
                 GUARDIAN_SKIN,
                 ELDER_GUARDIAN_SKIN,
                 CHAIR_RAT_SKIN,
-                KING_RAT_SKIN
+                KING_RAT_SKIN,
+                MECH_RAT_SKIN
 
         );
     }
@@ -58,7 +60,7 @@ public class RattEntity extends StandEntity {
 
 
     public Vec3 getEyeP(float d) {
-        if (this.getSavedSkin() == CHAIR_RAT_SKIN || this.getSavedSkin() == KING_RAT_SKIN) {
+        if (this.getSavedSkin() >= CHAIR_RAT_SKIN) {
             return this.getPosition(d).add(0,0.65,0);
         }
         return this.getPosition(d).add(0,0.15,0);
