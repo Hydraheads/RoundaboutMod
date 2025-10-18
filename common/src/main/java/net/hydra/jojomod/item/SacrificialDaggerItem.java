@@ -79,7 +79,9 @@ public class SacrificialDaggerItem extends TieredItem implements Vanishable {
                 int itemTime = 5;
                 if ($$5 >= itemTime) {
                     if ($$2 instanceof ServerPlayer SP){
-                        $$0.hurt(1,$$2.level().getRandom(),SP);
+                        if (!SP.getAbilities().instabuild) {
+                            $$0.hurt(1, $$2.level().getRandom(), SP);
+                        }
                     } else {
                         $$0.hurt(1,$$2.level().getRandom(),null);
                     }
