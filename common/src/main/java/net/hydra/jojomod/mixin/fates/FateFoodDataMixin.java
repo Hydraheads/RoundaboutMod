@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin.fates;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.access.AccessFateFoodData;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
@@ -16,6 +17,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(FoodData.class)
 public abstract class FateFoodDataMixin implements AccessFateFoodData {
@@ -33,6 +35,8 @@ public abstract class FateFoodDataMixin implements AccessFateFoodData {
     @Unique
     public Player rdbt$player = null;
     @Unique
+    public float rdbt$alternateSaturation;
+    @Unique
     @Override
     public void rdbt$setPlayer(Player pl){
         rdbt$player = pl;
@@ -49,27 +53,83 @@ public abstract class FateFoodDataMixin implements AccessFateFoodData {
             }
         }
     }
+
+    @Inject(method = "eat(IF)V", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$eat2(int $$0, float $$1, CallbackInfo ci) {
+        if (rdbt$player != null){
+            if (FateTypes.hasBloodHunger(rdbt$player)){
+                this.foodLevel = Math.min($$0 + this.foodLevel, 20);
+                this.rdbt$alternateSaturation = Math.min(this.rdbt$alternateSaturation + (float)$$0 * $$1 * 2.0F, (float)this.foodLevel);
+                ci.cancel();
+            }
+        }
+    }
+
+    @Inject(method = "getSaturationLevel()F", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$getSaturationLevel(CallbackInfoReturnable<Float> cir) {
+        if (rdbt$player != null){
+            if (FateTypes.hasBloodHunger(rdbt$player)){
+                cir.setReturnValue(this.rdbt$alternateSaturation);
+            }
+        }
+    }
+    @Inject(method = "setSaturation(F)V", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$setSaturation(float $$0, CallbackInfo ci) {
+        if (rdbt$player != null){
+            if (FateTypes.hasBloodHunger(rdbt$player)){
+                this.rdbt$alternateSaturation = $$0;
+                ci.cancel();
+            }
+        }
+    }
+    @Inject(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$addAdditionalSaveData(CompoundTag $$0, CallbackInfo ci) {
+        if (rdbt$player != null){
+            if (FateTypes.hasBloodHunger(rdbt$player)){
+                $$0.putInt("foodLevel", this.foodLevel);
+                $$0.putInt("foodTickTimer", this.tickTimer);
+                $$0.putFloat("foodSaturationLevel", this.rdbt$alternateSaturation);
+                $$0.putFloat("foodExhaustionLevel", this.exhaustionLevel);
+                ci.cancel();
+            }
+        }
+    }
+    @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci) {
+        if (rdbt$player != null){
+            if (FateTypes.hasBloodHunger(rdbt$player)){
+                if ($$0.contains("foodLevel", 99)) {
+                    this.foodLevel = $$0.getInt("foodLevel");
+                    this.tickTimer = $$0.getInt("foodTickTimer");
+                    this.rdbt$alternateSaturation = $$0.getFloat("foodSaturationLevel");
+                    this.exhaustionLevel = $$0.getFloat("foodExhaustionLevel");
+                }
+                ci.cancel();
+            }
+        }
+    }
     /**Vampires do not starve, remove the starve code here*/
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$tickVamp(Player $$0, CallbackInfo ci) {
         if (FateTypes.hasBloodHunger(rdbt$player)){
             ci.cancel();
+            this.saturationLevel = 0;
             Difficulty $$1 = $$0.level().getDifficulty();
             this.lastFoodLevel = this.foodLevel;
             if (this.exhaustionLevel > 4.0F) {
                 this.exhaustionLevel -= 4.0F;
-                if (this.saturationLevel > 0.0F) {
-                    this.saturationLevel = Math.max(this.saturationLevel - 1.0F, 0.0F);
+                if (this.rdbt$alternateSaturation > 0.0F) {
+                    this.rdbt$alternateSaturation = Math.max(this.rdbt$alternateSaturation - 1.0F, 0.0F);
                 } else if ($$1 != Difficulty.PEACEFUL) {
                     this.foodLevel = Math.max(this.foodLevel - 1, 0);
                 }
             }
 
             boolean $$2 = $$0.level().getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
-            if ($$2 && this.saturationLevel > 0.0F && $$0.isHurt() && this.foodLevel >= 20) {
+            if ($$2 && this.rdbt$alternateSaturation > 0.0F && $$0.isHurt() && this.foodLevel >= 20) {
                 this.tickTimer++;
                 if (this.tickTimer >= 10) {
-                    float $$3 = Math.min(this.saturationLevel, 6.0F);
+                    float $$3 = Math.min(this.rdbt$alternateSaturation, 6.0F);
                     $$0.heal($$3 / 6.0F);
                     this.addExhaustion($$3);
                     this.tickTimer = 0;
