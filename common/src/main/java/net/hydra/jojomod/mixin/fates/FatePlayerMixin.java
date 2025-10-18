@@ -72,11 +72,14 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
             Vec3 yes2 = this.position();
 
             /**Vampires die under the sun, even under liquids*/
-            for (var i = 0; i < 100; i++){
-                if (level().getBlockState(BlockPos.containing(yes)).liquid()){
-                    yes = yes.add(0,1,0);
-                } else {
-                    i = 100;
+            int waterReach = ClientNetworking.getAppropriateConfig().vampireSettings.sunDamageUnderwaterReach;
+            if (waterReach > 0) {
+                for (var i = 0; i < waterReach; i++) {
+                    if (level().getBlockState(BlockPos.containing(yes)).liquid()) {
+                        yes = yes.add(0, 1, 0);
+                    } else {
+                        i = 100;
+                    }
                 }
             }
             BlockPos atVec = BlockPos.containing(yes);

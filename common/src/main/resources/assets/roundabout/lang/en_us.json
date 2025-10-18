@@ -2123,6 +2123,9 @@
   "config.roundabout.vampireUsesPotionEffectForNightVision.name": "Vampire Uses NV Potion",
   "config.roundabout.vampireUsesPotionEffectForNightVision.desc": "If you have a mod like Bad Optimizations that deletes the vanilla code that scope uses to light things up, turn this on so it works regardless.",
 
+  "config.roundabout.sunDamageUnderwaterReach.name": "Underwater Sun Damage Reach",
+  "config.roundabout.sunDamageUnderwaterReach.desc": "Change how far underwater sunlight reaches. Zero makes sunlight not intrude on water.",
+
   "config.roundabout.levelsToGetStand.name": "Arrow Stand Level Cost",
   "config.roundabout.levelsToGetStand.desc": "Obtaining a stand from a Stand Arrow costs 15 levels by default.",
   "config.roundabout.levelsToRerollStandWithArrow.name": "Arrow Reroll Level Cost",
