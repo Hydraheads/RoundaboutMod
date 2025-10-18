@@ -56,6 +56,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public MiscSettings miscellaneousSettings;
     @NestedOption(group = "modded")
+    public VampireSettings vampireSettings;
+    @NestedOption(group = "modded")
     public StandLevelingSettings standLevelingSettings;
     @NestedOption(group = "modded")
     public GeneralStandSettings generalStandSettings;
@@ -165,6 +167,10 @@ public class Config implements Cloneable {
         public Boolean disableBleedingAndBloodSplatters;
         @BooleanOption(group = "inherit", value = false)
         public Boolean banDirectionalBlockPlacingFailure;
+    }
+    public static class VampireSettings {
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean vampireUsesPotionEffectForNightVision;
     }
     public static class StandLevelingSettings {
         @BooleanOption(group = "inherit", value = true)
