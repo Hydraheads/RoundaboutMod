@@ -27,6 +27,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
@@ -37,6 +38,7 @@ import net.minecraft.world.entity.PlayerRideableJumping;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -78,6 +80,9 @@ public abstract class HudRendering implements IHudAccess {
     //private void renderHotbar(float tickDelta, DrawContext context) {
 
 
+    private float rdbt$currentAlpha = 0.0F;
+    private boolean rdbt$fadingIn = false;
+
     /** The stand move HUD renders with the hotbar so that it may exist in all gamemodes.*/
     @Inject(method = "renderHotbar", at = @At(value = "HEAD"))
     private void roundabout$renderHotbarMixin(float $$0, GuiGraphics $$1, CallbackInfo info) {
@@ -113,13 +118,55 @@ public abstract class HudRendering implements IHudAccess {
                 }
             }
             if (this.minecraft.options.getCameraType().isFirstPerson()) {
+                if (FateTypes.hasBloodHunger(this.minecraft.player)){
+                    // Fade speed per tick — lower = slower fade
+                    float fadeStep = 1.0F / 30.0F; // same as before: full fade over ~30 ticks
+
+                    boolean checksOut = false;
+                    long timeOfDay = this.minecraft.level.getDayTime() % 24000L;
+                    boolean isDay = timeOfDay < 12000L; // 0–12000 = day, 12000–24000 = night
+
+                    if (this.minecraft.player.level().dimension().location().getPath().equals("overworld") &&
+                            isDay) {
+                        Vec3 yes = this.minecraft.player.getEyePosition();
+                        int range = 3;
+                        for (var i = -range; i <= range; i++) {
+                            for (var j = -range; j <= range; j++) {
+                                if (!(i == 0 || j == 0)) {
+                                    if (this.minecraft.player.level().canSeeSky(BlockPos.containing(yes.add(i,0,j)))){
+                                        checksOut = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (checksOut) {
+                        rdbt$fadingIn = true;
+                    } else {
+                        rdbt$fadingIn = false;
+                    }
+                    // Smoothly approach target
+                    if (rdbt$fadingIn) {
+                        rdbt$currentAlpha = Mth.clamp(rdbt$currentAlpha + fadeStep, 0.0F, 1.0F);
+                    } else {
+                        rdbt$currentAlpha = Mth.clamp(rdbt$currentAlpha - fadeStep, 0.0F, 1.0F);
+                    }
+
+                    // Only render if visible
+                    if (rdbt$currentAlpha > 0.01F) {
+                        RenderSystem.enableBlend();
+                        this.renderTextureOverlay($$1, StandIcons.SUN_TINGE_OVERLAY, rdbt$currentAlpha);
+                    }
+
+                }
                 if (user.roundabout$isBubbleEncased()){
                     RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.IN_BUBBLE_OVERLAY, 0.99F);
                 }
                 if (MainUtil.isWearingStoneMask(this.minecraft.player)){
                     RenderSystem.enableBlend();
-                    this.renderTextureOverlay($$1, StandIcons.STONE_MASK_OVERLAY, 0.7F);
+                    this.renderTextureOverlay($$1, StandIcons.STONE_MASK_OVERLAY, 0.6F);
                 }
                 if (MainUtil.isWearingBloodyStoneMask(this.minecraft.player)){
                     RenderSystem.enableBlend();

@@ -788,6 +788,11 @@ public class ModSounds {
     public static final ResourceLocation SPIKE_MISS_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SPIKE_MISS);
     public static SoundEvent SPIKE_MISS_EVENT = SoundEvent.createVariableRangeEvent(SPIKE_MISS_ID);
 
+    public static final String VAMPIRE_DRAIN = "vampire_drain";
+    public static final ResourceLocation VAMPIRE_DRAIN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VAMPIRE_DRAIN);
+    public static SoundEvent VAMPIRE_DRAIN_EVENT = SoundEvent.createVariableRangeEvent(VAMPIRE_DRAIN_ID);
+
+
 
     public static final String DIO_HOHO = "dio_hoho";
     public static final ResourceLocation DIO_HOHO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIO_HOHO);

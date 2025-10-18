@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.fates;
 
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
@@ -14,6 +15,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -63,9 +67,18 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
     }
     @Unique
     public void rdbt$tickThroughVampire(){
-        if (FateTypes.isVampire(this)){
+        if (FateTypes.hasBloodHunger(this)){
             Vec3 yes = this.getEyePosition();
             Vec3 yes2 = this.position();
+
+            /**Vampires die under the sun, even under liquids*/
+            for (var i = 0; i < 100; i++){
+                if (level().getBlockState(BlockPos.containing(yes)).liquid()){
+                    yes = yes.add(0,1,0);
+                } else {
+                    i = 100;
+                }
+            }
             BlockPos atVec = BlockPos.containing(yes);
             BlockPos atVec2 = BlockPos.containing(yes2);
             if ((level().canSeeSky(atVec) || level().canSeeSky(atVec2)) &&
@@ -81,6 +94,25 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
         }
         if (MainUtil.isWearingStoneMask(this) && hasEffect(ModEffects.BLEED)){
             MainUtil.activateStoneMask(this);
+        }
+
+
+        if (ClientNetworking.getAppropriateConfig().vampireSettings.vampireUsesPotionEffectForNightVision) {
+            if (FateTypes.canSeeInTheDark(this)) {
+                if (!hasEffect(MobEffects.NIGHT_VISION)) {
+                    addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, -1, 20, false, false), null);
+                }
+            } else {
+                MobEffectInstance ME = getEffect(MobEffects.NIGHT_VISION);
+                if (ME != null && ME.isInfiniteDuration() && ME.getAmplifier() == 20) {
+                    removeEffect(MobEffects.NIGHT_VISION);
+                }
+            }
+        } else {
+            MobEffectInstance ME = getEffect(MobEffects.NIGHT_VISION);
+            if (ME != null && ME.isInfiniteDuration() && ME.getAmplifier() == 20) {
+                removeEffect(MobEffects.NIGHT_VISION);
+            }
         }
 
         //This can move into a dedicated fate class eventually

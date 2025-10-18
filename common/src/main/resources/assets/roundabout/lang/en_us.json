@@ -733,6 +733,8 @@
 
   "sounds.roundabout.levelup": "Development Level Up!",
 
+  "sounds.roundabout.vampire_drain": "Blood drain",
+
   "sounds.roundabout.dio_hoho":  "Hoho!",
   "sounds.roundabout.dio_hoho_2":  "Ho!",
   "sounds.roundabout.dio_death":  "I am DIO!",
@@ -1319,6 +1321,8 @@
   "skins.roundabout.survivor.ender": "Ender",
   "skins.roundabout.survivor.conduit": "Conduit",
   "skins.roundabout.survivor.cake": "Cake",
+  "skins.roundabout.survivor.sponge": "Sponge",
+  "skins.roundabout.survivor.sculk": "Sculk",
 
   "skins.roundabout.killer_queen.base": "Part 4",
 
@@ -2115,6 +2119,8 @@
   "config.roundabout.blitzAttackCooldown.desc": "Change the length in between ending impale early with the attack button and using Star Blitz.",
 
 
+  "config.roundabout.vampireUsesPotionEffectForNightVision.name": "Vampire Uses NV Potion",
+  "config.roundabout.vampireUsesPotionEffectForNightVision.desc": "If you have a mod like Bad Optimizations that deletes the vanilla code that scope uses to light things up, turn this on so it works regardless.",
 
   "config.roundabout.levelsToGetStand.name": "Arrow Stand Level Cost",
   "config.roundabout.levelsToGetStand.desc": "Obtaining a stand from a Stand Arrow costs 15 levels by default.",
@@ -2183,6 +2189,7 @@
   "config.roundabout.nameTagSettings.name": "Nametags",
   "config.roundabout.griefSettings.name": "Griefing",
   "config.roundabout.miscellaneousSettings.name": "Miscellaneous",
+  "config.roundabout.vampireSettings.name": "Vampire",
   "config.roundabout.standLevelingSettings.name": "Stand Leveling",
   "config.roundabout.generalStandSettings.name": "General Stand",
   "config.roundabout.softAndWetSettings.name": "Soft And Wet",
