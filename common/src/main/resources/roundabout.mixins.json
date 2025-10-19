@@ -61,6 +61,7 @@
     "data_and_structures.DataStructureTemplatePool",
     "effects.bleed.BleedFoodData",
     "effects.hex.HexItem",
+    "fates.FateCakeBlockMixin",
     "fates.FateFoodDataMixin",
     "fates.FateLivingEntity",
     "fates.FatePlayerMixin",
