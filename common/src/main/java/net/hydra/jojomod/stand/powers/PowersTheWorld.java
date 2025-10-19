@@ -882,17 +882,17 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         float mult = 1;
         boolean isReduced = this.getReducedDamage(entity);
         if (getAttackTimeDuring() > 95){
-            mult = 1.7F;
+            mult = 2.0F;
         } else if (getAttackTimeDuring() > 70){
-            mult = 1.4F;
+            mult = 1.5F;
         } else if (getAttackTimeDuring() > 45){
-            mult = 1.2F;
+            mult = 1.25F;
         } else if (getAssaultEarlyTime() && isReduced){
             mult = 0.75F;
         }
 
         if (isReduced){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.7F*mult));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.4F*mult));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(7F*mult));
         }
