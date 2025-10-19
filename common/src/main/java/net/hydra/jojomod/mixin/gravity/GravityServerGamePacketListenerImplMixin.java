@@ -181,7 +181,7 @@ public abstract class GravityServerGamePacketListenerImplMixin {
                             $$14 = $$10 * $$10 + $$11 * $$11 + $$12 * $$12;
                             boolean $$21 = false;
                             if (!this.player.isChangingDimension()
-                                    && $$14 > 0.1225
+                                    && $$14 > 0.5225
                                     && !this.player.isSleeping()
                                     && !this.player.gameMode.isCreative()
                                     && this.player.gameMode.getGameModeForPlayer() != GameType.SPECTATOR) {
