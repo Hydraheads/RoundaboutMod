@@ -299,7 +299,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                     if (self.onGround()) {
                         this.setCooldown(PowerIndex.SKILL_3, 8);
                         if (!this.self.level().isClientSide()) {
-                            setHeelDirection(Direction.DOWN);
+                            setHeelDirection(((IGravityEntity)this.self).roundabout$getGravityDirection());
                             toggleSpikes(true);
                         }
                     }
