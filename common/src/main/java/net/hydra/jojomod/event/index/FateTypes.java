@@ -2,26 +2,30 @@ package net.hydra.jojomod.event.index;
 
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.fates.FatePowers;
+import net.hydra.jojomod.fates.powers.VampireFate;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
 public enum FateTypes {
-    HUMAN((byte) 0),
-    VAMPIRE((byte) 1),
-    SHADOW_CREATURE((byte) 2),
-    PILLAR_MAN((byte) 3),
-    ULTIMATE_LIFEFORM((byte) 4),
-    ROCK_HUMAN((byte) 5),
-    GHOST((byte) 6),
-    DOG((byte) 7),
-    RAT((byte) 8),
-    FALCON((byte) 9),
-    PLANKTON_COLONY((byte) 10);
+    HUMAN((byte) 0, new FatePowers()),
+    VAMPIRE((byte) 1, new VampireFate()),
+    SHADOW_CREATURE((byte) 2, new FatePowers()),
+    PILLAR_MAN((byte) 3, new FatePowers()),
+    ULTIMATE_LIFEFORM((byte) 4, new FatePowers()),
+    ROCK_HUMAN((byte) 5, new FatePowers()),
+    GHOST((byte) 6, new FatePowers()),
+    DOG((byte) 7, new FatePowers()),
+    RAT((byte) 8, new FatePowers()),
+    FALCON((byte) 9, new FatePowers()),
+    PLANKTON_COLONY((byte) 10, new FatePowers());
 
     public final byte id;
+    public final FatePowers fatePowers;
 
-    private FateTypes(byte $$0) {
+    private FateTypes(byte $$0, FatePowers $$1) {
         this.id = $$0;
+        this.fatePowers = $$1;
     }
     public static FateTypes getFateFromByte(byte bt){
         if (bt == VAMPIRE.id)
