@@ -9,6 +9,7 @@ import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.access.AccessFateFoodData;
+import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
@@ -24,6 +25,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.apache.http.client.utils.DateUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -36,6 +38,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class FatePlayerMixin extends LivingEntity implements IFatePlayer {
 
     @Shadow public abstract FoodData getFoodData();
+
+    @Unique
+    public FatePowers rdbt$fatePowers = null;
+
+    @Unique
+    public FatePowers rdbt$getFatePowers(){
+        if (rdbt$fatePowers == null){
+            FateTypes.getFateFromByte(((IPlayerEntity)this).roundabout$getFate()).fatePowers.generateFatePowers(this);
+        }
+        return rdbt$fatePowers;
+    }
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
     protected void roundabout$Tick(CallbackInfo ci) {
