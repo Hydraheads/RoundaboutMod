@@ -146,7 +146,7 @@ public class RattEntity extends StandEntity {
     public boolean hurt(DamageSource source, float amount) {
         if (source.getEntity() != null && source.getEntity() != this.getUser()) {
             if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersRatt PR) {
-                if (PR.immuneWhileReturning) {return false;}
+                if (!this.onGround()) {return false;}
                 PR.active = false;
                 this.forceDespawnSet = true;
                 PR.setCooldown(PowersRatt.SETPLACE,50);
