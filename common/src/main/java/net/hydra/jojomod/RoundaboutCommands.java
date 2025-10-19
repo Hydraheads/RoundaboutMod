@@ -140,13 +140,16 @@ public class RoundaboutCommands {
     }
     public static int executeReplenish(CommandSourceStack source, Collection<? extends Entity> targets) {
         for (Entity entity : targets) {
-            if (entity instanceof LivingEntity) {
+            if (entity instanceof LivingEntity LE) {
+                LE.removeAllEffects();
                 ((LivingEntity) entity).setHealth(((LivingEntity) entity).getMaxHealth());
                 if (entity instanceof Player PE){
+                    ((StandUser) PE).roundabout$setLocacacaCurse((byte) -1);
                     PE.getFoodData().setFoodLevel(20);
                     PE.getFoodData().setSaturation(14.4F);
                     MainUtil.clearCooldowns(PE);
                 }
+
             }
         }
         if (targets.size() == 1) {
