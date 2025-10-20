@@ -10,6 +10,7 @@ import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.GEntityTags;
 import net.hydra.jojomod.util.MainUtil;
@@ -63,10 +64,13 @@ import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.List;
+import java.util.Objects;
 
 @Mixin(value = Entity.class, priority = 100)
 public abstract class GravityEntityMixin implements IGravityEntity {
     // NEW FEATURES
+
+    @Shadow public abstract boolean isInLava();
 
     @Shadow @Deprecated public abstract BlockPos getOnPosLegacy();
 
@@ -1056,11 +1060,17 @@ public abstract class GravityEntityMixin implements IGravityEntity {
 
 
     @Inject(
-            method = "updateFluidHeightAndDoFluidPushing",
+            method = "updateFluidHeightAndDoFluidPushing(Lnet/minecraft/tags/TagKey;D)Z",
             at = @At("HEAD"),
             cancellable = true
     )
     private void roundabout$updateFluidHeightAndDoFluidPushing(TagKey<Fluid> $$0, double $$1, CallbackInfoReturnable<Boolean> cir) {
+        if (Objects.equals(ModPacketHandler.PLATFORM_ACCESS.getPlatformName(), "Forge")) {
+            if (isInLava())
+                return;
+            return;
+        }
+
         boolean counterPushing = false;
         if (rdbt$this() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW
         && PW.hasExtendedHeelsForWalking()){
