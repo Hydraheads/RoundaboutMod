@@ -64,14 +64,12 @@ public class PowersDiverDown extends NewPunchingStand {
         setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.SKILL_2);
 
         if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NONE);
+            setSkillIcon(context, x, y, 3, StandIcons.DIVER_DOWN_ZIP, PowerIndex.SKILL_3);
         } else {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         }
         if (canVault() ) {
             setSkillIcon(context, x, y, 3, StandIcons.DIVER_DOWN_VAULT, PowerIndex.GLOBAL_DASH);
-        } else {
-            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         }
 
         setSkillIcon(context, x, y, 4, StandIcons.DIVER_SELECTION, PowerIndex.SKILL_4);
@@ -83,6 +81,8 @@ public class PowersDiverDown extends NewPunchingStand {
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99, 0,"ability.roundabout.vault",
                 "instruction.roundabout.press_skill_air", StandIcons.DIVER_DOWN_VAULT,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99, 0,"ability.roundabout.diver_zip",
+                "instruction.roundabout.press_skill_crouch", StandIcons.DIVER_DOWN_ZIP,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.diver_selection",
                 "instruction.roundabout.press_skill", StandIcons.DIVER_SELECTION,4,level,bypas));
         return $$1;

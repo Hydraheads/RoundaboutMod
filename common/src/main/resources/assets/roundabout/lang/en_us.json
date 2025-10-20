@@ -1076,6 +1076,8 @@
 
   "ability.roundabout.diver_selection": "Diver Selection",
   "ability.roundabout.diver_selection.desc": "Opens an impairment wheel which you can apply effects onto yourself",
+  "ability.roundabout.diver_zip": "Diver Zip",
+  "ability.roundabout.diver_zip.desc": "Your stand dives into the ground and zips you around! Control your direction using arrow keys",
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Locked",
