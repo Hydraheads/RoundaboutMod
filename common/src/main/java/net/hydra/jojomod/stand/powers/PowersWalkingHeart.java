@@ -179,7 +179,7 @@ public class PowersWalkingHeart extends NewDashPreset {
 
     public void extendHeels(){
         if ((!this.onCooldown(PowerIndex.SKILL_3) && !onCooldown(PowerIndex.SKILL_2)) || hasExtendedHeelsForWalking()) {
-            if (!inCombatMode()){
+            if (!inCombatMode() && !self.isSwimming()){
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
             tryPowerPacket(PowerIndex.POWER_2);
             }
@@ -217,7 +217,7 @@ public class PowersWalkingHeart extends NewDashPreset {
         return getStandUserSelf().roundabout$getUniqueStandModeToggle();
     }
     public boolean canLatchOntoWall(){
-        if (onCooldown(PowerIndex.SKILL_2))
+        if (onCooldown(PowerIndex.SKILL_2) || self.isSwimming())
             return false;
 
         if ((this.self.onGround() && !hasExtendedHeelsForWalking()) || (!this.self.onGround() && hasExtendedHeelsForWalking()))
@@ -289,6 +289,8 @@ public class PowersWalkingHeart extends NewDashPreset {
     public int hitsSinceAttached = 0;
 
     public void regularExtendHeels(){
+        if (self.isSwimming())
+            return;
         boolean isAnchored = hasExtendedHeelsForWalking();
             if (isAnchored){
                 if (!this.self.level().isClientSide()) {
@@ -764,6 +766,8 @@ public class PowersWalkingHeart extends NewDashPreset {
             }
         } else {
 
+            if (self.isSwimming())
+                toggleSpikes(false);
             if (inCombatMode() && isBlockedByStone()){
                 switchModes();
             }
