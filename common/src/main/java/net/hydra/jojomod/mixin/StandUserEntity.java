@@ -3294,6 +3294,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
+        if (FateTypes.hasBloodHunger((LivingEntity) (Object) this)) {
+            if (roundabout$isDrown || getAirSupply() <= 0) {
+                basis *= 0.5F;
+            }
+        }
+
 
         return basis;
     }
