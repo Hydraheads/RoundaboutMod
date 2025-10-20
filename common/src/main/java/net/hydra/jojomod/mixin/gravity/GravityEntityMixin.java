@@ -1058,8 +1058,30 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         }
     }
 
-
     @Inject(
+            method = "onAboveBubbleCol(Z)V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void roundabout$onAboveBubbleCol(boolean $$0, CallbackInfo ci) {
+        if (rdbt$this() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW
+                && PW.hasExtendedHeelsForWalking()){
+            ci.cancel();
+        }
+    }
+    @Inject(
+            method = "onInsideBubbleColumn(Z)V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void roundabout$onInsideBubbleColumn(boolean $$0, CallbackInfo ci) {
+        if (rdbt$this() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW
+                && PW.hasExtendedHeelsForWalking()){
+            ci.cancel();
+        }
+    }
+
+        @Inject(
             method = "updateFluidHeightAndDoFluidPushing(Lnet/minecraft/tags/TagKey;D)Z",
             at = @At("HEAD"),
             cancellable = true
