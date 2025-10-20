@@ -173,6 +173,8 @@ public class Config implements Cloneable {
         public Boolean vampireUsesPotionEffectForNightVision;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer sunDamageUnderwaterReach;
+        @FloatOption(group = "inherit", value = 0.75F, min = 0, max = 1F)
+        public Float drownSpeedModifier;
     }
     public static class StandLevelingSettings {
         @BooleanOption(group = "inherit", value = true)

@@ -2127,6 +2127,8 @@
 
   "config.roundabout.sunDamageUnderwaterReach.name": "Underwater Sun Damage Reach",
   "config.roundabout.sunDamageUnderwaterReach.desc": "Change how far underwater sunlight reaches. Zero makes sunlight not intrude on water.",
+  "config.roundabout.drownSpeedModifier.name": "Vampire Oxygen Swim Slowdown",
+  "config.roundabout.drownSpeedModifier.desc": "When drowning, instead of taking damage, vampiric players are slowed down using this multiplier. Lower = slower.",
 
   "config.roundabout.levelsToGetStand.name": "Arrow Stand Level Cost",
   "config.roundabout.levelsToGetStand.desc": "Obtaining a stand from a Stand Arrow costs 15 levels by default.",
