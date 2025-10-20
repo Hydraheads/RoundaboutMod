@@ -854,7 +854,6 @@ public class ClientUtil {
         mc.setScreen(new JusticeMobSwitcherScreen());
     }
     public static void setJusticeBlockScreen() {
-        C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_OPEN_FOG_INVENTORY);
         Minecraft mc = Minecraft.getInstance();
         mc.setScreen(
                 new FogInventoryScreen(
