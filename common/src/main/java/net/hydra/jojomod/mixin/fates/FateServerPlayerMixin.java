@@ -7,10 +7,12 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -55,6 +57,8 @@ public abstract class FateServerPlayerMixin extends Player {
                     SL.sendParticles(ModParticles.DUST_CRUMBLE,
                             position3.x, position3.y, position3.z,
                             0, 0.2, 0.5, 0.2, 0.2);
+
+                    this.level().playSound(null, BlockPos.containing(this.position()), ModSounds.VAMPIRE_CRUMBLE_EVENT, SoundSource.PLAYERS, 1.0F, 1F);
                 }
             } else {
                 if (FateTypes.isVampire(this)){
@@ -74,6 +78,16 @@ public abstract class FateServerPlayerMixin extends Player {
                             SL.sendParticles(ModParticles.SOUL_FIRE_CRUMBLE,
                                     position3.x, position3.y, position3.z,
                                     0, 0.2, 0.2, 0.2, 0.1);
+
+                            SL.sendParticles(ModParticles.DUST_CRUMBLE,
+                                    position.x, position.y, position.z,
+                                    0, 0.2, 0.5, 0.2, 0.5);
+                            SL.sendParticles(ModParticles.DUST_CRUMBLE,
+                                    position2.x, position2.y, position2.z,
+                                    0, 0.2, 0.5, 0.2, 0.2);
+                            SL.sendParticles(ModParticles.DUST_CRUMBLE,
+                                    position3.x, position3.y, position3.z,
+                                    0, 0.2, 0.5, 0.2, 0.2);
                         }
                     }
                 }
