@@ -1,11 +1,13 @@
 package net.hydra.jojomod.mixin.fates;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.access.AccessFateFoodData;
@@ -16,6 +18,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -152,16 +155,9 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
         }
     }
 
-    /**You cannot get hurt while transformed*/
-    @Inject(method = "hurt", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$hurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> cir) {
-        if (!this.level().isClientSide()) {
-            if (rdbt$vampireTransformation >= 0){
-                cir.setReturnValue(false);
-                return;
-            }
-        }
-    }
+
+
+    //((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_BACKWARD);
 
     protected FatePlayerMixin(EntityType<? extends LivingEntity> $$0, Level $$1) {
         super($$0, $$1);

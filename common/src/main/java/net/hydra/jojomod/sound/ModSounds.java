@@ -792,6 +792,10 @@ public class ModSounds {
     public static final ResourceLocation VAMPIRE_DRAIN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VAMPIRE_DRAIN);
     public static SoundEvent VAMPIRE_DRAIN_EVENT = SoundEvent.createVariableRangeEvent(VAMPIRE_DRAIN_ID);
 
+    public static final String VAMPIRE_CRUMBLE = "vampire_crumble";
+    public static final ResourceLocation VAMPIRE_CRUMBLE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VAMPIRE_CRUMBLE);
+    public static SoundEvent VAMPIRE_CRUMBLE_EVENT = SoundEvent.createVariableRangeEvent(VAMPIRE_CRUMBLE_ID);
+
 
 
     public static final String DIO_HOHO = "dio_hoho";

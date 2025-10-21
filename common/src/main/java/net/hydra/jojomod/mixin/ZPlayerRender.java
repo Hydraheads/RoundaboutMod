@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.mobs.*;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.*;
@@ -801,6 +802,15 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         ItemStack visage = ipe.roundabout$getMaskSlot();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
         roundabout$changeTheModel($$0,visage,shift);
+
+            byte playerP = ((IPlayerEntity)$$0).roundabout$GetPos();
+
+            /*Dodge makes you lean forward visually*/
+            if (playerP == PlayerPosIndex.SUNLIGHT){
+                ci.cancel();
+                return;
+            }
+
 
         if (!ClientUtil.checkIfIsFirstPerson($$0)) {
             Poses pose = Poses.getPosFromByte(ipe.roundabout$GetPoseEmote());

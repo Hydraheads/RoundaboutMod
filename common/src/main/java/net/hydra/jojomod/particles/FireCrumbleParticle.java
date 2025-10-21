@@ -9,13 +9,13 @@ import net.minecraft.core.particles.SimpleParticleType;
 public class FireCrumbleParticle extends SimpleAnimatedParticle {
     FireCrumbleParticle(ClientLevel clientLevel, double d, double e, double f, double g, double h, double i, SpriteSet spriteSet) {
         super(clientLevel, d, e, f, spriteSet, 1f);
-        this.quadSize = 0.13f;
+        this.quadSize = 0.6f;
         this.friction = 0.96F;
         this.gravity = 0F;
         this.xd = this.xd * 0.01F + g;
         this.yd = this.yd * 0.01F + h;
         this.zd = this.zd * 0.01F + i;
-        this.lifetime = 6;
+        this.lifetime = 15;
         this.setFadeColor(15916745);
         this.setAlpha(0.7f);
         this.setSpriteFromAge(spriteSet);

@@ -267,6 +267,7 @@ public class ForgeEvents {
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_DIVER_DOWN.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_DIVER_DOWN.get());
         ModItems.MAX_STAND_DISC_DIVER_DOWN = ForgeItems.MAX_STAND_DISC_DIVER_DOWN.get();
         ModItems.COFFEE_GUM = ForgeItems.COFFEE_GUM.get();
+        ModItems.CHERRIES = ForgeItems.CHERRIES.get();
 
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_DIO.get()).referenceItem = ForgeItems.STREET_SIGN_DIO_BLOCK_ITEM.get().getDefaultInstance();
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_RIGHT.get()).referenceItem = ForgeItems.STREET_SIGN_RIGHT_BLOCK_ITEM.get().getDefaultInstance();
@@ -395,6 +396,7 @@ public class ForgeEvents {
         ModEffects.FACELESS = ForgeEffects.FACELESS.get();
         ModEffects.MELTING = ForgeEffects.MELTING.get();
         ModEffects.GRAVITY_FLIP = ForgeEffects.GRAVITY_FLIP.get();
+        ModEffects.WARDING = ForgeEffects.WARDING.get();
 
 
 

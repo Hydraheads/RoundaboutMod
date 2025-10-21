@@ -21,6 +21,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.Potions;
@@ -169,6 +170,10 @@ public class FabricItems {
     public static Item INTERDIMENSIONAL_KEY = registerItem("interdimensional_key", new InterdimensionalKeyItem(new Item.Properties().stacksTo(1)));
 
     public static Item FLESH_BUCKET = registerItem("flesh_bucket", new FleshBucketItem(new Item.Properties().stacksTo(1)));
+    public static final FoodProperties CHERRY =new FoodProperties.Builder().nutrition(1).saturationMod(0.0F).alwaysEat()
+            .effect(new MobEffectInstance(ModEffects.WARDING, 600, 0), 1.0F)
+            .build();
+    public static Item CHERRIES = registerItem("cherries", new Item(new Item.Properties().food(CHERRY)));
 
     public static Item PAINTING_BIRTH_OF_VENUS = registerItem("painting_venus", new BirthOfVenusPaintingItem(new Item.Properties().stacksTo(1)));
     public static Item PAINTING_VAN_GOUGH = registerItem("painting_van_gough", new VanGoughPaintingItem(new Item.Properties().stacksTo(1)));
@@ -402,6 +407,7 @@ public class FabricItems {
                         //entries.accept(STAND_DISC_WALKING_HEART);
                         entries.accept(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK);
                         entries.accept(ModBlocks.BLOODY_STONE_MASK_BLOCK);
+                        entries.accept(CHERRIES);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_RATT);
@@ -549,6 +555,7 @@ public class FabricItems {
         ModItems.FOG_BLOCK_ITEMS = FOG_BLOCK_ITEMS;
         ModItems.INTERDIMENSIONAL_KEY = INTERDIMENSIONAL_KEY;
         ModItems.FLESH_BUCKET = FLESH_BUCKET;
+        ModItems.CHERRIES = CHERRIES;
 
         ModItems.PAINTING_VAN_GOUGH = PAINTING_VAN_GOUGH;
         ModItems.PAINTING_MONA_LISA = PAINTING_MONA_LISA;

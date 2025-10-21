@@ -51,6 +51,8 @@
   "item.roundabout.lucky_lipstick": "Lucky Lipstick",
   "item.roundabout.lucky_lipstick.desc": "For better trades, apply until you sleep",
   "item.roundabout.sacrificial_dagger": "Sacrificial Dagger",
+  "item.roundabout.cherries": "Cherries",
+
 
   "item.roundabout.star_platinum_disc": "Stand Disc",
   "item.roundabout.the_world_disc": "Stand Disc",
@@ -203,6 +205,7 @@
   "effect.roundabout.faceless": "Faceless",
   "effect.roundabout.melting": "Melting",
   "effect.roundabout.gravity_flip": "Gravity",
+  "effect.roundabout.warding": "Warding",
 
   "item.roundabout.creative_only.info": "Creative Only",
 
@@ -570,6 +573,7 @@
   "sounds.roundabout.heel_stomp":  "Leg lowers",
   "sounds.roundabout.spike_hit":  "Spike hit",
   "sounds.roundabout.spike_miss":  "Spike extend",
+  "sounds.roundabout.vampire_crumble":  "Crumbling",
 
   "sounds.roundabout.mandom_rewind":  "Time Rewind",
 

@@ -130,6 +130,7 @@ public class ModItems {
     public static Item PAINTING_BIRTH_OF_VENUS;
 
     public static Item FLESH_BUCKET;
+    public static Item CHERRIES;
 
     public static CreativeModeTab FOG_BLOCK_ITEMS;
 

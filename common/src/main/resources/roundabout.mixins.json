@@ -66,6 +66,7 @@
     "fates.FateFoodDataMixin",
     "fates.FateLivingEntity",
     "fates.FatePlayerMixin",
+    "fates.FateServerPlayerMixin",
     "fates.FatesMobEffectMixin",
     "gravity.GravityAbstractArrowMixin",
     "gravity.GravityAbstractHorseMixin",

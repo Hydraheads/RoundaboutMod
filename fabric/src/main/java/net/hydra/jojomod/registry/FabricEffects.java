@@ -27,6 +27,8 @@ public class FabricEffects extends MobEffect{
             );
     public static final MobEffect GRAVITY_FLIP =
             register("gravity_flip", new FabricEffects(MobEffectCategory.NEUTRAL, 4906114));
+    public static final MobEffect WARDING =
+            register("warding", new FabricEffects(MobEffectCategory.BENEFICIAL, 16760283));
 
     protected FabricEffects(MobEffectCategory mobEffectCategory, int i) {
         super(mobEffectCategory, i);
@@ -45,5 +47,6 @@ public class FabricEffects extends MobEffect{
         ModEffects.FACELESS = FACELESS;
         ModEffects.MELTING = MELTING;
         ModEffects.GRAVITY_FLIP = GRAVITY_FLIP;
+        ModEffects.WARDING = WARDING;
     }
 }
