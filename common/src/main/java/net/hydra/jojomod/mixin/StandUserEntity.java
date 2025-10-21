@@ -3016,7 +3016,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "setSprinting", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$canSprintPlayer(boolean $$0, CallbackInfo ci) {
-        if (roundabout$getStandPowers().cancelSprint() || FateTypes.isTransforming(rdbt$this())){
+        if (roundabout$getStandPowers().cancelSprint() || FateTypes.isTransforming(rdbt$this()) ||
+                (FateTypes.takesSunlightDamage(rdbt$this()) && FateTypes.isInSunlight(rdbt$this()))){
             ci.cancel();
         }
     }
@@ -3290,13 +3291,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         MobEffectInstance melting = this.rdbt$this().getEffect(ModEffects.MELTING);
         if (melting != null) {
             if (melting.getAmplifier() >= 8) {
-                basis *= 0.7;
+                basis *= 0.7F;
             }
+        }
+        if (FateTypes.takesSunlightDamage(rdbt$this()) && FateTypes.isInSunlight(rdbt$this())){
+            basis *= 0.15F;
         }
 
         if (FateTypes.hasBloodHunger((LivingEntity) (Object) this)) {
             if (roundabout$isDrown || getAirSupply() <= 0) {
-                basis *= 0.5F;
+                if (!isUnderWater()) {
+                    basis *= ClientNetworking.getAppropriateConfig().vampireSettings.drownSpeedModifier;
+                }
             }
         }
 
