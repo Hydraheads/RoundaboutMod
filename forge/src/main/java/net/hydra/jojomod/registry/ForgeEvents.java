@@ -395,6 +395,7 @@ public class ForgeEvents {
         ModEffects.FACELESS = ForgeEffects.FACELESS.get();
         ModEffects.MELTING = ForgeEffects.MELTING.get();
         ModEffects.GRAVITY_FLIP = ForgeEffects.GRAVITY_FLIP.get();
+        ModEffects.WARDING = ForgeEffects.WARDING.get();
 
 
 
