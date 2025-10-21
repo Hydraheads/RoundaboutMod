@@ -574,6 +574,7 @@ public class MainUtil {
 
 
 
+
     public static boolean canAddItem(ItemStack itemStack, Inventory inventory) {
         boolean bl = false;
         for (ItemStack itemStack2 : inventory.items) {

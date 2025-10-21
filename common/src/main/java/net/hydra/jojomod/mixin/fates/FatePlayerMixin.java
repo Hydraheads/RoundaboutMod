@@ -81,27 +81,9 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
     @Unique
     public void rdbt$tickThroughVampire(){
         if (FateTypes.hasBloodHunger(this)){
-            Vec3 yes = this.getEyePosition();
-            Vec3 yes2 = this.position();
-
-            /**Vampires die under the sun, even under liquids*/
-            int waterReach = ClientNetworking.getAppropriateConfig().vampireSettings.sunDamageUnderwaterReach;
-            if (waterReach > 0) {
-                for (var i = 0; i < waterReach; i++) {
-                    if (level().getBlockState(BlockPos.containing(yes)).liquid()) {
-                        yes = yes.add(0, 1, 0);
-                    } else {
-                        i = 100;
-                    }
-                }
-            }
-            BlockPos atVec = BlockPos.containing(yes);
-            BlockPos atVec2 = BlockPos.containing(yes2);
-            if ((level().canSeeSky(atVec) || level().canSeeSky(atVec2)) &&
-                    this.level().dimension().location().getPath().equals("overworld") &&
-                    this.level().isDay()
+            if (FateTypes.isInSunlight(this)
             ){
-                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth()*2);
+                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth()*ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick);
             }
         } else if (FateTypes.isHuman(this)){
             if (MainUtil.isWearingBloodyStoneMask(this) && rdbt$vampireTransformation < 0){
