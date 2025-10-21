@@ -159,13 +159,14 @@ public class DiverDownModel<T extends DiverDownEntity> extends StandModel<T>{
         defaultModifiers(pEntity);
         defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
 
+        this.animate(pEntity.diverzip, DiverDownAnimations.DIVER_ZIP, pAgeInTicks, 1F);
         this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1F);
         this.animate(pEntity.miningBarrageAnimationState, DiverDownAnimations.Barrage, pAgeInTicks, 1f);
         this.animate(pEntity.barrageHurtAnimationState, DiverDownAnimations.BarrageDamage, pAgeInTicks, 2.5f);
         this.animate(pEntity.brokenBlockAnimationState, StandAnimations.BLOCKBREAK, pAgeInTicks, 1.8f);
         this.animate(pEntity.idleAnimationState, DiverDownAnimations.Idle, pAgeInTicks, 1f);
         this.animate(pEntity.idleAnimationState2, StandAnimations.FLOATY_IDLE, pAgeInTicks, 1f);
-        this.animate(pEntity.blockAnimationState, StandAnimations.BLOCK, pAgeInTicks, 1f);
+        this.animate(pEntity.blockAnimationState, DiverDownAnimations.BLOCK, pAgeInTicks, 1f);
         this.animate(pEntity.kick_barrage_windup, StandAnimations.KICK_BARRAGE_CHARGE, pAgeInTicks, 1f);
         this.animate(pEntity.kick_barrage, StandAnimations.KICK_BARRAGE, pAgeInTicks, 1.25f);
         this.animate(pEntity.kick_barrage_end, StandAnimations.KICK_BARRAGE_END, pAgeInTicks, 1f);
