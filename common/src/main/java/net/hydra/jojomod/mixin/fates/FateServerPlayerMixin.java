@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -57,7 +58,24 @@ public abstract class FateServerPlayerMixin extends Player {
                 }
             } else {
                 if (FateTypes.isVampire(this)){
-
+                    if (this.level() instanceof ServerLevel SL){
+                        if (MainUtil.isStandDamage($$0)) {
+                            Vec3 position = this.getPosition(1);
+                            Vec3 position2 = this.getEyePosition();
+                            Vec3 position3 = this.getEyePosition().subtract(this.getPosition(1)).multiply(new Vec3(0.5F,
+                                    0.5F, 0.5F));
+                            position3 = position3.add(this.getPosition(1));
+                            SL.sendParticles(ModParticles.SOUL_FIRE_CRUMBLE,
+                                    position.x, position.y, position.z,
+                                    0, 0.2, 0.2, 0.2, 0.1);
+                            SL.sendParticles(ModParticles.SOUL_FIRE_CRUMBLE,
+                                    position2.x, position2.y, position2.z,
+                                    0, 0.2, 0.2, 0.2, 0.1);
+                            SL.sendParticles(ModParticles.SOUL_FIRE_CRUMBLE,
+                                    position3.x, position3.y, position3.z,
+                                    0, 0.2, 0.2, 0.2, 0.1);
+                        }
+                    }
                 }
             }
         }
