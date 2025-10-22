@@ -393,6 +393,9 @@ public class StandHudRender {
 
     public static void renderDistanceHUDJustice(GuiGraphics context, Minecraft client, Player playerEntity,
                                                 int scaledWidth, int scaledHeight, int ticks, int x, StandEntity stand) {
+        int l;
+        int k;
+        int v;
         StandUser standUser = ((StandUser)playerEntity);
         StandPowers powers = standUser.roundabout$getStandPowers();
         int mode = powers.getPilotMode();
@@ -403,9 +406,27 @@ public class StandHudRender {
         } else if (mode == 2){
             distance = (int) MainUtil.cheapDistanceTo2(stand.getX(),stand.getZ(),playerEntity.getX(),playerEntity.getZ());
         }
+        int blt = (int) Math.floor(((double) 182 /maxDistance)*(distance));
+        l = scaledHeight - 32 + 3;
+        context.blit(StandIcons.JOJO_ICONS, x, l, 0, 131, 182, 5);
+        if (blt > 0) {
+            context.blit(StandIcons.JOJO_ICONS, x, l, 0, 136, blt, 5);
+        }
 
-        renderNumberHUD(context, client, scaledWidth, scaledHeight, x, distance, maxDistance, StandIcons.JOJO_ICONS, 0, 131,16173823);
+        int u = 183;
+        k = scaledWidth/2 - 5;
+        l = scaledHeight - 31 - 5;
 
+        int y = 16173823;
+        Font renderer = client.font;
+        String $$6 = distance + "";
+        int $$7 = (scaledWidth - renderer.width($$6)) / 2;
+        int $$8 = scaledHeight - 31 - 4;
+        context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7 - 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8, y, false);
     }
     public static void renderGuardHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                       int scaledWidth, int scaledHeight, int ticks, int x,
