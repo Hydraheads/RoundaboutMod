@@ -1,11 +1,13 @@
 package net.hydra.jojomod.mixin.fates;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.access.AccessFateFoodData;
@@ -16,6 +18,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -81,27 +84,9 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
     @Unique
     public void rdbt$tickThroughVampire(){
         if (FateTypes.hasBloodHunger(this)){
-            Vec3 yes = this.getEyePosition();
-            Vec3 yes2 = this.position();
-
-            /**Vampires die under the sun, even under liquids*/
-            int waterReach = ClientNetworking.getAppropriateConfig().vampireSettings.sunDamageUnderwaterReach;
-            if (waterReach > 0) {
-                for (var i = 0; i < waterReach; i++) {
-                    if (level().getBlockState(BlockPos.containing(yes)).liquid()) {
-                        yes = yes.add(0, 1, 0);
-                    } else {
-                        i = 100;
-                    }
-                }
-            }
-            BlockPos atVec = BlockPos.containing(yes);
-            BlockPos atVec2 = BlockPos.containing(yes2);
-            if ((level().canSeeSky(atVec) || level().canSeeSky(atVec2)) &&
-                    this.level().dimension().location().getPath().equals("overworld") &&
-                    this.level().isDay()
+            if (FateTypes.isInSunlight(this)
             ){
-                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth()*2);
+                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth()*ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick);
             }
         } else if (FateTypes.isHuman(this)){
             if (MainUtil.isWearingBloodyStoneMask(this) && rdbt$vampireTransformation < 0){
@@ -170,16 +155,9 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
         }
     }
 
-    /**You cannot get hurt while transformed*/
-    @Inject(method = "hurt", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$hurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> cir) {
-        if (!this.level().isClientSide()) {
-            if (rdbt$vampireTransformation >= 0){
-                cir.setReturnValue(false);
-                return;
-            }
-        }
-    }
+
+
+    //((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_BACKWARD);
 
     protected FatePlayerMixin(EntityType<? extends LivingEntity> $$0, Level $$1) {
         super($$0, $$1);

@@ -51,6 +51,8 @@
   "item.roundabout.lucky_lipstick": "Lucky Lipstick",
   "item.roundabout.lucky_lipstick.desc": "For better trades, apply until you sleep",
   "item.roundabout.sacrificial_dagger": "Sacrificial Dagger",
+  "item.roundabout.cherries": "Cherries",
+
 
   "item.roundabout.star_platinum_disc": "Stand Disc",
   "item.roundabout.the_world_disc": "Stand Disc",
@@ -203,6 +205,7 @@
   "effect.roundabout.faceless": "Faceless",
   "effect.roundabout.melting": "Melting",
   "effect.roundabout.gravity_flip": "Gravity",
+  "effect.roundabout.warding": "Warding",
 
   "item.roundabout.creative_only.info": "Creative Only",
 
@@ -352,6 +355,7 @@
   "block.roundabout.wall_street_sign_yield": "Sign Plate: Yield",
   "block.roundabout.wall_street_sign_danger": "Sign Plate: Danger",
   "block.roundabout.flesh_block": "Flesh Chunk",
+  "block.roundabout.cultivation_pot": "Cultivation Pot",
 
   "itemgroup.jojo": "Roundabout",
   "itemgroup.jojo_discs": "Stand Discs",
@@ -570,6 +574,7 @@
   "sounds.roundabout.heel_stomp":  "Leg lowers",
   "sounds.roundabout.spike_hit":  "Spike hit",
   "sounds.roundabout.spike_miss":  "Spike extend",
+  "sounds.roundabout.vampire_crumble":  "Crumbling",
 
   "sounds.roundabout.mandom_rewind":  "Time Rewind",
 
@@ -1079,6 +1084,8 @@
 
   "ability.roundabout.diver_selection": "Diver Selection",
   "ability.roundabout.diver_selection.desc": "Opens an impairment wheel which you can apply effects onto yourself",
+  "ability.roundabout.diver_zip": "Diver Zip",
+  "ability.roundabout.diver_zip.desc": "Your stand dives into the ground and zips you around! Control your direction using arrow keys",
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Locked",
@@ -2148,6 +2155,10 @@
 
   "config.roundabout.sunDamageUnderwaterReach.name": "Underwater Sun Damage Reach",
   "config.roundabout.sunDamageUnderwaterReach.desc": "Change how far underwater sunlight reaches. Zero makes sunlight not intrude on water.",
+  "config.roundabout.drownSpeedModifier.name": "Vampire Oxygen Swim Slowdown",
+  "config.roundabout.drownSpeedModifier.desc": "When drowning, instead of taking damage, vampiric players are slowed down using this multiplier. Lower = slower.",
+  "config.roundabout.sunDamagePercentPerDamageTick.name": "Sun Damage Per Dose",
+  "config.roundabout.sunDamagePercentPerDamageTick.desc": "How much of your health is drained, percentage wise of max health, per hit under the sun as a vampiric player?",
 
   "config.roundabout.levelsToGetStand.name": "Arrow Stand Level Cost",
   "config.roundabout.levelsToGetStand.desc": "Obtaining a stand from a Stand Arrow costs 15 levels by default.",

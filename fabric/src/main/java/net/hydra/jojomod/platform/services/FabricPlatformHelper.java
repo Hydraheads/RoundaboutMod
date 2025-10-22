@@ -5,8 +5,10 @@ import net.fabricmc.fabric.api.tag.convention.v1.ConventionalEntityTypeTags;
 import net.fabricmc.fabric.impl.datagen.FabricTagBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
 
 public class FabricPlatformHelper implements IPlatformHelper {
 
@@ -25,6 +27,9 @@ public class FabricPlatformHelper implements IPlatformHelper {
     @Override
     public boolean isModLoaded(String modId) {
         return FabricLoader.getInstance().isModLoaded(modId);
+    }
+    public boolean getFluidTagPushCode(Entity ent, TagKey<Fluid> $$0, double $$1){
+        return true;
     }
 
     @Override

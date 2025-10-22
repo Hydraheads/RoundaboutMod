@@ -71,6 +71,7 @@ import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.npc.*;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.inventory.AbstractFurnaceMenu;
@@ -560,11 +561,28 @@ public class MainUtil {
                     player.inventoryMenu.getSlot(integer).setByPlayer(itemstack);
                     player.inventoryMenu.broadcastChanges();
                 } else if (flag && flag2) {
-                    player.drop(itemstack, true);
+                    if (canAddItem(itemstack,player.getInventory())){
+                        addItem(player,itemstack);
+                    } else {
+                        player.drop(itemstack, true);
+                    }
                 }
 
             }
         }
+    }
+
+
+
+
+    public static boolean canAddItem(ItemStack itemStack, Inventory inventory) {
+        boolean bl = false;
+        for (ItemStack itemStack2 : inventory.items) {
+            if (!itemStack2.isEmpty() && (!ItemStack.isSameItemSameTags(itemStack2, itemStack) || itemStack2.getCount() >= itemStack2.getMaxStackSize())) continue;
+            bl = true;
+            break;
+        }
+        return bl;
     }
 
     public static boolean isWearingEitherStoneMask(Entity ent){

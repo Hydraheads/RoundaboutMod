@@ -143,11 +143,11 @@ public class CorpseBuildBreakGoal extends Goal {
                 this.fallenMob.getNavigation().moveTo(this.fallenMob,1);
 
                 if(this.fallenMob.getMainHandItem().getItem() instanceof BlockItem block){
-                    Roundabout.LOGGER.info("1");
+
                     if (block.place(new BlockPlaceContext(this.owner,this.fallenMob.swingingArm,this.fallenMob.getMainHandItem().copy(),blockHit)).consumesAction()){
                         //A check for a competent claims mod
                         this.fallenMob.level().destroyBlock(useOn,false,this.owner);
-                        Roundabout.LOGGER.info("2");
+
                         //if the block wasn't destroyed, this blockstate won't be air, which means that we shouldn't be placing here
                         if(!this.fallenMob.level().getBlockState(useOn).isAir()){
                             //so, we remove the block we placed as a test
@@ -181,10 +181,10 @@ public class CorpseBuildBreakGoal extends Goal {
                         if(this.fallenMob.getMainHandItem().isDamageableItem()) {
                             if(getEnchLevel("minecraft:unbreaking") != -1){
                                 if(this.fallenMob.getRandom().nextIntBetweenInclusive(1,100) <= 100/(getEnchLevel("minecraft:unbreaking")+1)){
-                                    this.fallenMob.getMainHandItem().setDamageValue(this.fallenMob.getMainHandItem().getDamageValue() + 1);
+                                    this.fallenMob.getMainHandItem().hurtAndBreak(1,  this.fallenMob, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 
                                 }
-                            } else{this.fallenMob.getMainHandItem().setDamageValue(this.fallenMob.getMainHandItem().getDamageValue() + 1);}
+                            } else{this.fallenMob.getMainHandItem().hurtAndBreak(1,  this.fallenMob, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));}
 
                         }
                         this.stop();
@@ -237,10 +237,10 @@ public class CorpseBuildBreakGoal extends Goal {
                             if(this.fallenMob.getMainHandItem().isDamageableItem()) {
                                 if(getEnchLevel("minecraft:unbreaking") != -1){
                                     if(this.fallenMob.getRandom().nextIntBetweenInclusive(1,100) <= 100/(getEnchLevel("minecraft:unbreaking")+1)){
-                                        this.fallenMob.getMainHandItem().setDamageValue(this.fallenMob.getMainHandItem().getDamageValue() + 1);
+                                        this.fallenMob.getMainHandItem().hurtAndBreak(1,  this.fallenMob, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 
                                     }
-                                } else{this.fallenMob.getMainHandItem().setDamageValue(this.fallenMob.getMainHandItem().getDamageValue() + 1);}
+                                } else{this.fallenMob.getMainHandItem().hurtAndBreak(1,  this.fallenMob, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));}
 
                             }
                             this.stop();

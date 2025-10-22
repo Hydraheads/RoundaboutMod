@@ -267,6 +267,7 @@ public class FabricSounds {
         addSound(ModSounds.SPIKE_HIT_ID, ModSounds.SPIKE_HIT_EVENT);
         addSound(ModSounds.SPIKE_MISS_ID, ModSounds.SPIKE_MISS_EVENT);
         addSound(ModSounds.VAMPIRE_DRAIN_ID, ModSounds.VAMPIRE_DRAIN_EVENT);
+        addSound(ModSounds.VAMPIRE_CRUMBLE_ID, ModSounds.VAMPIRE_CRUMBLE_EVENT);
 
         addSound(ModSounds.EXTEND_SPIKES_ID, ModSounds.EXTEND_SPIKES_EVENT);
         addSound(ModSounds.WALL_LATCH_ID, ModSounds.WALL_LATCH_EVENT);

@@ -2,6 +2,7 @@ package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.event.powers.visagedata.aesthetician.*;
 import net.hydra.jojomod.item.*;
@@ -10,6 +11,7 @@ import net.hydra.jojomod.item.paintings.MonaLisaPaintingItem;
 import net.hydra.jojomod.item.paintings.VanGoughPaintingItem;
 import net.hydra.jojomod.stand.powers.*;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.block.Blocks;
@@ -28,6 +30,13 @@ public class ForgeItems {
     public static final RegistryObject<Item> COFFEE_GUM = addToTab(ITEMS.register("coffee_gum",
             () -> new Item(new Item.Properties()
                     .food(ModFoodComponents.COFFEE_GUM)
+            )));
+
+    public static final RegistryObject<Item> CHERRIES = addToWIPTab(ITEMS.register("cherries",
+            () -> new Item(new Item.Properties()
+                    .food(new FoodProperties.Builder().nutrition(1).saturationMod(0.0F).alwaysEat()
+                            .effect(new MobEffectInstance(ForgeEffects.WARDING.get(), 600, 0), 1.0F)
+                            .build())
             )));
 
     public static final RegistryObject<Item> STAND_ARROW = addToTab(ITEMS.register("stand_arrow",
@@ -224,6 +233,10 @@ public class ForgeItems {
             )));
     public static final RegistryObject<BlockItem> WOOL_STAIRS_BROWN_ITEM = addToBuildingTab(ITEMS.register("wool_stairs_brown",
             () -> new BlockItem(ForgeBlocks.WOOL_STAIRS_BROWN.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<BlockItem> CULTIVATION_POT_ITEM = addToWIPTab(ITEMS.register("cultivation_pot",
+            () -> new BlockItem(ForgeBlocks.CULTIVATION_POT.get(),
                     new Item.Properties()
             )));
     public static final RegistryObject<BlockItem> LOCACACA_CACTUS_ITEM = addToBuildingTab(ITEMS.register("locacaca_cactus",

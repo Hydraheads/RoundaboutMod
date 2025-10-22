@@ -41,6 +41,9 @@ public class ForgeEffects{
     public static final RegistryObject<MobEffect> GRAVITY_FLIP =
             POTION_EFFECTS.register("gravity_flip", () ->
                     new Effect(MobEffectCategory.HARMFUL, 4906114));
+    public static final RegistryObject<MobEffect> WARDING =
+            POTION_EFFECTS.register("warding", () ->
+                    new Effect(MobEffectCategory.BENEFICIAL, 16760283));
 
 
     public static class Effect extends MobEffect{

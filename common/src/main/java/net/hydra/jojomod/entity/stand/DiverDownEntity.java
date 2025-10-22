@@ -1,6 +1,5 @@
 package net.hydra.jojomod.entity.stand;
 
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -22,9 +21,7 @@ public class DiverDownEntity extends FollowingStandEntity {
     public final AnimationState kick_barrage = new AnimationState();
     public final AnimationState kick_barrage_end = new AnimationState();
     public final AnimationState kick_barrage_windup = new AnimationState();
-    public final AnimationState finalKickWindup = new AnimationState();
-    public final AnimationState finalKick = new AnimationState();
-    public final AnimationState finalPunch = new AnimationState();
+    public final AnimationState diverzip = new AnimationState();
     public final AnimationState hideLegEntirely = new AnimationState();
     @Override
     public void setupAnimationStates() {
