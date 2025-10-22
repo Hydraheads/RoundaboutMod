@@ -608,7 +608,7 @@ public class ModBlocks {
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.PODZOL)
                     .instrument(NoteBlockInstrument.BANJO)
-                    .strength(5.0F, 1.0F)
+                    .strength(2.5F, 1.0F)
                     .sound(SoundType.HONEY_BLOCK)
     );
     public static BubbleScaffoldBlock BUBBLE_SCAFFOLD_BLOCK_PROPERTIES = new BubbleScaffoldBlock(

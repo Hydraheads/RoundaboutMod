@@ -312,16 +312,20 @@ public class ForgeSounds {
             register(ModSounds.RATT_PLACE, ModSounds.RATT_PLACE_ID);
     public static final RegistryObject<SoundEvent> RATT_SCOPE_EVENT =
             register(ModSounds.RATT_SCOPE, ModSounds.RATT_SCOPE_ID);
-    public static final RegistryObject<SoundEvent> RATT_DESCOPE =
+    public static final RegistryObject<SoundEvent> RATT_DESCOPE_EVENT =
             register(ModSounds.RATT_DESCOPE, ModSounds.RATT_DESCOPE_ID);
     public static final RegistryObject<SoundEvent> RATT_THUNK_EVENT =
             register(ModSounds.RATT_DART_THUNK, ModSounds.RATT_DART_THUNK_ID);
     public static final RegistryObject<SoundEvent> RATT_IMPACT_EVENT =
             register(ModSounds.RATT_DART_IMPACT, ModSounds.RATT_DART_IMPACT_ID);
-    public static final RegistryObject<SoundEvent> RATT_LOADING =
+    public static final RegistryObject<SoundEvent> RATT_LOADING_EVENT =
             register(ModSounds.RATT_LOADING, ModSounds.RATT_LOADING_ID);
-    public static final RegistryObject<SoundEvent> RATT_FIRING =
+    public static final RegistryObject<SoundEvent> RATT_FIRING_EVENT =
             register(ModSounds.RATT_FIRING, ModSounds.RATT_FIRING_ID);
+    public static final RegistryObject<SoundEvent> RATT_LEAP_EVENT =
+            register(ModSounds.RATT_LEAP, ModSounds.RATT_LEAP_ID);
+    public static final RegistryObject<SoundEvent> RATT_MODE_CHANGE =
+            register(ModSounds.RATT_MODE_CHANGE, ModSounds.RATT_MODE_CHANGE_ID);
 
 
     public static final RegistryObject<SoundEvent> THE_WORLD_OVER_HEAVEN_EVENT =

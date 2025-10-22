@@ -361,6 +361,36 @@ public class StandHudRender {
 
     }
 
+    // basic function which displays a xp bar with a min and a max, feel free to change around if needed
+    // bar is the y function of
+    public static void renderNumberHUD(GuiGraphics context, Minecraft client, int scaledWidth, int scaledHeight,
+                                       int x, double value, double max, ResourceLocation file, int bx, int by, int color) {
+        int l;
+        int k;
+        int v;
+        int blt = (int) Math.floor(((double) 182 / max)*(value));
+        l = scaledHeight - 32 + 3;
+        context.blit(file, x, l, bx, by, 182, 5);
+        if (blt > 0) {
+            context.blit(file, x, l, bx, by+5, blt, 5);
+        }
+
+        int u = 183;
+        k = scaledWidth/2 - 5;
+        l = scaledHeight - 31 - 5;
+
+        int y = color;
+        Font renderer = client.font;
+        String $$6 = (int)value + "";
+        int $$7 = (scaledWidth - renderer.width($$6)) / 2;
+        int $$8 = scaledHeight - 31 - 4;
+        context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7 - 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8, y, false);
+    }
+
     public static void renderDistanceHUDJustice(GuiGraphics context, Minecraft client, Player playerEntity,
                                                 int scaledWidth, int scaledHeight, int ticks, int x, StandEntity stand) {
         int l;

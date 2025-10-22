@@ -80,6 +80,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public WalkingHeartSettings walkingHeartSettings;
     @NestedOption(group = "modded")
+    public RattSettings rattSettings;
+    @NestedOption(group = "modded")
     public TheWorldSettings theWorldSettings;
     @NestedOption(group = "modded")
     public StarPlatinumSettings starPlatinumSettings;
@@ -599,6 +601,21 @@ public class Config implements Cloneable {
         public Integer walkingHeartMaxHits;
         @BooleanOption(group = "inherit", value = false)
         public Boolean fallProtectionOnRelease;
+    }
+
+    public static class RattSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableRatt;
+        @FloatOption(group = "inherit", value = 1F, min = 0F, max = 100F)
+        public Float rattAttackBonusOnMobs;
+        @FloatOption(group = "inherit", value = 1F, min = 0F, max = 100F)
+        public Float rattAttackBonusOnBosses;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 100)
+        public Integer rattMaxDespawnRange;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 100)
+        public Integer rattChargePerHit;
+        @IntOption(group = "inherit", value = 2, min = 0, max = 72000)
+        public Integer rattManualChargeRate;
     }
 
     public static class AchtungSettings {

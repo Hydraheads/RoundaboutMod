@@ -690,11 +690,14 @@
 
   "sounds.roundabout.ratt_summon":  "Chittering Noises",
   "sounds.roundabout.ratt_place":  "Stand Summoned",
+  "sounds.roundabout.ratt_deplace":  "Ratt Desummoned",
   "sounds.roundabout.ratt_scope":  "Scope Whirr",
   "sounds.roundabout.ratt_dart_impact": "Dart Impact",
   "sounds.roundabout.ratt_dart_thunk": "Dart Lands",
   "sounds.roundabout.ratt_loading": "Ominous Winding",
   "sounds.roundabout.ratt_firing": "Ratt Firing",
+  "sounds.roundabout.ratt_leap": "Mini Leap",
+  "sounds.roundabout.ratt_mode_change": "Mode Change",
 
   "sounds.roundabout.arcade_impale":  "[Arcade Impale]",
   "sounds.roundabout.arcade_long_ts":  "[Stop Time]",
@@ -1354,7 +1357,7 @@
   "unlock_skin.roundabout.justice.bad_bone": "Justice: Bad to The Bone Skin Unlocked!",
   "unlock_skin.roundabout.magicians_red.chagaroth": "Magician's Dread Skin Unlocked!",
   "unlock_skin.roundabout.soft_and_wet.kira": "Killer Queen 8 Skin Unlocked!",
-  "unlock_skin.roundabout.ratt.rat": "Rat Unlocked?!",
+  "unlock_skin.roundabout.ratt.rat": "Rat? Unlocked!",
   "unlock_skin.roundabout.walking_heart.spider": "Webbing Heart Skin Unlocked!",
 
   "justice.morph.player": "Player",
@@ -1571,6 +1574,8 @@
   "config.roundabout.enableJustice.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableWalkingHeart.name": "Enable Stand",
   "config.roundabout.enableWalkingHeart.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+  "config.roundabout.enableRatt.name": "Enable Stand",
+  "config.roundabout.enableRatt.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableMandom.name": "Enable Stand",
   "config.roundabout.enableMandom.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableAchtungBaby.name": "Enable Stand",
@@ -1740,6 +1745,22 @@
   "config.roundabout.walkingHeartAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
   "config.roundabout.walkingHeartAttackMultOnMobs.name": "Mob Damage Multiplier",
   "config.roundabout.walkingHeartAttackMultOnMobs.desc": "How much damage the stand deals to every other mob, same math as above.",
+
+  "config.roundabout.rattAttackBonusOnMobs.name": "Bonus Mob Damage",
+  "config.roundabout.rattAttackBonusOnMobs.desc": "How much bonus damage Ratt darts deal to a mob.",
+  "config.roundabout.rattAttackBonusOnBosses.name": "Bonus Boss Damage",
+  "config.roundabout.rattAttackBonusOnBosses.desc": "Since Boss mobs cannot receive melt, they instead take a flat bonus damage ",
+
+  "config.roundabout.rattMaxDespawnRange.name": "Ratt Despawn Range",
+  "config.roundabout.rattMaxDespawnRange.desc": "How far you can go from Ratt until they despawn.",
+
+  "config.roundabout.rattChargePerHit.name": "Manual Charge Per Hit",
+  "config.roundabout.rattChargePerHit.desc": "How much manual charge Ratt gets from hitting a placed shot successfully. Default is 30, which means 3 hits to fully charge ",
+  "config.roundabout.rattManualChargeRate.name": "Manual Ratt Charge Speed",
+  "config.roundabout.rattManualChargeRate.desc": "How quickly manually charging Ratt takes. default is 2 per tick which equals about 2.5 seconds to reach full charge.",
+
+
+
 
   "config.roundabout.softAndWetAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.softAndWetAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
@@ -2213,6 +2234,7 @@
   "config.roundabout.softAndWetSettings.name": "Soft And Wet",
   "config.roundabout.magiciansRedSettings.name": "Magician's Red",
   "config.roundabout.walkingHeartSettings.name": "Walking Heart",
+  "config.roundabout.rattSettings.name": "Ratt",
   "config.roundabout.justiceSettings.name": "Justice",
   "config.roundabout.cinderellaSettings.name": "Cinderella",
   "config.roundabout.heyYaSettings.name": "Hey Ya",
@@ -2307,7 +2329,6 @@
 
   "config.roundabout.walkingHeartMaxHits.name": "Max Planted Hits",
   "config.roundabout.walkingHeartMaxHits.desc": "How many hits can you take in heel planted/wall walking mode before you are knocked out of that state.",
-
   "config.roundabout.walkingHeartCooldownPerHit.name": "Cooldown Per Hit",
   "config.roundabout.walkingHeartCooldownPerHit.desc": "How many cooldown ticks per hit in heel planted/wall walking mode.",
 
