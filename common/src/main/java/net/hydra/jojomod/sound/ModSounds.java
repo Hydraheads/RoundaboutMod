@@ -605,6 +605,9 @@ public class ModSounds {
     public static final String RATT_PLACE = "ratt_place";
     public static final ResourceLocation RATT_PLACE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RATT_PLACE);
     public static SoundEvent RATT_PLACE_EVENT = SoundEvent.createVariableRangeEvent(RATT_PLACE_ID);
+    public static final String RATT_DEPLACE = "ratt_deplace";
+    public static final ResourceLocation RATT_DEPLACE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RATT_DEPLACE);
+    public static SoundEvent RATT_DEPLACE_EVENT = SoundEvent.createVariableRangeEvent(RATT_DEPLACE_ID);
     public static final String RATT_SCOPE = "ratt_scope";
     public static final ResourceLocation RATT_SCOPE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RATT_SCOPE);
     public static SoundEvent RATT_SCOPE_EVENT = SoundEvent.createVariableRangeEvent(RATT_SCOPE_ID);
@@ -623,6 +626,14 @@ public class ModSounds {
     public static final String RATT_FIRING = "ratt_firing";
     public static final ResourceLocation RATT_FIRING_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RATT_FIRING);
     public static SoundEvent RATT_FIRING_EVENT = SoundEvent.createVariableRangeEvent(RATT_FIRING_ID);
+    public static final String RATT_LEAP = "ratt_leap";
+    public static final ResourceLocation RATT_LEAP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RATT_LEAP);
+    public static SoundEvent RATT_LEAP_EVENT = SoundEvent.createVariableRangeEvent(RATT_LEAP_ID);
+    public static final String RATT_MODE_CHANGE = "ratt_mode_change";
+    public static final ResourceLocation RATT_MODE_CHANGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RATT_MODE_CHANGE);
+    public static SoundEvent RATT_MODE_CHANGE_EVENT = SoundEvent.createVariableRangeEvent(RATT_MODE_CHANGE_ID);
+
+
 
     public static final String UNLOCK_SKIN = "unlock_skin";
     public static final ResourceLocation UNLOCK_SKIN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+UNLOCK_SKIN);

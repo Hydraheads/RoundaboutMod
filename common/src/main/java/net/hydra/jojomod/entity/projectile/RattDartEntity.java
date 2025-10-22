@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -11,6 +12,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -26,6 +28,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.boss.EnderDragonPart;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -177,17 +181,21 @@ public class RattDartEntity extends AbstractArrow {
     }
     public void applyEffect(LivingEntity $$1) {
         if (MainUtil.isBossMob($$1)) {
-            DamageSource DS = ModDamageTypes.of($$1.level(), ModDamageTypes.STAND, this.getOwner());
-            $$1.hurt(DS,1);
+            DamageSource DS = ModDamageTypes.of($$1.level(), ModDamageTypes.MELTING, this.getOwner());
+            $$1.hurt(DS,ClientNetworking.getAppropriateConfig().rattSettings.rattAttackBonusOnBosses);
             return;
         }
 
+        MobEffectInstance effect = $$1.getEffect(ModEffects.MELTING);
+
         int stack = -1;
-        if ( $$1.getEffect(ModEffects.MELTING) != null) {
-            stack = $$1.getEffect(ModEffects.MELTING).getAmplifier() + this.melting;
+        if ( effect != null) {
+            stack = effect.getAmplifier() + this.melting;
         } else { stack = melting -1;}
         if (stack != -1) {
-            ((LivingEntity) $$1).addEffect(new MobEffectInstance(ModEffects.MELTING, 900, stack), this);
+            int duration =(int)  (600 * (this.charged > PowersRatt.MaxThreshold ? 1.5 : 1));
+            int originalDuration = effect != null ? effect.getDuration() : 0;
+            ((LivingEntity) $$1).addEffect(new MobEffectInstance(ModEffects.MELTING, Math.max(duration,originalDuration) , stack), this);
         }
     }
 
@@ -210,28 +218,37 @@ public class RattDartEntity extends AbstractArrow {
 
         }
 
-        Entity $$4 = this.getOwner();
-        DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.STAND, $$4);
-        SoundEvent $$6 = ModSounds.RATT_DART_IMPACT_EVENT;
-        if ($$1.hurt($$5,this.damage + (($$1 instanceof Mob) ? 1F : 0) )) {
+        float degrees = MainUtil.getLookAtEntityYaw(this, $$1);
+        float force = 0.45F;
+        if (this.charged >= 61) {
+            force *= 1.2;
+            if (this.charged >= PowersRatt.MaxThreshold) {
+                force *= 2F;
+            }
+        }
+        float blockDamp = 1.1F;
+        force /= blockDamp;
 
-            float degrees = MainUtil.getLookAtEntityYaw(this, $$1);
-            float force = 0.9F;
-            if (this.charged >= 61) {
-                force = 0.8F;
-                if (this.charged >= PowersRatt.MaxThreshold) {
-                    force = 1.35F;
+
+        Entity $$4 = this.getOwner();
+        DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.STAND, this,$$4);
+        SoundEvent $$6 = ModSounds.RATT_DART_IMPACT_EVENT;
+        if ($$1.hurt($$5,this.damage + (($$1 instanceof Mob) ? ClientNetworking.getAppropriateConfig().rattSettings.rattAttackBonusOnMobs : 0) )) {
+            force *= blockDamp;
+
+
+            if (charged == 51) {
+                if ( ((StandUser)$$4).roundabout$getStandPowers() instanceof PowersRatt PR ) {
+                    if ($$4 instanceof Player P) {
+                        S2CPacketUtil.sendIntPowerDataPacket(P, PowersRatt.UPDATE_CHARGE, Math.min(PR.getChargeTime()+ClientNetworking.getAppropriateConfig().rattSettings.rattChargePerHit,100));
+                    }
                 }
             }
-            MainUtil.takeKnockbackWithY($$1, force,
-                    Mth.sin(degrees * ((float) Math.PI / 180)),
-                    Mth.sin(-35 * ((float) Math.PI / 180)),
-                    -Mth.cos(degrees * ((float) Math.PI / 180)));
 
             if ($$4 instanceof LivingEntity LE) {
                 if ( ((StandUser)$$4).roundabout$getStandPowers() instanceof PowersRatt PR ) {
                     if ($$1 instanceof LivingEntity l) {
-                        PR.addEXP(1,l);
+                        PR.addEXP(2 + ((!PR.isPlaced() && PR.isAuto()) ? 2 : 0) ,l);
                     }
                 }
                 LE.setLastHurtMob($$1);
@@ -241,8 +258,13 @@ public class RattDartEntity extends AbstractArrow {
                 return;
             }
 
-
-            if ($$1 instanceof LivingEntity $$7) {
+            if ($$1 instanceof LivingEntity || ($$1 instanceof EnderDragonPart)) {
+                LivingEntity $$7;
+                if ($$1 instanceof LivingEntity L) {
+                    $$7 = L;
+                } else {
+                    $$7 = ((EnderDragonPart)$$1).parentMob;
+                }
                 applyEffect($$7);
                 $$1.setDeltaMovement($$1.getDeltaMovement().multiply(0.4,0.4,0.4));
                 if ($$4 instanceof LivingEntity) {
@@ -254,6 +276,19 @@ public class RattDartEntity extends AbstractArrow {
             }
             this.playSound($$6, 1.0F, (this.random.nextFloat() * 0.2F + 0.9F));
         }
+
+        if ($$1 instanceof Mob) {
+            force /= 2;
+        } else if ($$1 instanceof Player P) {
+            if (P.isCreative()) {
+                force = 0;
+            }
+        }
+        MainUtil.takeUnresistableKnockbackWithY($$1, force,
+                Mth.sin(degrees * ((float) Math.PI / 180)),
+                Mth.sin(-25 * ((float) Math.PI / 180)),
+                -Mth.cos(degrees * ((float) Math.PI / 180)));
+
         this.discard();
 
     }

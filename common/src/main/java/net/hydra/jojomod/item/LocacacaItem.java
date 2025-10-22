@@ -19,6 +19,7 @@ public class LocacacaItem extends Item {
     public void randomizeStone(LivingEntity entity){
         byte curse = ((StandUser)entity).roundabout$getLocacacaCurse();
         if (curse < 0){
+            entity.removeEffect(ModEffects.MELTING);
             float health = entity.getHealth();
             float maxHealth = entity.getMaxHealth();
             health += (maxHealth*1F);

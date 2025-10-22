@@ -918,6 +918,12 @@
       "roundabout:ratt_place"
     ]
   },
+  "ratt_deplace": {
+    "subtitle": "sounds.roundabout.ratt_deplace",
+    "sounds": [
+      "roundabout:ratt_deplace"
+    ]
+  },
   "ratt_scope": {
     "subtitle": "sounds.roundabout.ratt_scope",
     "sounds": [
@@ -954,6 +960,21 @@
       "roundabout:ratt_firing"
     ]
   },
+  "ratt_leap": {
+    "subtitle": "sounds.roundabout.ratt_leap",
+    "sounds": [
+      "roundabout:ratt_leap"
+    ]
+  },
+  "ratt_mode_change": {
+    "subtitle": "sounds.roundabout.ratt_mode_change",
+    "sounds": [
+      "roundabout:ratt_mode_change"
+    ]
+  },
+
+
+
 
   "ova_summon": {
     "subtitle": "sounds.roundabout.ova_summon",

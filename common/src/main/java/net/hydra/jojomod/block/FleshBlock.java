@@ -3,6 +3,7 @@ package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.entity.projectile.FleshPileEntity;
 import net.hydra.jojomod.entity.projectile.RattDartEntity;
+import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersRatt;
@@ -140,24 +141,23 @@ public class FleshBlock
     public void entityInside(BlockState $$0, Level $$1, BlockPos $$2, Entity entity) {
         double y = entity.getY()-((int)entity.getY());
         AABB bounds = VISUAL_SHAPE[$$0.getValue(LAYERS)].bounds();
-        if ( !(entity instanceof RattDartEntity) && !(entity instanceof FleshPileEntity) ) {
-            if (y <= bounds.getYsize()) {
-                boolean cond = false;
-                if (entity instanceof LivingEntity L) {
-                    StandPowers S = ((StandUser) L).roundabout$getStandPowers();
-                    if (S != null && S instanceof PowersRatt) {
-                        cond = true;
-                    }
+        if (entity instanceof RattDartEntity || entity instanceof FleshPileEntity || entity instanceof RattEntity) {return;}
+        if (y <= bounds.getYsize()) {
+            boolean cond = false;
+            if (entity instanceof LivingEntity L) {
+                StandPowers S = ((StandUser) L).roundabout$getStandPowers();
+                if (S != null && S instanceof PowersRatt) {
+                    cond = true;
                 }
-                Vec3 vec3 = entity.getDeltaMovement();
-                if (!cond && !entity.isInvulnerable()) {
-                    float clamp = $$0.getValue(LAYERS) == 1 ? 0.001F : 0.0005F;
-                    entity.setDeltaMovement(new Vec3(
-                            Mth.clamp(vec3.x, -clamp, clamp),
-                            ($$0.getValue(LAYERS) == 1 && vec3.y > 0) ? 0 : -0.05F,
-                            Mth.clamp(vec3.z, -clamp, clamp)
-                    ));
-                }
+            }
+            Vec3 vec3 = entity.getDeltaMovement();
+            if (!cond && !entity.isInvulnerable()) {
+                float clamp = $$0.getValue(LAYERS) == 1 ? 0.001F : 0.0005F;
+                entity.setDeltaMovement(new Vec3(
+                        Mth.clamp(vec3.x, -clamp, clamp),
+                        ($$0.getValue(LAYERS) == 1 && vec3.y > 0) ? 0 : -0.05F,
+                        Mth.clamp(vec3.z, -clamp, clamp)
+                ));
             }
         }
         if (entity.fallDistance > entity.getMaxFallDistance()) {

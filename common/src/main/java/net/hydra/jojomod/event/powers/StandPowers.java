@@ -43,6 +43,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -794,6 +795,16 @@ public class StandPowers {
         return true;
     }
 
+    public boolean isUsingShield(LivingEntity entity) {
+        if (entity.isUsingItem()) {
+            InteractionHand hand = entity.getUsedItemHand();
+            ItemStack item = entity.getItemInHand(hand);
+            if (item.getItem() instanceof ShieldItem) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**If eating or using items in general shouldn't cancel certain abilties, put them as exceptions here*/
     public boolean shouldReset(byte activeP){
