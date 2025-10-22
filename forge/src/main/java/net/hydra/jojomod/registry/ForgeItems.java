@@ -235,6 +235,10 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.WOOL_STAIRS_BROWN.get(),
                     new Item.Properties()
             )));
+    public static final RegistryObject<BlockItem> CULTIVATION_POT_ITEM = addToWIPTab(ITEMS.register("cultivation_pot",
+            () -> new BlockItem(ForgeBlocks.CULTIVATION_POT.get(),
+                    new Item.Properties()
+            )));
     public static final RegistryObject<BlockItem> LOCACACA_CACTUS_ITEM = addToBuildingTab(ITEMS.register("locacaca_cactus",
             () -> new BlockItem(ForgeBlocks.LOCACACA_CACTUS.get(),
                     new Item.Properties()
