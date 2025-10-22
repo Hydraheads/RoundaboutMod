@@ -144,6 +144,7 @@ public class FabricBlocks {
 
     public static final Block STEREO = registerBlock("stereo",ModBlocks.STEREO_PROPERTIES);
     public static final Block CULTIVATION_POT = registerBlock("cultivation_pot",ModBlocks.cultivationPot(Blocks.AIR));
+    public static final Block CULTIVATED_CHERRY_SAPLING = registerBlockItemless("cultivated_cherry_sapling",ModBlocks.cultivationPot(Blocks.CHERRY_SAPLING));
 
     public static final Block FLESH_BLOCK = registerFleshBlockFood("flesh_block",ModBlocks.FLESH_BLOCK_PROPERTIES, ModFoodComponents.FLESH_CHUNK);
     public static final Block MINING_ALERT_BLOCK = registerBlockItemless("mining_alert_block",ModBlocks.MINING_ALERT_BLOCK_PROPERTIES);
@@ -301,6 +302,7 @@ public class FabricBlocks {
         ModBlocks.BUBBLE_SCAFFOLD = BUBBLE_SCAFFOLD;
         ModBlocks.FLESH_BLOCK = FLESH_BLOCK;
         ModBlocks.CULTIVATION_POT = CULTIVATION_POT;
+        ModBlocks.CULTIVATED_CHERRY_SAPLING = CULTIVATED_CHERRY_SAPLING;
 
         ModBlocks.INVISIBLOCK = INVISIBLOCK;
         ModBlocks.STAND_FIRE = STAND_FIRE;

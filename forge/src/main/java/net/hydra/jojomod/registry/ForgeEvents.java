@@ -153,6 +153,7 @@ public class ForgeEvents {
         ModBlocks.WOOL_STAIRS_YELLOW = ForgeBlocks.WOOL_STAIRS_YELLOW.get();
         ModBlocks.REGAL_WALL = ForgeBlocks.REGAL_WALL.get();
         ModBlocks.CULTIVATION_POT = ForgeBlocks.CULTIVATION_POT.get();
+        ModBlocks.CULTIVATED_CHERRY_SAPLING = ForgeBlocks.CULTIVATED_CHERRY_SAPLING.get();
         ModBlocks.ANCIENT_METEOR = ForgeBlocks.ANCIENT_METEOR.get();
         ModBlocks.LOCACACA_CACTUS = ForgeBlocks.LOCACACA_CACTUS.get();
         ModBlocks.LOCACACA_BLOCK = ForgeBlocks.LOCACACA_BLOCK.get();
