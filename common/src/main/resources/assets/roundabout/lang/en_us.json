@@ -1066,7 +1066,7 @@
   "ability.roundabout.ratt_auto": "Automatic Mode",
   "ability.roundabout.ratt_auto.desc": "Target an entity in sight and Ratt will automatically fire at it",
   "ability.roundabout.ratt_flesh": "Flesh Blocks/Chunks",
-  "ability.roundabout.ratt_flesh.desc": "Drops from melting creatures. Slows mobs and is difficult to break. However, having Ratt equipped bypasses these restrictions, allowing you to move freely and pick them up instantly by shift+clicking",
+  "ability.roundabout.ratt_flesh.desc": "Drops from melting creatures. Slows mobs and is difficult to break. However, having Ratt equipped bypasses these restrictions, allowing you to move freely and pick them up instantly by right-clicking",
   "ability.roundabout.ratt_leap": "Ratt Leap",
   "ability.roundabout.ratt_leap.desc": "Launches Ratt in a direction, allowing you to quickly reposition them",
 
