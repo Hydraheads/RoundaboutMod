@@ -104,6 +104,7 @@ public class ModBlocks {
 
     public static Block CULTIVATION_POT;
     public static Block CULTIVATED_CHERRY_SAPLING;
+    public static Block CULTIVATED_OAK_SAPLING;
 
     public static Block STAND_FIRE;
     public static Block ORANGE_FIRE;

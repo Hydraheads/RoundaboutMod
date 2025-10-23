@@ -1,7 +1,10 @@
 {
   "variants": {
-    "": {
-      "model": "roundabout:block/cultivated_cherry_sapling"
+    "age=0": {
+      "model": "roundabout:block/cultivated_oak_sapling"
+    },
+    "age=1": {
+      "model": "roundabout:block/cultivated_oak_sapling_2"
     }
   }
 }
