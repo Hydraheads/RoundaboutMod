@@ -469,20 +469,6 @@ public abstract class EntityAndData implements IEntityAndData {
         }
     }
 
-    /**Warding cancels being set on fire outside the context of fire or lava*/
-    @Inject(method = "setSecondsOnFire(I)V", at = @At(value = "HEAD"),cancellable = true)
-    public void rdbt$setSecondsOnFire(int $$0, CallbackInfo ci) {
-        if (((Entity)(Object)this) instanceof LivingEntity LE){
-            if (LE.hasEffect(ModEffects.WARDING)){
-                if (!(isInLava() || MainUtil.isPlayerInFireBlock(LE))){
-                    ci.cancel();
-                }
-            }
-        }
-
-    }
-
-
     @Shadow
     private Vec3 deltaMovement;
 
