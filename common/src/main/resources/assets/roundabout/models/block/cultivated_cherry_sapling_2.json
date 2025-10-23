@@ -1,6 +1,6 @@
 {
   "parent": "roundabout:block/cultivation_pot_cross",
   "textures": {
-    "plant": "roundabout:block/cherry_sapling_1"
+    "plant": "roundabout:block/cherry_sapling_2"
   }
 }
