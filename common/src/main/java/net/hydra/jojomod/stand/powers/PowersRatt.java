@@ -357,7 +357,6 @@ public class PowersRatt extends NewDashPreset {
                     time *= 1.4;
                     Vec3 vec = target.getDeltaMovement();
                     if (target instanceof Player) {
-                        Roundabout.LOGGER.info(vec.toString());
                         if(Math.abs(vec.y) < 3 ) {vec = new Vec3(vec.x,0,vec.z);}
                     }
                     targetPos = targetPos.add(vec.multiply(time, time, time));
@@ -395,7 +394,6 @@ public class PowersRatt extends NewDashPreset {
     public void tickPower() {
         super.tickPower();
 
-        Roundabout.LOGGER.info(""+this.getChargeTime());
 
         if (isPlaced()) {
             DimensionType t = this.getStandEntity(this.getSelf()).level().dimensionType();
@@ -920,7 +918,6 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public void onActuallyHurt(DamageSource $$0, float $$1) {
-        Roundabout.LOGGER.info(""+this.isClient());
         if ($$0.is(DamageTypes.PLAYER_ATTACK) || $$0.is(DamageTypes.MOB_ATTACK) || $$0.is(ModDamageTypes.STAND) || $$0.is(ModDamageTypes.STAND_RUSH) || $$0.is(ModDamageTypes.PENETRATING_STAND)) {
             if ($$0.getEntity().getPosition(1).distanceTo(this.getSelf().getPosition(1)) < 6.0 ) {
                 if (this.getSelf() instanceof Player P ) {
