@@ -44,7 +44,7 @@ public class CultivationPotBlock extends FlowerPotBlock implements BonemealableB
     }
     @Override
     public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState blockState, boolean bl) {
-        return blockState.getValue(AGE) < 1;
+        return blockState.getValue(AGE) < 1 && !blockState.getBlock().equals(ModBlocks.CULTIVATION_POT);
     }
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
