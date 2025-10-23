@@ -162,6 +162,10 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> CULTIVATED_CHERRY_SAPLING = BLOCKS.register("cultivated_cherry_sapling",
             () -> ModBlocks.cultivationPot(Blocks.CHERRY_SAPLING)
     );
+    public static final RegistryObject<Block> CULTIVATED_OAK_SAPLING = BLOCKS.register("cultivated_oak_sapling",
+            () -> ModBlocks.cultivationPot(Blocks.OAK_SAPLING)
+    );
+
 
 
     public static final RegistryObject<Block> LOCACACA_CACTUS = BLOCKS.register("locacaca_cactus",
