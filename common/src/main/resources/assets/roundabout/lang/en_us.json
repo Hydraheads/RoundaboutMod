@@ -236,6 +236,7 @@
   "entity.roundabout.soft_and_wet_king": "Soft And Wet",
   "entity.roundabout.soft_and_wet_drowned": "Soft And Wet",
   "entity.roundabout.soft_and_wet_killer_queen": "Killer Queen",
+  "entity.roundabout.killer_queen": "Killer Queen",
   "entity.roundabout.walking_heart": "Walking Heart",
   "entity.roundabout.diver_down": "Diver Down",
   "entity.roundabout.harpoon": "Harpoon",
@@ -1345,9 +1346,7 @@
   "skins.roundabout.diver_down.orangediver": "Orange Diver",
   "skins.roundabout.diver_down.treasurediver": "Treasurer",
   "skins.roundabout.diver_down.birthdaydiver": "Birthday!",
-
-
-
+  "skins.roundabout.diver_down.firediver": "Fire Down",
 
   "skins.roundabout.achtung_baby.base": "Has No Form",
 
