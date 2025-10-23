@@ -253,6 +253,7 @@ public class FabricItems {
                         entries.accept(LOCACACA);
                         entries.accept(LOCACACA_BRANCH.asItem());
                         entries.accept(NEW_LOCACACA);
+                        entries.accept(CHERRIES);
                         entries.accept(METEORITE);
                         entries.accept(METEORITE_INGOT);
 
@@ -352,6 +353,7 @@ public class FabricItems {
                         entries.accept(ModBlocks.WIRE_TRAP);
                         entries.accept(ModBlocks.BARBED_WIRE_BUNDLE);
                         entries.accept(ModBlocks.LOCACACA_CACTUS);
+                        entries.accept(ModBlocks.CULTIVATION_POT);
 
                     }).build());
 
@@ -407,8 +409,7 @@ public class FabricItems {
                         //entries.accept(STAND_DISC_WALKING_HEART);
                         entries.accept(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK);
                         entries.accept(ModBlocks.BLOODY_STONE_MASK_BLOCK);
-                        entries.accept(CHERRIES);
-                        entries.accept(ModBlocks.CULTIVATION_POT);
+
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_RATT);

@@ -32,7 +32,7 @@ public class ForgeItems {
                     .food(ModFoodComponents.COFFEE_GUM)
             )));
 
-    public static final RegistryObject<Item> CHERRIES = addToWIPTab(ITEMS.register("cherries",
+    public static final RegistryObject<Item> CHERRIES = addToTab(ITEMS.register("cherries",
             () -> new Item(new Item.Properties()
                     .food(new FoodProperties.Builder().nutrition(1).saturationMod(0.0F).alwaysEat()
                             .effect(new MobEffectInstance(ForgeEffects.WARDING.get(), 1200, 0), 1.0F)
@@ -235,7 +235,7 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.WOOL_STAIRS_BROWN.get(),
                     new Item.Properties()
             )));
-    public static final RegistryObject<BlockItem> CULTIVATION_POT_ITEM = addToWIPTab(ITEMS.register("cultivation_pot",
+    public static final RegistryObject<BlockItem> CULTIVATION_POT_ITEM = addToBuildingTab(ITEMS.register("cultivation_pot",
             () -> new BlockItem(ForgeBlocks.CULTIVATION_POT.get(),
                     new Item.Properties()
             )));
