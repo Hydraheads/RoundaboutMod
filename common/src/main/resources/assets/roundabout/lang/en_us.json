@@ -282,6 +282,18 @@
   "entity.roundabout.go_beyond": "Go Beyond",
   "entity.roundabout.ground_bubble": "Underground Bubble",
 
+  "entity.roundabout.water_bottle": "Water Bottle",
+  "entity.roundabout.bowler_hat": "Bowler Hat",
+
+  "entity.roundabout.crossfire_hurricane": "Crossfire Hurricane",
+  "entity.roundabout.life_tracker": "Life Tracker",
+  "entity.roundabout.stand_fireball": "Stand Fireball",
+  "entity.roundabout.thrown_object": "Thrown Object",
+  "entity.roundabout.ratt_dart": "Ratt Dart",
+  "entity.roundabout.painting_van_gough": "VG Painting",
+  "entity.roundabout.painting_mona_lisa": "ML Painting",
+  "entity.roundabout.painting_venus": "V Painting",
+
   "block.roundabout.meteor_block": "Meteorite Block",
   "block.roundabout.regal_wall": "Regal Wall",
   "block.roundabout.regal_floor": "Regal Floor",
