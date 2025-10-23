@@ -870,6 +870,7 @@
   "instruction.roundabout.press_skill_air": "Press Skill %1$s In The Air",
   "instruction.roundabout.press_2_skill": "Press Skill %1$s While Using Skill %2$s",
   "instruction.roundabout.passive": "Passive",
+  "instruction.roundabout.shop_item": "Shop Item",
 
   "ability.roundabout.punch": "Punch",
   "ability.roundabout.punch.desc": "Throws a punch directly in front of you. Hold it down for a 3 hit-combo!",
