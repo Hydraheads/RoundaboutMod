@@ -756,7 +756,7 @@ public class PowersRatt extends NewDashPreset {
             }
             case PowersRatt.CHANGE_MODE -> {
                 if (!canExecuteMoveWithLevel(3)) {
-                    return false;
+                    return true;
                 }
                 if (scopeLevel != 0) {
                     return getChargeTime() <= MinThreshold || shotcooldown != 0;
