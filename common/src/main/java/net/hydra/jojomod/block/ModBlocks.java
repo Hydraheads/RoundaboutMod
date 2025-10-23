@@ -1,5 +1,6 @@
 package net.hydra.jojomod.block;
 
+import net.minecraft.world.flag.FeatureFlag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -100,6 +101,9 @@ public class ModBlocks {
     public static Block INVISIBLOCK;
 
     public static Block FLESH_BLOCK;
+
+    public static Block CULTIVATION_POT;
+    public static Block CULTIVATED_CHERRY_SAPLING;
 
     public static Block STAND_FIRE;
     public static Block ORANGE_FIRE;
@@ -604,7 +608,7 @@ public class ModBlocks {
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.PODZOL)
                     .instrument(NoteBlockInstrument.BANJO)
-                    .strength(5.0F, 1.0F)
+                    .strength(2.5F, 1.0F)
                     .sound(SoundType.HONEY_BLOCK)
     );
     public static BubbleScaffoldBlock BUBBLE_SCAFFOLD_BLOCK_PROPERTIES = new BubbleScaffoldBlock(
@@ -652,6 +656,15 @@ public class ModBlocks {
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(0.35F).sound(SoundType.STONE).pushReaction(PushReaction.DESTROY).lightLevel((L) -> {
                 return 1;
             }));
+
+    public static CultivationPotBlock cultivationPot(Block $$0, FeatureFlag... $$1) {
+        BlockBehaviour.Properties $$2 = BlockBehaviour.Properties.of().instabreak().noOcclusion().pushReaction(PushReaction.DESTROY);
+        if ($$1.length > 0) {
+            $$2 = $$2.requiredFeatures($$1);
+        }
+
+        return new CultivationPotBlock($$0, $$2);
+    }
 
     public static List<String> dontGenState = new ArrayList<String>();
     public static List<String> blockBlacklist = Arrays.asList(

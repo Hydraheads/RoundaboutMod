@@ -71,6 +71,7 @@ import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.npc.*;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.inventory.AbstractFurnaceMenu;
@@ -130,6 +131,61 @@ public class MainUtil {
     public static ArrayList<String> walkableBlocks = Lists.newArrayList();
     public static ArrayList<String> standBlockGrabBlacklist = Lists.newArrayList();
     public static ArrayList<String> naturalStandUserMobBlacklist = Lists.newArrayList();
+    public static Set<String> foodThatGivesBloodList = Set.of();
+    Map<String, FoodBloodStats> foodThatGivesBloodMap;
+
+    public record FoodBloodStats(String id, int hunger, float saturation) {}
+
+    public static Map<String, FoodBloodStats> parseFoodList(Set<String> entries) {
+        Map<String, FoodBloodStats> map = new HashMap<>();
+
+        for (String entry : entries) {
+            String[] parts = entry.split(":");
+            if (parts.length < 4) continue; // safety check
+
+            // Recombine the namespaced ID ("minecraft:beef" = parts[0] + ":" + parts[1])
+            String id = parts[0] + ":" + parts[1];
+            int hunger = Integer.parseInt(parts[2]);
+            float saturation = Float.parseFloat(parts[3].replace("F", "")); // remove trailing F
+
+            map.put(id, new FoodBloodStats(id, hunger, saturation));
+        }
+
+        return map;
+    }
+
+    public static Map<String, FoodBloodStats> foodMap;
+
+
+    public static int getBloodAmount(ItemStack stack) {
+        if (foodMap != null && !foodMap.isEmpty()) {
+            // Get the registry name of the item
+            ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+            if (id != null) {
+                FoodBloodStats stats = foodMap.get(id.toString());
+                if (stats != null) {
+                    // You can use either hunger, saturation, or a combination
+                    return stats.hunger(); // or stats.saturation(), depending on what you need
+                }
+            }
+        }
+        return 0;
+    }
+
+    public static float getSaturationAmount(ItemStack stack) {
+        if (foodMap != null && !foodMap.isEmpty()) {
+            // Get the registry name of the item
+            ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+            if (id != null) {
+                FoodBloodStats stats = foodMap.get(id.toString());
+                if (stats != null) {
+                    // You can use either hunger, saturation, or a combination
+                    return stats.saturation(); // or stats.saturation(), depending on what you need
+                }
+            }
+        }
+        return 0;
+    }
 
     public static boolean isBlockBlacklisted(BlockState bs){
         ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
@@ -505,11 +561,28 @@ public class MainUtil {
                     player.inventoryMenu.getSlot(integer).setByPlayer(itemstack);
                     player.inventoryMenu.broadcastChanges();
                 } else if (flag && flag2) {
-                    player.drop(itemstack, true);
+                    if (canAddItem(itemstack,player.getInventory())){
+                        addItem(player,itemstack);
+                    } else {
+                        player.drop(itemstack, true);
+                    }
                 }
 
             }
         }
+    }
+
+
+
+
+    public static boolean canAddItem(ItemStack itemStack, Inventory inventory) {
+        boolean bl = false;
+        for (ItemStack itemStack2 : inventory.items) {
+            if (!itemStack2.isEmpty() && (!ItemStack.isSameItemSameTags(itemStack2, itemStack) || itemStack2.getCount() >= itemStack2.getMaxStackSize())) continue;
+            bl = true;
+            break;
+        }
+        return bl;
     }
 
     public static boolean isWearingEitherStoneMask(Entity ent){
@@ -712,6 +785,7 @@ public class MainUtil {
     }
 
     public static void makeMobBleed(Entity target) {
+        if (!(target instanceof LivingEntity LE && FateTypes.hasBloodHunger(LE))) {
             int variety = (int) Math.round(Math.random() * 4);
             Block modBlock = ModBlocks.BLOOD_SPLATTER;
             if (MainUtil.hasBlueBlood(target)) {
@@ -732,6 +806,7 @@ public class MainUtil {
                 MainUtil.setSplatter(target.level(), target.getOnPos(), (int) Math.floor(Math.random() * 3) - 1, 1, modBlock.defaultBlockState().
                         setValue(ModBlocks.BLOOD_LEVEL, Integer.valueOf((int) Math.round(Math.random() * 3))));
             }
+        }
     }
     public static boolean hasBlueBlood(Entity target){
         if (target instanceof Spider || target instanceof Bee || target instanceof Silverfish  || target instanceof Squid){

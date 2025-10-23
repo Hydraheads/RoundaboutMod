@@ -13,6 +13,7 @@ import net.hydra.jojomod.entity.projectile.FleshPileEntity;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
+import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.*;
 import net.hydra.jojomod.event.index.*;
@@ -3016,7 +3017,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "setSprinting", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$canSprintPlayer(boolean $$0, CallbackInfo ci) {
-        if (roundabout$getStandPowers().cancelSprint() || FateTypes.isTransforming(rdbt$this())){
+        if (roundabout$getStandPowers().cancelSprint() || FateTypes.isTransforming(rdbt$this()) ||
+                (FateTypes.takesSunlightDamage(rdbt$this()) && FateTypes.isInSunlight(rdbt$this()))){
             ci.cancel();
         }
     }
@@ -3290,7 +3292,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         MobEffectInstance melting = this.rdbt$this().getEffect(ModEffects.MELTING);
         if (melting != null) {
             if (melting.getAmplifier() >= 8) {
-                basis *= 0.7;
+                basis *= 0.7F;
+            }
+        }
+        if (FateTypes.takesSunlightDamage(rdbt$this()) && FateTypes.isInSunlight(rdbt$this())){
+            basis *= 0.15F;
+        }
+
+        if (FateTypes.hasBloodHunger((LivingEntity) (Object) this)) {
+            if (roundabout$isDrown || getAirSupply() <= 0) {
+                if (!isUnderWater()) {
+                    basis *= ClientNetworking.getAppropriateConfig().vampireSettings.drownSpeedModifier;
+                }
             }
         }
 
@@ -3915,7 +3928,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         /**Makes bleed work for vamps against their hunger*/
         if (!this.level().isClientSide() && rdbt$this() instanceof  Player PE) {
-            if (FateTypes.isVampire(PE)) {
+            if (FateTypes.hasBloodHunger(PE)) {
                 if (hasEffect(ModEffects.BLEED)) {
                     MobEffectInstance ei = getEffect(ModEffects.BLEED);
                     if (ei != null){
@@ -4302,12 +4315,23 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         }
 
+
         if (cause != null) {
-            if ( ((LivingEntity)(Object)this) instanceof Guardian || ((LivingEntity)(Object)this) instanceof ElderGuardian) {
-                if ( this.getEffect(ModEffects.MELTING) != null) {
-                    if (((StandUserEntity) cause).roundabout$getStandPowers() instanceof PowersRatt PR) {
+            if (this.getEffect(ModEffects.MELTING) != null) {
+                if (((StandUserEntity) cause).roundabout$getStandPowers() instanceof PowersRatt PR) {
+                    RattEntity RE = (RattEntity) PR.getStandEntity((LivingEntity) cause);
+                    Vec3 vec3 = RE.getPosition(1);
+                    BlockPos bp = new BlockPos(
+                            (int)vec3.x,
+                            (int)vec3.y,
+                            (int)vec3.z);
+
+                    if (cause.level().getBlockState(bp).is(ModBlocks.WOODEN_MANOR_CHAIR) ||
+                        cause.level().getBlockState(bp.above()).is(ModBlocks.WOODEN_MANOR_CHAIR))
+                    {
                         PR.unlockSkin();
                     }
+
                 }
             }
         }
@@ -4370,25 +4394,32 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         previousYpos = this.getY();
     }
     public int CrawlTicks = 0;
-    @Inject(method = "travel", at = @At(value = "HEAD"))
+
+    @Unique
+    @Override
+    public boolean rdbt$isForceCrawl() {
+        return CrawlTicks > 0;
+    }
+
+    @Inject(method = "travel", at = @At(value = "HEAD"),cancellable = true)
     public void rdbt$crawltick(Vec3 movement, CallbackInfo ci) {
-                if (CrawlTicks > 0) {
-                    this.setPose(Pose.SWIMMING);
-                    this.setSwimming(true);
-                    CrawlTicks --;
-                }
+        if (this.rdbt$isForceCrawl()) {
+            this.setPose(Pose.SWIMMING);
+            this.setSwimming(true);
+            CrawlTicks--;
+        }
+
     }
 
     @Unique
     @Override
-    public int rdbt$SetCrawlTicks(int ticks){
+    public void rdbt$SetCrawlTicks(int ticks) {
         CrawlTicks = ticks;
-        return ticks;
     }
 
 
 
-    @Inject(method = "travel", at = @At(value = "TAIL"))
+    @Inject(method = "travel", at = @At(value = "TAIL"),cancellable = true)
     public void   MoldDetection(Vec3 movement,CallbackInfo info) {
         rdbt$doMoldDetection(movement);
     }

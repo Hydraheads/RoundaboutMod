@@ -56,6 +56,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public MiscSettings miscellaneousSettings;
     @NestedOption(group = "modded")
+    public VampireSettings vampireSettings;
+    @NestedOption(group = "modded")
     public StandLevelingSettings standLevelingSettings;
     @NestedOption(group = "modded")
     public GeneralStandSettings generalStandSettings;
@@ -77,6 +79,8 @@ public class Config implements Cloneable {
     public AchtungSettings achtungSettings;
     @NestedOption(group = "modded")
     public WalkingHeartSettings walkingHeartSettings;
+    @NestedOption(group = "modded")
+    public RattSettings rattSettings;
     @NestedOption(group = "modded")
     public TheWorldSettings theWorldSettings;
     @NestedOption(group = "modded")
@@ -165,6 +169,16 @@ public class Config implements Cloneable {
         public Boolean disableBleedingAndBloodSplatters;
         @BooleanOption(group = "inherit", value = false)
         public Boolean banDirectionalBlockPlacingFailure;
+    }
+    public static class VampireSettings {
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean vampireUsesPotionEffectForNightVision;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer sunDamageUnderwaterReach;
+        @FloatOption(group = "inherit", value = 0.75F, min = 0, max = 1F)
+        public Float drownSpeedModifier;
+        @FloatOption(group = "inherit", value = 0.4F, min = 0, max = 100F)
+        public Float sunDamagePercentPerDamageTick;
     }
     public static class StandLevelingSettings {
         @BooleanOption(group = "inherit", value = true)
@@ -587,6 +601,21 @@ public class Config implements Cloneable {
         public Integer walkingHeartMaxHits;
         @BooleanOption(group = "inherit", value = false)
         public Boolean fallProtectionOnRelease;
+    }
+
+    public static class RattSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableRatt;
+        @FloatOption(group = "inherit", value = 1F, min = 0F, max = 100F)
+        public Float rattAttackBonusOnMobs;
+        @FloatOption(group = "inherit", value = 1F, min = 0F, max = 100F)
+        public Float rattAttackBonusOnBosses;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 100)
+        public Integer rattMaxDespawnRange;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 100)
+        public Integer rattChargePerHit;
+        @IntOption(group = "inherit", value = 2, min = 0, max = 72000)
+        public Integer rattManualChargeRate;
     }
 
     public static class AchtungSettings {

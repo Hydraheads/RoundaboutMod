@@ -1,25 +1,36 @@
 package net.hydra.jojomod.mixin.fates;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.access.AccessFateFoodData;
+import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.apache.http.client.utils.DateUtils;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -29,8 +40,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Player.class)
 public abstract class FatePlayerMixin extends LivingEntity implements IFatePlayer {
 
+    @Shadow public abstract FoodData getFoodData();
+
+    @Unique
+    public FatePowers rdbt$fatePowers = null;
+
+    @Unique
+    public FatePowers rdbt$getFatePowers(){
+        if (rdbt$fatePowers == null){
+            FateTypes.getFateFromByte(((IPlayerEntity)this).roundabout$getFate()).fatePowers.generateFatePowers(this);
+        }
+        return rdbt$fatePowers;
+    }
+
     @Inject(method = "tick", at = @At(value = "HEAD"))
     protected void roundabout$Tick(CallbackInfo ci) {
+        ((AccessFateFoodData)getFoodData()).rdbt$setPlayer((Player) (Object) this);
         if (!this.level().isClientSide()) {
             rdbt$tickThroughVampire();
             rdbt$tickThroughVampireChange();
@@ -58,25 +83,39 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
     }
     @Unique
     public void rdbt$tickThroughVampire(){
-        if (FateTypes.isVampire(this)){
-            Vec3 yes = this.getEyePosition();
-            Vec3 yes2 = this.position();
-            BlockPos atVec = BlockPos.containing(yes);
-            BlockPos atVec2 = BlockPos.containing(yes2);
-            if ((level().canSeeSky(atVec) || level().canSeeSky(atVec2)) &&
-                    this.level().dimension().location().getPath().equals("overworld") &&
-                    this.level().isDay()
+        if (FateTypes.hasBloodHunger(this)){
+            if (FateTypes.isInSunlight(this)
             ){
-                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth()*2);
+                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth()*ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick);
             }
         } else if (FateTypes.isHuman(this)){
             if (MainUtil.isWearingBloodyStoneMask(this) && rdbt$vampireTransformation < 0){
                 rdbt$startVampireTransformation();
             }
-            if (MainUtil.isWearingStoneMask(this) && hasEffect(ModEffects.BLEED)){
-                MainUtil.activateStoneMask(this);
+        }
+        if (MainUtil.isWearingStoneMask(this) && hasEffect(ModEffects.BLEED)){
+            MainUtil.activateStoneMask(this);
+        }
+
+
+        if (ClientNetworking.getAppropriateConfig().vampireSettings.vampireUsesPotionEffectForNightVision) {
+            if (FateTypes.canSeeInTheDark(this)) {
+                if (!hasEffect(MobEffects.NIGHT_VISION)) {
+                    addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, -1, 20, false, false), null);
+                }
+            } else {
+                MobEffectInstance ME = getEffect(MobEffects.NIGHT_VISION);
+                if (ME != null && ME.isInfiniteDuration() && ME.getAmplifier() == 20) {
+                    removeEffect(MobEffects.NIGHT_VISION);
+                }
+            }
+        } else {
+            MobEffectInstance ME = getEffect(MobEffects.NIGHT_VISION);
+            if (ME != null && ME.isInfiniteDuration() && ME.getAmplifier() == 20) {
+                removeEffect(MobEffects.NIGHT_VISION);
             }
         }
+
         //This can move into a dedicated fate class eventually
     }
     @Unique
@@ -116,16 +155,9 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
         }
     }
 
-    /**You cannot get hurt while transformed*/
-    @Inject(method = "hurt", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$hurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> cir) {
-        if (!this.level().isClientSide()) {
-            if (rdbt$vampireTransformation >= 0){
-                cir.setReturnValue(false);
-                return;
-            }
-        }
-    }
+
+
+    //((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_BACKWARD);
 
     protected FatePlayerMixin(EntityType<? extends LivingEntity> $$0, Level $$1) {
         super($$0, $$1);

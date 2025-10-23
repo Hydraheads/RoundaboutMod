@@ -291,6 +291,7 @@ public interface StandUser {
 
     void DoMoldTick();
     void MoldFieldExit();
-    int rdbt$SetCrawlTicks(int ticks);
+    void rdbt$SetCrawlTicks(int ticks);
+    boolean rdbt$isForceCrawl();
 
 }

@@ -36,6 +36,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -409,7 +410,9 @@ public class BlockGrabPreset extends NewPunchingStand {
                             }
                             if (!this.getSelf().level().isClientSide) {
                                 if (ent instanceof NeutralMob NE && !(ent instanceof Animal) && !((ServerPlayer) this.getSelf()).isCreative()) {
-                                    NE.setTarget(this.getSelf());
+                                    if (!(ent instanceof IronGolem ig && ig.isPlayerCreated())) {
+                                        NE.setTarget(this.getSelf());
+                                    }
                                 }
                             }
                             this.getSelf().level().playSound(null, ent, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);

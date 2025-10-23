@@ -38,7 +38,7 @@ public class RattRenderer extends StandRenderer<RattEntity> {
     }
 
     @Override public ResourceLocation getTextureLocation(RattEntity entity) {
-        byte BT = entity.getSkin();
+        byte BT = entity.getSavedSkin();
         switch (BT) {
             case RattEntity.MANGA_SKIN -> {return MANGA_SKIN;}
             case RattEntity.MELON_SKIN -> {return MELON_SKIN;}

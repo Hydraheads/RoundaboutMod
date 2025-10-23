@@ -6,9 +6,11 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILivingEntityAccess;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.NoHitboxRendering;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.SavedSecond;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -236,6 +238,15 @@ public abstract class ZEntityRenderDispatcher {
             ((IEntityAndData)$$2).roundabout$setShadow(true);
             ci.cancel();
             return;
+        }
+        if ($$2 instanceof Player PL){
+            byte playerP = ((IPlayerEntity)PL).roundabout$GetPos();
+
+            /*Dodge makes you lean forward visually*/
+            if (playerP == PlayerPosIndex.SUNLIGHT){
+                ci.cancel();
+                return;
+            }
         }
 
         if (((TimeStop)$$2.level()).CanTimeStopEntity($$2) && $$2 instanceof LivingEntity) {

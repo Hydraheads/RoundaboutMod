@@ -57,6 +57,9 @@ public class FabricParticles {
     public static final SimpleParticleType STITCH = FabricParticleTypes.simple();
     public static final SimpleParticleType MOLD_DUST = FabricParticleTypes.simple();
     public static final SimpleParticleType MOLD = FabricParticleTypes.simple();
+    public static final SimpleParticleType DUST_CRUMBLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType FIRE_CRUMBLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType SOUL_FIRE_CRUMBLE = FabricParticleTypes.simple();
     public static void registerParticles(){
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("hit_impact"), HIT_IMPACT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("punch_miss"), PUNCH_MISS);
@@ -107,6 +110,10 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("magic_dust"), MAGIC_DUST);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("brief_magic_dust"), BRIEF_MAGIC_DUST);
 
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("dust_crumble"), DUST_CRUMBLE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("fire_crumble"), FIRE_CRUMBLE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("soul_fire_crumble"), SOUL_FIRE_CRUMBLE);
+
         ModParticles.MELTING = MELTING;
         ModParticles.BLOOD = BLOOD;
         ModParticles.BLUE_BLOOD = BLUE_BLOOD;
@@ -155,5 +162,9 @@ public class FabricParticles {
         ModParticles.STITCH = STITCH;
         ModParticles.MOLD_DUST = MOLD_DUST;
         ModParticles.MOLD = MOLD;
+
+        ModParticles.DUST_CRUMBLE = DUST_CRUMBLE;
+        ModParticles.FIRE_CRUMBLE = FIRE_CRUMBLE;
+        ModParticles.SOUL_FIRE_CRUMBLE = SOUL_FIRE_CRUMBLE;
     }
 }

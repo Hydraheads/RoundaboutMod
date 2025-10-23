@@ -63,6 +63,8 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.D4C.get(), D4CRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GREEN_DAY.get(), GreenDayRenderer::new);
         event.registerEntityRenderer(ForgeEntities.RATT.get(), RattRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.REDD.get(), ReddRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.CHAIR_RAT.get(), ChairRattRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SOFT_AND_WET.get(), SoftAndWetRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SOFT_AND_WET_DROWNED.get(), SoftAndWetDrownedRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SOFT_AND_WET_DEBUT.get(), SoftAndWetDebutRenderer::new);
@@ -175,12 +177,16 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.MR_SPIN_LAYER, MagiciansRedSpinEffectLayer::createLayer);
         event.registerLayerDefinition(ModEntityRendererClient.GREEN_DAY_LAYER, GreenDayModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.RATT_LAYER, RattModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.REDD_LAYER, ReddModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.CHAIR_RATT_LAYER, ChairRattModel::getTexturedModelData);
         ModStrayModels.SHOOTING_ARM = new SoftAndWetShootingArmModel();
         ModStrayModels.HEY_YA = new HeyYaModel();
         ModStrayModels.BOWLER_HAT = new BowlerHatModel();
         ModStrayModels.WORN_STONE_MASK = new WornStoneMaskModel();
         ModStrayModels.WORN_BLOODY_STONE_MASK = new WornBloodyStoneMaskModel();
         ModStrayModels.RATT_SHOULDER = new RattShoulderModel();
+        ModStrayModels.REDD_SHOULDER = new ReddShoulderModel();
+        ModStrayModels.CHAIR_RATT_SHOULDER = new ChairRattShoulderModel();
         ModStrayModels.MANDOM = new MandomModel();
         ModStrayModels.MANDOM_WATCH = new WatchModel();
         ModStrayModels.MANDOM_WATCH_SMALL = new SmallWatchModel();
@@ -255,5 +261,8 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.BABY_CRACKLE.get(), BabyCrackleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.MAGIC_DUST.get(), MagicDustParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.BRIEF_MAGIC_DUST.get(), BriefMagicDustParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.DUST_CRUMBLE.get(), DustCrumbleParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.FIRE_CRUMBLE.get(), FireCrumbleParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.SOUL_FIRE_CRUMBLE.get(), FireCrumbleParticle.Provider::new);
     }
 }

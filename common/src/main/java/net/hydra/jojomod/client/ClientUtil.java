@@ -8,6 +8,7 @@ import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.gui.*;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
+import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -633,6 +634,13 @@ public class ClientUtil {
                     }
                 }
             }
+            if (entity instanceof RattEntity RE) {
+                if(powers.getSelf() == RE.getUser()) {
+                    if(powers.isHoldingSneak()) {
+                        return 12948493;
+                    }
+                }
+            }
 
             if (powers.highlightsEntity(entity, player))
                 return powers.highlightsEntityColor(entity,player);
@@ -846,7 +854,6 @@ public class ClientUtil {
         mc.setScreen(new JusticeMobSwitcherScreen());
     }
     public static void setJusticeBlockScreen() {
-        C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_OPEN_FOG_INVENTORY);
         Minecraft mc = Minecraft.getInstance();
         mc.setScreen(
                 new FogInventoryScreen(
@@ -1338,7 +1345,7 @@ public class ClientUtil {
     public static void renderHungerStuff(GuiGraphics graphics, Player player, int width, int height, int rand,
                                          int foodlevel, int tickCount){
 
-        if (FateTypes.isVampire(player)){
+        if (FateTypes.hasBloodHunger(player)){
             for (int $$23 = 0; $$23 < 10; $$23++) {
                 int $$24 = height;
                 int $$25 = 238;

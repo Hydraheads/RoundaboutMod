@@ -2,45 +2,24 @@ package net.hydra.jojomod.stand.powers;
 
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.DiverDownEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
-import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.OffsetIndex;
-import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
-import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
-import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
-
-
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class PowersDiverDown extends NewPunchingStand {
     public void tryToDashClient(){
@@ -64,14 +43,12 @@ public class PowersDiverDown extends NewPunchingStand {
         setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.SKILL_2);
 
         if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NONE);
+            setSkillIcon(context, x, y, 3, StandIcons.DIVER_DOWN_ZIP, PowerIndex.SKILL_3);
         } else {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         }
         if (canVault() ) {
             setSkillIcon(context, x, y, 3, StandIcons.DIVER_DOWN_VAULT, PowerIndex.GLOBAL_DASH);
-        } else {
-            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         }
 
         setSkillIcon(context, x, y, 4, StandIcons.DIVER_SELECTION, PowerIndex.SKILL_4);
@@ -83,6 +60,8 @@ public class PowersDiverDown extends NewPunchingStand {
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99, 0,"ability.roundabout.vault",
                 "instruction.roundabout.press_skill_air", StandIcons.DIVER_DOWN_VAULT,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99, 0,"ability.roundabout.diver_zip",
+                "instruction.roundabout.press_skill_crouch", StandIcons.DIVER_DOWN_ZIP,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.diver_selection",
                 "instruction.roundabout.press_skill", StandIcons.DIVER_SELECTION,4,level,bypas));
         return $$1;
@@ -97,6 +76,7 @@ public class PowersDiverDown extends NewPunchingStand {
             case DiverDownEntity.ORANGE_DIVER -> {return Component.translatable("skins.roundabout.diver_down.orangediver");}
             case DiverDownEntity.TREASURE_DIVER -> {return Component.translatable("skins.roundabout.diver_down.treasurediver");}
             case DiverDownEntity.BIRTHDAY_DIVER -> {return Component.translatable("skins.roundabout.diver_down.birthdaydiver");}
+            case DiverDownEntity.FIRE_DIVER -> {return Component.translatable("skins.roundabout.diver_down.firediver");}
             default -> {return Component.translatable("skins.roundabout.diver_down.base");}
         }
     }
@@ -109,7 +89,8 @@ public class PowersDiverDown extends NewPunchingStand {
                 DiverDownEntity.RED_DIVER,
                 DiverDownEntity.ORANGE_DIVER,
                 DiverDownEntity.TREASURE_DIVER,
-                DiverDownEntity.BIRTHDAY_DIVER
+                DiverDownEntity.BIRTHDAY_DIVER,
+                DiverDownEntity.FIRE_DIVER
         );
     }
         public float standReach = 5;
@@ -173,7 +154,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
         @Override
         public Component ifWipListDevStatus () {
-            return Component.translatable("roundabout.dev_status.paused").withStyle(ChatFormatting.AQUA);
+            return Component.translatable("roundabout.dev_status.ongoing").withStyle(ChatFormatting.AQUA);
         }
         @Override
         public Component ifWipListDev () {

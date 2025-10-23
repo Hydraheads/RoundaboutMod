@@ -195,4 +195,16 @@ public class ForgeParticles {
             "mold",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> DUST_CRUMBLE = PARTICLES.register(
+            "dust_crumble",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> FIRE_CRUMBLE = PARTICLES.register(
+            "fire_crumble",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> SOUL_FIRE_CRUMBLE = PARTICLES.register(
+            "soul_fire_crumble",
+            () -> new SimpleParticleType(true)
+    );
 }

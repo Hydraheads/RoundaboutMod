@@ -156,6 +156,12 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> WOOL_STAIRS_BROWN = BLOCKS.register("wool_stairs_brown",
             () -> ModBlocks.WOOL_STAIRS_BROWN_PROPERTIES
     );
+    public static final RegistryObject<Block> CULTIVATION_POT = BLOCKS.register("cultivation_pot",
+            () -> ModBlocks.cultivationPot(Blocks.AIR)
+    );
+    public static final RegistryObject<Block> CULTIVATED_CHERRY_SAPLING = BLOCKS.register("cultivated_cherry_sapling",
+            () -> ModBlocks.cultivationPot(Blocks.CHERRY_SAPLING)
+    );
 
 
     public static final RegistryObject<Block> LOCACACA_CACTUS = BLOCKS.register("locacaca_cactus",

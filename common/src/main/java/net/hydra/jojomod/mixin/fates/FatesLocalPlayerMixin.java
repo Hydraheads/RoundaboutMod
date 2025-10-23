@@ -18,4 +18,11 @@ public class FatesLocalPlayerMixin {
                 cir.setReturnValue(false);
             }
     }
+    /**Vampires can sprint even at low food*/
+    @Inject(method = "hasEnoughFoodToStartSprinting", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$hasEnoughFoodToStartSprinting(CallbackInfoReturnable<Boolean> cir) {
+        if (FateTypes.hasBloodHunger(((LocalPlayer)(Object)this))) {
+            cir.setReturnValue(true);
+        }
+    }
 }

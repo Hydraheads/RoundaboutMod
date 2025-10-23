@@ -50,6 +50,8 @@ public class ForgeEvents {
         event.put(ForgeEntities.D4C.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.GREEN_DAY.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.RATT.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.REDD.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.CHAIR_RAT.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SOFT_AND_WET.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SOFT_AND_WET_KING.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SOFT_AND_WET_DROWNED.get(), StandEntity.createStandAttributes().build());
@@ -150,6 +152,8 @@ public class ForgeEvents {
         ModBlocks.WOOL_SLAB_YELLOW = ForgeBlocks.WOOL_SLAB_YELLOW.get();
         ModBlocks.WOOL_STAIRS_YELLOW = ForgeBlocks.WOOL_STAIRS_YELLOW.get();
         ModBlocks.REGAL_WALL = ForgeBlocks.REGAL_WALL.get();
+        ModBlocks.CULTIVATION_POT = ForgeBlocks.CULTIVATION_POT.get();
+        ModBlocks.CULTIVATED_CHERRY_SAPLING = ForgeBlocks.CULTIVATED_CHERRY_SAPLING.get();
         ModBlocks.ANCIENT_METEOR = ForgeBlocks.ANCIENT_METEOR.get();
         ModBlocks.LOCACACA_CACTUS = ForgeBlocks.LOCACACA_CACTUS.get();
         ModBlocks.LOCACACA_BLOCK = ForgeBlocks.LOCACACA_BLOCK.get();
@@ -265,6 +269,7 @@ public class ForgeEvents {
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_DIVER_DOWN.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_DIVER_DOWN.get());
         ModItems.MAX_STAND_DISC_DIVER_DOWN = ForgeItems.MAX_STAND_DISC_DIVER_DOWN.get();
         ModItems.COFFEE_GUM = ForgeItems.COFFEE_GUM.get();
+        ModItems.CHERRIES = ForgeItems.CHERRIES.get();
 
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_DIO.get()).referenceItem = ForgeItems.STREET_SIGN_DIO_BLOCK_ITEM.get().getDefaultInstance();
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_RIGHT.get()).referenceItem = ForgeItems.STREET_SIGN_RIGHT_BLOCK_ITEM.get().getDefaultInstance();
@@ -379,6 +384,9 @@ public class ForgeEvents {
         ModParticles.STITCH = ForgeParticles.STITCH.get();
         ModParticles.MOLD_DUST = ForgeParticles.MOLD_DUST.get();
         ModParticles.MOLD = ForgeParticles.MOLD.get();
+        ModParticles.DUST_CRUMBLE = ForgeParticles.DUST_CRUMBLE.get();
+        ModParticles.FIRE_CRUMBLE = ForgeParticles.FIRE_CRUMBLE.get();
+        ModParticles.SOUL_FIRE_CRUMBLE = ForgeParticles.SOUL_FIRE_CRUMBLE.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
@@ -390,6 +398,7 @@ public class ForgeEvents {
         ModEffects.FACELESS = ForgeEffects.FACELESS.get();
         ModEffects.MELTING = ForgeEffects.MELTING.get();
         ModEffects.GRAVITY_FLIP = ForgeEffects.GRAVITY_FLIP.get();
+        ModEffects.WARDING = ForgeEffects.WARDING.get();
 
 
 
@@ -407,6 +416,8 @@ public class ForgeEvents {
         ModEntities.D4C = ForgeEntities.D4C.get();
         ModEntities.GREEN_DAY = ForgeEntities.GREEN_DAY.get();
         ModEntities.RATT = ForgeEntities.RATT.get();
+        ModEntities.REDD = ForgeEntities.REDD.get();
+        ModEntities.CHAIR_RATT = ForgeEntities.CHAIR_RAT.get();
         ModEntities.FLESH_PILE = ForgeEntities.FLESH_PILE.get();
         ModEntities.SOFT_AND_WET = ForgeEntities.SOFT_AND_WET.get();
         ModEntities.SOFT_AND_WET_KING = ForgeEntities.SOFT_AND_WET_KING.get();

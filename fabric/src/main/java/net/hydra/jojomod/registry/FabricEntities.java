@@ -299,6 +299,20 @@ public class FabricEntities {
                         EntityType.Builder.of(RattEntity::new, MobCategory.MISC).
                                 sized(0.75f, 1.2f).clientTrackingRange(14).build(Roundabout.MOD_ID+":ratt")
                 );
+        public static final EntityType<ReddEntity> REDD =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        Roundabout.location("redd"),
+                        EntityType.Builder.of(ReddEntity::new, MobCategory.MISC).
+                                sized(0.75f, 1.2f).clientTrackingRange(14).build(Roundabout.MOD_ID+":redd")
+                );
+    public static final EntityType<ChairRattEntity> CHAIR_RATT =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    Roundabout.location("chair_ratt"),
+                    EntityType.Builder.of(ChairRattEntity::new, MobCategory.MISC).
+                            sized(0.75f, 1.2f).clientTrackingRange(14).build(Roundabout.MOD_ID+":chair_ratt")
+            );
         public static final EntityType<FleshPileEntity> FLESH_PILE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -587,6 +601,8 @@ public class FabricEntities {
                 ModEntities.D4C = D4C;
                 ModEntities.GREEN_DAY = GREEN_DAY;
                 ModEntities.RATT = RATT;
+                ModEntities.REDD = REDD;
+                ModEntities.CHAIR_RATT = CHAIR_RATT;
                 ModEntities.FLESH_PILE = FLESH_PILE;
                 ModEntities.SURVIVOR = SURVIVOR;
                 ModEntities.SOFT_AND_WET = SOFT_AND_WET;
@@ -697,6 +713,8 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(D4C, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(GREEN_DAY, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(RATT, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(REDD, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(CHAIR_RATT, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SURVIVOR, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SOFT_AND_WET, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SOFT_AND_WET_DROWNED, StandEntity.createStandAttributes());

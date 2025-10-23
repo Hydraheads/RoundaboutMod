@@ -210,6 +210,11 @@ public class FabricSounds {
         addSound(ModSounds.RATT_DART_IMPACT_ID, ModSounds.RATT_DART_IMPACT_EVENT);
         addSound(ModSounds.RATT_LOADING_ID, ModSounds.RATT_LOADING_EVENT);
         addSound(ModSounds.RATT_FIRING_ID, ModSounds.RATT_FIRING_EVENT);
+        addSound(ModSounds.RATT_LEAP_ID, ModSounds.RATT_LEAP_EVENT);
+        addSound(ModSounds.RATT_MODE_CHANGE_ID, ModSounds.RATT_MODE_CHANGE_EVENT);
+
+
+
 
 
 
@@ -261,6 +266,8 @@ public class FabricSounds {
         addSound(ModSounds.HEEL_STOMP_ID, ModSounds.HEEL_STOMP_EVENT);
         addSound(ModSounds.SPIKE_HIT_ID, ModSounds.SPIKE_HIT_EVENT);
         addSound(ModSounds.SPIKE_MISS_ID, ModSounds.SPIKE_MISS_EVENT);
+        addSound(ModSounds.VAMPIRE_DRAIN_ID, ModSounds.VAMPIRE_DRAIN_EVENT);
+        addSound(ModSounds.VAMPIRE_CRUMBLE_ID, ModSounds.VAMPIRE_CRUMBLE_EVENT);
 
         addSound(ModSounds.EXTEND_SPIKES_ID, ModSounds.EXTEND_SPIKES_EVENT);
         addSound(ModSounds.WALL_LATCH_ID, ModSounds.WALL_LATCH_EVENT);

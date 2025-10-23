@@ -57,4 +57,9 @@ public class ModParticles {
     public static SimpleParticleType STITCH;
     public static SimpleParticleType MOLD_DUST;
     public static SimpleParticleType MOLD;
+
+
+    public static SimpleParticleType DUST_CRUMBLE;
+    public static SimpleParticleType FIRE_CRUMBLE;
+    public static SimpleParticleType SOUL_FIRE_CRUMBLE;
 }

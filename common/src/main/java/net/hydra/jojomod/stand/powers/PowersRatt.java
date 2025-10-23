@@ -18,7 +18,6 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.mixin.PlayerEntity;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -756,7 +755,7 @@ public class PowersRatt extends NewDashPreset {
             }
             case PowersRatt.CHANGE_MODE -> {
                 if (!canExecuteMoveWithLevel(3)) {
-                    return true;
+                    return false;
                 }
                 if (scopeLevel != 0) {
                     return getChargeTime() <= MinThreshold || shotcooldown != 0;
@@ -893,7 +892,7 @@ public class PowersRatt extends NewDashPreset {
             int fifteen = 15-Math.round(ratio*15);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 12, fifteen, 6);
 
-        } else if ( ((IPlayerEntity)this.getSelf()).roundabout$getStandLevel() > 1 &&  getChargeTime() >= 10 || scopeLevel != 0) {
+        } else if (getChargeTime() >= 10 || scopeLevel != 0) {
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6    , 15, 6);
             float amount = (float) getChargeTime() /100;
             int finalAmount = Math.round(amount*15);
@@ -1017,31 +1016,22 @@ public class PowersRatt extends NewDashPreset {
     @Override
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        // manual scope
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,2, "ability.roundabout.ratt_scope",
                 "instruction.roundabout.press_skill", StandIcons.RATT_SCOPE_IN,1,level,bypas));
-       // charge fire
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+118,3, "ability.roundabout.ratt_single",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,2, "ability.roundabout.ratt_single",
                 "instruction.roundabout.hold_block", StandIcons.RATT_SINGLE,0,level,bypas));
-        // burst fire
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+99,2, "ability.roundabout.ratt_burst",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,3, "ability.roundabout.ratt_burst",
                 "instruction.roundabout.press_skill", StandIcons.RATT_BURST,2,level,bypas));
-        // place ratt
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.ratt_place",
                 "instruction.roundabout.press_skill", StandIcons.RATT_PLACE,2,level,bypas));
-        // place burst
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.ratt_place_burst",
                 "instruction.roundabout.press_skill", StandIcons.RATT_BURST,1,level,bypas));
-        // place auto
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,1, "ability.roundabout.ratt_auto",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,3, "ability.roundabout.ratt_auto",
                 "instruction.roundabout.press_skill_crouch", StandIcons.RATT_AUTO,1,level,bypas));
-        // ratt leap
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,4, "ability.roundabout.ratt_leap",
                 "instruction.roundabout.press_skill", StandIcons.RATT_LEAP,4,level,bypas));
-        // passive
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.ratt_flesh",
                 "instruction.roundabout.passive", StandIcons.RATT_BLOB,3,level,bypas));
-        // dodge
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
         return $$1;

@@ -12,5 +12,6 @@ public class ModEffects {
     public static MobEffect FACELESS;
     public static MobEffect MELTING;
     public static MobEffect GRAVITY_FLIP;
+    public static MobEffect WARDING;
 
 }

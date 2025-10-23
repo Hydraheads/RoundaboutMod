@@ -88,7 +88,12 @@ public class RattShoulderLayer<T extends LivingEntity, A extends HumanoidModel<T
                                     getParentModel().rightArm.translateAndRotate(poseStack);
                                 }
                                 poseStack.scale(0.35F, 0.35F, 0.35F);
-                                poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(new Vector3f(1, 0, 0), -90), 0, 0, -1);
+                                if (skin < RattEntity.CHAIR_RAT_SKIN) {
+                                    poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,-90), 0, 0, -1);
+                                } else {
+                                    poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,90),0,0,-1);
+                                    poseStack.translate(-0.35,0.8,-3);
+                                }
                                 poseStack.translate( entity.getMainArm().equals(HumanoidArm.LEFT) ? -0.35 : 0.35F, -1.3F, 0.6F);
                                 //  poseStack.translate(0.3F, 0F, -3F);
                             } else {
@@ -139,8 +144,18 @@ public class RattShoulderLayer<T extends LivingEntity, A extends HumanoidModel<T
                             float g = isHurt ? 0.0F : 1.0F;
                             float b = isHurt ? 0.0F : 1.0F;
                             if (user.roundabout$getRattShoulderVanishTicks() != 0) {
-                                ModStrayModels.RATT_SHOULDER.render(livent, partialTicks, poseStack, bufferSource, packedLight,
-                                        r, g, b, heyFull, skin);
+                                if (skin == RattEntity.REDD_SKIN) {
+                                    ModStrayModels.REDD_SHOULDER.render(livent,partialTicks,poseStack,bufferSource,packedLight,
+                                            r, g, b, heyFull, skin);
+                                } else if(skin >= RattEntity.CHAIR_RAT_SKIN) {
+                                    poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,180),0,0,0);
+                                    ModStrayModels.CHAIR_RATT_SHOULDER.render(livent,partialTicks,poseStack,bufferSource,packedLight,
+                                            r, g, b, heyFull, skin);
+                                } else {
+                                    ModStrayModels.RATT_SHOULDER.render(livent, partialTicks, poseStack, bufferSource, packedLight,
+                                            r, g, b, heyFull, skin);
+                                }
+
 
                             }
                             poseStack.popPose();

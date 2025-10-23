@@ -51,6 +51,8 @@
   "item.roundabout.lucky_lipstick": "Lucky Lipstick",
   "item.roundabout.lucky_lipstick.desc": "For better trades, apply until you sleep",
   "item.roundabout.sacrificial_dagger": "Sacrificial Dagger",
+  "item.roundabout.cherries": "Cherries",
+
 
   "item.roundabout.star_platinum_disc": "Stand Disc",
   "item.roundabout.the_world_disc": "Stand Disc",
@@ -203,6 +205,7 @@
   "effect.roundabout.faceless": "Faceless",
   "effect.roundabout.melting": "Melting",
   "effect.roundabout.gravity_flip": "Gravity",
+  "effect.roundabout.warding": "Warding",
 
   "item.roundabout.creative_only.info": "Creative Only",
 
@@ -233,6 +236,7 @@
   "entity.roundabout.soft_and_wet_king": "Soft And Wet",
   "entity.roundabout.soft_and_wet_drowned": "Soft And Wet",
   "entity.roundabout.soft_and_wet_killer_queen": "Killer Queen",
+  "entity.roundabout.killer_queen": "Killer Queen",
   "entity.roundabout.walking_heart": "Walking Heart",
   "entity.roundabout.diver_down": "Diver Down",
   "entity.roundabout.harpoon": "Harpoon",
@@ -278,6 +282,18 @@
   "entity.roundabout.item_launching_bubble": "Item Launching Bubble",
   "entity.roundabout.go_beyond": "Go Beyond",
   "entity.roundabout.ground_bubble": "Underground Bubble",
+
+  "entity.roundabout.water_bottle": "Water Bottle",
+  "entity.roundabout.bowler_hat": "Bowler Hat",
+
+  "entity.roundabout.crossfire_hurricane": "Crossfire Hurricane",
+  "entity.roundabout.life_tracker": "Life Tracker",
+  "entity.roundabout.stand_fireball": "Stand Fireball",
+  "entity.roundabout.thrown_object": "Thrown Object",
+  "entity.roundabout.ratt_dart": "Ratt Dart",
+  "entity.roundabout.painting_van_gough": "VG Painting",
+  "entity.roundabout.painting_mona_lisa": "ML Painting",
+  "entity.roundabout.painting_venus": "V Painting",
 
   "block.roundabout.meteor_block": "Meteorite Block",
   "block.roundabout.regal_wall": "Regal Wall",
@@ -352,6 +368,8 @@
   "block.roundabout.wall_street_sign_yield": "Sign Plate: Yield",
   "block.roundabout.wall_street_sign_danger": "Sign Plate: Danger",
   "block.roundabout.flesh_block": "Flesh Chunk",
+  "block.roundabout.cultivation_pot": "Cultivation Pot",
+  "block.roundabout.cultivated_cherry_sapling": "Cultivated Cherry Sapling",
 
   "itemgroup.jojo": "Roundabout",
   "itemgroup.jojo_discs": "Stand Discs",
@@ -409,6 +427,8 @@
   "death.attack.stand_rush.item": "%1$s was beaten down by %2$s",
   "death.attack.sunlight": "%1$s is dust in the wind.",
   "death.attack.sunlight.item": "%1$s is dust in the wind.",
+  "death.attack.sunlight.player": "%1$s saw the light while fighting %2$s.",
+  "death.attack.sunlight.player.item": "%1$s saw the light while fighting %2$s.",
   "death.attack.stand_fire": "%1$s was roasted",
   "death.attack.stand_fire.item": "%1$s was roasted",
   "death.attack.stand_fire.player": "%1$s was roasted by %2$s",
@@ -568,6 +588,7 @@
   "sounds.roundabout.heel_stomp":  "Leg lowers",
   "sounds.roundabout.spike_hit":  "Spike hit",
   "sounds.roundabout.spike_miss":  "Spike extend",
+  "sounds.roundabout.vampire_crumble":  "Crumbling",
 
   "sounds.roundabout.mandom_rewind":  "Time Rewind",
 
@@ -682,11 +703,14 @@
 
   "sounds.roundabout.ratt_summon":  "Chittering Noises",
   "sounds.roundabout.ratt_place":  "Stand Summoned",
+  "sounds.roundabout.ratt_deplace":  "Ratt Desummoned",
   "sounds.roundabout.ratt_scope":  "Scope Whirr",
   "sounds.roundabout.ratt_dart_impact": "Dart Impact",
   "sounds.roundabout.ratt_dart_thunk": "Dart Lands",
   "sounds.roundabout.ratt_loading": "Ominous Winding",
   "sounds.roundabout.ratt_firing": "Ratt Firing",
+  "sounds.roundabout.ratt_leap": "Mini Leap",
+  "sounds.roundabout.ratt_mode_change": "Mode Change",
 
   "sounds.roundabout.arcade_impale":  "[Arcade Impale]",
   "sounds.roundabout.arcade_long_ts":  "[Stop Time]",
@@ -732,6 +756,8 @@
   "sounds.roundabout.hey_ya_7": "Stand Talking",
 
   "sounds.roundabout.levelup": "Development Level Up!",
+
+  "sounds.roundabout.vampire_drain": "Blood drain",
 
   "sounds.roundabout.dio_hoho":  "Hoho!",
   "sounds.roundabout.dio_hoho_2":  "Ho!",
@@ -1072,6 +1098,8 @@
 
   "ability.roundabout.diver_selection": "Diver Selection",
   "ability.roundabout.diver_selection.desc": "Opens an impairment wheel which you can apply effects onto yourself",
+  "ability.roundabout.diver_zip": "Diver Zip",
+  "ability.roundabout.diver_zip.desc": "Your stand dives into the ground and zips you around! Control your direction using arrow keys",
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Locked",
@@ -1255,9 +1283,13 @@
   "skins.roundabout.ratt.sand" : "Sand",
   "skins.roundabout.ratt.aztec" : "Aztec",
   "skins.roundabout.ratt.tower" : "Cavern",
+  "skins.roundabout.ratt.redd" : "Redd",
   "skins.roundabout.ratt.snowy" : "Snowy",
   "skins.roundabout.ratt.guardian" : "Guardian",
-  "skins.roundabout.ratt.elder_guardian" : "Elder Guardian",
+  "skins.roundabout.ratt.elder_guardian" : "E. Guardian",
+  "skins.roundabout.ratt.chair_rat" : "Rat?",
+  "skins.roundabout.ratt.king_rat" : "The King",
+  "skins.roundabout.ratt.mech_rat" : "Cyborg Rat",
 
   "skins.roundabout.cinderella.base": "Part 4",
   "skins.roundabout.cinderella.manga": "Manga",
@@ -1316,6 +1348,8 @@
   "skins.roundabout.survivor.ender": "Ender",
   "skins.roundabout.survivor.conduit": "Conduit",
   "skins.roundabout.survivor.cake": "Cake",
+  "skins.roundabout.survivor.sponge": "Sponge",
+  "skins.roundabout.survivor.sculk": "Sculk",
 
   "skins.roundabout.killer_queen.base": "Part 4",
 
@@ -1325,9 +1359,7 @@
   "skins.roundabout.diver_down.orangediver": "Orange Diver",
   "skins.roundabout.diver_down.treasurediver": "Treasurer",
   "skins.roundabout.diver_down.birthdaydiver": "Birthday!",
-
-
-
+  "skins.roundabout.diver_down.firediver": "Fire Down",
 
   "skins.roundabout.achtung_baby.base": "Has No Form",
 
@@ -1336,7 +1368,7 @@
   "unlock_skin.roundabout.justice.bad_bone": "Justice: Bad to The Bone Skin Unlocked!",
   "unlock_skin.roundabout.magicians_red.chagaroth": "Magician's Dread Skin Unlocked!",
   "unlock_skin.roundabout.soft_and_wet.kira": "Killer Queen 8 Skin Unlocked!",
-  "unlock_skin.roundabout.ratt.guardians": "Ratt Guardian Skins Unlocked!",
+  "unlock_skin.roundabout.ratt.rat": "Rat? Unlocked!",
   "unlock_skin.roundabout.walking_heart.spider": "Webbing Heart Skin Unlocked!",
 
   "justice.morph.player": "Player",
@@ -1553,6 +1585,8 @@
   "config.roundabout.enableJustice.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableWalkingHeart.name": "Enable Stand",
   "config.roundabout.enableWalkingHeart.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+  "config.roundabout.enableRatt.name": "Enable Stand",
+  "config.roundabout.enableRatt.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableMandom.name": "Enable Stand",
   "config.roundabout.enableMandom.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableAchtungBaby.name": "Enable Stand",
@@ -1722,6 +1756,22 @@
   "config.roundabout.walkingHeartAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
   "config.roundabout.walkingHeartAttackMultOnMobs.name": "Mob Damage Multiplier",
   "config.roundabout.walkingHeartAttackMultOnMobs.desc": "How much damage the stand deals to every other mob, same math as above.",
+
+  "config.roundabout.rattAttackBonusOnMobs.name": "Bonus Mob Damage",
+  "config.roundabout.rattAttackBonusOnMobs.desc": "How much bonus damage Ratt darts deal to a mob.",
+  "config.roundabout.rattAttackBonusOnBosses.name": "Bonus Boss Damage",
+  "config.roundabout.rattAttackBonusOnBosses.desc": "Since Boss mobs cannot receive melt, they instead take a flat bonus damage ",
+
+  "config.roundabout.rattMaxDespawnRange.name": "Ratt Despawn Range",
+  "config.roundabout.rattMaxDespawnRange.desc": "How far you can go from Ratt until they despawn.",
+
+  "config.roundabout.rattChargePerHit.name": "Manual Charge Per Hit",
+  "config.roundabout.rattChargePerHit.desc": "How much manual charge Ratt gets from hitting a placed shot successfully. Default is 30, which means 3 hits to fully charge ",
+  "config.roundabout.rattManualChargeRate.name": "Manual Ratt Charge Speed",
+  "config.roundabout.rattManualChargeRate.desc": "How quickly manually charging Ratt takes. default is 2 per tick which equals about 2.5 seconds to reach full charge.",
+
+
+
 
   "config.roundabout.softAndWetAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.softAndWetAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
@@ -2112,6 +2162,15 @@
   "config.roundabout.blitzAttackCooldown.desc": "Change the length in between ending impale early with the attack button and using Star Blitz.",
 
 
+  "config.roundabout.vampireUsesPotionEffectForNightVision.name": "Vampire Uses NV Potion",
+  "config.roundabout.vampireUsesPotionEffectForNightVision.desc": "If you have a mod like Bad Optimizations that deletes the vanilla code that scope uses to light things up, turn this on so it works regardless.",
+
+  "config.roundabout.sunDamageUnderwaterReach.name": "Underwater Sun Damage Reach",
+  "config.roundabout.sunDamageUnderwaterReach.desc": "Change how far underwater sunlight reaches. Zero makes sunlight not intrude on water.",
+  "config.roundabout.drownSpeedModifier.name": "Vampire Oxygen Swim Slowdown",
+  "config.roundabout.drownSpeedModifier.desc": "When drowning, instead of taking damage, vampiric players are slowed down using this multiplier. Lower = slower.",
+  "config.roundabout.sunDamagePercentPerDamageTick.name": "Sun Damage Per Dose",
+  "config.roundabout.sunDamagePercentPerDamageTick.desc": "How much of your health is drained, percentage wise of max health, per hit under the sun as a vampiric player?",
 
   "config.roundabout.levelsToGetStand.name": "Arrow Stand Level Cost",
   "config.roundabout.levelsToGetStand.desc": "Obtaining a stand from a Stand Arrow costs 15 levels by default.",
@@ -2180,11 +2239,13 @@
   "config.roundabout.nameTagSettings.name": "Nametags",
   "config.roundabout.griefSettings.name": "Griefing",
   "config.roundabout.miscellaneousSettings.name": "Miscellaneous",
+  "config.roundabout.vampireSettings.name": "Vampire",
   "config.roundabout.standLevelingSettings.name": "Stand Leveling",
   "config.roundabout.generalStandSettings.name": "General Stand",
   "config.roundabout.softAndWetSettings.name": "Soft And Wet",
   "config.roundabout.magiciansRedSettings.name": "Magician's Red",
   "config.roundabout.walkingHeartSettings.name": "Walking Heart",
+  "config.roundabout.rattSettings.name": "Ratt",
   "config.roundabout.justiceSettings.name": "Justice",
   "config.roundabout.cinderellaSettings.name": "Cinderella",
   "config.roundabout.heyYaSettings.name": "Hey Ya",
@@ -2279,7 +2340,6 @@
 
   "config.roundabout.walkingHeartMaxHits.name": "Max Planted Hits",
   "config.roundabout.walkingHeartMaxHits.desc": "How many hits can you take in heel planted/wall walking mode before you are knocked out of that state.",
-
   "config.roundabout.walkingHeartCooldownPerHit.name": "Cooldown Per Hit",
   "config.roundabout.walkingHeartCooldownPerHit.desc": "How many cooldown ticks per hit in heel planted/wall walking mode.",
 
