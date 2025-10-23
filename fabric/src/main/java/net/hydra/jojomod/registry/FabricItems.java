@@ -171,7 +171,7 @@ public class FabricItems {
 
     public static Item FLESH_BUCKET = registerItem("flesh_bucket", new FleshBucketItem(new Item.Properties().stacksTo(1)));
     public static final FoodProperties CHERRY =new FoodProperties.Builder().nutrition(1).saturationMod(0.0F).alwaysEat()
-            .effect(new MobEffectInstance(ModEffects.WARDING, 600, 0), 1.0F)
+            .effect(new MobEffectInstance(ModEffects.WARDING, 1200, 0), 1.0F)
             .build();
     public static Item CHERRIES = registerItem("cherries", new Item(new Item.Properties().food(CHERRY)));
 
