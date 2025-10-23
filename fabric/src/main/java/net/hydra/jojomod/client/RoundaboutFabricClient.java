@@ -46,6 +46,7 @@ public class RoundaboutFabricClient implements ClientModInitializer {
                 ModBlocks.BLOODY_STONE_MASK_BLOCK,
                 ModBlocks.CULTIVATED_CHERRY_SAPLING,
                 ModBlocks.CULTIVATED_OAK_SAPLING,
+                ModBlocks.CULTIVATED_LOCACACA,
                 ModBlocks.FOG_TRAP);
         FabricParticlesClient.registerClientParticles();
         FabricEntityClient.register();

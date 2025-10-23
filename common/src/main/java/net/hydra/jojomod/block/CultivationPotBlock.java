@@ -2,6 +2,7 @@ package net.hydra.jojomod.block;
 
 import com.google.common.collect.Maps;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.NewLocacacaItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -74,6 +75,7 @@ public class CultivationPotBlock extends Block implements BonemealableBlock {
             ItemStack $$6 = $$3.getItemInHand($$4);
             Item $$7 = $$6.getItem();
             BlockState $$8 = ($$7 instanceof BlockItem ? POTTED_BY_CONTENT_2.getOrDefault(((BlockItem)$$7).getBlock(), Blocks.AIR) : Blocks.AIR).defaultBlockState();
+
             boolean $$9 = $$8.is(Blocks.AIR);
             boolean $$10 = this.isEmpty();
             if ($$9 != $$10) {
@@ -126,8 +128,10 @@ public class CultivationPotBlock extends Block implements BonemealableBlock {
             return ModItems.CHERRIES;
         }if (state.getBlock().equals(ModBlocks.CULTIVATED_OAK_SAPLING)) {
             return Items.APPLE;
+        }if (state.getBlock().equals(ModBlocks.CULTIVATED_LOCACACA)) {
+            return ModItems.LOCACACA;
         }
-        return ModItems.LOCACACA;
+        return Items.DIRT;
     }
 
     @Override
