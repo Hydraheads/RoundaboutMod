@@ -15,9 +15,9 @@ public class TheGratefulDeadModel<T extends TheGratefulDeadEntity> extends Stand
         this.head = stand.getChild("stand2").getChild("head");
         this.body = stand.getChild("stand2").getChild("body");
         this.leftHand = stand.getChild("stand2").getChild("body").getChild("body2")
-                .getChild("torso").getChild("chest").getChild("left_arm").getChild("left_lower");
+                .getChild("torso").getChild("chest").getChild("left_arm").getChild("lower_left_arm");
         this.rightHand = stand.getChild("stand2").getChild("body").getChild("body2")
-                .getChild("torso").getChild("chest").getChild("right_arm").getChild("right_lower");
+                .getChild("torso").getChild("chest").getChild("right_arm").getChild("lower_right_arm");
     }
 
     public static LayerDefinition getTexturedModelData(){
@@ -55,10 +55,10 @@ public class TheGratefulDeadModel<T extends TheGratefulDeadEntity> extends Stand
 
         PartDefinition right_arm = chest.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.offset(-4.5F, 1.0F, 0.0F));
 
-        PartDefinition right_upper = right_arm.addOrReplaceChild("right_upper", CubeListBuilder.create().texOffs(29, 0).addBox(-4.0F, -1.0F, -2.0F, 4.0F, 8.0F, 4.0F, new CubeDeformation(0.0F))
+        PartDefinition right_upper = right_arm.addOrReplaceChild("upper_right_arm", CubeListBuilder.create().texOffs(29, 0).addBox(-4.0F, -1.0F, -2.0F, 4.0F, 8.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(61, 0).addBox(-4.0F, -1.0F, -2.0F, 4.0F, 8.0F, 4.0F, new CubeDeformation(0.21F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition right_lower = right_arm.addOrReplaceChild("right_lower", CubeListBuilder.create().texOffs(29, 12).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 10.0F, 4.0F, new CubeDeformation(0.0F))
+        PartDefinition right_lower = right_arm.addOrReplaceChild("lower_right_arm", CubeListBuilder.create().texOffs(29, 12).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 10.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(61, 12).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 10.0F, 4.0F, new CubeDeformation(0.21F)), PartPose.offset(-2.0F, 7.0F, 0.0F));
 
         PartDefinition right_finger1 = right_lower.addOrReplaceChild("right_finger1", CubeListBuilder.create().texOffs(0, 22).mirror().addBox(-1.0F, -1.0F, -4.0F, 2.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(0.0F, 10.0F, -2.0F));
@@ -73,10 +73,10 @@ public class TheGratefulDeadModel<T extends TheGratefulDeadEntity> extends Stand
 
         PartDefinition left_arm = chest.addOrReplaceChild("left_arm", CubeListBuilder.create(), PartPose.offset(4.5F, 1.0F, 0.0F));
 
-        PartDefinition left_upper = left_arm.addOrReplaceChild("left_upper", CubeListBuilder.create().texOffs(45, 0).addBox(0.0F, -1.0F, -2.0F, 4.0F, 8.0F, 4.0F, new CubeDeformation(0.0F))
+        PartDefinition left_upper = left_arm.addOrReplaceChild("upper_left_arm", CubeListBuilder.create().texOffs(45, 0).addBox(0.0F, -1.0F, -2.0F, 4.0F, 8.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(77, 0).addBox(0.0F, -1.0F, -2.0F, 4.0F, 8.0F, 4.0F, new CubeDeformation(0.21F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition left_lower = left_arm.addOrReplaceChild("left_lower", CubeListBuilder.create().texOffs(45, 12).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 10.0F, 4.0F, new CubeDeformation(0.0F))
+        PartDefinition left_lower = left_arm.addOrReplaceChild("lower_left_arm", CubeListBuilder.create().texOffs(45, 12).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 10.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(77, 12).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 10.0F, 4.0F, new CubeDeformation(0.21F)), PartPose.offset(2.0F, 7.0F, 0.0F));
 
         PartDefinition left_finger1 = left_lower.addOrReplaceChild("left_finger1", CubeListBuilder.create().texOffs(0, 22).addBox(-1.0F, -1.0F, -4.0F, 2.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 10.0F, -2.0F));
@@ -126,12 +126,29 @@ public class TheGratefulDeadModel<T extends TheGratefulDeadEntity> extends Stand
     StandPowers Power = new PowersTheGratefulDead(null);
 
     @Override
+    public void defaultAnimations(T entity, float animationProgress, float windupLength){
+        this.animate(entity.idleAnimationState, StandAnimations.IDLE_2, animationProgress, 1f);
+        this.animate(entity.idleAnimationState2, StandAnimations.STAND_IDLE_FLOAT, animationProgress, 1f);
+        this.animate(entity.punchState1, StandAnimations.COMBO1, animationProgress, 1.4f);
+        this.animate(entity.punchState2, StandAnimations.COMBO2, animationProgress, 1.16666f); /*1.1666 for 6 ticks, 1.4 for 5*/
+        this.animate(entity.punchState3, StandAnimations.COMBO3, animationProgress, 1.16666f);
+        this.animate(entity.blockAnimationState, StandAnimations.BLOCK, animationProgress, 1f);
+        this.animate(entity.barrageChargeAnimationState, StandAnimations.BARRAGECHARGE, animationProgress, windupLength);
+        this.animate(entity.barrageAnimationState, StandAnimations.BARRAGE, animationProgress, 1f);
+        this.animate(entity.miningBarrageAnimationState, StandAnimations.MINING_BARRAGE, animationProgress, 1.65f);
+        this.animate(entity.barrageEndAnimationState, StandAnimations.COMBO3, animationProgress, 2.2f);
+        this.animate(entity.barrageHurtAnimationState, StandAnimations.BARRAGEDAMAGE, animationProgress, 2.5f);
+        this.animate(entity.brokenBlockAnimationState, StandAnimations.BLOCKBREAK, animationProgress, 1.8f);
+        this.animate(entity.standLeapAnimationState, StandAnimations.STAND_LEAP, animationProgress, 1f);
+        this.animate(entity.standLeapEndAnimationState, StandAnimations.STAND_LEAP_END, animationProgress, 3.0f);
+    }
+
+    @Override
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch){
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
-        //DONT ADD DEFAULT ANIMATIONS, OR DONT MAKE THEM OVERLAP
+        defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
         defaultModifiers(pEntity);
 
-        this.animate(pEntity.idleAnimationState, StandAnimations.IDLE_2, pAgeInTicks, 1F);
         this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1F);
     }
 

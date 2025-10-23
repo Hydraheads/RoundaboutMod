@@ -62,16 +62,16 @@ public class PowersTheGratefulDead extends NewPunchingStand {
     public List<Byte> getPosList(){
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add((byte) 0);
-        $$1.add((byte) 2);
+        $$1.add((byte) 1);
         return $$1;
     }
 
     @Override
     public Component getPosName(byte posID){
-        if (posID == 2){
-            return Component.translatable(  "idle.roundabout.floaty");
-        } else {
-            return Component.translatable(  "idle.roundabout.passive");
+        if (posID == 1){
+            return Component.translatable(   "idle.roundabout.floaty");
+        }else{
+            return Component.translatable(   "idle.roundabout.walky");
         }
     }
 }

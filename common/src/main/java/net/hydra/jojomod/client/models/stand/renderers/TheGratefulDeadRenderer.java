@@ -14,8 +14,8 @@ import net.hydra.jojomod.entity.stand.TheGratefulDeadEntity;
 import javax.annotation.Nullable;
 
 public class TheGratefulDeadRenderer extends StandRenderer<TheGratefulDeadEntity>{
-    private static final ResourceLocation ANIME_THE_GRATEFUL_DEAD = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/the_grateful_dead/anime_tgd.png");
-    private static final ResourceLocation MANGA_THE_GRATEFUL_DEAD = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/the_grateful_dead/manga_tgd.png");
+    private static final ResourceLocation ANIME = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/the_grateful_dead/anime_tgd.png");
+    private static final ResourceLocation MANGA = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/the_grateful_dead/manga_tgd.png");
 
     public TheGratefulDeadRenderer(EntityRendererProvider.Context context) {
         super(context, new TheGratefulDeadModel<>(context.bakeLayer(ModEntityRendererClient.THE_GRATEFUL_DEAD_LAYER)), 0f);
@@ -23,9 +23,9 @@ public class TheGratefulDeadRenderer extends StandRenderer<TheGratefulDeadEntity
     @Override
     public ResourceLocation getTextureLocation(TheGratefulDeadEntity entity){
         return switch (entity.getSkin()) {
-            case (TheGratefulDeadEntity.ANIME_THE_GRATEFUL_DEAD) -> ANIME_THE_GRATEFUL_DEAD;
-            case (TheGratefulDeadEntity.MANGA_THE_GRATEFUL_DEAD) -> MANGA_THE_GRATEFUL_DEAD;
-            default -> ANIME_THE_GRATEFUL_DEAD;
+            case (TheGratefulDeadEntity.ANIME) -> ANIME;
+            case (TheGratefulDeadEntity.MANGA) -> MANGA;
+            default -> ANIME;
         };
     }
     @Override
