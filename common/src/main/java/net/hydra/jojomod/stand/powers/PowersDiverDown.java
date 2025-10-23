@@ -76,6 +76,7 @@ public class PowersDiverDown extends NewPunchingStand {
             case DiverDownEntity.ORANGE_DIVER -> {return Component.translatable("skins.roundabout.diver_down.orangediver");}
             case DiverDownEntity.TREASURE_DIVER -> {return Component.translatable("skins.roundabout.diver_down.treasurediver");}
             case DiverDownEntity.BIRTHDAY_DIVER -> {return Component.translatable("skins.roundabout.diver_down.birthdaydiver");}
+            case DiverDownEntity.FIRE_DIVER -> {return Component.translatable("skins.roundabout.diver_down.firediver");}
             default -> {return Component.translatable("skins.roundabout.diver_down.base");}
         }
     }
@@ -88,7 +89,8 @@ public class PowersDiverDown extends NewPunchingStand {
                 DiverDownEntity.RED_DIVER,
                 DiverDownEntity.ORANGE_DIVER,
                 DiverDownEntity.TREASURE_DIVER,
-                DiverDownEntity.BIRTHDAY_DIVER
+                DiverDownEntity.BIRTHDAY_DIVER,
+                DiverDownEntity.FIRE_DIVER
         );
     }
         public float standReach = 5;
@@ -152,7 +154,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
         @Override
         public Component ifWipListDevStatus () {
-            return Component.translatable("roundabout.dev_status.paused").withStyle(ChatFormatting.AQUA);
+            return Component.translatable("roundabout.dev_status.ongoing").withStyle(ChatFormatting.AQUA);
         }
         @Override
         public Component ifWipListDev () {
