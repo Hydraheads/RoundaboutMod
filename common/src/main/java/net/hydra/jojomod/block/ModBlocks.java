@@ -125,6 +125,8 @@ public class ModBlocks {
 
     public static Block D4C_LIGHT_BLOCK;
 
+    public static Block MELON_PARFAIT;
+
     public static BlockEntityType<StandFireBlockEntity> STAND_FIRE_BLOCK_ENTITY;
     public static BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY;
     public static BlockEntityType<MirrorBlockEntity> MIRROR_BLOCK_ENTITY;
@@ -686,6 +688,14 @@ public class ModBlocks {
 
         return new CultivationPotBlock($$0, $$2);
     }
+
+    public static Block MELON_PARFAIT_PROPERTIES = new MelonParfaitBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_LIGHT_BLUE)
+                    .strength(0.3F).sound(SoundType.GLASS)
+                    .noOcclusion()
+                    .pushReaction(PushReaction.DESTROY)
+    );
 
     public static List<String> dontGenState = new ArrayList<String>();
     public static List<String> blockBlacklist = Arrays.asList(

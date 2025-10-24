@@ -377,6 +377,7 @@
   "block.roundabout.cultivated_cherry_sapling": "Cultivated Cherry Sapling",
   "block.roundabout.cultivated_oak_sapling": "Cultivated Oak Sapling",
   "block.roundabout.cultivated_locacaca": "Cultivated Locacaca",
+  "block.roundabout.melon_parfait": "Melon Parfait",
 
   "itemgroup.jojo": "Roundabout",
   "itemgroup.jojo_discs": "Stand Discs",
@@ -492,8 +493,8 @@
   "death.attack.glaive.item": "%1$s was skewered by %2$s using %3$s",
   "death.attack.stand_virus": "%1$s was turned into tomato sauce",
   "death.attack.stand_virus.item": "%1$s was turned into tomato sauce",
-  "death.attack.disintegration": "%1$ disintegrated",
-  "death.attack.disintegration.player": "%1$ was disintegrated by %$2s",
+  "death.attack.disintegration": "%1$s disintegrated",
+  "death.attack.disintegration.player": "%1$s was disintegrated by %$2s",
   "death.attack.melting": "%1$s became a fluid",
   "death.attack.melting.player":"%1$s was reduced to a puddle by %2$s",
   "death.attack.dagger": "%1$s became a human sacrifice",
