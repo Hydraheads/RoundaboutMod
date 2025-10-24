@@ -66,6 +66,7 @@ public class ModEntities {
     public static EntityType<StandFireballEntity> STAND_FIREBALL;
 
     public static EntityType<GasolineCanEntity> GASOLINE_CAN;
+    public static EntityType<RoadRollerEntity> ROAD_ROLLER_ENTITY;
 
     public static EntityType<GasolineSplatterEntity> GASOLINE_SPLATTER;
 

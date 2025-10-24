@@ -2479,6 +2479,19 @@ public class MainUtil {
         return closest; // null if no valid hit
     }
 
+
+    public static boolean isHoldingRoadRoller(Entity ent){
+        if (ent instanceof LivingEntity LE){
+            ItemStack hand = LE.getMainHandItem();
+            ItemStack offHand = LE.getOffhandItem();
+            if ((!hand.isEmpty() && hand.getItem() instanceof RoadRollerItem) || (!offHand.isEmpty() && offHand.getItem() instanceof RoadRollerItem)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     public static Entity raytraceEntityStandThroughWalls(Level world, LivingEntity player, double maxDistance) {
 
         Vec3 eyePos = player.getEyePosition(1.0F); // player.getEyePosition(float)

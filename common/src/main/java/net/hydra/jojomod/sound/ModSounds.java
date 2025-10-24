@@ -179,6 +179,21 @@ public class ModSounds {
     public static final ResourceLocation EXPLOSIVE_SPIN_MODE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EXPLOSIVE_SPIN_MODE);
     public static SoundEvent EXPLOSIVE_SPIN_MODE_EVENT = SoundEvent.createVariableRangeEvent(EXPLOSIVE_SPIN_MODE_ID);
 
+
+    public static final String ROAD_ROLLER_AMBIENT = "road_roller_ambient";
+    public static final ResourceLocation ROAD_ROLLER_AMBIENT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ROAD_ROLLER_AMBIENT);
+    public static SoundEvent ROAD_ROLLER_AMBIENT_EVENT = SoundEvent.createVariableRangeEvent(ROAD_ROLLER_AMBIENT_ID);
+
+    public static final String ROAD_ROLLER_EXPLOSION = "road_roller_explosion";
+    public static final ResourceLocation ROAD_ROLLER_EXPLOSION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ROAD_ROLLER_EXPLOSION);
+    public static SoundEvent ROAD_ROLLER_EXPLOSION_EVENT = SoundEvent.createVariableRangeEvent(ROAD_ROLLER_EXPLOSION_ID);
+
+    public static final String ROAD_ROLLER_MIXING = "road_roller_mixing";
+    public static final ResourceLocation ROAD_ROLLER_MIXING_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ROAD_ROLLER_MIXING);
+    public static SoundEvent ROAD_ROLLER_MIXING_EVENT = SoundEvent.createVariableRangeEvent(ROAD_ROLLER_MIXING_ID);
+
+
+
     public static final String BUBBLE_CREATE = "bubble_create";
     public static final ResourceLocation BUBBLE_CREATE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BUBBLE_CREATE);
     public static SoundEvent BUBBLE_CREATE_EVENT = SoundEvent.createVariableRangeEvent(BUBBLE_CREATE_ID);
