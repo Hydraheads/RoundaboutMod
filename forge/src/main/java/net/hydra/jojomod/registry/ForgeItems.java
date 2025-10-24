@@ -14,6 +14,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraftforge.common.ForgeSpawnEggItem;
@@ -259,6 +260,12 @@ public class ForgeItems {
     public static final RegistryObject<BlockItem> STEREO_ITEM = addToTab(ITEMS.register("stereo",
             () -> new BlockItem(ForgeBlocks.STEREO.get(),
                     new Item.Properties().stacksTo(64)
+            )));
+
+    public static final RegistryObject<BlockItem> MELON_PARFAIT_ITEM = addToTab(ITEMS.register("Melon_parfait",
+            () -> new BlockItem(ForgeBlocks.MELON_PARFAIT.get(),
+                    new Item.Properties().stacksTo(1)
+
             )));
 
     public static final RegistryObject<BlockItem> FOG_DIRT_COATING = addToFogTab(ITEMS.register("fog_dirt_coating",

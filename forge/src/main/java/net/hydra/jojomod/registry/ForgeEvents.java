@@ -192,6 +192,7 @@ public class ForgeEvents {
         ModBlocks.BUBBLE_SCAFFOLD = ForgeBlocks.BUBBLE_SCAFFOLD.get();
         ModBlocks.INVISIBLOCK = ForgeBlocks.INVISIBLOCK.get();
         ModBlocks.D4C_LIGHT_BLOCK = ForgeBlocks.D4C_LIGHT_BLOCK.get();
+        ModBlocks.MELON_PARFAIT = ForgeBlocks.MELON_PARFAIT.get();
 
         ModBlocks.ORANGE_FIRE = ForgeBlocks.ORANGE_FIRE.get();
         ModBlocks.BLUE_FIRE = ForgeBlocks.BLUE_FIRE.get();

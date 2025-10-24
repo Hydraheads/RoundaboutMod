@@ -174,6 +174,8 @@ public class ForgeBlocks {
             () -> ModBlocks.cultivationPot(Blocks.OAK_SAPLING)
     );
 
+    public static final RegistryObject<Block> MELON_PARFAIT = BLOCKS.register("melon_parfait",
+            () -> MELON_PARFAIT_PROPERTIES);
 
 
     public static final RegistryObject<Block> LOCACACA_CACTUS = BLOCKS.register("locacaca_cactus",

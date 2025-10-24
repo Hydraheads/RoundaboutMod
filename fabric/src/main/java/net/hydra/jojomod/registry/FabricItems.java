@@ -356,6 +356,7 @@ public class FabricItems {
                         entries.accept(ModBlocks.BARBED_WIRE_BUNDLE);
                         entries.accept(ModBlocks.LOCACACA_CACTUS);
                         entries.accept(ModBlocks.CULTIVATION_POT);
+                        entries.accept(ModBlocks.MELON_PARFAIT);
 
                     }).build());
 
