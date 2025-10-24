@@ -276,6 +276,8 @@ public class ForgeEvents {
         ModItems.COFFEE_GUM = ForgeItems.COFFEE_GUM.get();
         ModItems.CHERRIES = ForgeItems.CHERRIES.get();
 
+        ModItems.SNUBNOSE_REVOLVER = ForgeItems.SNUBNOSE_REVOLVER.get();
+
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_DIO.get()).referenceItem = ForgeItems.STREET_SIGN_DIO_BLOCK_ITEM.get().getDefaultInstance();
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_RIGHT.get()).referenceItem = ForgeItems.STREET_SIGN_RIGHT_BLOCK_ITEM.get().getDefaultInstance();
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_STOP.get()).referenceItem = ForgeItems.STREET_SIGN_STOP_BLOCK_ITEM.get().getDefaultInstance();

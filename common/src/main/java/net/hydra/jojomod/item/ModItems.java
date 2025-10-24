@@ -125,6 +125,8 @@ public class ModItems {
     public static Item SHIZUKA_MASK;
     public static Item INTERDIMENSIONAL_KEY;
 
+    public static Item SNUBNOSE_REVOLVER;
+
     public static Item PAINTING_VAN_GOUGH;
     public static Item PAINTING_MONA_LISA;
     public static Item PAINTING_BIRTH_OF_VENUS;

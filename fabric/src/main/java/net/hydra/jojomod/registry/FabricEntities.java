@@ -418,6 +418,13 @@ public class FabricEntities {
                         EntityType.Builder.<BladedBowlerHatEntity>of(BladedBowlerHatEntity::new, MobCategory.MISC).
                                 sized(0.5f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":bladed_bowler_hat")
                 );
+        public static final EntityType<BladedBowlerHatEntity> ROUNDABOUT_BULLET_ENTITY =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "roundabout_bullet_entity"),
+                        EntityType.Builder.<BladedBowlerHatEntity>of(RoundaboutBulletEntity::new, MobCategory.MISC).
+                                sized(0.5f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":roundabout_bullet_entity")
+                );
         public static final EntityType<KnifeEntity> THROWN_KNIFE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,

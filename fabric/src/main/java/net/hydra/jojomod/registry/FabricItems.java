@@ -102,6 +102,8 @@ public class FabricItems {
 
     public static Item BOWLER_HAT = registerItem("bowler_hat", new BowlerHatItem(Tiers.IRON, 0F, -1.6F, new Item.Properties()));
 
+    public static Item SNUBNOSE_REVOLVER = registerItem("snubnose_revolver", new SnubnoseRevolverItem(new Item.Properties().stacksTo(1)));
+
     public static Item WOODEN_GLAIVE = registerItem("wooden_glaive", new GlaiveItem(Tiers.WOOD, 4F, -2.9F, new Item.Properties(),4));
     public static Item STONE_GLAIVE = registerItem("stone_glaive", new GlaiveItem(Tiers.STONE, 4F, -2.9F, new Item.Properties(),6));
     public static Item IRON_GLAIVE = registerItem("iron_glaive", new GlaiveItem(Tiers.IRON, 4F, -2.9F, new Item.Properties(),7));
@@ -419,6 +421,7 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_RATT);
                         //entries.accept(STAND_DISC_DIVER_DOWN);
                         //entries.accept(MAX_STAND_DISC_DIVER_DOWN);
+                        entries.accept(SNUBNOSE_REVOLVER);
 
 
                     }).build());
@@ -504,6 +507,7 @@ public class FabricItems {
         ModItems.MATCH_BUNDLE = MATCH_BUNDLE;
         ModItems.GASOLINE_CAN = GASOLINE_CAN;
         ModItems.GASOLINE_BUCKET = GASOLINE_BUCKET;
+        ModItems.SNUBNOSE_REVOLVER = SNUBNOSE_REVOLVER;
         ModItems.STAND_DISC = STAND_DISC;
         ModItems.COFFEE_GUM = COFFEE_GUM;
         ModItems.METEORITE = METEORITE;
