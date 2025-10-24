@@ -262,7 +262,7 @@ public class ForgeItems {
                     new Item.Properties().stacksTo(64)
             )));
 
-    public static final RegistryObject<BlockItem> MELON_PARFAIT_ITEM = addToTab(ITEMS.register("Melon_parfait",
+    public static final RegistryObject<BlockItem> MELON_PARFAIT_ITEM = addToTab(ITEMS.register("melon_parfait",
             () -> new BlockItem(ForgeBlocks.MELON_PARFAIT.get(),
                     new Item.Properties().stacksTo(1)
 

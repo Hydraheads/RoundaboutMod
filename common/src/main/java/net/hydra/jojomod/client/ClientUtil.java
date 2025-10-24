@@ -6,6 +6,9 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.gui.*;
+import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerAmbientSound;
+import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerExplosionSound;
+import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerMixingSound;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
@@ -190,6 +193,18 @@ public class ClientUtil {
         ent.setYBodyRot(lerpYRot);
         ent.setYHeadRot(lerpYRot);
     }
+
+
+    public static void handleRoadRollerAmbientSound(Entity entity) {
+        Minecraft.getInstance().getSoundManager().play(new RoadRollerAmbientSound(ModSounds.ROAD_ROLLER_AMBIENT_EVENT, SoundSource.PLAYERS, 1, 0, entity));
+    }
+    public static void handleRoadRollerExplosionSound(Entity entity) {
+        Minecraft.getInstance().getSoundManager().play(new RoadRollerExplosionSound(ModSounds.ROAD_ROLLER_EXPLOSION_EVENT, SoundSource.PLAYERS, 1, 0, entity));
+    }
+    public static void handleRoadRollerMixingSound(Entity entity) {
+        Minecraft.getInstance().getSoundManager().play(new RoadRollerMixingSound(ModSounds.ROAD_ROLLER_MIXING_EVENT, SoundSource.PLAYERS, 1, 0, entity));
+    }
+
 
     public static void preRenderCinderellaMask(CinderellaVisageDisplayEntity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
 
