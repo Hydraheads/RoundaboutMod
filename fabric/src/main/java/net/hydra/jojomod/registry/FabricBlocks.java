@@ -99,6 +99,10 @@ public class FabricBlocks {
     );
     public static final Block WOOL_STAIRS_BROWN = registerBlock("wool_stairs_brown", ModBlocks.WOOL_STAIRS_BROWN_PROPERTIES
     );
+    public static final Block WALL_LANTERN = registerBlock("wall_lantern", ModBlocks.WALL_LANTERN_PROPERTIES
+    );
+    public static final Block GLASS_DOOR = registerBlock("glass_door", ModBlocks.GLASS_DOOR_PROPERTIES
+    );
     public static final Block LOCACACA_CACTUS = registerBlock("locacaca_cactus", ModBlocks.LOCACACA_CACTUS_PROPERTIES
     );
     public static final Block LOCACACA_BLOCK = registerBlock("locacaca_plant", ModBlocks.LOCACACA_BLOCK_PROPERTIES
@@ -276,6 +280,8 @@ public class FabricBlocks {
         ModBlocks.WOOL_STAIRS_RED = WOOL_STAIRS_RED;
         ModBlocks.WOOL_SLAB_YELLOW = WOOL_SLAB_YELLOW;
         ModBlocks.WOOL_STAIRS_YELLOW = WOOL_STAIRS_YELLOW;
+        ModBlocks.WALL_LANTERN = WALL_LANTERN;
+        ModBlocks.GLASS_DOOR = GLASS_DOOR;
         ModBlocks.LOCACACA_CACTUS = LOCACACA_CACTUS;
         ModBlocks.LOCACACA_BLOCK = LOCACACA_BLOCK;
         ModBlocks.NEW_LOCACACA_BLOCK = NEW_LOCACACA_BLOCK;

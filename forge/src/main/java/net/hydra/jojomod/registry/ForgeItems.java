@@ -362,6 +362,14 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.CEILING_LIGHT.get(),
                     new Item.Properties()
             )));
+    public static final RegistryObject<Item> WALL_LANTERN_ITEM = addToBuildingTab(ITEMS.register("wall_lantern",
+            () -> new BlockItem(ForgeBlocks.WALL_LANTERN.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<Item> GLASS_DOOR = addToBuildingTab(ITEMS.register("glass_door",
+            () -> new BlockItem(ForgeBlocks.GLASS_DOOR.get(),
+                    new Item.Properties()
+            )));
     public static final RegistryObject<Item> MIRROR_ITEM = addToBuildingTab(ITEMS.register("mirror",
             () -> new BlockItem(ForgeBlocks.MIRROR.get(),
                     new Item.Properties()

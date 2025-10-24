@@ -341,7 +341,9 @@ public class FabricItems {
                         entries.accept(STREET_SIGN_STOP_BLOCK_ITEM);
                         entries.accept(STREET_SIGN_YIELD_BLOCK_ITEM);
                         entries.accept(STREET_SIGN_DANGER_BLOCK_ITEM);
+                        entries.accept(ModBlocks.GLASS_DOOR);
                         entries.accept(ModBlocks.CEILING_LIGHT);
+                        entries.accept(ModBlocks.WALL_LANTERN);
                         entries.accept(ModBlocks.MIRROR);
                         entries.accept(ModBlocks.ANCIENT_METEOR);
                         entries.accept(ModBlocks.BARBED_WIRE);

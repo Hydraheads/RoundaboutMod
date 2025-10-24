@@ -151,6 +151,8 @@ public class ForgeEvents {
         ModBlocks.WOOL_STAIRS_RED = ForgeBlocks.WOOL_STAIRS_RED.get();
         ModBlocks.WOOL_SLAB_YELLOW = ForgeBlocks.WOOL_SLAB_YELLOW.get();
         ModBlocks.WOOL_STAIRS_YELLOW = ForgeBlocks.WOOL_STAIRS_YELLOW.get();
+        ModBlocks.GLASS_DOOR = ForgeBlocks.GLASS_DOOR.get();
+        ModBlocks.WALL_LANTERN = ForgeBlocks.WALL_LANTERN.get();
         ModBlocks.REGAL_WALL = ForgeBlocks.REGAL_WALL.get();
         ModBlocks.CULTIVATION_POT = ForgeBlocks.CULTIVATION_POT.get();
         ModBlocks.CULTIVATED_CHERRY_SAPLING = ForgeBlocks.CULTIVATED_CHERRY_SAPLING.get();

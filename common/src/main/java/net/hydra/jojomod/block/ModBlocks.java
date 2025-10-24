@@ -69,6 +69,8 @@ public class ModBlocks {
     public static Block WOOL_STAIRS_RED;
     public static Block WOOL_SLAB_YELLOW;
     public static Block WOOL_STAIRS_YELLOW;
+    public static Block WALL_LANTERN;
+    public static Block GLASS_DOOR;
     public static Block LOCACACA_CACTUS;
     public static Block LOCACACA_BLOCK;
     public static Block NEW_LOCACACA_BLOCK;
@@ -658,6 +660,23 @@ public class ModBlocks {
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(0.35F).sound(SoundType.STONE).pushReaction(PushReaction.DESTROY).lightLevel((L) -> {
                 return 1;
             }));
+
+    public static Block WALL_LANTERN_PROPERTIES = new LanternWallBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(2.0F).sound(SoundType.WOOD).ignitedByLava()
+                    .lightLevel(state -> 14)
+                    .noOcclusion()
+    );
+    public static Block GLASS_DOOR_PROPERTIES = new GlassDoorBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_LIGHT_BLUE)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.3F).sound(SoundType.GLASS).ignitedByLava()
+                    .noOcclusion()
+                    .pushReaction(PushReaction.BLOCK)
+    );
 
     public static CultivationPotBlock cultivationPot(Block $$0, FeatureFlag... $$1) {
         BlockBehaviour.Properties $$2 = BlockBehaviour.Properties.of().instabreak().noOcclusion().pushReaction(PushReaction.DESTROY);
