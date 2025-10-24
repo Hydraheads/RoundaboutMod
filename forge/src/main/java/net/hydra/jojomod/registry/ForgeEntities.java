@@ -19,6 +19,8 @@ import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.visages.mobs.*;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -495,5 +497,11 @@ public class ForgeEntities {
                             sized(EncasementBubbleEntity.eWidth, EncasementBubbleEntity.eHeight).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "encasement_bubble").toString())
+            );
+
+    public static final RegistryObject<EntityType<RoadRollerEntity>> ROAD_ROLLER_ENTITY =
+            ENTITY_TYPES.register("road_roller_entity", () ->
+                    EntityType.Builder.<RoadRollerEntity>of(RoadRollerEntity::new, MobCategory.MISC).
+                            sized(2f, 2f).clientTrackingRange(10).build(Roundabout.MOD_ID+":road_roller_entity")
             );
 }

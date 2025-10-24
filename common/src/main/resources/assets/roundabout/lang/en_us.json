@@ -772,6 +772,10 @@
 
   "sounds.roundabout.vampire_drain": "Blood drain",
 
+  "sounds.roundabout.road_roller_ambient":  "Road Roller Ambient",
+  "sounds.roundabout.road_roller_explosion":  "Road Roller Explosion",
+  "sounds.roundabout.road_roller_mixing":  "Road Roller Mixing",
+
   "sounds.roundabout.dio_hoho":  "Hoho!",
   "sounds.roundabout.dio_hoho_2":  "Ho!",
   "sounds.roundabout.dio_death":  "I am DIO!",
