@@ -392,6 +392,9 @@ public class ForgeEvents {
         ModParticles.DUST_CRUMBLE = ForgeParticles.DUST_CRUMBLE.get();
         ModParticles.FIRE_CRUMBLE = ForgeParticles.FIRE_CRUMBLE.get();
         ModParticles.SOUL_FIRE_CRUMBLE = ForgeParticles.SOUL_FIRE_CRUMBLE.get();
+        ModParticles.ROAD_ROLLER_SCRAP = ForgeParticles.ROAD_ROLLER_SCRAP.get();
+        ModParticles.ROAD_ROLLER_EXPLOSION = ForgeParticles.ROAD_ROLLER_EXPLOSION.get();
+        ModParticles.ROAD_ROLLER_SMOKE = ForgeParticles.ROAD_ROLLER_SMOKE.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();

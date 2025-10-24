@@ -207,4 +207,16 @@ public class ForgeParticles {
             "soul_fire_crumble",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> ROAD_ROLLER_SCRAP = PARTICLES.register(
+            "road_roller_scrap",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> ROAD_ROLLER_EXPLOSION = PARTICLES.register(
+            "road_roller_explosion",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> ROAD_ROLLER_SMOKE = PARTICLES.register(
+            "road_roller_smoke",
+            () -> new SimpleParticleType(true)
+    );
 }

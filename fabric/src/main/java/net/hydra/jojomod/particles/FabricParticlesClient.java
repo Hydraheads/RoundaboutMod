@@ -56,5 +56,8 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.DUST_CRUMBLE, DustCrumbleParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.FIRE_CRUMBLE, FireCrumbleParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.SOUL_FIRE_CRUMBLE, FireCrumbleParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.ROAD_ROLLER_SMOKE, RoadRollerSmokeParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.ROAD_ROLLER_EXPLOSION, RoadRollerExplosionParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.ROAD_ROLLER_SCRAP, RoadRollerScrapParticle.Provider::new);
     }
 }

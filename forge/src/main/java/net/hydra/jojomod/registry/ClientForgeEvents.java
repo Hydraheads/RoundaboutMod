@@ -264,5 +264,8 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.DUST_CRUMBLE.get(), DustCrumbleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.FIRE_CRUMBLE.get(), FireCrumbleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.SOUL_FIRE_CRUMBLE.get(), FireCrumbleParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.ROAD_ROLLER_SCRAP.get(), RoadRollerScrapParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.ROAD_ROLLER_EXPLOSION.get(), RoadRollerExplosionParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.ROAD_ROLLER_SMOKE.get(), RoadRollerSmokeParticle.Provider::new);
     }
 }
