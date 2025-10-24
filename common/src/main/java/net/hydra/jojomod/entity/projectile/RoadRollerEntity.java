@@ -878,21 +878,23 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
         }
     }
 
-    protected static final EntityDataAccessor<Integer> PAVING_TIMER = SynchedEntityData.defineId(StandEntity.class, EntityDataSerializers.INT);
-    protected static final EntityDataAccessor<Boolean> PAVING_BOOLEAN = SynchedEntityData.defineId(StandEntity.class, EntityDataSerializers.BOOLEAN);
-    protected static final EntityDataAccessor<ItemStack> CONCRETE_COLOUR = SynchedEntityData.defineId(StandEntity.class, EntityDataSerializers.ITEM_STACK);
+    protected static final EntityDataAccessor<Integer> PAVING_TIMER = SynchedEntityData.defineId(RoadRollerEntity.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Boolean> PAVING_BOOLEAN = SynchedEntityData.defineId(RoadRollerEntity.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<ItemStack> CONCRETE_COLOUR = SynchedEntityData.defineId(RoadRollerEntity.class, EntityDataSerializers.ITEM_STACK);
     protected static final EntityDataAccessor<Boolean> INPUT_UP = SynchedEntityData.defineId(RoadRollerEntity.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Boolean> EXPLODED = SynchedEntityData.defineId(RoadRollerEntity.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Byte> CRACKINESS = SynchedEntityData.defineId(RoadRollerEntity.class, EntityDataSerializers.BYTE);
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(PAVING_TIMER, 0);
-        this.entityData.define(PAVING_BOOLEAN, false);
-        this.entityData.define(CONCRETE_COLOUR, ItemStack.EMPTY);
-        this.entityData.define(INPUT_UP, false);
-        this.entityData.define(EXPLODED, false);
-        this.entityData.define(CRACKINESS, Crackiness.NONE);
+        if (!this.entityData.hasItem(PAVING_TIMER)) {
+            this.entityData.define(PAVING_TIMER, 0);
+            this.entityData.define(PAVING_BOOLEAN, false);
+            this.entityData.define(CONCRETE_COLOUR, ItemStack.EMPTY);
+            this.entityData.define(INPUT_UP, false);
+            this.entityData.define(EXPLODED, false);
+            this.entityData.define(CRACKINESS, Crackiness.NONE);
+        }
     }
 
     public final void setPavingTimer(int PavingTimer) {
