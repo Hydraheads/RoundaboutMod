@@ -234,6 +234,7 @@ public class ForgeEvents {
         ModItems.MATCH_BUNDLE = ForgeItems.MATCH_BUNDLE.get();
         ModItems.GASOLINE_CAN = ForgeItems.GASOLINE_CAN.get();
         ModItems.GASOLINE_BUCKET = ForgeItems.GASOLINE_BUCKET.get();
+        ModItems.ROAD_ROLLER = ForgeItems.ROAD_ROLLER.get();
         ModItems.STAND_DISC = ForgeItems.STAND_DISC.get();
         ModItems.STAND_DISC_THE_WORLD = ForgeItems.STAND_DISC_THE_WORLD.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_THE_WORLD.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_THE_WORLD.get());
