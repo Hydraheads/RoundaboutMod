@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "C": {
+      "item": "minecraft:candle"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    " G ",
+    "GCG",
+    "S  "
+  ],
+  "result": {
+    "count": 4,
+    "item": "roundabout:wall_lantern"
+  },
+  "show_notification": true
+}

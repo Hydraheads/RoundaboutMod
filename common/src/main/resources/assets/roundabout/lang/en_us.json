@@ -2,6 +2,7 @@
   "text.roundabout.barrage_clash": "Clash! Hold and Release Jump!",
   "text.roundabout.launch_bubble_encased": "Encased! Use sharp object to break free!",
   "text.roundabout.riding_flying_creature": "Hold Jump to ascend, Hold Dash to descend",
+  "text.roundabout.riding_road_roller": "Feed the Road Roller Concrete to Begin Paving!",
   "text.roundabout.riding_flying_creature.day": "Cannot fly at day time.",
   "text.roundabout.riding_flying_creature.dimension": "Cannot fly in this dimension.",
   "text.roundabout.warn_trap_triggered": " has been triggered!",
@@ -100,6 +101,8 @@
   "item.roundabout.diver_down_disc.desc": "Diver Down",
   "item.roundabout.max_diver_down_disc.desc": "Diver Down",
   "item.roundabout.none_disc.desc": "None",
+
+  "item.roundabout.road_roller": "Road Roller",
 
   "item.roundabout.light_bulb": "Light Bulb",
 
@@ -298,6 +301,8 @@
   "block.roundabout.meteor_block": "Meteorite Block",
   "block.roundabout.regal_wall": "Regal Wall",
   "block.roundabout.regal_floor": "Regal Floor",
+  "block.roundabout.glass_door": "Glass Door",
+  "block.roundabout.wall_lantern": "Wall Lantern",
   "block.roundabout.wooden_manor_table": "Wooden Manor Table",
   "block.roundabout.wooden_manor_chair": "Wooden Manor Chair",
   "block.roundabout.wool_slab_black": "Black Wool Slab",

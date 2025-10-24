@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "G": {
+      "item": "minecraft:glass_pane"
+    }
+  },
+  "pattern": [
+    "GG",
+    "GG",
+    "GG"
+  ],
+  "result": {
+    "count": 3,
+    "item": "roundabout:glass_door"
+  },
+  "show_notification": true
+}
