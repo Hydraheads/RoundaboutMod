@@ -297,6 +297,7 @@
   "entity.roundabout.painting_van_gough": "VG Painting",
   "entity.roundabout.painting_mona_lisa": "ML Painting",
   "entity.roundabout.painting_venus": "V Painting",
+  "entity.roundabout.road_roller_entity": "Road Roller",
 
   "block.roundabout.meteor_block": "Meteorite Block",
   "block.roundabout.regal_wall": "Regal Wall",
@@ -501,6 +502,10 @@
   "death.attack.dagger.item": "%1$s became a human sacrifice",
   "death.attack.dagger.player": "%1$s became a human sacrifice",
   "death.attack.dagger.player.item": "%1$s became a human sacrifice",
+  "death.attack.road_roller": "%1$s's grave was paved.",
+  "death.attack.road_roller.item": "%1$s's grave was paved.",
+  "death.attack.road_roller.player": "%1$s's grave was paved.",
+  "death.attack.road_roller.player.item": "%1$s's grave was paved.",
 
 
   "item.glaive.charge_power": "Charge Attack",
