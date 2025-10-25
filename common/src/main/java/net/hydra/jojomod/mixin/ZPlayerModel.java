@@ -12,6 +12,7 @@ import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModificationMaskItem;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.animation.AnimationChannel;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.animation.Keyframe;
@@ -223,6 +224,21 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         this.rightArm.yRot = 0F;
                         this.leftArm.yRot = 0F;
                     }
+                }
+            } else if (MainUtil.isHoldingRoadRoller($$0)) {
+                boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
+                if ($$9) {
+                    this.rightArm.zRot = -0.175F + this.body.yRot;
+                    this.rightArm.xRot = (float) (-Math.PI / 1) + this.body.xRot;
+                    this.rightArm.y = -0.1F;
+                    this.leftArm.zRot = 0.175F + this.body.yRot;
+                    this.leftArm.xRot = (float) (-Math.PI / 1) + this.body.xRot;
+                    this.leftArm.y = -0.1F;
+                } else {
+                    this.leftArm.yRot = 0.1F + this.body.yRot;
+                    this.leftArm.xRot = (float) (-Math.PI / 2) + this.body.xRot;
+                    this.rightArm.yRot = 0.1F + this.body.yRot;
+                    this.rightArm.xRot = (float) (-Math.PI / 2) + this.body.xRot;
                 }
             }
             this.hat.copyFrom(this.head);

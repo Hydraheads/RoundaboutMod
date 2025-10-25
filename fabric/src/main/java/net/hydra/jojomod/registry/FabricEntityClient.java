@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.client.models.RoadRollerStrayModel;
 import net.hydra.jojomod.client.models.WornBloodyStoneMaskModel;
 import net.hydra.jojomod.client.models.WornStoneMaskModel;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
@@ -209,5 +210,6 @@ public class FabricEntityClient {
         ModStrayModels.LeftLeg = new LeftLegPart();
         ModStrayModels.RightHeel = new RightHeelPart();
         ModStrayModels.LeftHeel = new LeftHeelPart();
+        ModStrayModels.ROAD_ROLLER = new RoadRollerStrayModel();
     }
 }
