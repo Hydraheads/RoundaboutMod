@@ -2,7 +2,10 @@ package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.VoiceLine;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -66,9 +69,7 @@ public class MelonParfaitBlock extends Block {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand $$4, BlockHitResult $$5) {
         int eating_stage = state.getValue(EATING_STAGE);
-        StandPowers powers = ((StandUser)  player ).roundabout$getStandPowers();
-        if (!powers.isClient()) {
-            level = powers.getSelf().level();
+        if (!level.isClientSide()) {
             if (eating_stage < 3) {
                 if (player.getFoodData().getFoodLevel()<16) {
                     player.getFoodData().setFoodLevel((player.getFoodData().getFoodLevel() + 5));
@@ -76,6 +77,8 @@ public class MelonParfaitBlock extends Block {
                 else{
                     player.getFoodData().setFoodLevel(20);
                 }
+                level.playSound(null, pos.getX(), pos.getY(), pos.getZ(),
+                        SoundEvents.GENERIC_EAT , SoundSource.PLAYERS, 2f, 0.2f);
                 level.setBlock(pos, (BlockState)state.setValue(EATING_STAGE, eating_stage + 1), 3);
 
             } else {
