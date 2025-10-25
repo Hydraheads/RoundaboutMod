@@ -11,6 +11,12 @@
       "roundabout:summon_diver_down"
     ]
   },
+  "killer_queen_barrage": {
+    "subtitle": "sounds.roundabout.killer_queen_barrage",
+    "sounds": [
+      "roundabout:killer_queen_barrage"
+    ]
+  },
   "summon_magician": {
     "subtitle": "sounds.roundabout.summon_magician",
     "sounds": [
