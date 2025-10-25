@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -19,11 +20,14 @@ import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 public class StandHudRender {
     /** Renders the HUD for stand attacks/abilities.
@@ -123,6 +127,88 @@ public class StandHudRender {
             ((StandUser) playerEntity).roundabout$getStandPowers().renderAttackHud(context,playerEntity,
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
         }
+    }
+
+    public static void renderRoadRollerHud(GuiGraphics context, Minecraft client, Player playerEntity, int scaledWidth, int scaledHeight, int ticks, int x, float flashAlpha, float otherFlashAlpha, RoadRollerEntity RRE) {
+        ResourceLocation itemID = BuiltInRegistries.ITEM.getKey(RRE.getConcreteColour().getItem());
+        if (itemID == null) return;
+
+        String fixedString = itemID.getPath().replace("_powder", "");
+        ResourceLocation blockID = new ResourceLocation(itemID.getNamespace(), fixedString);
+        Block actualConcrete = BuiltInRegistries.BLOCK.getOptional(blockID).orElse(Blocks.BLACK_CONCRETE);
+
+        int l = scaledHeight - 32 + 3;
+        int k = (int) (182 - ((float)182/800)*((float)RRE.getPavingTimer()));
+
+        int vOffset;
+        if (actualConcrete.equals(Blocks.BLACK_CONCRETE)) vOffset = 45;
+        else if (actualConcrete.equals(Blocks.BLUE_CONCRETE)) vOffset = 65;
+        else if (actualConcrete.equals(Blocks.BROWN_CONCRETE)) vOffset = 50;
+        else if (actualConcrete.equals(Blocks.PURPLE_CONCRETE)) vOffset = 70;
+        else if (actualConcrete.equals(Blocks.PINK_CONCRETE)) vOffset = 20;
+        else if (actualConcrete.equals(Blocks.CYAN_CONCRETE)) vOffset = 15;
+        else if (actualConcrete.equals(Blocks.MAGENTA_CONCRETE)) vOffset = 25;
+        else if (actualConcrete.equals(Blocks.YELLOW_CONCRETE)) vOffset = 5;
+        else if (actualConcrete.equals(Blocks.RED_CONCRETE)) vOffset = 10;
+        else if (actualConcrete.equals(Blocks.GRAY_CONCRETE)) vOffset = 40;
+        else if (actualConcrete.equals(Blocks.LIGHT_BLUE_CONCRETE)) vOffset = 75;
+        else if (actualConcrete.equals(Blocks.LIGHT_GRAY_CONCRETE)) vOffset = 35;
+        else if (actualConcrete.equals(Blocks.GREEN_CONCRETE)) vOffset = 60;
+        else if (actualConcrete.equals(Blocks.LIME_CONCRETE)) vOffset = 0;
+        else if (actualConcrete.equals(Blocks.WHITE_CONCRETE)) vOffset = 30;
+        else if (actualConcrete.equals(Blocks.ORANGE_CONCRETE)) vOffset = 55;
+        else vOffset = 0;
+
+        context.blit(StandIcons.VEHICLE_ICONS, x, l, 0, 0, 182, 5);
+
+        if (k > 0) {
+            context.blit(StandIcons.VEHICLE_ICONS, x, l, 0, vOffset + 5, k, 5);
+        }
+
+        int iconU = 193;
+        int iconV = 40;
+        int iconW = 9;
+        int iconH = 9;
+        int iconX = scaledWidth / 2 - 5;
+        int iconY = scaledHeight - 31 - 10;
+
+        context.blit(StandIcons.VEHICLE_ICONS, iconX, iconY, iconU, iconV, iconW, iconH);
+
+        int overlayU = 193;
+        int overlayV = 141;
+        if (actualConcrete.equals(Blocks.BLACK_CONCRETE)) overlayV = 140;
+        else if (actualConcrete.equals(Blocks.BLUE_CONCRETE)) {
+            overlayV = 60;
+            overlayU = 209;
+        }
+        else if (actualConcrete.equals(Blocks.BROWN_CONCRETE)) overlayV = 150;
+        else if (actualConcrete.equals(Blocks.PURPLE_CONCRETE)) {
+            overlayV = 70;
+            overlayU = 209;
+        }
+        else if (actualConcrete.equals(Blocks.PINK_CONCRETE)) overlayV = 90;
+        else if (actualConcrete.equals(Blocks.CYAN_CONCRETE)) overlayV = 80;
+        else if (actualConcrete.equals(Blocks.MAGENTA_CONCRETE)) overlayV = 100;
+        else if (actualConcrete.equals(Blocks.YELLOW_CONCRETE)) overlayV = 60;
+        else if (actualConcrete.equals(Blocks.RED_CONCRETE)) overlayV = 70;
+        else if (actualConcrete.equals(Blocks.GRAY_CONCRETE)) overlayV = 130;
+        else if (actualConcrete.equals(Blocks.LIGHT_BLUE_CONCRETE)) {
+            overlayV = 80;
+            overlayU = 209;
+        }
+        else if (actualConcrete.equals(Blocks.LIGHT_GRAY_CONCRETE)) overlayV = 120;
+        else if (actualConcrete.equals(Blocks.GREEN_CONCRETE)) {
+            overlayV = 50;
+            overlayU = 209;
+        }
+        else if (actualConcrete.equals(Blocks.LIME_CONCRETE)) overlayV = 50;
+        else if (actualConcrete.equals(Blocks.WHITE_CONCRETE)) overlayV = 110;
+        else if (actualConcrete.equals(Blocks.ORANGE_CONCRETE)) overlayV = 160;
+        else {
+            overlayV = 141;
+            overlayU = 193;
+        }
+        context.blit(StandIcons.VEHICLE_ICONS, iconX, iconY, overlayU, overlayV, iconW, iconH);
     }
 
     private static int getFinalATimeInt(StandUser standUser) {
