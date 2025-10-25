@@ -494,22 +494,24 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         Direction oldGravityDirection = roundabout$getGravityDirection();
         double oldGravityStrength = roundabout$currGravityStrength;
 
-        Entity vehicle = getVehicle();
-        if (vehicle != null) {
-            roundabout$setGravityDirection(GravityAPI.getGravityDirection(vehicle));
-            roundabout$currGravityStrength = GravityAPI.getGravityStrength(vehicle);
-        } else if (rdbt$this() instanceof FollowingStandEntity SE && SE.getFollowing() != null){
-            roundabout$setGravityDirection(GravityAPI.getGravityDirection(SE.getFollowing()));
-            roundabout$currGravityStrength = GravityAPI.getGravityStrength(SE.getFollowing());
-        } else if (rdbt$this() instanceof CinderellaVisageDisplayEntity CD && CD.getStandUser() != null){
-            roundabout$setGravityDirection(GravityAPI.getGravityDirection(CD.getStandUser()));
-            roundabout$currGravityStrength = GravityAPI.getGravityStrength(CD.getStandUser());
-        } else if (rdbt$this() instanceof CrossfireHurricaneEntity CD && CD.getUser() != null
-        && CD.getCrossNumber() != 7){
-            roundabout$setGravityDirection(GravityAPI.getGravityDirection(CD.getUser()));
-            roundabout$currGravityStrength = GravityAPI.getGravityStrength(CD.getUser());
-        } else if (rdbt$this() instanceof LivingEntity LE && LE.isSleeping()){
-            roundabout$setGravityDirection(Direction.DOWN);
+        if (!this.level.isClientSide()) {
+            Entity vehicle = getVehicle();
+            if (vehicle != null) {
+                roundabout$setGravityDirection(GravityAPI.getGravityDirection(vehicle));
+                roundabout$currGravityStrength = GravityAPI.getGravityStrength(vehicle);
+            } else if (rdbt$this() instanceof FollowingStandEntity SE && SE.getFollowing() != null) {
+                roundabout$setGravityDirection(GravityAPI.getGravityDirection(SE.getFollowing()));
+                roundabout$currGravityStrength = GravityAPI.getGravityStrength(SE.getFollowing());
+            } else if (rdbt$this() instanceof CinderellaVisageDisplayEntity CD && CD.getStandUser() != null) {
+                roundabout$setGravityDirection(GravityAPI.getGravityDirection(CD.getStandUser()));
+                roundabout$currGravityStrength = GravityAPI.getGravityStrength(CD.getStandUser());
+            } else if (rdbt$this() instanceof CrossfireHurricaneEntity CD && CD.getUser() != null
+                    && CD.getCrossNumber() != 7) {
+                roundabout$setGravityDirection(GravityAPI.getGravityDirection(CD.getUser()));
+                roundabout$currGravityStrength = GravityAPI.getGravityStrength(CD.getUser());
+            } else if (rdbt$this() instanceof LivingEntity LE && LE.isSleeping()) {
+                roundabout$setGravityDirection(Direction.DOWN);
+            }
         }
         else {
             if (!this.level.isClientSide()){

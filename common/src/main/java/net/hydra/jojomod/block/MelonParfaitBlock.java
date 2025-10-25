@@ -1,5 +1,6 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.VoiceLine;
@@ -71,11 +72,9 @@ public class MelonParfaitBlock extends Block {
         int eating_stage = state.getValue(EATING_STAGE);
         if (!level.isClientSide()) {
             if (eating_stage < 3) {
-                if (player.getFoodData().getFoodLevel()<16) {
-                    player.getFoodData().setFoodLevel((player.getFoodData().getFoodLevel() + 5));
-                }
-                else{
-                    player.getFoodData().setFoodLevel(20);
+
+                if (!FateTypes.hasBloodHunger(player)) {
+                    player.getFoodData().eat(5, 0.2F);
                 }
                 level.playSound(null, pos.getX(), pos.getY(), pos.getZ(),
                         SoundEvents.GENERIC_EAT , SoundSource.PLAYERS, 2f, 0.2f);
