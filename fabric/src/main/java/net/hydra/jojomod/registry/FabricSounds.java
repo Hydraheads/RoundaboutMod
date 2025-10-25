@@ -218,6 +218,7 @@ public class FabricSounds {
         addSound(ModSounds.RATT_MODE_CHANGE_ID, ModSounds.RATT_MODE_CHANGE_EVENT);
 
         addSound(ModSounds.KILLER_QUEEN_BARRAGE_ID, ModSounds.KILLER_QUEEN_BARRAGE_EVENT);
+        addSound(ModSounds.KILLER_QUEEN_SUMMON_ID, ModSounds.KILLER_QUEEN_SUMMON_EVENT);
 
         addSound(ModSounds.THE_WORLD_OVER_HEAVEN_ID, ModSounds.THE_WORLD_OVER_HEAVEN_EVENT);
         addSound(ModSounds.UNLOCK_SKIN_ID, ModSounds.UNLOCK_SKIN_EVENT);

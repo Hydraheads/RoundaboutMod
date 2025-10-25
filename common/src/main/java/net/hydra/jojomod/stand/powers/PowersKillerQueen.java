@@ -201,13 +201,19 @@ public class PowersKillerQueen extends NewPunchingStand {
     public byte chooseBarrageSound(){
         return SoundIndex.BARRAGE_CRY_SOUND;
     }
-
+    @Override
+    protected Byte getSummonSound() {return SoundIndex.SUMMON_SOUND;
+    }
+    
     public SoundEvent getSoundFromByte(byte soundChoice){
        Roundabout.LOGGER.info(""+soundChoice);
         switch (soundChoice)
         {
             case SoundIndex.BARRAGE_CRY_SOUND -> {
                 return ModSounds.KILLER_QUEEN_BARRAGE_EVENT;
+            }
+            case SoundIndex.SUMMON_SOUND -> {
+                return ModSounds.KILLER_QUEEN_SUMMON_EVENT;
             }
         }
         return super.getSoundFromByte(soundChoice);

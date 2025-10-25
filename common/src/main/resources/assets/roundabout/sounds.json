@@ -17,6 +17,12 @@
       "roundabout:killer_queen_barrage"
     ]
   },
+  "killer_queen_summon": {
+    "subtitle": "sounds.roundabout.killer_queen_summon",
+    "sounds": [
+      "roundabout:killer_queen_summon"
+    ]
+  },
   "summon_magician": {
     "subtitle": "sounds.roundabout.summon_magician",
     "sounds": [
