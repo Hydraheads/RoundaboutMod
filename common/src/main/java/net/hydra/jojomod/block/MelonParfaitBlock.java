@@ -72,13 +72,14 @@ public class MelonParfaitBlock extends Block {
         int eating_stage = state.getValue(EATING_STAGE);
         if (!level.isClientSide()) {
             if (eating_stage < 3) {
-
-                if (!FateTypes.hasBloodHunger(player)) {
-                    player.getFoodData().eat(5, 0.2F);
+                if (player.canEat(false)) {
+                    if (!FateTypes.hasBloodHunger(player)) {
+                        player.getFoodData().eat(5, 0.9F);
+                    }
                 }
                 level.playSound(null, pos.getX(), pos.getY(), pos.getZ(),
-                        SoundEvents.GENERIC_EAT , SoundSource.PLAYERS, 2f, 0.2f);
-                level.setBlock(pos, (BlockState)state.setValue(EATING_STAGE, eating_stage + 1), 3);
+                        SoundEvents.GENERIC_EAT, SoundSource.PLAYERS, 2f, 0.2f);
+                level.setBlock(pos, (BlockState) state.setValue(EATING_STAGE, eating_stage + 1), 3);
 
             } else {
                 ItemEntity glass_bottle = new ItemEntity(level,pos.getX(), pos.getY(), pos.getZ(), new ItemStack(Items.GLASS_BOTTLE));
