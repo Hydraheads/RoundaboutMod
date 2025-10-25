@@ -747,5 +747,7 @@ public class Config implements Cloneable {
         public Integer postTSiframes;
         @BooleanOption(group = "inherit", value = true)
         public Boolean postTSSoften;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean postTSCancel;
     }
 }
