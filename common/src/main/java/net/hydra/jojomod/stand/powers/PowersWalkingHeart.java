@@ -179,7 +179,7 @@ public class PowersWalkingHeart extends NewDashPreset {
 
     public void extendHeels(){
         if ((!this.onCooldown(PowerIndex.SKILL_3) && !onCooldown(PowerIndex.SKILL_2)) || hasExtendedHeelsForWalking()) {
-            if (!inCombatMode() && !self.isSwimming()){
+            if (!inCombatMode() && !(self.isSwimming() || self.isVisuallySwimming())){
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
             tryPowerPacket(PowerIndex.POWER_2);
             }
@@ -217,7 +217,7 @@ public class PowersWalkingHeart extends NewDashPreset {
         return getStandUserSelf().roundabout$getUniqueStandModeToggle();
     }
     public boolean canLatchOntoWall(){
-        if (onCooldown(PowerIndex.SKILL_2) || self.isSwimming())
+        if (onCooldown(PowerIndex.SKILL_2) || (self.isSwimming() || self.isVisuallySwimming()))
             return false;
 
         if ((this.self.onGround() && !hasExtendedHeelsForWalking()) || (!this.self.onGround() && hasExtendedHeelsForWalking()))
@@ -289,7 +289,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     public int hitsSinceAttached = 0;
 
     public void regularExtendHeels(){
-        if (self.isSwimming())
+        if (self.isSwimming() || self.isVisuallySwimming())
             return;
         boolean isAnchored = hasExtendedHeelsForWalking();
             if (isAnchored){
@@ -299,7 +299,7 @@ public class PowersWalkingHeart extends NewDashPreset {
             } else {
                 if (!inCombatMode()) {
                     if (self.onGround()) {
-                        this.setCooldown(PowerIndex.SKILL_3, 8);
+                        this.setCooldown(PowerIndex.SKILL_3, 9);
                         if (!this.self.level().isClientSide()) {
                             setHeelDirection(((IGravityEntity)this.self).roundabout$getGravityDirection());
                             toggleSpikes(true);
@@ -349,7 +349,7 @@ public class PowersWalkingHeart extends NewDashPreset {
 
     public void wallLatch(){
         if (canLatchOntoWall() && canWallWalkConfig()){
-            this.setCooldown(PowerIndex.SKILL_3, 6);
+            this.setCooldown(PowerIndex.SKILL_3, 9);
             if (!this.self.level().isClientSide()) {
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.WALL_LATCH_EVENT, SoundSource.PLAYERS, 1F, 1f);
                 toggleSpikes(true);
@@ -766,7 +766,7 @@ public class PowersWalkingHeart extends NewDashPreset {
             }
         } else {
 
-            if (self.isSwimming())
+            if (self.isSwimming() || self.isVisuallySwimming())
                 toggleSpikes(false);
             if (inCombatMode() && isBlockedByStone()){
                 switchModes();
