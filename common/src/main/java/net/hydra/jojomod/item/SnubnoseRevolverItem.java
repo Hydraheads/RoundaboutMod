@@ -1,5 +1,6 @@
 package net.hydra.jojomod.item;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.BladedBowlerHatEntity;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
@@ -14,6 +15,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 
 public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
@@ -22,7 +24,16 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
         super($$0);
     }
 
-    int ammoCount;
+    private static final String AMMO_COUNT_TAG = "AmmoCount";
+
+    private int getAmmo(ItemStack stack) {
+        return stack.getOrCreateTag().getInt(AMMO_COUNT_TAG);
+    }
+
+    private void setAmmo(ItemStack stack, int count) {
+        stack.getOrCreateTag().putInt(AMMO_COUNT_TAG, count);
+    }
+
     int maxAmmo = 6;
 
     @Override
@@ -32,9 +43,10 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
             return InteractionResultHolder.fail(itemStack);
         }
         LivingEntity livingEntity = $$1;
-        if (ammoCount > 0) {
+        int ammo = getAmmo(itemStack);
+        if (ammo > 0) {
             if ($$1 instanceof LivingEntity) {
-                RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity(ModEntities.ROUNDABOUT_BULLET_ENTITY, $$0);
+                RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity($$0, livingEntity);
                 $$7.shootFromRotation($$1, $$1.getXRot(), $$1.getYRot(), 0.0F, 1.5F, 1.0F);
                 $$0.addFreshEntity($$7);
                 if (livingEntity != null && ((StandUser) livingEntity).roundabout$isBubbleEncased()) {
@@ -49,6 +61,9 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
                     }
                 }
             }
+        } else if ($$1.isCrouching()) {
+            setAmmo(itemStack, maxAmmo);
+            Roundabout.LOGGER.info("Reloaded");
         }
         super.use($$0, $$1, $$2);
 

@@ -48,6 +48,13 @@ public class RoundaboutBulletEntity extends AbstractArrow {
         super(type, level);
     }
 
+    public RoundaboutBulletEntity(Level level, LivingEntity livingEntity) {
+        super(ModEntities.ROUNDABOUT_BULLET_ENTITY, livingEntity, level);
+    }
+    public RoundaboutBulletEntity(Level $$0, LivingEntity $$1, ItemStack $$2, double p_36862_, double p_36863_, double p_36864_) {
+        super(ModEntities.ROUNDABOUT_BULLET_ENTITY, p_36862_, p_36863_, p_36864_, $$0);
+    }
+
     @Override
     public void tick() {
 
@@ -59,7 +66,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
             if (isFlying) {
                 if (this.tickCount%80 ==1) {
                     if (!((TimeStop) this.level()).inTimeStopRange(this)) {
-                        ClientUtil.handleBowlerHatFlySound(this);
+                        // ClientUtil.handleBowlerHatFlySound(this);
                     }
                 }
             }

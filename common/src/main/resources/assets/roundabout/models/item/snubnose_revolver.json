@@ -2,7 +2,7 @@
 	"format_version": "1.21.6",
 	"credit": "Made with Blockbench",
 	"textures": {
-		"1": "item/snubnose_revolver"
+		"1": "roundabout:item/snubnose_revolver"
 	},
 	"elements": [
 		{

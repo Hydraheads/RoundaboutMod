@@ -118,6 +118,7 @@ public class ModEntities {
     public static EntityType<FallenCreeper> FALLEN_CREEPER;
     public static final ResourceLocation HARPOON_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_harpoon.png");
     public static final ResourceLocation BLADED_BOWLER_HAT_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/bladed_bowler_hat.png");
+    public static final ResourceLocation ROUNDABOUT_BULLET_ENTITY_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/roundabout_bullet.png");
     public static final ResourceLocation KNIFE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_knife.png");
     public static final ResourceLocation RATT_DART_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/ratt_dart.png");
     public static final ResourceLocation GASOLINE_CAN_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_gasoline_can.png");
