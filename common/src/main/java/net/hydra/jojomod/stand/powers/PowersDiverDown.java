@@ -154,7 +154,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
         @Override
         public Component ifWipListDevStatus () {
-            return Component.translatable("roundabout.dev_status.ongoing").withStyle(ChatFormatting.AQUA);
+            return Component.translatable("roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
         }
         @Override
         public Component ifWipListDev () {
