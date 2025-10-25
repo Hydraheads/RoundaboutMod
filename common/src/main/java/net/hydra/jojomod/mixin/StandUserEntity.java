@@ -2701,6 +2701,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "getDamageAfterArmorAbsorb", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$ApplyArmorToDamage(DamageSource $$0, float $$1, CallbackInfoReturnable<Float> ci){
         if (MainUtil.isArmorBypassingButNotShieldBypassing($$0)) {
+            float yeah = rdbt$mutuallyGetDamageAfterArmorAbsorb($$0,$$1);
+            if (yeah != 1){
+                ci.setReturnValue(yeah);
+                return;
+            }
             ci.setReturnValue($$1);
         }
     }
@@ -3481,9 +3486,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
-    /**This code makes stand user mobs resist attacks from other mobs*/
-    @Inject(method = "getDamageAfterArmorAbsorb", at = @At(value = "RETURN"), cancellable = true)
-    protected void rooundabout$armorAbsorb(DamageSource $$0, float $$1, CallbackInfoReturnable<Float> cir) {
+
+    public float rdbt$mutuallyGetDamageAfterArmorAbsorb(DamageSource $$0, float $$1){
+
+        boolean modified = false;
         if (((LivingEntity)(Object)this) instanceof Mob){
             if (!((StandUser)this).roundabout$getStandDisc().isEmpty()){
                 if (this.getMaxHealth() > 1) {
@@ -3497,10 +3503,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         || $$0.is(DamageTypes.MOB_ATTACK_NO_AGGRO)){
                     $$1*=0.5F;
                 }
-                cir.setReturnValue($$1);
+                modified = true;
             }
         }
-        boolean modified = false;
         if (this.hasEffect(ModEffects.FACELESS)) {
             float amt = (float) (0.15* this.getEffect(ModEffects.FACELESS).getAmplifier()+0.15F);
             $$1 = ($$1+($$1*amt));
@@ -3513,6 +3518,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
+        if (((LivingEntity)(Object)this) instanceof Player &&
+                !(((TimeStop)this.level()).CanTimeStopEntity(this))){
+            if (ClientNetworking.getAppropriateConfig().timeStopSettings.postTSSoften){
+                if (roundabout$getStandPowers().softenTicks > 20){
+                    if ($$0.is(ModDamageTypes.GASOLINE_EXPLOSION)
+                            || MainUtil.isStandDamage($$0)
+                            || $$0.is(DamageTypes.PLAYER_EXPLOSION)
+                            || $$0.is(DamageTypes.EXPLOSION)){
+                        $$1*=0.5F;
+                        modified = true;
+                    }
+                }
+            }
+        }
         if ($$0.getEntity() instanceof LivingEntity LE){
             if (((StandUser)LE).roundabout$getZappedToID() > -1){
                 if (MainUtil.isMeleeDamage($$0)){
@@ -3533,7 +3552,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
         if (modified){
-            cir.setReturnValue($$1);
+            return $$1;
+        }
+        return 1;
+    }
+
+    /**This code makes stand user mobs resist attacks from other mobs*/
+    @Inject(method = "getDamageAfterArmorAbsorb", at = @At(value = "RETURN"), cancellable = true)
+    protected void rooundabout$armorAbsorb(DamageSource $$0, float $$1, CallbackInfoReturnable<Float> cir) {
+
+        float yeah = rdbt$mutuallyGetDamageAfterArmorAbsorb($$0,$$1);
+        if (yeah != 1){
+            cir.setReturnValue(yeah);
         }
     }
 

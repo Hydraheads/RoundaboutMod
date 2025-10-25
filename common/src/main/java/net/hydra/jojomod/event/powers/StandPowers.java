@@ -439,13 +439,20 @@ public class StandPowers {
     }
 
 
+
     /**The manner in which your powers tick when you are being time stopped. Override this if the stand acts differently.
      * By technicality, you should still tick sounds.*/
     public void timeTick(){
         if (this.getSelf().level().isClientSide) {
             this.tickSounds();
+        } else {
+
+            softenTicks++;
         }
     }
+    // Soften ticks are a mechanic to make damage dealt after TS from
+    // certain sources less bad
+    public int softenTicks = 0;
 
     /**A generic function which sends a float corresponding with an active power via packets to the client from the
      *  server or vice versa. An example of its usage is sending the time left on TS in the world stand via
@@ -3488,6 +3495,10 @@ public class StandPowers {
                 if (displayStand.getFadeOut() < displayStand.MaxFade) {
                     displayStand.incFadeOut((byte) 1);
                 }
+            }
+        } else {
+            if (softenTicks > 0) {
+                softenTicks--;
             }
         }
 
