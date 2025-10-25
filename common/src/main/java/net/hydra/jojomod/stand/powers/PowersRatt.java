@@ -268,9 +268,9 @@ public class PowersRatt extends NewDashPreset {
                 setSkillIcon(context, x, y, 1, LockedOrNot(StandIcons.RATT_BURST,0), PowersRatt.PLACE_BURST);
             } else {
                 if (isAuto()) {
-                    setSkillIcon(context, x, y, 1, LockedOrNot(StandIcons.RATT_AUTO, 3), PowersRatt.CHANGE_MODE);
+                    setSkillIcon(context, x, y, 1, LockedOrNot(StandIcons.RATT_AUTO, 1), PowersRatt.CHANGE_MODE);
                 } else {
-                    setSkillIcon(context, x, y, 1, LockedOrNot(StandIcons.RATT_UNAUTO,3), PowersRatt.CHANGE_MODE);
+                    setSkillIcon(context, x, y, 1, LockedOrNot(StandIcons.RATT_UNAUTO,1), PowersRatt.CHANGE_MODE);
                 }
             }
             if (scopeLevel == 0) {
@@ -437,6 +437,10 @@ public class PowersRatt extends NewDashPreset {
         if (isPlaced() && !(this.getSelf() instanceof Mob)) {
 
 
+            Entity f = MainUtil.getTargetEntity(this.getSelf(),40);
+            if (getShootTarget() != null) {
+                Roundabout.LOGGER.info("{}, {}", getShootTarget().getHealth(), isAuto());
+            }
 
             if (!this.isClient()) {
 
@@ -453,6 +457,12 @@ public class PowersRatt extends NewDashPreset {
 
                 if (e instanceof LivingEntity L) {
                     if (isAuto()) {
+                        if (getShootTarget() != null) {
+                            if (getShootTarget().getHealth() == 0) {
+                                setShootTarget(null);
+                            }
+                        }
+
                     } else if (!L.equals(this.getSelf()) && !L.equals(SE)) {
                         if (!MainUtil.getEntityIsTrulyInvisible(e) && L.getEffect(MobEffects.INVISIBILITY) == null) {
                             if (!(L instanceof StandEntity)) {
@@ -468,6 +478,10 @@ public class PowersRatt extends NewDashPreset {
                         if (MainUtil.getEntityIsTrulyInvisible(getShootTarget()) || ((LivingEntity)getShootTarget()).getEffect(MobEffects.INVISIBILITY) != null) {
                             setShootTarget(null);
                         }
+                    }
+
+                    if(isAuto() && getShootTarget() == null) {
+                        this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
                     }
 
 
@@ -582,7 +596,7 @@ public class PowersRatt extends NewDashPreset {
             case SKILL_1_CROUCH -> {
                 if (isPlaced()) {
                     if (!isAttackIneptVisually(PowersRatt.AUTO, 1)) {
-                        if (canExecuteMoveWithLevel(3)) {
+                        if (canExecuteMoveWithLevel(1)) {
                             ToggleAuto();
                         }
                     }
@@ -826,9 +840,6 @@ public class PowersRatt extends NewDashPreset {
                 return shotcooldown != 0 || shieldDelay >= 20;
             }
             case PowersRatt.CHANGE_MODE -> {
-                if (!canExecuteMoveWithLevel(3)) {
-                    return true;
-                }
                 if (scopeLevel != 0) {
                     return getChargeTime() <= MinThreshold || shotcooldown != 0;
                 } else if (isPlaced()) {
@@ -837,6 +848,7 @@ public class PowersRatt extends NewDashPreset {
             }
 
             case PowersRatt.RATT_LEAP -> {
+                if (!canExecuteMoveWithLevel(4)) {return true;}
                 if (isPlaced()) {
                     if(this.getStandEntity(this.getSelf()).onGround()) {
                         return false;

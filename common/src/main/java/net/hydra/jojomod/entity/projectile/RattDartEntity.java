@@ -73,11 +73,13 @@ public class RattDartEntity extends AbstractArrow {
 
     public void alignDart(LivingEntity player) {
         if ( ((StandUser) player).roundabout$getStandPowers() instanceof PowersRatt PR) {
-            if (PR.getStandEntity(player) instanceof RattEntity RE) {
-                Vec3 rots = PR.getRotations(PR.getShootTarget());
-                Vec2 v = new Vec2((float) (-1*Math.cos(rots.y)),
-                        (float) (-1*Math.sin(rots.y)) );
-                this.setPos(RE.getEyeP(0).add(new Vec3(ding(), Mth.clamp(ding(),0,3), ding())));
+            if (PR.getStandEntity(player) != null ) {
+                if (PR.getStandEntity(player) instanceof RattEntity RE) {
+                    Vec3 rots = PR.getRotations(PR.getShootTarget());
+                    Vec2 v = new Vec2((float) (-1 * Math.cos(rots.y)),
+                            (float) (-1 * Math.sin(rots.y)));
+                    this.setPos(RE.getEyeP(0).add(new Vec3(ding(), Mth.clamp(ding(), 0, 3), ding())));
+                }
             }
         }
     }
@@ -231,7 +233,15 @@ public class RattDartEntity extends AbstractArrow {
 
 
         Entity $$4 = this.getOwner();
-        DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.STAND, this,$$4);
+        DamageSource $$5 = ModDamageTypes.of($$1.level(),ModDamageTypes.STAND,$$4);
+        if ( $$4 instanceof Player P  ) {
+            if (((StandUser) P).roundabout$getStandPowers() instanceof PowersRatt PR) {
+                if (PR.isPlaced()) {
+                    $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.STAND, this,$$4);
+
+                }
+            }
+        }
         SoundEvent $$6 = ModSounds.RATT_DART_IMPACT_EVENT;
         if ($$1.hurt($$5,this.damage + (($$1 instanceof Mob) ? ClientNetworking.getAppropriateConfig().rattSettings.rattAttackBonusOnMobs : 0) )) {
             force *= blockDamp;
