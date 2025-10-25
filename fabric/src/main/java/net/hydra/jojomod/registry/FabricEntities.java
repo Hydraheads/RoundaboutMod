@@ -594,6 +594,13 @@ public class FabricEntities {
                                 sized(0.5F, 0.5F).updateInterval(Integer.MAX_VALUE).
                                 clientTrackingRange(10).build(Roundabout.MOD_ID+":mona_lisa")
                 );
+    public static final EntityType<RoadRollerEntity> ROAD_ROLLER_ENTITY =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "road_roller_entity"),
+                    EntityType.Builder.<RoadRollerEntity>of(RoadRollerEntity::new, MobCategory.MISC).
+                            sized(2f, 2f).clientTrackingRange(10).build(Roundabout.MOD_ID+":road_roller_entity")
+            );
 
         public static void register() {
                 /*Common Code Bridge*/
@@ -605,6 +612,7 @@ public class FabricEntities {
                 ModEntities.JUSTICE = JUSTICE;
                 ModEntities.MAGICIANS_RED = MAGICIANS_RED;
                 ModEntities.MAGICIANS_RED_OVA = MAGICIANS_RED_OVA;
+                ModEntities.ROAD_ROLLER_ENTITY = ROAD_ROLLER_ENTITY;
                 ModEntities.D4C = D4C;
                 ModEntities.GREEN_DAY = GREEN_DAY;
                 ModEntities.RATT = RATT;
@@ -710,6 +718,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(FALLEN_VILLAGER, FallenVillager.createAttributes());
                 FabricDefaultAttributeRegistry.register(FALLEN_CREEPER, FallenCreeper.createAttributes());
                 FabricDefaultAttributeRegistry.register(FALLEN_PHANTOM,FallenPhantom.createAttributes());
+                FabricDefaultAttributeRegistry.register(ROAD_ROLLER_ENTITY, RoadRollerEntity.createAttributes().build());
 
                 FabricDefaultAttributeRegistry.register(THE_WORLD, StandEntity.createStandAttributes());
 

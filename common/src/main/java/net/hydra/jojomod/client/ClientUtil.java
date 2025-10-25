@@ -645,14 +645,14 @@ public class ClientUtil {
             if (powers instanceof PowersRatt PR) {
                 if (PR.getShootTarget() != null) {
                     if (PR.getShootTarget().equals(entity)) {
-                        return 12948493;
+                        return 15230850;
                     }
                 }
             }
             if (entity instanceof RattEntity RE) {
                 if(powers.getSelf() == RE.getUser()) {
                     if(powers.isHoldingSneak()) {
-                        return 12948493;
+                        return 6714709;
                     }
                 }
             }

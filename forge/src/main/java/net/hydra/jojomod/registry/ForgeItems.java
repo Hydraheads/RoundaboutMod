@@ -60,6 +60,8 @@ public class ForgeItems {
             () -> new GasolineCanItem(new Item.Properties().stacksTo(16))));
     public static final RegistryObject<Item> GASOLINE_BUCKET = addToTab(ITEMS.register("gasoline_bucket",
             () -> new GasolineBucketItem(new Item.Properties().stacksTo(1))));
+    public static final RegistryObject<Item> ROAD_ROLLER = addToTab(ITEMS.register("road_roller",
+            () -> new RoadRollerItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<BlockItem> WIRE_TRAP = addToBuildingTab(ITEMS.register("wire_trap",
             () -> new BlockItem(ForgeBlocks.WIRE_TRAP.get(),
                     new Item.Properties()
@@ -262,7 +264,7 @@ public class ForgeItems {
                     new Item.Properties().stacksTo(64)
             )));
 
-    public static final RegistryObject<BlockItem> MELON_PARFAIT_ITEM = addToTab(ITEMS.register("melon_parfait",
+    public static final RegistryObject<BlockItem> MELON_PARFAIT_ITEM = addToBuildingTab(ITEMS.register("melon_parfait",
             () -> new BlockItem(ForgeBlocks.MELON_PARFAIT.get(),
                     new Item.Properties().stacksTo(1)
 

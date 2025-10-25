@@ -3,6 +3,7 @@ package net.hydra.jojomod.registry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.client.models.RoadRollerStrayModel;
 import net.hydra.jojomod.client.models.WornBloodyStoneMaskModel;
 import net.hydra.jojomod.client.models.WornStoneMaskModel;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
@@ -100,6 +101,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.ITEM_LAUNCHING_BUBBLE_ENTITY.get(), SoftAndWetBubbleRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GO_BEYOND.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ENCASEMENT_BUBBLE.get(), EncasementBubbleRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.ROAD_ROLLER_ENTITY.get(), RoadRollerEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.OVA_ENYA.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ENYA.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.JOTARO.get(), VisageBasisRenderer::new);
@@ -178,6 +180,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.STAND_FIRE_LAYER, StandFireRenderer::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.MR_SPIN_LAYER, MagiciansRedSpinEffectLayer::createLayer);
         event.registerLayerDefinition(ModEntityRendererClient.GREEN_DAY_LAYER, GreenDayModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.ROAD_ROLLER_LAYER, RoadRollerModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.RATT_LAYER, RattModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.REDD_LAYER, ReddModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.CHAIR_RATT_LAYER, ChairRattModel::getTexturedModelData);
@@ -213,6 +216,7 @@ public class ClientForgeEvents {
         ModStrayModels.LeftLeg = new LeftLegPart();
         ModStrayModels.LeftHeel = new LeftHeelPart();
         ModStrayModels.RightHeel = new RightHeelPart();
+        ModStrayModels.ROAD_ROLLER = new RoadRollerStrayModel();
         //BlockEntityRenderers.register(ModBlocks.STAND_FIRE_BLOCK_ENTITY, StandFireRenderer::new);
     }
     @SubscribeEvent
@@ -266,5 +270,8 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.DUST_CRUMBLE.get(), DustCrumbleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.FIRE_CRUMBLE.get(), FireCrumbleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.SOUL_FIRE_CRUMBLE.get(), FireCrumbleParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.ROAD_ROLLER_SCRAP.get(), RoadRollerScrapParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.ROAD_ROLLER_EXPLOSION.get(), RoadRollerExplosionParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.ROAD_ROLLER_SMOKE.get(), RoadRollerSmokeParticle.Provider::new);
     }
 }

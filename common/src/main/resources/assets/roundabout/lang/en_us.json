@@ -2,7 +2,7 @@
   "text.roundabout.barrage_clash": "Clash! Hold and Release Jump!",
   "text.roundabout.launch_bubble_encased": "Encased! Use sharp object to break free!",
   "text.roundabout.riding_flying_creature": "Hold Jump to ascend, Hold Dash to descend",
-  "text.roundabout.riding_road_roller": "Feed the Road Roller Concrete to Begin Paving!",
+  "text.roundabout.riding_road_roller": "Feed the Road Roller Concrete Powder to Begin Paving!",
   "text.roundabout.riding_flying_creature.day": "Cannot fly at day time.",
   "text.roundabout.riding_flying_creature.dimension": "Cannot fly in this dimension.",
   "text.roundabout.warn_trap_triggered": " has been triggered!",
@@ -297,6 +297,7 @@
   "entity.roundabout.painting_van_gough": "VG Painting",
   "entity.roundabout.painting_mona_lisa": "ML Painting",
   "entity.roundabout.painting_venus": "V Painting",
+  "entity.roundabout.road_roller_entity": "Road Roller",
 
   "block.roundabout.meteor_block": "Meteorite Block",
   "block.roundabout.regal_wall": "Regal Wall",
@@ -501,6 +502,10 @@
   "death.attack.dagger.item": "%1$s became a human sacrifice",
   "death.attack.dagger.player": "%1$s became a human sacrifice",
   "death.attack.dagger.player.item": "%1$s became a human sacrifice",
+  "death.attack.road_roller": "%1$s's grave was paved.",
+  "death.attack.road_roller.item": "%1$s's grave was paved.",
+  "death.attack.road_roller.player": "%1$s's grave was paved.",
+  "death.attack.road_roller.player.item": "%1$s's grave was paved.",
 
 
   "item.glaive.charge_power": "Charge Attack",
@@ -540,7 +545,7 @@
   "sounds.roundabout.survivor_summon":  "Stand summoned",
   "sounds.roundabout.ova_summon":  "Stand summoned",
   "sounds.roundabout.ova_summon_the_world":  "Stand summoned",
-  "sounds.roundabout.diver_down_summon":  "Stand summoned",
+  "sounds.roundabout.summon_diver_down":  "Stand summoned",
   "sounds.roundabout.punch_sfx1":  "Air Cracks",
   "sounds.roundabout.punch_sfx2":  "Air Cracks",
   "sounds.roundabout.punch_sfx3":  "Impact",
@@ -763,9 +768,16 @@
   "sounds.roundabout.hey_ya_6": "Stand Talking",
   "sounds.roundabout.hey_ya_7": "Stand Talking",
 
+  "sounds.roundabout.killer_queen_summon": "Stand Summoned!",
+  "sounds.roundabout.killer_queen_barrage": "Shibabababa!",
+
   "sounds.roundabout.levelup": "Development Level Up!",
 
   "sounds.roundabout.vampire_drain": "Blood drain",
+
+  "sounds.roundabout.road_roller_ambient":  "Road Roller Ambient",
+  "sounds.roundabout.road_roller_explosion":  "Road Roller Explosion",
+  "sounds.roundabout.road_roller_mixing":  "Road Roller Mixing",
 
   "sounds.roundabout.dio_hoho":  "Hoho!",
   "sounds.roundabout.dio_hoho_2":  "Ho!",
@@ -2362,6 +2374,10 @@
 
   "config.roundabout.banDirectionalBlockPlacingFailure.name": "2 Percent Incompat Fix",
   "config.roundabout.banDirectionalBlockPlacingFailure.desc": "Dungeons now loading 2 Percent has a bug that makes block placement return false even if the block places, leading stand block place/throw to infinitely item dupes. Turn this on only if you have that mod installed because it means failed placements delete the blocks instead of duping them.",
+
+  "config.roundabout.enableRoadRollerRender.name": "Render Held Road Roller",
+  "config.roundabout.enableRoadRollerRender.desc": "Disable to make it not render above your head when held.",
+
 
   "config.roundabout.generalSettings.name": "General Settings",
   "config.roundabout.configSettings.name": "Config Settings",

@@ -1,16 +1,21 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -21,6 +26,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -53,14 +59,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
     public float standReach = 5;
     public PowersKillerQueen(LivingEntity self) {super(self);}
-    @Override
-    public boolean canSummonStand(){
-        return true;
-    }
-    @Override
-    public boolean isMiningStand() {
-        return true;
-    }
+
     @Override
     public StandPowers generateStandPowers(LivingEntity entity){
         return new PowersKillerQueen(entity);
@@ -166,35 +165,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                         1, 0.0, 0.0, 0.0, 1);
             }
         }
-
-        SoundEvent SE;
-        float pitch = 1F;
-        if (this.activePowerPhase >= this.activePowerPhaseMax) {
-
-            if (!this.self.level().isClientSide()) {
-                Byte LastHitSound = this.getLastHitSound();
-                this.playStandUserOnlySoundsIfNearby(LastHitSound, 15, false,
-                        true);
-            }
-
-            if (entity != null) {
-                SE = ModSounds.PUNCH_4_SOUND_EVENT;
-                pitch = 1.2F;
-            } else {
-                SE = ModSounds.PUNCH_2_SOUND_EVENT;
-            }
-        } else {
-            if (entity != null) {
-                SE = ModSounds.PUNCH_3_SOUND_EVENT;
-                pitch = 1.1F + 0.07F * activePowerPhase;
-            } else {
-                SE = ModSounds.PUNCH_1_SOUND_EVENT;
-            }
-        }
-
-        if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
-        }
     }
 
     @Override
@@ -228,56 +198,28 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     @Override
-    public void tickStandRejection(MobEffectInstance effect){
-        if (!this.getSelf().level().isClientSide()) {
-            float kbs = 0;
-            float pow = 0;
-            boolean throwPunch = false;
-            SoundEvent SE = null;
-            float pitch = 0;
-            if (effect.getDuration() == 13 || effect.getDuration() == 7) {
-                kbs = 0.2F;
-                pow = getPunchStrength(this.getSelf());
-                throwPunch = true;
-                SE = ModSounds.PUNCH_3_SOUND_EVENT;
-                if (effect.getDuration() == 7) {
-                    pitch = 1.24F;
-                } else {
-                    pitch = 1.17F;
-                }
-            } else if (effect.getDuration() == 1) {
-                kbs = 1F;
-                pow = getHeavyPunchStrength(this.getSelf());
-                throwPunch = true;
-                SE = ModSounds.PUNCH_4_SOUND_EVENT;
-                pitch = 1.2F;
-                if (!this.self.level().isClientSide()) {
-                    Byte LastHitSound = this.getLastHitSound();
-                    this.playStandUserOnlySoundsIfNearby(LastHitSound, 15, false,
-                            true);
-                }
+    public byte chooseBarrageSound(){
+        return SoundIndex.BARRAGE_CRY_SOUND;
+    }
+    @Override
+    protected Byte getSummonSound() {return SoundIndex.SUMMON_SOUND;
+    }
+    
+    public SoundEvent getSoundFromByte(byte soundChoice){
+       Roundabout.LOGGER.info(""+soundChoice);
+        switch (soundChoice)
+        {
+            case SoundIndex.BARRAGE_CRY_SOUND -> {
+                return ModSounds.KILLER_QUEEN_BARRAGE_EVENT;
             }
-
-            if (throwPunch) {
-                this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
-                if (StandDamageEntityAttack(this.getSelf(), pow, 0, this.self)) {
-                    this.takeDeterminedKnockback(this.self, this.getSelf(), kbs);
-                    if ((kbs *= (float) (1.0 - ((LivingEntity)this.getSelf()).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
-                        return;
-                    }
-                    this.getSelf().hurtMarked = true;
-                    Vec3 vec3d2 = new Vec3(Mth.sin(
-                            this.getSelf().getYRot() * ((float) Math.PI / 180)),
-                            0,
-                            -Mth.cos(this.getSelf().getYRot() * ((float) Math.PI / 180))).normalize().scale(kbs).reverse();
-                    this.getSelf().setDeltaMovement(- vec3d2.x,
-                            this.getSelf().onGround() ? 0.28 : 0,
-                            - vec3d2.z);
-                    this.getSelf().hasImpulse = true;
-                }
+            case SoundIndex.SUMMON_SOUND -> {
+                return ModSounds.KILLER_QUEEN_SUMMON_EVENT;
             }
         }
+        return super.getSoundFromByte(soundChoice);
     }
+
+
 
 
     @Override
@@ -297,21 +239,21 @@ public class PowersKillerQueen extends NewPunchingStand {
     public void renderIcons(GuiGraphics context, int x, int y) {
 
         if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 1, StandIcons.NONE, PowerIndex.NONE);
+            setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NONE);
         } else {
-            setSkillIcon(context, x, y, 1, StandIcons.NONE, PowerIndex.NO_CD);
+            setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD);
 
         }
 
-        setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.SKILL_2);
+        setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.SKILL_2);
 
         if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 3, StandIcons.NONE, PowerIndex.NONE);
+            setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NONE);
         } else {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.NONE);
         }
 
-        setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.SKILL_4);
+        setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4);
     }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();

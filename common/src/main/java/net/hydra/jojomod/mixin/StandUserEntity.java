@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.FleshPileEntity;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
+import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
@@ -3267,12 +3268,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public float roundabout$mutualGetSpeed(float basis){
         byte curse = this.roundabout$getLocacacaCurse();
+        LivingEntity livingEntity = ((LivingEntity)(Object)this);
+        ItemStack hand = livingEntity.getMainHandItem();
+        ItemStack offHand = livingEntity.getOffhandItem();
         if (curse > -1) {
             if (curse == LocacacaCurseIndex.RIGHT_LEG || curse == LocacacaCurseIndex.LEFT_LEG) {
                 basis = (basis * 0.82F);
             } else if (curse == LocacacaCurseIndex.CHEST) {
                 basis = (basis * 0.85F);
             }
+        }
+
+        if (hand.getItem() instanceof RoadRollerItem || offHand.getItem() instanceof RoadRollerItem) {
+            basis = (basis * 0.50F);
         }
 
         int zapped = roundabout$getZappedToID();
@@ -3714,6 +3722,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (this.roundabout$TSHurtTime <= 0 || damageSource.is(DamageTypeTags.BYPASSES_COOLDOWN)) {
                 float dmg = roundabout$getStoredDamage();
                 float max = roundaboutGetMaxStoredDamage();
+
+                if (((LivingEntity)(Object) this) instanceof RoadRollerEntity RRE) {
+                    if (damageSource.is(ModDamageTypes.STAND_RUSH)) {
+                        RRE.hasBeenBaraged = true;
+                    } else {
+                        RRE.hasBeenBaraged = false;
+                    }
+                }
 
                 if (((LivingEntity)(Object) this).isInvulnerableTo(damageSource)) {
                     ci.setReturnValue(false);
