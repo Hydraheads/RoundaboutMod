@@ -1,8 +1,10 @@
 package net.hydra.jojomod.client;
 
+import net.hydra.jojomod.client.models.RoadRollerStrayModel;
 import net.hydra.jojomod.client.models.WornBloodyStoneMaskModel;
 import net.hydra.jojomod.client.models.WornStoneMaskModel;
 import net.hydra.jojomod.client.models.projectile.BowlerHatModel;
+import net.hydra.jojomod.client.models.projectile.RoadRollerModel;
 import net.hydra.jojomod.client.models.visages.parts.*;
 import net.hydra.jojomod.client.models.worn_stand.*;
 import net.hydra.jojomod.item.BowlerHatItem;
@@ -42,4 +44,6 @@ public class ModStrayModels {
     public static LeftLegPart LeftLeg;
     public static LeftHeelPart LeftHeel;
     public static RightHeelPart RightHeel;
+
+    public static RoadRollerStrayModel ROAD_ROLLER;
 }

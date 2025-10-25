@@ -32,6 +32,10 @@ public class StandIcons {
             "textures/misc/gasoline_splatter.png");
 
 
+    public static final ResourceLocation VEHICLE_ICONS = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/vehicle_icons.png");
+
+
     public static final ResourceLocation SURVIVOR_ANGER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/survivor_anger.png");
     public static final ResourceLocation IN_BUBBLE_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,

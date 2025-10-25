@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IMinecartItemAccess;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModGamerules;
@@ -16,6 +17,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.item.RoadRollerItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.MainUtil;
@@ -227,7 +229,8 @@ public class BlockGrabPreset extends NewPunchingStand {
             StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
             if (!this.getSelf().level().isClientSide) {
                 if (getStandUserSelf().roundabout$getTSJump() && !ClientNetworking.getAppropriateConfig().timeStopSettings.enableCarryingWhileHovering){
-                    if (standEntity != null) {
+                    boolean passenger = standEntity.getFirstPassenger() instanceof RoadRollerEntity;
+                    if (standEntity != null && !passenger) {
                         standEntity.ejectPassengers();
                     }
                 }
@@ -845,7 +848,16 @@ public class BlockGrabPreset extends NewPunchingStand {
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
                 Entity entity = this.getSelf().level().getEntity(this.grabEntity);
                 if (entity != null && this.canGrab(entity)) {
+                    if (entity instanceof RoadRollerEntity RRE && RRE.getExploded()) {
+                        this.setPowerNone();
+                        return false;
+                    }
+
                     if (entity.startRiding(standEntity)) {
+                        if (entity instanceof RoadRollerEntity RRE) {
+                            RRE.thrower = this.getSelf();
+                            RRE.isThrown = true;
+                        }
                         this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                         this.setActivePower(PowerIndex.POWER_2_EXTRA);
                         this.setAttackTimeDuring(0);
@@ -1021,6 +1033,24 @@ public class BlockGrabPreset extends NewPunchingStand {
                             animateStand(StandEntity.ENTITY_GRAB);
                         }
                             /**Minecart Throw*/
+                    } else if (stack.getItem() instanceof RoadRollerItem RR && !(((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() == GameType.ADVENTURE)) {
+                        RoadRollerEntity roadRoller = new RoadRollerEntity(ModEntities.ROAD_ROLLER_ENTITY, this.getSelf().level());
+
+                        roadRoller.thrower = this.getSelf();
+
+                        roadRoller.setYRot(this.getSelf().getYRot());
+
+                        roadRoller.setPos(standEntity.getX(), standEntity.getY() + standEntity.getBbHeight() * 0.5, standEntity.getZ());
+
+                        this.getSelf().level().addFreshEntity(roadRoller);
+                        this.getSelf().level().gameEvent(this.getSelf(), GameEvent.ENTITY_PLACE, this.getSelf().position().add(0, 3, 0));
+                        if (roadRoller.startRiding(standEntity)) {
+                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                            this.setActivePower(PowerIndex.POWER_2_EXTRA);
+                            this.setAttackTimeDuring(0);
+                            poseStand(OffsetIndex.FOLLOW_NOLEAN);
+                            animateStand(StandEntity.ENTITY_GRAB);
+                        }
                     } else {
                         /**Item throw*/
                         standEntity.canAcquireHeldItem = true;

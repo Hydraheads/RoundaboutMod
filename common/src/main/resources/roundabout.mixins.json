@@ -275,6 +275,8 @@
     "gui.ConfigOptionsScreen",
     "items.BowlerHatPlayerRendererMixin",
     "items.ChairCameraMixin",
+    "items.RoadRollerItemInHandMixin",
+    "items.RoadRollerItemRendererMixin",
     "items.StoneMaskCustomHeadLayerMixin",
     "items.visages.VisageHumanoidArmorLayer",
     "justice.JusticeAbstractZombieRenderer",

@@ -768,7 +768,8 @@
   "sounds.roundabout.hey_ya_6": "Stand Talking",
   "sounds.roundabout.hey_ya_7": "Stand Talking",
 
-  "sounds.roundabout.killerqueen_barrage": "Shibabababa",
+  "sounds.roundabout.killer_queen_summon": "Stand Summoned!",
+  "sounds.roundabout.killer_queen_barrage": "Shibabababa!",
 
   "sounds.roundabout.levelup": "Development Level Up!",
 
@@ -2373,6 +2374,10 @@
 
   "config.roundabout.banDirectionalBlockPlacingFailure.name": "2 Percent Incompat Fix",
   "config.roundabout.banDirectionalBlockPlacingFailure.desc": "Dungeons now loading 2 Percent has a bug that makes block placement return false even if the block places, leading stand block place/throw to infinitely item dupes. Turn this on only if you have that mod installed because it means failed placements delete the blocks instead of duping them.",
+
+  "config.roundabout.enableRoadRollerRender.name": "Render Held Road Roller",
+  "config.roundabout.enableRoadRollerRender.desc": "Disable to make it not render above your head when held.",
+
 
   "config.roundabout.generalSettings.name": "General Settings",
   "config.roundabout.configSettings.name": "Config Settings",

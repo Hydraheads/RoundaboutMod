@@ -3,6 +3,7 @@ package net.hydra.jojomod.registry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.client.models.RoadRollerStrayModel;
 import net.hydra.jojomod.client.models.WornBloodyStoneMaskModel;
 import net.hydra.jojomod.client.models.WornStoneMaskModel;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
@@ -213,6 +214,7 @@ public class ClientForgeEvents {
         ModStrayModels.LeftLeg = new LeftLegPart();
         ModStrayModels.LeftHeel = new LeftHeelPart();
         ModStrayModels.RightHeel = new RightHeelPart();
+        ModStrayModels.ROAD_ROLLER = new RoadRollerStrayModel();
         //BlockEntityRenderers.register(ModBlocks.STAND_FIRE_BLOCK_ENTITY, StandFireRenderer::new);
     }
     @SubscribeEvent

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
@@ -58,14 +59,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
     public float standReach = 5;
     public PowersKillerQueen(LivingEntity self) {super(self);}
-    @Override
-    public boolean canSummonStand(){
-        return true;
-    }
-    @Override
-    public boolean isMiningStand() {
-        return true;
-    }
+
     @Override
     public StandPowers generateStandPowers(LivingEntity entity){
         return new PowersKillerQueen(entity);
@@ -203,23 +197,24 @@ public class PowersKillerQueen extends NewPunchingStand {
         super.updateMovesFromPacket(activePower);
     }
 
-
-    public static final byte KillerQueen_Barrage = 100;
-
     @Override
     public byte chooseBarrageSound(){
-        return 100;
+        return SoundIndex.BARRAGE_CRY_SOUND;
     }
-
-    public ResourceLocation getBarrageCryID(){
-        return ModSounds.KILLER_QUEEN_BARRAGE_HIT_ID;
+    @Override
+    protected Byte getSummonSound() {return SoundIndex.SUMMON_SOUND;
     }
-
+    
     public SoundEvent getSoundFromByte(byte soundChoice){
-        byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-
-        if (soundChoice == KillerQueen_Barrage) {
-            return ModSounds.KILLER_QUEEN_BARRAGE_HIT_EVENT;
+       Roundabout.LOGGER.info(""+soundChoice);
+        switch (soundChoice)
+        {
+            case SoundIndex.BARRAGE_CRY_SOUND -> {
+                return ModSounds.KILLER_QUEEN_BARRAGE_EVENT;
+            }
+            case SoundIndex.SUMMON_SOUND -> {
+                return ModSounds.KILLER_QUEEN_SUMMON_EVENT;
+            }
         }
         return super.getSoundFromByte(soundChoice);
     }
