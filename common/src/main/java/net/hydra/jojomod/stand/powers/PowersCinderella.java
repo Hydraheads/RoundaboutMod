@@ -484,9 +484,9 @@ public class PowersCinderella extends NewDashPreset {
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.visages",
-                "instruction.roundabout.passive", StandIcons.CINDERELLA_VISAGES,0,level,bypass));
+                "instruction.roundabout.shop_item", StandIcons.CINDERELLA_VISAGES,0,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.lucky_lipstick",
-                "instruction.roundabout.passive", StandIcons.CINDERELLA_LIPSTICK,0,level,bypass));
+                "instruction.roundabout.shop_item", StandIcons.CINDERELLA_LIPSTICK,0,level,bypass));
         return $$1;
     }
     @Override

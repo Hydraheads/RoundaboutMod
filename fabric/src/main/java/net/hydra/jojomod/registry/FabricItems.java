@@ -119,6 +119,7 @@ public class FabricItems {
     public static Item MATCH_BUNDLE = registerItem("match_bundle", new MatchItem(new Item.Properties().stacksTo(16)));
     public static Item GASOLINE_CAN = registerItem("gasoline_can", new GasolineCanItem(new Item.Properties().stacksTo(16)));
     public static Item GASOLINE_BUCKET = registerItem("gasoline_bucket", new GasolineBucketItem(new Item.Properties().stacksTo(1)));
+    public static Item ROAD_ROLLER = registerItem("road_roller", new RoadRollerItem(new Item.Properties().stacksTo(1)));
 
     public static Item STAND_DISC = registerItem("stand_disc", new EmptyStandDiscItem(new Item.Properties().stacksTo(1)));
     public static Item COFFEE_GUM = registerItem("coffee_gum", new Item(new Item.Properties().food(ModFoodComponents.COFFEE_GUM)));
@@ -171,7 +172,7 @@ public class FabricItems {
 
     public static Item FLESH_BUCKET = registerItem("flesh_bucket", new FleshBucketItem(new Item.Properties().stacksTo(1)));
     public static final FoodProperties CHERRY =new FoodProperties.Builder().nutrition(1).saturationMod(0.0F).alwaysEat()
-            .effect(new MobEffectInstance(ModEffects.WARDING, 600, 0), 1.0F)
+            .effect(new MobEffectInstance(ModEffects.WARDING, 1200, 0), 1.0F)
             .build();
     public static Item CHERRIES = registerItem("cherries", new Item(new Item.Properties().food(CHERRY)));
 
@@ -244,6 +245,7 @@ public class FabricItems {
                         entries.accept(MATCH_BUNDLE);
                         entries.accept(GASOLINE_CAN);
                         entries.accept(GASOLINE_BUCKET);
+                        entries.accept(ROAD_ROLLER);
                         entries.accept(AESTHETICIAN_SPAWN_EGG);
                         entries.accept(ZOMBIE_AESTHETICIAN_SPAWN_EGG);
                         entries.accept(TERRIER_SPAWN_EGG);
@@ -253,6 +255,7 @@ public class FabricItems {
                         entries.accept(LOCACACA);
                         entries.accept(LOCACACA_BRANCH.asItem());
                         entries.accept(NEW_LOCACACA);
+                        entries.accept(CHERRIES);
                         entries.accept(METEORITE);
                         entries.accept(METEORITE_INGOT);
 
@@ -340,7 +343,9 @@ public class FabricItems {
                         entries.accept(STREET_SIGN_STOP_BLOCK_ITEM);
                         entries.accept(STREET_SIGN_YIELD_BLOCK_ITEM);
                         entries.accept(STREET_SIGN_DANGER_BLOCK_ITEM);
+                        entries.accept(ModBlocks.GLASS_DOOR);
                         entries.accept(ModBlocks.CEILING_LIGHT);
+                        entries.accept(ModBlocks.WALL_LANTERN);
                         entries.accept(ModBlocks.MIRROR);
                         entries.accept(ModBlocks.ANCIENT_METEOR);
                         entries.accept(ModBlocks.BARBED_WIRE);
@@ -352,6 +357,8 @@ public class FabricItems {
                         entries.accept(ModBlocks.WIRE_TRAP);
                         entries.accept(ModBlocks.BARBED_WIRE_BUNDLE);
                         entries.accept(ModBlocks.LOCACACA_CACTUS);
+                        entries.accept(ModBlocks.CULTIVATION_POT);
+                        entries.accept(ModBlocks.MELON_PARFAIT);
 
                     }).build());
 
@@ -407,8 +414,7 @@ public class FabricItems {
                         //entries.accept(STAND_DISC_WALKING_HEART);
                         entries.accept(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK);
                         entries.accept(ModBlocks.BLOODY_STONE_MASK_BLOCK);
-                        entries.accept(CHERRIES);
-                        entries.accept(ModBlocks.CULTIVATION_POT);
+
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_RATT);
@@ -503,6 +509,7 @@ public class FabricItems {
         ModItems.STAND_DISC = STAND_DISC;
         ModItems.COFFEE_GUM = COFFEE_GUM;
         ModItems.METEORITE = METEORITE;
+        ModItems.ROAD_ROLLER = ROAD_ROLLER;
         ModItems.METEORITE_INGOT = METEORITE_INGOT;
         ModItems.LOCACACA_PIT = LOCACACA_PIT;
 

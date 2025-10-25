@@ -93,6 +93,14 @@ public class ForgeSounds {
             register(ModSounds.PUNCH_4_SOUND, ModSounds.PUNCH_4_SOUND_ID);
     public static final RegistryObject<SoundEvent> BODY_BAG_EVENT =
             register(ModSounds.BODY_BAG, ModSounds.BODY_BAG_ID);
+
+    public static final RegistryObject<SoundEvent> ROAD_ROLLER_AMBIENT_EVENT =
+            register(ModSounds.ROAD_ROLLER_AMBIENT, ModSounds.ROAD_ROLLER_AMBIENT_ID);
+    public static final RegistryObject<SoundEvent> ROAD_ROLLER_EXPLOSION_EVENT =
+            register(ModSounds.ROAD_ROLLER_EXPLOSION, ModSounds.ROAD_ROLLER_EXPLOSION_ID);
+    public static final RegistryObject<SoundEvent> ROAD_ROLLER_MIXING_EVENT =
+            register(ModSounds.ROAD_ROLLER_MIXING, ModSounds.ROAD_ROLLER_MIXING_ID);
+
     public static final RegistryObject<SoundEvent> JUSTICE_SELECT_EVENT =
             register(ModSounds.JUSTICE_SELECT, ModSounds.JUSTICE_SELECT_ID);
     public static final RegistryObject<SoundEvent> JUSTICE_SELECT_ATTACK_EVENT =

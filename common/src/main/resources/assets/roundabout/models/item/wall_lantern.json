@@ -1,0 +1,26 @@
+
+{
+  "parent": "roundabout:block/wall_lantern",
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [ 0, 0, 0 ],
+      "translation": [ 0, 1, -4.8 ],
+      "scale": [ 0.6, 0.6, 0.6 ]
+    },
+    "firstperson_righthand": {
+      "rotation": [ 0, 45, 0 ],
+      "translation": [ 0, 0, 0 ],
+      "scale": [ 0.6, 0.6, 0.6 ]
+    },
+    "gui": {
+      "rotation": [ 30, 160, 0 ],
+      "translation": [ -3.4, -4.7, 0],
+      "scale":[ 1.5, 1.5, 1.5]
+    },
+    "ground": {
+      "rotation": [ 0, 0, 0 ],
+      "translation": [ 0, 1, -3.3],
+      "scale":[ 0.4, 0.4, 0.4]
+    }
+  }
+}

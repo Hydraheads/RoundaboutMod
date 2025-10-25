@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:match_tool",
+          "predicate": {
+            "enchantments": [
+              {
+                "enchantment": "minecraft:silk_touch",
+                "levels": {
+                  "min": 1
+                }
+              }
+            ]
+          },
+          "block": "roundabout:glass_door",
+          "properties": { "half": "lower" }
+        }
+      ],
+      "entries": [
+        { "type": "minecraft:item", "name": "roundabout:glass_door" }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "roundabout:blocks/glass_door"
+}

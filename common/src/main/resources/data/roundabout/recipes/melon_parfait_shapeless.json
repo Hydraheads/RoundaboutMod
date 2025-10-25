@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "item": "minecraft:melon_slice"
+    },
+    {
+      "item": "minecraft:melon_slice"
+    },
+    {
+      "item": "minecraft:melon_slice"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item":"minecraft:glass_bottle"
+    }
+  ],
+  "result": {
+    "item": "roundabout:melon_parfait"
+  }
+}

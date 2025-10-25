@@ -95,7 +95,7 @@ public class PowersRatt extends NewDashPreset {
             START_CHARGE = 67,
             CHECK_AUTO = 68,
 
-            PLACE_BURST = 69,
+    PLACE_BURST = 69,
             CHANGE_MODE = 7,
             SETPLACE = 8,
             SCOPE = 9,
@@ -357,7 +357,6 @@ public class PowersRatt extends NewDashPreset {
                     time *= 1.4;
                     Vec3 vec = target.getDeltaMovement();
                     if (target instanceof Player) {
-                        Roundabout.LOGGER.info(vec.toString());
                         if(Math.abs(vec.y) < 3 ) {vec = new Vec3(vec.x,0,vec.z);}
                     }
                     targetPos = targetPos.add(vec.multiply(time, time, time));
@@ -410,7 +409,7 @@ public class PowersRatt extends NewDashPreset {
 
 
 
-        if (this.getActivePower() == PowersRatt.START_CHARGE) {
+        if (this.getActivePower() == PowersRatt.START_CHARGE && this.isClient()) {
             int amount = ClientNetworking.getAppropriateConfig().rattSettings.rattManualChargeRate;
             updateChargeTime(Mth.clamp(getChargeTime()+(this.getAttackTime()%2 == 0 ? amount : amount+1),0,100));
 
@@ -828,7 +827,7 @@ public class PowersRatt extends NewDashPreset {
             }
             case PowersRatt.CHANGE_MODE -> {
                 if (!canExecuteMoveWithLevel(3)) {
-                    return false;
+                    return true;
                 }
                 if (scopeLevel != 0) {
                     return getChargeTime() <= MinThreshold || shotcooldown != 0;
@@ -923,14 +922,13 @@ public class PowersRatt extends NewDashPreset {
             if ($$0.getEntity().getPosition(1).distanceTo(this.getSelf().getPosition(1)) < 6.0 ) {
                 if (this.getSelf() instanceof Player P ) {
                     if (this.getStandUserSelf().roundabout$getCombatMode()) {
-                        int nc = Math.max(this.getChargeTime()- 30,0);
+                        int nc = Math.max(this.getChargeTime()-30,0);
                         this.getSelf().level().playSound(null, this.getSelf().blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1F, 1F);
                         this.updatePowerInt(PowersRatt.UPDATE_CHARGE,nc);
                         S2CPacketUtil.sendIntPowerDataPacket(P,PowersRatt.UPDATE_CHARGE,nc);
                     }
                 }
             }
-
         }
     }
 
@@ -969,7 +967,7 @@ public class PowersRatt extends NewDashPreset {
         if (getValidPlacement() != null && !isPlaced() || shotcooldown != 0 || scopeLevel != 0) {
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
         }
-        if (getChargeTime() > 10) {
+        if (getChargeTime() > 10 && ((IPlayerEntity)playerEntity).roundabout$getStandLevel() > 1 ) {
             float amount = (float) getChargeTime() / 100;
             int finalAmount = Math.round(amount * 15);
             int bartexture = 30;
@@ -1128,22 +1126,32 @@ public class PowersRatt extends NewDashPreset {
     @Override
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
+
+        // manual scope
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,2, "ability.roundabout.ratt_scope",
                 "instruction.roundabout.press_skill", StandIcons.RATT_SCOPE_IN,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,3, "ability.roundabout.ratt_single",
+        // charge fire
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+118,3, "ability.roundabout.ratt_single",
                 "instruction.roundabout.hold_block", StandIcons.RATT_SINGLE,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,3, "ability.roundabout.ratt_burst",
+        // burst fire
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+99,2, "ability.roundabout.ratt_burst",
                 "instruction.roundabout.press_skill", StandIcons.RATT_BURST,2,level,bypas));
+        // place ratt
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.ratt_place",
                 "instruction.roundabout.press_skill", StandIcons.RATT_PLACE,2,level,bypas));
+        // place burst
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.ratt_place_burst",
                 "instruction.roundabout.press_skill", StandIcons.RATT_BURST,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,3, "ability.roundabout.ratt_auto",
+        // place auto
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,1, "ability.roundabout.ratt_auto",
                 "instruction.roundabout.press_skill_crouch", StandIcons.RATT_AUTO,1,level,bypas));
+        // ratt leap
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,4, "ability.roundabout.ratt_leap",
                 "instruction.roundabout.press_skill", StandIcons.RATT_LEAP,4,level,bypas));
+        // passive
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.ratt_flesh",
                 "instruction.roundabout.passive", StandIcons.RATT_BLOB,3,level,bypas));
+        // dodge
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
         return $$1;

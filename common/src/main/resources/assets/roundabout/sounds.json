@@ -23,6 +23,24 @@
       "roundabout:summon_mandom"
     ]
   },
+  "road_roller_ambient": {
+    "subtitle": "sounds.roundabout.road_roller_ambient",
+    "sounds": [
+      "roundabout:road_roller_ambient"
+    ]
+  },
+  "road_roller_explosion": {
+    "subtitle": "sounds.roundabout.road_roller_explosion",
+    "sounds": [
+      "roundabout:road_roller_explosion"
+    ]
+  },
+  "road_roller_mixing": {
+    "subtitle": "sounds.roundabout.road_roller_mixing",
+    "sounds": [
+      "roundabout:road_roller_mixing"
+    ]
+  },
   "survivor_summon": {
     "subtitle": "sounds.roundabout.survivor_summon",
     "sounds": [

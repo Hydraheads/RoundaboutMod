@@ -45,7 +45,12 @@ public class RoundaboutFabricClient implements ClientModInitializer {
                 ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK,
                 ModBlocks.BLOODY_STONE_MASK_BLOCK,
                 ModBlocks.CULTIVATED_CHERRY_SAPLING,
-                ModBlocks.FOG_TRAP);
+                ModBlocks.CULTIVATED_OAK_SAPLING,
+                ModBlocks.CULTIVATED_LOCACACA,
+                ModBlocks.FOG_TRAP,
+                ModBlocks.MELON_PARFAIT);
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(), ModBlocks.GLASS_DOOR);
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(), ModBlocks.WALL_LANTERN);
         FabricParticlesClient.registerClientParticles();
         FabricEntityClient.register();
         ClientPlayConnectionEvents.JOIN.register((clientPlayNetworkHandler, packetSender, minecraftClient) -> ClientNetworking.sendHandshake());

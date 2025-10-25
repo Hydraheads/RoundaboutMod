@@ -69,6 +69,8 @@ public class ModBlocks {
     public static Block WOOL_STAIRS_RED;
     public static Block WOOL_SLAB_YELLOW;
     public static Block WOOL_STAIRS_YELLOW;
+    public static Block WALL_LANTERN;
+    public static Block GLASS_DOOR;
     public static Block LOCACACA_CACTUS;
     public static Block LOCACACA_BLOCK;
     public static Block NEW_LOCACACA_BLOCK;
@@ -104,6 +106,8 @@ public class ModBlocks {
 
     public static Block CULTIVATION_POT;
     public static Block CULTIVATED_CHERRY_SAPLING;
+    public static Block CULTIVATED_OAK_SAPLING;
+    public static Block CULTIVATED_LOCACACA;
 
     public static Block STAND_FIRE;
     public static Block ORANGE_FIRE;
@@ -120,6 +124,8 @@ public class ModBlocks {
     public static Block BLOODY_STONE_MASK_BLOCK;
 
     public static Block D4C_LIGHT_BLOCK;
+
+    public static Block MELON_PARFAIT;
 
     public static BlockEntityType<StandFireBlockEntity> STAND_FIRE_BLOCK_ENTITY;
     public static BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY;
@@ -657,6 +663,23 @@ public class ModBlocks {
                 return 1;
             }));
 
+    public static Block WALL_LANTERN_PROPERTIES = new LanternWallBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(2.0F).sound(SoundType.WOOD).ignitedByLava()
+                    .lightLevel(state -> 14)
+                    .noOcclusion()
+    );
+    public static Block GLASS_DOOR_PROPERTIES = new GlassDoorBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_LIGHT_BLUE)
+                    .instrument(NoteBlockInstrument.HARP)
+                    .strength(0.3F).sound(SoundType.GLASS).ignitedByLava()
+                    .noOcclusion()
+                    .pushReaction(PushReaction.BLOCK)
+    );
+
     public static CultivationPotBlock cultivationPot(Block $$0, FeatureFlag... $$1) {
         BlockBehaviour.Properties $$2 = BlockBehaviour.Properties.of().instabreak().noOcclusion().pushReaction(PushReaction.DESTROY);
         if ($$1.length > 0) {
@@ -665,6 +688,14 @@ public class ModBlocks {
 
         return new CultivationPotBlock($$0, $$2);
     }
+
+    public static Block MELON_PARFAIT_PROPERTIES = new MelonParfaitBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_LIGHT_BLUE)
+                    .strength(0.3F).sound(SoundType.GLASS)
+                    .noOcclusion()
+                    .pushReaction(PushReaction.DESTROY)
+    );
 
     public static List<String> dontGenState = new ArrayList<String>();
     public static List<String> blockBlacklist = Arrays.asList(

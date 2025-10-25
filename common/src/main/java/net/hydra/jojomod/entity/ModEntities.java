@@ -66,6 +66,7 @@ public class ModEntities {
     public static EntityType<StandFireballEntity> STAND_FIREBALL;
 
     public static EntityType<GasolineCanEntity> GASOLINE_CAN;
+    public static EntityType<RoadRollerEntity> ROAD_ROLLER_ENTITY;
 
     public static EntityType<GasolineSplatterEntity> GASOLINE_SPLATTER;
 
@@ -119,6 +120,11 @@ public class ModEntities {
     public static final ResourceLocation KNIFE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_knife.png");
     public static final ResourceLocation RATT_DART_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/ratt_dart.png");
     public static final ResourceLocation GASOLINE_CAN_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_gasoline_can.png");
+
+    public static final ResourceLocation ROAD_ROLLER_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/road_roller.png");
+    public static final ResourceLocation ROAD_ROLLER_TEXTURE_CRACKED_MEDIUM = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/road_roller_cracked_medium.png");
+    public static final ResourceLocation ROAD_ROLLER_TEXTURE_CRACKED_HIGH = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/road_roller_cracked_high.png");
+
 
     /// Creates and registers the stand entity
     /// @param location The resource location to register the entity at (support for addons)

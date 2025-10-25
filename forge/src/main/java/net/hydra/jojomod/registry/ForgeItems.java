@@ -14,6 +14,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraftforge.common.ForgeSpawnEggItem;
@@ -32,10 +33,10 @@ public class ForgeItems {
                     .food(ModFoodComponents.COFFEE_GUM)
             )));
 
-    public static final RegistryObject<Item> CHERRIES = addToWIPTab(ITEMS.register("cherries",
+    public static final RegistryObject<Item> CHERRIES = addToTab(ITEMS.register("cherries",
             () -> new Item(new Item.Properties()
                     .food(new FoodProperties.Builder().nutrition(1).saturationMod(0.0F).alwaysEat()
-                            .effect(new MobEffectInstance(ForgeEffects.WARDING.get(), 600, 0), 1.0F)
+                            .effect(new MobEffectInstance(ForgeEffects.WARDING.get(), 1200, 0), 1.0F)
                             .build())
             )));
 
@@ -59,6 +60,8 @@ public class ForgeItems {
             () -> new GasolineCanItem(new Item.Properties().stacksTo(16))));
     public static final RegistryObject<Item> GASOLINE_BUCKET = addToTab(ITEMS.register("gasoline_bucket",
             () -> new GasolineBucketItem(new Item.Properties().stacksTo(1))));
+    public static final RegistryObject<Item> ROAD_ROLLER = addToTab(ITEMS.register("road_roller",
+            () -> new RoadRollerItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<BlockItem> WIRE_TRAP = addToBuildingTab(ITEMS.register("wire_trap",
             () -> new BlockItem(ForgeBlocks.WIRE_TRAP.get(),
                     new Item.Properties()
@@ -235,7 +238,7 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.WOOL_STAIRS_BROWN.get(),
                     new Item.Properties()
             )));
-    public static final RegistryObject<BlockItem> CULTIVATION_POT_ITEM = addToWIPTab(ITEMS.register("cultivation_pot",
+    public static final RegistryObject<BlockItem> CULTIVATION_POT_ITEM = addToBuildingTab(ITEMS.register("cultivation_pot",
             () -> new BlockItem(ForgeBlocks.CULTIVATION_POT.get(),
                     new Item.Properties()
             )));
@@ -259,6 +262,12 @@ public class ForgeItems {
     public static final RegistryObject<BlockItem> STEREO_ITEM = addToTab(ITEMS.register("stereo",
             () -> new BlockItem(ForgeBlocks.STEREO.get(),
                     new Item.Properties().stacksTo(64)
+            )));
+
+    public static final RegistryObject<BlockItem> MELON_PARFAIT_ITEM = addToBuildingTab(ITEMS.register("melon_parfait",
+            () -> new BlockItem(ForgeBlocks.MELON_PARFAIT.get(),
+                    new Item.Properties().stacksTo(1)
+
             )));
 
     public static final RegistryObject<BlockItem> FOG_DIRT_COATING = addToFogTab(ITEMS.register("fog_dirt_coating",
@@ -360,6 +369,14 @@ public class ForgeItems {
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> CEILING_LIGHT_BLOCK_ITEM = addToBuildingTab(ITEMS.register("ceiling_light",
             () -> new BlockItem(ForgeBlocks.CEILING_LIGHT.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<Item> WALL_LANTERN_ITEM = addToBuildingTab(ITEMS.register("wall_lantern",
+            () -> new BlockItem(ForgeBlocks.WALL_LANTERN.get(),
+                    new Item.Properties()
+            )));
+    public static final RegistryObject<Item> GLASS_DOOR = addToBuildingTab(ITEMS.register("glass_door",
+            () -> new BlockItem(ForgeBlocks.GLASS_DOOR.get(),
                     new Item.Properties()
             )));
     public static final RegistryObject<Item> MIRROR_ITEM = addToBuildingTab(ITEMS.register("mirror",

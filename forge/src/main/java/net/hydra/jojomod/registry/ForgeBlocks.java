@@ -156,12 +156,26 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> WOOL_STAIRS_BROWN = BLOCKS.register("wool_stairs_brown",
             () -> ModBlocks.WOOL_STAIRS_BROWN_PROPERTIES
     );
+
+    public static final RegistryObject<Block> WALL_LANTERN = BLOCKS.register("wall_lantern",
+            () -> ModBlocks.WALL_LANTERN_PROPERTIES
+    );
+    public static final RegistryObject<Block> GLASS_DOOR = BLOCKS.register("glass_door",
+            () -> ModBlocks.GLASS_DOOR_PROPERTIES
+    );
+
     public static final RegistryObject<Block> CULTIVATION_POT = BLOCKS.register("cultivation_pot",
             () -> ModBlocks.cultivationPot(Blocks.AIR)
     );
     public static final RegistryObject<Block> CULTIVATED_CHERRY_SAPLING = BLOCKS.register("cultivated_cherry_sapling",
             () -> ModBlocks.cultivationPot(Blocks.CHERRY_SAPLING)
     );
+    public static final RegistryObject<Block> CULTIVATED_OAK_SAPLING = BLOCKS.register("cultivated_oak_sapling",
+            () -> ModBlocks.cultivationPot(Blocks.OAK_SAPLING)
+    );
+
+    public static final RegistryObject<Block> MELON_PARFAIT = BLOCKS.register("melon_parfait",
+            () -> MELON_PARFAIT_PROPERTIES);
 
 
     public static final RegistryObject<Block> LOCACACA_CACTUS = BLOCKS.register("locacaca_cactus",
@@ -171,6 +185,8 @@ public class ForgeBlocks {
             () -> ModBlocks.LOCACACA_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> NEW_LOCACACA_BLOCK = BLOCKS.register("new_locacaca_plant",
             () -> ModBlocks.NEW_LOCACACA_BLOCK_PROPERTIES);
+    public static final RegistryObject<Block> CULTIVATED_LOCACACA = BLOCKS.register("cultivated_locacaca",
+            () -> ModBlocks.cultivationPot(NEW_LOCACACA_BLOCK.get()));
     public static final RegistryObject<Block> GASOLINE_SPLATTER = BLOCKS.register("gasoline_splatter",
             () -> ModBlocks.GASOLINE_SPLATTER_PROPERTIES);
     public static final RegistryObject<Block> BLOOD_SPLATTER = BLOCKS.register("blood_splatter",

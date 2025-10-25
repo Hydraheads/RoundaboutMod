@@ -13,6 +13,7 @@ import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
+import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.visages.mobs.*;
@@ -95,6 +96,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.GROUND_BUBBLE.get(), GroundBubbleEntity.createStandAttributes().build());
         event.put(ForgeEntities.LIFE_TRACKER.get(), LifeTrackerEntity.createStandAttributes().build());
         event.put(ForgeEntities.D4C_CLONE.get(), D4CCloneEntity.createAttributes().build());
+        event.put(ForgeEntities.ROAD_ROLLER_ENTITY.get(), RoadRollerEntity.createAttributes().build());
     }
 
     @SubscribeEvent
@@ -151,9 +153,13 @@ public class ForgeEvents {
         ModBlocks.WOOL_STAIRS_RED = ForgeBlocks.WOOL_STAIRS_RED.get();
         ModBlocks.WOOL_SLAB_YELLOW = ForgeBlocks.WOOL_SLAB_YELLOW.get();
         ModBlocks.WOOL_STAIRS_YELLOW = ForgeBlocks.WOOL_STAIRS_YELLOW.get();
+        ModBlocks.GLASS_DOOR = ForgeBlocks.GLASS_DOOR.get();
+        ModBlocks.WALL_LANTERN = ForgeBlocks.WALL_LANTERN.get();
         ModBlocks.REGAL_WALL = ForgeBlocks.REGAL_WALL.get();
         ModBlocks.CULTIVATION_POT = ForgeBlocks.CULTIVATION_POT.get();
         ModBlocks.CULTIVATED_CHERRY_SAPLING = ForgeBlocks.CULTIVATED_CHERRY_SAPLING.get();
+        ModBlocks.CULTIVATED_OAK_SAPLING = ForgeBlocks.CULTIVATED_OAK_SAPLING.get();
+        ModBlocks.CULTIVATED_LOCACACA = ForgeBlocks.CULTIVATED_LOCACACA.get();
         ModBlocks.ANCIENT_METEOR = ForgeBlocks.ANCIENT_METEOR.get();
         ModBlocks.LOCACACA_CACTUS = ForgeBlocks.LOCACACA_CACTUS.get();
         ModBlocks.LOCACACA_BLOCK = ForgeBlocks.LOCACACA_BLOCK.get();
@@ -188,6 +194,7 @@ public class ForgeEvents {
         ModBlocks.BUBBLE_SCAFFOLD = ForgeBlocks.BUBBLE_SCAFFOLD.get();
         ModBlocks.INVISIBLOCK = ForgeBlocks.INVISIBLOCK.get();
         ModBlocks.D4C_LIGHT_BLOCK = ForgeBlocks.D4C_LIGHT_BLOCK.get();
+        ModBlocks.MELON_PARFAIT = ForgeBlocks.MELON_PARFAIT.get();
 
         ModBlocks.ORANGE_FIRE = ForgeBlocks.ORANGE_FIRE.get();
         ModBlocks.BLUE_FIRE = ForgeBlocks.BLUE_FIRE.get();
@@ -229,6 +236,7 @@ public class ForgeEvents {
         ModItems.MATCH_BUNDLE = ForgeItems.MATCH_BUNDLE.get();
         ModItems.GASOLINE_CAN = ForgeItems.GASOLINE_CAN.get();
         ModItems.GASOLINE_BUCKET = ForgeItems.GASOLINE_BUCKET.get();
+        ModItems.ROAD_ROLLER = ForgeItems.ROAD_ROLLER.get();
         ModItems.STAND_DISC = ForgeItems.STAND_DISC.get();
         ModItems.STAND_DISC_THE_WORLD = ForgeItems.STAND_DISC_THE_WORLD.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_THE_WORLD.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_THE_WORLD.get());
@@ -387,6 +395,9 @@ public class ForgeEvents {
         ModParticles.DUST_CRUMBLE = ForgeParticles.DUST_CRUMBLE.get();
         ModParticles.FIRE_CRUMBLE = ForgeParticles.FIRE_CRUMBLE.get();
         ModParticles.SOUL_FIRE_CRUMBLE = ForgeParticles.SOUL_FIRE_CRUMBLE.get();
+        ModParticles.ROAD_ROLLER_SCRAP = ForgeParticles.ROAD_ROLLER_SCRAP.get();
+        ModParticles.ROAD_ROLLER_EXPLOSION = ForgeParticles.ROAD_ROLLER_EXPLOSION.get();
+        ModParticles.ROAD_ROLLER_SMOKE = ForgeParticles.ROAD_ROLLER_SMOKE.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
@@ -443,6 +454,7 @@ public class ForgeEvents {
         ModEntities.GASOLINE_CAN = ForgeEntities.GASOLINE_CAN.get();
         ModEntities.GASOLINE_SPLATTER = ForgeEntities.GASOLINE_SPLATTER.get();
         ModEntities.STAND_ARROW = ForgeEntities.STAND_ARROW.get();
+        ModEntities.ROAD_ROLLER_ENTITY = ForgeEntities.ROAD_ROLLER_ENTITY.get();
 
         ModEntities.THROWN_OBJECT = ForgeEntities.THROWN_OBJECT.get();
         ModEntities.CONCEALED_FLAME_OBJECT = ForgeEntities.CONCEALED_FLAME_OBJECT.get();

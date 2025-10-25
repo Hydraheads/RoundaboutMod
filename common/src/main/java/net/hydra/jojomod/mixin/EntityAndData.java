@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.SavedSecond;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -33,6 +34,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -467,7 +469,6 @@ public abstract class EntityAndData implements IEntityAndData {
         }
     }
 
-
     @Shadow
     private Vec3 deltaMovement;
 
@@ -552,6 +553,8 @@ public abstract class EntityAndData implements IEntityAndData {
     @Shadow @Final protected SynchedEntityData entityData;
 
     @Shadow public abstract SynchedEntityData getEntityData();
+
+    @Shadow public abstract boolean isInLava();
 
     @Override
     @Unique

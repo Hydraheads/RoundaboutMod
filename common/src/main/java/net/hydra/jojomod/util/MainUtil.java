@@ -125,8 +125,16 @@ public class MainUtil {
         }
         return false;
     }
+    public static boolean isPlayerInFireBlock(Entity player) {
+        // Get the position of the block the player is standing in
+        BlockPos pos = BlockPos.containing(player.getX(), player.getY()+0.01F, player.getZ());
 
+        // Get the block at that position
+        Block block = player.level().getBlockState(pos).getBlock();
 
+        // Check if it’s a subclass of AbstractFireBlock
+        return block instanceof BaseFireBlock;
+    }
 
     public static ArrayList<String> walkableBlocks = Lists.newArrayList();
     public static ArrayList<String> standBlockGrabBlacklist = Lists.newArrayList();
@@ -2470,6 +2478,19 @@ public class MainUtil {
 
         return closest; // null if no valid hit
     }
+
+
+    public static boolean isHoldingRoadRoller(Entity ent){
+        if (ent instanceof LivingEntity LE){
+            ItemStack hand = LE.getMainHandItem();
+            ItemStack offHand = LE.getOffhandItem();
+            if ((!hand.isEmpty() && hand.getItem() instanceof RoadRollerItem) || (!offHand.isEmpty() && offHand.getItem() instanceof RoadRollerItem)){
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public static Entity raytraceEntityStandThroughWalls(Level world, LivingEntity player, double maxDistance) {
 

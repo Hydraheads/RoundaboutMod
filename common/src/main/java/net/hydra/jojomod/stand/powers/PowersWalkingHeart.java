@@ -1011,6 +1011,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                 $$1.add(WalkingHeartEntity.MODEL_SKIN);
                 $$1.add(WalkingHeartEntity.PURPLE_SKIN);
             }if (Level > 2 || bypass) {
+                $$1.add(WalkingHeartEntity.SCARECROW_SKIN);
                 $$1.add(WalkingHeartEntity.VALENTINE_SKIN);
                 $$1.add(WalkingHeartEntity.VERDANT_SKIN);
             }if (Level > 3 || bypass) {
@@ -1045,6 +1046,8 @@ public class PowersWalkingHeart extends NewDashPreset {
             return Component.translatable(  "skins.roundabout.walking_heart.gothic");
         } else if (skinId == WalkingHeartEntity.SPIDER_SKIN){
             return Component.translatable(  "skins.roundabout.walking_heart.spider");
+        } else if (skinId == WalkingHeartEntity.SCARECROW_SKIN){
+            return Component.translatable(  "skins.roundabout.walking_heart.scarecrow");
         }
         return Component.translatable(  "skins.roundabout.walking_heart.base");
     }

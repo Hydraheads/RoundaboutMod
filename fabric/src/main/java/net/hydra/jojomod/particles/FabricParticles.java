@@ -53,6 +53,10 @@ public class FabricParticles {
     public static final SimpleParticleType EXCLAMATION = FabricParticleTypes.simple();
     public static final SimpleParticleType BABY_CRACKLE = FabricParticleTypes.simple();
     public static final SimpleParticleType MAGIC_DUST = FabricParticleTypes.simple();
+    public static final SimpleParticleType ROAD_ROLLER_EXPLOSION = FabricParticleTypes.simple();
+    public static final SimpleParticleType ROAD_ROLLER_SMOKE = FabricParticleTypes.simple();
+    public static final SimpleParticleType ROAD_ROLLER_SCRAP = FabricParticleTypes.simple();
+
     public static final SimpleParticleType BRIEF_MAGIC_DUST = FabricParticleTypes.simple();
     public static final SimpleParticleType STITCH = FabricParticleTypes.simple();
     public static final SimpleParticleType MOLD_DUST = FabricParticleTypes.simple();
@@ -110,6 +114,10 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("magic_dust"), MAGIC_DUST);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("brief_magic_dust"), BRIEF_MAGIC_DUST);
 
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("road_roller_explosion"), ROAD_ROLLER_EXPLOSION);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("road_roller_smoke"), ROAD_ROLLER_SMOKE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("road_roller_scrap"), ROAD_ROLLER_SCRAP);
+
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("dust_crumble"), DUST_CRUMBLE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("fire_crumble"), FIRE_CRUMBLE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("soul_fire_crumble"), SOUL_FIRE_CRUMBLE);
@@ -162,6 +170,11 @@ public class FabricParticles {
         ModParticles.STITCH = STITCH;
         ModParticles.MOLD_DUST = MOLD_DUST;
         ModParticles.MOLD = MOLD;
+
+
+        ModParticles.ROAD_ROLLER_EXPLOSION = ROAD_ROLLER_EXPLOSION;
+        ModParticles.ROAD_ROLLER_SMOKE = ROAD_ROLLER_SMOKE;
+        ModParticles.ROAD_ROLLER_SCRAP = ROAD_ROLLER_SCRAP;
 
         ModParticles.DUST_CRUMBLE = DUST_CRUMBLE;
         ModParticles.FIRE_CRUMBLE = FIRE_CRUMBLE;
