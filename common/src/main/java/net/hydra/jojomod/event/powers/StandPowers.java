@@ -3498,7 +3498,7 @@ public class StandPowers {
             }
         } else {
             if (softenTicks > 0) {
-                softenTicks--;
+                softenTicks-= 2;
             }
         }
 
