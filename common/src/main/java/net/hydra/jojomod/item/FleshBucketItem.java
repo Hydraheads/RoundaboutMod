@@ -1,5 +1,6 @@
 package net.hydra.jojomod.item;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.projectile.FleshPileEntity;
 import net.hydra.jojomod.entity.projectile.GasolineSplatterEntity;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -30,12 +31,13 @@ public class FleshBucketItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level $$1, Player $$2, InteractionHand $$3) {
         ItemStack hand = $$2.getItemInHand($$3);
         if (!$$1.isClientSide) {
-            hand.hurtAndBreak(1, $$2, $$1x -> $$1x.broadcastBreakEvent($$2.getUsedItemHand()));
-            FleshPileEntity $$7 = new FleshPileEntity($$2, $$1,4);
+
+            FleshPileEntity $$7 = new FleshPileEntity($$2, $$1,hand.getMaxDamage()-hand.getDamageValue());
             $$7.shootFromRotation($$2, $$2.getXRot(), $$2.getYRot(), -7, SHOOT_POWER, 1.0F);
 
             $$1.addFreshEntity($$7);
             $$1.playSound(null, $$7, SoundEvents.BUCKET_EMPTY, SoundSource.PLAYERS, 0.85F, 1.0F);
+
         }
         $$2.awardStat(Stats.ITEM_USED.get(this));
         if (!$$2.getAbilities().instabuild) {
@@ -44,10 +46,10 @@ public class FleshBucketItem extends Item {
             }
         }
 
-        if (!( ((StandUser)$$2).roundabout$getStandPowers() instanceof PowersRatt)) {
-            $$2.getCooldowns().addCooldown(Items.BUCKET,20);
-            $$2.getCooldowns().addCooldown(ModItems.FLESH_BUCKET,20);
-        }
+        int cooldown = 40;
+        if (!( ((StandUser)$$2).roundabout$getStandPowers() instanceof PowersRatt)) {cooldown = 20;}
+        $$2.getCooldowns().addCooldown(Items.BUCKET,cooldown);
+        $$2.getCooldowns().addCooldown(ModItems.FLESH_BUCKET,cooldown);
 
         $$2.swing($$3);
         return InteractionResultHolder.consume(hand);

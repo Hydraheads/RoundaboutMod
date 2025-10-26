@@ -20,11 +20,14 @@ import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
+import java.nio.ReadOnlyBufferException;
 import java.util.Arrays;
 
 
@@ -122,12 +125,22 @@ public class FleshPileEntity extends ThrowableItemProjectile {
 
 
     public void placeFlesh(BlockPos pos, int amount) {
+        // reduces the value preemptively
+        amount--;
         int[][] array = {
                 {0,0,0},
                 {0,1,0},
                 {0,0,0}
         };
 
+        // sets the middle value to -1 if there's something in the way
+        if (!level().getBlockState(pos.above()).is(Blocks.AIR)) {
+            array[1][1] = -1;
+            amount++;
+        }
+
+
+        // sets some spaces to -1 to prevent placing stuff there
         for (int x=0;x<array.length;x++) {
             for (int y=0;y<array[0].length;y++) {
                 boolean[] result = checkHeights(pos,x-1,y-1,array[x][y]);
@@ -138,7 +151,8 @@ public class FleshPileEntity extends ThrowableItemProjectile {
         }
 
 
-        for (int i=0;i<amount-1;i++) {
+        // adds values to locations
+        for (int i=0;i<amount;i++) {
             int x = (int) (Math.random()*3);
             int y = (int) (Math.random()*3);
             int n = 0;
@@ -152,11 +166,15 @@ public class FleshPileEntity extends ThrowableItemProjectile {
             }
         }
 
+        // if everywhere is invalid then drop an item
         if (Arrays.deepEquals(array, new int[][]{{-1, -1, -1}, {-1, -1, -1}, {-1, -1, -1}})) {
-            spawnAtLocation(new ItemStack(ModBlocks.FLESH_BLOCK,4));
+            spawnAtLocation(new ItemStack(ModBlocks.FLESH_BLOCK,flesh_count));
             return;
         }
+        Roundabout.LOGGER.info(Arrays.deepToString(array));
 
+
+        // places the stuff
         for (int x=0;x<array.length;x++) {
             for (int y=0;y<array[0].length;y++) {
                 if (array[x][y] > 0) {

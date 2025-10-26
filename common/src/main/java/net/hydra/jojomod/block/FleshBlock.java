@@ -17,6 +17,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -169,7 +170,7 @@ public class FleshBlock
     public InteractionResult use(BlockState $$0, Level $$1, BlockPos $$2, Player $$3, InteractionHand $$4, BlockHitResult $$5) {
         StandPowers powers = ((StandUser)  $$3 ).roundabout$getStandPowers();
         if (powers instanceof PowersRatt) {
-            if (!$$3.getMainHandItem().is(ModBlocks.FLESH_BLOCK.asItem())) {
+            if ($$3.getMainHandItem().is(Items.AIR)) {
                 if (!powers.isClient()) {
                     Level level = powers.getSelf().level();
                     level.setBlockAndUpdate($$2, Blocks.AIR.defaultBlockState());

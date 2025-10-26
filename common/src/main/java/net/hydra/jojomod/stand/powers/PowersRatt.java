@@ -1023,10 +1023,6 @@ public class PowersRatt extends NewDashPreset {
                 list.add(RattEntity.MELON_SKIN);
                 list.add(RattEntity.AZTEC_SKIN);
                 list.add(RattEntity.TOWER_SKIN);
-
-
-
-
             }
             if (Level >= 3 || bypass) {
                 list.add(RattEntity.GUARDIAN_SKIN);
@@ -1036,6 +1032,7 @@ public class PowersRatt extends NewDashPreset {
             if (Level >= 4 || bypass) {
                 list.add(RattEntity.SAND_SKIN);
                 list.add(RattEntity.SNOWY_SKIN);
+                list.add(RattEntity.NETHER_SKIN);
             }
             if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass) {
                 list.add(RattEntity.CHAIR_RAT_SKIN);
@@ -1060,6 +1057,7 @@ public class PowersRatt extends NewDashPreset {
             case RattEntity.TOWER_SKIN -> {return Component.translatable("skins.roundabout.ratt.tower");}
             case RattEntity.REDD_SKIN -> {return Component.translatable("skins.roundabout.ratt.redd");}
             case RattEntity.SNOWY_SKIN -> {return Component.translatable("skins.roundabout.ratt.snowy");}
+            case RattEntity.NETHER_SKIN -> {return Component.translatable("skins.roundabout.ratt.nether");}
             case RattEntity.GUARDIAN_SKIN -> {return Component.translatable("skins.roundabout.ratt.guardian");}
             case RattEntity.ELDER_GUARDIAN_SKIN -> {return Component.translatable("skins.roundabout.ratt.elder_guardian");}
             case RattEntity.CHAIR_RAT_SKIN -> {return Component.translatable("skins.roundabout.ratt.chair_rat");}
