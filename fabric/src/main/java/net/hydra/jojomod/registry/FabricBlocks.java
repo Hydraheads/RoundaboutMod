@@ -151,7 +151,7 @@ public class FabricBlocks {
     public static final Block CULTIVATED_CHERRY_SAPLING = registerBlockItemless("cultivated_cherry_sapling",ModBlocks.cultivationPot(Blocks.CHERRY_SAPLING));
     public static final Block CULTIVATED_OAK_SAPLING = registerBlockItemless("cultivated_oak_sapling",ModBlocks.cultivationPot(Blocks.OAK_SAPLING));
     public static final Block CULTIVATED_LOCACACA = registerBlockItemless("cultivated_locacaca",ModBlocks.cultivationPot(NEW_LOCACACA_BLOCK));
-    public static final Block MELON_PARFAIT = registerBlock("melon_parfait", MELON_PARFAIT_PROPERTIES);
+    public static final Block MELON_PARFAIT = registerBlockUnstackable("melon_parfait", MELON_PARFAIT_PROPERTIES,1);
 
     public static final Block FLESH_BLOCK = registerFleshBlockFood("flesh_block",ModBlocks.FLESH_BLOCK_PROPERTIES, ModFoodComponents.FLESH_CHUNK);
     public static final Block MINING_ALERT_BLOCK = registerBlockItemless("mining_alert_block",ModBlocks.MINING_ALERT_BLOCK_PROPERTIES);

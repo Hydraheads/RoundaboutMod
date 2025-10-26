@@ -299,7 +299,7 @@ public class PowersWalkingHeart extends NewDashPreset {
             } else {
                 if (!inCombatMode()) {
                     if (self.onGround()) {
-                        this.setCooldown(PowerIndex.SKILL_3, 8);
+                        this.setCooldown(PowerIndex.SKILL_3, 10);
                         if (!this.self.level().isClientSide()) {
                             setHeelDirection(((IGravityEntity)this.self).roundabout$getGravityDirection());
                             toggleSpikes(true);
@@ -349,7 +349,7 @@ public class PowersWalkingHeart extends NewDashPreset {
 
     public void wallLatch(){
         if (canLatchOntoWall() && canWallWalkConfig()){
-            this.setCooldown(PowerIndex.SKILL_3, 6);
+            this.setCooldown(PowerIndex.SKILL_3, 10);
             if (!this.self.level().isClientSide()) {
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.WALL_LATCH_EVENT, SoundSource.PLAYERS, 1F, 1f);
                 toggleSpikes(true);

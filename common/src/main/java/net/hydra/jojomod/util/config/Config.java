@@ -745,6 +745,9 @@ public class Config implements Cloneable {
         public Integer blockRangeNegativeOneIsInfinite;
         @IntOption(group = "inherit", value = 19, min = 0, max = 100)
         public Integer postTSiframes;
-
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean postTSSoften;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean postTSCancel;
     }
 }

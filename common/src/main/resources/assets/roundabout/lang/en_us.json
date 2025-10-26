@@ -2161,6 +2161,10 @@
   "config.roundabout.blockRangeNegativeOneIsInfinite.desc": "By default the ability has an 100 block radius so only players nearby feel it. If you set it to -1, it becomes global and actually stops the time of day beyond just visually.",
   "config.roundabout.postTSiframes.name": "Invincibility Ticks",
   "config.roundabout.postTSiframes.desc": "The amount of ticks after taking time damage in which you are immune to damage. Default is 19.",
+  "config.roundabout.postTSSoften.name": "Post Stop Soften",
+  "config.roundabout.postTSsoftenFrames.desc": "Whether or not players take reduced damage from things beyond your control (gasoline, stand attacks) after a time stop ends. The duration is proportionate to how long they are stopped, and only applies for stops that last more than a second.",
+  "config.roundabout.postTSCancel.name": "Post Stop Cancel",
+  "config.roundabout.postTSCancel.desc": "Whether or not certain moves get canceled when time resumes. Disable for legacy version.",
 
 
   "config.roundabout.starPlatinumAttackMultOnPlayers.name": "Player Damage Multiplier",
