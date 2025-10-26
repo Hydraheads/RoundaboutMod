@@ -171,7 +171,6 @@ public class FleshPileEntity extends ThrowableItemProjectile {
             spawnAtLocation(new ItemStack(ModBlocks.FLESH_BLOCK,flesh_count));
             return;
         }
-        Roundabout.LOGGER.info(Arrays.deepToString(array));
 
 
         // places the stuff
