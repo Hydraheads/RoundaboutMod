@@ -33,6 +33,9 @@ public class FleshBucketItem extends Item {
         if (!$$1.isClientSide) {
 
             FleshPileEntity $$7 = new FleshPileEntity($$2, $$1,hand.getMaxDamage()-hand.getDamageValue());
+            if ($$2.isCrouching()) {
+                $$7.flesh_count = Math.min(hand.getMaxDamage()-hand.getDamageValue(),8);
+            }
             $$7.shootFromRotation($$2, $$2.getXRot(), $$2.getYRot(), -7, SHOOT_POWER, 1.0F);
 
             $$1.addFreshEntity($$7);
@@ -42,7 +45,11 @@ public class FleshBucketItem extends Item {
         $$2.awardStat(Stats.ITEM_USED.get(this));
         if (!$$2.getAbilities().instabuild) {
             if (!$$1.isClientSide) {
-                $$2.setItemInHand($$3, new ItemStack(Items.BUCKET));
+                if(!$$2.isCrouching() || hand.getDamageValue()+8 >= hand.getMaxDamage()) {
+                    $$2.setItemInHand($$3, new ItemStack(Items.BUCKET));
+                } else {
+                    hand.setDamageValue(Math.max(hand.getDamageValue()+8,0));
+                }
             }
         }
 
