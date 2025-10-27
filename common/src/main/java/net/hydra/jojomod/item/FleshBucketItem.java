@@ -34,7 +34,7 @@ public class FleshBucketItem extends Item {
 
             FleshPileEntity $$7 = new FleshPileEntity($$2, $$1,hand.getMaxDamage()-hand.getDamageValue());
             if ($$2.isCrouching()) {
-                $$7.flesh_count = Math.min(hand.getMaxDamage()-hand.getDamageValue(),8);
+                $$7.setFleshCount(Math.min(hand.getMaxDamage()-hand.getDamageValue(),8));
             }
             $$7.shootFromRotation($$2, $$2.getXRot(), $$2.getYRot(), -7, SHOOT_POWER, 1.0F);
 

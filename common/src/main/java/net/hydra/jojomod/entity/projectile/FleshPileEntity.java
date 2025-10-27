@@ -4,12 +4,16 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.FleshBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -39,16 +43,27 @@ public class FleshPileEntity extends ThrowableItemProjectile {
         super($$0, $$1);
     }
 
-    public int flesh_count = 0;
+    protected static final EntityDataAccessor<Integer> FLESH_COUNT = SynchedEntityData.defineId(FleshPileEntity.class,
+            EntityDataSerializers.INT);
+    @Override
+    protected void defineSynchedData() {
+        if (!this.entityData.hasItem(FLESH_COUNT)) {
+            super.defineSynchedData();
+            this.entityData.define(FLESH_COUNT, 0);
+        }
+    }
+    public void setFleshCount(int amount) {this.entityData.set(FLESH_COUNT,amount);}
+    public int getFleshCount() {return this.entityData.get(FLESH_COUNT);}
+
 
     public FleshPileEntity(LivingEntity living, Level $$1,int amount) {
         super(ModEntities.FLESH_PILE, living, $$1);
-        flesh_count = amount;
+        setFleshCount(amount);
     }
 
     public FleshPileEntity(Level level, double d0, double d1, double d2, int amount) {
         super(ModEntities.FLESH_PILE, d0, d1,d2,level);
-        flesh_count = amount;
+        setFleshCount(amount);
     }
 
 
@@ -67,7 +82,7 @@ public class FleshPileEntity extends ThrowableItemProjectile {
                     15, 0.4, 0.4, 0.25, 0.4);
             this.playSound(SoundEvents.GENERIC_SPLASH, 1F, 1.5F);
 
-            placeFlesh($$0.getBlockPos(),(this.flesh_count != 0 ? this.flesh_count : 4));
+            placeFlesh($$0.getBlockPos(),(getFleshCount() != 0 ? getFleshCount() : 4));
 
 
             this.discard();
@@ -198,7 +213,7 @@ public class FleshPileEntity extends ThrowableItemProjectile {
             if (!zeroSpots) {break;}
         }
         if (zeroSpots) {
-            spawnAtLocation(new ItemStack(ModBlocks.FLESH_BLOCK,flesh_count));
+            spawnAtLocation(new ItemStack(ModBlocks.FLESH_BLOCK,getFleshCount()));
             return;
         }
 
