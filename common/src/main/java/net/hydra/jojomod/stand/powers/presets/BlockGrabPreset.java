@@ -856,7 +856,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                     if (entity.startRiding(standEntity)) {
                         if (entity instanceof RoadRollerEntity RRE) {
                             RRE.thrower = this.getSelf();
-                            RRE.isThrown = true;
+                            RRE.hasBeenBaraged = false;
                         }
                         this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                         this.setActivePower(PowerIndex.POWER_2_EXTRA);
@@ -1045,6 +1045,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                         this.getSelf().level().addFreshEntity(roadRoller);
                         this.getSelf().level().gameEvent(this.getSelf(), GameEvent.ENTITY_PLACE, this.getSelf().position().add(0, 3, 0));
                         if (roadRoller.startRiding(standEntity)) {
+                            roadRoller.isThrown = false;
                             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                             this.setActivePower(PowerIndex.POWER_2_EXTRA);
                             this.setAttackTimeDuring(0);

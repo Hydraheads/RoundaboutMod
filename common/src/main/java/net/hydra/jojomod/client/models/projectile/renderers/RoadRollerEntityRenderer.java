@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.projectile.RoadRollerModel;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -32,7 +33,12 @@ public class RoadRollerEntityRenderer extends LivingEntityRenderer<RoadRollerEnt
             ResourceLocation RL = this.getTextureLocation($$0);
             ClientUtil.saveBufferTexture = RL;
 
-            poseStack.scale(3f, 3f, 3f);
+            if ($$0.getVehicle() instanceof StandEntity SE) {
+                poseStack.scale(1.8f, 1.8f, 1.8f);
+                poseStack.translate(0, 0.07, 0);
+            } else {
+                poseStack.scale(3f, 3f, 3f);
+            }
 
             super.render($$0, $$1, $$2, poseStack, $$4, $$5);
 

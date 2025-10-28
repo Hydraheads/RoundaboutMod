@@ -277,6 +277,7 @@
     "items.ChairCameraMixin",
     "items.RoadRollerItemInHandMixin",
     "items.RoadRollerItemRendererMixin",
+    "items.RoadRollerPlayerRendererMixin",
     "items.StoneMaskCustomHeadLayerMixin",
     "items.visages.VisageHumanoidArmorLayer",
     "justice.JusticeAbstractZombieRenderer",

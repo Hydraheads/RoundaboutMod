@@ -502,8 +502,8 @@
   "death.attack.dagger.item": "%1$s became a human sacrifice",
   "death.attack.dagger.player": "%1$s became a human sacrifice",
   "death.attack.dagger.player.item": "%1$s became a human sacrifice",
-  "death.attack.road_roller": "%1$s's grave was paved.",
-  "death.attack.road_roller.item": "%1$s's grave was paved.",
+  "death.attack.road_roller_entity": "%1$s's grave was paved.",
+  "death.attack.road_roller_entity.item": "%1$s's grave was paved.",
   "death.attack.road_roller.player": "%1$s's grave was paved.",
   "death.attack.road_roller.player.item": "%1$s's grave was paved.",
 
