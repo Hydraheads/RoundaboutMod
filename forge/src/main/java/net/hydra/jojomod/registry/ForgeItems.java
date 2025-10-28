@@ -319,6 +319,10 @@ public class ForgeItems {
             () -> new BowlerHatItem(Tiers.IRON, 0F, -1.6F, new Item.Properties())
     ));
 
+    public static final RegistryObject<Item> SNUBNOSE_REVOLVER = addToWIPTab(ITEMS.register("snubnose_revolver",
+            () -> new SnubnoseRevolverItem(new Item.Properties().stacksTo(1))
+    ));
+
 
 
 

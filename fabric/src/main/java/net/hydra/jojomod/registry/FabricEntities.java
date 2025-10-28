@@ -418,6 +418,13 @@ public class FabricEntities {
                         EntityType.Builder.<BladedBowlerHatEntity>of(BladedBowlerHatEntity::new, MobCategory.MISC).
                                 sized(0.5f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":bladed_bowler_hat")
                 );
+        public static final EntityType<RoundaboutBulletEntity> ROUNDABOUT_BULLET_ENTITY =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "roundabout_bullet_entity"),
+                        EntityType.Builder.<RoundaboutBulletEntity>of(RoundaboutBulletEntity::new, MobCategory.MISC).
+                                sized(0.25f, 0.25f).clientTrackingRange(10).build(Roundabout.MOD_ID+":roundabout_bullet_entity")
+                );
         public static final EntityType<KnifeEntity> THROWN_KNIFE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -626,6 +633,7 @@ public class FabricEntities {
                 ModEntities.DIVER_DOWN = DIVER_DOWN;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
                 ModEntities.BLADED_BOWLER_HAT = BLADED_BOWLER_HAT;
+                ModEntities.ROUNDABOUT_BULLET_ENTITY = ROUNDABOUT_BULLET_ENTITY;
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
                 ModEntities.RATT_DART = RATT_DART;
                 ModEntities.THROWN_MATCH = THROWN_MATCH;

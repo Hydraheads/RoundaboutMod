@@ -1,11 +1,13 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_glass": {
+    "has_end_stone": {
       "conditions": {
         "items": [
           {
-            "tag": "minecraft:glass"
+            "items": [
+              "minecraft:end_stone"
+            ]
           }
         ]
       },
@@ -13,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "roundabout:glass_door_shaped"
+        "recipe": "roundabout:road_roller_shaped"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_glass",
+      "has_end_stone",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "roundabout:glass_door_shaped"
+      "roundabout:end_stone_shaped"
     ]
   },
   "sends_telemetry_event": false
