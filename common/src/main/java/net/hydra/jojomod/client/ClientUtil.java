@@ -790,6 +790,19 @@ public class ClientUtil {
             }
         }
     }
+    public static boolean heldDownHide = false;
+    public static void hideIcons(Player player, Minecraft C, boolean keyIsDown, Options option) {
+        if (ConfigManager.getClientConfig() == null || ConfigManager.getClientConfig().dynamicSettings == null)
+            return;
+        if (keyIsDown) {
+            if (!heldDownHide) {
+                ConfigManager.getClientConfig().dynamicSettings.hideGUI = !ConfigManager.getClientConfig().dynamicSettings.hideGUI;
+                heldDownHide = true;
+            }
+        } else {
+            heldDownHide = false;
+        }
+    }
     public static void openCorpseBag(ItemStack stack) {
         Minecraft client = Minecraft.getInstance();
         client.setScreen(new CorpseBagScreen(stack));

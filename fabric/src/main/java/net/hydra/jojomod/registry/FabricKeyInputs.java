@@ -35,6 +35,7 @@ public class FabricKeyInputs {
         KeyBindingHelper.registerKeyBinding(KeyInputRegistry.showExp);
 
         KeyBindingHelper.registerKeyBinding(KeyInputRegistry.pose);
+        KeyBindingHelper.registerKeyBinding(KeyInputRegistry.hide_good_info);
 
     }
 }

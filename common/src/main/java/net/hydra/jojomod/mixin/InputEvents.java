@@ -953,6 +953,8 @@ public abstract class InputEvents implements IInputEvents {
 
                 KeyInputs.showEXPKey(player,((Minecraft) (Object) this), roundabout$sameKeyThree(KeyInputRegistry.showExp),
                         this.options);
+                KeyInputs.hideIcons(player,((Minecraft) (Object) this), roundabout$sameKeyThree(KeyInputRegistry.hide_good_info),
+                        this.options);
                 KeyInputs.switchRowsKey(player,((Minecraft) (Object) this), roundabout$sameKeyThree(KeyInputRegistry.switchRow),
                         this.options);
                 KeyInputs.strikePose(player,((Minecraft) (Object) this), KeyInputRegistry.pose.isDown(),

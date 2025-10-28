@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -48,6 +49,8 @@ public class StandHudRender {
                                       float flashAlpha, float otherFlashAlpha) {
         if (!configIsLoaded())
             return;
+        if (ConfigManager.getClientConfig() == null || ConfigManager.getClientConfig().dynamicSettings == null)
+                return;
         if (playerEntity != null) {
             RenderSystem.enableBlend();
             int x = 0;
@@ -68,7 +71,8 @@ public class StandHudRender {
             float tickDelta = mc.getDeltaFrameTime();
 
             boolean standOn = ((StandUser) playerEntity).roundabout$getActive();
-            boolean renderIcons = standOn || !FateTypes.isHuman(playerEntity);
+            boolean renderIcons = (standOn || !FateTypes.isHuman(playerEntity)) && !ConfigManager.getClientConfig().dynamicSettings.hideGUI
+                    && !(ConfigManager.getClientConfig().enablePickyIconRendering && !((StandUser) playerEntity).roundabout$getStandPowers().hasCooldowns());
             if (renderIcons || presentX > 0.1){
                 if (!renderIcons){
                     if (ConfigManager.getClientConfig().abilityIconHudIsAnimated){
