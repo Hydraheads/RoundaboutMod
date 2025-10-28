@@ -46,9 +46,17 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
     public FatePowers rdbt$fatePowers = null;
 
     @Unique
+    public byte rdbt$lastFate = FateTypes.HUMAN.id;
+
+    @Unique
+    @Override
     public FatePowers rdbt$getFatePowers(){
+        if (rdbt$lastFate != ((IPlayerEntity)this).roundabout$getFate()){
+            rdbt$lastFate = ((IPlayerEntity)this).roundabout$getFate();
+            rdbt$fatePowers = null;
+        }
         if (rdbt$fatePowers == null){
-            FateTypes.getFateFromByte(((IPlayerEntity)this).roundabout$getFate()).fatePowers.generateFatePowers(this);
+            rdbt$fatePowers = FateTypes.getFateFromByte(((IPlayerEntity)this).roundabout$getFate()).fatePowers.generateFatePowers(this);
         }
         return rdbt$fatePowers;
     }
@@ -154,9 +162,6 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
                     0, randomX, randomY, randomZ, 3.5);
         }
     }
-
-
-
     //((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_BACKWARD);
 
     protected FatePlayerMixin(EntityType<? extends LivingEntity> $$0, Level $$1) {
