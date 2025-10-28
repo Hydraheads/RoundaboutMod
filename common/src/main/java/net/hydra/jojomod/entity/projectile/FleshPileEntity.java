@@ -4,15 +4,21 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.FleshBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,11 +26,15 @@ import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
+import java.nio.ReadOnlyBufferException;
 import java.util.Arrays;
 
 
@@ -33,15 +43,27 @@ public class FleshPileEntity extends ThrowableItemProjectile {
         super($$0, $$1);
     }
 
-    public int flesh_count = 0;
+    protected static final EntityDataAccessor<Integer> FLESH_COUNT = SynchedEntityData.defineId(FleshPileEntity.class,
+            EntityDataSerializers.INT);
+    @Override
+    protected void defineSynchedData() {
+        if (!this.entityData.hasItem(FLESH_COUNT)) {
+            super.defineSynchedData();
+            this.entityData.define(FLESH_COUNT, 0);
+        }
+    }
+    public void setFleshCount(int amount) {this.entityData.set(FLESH_COUNT,amount);}
+    public int getFleshCount() {return this.entityData.get(FLESH_COUNT);}
+
 
     public FleshPileEntity(LivingEntity living, Level $$1,int amount) {
         super(ModEntities.FLESH_PILE, living, $$1);
-        flesh_count = amount;
+        setFleshCount(amount);
     }
 
-    public FleshPileEntity(Level level, double d0, double d1, double d2) {
+    public FleshPileEntity(Level level, double d0, double d1, double d2, int amount) {
         super(ModEntities.FLESH_PILE, d0, d1,d2,level);
+        setFleshCount(amount);
     }
 
 
@@ -60,13 +82,20 @@ public class FleshPileEntity extends ThrowableItemProjectile {
                     15, 0.4, 0.4, 0.25, 0.4);
             this.playSound(SoundEvents.GENERIC_SPLASH, 1F, 1.5F);
 
-            placeFlesh($$0.getBlockPos(),(this.flesh_count != 0 ? this.flesh_count : 4));
+            placeFlesh($$0.getBlockPos(),(getFleshCount() != 0 ? getFleshCount() : 4));
 
 
             this.discard();
         }
     }
 
+    @Override
+    protected void onHitEntity(EntityHitResult $$0) {
+        Entity entity = $$0.getEntity();
+        if (entity instanceof LivingEntity LE) {
+            LE.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN,50,1));
+        }
+    }
 
     public boolean[] isValidLocation(BlockPos pos, int offsetX, int offsetY, int offsetZ, int level){
         BlockPos blk =  new BlockPos(pos.getX() + offsetX, pos.getY() + offsetY, pos.getZ() + offsetZ);
@@ -122,12 +151,31 @@ public class FleshPileEntity extends ThrowableItemProjectile {
 
 
     public void placeFlesh(BlockPos pos, int amount) {
+        // reduces the value preemptively
+        amount--;
         int[][] array = {
                 {0,0,0},
                 {0,1,0},
                 {0,0,0}
         };
+        if (amount > 8) {
+            array = new int[][]{
+                    {0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0},
+                    {0, 0, 1, 0, 0},
+                    {0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0}
+            };
+        }
 
+        // sets the middle value to -1 if there's something in the way
+        if (!level().getBlockState(pos.above()).is(Blocks.AIR)) {
+            array[array.length/2][array.length/2] = -1;
+            amount++;
+        }
+
+
+        // sets some spaces to -1 to prevent placing stuff there
         for (int x=0;x<array.length;x++) {
             for (int y=0;y<array[0].length;y++) {
                 boolean[] result = checkHeights(pos,x-1,y-1,array[x][y]);
@@ -138,13 +186,14 @@ public class FleshPileEntity extends ThrowableItemProjectile {
         }
 
 
-        for (int i=0;i<amount-1;i++) {
-            int x = (int) (Math.random()*3);
-            int y = (int) (Math.random()*3);
+        // adds values to locations
+        for (int i=0;i<amount;i++) {
+            int x = (int) (Math.random()*array.length);
+            int y = (int) (Math.random()*array.length);
             int n = 0;
             while(array[x][y] == -1 && n <= 10 ) {
-                x = (int) (Math.random()*3);
-                y = (int) (Math.random()*3);
+                x = (int) (Math.random()*array.length);
+                y = (int) (Math.random()*array.length);
                 n++;
             }
             if (array[x][y] != -1) {
@@ -152,15 +201,28 @@ public class FleshPileEntity extends ThrowableItemProjectile {
             }
         }
 
-        if (Arrays.deepEquals(array, new int[][]{{-1, -1, -1}, {-1, -1, -1}, {-1, -1, -1}})) {
-            spawnAtLocation(new ItemStack(ModBlocks.FLESH_BLOCK,4));
+        // if everywhere is invalid then drop an item
+        boolean zeroSpots = true;
+        for(int x=0;x<array.length;x++) {
+            for(int y=0;y<array.length;y++) {
+                if (array[x][y] != -1) {
+                    zeroSpots = false;
+                    break;
+                }
+            }
+            if (!zeroSpots) {break;}
+        }
+        if (zeroSpots) {
+            spawnAtLocation(new ItemStack(ModBlocks.FLESH_BLOCK,getFleshCount()));
             return;
         }
 
+
+        // places the stuff
         for (int x=0;x<array.length;x++) {
             for (int y=0;y<array[0].length;y++) {
                 if (array[x][y] > 0) {
-                    setGoo(pos, x-1, y-1, Mth.clamp(0,array[x][y],4));
+                    setGoo(pos, x-(array.length/2), y-(array.length/2), Mth.clamp(0,array[x][y],4));
                 }
             }
         }

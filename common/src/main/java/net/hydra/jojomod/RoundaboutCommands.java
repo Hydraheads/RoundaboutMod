@@ -126,7 +126,7 @@ public class RoundaboutCommands {
                     int standLevel = ipe.roundabout$getStandLevel();
                     if (!standDisc.isEmpty() && !(standDisc.getItem() instanceof MaxStandDiscItem)){
                         ipe.roundabout$setStandExp(0);
-                        ipe.roundabout$setStandLevel((byte) level);
+                        ipe.roundabout$setStandLevel((byte) Math.min(user.roundabout$getStandPowers().getMaxLevel(),level));
                     }
                 }
             }

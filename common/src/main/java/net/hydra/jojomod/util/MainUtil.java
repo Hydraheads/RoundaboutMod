@@ -779,6 +779,11 @@ public class MainUtil {
         return false;
     }
 
+    public static boolean canDrinkBlood(Entity mob){
+        return (getMobBleed(mob) && !hasEnderBlood(mob) && mob.isAlive() && !mob.isRemoved());
+    }
+
+
     public static void makeFaceless(Entity entity, int ticks, int power, Entity user){
         if (entity instanceof LivingEntity LE){
             if (((LivingEntity)entity).hasEffect(ModEffects.FACELESS)){

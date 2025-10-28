@@ -294,4 +294,8 @@ public interface StandUser {
     void rdbt$SetCrawlTicks(int ticks);
     boolean rdbt$isForceCrawl();
 
+    List<CooldownInstance> rdbt$initPowerCooldowns();
+    List<CooldownInstance> rdbt$getPowerCooldowns();
+    void rdbt$setPowerCooldowns(List<CooldownInstance> cdi);
+
 }

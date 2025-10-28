@@ -451,6 +451,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         return 1.3F;
     }
     public void impaleImpact(Entity entity){
+        if (activePower == PowerIndex.POWER_1_SNEAK){
         this.setAttackTimeDuring(-20);
         if (entity != null) {
             hitParticlesCenter(entity);
@@ -493,6 +494,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
         if (!this.self.level().isClientSide()) {
             this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+        }
         }
     }
 
@@ -588,8 +590,15 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         /*Time Resume*/
         if (!level.isClientSide()) {
             if (((TimeStop) level).isTimeStoppingEntity(this.getSelf())) {
+                if (ClientNetworking.getAppropriateConfig().timeStopSettings.postTSCancel) {
+                    if (this.getActivePower() == PowerIndex.POWER_1_SNEAK || this.getActivePower() == PowerIndex.POWER_1
+                            || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                    }
+                }
+
                 float tsTimeRemaining = (float) (ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopMinimumCooldown+((this.maxChargedTSTicks-this.getChargedTSTicks())*5*(ClientNetworking.getAppropriateConfig().timeStopSettings.additionalCooldownPerSecondsUsed *0.01)));
-                if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.POWER_1_SNEAK
+                if ((this.getActivePower() == PowerIndex.ATTACK
                         || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE || this.getActivePower() == PowerIndex.SNEAK_ATTACK ||
                         this.getActivePower() == PowerIndex.POWER_1) && this.getAttackTimeDuring() > -1){
                     this.hasActedInTS = true;

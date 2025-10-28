@@ -1,7 +1,13 @@
 {
   "variants": {
-    "": {
+    "stage=1": {
       "model": "roundabout:block/melon_parfait"
+    },
+    "stage=2": {
+      "model": "roundabout:block/melon_parfait_stage_2"
+    },
+    "stage=3": {
+      "model": "roundabout:block/melon_parfait_stage_3"
     }
   }
 }

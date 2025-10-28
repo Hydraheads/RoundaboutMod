@@ -406,7 +406,7 @@ public class ForgeItems {
                     new Item.Properties().food(ModFoodComponents.FLESH_CHUNK)
             )));
     public static final RegistryObject<Item> FLESH_BUCKET = addToBuildingTab(ITEMS.register("flesh_bucket",
-            () -> new FleshBucketItem(new Item.Properties().stacksTo(1))));
+            () -> new FleshBucketItem(new Item.Properties().stacksTo(1).durability(16))));
     public static final RegistryObject<ForgeSpawnEggItem> TERRIER_SPAWN_EGG = addToTab(ITEMS.register("terrier_spawn_egg",
             () -> new ForgeSpawnEggItem(ForgeEntities.TERRIER_DOG,
                     0xc9c071, 0xfffded, new Item.Properties())));

@@ -1,19 +1,17 @@
 package net.hydra.jojomod.fates;
 
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.minecraft.world.entity.LivingEntity;
 
-public class FatePowers {
-    /**Note that self refers to the entity with the power*/
-    public final LivingEntity self;
+public class FatePowers extends AbilityScapeBasis {
 
     public FatePowers(LivingEntity self) {
-        this.self = self;
+        super(self);
     }
     public FatePowers() {
-        this.self = null;
+        super(null);
     }
-
     public void tick(){
     }
 

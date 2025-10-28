@@ -137,7 +137,7 @@
     "items.BowlerHatPlayerRendererMixin",
     "items.BowlerHatUnRenderHelmetMixin",
     "items.ExecutionerAxeRaid",
-    "items.GasolineBucketBucketItem",
+    "items.BucketItemMixin",
     "items.MaskItemEntity",
     "items.RaidItemEntity",
     "items.StandArrowBowItem",
