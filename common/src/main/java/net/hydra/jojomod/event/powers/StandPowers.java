@@ -2275,6 +2275,10 @@ public class StandPowers extends AbilityScapeBasis {
         return $$0 + $$3;
     }
 
+    @Override
+    public ResourceLocation getIconYes(int slot){
+        return StandIcons.SQUARE_ICON;
+    }
 
     public BlockHitResult getAheadVec(float distOut){
         Vec3 vec3d = this.self.getEyePosition(1);

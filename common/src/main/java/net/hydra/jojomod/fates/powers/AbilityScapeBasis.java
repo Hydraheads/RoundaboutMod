@@ -71,6 +71,11 @@ public class AbilityScapeBasis {
         setSkillIcon(context,x,y,slot,rl,CDI,false);
     }
 
+
+    public ResourceLocation getIconYes(int slot){
+        return StandIcons.SQUARE_ICON;
+    }
+
     public static final int squareHeight = 24;
     public static final int squareWidth = 24;
     public void setSkillIcon(GuiGraphics context, int x, int y, int slot, ResourceLocation rl, byte CDI, boolean locked){
@@ -88,7 +93,7 @@ public class AbilityScapeBasis {
             context.blit(StandIcons.LOCKED_SQUARE_ICON,x-3,y-3,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
         } else {
             RenderSystem.enableBlend();
-            context.blit(StandIcons.SQUARE_ICON,x-3,y-3,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+            context.blit(getIconYes(slot),x-3,y-3,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
             Font renderer = Minecraft.getInstance().font;
             if (slot==4){
                 Component special4Key = KeyInputRegistry.abilityFourKey.getTranslatedKeyMessage();

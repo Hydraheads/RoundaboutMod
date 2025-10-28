@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -44,8 +45,16 @@ public class VampiricFate extends FatePowers {
      * activeP is your currently active power*/
     public boolean isAttackIneptVisually(byte activeP, int slot){
         Entity TE = getUserData(self).roundabout$getStandPowers().getTargetEntity(this.self, 3, 15);
-        if (slot == 2 && !MainUtil.canDrinkBlood(TE))
+        if (slot == 2 && !MainUtil.canDrinkBlood(TE) && !isHoldingSneak())
             return true;
         return super.isAttackIneptVisually(activeP,slot);
+    }
+
+    @Override
+    public ResourceLocation getIconYes(int slot){
+        if ((slot == 2 || slot == 3) && isHoldingSneak()){
+            return StandIcons.SQUARE_ICON_BLOOD;
+        }
+        return StandIcons.SQUARE_ICON;
     }
 }
