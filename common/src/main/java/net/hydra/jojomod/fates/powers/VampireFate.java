@@ -2,9 +2,13 @@ package net.hydra.jojomod.fates.powers;
 
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 
 public class VampireFate extends VampiricFate {
 
@@ -30,5 +34,21 @@ public class VampireFate extends VampiricFate {
 
     @Override
     public void tick(){
+    }
+    @Override
+    public void renderAttackHud(GuiGraphics context, Player playerEntity,
+                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+                                float flashAlpha, float otherFlashAlpha) {
+        StandUser standUser = ((StandUser) playerEntity);
+        boolean standOn = standUser.roundabout$getActive();
+        int j = scaledHeight / 2 - 7 - 4;
+        int k = scaledWidth / 2 - 8;
+        if (!standOn){
+            Entity TE = standUser.roundabout$getStandPowers().getTargetEntity(playerEntity, 3, 15);
+            if (TE != null && MainUtil.canDrinkBlood(TE)){
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 44, 16, 8);
+
+            }
+        }
     }
 }
