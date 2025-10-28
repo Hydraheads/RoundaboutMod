@@ -29,7 +29,6 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
-import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -785,6 +784,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             this.removeEffect(ModEffects.CAPTURING_LOVE);
             this.addEffect(new MobEffectInstance(ModEffects.FACELESS, 3600, 0, false, true));
         }
+
+
+
     }
     @Unique
     public boolean roundabout$isDrown = false;
@@ -1219,6 +1221,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$zappedTicks = Mth.clamp(roundabout$zappedTicks,-1,10);
         }
         this.roundabout$getStandPowers().tickPower();
+        this.rdbt$tickCooldowns();
         this.roundabout$tickGuard();
         this.roundabout$tickDaze();
         if (this.roundabout$leapTicks > -1) {
@@ -1905,7 +1908,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         compoundtag.putByte("bubbleEncased",roundabout$getBubbleEncased());
 
         StandPowers powers = roundabout$getStandPowers();
-        List<CooldownInstance> CDCopy = new ArrayList<>(powers.StandCooldowns) {
+        List<CooldownInstance> CDCopy = new ArrayList<>(rdbt$PowerCooldowns) {
         };
         if (!CDCopy.isEmpty()) {
             for (byte i = 0; i < CDCopy.size(); i++) {
@@ -1944,7 +1947,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         roundabout$setBubbleEncased(compoundtag.getByte("bubbleEncased"));
 
         StandPowers powers = roundabout$getStandPowers();
-        List<CooldownInstance> CDCopy = new ArrayList<>(powers.StandCooldowns) {
+        List<CooldownInstance> CDCopy = new ArrayList<>(rdbt$PowerCooldowns) {
         };
         if (!CDCopy.isEmpty()) {
             for (byte i = 0; i < CDCopy.size(); i++) {
@@ -4455,6 +4458,119 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             CrawlTicks--;
         }
 
+    }
+
+
+    /**Your stand's generalized cooldowns*/
+    @Unique
+    public List<CooldownInstance> rdbt$PowerCooldowns = rdbt$initPowerCooldowns();
+    public List<CooldownInstance> rdbt$initPowerCooldowns(){
+        List<CooldownInstance> Cooldowns = new ArrayList<>();
+        if (rdbt$this() instanceof Player){
+            for (byte i = 0; i < 30; i++) {
+                Cooldowns.add(new CooldownInstance(-1, -1));
+            }
+        } else {
+            for (byte i = 0; i < 10; i++) {
+                Cooldowns.add(new CooldownInstance(-1, -1));
+            }
+        }
+        return Cooldowns;
+    }
+
+    public List<CooldownInstance> rdbt$getPowerCooldowns(){
+        return rdbt$PowerCooldowns;
+    }
+    public void rdbt$setPowerCooldowns(List<CooldownInstance> cooldownInstances){
+        rdbt$PowerCooldowns = cooldownInstances;
+    }
+
+
+    /**If you stand still enough, abilities recharge faster. But this could be overpowered for some abilties, so
+     * use discretion and override this to return false on abilities where this might be op.*/
+    @Unique
+    public boolean rdbt$canUseStillStandingRecharge(byte bt){
+        if (!roundabout$getStandPowers().canUseStillStandingRecharge(bt)){
+            return false;
+        }
+        return true;
+    }
+
+
+
+    /**If the cooldown slot is to be controlled by the server, return true. Consider using this if
+     * bad TPS makes a stand ability actually overpowered for the client to handle the recharging of.*/
+    @Unique
+    public boolean rdbt$isServerControlledCooldown(CooldownInstance ci, byte num){
+        if (roundabout$getStandPowers().isServerControlledCooldown(ci,num)){
+            return true;
+        }
+        return false;
+    }
+
+    @Unique
+    public void rdbt$tickCooldowns(){
+        try {
+            int amt = 1;
+            boolean isDrowning = false;
+
+            // Changes how fast the cooldowns should recharge
+            if (rdbt$this() instanceof Player) {
+                isDrowning = (this.getAirSupply() <= 0);
+
+                int idle = this.roundabout$getIdleTime();
+                if (idle > 300) {
+                    amt *= 4;
+                } else if (idle > 200) {
+                    amt *= 3;
+                } else if (idle > 40) {
+                    amt *= 2;
+                }
+
+                if (isDrowning && !ClientNetworking.getAppropriateConfig().generalStandSettings.canRechargeCooldownsWhileDrowning)
+                { amt = 0; }
+            }
+
+            byte cin = -1;
+            for (CooldownInstance ci : rdbt$PowerCooldowns){
+                cin++;
+                if (ci.time >= 0){
+                    if (!rdbt$canUseStillStandingRecharge(cin)){
+                        amt = 1;
+                    }
+                    ci.setFrozen(isDrowning && !ClientNetworking.getAppropriateConfig().generalStandSettings.canRechargeCooldownsWhileDrowning);
+
+                    boolean serverControlledCooldwon = rdbt$isServerControlledCooldown(ci, cin);
+                    if (!(this.level().isClientSide() && serverControlledCooldwon)) {
+
+                        if (!ci.isFrozen()) {
+                            ci.time -= amt;
+                        }
+
+                        if (ci.time < -1) {
+                            ci.time = -1;
+                        }
+
+                        if (rdbt$this() instanceof Player) {
+                            if ((((Player) rdbt$this()).isCreative() &&
+                                    ClientNetworking.getAppropriateConfig().generalStandSettings.creativeModeRefreshesCooldowns) && ci.time > 2) {
+                                ci.time = 2;
+                            }
+                        }
+
+                        if (serverControlledCooldwon && !this.level().isClientSide() && rdbt$this() instanceof Player) {
+                            List<CooldownInstance> CDCopy = new ArrayList<>(rdbt$PowerCooldowns) {
+                            };
+
+                            S2CPacketUtil.sendMaxCooldownSyncPacket(((ServerPlayer) rdbt$this()), cin, ci.time, ci.maxTime);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e){
+            //I very much doubt this will error
+            Roundabout.LOGGER.info("???");
+        }
     }
 
     @Unique
