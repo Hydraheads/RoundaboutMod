@@ -3,12 +3,15 @@ package net.hydra.jojomod.client.hud;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -46,6 +49,8 @@ public class StandHudRender {
                                       float flashAlpha, float otherFlashAlpha) {
         if (!configIsLoaded())
             return;
+        if (ConfigManager.getClientConfig() == null || ConfigManager.getClientConfig().dynamicSettings == null)
+                return;
         if (playerEntity != null) {
             RenderSystem.enableBlend();
             int x = 0;
@@ -66,8 +71,10 @@ public class StandHudRender {
             float tickDelta = mc.getDeltaFrameTime();
 
             boolean standOn = ((StandUser) playerEntity).roundabout$getActive();
-            if (standOn || presentX > 0.1){
-                if (!standOn){
+            boolean renderIcons = (standOn || !FateTypes.isHuman(playerEntity)) && !ConfigManager.getClientConfig().dynamicSettings.hideGUI
+                    && !(ConfigManager.getClientConfig().enablePickyIconRendering && !((StandUser) playerEntity).roundabout$getStandPowers().hasCooldowns());
+            if (renderIcons || presentX > 0.1){
+                if (!renderIcons){
                     if (ConfigManager.getClientConfig().abilityIconHudIsAnimated){
                         presentX = Math.max(controlledLerp(tickDelta, presentX,0,0.5f),0);
                     } else {
@@ -88,7 +95,11 @@ public class StandHudRender {
                 //context.drawTexture(ARROW_ICON,x,y-2,0, 0, textureWidth, textureHeight, textureWidth, textureHeight);
 
 
-                ((StandUser) playerEntity).roundabout$getStandPowers().renderIcons(context, x, y);
+                if (standOn){
+                    ((StandUser) playerEntity).roundabout$getStandPowers().renderIcons(context, x, y);
+                } else {
+                    ((IFatePlayer) playerEntity).rdbt$getFatePowers().renderIcons(context, x, y);
+                }
 
 
                 context.setColor(1.0f, 1.0f, 1.0f, 1f);
@@ -125,6 +136,8 @@ public class StandHudRender {
                                        float flashAlpha, float otherFlashAlpha){
         if (playerEntity != null) {
             ((StandUser) playerEntity).roundabout$getStandPowers().renderAttackHud(context,playerEntity,
+                    scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
+            ((IFatePlayer) playerEntity).rdbt$getFatePowers().renderAttackHud(context,playerEntity,
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
         }
     }

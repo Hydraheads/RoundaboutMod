@@ -194,6 +194,7 @@ public class ClientUtil {
         ent.setYHeadRot(lerpYRot);
     }
 
+    private static RoadRollerMixingSound roadRollerMixingSound;
 
     public static void handleRoadRollerAmbientSound(Entity entity) {
         Minecraft.getInstance().getSoundManager().play(new RoadRollerAmbientSound(ModSounds.ROAD_ROLLER_AMBIENT_EVENT, SoundSource.PLAYERS, 1, 0, entity));
@@ -202,7 +203,14 @@ public class ClientUtil {
         Minecraft.getInstance().getSoundManager().play(new RoadRollerExplosionSound(ModSounds.ROAD_ROLLER_EXPLOSION_EVENT, SoundSource.PLAYERS, 1, 0, entity));
     }
     public static void handleRoadRollerMixingSound(Entity entity) {
-        Minecraft.getInstance().getSoundManager().play(new RoadRollerMixingSound(ModSounds.ROAD_ROLLER_MIXING_EVENT, SoundSource.PLAYERS, 1, 0, entity));
+        roadRollerMixingSound = new RoadRollerMixingSound(ModSounds.ROAD_ROLLER_MIXING_EVENT, SoundSource.PLAYERS, 1.0F, 0.0F, entity);
+        Minecraft.getInstance().getSoundManager().play(roadRollerMixingSound);
+    }
+    public static void stopRoadRollerMixingSound(Entity entity) {
+        if (roadRollerMixingSound != null) {
+            Minecraft.getInstance().getSoundManager().stop(roadRollerMixingSound);
+            roadRollerMixingSound = null;
+        }
     }
 
 
@@ -780,6 +788,19 @@ public class ClientUtil {
             if (poseHeld){
                 poseHeld = false;
             }
+        }
+    }
+    public static boolean heldDownHide = false;
+    public static void hideIcons(Player player, Minecraft C, boolean keyIsDown, Options option) {
+        if (ConfigManager.getClientConfig() == null || ConfigManager.getClientConfig().dynamicSettings == null)
+            return;
+        if (keyIsDown) {
+            if (!heldDownHide) {
+                ConfigManager.getClientConfig().dynamicSettings.hideGUI = !ConfigManager.getClientConfig().dynamicSettings.hideGUI;
+                heldDownHide = true;
+            }
+        } else {
+            heldDownHide = false;
         }
     }
     public static void openCorpseBag(ItemStack stack) {

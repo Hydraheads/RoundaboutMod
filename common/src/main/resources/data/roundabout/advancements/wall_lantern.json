@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_wool": {
+    "has_candle": {
       "conditions": {
         "items": [
           {

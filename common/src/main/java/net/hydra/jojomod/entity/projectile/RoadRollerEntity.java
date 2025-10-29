@@ -12,11 +12,13 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PlunderTypes;
+import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -28,6 +30,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -72,6 +75,7 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
     private float outOfControlTicks;
     private static final Ingredient CONCRETE;
     private int explosionParticleDelay = 0;
+    private byte lastCrackiness = Crackiness.NONE;
 
     public static final byte
             WHEELS = 1,
@@ -141,7 +145,7 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
 
     public static AttributeSupplier.Builder createAttributes() {
         return RoadRollerEntity.createLivingAttributes()
-                .add(Attributes.MAX_HEALTH, 100.0D)
+                .add(Attributes.MAX_HEALTH, 40.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.01D)
                 .add(Attributes.FOLLOW_RANGE, 0.0D);
     }
@@ -227,7 +231,6 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
     public void die(DamageSource $$0) {
         if (hasBeenBaraged && isThrown && thrower != null) {
             setExploded(true);
-            Roundabout.LOGGER.info("Explode!");
             this.deathTime = 0;
 
         }
@@ -293,8 +296,8 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
             final double speed = this.getDeltaMovement().length();
             if (speed < 1D) return;
 
-            float damage = 8.0f;
-            float aboveDamage = 13.0f;
+            float damage = 2.0f;
+            float aboveDamage = 4.0f;
 
             double fallDistance = this.highestY - this.getY();
 
@@ -321,18 +324,26 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
     private boolean scrapParticlesSpawned = false;
     private boolean smokeParticlesSpawned = false;
     private boolean explosionParticlesSpawned = false;
-
-    private int explosionExpandTicks = 0;
-    private boolean explosionExpanded = false;
-    private boolean shouldExpandHitbox = false;
     private boolean hitGroundBeforeExploding = false;
 
-    @Override
-    public EntityDimensions getDimensions(Pose pose) {
-        if (shouldExpandHitbox) {
-            return super.getDimensions(pose).scale(5.0F);
+    private boolean explosionDamageDone = false;
+
+    public void radialExplosion(@Nullable LivingEntity mainTarget) {
+
+        if (explosionParticleDelay == 10) {
+            if (!this.level().isClientSide() && !explosionDamageDone) {
+                explosionDamageDone = true;
+                List<Entity> entityList = DamageHandler.genHitbox(mainTarget, this.getX(), this.getY(), this.getZ(), 12, 12, 12);
+                if (!entityList.isEmpty()) {
+                    for (Entity value : entityList) {
+                        if (value.isPickable() && value.isAlive()) {
+                            DamageSource src = ModDamageTypes.of(this.level(), ModDamageTypes.ROAD_ROLLER, this, this.thrower);
+                            value.hurt(src, 6.66F);
+                        }
+                    }
+                }
+            }
         }
-        return super.getDimensions(pose);
     }
 
     @Override
@@ -346,6 +357,19 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
 
         if (!this.level().isClientSide()) {
             sendOutMessage();
+        }
+
+        if (!level().isClientSide) {
+            if (getPavingBoolean()) {
+                if (getPavingTimer() == 800) {
+                    setPavingTimer(0);
+                    setPavingBoolean(false);
+                } else {
+                    if (getPavingTimer() > -1) {
+                        setPavingTimer(getPavingTimer() + 1);
+                    }
+                }
+            }
         }
 
         if (level().isClientSide && this.tickCount % 60 == 1) {
@@ -381,24 +405,7 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
 
         if (!level().isClientSide) {
             if (getExploded()) {
-                explosionExpandTicks++;
-
-                if (!explosionExpanded && explosionExpandTicks == 5) {
-                    explosionExpanded = true;
-                    shouldExpandHitbox = true;
-                    this.refreshDimensions();
-
-                    AABB area = this.getBoundingBox().inflate(2.0D);
-                    for (Entity e : level().getEntities(this, area, entity -> entity instanceof LivingEntity && entity != this)) {
-                        e.hurt(ModDamageTypes.of(level(), ModDamageTypes.ROAD_ROLLER, this, thrower), 8.0F);
-                    }
-                }
-
-                if (explosionExpanded && explosionExpandTicks >= 25) {
-                    shouldExpandHitbox = false;
-                    explosionExpandTicks = 0;
-                    this.refreshDimensions();
-                }
+                radialExplosion(this);
             }
         }
 
@@ -458,38 +465,53 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
             this.setCrackiness(Crackiness.byHealthFraction(fraction));
         }
 
-        if (!level().isClientSide) {
-            BlockPos pos = this.blockPosition();
-            AABB box = this.getBoundingBox();
+        if (level().isClientSide) {
+            byte current = getCrackiness();
+            byte previous = lastCrackiness;
 
-            boolean insideABlock = false;
+            if (current != previous) {
+                lastCrackiness = current;
+
+                for (int i = 0; i < 5; i++) {
+                    double vx = (random.nextDouble() - 0.5D) * 1.2D;
+                    double vy = random.nextDouble() * 0.6D;
+                    double vz = (random.nextDouble() - 0.5D) * 1.2D;
+                    level().addParticle(ModParticles.ROAD_ROLLER_SCRAP,
+                            this.getX(), this.getY() + 1.0D, this.getZ(),
+                            vx, vy, vz);
+                }
+            }
+        }
+
+        if (!level().isClientSide) {
+            AABB box = this.getBoundingBox();
+            boolean bottomInsideBlock = false;
+
+            int y = Mth.floor(box.minY);
 
             for (int x = Mth.floor(box.minX); x <= Mth.floor(box.maxX); x++) {
-                for (int y = Mth.floor(box.minY); y <= Mth.floor(box.maxY); y++) {
-                    for (int z = Mth.floor(box.minZ); z <= Mth.floor(box.maxZ); z++) {
-                        BlockPos bp = new BlockPos(x, y, z);
-                        BlockState state = level().getBlockState(bp);
+                for (int z = Mth.floor(box.minZ); z <= Mth.floor(box.maxZ); z++) {
+                    BlockPos bp = new BlockPos(x, y, z);
+                    BlockState state = level().getBlockState(bp);
 
-                        if (!state.isAir() && !state.getCollisionShape(level(), bp).isEmpty()) {
-                            insideABlock = true;
-                            break;
-                        }
+                    if (!state.isAir() && !state.getCollisionShape(level(), bp).isEmpty()) {
+                        bottomInsideBlock = true;
+                        break;
                     }
-                    if (insideABlock) break;
                 }
-                if (insideABlock) break;
+                if (bottomInsideBlock) break;
             }
 
-            if (this.isInWall() || insideABlock) {
+            if (bottomInsideBlock) {
                 int tries = 0;
-                while ((this.isInWall() || insideABlock) && tries < 40) {
+                while (bottomInsideBlock && tries < 40) {
                     this.teleportTo(this.getX(), this.getY() + 0.05D, this.getZ());
                     this.refreshDimensions();
-                    insideABlock = !this.level().noCollision(this);
+                    bottomInsideBlock = !this.level().noCollision(this);
                     tries++;
                 }
 
-                if (this.isInWall() || insideABlock) {
+                if (bottomInsideBlock) {
                     this.teleportTo(this.getX(), this.getY() + 0.1D, this.getZ());
                     this.refreshDimensions();
                 }
@@ -582,6 +604,21 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
             inputDown = false;
             inputLeft = false;
             inputRight = false;
+        }
+
+        if (!this.level().isClientSide) {
+            BlockPos basePos = BlockPos.containing(this.position().add(0, -0.5, 0));
+
+            for (int x = -1; x <= 1; x++) {
+                for (int z = -1; z <= 1; z++) {
+                    BlockPos blockPos = basePos.offset(x, 0, z);
+                    BlockState state = this.level().getBlockState(blockPos);
+
+                    if (state.is(Blocks.ICE) || state.is(Blocks.PACKED_ICE) || state.is(Blocks.BLUE_ICE) || state.is(Blocks.FROSTED_ICE)) {
+                        this.level().destroyBlock(blockPos, false);
+                    }
+                }
+            }
         }
 
         if (!getInputUp()) {
@@ -884,17 +921,16 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
     protected static final EntityDataAccessor<Boolean> INPUT_UP = SynchedEntityData.defineId(RoadRollerEntity.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Boolean> EXPLODED = SynchedEntityData.defineId(RoadRollerEntity.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Byte> CRACKINESS = SynchedEntityData.defineId(RoadRollerEntity.class, EntityDataSerializers.BYTE);
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        if (!this.entityData.hasItem(PAVING_TIMER)) {
-            this.entityData.define(PAVING_TIMER, 0);
-            this.entityData.define(PAVING_BOOLEAN, false);
-            this.entityData.define(CONCRETE_COLOUR, ItemStack.EMPTY);
-            this.entityData.define(INPUT_UP, false);
-            this.entityData.define(EXPLODED, false);
-            this.entityData.define(CRACKINESS, Crackiness.NONE);
-        }
+        this.entityData.define(PAVING_TIMER, 0);
+        this.entityData.define(PAVING_BOOLEAN, false);
+        this.entityData.define(CONCRETE_COLOUR, ItemStack.EMPTY);
+        this.entityData.define(INPUT_UP, false);
+        this.entityData.define(EXPLODED, false);
+        this.entityData.define(CRACKINESS, Crackiness.NONE);
     }
 
     public final void setPavingTimer(int PavingTimer) {
@@ -905,19 +941,9 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
     }
 
     public void setPavingBoolean(boolean value) {
-        boolean wasPaving = this.getPavingBoolean();
         this.entityData.set(PAVING_BOOLEAN, value);
-
-        if (level().isClientSide) {
-            if (value && !wasPaving && !((TimeStop) level()).inTimeStopRange(this)) {
-                mixingSoundStarted = true;
-                ClientUtil.handleRoadRollerMixingSound(this);
-            }
-            if (!value && wasPaving) {
-                mixingSoundStarted = false;
-            }
-        }
     }
+
     public boolean getPavingBoolean() {
         return this.entityData.get(PAVING_BOOLEAN);
     }
@@ -956,7 +982,13 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
 
     public InteractionResult interact(Player $$0, InteractionHand $$1) {
 
+        boolean wasPaving = this.getPavingBoolean();
+
         if (getExploded()) {
+            return InteractionResult.FAIL;
+        }
+
+        if (((TimeStop) level()).inTimeStopRange(this)) {
             return InteractionResult.FAIL;
         }
 
@@ -969,10 +1001,31 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
                 if (!ItemStack.isSameItemSameTags(current, item)) {
                     setConcreteColour(item);
                 }
+
+                if (level().isClientSide) {
+                    if (getPavingBoolean() && !((TimeStop) level()).inTimeStopRange(this)) {
+                        mixingSoundStarted = true;
+                        ClientUtil.stopRoadRollerMixingSound(this);
+                        ClientUtil.handleRoadRollerMixingSound(this);
+                    } else if (!getPavingBoolean()) {
+                        mixingSoundStarted = false;
+                        ClientUtil.stopRoadRollerMixingSound(this);
+                    }
+                }
                 setPavingTimer(0);
             } else {
                 setConcreteColour(item);
                 setPavingBoolean(true);
+                if (level().isClientSide) {
+                    if (getPavingBoolean() && !((TimeStop) level()).inTimeStopRange(this)) {
+                        mixingSoundStarted = true;
+                        ClientUtil.stopRoadRollerMixingSound(this);
+                        ClientUtil.handleRoadRollerMixingSound(this);
+                    } else if (!getPavingBoolean()) {
+                        mixingSoundStarted = false;
+                        ClientUtil.stopRoadRollerMixingSound(this);
+                    }
+                }
                 setPavingTimer(0);
             }
             if (!$$0.getAbilities().instabuild && !level().isClientSide) {

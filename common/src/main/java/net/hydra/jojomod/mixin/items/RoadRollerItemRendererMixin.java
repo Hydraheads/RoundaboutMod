@@ -1,7 +1,6 @@
 package net.hydra.jojomod.mixin.items;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.item.BowlerHatItem;
 import net.hydra.jojomod.item.RoadRollerItem;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;

@@ -3,7 +3,6 @@ package net.hydra.jojomod.event.powers;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IProjectileAccess;
@@ -13,10 +12,10 @@ import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
+import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
@@ -27,7 +26,6 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.Font;
@@ -44,7 +42,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
@@ -57,29 +54,23 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.context.DirectionalPlaceContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.IceBlock;
-import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
-import net.zetalasis.hjson.JsonObject;
-import net.zetalasis.hjson.JsonValue;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
-public class StandPowers {
+public class StandPowers extends AbilityScapeBasis {
 
     /**StandPowers is a class that every stand has a variation of, override it
      * to define and tick through stand abilities and cooldowns.
@@ -99,9 +90,6 @@ public class StandPowers {
     // -----------------------------------------------------------------------------------------
     // UNDERSTANDING THE MAIN VARIABLES
     // -----------------------------------------------------------------------------------------
-
-    /**Note that self refers to the stand user, and not the stand itself.*/
-    public final LivingEntity self;
 
     /**The time that passed since using the last attack. It counts up, so that a visual meter can display cooldowns.
     * It is also used to */
@@ -427,16 +415,6 @@ public class StandPowers {
     public static final byte
             NONE = 0;
 
-    /**If the cooldown slot is to be controlled by the server, return true. Consider using this if
-     * bad TPS makes a stand ability actually overpowered for the client to handle the recharging of.*/
-    public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
-        return false;
-    }
-    /**If you stand still enough, abilities recharge faster. But this could be overpowered for some abilties, so
-     * use discretion and override this to return false on abilities where this might be op.*/
-    public boolean canUseStillStandingRecharge(byte bt){
-        return true;
-    }
 
 
 
@@ -1336,23 +1314,6 @@ public class StandPowers {
     // call client functions on a server without crashing
     // -----------------------------------------------------------------------------------------
 
-    /**Override this to render stand icons, see examples from other stands*/
-    public void renderIcons(GuiGraphics context, int x, int y) {
-    }
-
-    /**This function grays out icons for moves you can't currently use. Slot is the icon slot from 1-4,
-     * activeP is your currently active power*/
-    public boolean isAttackIneptVisually(byte activeP, int slot){
-        return this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
-    }
-
-
-    /**Use this to draw HUD elements, it is primarily for the middle HUD (attack cooldown bar that is
-     * blue, white, and orange), see punchingstand for examples*/
-    public void renderAttackHud(GuiGraphics context,  Player playerEntity,
-                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
-                                float flashAlpha, float otherFlashAlpha){
-    }
 
     /**The list of skins for your stand to cycle through, override, see examples, the server iterates through
      * this as well*/
@@ -1507,16 +1468,6 @@ public class StandPowers {
         return this.self instanceof Player PE && PE.isCreative();
     }
 
-    /**Does the casting to stand user for you, will always work because this class needs a livingentity to exist*/
-    public StandUser getUserData(LivingEntity User){
-        return ((StandUser) User);
-    }
-
-    /**What side are we on?*/
-    public boolean isClient(){
-        return this.getSelf().level().isClientSide();
-    }
-
     /**changes the pose of the stand, as in the position offset. For instance, if a stand is floating by you, or
      * in front of you to block, or simply loose (on its own). Synchs if changed on the server.*/
     public void poseStand(byte r){
@@ -1547,9 +1498,7 @@ public class StandPowers {
     public StandUser getStandUserSelf(){
         return ((StandUser)this.self);
     }
-    public LivingEntity getSelf(){
-        return this.self;
-    }
+
     public int getAttackTime(){
         return this.attackTime;
     }
@@ -1589,92 +1538,6 @@ public class StandPowers {
         this.activePowerPhase = activePowerPhase;
     }
 
-    /**If you have a stand entity summoned, get that*/
-    public StandEntity getStandEntity(LivingEntity User){
-        return this.getUserData(User).roundabout$getStand();
-    } public boolean hasStandEntity(LivingEntity User){
-        return this.getUserData(User).roundabout$hasStandOut();
-    } public boolean hasStandActive(LivingEntity User){
-        return this.getUserData(User).roundabout$getActive();
-    }
-
-    /**A basic function called to draw stand icons*/
-    public void setSkillIcon(GuiGraphics context, int x, int y, int slot, ResourceLocation rl, byte CDI){
-        setSkillIcon(context,x,y,slot,rl,CDI,false);
-    }
-    public void setSkillIcon(GuiGraphics context, int x, int y, int slot, ResourceLocation rl, byte CDI, boolean locked){
-        RenderSystem.enableBlend();
-        context.setColor(1f, 1f, 1f, 1f);
-        CooldownInstance cd = null;
-        if (CDI >= 0 && !StandCooldowns.isEmpty() && StandCooldowns.size() >= CDI){
-            cd = StandCooldowns.get(CDI);
-        }
-        x += slot * 25;
-        y-=1;
-
-        if (locked){
-            RenderSystem.enableBlend();
-            context.blit(StandIcons.LOCKED_SQUARE_ICON,x-3,y-3,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
-        } else {
-            RenderSystem.enableBlend();
-            context.blit(StandIcons.SQUARE_ICON,x-3,y-3,0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
-            Font renderer = Minecraft.getInstance().font;
-            if (slot==4){
-                Component special4Key = KeyInputRegistry.abilityFourKey.getTranslatedKeyMessage();
-                special4Key = fixKey(special4Key);
-                context.drawString(renderer, special4Key,x-1,y+11,0xffffff,true);
-            }
-            else if (slot==3){
-                Component special3Key = KeyInputRegistry.abilityThreeKey.getTranslatedKeyMessage();
-                special3Key = fixKey(special3Key);
-                context.drawString(renderer, special3Key,x-1,y+11,0xffffff,true);
-            }
-            else if (slot==2){
-                Component special2Key = KeyInputRegistry.abilityTwoKey.getTranslatedKeyMessage();
-                special2Key = fixKey(special2Key);
-                context.drawString(renderer, special2Key,x-1,y+11,0xffffff,true);
-            }
-            else if (slot==1){
-                Component special1Key = KeyInputRegistry.abilityOneKey.getTranslatedKeyMessage();
-                special1Key = fixKey(special1Key);
-                context.drawString(renderer, special1Key,x-1,y+11,0xffffff,true);
-            }
-            Component special1Key = KeyInputRegistry.abilityOneKey.getTranslatedKeyMessage();
-        }
-
-
-        if ((cd != null && (cd.time >= 0)) || isAttackIneptVisually(CDI,slot)){
-            RenderSystem.enableBlend();
-            context.setColor(0.62f, 0.62f, 0.62f, 0.8f);
-            context.blit(rl, x, y, 0, 0, 18, 18, 18, 18);
-            if ((cd != null && (cd.time >= 0))) {
-                float blit = (20*(1-((float) (1+cd.time) /(1+cd.maxTime))));
-                int b = (int) Math.round(blit);
-                RenderSystem.enableBlend();
-                context.setColor(1f, 1f, 1f, 1f);
-
-                ResourceLocation COOLDOWN_TEX = StandIcons.COOLDOWN_ICON;
-
-                if (cd.isFrozen())
-                    COOLDOWN_TEX = StandIcons.FROZEN_COOLDOWN_ICON;
-
-                context.blit(COOLDOWN_TEX, x - 1, y - 1 + b, 0, b, 20, 20-b, 20, 20);
-                int num = ((int)(Math.floor((double) cd.time /20)+1));
-                int offset = x+3;
-                if (num <=9){
-                    offset = x+7;
-                }
-
-                if (!cd.isFrozen())
-                    context.drawString(Minecraft.getInstance().font, ""+num,offset,y,0xffffff,true);
-
-            }
-            context.setColor(1f, 1f, 1f, 0.9f);
-        } else {
-            RenderSystem.enableBlend();
-            context.blit(rl, x, y, 0, 0, 18, 18, 18, 18);
-        }
-    }
 
 
     /**Call this to verify your stand is leveled enough to use a moe*/
@@ -1763,20 +1626,6 @@ public class StandPowers {
         return false;
     }
 
-    /**set an ability on cooldown*/
-    public void setCooldown(byte power, int cooldown){
-        if (!StandCooldowns.isEmpty() && StandCooldowns.size() >= power){
-            StandCooldowns.get(power).time = cooldown;
-            StandCooldowns.get(power).maxTime = cooldown;
-        }
-    }
-    /**set an ability on cooldown, and change the max cooldown*/
-    public void setCooldownMax(byte power, int cooldown, int maxCooldown){
-        if (!StandCooldowns.isEmpty() && StandCooldowns.size() >= power){
-            StandCooldowns.get(power).time = cooldown;
-            StandCooldowns.get(power).maxTime = maxCooldown;
-        }
-    }
 
     /**Functions to use to make your abilities grant stand exp*/
     public void addEXP(int amt, LivingEntity ent){
@@ -1837,21 +1686,6 @@ public class StandPowers {
         return false;
     }
 
-    /**Returns the cooldown for an ability*/
-    public CooldownInstance getCooldown(byte power){
-        if (!StandCooldowns.isEmpty() && StandCooldowns.size() >= power){
-            return StandCooldowns.get(power);
-        }
-        return null;
-    }
-
-    /**Checks if an ability is currently on cooldown*/
-    public boolean onCooldown(byte power){
-        if (!StandCooldowns.isEmpty() && StandCooldowns.size() >= power){
-            return (StandCooldowns.get(power).time >= 0);
-        }
-        return false;
-    }
 
     /**Inflict knockback*/
     public void takeKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
@@ -2441,6 +2275,10 @@ public class StandPowers {
         return $$0 + $$3;
     }
 
+    @Override
+    public ResourceLocation getIconYes(int slot){
+        return StandIcons.SQUARE_ICON;
+    }
 
     public BlockHitResult getAheadVec(float distOut){
         Vec3 vec3d = this.self.getEyePosition(1);
@@ -2545,46 +2383,7 @@ public class StandPowers {
         }
         return hitSomething;
     }
-    /**Functions to check/set barrage daze*/
-    public boolean isDazed(LivingEntity entity){
-        return this.getUserData(entity).roundabout$isDazed();
-    }
-    public void setDazed(LivingEntity entity, byte dazeTime){
-        if ((1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)) <= 0.0) {
-            /*Warden, iron golems, and anything else knockback immmune can't be dazed**/
-            return;
-        } else if (MainUtil.isBossMob(entity)){
-            /*Bosses can't be dazed**/
-            return;
-        }
 
-        /**Stand Drops item when user is dazed*/
-        StandEntity stand = getStandEntity(entity);
-        if (stand != null && !stand.getHeldItem().isEmpty()){
-            double $$3 = stand.getEyeY() - 0.3F;
-            ItemEntity $$4 = new ItemEntity(stand.level(), stand.getX(), $$3, stand.getZ(), stand.getHeldItem());
-            $$4.setPickUpDelay(40);
-            $$4.setThrower(stand.getUUID());
-            stand.level().addFreshEntity($$4);
-            stand.setHeldItem(ItemStack.EMPTY);
-        }
-        if (dazeTime > 0){
-            ((StandUser) entity).roundabout$tryPower(PowerIndex.NONE,true);
-            ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.HURT_BY_BARRAGE);
-        } else {
-            ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.IDLE);
-        }
-        this.getUserData(entity).roundabout$setDazed(dazeTime);
-    }
-    public void setDazedSafely(LivingEntity entity, byte dazeTime){
-        if (dazeTime > 0){
-            ((StandUser) entity).roundabout$tryPower(PowerIndex.NONE,true);
-            ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.HURT_BY_BARRAGE);
-        } else {
-            ((StandUser) entity).roundabout$getStandPowers().animateStand(StandEntity.IDLE);
-        }
-        this.getUserData(entity).roundabout$setDazed(dazeTime);
-    }
 
     /**Use this to multiply the exp needed to levelup for the config option*/
     public float getLevelMultiplier(){
@@ -2675,65 +2474,7 @@ public class StandPowers {
         return true;
     }
 
-    public boolean hasCooldowns(){
-        List<CooldownInstance> CDCopy = new ArrayList<>(StandCooldowns) {
-        };
-        for (byte i = 0; i < CDCopy.size(); i++){
-            CooldownInstance ci = CDCopy.get(i);
-            if (ci.time >= 0){
-                return true;
-            }
-        }
-        return false;
-    }
 
-    public void refreshCooldowns(){
-        List<CooldownInstance> CDCopy = new ArrayList<>(StandCooldowns) {
-        };
-        for (byte i = 0; i < CDCopy.size(); i++){
-            CooldownInstance ci = CDCopy.get(i);
-            ci.time = -1;
-        }
-        StandCooldowns = CDCopy;
-    }
-
-    public AbilityIconInstance drawSingleGUIIcon(GuiGraphics context, int size, int startingLeft, int startingTop, int levelToUnlock,
-                                                 String nameSTR, String instructionStr, ResourceLocation draw, int extra, byte level, boolean bypass){
-        Component name;
-        if (level < levelToUnlock && !bypass) {
-            context.blit(StandIcons.LOCKED_SQUARE_ICON, startingLeft, startingTop, 0, 0,size, size, size, size);
-            context.blit(StandIcons.LOCKED, startingLeft+2, startingTop+2, 0, 0,size-4, size-4, size-4, size-4);
-            name = Component.translatable("ability.roundabout.locked").withStyle(ChatFormatting.BOLD).
-                    withStyle(ChatFormatting.DARK_GRAY);
-        } else {
-            context.blit(StandIcons.SQUARE_ICON, startingLeft, startingTop, 0, 0,size, size, size, size);
-            context.blit(draw, startingLeft+2, startingTop+2, 0, 0,size-4, size-4, size-4, size-4);
-            name = Component.translatable(nameSTR).withStyle(ChatFormatting.BOLD).
-                    withStyle(ChatFormatting.DARK_PURPLE);
-        }
-        Component instruction;
-        if (level < levelToUnlock && !bypass){
-            instruction = Component.translatable("ability.roundabout.locked.ctrl").
-                    withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.RED);
-        } else {
-            if (extra <= 0) {
-                instruction = Component.translatable(instructionStr).withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.BLUE);
-            } else {
-                instruction = Component.translatable(instructionStr, "" + extra).withStyle(ChatFormatting.ITALIC).
-                        withStyle(ChatFormatting.BLUE);
-
-            }
-        }
-        Component description;
-        if (level < levelToUnlock && !bypass){
-            description = Component.translatable("ability.roundabout.locked.desc", "" + levelToUnlock).
-                    withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.RED);
-        } else {
-            description = Component.translatable(nameSTR+".desc");
-        }
-        return new AbilityIconInstance(size,startingLeft,startingTop,levelToUnlock,
-                name,instruction,description,extra);
-    }
 
     /**Preloads guard points*/
     public StandPowers generateStandPowersPre(LivingEntity entity){
@@ -3093,103 +2834,7 @@ public class StandPowers {
     }
 
 
-    public static Component fixKey(Component textIn){
 
-        String X = textIn.getString();
-        if (X.length() > 1){
-            String[] split = X.split("\\s");
-            if (split.length > 1){
-                return Component.nullToEmpty(""+split[0].charAt(0)+split[1].charAt(0));
-            } else {
-                if (split[0].length() > 1){
-                    return Component.nullToEmpty(""+split[0].charAt(0)+split[0].charAt(1));
-                } else {
-                    return Component.nullToEmpty(""+split[0].charAt(0));
-                }
-            }
-        } else {
-            return textIn;
-        }
-    }
-
-    public void syncAllCooldowns(){
-        try {
-            if (this.self instanceof ServerPlayer sp) {
-                byte cin = -1;
-                for (CooldownInstance ci : StandCooldowns){
-                    cin++;
-                    S2CPacketUtil.sendMaxCooldownSyncPacket(sp, cin, ci.time, ci.maxTime);
-                }
-            }
-        } catch (Exception e){
-            //I very much doubt this will error
-            Roundabout.LOGGER.info("???");
-        }
-    }
-
-    public void tickCooldowns(){
-        try {
-            int amt = 1;
-            boolean isDrowning = false;
-
-            // Changes how fast the cooldowns should recharge
-            if (this.self instanceof Player) {
-                isDrowning = (this.self.getAirSupply() <= 0);
-
-                int idle = ((StandUser) this.getSelf()).roundabout$getIdleTime();
-                if (idle > 300) {
-                    amt *= 4;
-                } else if (idle > 200) {
-                    amt *= 3;
-                } else if (idle > 40) {
-                    amt *= 2;
-                }
-
-                if (isDrowning && !ClientNetworking.getAppropriateConfig().generalStandSettings.canRechargeCooldownsWhileDrowning)
-                { amt = 0; }
-            }
-
-            byte cin = -1;
-            for (CooldownInstance ci : StandCooldowns){
-                cin++;
-                if (ci.time >= 0){
-                    if (!canUseStillStandingRecharge(cin)){
-                        amt = 1;
-                    }
-                    ci.setFrozen(isDrowning && !ClientNetworking.getAppropriateConfig().generalStandSettings.canRechargeCooldownsWhileDrowning);
-
-                    boolean serverControlledCooldwon = isServerControlledCooldown(ci, cin);
-                    if (!(this.self.level().isClientSide() && serverControlledCooldwon)) {
-
-                        if (!ci.isFrozen()) {
-                            ci.time -= amt;
-                        }
-
-                        if (ci.time < -1) {
-                            ci.time = -1;
-                        }
-
-                        if (this.self instanceof Player) {
-                            if ((((Player) this.self).isCreative() &&
-                                    ClientNetworking.getAppropriateConfig().generalStandSettings.creativeModeRefreshesCooldowns) && ci.time > 2) {
-                                ci.time = 2;
-                            }
-                        }
-
-                        if (serverControlledCooldwon && !this.self.level().isClientSide() && this.self instanceof Player) {
-                            List<CooldownInstance> CDCopy = new ArrayList<>(StandCooldowns) {
-                            };
-
-                            S2CPacketUtil.sendMaxCooldownSyncPacket(((ServerPlayer) this.getSelf()), cin, ci.time, ci.maxTime);
-                        }
-                    }
-                }
-            }
-        } catch (Exception e){
-            //I very much doubt this will error
-            Roundabout.LOGGER.info("???");
-        }
-    }
 
     public static final int zenith = 10;
 
@@ -3228,9 +2873,6 @@ public class StandPowers {
             }
         }
     }
-
-    public static final int squareHeight = 24;
-    public static final int squareWidth = 24;
 
     public void preCheckButtonInputAttack(boolean keyIsDown, Options options) {
         if (hasStandActive(this.getSelf()) && !this.isGuarding()) {
@@ -3281,10 +2923,7 @@ public class StandPowers {
         return Math.max(0.0f, Math.min(1.0f, normalized)) * maxOverlay;
     }
 
-    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos,byte level,boolean bypas){
-        List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        return $$1;
-    }
+
 
     public Vec3 getRandPos(Entity ent){
         Vec3 funnyVec = new Vec3(0,(ent.getBbHeight()*0.65),0);
@@ -3483,7 +3122,7 @@ public class StandPowers {
         findDeflectables();
     }
     public StandPowers(LivingEntity self) {
-        this.self = self;
+        super(self);
     }
     public void baseTickPower(){
         if (this.self.level().isClientSide()){
@@ -3554,7 +3193,6 @@ public class StandPowers {
                 }
             }
             this.tickDash();
-            this.tickCooldowns();
         } else {
             StandUser user = ((StandUser)this.getSelf());
             StandEntity stnd = user.roundabout$getStand();
@@ -3713,20 +3351,7 @@ public class StandPowers {
         }
     }
 
-    /**Just time stop barrage canceling when the time stop expires*/
-    public boolean bonusBarrageConditions(){
-        return true;
-    }
 
-    /**Your stand's generalized cooldowns*/
-    public List<CooldownInstance> StandCooldowns = initStandCooldowns();
-    public List<CooldownInstance> initStandCooldowns(){
-        List<CooldownInstance> Cooldowns = new ArrayList<>();
-        for (byte i = 0; i < 10; i++) {
-            Cooldowns.add(new CooldownInstance(-1, -1));
-        }
-        return Cooldowns;
-    }
 
     /**The stand is named on the disc so we just use that*/
     public Component getStandName(){
@@ -3751,34 +3376,6 @@ public class StandPowers {
             this.interruptCD = 3;
             ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
         }
-    }
-
-    /**Code for the button that switches your ability row*/
-    public boolean heldDownSwitch = false;
-    public void switchRowsKey(boolean keyIsDown, Options options) {
-        if (!heldDownSwitch) {
-            if (keyIsDown) {
-                heldDownSwitch = true;
-                if (isHoldingSneakToggle) {
-                    isHoldingSneakToggle = false;
-                } else {
-                    isHoldingSneakToggle = true;
-                }
-            }
-        } else {
-            if (!keyIsDown) {
-                heldDownSwitch = false;
-            }
-        }
-    }
-    /**Related code to the above*/
-    public boolean isHoldingSneakToggle = false;
-    public boolean isHoldingSneak(){
-        if (this.self.level().isClientSide) {
-            Minecraft mc = Minecraft.getInstance();
-            return ((mc.options.keyShift.isDown() && !isHoldingSneakToggle) || (isHoldingSneakToggle && !mc.options.keyShift.isDown()));
-        }
-        return this.getSelf().isCrouching();
     }
 
     /**You don't really need this*/

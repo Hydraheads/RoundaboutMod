@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.client.ClientUtil;
@@ -224,21 +225,24 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         this.rightArm.yRot = 0F;
                         this.leftArm.yRot = 0F;
                     }
-                }
-            } else if (MainUtil.isHoldingRoadRoller($$0)) {
-                boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
-                if ($$9) {
-                    this.rightArm.zRot = -0.175F + this.body.yRot;
-                    this.rightArm.xRot = (float) (-Math.PI / 1) + this.body.xRot;
-                    this.rightArm.y = -0.1F;
-                    this.leftArm.zRot = 0.175F + this.body.yRot;
-                    this.leftArm.xRot = (float) (-Math.PI / 1) + this.body.xRot;
-                    this.leftArm.y = -0.1F;
-                } else {
-                    this.leftArm.yRot = 0.1F + this.body.yRot;
-                    this.leftArm.xRot = (float) (-Math.PI / 2) + this.body.xRot;
-                    this.rightArm.yRot = 0.1F + this.body.yRot;
-                    this.rightArm.xRot = (float) (-Math.PI / 2) + this.body.xRot;
+                } else if (MainUtil.isHoldingRoadRoller($$0)) {
+                    boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
+                    if ($$9) {
+                        Roundabout.LOGGER.info("222");
+                        this.rightArm.zRot = -0.175F + this.body.yRot;
+                        this.rightArm.xRot = (float) (-Math.PI / 1) + this.body.xRot;
+                        this.rightArm.y = -0.1F;
+                        this.leftArm.zRot = 0.175F + this.body.yRot;
+                        this.leftArm.xRot = (float) (-Math.PI / 1) + this.body.xRot;
+                        this.leftArm.y = -0.1F;
+                    } else {
+                        this.rightArm.zRot = -0.175F + this.body.yRot;
+                        this.rightArm.xRot = (float) (-Math.PI / 1) + this.body.xRot;
+                        this.rightArm.y = -0.1F;
+                        this.leftArm.zRot = 0.175F + this.body.yRot;
+                        this.leftArm.xRot = (float) (-Math.PI / 1) + this.body.xRot;
+                        this.leftArm.y = -0.1F;
+                    }
                 }
             }
             this.hat.copyFrom(this.head);

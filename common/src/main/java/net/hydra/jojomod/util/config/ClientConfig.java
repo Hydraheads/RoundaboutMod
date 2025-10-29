@@ -29,6 +29,8 @@ public class ClientConfig implements Cloneable {
     public ClientConfig.GeneralSettings generalSettings;
     @BooleanOption(group = "inherit", value = true)
     public Boolean pressingAbilityKeysSummonsStands;
+    @BooleanOption(group = "inherit", value = false)
+    public Boolean enablePickyIconRendering;
     @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
     public Integer maxMirrorRendersAtOnceSetToZeroToDisable;
     @BooleanOption(group = "inherit", value = false)
@@ -152,6 +154,8 @@ public class ClientConfig implements Cloneable {
     public static class DynamicSettings {
         @IntOption(group = "inherit", value = 1, min = 1, max = 8)
         public Integer SoftAndWetCurrentlySelectedBubble;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean hideGUI;
     }
     public static class VanillaMCTweaks {
         @BooleanOption(group = "inherit", value = true)
