@@ -93,7 +93,7 @@ public class FleshPileEntity extends ThrowableItemProjectile {
     protected void onHitEntity(EntityHitResult $$0) {
         Entity entity = $$0.getEntity();
         if (entity instanceof LivingEntity LE) {
-            LE.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN,50,1));
+            LE.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN,this.getFleshCount() > 10 ? 70 : 50,1));
         }
     }
 
@@ -158,7 +158,7 @@ public class FleshPileEntity extends ThrowableItemProjectile {
                 {0,1,0},
                 {0,0,0}
         };
-        if (amount > 8) {
+        if (amount > 10) {
             array = new int[][]{
                     {0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0},
