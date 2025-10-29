@@ -45,6 +45,16 @@ public class StandIcons {
             "textures/gui//icons/fates/vampire/cheetah_speed.png");
     public static final ResourceLocation REGENERATE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/vampire/regenerate.png");
+    public static final ResourceLocation HYPNOTISM = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/hypnotism.png");
+    public static final ResourceLocation FLESH_BUD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/flesh_bud.png");
+    public static final ResourceLocation VAMP_VISION_ON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/vision_on.png");
+    public static final ResourceLocation VAMP_VISION_OFF = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/vision_off.png");
+    public static final ResourceLocation HEARING_MODE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/hearing_mode.png");
 
     public static final ResourceLocation SURVIVOR_ANGER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/survivor_anger.png");

@@ -31,11 +31,11 @@ public class VampiricFate extends FatePowers {
         StandUser standUser = ((StandUser) playerEntity);
         boolean standOn = standUser.roundabout$getActive();
         int j = scaledHeight / 2 - 7 - 4;
-        int k = scaledWidth / 2 - 8;
+        int k = scaledWidth / 2 - 8 - 1;
         if (!standOn){
             Entity TE = standUser.roundabout$getStandPowers().getTargetEntity(playerEntity, 3, 15);
             if (TE != null && MainUtil.canDrinkBlood(TE)){
-                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 44, 16, 8);
+                context.blit(StandIcons.JOJO_ICONS, k, j, 192, 44, 17, 8);
 
             }
         }
@@ -50,6 +50,9 @@ public class VampiricFate extends FatePowers {
         return super.isAttackIneptVisually(activeP,slot);
     }
 
+    public boolean isVisionOn(){
+        return true;
+    }
     @Override
     public ResourceLocation getIconYes(int slot){
         if ((slot == 2 || slot == 3) && isHoldingSneak()){
