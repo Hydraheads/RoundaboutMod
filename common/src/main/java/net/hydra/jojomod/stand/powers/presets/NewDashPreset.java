@@ -106,7 +106,7 @@ public class NewDashPreset extends StandPowerRewrite {
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime){
 
-        return false;
+        return super.tryIntPower(move,forced,chargeTime);
     }
 
 

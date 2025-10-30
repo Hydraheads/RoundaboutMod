@@ -3,12 +3,14 @@ package net.hydra.jojomod.fates.powers;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.projectile.KnifeEntity;
+import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.*;
@@ -18,6 +20,7 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -35,19 +38,20 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PotionItem;
+import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3d;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,6 +149,12 @@ public class AbilityScapeBasis {
             }
         }
         return false;
+    }
+
+    /**How far do the basic attacks of your stand travel if it is a humanoid stand and overrides the above?
+     * (default is 5, 3 minecraft block range +2 meters extra from stand)*/
+    public float getReach(){
+        return 5;
     }
 
     /**Override this to set the special move*/
@@ -1368,4 +1378,652 @@ public class AbilityScapeBasis {
             }
         }
     }
+    /**If you need to temporarily save an entity use this*/
+    public Entity storeEnt = null;
+
+
+    /**Lots of hitbox grabbing code*/
+
+    public List<Entity> getTargetEntityList(LivingEntity User, float distMax){
+        return getTargetEntityList(User,distMax,25);
+    }
+    public List<Entity> getTargetEntityList(LivingEntity User, float distMax, float angle){
+        /*First, attempts to hit what you are looking at*/
+        if (!(distMax >= 0)) {
+            distMax = this.getDistanceOut(User, this.getReach(), false);
+        }
+        Entity targetEntity = this.rayCastEntity(User,distMax);
+
+        if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
+                || (targetEntity != null && (!targetEntity.isAlive() || targetEntity.isRemoved()))){
+            targetEntity = null;
+        }
+
+        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
+        float halfReach = (float) (distMax*0.5);
+        Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
+        List<Entity> listE = StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
+                pointVec.z, halfReach, halfReach, halfReach), distMax);
+        if (targetEntity == null) {
+            targetEntity = StandAttackHitboxNear(User,listE,angle);
+        }
+        if (targetEntity instanceof StandEntity SE && SE.redirectKnockbackToUser()){
+
+            if (SE.getUser() != null){
+                targetEntity = SE.getUser();
+            }
+        }
+        if (targetEntity instanceof EnderDragonPart EDP){
+            targetEntity = EDP.parentMob;
+        }
+
+        storeEnt = targetEntity;
+
+        return listE;
+    }
+
+    public Entity getTargetEntityThroughWalls(LivingEntity User, float distMax, float angle){
+        /*First, attempts to hit what you are looking at*/
+        if (!(distMax >= 0)) {
+            distMax = this.getDistanceOut(User, this.getReach(), false);
+        }
+        Entity targetEntity = this.rayCastEntityThroughWalls(User,distMax);
+
+        if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
+                || (targetEntity != null && (!targetEntity.isAlive() || targetEntity.isRemoved()))){
+            targetEntity = null;
+        }
+
+        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
+        if (targetEntity == null) {
+            float halfReach = (float) (distMax*0.5);
+            Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
+
+            targetEntity = StandAttackHitboxNear(User,StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
+                    pointVec.z, halfReach, halfReach, halfReach), distMax, angle,true),angle,true);
+        }
+        if (targetEntity instanceof StandEntity SE && SE.redirectKnockbackToUser()){
+
+            if (SE.getUser() != null){
+                targetEntity = SE.getUser();
+            }
+        }
+        if (targetEntity instanceof EnderDragonPart EDP){
+            targetEntity = EDP.parentMob;
+        }
+
+        if (targetEntity instanceof LivingEntity LE)
+        {
+            if (((StandUser)LE).roundabout$isParallelRunning())
+                return null;
+        }
+
+        return targetEntity;
+    }
+
+    public List<Entity> getTargetEntityListThroughWalls(LivingEntity User, float distMax, float angle){
+        /*First, attempts to hit what you are looking at*/
+        if (!(distMax >= 0)) {
+            distMax = this.getDistanceOut(User, this.getReach(), false);
+        }
+        Entity targetEntity = this.rayCastEntityThroughWalls(User,distMax);
+
+        if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
+                || (targetEntity != null && (!targetEntity.isAlive() || targetEntity.isRemoved()))){
+            targetEntity = null;
+        }
+
+        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
+
+        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
+        float halfReach = (float) (distMax*0.5);
+        Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
+        List<Entity> listE = StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
+                pointVec.z, halfReach, halfReach, halfReach), distMax, angle,true);
+        if (targetEntity == null) {
+            targetEntity = StandAttackHitboxNear(User,listE,angle);
+        }
+        if (targetEntity instanceof StandEntity SE && SE.redirectKnockbackToUser()){
+
+            if (SE.getUser() != null){
+                targetEntity = SE.getUser();
+            }
+        }
+        if (targetEntity instanceof EnderDragonPart EDP){
+            targetEntity = EDP.parentMob;
+        }
+
+        if (targetEntity instanceof LivingEntity LE)
+        {
+            if (((StandUser)LE).roundabout$isParallelRunning())
+                return null;
+        }
+        storeEnt = targetEntity;
+
+        if (!listE.contains(targetEntity) && targetEntity != null)
+            listE.add(targetEntity);
+        return listE;
+    }
+
+    public Entity getTargetEntity(LivingEntity User, float distMax){
+        return getTargetEntity(User,distMax, 25);
+    }
+    public Entity getTargetEntity(LivingEntity User, float distMax, float angle){
+        /*First, attempts to hit what you are looking at*/
+        if (!(distMax >= 0)) {
+            distMax = this.getDistanceOut(User, this.getReach(), false);
+        }
+        Entity targetEntity = this.rayCastEntity(User,distMax);
+
+        if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
+                || (targetEntity != null && (!targetEntity.isAlive() || targetEntity.isRemoved()))){
+            targetEntity = null;
+        }
+
+        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
+        if (targetEntity == null) {
+            float halfReach = (float) (distMax*0.5);
+            Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
+            targetEntity = StandAttackHitboxNear(User,StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
+                    pointVec.z, halfReach, halfReach, halfReach), distMax),angle);
+        }
+        if (targetEntity instanceof StandEntity SE && SE.redirectKnockbackToUser()){
+
+            if (SE.getUser() != null){
+                targetEntity = SE.getUser();
+            }
+        }
+        if (targetEntity instanceof EnderDragonPart EDP){
+            targetEntity = EDP.parentMob;
+        }
+
+        if (targetEntity instanceof LivingEntity LE)
+        {
+            if (((StandUser)LE).roundabout$isParallelRunning())
+                return null;
+        }
+
+        return targetEntity;
+    }
+
+    public int getTargetEntityId(){
+        Entity targetEntity = getTargetEntity(this.self, -1);
+        int id;
+        if (targetEntity != null) {
+            id = targetEntity.getId();
+        } else {
+            id = -1;
+        }
+        return id;
+    }
+
+    public int getTargetEntityId(float angle){
+        Entity targetEntity = getTargetEntity(this.self, -1, angle);
+        int id;
+        if (targetEntity != null) {
+            id = targetEntity.getId();
+        } else {
+            id = -1;
+        }
+        return id;
+    }
+    public int getTargetEntityId2(float distance){
+        Entity targetEntity = getTargetEntity(this.self, distance);
+        int id;
+        if (targetEntity != null) {
+            id = targetEntity.getId();
+        } else {
+            id = -1;
+        }
+        return id;
+    }
+    public int getTargetEntityId2(float distance,LivingEntity userr,float angle){
+        Entity targetEntity = getTargetEntityGenerous(userr, distance,angle);
+        int id;
+        if (targetEntity != null) {
+            id = targetEntity.getId();
+        } else {
+            id = -1;
+        }
+        return id;
+    }
+
+    public Entity getTargetEntityGenerous(LivingEntity User, float distMax, float angle){
+        /*First, attempts to hit what you are looking at*/
+        Entity targetEntity = this.rayCastEntity(User,distMax);
+
+        if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
+                || (targetEntity != null && targetEntity.is(User))){
+            targetEntity = null;
+        }
+
+        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
+        if (targetEntity == null) {
+            float halfReach = (float) (distMax*0.5);
+            Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
+            targetEntity = StandAttackHitboxNear(User,StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
+                    pointVec.z, halfReach, halfReach, halfReach), distMax, angle),angle);
+        }
+        if (targetEntity instanceof StandEntity SE && SE.redirectKnockbackToUser()){
+
+            if (SE.getUser() != null){
+                targetEntity = SE.getUser();
+            }
+        }
+
+        return targetEntity;
+    }
+
+    public Entity StandAttackHitboxNear(LivingEntity User,List<Entity> entities, float angle){
+        return StandAttackHitboxNear(User,entities,angle,false);
+    }
+
+    public Entity StandAttackHitboxNear(LivingEntity User,List<Entity> entities, float angle, boolean throughWalls){
+        float nearestDistance = -1;
+        Entity nearestMob = null;
+        if (entities != null){
+            for (Entity value : entities) {
+                if (!value.isInvulnerable() && value.isAlive() && value.getUUID() != User.getUUID() && (MainUtil.isStandPickable(value) || value instanceof StandEntity)){
+                    if (!(value instanceof StandEntity SE1 && SE1.getUser() != null && SE1.getUser().is(User))) {
+                        float distanceTo = value.distanceTo(User);
+                        float range = this.getReach();
+                        if (value instanceof FollowingStandEntity SE && OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FOLLOW_STYLE) {
+                            range = 0;
+                        }
+                        if ((nearestDistance < 0 || distanceTo < nearestDistance)
+                                && distanceTo <= range) {
+                            if (canActuallyHit(value) || throughWalls) {
+                                nearestDistance = distanceTo;
+                                nearestMob = value;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return nearestMob;
+    }
+    public double getBlockDistanceOut(LivingEntity entity, double range){
+        Vec3 vec3dST = entity.getEyePosition(0);
+        Vec3 vec3d2ST = entity.getViewVector(0);
+        Vec3 vec3d3ST = vec3dST.add(vec3d2ST.x * range, vec3d2ST.y * range, vec3d2ST.z * range);
+
+        BlockHitResult blockHit = entity.level().clip(new ClipContext(vec3dST, vec3d3ST,
+                ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, entity));
+        double bhit = Math.sqrt(blockHit.distanceTo(entity));
+        if (bhit < range){
+            range = bhit;
+        }
+
+        return range;
+    }
+    public float getDistanceOut(LivingEntity entity, float range, boolean offset){
+        float distanceFront = this.getRayDistance(entity, range);
+        if (offset) {
+            Entity targetEntity = this.rayCastEntity(entity,distanceFront);
+            if (targetEntity != null && targetEntity.distanceTo(entity) < distanceFront) {
+                distanceFront = targetEntity.distanceTo(entity);
+            }
+            distanceFront -= 1;
+            distanceFront = Math.max(Math.min(distanceFront, 1.7F), 0.4F);
+        }
+        return distanceFront;
+    }
+
+    public float getDistanceOutAccurate(Entity entity, float range, boolean offset){
+        float distanceFront = this.getRayDistance(entity, range);
+        if (offset) {
+            Entity targetEntity = this.getTargetEntity(this.self,this.getReach());
+            if (targetEntity != null && targetEntity.distanceTo(entity) < distanceFront) {
+                distanceFront = targetEntity.distanceTo(entity);
+            }
+            distanceFront -= 1;
+            distanceFront = Math.max(Math.min(distanceFront, 1.7F), 0.4F);
+        }
+        return distanceFront;
+    }
+
+    public float getRayDistance(Entity entity, float range){
+        Vec3 vec3d = entity.getEyePosition(0);
+        Vec3 vec3d2 = entity.getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+        HitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
+        if (blockHit.getType() != HitResult.Type.MISS){
+            return Mth.sqrt((float) entity.distanceToSqr(blockHit.getLocation()));
+        }
+        return range;
+    } public Vec3 getRayBlock(Entity entity, float range){
+        Vec3 vec3d = entity.getEyePosition(0);
+        Vec3 vec3d2 = entity.getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+        HitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
+        return blockHit.getLocation();
+    }
+
+    public float getPivotPoint(Vector3d pointToRotate, Vector3d axisStart, Vector3d axisEnd) {
+        Vector3d d = new Vector3d(axisEnd.x-axisStart.x,axisEnd.y-axisStart.y,axisEnd.z-axisStart.z).normalize();
+        Vector3d v = new Vector3d(pointToRotate.x-axisStart.x,pointToRotate.y-axisStart.y,pointToRotate.z-axisStart.z).normalize();
+        double t = v.dot(d);
+        return (float) pointToRotate.distance(axisStart.add(d.mul(t)));
+    }
+
+    public static float angleDistance(float alpha, float beta) {
+        float phi = Math.abs(beta - alpha) % 360;       // This is either the distance or 360 - distance
+        float distance = phi > 180 ? 360 - phi : phi;
+        return distance;
+    }
+
+    /**Returns the vertical angle between two mobs*/
+    public float getLookAtEntityPitch(Entity user, Entity targetEntity) {
+        double f;
+        double d = targetEntity.getEyePosition().x - user.getEyePosition().x;
+        double e = targetEntity.getEyePosition().z - user.getEyePosition().z;
+        if (targetEntity instanceof LivingEntity) {
+            LivingEntity livingEntity = (LivingEntity)targetEntity;
+            f = livingEntity.getEyePosition().y - user.getEyePosition().y;
+        } else {
+            f = ((targetEntity.getBoundingBox().minY + targetEntity.getBoundingBox().maxY) / 2.0) - (user.getEyePosition().y);
+        }
+
+        Vec3 vec = new Vec3(d,f,e);
+        /***
+         Direction dr = ((IGravityEntity)user).roundabout$getGravityDirection();
+         if (dr != Direction.DOWN){
+         vec = RotationUtil.vecWorldToPlayer(d,f,e,dr);
+         }
+         */
+
+        double g = Math.sqrt(vec.x * vec.x + vec.z * vec.z);
+        return (float)(-(Mth.atan2(vec.y, g) * 57.2957763671875));
+    }
+    /** This code grabs an entity in front of you at the specified range, raycasting is used*/
+    public Entity rayCastEntity(LivingEntity User, float reach){
+        Entity entityHitResult = MainUtil.raytraceEntityStand(User.level(),User,reach);
+        if (entityHitResult != null){
+            if (entityHitResult.isAlive() && !entityHitResult.isRemoved() && !entityHitResult.is(User) &&
+                    !(User instanceof StandEntity SE2 && SE2.getUser() != null &&  SE2.getUser().isPassenger() &&
+                            SE2.getUser().getVehicle().getUUID() == entityHitResult.getUUID())) {
+                return entityHitResult;
+            }
+        }
+        return null;
+    }
+    public Entity rayCastEntityThroughWalls(LivingEntity User, float reach){
+        Entity entityHitResult = MainUtil.raytraceEntityStandThroughWalls(User.level(),User,reach);
+        if (entityHitResult != null){
+            if (entityHitResult.isAlive() && !entityHitResult.isRemoved() && !entityHitResult.is(User) &&
+                    !(User instanceof StandEntity SE2 && SE2.getUser() != null &&  SE2.getUser().isPassenger() &&
+                            SE2.getUser().getVehicle().getUUID() == entityHitResult.getUUID())) {
+                return entityHitResult;
+            }
+        }
+        return null;
+    }
+    /**Returns the horizontal angle between two mobs*/
+    public float getLookAtEntityYaw(Entity user, Entity targetEntity) {
+
+        Vec3 uservec = user.getEyePosition();
+
+        double d = targetEntity.getEyePosition().x - uservec.x;
+        double e = targetEntity.getEyePosition().z - uservec.z;
+
+        Vec3 vec = new Vec3(d,0,e);
+        return (float)(Mth.atan2(vec.z, vec.x) * 57.2957763671875) - 90.0f;
+    }
+
+
+
+    /**Returns the vertical angle between a mob and a position*/
+    public float getLookAtPlacePitch(Entity user, Vec3 vec) {
+        double f;
+        double d = vec.x() - user.getEyePosition().x;
+        double e = vec.z() - user.getEyePosition().z;
+        f = vec.y() - user.getEyePosition().y;
+        double g = Math.sqrt(d * d + e * e);
+        return (float)(-(Mth.atan2(f, g) * 57.2957763671875));
+    }
+    /**Returns the horizontal angle between a mob and a position*/
+    public float getLookAtPlaceYaw(Entity user, Vec3 vec) {
+        double d = vec.x() - user.getEyePosition().x;
+        double e = vec.z() - user.getEyePosition().z;
+        return (float)(Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
+    }
+
+    public void forceLook(Entity stand, Vec3 blockCenterPlus) {
+        Direction gravityDirection2 = GravityAPI.getGravityDirection(stand);
+        if (gravityDirection2 == Direction.DOWN)
+            return;
+
+        double $$3 = blockCenterPlus.x - stand.getEyePosition().x;
+        double $$4 = blockCenterPlus.z - stand.getEyePosition().z;
+        double $$6 = blockCenterPlus.y - stand.getEyePosition().y;
+
+        double $$8 = Math.sqrt($$3 * $$3 + $$4 * $$4);
+        float $$9 = (float)(Mth.atan2($$4, $$3) * 180.0F / (float)Math.PI) - 90.0F;
+        float $$10 = (float)(-(Mth.atan2($$6, $$8) * 180.0F / (float)Math.PI));
+
+        stand.setXRot(rotlerp(stand.getXRot(), $$10, 30f));
+        stand.setYRot(rotlerp(stand.getYRot(), $$9, 30f));
+    }
+    private float rotlerp( float $$0, float $$1, float $$2) {
+        float $$3 = Mth.wrapDegrees($$1 - $$0);
+        if ($$3 > $$2) {
+            $$3 = $$2;
+        }
+
+        if ($$3 < -$$2) {
+            $$3 = -$$2;
+        }
+
+        return $$0 + $$3;
+    }
+
+    public List<Entity> StandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance){
+        return StandGrabHitbox(User,entities,maxDistance,25);
+    }
+    public List<Entity> StandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, float angle){
+        return StandGrabHitbox(User,entities,maxDistance,25,false);
+    }
+    public List<Entity> StandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, float angle, boolean throughWalls){
+        List<Entity> hitEntities = new ArrayList<>(entities) {
+        };
+
+        for (Entity value : entities) {
+            if (!value.showVehicleHealth() || (!MainUtil.isStandPickable(value) && !(value instanceof StandEntity)) || (!value.isAttackable() && !(value instanceof StandEntity)) || value.isInvulnerable() || !value.isAlive()
+                    || (User.isPassenger() && User.getVehicle().getUUID() == value.getUUID())
+                    || value.is(User) || (((StandUser)User).roundabout$getStand() != null &&
+                    ((StandUser)User).roundabout$getStand().is(User)) || (User instanceof StandEntity SE && SE.getUser() !=null && SE.getUser().is(value)) ||
+                    (User instanceof StandEntity SE2 && SE2.getUser() != null &&  SE2.getUser().isPassenger() && SE2.getUser().getVehicle().getUUID() == value.getUUID())){
+                hitEntities.remove(value);
+            } else {
+                Direction gravD = ((IGravityEntity)User).roundabout$getGravityDirection();
+                Vec2 lookVec = new Vec2(getLookAtEntityYaw(User, value), getLookAtEntityPitch(User, value));
+                if (gravD != Direction.DOWN) {
+                    lookVec = RotationUtil.rotPlayerToWorld(lookVec.x, lookVec.y, gravD);
+                }
+                if (!(angleDistance(lookVec.x, (User.getYHeadRot()%360f)) <= angle && angleDistance(lookVec.y, User.getXRot()) <= angle)){
+
+                    hitEntities.remove(value);
+                } else if (!canActuallyHit(value) && !throughWalls){
+                    hitEntities.remove(value);
+                }
+            }
+        }
+        return hitEntities;
+    }
+
+    /**This function is a sanity check so mobs can't be hit behind doors*/
+    public boolean canActuallyHit(Entity entity){
+        if (ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchesGoThroughDoorsAndCorners){
+            return true;
+        }
+        Vec3 from = new Vec3(this.self.getX(), this.self.getY(), this.self.getZ()); // your position
+        Vec3 to = entity.getEyePosition(1.0F); // where the entity's eyes are
+
+        BlockHitResult result = this.self.level().clip(new ClipContext(
+                from,
+                to,
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.NONE,
+                this.self
+        ));
+        boolean isBlocked = result.getType() != HitResult.Type.MISS &&
+                result.getLocation().distanceTo(from) < to.distanceTo(from);
+        if (isBlocked){
+            from = this.self.getEyePosition(1); // your position
+            to = entity.getEyePosition(1.0F); // where the entity's eyes are
+
+            result = this.self.level().clip(new ClipContext(
+                    from,
+                    to,
+                    ClipContext.Block.COLLIDER,
+                    ClipContext.Fluid.NONE,
+                    this.self
+            ));
+            isBlocked = result.getType() != HitResult.Type.MISS &&
+                    result.getLocation().distanceTo(from) < to.distanceTo(from);
+        }
+        return !isBlocked;
+    }
+
+    /**disables stand guard amd shield guard, this is simplified in the next function*/
+    public boolean knockShield(Entity entity, int duration){
+
+        if (entity != null && entity.isAlive() && !entity.isRemoved()) {
+            if (entity instanceof LivingEntity) {
+                if (((LivingEntity) entity).isBlocking()) {
+
+                    StandUser standUser= this.getUserData((LivingEntity) entity);
+                    if (standUser.roundabout$isGuarding()) {
+                        if (!standUser.roundabout$getGuardBroken()){
+                            standUser.roundabout$breakGuard();
+                        }
+                    }
+                    if (entity instanceof Player){
+                        ItemStack itemStack = ((LivingEntity) entity).getUseItem();
+                        Item item = itemStack.getItem();
+                        if (item.getUseAnimation(itemStack) == UseAnim.BLOCK) {
+                            ((LivingEntity) entity).releaseUsingItem();
+                            ((Player) entity).stopUsingItem();
+                        }
+                        ((Player) entity).getCooldowns().addCooldown(Items.SHIELD, duration);
+                        entity.level().broadcastEntityEvent(entity, EntityEvent.SHIELD_DISABLED);
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    /**disables just shield guard because stand guard doesn't work if your shield guard is disabled*/
+    public boolean knockShield2(Entity entity, int duration){
+
+        if (entity != null && entity.isAlive() && !entity.isRemoved()) {
+            if (entity instanceof LivingEntity) {
+                if (((LivingEntity) entity).isBlocking()) {
+
+                    if (entity instanceof Player){
+                        ItemStack itemStack = ((LivingEntity) entity).getUseItem();
+                        Item item = itemStack.getItem();
+                        if (item.getUseAnimation(itemStack) == UseAnim.BLOCK) {
+                            ((LivingEntity) entity).releaseUsingItem();
+                            ((Player) entity).stopUsingItem();
+                        }
+                        ((Player) entity).getCooldowns().addCooldown(Items.SHIELD, duration);
+                        entity.level().broadcastEntityEvent(entity, EntityEvent.SHIELD_DISABLED);
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public List<Entity> arrowGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance){
+        return arrowGrabHitbox(User,entities,maxDistance,90);
+    }
+    public List<Entity> arrowGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, float angle){
+        List<Entity> hitEntities = new ArrayList<>(entities) {
+        };
+        for (Entity value : entities) {
+            Direction gravD = ((IGravityEntity)User).roundabout$getGravityDirection();
+            Vec2 lookVec = new Vec2(getLookAtEntityYaw(User, value), getLookAtEntityPitch(User, value));
+            if (gravD != Direction.DOWN) {
+                lookVec = RotationUtil.rotPlayerToWorld(lookVec.x, lookVec.y, gravD);
+            }
+
+            if (!(value instanceof Arrow) && !(value instanceof KnifeEntity) && !(value instanceof ThrownObjectEntity)){
+                hitEntities.remove(value);
+            } else if (!(angleDistance(lookVec.x, (User.getYHeadRot()%360f)) <= angle && angleDistance(lookVec.y, User.getXRot()) <= angle)){
+                hitEntities.remove(value);
+            } else if (value.distanceTo(User) > maxDistance){
+                hitEntities.remove(value);
+            }
+        }
+        return hitEntities;
+    }
+    public boolean StandAttackHitbox(List<Entity> entities, float pow, float knockbackStrength){
+        boolean hitSomething = false;
+        float nearestDistance = -1;
+        Entity nearestMob;
+        if (entities != null){
+            for (Entity value : entities) {
+                if (this.StandDamageEntityAttack(value,pow, knockbackStrength, this.self)){
+                    hitSomething = true;
+                }
+            }
+        }
+        return hitSomething;
+    }
+
+    /**Code for triggering a damage event*/
+    public boolean StandDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
+        if (attacker instanceof TamableAnimal TA){
+            if (target instanceof TamableAnimal TT && TT.getOwner() != null
+                    && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
+                return false;
+            }
+        } else if (attacker instanceof AbstractVillager av1){
+            if (target instanceof AbstractVillager av2){
+                if (!(av1.getTarget() != null && av1.getTarget().is(av2)) && !(av2.getTarget() != null && av2.getTarget().is(av1)))
+                    return false;
+            }
+        }
+        if (DamageHandler.StandDamageEntity(target,pow, attacker)){
+            if (attacker instanceof LivingEntity LE){
+                LE.setLastHurtMob(target);
+            }
+            if (target instanceof LivingEntity && knockbackStrength > 0) {
+                ((LivingEntity) target).knockback(knockbackStrength * 0.5f, Mth.sin(attacker.getYRot() * ((float) Math.PI / 180)), -Mth.cos(attacker.getYRot() * ((float) Math.PI / 180)));
+            }
+            return true;
+        }
+        return false;
+    }
+    public boolean StandRushDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
+        if (attacker instanceof TamableAnimal TA){
+            if (target instanceof TamableAnimal TT && TT.getOwner() != null
+                    && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
+                return false;
+            }
+        } else if (attacker instanceof AbstractVillager){
+            if (target instanceof AbstractVillager){
+                return false;
+            }
+        }
+        if (DamageHandler.StandRushDamageEntity(target,pow, attacker)){
+            if (attacker instanceof LivingEntity LE){
+                LE.setLastHurtMob(target);
+            }
+            if (target instanceof LivingEntity && knockbackStrength > 0) {
+                ((LivingEntity) target).knockback(knockbackStrength * 0.5f, Mth.sin(attacker.getYRot() * ((float) Math.PI / 180)), -Mth.cos(attacker.getYRot() * ((float) Math.PI / 180)));
+            }
+            return true;
+        }
+        return false;
+    }
+
 }

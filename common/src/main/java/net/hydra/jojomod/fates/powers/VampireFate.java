@@ -4,6 +4,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
+import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.Entity;
@@ -23,6 +24,16 @@ public class VampireFate extends VampiricFate {
     public FatePowers generateFatePowers(LivingEntity entity){
         return new VampireFate(entity);
     }
+    @Override
+    public void powerActivate(PowerContext context) {
+        switch (context)
+        {
+            case SKILL_2_NORMAL -> {
+                suckBlood();
+            }
+        }
+        super.powerActivate(context);
+    };
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {

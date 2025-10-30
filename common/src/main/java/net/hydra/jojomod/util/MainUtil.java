@@ -784,6 +784,10 @@ public class MainUtil {
         return (getMobBleed(mob) && !hasEnderBlood(mob) && mob.isAlive() && !mob.isRemoved());
     }
 
+    public static boolean canDrinkBloodFair(Entity ent,Entity drinker){
+        return canDrinkBlood(ent) && !(ent instanceof Player) && !(ent instanceof Mob mb && mb.getTarget() != null && mb.getTarget().is(drinker));
+    }
+
 
     public static void makeFaceless(Entity entity, int ticks, int power, Entity user){
         if (entity instanceof LivingEntity LE){
