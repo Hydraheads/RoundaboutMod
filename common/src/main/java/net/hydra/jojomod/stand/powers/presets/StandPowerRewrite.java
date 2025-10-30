@@ -9,6 +9,10 @@ public class StandPowerRewrite extends StandPowers {
     public StandPowerRewrite(LivingEntity self) {
         super(self);
     }
-
+    /**If you are not currently supposed to be able to activate your stand, override for sealing reasons*/
+    @Override
+    public boolean canSummonStand(){
+        return true;
+    }
 
 }

@@ -92,7 +92,9 @@ public class KeyInputs {
             }
             ((StandUser) player).roundabout$getStandPowers().preButtonInput4(keyIsDown, option);
         }
-        ((IFatePlayer)player).rdbt$getFatePowers().preButtonInput4(keyIsDown, option);
+        if (!FateTypes.isHuman(player)) {
+            ((IFatePlayer) player).rdbt$getFatePowers().preButtonInput4(keyIsDown, option);
+        }
     }
     public static void MoveKey3(Player player, Minecraft client, boolean keyIsDown, Options option){
         if (!((StandUser) player).roundabout$isSealed()) {
@@ -101,7 +103,9 @@ public class KeyInputs {
             }
             ((StandUser) player).roundabout$getStandPowers().preButtonInput3(keyIsDown, option);
         }
-        ((IFatePlayer)player).rdbt$getFatePowers().preButtonInput3(keyIsDown, option);
+        if (!FateTypes.isHuman(player)) {
+            ((IFatePlayer) player).rdbt$getFatePowers().preButtonInput3(keyIsDown, option);
+        }
     }
     public static void MoveKey2(Player player, Minecraft client, boolean keyIsDown, Options option){
         if (!((StandUser) player).roundabout$isSealed()) {
@@ -110,7 +114,9 @@ public class KeyInputs {
             }
             ((StandUser) player).roundabout$getStandPowers().preButtonInput2(keyIsDown, option);
         }
-        ((IFatePlayer)player).rdbt$getFatePowers().preButtonInput2(keyIsDown, option);
+        if (!FateTypes.isHuman(player)) {
+            ((IFatePlayer) player).rdbt$getFatePowers().preButtonInput2(keyIsDown, option);
+        }
     }
     public static void MoveKey1(Player player, Minecraft client, boolean keyIsDown, Options option){
         if (!((StandUser) player).roundabout$isSealed()) {
@@ -119,7 +125,9 @@ public class KeyInputs {
             }
             ((StandUser) player).roundabout$getStandPowers().preButtonInput1(keyIsDown, option);
         }
-        ((IFatePlayer)player).rdbt$getFatePowers().preButtonInput1(keyIsDown, option);
+        if (!FateTypes.isHuman(player)) {
+            ((IFatePlayer) player).rdbt$getFatePowers().preButtonInput1(keyIsDown, option);
+        }
     }
 
 

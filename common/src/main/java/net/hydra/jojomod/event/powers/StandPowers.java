@@ -118,7 +118,7 @@ public class StandPowers extends AbilityScapeBasis {
     }
     /**If you are not currently supposed to be able to activate your stand, override for sealing reasons*/
     public boolean canSummonStand(){
-        return true;
+        return false;
     }
 
     /**If the standard left click input should be canceled while your stand is active*/
@@ -225,6 +225,9 @@ public class StandPowers extends AbilityScapeBasis {
             basis*=0.2f;
         } else if (this.isBarrageCharging()) {
             basis*=0.5f;
+        }
+        if (impactSlowdown > -1) {
+            basis = 0f;
         }
         return basis;
     }
