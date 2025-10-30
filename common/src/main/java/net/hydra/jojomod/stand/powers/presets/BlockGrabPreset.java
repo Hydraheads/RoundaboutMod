@@ -855,7 +855,7 @@ public class BlockGrabPreset extends NewPunchingStand {
 
                     if (entity.startRiding(standEntity)) {
                         if (entity instanceof RoadRollerEntity RRE) {
-                            RRE.thrower = this.getSelf();
+                            RRE.thrower = standEntity.getUser();
                             RRE.hasBeenBaraged = false;
                         }
                         this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
@@ -1032,11 +1032,10 @@ public class BlockGrabPreset extends NewPunchingStand {
                             poseStand(OffsetIndex.FOLLOW_NOLEAN);
                             animateStand(StandEntity.ENTITY_GRAB);
                         }
-                            /**Minecart Throw*/
                     } else if (stack.getItem() instanceof RoadRollerItem RR && !(((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() == GameType.ADVENTURE)) {
                         RoadRollerEntity roadRoller = new RoadRollerEntity(ModEntities.ROAD_ROLLER_ENTITY, this.getSelf().level());
 
-                        roadRoller.thrower = this.getSelf();
+                        roadRoller.thrower = standEntity.getUser();
 
                         roadRoller.setYRot(this.getSelf().getYRot());
 
@@ -1046,6 +1045,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                         this.getSelf().level().gameEvent(this.getSelf(), GameEvent.ENTITY_PLACE, this.getSelf().position().add(0, 3, 0));
                         if (roadRoller.startRiding(standEntity)) {
                             roadRoller.isThrown = false;
+                            roadRoller.thrower = standEntity.getUser();
                             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                             this.setActivePower(PowerIndex.POWER_2_EXTRA);
                             this.setAttackTimeDuring(0);

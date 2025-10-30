@@ -220,6 +220,26 @@ public class StandHudRender {
         context.blit(StandIcons.VEHICLE_ICONS, iconX, iconY, overlayU, overlayV, iconW, iconH);
     }
 
+    public static void renderRoadRollerPickupHud(GuiGraphics context, Minecraft client, Player playerEntity, int scaledWidth, int scaledHeight, int ticks, int x, float flashAlpha, float otherFlashAlpha, RoadRollerEntity RRE) {
+        int l = scaledHeight - 32 + 3;
+        int k = (int)(((float) 182 / 100f) * (float) RRE.getPickupTimer());
+
+        context.blit(StandIcons.VEHICLE_ICONS, x, l, 0, 90, 182, 5);
+
+        if (k > 0) {
+            context.blit(StandIcons.VEHICLE_ICONS, x, l, 0, 85, k, 5);
+        }
+
+        int iconU = 183;
+        int iconV = 0;
+        int iconW = 9;
+        int iconH = 9;
+        int iconX = scaledWidth / 2 - 5;
+        int iconY = scaledHeight - 31 - 10;
+
+        context.blit(StandIcons.VEHICLE_ICONS, iconX, iconY, iconU, iconV, iconW, iconH);
+    }
+
     private static int getFinalATimeInt(StandUser standUser) {
         int barrageWindup = standUser.roundabout$getStandPowers().getBarrageWindup();
         int barrageLength = standUser.roundabout$getStandPowers().getBarrageLength();

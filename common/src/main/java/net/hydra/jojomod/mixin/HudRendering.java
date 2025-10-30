@@ -563,6 +563,9 @@ public abstract class HudRendering implements IHudAccess {
             } else if (minecraft.player.getVehicle() != null && minecraft.player.getVehicle() instanceof RoadRollerEntity RRE && RRE.getPavingBoolean()) {
                 StandHudRender.renderRoadRollerHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha,  RRE);
                 return true;
+            } else if (ClientUtil.getRoadRollerPickingRRE() != null && ClientUtil.getRoadRollerPickingRRE() instanceof RoadRollerEntity && ClientUtil.getRoadRollerPickingRRE().getPickupBoolean()==minecraft.player.getId()) {
+                StandHudRender.renderRoadRollerPickupHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha,  ClientUtil.getRoadRollerPickingRRE());
+                return true;
             } else if (((IPlayerEntity)minecraft.player).roundabout$getDisplayExp() && ((StandUser)minecraft.player).roundabout$hasAStand()){
 
                 StandHudRender.renderExpHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha,removeNum);
