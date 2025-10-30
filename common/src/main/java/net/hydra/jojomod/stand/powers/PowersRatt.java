@@ -158,6 +158,9 @@ public class PowersRatt extends NewDashPreset {
                 ((StandUser) this.getSelf()).roundabout$setCombatMode(false);
                 this.scopeLevel = 0;
                 this.setCooldown(PowersRatt.SCOPE, 35);
+                if (this.getActivePower() == PowersRatt.START_CHARGE) {
+                    this.setPowerNone();
+                }
             }
             chargeTime = data;
             updateChargeTime(data);
@@ -977,7 +980,10 @@ public class PowersRatt extends NewDashPreset {
         if (getValidPlacement() != null && !isPlaced() || shotcooldown != 0 || scopeLevel != 0) {
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
         }
-        if (getChargeTime() > 10 && ((IPlayerEntity)playerEntity).roundabout$getStandLevel() > 1 ) {
+
+        ItemStack goldDisc = ((StandUser)playerEntity).roundabout$getStandDisc();
+        boolean bypass = playerEntity.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+        if (getChargeTime() > 10 && ( ((IPlayerEntity)playerEntity).roundabout$getStandLevel() > 1 ) || bypass ) {
             float amount = (float) getChargeTime() / 100;
             int finalAmount = Math.round(amount * 15);
             int bartexture = 30;
