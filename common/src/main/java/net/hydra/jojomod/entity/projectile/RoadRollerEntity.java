@@ -63,6 +63,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -580,24 +581,23 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
             AABB box = this.getBoundingBox();
             boolean bottomInsideBlock = false;
 
-            int y = Mth.floor(box.minY);
+            double cx = box.getCenter().x;
+            double cz = box.getCenter().z;
+            int y = Mth.floor(box.minY - 0.05D);
 
-            for (int x = Mth.floor(box.minX); x <= Mth.floor(box.maxX); x++) {
-                for (int z = Mth.floor(box.minZ); z <= Mth.floor(box.maxZ); z++) {
-                    BlockPos bp = new BlockPos(x, y, z);
-                    BlockState state = level().getBlockState(bp);
+            BlockPos bp = new BlockPos(Mth.floor(cx), y, Mth.floor(cz));
+            BlockState state = level().getBlockState(bp);
 
-                    if (!state.isAir() && !state.getCollisionShape(level(), bp).isEmpty()) {
-                        bottomInsideBlock = true;
-                        break;
-                    }
+            if (!state.isAir()) {
+                VoxelShape shape = state.getCollisionShape(level(), bp);
+                if (!shape.isEmpty() && shape.max(Direction.Axis.Y) > (box.minY - y)) {
+                    bottomInsideBlock = true;
                 }
-                if (bottomInsideBlock) break;
             }
 
             if (bottomInsideBlock) {
                 int tries = 0;
-                while (bottomInsideBlock && tries < 40) {
+                while (bottomInsideBlock && tries < 5) {
                     this.teleportTo(this.getX(), this.getY() + 0.05D, this.getZ());
                     this.refreshDimensions();
                     bottomInsideBlock = !this.level().noCollision(this);
