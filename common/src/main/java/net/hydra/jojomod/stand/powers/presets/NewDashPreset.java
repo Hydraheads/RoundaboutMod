@@ -35,15 +35,8 @@ public class NewDashPreset extends StandPowerRewrite {
         super(self);
     }
 
+
     @Override
-    public void powerActivate(PowerContext context) {
-        switch (context)
-        {
-            case SKILL_3_NORMAL -> {
-                dash();
-            }
-        }
-    }
     public void dash(){
         Options options = Minecraft.getInstance().options;
 
@@ -112,100 +105,46 @@ public class NewDashPreset extends StandPowerRewrite {
 
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime){
-        if (this.canChangePower(move, forced)) {
-            if (move == PowerIndex.MOVEMENT) {
-                this.storedInt = chargeTime;
-            }
-            return super.tryIntPower(move, forced, chargeTime);
-        }
-        return false;
+
+        return super.tryIntPower(move,forced,chargeTime);
     }
 
 
-    @SuppressWarnings("deprecation")
-    public boolean doVault(){
-        if (!this.self.onGround()) {
-            Vec3 vec3d = this.getSelf().getEyePosition(1);
-
-            Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
-            Vec3 vec3d2 = this.getSelf().getViewVector(1);
-            Vec3 vec3d3 = vec3d.add(vec3d2.x * 2, vec3d2.y * 2, vec3d2.z * 2);
-            BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
 
 
-            boolean logicCheck = blockHit.getBlockPos().getY()+1 > this.getSelf().getY();
-            BlockPos aboveCheck = blockHit.getBlockPos().above();
-            if (gravD != Direction.DOWN){
-                BlockPos abv = blockHit.getBlockPos().relative(gravD.getOpposite());
-                BlockPos att = blockHit.getBlockPos();
+    @Override
+    /**Stand related things that slow you down or speed you up*/
+    public float inputSpeedModifiers(float basis){
 
-                Vec3 blockHitVec = RotationUtil.vecPlayerToWorld(new Vec3(abv.getX(),att.getY(),att.getZ()), gravD);
-                Vec3 playerVec = RotationUtil.vecPlayerToWorld(this.getSelf().position(), gravD);
-                aboveCheck = abv;
-                logicCheck = blockHitVec.y+1 > playerVec.y;
-            }
-
-            if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && logicCheck
-                    && !this.getSelf().level().getBlockState(aboveCheck).isSolid()) {
-                if (!this.onCooldown(PowerIndex.GLOBAL_DASH)) {
-                    /*Stand vaulting*/
-                    this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.vaultingCooldown);
-                    double mag = this.getSelf().getPosition(0).distanceTo(
-                            new Vec3(blockHit.getLocation().x, blockHit.getLocation().y, blockHit.getLocation().z)) * 1.68 + 1;
-                    Vec3 vec3 = new Vec3(
-                            (blockHit.getLocation().x - this.getSelf().getX()) / mag,
-                            (blockHit.getLocation().y - this.getSelf().getY()) / mag,
-                            (blockHit.getLocation().z - this.getSelf().getZ()) / mag
-                            );
-                    if (gravD != Direction.DOWN){
-                        vec3 = RotationUtil.vecWorldToPlayer(vec3,gravD);
-                    }
-
-                    MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
-                            vec3.x,
-                            0.35 + Math.max(vec3.y, 0),
-                            vec3.z
-                    );
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.VAULT, true);
-                    tryPowerPacket(PowerIndex.VAULT);
-                    return true;
-                }
-                return true;
-            }
-        }
-        return false;
+        return super.inputSpeedModifiers(basis);
     }
 
-    @SuppressWarnings("deprecation")
-    public boolean canVault(){
-        if (this.self.onGround())
-            return false;
-        Vec3 vec3d = this.getSelf().getEyePosition(0);
-        Vec3 vec3d2 = this.getSelf().getViewVector(0);
-        Vec3 vec3d3 = vec3d.add(vec3d2.x * 2, vec3d2.y * 2, vec3d2.z * 2);
-        BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
 
-        Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
-        boolean logicCheck = blockHit.getBlockPos().getY()+1 > this.getSelf().getY();
-        BlockPos aboveCheck = blockHit.getBlockPos().above();
-        if (gravD != Direction.DOWN){
-            BlockPos abv = blockHit.getBlockPos().relative(gravD.getOpposite());
-            BlockPos att = blockHit.getBlockPos();
+    @Override
+    public void tickPower(){
 
-            Vec3 blockHitVec = RotationUtil.vecPlayerToWorld(new Vec3(abv.getX(),att.getY(),att.getZ()), gravD);
-            Vec3 playerVec = RotationUtil.vecPlayerToWorld(this.getSelf().position(), gravD);
-            aboveCheck = abv;
-            logicCheck = blockHitVec.y+1 > playerVec.y;
-        }
-
-        if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && logicCheck
-                && !this.getSelf().level().getBlockState(aboveCheck).isSolid()){
-            return true;
-        } else {
-            return false;
-        }
+        super.tickPower();
     }
 
+    @Override
+    public boolean vault() {
+        animateStand(StandEntity.BROKEN_GUARD);
+        this.poseStand(OffsetIndex.GUARD);
+        cancelConsumableItem(this.getSelf());
+        this.setAttackTimeDuring(-7);
+        this.setActivePower(PowerIndex.VAULT);
+        this.getSelf().resetFallDistance();
+        if (!this.getSelf().level().isClientSide()) {
+            if (Math.random() > 0.85){
+                addEXP(1);
+            }
+            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.8 + (Math.random() * 0.04)));
+
+        }
+        return true;
+    }
+
+    @Override
     public boolean fallBraceInit() {
         this.getSelf().fallDistance -= 20;
         if (this.getSelf().fallDistance < 0){
@@ -220,78 +159,6 @@ public class NewDashPreset extends StandPowerRewrite {
         this.poseStand(OffsetIndex.BENEATH);
         if (!this.getSelf().level().isClientSide()) {
             playFallBraceInitSound();
-        }
-        return true;
-    }
-
-    public void playFallBraceInitSound(){
-        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.78 + (Math.random() * 0.04)));
-    }
-
-    public void playFallBraceImpactSounds(){
-        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.FALL_BRACE_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
-    }
-    public void playFallBraceImpactParticles(){
-        ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
-                this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
-                50, 1.1, 0.05, 1.1, 0.4);
-        ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
-                this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
-                30, 1, 0.05, 1, 0.4);
-    }
-
-    public boolean vaultOrFallBraceFails(){
-        if (!doVault()){
-            if (canFallBrace()) {
-                doFallBraceClient();
-            } else {
-                return true;
-            }
-        }
-        return false;
-    }
-    public void doFallBraceClient(){
-        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.EXTRA, true);
-        tryPowerPacket(PowerIndex.EXTRA);
-    }
-    public boolean fallBrace() {
-        impactBrace= false;
-        if (this.getActivePower() == PowerIndex.EXTRA && this.attackTimeDuring >= 0) {
-
-            cancelConsumableItem(this.getSelf());
-            this.setAttackTimeDuring(-15);
-            if (!this.getSelf().level().isClientSide()) {
-                playFallBraceImpactParticles();
-                playFallBraceImpactSounds();
-                int degrees = (int) (this.getSelf().getYRot() % 360);
-                MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 1.2F,
-                        Mth.sin(degrees * ((float) Math.PI / 180)),
-                        Mth.sin(-12 * ((float) Math.PI / 180)),
-                        -Mth.cos(degrees * ((float) Math.PI / 180)));
-            }
-        }
-        return true;
-    }
-    public boolean impactBrace = false;
-
-    public int impactAirTime = -1;
-    public int impactSlowdown = -1;
-    public boolean canFallBrace(){
-        return this.getSelf().fallDistance > 3 && impactSlowdown <= -1 && !((StandUser)this.self).roundabout$isBubbleEncased();
-    }
-    public boolean vault() {
-        animateStand(StandEntity.BROKEN_GUARD);
-        this.poseStand(OffsetIndex.GUARD);
-        cancelConsumableItem(this.getSelf());
-        this.setAttackTimeDuring(-7);
-        this.setActivePower(PowerIndex.VAULT);
-        this.getSelf().resetFallDistance();
-        if (!this.getSelf().level().isClientSide()) {
-            if (Math.random() > 0.85){
-                addEXP(1);
-            }
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.8 + (Math.random() * 0.04)));
-
         }
         return true;
     }
@@ -351,66 +218,5 @@ public class NewDashPreset extends StandPowerRewrite {
             this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.98 + (Math.random() * 0.04)));
         }
         return true;
-    }
-    public boolean inputDash = false;
-
-
-    @Override
-    /**Stand related things that slow you down or speed you up*/
-    public float inputSpeedModifiers(float basis){
-        if (impactSlowdown > -1) {
-            basis = 0f;
-        }
-        return super.inputSpeedModifiers(basis);
-    }
-
-
-    @Override
-    public void tickPower(){
-
-
-        if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
-            if (impactSlowdown >= -1){
-                impactSlowdown--;
-            }
-            if (impactBrace) {
-                if (((StandUser) this.getSelf()).roundabout$getActive()) {
-                    if (this.getSelf().onGround()) {
-                        impactBrace = false;
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.FALL_BRACE_FINISH, true);
-                        if (this.getSelf().level().isClientSide && this.isPacketPlayer()) {
-                            tryPowerPacket(PowerIndex.FALL_BRACE_FINISH);
-                        }
-                    } else if (this.getSelf().isInWater() || this.getSelf().hasEffect(MobEffects.LEVITATION)) {
-                        impactSlowdown = -1;
-                        impactBrace = false;
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                        if (this.getSelf().level().isClientSide && this.isPacketPlayer()) {
-                            tryPowerPacket(PowerIndex.NONE);
-                        }
-                    } else {
-                        if (impactAirTime > -1) {
-                            impactAirTime--;
-                        }
-                        impactSlowdown = 15;
-                        if (impactAirTime > -1 || this.getSelf().tickCount % 2 == 0) {
-                            this.getSelf().fallDistance -= 1;
-                            if (this.getSelf().fallDistance < 0) {
-                                this.getSelf().fallDistance = 0;
-                            }
-                        }
-                    }
-                } else {
-                    impactSlowdown = -1;
-                    impactBrace = false;
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                    if (this.getSelf().level().isClientSide && this.isPacketPlayer()) {
-                        tryPowerPacket(PowerIndex.NONE);
-                    }
-                }
-            }
-        }
-
-        super.tickPower();
     }
 }

@@ -18,8 +18,12 @@ public class StandIcons {
 
     public static final ResourceLocation NONE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/none.png");
+    public static final ResourceLocation SQUARE_ICON_OG = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/move_square.png");
     public static final ResourceLocation SQUARE_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_square2.png");
+    public static final ResourceLocation SQUARE_ICON_BLOOD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/move_square4.png");
     public static final ResourceLocation NOVELTY_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_square_novelty.png");
     public static final ResourceLocation LOCKED_SQUARE_ICON = new ResourceLocation(Roundabout.MOD_ID,
@@ -37,6 +41,20 @@ public class StandIcons {
 
     public static final ResourceLocation BLOOD_DRINK = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/fates/vampire/drink.png");
+    public static final ResourceLocation CHEETAH_SPEED = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/cheetah_speed.png");
+    public static final ResourceLocation REGENERATE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/regenerate.png");
+    public static final ResourceLocation HYPNOTISM = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/hypnotism.png");
+    public static final ResourceLocation FLESH_BUD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/flesh_bud.png");
+    public static final ResourceLocation VAMP_VISION_ON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/vision_on.png");
+    public static final ResourceLocation VAMP_VISION_OFF = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/vision_off.png");
+    public static final ResourceLocation HEARING_MODE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/hearing_mode.png");
 
     public static final ResourceLocation SURVIVOR_ANGER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/survivor_anger.png");

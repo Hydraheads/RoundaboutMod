@@ -438,9 +438,6 @@ public class PowersRatt extends NewDashPreset {
 
 
             Entity f = MainUtil.getTargetEntity(this.getSelf(),40);
-            if (getShootTarget() != null) {
-                Roundabout.LOGGER.info("{}, {}", getShootTarget().getHealth(), isAuto());
-            }
 
             if (!this.isClient()) {
 
@@ -731,8 +728,8 @@ public class PowersRatt extends NewDashPreset {
 
 
     public void RecallClient(boolean forced) {
-        if (!this.onCooldown(PowersRatt.SETPLACE) || forced) {
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.RATT_DEPLACE_EVENT, SoundSource.PLAYERS, 0.5F, 1F);
+        Roundabout.LOGGER.info("??"+this.getStandEntity(this.getSelf()).forceDespawnSet);
+        if (!this.onCooldown(PowersRatt.SETPLACE) || forced && this.getStandEntity(this.getSelf()) != null) {
             tryPower(PowersRatt.NET_RECALL,true);
             tryPowerPacket(PowersRatt.NET_RECALL);
         }
@@ -750,6 +747,7 @@ public class PowersRatt extends NewDashPreset {
                 if (this.getStandEntity(this.getSelf()) != null) {
                     this.getStandEntity(this.getSelf()).forceDespawnSet = true;
                 }
+                this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.RATT_DEPLACE_EVENT, SoundSource.PLAYERS, 0.5F, 1F);
                 this.setCooldown(PowersRatt.SETPLACE,40);
             }
             case PowersRatt.FIRE_DART -> this.setCooldown(PowersRatt.CHANGE_MODE,15);

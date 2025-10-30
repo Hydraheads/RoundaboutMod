@@ -27,6 +27,7 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -781,6 +782,10 @@ public class MainUtil {
 
     public static boolean canDrinkBlood(Entity mob){
         return (getMobBleed(mob) && !hasEnderBlood(mob) && mob.isAlive() && !mob.isRemoved());
+    }
+
+    public static boolean canDrinkBloodFair(Entity ent,Entity drinker){
+        return canDrinkBlood(ent) && !(ent instanceof Player) && !(ent instanceof Mob mb && mb.getTarget() != null && mb.getTarget().is(drinker));
     }
 
 
@@ -2376,6 +2381,28 @@ public class MainUtil {
         powers.updateMovesFromPacket(activePower);
         powers.setActivePower(activePower);
         powers.kickStartClient();
+
+    }
+
+    public static void syncActivePowerFate(Player pl, byte activePower){
+
+        FatePowers powers = ((IFatePlayer) pl).rdbt$getFatePowers();
+
+        if (powers.activePower != activePower){
+            if (activePower == PowerIndex.NONE){
+                powers.setAttackTimeDuring(-1);
+            } else {
+                powers.setAttackTimeDuring(0);
+            }
+        }
+        powers.updateMovesFromPacket(activePower);
+        powers.setActivePower(activePower);
+        powers.kickStartClient();
+
+    }
+    public static void syncActivePowerPowers(Player pl, byte activePower){
+
+        //FILL THIS IN FOR POWERS
 
     }
     public static void syncCooldownsForAttacks(int attackTime, int attackTimeMax, int attackTimeDuring,

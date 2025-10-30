@@ -401,6 +401,7 @@
   "key.roundabout.switch_rows": "Toggle Crouch Ability Row",
   "key.roundabout.show_exp": "Toggle Stand EXP Display",
   "key.roundabout.pose": "Strike Pose",
+  "key.roundabout.hide_icons": "Hide Ability Icons",
 
   "roundabout:item.roundabout.smithing_template.execution_upgrade.applies_to": "Iron Axe",
   "roundabout:item.roundabout.smithing_template.execution_upgrade.base_slot_description": "Add to iron axe",
@@ -1632,6 +1633,10 @@
   "config.roundabout.enableStandLeveling.name": "Enable Stand Leveling",
   "config.roundabout.enableStandLeveling.desc": "Stand Leveling is for unlocking skins and skills",
 
+  "config.roundabout.enablePickyIconRendering.name": "Enable Icon Cooldown Hiding",
+  "config.roundabout.enablePickyIconRendering.desc": "Hides ability icons when all of your cooldowns are off.",
+
+
   "config.roundabout.spiritOutInterruption.name": "Full Spirit Interrupt",
   "config.roundabout.spiritOutInterruption.desc": "By default, you need your powers activated (or to be powerless) to interrupt attacks. This mechanic is called full spirit interrupt, and serves to make the interrupting mechanic more satisfying. Turn off this setting for classic roundabout interrupts.",
   "config.roundabout.standThrownEntityFallDamageImmmunityTicks.name": "Thrown Fall Prot Ticks",
@@ -1655,6 +1660,8 @@
   "config.roundabout.meteoriteSeparationMakeSmallerThanSpacing.desc": "Must be smaller than spacing, how separated these structures are.",
   "config.roundabout.modifyStructureWeights.name": "Modify Structure Weights",
   "config.roundabout.modifyStructureWeights.desc": "Whether or not to modify structure weights, there is an off chance that it will conflict with other mods. (unlikely)",
+  "config.roundabout.hideGUI.name": "Hide Ability Icons",
+  "config.roundabout.hideGUI.desc": "Actively turn on or off rendering of HUD.",
 
   "config.roundabout.disableMeleeWhileStandActive.name": "Disable Melee With Stands",
   "config.roundabout.disableMeleeWhileStandActive.desc": "Stands that have stand punches disable melee by default. Change this value if you want to use both at the same time.",

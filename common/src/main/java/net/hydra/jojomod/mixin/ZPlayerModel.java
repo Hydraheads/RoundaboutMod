@@ -228,7 +228,6 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 } else if (MainUtil.isHoldingRoadRoller($$0)) {
                     boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
                     if ($$9) {
-                        Roundabout.LOGGER.info("222");
                         this.rightArm.zRot = -0.175F + this.body.yRot;
                         this.rightArm.xRot = (float) (-Math.PI / 1) + this.body.xRot;
                         this.rightArm.y = -0.1F;

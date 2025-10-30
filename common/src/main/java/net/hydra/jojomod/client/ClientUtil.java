@@ -398,6 +398,16 @@ public class ClientUtil {
                     byte power = (byte) vargs[0];
                     MainUtil.syncActivePower(player,power);
                 }
+                /**Syncs the active power the fate is using*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePowerFate.value)) {
+                    byte power = (byte) vargs[0];
+                    MainUtil.syncActivePowerFate(player,power);
+                }
+                /**Syncs the active power the powers is using*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePowerPowers.value)) {
+                    byte power = (byte) vargs[0];
+                    MainUtil.syncActivePowerPowers(player,power);
+                }
 
                 /**Syncs the power inventory settings*/
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPowerInventory.value)) {
@@ -795,6 +805,19 @@ public class ClientUtil {
             if (poseHeld){
                 poseHeld = false;
             }
+        }
+    }
+    public static boolean heldDownHide = false;
+    public static void hideIcons(Player player, Minecraft C, boolean keyIsDown, Options option) {
+        if (ConfigManager.getClientConfig() == null || ConfigManager.getClientConfig().dynamicSettings == null)
+            return;
+        if (keyIsDown) {
+            if (!heldDownHide) {
+                ConfigManager.getClientConfig().dynamicSettings.hideGUI = !ConfigManager.getClientConfig().dynamicSettings.hideGUI;
+                heldDownHide = true;
+            }
+        } else {
+            heldDownHide = false;
         }
     }
     public static void openCorpseBag(ItemStack stack) {

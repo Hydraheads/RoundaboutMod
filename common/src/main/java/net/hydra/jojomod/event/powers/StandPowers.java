@@ -87,35 +87,6 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    // -----------------------------------------------------------------------------------------
-    // UNDERSTANDING THE MAIN VARIABLES
-    // -----------------------------------------------------------------------------------------
-
-    /**The time that passed since using the last attack. It counts up, so that a visual meter can display cooldowns.
-    * It is also used to */
-    public int attackTime = -1;
-
-    /**The time within an attack. This matters, because if you desummon a stand the attack time doesnt reset */
-    public int attackTimeDuring = -1;
-
-    /**The time until the generic ability cooldown passes.
-    This exists so you have downtime that non-stand users can get it and attack you during.*/
-    public int attackTimeMax = -1;
-
-    /**The id of the move being used. Ex: 1 = punch*/
-    public byte activePower = 0;
-
-    /**The phase of the move being used, primarily to keep track of which punch you are on in a punch string.*/
-    public byte activePowerPhase = 0;
-
-    /**This is when the punch combo goes on cooldown. Default is 3 hit combo.*/
-    public final byte activePowerPhaseMax = 3;
-
-    /**This variable exists so that a client can begin displaying your attack hud info without ticking through it.
-     * Basically, stand attacks are clientside, but they need the server's confirmation to kickstart so you
-     * can't hit targets in frozen tps*/
-    public boolean kickStarted = true;
-
 
 
 
@@ -147,7 +118,7 @@ public class StandPowers extends AbilityScapeBasis {
     }
     /**If you are not currently supposed to be able to activate your stand, override for sealing reasons*/
     public boolean canSummonStand(){
-        return true;
+        return false;
     }
 
     /**If the standard left click input should be canceled while your stand is active*/
@@ -160,11 +131,7 @@ public class StandPowers extends AbilityScapeBasis {
             tryPowerPacket(PowerIndex.ATTACK);
         }}
     }
-    /**How far do the basic attacks of your stand travel if it is a humanoid stand and overrides the above?
-     * (default is 5, 3 minecraft block range +2 meters extra from stand)*/
-    public float getReach(){
-        return 5;
-    }
+
 
     /**If the standard right click input should usually be canceled while your stand is active*/
     public boolean interceptGuard(){
@@ -179,11 +146,6 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    /**Stuff that happens every tick while possessing the stand in general.
-     * Remember to call the super when you override or some things might not function properly*/
-    public void tickPower(){
-        baseTickPower();
-    }
 
     /**Override this if you need ultra specific timing on tickpower after other entity functions are called,
      * this works the best for subtle movement tricks*/
@@ -260,6 +222,9 @@ public class StandPowers extends AbilityScapeBasis {
         } else if (this.isBarrageCharging()) {
             basis*=0.5f;
         }
+        if (impactSlowdown > -1) {
+            basis = 0f;
+        }
         return basis;
     }
     /**Similar to the above function, but prevents the additional velocity carried over from
@@ -293,14 +258,6 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
     /**This value prevents you from resummoning/blocking to cheese the 3 hit combo's last hit faster*/
-    public int interruptCD = 0;
-    public boolean getInterruptCD(){
-        return this.interruptCD <= 0;
-    }
-    public void setInterruptCD(int interruptCD){
-        this.interruptCD = interruptCD;
-    }
-
 
     public int getMobRecoilTime(){
         return -30;
@@ -330,25 +287,6 @@ public class StandPowers extends AbilityScapeBasis {
     public void buttonInputUse(boolean keyIsDown, Options options) {
         if (keyIsDown) {
         }
-    }
-
-    /**Does your stand let you zoom in a lot? Override this if it does*/
-    public boolean canScope(){
-        return false;
-    }
-    public int scopeTime = -1;
-    public int scopeLevel = 0;
-    public void setScopeLevel(int level){
-        if (scopeLevel <= 0 && level > 0){
-            if (this.getSelf().level().isClientSide()){
-                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SCOPE);
-            }
-        } else if (scopeLevel > 0 && level <= 0){
-            if (this.getSelf().level().isClientSide()){
-                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SCOPE_OFF);
-            }
-        }
-        scopeLevel=level;
     }
 
 
@@ -412,10 +350,6 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    public static final byte
-            NONE = 0;
-
-
 
 
     /**The manner in which your powers tick when you are being time stopped. Override this if the stand acts differently.
@@ -445,13 +379,7 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    /**plays every tick that the active power is set to X move, the unique moves lets you do your own packets,
-     * see examples*/
-    public void updateUniqueMoves(){
-    }
-    /**same as above but for the standard attack packet*/
-    public void updateAttack(){
-    }
+
     public void updateIntMove(int in){
     }
 
@@ -600,12 +528,6 @@ public class StandPowers extends AbilityScapeBasis {
         }
         return power;
     }
-    public boolean getReducedDamage(Entity entity){
-        return (entity instanceof Player || entity instanceof StandEntity ||
-                ((entity instanceof LivingEntity LE && !((StandUser)LE).roundabout$getStandDisc().isEmpty()) &&
-                        ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.standUserMobsTakePlayerDamageMultipliers)
-        );
-    }
 
     /***The distance above you the stand floats*/
     private float getYOffSet(LivingEntity stand){
@@ -628,9 +550,6 @@ public class StandPowers extends AbilityScapeBasis {
     /**If you need to temporarily save a boolean for an attack state use this*/
     public boolean moveStarted = false;
 
-    /**If you need to temporarily save an entity use this*/
-    public Entity storeEnt = null;
-
     /**If your stand is in a position to change abilities. By default, you are locked into clashing while clashing
      * unless you forfeit the clash by desummoning your stand*/
     public boolean canChangePower(int move, boolean forced){
@@ -647,9 +566,8 @@ public class StandPowers extends AbilityScapeBasis {
     /** Tries to use an ability of your stand. If forced is true, the ability comes out no matter what.**/
     /** There is no reason for the function to be a boolean, that goes unused, so gradually we can convert this to
      * a void function*/
-    public void tryPower(int move){
-        tryPower(move,true);
-    }
+
+    @Override
     public boolean tryPower(int move, boolean forced){
         if (move != PowerIndex.NONE && this.self instanceof Mob && !hasStandEntity(this.self)){
             if (canSummonStand()) {
@@ -693,77 +611,6 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    public boolean tryPosPower(int move, boolean forced, Vec3 pos){
-        tryPower(move, forced);
-        /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
-        return true;
-    }
-    public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos){
-        tryPower(move, forced);
-        /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
-        return true;
-    }
-    public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos, BlockHitResult blockhit){
-        tryPower(move, forced);
-        /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
-        return true;
-    }
-
-    public int storedInt = 0;
-    public boolean tryIntPower(int move, boolean forced, int chargeTime){
-        tryPower(move, forced);
-        /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
-        return true;
-    }
-    public boolean tryTripleIntPower(int move, boolean forced, int chargeTime, int move2, int move3){
-        tryPower(move, forced);
-        /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
-        return true;
-    }
-
-    public void tryPowerPacket(byte packet){
-        if (this.self.level().isClientSide()) {
-            C2SPacketUtil.tryPowerPacket(packet);
-        }
-    }
-    public void tryIntPowerPacket(byte packet, int integer){
-        if (this.self.level().isClientSide()) {
-            C2SPacketUtil.tryIntPowerPacket(packet,integer);
-        }
-    }
-    /**This is different than int power packet only by virtue of what functions it passes through, and is useful
-     * for calling something even if you are in a barrage clash or other conditions would otherwise interrupt your
-     * packet. Very niche, but it exists, and isn't always used in essential ways*/
-    public void tryIntToServerPacket(byte packet, int integer){
-        if (this.self.level().isClientSide()) {
-            C2SPacketUtil.intToServerPacket(packet,integer);
-        }
-    }
-
-    public void tryTripleIntPacket(byte packet, int in1, int in2, int in3){
-        if (this.self.level().isClientSide()) {
-            C2SPacketUtil.tryTripleIntPacket(packet, in1, in2, in3);
-        }
-    }
-    public void tryBlockPosPowerPacket(byte packet, BlockPos pos){
-        if (this.self.level().isClientSide()) {
-            C2SPacketUtil.tryBlockPosPowerPacket(packet, pos);
-        }
-    }
-    public void tryBlockPosPowerPacket(byte packet, BlockPos pos, HitResult hitResult){
-        if (this.self.level().isClientSide()) {
-            C2SPacketUtil.tryBlockPosPowerPacket(packet, pos, hitResult);
-        }
-    }
-    public void tryPosPowerPacket(byte packet, Vec3 pos){
-        if (this.self.level().isClientSide()) {
-            C2SPacketUtil.tryPosPowerPacket(packet, pos);
-        }
-    }
-    public Vec3 savedPos;
-
-
-
     public void handleStandAttack(Player player, Entity target){
     }
 
@@ -771,14 +618,7 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    /**Sets your active power to nothing*/
-    public boolean setPowerNone(){
-        this.attackTimeDuring = -1;
-        this.setActivePower(PowerIndex.NONE);
-        poseStand(OffsetIndex.FOLLOW);
-        animateStand(StandEntity.IDLE);
-        return true;
-    }
+
 
     public boolean isUsingShield(LivingEntity entity) {
         if (entity.isUsingItem()) {
@@ -791,16 +631,17 @@ public class StandPowers extends AbilityScapeBasis {
         return false;
     }
 
+    @Override
     /**If eating or using items in general shouldn't cancel certain abilties, put them as exceptions here*/
     public boolean shouldReset(byte activeP){
         return ((this.self.isUsingItem() &&
                 !(this.getActivePower() == PowerIndex.BARRAGE_CLASH)) || this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())));
     }
 
-
-    public void updateMovesFromPacket(byte activePower){
-
+    public void xTryPower(byte index, boolean forced){
+        ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE,true);
     }
+
     public boolean canAttack(){
         if (this.attackTimeDuring <= -1) {
             return this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax;
@@ -829,10 +670,7 @@ public class StandPowers extends AbilityScapeBasis {
 
     public int clashStarter = 0;
 
-    /**Override this to set the special move*/
-    public boolean setPowerOther(int move, int lastMove) {
-        return false;
-    }
+
 
 
     /**For humanoid stands that have their own mining*/
@@ -949,17 +787,9 @@ public class StandPowers extends AbilityScapeBasis {
         return false;
     }
 
-    public void syncActivePower(){
-        if (!this.self.level().isClientSide && this.self instanceof ServerPlayer SP){
-            S2CPacketUtil.sendActivePowerPacket(SP,activePower);
-        }
-    }
 
-    /**Override this if you want to add or remove conditions that prevent moves from updating and shut
-     * them down*/
-    public boolean isAttackInept(byte activeP){
-        return this.self.isUsingItem() || this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
-    }
+
+
 
 
 
@@ -1417,19 +1247,6 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    /**The four key presses, made obselete by standpowerrewrwite's poweractivate function, check
-     * other stands for examples of how to use that*/
-    public void buttonInput4(boolean keyIsDown, Options options){
-    }
-    public void buttonInput3(boolean keyIsDown, Options options){
-    }
-    public void buttonInput2(boolean keyIsDown, Options options){
-    }
-    public void buttonInput1(boolean keyIsDown, Options options){
-    }
-
-
-
 
 
 
@@ -1494,53 +1311,19 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    /**The most basic getters and setters*/
-    public StandUser getStandUserSelf(){
-        return ((StandUser)this.self);
-    }
-
-    public int getAttackTime(){
-        return this.attackTime;
-    }
-    public int getAttackTimeDuring(){
-        return this.attackTimeDuring;
-    }
-    public byte getActivePower(){
-        return this.activePower;
-    }
-    public byte getActivePowerPhase(){
-        return this.activePowerPhase;
-    }
-    public byte getActivePowerPhaseMax(){
-        return this.activePowerPhaseMax;
-    }
-
-    public void setAttackTime(int attackTime){
-        this.attackTime = attackTime;
-    }
-    public void setAttackTimeDuring(int attackTimeDuring){
-        this.attackTimeDuring = attackTimeDuring;
-    }
-    public void setAttackTimeMax(int attackTimeMax){
-        this.attackTimeMax = attackTimeMax;
-    }
-    public int getAttackTimeMax(){
-        return this.attackTimeMax;
-    }
-
-    public void setMaxAttackTime(int attackTimeMax){
-        this.attackTimeMax = attackTimeMax;
-    }
-    public void setActivePower(byte activeMove){
-        this.activePower = activeMove;
-    }
-    public void setActivePowerPhase(byte activePowerPhase){
-        this.activePowerPhase = activePowerPhase;
+    /**Sets your active power to nothing*/
+    @Override
+    public boolean setPowerNone(){
+        this.attackTimeDuring = -1;
+        this.setActivePower(PowerIndex.NONE);
+        poseStand(OffsetIndex.FOLLOW);
+        animateStand(StandEntity.IDLE);
+        return true;
     }
 
 
 
-    /**Call this to verify your stand is leveled enough to use a moe*/
+    /**Call this to verify your stand is leveled enough to use a move*/
     public boolean canExecuteMoveWithLevel(int minLevel){
         if (!ClientNetworking.getAppropriateConfig().standLevelingSettings.enableStandLeveling) {
             return true;
@@ -1557,64 +1340,8 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    /**Call this to make yourself stop using an item*/
-    public void cancelConsumableItem(LivingEntity entity){
-        ItemStack itemStack = entity.getUseItem();
-        Item item = itemStack.getItem();
-        if (item.isEdible() || item instanceof PotionItem) {
-            entity.releaseUsingItem();
-            if (entity instanceof Player) {
-                entity.stopUsingItem();
-            }
-        }
-    }
 
-    /**Code for triggering a damage event*/
-    public boolean StandDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
-        if (attacker instanceof TamableAnimal TA){
-            if (target instanceof TamableAnimal TT && TT.getOwner() != null
-                    && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
-                return false;
-            }
-        } else if (attacker instanceof AbstractVillager av1){
-            if (target instanceof AbstractVillager av2){
-                if (!(av1.getTarget() != null && av1.getTarget().is(av2)) && !(av2.getTarget() != null && av2.getTarget().is(av1)))
-                    return false;
-            }
-        }
-        if (DamageHandler.StandDamageEntity(target,pow, attacker)){
-            if (attacker instanceof LivingEntity LE){
-                LE.setLastHurtMob(target);
-            }
-            if (target instanceof LivingEntity && knockbackStrength > 0) {
-                ((LivingEntity) target).knockback(knockbackStrength * 0.5f, Mth.sin(attacker.getYRot() * ((float) Math.PI / 180)), -Mth.cos(attacker.getYRot() * ((float) Math.PI / 180)));
-            }
-            return true;
-        }
-        return false;
-    }
-    public boolean StandRushDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
-        if (attacker instanceof TamableAnimal TA){
-            if (target instanceof TamableAnimal TT && TT.getOwner() != null
-                    && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
-                return false;
-            }
-        } else if (attacker instanceof AbstractVillager){
-            if (target instanceof AbstractVillager){
-                return false;
-            }
-        }
-        if (DamageHandler.StandRushDamageEntity(target,pow, attacker)){
-            if (attacker instanceof LivingEntity LE){
-                LE.setLastHurtMob(target);
-            }
-            if (target instanceof LivingEntity && knockbackStrength > 0) {
-                ((LivingEntity) target).knockback(knockbackStrength * 0.5f, Mth.sin(attacker.getYRot() * ((float) Math.PI / 180)), -Mth.cos(attacker.getYRot() * ((float) Math.PI / 180)));
-            }
-            return true;
-        }
-        return false;
-    }
+
 
 
     /**This function ensures the client sending attack packets is ONLY the player using the attack, prevents double attacking*/
@@ -1750,94 +1477,7 @@ public class StandPowers extends AbilityScapeBasis {
         target.hasImpulse = true;
     }
 
-    /**This function is a sanity check so mobs can't be hit behind doors*/
-    public boolean canActuallyHit(Entity entity){
-        if (ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchesGoThroughDoorsAndCorners){
-            return true;
-        }
-        Vec3 from = new Vec3(this.self.getX(), this.self.getY(), this.self.getZ()); // your position
-        Vec3 to = entity.getEyePosition(1.0F); // where the entity's eyes are
 
-        BlockHitResult result = this.self.level().clip(new ClipContext(
-                from,
-                to,
-                ClipContext.Block.COLLIDER,
-                ClipContext.Fluid.NONE,
-                this.self
-        ));
-        boolean isBlocked = result.getType() != HitResult.Type.MISS &&
-                result.getLocation().distanceTo(from) < to.distanceTo(from);
-        if (isBlocked){
-            from = this.self.getEyePosition(1); // your position
-            to = entity.getEyePosition(1.0F); // where the entity's eyes are
-
-            result = this.self.level().clip(new ClipContext(
-                    from,
-                    to,
-                    ClipContext.Block.COLLIDER,
-                    ClipContext.Fluid.NONE,
-                    this.self
-            ));
-            isBlocked = result.getType() != HitResult.Type.MISS &&
-                    result.getLocation().distanceTo(from) < to.distanceTo(from);
-        }
-        return !isBlocked;
-    }
-
-    /**disables stand guard amd shield guard, this is simplified in the next function*/
-    public boolean knockShield(Entity entity, int duration){
-
-        if (entity != null && entity.isAlive() && !entity.isRemoved()) {
-            if (entity instanceof LivingEntity) {
-                if (((LivingEntity) entity).isBlocking()) {
-
-                    StandUser standUser= this.getUserData((LivingEntity) entity);
-                    if (standUser.roundabout$isGuarding()) {
-                        if (!standUser.roundabout$getGuardBroken()){
-                            standUser.roundabout$breakGuard();
-                        }
-                    }
-                    if (entity instanceof Player){
-                        ItemStack itemStack = ((LivingEntity) entity).getUseItem();
-                        Item item = itemStack.getItem();
-                        if (item.getUseAnimation(itemStack) == UseAnim.BLOCK) {
-                            ((LivingEntity) entity).releaseUsingItem();
-                            ((Player) entity).stopUsingItem();
-                        }
-                        ((Player) entity).getCooldowns().addCooldown(Items.SHIELD, duration);
-                        entity.level().broadcastEntityEvent(entity, EntityEvent.SHIELD_DISABLED);
-                    }
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-
-    /**disables just shield guard because stand guard doesn't work if your shield guard is disabled*/
-    public boolean knockShield2(Entity entity, int duration){
-
-        if (entity != null && entity.isAlive() && !entity.isRemoved()) {
-            if (entity instanceof LivingEntity) {
-                if (((LivingEntity) entity).isBlocking()) {
-
-                    if (entity instanceof Player){
-                        ItemStack itemStack = ((LivingEntity) entity).getUseItem();
-                        Item item = itemStack.getItem();
-                        if (item.getUseAnimation(itemStack) == UseAnim.BLOCK) {
-                            ((LivingEntity) entity).releaseUsingItem();
-                            ((Player) entity).stopUsingItem();
-                        }
-                        ((Player) entity).getCooldowns().addCooldown(Items.SHIELD, duration);
-                        entity.level().broadcastEntityEvent(entity, EntityEvent.SHIELD_DISABLED);
-                    }
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 
 
     /**Multiply damage by this to add compatibility for stand levelup config*/
@@ -1861,420 +1501,12 @@ public class StandPowers extends AbilityScapeBasis {
         return damage;
     }
 
-    /**Lots of hitbox grabbing code*/
 
-    public List<Entity> getTargetEntityList(LivingEntity User, float distMax){
-        return getTargetEntityList(User,distMax,25);
+
+    @Override
+    public ResourceLocation getIconYes(int slot){
+        return StandIcons.SQUARE_ICON;
     }
-    public List<Entity> getTargetEntityList(LivingEntity User, float distMax, float angle){
-        /*First, attempts to hit what you are looking at*/
-        if (!(distMax >= 0)) {
-            distMax = this.getDistanceOut(User, this.getReach(), false);
-        }
-        Entity targetEntity = this.rayCastEntity(User,distMax);
-
-        if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
-                || (targetEntity != null && (!targetEntity.isAlive() || targetEntity.isRemoved()))){
-            targetEntity = null;
-        }
-
-        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
-        float halfReach = (float) (distMax*0.5);
-        Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
-        List<Entity> listE = StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
-                pointVec.z, halfReach, halfReach, halfReach), distMax);
-        if (targetEntity == null) {
-            targetEntity = StandAttackHitboxNear(User,listE,angle);
-        }
-        if (targetEntity instanceof StandEntity SE && SE.redirectKnockbackToUser()){
-
-            if (SE.getUser() != null){
-                targetEntity = SE.getUser();
-            }
-        }
-        if (targetEntity instanceof EnderDragonPart EDP){
-            targetEntity = EDP.parentMob;
-        }
-
-        storeEnt = targetEntity;
-
-        return listE;
-    }
-
-    public Entity getTargetEntityThroughWalls(LivingEntity User, float distMax, float angle){
-        /*First, attempts to hit what you are looking at*/
-        if (!(distMax >= 0)) {
-            distMax = this.getDistanceOut(User, this.getReach(), false);
-        }
-        Entity targetEntity = this.rayCastEntityThroughWalls(User,distMax);
-
-        if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
-                || (targetEntity != null && (!targetEntity.isAlive() || targetEntity.isRemoved()))){
-            targetEntity = null;
-        }
-
-        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
-        if (targetEntity == null) {
-            float halfReach = (float) (distMax*0.5);
-            Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
-
-            targetEntity = StandAttackHitboxNear(User,StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
-                    pointVec.z, halfReach, halfReach, halfReach), distMax, angle,true),angle,true);
-        }
-        if (targetEntity instanceof StandEntity SE && SE.redirectKnockbackToUser()){
-
-            if (SE.getUser() != null){
-                targetEntity = SE.getUser();
-            }
-        }
-        if (targetEntity instanceof EnderDragonPart EDP){
-            targetEntity = EDP.parentMob;
-        }
-
-        if (targetEntity instanceof LivingEntity LE)
-        {
-            if (((StandUser)LE).roundabout$isParallelRunning())
-                return null;
-        }
-
-        return targetEntity;
-    }
-
-    public List<Entity> getTargetEntityListThroughWalls(LivingEntity User, float distMax, float angle){
-        /*First, attempts to hit what you are looking at*/
-        if (!(distMax >= 0)) {
-            distMax = this.getDistanceOut(User, this.getReach(), false);
-        }
-        Entity targetEntity = this.rayCastEntityThroughWalls(User,distMax);
-
-        if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
-                || (targetEntity != null && (!targetEntity.isAlive() || targetEntity.isRemoved()))){
-            targetEntity = null;
-        }
-
-        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
-
-        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
-        float halfReach = (float) (distMax*0.5);
-        Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
-        List<Entity> listE = StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
-                pointVec.z, halfReach, halfReach, halfReach), distMax, angle,true);
-        if (targetEntity == null) {
-            targetEntity = StandAttackHitboxNear(User,listE,angle);
-        }
-        if (targetEntity instanceof StandEntity SE && SE.redirectKnockbackToUser()){
-
-            if (SE.getUser() != null){
-                targetEntity = SE.getUser();
-            }
-        }
-        if (targetEntity instanceof EnderDragonPart EDP){
-            targetEntity = EDP.parentMob;
-        }
-
-        if (targetEntity instanceof LivingEntity LE)
-        {
-            if (((StandUser)LE).roundabout$isParallelRunning())
-                return null;
-        }
-        storeEnt = targetEntity;
-
-        if (!listE.contains(targetEntity) && targetEntity != null)
-            listE.add(targetEntity);
-        return listE;
-    }
-
-    public Entity getTargetEntity(LivingEntity User, float distMax){
-        return getTargetEntity(User,distMax, 25);
-    }
-    public Entity getTargetEntity(LivingEntity User, float distMax, float angle){
-        /*First, attempts to hit what you are looking at*/
-        if (!(distMax >= 0)) {
-            distMax = this.getDistanceOut(User, this.getReach(), false);
-        }
-        Entity targetEntity = this.rayCastEntity(User,distMax);
-
-        if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
-                || (targetEntity != null && (!targetEntity.isAlive() || targetEntity.isRemoved()))){
-            targetEntity = null;
-        }
-
-        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
-        if (targetEntity == null) {
-            float halfReach = (float) (distMax*0.5);
-            Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
-            targetEntity = StandAttackHitboxNear(User,StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
-                    pointVec.z, halfReach, halfReach, halfReach), distMax),angle);
-        }
-        if (targetEntity instanceof StandEntity SE && SE.redirectKnockbackToUser()){
-
-            if (SE.getUser() != null){
-                targetEntity = SE.getUser();
-            }
-        }
-        if (targetEntity instanceof EnderDragonPart EDP){
-            targetEntity = EDP.parentMob;
-        }
-
-        if (targetEntity instanceof LivingEntity LE)
-        {
-            if (((StandUser)LE).roundabout$isParallelRunning())
-                return null;
-        }
-
-        return targetEntity;
-    }
-
-    public int getTargetEntityId(){
-        Entity targetEntity = getTargetEntity(this.self, -1);
-        int id;
-        if (targetEntity != null) {
-            id = targetEntity.getId();
-        } else {
-            id = -1;
-        }
-        return id;
-    }
-
-    public int getTargetEntityId(float angle){
-        Entity targetEntity = getTargetEntity(this.self, -1, angle);
-        int id;
-        if (targetEntity != null) {
-            id = targetEntity.getId();
-        } else {
-            id = -1;
-        }
-        return id;
-    }
-    public int getTargetEntityId2(float distance){
-        Entity targetEntity = getTargetEntity(this.self, distance);
-        int id;
-        if (targetEntity != null) {
-            id = targetEntity.getId();
-        } else {
-            id = -1;
-        }
-        return id;
-    }
-    public int getTargetEntityId2(float distance,LivingEntity userr,float angle){
-        Entity targetEntity = getTargetEntityGenerous(userr, distance,angle);
-        int id;
-        if (targetEntity != null) {
-            id = targetEntity.getId();
-        } else {
-            id = -1;
-        }
-        return id;
-    }
-
-    public Entity getTargetEntityGenerous(LivingEntity User, float distMax, float angle){
-        /*First, attempts to hit what you are looking at*/
-        Entity targetEntity = this.rayCastEntity(User,distMax);
-
-        if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
-                || (targetEntity != null && targetEntity.is(User))){
-            targetEntity = null;
-        }
-
-        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
-        if (targetEntity == null) {
-            float halfReach = (float) (distMax*0.5);
-            Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
-            targetEntity = StandAttackHitboxNear(User,StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
-                    pointVec.z, halfReach, halfReach, halfReach), distMax, angle),angle);
-        }
-        if (targetEntity instanceof StandEntity SE && SE.redirectKnockbackToUser()){
-
-            if (SE.getUser() != null){
-                targetEntity = SE.getUser();
-            }
-        }
-
-        return targetEntity;
-    }
-
-    public Entity StandAttackHitboxNear(LivingEntity User,List<Entity> entities, float angle){
-        return StandAttackHitboxNear(User,entities,angle,false);
-    }
-
-    public Entity StandAttackHitboxNear(LivingEntity User,List<Entity> entities, float angle, boolean throughWalls){
-        float nearestDistance = -1;
-        Entity nearestMob = null;
-        if (entities != null){
-            for (Entity value : entities) {
-                if (!value.isInvulnerable() && value.isAlive() && value.getUUID() != User.getUUID() && (MainUtil.isStandPickable(value) || value instanceof StandEntity)){
-                    if (!(value instanceof StandEntity SE1 && SE1.getUser() != null && SE1.getUser().is(User))) {
-                        float distanceTo = value.distanceTo(User);
-                        float range = this.getReach();
-                        if (value instanceof FollowingStandEntity SE && OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FOLLOW_STYLE) {
-                            range = 0;
-                        }
-                        if ((nearestDistance < 0 || distanceTo < nearestDistance)
-                                && distanceTo <= range) {
-                            if (canActuallyHit(value) || throughWalls) {
-                                nearestDistance = distanceTo;
-                                nearestMob = value;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return nearestMob;
-    }
-    public double getBlockDistanceOut(LivingEntity entity, double range){
-        Vec3 vec3dST = entity.getEyePosition(0);
-        Vec3 vec3d2ST = entity.getViewVector(0);
-        Vec3 vec3d3ST = vec3dST.add(vec3d2ST.x * range, vec3d2ST.y * range, vec3d2ST.z * range);
-
-        BlockHitResult blockHit = entity.level().clip(new ClipContext(vec3dST, vec3d3ST,
-                ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, entity));
-        double bhit = Math.sqrt(blockHit.distanceTo(entity));
-        if (bhit < range){
-            range = bhit;
-        }
-
-        return range;
-    }
-    public float getDistanceOut(LivingEntity entity, float range, boolean offset){
-        float distanceFront = this.getRayDistance(entity, range);
-        if (offset) {
-            Entity targetEntity = this.rayCastEntity(entity,distanceFront);
-            if (targetEntity != null && targetEntity.distanceTo(entity) < distanceFront) {
-                distanceFront = targetEntity.distanceTo(entity);
-            }
-            distanceFront -= 1;
-            distanceFront = Math.max(Math.min(distanceFront, 1.7F), 0.4F);
-        }
-        return distanceFront;
-    }
-
-    public float getDistanceOutAccurate(Entity entity, float range, boolean offset){
-        float distanceFront = this.getRayDistance(entity, range);
-        if (offset) {
-            Entity targetEntity = this.getTargetEntity(this.self,this.getReach());
-            if (targetEntity != null && targetEntity.distanceTo(entity) < distanceFront) {
-                distanceFront = targetEntity.distanceTo(entity);
-            }
-            distanceFront -= 1;
-            distanceFront = Math.max(Math.min(distanceFront, 1.7F), 0.4F);
-        }
-        return distanceFront;
-    }
-
-    public float getRayDistance(Entity entity, float range){
-        Vec3 vec3d = entity.getEyePosition(0);
-        Vec3 vec3d2 = entity.getViewVector(0);
-        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
-        HitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
-        if (blockHit.getType() != HitResult.Type.MISS){
-            return Mth.sqrt((float) entity.distanceToSqr(blockHit.getLocation()));
-        }
-        return range;
-    } public Vec3 getRayBlock(Entity entity, float range){
-        Vec3 vec3d = entity.getEyePosition(0);
-        Vec3 vec3d2 = entity.getViewVector(0);
-        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
-        HitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
-        return blockHit.getLocation();
-    }
-
-    public float getPivotPoint(Vector3d pointToRotate, Vector3d axisStart, Vector3d axisEnd) {
-        Vector3d d = new Vector3d(axisEnd.x-axisStart.x,axisEnd.y-axisStart.y,axisEnd.z-axisStart.z).normalize();
-        Vector3d v = new Vector3d(pointToRotate.x-axisStart.x,pointToRotate.y-axisStart.y,pointToRotate.z-axisStart.z).normalize();
-        double t = v.dot(d);
-        return (float) pointToRotate.distance(axisStart.add(d.mul(t)));
-    }
-
-    public static float angleDistance(float alpha, float beta) {
-        float phi = Math.abs(beta - alpha) % 360;       // This is either the distance or 360 - distance
-        float distance = phi > 180 ? 360 - phi : phi;
-        return distance;
-    }
-
-    /**Returns the vertical angle between two mobs*/
-    public float getLookAtEntityPitch(Entity user, Entity targetEntity) {
-        double f;
-        double d = targetEntity.getEyePosition().x - user.getEyePosition().x;
-        double e = targetEntity.getEyePosition().z - user.getEyePosition().z;
-        if (targetEntity instanceof LivingEntity) {
-            LivingEntity livingEntity = (LivingEntity)targetEntity;
-            f = livingEntity.getEyePosition().y - user.getEyePosition().y;
-        } else {
-            f = ((targetEntity.getBoundingBox().minY + targetEntity.getBoundingBox().maxY) / 2.0) - (user.getEyePosition().y);
-        }
-
-        Vec3 vec = new Vec3(d,f,e);
-        /***
-        Direction dr = ((IGravityEntity)user).roundabout$getGravityDirection();
-        if (dr != Direction.DOWN){
-            vec = RotationUtil.vecWorldToPlayer(d,f,e,dr);
-        }
-         */
-
-        double g = Math.sqrt(vec.x * vec.x + vec.z * vec.z);
-        return (float)(-(Mth.atan2(vec.y, g) * 57.2957763671875));
-    }
-    /**Returns the horizontal angle between two mobs*/
-    public float getLookAtEntityYaw(Entity user, Entity targetEntity) {
-
-         Vec3 uservec = user.getEyePosition();
-
-        double d = targetEntity.getEyePosition().x - uservec.x;
-        double e = targetEntity.getEyePosition().z - uservec.z;
-
-        Vec3 vec = new Vec3(d,0,e);
-        return (float)(Mth.atan2(vec.z, vec.x) * 57.2957763671875) - 90.0f;
-    }
-
-
-
-    /**Returns the vertical angle between a mob and a position*/
-    public float getLookAtPlacePitch(Entity user, Vec3 vec) {
-        double f;
-        double d = vec.x() - user.getEyePosition().x;
-        double e = vec.z() - user.getEyePosition().z;
-        f = vec.y() - user.getEyePosition().y;
-        double g = Math.sqrt(d * d + e * e);
-        return (float)(-(Mth.atan2(f, g) * 57.2957763671875));
-    }
-    /**Returns the horizontal angle between a mob and a position*/
-    public float getLookAtPlaceYaw(Entity user, Vec3 vec) {
-        double d = vec.x() - user.getEyePosition().x;
-        double e = vec.z() - user.getEyePosition().z;
-        return (float)(Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
-    }
-
-    public void forceLook(Entity stand, Vec3 blockCenterPlus) {
-        Direction gravityDirection2 = GravityAPI.getGravityDirection(stand);
-        if (gravityDirection2 == Direction.DOWN)
-            return;
-
-        double $$3 = blockCenterPlus.x - stand.getEyePosition().x;
-        double $$4 = blockCenterPlus.z - stand.getEyePosition().z;
-        double $$6 = blockCenterPlus.y - stand.getEyePosition().y;
-
-        double $$8 = Math.sqrt($$3 * $$3 + $$4 * $$4);
-        float $$9 = (float)(Mth.atan2($$4, $$3) * 180.0F / (float)Math.PI) - 90.0F;
-        float $$10 = (float)(-(Mth.atan2($$6, $$8) * 180.0F / (float)Math.PI));
-
-        stand.setXRot(rotlerp(stand.getXRot(), $$10, 30f));
-        stand.setYRot(rotlerp(stand.getYRot(), $$9, 30f));
-    }
-    private float rotlerp( float $$0, float $$1, float $$2) {
-        float $$3 = Mth.wrapDegrees($$1 - $$0);
-        if ($$3 > $$2) {
-            $$3 = $$2;
-        }
-
-        if ($$3 < -$$2) {
-            $$3 = -$$2;
-        }
-
-        return $$0 + $$3;
-    }
-
 
     public BlockHitResult getAheadVec(float distOut){
         Vec3 vec3d = this.self.getEyePosition(1);
@@ -2283,102 +1515,9 @@ public class StandPowers extends AbilityScapeBasis {
                 vec3d2.y * distOut, vec3d2.z * distOut), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
                 this.getSelf()));
     }
-    /** This code grabs an entity in front of you at the specified range, raycasting is used*/
-    public Entity rayCastEntity(LivingEntity User, float reach){
-        Entity entityHitResult = MainUtil.raytraceEntityStand(User.level(),User,reach);
-        if (entityHitResult != null){
-            if (entityHitResult.isAlive() && !entityHitResult.isRemoved() && !entityHitResult.is(User) &&
-                    !(User instanceof StandEntity SE2 && SE2.getUser() != null &&  SE2.getUser().isPassenger() &&
-                            SE2.getUser().getVehicle().getUUID() == entityHitResult.getUUID())) {
-                return entityHitResult;
-            }
-        }
-        return null;
-    }
-    public Entity rayCastEntityThroughWalls(LivingEntity User, float reach){
-        Entity entityHitResult = MainUtil.raytraceEntityStandThroughWalls(User.level(),User,reach);
-        if (entityHitResult != null){
-            if (entityHitResult.isAlive() && !entityHitResult.isRemoved() && !entityHitResult.is(User) &&
-                    !(User instanceof StandEntity SE2 && SE2.getUser() != null &&  SE2.getUser().isPassenger() &&
-                            SE2.getUser().getVehicle().getUUID() == entityHitResult.getUUID())) {
-                return entityHitResult;
-            }
-        }
-        return null;
-    }
 
 
-    public List<Entity> StandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance){
-        return StandGrabHitbox(User,entities,maxDistance,25);
-    }
-    public List<Entity> StandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, float angle){
-        return StandGrabHitbox(User,entities,maxDistance,25,false);
-    }
-    public List<Entity> StandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, float angle, boolean throughWalls){
-        List<Entity> hitEntities = new ArrayList<>(entities) {
-        };
 
-        for (Entity value : entities) {
-            if (!value.showVehicleHealth() || (!MainUtil.isStandPickable(value) && !(value instanceof StandEntity)) || (!value.isAttackable() && !(value instanceof StandEntity)) || value.isInvulnerable() || !value.isAlive()
-                    || (User.isPassenger() && User.getVehicle().getUUID() == value.getUUID())
-                    || value.is(User) || (((StandUser)User).roundabout$getStand() != null &&
-                    ((StandUser)User).roundabout$getStand().is(User)) || (User instanceof StandEntity SE && SE.getUser() !=null && SE.getUser().is(value)) ||
-                    (User instanceof StandEntity SE2 && SE2.getUser() != null &&  SE2.getUser().isPassenger() && SE2.getUser().getVehicle().getUUID() == value.getUUID())){
-                hitEntities.remove(value);
-            } else {
-                Direction gravD = ((IGravityEntity)User).roundabout$getGravityDirection();
-                Vec2 lookVec = new Vec2(getLookAtEntityYaw(User, value), getLookAtEntityPitch(User, value));
-                if (gravD != Direction.DOWN) {
-                    lookVec = RotationUtil.rotPlayerToWorld(lookVec.x, lookVec.y, gravD);
-                }
-                if (!(angleDistance(lookVec.x, (User.getYHeadRot()%360f)) <= angle && angleDistance(lookVec.y, User.getXRot()) <= angle)){
-
-                    hitEntities.remove(value);
-                } else if (!canActuallyHit(value) && !throughWalls){
-                    hitEntities.remove(value);
-                }
-            }
-        }
-        return hitEntities;
-    }
-
-
-    public List<Entity> arrowGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance){
-        return arrowGrabHitbox(User,entities,maxDistance,90);
-    }
-    public List<Entity> arrowGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, float angle){
-        List<Entity> hitEntities = new ArrayList<>(entities) {
-        };
-        for (Entity value : entities) {
-            Direction gravD = ((IGravityEntity)User).roundabout$getGravityDirection();
-            Vec2 lookVec = new Vec2(getLookAtEntityYaw(User, value), getLookAtEntityPitch(User, value));
-            if (gravD != Direction.DOWN) {
-                lookVec = RotationUtil.rotPlayerToWorld(lookVec.x, lookVec.y, gravD);
-            }
-
-            if (!(value instanceof Arrow) && !(value instanceof KnifeEntity) && !(value instanceof ThrownObjectEntity)){
-                hitEntities.remove(value);
-            } else if (!(angleDistance(lookVec.x, (User.getYHeadRot()%360f)) <= angle && angleDistance(lookVec.y, User.getXRot()) <= angle)){
-                hitEntities.remove(value);
-            } else if (value.distanceTo(User) > maxDistance){
-                hitEntities.remove(value);
-            }
-        }
-        return hitEntities;
-    }
-    public boolean StandAttackHitbox(List<Entity> entities, float pow, float knockbackStrength){
-        boolean hitSomething = false;
-        float nearestDistance = -1;
-        Entity nearestMob;
-        if (entities != null){
-            for (Entity value : entities) {
-                if (this.StandDamageEntityAttack(value,pow, knockbackStrength, this.self)){
-                    hitSomething = true;
-                }
-            }
-        }
-        return hitSomething;
-    }
 
 
     /**Use this to multiply the exp needed to levelup for the config option*/
@@ -2794,6 +1933,7 @@ public class StandPowers extends AbilityScapeBasis {
         }
     }
 
+    @Override
     public void preButtonInput4(boolean keyIsDown, Options options){
         if (hasStandActive(this.getSelf()) && !this.isClashing()) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
@@ -2802,6 +1942,7 @@ public class StandPowers extends AbilityScapeBasis {
             }
         }
     }
+    @Override
     public void preButtonInput3(boolean keyIsDown, Options options){
         if (hasStandActive(this.getSelf()) && !this.isClashing()) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
@@ -2811,6 +1952,7 @@ public class StandPowers extends AbilityScapeBasis {
         }
     }
 
+    @Override
     public void preButtonInput2(boolean keyIsDown, Options options){
         if (hasStandActive(this.getSelf()) && !this.isClashing()) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
@@ -2820,6 +1962,7 @@ public class StandPowers extends AbilityScapeBasis {
         }
     }
 
+    @Override
     public void preButtonInput1(boolean keyIsDown, Options options){
         if (hasStandActive(this.getSelf()) && !this.isClashing()) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
@@ -2835,40 +1978,6 @@ public class StandPowers extends AbilityScapeBasis {
     public static final int zenith = 10;
 
 
-    public void tickDash(){
-        if (this.getSelf() instanceof Player) {
-
-            if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 0) {
-                cancelConsumableItem(this.getSelf());
-            }
-
-            if (((IPlayerEntity)this.getSelf()).roundabout$getClientDodgeTime() >= 10){
-                ((IPlayerEntity)this.getSelf()).roundabout$setClientDodgeTime(-1);
-                if (!this.getSelf().level().isClientSide){
-                    ((IPlayerEntity)this.getSelf()).roundabout$setDodgeTime(-1);
-                    byte pos = ((IPlayerEntity)this.getSelf()).roundabout$GetPos();
-                    if (pos == PlayerPosIndex.DODGE_FORWARD || pos == PlayerPosIndex.DODGE_BACKWARD) {
-                        ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.NONE);
-                    }
-                }
-            } else if (((IPlayerEntity)this.getSelf()).roundabout$getClientDodgeTime() >= 0){
-                ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(((IPlayerEntity) this.getSelf()).roundabout$getClientDodgeTime()+1);
-            }
-
-            if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 10){
-
-                ((IPlayerEntity)this.getSelf()).roundabout$setDodgeTime(-1);
-                byte pos = ((IPlayerEntity)this.getSelf()).roundabout$GetPos();
-                if (pos == PlayerPosIndex.DODGE_FORWARD || pos == PlayerPosIndex.DODGE_BACKWARD) {
-                    ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.NONE);
-                }
-            } else if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 0){
-                if (this.getSelf().level().isClientSide){
-                    ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(((IPlayerEntity) this.getSelf()).roundabout$getDodgeTime()+1);
-                }
-            }
-        }
-    }
 
     public void preCheckButtonInputAttack(boolean keyIsDown, Options options) {
         if (hasStandActive(this.getSelf()) && !this.isGuarding()) {
@@ -3120,6 +2229,8 @@ public class StandPowers extends AbilityScapeBasis {
     public StandPowers(LivingEntity self) {
         super(self);
     }
+
+    @Override
     public void baseTickPower(){
         if (this.self.level().isClientSide()){
             if (this.self instanceof Player) {
@@ -3269,10 +2380,6 @@ public class StandPowers extends AbilityScapeBasis {
         }
     }
 
-    /**This plays automatically when a power is changed on the server to sync it with the client*/
-    public void kickStartClient(){
-        this.kickStarted = true;
-    }
 
     /**Only star platinum or the world would ever need to override these*/
     public float getTimestopRange(){
@@ -3358,21 +2465,7 @@ public class StandPowers extends AbilityScapeBasis {
         return Component.empty();
     }
 
-    /**Sound updates that play every tick*/
-    public void tickSounds(){
-        if (this.self.level().isClientSide) {
-            ((StandUserClient) this.self).roundabout$clientPlaySound();
-            ((StandUserClient) this.self).roundabout$clientSoundCancel();
-        }
-    }
 
-    /**If doing something like eating, cancels attack state*/
-    public void resetAttackState(){
-        if (shouldReset(this.getActivePower())){
-            this.interruptCD = 3;
-            ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
-        }
-    }
 
     /**You don't really need this*/
     public boolean setPowerSpecial(int lastMove) {return false;}

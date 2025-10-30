@@ -24,6 +24,8 @@ public class ServerToClientPackets {
             SyncCooldown("sync_cooldown"),
             SyncCooldownMax("sync_cooldown_max"),
             SyncActivePower("sync_active_power"),
+            SyncActivePowerFate("sync_active_power_fate"),
+            SyncActivePowerPowers("sync_active_power_powers"),
             SyncPowerInventory("sync_power_inventory"),
             IntPowerData("int_power_data"),
             IntToClient("generic_int_to_client"),

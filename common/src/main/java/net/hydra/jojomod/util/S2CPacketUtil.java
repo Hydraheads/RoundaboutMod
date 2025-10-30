@@ -129,6 +129,22 @@ public class S2CPacketUtil {
             );
         }
     }
+    public static void sendActivePowerFatePacket(Player player, byte activePower){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePowerFate.value,
+                    activePower
+            );
+        }
+    }
+    public static void sendActivePowerPowersPacket(Player player, byte activePower){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePowerPowers.value,
+                    activePower
+            );
+        }
+    }
 
     public static void sendPowerInventorySettings(Player player, int anchorPlace, float distanceOut, float idleOpacity,
                                                   float combatOpacity, float enemyOpacity, int anchorPlaceAttack){

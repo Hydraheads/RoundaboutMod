@@ -4,6 +4,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
+import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.Entity;
@@ -23,32 +24,48 @@ public class VampireFate extends VampiricFate {
     public FatePowers generateFatePowers(LivingEntity entity){
         return new VampireFate(entity);
     }
+    @Override
+    public void powerActivate(PowerContext context) {
+        switch (context)
+        {
+            case SKILL_2_NORMAL -> {
+                suckBlood();
+            }
+        }
+        super.powerActivate(context);
+    };
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        setSkillIcon(context, x, y, 1, StandIcons.CINDERELLA_MASK, PowerIndex.FATE_1);
-        setSkillIcon(context, x, y, 2, StandIcons.BLOOD_DRINK, PowerIndex.FATE_2);
-        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
-        setSkillIcon(context, x, y, 4, StandIcons.DODGE, PowerIndex.FATE_3);
+        if (isHoldingSneak()) {
+            setSkillIcon(context, x, y, 1, StandIcons.FLESH_BUD, PowerIndex.FATE_1_SNEAK);
+        } else {
+            setSkillIcon(context, x, y, 1, StandIcons.HYPNOTISM, PowerIndex.FATE_1);
+        }
+
+        if (isHoldingSneak()) {
+            setSkillIcon(context, x, y, 2, StandIcons.REGENERATE, PowerIndex.FATE_2_SNEAK);
+        } else {
+            setSkillIcon(context, x, y, 2, StandIcons.BLOOD_DRINK, PowerIndex.FATE_2);
+        }
+
+        if (isHoldingSneak()) {
+            setSkillIcon(context, x, y, 3, StandIcons.CHEETAH_SPEED, PowerIndex.FATE_3_SNEAK);
+        } else {
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        }
+        if (isHoldingSneak()) {
+            setSkillIcon(context, x, y, 4, StandIcons.HEARING_MODE, PowerIndex.FATE_4_SNEAK);
+        } else {
+            if (isVisionOn()){
+                setSkillIcon(context, x, y, 4, StandIcons.VAMP_VISION_ON, PowerIndex.FATE_4);
+            } else {
+                setSkillIcon(context, x, y, 4, StandIcons.VAMP_VISION_OFF, PowerIndex.FATE_4);
+            }
+        }
     }
 
     @Override
     public void tick(){
-    }
-    @Override
-    public void renderAttackHud(GuiGraphics context, Player playerEntity,
-                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
-                                float flashAlpha, float otherFlashAlpha) {
-        StandUser standUser = ((StandUser) playerEntity);
-        boolean standOn = standUser.roundabout$getActive();
-        int j = scaledHeight / 2 - 7 - 4;
-        int k = scaledWidth / 2 - 8;
-        if (!standOn){
-            Entity TE = standUser.roundabout$getStandPowers().getTargetEntity(playerEntity, 3, 15);
-            if (TE != null && MainUtil.canDrinkBlood(TE)){
-                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 44, 16, 8);
-
-            }
-        }
     }
 }
