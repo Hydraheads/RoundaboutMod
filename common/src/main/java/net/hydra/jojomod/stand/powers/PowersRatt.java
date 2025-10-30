@@ -977,26 +977,29 @@ public class PowersRatt extends NewDashPreset {
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
 
-        if (getValidPlacement() != null && !isPlaced() || shotcooldown != 0 || scopeLevel != 0) {
-            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
-        }
+        if(this.getStandUserSelf().roundabout$getActive()) {
 
-        ItemStack goldDisc = ((StandUser)playerEntity).roundabout$getStandDisc();
-        boolean bypass = playerEntity.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
-        if (getChargeTime() > 10 && ( ((IPlayerEntity)playerEntity).roundabout$getStandLevel() > 1 ) || bypass ) {
-            float amount = (float) getChargeTime() / 100;
-            int finalAmount = Math.round(amount * 15);
-            int bartexture = 30;
-            if (getChargeTime() >= MaxThreshold) {
-                bartexture -= 6;
+            if (getValidPlacement() != null && !isPlaced() || shotcooldown != 0 || scopeLevel != 0) {
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             }
-            //file, end x, endy, x, y, width, height
-            context.blit(StandIcons.JOJO_ICONS, k, j, 193, bartexture, finalAmount, 6);
-        }
-        if (shotcooldown != 0) {
-            float ratio = (float) shotcooldown /maxshotcooldown;
-            int fifteen = 15-Math.round(ratio*15);
-            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 12, fifteen, 6);
+
+            ItemStack goldDisc = ((StandUser) playerEntity).roundabout$getStandDisc();
+            boolean bypass = playerEntity.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+            if (getChargeTime() > 10 && (((IPlayerEntity) playerEntity).roundabout$getStandLevel() > 1) || bypass) {
+                float amount = (float) getChargeTime() / 100;
+                int finalAmount = Math.round(amount * 15);
+                int bartexture = 30;
+                if (getChargeTime() >= MaxThreshold) {
+                    bartexture -= 6;
+                }
+                //file, end x, endy, x, y, width, height
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, bartexture, finalAmount, 6);
+            }
+            if (shotcooldown != 0) {
+                float ratio = (float) shotcooldown / maxshotcooldown;
+                int fifteen = 15 - Math.round(ratio * 15);
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 12, fifteen, 6);
+            }
         }
 
         super.renderAttackHud(context, playerEntity, scaledWidth, scaledHeight, ticks, vehicleHeartCount, flashAlpha, otherFlashAlpha);
@@ -1159,15 +1162,19 @@ public class PowersRatt extends NewDashPreset {
         // place auto
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,1, "ability.roundabout.ratt_auto",
                 "instruction.roundabout.press_skill_crouch", StandIcons.RATT_AUTO,1,level,bypas));
-        // ratt leap
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,4, "ability.roundabout.ratt_leap",
-                "instruction.roundabout.press_skill", StandIcons.RATT_LEAP,4,level,bypas));
+        // dodge
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.dodge",
+                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
         // passive
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.ratt_flesh",
                 "instruction.roundabout.passive", StandIcons.RATT_BLOB,3,level,bypas));
-        // dodge
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
+        // bucket passive
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.ratt_bucket",
+                "instruction.roundabout.passive", StandIcons.RATT_BUCKET,3,level,bypas));
+        // ratt leap
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+76,topPos+80,4, "ability.roundabout.ratt_leap",
+                "instruction.roundabout.press_skill", StandIcons.RATT_LEAP,4,level,bypas));
+
         return $$1;
     }
 
