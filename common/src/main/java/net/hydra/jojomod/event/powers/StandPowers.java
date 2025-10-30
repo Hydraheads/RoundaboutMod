@@ -1251,19 +1251,6 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    /**The four key presses, made obselete by standpowerrewrwite's poweractivate function, check
-     * other stands for examples of how to use that*/
-    public void buttonInput4(boolean keyIsDown, Options options){
-    }
-    public void buttonInput3(boolean keyIsDown, Options options){
-    }
-    public void buttonInput2(boolean keyIsDown, Options options){
-    }
-    public void buttonInput1(boolean keyIsDown, Options options){
-    }
-
-
-
 
 
 
@@ -2587,6 +2574,7 @@ public class StandPowers extends AbilityScapeBasis {
         }
     }
 
+    @Override
     public void preButtonInput4(boolean keyIsDown, Options options){
         if (hasStandActive(this.getSelf()) && !this.isClashing()) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
@@ -2595,6 +2583,7 @@ public class StandPowers extends AbilityScapeBasis {
             }
         }
     }
+    @Override
     public void preButtonInput3(boolean keyIsDown, Options options){
         if (hasStandActive(this.getSelf()) && !this.isClashing()) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
@@ -2604,6 +2593,7 @@ public class StandPowers extends AbilityScapeBasis {
         }
     }
 
+    @Override
     public void preButtonInput2(boolean keyIsDown, Options options){
         if (hasStandActive(this.getSelf()) && !this.isClashing()) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
@@ -2613,6 +2603,7 @@ public class StandPowers extends AbilityScapeBasis {
         }
     }
 
+    @Override
     public void preButtonInput1(boolean keyIsDown, Options options){
         if (hasStandActive(this.getSelf()) && !this.isClashing()) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
