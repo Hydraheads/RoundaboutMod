@@ -63,10 +63,12 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
     protected void roundabout$Tick(CallbackInfo ci) {
-        ((AccessFateFoodData)getFoodData()).rdbt$setPlayer((Player) (Object) this);
-        if (!this.level().isClientSide()) {
-            rdbt$tickThroughVampire();
-            rdbt$tickThroughVampireChange();
+        if (this.isAlive() && !this.isRemoved()) {
+            ((AccessFateFoodData) getFoodData()).rdbt$setPlayer((Player) (Object) this);
+            if (!this.level().isClientSide()) {
+                rdbt$tickThroughVampire();
+                rdbt$tickThroughVampireChange();
+            }
         }
     }
     /**tick through transformation sequences*/
