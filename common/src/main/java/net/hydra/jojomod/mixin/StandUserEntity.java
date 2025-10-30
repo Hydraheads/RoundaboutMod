@@ -3347,7 +3347,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
         if (hand.getItem() instanceof RoadRollerItem || offHand.getItem() instanceof RoadRollerItem) {
-            basis = (basis * 0.50F);
+            if (!FateTypes.isVampireStrong(rdbt$this())) {
+                basis = (basis * 0.50F);
+            }
         }
 
         int zapped = roundabout$getZappedToID();

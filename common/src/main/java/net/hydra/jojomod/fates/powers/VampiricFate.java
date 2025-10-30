@@ -1,6 +1,8 @@
 package net.hydra.jojomod.fates.powers;
 
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -20,7 +22,7 @@ public class VampiricFate extends FatePowers {
     public VampiricFate() {
         super();
     }
-
+    public static final byte BLOOD_SUCK = 27;
     @Override
     public void tick(){
     }
@@ -28,16 +30,31 @@ public class VampiricFate extends FatePowers {
     public Entity bloodSuckingTarget = null;
 
     public void tickBloodSuck(){
-
+        if (!this.self.level().isClientSide()) {
+            if (bloodSuckingTarget != null) {
+                Entity TE = getTargetEntity(self, 3, 15);
+                if (TE != null && MainUtil.canDrinkBloodFair(TE, self)
+                        && self.hurtTime <= 0 && bloodSuckingTarget.is(TE)) {
+                } else {
+                    bloodSuckingTarget = null;
+                }
+            }
+        }
     }
 
     public void suckBlood(){
         Entity TE = getTargetEntity(self, 3, 15);
         if (TE != null && MainUtil.canDrinkBloodFair(TE,self)){
-
+            tryIntPowerPacket(BLOOD_SUCK,bloodSuckingTarget.getId());
         }
     }
-
+    @Override
+    public boolean tryIntPower(int move, boolean forced, int chargeTime){
+        if (move == BLOOD_SUCK) {
+            bloodSuckingTarget = this.self.level().getEntity(chargeTime);
+        }
+        return super.tryIntPower(move, forced, chargeTime);
+    }
 
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
