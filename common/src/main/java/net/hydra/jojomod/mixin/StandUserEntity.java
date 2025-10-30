@@ -2245,49 +2245,108 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return this.roundabout$getStandPowers().getRayDistance(entity,range);
     }
 
+    public int rdbt$checkContext(){
+        if (roundabout$getActive()){
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
     @Unique
     public void roundabout$tryPower(int move, boolean forced){
-        if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
-            this.roundabout$getStandPowers().tryPower(move, forced);
-            tryPowerStuff();
+        int ct =rdbt$checkContext();
+        if (ct == 0){
+            if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
+                this.roundabout$getStandPowers().tryPower(move, forced);
+                rdbt$tryPowerStuff();
+            }
+        } else {
+            if (rdbt$this() instanceof Player pl){
+                ((IFatePlayer)pl).rdbt$getFatePowers().tryPower(move, forced);
+                rdbt$tryPowerFateStuff();
+            }
         }
     }
     @Unique
     @Override
     public void roundabout$tryIntPower(int move, boolean forced, int chargeTime){
-        if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
-            this.roundabout$getStandPowers().tryIntPower(move, forced, chargeTime);
-            tryPowerStuff();
+        int ct =rdbt$checkContext();
+        if (ct == 0) {
+            if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
+                this.roundabout$getStandPowers().tryIntPower(move, forced, chargeTime);
+                rdbt$tryPowerStuff();
+            }
+        } else {
+            if (rdbt$this() instanceof Player pl){
+                ((IFatePlayer)pl).rdbt$getFatePowers().tryIntPower(move, forced, chargeTime);
+                rdbt$tryPowerFateStuff();
+            }
         }
     }
     @Unique
     @Override
     public void roundabout$tryIntPower(int move,  boolean forced, int chargeTime,int move2, int move3){
-        if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
-            this.roundabout$getStandPowers().tryTripleIntPower(move, forced, chargeTime, move2, move3);
-            tryPowerStuff();
+
+        int ct =rdbt$checkContext();
+        if (ct == 0) {
+            if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
+                this.roundabout$getStandPowers().tryTripleIntPower(move, forced, chargeTime, move2, move3);
+                rdbt$tryPowerStuff();
+            }
+        } else {
+            if (rdbt$this() instanceof Player pl){
+                ((IFatePlayer)pl).rdbt$getFatePowers().tryTripleIntPower(move, forced, chargeTime, move2, move3);
+                rdbt$tryPowerFateStuff();
+            }
         }
     }
     @Unique
     @Override
     public void roundabout$tryBlockPosPower(int move, boolean forced, BlockPos blockPos){
-        if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
-            this.roundabout$getStandPowers().tryBlockPosPower(move, forced, blockPos);
-            tryPowerStuff();
+
+        int ct =rdbt$checkContext();
+        if (ct == 0) {
+            if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
+                this.roundabout$getStandPowers().tryBlockPosPower(move, forced, blockPos);
+                rdbt$tryPowerStuff();
+            }
+        } else {
+            if (rdbt$this() instanceof Player pl){
+                ((IFatePlayer)pl).rdbt$getFatePowers().tryBlockPosPower(move, forced, blockPos);
+                rdbt$tryPowerFateStuff();
+            }
         }
     }
     @Unique
     @Override
     public void roundabout$tryPosPower(int move, boolean forced, Vec3 pos){
-        if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
-            this.roundabout$getStandPowers().tryPosPower(move, forced, pos);
-            tryPowerStuff();
+        int ct =rdbt$checkContext();
+        if (ct == 0){
+            if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
+                this.roundabout$getStandPowers().tryPosPower(move, forced, pos);
+                rdbt$tryPowerStuff();
+            }
+        } else {
+            if (rdbt$this() instanceof Player pl){
+                ((IFatePlayer)pl).rdbt$getFatePowers().tryPosPower(move, forced, pos);
+                rdbt$tryPowerFateStuff();
+            }
         }
     }
-    public void tryPowerStuff(){
+    public void rdbt$tryPowerStuff(){
         this.roundabout$getStandPowers().syncActivePower();
         if (this.level().isClientSide) {
             this.roundabout$getStandPowers().kickStarted = false;
+        }
+    }
+    public void rdbt$tryPowerFateStuff(){
+        if (rdbt$this() instanceof Player pl){
+            IFatePlayer ifp = ((IFatePlayer) pl);
+            ifp.rdbt$getFatePowers().syncActivePower();
+            if (this.level().isClientSide) {
+                ifp.rdbt$getFatePowers().kickStarted = false;
+            }
         }
     }
 
@@ -2430,7 +2489,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$tryBlockPosPower(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit){
         if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
             this.roundabout$getStandPowers().tryBlockPosPower(move, forced, blockPos, blockHit);
-            tryPowerStuff();
+            rdbt$tryPowerStuff();
         }
     }
     @Override

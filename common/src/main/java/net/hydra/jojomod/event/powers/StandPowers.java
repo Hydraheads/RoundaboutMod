@@ -87,35 +87,6 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    // -----------------------------------------------------------------------------------------
-    // UNDERSTANDING THE MAIN VARIABLES
-    // -----------------------------------------------------------------------------------------
-
-    /**The time that passed since using the last attack. It counts up, so that a visual meter can display cooldowns.
-    * It is also used to */
-    public int attackTime = -1;
-
-    /**The time within an attack. This matters, because if you desummon a stand the attack time doesnt reset */
-    public int attackTimeDuring = -1;
-
-    /**The time until the generic ability cooldown passes.
-    This exists so you have downtime that non-stand users can get it and attack you during.*/
-    public int attackTimeMax = -1;
-
-    /**The id of the move being used. Ex: 1 = punch*/
-    public byte activePower = 0;
-
-    /**The phase of the move being used, primarily to keep track of which punch you are on in a punch string.*/
-    public byte activePowerPhase = 0;
-
-    /**This is when the punch combo goes on cooldown. Default is 3 hit combo.*/
-    public final byte activePowerPhaseMax = 3;
-
-    /**This variable exists so that a client can begin displaying your attack hud info without ticking through it.
-     * Basically, stand attacks are clientside, but they need the server's confirmation to kickstart so you
-     * can't hit targets in frozen tps*/
-    public boolean kickStarted = true;
-
 
 
 
@@ -179,11 +150,6 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    /**Stuff that happens every tick while possessing the stand in general.
-     * Remember to call the super when you override or some things might not function properly*/
-    public void tickPower(){
-        baseTickPower();
-    }
 
     /**Override this if you need ultra specific timing on tickpower after other entity functions are called,
      * this works the best for subtle movement tricks*/
@@ -293,14 +259,6 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
     /**This value prevents you from resummoning/blocking to cheese the 3 hit combo's last hit faster*/
-    public int interruptCD = 0;
-    public boolean getInterruptCD(){
-        return this.interruptCD <= 0;
-    }
-    public void setInterruptCD(int interruptCD){
-        this.interruptCD = interruptCD;
-    }
-
 
     public int getMobRecoilTime(){
         return -30;
@@ -330,25 +288,6 @@ public class StandPowers extends AbilityScapeBasis {
     public void buttonInputUse(boolean keyIsDown, Options options) {
         if (keyIsDown) {
         }
-    }
-
-    /**Does your stand let you zoom in a lot? Override this if it does*/
-    public boolean canScope(){
-        return false;
-    }
-    public int scopeTime = -1;
-    public int scopeLevel = 0;
-    public void setScopeLevel(int level){
-        if (scopeLevel <= 0 && level > 0){
-            if (this.getSelf().level().isClientSide()){
-                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SCOPE);
-            }
-        } else if (scopeLevel > 0 && level <= 0){
-            if (this.getSelf().level().isClientSide()){
-                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SCOPE_OFF);
-            }
-        }
-        scopeLevel=level;
     }
 
 
@@ -412,10 +351,6 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    public static final byte
-            NONE = 0;
-
-
 
 
     /**The manner in which your powers tick when you are being time stopped. Override this if the stand acts differently.
@@ -445,13 +380,7 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    /**plays every tick that the active power is set to X move, the unique moves lets you do your own packets,
-     * see examples*/
-    public void updateUniqueMoves(){
-    }
-    /**same as above but for the standard attack packet*/
-    public void updateAttack(){
-    }
+
     public void updateIntMove(int in){
     }
 
@@ -600,12 +529,6 @@ public class StandPowers extends AbilityScapeBasis {
         }
         return power;
     }
-    public boolean getReducedDamage(Entity entity){
-        return (entity instanceof Player || entity instanceof StandEntity ||
-                ((entity instanceof LivingEntity LE && !((StandUser)LE).roundabout$getStandDisc().isEmpty()) &&
-                        ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.standUserMobsTakePlayerDamageMultipliers)
-        );
-    }
 
     /***The distance above you the stand floats*/
     private float getYOffSet(LivingEntity stand){
@@ -647,9 +570,8 @@ public class StandPowers extends AbilityScapeBasis {
     /** Tries to use an ability of your stand. If forced is true, the ability comes out no matter what.**/
     /** There is no reason for the function to be a boolean, that goes unused, so gradually we can convert this to
      * a void function*/
-    public void tryPower(int move){
-        tryPower(move,true);
-    }
+
+    @Override
     public boolean tryPower(int move, boolean forced){
         if (move != PowerIndex.NONE && this.self instanceof Mob && !hasStandEntity(this.self)){
             if (canSummonStand()) {
@@ -693,77 +615,6 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    public boolean tryPosPower(int move, boolean forced, Vec3 pos){
-        tryPower(move, forced);
-        /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
-        return true;
-    }
-    public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos){
-        tryPower(move, forced);
-        /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
-        return true;
-    }
-    public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos, BlockHitResult blockhit){
-        tryPower(move, forced);
-        /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
-        return true;
-    }
-
-    public int storedInt = 0;
-    public boolean tryIntPower(int move, boolean forced, int chargeTime){
-        tryPower(move, forced);
-        /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
-        return true;
-    }
-    public boolean tryTripleIntPower(int move, boolean forced, int chargeTime, int move2, int move3){
-        tryPower(move, forced);
-        /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
-        return true;
-    }
-
-    public void tryPowerPacket(byte packet){
-        if (this.self.level().isClientSide()) {
-            C2SPacketUtil.tryPowerPacket(packet);
-        }
-    }
-    public void tryIntPowerPacket(byte packet, int integer){
-        if (this.self.level().isClientSide()) {
-            C2SPacketUtil.tryIntPowerPacket(packet,integer);
-        }
-    }
-    /**This is different than int power packet only by virtue of what functions it passes through, and is useful
-     * for calling something even if you are in a barrage clash or other conditions would otherwise interrupt your
-     * packet. Very niche, but it exists, and isn't always used in essential ways*/
-    public void tryIntToServerPacket(byte packet, int integer){
-        if (this.self.level().isClientSide()) {
-            C2SPacketUtil.intToServerPacket(packet,integer);
-        }
-    }
-
-    public void tryTripleIntPacket(byte packet, int in1, int in2, int in3){
-        if (this.self.level().isClientSide()) {
-            C2SPacketUtil.tryTripleIntPacket(packet, in1, in2, in3);
-        }
-    }
-    public void tryBlockPosPowerPacket(byte packet, BlockPos pos){
-        if (this.self.level().isClientSide()) {
-            C2SPacketUtil.tryBlockPosPowerPacket(packet, pos);
-        }
-    }
-    public void tryBlockPosPowerPacket(byte packet, BlockPos pos, HitResult hitResult){
-        if (this.self.level().isClientSide()) {
-            C2SPacketUtil.tryBlockPosPowerPacket(packet, pos, hitResult);
-        }
-    }
-    public void tryPosPowerPacket(byte packet, Vec3 pos){
-        if (this.self.level().isClientSide()) {
-            C2SPacketUtil.tryPosPowerPacket(packet, pos);
-        }
-    }
-    public Vec3 savedPos;
-
-
-
     public void handleStandAttack(Player player, Entity target){
     }
 
@@ -771,14 +622,7 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    /**Sets your active power to nothing*/
-    public boolean setPowerNone(){
-        this.attackTimeDuring = -1;
-        this.setActivePower(PowerIndex.NONE);
-        poseStand(OffsetIndex.FOLLOW);
-        animateStand(StandEntity.IDLE);
-        return true;
-    }
+
 
     public boolean isUsingShield(LivingEntity entity) {
         if (entity.isUsingItem()) {
@@ -791,16 +635,17 @@ public class StandPowers extends AbilityScapeBasis {
         return false;
     }
 
+    @Override
     /**If eating or using items in general shouldn't cancel certain abilties, put them as exceptions here*/
     public boolean shouldReset(byte activeP){
         return ((this.self.isUsingItem() &&
                 !(this.getActivePower() == PowerIndex.BARRAGE_CLASH)) || this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())));
     }
 
-
-    public void updateMovesFromPacket(byte activePower){
-
+    public void xTryPower(byte index, boolean forced){
+        ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE,true);
     }
+
     public boolean canAttack(){
         if (this.attackTimeDuring <= -1) {
             return this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax;
@@ -829,10 +674,7 @@ public class StandPowers extends AbilityScapeBasis {
 
     public int clashStarter = 0;
 
-    /**Override this to set the special move*/
-    public boolean setPowerOther(int move, int lastMove) {
-        return false;
-    }
+
 
 
     /**For humanoid stands that have their own mining*/
@@ -949,17 +791,9 @@ public class StandPowers extends AbilityScapeBasis {
         return false;
     }
 
-    public void syncActivePower(){
-        if (!this.self.level().isClientSide && this.self instanceof ServerPlayer SP){
-            S2CPacketUtil.sendActivePowerPacket(SP,activePower);
-        }
-    }
 
-    /**Override this if you want to add or remove conditions that prevent moves from updating and shut
-     * them down*/
-    public boolean isAttackInept(byte activeP){
-        return this.self.isUsingItem() || this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
-    }
+
+
 
 
 
@@ -1494,53 +1328,19 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    /**The most basic getters and setters*/
-    public StandUser getStandUserSelf(){
-        return ((StandUser)this.self);
-    }
-
-    public int getAttackTime(){
-        return this.attackTime;
-    }
-    public int getAttackTimeDuring(){
-        return this.attackTimeDuring;
-    }
-    public byte getActivePower(){
-        return this.activePower;
-    }
-    public byte getActivePowerPhase(){
-        return this.activePowerPhase;
-    }
-    public byte getActivePowerPhaseMax(){
-        return this.activePowerPhaseMax;
-    }
-
-    public void setAttackTime(int attackTime){
-        this.attackTime = attackTime;
-    }
-    public void setAttackTimeDuring(int attackTimeDuring){
-        this.attackTimeDuring = attackTimeDuring;
-    }
-    public void setAttackTimeMax(int attackTimeMax){
-        this.attackTimeMax = attackTimeMax;
-    }
-    public int getAttackTimeMax(){
-        return this.attackTimeMax;
-    }
-
-    public void setMaxAttackTime(int attackTimeMax){
-        this.attackTimeMax = attackTimeMax;
-    }
-    public void setActivePower(byte activeMove){
-        this.activePower = activeMove;
-    }
-    public void setActivePowerPhase(byte activePowerPhase){
-        this.activePowerPhase = activePowerPhase;
+    /**Sets your active power to nothing*/
+    @Override
+    public boolean setPowerNone(){
+        this.attackTimeDuring = -1;
+        this.setActivePower(PowerIndex.NONE);
+        poseStand(OffsetIndex.FOLLOW);
+        animateStand(StandEntity.IDLE);
+        return true;
     }
 
 
 
-    /**Call this to verify your stand is leveled enough to use a moe*/
+    /**Call this to verify your stand is leveled enough to use a move*/
     public boolean canExecuteMoveWithLevel(int minLevel){
         if (!ClientNetworking.getAppropriateConfig().standLevelingSettings.enableStandLeveling) {
             return true;
@@ -1557,17 +1357,6 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    /**Call this to make yourself stop using an item*/
-    public void cancelConsumableItem(LivingEntity entity){
-        ItemStack itemStack = entity.getUseItem();
-        Item item = itemStack.getItem();
-        if (item.isEdible() || item instanceof PotionItem) {
-            entity.releaseUsingItem();
-            if (entity instanceof Player) {
-                entity.stopUsingItem();
-            }
-        }
-    }
 
     /**Code for triggering a damage event*/
     public boolean StandDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker){
@@ -2839,40 +2628,6 @@ public class StandPowers extends AbilityScapeBasis {
     public static final int zenith = 10;
 
 
-    public void tickDash(){
-        if (this.getSelf() instanceof Player) {
-
-            if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 0) {
-                cancelConsumableItem(this.getSelf());
-            }
-
-            if (((IPlayerEntity)this.getSelf()).roundabout$getClientDodgeTime() >= 10){
-                ((IPlayerEntity)this.getSelf()).roundabout$setClientDodgeTime(-1);
-                if (!this.getSelf().level().isClientSide){
-                    ((IPlayerEntity)this.getSelf()).roundabout$setDodgeTime(-1);
-                    byte pos = ((IPlayerEntity)this.getSelf()).roundabout$GetPos();
-                    if (pos == PlayerPosIndex.DODGE_FORWARD || pos == PlayerPosIndex.DODGE_BACKWARD) {
-                        ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.NONE);
-                    }
-                }
-            } else if (((IPlayerEntity)this.getSelf()).roundabout$getClientDodgeTime() >= 0){
-                ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(((IPlayerEntity) this.getSelf()).roundabout$getClientDodgeTime()+1);
-            }
-
-            if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 10){
-
-                ((IPlayerEntity)this.getSelf()).roundabout$setDodgeTime(-1);
-                byte pos = ((IPlayerEntity)this.getSelf()).roundabout$GetPos();
-                if (pos == PlayerPosIndex.DODGE_FORWARD || pos == PlayerPosIndex.DODGE_BACKWARD) {
-                    ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.NONE);
-                }
-            } else if (((IPlayerEntity)this.getSelf()).roundabout$getDodgeTime() >= 0){
-                if (this.getSelf().level().isClientSide){
-                    ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(((IPlayerEntity) this.getSelf()).roundabout$getDodgeTime()+1);
-                }
-            }
-        }
-    }
 
     public void preCheckButtonInputAttack(boolean keyIsDown, Options options) {
         if (hasStandActive(this.getSelf()) && !this.isGuarding()) {
@@ -3124,6 +2879,8 @@ public class StandPowers extends AbilityScapeBasis {
     public StandPowers(LivingEntity self) {
         super(self);
     }
+
+    @Override
     public void baseTickPower(){
         if (this.self.level().isClientSide()){
             if (this.self instanceof Player) {
@@ -3273,10 +3030,6 @@ public class StandPowers extends AbilityScapeBasis {
         }
     }
 
-    /**This plays automatically when a power is changed on the server to sync it with the client*/
-    public void kickStartClient(){
-        this.kickStarted = true;
-    }
 
     /**Only star platinum or the world would ever need to override these*/
     public float getTimestopRange(){
@@ -3362,21 +3115,7 @@ public class StandPowers extends AbilityScapeBasis {
         return Component.empty();
     }
 
-    /**Sound updates that play every tick*/
-    public void tickSounds(){
-        if (this.self.level().isClientSide) {
-            ((StandUserClient) this.self).roundabout$clientPlaySound();
-            ((StandUserClient) this.self).roundabout$clientSoundCancel();
-        }
-    }
 
-    /**If doing something like eating, cancels attack state*/
-    public void resetAttackState(){
-        if (shouldReset(this.getActivePower())){
-            this.interruptCD = 3;
-            ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
-        }
-    }
 
     /**You don't really need this*/
     public boolean setPowerSpecial(int lastMove) {return false;}

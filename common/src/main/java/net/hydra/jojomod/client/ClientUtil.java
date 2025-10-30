@@ -391,6 +391,16 @@ public class ClientUtil {
                     byte power = (byte) vargs[0];
                     MainUtil.syncActivePower(player,power);
                 }
+                /**Syncs the active power the fate is using*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePowerFate.value)) {
+                    byte power = (byte) vargs[0];
+                    MainUtil.syncActivePowerFate(player,power);
+                }
+                /**Syncs the active power the powers is using*/
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePowerPowers.value)) {
+                    byte power = (byte) vargs[0];
+                    MainUtil.syncActivePowerPowers(player,power);
+                }
 
                 /**Syncs the power inventory settings*/
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPowerInventory.value)) {
