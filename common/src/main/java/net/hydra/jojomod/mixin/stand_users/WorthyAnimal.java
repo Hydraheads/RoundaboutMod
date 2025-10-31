@@ -49,6 +49,7 @@ public abstract class WorthyAnimal extends AgeableMob {
                     if ($$5.nextFloat() < UserOdds && !(ModItems.getPoolForMob($$2)).isEmpty()) {
                         ((IMob)$$2).roundabout$setWorthy(true);
                         ((IMob)$$2).roundabout$setIsNaturalStandUser(true);
+                        ((IMob)$$2).roundabout$setIsBred(true);
                         int index = (int) (Math.floor(Math.random()* ModItems.getPoolForMob($$2).size()));
                         ItemStack stack = ModItems.getPoolForMob($$2).get(index).getDefaultInstance();
                         if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem SD){

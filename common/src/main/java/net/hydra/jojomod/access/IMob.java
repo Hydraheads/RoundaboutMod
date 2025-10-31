@@ -21,4 +21,6 @@ public interface IMob {
     void roundabout$toggleFightOrFlight(boolean flight);
     boolean roundabout$getFightOrFlight();
     void roundabout$resetAtkCD();
+    boolean roundabout$getIsBred();
+    void roundabout$setIsBred(boolean set);
 }
