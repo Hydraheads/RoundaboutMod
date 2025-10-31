@@ -169,6 +169,11 @@ public class AbilityScapeBasis {
         return true;
     }
 
+    /**Stand related things that slow you down or speed you up, override and call super to make
+     * any stand ability slow you down*/
+    public float inputSpeedModifiers(float basis){
+        return basis;
+    }
 
     public boolean tryPosPower(int move, boolean forced, Vec3 pos){
         tryPower(move, forced);

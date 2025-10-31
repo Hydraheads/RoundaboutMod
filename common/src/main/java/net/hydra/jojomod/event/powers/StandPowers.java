@@ -208,6 +208,7 @@ public class StandPowers extends AbilityScapeBasis {
         return true;
     }
 
+    @Override
     /**Stand related things that slow you down or speed you up, override and call super to make
      * any stand ability slow you down*/
     public float inputSpeedModifiers(float basis){
@@ -639,7 +640,7 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
     public void xTryPower(byte index, boolean forced){
-        ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE,true);
+        ((StandUser) this.self).roundabout$tryPower(index,true);
     }
 
     public boolean canAttack(){
