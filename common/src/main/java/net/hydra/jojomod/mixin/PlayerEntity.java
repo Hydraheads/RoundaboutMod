@@ -891,6 +891,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (!((StandUser)this).roundabout$getStandDisc().isEmpty()){
             basis = ((StandUser)this).roundabout$getStandPowers().inputSpeedModifiers(basis);
         }
+        basis = ((IFatePlayer)this).rdbt$getFatePowers().inputSpeedModifiers(basis);
         basis = ((StandUser)this).roundabout$mutualGetSpeed(basis);
 
         cir.setReturnValue(basis);

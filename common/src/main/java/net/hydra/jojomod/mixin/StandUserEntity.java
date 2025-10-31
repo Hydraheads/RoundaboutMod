@@ -1221,6 +1221,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$zappedTicks = Mth.clamp(roundabout$zappedTicks,-1,10);
         }
         this.roundabout$getStandPowers().tickPower();
+        if (rdbt$this() instanceof Player PL){
+            ((IFatePlayer)PL).rdbt$getFatePowers().tickPower();
+        }
         this.rdbt$tickCooldowns();
         this.roundabout$tickGuard();
         this.roundabout$tickDaze();

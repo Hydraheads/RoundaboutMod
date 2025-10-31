@@ -27,6 +27,12 @@ public class VampiricFate extends FatePowers {
     public void tick(){
     }
 
+    @Override
+    public void tickPower() {
+        tickBloodSuck();
+        super.tickPower();
+    }
+
     public Entity bloodSuckingTarget = null;
 
     public void tickBloodSuck(){
@@ -37,6 +43,7 @@ public class VampiricFate extends FatePowers {
                         && self.hurtTime <= 0 && bloodSuckingTarget.is(TE)) {
                 } else {
                     bloodSuckingTarget = null;
+                    xTryPower(PowerIndex.NONE,true);
                 }
             }
         }
@@ -45,15 +52,29 @@ public class VampiricFate extends FatePowers {
     public void suckBlood(){
         Entity TE = getTargetEntity(self, 3, 15);
         if (TE != null && MainUtil.canDrinkBloodFair(TE,self)){
+            setActivePower(BLOOD_SUCK);
             tryIntPowerPacket(BLOOD_SUCK,TE.getId());
+            this.attackTimeDuring = 0;
         }
     }
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime){
         if (move == BLOOD_SUCK) {
             bloodSuckingTarget = this.self.level().getEntity(chargeTime);
+            setActivePower(BLOOD_SUCK);
+            this.attackTimeDuring = 0;
         }
         return super.tryIntPower(move, forced, chargeTime);
+    }
+
+    @Override
+    /**Stand related things that slow you down or speed you up, override and call super to make
+     * any stand ability slow you down*/
+    public float inputSpeedModifiers(float basis){
+        if (getActivePower() == BLOOD_SUCK){
+            basis*=0;
+        }
+        return basis;
     }
 
     @Override
