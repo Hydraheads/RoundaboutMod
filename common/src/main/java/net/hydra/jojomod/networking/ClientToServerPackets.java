@@ -7,9 +7,7 @@ import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.event.index.Corpses;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.item.GlaiveItem;
-import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.item.ModificationMaskItem;
+import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
@@ -17,8 +15,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.zetalasis.networking.message.impl.IMessageEvent;
@@ -54,6 +54,7 @@ public class ClientToServerPackets {
             ItemContext("item_context"),
             GuardCancel("guard_cancel"),
             HandshakeCooldowns("handshake_cooldowns"),
+            GunShot("gun_shot"),
             DimensionHopD4C("thread_hop_d4c_request_dimension_hop");
 
             public final String value;
@@ -384,6 +385,15 @@ public class ClientToServerPackets {
                     if (((StandUser) sender).roundabout$isGuarding() || ((StandUser) sender).roundabout$isBarraging()
                             || ((StandUser) sender).roundabout$getStandPowers().clickRelease()) {
                         ((StandUser) sender).roundabout$tryPower(PowerIndex.NONE, true);
+                    }
+                }
+
+                /**Fire the gun when left-clicking*/
+                if (message.equals(MESSAGES.GunShot.value)) {
+                    ItemStack itemStack = sender.getUseItem();
+                    Level level = sender.level();
+                    if (itemStack.getItem() instanceof FirearmItem) {
+                        ((FirearmItem) itemStack.getItem()).fireBullet(level, sender);
                     }
                 }
 

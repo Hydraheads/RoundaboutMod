@@ -1,6 +1,8 @@
 package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -11,6 +13,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -40,5 +43,23 @@ public class FirearmItem extends Item {
 
         }
         return InteractionResultHolder.success(itemStack);
+    }
+
+    public void fireBullet(Level level, Player player) {
+        LivingEntity livingEntity = player;
+        RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity(level, livingEntity);
+        $$7.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.5F, 1.0F);
+        level.addFreshEntity($$7);
+        if (livingEntity != null && ((StandUser) livingEntity).roundabout$isBubbleEncased()) {
+            StandUser SE = ((StandUser) livingEntity);
+            if (!level.isClientSide()) {
+                SE.roundabout$setBubbleEncased((byte) 0);
+                level.playSound(null, livingEntity.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
+                        SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+                ((ServerLevel) level).sendParticles(ModParticles.BUBBLE_POP,
+                        livingEntity.getX(), livingEntity.getY() + livingEntity.getBbHeight() * 0.5, livingEntity.getZ(),
+                        5, 0.25, 0.25, 0.25, 0.025);
+            }
+        }
     }
 }

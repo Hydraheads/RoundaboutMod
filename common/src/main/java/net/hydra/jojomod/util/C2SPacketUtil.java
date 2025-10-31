@@ -202,6 +202,13 @@ public class C2SPacketUtil {
         );
     }
 
+    /**Fire the gun when left-clicking*/
+    public static void gunShot(){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.GunShot.value
+        );
+    }
+
     /**Request a dimension hop with d4c*/
     public static void d4cDimensionHopRegistryPacket(){
         ModMessageEvents.sendToServer(

@@ -4,6 +4,28 @@
 	"textures": {
 		"1": "roundabout:item/snubnose_revolver"
 	},
+    "display": {
+      "firstperson_righthand": {
+        "rotation": [0, 0, 0],
+        "translation": [0.0, 5.0, 0.5],
+        "scale": [1, 1, 1]
+      },
+      "firstperson_lefthand": {
+        "rotation": [0, 0, 0],
+        "translation": [0.0, 5.0, 0.5],
+        "scale": [1, 1, 1]
+      },
+      "thirdperson_righthand": {
+        "rotation": [0, 0, 0],
+        "translation": [0.0, 5.0, 1.1],
+        "scale": [1, 1, 1]
+      },
+      "thirdperson_lefthand": {
+        "rotation": [0, 0, 0],
+        "translation": [0.0, 5.0, 1.1],
+        "scale": [1, 1, 1]
+      }
+    },
 	"elements": [
 		{
 			"name": "handle",

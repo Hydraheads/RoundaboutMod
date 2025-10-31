@@ -34,40 +34,55 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
         stack.getOrCreateTag().putInt(AMMO_COUNT_TAG, count);
     }
 
+    private static final String FIRING_MODE = "FiringMode";
+
+    private boolean getFiringMode(ItemStack stack) {
+        return stack.getOrCreateTag().getBoolean(FIRING_MODE);
+    }
+
+    private void setFiringMode(ItemStack stack, boolean value) {
+        stack.getOrCreateTag().putBoolean(FIRING_MODE, value);
+    }
+
+    @Override
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.BOW;
+    }
+
+    @Override
+    public int getUseDuration(ItemStack stack) {
+        return 72000;
+    }
+
     int maxAmmo = 6;
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
-        ItemStack itemStack = $$1.getMainHandItem();
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack itemStack = player.getItemInHand(hand);
+        player.startUsingItem(hand);
         if (!(itemStack.getItem() instanceof SnubnoseRevolverItem)) {
             return InteractionResultHolder.fail(itemStack);
         }
-        LivingEntity livingEntity = $$1;
-        int ammo = getAmmo(itemStack);
-        if (ammo > 0) {
-            if ($$1 instanceof LivingEntity) {
-                RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity($$0, livingEntity);
-                $$7.shootFromRotation($$1, $$1.getXRot(), $$1.getYRot(), 0.0F, 1.5F, 1.0F);
-                $$0.addFreshEntity($$7);
-                if (livingEntity != null && ((StandUser) livingEntity).roundabout$isBubbleEncased()) {
-                    StandUser SE = ((StandUser) livingEntity);
-                    if (!$$0.isClientSide()) {
-                        SE.roundabout$setBubbleEncased((byte) 0);
-                        $$0.playSound(null, livingEntity.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
-                                SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
-                        ((ServerLevel) $$0).sendParticles(ModParticles.BUBBLE_POP,
-                                livingEntity.getX(), livingEntity.getY() + livingEntity.getBbHeight() * 0.5, livingEntity.getZ(),
-                                5, 0.25, 0.25, 0.25, 0.025);
-                    }
-                }
-            }
-        } else if ($$1.isCrouching()) {
+        if (!getFiringMode(itemStack)) {
+            setFiringMode(itemStack, true);
+            Roundabout.LOGGER.info(""+getFiringMode(itemStack));
+        } else if (player.isCrouching()) {
             setAmmo(itemStack, maxAmmo);
             Roundabout.LOGGER.info("Reloaded");
         }
-        super.use($$0, $$1, $$2);
+        super.use(level, player, hand);
 
         return InteractionResultHolder.consume(itemStack);
     }
-}
 
+    @Override
+    public void releaseUsing(ItemStack stack, Level dimension, LivingEntity livingEntity, int timeLeft) {
+        if (!dimension.isClientSide && livingEntity instanceof Player player) {
+            ItemStack itemStack = player.getMainHandItem();
+            if (getFiringMode(itemStack)) {
+                setFiringMode(itemStack, false);
+                Roundabout.LOGGER.info(""+getFiringMode(itemStack));
+            }
+        }
+    }
+}
