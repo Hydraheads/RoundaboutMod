@@ -520,7 +520,6 @@ public abstract class GravityEntityMixin implements IGravityEntity {
                     dr = PW.getHeelDirection();
                 } else if (rdbt$this() instanceof LivingEntity LE && LE.hasEffect(ModEffects.GRAVITY_FLIP)){
                     MobEffectInstance mi = LE.getEffect(ModEffects.GRAVITY_FLIP);
-                    Roundabout.LOGGER.info("2");
                     if (mi != null){
                         if (mi.getAmplifier() == 0){
                             dr = Direction.NORTH;

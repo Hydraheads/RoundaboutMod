@@ -45,7 +45,7 @@ public class VampiricFate extends FatePowers {
     public void suckBlood(){
         Entity TE = getTargetEntity(self, 3, 15);
         if (TE != null && MainUtil.canDrinkBloodFair(TE,self)){
-            tryIntPowerPacket(BLOOD_SUCK,bloodSuckingTarget.getId());
+            tryIntPowerPacket(BLOOD_SUCK,TE.getId());
         }
     }
     @Override
