@@ -4,18 +4,13 @@ import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.PlunderTypes;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
-import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -35,19 +30,15 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -62,7 +53,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 import java.util.*;
-import java.util.stream.Stream;
 
 public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
     private ItemStack roadRollerItem = new ItemStack(ModItems.ROAD_ROLLER);
@@ -414,7 +404,7 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
             }
         }
 
-        if (level().isClientSide && this.tickCount % 60 == 1) {
+        if (level().isClientSide() && this.tickCount % 60 == 1) {
             if (!((TimeStop) level()).inTimeStopRange(this)) {
                 ClientUtil.handleRoadRollerAmbientSound(this);
             }
@@ -476,7 +466,7 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
             }
         }
 
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             if (getExploded()) {
                 if (explosionParticleDelay >= 10) {
                     if (!((TimeStop) level()).inTimeStopRange(this)) {
