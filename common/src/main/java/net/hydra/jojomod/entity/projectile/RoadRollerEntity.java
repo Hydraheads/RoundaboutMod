@@ -407,7 +407,7 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
 
         if (!level().isClientSide() && this.tickCount % 60 == 1) {
             if (!((TimeStop) level()).inTimeStopRange(this)) {
-                MainUtil.handleRoadRollerAmbientSound(this);
+                ClientUtil.handleRoadRollerAmbientSound(this);
             }
         }
 
@@ -1139,11 +1139,11 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
                 if (!level().isClientSide) {
                     if (getPavingBoolean() && !((TimeStop) level()).inTimeStopRange(this)) {
                         mixingSoundStarted = true;
-                        MainUtil.stopRoadRollerMixingSound(this);
-                        MainUtil.handleRoadRollerMixingSound(this);
+                        ClientUtil.stopRoadRollerMixingSound(this);
+                        ClientUtil.handleRoadRollerMixingSound(this);
                     } else if (!getPavingBoolean()) {
                         mixingSoundStarted = false;
-                        MainUtil.stopRoadRollerMixingSound(this);
+                        ClientUtil.stopRoadRollerMixingSound(this);
                     }
                 }
                 setPavingTimer(0);
@@ -1153,11 +1153,11 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
                 if (!level().isClientSide) {
                     if (getPavingBoolean() && !((TimeStop) level()).inTimeStopRange(this)) {
                         mixingSoundStarted = true;
-                        MainUtil.stopRoadRollerMixingSound(this);
-                        MainUtil.handleRoadRollerMixingSound(this);
+                        ClientUtil.stopRoadRollerMixingSound(this);
+                        ClientUtil.handleRoadRollerMixingSound(this);
                     } else if (!getPavingBoolean()) {
                         mixingSoundStarted = false;
-                        MainUtil.stopRoadRollerMixingSound(this);
+                        ClientUtil.stopRoadRollerMixingSound(this);
                     }
                 }
                 setPavingTimer(0);

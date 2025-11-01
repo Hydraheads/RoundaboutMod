@@ -192,6 +192,7 @@ public class ClientUtil {
         ent.setYHeadRot(lerpYRot);
     }
 
+    private static RoadRollerMixingSound roadRollerMixingSound;
     private static RoadRollerEntity roadRollerPickingRRE;
 
     public static void setRoadRollerPickingEntity(RoadRollerEntity RRE) {
@@ -200,6 +201,21 @@ public class ClientUtil {
 
     public static RoadRollerEntity getRoadRollerPickingRRE() {
         return roadRollerPickingRRE;
+    }
+
+    public static void handleRoadRollerAmbientSound(Entity entity) {
+        Minecraft.getInstance().getSoundManager().play(new RoadRollerAmbientSound(ModSounds.ROAD_ROLLER_AMBIENT_EVENT, SoundSource.PLAYERS, 1, 0, entity));
+    }
+
+    public static void handleRoadRollerMixingSound(Entity entity) {
+        roadRollerMixingSound = new RoadRollerMixingSound(ModSounds.ROAD_ROLLER_MIXING_EVENT, SoundSource.PLAYERS, 1.0F, 0.0F, entity);
+        Minecraft.getInstance().getSoundManager().play(roadRollerMixingSound);
+    }
+    public static void stopRoadRollerMixingSound(Entity entity) {
+        if (roadRollerMixingSound != null) {
+            Minecraft.getInstance().getSoundManager().stop(roadRollerMixingSound);
+            roadRollerMixingSound = null;
+        }
     }
 
 
