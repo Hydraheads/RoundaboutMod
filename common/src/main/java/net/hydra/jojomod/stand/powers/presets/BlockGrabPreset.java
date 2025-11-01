@@ -229,9 +229,11 @@ public class BlockGrabPreset extends NewPunchingStand {
             StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
             if (!this.getSelf().level().isClientSide) {
                 if (getStandUserSelf().roundabout$getTSJump() && !ClientNetworking.getAppropriateConfig().timeStopSettings.enableCarryingWhileHovering){
+                    if (standEntity != null){
                     boolean passenger = standEntity.getFirstPassenger() instanceof RoadRollerEntity;
-                    if (standEntity != null && !passenger) {
-                        standEntity.ejectPassengers();
+                        if (!passenger) {
+                            standEntity.ejectPassengers();
+                        }
                     }
                 }
 

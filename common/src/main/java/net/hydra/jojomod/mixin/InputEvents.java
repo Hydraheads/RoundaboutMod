@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IInputEvents;
 import net.hydra.jojomod.access.IMultiplayerGameMode;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -538,7 +539,8 @@ public abstract class InputEvents implements IInputEvents {
                 ci.cancel();
                 return;
             } else if (standComp.roundabout$getActive()) {
-                if (standComp.roundabout$isGuarding() || standComp.roundabout$isBarraging() || standComp.roundabout$isClashing() || standComp.roundabout$getStandPowers().cancelItemUse()) {
+                if (standComp.roundabout$isGuarding() || standComp.roundabout$isBarraging() || standComp.roundabout$isClashing() || standComp.roundabout$getStandPowers().cancelItemUse()
+                || ((IFatePlayer)this.player).rdbt$getFatePowers().cancelItemUse()) {
                     ci.cancel();
                     return;
                 }

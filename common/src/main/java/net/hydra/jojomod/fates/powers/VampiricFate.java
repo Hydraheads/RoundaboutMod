@@ -2,18 +2,12 @@ package net.hydra.jojomod.fates.powers;
 
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.particles.ItemParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -22,7 +16,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 
 public class VampiricFate extends FatePowers {
     public VampiricFate(LivingEntity self) {
@@ -55,11 +49,12 @@ public class VampiricFate extends FatePowers {
                         ((StandUser)LE).roundabout$setDazed((byte)3);
                     }
 
-                        double random = (Math.random() * 1.2) - 0.6;
-                        double random2 = (Math.random() * 1.2) - 0.6;
-                        double random3 = (Math.random() * 1.2) - 0.6;
+                    if (self.tickCount % 2 == 0) {
+                        double random = (Math.random() * 0.8) - 0.4;
+                        double random2 = (Math.random() * 0.8) - 0.4;
+                        double random3 = (Math.random() * 0.8) - 0.4;
                         SimpleParticleType particle = ModParticles.BLOOD;
-                        if (MainUtil.hasBlueBlood(TE)){
+                        if (MainUtil.hasBlueBlood(TE)) {
                             particle = ModParticles.BLUE_BLOOD;
                         }
                         ((ServerLevel) this.self.level()).sendParticles(particle, TE.getX() + random,
@@ -67,7 +62,7 @@ public class VampiricFate extends FatePowers {
                                 0,
                                 (this.self.getX() - TE.getX()), (this.self.getY() - TE.getY() + TE.getEyeHeight()), (this.self.getZ() - TE.getZ()),
                                 0.08);
-
+                    }
                 } else {
                     bloodSuckingTarget = null;
                     xTryPower(PowerIndex.NONE,true);
@@ -103,6 +98,7 @@ public class VampiricFate extends FatePowers {
         Entity TE = getTargetEntity(self, 3, 15);
         if (TE != null && MainUtil.canDrinkBloodFair(TE,self)){
             setActivePower(BLOOD_SUCK);
+            self.setSprinting(false);
             tryIntPowerPacket(BLOOD_SUCK,TE.getId());
             this.attackTimeDuring = 0;
         }
@@ -112,7 +108,11 @@ public class VampiricFate extends FatePowers {
         if (move == BLOOD_SUCK) {
             bloodSuckingTarget = this.self.level().getEntity(chargeTime);
             setActivePower(BLOOD_SUCK);
+            self.setSprinting(false);
             this.attackTimeDuring = 0;
+            if (bloodSuckingTarget != null) {
+                bloodSuckingTarget.setDeltaMovement(Vec3.ZERO);
+            }
         }
         return super.tryIntPower(move, forced, chargeTime);
     }
@@ -122,9 +122,16 @@ public class VampiricFate extends FatePowers {
      * any stand ability slow you down*/
     public float inputSpeedModifiers(float basis){
         if (getActivePower() == BLOOD_SUCK){
-            basis*=0;
+            basis*=0.2F;
         }
         return basis;
+    }
+    @Override
+    public float zoomMod(){
+        if (getActivePower() == BLOOD_SUCK) {
+            return 0.6f;
+        }
+        return 1;
     }
 
     @Override
@@ -150,6 +157,20 @@ public class VampiricFate extends FatePowers {
             }
         }
     }
+    @Override
+    public boolean cancelSprintJump(){
+        return getActivePower() == BLOOD_SUCK;
+    }
+    @Override
+    /**Cancel all sprinting*/
+    public boolean cancelSprint(){
+        return getActivePower() == BLOOD_SUCK;
+    }
+    @Override
+    public boolean cancelSprintParticles(){
+        return getActivePower() == BLOOD_SUCK;
+    }
+
 
     /**This function grays out icons for moves you can't currently use. Slot is the icon slot from 1-4,
      * activeP is your currently active power*/

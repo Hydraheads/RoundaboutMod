@@ -114,6 +114,27 @@ public class AbilityScapeBasis {
         return true;
     }
 
+    /**Similar to the above function, but prevents the additional velocity carried over from
+     * sprint jumping if made to return true, override and call super*/
+    public boolean cancelSprintJump(){
+        return false;
+    }
+    public boolean cancelSprintParticles(){
+        return false;
+    }
+    /**Cancel all sprinting*/
+    public boolean cancelSprint(){
+        return false;
+    }
+    /**Cancel all jumping*/
+    public boolean cancelJump(){
+        return false;
+    }
+
+    /** Make a stand ability cancel you using items */
+    public boolean cancelItemUse() {
+        return false;
+    }
 
     public boolean getReducedDamage(Entity entity){
         return (entity instanceof Player || entity instanceof StandEntity ||
@@ -458,6 +479,10 @@ public class AbilityScapeBasis {
             ((StandUserClient) this.self).roundabout$clientPlaySound();
             ((StandUserClient) this.self).roundabout$clientSoundCancel();
         }
+    }
+
+    public float zoomMod(){
+        return 1;
     }
 
     /**Does your stand let you zoom in a lot? Override this if it does*/

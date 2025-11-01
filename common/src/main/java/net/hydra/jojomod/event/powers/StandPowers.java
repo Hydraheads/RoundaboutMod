@@ -228,23 +228,11 @@ public class StandPowers extends AbilityScapeBasis {
         }
         return basis;
     }
+    @Override
     /**Similar to the above function, but prevents the additional velocity carried over from
      * sprint jumping if made to return true, override and call super*/
     public boolean cancelSprintJump(){
         return this.isBarraging();
-    }
-    /**Cancel all sprinting*/
-    public boolean cancelSprint(){
-        return false;
-    }
-    /**Cancel all jumping*/
-    public boolean cancelJump(){
-        return false;
-    }
-
-    /** Make a stand ability cancel you using items */
-    public boolean cancelItemUse() {
-        return false;
     }
 
     /**If a power can be interrupted, that means you can hit the person using the power to cancel it,
