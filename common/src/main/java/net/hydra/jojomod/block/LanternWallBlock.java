@@ -7,7 +7,10 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -35,6 +38,17 @@ public class LanternWallBlock extends Block {
     public LanternWallBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+    }
+
+    public boolean canSurvive(BlockState $$0, LevelReader $$1, BlockPos $$2) {
+        Direction $$3 = (Direction)$$0.getValue(FACING).getOpposite();
+        BlockPos $$4 = $$2.relative($$3.getOpposite());
+        BlockState $$5 = $$1.getBlockState($$4);
+        return $$5.isFaceSturdy($$1, $$4, $$3);
+    }
+
+    public BlockState updateShape(BlockState $$0, Direction $$1, BlockState $$2, LevelAccessor $$3, BlockPos $$4, BlockPos $$5) {
+        return $$1.getOpposite() == $$0.getValue(FACING).getOpposite() && !$$0.canSurvive($$3, $$4) ? Blocks.AIR.defaultBlockState() : $$0;
     }
 
     @Override
