@@ -60,10 +60,11 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
 
         PartDefinition body2 = body.addOrReplaceChild("body2", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition torso = body2.addOrReplaceChild("torso", CubeListBuilder.create().texOffs(32, 29).addBox(-1.6617F, -9.0804F, -0.5F, 4.0F, 10.0F, 2.0F, new CubeDeformation(0.0F))
+        PartDefinition torso = body2.addOrReplaceChild("torso", CubeListBuilder.create().texOffs(32, 29).addBox(-1.6617F, -1.0804F, -0.5F, 4.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(32, 29).addBox(-1.6617F, -9.0804F, -0.5F, 4.0F, 8.0F, 2.0F, new CubeDeformation(0.0F))
                 .texOffs(32, 23).addBox(-3.1617F, -0.3052F, -1.5F, 7.0F, 2.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(42, 54).addBox(-3.1617F, -6.1052F, -1.5F, 7.0F, 6.0F, 4.0F, new CubeDeformation(-0.1F))
-                .texOffs(32, 16).addBox(-3.6617F, -8.0804F, -1.5F, 8.0F, 3.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-0.3383F, 9.0804F, -0.5F));
+                .texOffs(32, 16).addBox(-3.6617F, -8.0804F, -1.5F, 8.0F, 3.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(44, 50).addBox(-4.6617F, -8.0804F, 2.575F, 10.0F, 14.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-0.3383F, 9.0804F, -0.5F));
 
         PartDefinition left_arm = torso.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(0, 38).addBox(-0.0656F, -1.0F, -0.9128F, 2.0F, 10.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.4F, -7.0F, 0.5F, 0.0F, 0.0873F, 0.0F));
 
@@ -143,6 +144,8 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
             "textures/stand/hey_ya/knight.png");
     public static ResourceLocation saint = new ResourceLocation(Roundabout.MOD_ID,
             "textures/stand/hey_ya/saint.png");
+    public static ResourceLocation vampire = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/hey_ya/vampire.png");
 
     public ResourceLocation getTextureLocation(Entity context, byte skin){
         switch (skin)
@@ -170,6 +173,7 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
             case PowersHeyYa.ANGEL ->  {return angel;}
             case PowersHeyYa.KNIGHT ->  {return knight;}
             case PowersHeyYa.SAINT ->  {return saint;}
+            case PowersHeyYa.VAMPIRE ->  {return vampire;}
             default -> {return base;}
         }
     }
