@@ -446,6 +446,10 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMagiciansRed(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_MAGICIANS_RED = addToDiscTab(ITEMS.register("max_magicians_red_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersMagiciansRed(null))));
+    public static final RegistryObject<Item> STAND_DISC_RATT = addToDiscTab(ITEMS.register("ratt_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersRatt(null))));
+    public static final RegistryObject<Item> MAX_STAND_DISC_RATT = addToDiscTab(ITEMS.register("max_ratt_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersRatt(null))));
 
     public static final RegistryObject<Item> STAND_DISC_KILLER_QUEEN = ITEMS.register("killer_queen_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null)));
@@ -477,10 +481,6 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersGreenDay(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_GREEN_DAY = addToWIPTab(ITEMS.register("max_green_day_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersGreenDay(null))));
-    public static final RegistryObject<Item> STAND_DISC_RATT = addToWIPTab(ITEMS.register("ratt_disc",
-            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersRatt(null))));
-    public static final RegistryObject<Item> MAX_STAND_DISC_RATT = addToWIPTab(ITEMS.register("max_ratt_disc",
-            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersRatt(null))));
     public static final RegistryObject<Item> STAND_DISC_DIVER_DOWN = ITEMS.register("diver_down_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
     public static final RegistryObject<Item> MAX_STAND_DISC_DIVER_DOWN = ITEMS.register("max_diver_down_disc",
