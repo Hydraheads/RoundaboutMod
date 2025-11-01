@@ -286,6 +286,7 @@
   "entity.roundabout.go_beyond": "Go Beyond（超越）",
   "entity.roundabout.ground_bubble": "地底泡泡",
 
+
   "entity.roundabout.water_bottle": "水瓶",
   "entity.roundabout.bowler_hat": "鋸帽",
 
@@ -297,6 +298,7 @@
   "entity.roundabout.painting_van_gough": "梵高畫像",
   "entity.roundabout.painting_mona_lisa": "蒙娜麗莎畫像",
   "entity.roundabout.painting_venus": "維納斯畫像",
+  "entity.roundabout.road_roller_entity": "壓路機",
 
   "block.roundabout.meteor_block": "隕錠塊",
   "block.roundabout.regal_wall": "豪華墻",
@@ -377,11 +379,12 @@
   "block.roundabout.cultivated_cherry_sapling": "盆栽櫻花樹苗",
   "block.roundabout.cultivated_oak_sapling": "盆栽橡樹樹苗",
   "block.roundabout.cultivated_locacaca": "盆栽洛卡卡卡植株",
+  "block.roundabout.melon_parfait": "西瓜凍糕",
 
   "itemgroup.jojo": "徘徊",
   "itemgroup.jojo_discs": "替身光碟",
   "itemgroup.jojo_wip_features": "徘徊——開發中",
-  "itemgroup.jojo_building_blocks": "Roundabout Building Blocks",
+  "itemgroup.jojo_building_blocks": "徘徊：建築方塊",
   "itemgroup.justice_fog_items": "[正義]的幻象方塊",
   "roundabout.dev_status.dev_status": "創作者狀態：",
   "roundabout.dev_status.active": "活躍",
@@ -500,6 +503,10 @@
   "death.attack.dagger.item": "%1$s成了一個完美的祭品",
   "death.attack.dagger.player": "%1$s成了一個完美的祭品",
   "death.attack.dagger.player.item": "%1$s成了一個完美的祭品",
+  "death.attack.road_roller_entity": "%1$s上路了。",
+  "death.attack.road_roller_entity.item": "%1$s的墓地壓好了",
+  "death.attack.road_roller.player": "%1$s上路了。",
+  "death.attack.road_roller.player.item": "%1$s的墓地壓好了",
 
 
   "item.glaive.charge_power": "蓄力攻擊",
@@ -744,7 +751,7 @@
   "sounds.roundabout.star_platinum_ora_2":  "歐拉",
   "sounds.roundabout.star_platinum_ora_3":  "歐拉！",
   "sounds.roundabout.the_world_muda":  "木大！",
-  "sounds.roundabout.star_platinum_catch":  "物品抓取成功",
+  "sounds.roundabout.star_platinum_catch":  "抓住了什麽",
 
   "sounds.roundabout.hallelujah":  "Hallelujah",
   "sounds.roundabout.torture_dance":  "Torture Dance",
@@ -762,9 +769,16 @@
   "sounds.roundabout.hey_ya_6": "替身的話語",
   "sounds.roundabout.hey_ya_7": "替身的話語",
 
+  "sounds.roundabout.killer_queen_summon": "替身被召喚！",
+  "sounds.roundabout.killer_queen_barrage": "Shibabababa!",
+
   "sounds.roundabout.levelup": "替身已成長！",
 
   "sounds.roundabout.vampire_drain": "吸取血液",
+
+  "sounds.roundabout.road_roller_ambient":  "壓路機運行",
+  "sounds.roundabout.road_roller_explosion":  "壓路機爆炸",
+  "sounds.roundabout.road_roller_mixing":  "壓路機混合漿體",
 
   "sounds.roundabout.dio_hoho":  "吼吼！",
   "sounds.roundabout.dio_hoho_2":  "吼~",
@@ -1099,6 +1113,8 @@
   "ability.roundabout.ratt_place_burst.desc": "令溶蝕針向你鼠標朝向位置進行毒針三連射。",
   "ability.roundabout.ratt_auto": "自由開火",
   "ability.roundabout.ratt_auto.desc": "選擇視野中的目標，隨後溶蝕針將會持續攻擊目標直至地方死亡。",
+  "ability.roundabout.ratt_bucket": "血肉裝桶",
+  "ability.roundabout.ratt_bucket.desc": "桶可以收集較大範圍的融化血肉以快速收集和放置血肉。",
   "ability.roundabout.ratt_flesh": "血肉方塊/小塊",
   "ability.roundabout.ratt_flesh.desc": "溶蝕針擊殺而融化的生物將會在原地生成血肉塊。可以減速生物，同時難以破壞。溶蝕針使用者無視這些負面效果，能夠在其中自由移動且可以通過潛行右鍵收集這些血肉。",
   "ability.roundabout.ratt_leap": "溶蝕針飛躍",
@@ -1299,6 +1315,7 @@
   "skins.roundabout.ratt.chair_rat" : "老鼠……？",
   "skins.roundabout.ratt.king_rat" : "國王陛下",
   "skins.roundabout.ratt.mech_rat" : "生化機械鼠",
+  "skins.roundabout.ratt.nether" : "下界風範",
 
   "skins.roundabout.cinderella.base": "第四部",
   "skins.roundabout.cinderella.manga": "漫畫版",
@@ -1331,6 +1348,7 @@
   "skins.roundabout.hey_ya.angel": "天使",
   "skins.roundabout.hey_ya.knight": "騎士",
   "skins.roundabout.hey_ya.saint": "聖人",
+  "skins.roundabout.hey_ya.vampire": "吸血鬼",
 
   "skins.roundabout.mandom.manga": "漫畫版",
   "skins.roundabout.mandom.purple": "紫變色",
@@ -1618,13 +1636,17 @@
   "config.roundabout.enableStandLeveling.name": "開啟替身等級",
   "config.roundabout.enableStandLeveling.desc": "開啟替身等級機製，此機製將用於解鎖技能和皮膚",
 
+  "config.roundabout.enablePickyIconRendering.name": "開啟自動隱藏圖標",
+  "config.roundabout.enablePickyIconRendering.desc": "技能圖標將在所以技能都不處於冷卻的情況下自動隱藏。",
+
+
   "config.roundabout.spiritOutInterruption.name": "全神貫註打斷",
   "config.roundabout.spiritOutInterruption.desc": "默認情況下，玩家需要開啟替身並使用替身攻擊（或是非替身使者，此時普通攻擊也行）才能打斷攻擊。此機製被稱為「全神貫註打斷」，目的是讓打斷機製更令人滿意，避免替身使者無腦左鍵打斷。關閉後將回歸原先的打斷機製（啥事都能給你斷了）。",
   "config.roundabout.standThrownEntityFallDamageImmmunityTicks.name": "投擲摔落保護刻",
   "config.roundabout.standThrownEntityFallDamageImmmunityTicks.desc": "默認情況下，將實體扔出會給予他們一個短暫的摔落傷害免疫，以避免短程投擲即可造成傷害的無腦投擲行為。",
 
   "config.roundabout.enableBowlerHatRender.name": "開啟鋸帽渲染",
-  "config.roundabout.enableBowlerHatRender.desc": "鋸帽是否在手持時，渲染為頭戴其的形式。（捏住帶著的帽子的邊緣這樣）",
+  "config.roundabout.enableBowlerHatRender.desc": "鋸帽是否在手持時，渲染為頭戴帽子的形式。（捏住帶著的帽子的邊緣這樣）",
 
 
   "config.roundabout.cinderellaSpacing.name": "灰姑娘沙龍布局",
@@ -1641,6 +1663,8 @@
   "config.roundabout.meteoriteSeparationMakeSmallerThanSpacing.desc": "兩個隕石之間的最小距離，必須比其平均距離小。",
   "config.roundabout.modifyStructureWeights.name": "調整結構權重",
   "config.roundabout.modifyStructureWeights.desc": "不管是否調整了結構權重，仍有可能與其他mod的結構沖突。",
+  "config.roundabout.hideGUI.name": "隱藏能力圖標",
+  "config.roundabout.hideGUI.desc": "主動開啟或關閉HUD渲染。",
 
   "config.roundabout.disableMeleeWhileStandActive.name": "替身召喚時關閉近戰攻擊",
   "config.roundabout.disableMeleeWhileStandActive.desc": "默認情況下，喚出擁有替身攻擊技能的替身時會自動覆蓋近戰攻擊，修改此選項以同時使用兩者。",
@@ -2034,7 +2058,7 @@
   "config.roundabout.buffToMeleeAttacksWhenZapped.name": "物理增強",
   "config.roundabout.buffToMeleeAttacksWhenZapped.desc": "接近時，玩家和生物的物理傷害增強此數值。（默認為1.2，即有20%的傷害加成）",
   "config.roundabout.bonusDamageWhenPunching.name": "增強空手傷害",
-  "config.roundabout.bonusDamageWhenPunching.desc": "就像伍斯伍德一樣，當你戰鬥時你的空手傷害將會增加到3點（默認傷害），然而攻擊將會使自己流血。註意，盡管這份傷害可以與其他傷害叠加，這份附加傷害是獨立計算護甲減傷部分的，所以對pvp用處不大（說得好像這對模組pvp有什麽幫助是的……）",
+  "config.roundabout.bonusDamageWhenPunching.desc": "就像伍斯伍德一樣，當你戰鬥時你的空手傷害將會增加到3點（默認傷害），然而攻擊將會使自己流血。註意，盡管這份傷害可以與其他傷害疊加，這份附加傷害是獨立計算護甲減傷部分的，所以對pvp用處不大（說得好像這對模組pvp有什麽幫助是的……）",
   "config.roundabout.survivorRange.name": "基礎範圍",
   "config.roundabout.survivorRange.desc": "生存者替身在基礎模式下能夠用電流影響玩家和生物的最大範圍。（默認為8格）",
   "config.roundabout.survivorCupidRange.name": "丘比特生存模式範圍",
@@ -2147,6 +2171,10 @@
   "config.roundabout.blockRangeNegativeOneIsInfinite.desc": "默認的有效範圍為100格，這樣只有附近的玩家才會受影響。若設置為-1時停範圍將會變為世界時停並可以停止遊戲時間流逝。但是出於服務器中的性能考慮和其他玩家體感不建議。",
   "config.roundabout.postTSiframes.name": "時停傷害結算保護",
   "config.roundabout.postTSiframes.desc": "承受時停傷害後的無敵幀。默認為19刻。（調低就能時停飛刀配合拳擊了）",
+  "config.roundabout.postTSSoften.name": "時停後減傷",
+  "config.roundabout.postTSsoftenFrames.desc": "玩家是否會在時停之後對不可避免的攻擊有一定時間的減傷。（如汽油爆炸和替身攻擊）。此減傷持續時間與時停的時間成正比，且對於1s以下的時停不會有任何時停減傷時間。",
+  "config.roundabout.postTSCancel.name": "時停後取消特定動作",
+  "config.roundabout.postTSCancel.desc": "時停結束後是否會有特定動作失效或被終止。對舊版本禁用。",
 
 
   "config.roundabout.starPlatinumAttackMultOnPlayers.name": "對玩家傷害倍率",
@@ -2254,6 +2282,7 @@
   "config.roundabout.softAndWetSettings.name": "軟又濕",
   "config.roundabout.magiciansRedSettings.name": "魔術師之紅",
   "config.roundabout.walkingHeartSettings.name": "步行之心",
+  "config.roundabout.rattSettings.name": "溶蝕針",
   "config.roundabout.justiceSettings.name": "正義",
   "config.roundabout.cinderellaSettings.name": "灰姑娘",
   "config.roundabout.heyYaSettings.name": "嘿呀！",
@@ -2361,6 +2390,9 @@
 
   "config.roundabout.banDirectionalBlockPlacingFailure.name": "地牢進行時不兼容修復",
   "config.roundabout.banDirectionalBlockPlacingFailure.desc": "地牢進行時2%這個模組存在一個奇怪的bug，會在方塊放置成功的情況下仍然報回方塊放置失敗，使得替身投擲、放置方塊後出現物品無限刷取的情況。只有你確實安裝了那個mod時才需要開啟此項，因為修復這個bug是將所有放置失敗的方塊投擲物直接刪除而非變為掉落物。",
+
+  "config.roundabout.enableRoadRollerRender.name": "壓路機手持渲染",
+  "config.roundabout.enableRoadRollerRender.desc": "關閉此項以讓壓路機手持時不為舉過頭頂。",
 
   "config.roundabout.generalSettings.name": "總設置",
   "config.roundabout.configSettings.name": "設置配置文件",
