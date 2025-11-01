@@ -1,5 +1,6 @@
 package net.hydra.jojomod.fates.powers;
 
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -7,10 +8,12 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -95,12 +98,18 @@ public class VampiricFate extends FatePowers {
     }
 
     public void suckBlood(){
-        Entity TE = getTargetEntity(self, 3, 15);
-        if (TE != null && MainUtil.canDrinkBloodFair(TE,self)){
-            setActivePower(BLOOD_SUCK);
-            self.setSprinting(false);
-            tryIntPowerPacket(BLOOD_SUCK,TE.getId());
-            this.attackTimeDuring = 0;
+        if (!onCooldown(PowerIndex.FATE_2)) {
+            Entity TE = getTargetEntity(self, 3, 15);
+            if (TE != null && MainUtil.canDrinkBloodFair(TE, self)) {
+                setActivePower(BLOOD_SUCK);
+                self.setSprinting(false);
+                tryIntPowerPacket(BLOOD_SUCK, TE.getId());
+                this.attackTimeDuring = 0;
+                if (this.getSelf() instanceof Player && !self.level().isClientSide()) {
+                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.FATE_2, 60);
+                }
+                this.setCooldown(PowerIndex.FATE_2, 60);
+            }
         }
     }
     @Override
