@@ -731,7 +731,6 @@ public class PowersRatt extends NewDashPreset {
 
 
     public void RecallClient(boolean forced) {
-        Roundabout.LOGGER.info("??"+this.getStandEntity(this.getSelf()).forceDespawnSet);
         if (!this.onCooldown(PowersRatt.SETPLACE) || forced && this.getStandEntity(this.getSelf()) != null) {
             tryPower(PowersRatt.NET_RECALL,true);
             tryPowerPacket(PowersRatt.NET_RECALL);
