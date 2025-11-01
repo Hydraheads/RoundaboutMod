@@ -49,6 +49,7 @@ public class WorthyVillagerMakeLove {
                     if ($$5.nextFloat() < UserOdds && !ModItems.getPoolForMob(villager).isEmpty()) {
                         ((IMob) villager).roundabout$setWorthy(true);
                         ((IMob) villager).roundabout$setIsNaturalStandUser(true);
+                        ((IMob)$$2).roundabout$setIsBred(true);
                         int index = (int) (Math.floor(Math.random() * ModItems.getPoolForMob(villager).size()));
                         ItemStack stack = ModItems.getPoolForMob(villager).get(index).getDefaultInstance();
                         if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem SD) {

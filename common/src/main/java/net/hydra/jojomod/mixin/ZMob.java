@@ -122,13 +122,25 @@ public abstract class ZMob extends LivingEntity implements IMob {
     }
     @Unique
     public boolean roundabout$isNaturalStandUser = false;
+    @Unique
+    public boolean roundabout$isBred = false;
 
+    @Override
+    @Unique
+    public boolean roundabout$getIsBred() {
+        return roundabout$isBred;
+    }
+    @Override
+    @Unique
+    public void roundabout$setIsBred(boolean set) {
+        roundabout$isBred = set;
+    }
 
     @Inject(method = "dropCustomDeathLoot", at = @At(value = "HEAD"))
     private void roundabout$dropCustomLoot(DamageSource $$0, int $$1, boolean $$2, CallbackInfo ci) {
         if (roundabout$isNaturalStandUser){
             if ($$0.getEntity() != null) {
-                if (((Mob)(Object)this) instanceof Enemy && ((StandUser)this).roundabout$hasAStand()) {
+                if (((StandUser)this).roundabout$hasAStand() && !roundabout$isBred) {
                     if ($$0.getEntity() instanceof Player) {
                         if (!this.level().isClientSide()){
                             ExperienceOrb.award((ServerLevel) this.level(), this.position(), 160);
@@ -164,7 +176,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
     public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
         $$0.putBoolean("roundabout.isWorthy", this.roundabout$isWorthy());
-        $$0.putBoolean("roundabout.isNaturalStandUser", this.roundabout$isWorthy());
+        $$0.putBoolean("roundabout.isNaturalStandUser", this.roundabout$isNaturalStandUser);
+        $$0.putBoolean("roundabout.isBred", roundabout$getIsBred());
         return $$0;
     }
 
@@ -172,6 +185,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
     public void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci){
         this.roundabout$setWorthy($$0.getBoolean("roundabout.isWorthy"));
         this.roundabout$setIsNaturalStandUser($$0.getBoolean("roundabout.isNaturalStandUser"));
+        this.roundabout$setIsBred($$0.getBoolean("roundabout.isBred"));
     }
 
     @Shadow

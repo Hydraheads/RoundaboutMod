@@ -83,11 +83,11 @@ public abstract class ConfigManager {
 
     public static void loadStandArrowPool()
     {
-        if (getAdvancedConfig().standArrowPoolv3 != null)
+        if (getAdvancedConfig().standArrowPoolv4 != null)
         {
             ModItems.STAND_ARROW_POOL.clear();
 
-            for (String disc : getAdvancedConfig().standArrowPoolv3)
+            for (String disc : getAdvancedConfig().standArrowPoolv4)
             {
                 String[] split = disc.split(":");
 

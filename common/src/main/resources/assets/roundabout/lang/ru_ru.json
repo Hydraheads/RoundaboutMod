@@ -2,6 +2,7 @@
   "text.roundabout.barrage_clash": "Схватка! Зажми и отпусти кнопку Прыжка!",
   "text.roundabout.launch_bubble_encased": "Вы заключены в пузырь! Используй острый предмет чтобы выбраться!",
   "text.roundabout.riding_flying_creature": "Зажми Прыжок чтобы вознестись, Зажми Рывок чтобы спуститься",
+  "text.roundabout.riding_road_roller": "Заполни Асфальтоукладчик бетоном чтобы начать укладку!",
   "text.roundabout.riding_flying_creature.day": "Нельзя летать в дневное время.",
   "text.roundabout.riding_flying_creature.dimension": "Нельзя лететь в этом измерении.",
   "text.roundabout.warn_trap_triggered": " задет(а)!",
@@ -51,6 +52,8 @@
   "item.roundabout.lucky_lipstick": "Помада 'Lucky'",
   "item.roundabout.lucky_lipstick.desc": "Нанеси до сна для успешных сделок.",
   "item.roundabout.sacrificial_dagger": "Кинжал жертвоприношений",
+  "item.roundabout.cherries": "Вишенки",
+
 
   "item.roundabout.star_platinum_disc": "Диск со Стендом",
   "item.roundabout.the_world_disc": "Диск со Стендом",
@@ -98,6 +101,8 @@
   "item.roundabout.diver_down_disc.desc": "Diver Down",
   "item.roundabout.max_diver_down_disc.desc": "Diver Down",
   "item.roundabout.none_disc.desc": "None",
+
+  "item.roundabout.road_roller": "Асфальтоукладчик",
 
   "item.roundabout.light_bulb": "Лампочка",
 
@@ -203,6 +208,7 @@
   "effect.roundabout.faceless": "Безликость",
   "effect.roundabout.melting": "Разложение",
   "effect.roundabout.gravity_flip": "Гравитация",
+  "effect.roundabout.warding": "Отражение",
 
   "item.roundabout.creative_only.info": "Только Креатив",
 
@@ -233,6 +239,7 @@
   "entity.roundabout.soft_and_wet_king": "Soft And Wet",
   "entity.roundabout.soft_and_wet_drowned": "Soft And Wet",
   "entity.roundabout.soft_and_wet_killer_queen": "Killer Queen",
+  "entity.roundabout.killer_queen": "Killer Queen",
   "entity.roundabout.walking_heart": "Walking Heart",
   "entity.roundabout.diver_down": "Diver Down",
   "entity.roundabout.harpoon": "Гарпун",
@@ -279,9 +286,23 @@
   "entity.roundabout.go_beyond": "Go Beyond",
   "entity.roundabout.ground_bubble": "Подземный пузырь",
 
+  "entity.roundabout.water_bottle": "Бутылочка воды",
+  "entity.roundabout.bowler_hat": "Шляпа Котелок",
+
+  "entity.roundabout.crossfire_hurricane": "Перекрестный Огонь",
+  "entity.roundabout.life_tracker": "Детектор Жизни",
+  "entity.roundabout.stand_fireball": "Фаерболл Стенда",
+  "entity.roundabout.thrown_object": "Брошеный обьект",
+  "entity.roundabout.ratt_dart": "Дротик Ratt",
+  "entity.roundabout.painting_van_gough": "Картина В.Г.",
+  "entity.roundabout.painting_mona_lisa": "Картина М.Л",
+  "entity.roundabout.painting_venus": "Картина В",
+
   "block.roundabout.meteor_block": "Блок Метеорита",
   "block.roundabout.regal_wall": "Роскошная стена",
   "block.roundabout.regal_floor": "Роскошный пол",
+  "block.roundabout.glass_door": "Стеклянная Дверь",
+  "block.roundabout.wall_lantern": "Настенный Светильник",
   "block.roundabout.wooden_manor_table": "Деревянный усадебный стол",
   "block.roundabout.wooden_manor_chair": "Деревянный усадебный стул",
   "block.roundabout.wool_slab_black": "Чёрная Шерстяная Плита",
@@ -352,6 +373,10 @@
   "block.roundabout.wall_street_sign_yield": "Указатель: Уступи дорогу",
   "block.roundabout.wall_street_sign_danger": "Указатель: Опасность",
   "block.roundabout.flesh_block": "Кусок плоти",
+  "block.roundabout.cultivation_pot": "Горшочек для выращивания",
+  "block.roundabout.cultivated_cherry_sapling": "Культивированный Саженец Вишни",
+  "block.roundabout.cultivated_oak_sapling": "Культивированный Саженец Дуба",
+  "block.roundabout.cultivated_locacaca": "Культивированная Локакака",
 
   "itemgroup.jojo": "Roundabout",
   "itemgroup.jojo_discs": "Диски со Стендами",
@@ -407,6 +432,10 @@
   "death.attack.stand.item": "%1$s умер(ла) от таинственной силы, борясь с %2$s",
   "death.attack.stand_rush": "%1$s был(а) избит(а) %2$s",
   "death.attack.stand_rush.item": "%1$s был(а) избит(а) %2$s",
+  "death.attack.sunlight": "%1$s пущен(а) по ветру.",
+  "death.attack.sunlight.item": "%1$s пущен(а) по ветру.",
+  "death.attack.sunlight.player": "%1$s увидел(а) свет пока боролся(ась) с %2$s.",
+  "death.attack.sunlight.player.item": "%1$s увидел(а) свет пока боролся(ась) %2$s.",
   "death.attack.stand_fire": "%1$s был(а) зажарен(а)",
   "death.attack.stand_fire.item": "%1$s был(а) зажарен(а)",
   "death.attack.stand_fire.player": "%1$s был(а) зажарен(а)",
@@ -566,6 +595,7 @@
   "sounds.roundabout.heel_stomp":  "Опущение ноги",
   "sounds.roundabout.spike_hit":  "Удар шпилькой",
   "sounds.roundabout.spike_miss":  "Выдвижение шпильки",
+  "sounds.roundabout.vampire_crumble":  "Крошение",
 
   "sounds.roundabout.mandom_rewind":  "Отмотка времени",
 
@@ -680,11 +710,14 @@
 
   "sounds.roundabout.ratt_summon":  "Стрекочущие звуки",
   "sounds.roundabout.ratt_place":  "Стенд призван",
+  "sounds.roundabout.ratt_deplace":  "Ratt Отозван",
   "sounds.roundabout.ratt_scope":  "Жужжание прицела",
   "sounds.roundabout.ratt_dart_impact": "Удар дротика",
   "sounds.roundabout.ratt_dart_thunk": "Дротик вонзается",
   "sounds.roundabout.ratt_loading": "Зловещее взведение",
   "sounds.roundabout.ratt_firing": "Ratt стреляет",
+  "sounds.roundabout.ratt_leap": "Мини Скачок",
+  "sounds.roundabout.ratt_mode_change": "Изменение Режима",
 
   "sounds.roundabout.arcade_impale":  "[Аркадный Удар]",
   "sounds.roundabout.arcade_long_ts":  "[Остановка Времени]",
@@ -731,6 +764,8 @@
 
   "sounds.roundabout.levelup": "Повышение уровня Стенда!",
 
+  "sounds.roundabout.vampire_drain": "Высасывание крови",
+
   "sounds.roundabout.dio_hoho":  "Хо-Хо!",
   "sounds.roundabout.dio_hoho_2":  "Хо!",
   "sounds.roundabout.dio_death":  "Я ДИО!!",
@@ -759,6 +794,32 @@
   "sounds.roundabout.dio_interesting":  "Забавно",
   "sounds.roundabout.dio_jotaro":  "Джотаро!",
   "sounds.roundabout.dio_jotaro_2":  "Джотаро-",
+
+  "sounds.roundabout.diego_ho":  "Хо-Хо!",
+  "sounds.roundabout.diego_ho_2":  "Хо!",
+  "sounds.roundabout.diego_death":  "Диего убит",
+  "sounds.roundabout.diego_death_2":  "Диего Убит",
+  "sounds.roundabout.diego_kurei":  "Диего кричит",
+  "sounds.roundabout.diego_kureit":  "Диего кричит",
+  "sounds.roundabout.diego_hurt_1":  "Диего ранен",
+  "sounds.roundabout.diego_hurt_2":  "Диего ранен",
+  "sounds.roundabout.diego_hurt_3":  "Диего ранен",
+  "sounds.roundabout.diego_hurt_4":  "Диего ранен",
+  "sounds.roundabout.diego_laugh":  "Диего смеётся",
+  "sounds.roundabout.diego_wry":  "Wryyy",
+  "sounds.roundabout.diego_shine":  "Умри!",
+  "sounds.roundabout.diego_checkmate":  "Шах и Мат",
+  "sounds.roundabout.diego_nani":  "Что!?",
+  "sounds.roundabout.diego_no_way":  "Быть такого не может!",
+  "sounds.roundabout.diego_kono_dio":  "Я Диего!",
+  "sounds.roundabout.diego_attack":  "Диего атакует",
+  "sounds.roundabout.diego_attack_2":  "Диего атакует",
+  "sounds.roundabout.diego_the_world":  "The World",
+  "sounds.roundabout.diego_the_world_2":  "The World",
+  "sounds.roundabout.diego_the_world_3":  "The World",
+  "sounds.roundabout.diego_the_world_4":  "The World",
+  "sounds.roundabout.diego_taunt":  "Диего издевается",
+  "sounds.roundabout.diego_interesting":  "Диего заинтересован",
 
   "sounds.roundabout.jotaro_hurt_1":  "Джотаро ранен",
   "sounds.roundabout.jotaro_hurt_2":  "Джотаро ранен",
@@ -814,6 +875,7 @@
   "instruction.roundabout.press_skill_air": "Находясь в воздухе, нажмите кнопку способности %1$s",
   "instruction.roundabout.press_2_skill": "Нажмите кнопку способности %1$s во время способности %2$s",
   "instruction.roundabout.passive": "Пассивное",
+  "instruction.roundabout.shop_item": "Магазин Предметов",
 
   "ability.roundabout.punch": "Удар",
   "ability.roundabout.punch.desc": "Наносит удар кулаком прямо перед вами. Удерживайте кнопку для трёхударного комбо!",
@@ -1028,7 +1090,7 @@
   "ability.roundabout.ratt_scope": "Режим Прицела",
   "ability.roundabout.ratt_scope.desc": "Удерживание Ratt на себе зажатие и прицела, позволяет вам стрелять во время движения.",
   "ability.roundabout.ratt_single": "Точный Выстрел",
-  "ability.roundabout.ratt_single.desc": "Зарядите дротик и атакуйте, чтобы выстрелить им",
+  "ability.roundabout.ratt_single.desc": "Зарядите дротик и атакуйте, чтобы выстрелить им.",
   "ability.roundabout.ratt_burst": "Множественный Выстрел",
   "ability.roundabout.ratt_burst.desc": "Стреляет альтернативной формой выстрела, которая больше плавит, но наносит меньше урона.",
   "ability.roundabout.ratt_place": "Установка Ratt",
@@ -1036,12 +1098,16 @@
   "ability.roundabout.ratt_place_burst": "Установленный Множественный Выстрел",
   "ability.roundabout.ratt_place_burst.desc": "Выпускает множественный выстрел 3 дротиков из положения Ratt туда куда смотрит ваш курсор.",
   "ability.roundabout.ratt_auto": "Автоматический Режим",
-  "ability.roundabout.ratt_auto.desc": "Наведите прицел на объект в поле зрения, и Ratt автоматически откроет по нему огонь",
+  "ability.roundabout.ratt_auto.desc": "Наведите прицел на объект в поле зрения, и Ratt автоматически откроет по нему огонь.",
   "ability.roundabout.ratt_flesh": "Куски/Блоки Плоти",
-  "ability.roundabout.ratt_flesh.desc": "Падают от плавящихся существ. Замедляют мобов и их трудно разбить. Однако, имея Ratt, вы можете обойти эти ограничения, свободно передвигаться по ним и мгновенно подбирать их, нажав Shift+Правая Кнопка Мыши.",
+  "ability.roundabout.ratt_flesh.desc": "Падают от плавящихся существ. Замедляют мобов и их трудно разбить. Однако, имея Ratt, вы можете обойти эти ограничения, свободно передвигаться по ним и мгновенно подбирать их, нажав Правую Кнопку Мыши.",
+  "ability.roundabout.ratt_leap": "Рывок Ratt",
+  "ability.roundabout.ratt_leap.desc": "Бросает Ratt в сторону, позволяя вам быстро сменить его позицию.",
 
   "ability.roundabout.diver_selection": "Погружённый выбор",
   "ability.roundabout.diver_selection.desc": "Открывает колесо ослаблений, которое вы можете применить к себе.",
+  "ability.roundabout.diver_zip": "Погружённый Рывок",
+  "ability.roundabout.diver_zip.desc": "Ваш стенд ныряет под землю и проносит вас с собой! Задавайте направление кнопками движения.",
 
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Недоступно",
@@ -1138,6 +1204,7 @@
   "skins.roundabout.the_world.ultimate_kars": "Ultimate K",
   "skins.roundabout.the_world.scarlet": "Алый",
   "skins.roundabout.the_world.the_nether": "The Nether",
+  "skins.roundabout.the_world.bronze": "Бронзовый",
 
   "skins.roundabout.justice.base": "Часть 3",
   "skins.roundabout.justice.skeleton": "Скелетный",
@@ -1153,6 +1220,8 @@
   "skins.roundabout.justice.pirate": "Пират",
   "skins.roundabout.justice.dark_mirage": "Мрачный Мираж",
   "skins.roundabout.justice.jojonium": "Jojonium",
+  "skins.roundabout.justice.pumpkin": "Тыква",
+  "skins.roundabout.justice.jack": "Джек",
 
   "skins.roundabout.magicians_red.base": "Часть 3",
   "skins.roundabout.magicians_red.blue": "Голубой Огонёк",
@@ -1195,6 +1264,8 @@
   "skins.roundabout.soft_and_wet.melon": "Арбузный",
   "skins.roundabout.soft_and_wet.nature": "Природный",
   "skins.roundabout.soft_and_wet.art": "Художественный",
+  "skins.roundabout.soft_and_wet.wheel": "Колесо",
+  "skins.roundabout.soft_and_wet.action": "Обитый",
 
   "skins.roundabout.d4c.base": "Манга",
   "skins.roundabout.d4c.wonder_festival": "JOJOVELLER",
@@ -1206,11 +1277,12 @@
   "skins.roundabout.walking_heart.base": "Manga",
   "skins.roundabout.walking_heart.model": "Модель",
   "skins.roundabout.walking_heart.purple": "Фиолетовый",
-  "skins.roundabout.walking_heart.verdant": "Verdant",
+  "skins.roundabout.walking_heart.verdant": "Зеленеющий",
   "skins.roundabout.walking_heart.pale": "Бледный",
   "skins.roundabout.walking_heart.valentine": "Валентинка",
   "skins.roundabout.walking_heart.gothic": "Готический",
   "skins.roundabout.walking_heart.spider": "Паутинный",
+  "skins.roundabout.walking_heart.scarecrow": "Пугало",
 
   "skins.roundabout.green_day.base": "Часть 5",
 
@@ -1220,16 +1292,20 @@
   "skins.roundabout.ratt.sand" : "Песочный",
   "skins.roundabout.ratt.aztec" : "Ацтекский",
   "skins.roundabout.ratt.tower" : "Пещерный",
+  "skins.roundabout.ratt.redd" : "Redd",
   "skins.roundabout.ratt.snowy" : "Снежный",
   "skins.roundabout.ratt.guardian" : "Страж",
   "skins.roundabout.ratt.elder_guardian" : "Древний Страж",
+  "skins.roundabout.ratt.rat" : "Крыса?",
+  "skins.roundabout.ratt.king_rat" : "Крысинный Король",
+  "skins.roundabout.ratt.mech_rat" : "Киборг Крыса",
 
   "skins.roundabout.cinderella.base": "Часть 4",
   "skins.roundabout.cinderella.manga": "Манга",
   "skins.roundabout.cinderella.zombie": "Заражённая",
   "skins.roundabout.cinderella.jack_in_the_box": "Шут",
   "skins.roundabout.cinderella.business": "Деловой стиль",
-  "skins.roundabout.cinderella.face_off": "Face Off",
+  "skins.roundabout.cinderella.face_off": "Безликая",
 
   "skins.roundabout.hey_ya.manga": "Манга",
   "skins.roundabout.hey_ya.gothic": "Готичный",
@@ -1276,11 +1352,13 @@
   "skins.roundabout.survivor.purple": "Фиолетовый",
   "skins.roundabout.survivor.red": "Красный",
   "skins.roundabout.survivor.blue": "Голубой",
-  "skins.roundabout.survivor.silver": "Серебрянный",
+  "skins.roundabout.survivor.silver": "Серебряный",
   "skins.roundabout.survivor.ghast": "Гастлинг",
   "skins.roundabout.survivor.ender": "Эндер",
   "skins.roundabout.survivor.conduit": "Морской Источник",
   "skins.roundabout.survivor.cake": "Тортик",
+  "skins.roundabout.survivor.sponge": "Губка",
+  "skins.roundabout.survivor.sculk": "Скалк",
 
   "skins.roundabout.killer_queen.base": "Часть 4",
 
@@ -1290,9 +1368,7 @@
   "skins.roundabout.diver_down.orangediver": "Оранжевый Дайвер",
   "skins.roundabout.diver_down.treasurediver": "Кладоискатель",
   "skins.roundabout.diver_down.birthdaydiver": "День Рождения!",
-
-
-
+  "skins.roundabout.diver_down.firediver": "Fire Down",
 
   "skins.roundabout.achtung_baby.base": "Не имеет формы",
 
@@ -1302,6 +1378,7 @@
   "unlock_skin.roundabout.magicians_red.chagaroth": "Разблокирован скин: Magician's Dread!",
   "unlock_skin.roundabout.soft_and_wet.kira": "Разблокирован скин: Killer Queen (8-я часть)!",
   "unlock_skin.roundabout.ratt.guardians": "Разблокирован скин: Cтраж Ratt",
+  "unlock_skin.roundabout.ratt.rat": "Разблокирован скин Ratt: Крыса?",
   "unlock_skin.roundabout.walking_heart.spider": "Разблокирован скин Walking Heart: Паутинное Сердце",
 
   "justice.morph.player": "Игрок",
@@ -1323,6 +1400,7 @@
   "roundabout.pose.wamuu": "Пробуждён!",
   "roundabout.pose.jotaro": "Гордая Стойка",
   "roundabout.pose.jonathan": "Герой",
+  "roundabout.pose.sitting": "Сидеть",
   "roundabout.pose.none": "ДжоДжо Позинг",
 
   "roundabout.soft_and_wet_plunder.none": "Похититель Свойств",
