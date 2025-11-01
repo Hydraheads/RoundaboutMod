@@ -405,7 +405,7 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
             }
         }
 
-        if (!level().isClientSide() && this.tickCount % 60 == 1) {
+        if (level().isClientSide() && this.tickCount % 60 == 1) {
             if (!((TimeStop) level()).inTimeStopRange(this)) {
                 ClientUtil.handleRoadRollerAmbientSound(this);
             }
@@ -467,20 +467,20 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
             }
         }
 
-        if (!level().isClientSide()) {
+        if (level().isClientSide()) {
             if (getExploded()) {
                 if (explosionParticleDelay >= 10) {
                     if (!((TimeStop) level()).inTimeStopRange(this)) {
                         if (!explosionSoundStarted) {
                             explosionSoundStarted = true;
-                            MainUtil.handleRoadRollerExplosionSound(this);
+                            ClientUtil.handleRoadRollerExplosionSound(this);
                         }
                     }
                 }
             }
         }
 
-        if (!level().isClientSide) {
+        if (level().isClientSide) {
             if (getPickupBoolean() > 0) {
                 ClientUtil.setRoadRollerPickingEntity(this);
             }
@@ -1136,7 +1136,7 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
                     setConcreteColour(item);
                 }
 
-                if (!level().isClientSide) {
+                if (level().isClientSide) {
                     if (getPavingBoolean() && !((TimeStop) level()).inTimeStopRange(this)) {
                         mixingSoundStarted = true;
                         ClientUtil.stopRoadRollerMixingSound(this);
@@ -1150,7 +1150,7 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
             } else {
                 setConcreteColour(item);
                 setPavingBoolean(true);
-                if (!level().isClientSide) {
+                if (level().isClientSide) {
                     if (getPavingBoolean() && !((TimeStop) level()).inTimeStopRange(this)) {
                         mixingSoundStarted = true;
                         ClientUtil.stopRoadRollerMixingSound(this);

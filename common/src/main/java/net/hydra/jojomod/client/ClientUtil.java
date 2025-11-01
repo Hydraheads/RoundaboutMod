@@ -207,6 +207,10 @@ public class ClientUtil {
         Minecraft.getInstance().getSoundManager().play(new RoadRollerAmbientSound(ModSounds.ROAD_ROLLER_AMBIENT_EVENT, SoundSource.PLAYERS, 1, 0, entity));
     }
 
+    public static void handleRoadRollerExplosionSound(Entity entity) {
+        Minecraft.getInstance().getSoundManager().play(new RoadRollerExplosionSound(ModSounds.ROAD_ROLLER_EXPLOSION_EVENT, SoundSource.PLAYERS, 1, 0, entity));
+    }
+
     public static void handleRoadRollerMixingSound(Entity entity) {
         roadRollerMixingSound = new RoadRollerMixingSound(ModSounds.ROAD_ROLLER_MIXING_EVENT, SoundSource.PLAYERS, 1.0F, 0.0F, entity);
         Minecraft.getInstance().getSoundManager().play(roadRollerMixingSound);
