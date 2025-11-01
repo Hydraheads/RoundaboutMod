@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -404,9 +405,9 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
             }
         }
 
-        if (level().isClientSide() && this.tickCount % 60 == 1) {
+        if (!level().isClientSide() && this.tickCount % 60 == 1) {
             if (!((TimeStop) level()).inTimeStopRange(this)) {
-                ClientUtil.handleRoadRollerAmbientSound(this);
+                MainUtil.handleRoadRollerAmbientSound(this);
             }
         }
 
@@ -466,20 +467,20 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
             }
         }
 
-        if (level().isClientSide()) {
+        if (!level().isClientSide()) {
             if (getExploded()) {
                 if (explosionParticleDelay >= 10) {
                     if (!((TimeStop) level()).inTimeStopRange(this)) {
                         if (!explosionSoundStarted) {
                             explosionSoundStarted = true;
-                            ClientUtil.handleRoadRollerExplosionSound(this);
+                            MainUtil.handleRoadRollerExplosionSound(this);
                         }
                     }
                 }
             }
         }
 
-        if (level().isClientSide) {
+        if (!level().isClientSide) {
             if (getPickupBoolean() > 0) {
                 ClientUtil.setRoadRollerPickingEntity(this);
             }
@@ -542,7 +543,7 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
             this.setCrackiness(Crackiness.byHealthFraction(fraction));
         }
 
-        if (level().isClientSide) {
+        if (!level().isClientSide) {
             byte current = getCrackiness();
             byte previous = lastCrackiness;
 
@@ -1135,28 +1136,28 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
                     setConcreteColour(item);
                 }
 
-                if (level().isClientSide) {
+                if (!level().isClientSide) {
                     if (getPavingBoolean() && !((TimeStop) level()).inTimeStopRange(this)) {
                         mixingSoundStarted = true;
-                        ClientUtil.stopRoadRollerMixingSound(this);
-                        ClientUtil.handleRoadRollerMixingSound(this);
+                        MainUtil.stopRoadRollerMixingSound(this);
+                        MainUtil.handleRoadRollerMixingSound(this);
                     } else if (!getPavingBoolean()) {
                         mixingSoundStarted = false;
-                        ClientUtil.stopRoadRollerMixingSound(this);
+                        MainUtil.stopRoadRollerMixingSound(this);
                     }
                 }
                 setPavingTimer(0);
             } else {
                 setConcreteColour(item);
                 setPavingBoolean(true);
-                if (level().isClientSide) {
+                if (!level().isClientSide) {
                     if (getPavingBoolean() && !((TimeStop) level()).inTimeStopRange(this)) {
                         mixingSoundStarted = true;
-                        ClientUtil.stopRoadRollerMixingSound(this);
-                        ClientUtil.handleRoadRollerMixingSound(this);
+                        MainUtil.stopRoadRollerMixingSound(this);
+                        MainUtil.handleRoadRollerMixingSound(this);
                     } else if (!getPavingBoolean()) {
                         mixingSoundStarted = false;
-                        ClientUtil.stopRoadRollerMixingSound(this);
+                        MainUtil.stopRoadRollerMixingSound(this);
                     }
                 }
                 setPavingTimer(0);
