@@ -1,11 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
-import com.google.common.collect.ImmutableList;
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IAbstractArrowAccess;
-import net.hydra.jojomod.access.IAreaOfEffectCloud;
 import net.hydra.jojomod.access.IEnderMan;
-import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -384,9 +379,10 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
             if (player.addItem(copy)) {
                 setPickupBoolean(0);
                 setPickupTimer(0);
-                ClientUtil.setRoadRollerPickingEntity(null);
                 this.discard();
             }
+        } else {
+            ClientUtil.setRoadRollerPickingEntity(null);
         }
     }
 
@@ -480,7 +476,7 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
             }
         }
 
-        if (!level().isClientSide) {
+        if (level().isClientSide) {
             if (getExploded()) {
                 if (explosionParticleDelay >= 10) {
                     if (!((TimeStop) level()).inTimeStopRange(this)) {
