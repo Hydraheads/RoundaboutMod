@@ -101,6 +101,8 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> ROAD_ROLLER_MIXING_EVENT =
             register(ModSounds.ROAD_ROLLER_MIXING, ModSounds.ROAD_ROLLER_MIXING_ID);
 
+    public static final RegistryObject<SoundEvent> BLOOD_SUCK_EVENT =
+            register(ModSounds.BLOOD_SUCK, ModSounds.BLOOD_SUCK_ID);
     public static final RegistryObject<SoundEvent> JUSTICE_SELECT_EVENT =
             register(ModSounds.JUSTICE_SELECT, ModSounds.JUSTICE_SELECT_ID);
     public static final RegistryObject<SoundEvent> JUSTICE_SELECT_ATTACK_EVENT =

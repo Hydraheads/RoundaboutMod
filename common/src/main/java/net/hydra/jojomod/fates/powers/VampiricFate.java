@@ -8,6 +8,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.FatePowers;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.gui.GuiGraphics;
@@ -16,6 +17,8 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -73,6 +76,10 @@ public class VampiricFate extends FatePowers {
 
 
             if (this.getActivePower() == BLOOD_SUCK){
+                if (attackTimeDuring == 0 || attackTimeDuring == 5){
+                    self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SUCK_EVENT, SoundSource.PLAYERS, 1F, 0.95F+(float)(Math.random()*0.1));
+
+                }
                 if (attackTimeDuring >= 20){
                     if (this.isPacketPlayer() && attackTimeDuring == 20){
                     } else {
@@ -131,7 +138,14 @@ public class VampiricFate extends FatePowers {
         if (!standOn){
             Entity TE = getTargetEntity(playerEntity, 3, 15);
             if (TE != null && MainUtil.canDrinkBloodFair(TE, self)){
-                context.blit(StandIcons.JOJO_ICONS, k, j, 192, 44, 17, 8);
+
+                if (getActivePower() == BLOOD_SUCK){
+                    int test = (int) ((17F/20F) * Mth.clamp(this.attackTimeDuring,0,20));
+                    context.blit(StandIcons.JOJO_ICONS, k, j, 192, 36, 17, 8);
+                    context.blit(StandIcons.JOJO_ICONS, k, j, 192, 44, 17-test, 8);
+                } else {
+                    context.blit(StandIcons.JOJO_ICONS, k, j, 192, 44, 17, 8);
+                }
 
             }
         }
