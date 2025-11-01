@@ -54,6 +54,10 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
         return 72000;
     }
 
+    public boolean interceptAttack(){
+        return false;
+    }
+
     int maxAmmo = 6;
 
     @Override
