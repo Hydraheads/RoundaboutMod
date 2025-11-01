@@ -182,7 +182,7 @@ public class RattDartEntity extends AbstractArrow {
         return ModSounds.RATT_DART_THUNK_EVENT;
     }
     public void applyEffect(LivingEntity $$1) {
-        if (MainUtil.isBossMob($$1)) {
+        if (MainUtil.isBossMob($$1) || $$1 instanceof RoadRollerEntity) {
             DamageSource DS = ModDamageTypes.of($$1.level(), ModDamageTypes.MELTING, this.getOwner());
             $$1.hurt(DS,ClientNetworking.getAppropriateConfig().rattSettings.rattAttackBonusOnBosses);
             return;
