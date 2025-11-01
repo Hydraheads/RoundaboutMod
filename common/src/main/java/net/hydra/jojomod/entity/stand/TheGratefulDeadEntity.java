@@ -1,11 +1,9 @@
 package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.access.IGravityEntity;
-import net.hydra.jojomod.mixin.PlayerEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.AnimationState;
@@ -14,7 +12,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.hydra.jojomod.Roundabout;
 
 public class TheGratefulDeadEntity extends FollowingStandEntity{
     public TheGratefulDeadEntity(EntityType<? extends Mob> entityType, Level world) {
@@ -38,72 +35,72 @@ public class TheGratefulDeadEntity extends FollowingStandEntity{
         if (this.getUser() != null) {
             byte idle = getIdleAnimation();
             byte animation = getAnimation();
-            if(animation == 0 && this.getWalking()){
+            if(animation == 0 && this.getGrounded()){
                 this.idleAnimationState.startIfStopped(this.tickCount);
             }else{
                 this.idleAnimationState.stop();
             }
-            if(animation == 0 && !this.getWalking()){
+            if(animation == 0 && !this.getGrounded()){
                 this.idleAnimationState2.startIfStopped(this.tickCount);
             }else{
                 this.idleAnimationState2.stop();
             }
-            if(animation == 12 && this.getWalking()){
+            if(animation == 12 && this.getGrounded()){
                 this.customBarrage.startIfStopped(this.tickCount);
             }else{
                 this.customBarrage.stop();
             }
-            if(animation == 12 && !this.getWalking()){
+            if(animation == 12 && !this.getGrounded()){
                 this.barrageAnimationState.startIfStopped(this.tickCount);
             }else{
                 this.barrageAnimationState.stop();
             }
-            if(animation == 11 && this.getWalking()){
+            if(animation == 11 && this.getGrounded()){
                 this.customBarrageCharge.startIfStopped(this.tickCount);
             }else{
                 this.customBarrageCharge.stop();
             }
-            if(animation == 11 && !this.getWalking()){
+            if(animation == 11 && !this.getGrounded()){
                 this.barrageChargeAnimationState.startIfStopped(this.tickCount);
             }else{
                 this.barrageChargeAnimationState.stop();
             }
-            if(animation == 10 && this.getWalking()){
+            if(animation == 10 && this.getGrounded()){
                 this.customBlock.startIfStopped(this.tickCount);
             }else{
                 this.customBlock.stop();
             }
-            if(animation == 10 && !this.getWalking()){
+            if(animation == 10 && !this.getGrounded()){
                 this.blockAnimationState.startIfStopped(this.tickCount);
             }else{
                 this.blockAnimationState.stop();
             }
-            if(animation == 13 && this.getWalking()){
+            if(animation == 13 && this.getGrounded()){
                 this.customBarrageEnd.startIfStopped(this.tickCount);
             }else{
                 this.customBarrageEnd.stop();
             }
-            if(animation == 13 && !this.getWalking()){
+            if(animation == 13 && !this.getGrounded()){
                 this.barrageEndAnimationState.startIfStopped(this.tickCount);
             }else{
                 this.barrageEndAnimationState.stop();
             }
-            if(animation == 15 && this.getWalking()){
+            if(animation == 15 && this.getGrounded()){
                 this.customBrokenGuard.startIfStopped(this.tickCount);
             }else{
                 this.customBrokenGuard.stop();
             }
-            if(animation == 15 && !this.getWalking()){
+            if(animation == 15 && !this.getGrounded()){
                 this.brokenBlockAnimationState.startIfStopped(this.tickCount);
             }else{
                 this.brokenBlockAnimationState.stop();
             }
-            if(animation == 16 && this.getWalking()){
+            if(animation == 16 && this.getGrounded()){
                 this.customMiningBarrage.startIfStopped(this.tickCount);
             }else{
                 this.customMiningBarrage.stop();
             }
-            if(animation == 16 && !this.getWalking()){
+            if(animation == 16 && !this.getGrounded()){
                 this.miningBarrageAnimationState.startIfStopped(this.tickCount);
             }else{
                 this.miningBarrageAnimationState.stop();
@@ -133,18 +130,18 @@ public class TheGratefulDeadEntity extends FollowingStandEntity{
 
     @Override
     public boolean lockPos(){
-        return !(this.getWalking());
+        return !(this.getGrounded());
     }
     @Override
     public boolean hasNoPhysics(){
-        return !(this.getWalking());
+        return !(this.getGrounded());
     }
     @Override
     public boolean standHasGravity() {
-        return this.getWalking();
+        return this.getGrounded();
     }
 
-    public boolean getWalking(){
+    public boolean getGrounded(){
         if (this.getUser() == null){
             return false;
         }else{
@@ -152,8 +149,12 @@ public class TheGratefulDeadEntity extends FollowingStandEntity{
             Block blockBelowStand = this.level().getBlockState(blockBelowPosStand).getBlock();
             BlockPos blockBelowPos = this.getUser().blockPosition().below();
             Block blockBelow = this.getUser().level().getBlockState(blockBelowPos).getBlock();
-            return (getIdleAnimation() == 0)&&!(blockBelowStand==Blocks.AIR || blockBelowStand==Blocks.WATER || blockBelowStand==Blocks.LAVA)&&!(blockBelow==Blocks.AIR || blockBelow==Blocks.WATER || blockBelow==Blocks.LAVA);
+            return (getIdleAnimation() == 0)&&!(blockBelowStand==Blocks.AIR || blockBelowStand==Blocks.WATER || blockBelowStand==Blocks.LAVA)&&!(blockBelow==Blocks.AIR || blockBelow==Blocks.WATER || blockBelow==Blocks.LAVA)&&!(this.getUser().isSwimming());
         }
+    }
+    @Override
+    public boolean isVisuallyCrawling(){
+        return false;
     }
 
     @Override
