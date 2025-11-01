@@ -41,6 +41,12 @@
       "roundabout:road_roller_ambient"
     ]
   },
+  "blood_suck": {
+    "subtitle": "sounds.roundabout.blood_suck",
+    "sounds": [
+      "roundabout:blood_suck"
+    ]
+  },
   "road_roller_explosion": {
     "subtitle": "sounds.roundabout.road_roller_explosion",
     "sounds": [

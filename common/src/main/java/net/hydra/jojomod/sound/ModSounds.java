@@ -193,6 +193,10 @@ public class ModSounds {
     public static SoundEvent ROAD_ROLLER_MIXING_EVENT = SoundEvent.createVariableRangeEvent(ROAD_ROLLER_MIXING_ID);
 
 
+    public static final String BLOOD_SUCK = "blood_suck";
+    public static final ResourceLocation BLOOD_SUCK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLOOD_SUCK);
+    public static SoundEvent BLOOD_SUCK_EVENT = SoundEvent.createVariableRangeEvent(BLOOD_SUCK_ID);
+
 
     public static final String BUBBLE_CREATE = "bubble_create";
     public static final ResourceLocation BUBBLE_CREATE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BUBBLE_CREATE);
