@@ -239,15 +239,6 @@ public class AbilityScapeBasis {
             C2SPacketUtil.tryIntPowerPacket(packet,integer);
         }
     }
-    /**This is different than int power packet only by virtue of what functions it passes through, and is useful
-     * for calling something even if you are in a barrage clash or other conditions would otherwise interrupt your
-     * packet. Very niche, but it exists, and isn't always used in essential ways*/
-    public void tryIntToServerPacket(byte packet, int integer){
-        if (this.self.level().isClientSide()) {
-            C2SPacketUtil.intToServerPacket(packet,integer);
-        }
-    }
-
     public void tryTripleIntPacket(byte packet, int in1, int in2, int in3){
         if (this.self.level().isClientSide()) {
             C2SPacketUtil.tryTripleIntPacket(packet, in1, in2, in3);
@@ -268,6 +259,16 @@ public class AbilityScapeBasis {
             C2SPacketUtil.tryPosPowerPacket(packet, pos);
         }
     }
+    /**This is different than int power packet only by virtue of what functions it passes through, and is useful
+     * for calling something even if you are in a barrage clash or other conditions would otherwise interrupt your
+     * packet. Very niche, but it exists, and isn't always used in essential ways*/
+    public void tryIntToServerPacket(byte packet, int integer){
+        if (this.self.level().isClientSide()) {
+            C2SPacketUtil.intToServerPacket(packet,integer);
+        }
+    }
+
+
     public Vec3 savedPos;
 
     /**The most basic getters and setters*/

@@ -25,6 +25,7 @@ public interface StandUser {
      * Minimize the amount of synced data to just things you really need.*/
     boolean roundabout$hasStandOut();
     void roundabout$tryBlockPosPower(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit);
+    void roundabout$tryBlockPosPowerF(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit);
     Vec3 roundabout$frictionSave();
     void roundabout$deeplyRemoveAttackTarget();
     boolean roundabout$getQueForTargetDeletion();
@@ -155,6 +156,11 @@ public interface StandUser {
     void roundabout$tryIntPower(int move,boolean forced, int chargeTime, int move2, int move3);
     void roundabout$tryBlockPosPower(int move, boolean forced, BlockPos blockPos);
     void roundabout$tryPosPower(int move, boolean forced, Vec3 blockPos);
+    void roundabout$tryPowerF(int move, boolean forced);
+    void roundabout$tryIntPowerF(int move, boolean forced, int chargeTime);
+    void roundabout$tryIntPowerF(int move,boolean forced, int chargeTime, int move2, int move3);
+    void roundabout$tryBlockPosPowerF(int move, boolean forced, BlockPos blockPos);
+    void roundabout$tryPosPowerF(int move, boolean forced, Vec3 blockPos);
     void roundabout$addFollower(FollowingStandEntity $$0);
     void roundabout$removeFollower(FollowingStandEntity $$0);
 

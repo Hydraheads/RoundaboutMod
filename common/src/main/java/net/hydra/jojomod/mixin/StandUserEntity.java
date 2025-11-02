@@ -2258,85 +2258,95 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Unique
     public void roundabout$tryPower(int move, boolean forced){
-        int ct =rdbt$checkContext();
-        if (ct == 0){
+
             if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
                 this.roundabout$getStandPowers().tryPower(move, forced);
                 rdbt$tryPowerStuff();
             }
-        } else {
-            if (rdbt$this() instanceof Player pl){
-                ((IFatePlayer)pl).rdbt$getFatePowers().tryPower(move, forced);
-                rdbt$tryPowerFateStuff();
-            }
-        }
     }
     @Unique
     @Override
     public void roundabout$tryIntPower(int move, boolean forced, int chargeTime){
-        int ct =rdbt$checkContext();
-        if (ct == 0) {
+
             if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
                 this.roundabout$getStandPowers().tryIntPower(move, forced, chargeTime);
                 rdbt$tryPowerStuff();
             }
-        } else {
-            if (rdbt$this() instanceof Player pl){
-                ((IFatePlayer)pl).rdbt$getFatePowers().tryIntPower(move, forced, chargeTime);
-                rdbt$tryPowerFateStuff();
-            }
-        }
     }
     @Unique
     @Override
     public void roundabout$tryIntPower(int move,  boolean forced, int chargeTime,int move2, int move3){
 
-        int ct =rdbt$checkContext();
-        if (ct == 0) {
             if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
                 this.roundabout$getStandPowers().tryTripleIntPower(move, forced, chargeTime, move2, move3);
                 rdbt$tryPowerStuff();
             }
-        } else {
-            if (rdbt$this() instanceof Player pl){
-                ((IFatePlayer)pl).rdbt$getFatePowers().tryTripleIntPower(move, forced, chargeTime, move2, move3);
-                rdbt$tryPowerFateStuff();
-            }
-        }
     }
     @Unique
     @Override
     public void roundabout$tryBlockPosPower(int move, boolean forced, BlockPos blockPos){
 
-        int ct =rdbt$checkContext();
-        if (ct == 0) {
             if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
                 this.roundabout$getStandPowers().tryBlockPosPower(move, forced, blockPos);
                 rdbt$tryPowerStuff();
             }
-        } else {
-            if (rdbt$this() instanceof Player pl){
-                ((IFatePlayer)pl).rdbt$getFatePowers().tryBlockPosPower(move, forced, blockPos);
-                rdbt$tryPowerFateStuff();
-            }
-        }
+
     }
     @Unique
     @Override
     public void roundabout$tryPosPower(int move, boolean forced, Vec3 pos){
-        int ct =rdbt$checkContext();
-        if (ct == 0){
+
             if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
                 this.roundabout$getStandPowers().tryPosPower(move, forced, pos);
                 rdbt$tryPowerStuff();
             }
-        } else {
+    }
+
+
+    @Unique
+    @Override
+    public void roundabout$tryPowerF(int move, boolean forced){
+            if (rdbt$this() instanceof Player pl){
+                ((IFatePlayer)pl).rdbt$getFatePowers().tryPower(move, forced);
+                rdbt$tryPowerFateStuff();
+            }
+    }
+    @Unique
+    @Override
+    public void roundabout$tryIntPowerF(int move, boolean forced, int chargeTime){
+            if (rdbt$this() instanceof Player pl){
+                ((IFatePlayer)pl).rdbt$getFatePowers().tryIntPower(move, forced, chargeTime);
+                rdbt$tryPowerFateStuff();
+            }
+    }
+    @Unique
+    @Override
+    public void roundabout$tryIntPowerF(int move,  boolean forced, int chargeTime,int move2, int move3){
+
+            if (rdbt$this() instanceof Player pl){
+                ((IFatePlayer)pl).rdbt$getFatePowers().tryTripleIntPower(move, forced, chargeTime, move2, move3);
+                rdbt$tryPowerFateStuff();
+            }
+    }
+    @Unique
+    @Override
+    public void roundabout$tryBlockPosPowerF(int move, boolean forced, BlockPos blockPos){
+            if (rdbt$this() instanceof Player pl){
+                ((IFatePlayer)pl).rdbt$getFatePowers().tryBlockPosPower(move, forced, blockPos);
+                rdbt$tryPowerFateStuff();
+            }
+    }
+    @Unique
+    @Override
+    public void roundabout$tryPosPowerF(int move, boolean forced, Vec3 pos){
             if (rdbt$this() instanceof Player pl){
                 ((IFatePlayer)pl).rdbt$getFatePowers().tryPosPower(move, forced, pos);
                 rdbt$tryPowerFateStuff();
             }
-        }
     }
+
+
+
     public void rdbt$tryPowerStuff(){
         this.roundabout$getStandPowers().syncActivePower();
         if (this.level().isClientSide) {

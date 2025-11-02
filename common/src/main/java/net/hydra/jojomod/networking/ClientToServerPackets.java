@@ -34,11 +34,17 @@ public class ClientToServerPackets {
             TryBlockPosPower("try_block_pos_power"),
             TryHitResultPosPower("try_hit_result_pos_power"),
             TryIntPower("try_int_power"),
+            TryTripleIntPower("try_triple_int_power"),
+            TryPowerF("try_power_f"),
+            TryPosPowerF("try_pos_power_f"),
+            TryBlockPosPowerF("try_block_pos_power_f"),
+            TryHitResultPosPowerF("try_hit_result_pos_power_f"),
+            TryIntPowerF("try_int_power_f"),
+            TryTripleIntPowerF("try_triple_int_power_f"),
             IntToServer("int_to_server"),
             FloatToServer("float_to_server"),
             ByteToServer("byte_to_server"),
             SingleByteToServer("single_byte_to_server"),
-            TryTripleIntPower("try_triple_int_power"),
             BodyBag("body_bag"),
             ModVisageConfigure("thread_hop_mod_visage"),
             TimeStopHovering("thread_hop_time_stop_hovering"),
@@ -131,6 +137,65 @@ public class ClientToServerPackets {
                         powers.roundabout$tryIntPower(b, true, c, d, e);
                     });
                 }
+
+
+                if (message.equals(MESSAGES.TryPowerF.value)) {
+                    server.execute(() -> {
+                        StandUser powers = basicChecks(sender);
+                        byte b = (byte) vargs[0];
+                        powers.roundabout$tryPower(b, true);
+                    });
+                }
+                /**Try Power Packet*/
+                if (message.equals(MESSAGES.TryPosPowerF.value)) {
+                    server.execute(() -> {
+                        StandUser powers = basicChecks(sender);
+                        byte b = (byte) vargs[0];
+                        Vector3f c = (Vector3f) vargs[1];
+                        powers.roundabout$tryPosPower(b, true, new Vec3(c.x, c.y, c.z));
+                    });
+                }
+                /**Try Block Pos Power Packet*/
+                if (message.equals(MESSAGES.TryBlockPosPowerF.value)) {
+                    server.execute(() -> {
+                        StandUser powers = basicChecks(sender);
+                        byte b = (byte) vargs[0];
+                        BlockPos c = (BlockPos) vargs[1];
+                        powers.roundabout$tryBlockPosPowerF(b, true, c);
+                    });
+                }
+                /**Try Block Pos Power Packet*/
+                if (message.equals(MESSAGES.TryHitResultPosPowerF.value)) {
+                    server.execute(() -> {
+                        StandUser powers = basicChecks(sender);
+                        byte b = (byte) vargs[0];
+                        BlockPos c = (BlockPos) vargs[1];
+                        BlockHitResult d = (BlockHitResult) vargs[2];
+                        powers.roundabout$tryBlockPosPower(b, true, c, d);
+                    });
+                }
+                /**Try Power Packet*/
+                if (message.equals(MESSAGES.TryIntPowerF.value)) {
+                    server.execute(() -> {
+                        StandUser powers = basicChecks(sender);
+                        byte b = (byte) vargs[0];
+                        int c = (int) vargs[1];
+                        powers.roundabout$tryIntPowerF(b, true, c);
+                    });
+                }
+                /**Try Triple Int Power Packet*/
+                if (message.equals(MESSAGES.TryTripleIntPowerF.value)) {
+                    server.execute(() -> {
+                        StandUser powers = basicChecks(sender);
+                        byte b = (byte) vargs[0];
+                        int c = (int) vargs[1];
+                        int d = (int) vargs[2];
+                        int e = (int) vargs[3];
+                        powers.roundabout$tryIntPowerF(b, true, c, d, e);
+                    });
+                }
+
+
                 /**Generic int to server packet*/
                 if (message.equals(MESSAGES.IntToServer.value)) {
                     server.execute(() -> {
