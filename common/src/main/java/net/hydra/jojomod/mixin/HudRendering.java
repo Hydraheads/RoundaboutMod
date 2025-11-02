@@ -511,6 +511,9 @@ public abstract class HudRendering implements IHudAccess {
 
                 StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, false, this.getFont());
                 return true;
+            } if (user.roundabout$getPossesionTime() > 0) {
+                StandHudRender.renderNumberHUD(context,minecraft,screenWidth,screenHeight,x, (double) user.roundabout$getPossesionTime() /20,5,StandIcons.JOJO_ICONS,0,161,16730092);
+                return true;
             } else if (user.roundabout$isClashing()) {
                 ((StandUserClientPlayer) minecraft.player).roundabout$setClashDisplayExtraTimestamp(this.minecraft.player.tickCount);
                 float c = (user.roundabout$getStandPowers().getClashProgress());
@@ -544,12 +547,6 @@ public abstract class HudRendering implements IHudAccess {
                     StandHudRender.renderDistanceHUDJustice(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, ((StandUser) minecraft.player).roundabout$getStandPowers().getPilotingStand());
                 }
                 return true;
-            } else if ( ((StandUser)minecraft.player).roundabout$getStandPowers() instanceof PowersRatt PR ) {
-                if (PR.isPlaced() && PR.isHoldingSneak()) {
-                    double distance = PR.getStandEntity(PR.getSelf()).distanceTo(PR.getSelf());
-                    StandHudRender.renderNumberHUD(context, minecraft, screenWidth, screenHeight, x, distance, PR.getMaxPilotRange(), StandIcons.JOJO_ICONS, 0,100,6141070);
-                    return true;
-                }
             }else if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && user.roundabout$getEffectiveCombatMode()){
                 StandHudRender.renderShootModeSoftAndWet(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PW);
                 return true;

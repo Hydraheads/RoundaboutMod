@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.RattDartEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
@@ -26,6 +27,7 @@ import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -660,9 +662,11 @@ public class PowersRatt extends NewDashPreset {
                 this.setCooldown(PowersRatt.SETPLACE,30);
                 if (!isClient()) {
                     FireDart(chargeTime,0.2F);
-                }  else {
-                    updateChargeTime(0);
                 }
+
+                this.updateChargeTime(0);
+                tryPowerPacket(PowerIndex.NONE);
+                setPowerNone();
 
             }
 
@@ -745,11 +749,13 @@ public class PowersRatt extends NewDashPreset {
             }
             case PowersRatt.NET_RECALL -> {
                 active = false;
+                if (!this.getStandEntity(this.getSelf()).forceDespawnSet) {
+                    this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.RATT_DEPLACE_EVENT, SoundSource.PLAYERS, 0.5F, 1F);
+                }
                 this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
                 if (this.getStandEntity(this.getSelf()) != null) {
                     this.getStandEntity(this.getSelf()).forceDespawnSet = true;
                 }
-                this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.RATT_DEPLACE_EVENT, SoundSource.PLAYERS, 0.5F, 1F);
                 this.setCooldown(PowersRatt.SETPLACE,40);
             }
             case PowersRatt.FIRE_DART -> this.setCooldown(PowersRatt.CHANGE_MODE,15);
@@ -1004,6 +1010,16 @@ public class PowersRatt extends NewDashPreset {
         super.renderAttackHud(context, playerEntity, scaledWidth, scaledHeight, ticks, vehicleHeartCount, flashAlpha, otherFlashAlpha);
     }
 
+    @Override
+    public boolean replaceHudActively() {
+        return isPlaced() && this.isHoldingSneak();
+    }
+
+    @Override
+    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x) {
+        double distance = getStandEntity(getSelf()).distanceTo(getSelf());
+        StandHudRender.renderNumberHUD(context, Minecraft.getInstance(), screenWidth, screenHeight, x, distance, getMaxPilotRange(), StandIcons.JOJO_ICONS, 0,100,6141070);
+    }
 
     @Override
     public boolean canScope() {
@@ -1017,6 +1033,13 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public List<Byte> getSkinList() {
+        if (isPlaced()) {
+            if (getStandEntity(this.getSelf()) instanceof RattEntity RE) {
+                List<Byte> list = Lists.newArrayList();
+                list.add(RE.getSavedSkin());
+                return list;
+            }
+        }
         List<Byte> list = Lists.newArrayList();
         list.add(RattEntity.ANIME_SKIN);
         list.add(RattEntity.MANGA_SKIN);

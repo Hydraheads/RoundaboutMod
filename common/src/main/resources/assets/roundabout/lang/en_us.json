@@ -1105,7 +1105,7 @@
   "ability.roundabout.ratt_scope": "Scoped Mode",
   "ability.roundabout.ratt_scope.desc": "Hold Ratt and scope in, allowing you to shoot while moving. The darts in this form bounce on surfaces",
   "ability.roundabout.ratt_single": "Single Fire",
-  "ability.roundabout.ratt_single.desc": "Shoots an alternate form instead, which does less melt but more damage",
+  "ability.roundabout.ratt_single.desc": "Shoots an alternate form instead, dealing more knockback and inflicting a longer melt duration",
   "ability.roundabout.ratt_burst": "Burst Fire",
   "ability.roundabout.ratt_burst.desc": "Charge up a volley of three darts, each which inflict melt",
   "ability.roundabout.ratt_place": "Ratt Place",
