@@ -190,7 +190,6 @@ public class RattDartEntity extends AbstractArrow {
 
         MobEffectInstance effect = $$1.getEffect(ModEffects.MELTING);
 
-        Roundabout.LOGGER.info(""+this.melting);
 
         int stack = 0;
         if ( effect != null) {
