@@ -511,10 +511,10 @@ public abstract class HudRendering implements IHudAccess {
 
                 StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, false, this.getFont());
                 return true;
-            } if (user.roundabout$getPossesionTime() > 0) {
+            }/* if (user.roundabout$getPossesionTime() > 0) {
                 StandHudRender.renderNumberHUD(context,minecraft,screenWidth,screenHeight,x, (double) user.roundabout$getPossesionTime() /20,5,StandIcons.JOJO_ICONS,0,161,16730092);
                 return true;
-            } else if (user.roundabout$isClashing()) {
+            }*/ else if (user.roundabout$isClashing()) {
                 ((StandUserClientPlayer) minecraft.player).roundabout$setClashDisplayExtraTimestamp(this.minecraft.player.tickCount);
                 float c = (user.roundabout$getStandPowers().getClashProgress());
                 ((StandUserClientPlayer) minecraft.player).roundabout$setLastClashPower(c);
