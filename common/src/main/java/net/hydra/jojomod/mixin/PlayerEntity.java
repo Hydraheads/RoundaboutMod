@@ -546,7 +546,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     @Inject(method = "canSprint", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$canSprintPlayer(CallbackInfoReturnable<Boolean> cir) {
-        if ( ((StandUser)this).roundabout$getStandPowers().cancelSprint()){
+        if ( ((StandUser)this).roundabout$getStandPowers().cancelSprint()
+                || ((IFatePlayer)this).rdbt$getFatePowers().cancelSprint()){
             cir.setReturnValue(false);
         }
     }
@@ -1013,6 +1014,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Inject(method = "jumpFromGround", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$Jump(CallbackInfo ci) {
         if (((StandUser) this).roundabout$isClashing() || ((StandUser) this).roundabout$getStandPowers().cancelJump()
+                || ((IFatePlayer)this).rdbt$getFatePowers().cancelJump()
         || FateTypes.isTransforming(this) ||
         FateTypes.takesSunlightDamage(this) && FateTypes.isInSunlight(this)) {
             ci.cancel();

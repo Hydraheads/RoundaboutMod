@@ -114,6 +114,27 @@ public class AbilityScapeBasis {
         return true;
     }
 
+    /**Similar to the above function, but prevents the additional velocity carried over from
+     * sprint jumping if made to return true, override and call super*/
+    public boolean cancelSprintJump(){
+        return false;
+    }
+    public boolean cancelSprintParticles(){
+        return false;
+    }
+    /**Cancel all sprinting*/
+    public boolean cancelSprint(){
+        return false;
+    }
+    /**Cancel all jumping*/
+    public boolean cancelJump(){
+        return false;
+    }
+
+    /** Make a stand ability cancel you using items */
+    public boolean cancelItemUse() {
+        return false;
+    }
 
     public boolean getReducedDamage(Entity entity){
         return (entity instanceof Player || entity instanceof StandEntity ||
@@ -218,15 +239,6 @@ public class AbilityScapeBasis {
             C2SPacketUtil.tryIntPowerPacket(packet,integer);
         }
     }
-    /**This is different than int power packet only by virtue of what functions it passes through, and is useful
-     * for calling something even if you are in a barrage clash or other conditions would otherwise interrupt your
-     * packet. Very niche, but it exists, and isn't always used in essential ways*/
-    public void tryIntToServerPacket(byte packet, int integer){
-        if (this.self.level().isClientSide()) {
-            C2SPacketUtil.intToServerPacket(packet,integer);
-        }
-    }
-
     public void tryTripleIntPacket(byte packet, int in1, int in2, int in3){
         if (this.self.level().isClientSide()) {
             C2SPacketUtil.tryTripleIntPacket(packet, in1, in2, in3);
@@ -247,6 +259,16 @@ public class AbilityScapeBasis {
             C2SPacketUtil.tryPosPowerPacket(packet, pos);
         }
     }
+    /**This is different than int power packet only by virtue of what functions it passes through, and is useful
+     * for calling something even if you are in a barrage clash or other conditions would otherwise interrupt your
+     * packet. Very niche, but it exists, and isn't always used in essential ways*/
+    public void tryIntToServerPacket(byte packet, int integer){
+        if (this.self.level().isClientSide()) {
+            C2SPacketUtil.intToServerPacket(packet,integer);
+        }
+    }
+
+
     public Vec3 savedPos;
 
     /**The most basic getters and setters*/
@@ -458,6 +480,10 @@ public class AbilityScapeBasis {
             ((StandUserClient) this.self).roundabout$clientPlaySound();
             ((StandUserClient) this.self).roundabout$clientSoundCancel();
         }
+    }
+
+    public float zoomMod(){
+        return 1;
     }
 
     /**Does your stand let you zoom in a lot? Override this if it does*/
