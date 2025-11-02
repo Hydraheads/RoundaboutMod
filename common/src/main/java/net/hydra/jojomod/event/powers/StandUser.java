@@ -281,6 +281,10 @@ public interface StandUser {
     boolean roundabout$isLaunchBubbleEncased();
     void roundabout$setBubbleLaunchEncased();
 
+    /**Anubis Possesion */
+    void roundabout$setPossesionTime(int adj);
+    int roundabout$getPossesionTime();
+
     /**Play around with falling gravity*/
     void roundabout$setAdjustedGravity(int adj);
     int roundabout$getAdjustedGravity();

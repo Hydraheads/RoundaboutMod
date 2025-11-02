@@ -72,10 +72,7 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CactusBlock;
-import net.minecraft.world.level.block.PointedDripstoneBlock;
-import net.minecraft.world.level.block.SweetBerryBushBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
@@ -294,6 +291,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT$IS_BUBBLE_ENCASED = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.BYTE);
+    @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$POSSESION_TIME = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.INT);
     @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$ONLY_BLEEDING = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.BOOLEAN);
@@ -1019,6 +1019,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         return 0;
     }
+    @Unique
+    @Override
+    public void roundabout$setPossesionTime(int adj) {
+        if (this.entityData.hasItem(ROUNDABOUT$POSSESION_TIME)) {
+            this.getEntityData().set(ROUNDABOUT$POSSESION_TIME, adj);
+        }
+    }
+    @Unique
+    @Override
+    public int roundabout$getPossesionTime() {
+        if (this.entityData.hasItem(ROUNDABOUT$POSSESION_TIME)) {
+            return this.getEntityData().get(ROUNDABOUT$POSSESION_TIME);
+        }
+        return 0;
+    }
 
     @Unique
     @Override
@@ -1174,6 +1189,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     }
                 }
                 roundabout$zappedTicks--;
+            }
+
+            /** Possesion ticking */
+            if (this.roundabout$getPossesionTime() > 0) {
+                this.roundabout$setPossesionTime(this.roundabout$getPossesionTime()-1);
             }
 
             //**Stone Mask Clearing*/
@@ -2725,6 +2745,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$BLEED_LEVEL, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GLOW, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BUBBLE_ENCASED, (byte) 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$POSSESION_TIME, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BOUND_TO, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_ZAPPED_TO_ATTACK, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$TRUE_INVISIBILITY, -1);
@@ -4447,14 +4468,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     if (PR.isPlaced()) {
                         RattEntity RE = (RattEntity) PR.getStandEntity((LivingEntity) cause);
                         Vec3 vec3 = RE.getPosition(1);
-                        BlockPos bp = new BlockPos(
-                                (int) vec3.x,
-                                (int) vec3.y,
-                                (int) vec3.z);
-
-                        if (cause.level().getBlockState(bp).is(ModBlocks.WOODEN_MANOR_CHAIR) ||
-                                cause.level().getBlockState(bp.above()).is(ModBlocks.WOODEN_MANOR_CHAIR)) {
-                            PR.unlockSkin();
+                        for (int x=-1;x<2;x++) {
+                            for(int z=-1;z<2;z++) {
+                                BlockPos bp = new BlockPos(
+                                        (int) vec3.x+x,
+                                        (int) vec3.y,
+                                        (int) vec3.z+z
+                                );
+                                BlockState state = cause.level().getBlockState(bp);
+                                Roundabout.LOGGER.info(bp.toString());
+                                Roundabout.LOGGER.info(state.toString() + " | " + cause.level().getBlockState(bp).is(ModBlocks.WOODEN_MANOR_CHAIR));
+                                if (cause.level().getBlockState(bp).is(ModBlocks.WOODEN_MANOR_CHAIR)) {
+                                    PR.unlockSkin();
+                                }
+                            }
                         }
                     }
 
