@@ -1,5 +1,6 @@
 package net.hydra.jojomod.networking;
 
+import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.advancement.criteria.ModCriteria;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
@@ -7,6 +8,7 @@ import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.event.index.Corpses;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.util.MainUtil;
@@ -17,6 +19,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -59,6 +62,8 @@ public class ClientToServerPackets {
             Inventory("inventory"),
             ItemContext("item_context"),
             GuardCancel("guard_cancel"),
+            FinishSucking("finish_sucking"),
+            CancelSucking("cancel_sucking"),
             HandshakeCooldowns("handshake_cooldowns"),
             GunShot("gun_shot"),
             DimensionHopD4C("thread_hop_d4c_request_dimension_hop");
@@ -452,6 +457,19 @@ public class ClientToServerPackets {
                         ((StandUser) sender).roundabout$tryPower(PowerIndex.NONE, true);
                     }
                 }
+                /**Release right click to stop guarding*/
+                if (message.equals(MESSAGES.FinishSucking.value)) {
+                    if (((IFatePlayer) sender).rdbt$getFatePowers() instanceof VampiricFate VP) {
+                        VP.packetFinish();
+                    }
+                }
+                /**Release right click to stop guarding*/
+                if (message.equals(MESSAGES.CancelSucking.value)) {
+                    if (((IFatePlayer) sender).rdbt$getFatePowers() instanceof VampiricFate VP) {
+                        VP.packetCancel();
+                    }
+                }
+
 
                 /**Fire the gun when left-clicking*/
                 if (message.equals(MESSAGES.GunShot.value)) {

@@ -1,12 +1,17 @@
 package net.hydra.jojomod.fates.powers;
 
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.gui.GuiGraphics;
@@ -48,8 +53,8 @@ public class VampiricFate extends FatePowers {
                 Entity TE = getTargetEntity(self, 3, 15);
                 if (TE != null && MainUtil.canDrinkBloodFair(TE, self)
                         && self.hurtTime <= 0 && bloodSuckingTarget.is(TE)) {
-                    if (TE instanceof LivingEntity LE){
-                        ((StandUser)LE).roundabout$setDazed((byte)3);
+                    if (TE instanceof LivingEntity LE) {
+                        ((StandUser) LE).roundabout$setDazed((byte) 3);
                     }
 
                     if (self.tickCount % 2 == 0) {
@@ -66,9 +71,6 @@ public class VampiricFate extends FatePowers {
                                 (this.self.getX() - TE.getX()), (this.self.getY() - TE.getY() + TE.getEyeHeight()), (this.self.getZ() - TE.getZ()),
                                 0.08);
                     }
-                } else {
-                    bloodSuckingTarget = null;
-                    xTryPower(PowerIndex.NONE,true);
                 }
             }
 
@@ -79,15 +81,43 @@ public class VampiricFate extends FatePowers {
 
                 }
                 if (attackTimeDuring >= 20){
-                    if (this.isPacketPlayer() && attackTimeDuring == 20){
-                    } else {
-                        if (!this.self.level().isClientSide()){
-                            finishSucking();
-                        }
+                     finishSucking();
+                    bloodSuckingTarget = null;
+                }
+            }
+        } else {
+            if (bloodSuckingTarget != null) {
+                Entity TE = getTargetEntity(self, 3, 15);
+                if (TE != null && MainUtil.canDrinkBloodFair(TE, self)
+                        && self.hurtTime <= 0 && bloodSuckingTarget.is(TE)) {
+                    //safe
+                } else {
+                    xTryPower(PowerIndex.NONE,true);
+                    C2SPacketUtil.cancelSuckingPacket();
+                    bloodSuckingTarget = null;
+                }
+            }
+            if (this.getActivePower() == BLOOD_SUCK) {
+                if (attackTimeDuring >= 20) {
+                    if (this.isPacketPlayer() && attackTimeDuring == 20) {
+                        C2SPacketUtil.finishSuckingPacket();
                     }
                 }
             }
         }
+    }
+
+
+    public void packetFinish(){
+        if (this.getActivePower() == BLOOD_SUCK){
+            finishSucking();
+        }
+    }
+    public void packetCancel(){
+        if (this.getActivePower() == BLOOD_SUCK){
+            xTryPower(PowerIndex.NONE,true);
+        }
+        bloodSuckingTarget = null;
     }
 
     public void finishSucking(){
@@ -105,12 +135,16 @@ public class VampiricFate extends FatePowers {
                 self.setSprinting(false);
                 tryIntPowerPacket(BLOOD_SUCK, TE.getId());
                 this.attackTimeDuring = 0;
-                if (this.getSelf() instanceof Player && !self.level().isClientSide()) {
-                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.FATE_2, 60);
-                }
                 this.setCooldown(PowerIndex.FATE_2, 60);
             }
         }
+    }
+    @Override
+    public boolean tryPower(int move, boolean forced){
+        if (activePower == BLOOD_SUCK && move != BLOOD_SUCK && !self.level().isClientSide()) {
+            super.setPlayerPos2(PlayerPosIndex.NONE_2);
+        }
+        return super.tryPower(move, forced);
     }
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime){
@@ -118,6 +152,9 @@ public class VampiricFate extends FatePowers {
             bloodSuckingTarget = this.self.level().getEntity(chargeTime);
             setActivePower(BLOOD_SUCK);
             self.setSprinting(false);
+            if (!self.level().isClientSide()) {
+                super.setPlayerPos2(PlayerPosIndex.BLOOD_SUCK);
+            }
             this.attackTimeDuring = 0;
             if (bloodSuckingTarget != null) {
                 bloodSuckingTarget.setDeltaMovement(Vec3.ZERO);
