@@ -2,7 +2,6 @@ package net.hydra.jojomod.mixin.gravity;
 
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IClientEntity;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
@@ -499,9 +498,9 @@ public abstract class GravityEntityMixin implements IGravityEntity {
             if (vehicle != null) {
                 roundabout$setGravityDirection(GravityAPI.getGravityDirection(vehicle));
                 roundabout$currGravityStrength = GravityAPI.getGravityStrength(vehicle);
-            } else if (rdbt$this() instanceof FollowingStandEntity SE && SE.getFollowing() != null) {
-                roundabout$setGravityDirection(GravityAPI.getGravityDirection(SE.getFollowing()));
-                roundabout$currGravityStrength = GravityAPI.getGravityStrength(SE.getFollowing());
+            } else if (rdbt$this() instanceof FollowingStandEntity SE && SE.getFollowingAggressive() != null) {
+                roundabout$setGravityDirection(GravityAPI.getGravityDirection(SE.getFollowingAggressive()));
+                roundabout$currGravityStrength = GravityAPI.getGravityStrength(SE.getFollowingAggressive());
             } else if (rdbt$this() instanceof CinderellaVisageDisplayEntity CD && CD.getStandUser() != null) {
                 roundabout$setGravityDirection(GravityAPI.getGravityDirection(CD.getStandUser()));
                 roundabout$currGravityStrength = GravityAPI.getGravityStrength(CD.getStandUser());
@@ -511,30 +510,35 @@ public abstract class GravityEntityMixin implements IGravityEntity {
                 roundabout$currGravityStrength = GravityAPI.getGravityStrength(CD.getUser());
             } else if (rdbt$this() instanceof LivingEntity LE && LE.isSleeping()) {
                 roundabout$setGravityDirection(Direction.DOWN);
-            }
-            if (!this.level.isClientSide()){
-                Direction dr = Direction.DOWN;
-                if (rdbt$this() instanceof LivingEntity LE &&
-                        ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()
-                ) {
-                    dr = PW.getHeelDirection();
-                } else if (rdbt$this() instanceof LivingEntity LE && LE.hasEffect(ModEffects.GRAVITY_FLIP)){
-                    MobEffectInstance mi = LE.getEffect(ModEffects.GRAVITY_FLIP);
-                    if (mi != null){
-                        if (mi.getAmplifier() == 0){
-                            dr = Direction.NORTH;
-                        }if (mi.getAmplifier() == 1){
-                            dr = Direction.SOUTH;
-                        }if (mi.getAmplifier() == 2){
-                            dr = Direction.EAST;
-                        }if (mi.getAmplifier() == 3){
-                            dr = Direction.WEST;
-                        }if (mi.getAmplifier() == 4){
-                            dr = Direction.UP;
+            } else {
+                if (!this.level.isClientSide()) {
+                    Direction dr = Direction.DOWN;
+                    if (rdbt$this() instanceof LivingEntity LE &&
+                            ((StandUser) LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()
+                    ) {
+                        dr = PW.getHeelDirection();
+                    } else if (rdbt$this() instanceof LivingEntity LE && LE.hasEffect(ModEffects.GRAVITY_FLIP)) {
+                        MobEffectInstance mi = LE.getEffect(ModEffects.GRAVITY_FLIP);
+                        if (mi != null) {
+                            if (mi.getAmplifier() == 0) {
+                                dr = Direction.NORTH;
+                            }
+                            if (mi.getAmplifier() == 1) {
+                                dr = Direction.SOUTH;
+                            }
+                            if (mi.getAmplifier() == 2) {
+                                dr = Direction.EAST;
+                            }
+                            if (mi.getAmplifier() == 3) {
+                                dr = Direction.WEST;
+                            }
+                            if (mi.getAmplifier() == 4) {
+                                dr = Direction.UP;
+                            }
                         }
                     }
+                    roundabout$setGravityDirection(dr);
                 }
-                roundabout$setGravityDirection(dr);
             }
             if (roundabout$isReadyToResetGravity()){
                 roundabout$setGravityDirection(roundabout$baseGravityDirection);
