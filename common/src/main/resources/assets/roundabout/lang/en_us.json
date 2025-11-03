@@ -1109,7 +1109,7 @@
   "ability.roundabout.ratt_burst": "Burst Fire",
   "ability.roundabout.ratt_burst.desc": "Charge up a volley of three darts, each which inflict melt",
   "ability.roundabout.ratt_place": "Ratt Place",
-  "ability.roundabout.ratt_place.desc": "Place Ratt down, allowing Ratt to fire alongside you",
+  "ability.roundabout.ratt_place.desc": "Place Ratt down, allowing Ratt to fire alongside you. Sneaking highlights ratt and displays the distance to you.",
   "ability.roundabout.ratt_place_burst": "Placed Burst Fire",
   "ability.roundabout.ratt_place_burst.desc": "Shoot a burst of 3 darts from Ratt's position to your cursor",
   "ability.roundabout.ratt_auto": "Automatic Mode",

@@ -414,7 +414,7 @@ public class PowersRatt extends NewDashPreset {
 
 
 
-        if (this.getActivePower() == PowersRatt.START_CHARGE && this.isClient()) {
+        if (this.getActivePower() == PowersRatt.START_CHARGE && this.isClient() && this.getStandUserSelf().roundabout$getCombatMode()) {
             int amount = ClientNetworking.getAppropriateConfig().rattSettings.rattManualChargeRate;
             updateChargeTime(Mth.clamp(getChargeTime()+(this.getAttackTime()%2 == 0 ? amount : amount+1),0,100));
 
@@ -552,12 +552,9 @@ public class PowersRatt extends NewDashPreset {
                         shieldDelay += 9;
                     } */
                 }
-
-
                 if (!this.isClient()) {
                     placeBurst();
                 }
-
 
             }
         }
@@ -895,9 +892,12 @@ public class PowersRatt extends NewDashPreset {
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
         if (this.getActivePower() == PowerIndex.NONE) {
-            if (getChargeTime() != 100 && shotcooldown == 0) {
+            if (getChargeTime() != 100 && shotcooldown == 0 && this.getStandUserSelf().roundabout$getCombatMode() && scopeLevel != 0) {
                 tryPower(PowerIndex.GUARD, true);
                 tryPowerPacket(PowerIndex.GUARD);
+            } else if (scopeLevel == 0) {
+                setPowerNone();
+                setActivePower(PowerIndex.NONE);
             }
         }
         return true;
@@ -906,7 +906,7 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public boolean clickRelease() {
-        if (scopeLevel != 0 && this.getActivePower() == PowersRatt.START_CHARGE) {
+        if (this.getActivePower() == PowersRatt.START_CHARGE) {
             this.setPowerNone();
         }
         return false;
@@ -914,7 +914,11 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public boolean setPowerGuard() {
-        this.setActivePower(PowersRatt.START_CHARGE);
+        if (this.getStandUserSelf().roundabout$getCombatMode()) {
+            this.setActivePower(PowersRatt.START_CHARGE);
+        } else {
+            this.setPowerNone();
+        }
         return true;
     }
 
