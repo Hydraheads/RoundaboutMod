@@ -11,4 +11,9 @@ public class PlayerPosIndex {
     //Pos 2
     public static final byte NONE_2 = 0;
     public static final byte BLOOD_SUCK = 1;
+
+    public static boolean isHidingHeldItem(byte bt){
+
+        return bt == BLOOD_SUCK;
+    }
 }
