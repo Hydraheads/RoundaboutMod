@@ -5,9 +5,11 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.sound.ModSounds;
@@ -121,7 +123,18 @@ public class VampiricFate extends FatePowers {
     }
 
     public void finishSucking(){
-        if (bloodSuckingTarget != null) {
+        if (bloodSuckingTarget != null && self instanceof Player pl) {
+
+            boolean canDrainGood = MainUtil.canDrinkBloodCrit(bloodSuckingTarget,self);
+            if (bloodSuckingTarget.hurt(ModDamageTypes.of(self.level(),
+                    ModDamageTypes.BLOOD_DRAIN), 4)) {
+                if (canDrainGood) {
+                    pl.getFoodData().eat(6, 1.2F);
+                } else {
+                    pl.getFoodData().eat(2, 0.1F);
+                }
+                MainUtil.makeBleed(bloodSuckingTarget, 0, 200, null);
+            }
             bloodSuckingTarget = null;
             xTryPower(PowerIndex.NONE, true);
         }
