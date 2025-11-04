@@ -54,6 +54,14 @@ public class VampiricFate extends FatePowers {
     public void tickBloodSuck(){
         if (!this.self.level().isClientSide()) {
 
+            if (self.isUsingItem()) {
+                if (bloodSuckingTarget != null || this.getActivePower() == BLOOD_SUCK) {
+                    bloodSuckingTarget = null;
+                    xTryPower(PowerIndex.NONE, true);
+                }
+            }
+
+
             if (bloodSuckingTarget != null) {
                 Entity TE = getTargetEntity(self, 3, 15);
                 if (TE != null && MainUtil.canDrinkBloodFair(TE, self)
@@ -97,6 +105,7 @@ public class VampiricFate extends FatePowers {
                         && self.hurtTime <= 0 && bloodSuckingTarget.is(TE)) {
                     //safe
                 } else {
+                    Roundabout.LOGGER.info("1");
                     xTryPower(PowerIndex.NONE,true);
                     C2SPacketUtil.cancelSuckingPacket();
                     bloodSuckingTarget = null;
@@ -120,8 +129,10 @@ public class VampiricFate extends FatePowers {
     }
     public void packetCancel(){
         if (this.getActivePower() == BLOOD_SUCK){
+            Roundabout.LOGGER.info("2");
             xTryPower(PowerIndex.NONE,true);
         }
+        Roundabout.LOGGER.info("3");
         bloodSuckingTarget = null;
     }
 
@@ -134,9 +145,9 @@ public class VampiricFate extends FatePowers {
             if (bloodSuckingTarget.hurt(sauce, 4) && bloodSuckingTarget instanceof LivingEntity LE) {
                 if (canDrainGood) {
                     if (pl.canEat(false)) {
-                        pl.getFoodData().eat(6, 1.2F);
+                        pl.getFoodData().eat(6, 1.0F);
                     } else {
-                        pl.getFoodData().eat(6, 0.8F);
+                        pl.getFoodData().eat(6, 0.5F);
                     }
                     self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SUCK_DRAIN_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
                     self.level().playSound(null, self.getX(), self.getY(), self.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, SoundSource.PLAYERS, 1F, 1F+(float)(Math.random()*0.1));
@@ -165,6 +176,7 @@ public class VampiricFate extends FatePowers {
                 setActivePower(BLOOD_SUCK);
                 self.setSprinting(false);
                 tryIntPowerPacket(BLOOD_SUCK, TE.getId());
+                bloodSuckingTarget = TE;
                 this.attackTimeDuring = 0;
                 this.setCooldown(PowerIndex.FATE_2, 60);
             }
