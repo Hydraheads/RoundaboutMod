@@ -47,6 +47,12 @@
       "roundabout:blood_suck"
     ]
   },
+  "blood_suck_crit": {
+    "subtitle": "sounds.roundabout.blood_suck_crit",
+    "sounds": [
+      "roundabout:blood_suck_crit"
+    ]
+  },
   "road_roller_explosion": {
     "subtitle": "sounds.roundabout.road_roller_explosion",
     "sounds": [

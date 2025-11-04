@@ -5,6 +5,7 @@ import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
@@ -280,6 +281,9 @@ public interface StandUser {
     Vec3 roundabout$getStoredVelocity();
     boolean roundabout$isLaunchBubbleEncased();
     void roundabout$setBubbleLaunchEncased();
+
+
+    SoundEvent roundabout$getHurtSound(DamageSource sauce);
 
     /**Anubis Possesion */
     void roundabout$setPossesionTime(int adj);

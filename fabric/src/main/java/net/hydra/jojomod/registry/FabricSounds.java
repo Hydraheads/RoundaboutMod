@@ -105,6 +105,7 @@ public class FabricSounds {
 
         addSound(ModSounds.BUBBLE_CREATE_ID, ModSounds.BUBBLE_CREATE_EVENT);
         addSound(ModSounds.BLOOD_SUCK_ID, ModSounds.BLOOD_SUCK_EVENT);
+        addSound(ModSounds.BLOOD_SUCK_DRAIN_ID, ModSounds.BLOOD_SUCK_DRAIN_EVENT);
         addSound(ModSounds.BIG_BUBBLE_CREATE_ID, ModSounds.BIG_BUBBLE_CREATE_EVENT);
         addSound(ModSounds.BUBBLE_PLUNDER_ID, ModSounds.BUBBLE_PLUNDER_EVENT);
         addSound(ModSounds.SOFT_AND_WET_BARRAGE_ID, ModSounds.SOFT_AND_WET_BARRAGE_EVENT);

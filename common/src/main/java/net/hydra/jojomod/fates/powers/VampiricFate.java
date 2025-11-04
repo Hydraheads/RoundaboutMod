@@ -17,12 +17,15 @@ import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -126,11 +129,26 @@ public class VampiricFate extends FatePowers {
         if (bloodSuckingTarget != null && self instanceof Player pl) {
 
             boolean canDrainGood = MainUtil.canDrinkBloodCrit(bloodSuckingTarget,self);
-            if (bloodSuckingTarget.hurt(ModDamageTypes.of(self.level(),
-                    ModDamageTypes.BLOOD_DRAIN), 4)) {
+            DamageSource sauce = ModDamageTypes.of(self.level(),
+                    ModDamageTypes.BLOOD_DRAIN);
+            if (bloodSuckingTarget.hurt(sauce, 4) && bloodSuckingTarget instanceof LivingEntity LE) {
                 if (canDrainGood) {
-                    pl.getFoodData().eat(6, 1.2F);
+                    if (pl.canEat(false)) {
+                        pl.getFoodData().eat(6, 1.2F);
+                    } else {
+                        pl.getFoodData().eat(6, 0.8F);
+                    }
+                    self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SUCK_DRAIN_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
+                    self.level().playSound(null, self.getX(), self.getY(), self.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, SoundSource.PLAYERS, 1F, 1F+(float)(Math.random()*0.1));
+                    int $$23 = (int)((double)2 * 0.5);
+                    ((ServerLevel)this.self.level()).sendParticles(ParticleTypes.CRIT,
+                            bloodSuckingTarget.getEyePosition().x,
+                            bloodSuckingTarget.getEyePosition().y,
+                            bloodSuckingTarget.getEyePosition().z,
+                             15, 0.2, 0.2, 0.2, 0.0);
+
                 } else {
+                    self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SUCK_DRAIN_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
                     pl.getFoodData().eat(2, 0.1F);
                 }
                 MainUtil.makeBleed(bloodSuckingTarget, 0, 200, null);
