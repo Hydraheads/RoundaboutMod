@@ -238,46 +238,65 @@ public class ForgeEvents {
         ModItems.GASOLINE_BUCKET = ForgeItems.GASOLINE_BUCKET.get();
         ModItems.ROAD_ROLLER = ForgeItems.ROAD_ROLLER.get();
         ModItems.STAND_DISC = ForgeItems.STAND_DISC.get();
+
         ModItems.STAND_DISC_THE_WORLD = ForgeItems.STAND_DISC_THE_WORLD.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_THE_WORLD.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_THE_WORLD.get());
         ModItems.MAX_STAND_DISC_THE_WORLD = ForgeItems.MAX_STAND_DISC_THE_WORLD.get();
+
         ModItems.STAND_DISC_STAR_PLATINUM = ForgeItems.STAND_DISC_STAR_PLATINUM.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_STAR_PLATINUM.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_STAR_PLATINUM.get());
         ModItems.MAX_STAND_DISC_STAR_PLATINUM = ForgeItems.MAX_STAND_DISC_STAR_PLATINUM.get();
+
         ModItems.STAND_DISC_JUSTICE = ForgeItems.STAND_DISC_JUSTICE.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_JUSTICE.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_JUSTICE.get());
         ModItems.MAX_STAND_DISC_JUSTICE = ForgeItems.MAX_STAND_DISC_JUSTICE.get();
+
         ModItems.STAND_DISC_MAGICIANS_RED = ForgeItems.STAND_DISC_MAGICIANS_RED.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_MAGICIANS_RED.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_MAGICIANS_RED.get());
         ModItems.MAX_STAND_DISC_MAGICIANS_RED = ForgeItems.MAX_STAND_DISC_MAGICIANS_RED.get();
+
         ModItems.STAND_DISC_KILLER_QUEEN = ForgeItems.STAND_DISC_KILLER_QUEEN.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_KILLER_QUEEN.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_KILLER_QUEEN.get());
         ModItems.MAX_STAND_DISC_KILLER_QUEEN = ForgeItems.MAX_STAND_DISC_KILLER_QUEEN.get();
+
         ModItems.STAND_DISC_D4C = ForgeItems.STAND_DISC_D4C.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_D4C.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_D4C.get());
         ModItems.MAX_STAND_DISC_D4C = ForgeItems.MAX_STAND_DISC_D4C.get();
+
         ModItems.STAND_DISC_GREEN_DAY = ForgeItems.STAND_DISC_GREEN_DAY.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_GREEN_DAY.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_GREEN_DAY.get());
         ModItems.MAX_STAND_DISC_D4C = ForgeItems.MAX_STAND_DISC_GREEN_DAY.get();
+
         ModItems.STAND_DISC_RATT = ForgeItems.STAND_DISC_RATT.get();
         ModItems.MAX_STAND_DISC_RATT = ForgeItems.MAX_STAND_DISC_RATT.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_RATT.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_RATT.get());
+
         ModItems.STAND_DISC_SOFT_AND_WET = ForgeItems.STAND_DISC_SOFT_AND_WET.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_SOFT_AND_WET.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_SOFT_AND_WET.get());
         ModItems.MAX_STAND_DISC_SOFT_AND_WET = ForgeItems.MAX_STAND_DISC_SOFT_AND_WET.get();
+
         ModItems.STAND_DISC_CINDERELLA = ForgeItems.STAND_DISC_CINDERELLA.get();
         ModItems.STAND_DISC_HEY_YA = ForgeItems.STAND_DISC_HEY_YA.get();
         ModItems.STAND_DISC_MANDOM = ForgeItems.STAND_DISC_MANDOM.get();
         ModItems.STAND_DISC_SURVIVOR = ForgeItems.STAND_DISC_SURVIVOR.get();
         ModItems.STAND_DISC_ACHTUNG = ForgeItems.STAND_DISC_ACHTUNG.get();
+
         ModItems.STAND_DISC_WALKING_HEART = ForgeItems.STAND_DISC_WALKING_HEART.get();
         ModItems.MAX_STAND_DISC_WALKING_HEART = ForgeItems.MAX_STAND_DISC_WALKING_HEART.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_WALKING_HEART.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_WALKING_HEART.get());
+
         ModItems.STAND_DISC_DIVER_DOWN = ForgeItems.STAND_DISC_DIVER_DOWN.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_DIVER_DOWN.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_DIVER_DOWN.get());
         ModItems.MAX_STAND_DISC_DIVER_DOWN = ForgeItems.MAX_STAND_DISC_DIVER_DOWN.get();
+
+        ModItems.STAND_DISC_ANUBIS = ForgeItems.STAND_DISC_ANUBIS.get();
+        ModItems.MAX_STAND_DISC_ANUBIS = ForgeItems.MAX_STAND_DISC_ANUBIS.get();
+        ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_ANUBIS.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_ANUBIS.get());
+
         ModItems.COFFEE_GUM = ForgeItems.COFFEE_GUM.get();
         ModItems.CHERRIES = ForgeItems.CHERRIES.get();
+
+        ModItems.ANUBIS_ITEM = ForgeItems.ANUBIS_ITEM.get();
 
         ModItems.SNUBNOSE_REVOLVER = ForgeItems.SNUBNOSE_REVOLVER.get();
 

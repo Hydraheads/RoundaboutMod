@@ -186,6 +186,7 @@ public class FabricEntityClient {
         ModStrayModels.WORN_STONE_MASK = new WornStoneMaskModel<>();
         ModStrayModels.WORN_BLOODY_STONE_MASK = new WornBloodyStoneMaskModel();
         ModStrayModels.MANDOM = new MandomModel();
+        ModStrayModels.ANUBIS = new AnubisModel();
         ModStrayModels.RATT_SHOULDER = new RattShoulderModel();
         ModStrayModels.REDD_SHOULDER = new ReddShoulderModel();
         ModStrayModels.CHAIR_RATT_SHOULDER = new ChairRattShoulderModel();

@@ -87,7 +87,6 @@ public abstract class InputEvents implements IInputEvents {
 
     @Inject(method = "startAttack", at = @At("HEAD"), cancellable = true)
     public void roundaboutAttack(CallbackInfoReturnable<Boolean> ci) {
-
     }
 
     /*outline, highlight, glowing, justice, corpse*/
@@ -198,6 +197,12 @@ public abstract class InputEvents implements IInputEvents {
         if (player != null) {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
+
+            if (standComp.roundabout$isPossessed()) {
+                ci.setReturnValue(false);
+                return;
+            }
+
             if (powers.isPiloting()){
                 ci.setReturnValue(false);
                 powers.pilotInputAttack();
@@ -279,6 +284,11 @@ public abstract class InputEvents implements IInputEvents {
         public void roundaboutBlockBreak(boolean $$0, CallbackInfo ci) {
             if (player != null) {
                 StandUser standComp = ((StandUser) player);
+
+                if (standComp.roundabout$isPossessed()) {
+                    ci.cancel();
+                    return;
+                }
 
                 StandPowers powers = standComp.roundabout$getStandPowers();
                 if (powers.isPiloting()){
@@ -522,6 +532,10 @@ public abstract class InputEvents implements IInputEvents {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
 
+            if (standComp.roundabout$isPossessed()) {
+                ci.cancel();
+                return;
+            }
             if (powers.interceptAllInteractions()) {
                 roundabout$TryGuard();
                 ci.cancel();
@@ -809,6 +823,10 @@ public abstract class InputEvents implements IInputEvents {
     public void roundabout$pickBlock(CallbackInfo ci){
         if (player != null){
         StandUser standComp = ((StandUser) player);
+            if (standComp.roundabout$isPossessed()) {
+                ci.cancel();
+                return;
+            }
             if (standComp.roundabout$getCombatMode()){
                 ci.cancel();
             }

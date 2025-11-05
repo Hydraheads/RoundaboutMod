@@ -444,7 +444,7 @@ public class AbilityScapeBasis {
     /**Override this if you want to add or remove conditions that prevent moves from updating and shut
      * them down*/
     public boolean isAttackInept(byte activeP){
-        return this.self.isUsingItem() || this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
+        return this.self.isUsingItem() || this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) || this.getStandUserSelf().roundabout$isPossessed();
     }
 
     /**If doing something like eating, cancels attack state*/
@@ -459,7 +459,9 @@ public class AbilityScapeBasis {
     /**If eating or using items in general shouldn't cancel certain abilties, put them as exceptions here*/
     public boolean shouldReset(byte activeP){
         return (this.self.isUsingItem() &&
-                !(this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))));
+                !(this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())))
+                || this.getStandUserSelf().roundabout$isPossessed()
+        );
     }
     public int interruptCD = 0;
     public boolean getInterruptCD(){
@@ -614,7 +616,8 @@ public class AbilityScapeBasis {
     /**This function grays out icons for moves you can't currently use. Slot is the icon slot from 1-4,
      * activeP is your currently active power*/
     public boolean isAttackIneptVisually(byte activeP, int slot){
-        return this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
+        return this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())
+        || this.getStandUserSelf().roundabout$isPossessed());
     }
 
 
@@ -1086,7 +1089,7 @@ public class AbilityScapeBasis {
 
     public void preButtonInput4(boolean keyIsDown, Options options){
         if (!hasStandActive(this.getSelf())) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+            if (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()  ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
                 buttonInput4(keyIsDown, options);
             }
@@ -1094,7 +1097,7 @@ public class AbilityScapeBasis {
     }
     public void preButtonInput3(boolean keyIsDown, Options options){
         if (!hasStandActive(this.getSelf())) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()  ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
                 buttonInput3(keyIsDown, options);
             }
@@ -1103,7 +1106,7 @@ public class AbilityScapeBasis {
 
     public void preButtonInput2(boolean keyIsDown, Options options){
         if (!hasStandActive(this.getSelf())) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()   ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
                 buttonInput2(keyIsDown, options);
             }
@@ -1112,7 +1115,7 @@ public class AbilityScapeBasis {
 
     public void preButtonInput1(boolean keyIsDown, Options options){
         if (!hasStandActive(this.getSelf())) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()   ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
                 buttonInput1(keyIsDown, options);
             }
@@ -1349,7 +1352,7 @@ public class AbilityScapeBasis {
 
         inputDash = true;
         if (this.getSelf().level().isClientSide) {
-            if (!((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+            if (!((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf())  && !this.getStandUserSelf().roundabout$isPossessed()   ) {
                 if (this.getSelf().onGround() && !this.onCooldown(PowerIndex.GLOBAL_DASH)) {
                     byte forward = 0;
                     byte strafe = 0;

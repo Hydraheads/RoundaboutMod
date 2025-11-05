@@ -29,6 +29,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -37,6 +38,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -292,7 +294,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private static final EntityDataAccessor<Byte> ROUNDABOUT$IS_BUBBLE_ENCASED = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.BYTE);
     @Unique
-    private static final EntityDataAccessor<Integer> ROUNDABOUT$POSSESION_TIME = SynchedEntityData.defineId(LivingEntity.class,
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$POSSESSION_TIME = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.INT);
     @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$ONLY_BLEEDING = SynchedEntityData.defineId(LivingEntity.class,
@@ -1021,18 +1023,24 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     @Override
-    public void roundabout$setPossesionTime(int adj) {
-        if (this.entityData.hasItem(ROUNDABOUT$POSSESION_TIME)) {
-            this.getEntityData().set(ROUNDABOUT$POSSESION_TIME, adj);
+    public void roundabout$setPossessionTime(int adj) {
+        if (this.entityData.hasItem(ROUNDABOUT$POSSESSION_TIME)) {
+            this.getEntityData().set(ROUNDABOUT$POSSESSION_TIME, adj);
         }
     }
     @Unique
     @Override
-    public int roundabout$getPossesionTime() {
-        if (this.entityData.hasItem(ROUNDABOUT$POSSESION_TIME)) {
-            return this.getEntityData().get(ROUNDABOUT$POSSESION_TIME);
+    public int roundabout$getPossessionTime() {
+        if (this.entityData.hasItem(ROUNDABOUT$POSSESSION_TIME)) {
+            return this.getEntityData().get(ROUNDABOUT$POSSESSION_TIME);
         }
         return 0;
+    }
+
+    @Unique
+    @Override
+    public boolean roundabout$isPossessed() {
+        return this.getEntityData().get(ROUNDABOUT$POSSESSION_TIME) > 0;
     }
 
     @Unique
@@ -1172,9 +1180,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         roundabout$tickStandOrStandless();
         //if (StandID > -1) {
         if (!this.level().isClientSide()) {
-            if (roundabout$getZappedToID() > -1){
+            if (roundabout$getZappedToID() > -1) {
                 roundabout$zappedTicks++;
-                if (roundabout$zappedTicks >= ClientNetworking.getAppropriateConfig().survivorSettings.durationOfAggressiveAngerSetting){
+                if (roundabout$zappedTicks >= ClientNetworking.getAppropriateConfig().survivorSettings.durationOfAggressiveAngerSetting) {
                     roundabout$setZappedToID(-1);
                 } else {
                     Entity ent = this.level().getEntity(roundabout$getZappedToID());
@@ -1192,8 +1200,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
 
             /** Possesion ticking */
-            if (this.roundabout$getPossesionTime() > 0) {
-                this.roundabout$setPossesionTime(this.roundabout$getPossesionTime()-1);
+            int possesionTime = this.roundabout$getPossessionTime();
+            if (possesionTime > 0) {
+
+                int npt = possesionTime - 1;
+                this.roundabout$setPossessionTime(npt);
+                if (rdbt$this() instanceof Player P) {
+
+                    P.aiStep();
+
+                    if (npt == 0) {
+                        P.displayClientMessage(Component.translatable("item.roundabout.anubis_item.message1").withStyle(ChatFormatting.RED), true);
+                    }
+                }
             }
 
             //**Stone Mask Clearing*/
@@ -2097,6 +2116,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Unique
+    public int roundabout$anubisVanishTicks = 0;
+
+    @Unique
+    @Override
+    public int roundabout$getAnubisVanishTicks(){
+        return roundabout$anubisVanishTicks;
+    }
+    @Unique
+    @Override
+    public void roundabout$setAnubisVanishTicks(int set){
+        roundabout$anubisVanishTicks = Mth.clamp(set,0,10);
+    }
+
+    @Unique
     public AnimationState roundabout$heyYaAnimation2 = new AnimationState();
 
     @Unique
@@ -2745,7 +2778,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$BLEED_LEVEL, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GLOW, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BUBBLE_ENCASED, (byte) 0);
-            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$POSSESION_TIME, -1);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$POSSESSION_TIME, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BOUND_TO, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_ZAPPED_TO_ATTACK, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$TRUE_INVISIBILITY, -1);
@@ -4111,6 +4144,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setRattShoulderVanishTicks(roundabout$getRattShoulderVanishTicks()+1);
         } else {
             roundabout$setRattShoulderVanishTicks(0);
+        }
+        if (roundabout$getStandPowers() instanceof PowersAnubis && active){
+            roundabout$setAnubisVanishTicks(roundabout$getAnubisVanishTicks()+1);
+        } else {
+            roundabout$setAnubisVanishTicks(roundabout$getAnubisVanishTicks()-1);
         }
 
 

@@ -65,8 +65,10 @@
   "item.roundabout.survivor_disc": "Stand Disc",
   "item.roundabout.hey_ya_disc": "Stand Disc",
   "item.roundabout.ratt_disc": "Stand Disc",
+  "item.roundabout.anubis_disc": "Stand Disc",
   "item.roundabout.achtung_baby_disc": "Stand Disc",
   "item.roundabout.max_ratt_disc": "Stand Disc+",
+  "item.roundabout.max_anubis_disc": "Stand Disc+",
   "item.roundabout.mandom_disc": "Stand Disc",
   "item.roundabout.walking_heart_disc": "Stand Disc",
   "item.roundabout.max_walking_heart_disc": "Stand Disc+",
@@ -93,6 +95,8 @@
   "item.roundabout.cinderella_disc.desc": "Cinderella",
   "item.roundabout.max_ratt_disc.desc": "Ratt",
   "item.roundabout.ratt_disc.desc": "Ratt",
+  "item.roundabout.anubis_disc.desc": "Anubis",
+  "item.roundabout.max_anubis_disc.desc": "Anubis",
   "item.roundabout.achtung_baby_disc.desc": "Achtung Baby",
   "item.roundabout.survivor_disc.desc": "Survivor",
   "item.roundabout.hey_ya_disc.desc": "Hey Ya!",
@@ -725,6 +729,9 @@
   "sounds.roundabout.ratt_firing": "Ratt Firing",
   "sounds.roundabout.ratt_leap": "Mini Leap",
   "sounds.roundabout.ratt_mode_change": "Mode Change",
+
+  "sounds.roundabout.anubis_possession": "Ominous Roar",
+
 
   "sounds.roundabout.arcade_impale":  "[Arcade Impale]",
   "sounds.roundabout.arcade_long_ts":  "[Stop Time]",
@@ -1388,6 +1395,11 @@
   "skins.roundabout.diver_down.treasurediver": "Treasurer",
   "skins.roundabout.diver_down.birthdaydiver": "Birthday!",
   "skins.roundabout.diver_down.firediver": "Fire Down",
+
+  "item.roundabout.anubis_item": "Mysterious Sword",
+  "item.roundabout.anubis_item.message1" : "The sword is cursed! Seek out a cleric!",
+  "item.roundabout.anubis_item.sword_cleansed": "Anubis Aquired!",
+  "skins.roundabout.anubis.anime" : "Anime",
 
   "skins.roundabout.achtung_baby.base": "Has No Form",
 

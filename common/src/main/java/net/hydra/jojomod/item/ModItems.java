@@ -36,6 +36,8 @@ public class ModItems {
     public static Item MAX_STAND_DISC_D4C;
     public static Item STAND_DISC_RATT;
     public static Item MAX_STAND_DISC_RATT;
+    public static Item STAND_DISC_ANUBIS;
+    public static Item MAX_STAND_DISC_ANUBIS;
     public static Item STAND_DISC_WALKING_HEART;
     public static Item MAX_STAND_DISC_WALKING_HEART;
     public static Item STAND_DISC_GREEN_DAY;
@@ -125,6 +127,8 @@ public class ModItems {
     public static Item HATO_MASK;
     public static Item SHIZUKA_MASK;
     public static Item INTERDIMENSIONAL_KEY;
+
+    public static Item ANUBIS_ITEM;
 
     public static Item SNUBNOSE_REVOLVER;
 

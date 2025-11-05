@@ -100,12 +100,16 @@ public interface StandUser {
     AnimationState roundabout$getWornStandIdleAnimation();
     void roundabout$setHeyYaAnimation(AnimationState layer);
     AnimationState roundabout$getHeyYaAnimation2();
+    // TODO: fix this shit below
     int roundabout$getHeyYaVanishTicks();
     void roundabout$setHeyYaVanishTicks(int set);
     int roundabout$getRattShoulderVanishTicks();
     void roundabout$setRattShoulderVanishTicks(int set);
     int roundabout$getMandomVanishTicks();
     void roundabout$setMandomVanishTicks(int set);
+    int roundabout$getAnubisVanishTicks();
+    void roundabout$setAnubisVanishTicks(int set);
+
     void rdbt$doMoldDetection(Vec3 movement);
 
     boolean roundabout$getActive();
@@ -282,8 +286,9 @@ public interface StandUser {
     void roundabout$setBubbleLaunchEncased();
 
     /**Anubis Possesion */
-    void roundabout$setPossesionTime(int adj);
-    int roundabout$getPossesionTime();
+    boolean roundabout$isPossessed();
+    void roundabout$setPossessionTime(int adj);
+    int roundabout$getPossessionTime();
 
     /**Play around with falling gravity*/
     void roundabout$setAdjustedGravity(int adj);

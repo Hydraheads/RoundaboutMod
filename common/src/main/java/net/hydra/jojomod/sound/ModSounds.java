@@ -660,6 +660,9 @@ public class ModSounds {
     public static final ResourceLocation RATT_MODE_CHANGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RATT_MODE_CHANGE);
     public static SoundEvent RATT_MODE_CHANGE_EVENT = SoundEvent.createVariableRangeEvent(RATT_MODE_CHANGE_ID);
 
+    public static final String ANUBIS_POSSESSION = "anubis_possession";
+    public static final ResourceLocation ANUBIS_POSSESSION_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_POSSESSION);
+    public static SoundEvent ANUBIS_POSSESSION_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_POSSESSION_ID);
 
 
     public static final String UNLOCK_SKIN = "unlock_skin";
