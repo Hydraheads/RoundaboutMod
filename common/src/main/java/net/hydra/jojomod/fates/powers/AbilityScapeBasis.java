@@ -2060,4 +2060,9 @@ public class AbilityScapeBasis {
         return false;
     }
 
+    public void setPlayerPos2(byte pos){
+        if (self instanceof Player){
+            ((IPlayerEntity) self).roundabout$SetPos2(pos);
+        }
+    }
 }

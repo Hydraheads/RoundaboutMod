@@ -266,6 +266,9 @@ public class FollowingStandEntity extends StandEntity{
             return this.Following;
         }
     }
+    public LivingEntity getFollowingAggressive() {
+            return (LivingEntity) this.level().getEntity(this.entityData.get(FOLLOWING_ID));
+    }
 
     /**FOLLOWING_ID is the mob the stand is floating by. This does not have to be
      * the user, for instance, if a stand like killer queen is planted in someone else.*/

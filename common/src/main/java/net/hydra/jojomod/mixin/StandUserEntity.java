@@ -807,6 +807,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     @Override
+    public SoundEvent roundabout$getHurtSound(DamageSource sauce){
+        return getHurtSound(sauce);
+    }
+    @Unique
+    @Override
     public boolean roundabout$getDrowning(){
         return roundabout$isDrown;
     }
@@ -4414,6 +4419,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Shadow public abstract float getSpeed();
 
     @Shadow protected abstract float getWaterSlowDown();
+
+    @Shadow @Nullable protected abstract SoundEvent getHurtSound(DamageSource damageSource);
 
     @Unique private boolean roundabout$isPRunning = false;
 

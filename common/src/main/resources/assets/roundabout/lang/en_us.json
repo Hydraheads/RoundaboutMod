@@ -511,7 +511,10 @@
   "death.attack.road_roller_entity.item": "%1$s's grave was paved.",
   "death.attack.road_roller.player": "%1$s's grave was paved.",
   "death.attack.road_roller.player.item": "%1$s's grave was paved.",
-
+  "death.attack.blood_drain": "%1$s lost all color.",
+  "death.attack.blood_drain.item": "%1$s lost all color.",
+  "death.attack.blood_drain.player": "%1$s lost all color.",
+  "death.attack.blood_drain.player.item": "%1$s lost all color.",
 
   "item.glaive.charge_power": "Charge Attack",
 
@@ -871,6 +874,7 @@
   "sounds.roundabout.jotaro_dio":  "DIO!",
   "sounds.roundabout.jotaro_getting_closer":  "How else can I...",
   "sounds.roundabout.blood_suck":  "Blood",
+  "sounds.roundabout.blood_suck_crit":  "Blood",
 
   "sounds.roundabout.aesthetician_exhale":  "Huff",
   "sounds.roundabout.female_zombie_ambient":  "Zombie Aesthetician groans",

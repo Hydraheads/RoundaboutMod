@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.client.models.layers.*;
@@ -252,9 +253,16 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             if (((StandUser) (Player) $$0).roundabout$getStandPowers() instanceof PowersRatt) {
                 if (((StandUser) (Player) $$0).roundabout$getStandPowers().getStandUserSelf().roundabout$getCombatMode()) {
                     ci.setReturnValue(HumanoidModel.ArmPose.SPYGLASS);
+                    return;
                 }
             }
+
+            if (((IPlayerEntity)$$0).roundabout$GetPos2() == PlayerPosIndex.BLOOD_SUCK){
+                ci.setReturnValue(HumanoidModel.ArmPose.SPYGLASS);
+                return;
+            }
         }
+
     }
 
 

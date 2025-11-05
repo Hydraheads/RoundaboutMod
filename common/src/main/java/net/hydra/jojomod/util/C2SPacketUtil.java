@@ -243,6 +243,18 @@ public class C2SPacketUtil {
                 ClientToServerPackets.StandPowerPackets.MESSAGES.GuardCancel.value
         );
     }
+    /**Finish Blood Suck*/
+    public static void finishSuckingPacket(){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.FinishSucking.value
+        );
+    }
+    /**Cancel Blood Suck*/
+    public static void cancelSuckingPacket(){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.CancelSucking.value
+        );
+    }
 
     /**Release right click to stop guarding*/
     public static void handShakeCooldownPacket(){

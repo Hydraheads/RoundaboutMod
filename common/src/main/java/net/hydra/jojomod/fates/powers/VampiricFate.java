@@ -1,21 +1,31 @@
 package net.hydra.jojomod.fates.powers;
 
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -44,12 +54,20 @@ public class VampiricFate extends FatePowers {
     public void tickBloodSuck(){
         if (!this.self.level().isClientSide()) {
 
+            if (self.isUsingItem()) {
+                if (bloodSuckingTarget != null || this.getActivePower() == BLOOD_SUCK) {
+                    bloodSuckingTarget = null;
+                    xTryPower(PowerIndex.NONE, true);
+                }
+            }
+
+
             if (bloodSuckingTarget != null) {
                 Entity TE = getTargetEntity(self, 3, 15);
                 if (TE != null && MainUtil.canDrinkBloodFair(TE, self)
                         && self.hurtTime <= 0 && bloodSuckingTarget.is(TE)) {
-                    if (TE instanceof LivingEntity LE){
-                        ((StandUser)LE).roundabout$setDazed((byte)3);
+                    if (TE instanceof LivingEntity LE) {
+                        ((StandUser) LE).roundabout$setDazed((byte) 3);
                     }
 
                     if (self.tickCount % 2 == 0) {
@@ -66,9 +84,6 @@ public class VampiricFate extends FatePowers {
                                 (this.self.getX() - TE.getX()), (this.self.getY() - TE.getY() + TE.getEyeHeight()), (this.self.getZ() - TE.getZ()),
                                 0.08);
                     }
-                } else {
-                    bloodSuckingTarget = null;
-                    xTryPower(PowerIndex.NONE,true);
                 }
             }
 
@@ -79,19 +94,76 @@ public class VampiricFate extends FatePowers {
 
                 }
                 if (attackTimeDuring >= 20){
-                    if (this.isPacketPlayer() && attackTimeDuring == 20){
-                    } else {
-                        if (!this.self.level().isClientSide()){
-                            finishSucking();
-                        }
+                     finishSucking();
+                    bloodSuckingTarget = null;
+                }
+            }
+        } else {
+            if (bloodSuckingTarget != null) {
+                Entity TE = getTargetEntity(self, 3, 15);
+                if (TE != null && MainUtil.canDrinkBloodFair(TE, self)
+                        && self.hurtTime <= 0 && bloodSuckingTarget.is(TE)) {
+                    //safe
+                } else {
+                    Roundabout.LOGGER.info("1");
+                    xTryPower(PowerIndex.NONE,true);
+                    C2SPacketUtil.cancelSuckingPacket();
+                    bloodSuckingTarget = null;
+                }
+            }
+            if (this.getActivePower() == BLOOD_SUCK) {
+                if (attackTimeDuring >= 20) {
+                    if (this.isPacketPlayer() && attackTimeDuring == 20) {
+                        C2SPacketUtil.finishSuckingPacket();
                     }
                 }
             }
         }
     }
 
+
+    public void packetFinish(){
+        if (this.getActivePower() == BLOOD_SUCK){
+            finishSucking();
+        }
+    }
+    public void packetCancel(){
+        if (this.getActivePower() == BLOOD_SUCK){
+            Roundabout.LOGGER.info("2");
+            xTryPower(PowerIndex.NONE,true);
+        }
+        Roundabout.LOGGER.info("3");
+        bloodSuckingTarget = null;
+    }
+
     public void finishSucking(){
-        if (bloodSuckingTarget != null) {
+        if (bloodSuckingTarget != null && self instanceof Player pl) {
+
+            boolean canDrainGood = MainUtil.canDrinkBloodCrit(bloodSuckingTarget,self);
+            DamageSource sauce = ModDamageTypes.of(self.level(),
+                    ModDamageTypes.BLOOD_DRAIN);
+            if (bloodSuckingTarget.hurt(sauce, 4) && bloodSuckingTarget instanceof LivingEntity LE) {
+                if (canDrainGood) {
+                    if (pl.canEat(false)) {
+                        pl.getFoodData().eat(6, 1.0F);
+                    } else {
+                        pl.getFoodData().eat(6, 0.5F);
+                    }
+                    self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SUCK_DRAIN_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
+                    self.level().playSound(null, self.getX(), self.getY(), self.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, SoundSource.PLAYERS, 1F, 1F+(float)(Math.random()*0.1));
+                    int $$23 = (int)((double)2 * 0.5);
+                    ((ServerLevel)this.self.level()).sendParticles(ParticleTypes.CRIT,
+                            bloodSuckingTarget.getEyePosition().x,
+                            bloodSuckingTarget.getEyePosition().y,
+                            bloodSuckingTarget.getEyePosition().z,
+                             15, 0.2, 0.2, 0.2, 0.0);
+
+                } else {
+                    self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SUCK_DRAIN_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
+                    pl.getFoodData().eat(2, 0.1F);
+                }
+                MainUtil.makeBleed(bloodSuckingTarget, 0, 200, null);
+            }
             bloodSuckingTarget = null;
             xTryPower(PowerIndex.NONE, true);
         }
@@ -104,13 +176,18 @@ public class VampiricFate extends FatePowers {
                 setActivePower(BLOOD_SUCK);
                 self.setSprinting(false);
                 tryIntPowerPacket(BLOOD_SUCK, TE.getId());
+                bloodSuckingTarget = TE;
                 this.attackTimeDuring = 0;
-                if (this.getSelf() instanceof Player && !self.level().isClientSide()) {
-                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.FATE_2, 60);
-                }
                 this.setCooldown(PowerIndex.FATE_2, 60);
             }
         }
+    }
+    @Override
+    public boolean tryPower(int move, boolean forced){
+        if (activePower == BLOOD_SUCK && move != BLOOD_SUCK && !self.level().isClientSide()) {
+            super.setPlayerPos2(PlayerPosIndex.NONE_2);
+        }
+        return super.tryPower(move, forced);
     }
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime){
@@ -118,6 +195,9 @@ public class VampiricFate extends FatePowers {
             bloodSuckingTarget = this.self.level().getEntity(chargeTime);
             setActivePower(BLOOD_SUCK);
             self.setSprinting(false);
+            if (!self.level().isClientSide()) {
+                super.setPlayerPos2(PlayerPosIndex.BLOOD_SUCK);
+            }
             this.attackTimeDuring = 0;
             if (bloodSuckingTarget != null) {
                 bloodSuckingTarget.setDeltaMovement(Vec3.ZERO);
