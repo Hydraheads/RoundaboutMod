@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.fates;
 
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.access.AccessFateFoodData;
 import net.hydra.jojomod.util.MainUtil;
@@ -30,6 +31,8 @@ public abstract class FateFoodDataMixin implements AccessFateFoodData {
     @Shadow private int tickTimer;
 
     @Shadow public abstract void addExhaustion(float f);
+
+    @Shadow public abstract float getSaturationLevel();
 
     /**Makes vampires not replen from food*/
     @Unique
@@ -65,11 +68,24 @@ public abstract class FateFoodDataMixin implements AccessFateFoodData {
         }
     }
 
-    @Inject(method = "getSaturationLevel()F", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$getSaturationLevel(CallbackInfoReturnable<Float> cir) {
+    @Unique
+    @Override
+    public float rdbt$getRealSaturation() {
         if (rdbt$player != null){
             if (FateTypes.hasBloodHunger(rdbt$player)){
-                cir.setReturnValue(this.rdbt$alternateSaturation);
+                return this.rdbt$alternateSaturation;
+            }
+        }
+        return getSaturationLevel();
+    }
+
+    @Inject(method = "getSaturationLevel()F", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$getSaturationLevel(CallbackInfoReturnable<Float> cir) {
+        if (!ClientNetworking.getAppropriateConfig().vampireSettings.vampireUsesInternalSaturation) {
+            if (rdbt$player != null) {
+                if (FateTypes.hasBloodHunger(rdbt$player)) {
+                    cir.setReturnValue(this.rdbt$alternateSaturation);
+                }
             }
         }
     }

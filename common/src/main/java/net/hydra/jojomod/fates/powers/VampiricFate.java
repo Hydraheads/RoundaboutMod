@@ -1,6 +1,8 @@
 package net.hydra.jojomod.fates.powers;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.AccessFateFoodData;
+import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
@@ -105,7 +107,6 @@ public class VampiricFate extends FatePowers {
                         && self.hurtTime <= 0 && bloodSuckingTarget.is(TE)) {
                     //safe
                 } else {
-                    Roundabout.LOGGER.info("1");
                     xTryPower(PowerIndex.NONE,true);
                     C2SPacketUtil.cancelSuckingPacket();
                     bloodSuckingTarget = null;
@@ -129,10 +130,8 @@ public class VampiricFate extends FatePowers {
     }
     public void packetCancel(){
         if (this.getActivePower() == BLOOD_SUCK){
-            Roundabout.LOGGER.info("2");
             xTryPower(PowerIndex.NONE,true);
         }
-        Roundabout.LOGGER.info("3");
         bloodSuckingTarget = null;
     }
 
@@ -144,7 +143,7 @@ public class VampiricFate extends FatePowers {
                     ModDamageTypes.BLOOD_DRAIN);
             if (bloodSuckingTarget.hurt(sauce, 4) && bloodSuckingTarget instanceof LivingEntity LE) {
                 if (canDrainGood) {
-                    if (pl.canEat(false)) {
+                    if (pl.canEat(false) || ((AccessFateFoodData)pl.getFoodData()).rdbt$getRealSaturation() < 8) {
                         pl.getFoodData().eat(6, 1.0F);
                     } else {
                         pl.getFoodData().eat(6, 0.5F);
@@ -160,7 +159,7 @@ public class VampiricFate extends FatePowers {
 
                 } else {
                     self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SUCK_DRAIN_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
-                    pl.getFoodData().eat(2, 0.1F);
+                    pl.getFoodData().eat(2, 0.0F);
                 }
                 MainUtil.makeBleed(bloodSuckingTarget, 0, 200, null);
             }
