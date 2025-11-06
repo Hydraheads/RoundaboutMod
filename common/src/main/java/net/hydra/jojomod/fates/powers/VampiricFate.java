@@ -70,6 +70,7 @@ public class VampiricFate extends FatePowers {
                         && self.hurtTime <= 0 && bloodSuckingTarget.is(TE)) {
                     if (TE instanceof LivingEntity LE) {
                         ((StandUser) LE).roundabout$setDazed((byte) 3);
+                        LE.setDeltaMovement(0,-0.1F,0);
                     }
 
                     if (self.tickCount % 2 == 0) {
@@ -143,10 +144,14 @@ public class VampiricFate extends FatePowers {
                     ModDamageTypes.BLOOD_DRAIN);
             if (bloodSuckingTarget.hurt(sauce, 4) && bloodSuckingTarget instanceof LivingEntity LE) {
                 if (canDrainGood) {
-                    if (pl.canEat(false) || ((AccessFateFoodData)pl.getFoodData()).rdbt$getRealSaturation() < 8) {
+                    if (pl.canEat(false)) {
                         pl.getFoodData().eat(6, 1.0F);
                     } else {
-                        pl.getFoodData().eat(6, 0.5F);
+                        if (((AccessFateFoodData)pl.getFoodData()).rdbt$getRealSaturation() < 7){
+                            pl.getFoodData().eat(6, 0.5F);
+                        } else {
+                            pl.getFoodData().eat(6, 0);
+                        }
                     }
                     self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SUCK_DRAIN_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
                     self.level().playSound(null, self.getX(), self.getY(), self.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, SoundSource.PLAYERS, 1F, 1F+(float)(Math.random()*0.1));
