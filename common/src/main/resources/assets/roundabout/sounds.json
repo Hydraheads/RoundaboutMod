@@ -1022,6 +1022,14 @@
   },
 
 
+  "anubis_possession": {
+    "subtitle": "sounds.roundabout.anubis_possession",
+    "sounds": [
+      "roundabout:anubis_possession"
+    ]
+  },
+
+
 
 
   "ova_summon": {

@@ -3,13 +3,24 @@ package net.hydra.jojomod.mixin.stand_users;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import net.hydra.jojomod.access.IMob;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.AnubisItem;
+import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ReputationEventHandler;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
-import net.minecraft.world.entity.ai.behavior.VillagerGoalPackages;
+import net.minecraft.world.entity.ai.behavior.*;
 import net.minecraft.world.entity.ai.gossip.GossipContainer;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
@@ -17,8 +28,11 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerDataHolder;
 import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.entity.schedule.Schedule;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -27,9 +41,63 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Villager.class)
-public abstract class UserAIVillager extends AbstractVillager implements ReputationEventHandler, VillagerDataHolder {
+public abstract class ZVillager extends AbstractVillager implements ReputationEventHandler, VillagerDataHolder {
+    @Shadow
+    public abstract boolean isClientSide();
+
+
+
+    /** At some point I'm gonna go and make the villager hold and inspect it for a sec, then drop the disc but whatever */
+    @Inject(method = "mobInteract", at = @At(value = "HEAD"), cancellable = true)
+    private void villagerAnubisInteraction(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
+        if (!isClientSide()) {
+            Villager This = (Villager) (Object) this;
+            if (This.getVillagerData().getProfession() == VillagerProfession.CLERIC) {
+                if($$0.getMainHandItem().getItem() instanceof AnubisItem ) {
+
+                    int get = ClientNetworking.getAppropriateConfig().itemSettings.levelsToGetStand;
+                    if ($$0.experienceLevel >= get || $$0.isCreative()) {
+                       // This.setItemSlot(EquipmentSlot.MAINHAND,$$0.getMainHandItem());
+                      //  This.setGuaranteedDrop(EquipmentSlot.MAINHAND);
+                        This.addEffect(new MobEffectInstance(MobEffects.REGENERATION,100));
+
+                        $$0.setItemInHand(InteractionHand.MAIN_HAND,new ItemStack(Items.AIR));
+                        $$0.giveExperienceLevels(-get);
+
+                        doAnubis($$0);
+                        cir.setReturnValue(InteractionResult.SUCCESS);
+                        return;
+                    } else {
+                        $$0.displayClientMessage(Component.translatable("container.enchant.level.requirement", get).withStyle(ChatFormatting.RED), true);
+                        cir.setReturnValue(InteractionResult.FAIL);
+                        return;
+                    }
+
+
+                }
+            }
+        }
+
+    }
+
+
+    @Unique
+    private void doAnubis(Player $$0) {
+        Villager This = ((Villager)(Object)this);
+        $$0.level().playSound(null, $$0.blockPosition(), ModSounds.STAND_ARROW_USE_EVENT, SoundSource.PLAYERS, 1.5F, 1F);
+        $$0.displayClientMessage(Component.translatable("item.roundabout.anubis_item.sword_cleansed").withStyle(ChatFormatting.WHITE), true);
+        ((ServerLevel) $$0.level()).sendParticles(ParticleTypes.FIREWORK, $$0.getX(),
+                $$0.getY() + $$0.getEyeHeight(), $$0.getZ(),
+                20, 0, 0, 0, 0.4);
+        if (This.getMainHandItem().is(ModItems.ANUBIS_ITEM)) {
+            This.setItemSlot(EquipmentSlot.MAINHAND,new ItemStack(Items.AIR,3));
+        }
+        This.spawnAtLocation(ModItems.STAND_DISC_RATT);
+    }
+
     /**This class sets up a mode in villager ai called fight or flight mode,
      * it contains nuanced ai for villagers with stands to
      * essentially start running when they get low on health (see SurvivorBrain as well),
@@ -123,7 +191,7 @@ public abstract class UserAIVillager extends AbstractVillager implements Reputat
      * -------------------------------------------------------------------------------------------------------------
      * */
 
-    public UserAIVillager(EntityType<? extends AbstractVillager> $$0, Level $$1) {
+    public ZVillager(EntityType<? extends AbstractVillager> $$0, Level $$1) {
         super($$0, $$1);
     }
 

@@ -197,6 +197,8 @@ public abstract class HudRendering implements IHudAccess {
                     ticks*=0.1F;
                     RenderSystem.enableBlend();
                     roundabout$renderTextureOverlay($$1, StandIcons.SURVIVOR_ANGER, ticks*0.6F,1F,1F,1F);
+                } else if (user.roundabout$isPossessed()) {
+                    roundabout$renderTextureOverlay($$1, StandIcons.ANUBIS_POSSESSION_OVERLAY, 0.8F,1F,1F,1F);
                 }
             }
 
@@ -511,10 +513,10 @@ public abstract class HudRendering implements IHudAccess {
 
                 StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, false, this.getFont());
                 return true;
-            }/* if (user.roundabout$getPossesionTime() > 0) {
-                StandHudRender.renderNumberHUD(context,minecraft,screenWidth,screenHeight,x, (double) user.roundabout$getPossesionTime() /20,5,StandIcons.JOJO_ICONS,0,161,16730092);
+            } if (user.roundabout$isPossessed()) {
+                StandHudRender.renderPossessionHud(context,minecraft,getCameraPlayer(),screenWidth,screenHeight,x);
                 return true;
-            }*/ else if (user.roundabout$isClashing()) {
+            } else if (user.roundabout$isClashing()) {
                 ((StandUserClientPlayer) minecraft.player).roundabout$setClashDisplayExtraTimestamp(this.minecraft.player.tickCount);
                 float c = (user.roundabout$getStandPowers().getClashProgress());
                 ((StandUserClientPlayer) minecraft.player).roundabout$setLastClashPower(c);

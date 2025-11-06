@@ -276,6 +276,24 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         return $$0;
     }
 
+
+    ///  hides the arms if you're holding anubis
+    @Inject(method = "setModelProperties", at = @At(value = "TAIL"))
+    private void roundabout$setModelProperties(AbstractClientPlayer $$0, CallbackInfo ci) {
+        if (ClientUtil.checkIfIsFirstPerson($$0) )  {
+            if (AnubisLayer.shouldRender($$0) != null) {
+                PlayerModel<AbstractClientPlayer> playerModel = (PlayerModel)this.getModel();
+                if (AnubisLayer.shouldRender($$0) == HumanoidArm.RIGHT) {
+                    playerModel.rightArm.visible = false;
+                    playerModel.rightSleeve.visible = false;
+                } else {
+                    playerModel.leftArm.visible = false;
+                    playerModel.leftSleeve.visible = false;
+                }
+            }
+        }
+    }
+
     /**Render external layers like soft and wet shooting mode out of context. This particular inject is for Achtung Baby*/
     @Inject(method = "renderHand", at = @At(value = "HEAD"), cancellable = true)
     private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderHandHEAD(PoseStack stack, MultiBufferSource buffer, int integer,
@@ -425,6 +443,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
         ShootingArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,yes,
                 0,0,$$4);
+        AnubisLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,yes,$$4);
         if ($$4 != null && $$4.equals(this.model.rightArm)) {
             MandomLayer.renderWatchFirstPerson(stack, buffer, getPackedLightCoords(acl, 1F), acl, 1, 1, 1, yes,
                     0, 0, $$4, ((IPlayerModel) this.model).roundabout$getSlim()
@@ -751,7 +770,8 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
             ShootingArmLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,1,1,1,yes,
                     0,0,$$5);
-    }
+            AnubisLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,yes,$$4);
+        }
 
     @Unique
     public void roundabout$corpseShowName(AbstractClientPlayer $$0, PoseStack $$3, MultiBufferSource $$4, int $$5){

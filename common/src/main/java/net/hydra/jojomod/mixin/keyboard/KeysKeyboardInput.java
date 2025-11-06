@@ -26,7 +26,20 @@ public abstract class KeysKeyboardInput extends Input {
     private void roundabout$tick(boolean $$0, float $$1, CallbackInfo ci) {
         Player player = Minecraft.getInstance().player;
         if (player != null){
+
             StandUser user = ((StandUser) player);
+            if (user.roundabout$isPossessed()) {
+                this.up = false;
+                this.down = false;
+                this.left = false;
+                this.right = false;
+                this.forwardImpulse = 0;
+                this.leftImpulse = 0;
+                this.jumping = false;
+                this.shiftKeyDown = false;
+                ci.cancel();
+            }
+
             if (user.roundabout$getStandPowers().isPiloting()){
                 if (roundabout$keyPilot == null){
                     roundabout$keyPilot = new KeyboardPilotInput(this.options);

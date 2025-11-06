@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.model_layers;
 
 import net.hydra.jojomod.client.FacelessLayer;
+import net.hydra.jojomod.client.models.layers.AnubisLayer;
 import net.hydra.jojomod.client.models.layers.HeyYaLayer;
 import net.hydra.jojomod.client.models.layers.MandomLayer;
 import net.hydra.jojomod.client.models.layers.RattShoulderLayer;
@@ -23,6 +24,7 @@ public abstract class LayerHumanoidMobRendererMixin<T extends Mob, M extends Hum
         this.addLayer(new HeyYaLayer<>($$0, this));
         this.addLayer(new MandomLayer<>($$0, this));
         this.addLayer(new RattShoulderLayer<>($$0, this));
+        this.addLayer(new AnubisLayer<>($$0, this));
     }
 
     /**Shadows, ignore

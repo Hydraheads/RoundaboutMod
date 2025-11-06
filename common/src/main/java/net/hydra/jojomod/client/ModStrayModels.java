@@ -4,10 +4,9 @@ import net.hydra.jojomod.client.models.RoadRollerStrayModel;
 import net.hydra.jojomod.client.models.WornBloodyStoneMaskModel;
 import net.hydra.jojomod.client.models.WornStoneMaskModel;
 import net.hydra.jojomod.client.models.projectile.BowlerHatModel;
-import net.hydra.jojomod.client.models.projectile.RoadRollerModel;
+import net.hydra.jojomod.client.models.stand.AnubisModel;
 import net.hydra.jojomod.client.models.visages.parts.*;
 import net.hydra.jojomod.client.models.worn_stand.*;
-import net.hydra.jojomod.item.BowlerHatItem;
 
 public class ModStrayModels {
     public static SoftAndWetShootingArmModel SHOOTING_ARM;
@@ -19,6 +18,7 @@ public class ModStrayModels {
     public static ReddShoulderModel REDD_SHOULDER;
     public static ChairRattShoulderModel CHAIR_RATT_SHOULDER;
     public static MandomModel MANDOM;
+    public static AnubisModel ANUBIS;
     public static WatchModel MANDOM_WATCH;
     public static SmallWatchModel MANDOM_WATCH_SMALL;
     public static ChestPart ChestPart;
