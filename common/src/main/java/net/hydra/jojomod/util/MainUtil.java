@@ -2170,7 +2170,7 @@ public class MainUtil {
                 }
             }
         } else if (context == PacketDataIndex.SINGLE_BYTE_FORWARD_BARRAGE) {
-            if (player != null){
+            if (player != null && ((StandUser)player).roundabout$getStandPowers().attackTimeDuring >= 0){
                 ((StandUser)player).roundabout$getStandPowers().forwardBarrage = true;
                 ((StandUser)player).roundabout$getStandPowers().moveStarted = true;
                 ((StandUser)player).roundabout$getStandPowers().poseStand(OffsetIndex.LOOSE);
