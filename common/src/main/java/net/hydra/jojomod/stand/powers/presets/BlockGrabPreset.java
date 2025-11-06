@@ -884,6 +884,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                 && !(entity instanceof Player pl && pl.isCreative())
                 && !(entity instanceof MinecartCommandBlock)
                 && !(entity instanceof MinecartSpawner)
+                && ((entity != null && ((IEntityAndData)entity).rdbt$returnPickup()))
                 && !(entity instanceof Projectile)
                 && !(entity instanceof LivingEntity lv &&
                 ((StandUser)lv).roundabout$getStandPowers() instanceof PowersWalkingHeart PW &&
