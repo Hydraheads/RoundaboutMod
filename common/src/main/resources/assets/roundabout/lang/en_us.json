@@ -1037,6 +1037,9 @@
   "ability.roundabout.wall_walk_move.desc": "Latches onto walls, allowing you to walk on them. Trigger by facing a wall while having your heels planted, or by being in the air.",
   "ability.roundabout.firm_swing": "Firm Swing",
   "ability.roundabout.firm_swing.desc": "Makes all attacks critical attacks while your heel is planted, due to the increased force from a sturdy stance.",
+  "ability.roundabout.fall_disperse": "Fall Absorb",
+  "ability.roundabout.fall_disperse.desc": "Halves incoming fall damage, spreading the impact across your heels.",
+
 
 
 

@@ -3604,9 +3604,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             cir.setReturnValue(0);
             return;
         }
+        boolean adj = false;
+        if (roundabout$getStandPowers() instanceof PowersWalkingHeart PW){
+            $$1/=2;
+            adj = true;
+        }
         int yesInt = roundabout$getAdjustedGravity();
-        if (yesInt > 0){
+        if (yesInt > 0 || adj){
             cir.setReturnValue(roundabout$calculateFallDamage($$0,$$1,yesInt));
+            return;
         }
     }
 

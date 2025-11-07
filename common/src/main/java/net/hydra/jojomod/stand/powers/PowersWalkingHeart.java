@@ -993,9 +993,13 @@ public class PowersWalkingHeart extends NewDashPreset {
                     "instruction.roundabout.press_skill", StandIcons.WALL_WALK, 3, level, bypass));
             $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.firm_swing",
                     "instruction.roundabout.passive", StandIcons.FIRM_SWING, 0, level, bypass));
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.fall_disperse",
+                    "instruction.roundabout.passive", StandIcons.FALL_ABSORB, 0, level, bypass));
         } else {
             $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.firm_swing",
                     "instruction.roundabout.passive", StandIcons.FIRM_SWING, 0, level, bypass));
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.fall_disperse",
+                    "instruction.roundabout.passive", StandIcons.FALL_ABSORB, 0, level, bypass));
         }
         return $$1;
     }
