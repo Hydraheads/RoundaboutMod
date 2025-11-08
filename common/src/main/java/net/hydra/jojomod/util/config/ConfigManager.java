@@ -75,9 +75,9 @@ public abstract class ConfigManager {
             MainUtil.naturalStandUserMobBlacklist.clear();
             MainUtil.naturalStandUserMobBlacklist.addAll(getAdvancedConfig().naturalStandUserMobBlacklist);
         }
-        if (getAdvancedConfig().foodThatGivesBloodListV2 != null)
+        if (getAdvancedConfig().foodThatGivesBloodListV3 != null)
         {
-            MainUtil.foodMap = MainUtil.parseFoodList(getAdvancedConfig().foodThatGivesBloodListV2);
+            MainUtil.foodMap = MainUtil.parseFoodList(getAdvancedConfig().foodThatGivesBloodListV3);
         }
     }
 
