@@ -411,6 +411,7 @@ public class ForgeEvents {
         ModParticles.BRIEF_MAGIC_DUST = ForgeParticles.BRIEF_MAGIC_DUST.get();
         ModParticles.D4C_LINES = ForgeParticles.D4C_LINES.get();
         ModParticles.STITCH = ForgeParticles.STITCH.get();
+        ModParticles.HYPNO_SWIRL = ForgeParticles.HYPNO_SWIRL.get();
         ModParticles.MOLD_DUST = ForgeParticles.MOLD_DUST.get();
         ModParticles.MOLD = ForgeParticles.MOLD.get();
         ModParticles.DUST_CRUMBLE = ForgeParticles.DUST_CRUMBLE.get();

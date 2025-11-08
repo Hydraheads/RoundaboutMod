@@ -2,6 +2,7 @@ package net.hydra.jojomod.fates.powers;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -10,10 +11,13 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.Position;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 
 public class VampireFate extends VampiricFate {
 
@@ -77,6 +81,15 @@ public class VampireFate extends VampiricFate {
         if (!self.level().isClientSide())
             if (isHypnotizing) {
                 if (hypnoTicks % 9 == 0){
+
+                    Vec3 lvec = self.getLookAngle();
+                    Position pn = self.getEyePosition().add(lvec.scale(3));
+                    Vec3 rev = lvec.reverse();
+                    ((ServerLevel) this.self.level()).sendParticles(ModParticles.HYPNO_SWIRL, pn.x(),
+                            pn.y(), pn.z(),
+                            0,
+                            rev.x,rev.y,rev.z,
+                            0.08);
                     self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.HYPNOSIS_EVENT, SoundSource.PLAYERS, 1F, 1F);
                 }
                 hypnoTicks++;

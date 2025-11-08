@@ -60,6 +60,7 @@ public class FabricParticles {
     public static final SimpleParticleType BRIEF_MAGIC_DUST = FabricParticleTypes.simple();
     public static final SimpleParticleType STITCH = FabricParticleTypes.simple();
     public static final SimpleParticleType MOLD_DUST = FabricParticleTypes.simple();
+    public static final SimpleParticleType HYPNO_SWIRL = FabricParticleTypes.simple();
     public static final SimpleParticleType MOLD = FabricParticleTypes.simple();
     public static final SimpleParticleType DUST_CRUMBLE = FabricParticleTypes.simple();
     public static final SimpleParticleType FIRE_CRUMBLE = FabricParticleTypes.simple();
@@ -104,6 +105,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("stitch"), STITCH);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("mold_dust"), MOLD_DUST);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("mold"), MOLD);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("hypno_swirl"), HYPNO_SWIRL);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("clock"), CLOCK);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("red_clock"), RED_CLOCK);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("blue_clock"), BLUE_CLOCK);
@@ -169,6 +171,7 @@ public class FabricParticles {
         ModParticles.BRIEF_MAGIC_DUST = BRIEF_MAGIC_DUST;
         ModParticles.STITCH = STITCH;
         ModParticles.MOLD_DUST = MOLD_DUST;
+        ModParticles.HYPNO_SWIRL = HYPNO_SWIRL;
         ModParticles.MOLD = MOLD;
 
 

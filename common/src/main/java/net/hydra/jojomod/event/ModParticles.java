@@ -58,6 +58,8 @@ public class ModParticles {
     public static SimpleParticleType MOLD_DUST;
     public static SimpleParticleType MOLD;
 
+    public static SimpleParticleType HYPNO_SWIRL;
+
     public static SimpleParticleType ROAD_ROLLER_EXPLOSION;
     public static SimpleParticleType ROAD_ROLLER_SMOKE;
     public static SimpleParticleType ROAD_ROLLER_SCRAP;
