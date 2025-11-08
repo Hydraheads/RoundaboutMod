@@ -118,6 +118,9 @@ public abstract class HudRendering implements IHudAccess {
                     this.renderTextureOverlay($$1, StandIcons.RATT_SCOPE_OVERLAY, 0.99F);
                 }
             }
+            if (user.roundabout$isPossessed()) {
+                roundabout$renderTextureOverlay($$1, StandIcons.ANUBIS_POSSESSION_OVERLAY, 0.8F,1F,1F,1F);
+            }
             if (this.minecraft.options.getCameraType().isFirstPerson()) {
                 if (FateTypes.hasBloodHunger(this.minecraft.player)){
                     // Fade speed per tick — lower = slower fade
@@ -197,8 +200,6 @@ public abstract class HudRendering implements IHudAccess {
                     ticks*=0.1F;
                     RenderSystem.enableBlend();
                     roundabout$renderTextureOverlay($$1, StandIcons.SURVIVOR_ANGER, ticks*0.6F,1F,1F,1F);
-                } else if (user.roundabout$isPossessed()) {
-                    roundabout$renderTextureOverlay($$1, StandIcons.ANUBIS_POSSESSION_OVERLAY, 0.8F,1F,1F,1F);
                 }
             }
 

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.item;
 
 
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
@@ -28,10 +29,6 @@ public class AnubisItem extends Item {
     }
 
 
-    @Override
-    public boolean canAttackBlock(BlockState $$0, Level $$1, BlockPos $$2, Player $$3) {
-        return !$$3.isCreative();
-    }
 
 
     @Override
@@ -40,7 +37,6 @@ public class AnubisItem extends Item {
             if ($$2 instanceof Player P) {
                 ((StandUser) P).roundabout$setPossessionTime(100);
                 ((Player) $$2).getCooldowns().addCooldown($$0.getItem(),10/*2400*/);
-                //TODO GET A PROPER SOUND
                 P.level().playSound(null,P.blockPosition(), ModSounds.ANUBIS_POSSESSION_EVENT,SoundSource.PLAYERS,1.0F,1.0F);
             }
         }
@@ -74,6 +70,9 @@ public class AnubisItem extends Item {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
+
+        ((IPlayerEntity)$$1).roundabout$getThirdPersonAnubisUnsheath().startIfStopped($$1.tickCount);
+
         ItemStack $$3 = $$1.getItemInHand($$2);
         $$1.startUsingItem($$2);
         return InteractionResultHolder.fail($$3);
@@ -81,12 +80,12 @@ public class AnubisItem extends Item {
 
     @Override
     public UseAnim getUseAnimation(ItemStack $$0) {
-        return UseAnim.BLOCK;
+        return UseAnim.NONE;
     }
 
     @Override
     public int getUseDuration(ItemStack $$0) {
-        return 60;
+        return 50;
     }
 
 

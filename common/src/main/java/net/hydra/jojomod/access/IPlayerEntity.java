@@ -93,6 +93,10 @@ public interface IPlayerEntity {
     AnimationState roundabout$getBubbleAim();
     int roundabout$getBubbleShotAimPoints();
     void roundabout$setBubbleShotAimPoints(int shotPoints);
+
+    AnimationState roundabout$getAnubisUnsheath();
+    AnimationState roundabout$getThirdPersonAnubisUnsheath();
+
     AnimationState roundabout$getBubbleShotAim();
     AnimationState roundabout$getOffsetCorrect();
     AnimationState getWry();

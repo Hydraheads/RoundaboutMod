@@ -98,10 +98,13 @@ public interface StandUser {
     void roundabout$summonStand(Level theWorld, boolean forced, boolean sound);
     AnimationState roundabout$getHandLayerAnimation();
     void roundabout$setHandLayerAnimation(AnimationState layer);
+
     AnimationState roundabout$getWornStandIdleAnimation();
-    void roundabout$setHeyYaAnimation(AnimationState layer);
-    AnimationState roundabout$getHeyYaAnimation2();
-    // TODO: fix this shit below
+    void roundabout$setWornStandIdleAnimation(AnimationState layer);
+
+    AnimationState roundabout$getWornStandAnimation();
+
+    // TODO: fix this shit below, make it so that we don't add a new vanishticks every stand :/
     int roundabout$getHeyYaVanishTicks();
     void roundabout$setHeyYaVanishTicks(int set);
     int roundabout$getRattShoulderVanishTicks();

@@ -5,10 +5,12 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.models.layers.animations.AnubisAnimations;
 import net.hydra.jojomod.client.models.layers.animations.FirstPersonLayerAnimations;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModificationMaskItem;
@@ -123,6 +125,14 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 ipe.roundabout$getBubbleShotAim().stop();
             }
 
+            if ( $$0.getUseItem().is(ModItems.ANUBIS_ITEM)  ) {
+                ipe.roundabout$getAnubisUnsheath().startIfStopped($$0.tickCount); change = true;
+                this.roundabout$animate(ipe.roundabout$getAnubisUnsheath(), AnubisAnimations.Unsheathe, yes, 1f);
+                ipe.roundabout$getAnubisUnsheath();
+            } else {
+                ipe.roundabout$getAnubisUnsheath().stop();
+            }
+
             if (change){
                 ipe.roundabout$getOffsetCorrect().startIfStopped($$0.tickCount);
                 this.roundabout$animate(ipe.roundabout$getOffsetCorrect(), FirstPersonLayerAnimations.offsetCorrect, yes, 1f);
@@ -179,12 +189,24 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 this.roundabout$animate(ipe.getWatch(), Poses.WATCH.ad, $$3, 1f);
                 this.roundabout$animate(ipe.getSitting(), Poses.SITTING.ad, $$3, 1f);
                 this.roundabout$animate(ipe.getVampire(), Poses.VAMPIRE_TRANSFORMATION.ad, $$3, 1f);
+
+                if ($$0.getUseItem().is(ModItems.ANUBIS_ITEM)) {
+                    this.body.resetPose();
+                    this.rightLeg.resetPose();
+                    this.leftLeg.resetPose();
+                    this.rightArm.resetPose();
+                    this.leftArm.resetPose();
+                } else {
+                    ipe.roundabout$getThirdPersonAnubisUnsheath().stop();
+                    ipe.roundabout$getAnubisUnsheath().stop();
+                }
+                this.roundabout$animate(ipe.roundabout$getThirdPersonAnubisUnsheath(), AnubisAnimations.ThirdPersonUnsheathe,$$3,1F);
             }
 
             /**Shoot mode aiming*/
             StandUser user = ((StandUser)$$0);
             if (rdbt$isNotPosing($$0)) {
-                if (user.roundabout$getEffectiveCombatMode() && !$$0.isUsingItem()) {
+                if (user.roundabout$getEffectiveCombatMode() && !$$0.isUsingItem() ) {
                     if (user.roundabout$rotateArmToShoot()) {
                         boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
                         if ($$9) {
@@ -242,6 +264,10 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         this.leftArm.xRot = (float) (-Math.PI / 1) + this.body.xRot;
                         this.leftArm.y = -0.1F;
                     }
+                } else if ($$0.getUseItem().is(ModItems.ANUBIS_ITEM) && ClientUtil.checkIfIsFirstPerson((Player)$$0)) {
+                    this.rightArm.yRot = 0;
+                    this.rightArm.zRot = 0;// (float) Math.PI/5;
+                    this.rightArm.xRot = 0;
                 }
             }
             this.hat.copyFrom(this.head);
@@ -268,6 +294,9 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 this.roundabout$animate2(ipe.getWatch(), Poses.WATCH.ad, $$3, 1f);
                 this.roundabout$animate2(ipe.getSitting(), Poses.SITTING.ad, $$3, 1f);
                 this.roundabout$animate2(ipe.getVampire(), Poses.VAMPIRE_TRANSFORMATION.ad, $$3, 1f);
+
+                this.roundabout$animate(ipe.roundabout$getThirdPersonAnubisUnsheath(), AnubisAnimations.ThirdPersonUnsheathe,$$3,1F);
+
                 if ($$0.getItemBySlot(EquipmentSlot.CHEST).isEmpty()) {
                         this.cloak.z += 0.0F;
                         this.cloak.y += 0.0F;

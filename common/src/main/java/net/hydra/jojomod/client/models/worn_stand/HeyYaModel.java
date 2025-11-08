@@ -206,14 +206,14 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
             user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
             if (user.roundabout$getStandAnimation() == PowersHeyYa.YAP) {
-                user.roundabout$getHeyYaAnimation2().startIfStopped(context.tickCount);
+                user.roundabout$getWornStandAnimation().startIfStopped(context.tickCount);
             } else {
-                user.roundabout$getHeyYaAnimation2().stop();
+                user.roundabout$getWornStandAnimation().stop();
             }
             rotateHead(context,partialTicks,user);
             this.animate(user.roundabout$getWornStandIdleAnimation(), HeyYaAnimations.hangin_on, partialTicks, 1f);
             this.animate(user.roundabout$getWornStandIdleAnimation(), HeyYaAnimations.idle_normal, partialTicks, 1f);
-            this.animate(user.roundabout$getHeyYaAnimation2(), HeyYaAnimations.talk, partialTicks, 1f);
+            this.animate(user.roundabout$getWornStandAnimation(), HeyYaAnimations.talk, partialTicks, 1f);
             //The number at the end is inversely proportional so 2 is half speed
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
         }
