@@ -414,8 +414,6 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
             }
         }
 
-        Roundabout.LOGGER.info(""+getPickupBoolean());
-
         if (!this.level().isClientSide) {
             if (isThrown) {
                 if (this.tickCount % 180 == 0) {

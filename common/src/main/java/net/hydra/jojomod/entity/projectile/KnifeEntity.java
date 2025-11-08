@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
 import com.google.common.collect.Sets;
+import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModEffects;
@@ -16,6 +17,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -28,6 +30,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -116,8 +120,22 @@ public class KnifeEntity extends AbstractArrow {
     }
 
     @Override
-    protected SoundEvent getDefaultHitGroundSoundEvent() {
-        return ModSounds.KNIFE_IMPACT_GROUND_EVENT;
+    protected void onHitBlock(BlockHitResult $$0) {
+        ((IAbstractArrowAccess)this).roundabout$setLastState(this.level().getBlockState($$0.getBlockPos()));
+        BlockState BSS = this.level().getBlockState($$0.getBlockPos());
+        BSS.onProjectileHit(this.level(), BSS, $$0, this);
+        Vec3 $$1 = $$0.getLocation().subtract(this.getX(), this.getY(), this.getZ());
+        this.setDeltaMovement($$1);
+        Vec3 $$2 = $$1.normalize().scale(0.05F);
+        this.setPosRaw(this.getX() - $$2.x, this.getY() - $$2.y, this.getZ() - $$2.z);
+        this.playSound(ModSounds.KNIFE_IMPACT_GROUND_EVENT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
+        this.inGround = true;
+        this.shakeTime = 7;
+        this.setCritArrow(false);
+        this.setPierceLevel((byte)0);
+        this.setSoundEvent(SoundEvents.ARROW_HIT);
+        this.setShotFromCrossbow(false);
+        ((IAbstractArrowAccess)this).roundabout$resetPiercedEntities();
     }
 
     @Override

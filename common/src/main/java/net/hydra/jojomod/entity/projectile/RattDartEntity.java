@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.RattEntity;
@@ -20,6 +21,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -34,6 +36,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec2;
@@ -126,8 +129,7 @@ public class RattDartEntity extends AbstractArrow {
         } else {
             this.DisableSuperThrow();
             setParticleTrails(false);
-            super.onHitBlock($$0);
-
+            onHitBlock2($$0);
         }
 
     }
@@ -176,10 +178,22 @@ public class RattDartEntity extends AbstractArrow {
         this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
         superThrowTicks = 0;
     }
-
-    @Override
-    protected SoundEvent getDefaultHitGroundSoundEvent() {
-        return ModSounds.RATT_DART_THUNK_EVENT;
+    protected void onHitBlock2(BlockHitResult $$0) {
+        ((IAbstractArrowAccess)this).roundabout$setLastState(this.level().getBlockState($$0.getBlockPos()));
+        BlockState BSS = this.level().getBlockState($$0.getBlockPos());
+        BSS.onProjectileHit(this.level(), BSS, $$0, this);
+        Vec3 $$1 = $$0.getLocation().subtract(this.getX(), this.getY(), this.getZ());
+        this.setDeltaMovement($$1);
+        Vec3 $$2 = $$1.normalize().scale(0.05F);
+        this.setPosRaw(this.getX() - $$2.x, this.getY() - $$2.y, this.getZ() - $$2.z);
+        this.playSound(ModSounds.RATT_DART_THUNK_EVENT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
+        this.inGround = true;
+        this.shakeTime = 7;
+        this.setCritArrow(false);
+        this.setPierceLevel((byte)0);
+        this.setSoundEvent(SoundEvents.ARROW_HIT);
+        this.setShotFromCrossbow(false);
+        ((IAbstractArrowAccess)this).roundabout$resetPiercedEntities();
     }
     public void applyEffect(LivingEntity $$1) {
         if (MainUtil.isBossMob($$1) || $$1 instanceof RoadRollerEntity) {
