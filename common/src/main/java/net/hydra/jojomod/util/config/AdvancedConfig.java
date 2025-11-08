@@ -112,4 +112,11 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:vex"
             )
     );
+    public Set<String> hypnotismMobBlackList = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:ender_dragon",
+                    "minecraft:wither",
+                    "minecraft:warden"
+            )
+    );
 }

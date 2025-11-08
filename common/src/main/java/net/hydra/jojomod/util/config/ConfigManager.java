@@ -75,6 +75,11 @@ public abstract class ConfigManager {
             MainUtil.naturalStandUserMobBlacklist.clear();
             MainUtil.naturalStandUserMobBlacklist.addAll(getAdvancedConfig().naturalStandUserMobBlacklist);
         }
+        if (getAdvancedConfig().hypnotismMobBlackList != null)
+        {
+            MainUtil.hypnotismMobBlackList.clear();
+            MainUtil.hypnotismMobBlackList.addAll(getAdvancedConfig().hypnotismMobBlackList);
+        }
         if (getAdvancedConfig().foodThatGivesBloodListV3 != null)
         {
             MainUtil.foodMap = MainUtil.parseFoodList(getAdvancedConfig().foodThatGivesBloodListV3);

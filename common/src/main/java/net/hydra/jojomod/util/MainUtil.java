@@ -139,6 +139,7 @@ public class MainUtil {
     public static ArrayList<String> walkableBlocks = Lists.newArrayList();
     public static ArrayList<String> standBlockGrabBlacklist = Lists.newArrayList();
     public static ArrayList<String> naturalStandUserMobBlacklist = Lists.newArrayList();
+    public static ArrayList<String> hypnotismMobBlackList = Lists.newArrayList();
     public static Set<String> foodThatGivesBloodList = Set.of();
     Map<String, FoodBloodStats> foodThatGivesBloodMap;
 
@@ -212,6 +213,13 @@ public class MainUtil {
     public static boolean isMobStandUserBlacklisted(Entity ent){
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
         if (naturalStandUserMobBlacklist != null && !naturalStandUserMobBlacklist.isEmpty() && rl != null && naturalStandUserMobBlacklist.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isHypnotismTargetBlacklisted(Entity ent){
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        if (hypnotismMobBlackList != null && !hypnotismMobBlackList.isEmpty() && rl != null && hypnotismMobBlackList.contains(rl.toString())){
             return true;
         }
         return false;

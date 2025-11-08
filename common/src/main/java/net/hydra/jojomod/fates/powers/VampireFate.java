@@ -105,7 +105,8 @@ public class VampireFate extends VampiricFate {
                     Iterator var4 = le.iterator();
                     while(var4.hasNext()) {
                         Mob nle = (Mob) var4.next();
-                        if (!nle.isRemoved() && nle.isAlive() && !nle.isSleeping()){
+                        if (!nle.isRemoved() && nle.isAlive() && !nle.isSleeping() &&
+                                !(MainUtil.isHypnotismTargetBlacklisted(nle))){
                             if (nle.getTarget() == null || !nle.getTarget().isAlive()
                             || nle.getTarget().isRemoved()){
                                 ((IMob) nle).roundabout$setHypnotizedBy(self);
