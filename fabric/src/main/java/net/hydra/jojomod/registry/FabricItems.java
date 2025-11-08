@@ -47,34 +47,47 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMagiciansRed(null)));
     public static Item MAX_STAND_DISC_THE_WORLD = registerItem("max_the_world_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersTheWorld(null)));
+
     public static Item STAND_DISC_JUSTICE = registerItem("justice_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersJustice(null)));
     public static Item MAX_STAND_DISC_JUSTICE= registerItem("max_justice_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersJustice(null)));
+
     public static Item STAND_DISC_D4C = registerItem("d4c_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
     public static Item MAX_STAND_DISC_D4C = registerItem("max_d4c_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
+
     public static Item STAND_DISC_GREEN_DAY = registerItem("green_day_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersGreenDay(null)));
     public static Item MAX_STAND_DISC_GREEN_DAY = registerItem("max_green_day_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersGreenDay(null)));
+
     public static Item STAND_DISC_RATT = registerItem("ratt_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersRatt(null)));
     public static Item MAX_STAND_DISC_RATT = registerItem("max_ratt_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersRatt(null)));
+
+    public static Item STAND_DISC_ANUBIS = registerItem("anubis_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null)));
+    public static Item MAX_STAND_DISC_ANUBIS = registerItem("max_anubis_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null)));
+
     public static Item STAND_DISC_SOFT_AND_WET = registerItem("soft_and_wet_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSoftAndWet(null)));
     public static Item MAX_STAND_DISC_SOFT_AND_WET = registerItem("max_soft_and_wet_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersSoftAndWet(null)));
+
     public static Item STAND_DISC_WALKING_HEART = registerItem("walking_heart_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersWalkingHeart(null)));
     public static Item MAX_STAND_DISC_WALKING_HEART = registerItem("max_walking_heart_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersWalkingHeart(null)));
+
     public static Item STAND_DISC_KILLER_QUEEN = registerItem("killer_queen_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null)));
     public static Item MAX_STAND_DISC_KILLER_QUEEN = registerItem("max_killer_queen_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null)));
+
     public static Item STAND_DISC_CINDERELLA = registerItem("cinderella_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null)));
     public static Item STAND_DISC_HEY_YA = registerItem("hey_ya_disc",
@@ -85,10 +98,12 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSurvivor(null)));
     public static Item STAND_DISC_ACHTUNG = registerItem("achtung_baby_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAchtungBaby(null)));
+
     public static Item STAND_DISC_DIVER_DOWN = registerItem("diver_down_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
     public static Item MAX_STAND_DISC_DIVER_DOWN = registerItem("max_diver_down_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
+
     public static Item LUCK_UPGRADE = registerItem("luck_upgrade",
         new SmithingTemplateItem(SmithingTemplates.LUCK_UPGRADE_APPLIES_TO, SmithingTemplates.LUCK_UPGRADE_INGREDIENTS, SmithingTemplates.LUCK_UPGRADE, SmithingTemplates.LUCK_UPGRADE_BASE_SLOT_DESCRIPTION, SmithingTemplates.LUCK_UPGRADE_ADDITIONS_SLOT_DESCRIPTION, SmithingTemplates.createLuckUpgradeIconList(), SmithingTemplates.createLuckMatIconList())
     );
@@ -101,6 +116,8 @@ public class FabricItems {
     public static Item HARPOON = registerItem("harpoon", new HarpoonItem((new Item.Properties()).durability(250)));
 
     public static Item BOWLER_HAT = registerItem("bowler_hat", new BowlerHatItem(Tiers.IRON, 0F, -1.6F, new Item.Properties()));
+
+    public static Item ANUBIS_ITEM = registerItem("anubis_item", new AnubisItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
 
     public static Item SNUBNOSE_REVOLVER = registerItem("snubnose_revolver", new SnubnoseRevolverItem(new Item.Properties().stacksTo(1)));
 
@@ -470,6 +487,9 @@ public class FabricItems {
         ModItems.MAX_STAND_DISC_RATT = MAX_STAND_DISC_RATT;
         ModItems.STAND_DISC_RATT = STAND_DISC_RATT;
         ((MaxStandDiscItem)MAX_STAND_DISC_RATT).baseDisc = ((StandDiscItem)STAND_DISC_RATT);
+        ModItems.MAX_STAND_DISC_ANUBIS = MAX_STAND_DISC_ANUBIS;
+        ModItems.STAND_DISC_ANUBIS = STAND_DISC_ANUBIS;
+        ((MaxStandDiscItem)MAX_STAND_DISC_ANUBIS).baseDisc = ((StandDiscItem)STAND_DISC_ANUBIS);
         ModItems.STAND_DISC_SOFT_AND_WET = STAND_DISC_SOFT_AND_WET;
         ModItems.MAX_STAND_DISC_SOFT_AND_WET = MAX_STAND_DISC_SOFT_AND_WET;
         ((MaxStandDiscItem)MAX_STAND_DISC_SOFT_AND_WET).baseDisc = ((StandDiscItem)STAND_DISC_SOFT_AND_WET);
@@ -509,6 +529,7 @@ public class FabricItems {
         ModItems.MATCH_BUNDLE = MATCH_BUNDLE;
         ModItems.GASOLINE_CAN = GASOLINE_CAN;
         ModItems.GASOLINE_BUCKET = GASOLINE_BUCKET;
+        ModItems.ANUBIS_ITEM = ANUBIS_ITEM;
         ModItems.SNUBNOSE_REVOLVER = SNUBNOSE_REVOLVER;
         ModItems.STAND_DISC = STAND_DISC;
         ModItems.COFFEE_GUM = COFFEE_GUM;

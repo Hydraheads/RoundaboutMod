@@ -118,8 +118,8 @@ public class StandDiscItem extends Item {
 
 
     public void addItem(Player player, ItemStack stack){
-            ItemEntity $$4 = new ItemEntity(player.level(), player.getX(),
-                    player.getY() + player.getEyeHeight(), player.getZ(),
+            ItemEntity $$4 = new ItemEntity(player.level(), player.getEyePosition().x,
+                    player.getEyePosition().y, player.getEyePosition().z,
                     stack);
             $$4.setPickUpDelay(0);
             $$4.setThrower(player.getUUID());

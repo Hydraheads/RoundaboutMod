@@ -5,6 +5,7 @@ import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
@@ -25,6 +26,7 @@ public interface StandUser {
      * Minimize the amount of synced data to just things you really need.*/
     boolean roundabout$hasStandOut();
     void roundabout$tryBlockPosPower(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit);
+    void roundabout$tryBlockPosPowerF(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit);
     Vec3 roundabout$frictionSave();
     void roundabout$deeplyRemoveAttackTarget();
     boolean roundabout$getQueForTargetDeletion();
@@ -99,12 +101,16 @@ public interface StandUser {
     AnimationState roundabout$getWornStandIdleAnimation();
     void roundabout$setHeyYaAnimation(AnimationState layer);
     AnimationState roundabout$getHeyYaAnimation2();
+    // TODO: fix this shit below
     int roundabout$getHeyYaVanishTicks();
     void roundabout$setHeyYaVanishTicks(int set);
     int roundabout$getRattShoulderVanishTicks();
     void roundabout$setRattShoulderVanishTicks(int set);
     int roundabout$getMandomVanishTicks();
     void roundabout$setMandomVanishTicks(int set);
+    int roundabout$getAnubisVanishTicks();
+    void roundabout$setAnubisVanishTicks(int set);
+
     void rdbt$doMoldDetection(Vec3 movement);
 
     boolean roundabout$getActive();
@@ -155,6 +161,11 @@ public interface StandUser {
     void roundabout$tryIntPower(int move,boolean forced, int chargeTime, int move2, int move3);
     void roundabout$tryBlockPosPower(int move, boolean forced, BlockPos blockPos);
     void roundabout$tryPosPower(int move, boolean forced, Vec3 blockPos);
+    void roundabout$tryPowerF(int move, boolean forced);
+    void roundabout$tryIntPowerF(int move, boolean forced, int chargeTime);
+    void roundabout$tryIntPowerF(int move,boolean forced, int chargeTime, int move2, int move3);
+    void roundabout$tryBlockPosPowerF(int move, boolean forced, BlockPos blockPos);
+    void roundabout$tryPosPowerF(int move, boolean forced, Vec3 blockPos);
     void roundabout$addFollower(FollowingStandEntity $$0);
     void roundabout$removeFollower(FollowingStandEntity $$0);
 
@@ -274,6 +285,14 @@ public interface StandUser {
     Vec3 roundabout$getStoredVelocity();
     boolean roundabout$isLaunchBubbleEncased();
     void roundabout$setBubbleLaunchEncased();
+
+
+    SoundEvent roundabout$getHurtSound(DamageSource sauce);
+
+    /**Anubis Possesion */
+    boolean roundabout$isPossessed();
+    void roundabout$setPossessionTime(int adj);
+    int roundabout$getPossessionTime();
 
     /**Play around with falling gravity*/
     void roundabout$setAdjustedGravity(int adj);

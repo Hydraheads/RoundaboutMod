@@ -65,8 +65,10 @@
   "item.roundabout.survivor_disc": "Stand Disc",
   "item.roundabout.hey_ya_disc": "Stand Disc",
   "item.roundabout.ratt_disc": "Stand Disc",
+  "item.roundabout.anubis_disc": "Stand Disc",
   "item.roundabout.achtung_baby_disc": "Stand Disc",
   "item.roundabout.max_ratt_disc": "Stand Disc+",
+  "item.roundabout.max_anubis_disc": "Stand Disc+",
   "item.roundabout.mandom_disc": "Stand Disc",
   "item.roundabout.walking_heart_disc": "Stand Disc",
   "item.roundabout.max_walking_heart_disc": "Stand Disc+",
@@ -93,6 +95,8 @@
   "item.roundabout.cinderella_disc.desc": "Cinderella",
   "item.roundabout.max_ratt_disc.desc": "Ratt",
   "item.roundabout.ratt_disc.desc": "Ratt",
+  "item.roundabout.anubis_disc.desc": "Anubis",
+  "item.roundabout.max_anubis_disc.desc": "Anubis",
   "item.roundabout.achtung_baby_disc.desc": "Achtung Baby",
   "item.roundabout.survivor_disc.desc": "Survivor",
   "item.roundabout.hey_ya_disc.desc": "Hey Ya!",
@@ -507,7 +511,10 @@
   "death.attack.road_roller_entity.item": "%1$s's grave was paved.",
   "death.attack.road_roller.player": "%1$s's grave was paved.",
   "death.attack.road_roller.player.item": "%1$s's grave was paved.",
-
+  "death.attack.blood_drain": "%1$s lost all color.",
+  "death.attack.blood_drain.item": "%1$s lost all color.",
+  "death.attack.blood_drain.player": "%1$s lost all color.",
+  "death.attack.blood_drain.player.item": "%1$s lost all color.",
 
   "item.glaive.charge_power": "Charge Attack",
 
@@ -726,6 +733,9 @@
   "sounds.roundabout.ratt_leap": "Mini Leap",
   "sounds.roundabout.ratt_mode_change": "Mode Change",
 
+  "sounds.roundabout.anubis_possession": "Ominous Roar",
+
+
   "sounds.roundabout.arcade_impale":  "[Arcade Impale]",
   "sounds.roundabout.arcade_long_ts":  "[Stop Time]",
   "sounds.roundabout.arcade_muda":  "[Arcade Muda]",
@@ -864,6 +874,7 @@
   "sounds.roundabout.jotaro_dio":  "DIO!",
   "sounds.roundabout.jotaro_getting_closer":  "How else can I...",
   "sounds.roundabout.blood_suck":  "Blood",
+  "sounds.roundabout.blood_suck_crit":  "Blood",
 
   "sounds.roundabout.aesthetician_exhale":  "Huff",
   "sounds.roundabout.female_zombie_ambient":  "Zombie Aesthetician groans",
@@ -1026,6 +1037,9 @@
   "ability.roundabout.wall_walk_move.desc": "Latches onto walls, allowing you to walk on them. Trigger by facing a wall while having your heels planted, or by being in the air.",
   "ability.roundabout.firm_swing": "Firm Swing",
   "ability.roundabout.firm_swing.desc": "Makes all attacks critical attacks while your heel is planted, due to the increased force from a sturdy stance.",
+  "ability.roundabout.fall_disperse": "Fall Absorb",
+  "ability.roundabout.fall_disperse.desc": "Halves incoming fall damage, spreading the impact across your heels.",
+
 
 
 
@@ -1105,11 +1119,11 @@
   "ability.roundabout.ratt_scope": "Scoped Mode",
   "ability.roundabout.ratt_scope.desc": "Hold Ratt and scope in, allowing you to shoot while moving. The darts in this form bounce on surfaces",
   "ability.roundabout.ratt_single": "Single Fire",
-  "ability.roundabout.ratt_single.desc": "Shoots an alternate form instead, which does less melt but more damage",
+  "ability.roundabout.ratt_single.desc": "Shoots an alternate form instead, dealing more knockback and inflicting a longer melt duration",
   "ability.roundabout.ratt_burst": "Burst Fire",
   "ability.roundabout.ratt_burst.desc": "Charge up a volley of three darts, each which inflict melt",
   "ability.roundabout.ratt_place": "Ratt Place",
-  "ability.roundabout.ratt_place.desc": "Place Ratt down, allowing Ratt to fire alongside you",
+  "ability.roundabout.ratt_place.desc": "Place Ratt down, allowing Ratt to fire alongside you. Sneaking highlights ratt and displays the distance to you.",
   "ability.roundabout.ratt_place_burst": "Placed Burst Fire",
   "ability.roundabout.ratt_place_burst.desc": "Shoot a burst of 3 darts from Ratt's position to your cursor",
   "ability.roundabout.ratt_auto": "Automatic Mode",
@@ -1388,6 +1402,11 @@
   "skins.roundabout.diver_down.treasurediver": "Treasurer",
   "skins.roundabout.diver_down.birthdaydiver": "Birthday!",
   "skins.roundabout.diver_down.firediver": "Fire Down",
+
+  "item.roundabout.anubis_item": "Mysterious Sword",
+  "item.roundabout.anubis_item.message1" : "The sword is cursed! Seek out a cleric!",
+  "item.roundabout.anubis_item.sword_cleansed": "Anubis Aquired!",
+  "skins.roundabout.anubis.anime" : "Anime",
 
   "skins.roundabout.achtung_baby.base": "Has No Form",
 
@@ -2209,6 +2228,8 @@
   "config.roundabout.drownSpeedModifier.desc": "When drowning, instead of taking damage, vampiric players are slowed down using this multiplier. Lower = slower.",
   "config.roundabout.sunDamagePercentPerDamageTick.name": "Sun Damage Per Dose",
   "config.roundabout.sunDamagePercentPerDamageTick.desc": "How much of your health is drained, percentage wise of max health, per hit under the sun as a vampiric player?",
+  "config.roundabout.vampireUsesInternalSaturation.name": "Internal Saturation",
+  "config.roundabout.vampireUsesInternalSaturation.desc": "Set to false to make forge appleskin render golden meat sticks over blood bar.",
 
   "config.roundabout.levelsToGetStand.name": "Arrow Stand Level Cost",
   "config.roundabout.levelsToGetStand.desc": "Obtaining a stand from a Stand Arrow costs 15 levels by default.",

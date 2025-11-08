@@ -47,6 +47,12 @@
       "roundabout:blood_suck"
     ]
   },
+  "blood_suck_crit": {
+    "subtitle": "sounds.roundabout.blood_suck_crit",
+    "sounds": [
+      "roundabout:blood_suck_crit"
+    ]
+  },
   "road_roller_explosion": {
     "subtitle": "sounds.roundabout.road_roller_explosion",
     "sounds": [
@@ -1012,6 +1018,14 @@
     "subtitle": "sounds.roundabout.ratt_mode_change",
     "sounds": [
       "roundabout:ratt_mode_change"
+    ]
+  },
+
+
+  "anubis_possession": {
+    "subtitle": "sounds.roundabout.anubis_possession",
+    "sounds": [
+      "roundabout:anubis_possession"
     ]
   },
 

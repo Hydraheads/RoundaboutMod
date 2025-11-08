@@ -114,6 +114,27 @@ public class AbilityScapeBasis {
         return true;
     }
 
+    /**Similar to the above function, but prevents the additional velocity carried over from
+     * sprint jumping if made to return true, override and call super*/
+    public boolean cancelSprintJump(){
+        return false;
+    }
+    public boolean cancelSprintParticles(){
+        return false;
+    }
+    /**Cancel all sprinting*/
+    public boolean cancelSprint(){
+        return false;
+    }
+    /**Cancel all jumping*/
+    public boolean cancelJump(){
+        return false;
+    }
+
+    /** Make a stand ability cancel you using items */
+    public boolean cancelItemUse() {
+        return false;
+    }
 
     public boolean getReducedDamage(Entity entity){
         return (entity instanceof Player || entity instanceof StandEntity ||
@@ -218,15 +239,6 @@ public class AbilityScapeBasis {
             C2SPacketUtil.tryIntPowerPacket(packet,integer);
         }
     }
-    /**This is different than int power packet only by virtue of what functions it passes through, and is useful
-     * for calling something even if you are in a barrage clash or other conditions would otherwise interrupt your
-     * packet. Very niche, but it exists, and isn't always used in essential ways*/
-    public void tryIntToServerPacket(byte packet, int integer){
-        if (this.self.level().isClientSide()) {
-            C2SPacketUtil.intToServerPacket(packet,integer);
-        }
-    }
-
     public void tryTripleIntPacket(byte packet, int in1, int in2, int in3){
         if (this.self.level().isClientSide()) {
             C2SPacketUtil.tryTripleIntPacket(packet, in1, in2, in3);
@@ -247,6 +259,16 @@ public class AbilityScapeBasis {
             C2SPacketUtil.tryPosPowerPacket(packet, pos);
         }
     }
+    /**This is different than int power packet only by virtue of what functions it passes through, and is useful
+     * for calling something even if you are in a barrage clash or other conditions would otherwise interrupt your
+     * packet. Very niche, but it exists, and isn't always used in essential ways*/
+    public void tryIntToServerPacket(byte packet, int integer){
+        if (this.self.level().isClientSide()) {
+            C2SPacketUtil.intToServerPacket(packet,integer);
+        }
+    }
+
+
     public Vec3 savedPos;
 
     /**The most basic getters and setters*/
@@ -422,7 +444,7 @@ public class AbilityScapeBasis {
     /**Override this if you want to add or remove conditions that prevent moves from updating and shut
      * them down*/
     public boolean isAttackInept(byte activeP){
-        return this.self.isUsingItem() || this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
+        return this.self.isUsingItem() || this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) || this.getStandUserSelf().roundabout$isPossessed();
     }
 
     /**If doing something like eating, cancels attack state*/
@@ -437,7 +459,9 @@ public class AbilityScapeBasis {
     /**If eating or using items in general shouldn't cancel certain abilties, put them as exceptions here*/
     public boolean shouldReset(byte activeP){
         return (this.self.isUsingItem() &&
-                !(this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))));
+                !(this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())))
+                || this.getStandUserSelf().roundabout$isPossessed()
+        );
     }
     public int interruptCD = 0;
     public boolean getInterruptCD(){
@@ -458,6 +482,10 @@ public class AbilityScapeBasis {
             ((StandUserClient) this.self).roundabout$clientPlaySound();
             ((StandUserClient) this.self).roundabout$clientSoundCancel();
         }
+    }
+
+    public float zoomMod(){
+        return 1;
     }
 
     /**Does your stand let you zoom in a lot? Override this if it does*/
@@ -588,7 +616,8 @@ public class AbilityScapeBasis {
     /**This function grays out icons for moves you can't currently use. Slot is the icon slot from 1-4,
      * activeP is your currently active power*/
     public boolean isAttackIneptVisually(byte activeP, int slot){
-        return this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
+        return this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())
+        || this.getStandUserSelf().roundabout$isPossessed());
     }
 
 
@@ -1060,7 +1089,7 @@ public class AbilityScapeBasis {
 
     public void preButtonInput4(boolean keyIsDown, Options options){
         if (!hasStandActive(this.getSelf())) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+            if (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()  ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
                 buttonInput4(keyIsDown, options);
             }
@@ -1068,7 +1097,7 @@ public class AbilityScapeBasis {
     }
     public void preButtonInput3(boolean keyIsDown, Options options){
         if (!hasStandActive(this.getSelf())) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()  ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
                 buttonInput3(keyIsDown, options);
             }
@@ -1077,7 +1106,7 @@ public class AbilityScapeBasis {
 
     public void preButtonInput2(boolean keyIsDown, Options options){
         if (!hasStandActive(this.getSelf())) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()   ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
                 buttonInput2(keyIsDown, options);
             }
@@ -1086,7 +1115,7 @@ public class AbilityScapeBasis {
 
     public void preButtonInput1(boolean keyIsDown, Options options){
         if (!hasStandActive(this.getSelf())) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()   ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
                 buttonInput1(keyIsDown, options);
             }
@@ -1323,7 +1352,7 @@ public class AbilityScapeBasis {
 
         inputDash = true;
         if (this.getSelf().level().isClientSide) {
-            if (!((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf())) {
+            if (!((TimeStop) this.getSelf().level()).CanTimeStopEntity(this.getSelf())  && !this.getStandUserSelf().roundabout$isPossessed()   ) {
                 if (this.getSelf().onGround() && !this.onCooldown(PowerIndex.GLOBAL_DASH)) {
                     byte forward = 0;
                     byte strafe = 0;
@@ -2031,4 +2060,9 @@ public class AbilityScapeBasis {
         return false;
     }
 
+    public void setPlayerPos2(byte pos){
+        if (self instanceof Player){
+            ((IPlayerEntity) self).roundabout$SetPos2(pos);
+        }
+    }
 }

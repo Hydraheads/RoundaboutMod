@@ -58,6 +58,8 @@ public class StandIcons {
 
     public static final ResourceLocation SURVIVOR_ANGER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/survivor_anger.png");
+    public static final ResourceLocation ANUBIS_POSSESSION_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/misc/anubis_possession.png");
     public static final ResourceLocation IN_BUBBLE_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/in_bubble.png");
     public static final ResourceLocation SUN_TINGE_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
@@ -314,6 +316,8 @@ public class StandIcons {
 
     public static final ResourceLocation FIRM_SWING = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/walking_heart/firm_swing.png");
+    public static final ResourceLocation FALL_ABSORB = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/walking_heart/fall_absorb.png");
     public static final ResourceLocation WALL_WALK = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/walking_heart/wall_walk.png");
     public static final ResourceLocation GROUND_IMPLANT = new ResourceLocation(Roundabout.MOD_ID,

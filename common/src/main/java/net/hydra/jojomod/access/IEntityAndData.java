@@ -12,7 +12,7 @@ public interface IEntityAndData {
     float roundabout$getPreTSTick();
     void roundabout$setExclusiveLayers(boolean exclusive);
     boolean roundabout$getExclusiveLayers();
-
+    boolean rdbt$returnPickup();
     void roundabout$setNoGravTicks(int ticks);
     int roundabout$getNoGravTicks();
 

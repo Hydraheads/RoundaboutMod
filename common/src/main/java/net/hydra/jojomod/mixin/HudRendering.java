@@ -197,6 +197,8 @@ public abstract class HudRendering implements IHudAccess {
                     ticks*=0.1F;
                     RenderSystem.enableBlend();
                     roundabout$renderTextureOverlay($$1, StandIcons.SURVIVOR_ANGER, ticks*0.6F,1F,1F,1F);
+                } else if (user.roundabout$isPossessed()) {
+                    roundabout$renderTextureOverlay($$1, StandIcons.ANUBIS_POSSESSION_OVERLAY, 0.8F,1F,1F,1F);
                 }
             }
 
@@ -511,6 +513,9 @@ public abstract class HudRendering implements IHudAccess {
 
                 StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, false, this.getFont());
                 return true;
+            } if (user.roundabout$isPossessed()) {
+                StandHudRender.renderPossessionHud(context,minecraft,getCameraPlayer(),screenWidth,screenHeight,x);
+                return true;
             } else if (user.roundabout$isClashing()) {
                 ((StandUserClientPlayer) minecraft.player).roundabout$setClashDisplayExtraTimestamp(this.minecraft.player.tickCount);
                 float c = (user.roundabout$getStandPowers().getClashProgress());
@@ -544,12 +549,6 @@ public abstract class HudRendering implements IHudAccess {
                     StandHudRender.renderDistanceHUDJustice(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, ((StandUser) minecraft.player).roundabout$getStandPowers().getPilotingStand());
                 }
                 return true;
-            } else if ( ((StandUser)minecraft.player).roundabout$getStandPowers() instanceof PowersRatt PR ) {
-                if (PR.isPlaced() && PR.isHoldingSneak()) {
-                    double distance = PR.getStandEntity(PR.getSelf()).distanceTo(PR.getSelf());
-                    StandHudRender.renderNumberHUD(context, minecraft, screenWidth, screenHeight, x, distance, PR.getMaxPilotRange(), StandIcons.JOJO_ICONS, 0,100,6141070);
-                    return true;
-                }
             }else if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && user.roundabout$getEffectiveCombatMode()){
                 StandHudRender.renderShootModeSoftAndWet(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PW);
                 return true;

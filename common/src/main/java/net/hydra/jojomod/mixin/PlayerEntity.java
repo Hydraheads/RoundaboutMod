@@ -81,6 +81,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT$POS = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.BYTE);
+    @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$POS_2 = SynchedEntityData.defineId(Player.class,
+            EntityDataSerializers.BYTE);
 
     @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT$POSE_EMOTE = SynchedEntityData.defineId(Player.class,
@@ -236,6 +239,12 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     public byte roundabout$GetPos(){
         return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$POS);
+    }
+    public void roundabout$SetPos2(byte Pos){
+        ((Player) (Object) this).getEntityData().set(ROUNDABOUT$POS_2, Pos);
+    }
+    public byte roundabout$GetPos2(){
+        return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$POS_2);
     }
     public void roundabout$SetPoseEmote(byte Pos){
         ((Player) (Object) this).getEntityData().set(ROUNDABOUT$POSE_EMOTE, Pos);
@@ -546,7 +555,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     @Inject(method = "canSprint", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$canSprintPlayer(CallbackInfoReturnable<Boolean> cir) {
-        if ( ((StandUser)this).roundabout$getStandPowers().cancelSprint()){
+        if ( ((StandUser)this).roundabout$getStandPowers().cancelSprint()
+                || ((IFatePlayer)this).rdbt$getFatePowers().cancelSprint()){
             cir.setReturnValue(false);
         }
     }
@@ -1013,6 +1023,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Inject(method = "jumpFromGround", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$Jump(CallbackInfo ci) {
         if (((StandUser) this).roundabout$isClashing() || ((StandUser) this).roundabout$getStandPowers().cancelJump()
+                || ((IFatePlayer)this).rdbt$getFatePowers().cancelJump()
         || FateTypes.isTransforming(this) ||
         FateTypes.takesSunlightDamage(this) && FateTypes.isInSunlight(this)) {
             ci.cancel();
@@ -1301,6 +1312,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     private void initDataTrackerRoundabout(CallbackInfo ci) {
         if (!((LivingEntity)(Object)this).getEntityData().hasItem(ROUNDABOUT$POS)) {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$POS, PlayerPosIndex.NONE);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$POS_2, PlayerPosIndex.NONE);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$POSE_EMOTE, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DODGE_TIME, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$CAMERA_HITS, -1);

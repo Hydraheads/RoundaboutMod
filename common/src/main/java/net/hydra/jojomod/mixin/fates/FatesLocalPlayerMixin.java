@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.fates;
 
+import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.effect.MobEffect;
@@ -14,7 +15,8 @@ public class FatesLocalPlayerMixin {
     /**You cannot spawn sprint particles while transforming*/
     @Inject(method = "canSpawnSprintParticle", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$applyEffectTick(CallbackInfoReturnable<Boolean> cir) {
-            if (FateTypes.isTransforming(((LocalPlayer)(Object)this))) {
+            if (FateTypes.isTransforming(((LocalPlayer)(Object)this))||
+                    ((IFatePlayer)this).rdbt$getFatePowers().cancelSprintParticles()) {
                 cir.setReturnValue(false);
             }
     }

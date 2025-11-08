@@ -1,5 +1,6 @@
 package net.hydra.jojomod.stand.powers.presets;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -766,7 +767,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
     }
     public boolean clientForwardBarrage(){
-        if (this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2){
+        if ((this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2)){
+            if (attackTimeDuring >= 0){
+                return true;
+            }
+
             if (!forwardBarrage) {
                 hold1 = true;
                 forwardBarrage = true;

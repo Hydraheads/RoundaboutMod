@@ -103,6 +103,8 @@ public class ForgeSounds {
 
     public static final RegistryObject<SoundEvent> BLOOD_SUCK_EVENT =
             register(ModSounds.BLOOD_SUCK, ModSounds.BLOOD_SUCK_ID);
+    public static final RegistryObject<SoundEvent> BLOOD_SUCK_DRAIN_EVENT =
+            register(ModSounds.BLOOD_SUCK_DRAIN, ModSounds.BLOOD_SUCK_DRAIN_ID);
     public static final RegistryObject<SoundEvent> JUSTICE_SELECT_EVENT =
             register(ModSounds.JUSTICE_SELECT, ModSounds.JUSTICE_SELECT_ID);
     public static final RegistryObject<SoundEvent> JUSTICE_SELECT_ATTACK_EVENT =
@@ -340,6 +342,9 @@ public class ForgeSounds {
             register(ModSounds.RATT_LEAP, ModSounds.RATT_LEAP_ID);
     public static final RegistryObject<SoundEvent> RATT_MODE_CHANGE =
             register(ModSounds.RATT_MODE_CHANGE, ModSounds.RATT_MODE_CHANGE_ID);
+
+    public static final RegistryObject<SoundEvent> ANUBIS_POSSESSION =
+            register(ModSounds.ANUBIS_POSSESSION, ModSounds.ANUBIS_POSSESSION_ID);
 
 
     public static final RegistryObject<SoundEvent> THE_WORLD_OVER_HEAVEN_EVENT =
