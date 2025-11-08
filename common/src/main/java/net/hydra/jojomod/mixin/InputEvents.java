@@ -200,6 +200,7 @@ public abstract class InputEvents implements IInputEvents {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
             ItemStack itemStack = player.getUseItem();
+            Roundabout.LOGGER.info(""+itemStack);
             if (powers.isPiloting()){
                 ci.setReturnValue(false);
                 powers.pilotInputAttack();
@@ -239,6 +240,10 @@ public abstract class InputEvents implements IInputEvents {
                         return;
                     }
                 }
+            } else if (itemStack.getItem() != null && itemStack.getItem() instanceof FirearmItem && ((FirearmItem) itemStack.getItem()).interceptAttack(itemStack, player)) {
+                ci.setReturnValue(false);
+                C2SPacketUtil.gunShot();
+                return;
             }
             //while (this.options.attackKey.wasPressed()) {
             //}

@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
@@ -11,7 +12,6 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,9 +22,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -368,12 +366,11 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
         if (!level().isClientSide) {
             ItemStack copy = new ItemStack(ModItems.ROAD_ROLLER);
             if (player.addItem(copy)) {
+                pickupPlayer = null;
                 setPickupBoolean(0);
                 setPickupTimer(0);
                 this.discard();
             }
-        } else {
-            ClientUtil.setRoadRollerPickingEntity(null);
         }
     }
 
@@ -411,6 +408,14 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
             }
         }
 
+        if (level().isClientSide) {
+            if (getPickupBoolean() == 0) {
+                ClientUtil.setRoadRollerPickingEntity(null);
+            }
+        }
+
+        Roundabout.LOGGER.info(""+getPickupBoolean());
+
         if (!this.level().isClientSide) {
             if (isThrown) {
                 if (this.tickCount % 180 == 0) {
@@ -434,8 +439,6 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
                 }
                 if (pickupPlayer != null) {
                     setPickupBoolean(pickupPlayer.getId());
-                } else {
-                    setPickupBoolean(0);
                 }
                 setPickupTimer(0);
                 pickupPlayer = null;

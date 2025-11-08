@@ -128,6 +128,12 @@ public class ClientUtil {
             ClientUtil.popSounds = null;
         }
 
+        if (roadRollerPickingRRE != null) {
+            if (!roadRollerPickingRRE.isAlive() && roadRollerPickingRRE.isRemoved()) {
+                roadRollerPickingRRE = null;
+            }
+        }
+
         if (ClientUtil.isInCinderellaMobUI > -1){
             if (!ClientUtil.hasCinderellaShopUI()){
                 C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_RELLA_CANCEL,ClientUtil.isInCinderellaMobUI);

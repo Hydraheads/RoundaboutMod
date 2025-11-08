@@ -55,10 +55,32 @@ public class RoundaboutBulletEntity extends AbstractArrow {
         super(ModEntities.ROUNDABOUT_BULLET_ENTITY, p_36862_, p_36863_, p_36864_, $$0);
     }
 
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$SUPER_THROWN = SynchedEntityData.defineId(RattDartEntity.class, EntityDataSerializers.BOOLEAN);
+
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        if (!this.getEntityData().hasItem(ROUNDABOUT$SUPER_THROWN)) {
+            this.getEntityData().define(ROUNDABOUT$SUPER_THROWN, true);
+        }
+    }
+
     @Override
     public void tick() {
+        Vec3 delta = this.getDeltaMovement();
+
+        if (inGroundTime >= 160) {
+            this.remove(RemovalReason.DISCARDED);
+        }
+
+        if(this.isInWater()) {
+            this.entityData.set(ROUNDABOUT$SUPER_THROWN,false);
+        }
 
         super.tick();
+
+        if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
+            this.setDeltaMovement(delta);
+        }
 
         if (level().isClientSide) {
             boolean isFlying = getDeltaMovement().lengthSqr() > 0.01;

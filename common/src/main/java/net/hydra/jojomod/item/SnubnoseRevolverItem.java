@@ -34,59 +34,5 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
         stack.getOrCreateTag().putInt(AMMO_COUNT_TAG, count);
     }
 
-    private static final String FIRING_MODE = "FiringMode";
-
-    private boolean getFiringMode(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean(FIRING_MODE);
-    }
-
-    private void setFiringMode(ItemStack stack, boolean value) {
-        stack.getOrCreateTag().putBoolean(FIRING_MODE, value);
-    }
-
-    @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.BOW;
-    }
-
-    @Override
-    public int getUseDuration(ItemStack stack) {
-        return 72000;
-    }
-
-    public boolean interceptAttack(){
-        return false;
-    }
-
     int maxAmmo = 6;
-
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        ItemStack itemStack = player.getItemInHand(hand);
-        player.startUsingItem(hand);
-        if (!(itemStack.getItem() instanceof SnubnoseRevolverItem)) {
-            return InteractionResultHolder.fail(itemStack);
-        }
-        if (!getFiringMode(itemStack)) {
-            setFiringMode(itemStack, true);
-            Roundabout.LOGGER.info(""+getFiringMode(itemStack));
-        } else if (player.isCrouching()) {
-            setAmmo(itemStack, maxAmmo);
-            Roundabout.LOGGER.info("Reloaded");
-        }
-        super.use(level, player, hand);
-
-        return InteractionResultHolder.consume(itemStack);
-    }
-
-    @Override
-    public void releaseUsing(ItemStack stack, Level dimension, LivingEntity livingEntity, int timeLeft) {
-        if (!dimension.isClientSide && livingEntity instanceof Player player) {
-            ItemStack itemStack = player.getMainHandItem();
-            if (getFiringMode(itemStack)) {
-                setFiringMode(itemStack, false);
-                Roundabout.LOGGER.info(""+getFiringMode(itemStack));
-            }
-        }
-    }
 }
