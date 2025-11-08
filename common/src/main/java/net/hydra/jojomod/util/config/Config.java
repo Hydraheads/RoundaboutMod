@@ -179,6 +179,8 @@ public class Config implements Cloneable {
         public Float drownSpeedModifier;
         @FloatOption(group = "inherit", value = 0.4F, min = 0, max = 100F)
         public Float sunDamagePercentPerDamageTick;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean vampireUsesInternalSaturation;
     }
     public static class StandLevelingSettings {
         @BooleanOption(group = "inherit", value = true)

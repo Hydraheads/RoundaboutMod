@@ -1,6 +1,7 @@
 package net.hydra.jojomod.access;
 
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -23,4 +24,7 @@ public interface IMob {
     void roundabout$resetAtkCD();
     boolean roundabout$getIsBred();
     void roundabout$setIsBred(boolean set);
+
+    void roundabout$setHypnotizedBy(LivingEntity set);
+    LivingEntity roundabout$getHypnotizedBy();
 }

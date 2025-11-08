@@ -21,9 +21,12 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
+import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
@@ -97,6 +100,29 @@ public abstract class EntityAndData implements IEntityAndData {
         }
     }
 
+
+    @Unique
+    public boolean rdbt$canBePickedUp=true;
+
+    @Unique
+    @Override
+    public boolean rdbt$returnPickup(){
+        return rdbt$canBePickedUp;
+    }
+
+    @Inject(method = "saveWithoutId(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V",shift = At.Shift.AFTER))
+    public void roundabout$addAdditionalSaveDataX(CompoundTag $$0, CallbackInfoReturnable<CompoundTag> cir){
+        $$0.putBoolean("canMobGrab",rdbt$canBePickedUp);
+    }
+
+    @Inject(method = "load(Lnet/minecraft/nbt/CompoundTag;)V",
+            at = @At(value = "INVOKE",target = "Lnet/minecraft/world/entity/Entity;readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V",shift = At.Shift.AFTER))
+    public void roundabout$readAdditionalSaveDataX(CompoundTag $$0, CallbackInfo ci){
+        if ($$0.contains("canMobGrab")) {
+            rdbt$canBePickedUp = $$0.getBoolean("canMobGrab");
+        }
+
+    }
 
 
     @Unique

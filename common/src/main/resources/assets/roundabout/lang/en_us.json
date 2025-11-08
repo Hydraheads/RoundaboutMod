@@ -1037,6 +1037,9 @@
   "ability.roundabout.wall_walk_move.desc": "Latches onto walls, allowing you to walk on them. Trigger by facing a wall while having your heels planted, or by being in the air.",
   "ability.roundabout.firm_swing": "Firm Swing",
   "ability.roundabout.firm_swing.desc": "Makes all attacks critical attacks while your heel is planted, due to the increased force from a sturdy stance.",
+  "ability.roundabout.fall_disperse": "Fall Absorb",
+  "ability.roundabout.fall_disperse.desc": "Halves incoming fall damage, spreading the impact across your heels.",
+
 
 
 
@@ -2225,6 +2228,8 @@
   "config.roundabout.drownSpeedModifier.desc": "When drowning, instead of taking damage, vampiric players are slowed down using this multiplier. Lower = slower.",
   "config.roundabout.sunDamagePercentPerDamageTick.name": "Sun Damage Per Dose",
   "config.roundabout.sunDamagePercentPerDamageTick.desc": "How much of your health is drained, percentage wise of max health, per hit under the sun as a vampiric player?",
+  "config.roundabout.vampireUsesInternalSaturation.name": "Internal Saturation",
+  "config.roundabout.vampireUsesInternalSaturation.desc": "Set to false to make forge appleskin render golden meat sticks over blood bar.",
 
   "config.roundabout.levelsToGetStand.name": "Arrow Stand Level Cost",
   "config.roundabout.levelsToGetStand.desc": "Obtaining a stand from a Stand Arrow costs 15 levels by default.",
