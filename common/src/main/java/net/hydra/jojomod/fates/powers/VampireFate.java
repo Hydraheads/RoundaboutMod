@@ -1,6 +1,7 @@
 package net.hydra.jojomod.fates.powers;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
@@ -16,8 +17,15 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.Iterator;
+import java.util.List;
 
 public class VampireFate extends VampiricFate {
 
@@ -91,11 +99,25 @@ public class VampireFate extends VampiricFate {
                             rev.x,rev.y,rev.z,
                             0.08);
                     self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.HYPNOSIS_EVENT, SoundSource.PLAYERS, 1F, 1F);
+
+                    AABB aab = this.getSelf().getBoundingBox().inflate(10.0, 8.0, 10.0);
+                    List<? extends LivingEntity> le = this.self.level().getNearbyEntities(Mob.class, hypnosisTargeting, ((LivingEntity)(Object)self), aab);
+                    Iterator var4 = le.iterator();
+                    while(var4.hasNext()) {
+                        Mob nle = (Mob) var4.next();
+                        if (!nle.isRemoved() && nle.isAlive()){
+                            if (nle.getTarget() == null || !nle.getTarget().isAlive()
+                            || nle.getTarget().isRemoved()){
+                                ((IMob) nle).roundabout$setHypnotizedBy(self);
+                            }
+                        }
+                    }
+
                 }
                 hypnoTicks++;
             }
     }
-
+    private final TargetingConditions hypnosisTargeting = TargetingConditions.forCombat().range(7);
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         if (isHoldingSneak()) {
