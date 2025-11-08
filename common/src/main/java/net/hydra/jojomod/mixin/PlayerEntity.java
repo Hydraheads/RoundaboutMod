@@ -45,6 +45,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -233,7 +234,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         return inventory;
     }
 
-    /**Keep track of unique player animations like floating*/
+    /**Keep track of unique player animations like floating <- passive anims like dodging or posing*/
     public void roundabout$SetPos(byte Pos){
         ((Player) (Object) this).getEntityData().set(ROUNDABOUT$POS, Pos);
     }
@@ -681,6 +682,22 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public AnimationState roundabout$getOffsetCorrect(){
         return roundabout$OffsetCorrect;
     }
+
+    @Unique
+    public final AnimationState roundabout$anubishUnsheath = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getAnubisUnsheath(){
+        return roundabout$anubishUnsheath;
+    }
+    @Unique
+    public final AnimationState roundabout$thirdPersonAnubishUnsheath = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getThirdPersonAnubisUnsheath(){
+        return roundabout$thirdPersonAnubishUnsheath;
+    }
+
     @Unique
     public final AnimationState roundabout$BubbleShotAim = new AnimationState();
     @Unique
@@ -1427,5 +1444,17 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (((StandUser)this).roundabout$getStandPowers().onKilledEntity($$0,$$1)){
             cir.setReturnValue(false);
         }
+    }
+
+    @Inject(method = "drop(Lnet/minecraft/world/item/ItemStack;ZZ)Lnet/minecraft/world/entity/item/ItemEntity;",at = @At(value = "HEAD"), cancellable = true)
+    public void roundabout$drop(ItemStack $$0, boolean $$1, boolean $$2, CallbackInfoReturnable<ItemEntity> cir) {
+        Player This = (Player)(Object)this;
+        StandUser SU = ((StandUser)This);
+        if (SU.roundabout$isPossessed()) {
+            This.addItem($$0);
+            cir.cancel();
+            return;
+        }
+
     }
 }

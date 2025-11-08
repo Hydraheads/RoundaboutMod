@@ -96,10 +96,11 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
                 ClientUtil.pushPoseAndCooperate(poseStack, 48);
 
+                handarm.translateAndRotate(poseStack);
 
                 poseStack.translate(0, 0.9, 0);
                 if (AnubisLayer.shouldRender(entity) == HumanoidArm.RIGHT) {
-                    poseStack.translate(-0.4,0,0);
+                    poseStack.translate(0,0,0);
                     if (isSheathed(entity)) {
                         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0F, 0F, 1F, 200), 0, 0, 0);
                         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1, 0, 0, 30), 0, 0, 0);
@@ -148,10 +149,10 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
         if ( user.roundabout$isPossessed() ) {
             ModStrayModels.ANUBIS.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                     1, 1, 1, 1F, (byte) 1);
-        } else if ( (user.roundabout$getStandPowers() instanceof PowersAnubis PA && user.roundabout$getActive() )|| heyTicks != 0) {
+        } else if ( (user.roundabout$getStandPowers() instanceof PowersAnubis PA && user.roundabout$getActive() ) || (heyTicks != 0) ) {
             ModStrayModels.ANUBIS.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                     1, 1, 1, heyFull, (byte)1 /*user.roundabout$getStandSkin()*/ );
-        } else if (entity.getMainHandItem().getItem() instanceof AnubisItem) {
+        } else if (entity.getMainHandItem().getItem() instanceof AnubisItem && !user.roundabout$getEffectiveCombatMode()) {
             ModStrayModels.ANUBIS.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                     1, 1, 1, 1F, (byte) 0);
         }

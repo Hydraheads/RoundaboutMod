@@ -95,7 +95,7 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
         if (This.getMainHandItem().is(ModItems.ANUBIS_ITEM)) {
             This.setItemSlot(EquipmentSlot.MAINHAND,new ItemStack(Items.AIR,3));
         }
-        This.spawnAtLocation(ModItems.STAND_DISC_RATT);
+        This.spawnAtLocation(ModItems.STAND_DISC_ANUBIS);
     }
 
     /**This class sets up a mode in villager ai called fight or flight mode,

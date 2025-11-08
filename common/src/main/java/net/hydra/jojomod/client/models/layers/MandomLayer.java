@@ -125,7 +125,7 @@ public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                                               float var9, float var10,
                                               ModelPart handarm, boolean slim) {
 
-        if (entity != null) {
+        if (entity != null && handarm.visible) {
             StandUser user = ((StandUser) entity);
             boolean hasMandom = (user.roundabout$getStandPowers() instanceof PowersMandom);
             boolean hasMandomOut = (user.roundabout$getActive() && hasMandom);

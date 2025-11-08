@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.minecraft.ChatFormatting;
@@ -67,6 +68,10 @@ public class PowersAnubis extends NewDashPreset {
 
     @Override
     public void tickPower() {
+
+        StandUser SU = this.getStandUserSelf();
+
+        SU.roundabout$setCombatMode(SU.roundabout$getActive());
        /*  if (!isClient()) {
             if (isYapping()) {
                 getStandUserSelf().roundabout$setStandAnimation(YAP);

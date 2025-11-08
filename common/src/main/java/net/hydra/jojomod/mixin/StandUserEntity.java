@@ -1045,6 +1045,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     @Override
     public boolean roundabout$isPossessed() {
+       if ( rdbt$this() instanceof Player P) {
+            if (P.isCreative()) {
+                return false;
+            }
+        }
         return this.getEntityData().get(ROUNDABOUT$POSSESSION_TIME) > 0;
     }
 
@@ -1920,6 +1925,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**The items that shoot and brawl mode are allowed to use*/
     @Inject(method = "getItemInHand(Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/item/ItemStack;", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$getItemInHand(InteractionHand $$0, CallbackInfoReturnable<ItemStack> cir){
+        if (this.roundabout$isPossessed()) {
+            cir.setReturnValue(ItemStack.EMPTY);
+            return;
+        }
         if (roundabout$getEffectiveCombatMode()){
             ItemStack stack = ItemStack.EMPTY;
             if ($$0 == InteractionHand.MAIN_HAND) {
@@ -2134,42 +2143,43 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         roundabout$anubisVanishTicks = Mth.clamp(set,0,10);
     }
 
-    @Unique
-    public AnimationState roundabout$heyYaAnimation2 = new AnimationState();
 
+
+    @Unique
+    public AnimationState roundabout$wornStandAnimation = new AnimationState();
     @Unique
     @Override
-    public AnimationState roundabout$getHeyYaAnimation2(){
-        return roundabout$heyYaAnimation2;
+    public AnimationState roundabout$getWornStandAnimation(){
+        return roundabout$wornStandAnimation;
     }
-    @Unique
-    public AnimationState roundabout$heyYaAnimation = new AnimationState();
 
+
+    @Unique
+    public AnimationState roundabout$wornStandIdleAnimation = new AnimationState();
     @Unique
     @Override
     public AnimationState roundabout$getWornStandIdleAnimation(){
-        return roundabout$heyYaAnimation;
+        return roundabout$wornStandIdleAnimation;
     }
-
     @Unique
     @Override
-    public void roundabout$setHeyYaAnimation(AnimationState layer){
-        roundabout$heyYaAnimation = layer;
+    public void roundabout$setWornStandIdleAnimation(AnimationState layer){
+        roundabout$wornStandIdleAnimation = layer;
     }
+
     @Unique
     public AnimationState roundabout$handLayerAnimation = new AnimationState();
-
     @Unique
     @Override
     public AnimationState roundabout$getHandLayerAnimation(){
         return roundabout$handLayerAnimation;
     }
-
     @Unique
     @Override
     public void roundabout$setHandLayerAnimation(AnimationState layer){
         roundabout$handLayerAnimation = layer;
     }
+
     @Unique
     public float roundabout$getGuardCooldown(){
         return this.roundabout$GuardCooldown;
