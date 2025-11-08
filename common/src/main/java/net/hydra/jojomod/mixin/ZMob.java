@@ -136,6 +136,22 @@ public abstract class ZMob extends LivingEntity implements IMob {
         roundabout$isBred = set;
     }
 
+    @Unique
+    private LivingEntity roundabout$hypnotizedBy = null;
+    @Unique
+    private int roundabout$hypnosisTime = 0;
+    @Override
+    @Unique
+    public void roundabout$setHypnotizedBy(LivingEntity set) {
+        roundabout$hypnotizedBy = set;
+        roundabout$hypnosisTime = 10;
+    }
+    @Override
+    @Unique
+    public LivingEntity roundabout$getHypnotizedBy() {
+        return roundabout$hypnotizedBy;
+    }
+
     @Inject(method = "dropCustomDeathLoot", at = @At(value = "HEAD"))
     private void roundabout$dropCustomLoot(DamageSource $$0, int $$1, boolean $$2, CallbackInfo ci) {
         if (roundabout$isNaturalStandUser){
@@ -761,6 +777,13 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
             if (roundabout$sightProtectionTicks > 0){
                 roundabout$sightProtectionTicks--;
+            }
+
+            if (roundabout$hypnosisTime > 0){
+                roundabout$hypnosisTime--;
+                if (roundabout$hypnosisTime <= 0) {
+                    roundabout$hypnotizedBy = null;
+                }
             }
 
             if (!((StandUser) this).roundabout$getStandDisc().isEmpty()) {

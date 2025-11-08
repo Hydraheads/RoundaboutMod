@@ -193,6 +193,7 @@ public class VampiricFate extends FatePowers {
         }
         return super.tryPower(move, forced);
     }
+
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime){
         if (move == BLOOD_SUCK) {
