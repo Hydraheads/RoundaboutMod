@@ -6,6 +6,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ReputationEventHandler;
 import net.minecraft.world.entity.ai.village.ReputationEventType;
 import net.minecraft.world.entity.npc.AbstractVillager;
@@ -45,6 +46,18 @@ public abstract class JusticeVillager extends AbstractVillager implements Reputa
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
             if (shift != ShapeShifts.PLAYER) {
                 ci.cancel();
+            }
+        }
+    }    /**Reputation of the player will NOT change at all if they are shapeshifted in general*/
+    @Inject(method = "setLastHurtByMob(Lnet/minecraft/world/entity/LivingEntity;)V", at = @At(value = "HEAD"),cancellable = true)
+    private void roundabout$setLastHurtByMobX(LivingEntity $$0, CallbackInfo ci) {
+        if ($$0 instanceof Player PL) {
+            IPlayerEntity ple = ((IPlayerEntity) PL);
+            byte shape = ple.roundabout$getShapeShift();
+            ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
+            if (shift != ShapeShifts.PLAYER) {
+                ci.cancel();
+                super.setLastHurtByMob($$0);
             }
         }
     }

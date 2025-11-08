@@ -70,6 +70,7 @@
     "fates.FatePlayerMixin",
     "fates.FateServerPlayerMixin",
     "fates.FatesMobEffectMixin",
+    "fates.FateVillagerMixin",
     "gravity.GravityAbstractArrowMixin",
     "gravity.GravityAbstractHorseMixin",
     "gravity.GravityAbstractMinecart",
