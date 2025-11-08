@@ -276,6 +276,8 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> UNLOCK_SKIN_EVENT =
             register(ModSounds.UNLOCK_SKIN, ModSounds.UNLOCK_SKIN_ID);
 
+    public static final RegistryObject<SoundEvent> HYPNOSIS_EVENT =
+            register(ModSounds.HYPNOSIS, ModSounds.HYPNOSIS_ID);
 
     public static final RegistryObject<SoundEvent> ARCADE_TIMESTOP_EVENT =
             register(ModSounds.ARCADE_TIMESTOP, ModSounds.ARCADE_TIMESTOP_ID);

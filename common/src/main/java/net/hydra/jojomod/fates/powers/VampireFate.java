@@ -76,8 +76,8 @@ public class VampireFate extends VampiricFate {
     public void tickHypnosis() {
         if (!self.level().isClientSide())
             if (isHypnotizing) {
-                if (hypnoTicks % 10 == 0){
-                    self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SUCK_DRAIN_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
+                if (hypnoTicks % 9 == 0){
+                    self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.HYPNOSIS_EVENT, SoundSource.PLAYERS, 1F, 1F);
                 }
                 hypnoTicks++;
             }
