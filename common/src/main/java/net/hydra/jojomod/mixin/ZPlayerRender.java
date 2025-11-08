@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
+import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.client.models.layers.*;
 import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
 import net.hydra.jojomod.entity.ModEntities;
@@ -45,6 +46,7 @@ import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
@@ -280,7 +282,8 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     ///  hides the arms if you're holding anubis
     @Inject(method = "setModelProperties", at = @At(value = "TAIL"))
     private void roundabout$setModelProperties(AbstractClientPlayer $$0, CallbackInfo ci) {
-        if (ClientUtil.checkIfIsFirstPerson($$0) )  {
+        if (ClientUtil.checkIfIsFirstPerson($$0)
+                && !(Minecraft.getInstance().player.containerMenu instanceof PowerInventoryMenu))  {
             if (AnubisLayer.shouldRender($$0) != null) {
                 PlayerModel<AbstractClientPlayer> playerModel = (PlayerModel)this.getModel();
                 if (AnubisLayer.shouldRender($$0) == HumanoidArm.RIGHT) {

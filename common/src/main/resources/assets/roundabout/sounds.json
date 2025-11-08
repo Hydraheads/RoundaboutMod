@@ -53,6 +53,12 @@
       "roundabout:blood_suck_crit"
     ]
   },
+  "hypnosis": {
+    "subtitle": "sounds.roundabout.hypnosis",
+    "sounds": [
+      "roundabout:hypnosis"
+    ]
+  },
   "road_roller_explosion": {
     "subtitle": "sounds.roundabout.road_roller_explosion",
     "sounds": [

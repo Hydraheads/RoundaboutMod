@@ -201,6 +201,11 @@ public class ModSounds {
     public static final ResourceLocation BLOOD_SUCK_DRAIN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLOOD_SUCK_DRAIN);
     public static SoundEvent BLOOD_SUCK_DRAIN_EVENT = SoundEvent.createVariableRangeEvent(BLOOD_SUCK_DRAIN_ID);
 
+    public static final String HYPNOSIS = "hypnosis";
+    public static final ResourceLocation HYPNOSIS_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HYPNOSIS);
+    public static SoundEvent HYPNOSIS_EVENT = SoundEvent.createVariableRangeEvent(HYPNOSIS_ID);
+
+
 
     public static final String BUBBLE_CREATE = "bubble_create";
     public static final ResourceLocation BUBBLE_CREATE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BUBBLE_CREATE);

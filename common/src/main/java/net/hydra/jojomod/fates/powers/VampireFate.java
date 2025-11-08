@@ -1,12 +1,16 @@
 package net.hydra.jojomod.fates.powers;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -28,12 +32,56 @@ public class VampireFate extends VampiricFate {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
+            case SKILL_1_NORMAL -> {
+                hypnosis();
+            }
             case SKILL_2_NORMAL -> {
                 suckBlood();
             }
         }
         super.powerActivate(context);
     };
+    public static final byte HYPNOSIS = 50;
+
+    public void hypnosis(){
+        tryPowerPacket(HYPNOSIS);
+    }
+    @Override
+    public boolean setPowerOther(int move, int lastMove) {
+        if (move == HYPNOSIS) {
+            hypnosisServer();
+        }
+        return super.setPowerOther(move,lastMove);
+    }
+    public void hypnosisServer(){
+        if (isHypnotizing){
+            isHypnotizing = false;
+            hypnoTicks = 0;
+        } else {
+            isHypnotizing = true;
+            hypnoTicks = 0;
+        }
+    }
+    public boolean isHypnotizing = false;
+    public int hypnoTicks = 0;
+
+
+
+
+    @Override
+    public void tickPower(){
+        tickHypnosis();
+        super.tickPower();
+    }
+    public void tickHypnosis() {
+        if (!self.level().isClientSide())
+            if (isHypnotizing) {
+                if (hypnoTicks % 9 == 0){
+                    self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.HYPNOSIS_EVENT, SoundSource.PLAYERS, 1F, 1F);
+                }
+                hypnoTicks++;
+            }
+    }
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
@@ -63,9 +111,5 @@ public class VampireFate extends VampiricFate {
                 setSkillIcon(context, x, y, 4, StandIcons.VAMP_VISION_OFF, PowerIndex.FATE_4);
             }
         }
-    }
-
-    @Override
-    public void tick(){
     }
 }

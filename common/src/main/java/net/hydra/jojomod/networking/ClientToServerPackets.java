@@ -148,7 +148,7 @@ public class ClientToServerPackets {
                     server.execute(() -> {
                         StandUser powers = basicChecks(sender);
                         byte b = (byte) vargs[0];
-                        powers.roundabout$tryPower(b, true);
+                        powers.roundabout$tryPowerF(b, true);
                     });
                 }
                 /**Try Power Packet*/
@@ -157,7 +157,7 @@ public class ClientToServerPackets {
                         StandUser powers = basicChecks(sender);
                         byte b = (byte) vargs[0];
                         Vector3f c = (Vector3f) vargs[1];
-                        powers.roundabout$tryPosPower(b, true, new Vec3(c.x, c.y, c.z));
+                        powers.roundabout$tryPosPowerF(b, true, new Vec3(c.x, c.y, c.z));
                     });
                 }
                 /**Try Block Pos Power Packet*/
@@ -176,7 +176,7 @@ public class ClientToServerPackets {
                         byte b = (byte) vargs[0];
                         BlockPos c = (BlockPos) vargs[1];
                         BlockHitResult d = (BlockHitResult) vargs[2];
-                        powers.roundabout$tryBlockPosPower(b, true, c, d);
+                        powers.roundabout$tryBlockPosPowerF(b, true, c, d);
                     });
                 }
                 /**Try Power Packet*/
