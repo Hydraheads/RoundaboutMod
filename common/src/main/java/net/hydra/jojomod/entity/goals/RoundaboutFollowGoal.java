@@ -72,7 +72,6 @@ public class RoundaboutFollowGoal extends Goal {
 
     @Override
     public void tick() {
-        Roundabout.LOGGER.info("yup");
         this.mob.getLookControl().setLookAt(this.getHypnotizer(), (float)(this.mob.getMaxHeadYRot() + 20), (float)this.mob.getMaxHeadXRot());
         if (this.mob.distanceToSqr(this.getHypnotizer()) < 6.25 ||
         this.mob.isSleeping()) {
