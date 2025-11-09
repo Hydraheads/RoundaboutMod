@@ -497,10 +497,10 @@ public class ForgeItems {
     public static final RegistryObject<Item> MAX_STAND_DISC_DIVER_DOWN = ITEMS.register("max_diver_down_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
 
-    public static final RegistryObject<Item> STAND_DISC_ANUBIS = addToWIPTab(ITEMS.register("anubis_disc",
-            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null))));
-    public static final RegistryObject<Item> MAX_STAND_DISC_ANUBIS = addToWIPTab(ITEMS.register("max_anubis_disc",
-            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null))));
+    public static final RegistryObject<Item> STAND_DISC_ANUBIS = ITEMS.register("anubis_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null)));
+    public static final RegistryObject<Item> MAX_STAND_DISC_ANUBIS = ITEMS.register("max_anubis_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null)));
 
     public static final RegistryObject<Item> WORTHY_ARROW = addToTab(ITEMS.register("worthy_arrow",
             () -> new WorthyArrowItem(new Item.Properties().stacksTo(1))));
