@@ -438,6 +438,8 @@ public class FabricItems {
 
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
+                        entries.accept(STAND_DISC_ANUBIS);
+                        entries.accept(MAX_STAND_DISC_ANUBIS);
                         //entries.accept(STAND_DISC_DIVER_DOWN);
                         //entries.accept(MAX_STAND_DISC_DIVER_DOWN);
                         entries.accept(SNUBNOSE_REVOLVER);
