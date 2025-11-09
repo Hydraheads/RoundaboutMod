@@ -234,7 +234,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         return inventory;
     }
 
-    /**Keep track of unique player animations like floating <- passive anims like dodging or posing*/
+    /**Keep track of unique player animations like floating passive anims like dodging or posing*/
     public void roundabout$SetPos(byte Pos){
         ((Player) (Object) this).getEntityData().set(ROUNDABOUT$POS, Pos);
     }
