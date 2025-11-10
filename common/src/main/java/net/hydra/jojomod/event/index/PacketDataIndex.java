@@ -62,6 +62,7 @@ public class PacketDataIndex {
     public static final byte SINGLE_BYTE_DESUMMON = 16;
     public static final byte SINGLE_BYTE_SKIN_LEFT_SEALED = 30;
     public static final byte SINGLE_BYTE_SKIN_RIGHT_SEALED = 31;
+    public static final byte END_BLOOD_SPEED = 32;
 
     /**Byte packets*/
     public static final byte BYTE_CHANGE_MORPH = 6;

@@ -560,7 +560,7 @@ public class ClientUtil {
             }
         } else if (context == PacketDataIndex.S2C_INT_VAMPIRE_SPEED){
             if (((IFatePlayer)player).rdbt$getFatePowers() instanceof VampiricFate VP){
-                VP.setFast();
+                VP.setSpeedActivated(data);
             }
         }
     }

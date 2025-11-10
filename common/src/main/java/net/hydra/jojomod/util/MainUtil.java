@@ -27,6 +27,7 @@ import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
+import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -2206,6 +2207,12 @@ public class MainUtil {
                 StandUser user = ((StandUser) player);
                 if (user.roundabout$getActive()){
                     user.roundabout$summonStand(player.level(), false, false);
+                }
+            }
+        } else if (context == PacketDataIndex.END_BLOOD_SPEED) {
+            if (player != null) {
+                if (((IFatePlayer)player).rdbt$getFatePowers() instanceof VampiricFate vp){
+                    vp.setSpeedActivated(0);
                 }
             }
         }

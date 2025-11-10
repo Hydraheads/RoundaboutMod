@@ -80,6 +80,11 @@ public class VampireFate extends VampiricFate {
     public boolean isHypnotizing = false;
     public int hypnoTicks = 0;
 
+    public boolean isAttackIneptVisually(byte activeP, int slot){
+        if (slot == 3 && isHoldingSneak() && !canUseBloodSpeed())
+            return true;
+        return super.isAttackIneptVisually(activeP,slot);
+    }
 
 
 
@@ -121,6 +126,9 @@ public class VampireFate extends VampiricFate {
                 hypnoTicks++;
             }
     }
+
+
+
     private final TargetingConditions hypnosisTargeting = TargetingConditions.forCombat().range(7);
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {

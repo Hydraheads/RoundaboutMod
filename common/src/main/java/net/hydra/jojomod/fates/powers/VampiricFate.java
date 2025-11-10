@@ -68,6 +68,16 @@ public class VampiricFate extends FatePowers {
     public void tickSpeed(){
         if (isFast()){
             setSpeedActivated(getSpeedActivated()-1);
+            if (!isFast()){
+                if (self instanceof Player pl) {
+                    if (self.level().isClientSide()) {
+                        C2SPacketUtil.trySingleBytePacket(PacketDataIndex.END_BLOOD_SPEED);
+                    } else {
+                        S2CPacketUtil.sendGenericIntToClientPacket(pl, PacketDataIndex.S2C_INT_VAMPIRE_SPEED,
+                                0);
+                    }
+                }
+            }
         }
     }
 
@@ -157,7 +167,7 @@ public class VampiricFate extends FatePowers {
     }
 
     public boolean canUseBloodSpeed(){
-        return self instanceof Player PE && PE.getFoodData().getFoodLevel() >= 10;
+        return self instanceof Player PE && PE.getFoodData().getFoodLevel() >= 10 && !isFast();
     }
     public void bloodSpeedClient(){
         if (canUseBloodSpeed() && !onCooldown(PowerIndex.FATE_3_SNEAK)){
@@ -165,7 +175,6 @@ public class VampiricFate extends FatePowers {
         }
     }
     public void bloodSpeed(){
-        Roundabout.LOGGER.info("suces");
         if (canUseBloodSpeed()) {
             if (self instanceof Player PE && !PE.isCreative()){
                 int foodLevel = PE.getFoodData().getFoodLevel();
@@ -257,7 +266,7 @@ public class VampiricFate extends FatePowers {
         if (getActivePower() == BLOOD_SUCK){
             basis*=0.2F;
         } else if (isFast()){
-            basis*=2.2F;
+            basis*=2.0F;
         }
 
         return basis;
