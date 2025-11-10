@@ -246,6 +246,13 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.LOCACACA_CACTUS.get(),
                     new Item.Properties()
             )));
+
+    public static final RegistryObject<BlockItem> GASOLINE_SPLATTER_ITEM = ITEMS.register("gasoline_splatter",
+            () -> new BlockItem(ForgeBlocks.GASOLINE_SPLATTER.get(),
+                    new Item.Properties()
+            ));
+
+
     public static final RegistryObject<Item> PAINTING_VAN_GOUGH = addToBuildingTab(ITEMS.register("painting_van_gough",
             () -> new VanGoughPaintingItem(new Item.Properties().stacksTo(1))
     ));
