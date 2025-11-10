@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IHudAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
@@ -17,6 +18,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.event.powers.visagedata.JosukePartEightVisage;
 import net.hydra.jojomod.item.MaskItem;
@@ -201,6 +203,12 @@ public abstract class HudRendering implements IHudAccess {
                     RenderSystem.enableBlend();
                     roundabout$renderTextureOverlay($$1, StandIcons.SURVIVOR_ANGER, ticks*0.6F,1F,1F,1F);
                 }
+            }
+
+            if (((IFatePlayer) this.minecraft.player).rdbt$getFatePowers() instanceof VampiricFate VP && VP.isFast()) {
+                RenderSystem.enableBlend();
+                roundabout$renderTextureOverlay($$1, new ResourceLocation(Roundabout.MOD_ID,
+                        "textures/misc/vamp_speed/frame_" + (minecraft.player.tickCount % 10) + ".png"), 0.2F, 1F, 1F, 1F);
             }
 
              StandPowers powers = user.roundabout$getStandPowers();

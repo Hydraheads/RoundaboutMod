@@ -45,6 +45,10 @@ public class VampiricFate extends FatePowers {
     public void tick(){
     }
 
+    public boolean isFast(){
+        return false;
+    }
+
     @Override
     public void tickPower() {
         tickBloodSuck();
