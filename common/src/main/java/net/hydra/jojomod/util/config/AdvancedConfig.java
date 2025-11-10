@@ -92,9 +92,10 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
-    public Set<String> walkingHeartWalkOnBlockBlacklist = new HashSet<>(
+    public Set<String> walkingHeartWalkOnBlockBlacklist2 = new HashSet<>(
             Arrays.asList(
-                    "minecraft:barrier"
+                    "minecraft:barrier",
+                    "minecraft:mud"
             )
     );
 

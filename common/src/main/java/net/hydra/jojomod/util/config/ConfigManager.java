@@ -60,10 +60,10 @@ public abstract class ConfigManager {
 
     public static void loadBlacklists()
     {
-        if (getAdvancedConfig().walkingHeartWalkOnBlockBlacklist != null)
+        if (getAdvancedConfig().walkingHeartWalkOnBlockBlacklist2 != null)
         {
             MainUtil.walkableBlocks.clear();
-            MainUtil.walkableBlocks.addAll(getAdvancedConfig().walkingHeartWalkOnBlockBlacklist);
+            MainUtil.walkableBlocks.addAll(getAdvancedConfig().walkingHeartWalkOnBlockBlacklist2);
         }
         if (getAdvancedConfig().standBlockGrabBlacklist != null)
         {

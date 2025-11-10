@@ -180,12 +180,20 @@ public class PowersWalkingHeart extends NewDashPreset {
     public void extendHeels(){
         if ((!this.onCooldown(PowerIndex.SKILL_3) && !onCooldown(PowerIndex.SKILL_2)) || hasExtendedHeelsForWalking()) {
             if (!inCombatMode() && !self.isSwimming()){
+                if (forceBlock())
+                    return;
+
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
             tryPowerPacket(PowerIndex.POWER_2);
             }
         }
     }
 
+    public boolean forceBlock(){
+        if (!MainUtil.isBlockWalkableSimplified(self.level().getBlockState(self.getOnPos())))
+            return true;
+        return false;
+    }
 
     public void dashOrWallLatch(){
         if (inCombatMode())
@@ -218,6 +226,9 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
     public boolean canLatchOntoWall(){
         if (onCooldown(PowerIndex.SKILL_2) || self.isSwimming())
+            return false;
+
+        if (forceBlock())
             return false;
 
         if ((this.self.onGround() && !hasExtendedHeelsForWalking()) || (!this.self.onGround() && hasExtendedHeelsForWalking()))
@@ -795,9 +806,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                     BlockState state4 = self.level().getBlockState(pos4);
                     BlockState state5 = self.level().getBlockState(pos5);
                     boolean isOnValidBlock =  MainUtil.isBlockWalkableSimplified(state1)
-                            && MainUtil.isBlockWalkableSimplified(state2)
-                            && MainUtil.isBlockWalkableSimplified(state4)
-                            && MainUtil.isBlockWalkableSimplified(state5);
+                            && MainUtil.isBlockWalkableSimplified(state4);
 
                     if (self.onGround() && MainUtil.isBlockWalkableSimplified(self.getBlockStateOn())
                     && isOnValidBlock){
