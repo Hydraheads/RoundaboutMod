@@ -50,6 +50,9 @@ public class VampireFate extends VampiricFate {
             case SKILL_2_NORMAL -> {
                 suckBlood();
             }
+            case SKILL_3_CROUCH -> {
+                bloodSpeedClient();
+            }
         }
         super.powerActivate(context);
     };
