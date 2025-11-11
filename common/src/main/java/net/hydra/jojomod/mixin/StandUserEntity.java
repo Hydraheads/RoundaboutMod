@@ -2544,6 +2544,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (!active){
             roundabout$tryPower(PowerIndex.NONE, true);
         }
+        roundabout$getStandPowers().onStandSummon(!active);
+
         ((LivingEntity) (Object) this).getEntityData().set(ROUNDABOUT$STAND_ACTIVE, active);
     }
 
