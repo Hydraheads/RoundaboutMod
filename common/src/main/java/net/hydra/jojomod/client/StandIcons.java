@@ -39,6 +39,9 @@ public class StandIcons {
     public static final ResourceLocation VEHICLE_ICONS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/vehicle_icons.png");
 
+    public static final ResourceLocation CREAM_ICONS = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/cream_icons.png");
+
     public static final ResourceLocation BLOOD_DRINK = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/fates/vampire/drink.png");
     public static final ResourceLocation CHEETAH_SPEED = new ResourceLocation(Roundabout.MOD_ID,
@@ -94,6 +97,9 @@ public class StandIcons {
             "textures/entity/locacaca_layers/right_leg.png");
     public static final ResourceLocation STONE_LEFT_LEG = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/locacaca_layers/left_leg.png");
+
+    public static final ResourceLocation CREAM_VOID_ATTACK = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/cream/void_attack.png");
 
     public static final ResourceLocation MUSCLE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/other_layers/muscle_full.png");

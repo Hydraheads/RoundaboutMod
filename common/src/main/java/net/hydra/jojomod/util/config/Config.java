@@ -87,6 +87,8 @@ public class Config implements Cloneable {
     public StarPlatinumSettings starPlatinumSettings;
     @NestedOption(group = "modded")
     public TimeStopSettings timeStopSettings;
+    @NestedOption(group = "modded")
+    public CreamSettings creamSettings;
 
     public static class VanillaMCTweaks {
         @BooleanOption(group = "inherit", value = true)
@@ -653,6 +655,23 @@ public class Config implements Cloneable {
         public Integer invisiBurstBlockRange;
         @BooleanOption(group = "inherit", value = true)
         public Boolean invisiBurstAlertsMobs;
+    }
+
+    public static class CreamSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableCream;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer creamAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer creamAttackMultOnPlayers;
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer creamGuardPoints;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer miningSpeedMultiplierCream;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierCream;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer creamVoidTime;
     }
 
     public static class TheWorldSettings {

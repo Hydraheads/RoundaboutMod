@@ -40,7 +40,10 @@ public class ServerToClientPackets {
             EjectPRunning("eject_p_running"),
             HeelExtend("heel_extend"),
             RefreshAllCooldowns("refresh_cooldowns"),
-            AffirmAllCooldowns("affirm_cooldown_sync");
+            AffirmAllCooldowns("affirm_cooldown_sync"),
+            CreamUpdateTimer("cream_update_timer"),
+            CreamUpdateTransformTimer("cream_update_transform_timer"),
+            CreamUpdateTransformDirection("cream_update_transform_direction");
 
             public final String value;
 

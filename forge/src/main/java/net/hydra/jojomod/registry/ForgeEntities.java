@@ -260,6 +260,12 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "d4c").toString())
             );
+    public static final RegistryObject<EntityType<CreamEntity>> CREAM =
+            ENTITY_TYPES.register("cream", () ->
+                    EntityType.Builder.of(CreamEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "cream").toString())
+            );
     public static final RegistryObject<EntityType<GreenDayEntity>> GREEN_DAY =
             ENTITY_TYPES.register("green_day", () ->
                     EntityType.Builder.of(GreenDayEntity::new, MobCategory.MISC).sized(0.75F, 1.2f).

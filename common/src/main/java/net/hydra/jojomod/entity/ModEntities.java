@@ -42,6 +42,7 @@ public class ModEntities {
     public static EntityType<ChairRattEntity> CHAIR_RATT;
     public static EntityType<FleshPileEntity> FLESH_PILE;
     public static EntityType<D4CEntity> D4C;
+    public static EntityType<CreamEntity> CREAM;
     public static EntityType<SurvivorEntity> SURVIVOR;
     public static EntityType<GreenDayEntity> GREEN_DAY;
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET;
