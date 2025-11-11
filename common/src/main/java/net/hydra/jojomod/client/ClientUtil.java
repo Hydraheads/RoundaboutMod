@@ -17,6 +17,7 @@ import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
 import net.hydra.jojomod.sound.ModSounds;
@@ -575,6 +576,10 @@ public class ClientUtil {
             if (target instanceof SoftAndWetPlunderBubbleEntity IE) {
                 IE.setFinished(true);
                 popSounds = IE;
+            }
+        } else if (context == PacketDataIndex.S2C_INT_VAMPIRE_SPEED){
+            if (((IFatePlayer)player).rdbt$getFatePowers() instanceof VampiricFate VP){
+                VP.setSpeedActivated(data);
             }
         }
     }
@@ -1437,9 +1442,9 @@ public class ClientUtil {
                     sizey2 = 0;
                 }
 
-                if (player.getFoodData().getSaturationLevel() <= 0.0F && tickCount % (foodlevel * 3 + 1) == 0) {
-                    $$24 = height + (rand - 1);
-                }
+                //if (player.getFoodData().getSaturationLevel() <= 0.0F && tickCount % (foodlevel * 3 + 1) == 0) {
+                //    $$24 = height + (rand - 1);
+                //}
 
                 int $$27 = width - $$23 * 8 - 9;
                 graphics.blit(StandIcons.JOJO_ICONS_2, $$27, $$24, $$26, 18, 9, 9);

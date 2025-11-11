@@ -53,6 +53,12 @@
       "roundabout:blood_suck_crit"
     ]
   },
+  "vampire_speed": {
+    "subtitle": "sounds.roundabout.vampire_speed",
+    "sounds": [
+      "roundabout:vampire_speed"
+    ]
+  },
   "hypnosis": {
     "subtitle": "sounds.roundabout.hypnosis",
     "sounds": [

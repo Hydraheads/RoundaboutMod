@@ -246,6 +246,13 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.LOCACACA_CACTUS.get(),
                     new Item.Properties()
             )));
+
+    public static final RegistryObject<BlockItem> GASOLINE_SPLATTER_ITEM = ITEMS.register("gasoline_splatter",
+            () -> new BlockItem(ForgeBlocks.GASOLINE_SPLATTER.get(),
+                    new Item.Properties()
+            ));
+
+
     public static final RegistryObject<Item> PAINTING_VAN_GOUGH = addToBuildingTab(ITEMS.register("painting_van_gough",
             () -> new VanGoughPaintingItem(new Item.Properties().stacksTo(1))
     ));
@@ -502,10 +509,10 @@ public class ForgeItems {
     public static final RegistryObject<Item> MAX_STAND_DISC_CREAM = addToWIPTab(ITEMS.register("max_cream_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersCream(null))));
 
-    public static final RegistryObject<Item> STAND_DISC_ANUBIS = addToDiscTab(ITEMS.register("anubis_disc",
-            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null))));
-    public static final RegistryObject<Item> MAX_STAND_DISC_ANUBIS = addToDiscTab(ITEMS.register("max_anubis_disc",
-            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null))));
+    public static final RegistryObject<Item> STAND_DISC_ANUBIS = ITEMS.register("anubis_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null)));
+    public static final RegistryObject<Item> MAX_STAND_DISC_ANUBIS = ITEMS.register("max_anubis_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null)));
 
     public static final RegistryObject<Item> WORTHY_ARROW = addToTab(ITEMS.register("worthy_arrow",
             () -> new WorthyArrowItem(new Item.Properties().stacksTo(1))));

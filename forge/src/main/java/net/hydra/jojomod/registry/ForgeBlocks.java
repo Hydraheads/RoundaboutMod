@@ -187,6 +187,7 @@ public class ForgeBlocks {
             () -> ModBlocks.NEW_LOCACACA_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> CULTIVATED_LOCACACA = BLOCKS.register("cultivated_locacaca",
             () -> ModBlocks.cultivationPot(NEW_LOCACACA_BLOCK.get()));
+
     public static final RegistryObject<Block> GASOLINE_SPLATTER = BLOCKS.register("gasoline_splatter",
             () -> ModBlocks.GASOLINE_SPLATTER_PROPERTIES);
     public static final RegistryObject<Block> BLOOD_SPLATTER = BLOCKS.register("blood_splatter",

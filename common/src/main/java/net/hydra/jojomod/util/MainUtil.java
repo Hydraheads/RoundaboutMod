@@ -27,6 +27,7 @@ import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
+import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -139,6 +140,7 @@ public class MainUtil {
     public static ArrayList<String> walkableBlocks = Lists.newArrayList();
     public static ArrayList<String> standBlockGrabBlacklist = Lists.newArrayList();
     public static ArrayList<String> naturalStandUserMobBlacklist = Lists.newArrayList();
+    public static ArrayList<String> hypnotismMobBlackList = Lists.newArrayList();
     public static Set<String> foodThatGivesBloodList = Set.of();
     Map<String, FoodBloodStats> foodThatGivesBloodMap;
 
@@ -212,6 +214,13 @@ public class MainUtil {
     public static boolean isMobStandUserBlacklisted(Entity ent){
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
         if (naturalStandUserMobBlacklist != null && !naturalStandUserMobBlacklist.isEmpty() && rl != null && naturalStandUserMobBlacklist.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isHypnotismTargetBlacklisted(Entity ent){
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        if (hypnotismMobBlackList != null && !hypnotismMobBlackList.isEmpty() && rl != null && hypnotismMobBlackList.contains(rl.toString())){
             return true;
         }
         return false;
@@ -2198,6 +2207,12 @@ public class MainUtil {
                 StandUser user = ((StandUser) player);
                 if (user.roundabout$getActive()){
                     user.roundabout$summonStand(player.level(), false, false);
+                }
+            }
+        } else if (context == PacketDataIndex.END_BLOOD_SPEED) {
+            if (player != null) {
+                if (((IFatePlayer)player).rdbt$getFatePowers() instanceof VampiricFate vp){
+                    vp.setSpeedActivated(0);
                 }
             }
         }

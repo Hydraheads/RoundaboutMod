@@ -60,10 +60,10 @@ public abstract class ConfigManager {
 
     public static void loadBlacklists()
     {
-        if (getAdvancedConfig().walkingHeartWalkOnBlockBlacklist != null)
+        if (getAdvancedConfig().walkingHeartWalkOnBlockBlacklist2 != null)
         {
             MainUtil.walkableBlocks.clear();
-            MainUtil.walkableBlocks.addAll(getAdvancedConfig().walkingHeartWalkOnBlockBlacklist);
+            MainUtil.walkableBlocks.addAll(getAdvancedConfig().walkingHeartWalkOnBlockBlacklist2);
         }
         if (getAdvancedConfig().standBlockGrabBlacklist != null)
         {
@@ -75,9 +75,14 @@ public abstract class ConfigManager {
             MainUtil.naturalStandUserMobBlacklist.clear();
             MainUtil.naturalStandUserMobBlacklist.addAll(getAdvancedConfig().naturalStandUserMobBlacklist);
         }
-        if (getAdvancedConfig().foodThatGivesBloodListV2 != null)
+        if (getAdvancedConfig().hypnotismMobBlackList != null)
         {
-            MainUtil.foodMap = MainUtil.parseFoodList(getAdvancedConfig().foodThatGivesBloodListV2);
+            MainUtil.hypnotismMobBlackList.clear();
+            MainUtil.hypnotismMobBlackList.addAll(getAdvancedConfig().hypnotismMobBlackList);
+        }
+        if (getAdvancedConfig().foodThatGivesBloodListV3 != null)
+        {
+            MainUtil.foodMap = MainUtil.parseFoodList(getAdvancedConfig().foodThatGivesBloodListV3);
         }
     }
 

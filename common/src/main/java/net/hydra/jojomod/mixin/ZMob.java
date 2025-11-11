@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.ITargetGoal;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.goals.RoundaboutFollowGoal;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModGamerules;
@@ -31,6 +32,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.memory.ExpirableValue;
@@ -150,6 +152,16 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Unique
     public LivingEntity roundabout$getHypnotizedBy() {
         return roundabout$hypnotizedBy;
+    }
+
+    //Injects universal behaviors that all mobs can share
+    @Inject(method = "<init>(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;)V", at = @At(value = "RETURN"))
+    private void roundabout$initRegisterCustomGoals(EntityType type, Level level, CallbackInfo ci) {
+        if (level != null && !level.isClientSide) {
+            if (((Mob)(Object)this) instanceof PathfinderMob pm){
+                this.goalSelector.addGoal(2, new RoundaboutFollowGoal(pm, 1));
+            }
+        }
     }
 
     @Inject(method = "dropCustomDeathLoot", at = @At(value = "HEAD"))

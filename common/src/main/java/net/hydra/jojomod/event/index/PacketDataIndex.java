@@ -62,6 +62,7 @@ public class PacketDataIndex {
     public static final byte SINGLE_BYTE_DESUMMON = 16;
     public static final byte SINGLE_BYTE_SKIN_LEFT_SEALED = 30;
     public static final byte SINGLE_BYTE_SKIN_RIGHT_SEALED = 31;
+    public static final byte END_BLOOD_SPEED = 32;
 
     /**Byte packets*/
     public static final byte BYTE_CHANGE_MORPH = 6;
@@ -84,6 +85,7 @@ public class PacketDataIndex {
     public static final byte S2C_POWER_INVENTORY = 6;
     public static final byte S2C_INT_SEAL = 7;
     public static final byte S2C_INT_BUBBLE_FINISH = 8;
+    public static final byte S2C_INT_VAMPIRE_SPEED = 9;
 
     /**S2C BUNDLE packets*/
     public static final byte S2C_BUNDLE_POWER_INV = 1;

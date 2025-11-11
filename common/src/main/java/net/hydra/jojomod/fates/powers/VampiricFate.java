@@ -41,14 +41,44 @@ public class VampiricFate extends FatePowers {
         super();
     }
     public static final byte BLOOD_SUCK = 27;
+    public static final byte BLOOD_SPEED = 28;
     @Override
     public void tick(){
+    }
+
+
+
+    public int speedActivated = 0;
+    public boolean isFast(){
+        return speedActivated > 0;
+    }
+    public int getSpeedActivated(){
+        return speedActivated;
+    }
+    public void setSpeedActivated(int sped){
+        speedActivated = sped;
     }
 
     @Override
     public void tickPower() {
         tickBloodSuck();
+        tickSpeed();
         super.tickPower();
+    }
+    public void tickSpeed(){
+        if (isFast()){
+            setSpeedActivated(getSpeedActivated()-1);
+            if (!isFast()){
+                if (self instanceof Player pl) {
+                    if (self.level().isClientSide()) {
+                        C2SPacketUtil.trySingleBytePacket(PacketDataIndex.END_BLOOD_SPEED);
+                    } else {
+                        S2CPacketUtil.sendGenericIntToClientPacket(pl, PacketDataIndex.S2C_INT_VAMPIRE_SPEED,
+                                0);
+                    }
+                }
+            }
+        }
     }
 
     public Entity bloodSuckingTarget = null;
@@ -136,6 +166,26 @@ public class VampiricFate extends FatePowers {
         bloodSuckingTarget = null;
     }
 
+    public boolean canUseBloodSpeed(){
+        return self instanceof Player PE && PE.getFoodData().getFoodLevel() >= 10 && !isFast();
+    }
+    public void bloodSpeedClient(){
+        if (canUseBloodSpeed() && !onCooldown(PowerIndex.FATE_3_SNEAK)){
+            tryPowerPacket(BLOOD_SPEED);
+        }
+    }
+    public void bloodSpeed(){
+        if (canUseBloodSpeed()) {
+            if (self instanceof Player PE && !PE.isCreative()){
+                int foodLevel = PE.getFoodData().getFoodLevel();
+                PE.getFoodData().setFoodLevel(foodLevel-10);
+            }
+            setFast();
+            self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SPEED_EVENT, SoundSource.PLAYERS, 1F, 0.95F+(float)(Math.random()*0.1));
+
+        }
+    }
+
     public void finishSucking(){
         if (bloodSuckingTarget != null && self instanceof Player pl) {
 
@@ -217,15 +267,38 @@ public class VampiricFate extends FatePowers {
     public float inputSpeedModifiers(float basis){
         if (getActivePower() == BLOOD_SUCK){
             basis*=0.2F;
+        } else if (isFast()){
+            basis*=2.2F;
         }
+
         return basis;
+    }
+
+    public void setFast(){
+        speedActivated = 120;
+        if (!self.level().isClientSide()){
+            if (self instanceof Player pl) {
+                S2CPacketUtil.sendGenericIntToClientPacket(pl,PacketDataIndex.S2C_INT_VAMPIRE_SPEED,
+                        speedActivated);
+            }
+            speedActivated+=60;
+        }
     }
     @Override
     public float zoomMod(){
         if (getActivePower() == BLOOD_SUCK) {
             return 0.6f;
+        } else if (isFast()){
+            return 1.1F;
         }
         return 1;
+    }
+    @Override
+    public boolean setPowerOther(int move, int lastMove) {
+        if (move == BLOOD_SPEED) {
+            bloodSpeed();
+        }
+        return super.setPowerOther(move,lastMove);
     }
 
     @Override

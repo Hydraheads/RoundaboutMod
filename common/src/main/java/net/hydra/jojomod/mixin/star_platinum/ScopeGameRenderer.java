@@ -29,6 +29,10 @@ public class ScopeGameRenderer {
             StandPowers SP = ((StandUser)player).roundabout$getStandPowers();
             FatePowers fp = ((IFatePlayer)player).rdbt$getFatePowers();
             float zoomMod = fp.zoomMod();
+
+            float zoomMod2 = zoomMod - 1;
+            zoomMod2*=Minecraft.getInstance().options.fovEffectScale().get();
+            zoomMod = 1+zoomMod2;
             if (SP.scopeLevel > 0 || zoomMod != 1) {
                 ci.cancel();
 
