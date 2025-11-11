@@ -33,6 +33,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
     public static HumanoidArm shouldRender(LivingEntity entity) {
         StandUser user = ((StandUser)entity);
         if (entity.getMainHandItem().getItem() instanceof AnubisItem
+                || entity.getOffhandItem().getItem() instanceof AnubisItem
                 || user.roundabout$isPossessed()
                 || (user.roundabout$getStandPowers() instanceof PowersAnubis && user.roundabout$getActive())
                 || user.roundabout$getAnubisVanishTicks() > 0 ) {
@@ -61,6 +62,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
                 ClientUtil.pushPoseAndCooperate(poseStack,25);
 
+                StandUser SU = (StandUser) entity;
 
                 if (AnubisLayer.shouldRender(entity) == HumanoidArm.RIGHT ) {
                     getParentModel().rightArm.translateAndRotate(poseStack);
@@ -81,8 +83,15 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
 
                 renderAnubis(poseStack, bufferSource, packedLight, entity, partialTicks);
-
                 ClientUtil.popPoseAndCooperate(poseStack,25);
+
+                ClientUtil.pushPoseAndCooperate(poseStack,47);
+                if (SU.roundabout$isPossessed()) {
+                    renderHumanoidAnubis(poseStack,bufferSource,packedLight,entity,partialTicks,0.6F);
+                } else if (SU.roundabout$getStandPowers()  instanceof PowersAnubis AP && SU.roundabout$getActive() && SU.roundabout$getIdlePos() == 1) {
+                    renderHumanoidAnubis(poseStack,bufferSource,packedLight,entity,partialTicks,SU.roundabout$getAnubisVanishTicks()/10F*0.7F );
+                }
+                ClientUtil.popPoseAndCooperate(poseStack,47);
 
             }
         }
@@ -157,6 +166,16 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                     1, 1, 1, 1F, (byte) 0);
         }
 
+
+    }
+
+    public void renderHumanoidAnubis(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float partialTicks, float alpha) {
+        this.getParentModel().body.translateAndRotate(poseStack);
+        poseStack.translate(-0.55,-0.1,0.5);
+
+        poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,-15),0,0,0);
+
+        ModStrayModels.ANUBIS_HUMAN.render(entity,partialTicks,poseStack,bufferSource,packedLight,1.0F,1.0F,1.0F,alpha  );
 
     }
 

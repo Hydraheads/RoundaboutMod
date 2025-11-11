@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
 import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
 import net.hydra.jojomod.entity.paintings.VanGoughPainting;
+import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
@@ -41,6 +42,7 @@ public class ModEntities {
     public static EntityType<ChairRattEntity> CHAIR_RATT;
     public static EntityType<FleshPileEntity> FLESH_PILE;
     public static EntityType<D4CEntity> D4C;
+    public static EntityType<CreamEntity> CREAM;
     public static EntityType<SurvivorEntity> SURVIVOR;
     public static EntityType<GreenDayEntity> GREEN_DAY;
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET;
@@ -80,6 +82,7 @@ public class ModEntities {
     public static EntityType<SoftAndWetPlunderBubbleEntity> PLUNDER_BUBBLE;
     public static EntityType<SoftAndWetExplosiveBubbleEntity> EXPLOSIVE_BUBBLE;
     public static EntityType<SoftAndWetItemLaunchingBubbleEntity> ITEM_LAUNCHING_BUBBLE_ENTITY;
+    public static EntityType<AnubisPossessorEntity> ANUBIS_POSSESSOR;
 
     public static EntityType<GoBeyondEntity> GO_BEYOND;
     public static EntityType<EncasementBubbleEntity> ENCASEMENT_BUBBLE;

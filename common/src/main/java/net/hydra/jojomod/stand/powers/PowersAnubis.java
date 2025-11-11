@@ -16,12 +16,13 @@ import net.minecraft.world.entity.LivingEntity;
 import java.util.Arrays;
 import java.util.List;
 
-/** basic af right now (if you see this don't spoil the fun :P ) */
 public class PowersAnubis extends NewDashPreset {
     public PowersAnubis(LivingEntity self) {
         super(self);
     }
 
+
+    public static final int MaxPossesionTime = 100;
 
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
@@ -93,12 +94,19 @@ public class PowersAnubis extends NewDashPreset {
 
 
     public Component getPosName(byte posID){
-        return Component.empty();
+        return switch (posID) {
+            case (byte) 1 -> Component.translatable("idle.roundabout.anubis_2");
+            default -> Component.translatable("idle.roundabout.anubis_1");
+        };
     }
     public List<Byte> getPosList(){
         List<Byte> $$1 = Lists.newArrayList();
+        $$1.add((byte)0);
+        $$1.add((byte)1);
         return $$1;
     }
+
+
 
     public static final byte
             ANIME = 1;

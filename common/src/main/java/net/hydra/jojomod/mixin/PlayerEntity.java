@@ -392,7 +392,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @ModifyVariable(method = "attack",
             at = @At(value = "STORE"), ordinal = 2)
     public boolean roundabout$attackThis(boolean value) {
-        if (((StandUser)this).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()){
+        StandUser SU = ((StandUser) this );
+        if (SU.roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()){
+            return true;
+        }
+        if ( SU.roundabout$isPossessed() ) {
             return true;
         }
         return value;
@@ -1446,7 +1450,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
     }
 
-    @Inject(method = "drop(Lnet/minecraft/world/item/ItemStack;ZZ)Lnet/minecraft/world/entity/item/ItemEntity;",at = @At(value = "HEAD"), cancellable = true)
+ /*   @Inject(method = "drop(Lnet/minecraft/world/item/ItemStack;ZZ)Lnet/minecraft/world/entity/item/ItemEntity;",at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$drop(ItemStack $$0, boolean $$1, boolean $$2, CallbackInfoReturnable<ItemEntity> cir) {
         Player This = (Player)(Object)this;
         StandUser SU = ((StandUser)This);
@@ -1456,5 +1460,5 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             return;
         }
 
-    }
+    } */
 }

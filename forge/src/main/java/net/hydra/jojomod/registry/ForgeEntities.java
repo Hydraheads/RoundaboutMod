@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
 import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
 import net.hydra.jojomod.entity.paintings.VanGoughPainting;
+import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.*;
@@ -259,6 +260,12 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "d4c").toString())
             );
+    public static final RegistryObject<EntityType<CreamEntity>> CREAM =
+            ENTITY_TYPES.register("cream", () ->
+                    EntityType.Builder.of(CreamEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "cream").toString())
+            );
     public static final RegistryObject<EntityType<GreenDayEntity>> GREEN_DAY =
             ENTITY_TYPES.register("green_day", () ->
                     EntityType.Builder.of(GreenDayEntity::new, MobCategory.MISC).sized(0.75F, 1.2f).
@@ -503,6 +510,12 @@ public class ForgeEntities {
                             sized(EncasementBubbleEntity.eWidth, EncasementBubbleEntity.eHeight).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "encasement_bubble").toString())
+            );
+    public static final RegistryObject<EntityType<AnubisPossessorEntity>> ANUBIS_POSSESSOR =
+            ENTITY_TYPES.register("anubis_possessor", () ->
+                    EntityType.Builder.<AnubisPossessorEntity>of(AnubisPossessorEntity::new, MobCategory.MISC).sized(0.6f, 2f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "anubis_possessor").toString())
             );
 
     public static final RegistryObject<EntityType<RoadRollerEntity>> ROAD_ROLLER_ENTITY =

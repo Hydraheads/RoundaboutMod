@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.event.IVillagerAccess;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.AnubisItem;
 import net.hydra.jojomod.item.ModItems;
@@ -12,7 +13,11 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -24,6 +29,7 @@ import net.minecraft.world.entity.ai.behavior.*;
 import net.minecraft.world.entity.ai.gossip.GossipContainer;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerDataHolder;
@@ -44,9 +50,57 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Villager.class)
-public abstract class ZVillager extends AbstractVillager implements ReputationEventHandler, VillagerDataHolder {
+public abstract class ZVillager extends AbstractVillager implements ReputationEventHandler, VillagerDataHolder, IVillagerAccess {
     @Shadow
     public abstract boolean isClientSide();
+
+
+
+
+
+    @Unique
+    @Override
+    public int roundabout$getAnubisTicks() {
+        return this.getEntityData().get(ROUNDABOUT$ANUBIS_TICKS);
+    }
+    @Unique
+    @Override
+    public void roundabout$setAnubisTicks(int i) {
+        this.getEntityData().set(ROUNDABOUT$ANUBIS_TICKS,i);
+    }
+    @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$ANUBIS_TICKS = SynchedEntityData.defineId(Villager.class,
+            EntityDataSerializers.INT);
+    @Inject(method = "defineSynchedData",at=@At(value = "HEAD"))
+    public void roundabout$addVillagerSynched(CallbackInfo ci) {
+        if (!this.getEntityData().hasItem(ROUNDABOUT$ANUBIS_TICKS) ) {
+            this.getEntityData().define(ROUNDABOUT$ANUBIS_TICKS, -1);
+        }
+    }
+
+
+    @Inject(method = "tick", at = @At(value = "HEAD"))
+    public void roundabout$villagerTick(CallbackInfo ci) {
+        int at = this.roundabout$getAnubisTicks();
+        if (!isClientSide()) {
+            if (at >= 0) {
+                at--;
+
+                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.ANUBIS_ITEM));
+                this.setDropChance(EquipmentSlot.MAINHAND, 1.0F);
+
+                ((ServerLevel) this.level()).sendParticles(ParticleTypes.FIREWORK, this.getX(),
+                        this.getY() + this.getEyeHeight(), this.getZ(),
+                        1, 0, 0, 0, 0.4);
+
+                this.roundabout$setAnubisTicks(at);
+                if (at == 0) {
+                    doAnubis();
+                }
+            }
+        }
+
+    }
 
 
 
@@ -67,7 +121,10 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
                         $$0.setItemInHand(InteractionHand.MAIN_HAND,new ItemStack(Items.AIR));
                         $$0.giveExperienceLevels(-get);
 
-                        doAnubis($$0);
+                        This.level().playSound(null,This.blockPosition(), SoundEvents.EVOKER_PREPARE_SUMMON,SoundSource.NEUTRAL,1F,1F);
+                        This.setVillagerXp(This.getVillagerXp()+2);
+
+                        roundabout$setAnubisTicks(60);
                         cir.setReturnValue(InteractionResult.SUCCESS);
                         return;
                     } else {
@@ -85,17 +142,18 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
 
 
     @Unique
-    private void doAnubis(Player $$0) {
+    private void doAnubis() {
         Villager This = ((Villager)(Object)this);
-        $$0.level().playSound(null, $$0.blockPosition(), ModSounds.STAND_ARROW_USE_EVENT, SoundSource.PLAYERS, 1.5F, 1F);
-        $$0.displayClientMessage(Component.translatable("item.roundabout.anubis_item.sword_cleansed").withStyle(ChatFormatting.WHITE), true);
-        ((ServerLevel) $$0.level()).sendParticles(ParticleTypes.FIREWORK, $$0.getX(),
-                $$0.getY() + $$0.getEyeHeight(), $$0.getZ(),
+        This.level().playSound(null, This.blockPosition(), ModSounds.STAND_ARROW_USE_EVENT, SoundSource.PLAYERS, 1.5F, 1F);
+        ((ServerLevel) This.level()).sendParticles(ParticleTypes.FIREWORK, This.getX(),
+                This.getY() + This.getEyeHeight(), This.getZ(),
                 20, 0, 0, 0, 0.4);
-        if (This.getMainHandItem().is(ModItems.ANUBIS_ITEM)) {
-            This.setItemSlot(EquipmentSlot.MAINHAND,new ItemStack(Items.AIR,3));
-        }
         This.spawnAtLocation(ModItems.STAND_DISC_ANUBIS);
+
+        Player player = This.level().getNearestPlayer(This,10);
+        if (player != null) {
+            player.displayClientMessage(Component.translatable("item.roundabout.anubis_item.sword_cleansed").withStyle(ChatFormatting.WHITE), true);
+        }
     }
 
     /**This class sets up a mode in villager ai called fight or flight mode,

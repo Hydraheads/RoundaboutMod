@@ -1,6 +1,7 @@
 package net.hydra.jojomod.util;
 
 import net.hydra.jojomod.networking.ServerToClientPackets;
+import net.hydra.jojomod.stand.powers.PowersCream;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
@@ -263,6 +264,30 @@ public class S2CPacketUtil {
         if (player instanceof ServerPlayer SP) {
             ModMessageEvents.sendToPlayer(SP,
                     ServerToClientPackets.S2CPackets.MESSAGES.EjectPRunning.value
+            );
+        }
+    }
+    public static void creamUpdateTimer(Player player, int time){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTimer.value,
+                    time
+            );
+        }
+    }
+    public static void creamUpdateTransformTimer(Player player, int time){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTransformTimer.value,
+                    time
+            );
+        }
+    }
+    public static void creamUpdateTransformDirection(Player player, int transformDirectionValue){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTransformDirection.value,
+                    transformDirectionValue
             );
         }
     }

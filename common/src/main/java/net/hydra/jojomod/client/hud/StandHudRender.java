@@ -6,7 +6,6 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -15,6 +14,8 @@ import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersAnubis;
+import net.hydra.jojomod.stand.powers.PowersCream;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
@@ -242,6 +243,55 @@ public class StandHudRender {
         int iconY = scaledHeight - 31 - 10;
 
         context.blit(StandIcons.VEHICLE_ICONS, iconX, iconY, iconU, iconV, iconW, iconH);
+    }
+
+    public static void renderCreamVoidTimerHud(GuiGraphics context, Minecraft client, Player playerEntity,
+                                         int scaledWidth, int scaledHeight, int x,
+                                         PowersCream PC) {
+        int l = scaledHeight - 32 + 3;
+        int k = (int)(((float) 182 / 100f) * (100 - (float) PC.getVoidTime()));
+
+        context.blit(StandIcons.CREAM_ICONS, x, l, 0, 90, 182, 5);
+
+        if (k > 0) {
+            context.blit(StandIcons.CREAM_ICONS, x, l, 0, 5, k, 5);
+        }
+
+        int iconU = 183;
+        int iconV = 0;
+        int iconW = 9;
+        int iconH = 9;
+        int iconX = scaledWidth / 2 - 5;
+        int iconY = scaledHeight - 31 - 5;
+
+        context.blit(StandIcons.CREAM_ICONS, iconX, iconY, iconU, iconV, iconW, iconH);
+    }
+
+    public static void renderCreamTransformTimerHud(GuiGraphics context, Minecraft client, Player playerEntity,
+                                               int scaledWidth, int scaledHeight, int x,
+                                               PowersCream PC) {
+        int l = scaledHeight - 32 + 3;
+        int k;
+        if (PC.getTransformDirection() == 1) {
+            k = (int)(((float) 182 / 100f) * (float) PC.getTransformTimer());
+        } else {
+            k = (int)(((float) 182 / 20f) * (float) PC.getTransformTimer());
+        }
+
+        context.blit(StandIcons.CREAM_ICONS, x, l, 0, 90, 182, 5);
+
+        if (k > 0) {
+            context.blit(StandIcons.CREAM_ICONS, x, l, 0, 5, k, 5);
+        }
+
+        int iconU = 183;
+        int iconV = 10;
+        int iconW = 9;
+        int iconH = 9;
+        int iconX = scaledWidth / 2 - 5;
+        int iconY = scaledHeight - 31 - 5;
+
+        context.blit(StandIcons.CREAM_ICONS, iconX, iconY, iconU, iconV, iconW, iconH);
     }
 
     private static int getFinalATimeInt(StandUser standUser) {
@@ -575,7 +625,7 @@ public class StandHudRender {
     public static void renderPossessionHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                       int scaledWidth, int scaledHeight, int x) {
         int l = scaledHeight - 32 + 3;
-        int k = (int)(((float) 182 / 100f) * (float) ((StandUser)playerEntity).roundabout$getPossessionTime() );
+        int k = (int)(((float) 182 / PowersAnubis.MaxPossesionTime) * (float) ((StandUser)playerEntity).roundabout$getPossessionTime() );
 
         context.blit(StandIcons.JOJO_ICONS, x, l, 0, 161, 182, 5);
 

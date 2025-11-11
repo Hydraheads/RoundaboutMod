@@ -23,7 +23,7 @@ public class KeyInputs {
 
     public static void summonKey(Player player, Minecraft client){
         StandUser user = ((StandUser) player);
-        if (user.roundabout$getStandPowers().canSummonStand() && !user.roundabout$isSealed()) {
+        if (user.roundabout$getStandPowers().canSummonStand() && !user.roundabout$isSealed() && !user.roundabout$isPossessed()) {
             if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0) {
                 if (user.roundabout$getActive()) {
                     user.roundabout$setSummonCD(8);
@@ -86,7 +86,7 @@ public class KeyInputs {
         ((IPlayerEntity) player).roundabout$showExp(keyIsDown);
     }
     public static void MoveKey4(Player player, Minecraft client, boolean keyIsDown, Options option){
-        if (!((StandUser) player).roundabout$isSealed()){
+        if (!((StandUser) player).roundabout$isSealed() && !((StandUser)player).roundabout$isPossessed()) {
             if (FateTypes.isHuman(player)) {
                 forceSummon(player, keyIsDown);
             }
@@ -97,7 +97,7 @@ public class KeyInputs {
         }
     }
     public static void MoveKey3(Player player, Minecraft client, boolean keyIsDown, Options option){
-        if (!((StandUser) player).roundabout$isSealed()) {
+        if (!((StandUser) player).roundabout$isSealed() && !((StandUser)player).roundabout$isPossessed()) {
             if (FateTypes.isHuman(player)) {
                 forceSummon(player, keyIsDown);
             }
@@ -108,7 +108,7 @@ public class KeyInputs {
         }
     }
     public static void MoveKey2(Player player, Minecraft client, boolean keyIsDown, Options option){
-        if (!((StandUser) player).roundabout$isSealed()) {
+        if (!((StandUser) player).roundabout$isSealed() && !((StandUser)player).roundabout$isPossessed()) {
             if (FateTypes.isHuman(player)) {
                 forceSummon(player, keyIsDown);
             }
@@ -119,7 +119,7 @@ public class KeyInputs {
         }
     }
     public static void MoveKey1(Player player, Minecraft client, boolean keyIsDown, Options option){
-        if (!((StandUser) player).roundabout$isSealed()) {
+        if (!((StandUser) player).roundabout$isSealed() && !((StandUser)player).roundabout$isPossessed()) {
             if (FateTypes.isHuman(player)) {
                 forceSummon(player, keyIsDown);
             }

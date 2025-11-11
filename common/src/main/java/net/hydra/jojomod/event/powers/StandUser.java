@@ -10,6 +10,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -296,6 +297,8 @@ public interface StandUser {
     boolean roundabout$isPossessed();
     void roundabout$setPossessionTime(int adj);
     int roundabout$getPossessionTime();
+    PathfinderMob roundabout$getPossessor();
+    void roundabout$setPossessor(PathfinderMob e);
 
     /**Play around with falling gravity*/
     void roundabout$setAdjustedGravity(int adj);
