@@ -17,6 +17,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersCream;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.event.powers.visagedata.JosukePartEightVisage;
 import net.hydra.jojomod.item.MaskItem;
@@ -550,10 +551,15 @@ public abstract class HudRendering implements IHudAccess {
                     StandHudRender.renderDistanceHUDJustice(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, ((StandUser) minecraft.player).roundabout$getStandPowers().getPilotingStand());
                 }
                 return true;
-            }else if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && user.roundabout$getEffectiveCombatMode()){
+            } else if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && user.roundabout$getEffectiveCombatMode()){
                 StandHudRender.renderShootModeSoftAndWet(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PW);
                 return true;
-
+            } else if (user.roundabout$getStandPowers() instanceof PowersCream PC && PC.insideVoidInt > 0){
+                StandHudRender.renderCreamVoidTimerHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PC);
+                return true;
+            } else if (user.roundabout$getStandPowers() instanceof PowersCream PC && PC.transformTimer > 0){
+                StandHudRender.renderCreamTransformTimerHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PC);
+                return true;
             } else if (user.roundabout$getStandPowers().replaceHudActively()){
                 user.roundabout$getStandPowers().getReplacementHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x);
                 return true;

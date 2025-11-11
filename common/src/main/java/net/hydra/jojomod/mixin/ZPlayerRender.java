@@ -19,6 +19,7 @@ import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ModificationMaskItem;
+import net.hydra.jojomod.stand.powers.PowersCream;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
@@ -295,6 +296,53 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                 }
             }
         }
+    }
+
+    @Inject(method = "setModelProperties", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$setModelPropertiesCream(AbstractClientPlayer $$0, CallbackInfo ci) {
+        if ($$0 instanceof StandUser standUser) {
+            if (((StandUser) $$0).roundabout$getStandPowers() instanceof PowersCream PC) {
+                PlayerModel<AbstractClientPlayer> playerModel = (PlayerModel)this.getModel();
+                int transformTimer = PC.getTransformTimer();
+
+                if (PC.getTransformDirection() == 1) {
+                    if (transformTimer == 10) {
+                        playerModel.head.visible = false;
+                        playerModel.hat.visible = false;
+                    } else if (transformTimer == 15) {
+                        playerModel.leftArm.visible = false;
+                        playerModel.rightArm.visible = false;
+                        playerModel.body.visible = false;
+                        playerModel.leftSleeve.visible = false;
+                        playerModel.rightSleeve.visible = false;
+                        playerModel.jacket.visible = false;
+                    } else if (transformTimer == 20) {
+                        playerModel.leftLeg.visible = false;
+                        playerModel.rightLeg.visible = false;
+                        playerModel.leftPants.visible = false;
+                        playerModel.rightPants.visible = false;
+                    }
+                } else if (PC.getTransformDirection() == 2) {
+                    if (transformTimer == 10) {
+                        playerModel.leftLeg.visible = true;
+                        playerModel.rightLeg.visible = true;
+                        playerModel.leftPants.visible = true;
+                        playerModel.rightPants.visible = true;
+                    } else if (transformTimer == 15) {
+                        playerModel.leftArm.visible = true;
+                        playerModel.rightArm.visible = true;
+                        playerModel.body.visible = true;
+                        playerModel.leftSleeve.visible = true;
+                        playerModel.rightSleeve.visible = true;
+                        playerModel.jacket.visible = true;
+                    } else if (transformTimer == 20) {
+                        playerModel.head.visible = true;
+                        playerModel.hat.visible = true;
+                    }
+                }
+            }
+        }
+        ci.cancel();
     }
 
     /**Render external layers like soft and wet shooting mode out of context. This particular inject is for Achtung Baby*/

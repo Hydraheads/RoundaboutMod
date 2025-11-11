@@ -285,6 +285,14 @@ public class FabricEntities {
                                 sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":d4c")
                 );
 
+        public static final EntityType<CreamEntity> CREAM =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        Roundabout.location("cream"),
+                        EntityType.Builder.of(CreamEntity::new, MobCategory.MISC).
+                                sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":cream")
+                );
+
         public static final EntityType<SoftAndWetEntity> SOFT_AND_WET =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -614,6 +622,7 @@ public class FabricEntities {
                 ModEntities.MAGICIANS_RED_OVA = MAGICIANS_RED_OVA;
                 ModEntities.ROAD_ROLLER_ENTITY = ROAD_ROLLER_ENTITY;
                 ModEntities.D4C = D4C;
+                ModEntities.CREAM = CREAM;
                 ModEntities.GREEN_DAY = GREEN_DAY;
                 ModEntities.RATT = RATT;
                 ModEntities.REDD = REDD;
@@ -728,6 +737,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(MAGICIANS_RED, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(MAGICIANS_RED_OVA, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(D4C, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(CREAM, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(GREEN_DAY, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(RATT, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(REDD, StandEntity.createStandAttributes());

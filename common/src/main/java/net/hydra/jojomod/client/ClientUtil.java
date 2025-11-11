@@ -514,8 +514,27 @@ public class ClientUtil {
                 }
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.RefreshAllCooldowns.value)) {
                     MainUtil.clearCooldowns(player);
-                }if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AffirmAllCooldowns.value)) {
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AffirmAllCooldowns.value)) {
                     ((IPlayerEntity)player).rdbt$setCooldownQuery(true);
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTimer.value)) {
+                    int sigmaTime = (int) vargs[0];
+                    if (((StandUser)player).roundabout$getStandPowers() instanceof PowersCream PC) {
+                        PC.setVoidTime(sigmaTime);
+                    }
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTransformTimer.value)) {
+                    int sigmaTime = (int) vargs[0];
+                    if (((StandUser)player).roundabout$getStandPowers() instanceof PowersCream PC) {
+                        PC.setTransformTimer(sigmaTime);
+                    }
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTransformDirection.value)) {
+                    int sigmaDirection = (int) vargs[0];
+                    if (((StandUser)player).roundabout$getStandPowers() instanceof PowersCream PC) {
+                        PC.setTransformDirection(sigmaDirection);
+                    }
                 }
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();

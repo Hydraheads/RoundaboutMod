@@ -63,7 +63,6 @@ public class FirearmItem extends Item {
     public boolean interceptAttack(ItemStack itemStack, Player player) {
         if (player != null && player.getUseItem() != null && player.getUseItem() == itemStack) {
             if (player.getUseItem() == itemStack) {
-                Roundabout.LOGGER.info("interceptAttack true");
                 return true;
             }
         }

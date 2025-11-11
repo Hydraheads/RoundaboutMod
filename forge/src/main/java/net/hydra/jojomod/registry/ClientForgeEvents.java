@@ -62,6 +62,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.SURVIVOR.get(), SurvivorRenderer::new);
         event.registerEntityRenderer(ForgeEntities.KILLER_QUEEN.get(), KillerQueenRenderer::new);
         event.registerEntityRenderer(ForgeEntities.D4C.get(), D4CRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.CREAM.get(), CreamRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GREEN_DAY.get(), GreenDayRenderer::new);
         event.registerEntityRenderer(ForgeEntities.RATT.get(), RattRenderer::new);
         event.registerEntityRenderer(ForgeEntities.REDD.get(), ReddRenderer::new);
@@ -154,6 +155,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.JUSTICE_PIRATE_LAYER, JusticePirateModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.D4C_LAYER, D4CModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.WALKING_HEART_LAYER, WalkingHeartModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.CREAM_LAYER, CreamModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.SOFT_AND_WET_LAYER, SoftAndWetModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.SOFT_AND_WET_DROWNED_LAYER, SoftAndWetDrownedModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.SOFT_AND_WET_DEBUT_LAYER, SoftAndWetDebutModel::getTexturedModelData);

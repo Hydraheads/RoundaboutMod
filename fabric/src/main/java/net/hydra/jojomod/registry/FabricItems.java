@@ -104,6 +104,11 @@ public class FabricItems {
     public static Item MAX_STAND_DISC_DIVER_DOWN = registerItem("max_diver_down_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
 
+    public static Item STAND_DISC_CREAM = registerItem("cream_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCream(null)));
+    public static Item MAX_STAND_DISC_CREAM = registerItem("max_cream_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersCream(null)));
+
     public static Item LUCK_UPGRADE = registerItem("luck_upgrade",
         new SmithingTemplateItem(SmithingTemplates.LUCK_UPGRADE_APPLIES_TO, SmithingTemplates.LUCK_UPGRADE_INGREDIENTS, SmithingTemplates.LUCK_UPGRADE, SmithingTemplates.LUCK_UPGRADE_BASE_SLOT_DESCRIPTION, SmithingTemplates.LUCK_UPGRADE_ADDITIONS_SLOT_DESCRIPTION, SmithingTemplates.createLuckUpgradeIconList(), SmithingTemplates.createLuckMatIconList())
     );
@@ -441,6 +446,8 @@ public class FabricItems {
                         //entries.accept(STAND_DISC_DIVER_DOWN);
                         //entries.accept(MAX_STAND_DISC_DIVER_DOWN);
                         entries.accept(SNUBNOSE_REVOLVER);
+                        entries.accept(STAND_DISC_CREAM);
+                        entries.accept(MAX_STAND_DISC_CREAM);
 
 
                     }).build());
@@ -507,6 +514,9 @@ public class FabricItems {
         ModItems.STAND_DISC_DIVER_DOWN = STAND_DISC_DIVER_DOWN;
         ((MaxStandDiscItem)MAX_STAND_DISC_DIVER_DOWN).baseDisc = ((StandDiscItem)STAND_DISC_DIVER_DOWN);
         ModItems.MAX_STAND_DISC_DIVER_DOWN = MAX_STAND_DISC_DIVER_DOWN;
+        ModItems.STAND_DISC_CREAM = STAND_DISC_CREAM;
+        ((MaxStandDiscItem)MAX_STAND_DISC_CREAM).baseDisc = ((StandDiscItem)STAND_DISC_CREAM);
+        ModItems.MAX_STAND_DISC_CREAM = MAX_STAND_DISC_CREAM;
         ModItems.LUCK_UPGRADE = LUCK_UPGRADE;
         ModItems.EXECUTION_UPGRADE = EXECUTION_UPGRADE;
         ModItems.LUCK_SWORD = LUCK_SWORD;
