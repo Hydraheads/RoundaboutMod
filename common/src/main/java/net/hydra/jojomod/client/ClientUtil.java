@@ -1423,9 +1423,9 @@ public class ClientUtil {
                     sizey2 = 0;
                 }
 
-                if (player.getFoodData().getSaturationLevel() <= 0.0F && tickCount % (foodlevel * 3 + 1) == 0) {
-                    $$24 = height + (rand - 1);
-                }
+                //if (player.getFoodData().getSaturationLevel() <= 0.0F && tickCount % (foodlevel * 3 + 1) == 0) {
+                //    $$24 = height + (rand - 1);
+                //}
 
                 int $$27 = width - $$23 * 8 - 9;
                 graphics.blit(StandIcons.JOJO_ICONS_2, $$27, $$24, $$26, 18, 9, 9);

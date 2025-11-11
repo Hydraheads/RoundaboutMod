@@ -167,7 +167,7 @@ public class VampiricFate extends FatePowers {
     }
 
     public boolean canUseBloodSpeed(){
-        return self instanceof Player PE && PE.getFoodData().getFoodLevel() >= 10 && !isFast();
+        return self instanceof Player PE && PE.getFoodData().getFoodLevel() >= 12 && !isFast();
     }
     public void bloodSpeedClient(){
         if (canUseBloodSpeed() && !onCooldown(PowerIndex.FATE_3_SNEAK)){
@@ -178,7 +178,7 @@ public class VampiricFate extends FatePowers {
         if (canUseBloodSpeed()) {
             if (self instanceof Player PE && !PE.isCreative()){
                 int foodLevel = PE.getFoodData().getFoodLevel();
-                PE.getFoodData().setFoodLevel(foodLevel-10);
+                PE.getFoodData().setFoodLevel(foodLevel-12);
             }
             setFast();
             self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SPEED_EVENT, SoundSource.PLAYERS, 1F, 0.95F+(float)(Math.random()*0.1));
