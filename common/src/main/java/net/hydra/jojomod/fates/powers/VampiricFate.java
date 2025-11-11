@@ -268,7 +268,7 @@ public class VampiricFate extends FatePowers {
         if (getActivePower() == BLOOD_SUCK){
             basis*=0.2F;
         } else if (isFast()){
-            basis*=2.0F;
+            basis*=2.2F;
         }
 
         return basis;
