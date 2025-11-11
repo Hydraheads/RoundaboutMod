@@ -14,6 +14,7 @@ import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersCream;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.item.MaxStandDiscItem;
@@ -624,7 +625,7 @@ public class StandHudRender {
     public static void renderPossessionHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                       int scaledWidth, int scaledHeight, int x) {
         int l = scaledHeight - 32 + 3;
-        int k = (int)(((float) 182 / 100f) * (float) ((StandUser)playerEntity).roundabout$getPossessionTime() );
+        int k = (int)(((float) 182 / PowersAnubis.MaxPossesionTime) * (float) ((StandUser)playerEntity).roundabout$getPossessionTime() );
 
         context.blit(StandIcons.JOJO_ICONS, x, l, 0, 161, 182, 5);
 
