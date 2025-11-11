@@ -2,9 +2,11 @@ package net.hydra.jojomod.item;
 
 
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -35,9 +37,15 @@ public class AnubisItem extends Item {
     public ItemStack finishUsingItem(ItemStack $$0, Level $$1, LivingEntity $$2) {
         if (!$$1.isClientSide) {
             if ($$2 instanceof Player P) {
-                ((StandUser) P).roundabout$setPossessionTime(100);
+                StandUser SU = (StandUser)P;
+                SU.roundabout$setPossessionTime(PowersAnubis.MaxPossesionTime);
                 ((Player) $$2).getCooldowns().addCooldown($$0.getItem(),10/*2400*/);
                 P.level().playSound(null,P.blockPosition(), ModSounds.ANUBIS_POSSESSION_EVENT,SoundSource.PLAYERS,1.0F,1.0F);
+
+                AnubisPossessorEntity p = new AnubisPossessorEntity($$2.level(), $$2 );
+                p.setPos($$2.getPosition(1));
+                $$1.addFreshEntity(p);
+                SU.roundabout$setPossessor(p);
             }
         }
         return $$0;

@@ -28,10 +28,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3f;
@@ -266,7 +263,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     }
                 } else if ($$0.getUseItem().is(ModItems.ANUBIS_ITEM) && ClientUtil.checkIfIsFirstPerson((Player)$$0)) {
                     this.rightArm.yRot = 0;
-                    this.rightArm.zRot = 0;// (float) Math.PI/5;
+                    this.rightArm.zRot = 0;
                     this.rightArm.xRot = 0;
                 }
             }

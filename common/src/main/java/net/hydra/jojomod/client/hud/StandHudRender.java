@@ -32,6 +32,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
+import static net.hydra.jojomod.stand.powers.PowersAnubis.MaxPossesionTime;
+
 public class StandHudRender {
     /** Renders the HUD for stand attacks/abilities.
      * Keep in mind it has to slide in so some of the code may look awkward.*/
@@ -575,7 +577,7 @@ public class StandHudRender {
     public static void renderPossessionHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                       int scaledWidth, int scaledHeight, int x) {
         int l = scaledHeight - 32 + 3;
-        int k = (int)(((float) 182 / 100f) * (float) ((StandUser)playerEntity).roundabout$getPossessionTime() );
+        int k = (int)(((float) 182 / MaxPossesionTime) * (float) ((StandUser)playerEntity).roundabout$getPossessionTime() );
 
         context.blit(StandIcons.JOJO_ICONS, x, l, 0, 161, 182, 5);
 
