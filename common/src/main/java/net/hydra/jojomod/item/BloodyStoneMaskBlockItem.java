@@ -1,6 +1,7 @@
 package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -32,7 +33,8 @@ public class BloodyStoneMaskBlockItem extends BlockItem {
 
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int $$3, boolean $$4) {
         if (!level.isClientSide()){
-            if (entity.isInWater() && entity instanceof LivingEntity LE){
+            if (entity.isInWater() && entity instanceof LivingEntity LE &&
+                    !(FateTypes.isTransforming(LE))){
                 ItemStack stack2 = ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem().getDefaultInstance();
                 stack2.setTag(stack.getTag());
                 LE.getSlot($$3).set(stack2);

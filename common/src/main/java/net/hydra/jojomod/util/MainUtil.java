@@ -607,21 +607,23 @@ public class MainUtil {
     }
 
     public static void activateStoneMask(Entity ent){
-        if (ent instanceof LivingEntity LE && !ent.isInWater()){
+        if (ent instanceof LivingEntity LE && !ent.isInWater() && !ent.level().isClientSide()){
             ItemStack stack = LE.getItemBySlot(EquipmentSlot.HEAD);
             if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem())){
-                ItemStack stack2 = ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem().getDefaultInstance();
-                stack2.setTag(stack.getTag());
-                LE.setItemSlot(EquipmentSlot.HEAD,stack2);
+
                 if (ent instanceof Player PE){
                     IFatePlayer ifp = (IFatePlayer) PE;
                     if (FateTypes.isHuman(PE)){
                         ifp.rdbt$startVampireTransformation();
                     }
                 }
+                ItemStack stack2 = ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem().getDefaultInstance();
+                stack2.setTag(stack.getTag());
+                LE.setItemSlot(EquipmentSlot.HEAD,stack2);
             }
         }
     }
+    //only called at end of transformation
     public static void popOffStoneMask(Entity ent){
         if (ent instanceof LivingEntity LE){
             ItemStack helmet = LE.getItemBySlot(EquipmentSlot.HEAD);
@@ -632,10 +634,10 @@ public class MainUtil {
                     // Do nothing if no helmet
                     if (helmet.isEmpty()) return;
 
-                    // Remove the helmet
-                    ent.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
 
                     if (!level.isClientSide) {
+                        // Remove the helmet
+                        ent.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
                         // Drop item slightly above the player’s head
                         Vec3 pos = ent.position().add(0, ent.getBbHeight() * 0.8, 0);
                         ItemEntity drop = new ItemEntity(level, pos.x, pos.y, pos.z, helmet.copy());
@@ -647,11 +649,11 @@ public class MainUtil {
                                 (level.random.nextDouble() - 0.5) * 0.2
                         );
 
+                        // Shrink the player's inventory copy only after spawning the entity
+                        helmet.shrink(helmet.getCount());
                         level.addFreshEntity(drop);
                     }
 
-                    // Shrink the player's inventory copy only after spawning the entity
-                    helmet.shrink(helmet.getCount());
             }
         }
     }
@@ -659,6 +661,7 @@ public class MainUtil {
         if (ent instanceof LivingEntity LE){
             if (FateTypes.isTransforming(LE))
                 return;
+
             ItemStack stack = LE.getItemBySlot(EquipmentSlot.HEAD);
             if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())){
                 ItemStack stack2 = ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem().getDefaultInstance();
@@ -666,6 +669,12 @@ public class MainUtil {
                 LE.setItemSlot(EquipmentSlot.HEAD,stack2);
             }
 
+            stack = LE.getItemBySlot(EquipmentSlot.MAINHAND);
+            if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())){
+                ItemStack stack2 = ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem().getDefaultInstance();
+                stack2.setTag(stack.getTag());
+                LE.setItemSlot(EquipmentSlot.MAINHAND,stack2);
+            }
             stack = LE.getItemBySlot(EquipmentSlot.OFFHAND);
             if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())){
                 ItemStack stack2 = ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem().getDefaultInstance();
