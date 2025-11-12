@@ -2889,6 +2889,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "hurt", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$RoundaboutDamage(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
 
+        if (FateTypes.isTransforming(rdbt$this()) && !$$0.is(DamageTypes.GENERIC_KILL)){
+            ci.setReturnValue(false);
+            return;
+        }
+
         if ($$0.is(DamageTypes.IN_WALL)){
             if (((IGravityEntity)rdbt$this()).roundabout$getSuffocationTicks() > 0){
                 ci.setReturnValue(false);
