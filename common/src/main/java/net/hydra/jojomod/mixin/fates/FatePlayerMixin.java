@@ -142,6 +142,8 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
                 }
                 rdbt$scatterTransformationParticles();
             }
+            markHurt();
+            hasImpulse = true;
             Vec3 getTransformVec = RotationUtil.vecPlayerToWorld(new Vec3(0,-0.1,0),((IGravityEntity)this).roundabout$getGravityDirection());
             Vec3 dm = getDeltaMovement().add(getTransformVec.x,getTransformVec.y,getTransformVec.z);
             setDeltaMovement(dm);
