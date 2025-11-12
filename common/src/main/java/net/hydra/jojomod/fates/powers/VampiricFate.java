@@ -192,7 +192,7 @@ public class VampiricFate extends FatePowers {
             boolean canDrainGood = MainUtil.canDrinkBloodCrit(bloodSuckingTarget,self);
             DamageSource sauce = ModDamageTypes.of(self.level(),
                     ModDamageTypes.BLOOD_DRAIN);
-            if (bloodSuckingTarget.hurt(sauce, 4) && bloodSuckingTarget instanceof LivingEntity LE) {
+            if (bloodSuckingTarget.hurt(sauce, getSuckDamage()) && bloodSuckingTarget instanceof LivingEntity LE) {
                 if (canDrainGood) {
                     if (pl.canEat(false)) {
                         pl.getFoodData().eat(6, 1.0F);
@@ -318,11 +318,19 @@ public class VampiricFate extends FatePowers {
                     context.blit(StandIcons.JOJO_ICONS, k, j, 192, 36, 17, 8);
                     context.blit(StandIcons.JOJO_ICONS, k, j, 192, 44, 17-test, 8);
                 } else {
-                    context.blit(StandIcons.JOJO_ICONS, k, j, 192, 44, 17, 8);
+                    if (TE instanceof LivingEntity LE && LE.getHealth()-getSuckDamage() <= 0){
+                        context.blit(StandIcons.JOJO_ICONS, k, j, 192, 52, 17, 8);
+                    } else {
+                        context.blit(StandIcons.JOJO_ICONS, k, j, 192, 44, 17, 8);
+                    }
                 }
 
             }
         }
+    }
+
+    public float getSuckDamage(){
+        return 4;
     }
     @Override
     public boolean cancelSprintJump(){
