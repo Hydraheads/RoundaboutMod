@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampireFate;
+import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -79,7 +80,8 @@ public enum FateTypes {
     }
     public static boolean canSeeInTheDark(LivingEntity entity){
         if (entity instanceof Player PE){
-            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.id;
+            return ((IFatePlayer)PE).rdbt$getFatePowers() instanceof VampiricFate VP &&
+                    VP.isVisionOn();
         }
         return false;
     }

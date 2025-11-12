@@ -18,6 +18,8 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.config.ClientConfig;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -183,6 +185,24 @@ public class VampiricFate extends FatePowers {
             setFast();
             self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SPEED_EVENT, SoundSource.PLAYERS, 1F, 0.95F+(float)(Math.random()*0.1));
 
+        }
+    }
+
+    public boolean isVisionOn(){
+        ClientConfig clientConfig = ConfigManager.getClientConfig();
+        if (clientConfig != null && clientConfig.dynamicSettings != null) {
+            return clientConfig.dynamicSettings.vampireVisionMode;
+        }
+        return true;
+    }
+
+    public void clientChangeVision(){
+        Roundabout.LOGGER.info("1");
+        ClientConfig clientConfig = ConfigManager.getClientConfig();
+        if (clientConfig != null && clientConfig.dynamicSettings != null) {
+            Roundabout.LOGGER.info("2");
+            clientConfig.dynamicSettings.vampireVisionMode = !clientConfig.dynamicSettings.vampireVisionMode;
+            ConfigManager.saveClientConfig();
         }
     }
 
@@ -360,9 +380,6 @@ public class VampiricFate extends FatePowers {
         return super.isAttackIneptVisually(activeP,slot);
     }
 
-    public boolean isVisionOn(){
-        return true;
-    }
     @Override
     public ResourceLocation getIconYes(int slot){
         if ((slot == 2 || slot == 3) && isHoldingSneak()){
