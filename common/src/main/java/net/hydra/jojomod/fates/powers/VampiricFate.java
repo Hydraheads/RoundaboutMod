@@ -192,7 +192,11 @@ public class VampiricFate extends FatePowers {
             boolean canDrainGood = MainUtil.canDrinkBloodCrit(bloodSuckingTarget,self);
             DamageSource sauce = ModDamageTypes.of(self.level(),
                     ModDamageTypes.BLOOD_DRAIN);
-            if (bloodSuckingTarget.hurt(sauce, getSuckDamage()) && bloodSuckingTarget instanceof LivingEntity LE) {
+            if (bloodSuckingTarget.hurt(sauce, getSuckDamage()) && bloodSuckingTarget instanceof LivingEntity LE) {//this.setCooldown(PowerIndex.FATE_2, 30);
+                //if (!self.level().isClientSide()){
+                //    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
+                //            PowerIndex.FATE_2, 30);
+                //}
                 if (canDrainGood) {
                     if (pl.canEat(false)) {
                         pl.getFoodData().eat(6, 1.0F);
@@ -232,7 +236,7 @@ public class VampiricFate extends FatePowers {
                 tryIntPowerPacket(BLOOD_SUCK, TE.getId());
                 bloodSuckingTarget = TE;
                 this.attackTimeDuring = 0;
-                this.setCooldown(PowerIndex.FATE_2, 60);
+                this.setCooldown(PowerIndex.FATE_2, 44);
             }
         }
     }
@@ -268,7 +272,7 @@ public class VampiricFate extends FatePowers {
         if (getActivePower() == BLOOD_SUCK){
             basis*=0.2F;
         } else if (isFast()){
-            basis*=2.2F;
+            basis*=2.1F;
         }
 
         return basis;
