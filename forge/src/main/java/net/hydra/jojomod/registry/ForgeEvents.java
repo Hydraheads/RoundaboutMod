@@ -410,6 +410,7 @@ public class ForgeEvents {
         ModParticles.BLUE_CLOCK = ForgeParticles.BLUE_CLOCK.get();
         ModParticles.CINDERELLA_GLOW = ForgeParticles.CINDERELLA_GLOW.get();
         ModParticles.PINK_SMOKE = ForgeParticles.PINK_SMOKE.get();
+        ModParticles.BLOOD_MIST = ForgeParticles.BLOOD_MIST.get();
         ModParticles.BUBBLE_POP = ForgeParticles.BUBBLE_POP.get();
         ModParticles.PLUNDER = ForgeParticles.PLUNDER.get();
         ModParticles.FRICTIONLESS = ForgeParticles.FRICTIONLESS.get();

@@ -44,6 +44,9 @@ public class VampireFate extends VampiricFate {
             case SKILL_2_NORMAL -> {
                 suckBlood();
             }
+            case SKILL_2_CROUCH -> {
+                regenClient();
+            }
             case SKILL_3_CROUCH -> {
                 bloodSpeedClient();
             }
@@ -79,6 +82,8 @@ public class VampireFate extends VampiricFate {
 
     public boolean isAttackIneptVisually(byte activeP, int slot){
         if (slot == 3 && isHoldingSneak() && !canUseBloodSpeed())
+            return true;
+        if (slot == 2 && isHoldingSneak() && !canUseRegen())
             return true;
         return super.isAttackIneptVisually(activeP,slot);
     }
