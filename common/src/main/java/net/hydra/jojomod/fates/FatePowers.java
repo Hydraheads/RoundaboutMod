@@ -4,6 +4,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.minecraft.client.Options;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -42,6 +43,11 @@ public class FatePowers extends AbilityScapeBasis {
     public void syncActivePower(){
         if (!this.self.level().isClientSide && this.self instanceof ServerPlayer SP){
             S2CPacketUtil.sendActivePowerFatePacket(SP,activePower);
+        }
+    }
+    public void preCheckButtonInputAttack(boolean keyIsDown, Options options) {
+        if (!hasStandActive(this.getSelf()) && !this.isGuarding()) {
+            buttonInputAttack(keyIsDown, options);
         }
     }
 

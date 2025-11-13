@@ -196,11 +196,14 @@ public class VampiricFate extends FatePowers {
         return true;
     }
 
+    @Override
+    public boolean interceptAttack(){
+        return this.getActivePower() == BLOOD_SUCK;
+    }
+
     public void clientChangeVision(){
-        Roundabout.LOGGER.info("1");
         ClientConfig clientConfig = ConfigManager.getClientConfig();
         if (clientConfig != null && clientConfig.dynamicSettings != null) {
-            Roundabout.LOGGER.info("2");
             clientConfig.dynamicSettings.vampireVisionMode = !clientConfig.dynamicSettings.vampireVisionMode;
             ConfigManager.saveClientConfig();
         }

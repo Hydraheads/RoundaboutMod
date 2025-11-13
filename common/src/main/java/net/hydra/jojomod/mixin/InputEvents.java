@@ -221,7 +221,8 @@ public abstract class InputEvents implements IInputEvents {
             if (standComp.roundabout$isDazed() || ((TimeStop) player.level()).CanTimeStopEntity(player)) {
                 ci.setReturnValue(true);
                 return;
-            } else if (standComp.roundabout$getActive() && standComp.roundabout$getStandPowers().interceptAttack()) {
+            } else if ((standComp.roundabout$getActive() && standComp.roundabout$getStandPowers().interceptAttack())
+            || (((IFatePlayer)player).rdbt$getFatePowers().interceptAttack())) {
                 if (this.hitResult != null) {
                     boolean $$1 = false;
                     if (isMining) {
@@ -329,7 +330,7 @@ public abstract class InputEvents implements IInputEvents {
                         this.gameMode.stopDestroyBlock();
                     }
                     ci.cancel();
-                } else if (standComp.roundabout$getActive() && standComp.roundabout$getStandPowers().interceptAttack()){
+                } else if ((standComp.roundabout$getActive() && standComp.roundabout$getStandPowers().interceptAttack())|| (((IFatePlayer)player).rdbt$getFatePowers().interceptAttack())){
                     if (isMining) {
                         if (!this.player.isUsingItem()) {
                             if ($$0 && this.hitResult != null && this.hitResult.getType() == HitResult.Type.BLOCK) {
@@ -1105,6 +1106,7 @@ public abstract class InputEvents implements IInputEvents {
                 if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {
                     if (rdbt$isInitialized(player)) {
                         powers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
+                        ((IFatePlayer)player).rdbt$getFatePowers().buttonInputAttack(this.options.keyAttack.isDown(), this.options);
                     }
                 }
 
