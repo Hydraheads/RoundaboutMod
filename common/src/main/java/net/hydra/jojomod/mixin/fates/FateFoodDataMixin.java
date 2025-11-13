@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.fates;
 
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.access.AccessFateFoodData;
 import net.hydra.jojomod.util.MainUtil;
@@ -129,6 +130,16 @@ public abstract class FateFoodDataMixin implements AccessFateFoodData {
     protected void roundabout$tickVamp(Player $$0, CallbackInfo ci) {
         if (FateTypes.hasBloodHunger(rdbt$player)){
             ci.cancel();
+            float multiplier = 1F;
+            int amp = -1;
+            if ($$0.hasEffect(ModEffects.BLEED)) {
+                amp = $$0.getEffect(ModEffects.BLEED).getAmplifier();
+                multiplier = 0.5F;
+                if (amp == 1) {
+                    multiplier = 0.25F;
+                }
+            }
+
             this.saturationLevel = 0;
             Difficulty $$1 = $$0.level().getDifficulty();
             this.lastFoodLevel = this.foodLevel;
@@ -146,14 +157,18 @@ public abstract class FateFoodDataMixin implements AccessFateFoodData {
                 this.tickTimer++;
                 if (this.tickTimer >= 10) {
                     float $$3 = Math.min(this.rdbt$alternateSaturation, 6.0F);
-                    $$0.heal($$3 / 6.0F);
+                    if (amp < 2) {
+                        $$0.heal(($$3 / 6.0F)*multiplier);
+                    }
                     this.addExhaustion($$3);
                     this.tickTimer = 0;
                 }
             } else if ($$2 && this.foodLevel >= 18 && $$0.isHurt()) {
                 this.tickTimer++;
                 if (this.tickTimer >= 80) {
-                    $$0.heal(1.0F);
+                    if (amp < 2) {
+                        $$0.heal(multiplier);
+                    }
                     this.addExhaustion(6.0F);
                     this.tickTimer = 0;
                 }

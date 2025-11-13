@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.effects.bleed;
 
 import net.hydra.jojomod.access.IFoodData;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
@@ -34,36 +35,38 @@ public class BleedFoodData implements IFoodData {
     }
     @Inject(method = "tick", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$foodData(Player $$0, CallbackInfo ci) {
-        if ($$0.hasEffect(ModEffects.BLEED)) {
-            int amp = $$0.getEffect(ModEffects.BLEED).getAmplifier();
-            float multiplier = 0.5F;
-            if (amp == 1){
-                multiplier = 0.25F;
-            }
-            boolean $$2 = $$0.level().getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
-            if ($$2 && this.saturationLevel > 0.0F && $$0.isHurt() && this.foodLevel >= 20) {
-                roundabout$p1($$0);
-                this.tickTimer++;
-                if (this.tickTimer >= 10) {
-                    float $$3 = Math.min(this.saturationLevel, 6.0F);
-                    if (amp < 2) {
-                        $$0.heal(($$3 / 6.0F)*multiplier);
-                        this.addExhaustion($$3);
-                    }
-                    this.tickTimer = 0;
+        if (!FateTypes.hasBloodHunger($$0)) {
+            if ($$0.hasEffect(ModEffects.BLEED)) {
+                int amp = $$0.getEffect(ModEffects.BLEED).getAmplifier();
+                float multiplier = 0.5F;
+                if (amp == 1) {
+                    multiplier = 0.25F;
                 }
-                ci.cancel();
-            } else if ($$2 && this.foodLevel >= 18 && $$0.isHurt()) {
-                roundabout$p1($$0);
-                this.tickTimer++;
-                if (this.tickTimer >= 80) {
-                    if (amp < 2) {
-                        $$0.heal(multiplier);
-                        this.addExhaustion(6.0F);
+                boolean $$2 = $$0.level().getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
+                if ($$2 && this.saturationLevel > 0.0F && $$0.isHurt() && this.foodLevel >= 20) {
+                    roundabout$p1($$0);
+                    this.tickTimer++;
+                    if (this.tickTimer >= 10) {
+                        float $$3 = Math.min(this.saturationLevel, 6.0F);
+                        if (amp < 2) {
+                            $$0.heal(($$3 / 6.0F) * multiplier);
+                            this.addExhaustion($$3);
+                        }
+                        this.tickTimer = 0;
                     }
-                    this.tickTimer = 0;
+                    ci.cancel();
+                } else if ($$2 && this.foodLevel >= 18 && $$0.isHurt()) {
+                    roundabout$p1($$0);
+                    this.tickTimer++;
+                    if (this.tickTimer >= 80) {
+                        if (amp < 2) {
+                            $$0.heal(multiplier);
+                            this.addExhaustion(6.0F);
+                        }
+                        this.tickTimer = 0;
+                    }
+                    ci.cancel();
                 }
-                ci.cancel();
             }
         }
     }
