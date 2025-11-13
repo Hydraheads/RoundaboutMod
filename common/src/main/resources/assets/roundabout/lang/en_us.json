@@ -2390,6 +2390,9 @@
   "config.roundabout.SoftAndWetCurrentlySelectedBubble.name": "Selected Bubble Type",
   "config.roundabout.SoftAndWetCurrentlySelectedBubble.desc": "For Soft and Wet, your client remembers what bubble is presently selected.",
 
+  "config.roundabout.vampireVisionMode.name": "Selected Vision Type",
+  "config.roundabout.vampireVisionMode.desc": "Toggle on and off vampiric night vision. V is the hotkey for vampiric fates.",
+
   "config.roundabout.mobThrowRecoilTicks.name": "Mob Throw Recoil",
   "config.roundabout.mobThrowRecoilTicks.desc": "How many ticks after throwing a mob you can attack with basic punches again.",
 

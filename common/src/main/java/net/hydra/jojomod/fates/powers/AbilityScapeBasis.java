@@ -1089,7 +1089,7 @@ public class AbilityScapeBasis {
 
     public void preButtonInput4(boolean keyIsDown, Options options){
         if (!hasStandActive(this.getSelf())) {
-            if (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()  ) {
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()  ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
                 buttonInput4(keyIsDown, options);
             }
@@ -1122,6 +1122,23 @@ public class AbilityScapeBasis {
         }
     }
 
+
+    /**If the standard left click input should be canceled while your stand is active*/
+    public boolean interceptAttack(){
+        return false;
+    }
+    public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (keyIsDown) { if (this.canAttack()) {
+            this.tryPower(PowerIndex.ATTACK);
+            tryPowerPacket(PowerIndex.ATTACK);
+        }}
+    }
+    public boolean canAttack(){
+        if (this.attackTimeDuring <= -1) {
+            return this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax;
+        }
+        return false;
+    }
 
     @SuppressWarnings("deprecation")
     public boolean doVault(){

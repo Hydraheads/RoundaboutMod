@@ -37,7 +37,8 @@ public abstract class MaskItemEntity extends Entity {
     protected void roundabout$tick(CallbackInfo ci) {
         if (!this.level().isClientSide()) {
             ItemStack stack = getItem();
-            if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())) {
+            if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())
+            && stack.getCount() > 0) {
                 if (this.isInWater()) {
                     rdbt$transformMask();
                 } else {

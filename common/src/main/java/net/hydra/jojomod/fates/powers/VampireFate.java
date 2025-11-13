@@ -47,6 +47,9 @@ public class VampireFate extends VampiricFate {
             case SKILL_3_CROUCH -> {
                 bloodSpeedClient();
             }
+            case SKILL_4_NORMAL -> {
+                clientChangeVision();
+            }
         }
         super.powerActivate(context);
     };

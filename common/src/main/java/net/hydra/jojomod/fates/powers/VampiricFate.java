@@ -18,6 +18,8 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.config.ClientConfig;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -186,13 +188,38 @@ public class VampiricFate extends FatePowers {
         }
     }
 
+    public boolean isVisionOn(){
+        ClientConfig clientConfig = ConfigManager.getClientConfig();
+        if (clientConfig != null && clientConfig.dynamicSettings != null) {
+            return clientConfig.dynamicSettings.vampireVisionMode;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean interceptAttack(){
+        return this.getActivePower() == BLOOD_SUCK;
+    }
+
+    public void clientChangeVision(){
+        ClientConfig clientConfig = ConfigManager.getClientConfig();
+        if (clientConfig != null && clientConfig.dynamicSettings != null) {
+            clientConfig.dynamicSettings.vampireVisionMode = !clientConfig.dynamicSettings.vampireVisionMode;
+            ConfigManager.saveClientConfig();
+        }
+    }
+
     public void finishSucking(){
         if (bloodSuckingTarget != null && self instanceof Player pl) {
 
             boolean canDrainGood = MainUtil.canDrinkBloodCrit(bloodSuckingTarget,self);
             DamageSource sauce = ModDamageTypes.of(self.level(),
                     ModDamageTypes.BLOOD_DRAIN);
-            if (bloodSuckingTarget.hurt(sauce, 4) && bloodSuckingTarget instanceof LivingEntity LE) {
+            if (bloodSuckingTarget.hurt(sauce, getSuckDamage()) && bloodSuckingTarget instanceof LivingEntity LE) {//this.setCooldown(PowerIndex.FATE_2, 30);
+                //if (!self.level().isClientSide()){
+                //    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
+                //            PowerIndex.FATE_2, 30);
+                //}
                 if (canDrainGood) {
                     if (pl.canEat(false)) {
                         pl.getFoodData().eat(6, 1.0F);
@@ -232,7 +259,7 @@ public class VampiricFate extends FatePowers {
                 tryIntPowerPacket(BLOOD_SUCK, TE.getId());
                 bloodSuckingTarget = TE;
                 this.attackTimeDuring = 0;
-                this.setCooldown(PowerIndex.FATE_2, 60);
+                this.setCooldown(PowerIndex.FATE_2, 44);
             }
         }
     }
@@ -268,7 +295,7 @@ public class VampiricFate extends FatePowers {
         if (getActivePower() == BLOOD_SUCK){
             basis*=0.2F;
         } else if (isFast()){
-            basis*=2.2F;
+            basis*=2F;
         }
 
         return basis;
@@ -318,11 +345,19 @@ public class VampiricFate extends FatePowers {
                     context.blit(StandIcons.JOJO_ICONS, k, j, 192, 36, 17, 8);
                     context.blit(StandIcons.JOJO_ICONS, k, j, 192, 44, 17-test, 8);
                 } else {
-                    context.blit(StandIcons.JOJO_ICONS, k, j, 192, 44, 17, 8);
+                    if (TE instanceof LivingEntity LE && LE.getHealth()-getSuckDamage() <= 0){
+                        context.blit(StandIcons.JOJO_ICONS, k, j, 192, 52, 17, 8);
+                    } else {
+                        context.blit(StandIcons.JOJO_ICONS, k, j, 192, 44, 17, 8);
+                    }
                 }
 
             }
         }
+    }
+
+    public float getSuckDamage(){
+        return 4;
     }
     @Override
     public boolean cancelSprintJump(){
@@ -348,9 +383,6 @@ public class VampiricFate extends FatePowers {
         return super.isAttackIneptVisually(activeP,slot);
     }
 
-    public boolean isVisionOn(){
-        return true;
-    }
     @Override
     public ResourceLocation getIconYes(int slot){
         if ((slot == 2 || slot == 3) && isHoldingSneak()){

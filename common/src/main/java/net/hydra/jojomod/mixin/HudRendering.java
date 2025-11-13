@@ -131,7 +131,7 @@ public abstract class HudRendering implements IHudAccess {
 
                     boolean checksOut = false;
                     long timeOfDay = this.minecraft.level.getDayTime() % 24000L;
-                    boolean isDay = timeOfDay < 12000L; // 0–12000 = day, 12000–24000 = night
+                    boolean isDay = timeOfDay < 12000L || timeOfDay > 23840; // 0–12000 = day, 12000–24000 = night
 
                     if (this.minecraft.player.level().dimension().location().getPath().equals("overworld") &&
                             isDay) {

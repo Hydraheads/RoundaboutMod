@@ -159,6 +159,8 @@ public class ClientConfig implements Cloneable {
         public Integer SoftAndWetCurrentlySelectedBubble;
         @BooleanOption(group = "inherit", value = false)
         public Boolean hideGUI;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean vampireVisionMode;
     }
     public static class VanillaMCTweaks {
         @BooleanOption(group = "inherit", value = true)

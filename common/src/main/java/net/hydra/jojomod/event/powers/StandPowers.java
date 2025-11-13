@@ -121,16 +121,6 @@ public class StandPowers extends AbilityScapeBasis {
         return false;
     }
 
-    /**If the standard left click input should be canceled while your stand is active*/
-    public boolean interceptAttack(){
-        return false;
-    }
-    public void buttonInputAttack(boolean keyIsDown, Options options) {
-        if (keyIsDown) { if (this.canAttack()) {
-            this.tryPower(PowerIndex.ATTACK);
-            tryPowerPacket(PowerIndex.ATTACK);
-        }}
-    }
 
 
     /**If the standard right click input should usually be canceled while your stand is active*/
@@ -635,12 +625,7 @@ public class StandPowers extends AbilityScapeBasis {
         ((StandUser) this.self).roundabout$tryPower(index,true);
     }
 
-    public boolean canAttack(){
-        if (this.attackTimeDuring <= -1) {
-            return this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax;
-        }
-        return false;
-    }
+
     public boolean setPowerGuard() {
         if (((StandUser)this.self).roundabout$getGuardBroken()) {
             animateStand(StandEntity.BROKEN_GUARD);

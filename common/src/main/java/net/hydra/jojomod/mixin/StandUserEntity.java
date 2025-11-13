@@ -2889,6 +2889,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "hurt", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$RoundaboutDamage(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
 
+        //Vampire transformation immunity
+        if (FateTypes.isTransforming(rdbt$this()) && !$$0.is(DamageTypes.GENERIC_KILL)){
+            ci.setReturnValue(false);
+            return;
+        }
+
+        //Right after a gravity flip you are briefly immune to suffocation
         if ($$0.is(DamageTypes.IN_WALL)){
             if (((IGravityEntity)rdbt$this()).roundabout$getSuffocationTicks() > 0){
                 ci.setReturnValue(false);
@@ -2906,6 +2913,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
+        //Coprse damage is converted and multiplied for Justice Army
         if ($$0.is(DamageTypes.ARROW) && $$0.getEntity() instanceof FallenMob FM){
             if (!(((LivingEntity)(Object)this) instanceof Player) && FM.getController() == this.getId()){
                 ci.setReturnValue(false);
@@ -2940,6 +2948,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             return;
         }
 
+        //Gasoline invincibility frames
         if ($$0.is(ModDamageTypes.GASOLINE_EXPLOSION)){
             if (roundabout$gasolineIFRAMES > 0){
                 ci.setReturnValue(false);
