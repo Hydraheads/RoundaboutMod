@@ -182,6 +182,8 @@ public class CreamModel<T extends CreamEntity> extends StandModel<T> {
         this.animate(pEntity.hideLeg, StandAnimations.HIDE_LEG, pAgeInTicks, 1f);
         this.animate(pEntity.phaseGrab, StandAnimations.PHASE_GRAB, pAgeInTicks, 0.6f);
         this.animate(pEntity.creamVoidEat, CreamAnimations.CREAM_EAT_VOID, pAgeInTicks, 1f);
+        this.animate(pEntity.creamUnEat, CreamAnimations.CREAM_UN_EAT, pAgeInTicks, 1f);
+        this.animate(pEntity.creamVoidAttackBall, CreamAnimations.CREAM_VOID_ATTACK_BALL, pAgeInTicks, 1f);
     }
 
     @Override

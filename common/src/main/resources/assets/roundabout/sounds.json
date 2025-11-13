@@ -35,6 +35,18 @@
       "roundabout:summon_mandom"
     ]
   },
+  "cream_summon": {
+    "subtitle": "sounds.roundabout.summon_cream",
+    "sounds": [
+      "roundabout:cream_summon"
+    ]
+  },
+  "cream_void_attack": {
+    "subtitle": "sounds.roundabout.cream_void_attack",
+    "sounds": [
+      "roundabout:cream_void_attack"
+    ]
+  },
   "road_roller_ambient": {
     "subtitle": "sounds.roundabout.road_roller_ambient",
     "sounds": [

@@ -179,6 +179,10 @@ public abstract class HudRendering implements IHudAccess {
                     RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.BLOODY_MASK_OVERLAY, 0.55F);
                 }
+                if (user.roundabout$getStandPowers() instanceof PowersCream PC && PC.insideVoidInt > 0) {
+                    RenderSystem.enableBlend();
+                    this.renderTextureOverlay($$1, StandIcons.CREAM_OVERLAY, 1F);
+                }
                 if (user.roundabout$getLocacacaCurse() == LocacacaCurseIndex.HEAD) {
                     if (((IPlayerEntity) this.minecraft.player).roundabout$getMaskSlot() != null &&
                             !((IPlayerEntity) this.minecraft.player).roundabout$getMaskSlot().isEmpty() &&
@@ -203,6 +207,11 @@ public abstract class HudRendering implements IHudAccess {
                     ticks*=0.1F;
                     RenderSystem.enableBlend();
                     roundabout$renderTextureOverlay($$1, StandIcons.SURVIVOR_ANGER, ticks*0.6F,1F,1F,1F);
+                }
+            } else {
+                if (user.roundabout$getStandPowers() instanceof PowersCream PC && PC.insideVoidInt > 0) {
+                    RenderSystem.enableBlend();
+                    this.renderTextureOverlay($$1, StandIcons.CREAM_OVERLAY, 1F);
                 }
             }
 

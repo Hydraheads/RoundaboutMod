@@ -10,6 +10,8 @@ import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.powers.DamageHandler;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
@@ -24,6 +26,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Player;
@@ -31,8 +34,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.WaterFluid;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
@@ -74,9 +75,21 @@ public class PowersCream extends NewPunchingStand {
     public SoundEvent getSoundFromByte(byte soundChoice){
         byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
-            return ModSounds.SUMMON_WALKING_EVENT;
+            return ModSounds.CREAM_SUMMON_EVENT;
+        }
+        if (soundChoice == CREAM_VOID_ATTACK) {
+            return ModSounds.CREAM_VOID_ATTACK_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
+    }
+
+    public static final byte CREAM_VOID_ATTACK = 103;
+
+    public void playVoidAttackEnterSound(){
+        if (!this.self.level().isClientSide()) {
+            byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+            playStandUserOnlySoundsIfNearby(CREAM_VOID_ATTACK, 27, false,true);
+        }
     }
 
     @Override
@@ -187,6 +200,7 @@ public class PowersCream extends NewPunchingStand {
 
     public void enterVoidModeAttack() {
         if (!isTransforming && !insideVoid) {
+            playVoidAttackEnterSound();
             setTransformDirection(1);
             setTransformTimer(0);
             isTransforming = true;
@@ -216,40 +230,48 @@ public class PowersCream extends NewPunchingStand {
     }
 
     public void exitVoidModeAttack() {
-        if (!isTransforming && insideVoid) {
-            insideVoid = false;
-            setTransformDirection(2);
-            setTransformTimer(0);
-            setVoidTime(0);
-            isTransforming = true;
-            if (!self.level().isClientSide) {
-                GameType currentMode = ((ServerPlayer) self).gameMode.getGameModeForPlayer();
-                boolean gameModeSwitched = false;
+        insideVoid = false;
+        setTransformDirection(2);
+        setTransformTimer(0);
+        setVoidTime(0);
+        isTransforming = true;
+        if (!self.level().isClientSide) {
+            GameType currentMode = ((ServerPlayer) self).gameMode.getGameModeForPlayer();
+            boolean gameModeSwitched = false;
 
-                if (currentMode != gameMode) {
-                    gameMode = currentMode;
-                    gameModeSwitched = true;
-                }
-
-                switch (gameMode) {
-                    case CREATIVE, SPECTATOR -> {
-                        ((Player) self).getAbilities().mayfly = true;
-                        ((Player) self).getAbilities().flying = previousFlying;
-                        ((Player) self).getAbilities().invulnerable = true;
-                    }
-                    default -> {
-                        if (!gameModeSwitched) {
-                            ((Player) self).getAbilities().mayfly = previousMayFly;
-                            ((Player) self).getAbilities().invulnerable = previousInvulnerable;
-                        }
-                        ((Player) self).getAbilities().flying = false;
-                    }
-                }
-
-                ((Player) self).onUpdateAbilities();
+            if (currentMode != gameMode) {
+                gameMode = currentMode;
+                gameModeSwitched = true;
             }
-            this.animateStand(CreamEntity.IDLE);
+
+            switch (gameMode) {
+                case CREATIVE, SPECTATOR -> {
+                    ((Player) self).getAbilities().mayfly = true;
+                    ((Player) self).getAbilities().flying = previousFlying;
+                    ((Player) self).getAbilities().invulnerable = true;
+                }
+                default -> {
+                    if (!gameModeSwitched) {
+                        ((Player) self).getAbilities().mayfly = previousMayFly;
+                        ((Player) self).getAbilities().invulnerable = previousInvulnerable;
+                    }
+                    ((Player) self).getAbilities().flying = false;
+                }
+            }
+
+            ((Player) self).onUpdateAbilities();
         }
+        this.animateStand(CreamEntity.CREAM_UN_EAT);
+    }
+
+    public int creamAnimationIntForUnEat = 0;
+
+    public void creamIdleAnimationReset() {
+        this.animateStand(CreamEntity.IDLE);
+    }
+
+    public void creamBallAnimation() {
+        this.animateStand(CreamEntity.CREAM_VOID_ATTACK_BALL);
     }
 
     public void actualVoidAttackDestruction() {
@@ -277,8 +299,62 @@ public class PowersCream extends NewPunchingStand {
         }
     }
 
+    public void radialDamage() {
+        if (!self.level().isClientSide()) {
+            List<Entity> entityList = DamageHandler.genHitbox(self, self.getX(), self.getY(), self.getZ(),2.5,2.5,2.5);
+
+            if (!entityList.isEmpty()) {
+                for (Entity entity : entityList) {
+                    if (entity != self && entity.isPickable() && entity.isAlive()) {
+                        DamageSource src = ModDamageTypes.of(
+                                self.level(),
+                                ModDamageTypes.CREAM_VOID_BALL,
+                                self,
+                                self
+                        );
+                        entity.hurt(src, getVoidDamage(self));
+                    }
+                }
+            }
+        }
+    }
+
+    public float getVoidDamage(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod((float) ((float) 2.7* (ClientNetworking.getAppropriateConfig().
+                    creamSettings.creamAttackMultOnPlayers*0.01)));
+        } else {
+            return levelupDamageMod((float) ((float) 10* (ClientNetworking.getAppropriateConfig().
+                    creamSettings.creamAttackMultOnMobs*0.01)));
+        }
+    }
+
+    @Override
+    public void onStandSummon(boolean desummon){
+        if (desummon) {
+            if (insideVoidInt > 0 || transformTimer > 0) {
+                exitVoidModeAttack();
+            }
+        }
+    }
+
     public void tickPower() {
         super.tickPower();
+
+        if (!self.level().isClientSide) {
+            if (transformDirection == 2 && transformTimer > -1) {
+                if (creamAnimationIntForUnEat >= 20) {
+                    creamAnimationIntForUnEat = 0;
+                    creamIdleAnimationReset();
+                }
+            }
+        }
+
+        if (!self.level().isClientSide) {
+            if (insideVoidInt > 0) {
+                radialDamage();
+            }
+        }
 
         if (!self.level().isClientSide) {
             if (insideVoidInt > 0) {
@@ -299,10 +375,10 @@ public class PowersCream extends NewPunchingStand {
                     setTransformTimer(0);
                     insideVoid = true;
                     isTransforming = false;
-                    setTransformDirection(0);
                 }
             } else if (getTransformDirection() == 2) {
                 if (getTransformTimer() < 20) {
+                    creamAnimationIntForUnEat++;
                     setTransformTimer(getTransformTimer() + 1);
                 } else {
                     setTransformTimer(0);
@@ -317,9 +393,10 @@ public class PowersCream extends NewPunchingStand {
         if (!self.level().isClientSide) {
             if (insideVoid) {
                 actualVoidAttackDestruction();
-                if (getVoidTime() < 100) {
+                if (getVoidTime() < 400) {
+                    creamBallAnimation();
                     setVoidTime(getVoidTime() + 1);
-                } else if (getVoidTime() >= 100) {
+                } else if (getVoidTime() >= 400) {
                     exitVoidModeAttack();
                 }
             }

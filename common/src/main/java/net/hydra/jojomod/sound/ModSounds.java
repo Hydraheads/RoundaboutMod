@@ -179,6 +179,14 @@ public class ModSounds {
     public static final ResourceLocation EXPLOSIVE_SPIN_MODE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EXPLOSIVE_SPIN_MODE);
     public static SoundEvent EXPLOSIVE_SPIN_MODE_EVENT = SoundEvent.createVariableRangeEvent(EXPLOSIVE_SPIN_MODE_ID);
 
+    public static final String CREAM_SUMMON = "cream_summon";
+    public static final ResourceLocation CREAM_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CREAM_SUMMON);
+    public static SoundEvent CREAM_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(CREAM_SUMMON_ID);
+
+    public static final String CREAM_VOID_ATTACK = "cream_void_attack";
+    public static final ResourceLocation CREAM_VOID_ATTACK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CREAM_VOID_ATTACK);
+    public static SoundEvent CREAM_VOID_ATTACK_EVENT = SoundEvent.createVariableRangeEvent(CREAM_VOID_ATTACK_ID);
+
 
     public static final String ROAD_ROLLER_AMBIENT = "road_roller_ambient";
     public static final ResourceLocation ROAD_ROLLER_AMBIENT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ROAD_ROLLER_AMBIENT);

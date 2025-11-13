@@ -249,7 +249,7 @@ public class StandHudRender {
                                          int scaledWidth, int scaledHeight, int x,
                                          PowersCream PC) {
         int l = scaledHeight - 32 + 3;
-        int k = (int)(((float) 182 / 100f) * (100 - (float) PC.getVoidTime()));
+        int k = (int)(((float) 182 / 400f) * (400 - (float) PC.getVoidTime()));
 
         context.blit(StandIcons.CREAM_ICONS, x, l, 0, 90, 182, 5);
 

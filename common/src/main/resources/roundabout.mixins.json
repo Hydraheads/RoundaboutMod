@@ -44,6 +44,7 @@
     "block_throw.ThrowBoat",
     "cinderella.CinderellaCreeper",
     "cinderella.CinderellaVillager",
+    "cream.CreamCancelHealthRegenMixin",
     "cream.CreamCancelPlayerHurtMixin",
     "d4c.D4CBlockBehaviour",
     "d4c.D4CBlockStateBase",

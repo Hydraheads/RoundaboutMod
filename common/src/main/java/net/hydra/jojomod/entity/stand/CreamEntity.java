@@ -37,9 +37,13 @@ public class CreamEntity extends FollowingStandEntity {
     public final AnimationState finalPunchWindup = new AnimationState();
     public final AnimationState phaseGrab = new AnimationState();
     public final AnimationState creamVoidEat = new AnimationState();
+    public final AnimationState creamUnEat = new AnimationState();
+    public final AnimationState creamVoidAttackBall = new AnimationState();
 
     public static final byte
-            CREAM_EAT_VOID = 100;
+            CREAM_EAT_VOID = 100,
+            CREAM_UN_EAT = 101,
+            CREAM_VOID_ATTACK_BALL = 102;
 
     @Override
     public void setupAnimationStates() {
@@ -113,19 +117,41 @@ public class CreamEntity extends FollowingStandEntity {
             } else {
                 this.creamVoidEat.stop();
             }
+            if (this.getAnimation() == CREAM_UN_EAT) {
+                this.creamUnEat.startIfStopped(this.tickCount);
+            } else {
+                this.creamUnEat.stop();
+            }
+            if (this.getAnimation() == CREAM_VOID_ATTACK_BALL) {
+                this.creamVoidAttackBall.startIfStopped(this.tickCount);
+            } else {
+                this.creamVoidAttackBall.stop();
+            }
         }
     }
 
     private int creamEatVoidStart = 0;
+    private int creamUnEatStart = 0;
 
     @Override
     public Vec3 getIdleOffset(LivingEntity standUser) {
+        int animationTick = this.creamEatVoidStart;
+        int animationTick2 = this.creamUnEatStart;
         if (this.getAnimation() == CREAM_EAT_VOID) {
-            int animationTick = this.creamEatVoidStart;
             double y;
 
             if (animationTick <= 40) {
-                y = standUser.getY() + 1 + ((-0.5 - 2) * ((double) animationTick / 40.0));
+                y = standUser.getY() + 1 + ((-0.7 - 2) * ((double) animationTick / 40.0));
+            } else {
+                y = standUser.getY();
+            }
+
+            return new Vec3(standUser.getX(), y, standUser.getZ());
+        } else if (this.getAnimation() == CREAM_UN_EAT) {
+            double y;
+
+            if (animationTick2 <= 40) {
+                y = standUser.getY() - 1.5 + (4.5 * ((double) animationTick2 / 40.0));
             } else {
                 y = standUser.getY();
             }
@@ -142,8 +168,13 @@ public class CreamEntity extends FollowingStandEntity {
 
         if (this.getAnimation() == CREAM_EAT_VOID) {
             creamEatVoidStart++;
+            creamUnEatStart++;
+        } else if (this.getAnimation() == CREAM_UN_EAT) {
+            creamEatVoidStart++;
+            creamUnEatStart++;
         } else {
             creamEatVoidStart = 0;
+            creamUnEatStart = 0;
         }
     }
 }

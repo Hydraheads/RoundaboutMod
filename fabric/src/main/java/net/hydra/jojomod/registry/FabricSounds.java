@@ -99,6 +99,9 @@ public class FabricSounds {
         addSound(ModSounds.EXPLOSIVE_BUBBLE_SWITCH_OFF_ID, ModSounds.EXPLOSIVE_BUBBLE_SWITCH_OFF_EVENT);
         addSound(ModSounds.EXPLOSIVE_SPIN_MODE_ID, ModSounds.EXPLOSIVE_SPIN_MODE_EVENT);
 
+        addSound(ModSounds.CREAM_SUMMON_ID, ModSounds.CREAM_SUMMON_EVENT);
+        addSound(ModSounds.CREAM_VOID_ATTACK_ID, ModSounds.CREAM_VOID_ATTACK_EVENT);
+
         addSound(ModSounds.ROAD_ROLLER_AMBIENT_ID, ModSounds.ROAD_ROLLER_AMBIENT_EVENT);
         addSound(ModSounds.ROAD_ROLLER_EXPLOSION_ID, ModSounds.ROAD_ROLLER_EXPLOSION_EVENT);
         addSound(ModSounds.ROAD_ROLLER_MIXING_ID, ModSounds.ROAD_ROLLER_MIXING_EVENT);

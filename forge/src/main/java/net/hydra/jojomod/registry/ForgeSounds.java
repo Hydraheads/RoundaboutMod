@@ -94,6 +94,11 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> BODY_BAG_EVENT =
             register(ModSounds.BODY_BAG, ModSounds.BODY_BAG_ID);
 
+    public static final RegistryObject<SoundEvent> CREAM_SUMMON_EVENT =
+            register(ModSounds.CREAM_SUMMON, ModSounds.CREAM_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> CREAM_VOID_ATTACK_EVENT =
+            register(ModSounds.CREAM_VOID_ATTACK, ModSounds.CREAM_VOID_ATTACK_ID);
+
     public static final RegistryObject<SoundEvent> ROAD_ROLLER_AMBIENT_EVENT =
             register(ModSounds.ROAD_ROLLER_AMBIENT, ModSounds.ROAD_ROLLER_AMBIENT_ID);
     public static final RegistryObject<SoundEvent> ROAD_ROLLER_EXPLOSION_EVENT =

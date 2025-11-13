@@ -662,7 +662,7 @@ public class Config implements Cloneable {
         public Boolean enableCream;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer creamAttackMultOnMobs;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer creamAttackMultOnPlayers;
         @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
         public Integer creamGuardPoints;
