@@ -298,7 +298,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
     }
 
-    @Inject(method = "setModelProperties", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "setModelProperties", at = @At(value = "HEAD"))
     private void roundabout$setModelPropertiesCream(AbstractClientPlayer $$0, CallbackInfo ci) {
         if ($$0 instanceof StandUser standUser) {
             if (((StandUser) $$0).roundabout$getStandPowers() instanceof PowersCream PC) {
@@ -355,7 +355,6 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                 }
             }
         }
-        ci.cancel();
     }
 
     /**Render external layers like soft and wet shooting mode out of context. This particular inject is for Achtung Baby*/

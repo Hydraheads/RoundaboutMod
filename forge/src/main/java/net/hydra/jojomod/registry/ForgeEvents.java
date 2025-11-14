@@ -307,6 +307,7 @@ public class ForgeEvents {
         ModItems.ANUBIS_ITEM = ForgeItems.ANUBIS_ITEM.get();
 
         ModItems.SNUBNOSE_REVOLVER = ForgeItems.SNUBNOSE_REVOLVER.get();
+        ModItems.SNUBNOSE_AMMO = ForgeItems.SNUBNOSE_AMMO.get();
 
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_DIO.get()).referenceItem = ForgeItems.STREET_SIGN_DIO_BLOCK_ITEM.get().getDefaultInstance();
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_RIGHT.get()).referenceItem = ForgeItems.STREET_SIGN_RIGHT_BLOCK_ITEM.get().getDefaultInstance();

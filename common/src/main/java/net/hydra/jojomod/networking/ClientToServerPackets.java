@@ -475,8 +475,9 @@ public class ClientToServerPackets {
                 if (message.equals(MESSAGES.GunShot.value)) {
                     ItemStack itemStack = sender.getUseItem();
                     Level level = sender.level();
+                    InteractionHand hand = sender.getUsedItemHand();
                     if (itemStack.getItem() instanceof FirearmItem) {
-                        ((FirearmItem) itemStack.getItem()).fireBullet(level, sender);
+                        ((FirearmItem) itemStack.getItem()).fireBullet(level, sender, hand);
                     }
                 }
 
