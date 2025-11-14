@@ -151,6 +151,10 @@ public class ForgeParticles {
             "pink_smoke",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> BLOOD_MIST = PARTICLES.register(
+            "blood_mist",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> BUBBLE_POP = PARTICLES.register(
             "soft_bubble_pop",
             () -> new SimpleParticleType(true)

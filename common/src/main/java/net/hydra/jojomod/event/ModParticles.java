@@ -47,6 +47,7 @@ public class ModParticles {
     public static SimpleParticleType CINDERELLA_GLOW;
     public static SimpleParticleType D4C_LINES;
     public static SimpleParticleType PINK_SMOKE;
+    public static SimpleParticleType BLOOD_MIST;
     public static SimpleParticleType BUBBLE_POP;
     public static SimpleParticleType PLUNDER;
     public static SimpleParticleType FRICTIONLESS;

@@ -46,6 +46,7 @@ public class FabricParticles {
     public static final SimpleParticleType CLOCK = FabricParticleTypes.simple();
     public static final SimpleParticleType CINDERELLA_GLOW = FabricParticleTypes.simple();
     public static final SimpleParticleType PINK_SMOKE = FabricParticleTypes.simple();
+    public static final SimpleParticleType BLOOD_MIST = FabricParticleTypes.simple();
     public static final SimpleParticleType D4C_LINES = FabricParticleTypes.simple();
     public static final SimpleParticleType BUBBLE_POP = FabricParticleTypes.simple();
     public static final SimpleParticleType PLUNDER = FabricParticleTypes.simple();
@@ -97,6 +98,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("cream_flame"), CREAM_FLAME);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("cinderella_glow"), CINDERELLA_GLOW);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("pink_smoke"), PINK_SMOKE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("blood_mist"), BLOOD_MIST);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("soft_bubble_pop"), BUBBLE_POP);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("plunder"), PLUNDER);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("frictionless"), FRICTIONLESS);
@@ -162,6 +164,7 @@ public class FabricParticles {
         ModParticles.CINDERELLA_GLOW = CINDERELLA_GLOW;
         ModParticles.D4C_LINES = D4C_LINES;
         ModParticles.PINK_SMOKE = PINK_SMOKE;
+        ModParticles.BLOOD_MIST = BLOOD_MIST;
         ModParticles.BUBBLE_POP = BUBBLE_POP;
         ModParticles.PLUNDER = PLUNDER;
         ModParticles.FRICTIONLESS = FRICTIONLESS;

@@ -44,6 +44,7 @@ public class VampiricFate extends FatePowers {
     }
     public static final byte BLOOD_SUCK = 27;
     public static final byte BLOOD_SPEED = 28;
+    public static final byte BLOOD_REGEN = 29;
     @Override
     public void tick(){
     }
@@ -65,7 +66,33 @@ public class VampiricFate extends FatePowers {
     public void tickPower() {
         tickBloodSuck();
         tickSpeed();
+        tickBloodRegen();
         super.tickPower();
+    }
+
+    public final int duration = 100;
+    public void tickBloodRegen(){
+        if (!this.self.level().isClientSide()) {
+            if (getActivePower() == BLOOD_REGEN){
+                if (self instanceof Player PE && !PE.isCreative()){
+                    PE.getFoodData().setFoodLevel(0);
+                }
+                float healthBack = sunkRegen/duration * 0.8F;
+                float health = self.getHealth();
+                float maxHealth = self.getMaxHealth();
+                if (health < maxHealth){
+                    health+=healthBack;
+                    if (health < maxHealth){
+                        self.setHealth(health);
+                    } else {
+                        self.setHealth(maxHealth);
+                    }
+                }
+                if (attackTimeDuring > duration || self.getHealth() >= maxHealth){
+                    xTryPower(PowerIndex.NONE, true);
+                }
+            }
+        }
     }
     public void tickSpeed(){
         if (isFast()){
@@ -169,11 +196,36 @@ public class VampiricFate extends FatePowers {
     }
 
     public boolean canUseBloodSpeed(){
-        return self instanceof Player PE && PE.getFoodData().getFoodLevel() >= 10 && !isFast();
+        return self instanceof Player PE && PE.getFoodData().getFoodLevel() >= 10 && !isFast()
+                && getActivePower() != BLOOD_REGEN;
+    }
+    public boolean canUseRegen(){
+        return self instanceof Player PE && PE.getFoodData().getFoodLevel() >= 4 && !isFast()
+                && getActivePower() != BLOOD_REGEN;
+    }
+    public void regenClient(){
+        if (canUseRegen() && !onCooldown(PowerIndex.FATE_2_SNEAK)){
+            tryPowerPacket(BLOOD_REGEN);
+        }
     }
     public void bloodSpeedClient(){
         if (canUseBloodSpeed() && !onCooldown(PowerIndex.FATE_3_SNEAK)){
             tryPowerPacket(BLOOD_SPEED);
+        }
+    }
+
+    public float sunkRegen = 0;
+    public void bloodRegen(){
+        if (canUseRegen()) {
+            if (self instanceof Player PE && !PE.isCreative()){
+                int foodLevel = PE.getFoodData().getFoodLevel();
+                sunkRegen = foodLevel;
+                PE.getFoodData().setFoodLevel(0);
+            }
+            setAttackTimeDuring(0);
+            setActivePower(BLOOD_REGEN);
+            self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SPEED_EVENT, SoundSource.PLAYERS, 1F, 0.95F+(float)(Math.random()*0.1));
+
         }
     }
     public void bloodSpeed(){
@@ -198,7 +250,7 @@ public class VampiricFate extends FatePowers {
 
     @Override
     public boolean interceptAttack(){
-        return this.getActivePower() == BLOOD_SUCK;
+        return this.getActivePower() == BLOOD_SUCK || this.getActivePower() == BLOOD_REGEN;
     }
 
     public void clientChangeVision(){
@@ -253,7 +305,7 @@ public class VampiricFate extends FatePowers {
     public void suckBlood(){
         if (!onCooldown(PowerIndex.FATE_2)) {
             Entity TE = getTargetEntity(self, 3, 15);
-            if (TE != null && MainUtil.canDrinkBloodFair(TE, self)) {
+            if (TE != null && MainUtil.canDrinkBloodFair(TE, self) && getActivePower() != BLOOD_REGEN) {
                 setActivePower(BLOOD_SUCK);
                 self.setSprinting(false);
                 tryIntPowerPacket(BLOOD_SUCK, TE.getId());
@@ -294,6 +346,8 @@ public class VampiricFate extends FatePowers {
     public float inputSpeedModifiers(float basis){
         if (getActivePower() == BLOOD_SUCK){
             basis*=0.2F;
+        } else if (getActivePower() == BLOOD_REGEN){
+            basis*=0.1F;
         } else if (isFast()){
             basis*=2F;
         }
@@ -324,6 +378,8 @@ public class VampiricFate extends FatePowers {
     public boolean setPowerOther(int move, int lastMove) {
         if (move == BLOOD_SPEED) {
             bloodSpeed();
+        } else if (move == BLOOD_REGEN) {
+            bloodRegen();
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -361,18 +417,22 @@ public class VampiricFate extends FatePowers {
     }
     @Override
     public boolean cancelSprintJump(){
-        return getActivePower() == BLOOD_SUCK;
+        return getActivePower() == BLOOD_SUCK || getActivePower() == BLOOD_REGEN;
     }
     @Override
     /**Cancel all sprinting*/
     public boolean cancelSprint(){
-        return getActivePower() == BLOOD_SUCK;
+        return getActivePower() == BLOOD_SUCK || getActivePower() == BLOOD_REGEN;
     }
     @Override
     public boolean cancelSprintParticles(){
-        return getActivePower() == BLOOD_SUCK;
+        return getActivePower() == BLOOD_SUCK || getActivePower() == BLOOD_REGEN;
     }
 
+    @Override
+    public boolean cancelJump(){
+        return getActivePower() == BLOOD_REGEN;
+    }
 
     /**This function grays out icons for moves you can't currently use. Slot is the icon slot from 1-4,
      * activeP is your currently active power*/
