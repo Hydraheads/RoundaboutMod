@@ -16,6 +16,7 @@ import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
+import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
@@ -379,6 +380,12 @@ public class StandPowers extends AbilityScapeBasis {
 
     /**A specific packet makes this happen*/
     public void updateMove(float flot){
+    }
+
+    /** Moves that the user can use without the stand actively being out. **/
+    public List<PowerContext> standlessAbilities(){
+        List<PowerContext> $$1 = Lists.newArrayList();
+        return $$1;
     }
 
     /**If you want something to happen when you spawn a projectile, this is your place.
@@ -1818,39 +1825,39 @@ public class StandPowers extends AbilityScapeBasis {
 
     @Override
     public void preButtonInput4(boolean keyIsDown, Options options){
-        if (hasStandActive(this.getSelf()) && !this.isClashing()) {
+        if (hasStandActive(this.getSelf()) || FateTypes.isHuman((this.getSelf())) && !this.isClashing()) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())  && !this.getStandUserSelf().roundabout$isPossessed()   ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
-                buttonInput4(keyIsDown, options);
+                buttonInput4(keyIsDown, options, STAND);
             }
         }
     }
     @Override
     public void preButtonInput3(boolean keyIsDown, Options options){
-        if (hasStandActive(this.getSelf()) && !this.isClashing()) {
+        if (hasStandActive(this.getSelf()) || FateTypes.isHuman((this.getSelf())) && !this.isClashing()) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())  && !this.getStandUserSelf().roundabout$isPossessed()   ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
-                buttonInput3(keyIsDown, options);
+                buttonInput3(keyIsDown, options, STAND);
             }
         }
     }
 
     @Override
     public void preButtonInput2(boolean keyIsDown, Options options){
-        if (hasStandActive(this.getSelf()) && !this.isClashing()) {
+        if (hasStandActive(this.getSelf()) || FateTypes.isHuman(this.getSelf()) && !this.isClashing()) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())  && !this.getStandUserSelf().roundabout$isPossessed()   ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
-                buttonInput2(keyIsDown, options);
+                buttonInput2(keyIsDown, options, STAND);
             }
         }
     }
 
     @Override
     public void preButtonInput1(boolean keyIsDown, Options options){
-        if (hasStandActive(this.getSelf()) && !this.isClashing()) {
+        if (hasStandActive(this.getSelf()) || FateTypes.isHuman(this.getSelf()) && !this.isClashing()) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())  && !this.getStandUserSelf().roundabout$isPossessed()   ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
-                buttonInput1(keyIsDown, options);
+                buttonInput1(keyIsDown, options, STAND);
             }
         }
     }

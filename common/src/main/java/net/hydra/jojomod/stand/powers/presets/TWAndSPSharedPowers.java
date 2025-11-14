@@ -788,7 +788,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public void preButtonInput4(boolean keyIsDown, Options options){
         if (hasStandActive(this.getSelf()) && !this.isClashing()) {
             ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
-            buttonInput4(keyIsDown, options);
+            buttonInput4(keyIsDown, options, STAND);
         }
     }
 
