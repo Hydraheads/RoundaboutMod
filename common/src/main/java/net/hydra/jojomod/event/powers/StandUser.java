@@ -318,6 +318,7 @@ public interface StandUser {
     void MoldFieldExit();
     void rdbt$SetCrawlTicks(int ticks);
     boolean rdbt$isForceCrawl();
+    int rdbt$getCrawlTicks();
 
     List<CooldownInstance> rdbt$initPowerCooldowns();
     List<CooldownInstance> rdbt$getPowerCooldowns();

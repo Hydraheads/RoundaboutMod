@@ -4735,6 +4735,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return CrawlTicks > 0;
     }
 
+    @Unique
+    @Override
+    public int rdbt$getCrawlTicks() {
+        return CrawlTicks;
+    }
+
+
+
     @Inject(method = "travel", at = @At(value = "HEAD"),cancellable = true)
     public void rdbt$crawltick(Vec3 movement, CallbackInfo ci) {
         if (this.rdbt$isForceCrawl()) {
