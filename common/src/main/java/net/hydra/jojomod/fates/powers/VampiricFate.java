@@ -266,7 +266,7 @@ public class VampiricFate extends FatePowers {
 
     @Override
     public boolean interceptAttack(){
-        return this.getActivePower() == BLOOD_SUCK || this.getActivePower() == BLOOD_REGEN;
+        return this.getActivePower() == BLOOD_SUCK;
     }
 
     public void clientChangeVision(){
