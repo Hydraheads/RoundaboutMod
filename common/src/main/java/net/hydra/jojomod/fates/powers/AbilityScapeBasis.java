@@ -1072,7 +1072,7 @@ public class AbilityScapeBasis {
                 else activatedPower = PowerContext.SKILL_1_CROUCH;
             else if(isGuarding())
                 activatedPower = PowerContext.SKILL_1_GUARD;
-            else activatedPower = PowerContext.SKILL_1_NORMAL;
+                else activatedPower = PowerContext.SKILL_1_NORMAL;
 
             if (!((StandUser) this.getSelf()).roundabout$getStandPowers().standlessAbilities().contains(activatedPower) && source == STAND)
                 KeyInputs.forceSummon(Minecraft.getInstance().player, keyIsDown);
@@ -1099,7 +1099,7 @@ public class AbilityScapeBasis {
                 else activatedPower = PowerContext.SKILL_2_CROUCH;
             else if(isGuarding())
                 activatedPower = PowerContext.SKILL_2_GUARD;
-            else activatedPower = PowerContext.SKILL_2_NORMAL;
+                else activatedPower = PowerContext.SKILL_2_NORMAL;
 
             if (!((StandUser) this.getSelf()).roundabout$getStandPowers().standlessAbilities().contains(activatedPower) && source == STAND)
                 KeyInputs.forceSummon(Minecraft.getInstance().player, keyIsDown);
@@ -1153,7 +1153,7 @@ public class AbilityScapeBasis {
                 else activatedPower = PowerContext.SKILL_4_CROUCH;
             else if(isGuarding())
                 activatedPower = PowerContext.SKILL_4_GUARD;
-            else activatedPower = PowerContext.SKILL_4_NORMAL;
+                else activatedPower = PowerContext.SKILL_4_NORMAL;
 
             if (!((StandUser) this.getSelf()).roundabout$getStandPowers().standlessAbilities().contains(activatedPower) && source == STAND)
                 KeyInputs.forceSummon(Minecraft.getInstance().player, keyIsDown);
