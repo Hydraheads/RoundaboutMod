@@ -592,6 +592,8 @@
   "sounds.roundabout.go_beyond_launch":  "???",
   "sounds.roundabout.go_beyond_hit":  "Something Invisible",
   "sounds.roundabout.hypnosis":  "Hypnosis",
+  "sounds.roundabout.blood_regen":  "Flesh",
+  "sounds.roundabout.blood_regen_finish":  "Healed",
 
   "sounds.roundabout.bubble_hover_over":  "Bubble",
   "sounds.roundabout.bubble_pop":  "Bubble popping",

@@ -41,6 +41,18 @@
       "roundabout:cream_summon"
     ]
   },
+  "blood_regen": {
+    "subtitle": "sounds.roundabout.blood_regen",
+    "sounds": [
+      "roundabout:blood_regen"
+    ]
+  },
+  "blood_regen_finish": {
+    "subtitle": "sounds.roundabout.blood_regen_finish",
+    "sounds": [
+      "roundabout:blood_regen_finish"
+    ]
+  },
   "cream_void_attack": {
     "subtitle": "sounds.roundabout.cream_void_attack",
     "sounds": [

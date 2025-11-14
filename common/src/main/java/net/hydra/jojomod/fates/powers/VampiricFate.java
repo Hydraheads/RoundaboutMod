@@ -7,10 +7,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.FateTypes;
-import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.index.PlayerPosIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
@@ -93,7 +90,7 @@ public class VampiricFate extends FatePowers {
 
 
                 //heal
-                float healthBack = sunkRegen/duration * 0.8F;
+                float healthBack = sunkRegen/duration * 0.9F;
                 float health = self.getHealth();
                 float maxHealth = self.getMaxHealth();
 
@@ -107,6 +104,8 @@ public class VampiricFate extends FatePowers {
                 }
                 if (attackTimeDuring > duration || self.getHealth() >= maxHealth){
                     xTryPower(PowerIndex.NONE, true);
+                    this.stopSoundsIfNearby(SoundIndex.BLOOD_REGEN, 100,false);
+                    self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_REGEN_FINISH_EVENT, SoundSource.PLAYERS, 1F, 1F);
                 }
             }
         }
@@ -217,7 +216,7 @@ public class VampiricFate extends FatePowers {
                 && getActivePower() != BLOOD_REGEN;
     }
     public boolean canUseRegen(){
-        return self instanceof Player PE && PE.getFoodData().getFoodLevel() >= 4 && !isFast()
+        return self instanceof Player PE && PE.getFoodData().getFoodLevel() >= 1 && !isFast()
                 && getActivePower() != BLOOD_REGEN;
     }
     public void regenClient(){
@@ -241,7 +240,7 @@ public class VampiricFate extends FatePowers {
             }
             setAttackTimeDuring(0);
             setActivePower(BLOOD_REGEN);
-            self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SPEED_EVENT, SoundSource.PLAYERS, 1F, 0.95F+(float)(Math.random()*0.1));
+            playSoundsIfNearby(SoundIndex.BLOOD_REGEN, 100, true);
 
         }
     }

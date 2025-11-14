@@ -708,6 +708,13 @@ public class ModSounds {
     public static final ResourceLocation MATCH_THROW_ID = new ResourceLocation(Roundabout.MOD_ID+":"+MATCH_THROW);
     public static SoundEvent MATCH_THROW_EVENT = SoundEvent.createVariableRangeEvent(MATCH_THROW_ID);
 
+    public static final String BLOOD_REGEN = "blood_regen";
+    public static final ResourceLocation BLOOD_REGEN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLOOD_REGEN);
+    public static SoundEvent BLOOD_REGEN_EVENT = SoundEvent.createVariableRangeEvent(BLOOD_REGEN_ID);
+    public static final String BLOOD_REGEN_FINISH = "blood_regen_finish";
+    public static final ResourceLocation BLOOD_REGEN_FINISH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLOOD_REGEN_FINISH);
+    public static SoundEvent BLOOD_REGEN_FINISH_EVENT = SoundEvent.createVariableRangeEvent(BLOOD_REGEN_FINISH_ID);
+
     public static final String HARPOON_THROW = "harpoon_throw";
     public static final ResourceLocation HARPOON_THROW_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HARPOON_THROW);
     public static SoundEvent HARPOON_THROW_EVENT = SoundEvent.createVariableRangeEvent(HARPOON_THROW_ID);

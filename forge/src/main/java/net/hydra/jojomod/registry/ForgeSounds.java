@@ -414,6 +414,10 @@ public class ForgeSounds {
             register(ModSounds.MATCH_THROW, ModSounds.MATCH_THROW_ID);
     public static final RegistryObject<SoundEvent> HARPOON_THROW =
             register(ModSounds.HARPOON_THROW, ModSounds.HARPOON_THROW_ID);
+    public static final RegistryObject<SoundEvent> BLOOD_REGEN =
+            register(ModSounds.BLOOD_REGEN, ModSounds.BLOOD_REGEN_ID);
+    public static final RegistryObject<SoundEvent> BLOOD_REGEN_FINISH =
+            register(ModSounds.BLOOD_REGEN_FINISH, ModSounds.BLOOD_REGEN_FINISH_ID);
     public static final RegistryObject<SoundEvent> HARPOON_HIT =
             register(ModSounds.HARPOON_HIT, ModSounds.HARPOON_HIT_ID);
     public static final RegistryObject<SoundEvent> HARPOON_CRIT =
