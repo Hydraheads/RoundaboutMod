@@ -90,6 +90,7 @@ public class AbilityScapeBasis {
     /**This is when the punch combo goes on cooldown. Default is 3 hit combo.*/
     public final byte activePowerPhaseMax = 3;
 
+    /** Used to determine which ability set is being used. */
     public final byte
         FATE = 1,
         STAND = 2;
