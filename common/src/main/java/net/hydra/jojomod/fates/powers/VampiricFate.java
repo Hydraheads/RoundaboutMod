@@ -70,6 +70,7 @@ public class VampiricFate extends FatePowers {
         super.tickPower();
     }
 
+    public final float bloodSpread = 3;
     public final int duration = 100;
     public void tickBloodRegen(){
         if (!this.self.level().isClientSide()) {
@@ -77,9 +78,25 @@ public class VampiricFate extends FatePowers {
                 if (self instanceof Player PE && !PE.isCreative()){
                     PE.getFoodData().setFoodLevel(0);
                 }
+                //Particle
+                float spreadX = (float) (Math.random()*bloodSpread - (bloodSpread/2));
+                float spreadY = (float) (Math.random()*bloodSpread - (bloodSpread/2));
+                float spreadZ = (float) (Math.random()*bloodSpread - (bloodSpread/2));
+
+                Vec3 shotPos = new Vec3(spreadX,spreadY,spreadZ);
+                Vec3 spawnPos = shotPos.add(self.getEyePosition(1f));
+                shotPos = shotPos.multiply(new Vec3(-1,-1,-1));
+
+                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.BLOOD_MIST,
+                        spawnPos.x, spawnPos.y, spawnPos.z,
+                        0, shotPos.x, shotPos.y,shotPos.z, 0.03);
+
+
+                //heal
                 float healthBack = sunkRegen/duration * 0.8F;
                 float health = self.getHealth();
                 float maxHealth = self.getMaxHealth();
+
                 if (health < maxHealth){
                     health+=healthBack;
                     if (health < maxHealth){
