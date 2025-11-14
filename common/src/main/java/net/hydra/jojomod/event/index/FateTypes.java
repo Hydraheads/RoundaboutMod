@@ -127,7 +127,7 @@ public enum FateTypes {
         }
 
         long timeOfDay = ent.level().getDayTime() % 24000L;
-        boolean isDay = timeOfDay < 12000L; // 0–12000 = day, 12000–24000 = night
+        boolean isDay = timeOfDay < 12555L || timeOfDay > 23360; // 0–12000 = day, 12000–24000 = night
         BlockPos atVec = BlockPos.containing(yes);
         BlockPos atVec2 = BlockPos.containing(yes2);
         if ((ent.level().canSeeSky(atVec) || ent.level().canSeeSky(atVec2)) &&
