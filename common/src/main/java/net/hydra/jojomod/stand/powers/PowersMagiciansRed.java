@@ -707,6 +707,13 @@ public class PowersMagiciansRed extends NewPunchingStand {
     }
 
     @Override
+    public List<PowerContext> standlessAbilities(){
+        List<PowerContext> $$1 = Lists.newArrayList();
+        $$1.add(PowerContext.SKILL_3_CROUCH);
+        return $$1;
+    }
+
+    @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
