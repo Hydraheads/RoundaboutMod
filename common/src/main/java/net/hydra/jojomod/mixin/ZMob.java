@@ -144,9 +144,14 @@ public abstract class ZMob extends LivingEntity implements IMob {
     private int roundabout$hypnosisTime = 0;
     @Override
     @Unique
-    public void roundabout$setHypnotizedBy(LivingEntity set) {
+    public void roundabout$setHypnotizedBy(LivingEntity set, int time) {
         roundabout$hypnotizedBy = set;
-        roundabout$hypnosisTime = 10;
+        roundabout$hypnosisTime = time;
+    }
+    @Override
+    @Unique
+    public void roundabout$setHypnotizedBy(LivingEntity set) {
+        roundabout$setHypnotizedBy(set,10);
     }
     @Override
     @Unique

@@ -96,6 +96,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.GROUND_HURRICANE, NoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GROUND_BUBBLE, NoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ANUBIS_POSSESSOR, NoRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.ANUBIS_SLIPSTREAM, NoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.PLUNDER_BUBBLE, SoftAndWetBubbleRenderer::new);
         EntityRendererRegistry.register(FabricEntities.EXPLOSIVE_BUBBLE, SoftAndWetBubbleRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ITEM_LAUNCHING_BUBBLE_ENTITY, SoftAndWetBubbleRenderer::new);

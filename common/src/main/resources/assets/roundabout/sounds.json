@@ -1052,6 +1052,30 @@
       "roundabout:anubis_possession"
     ]
   },
+  "anubis_alluring": {
+    "subtitle": "sounds.roundabout.anubis_alluring",
+    "sounds": [
+      "roundabout:anubis_alluring"
+    ]
+  },
+  "anubis_raging": {
+    "subtitle": "sounds.roundabout.anubis_raging",
+    "sounds": [
+      "roundabout:anubis_raging"
+    ]
+  },
+  "anubis_backflip": {
+    "subtitle": "sounds.roundabout.anubis_backflip",
+    "sounds": [
+      "roundabout:anubis_backflip"
+    ]
+  },
+  "anubis_summon": {
+    "subtitle": "sounds.roundabout.anubis_summon",
+    "sounds": [
+      "roundabout:anubis_summon"
+    ]
+  },
 
 
 

@@ -40,7 +40,7 @@ public class AnubisItem extends Item {
                 StandUser SU = (StandUser)P;
                 SU.roundabout$setPossessionTime(PowersAnubis.MaxPossesionTime);
                 ((Player) $$2).getCooldowns().addCooldown($$0.getItem(),10/*2400*/);
-                P.level().playSound(null,P.blockPosition(), ModSounds.ANUBIS_POSSESSION_EVENT,SoundSource.PLAYERS,1.0F,1.0F);
+                P.level().playSound(null,P.blockPosition(), ModSounds.ANUBIS_POSSESSION_EVENT,SoundSource.PLAYERS,1.0F,1.3F);
 
                 AnubisPossessorEntity p = new AnubisPossessorEntity($$2.level(), $$2 );
                 p.setPos($$2.getPosition(1));

@@ -25,6 +25,7 @@ public interface IMob {
     boolean roundabout$getIsBred();
     void roundabout$setIsBred(boolean set);
 
+    void roundabout$setHypnotizedBy(LivingEntity set, int time);
     void roundabout$setHypnotizedBy(LivingEntity set);
     LivingEntity roundabout$getHypnotizedBy();
 }

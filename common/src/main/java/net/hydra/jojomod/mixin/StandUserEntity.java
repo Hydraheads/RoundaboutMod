@@ -1621,6 +1621,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (roundabout$getBubbleEncased() == 1){
             TOT+=4;
         }
+        StandUser SU = (StandUser) rdbt$this();
+        if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA && SU.roundabout$getActive()) {
+                TOT += 1;
+        }
         return TOT;
     }
     @Unique
@@ -3669,6 +3673,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             $$1/=2;
             adj = true;
         }
+        if (this.roundabout$getStandPowers() instanceof PowersAnubis) {
+            adj = true;
+        }
         int yesInt = roundabout$getAdjustedGravity();
         if (yesInt > 0 || adj){
             cir.setReturnValue(roundabout$calculateFallDamage($$0,$$1,yesInt));
@@ -3685,6 +3692,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         } else {
             MobEffectInstance jumpEffect = this.getEffect(MobEffects.JUMP);
             float jumpLevel = jumpEffect == null ? 0.0F : (float)(jumpEffect.getAmplifier() + 1);
+
+            if (this.roundabout$getStandPowers() instanceof PowersAnubis) {
+                jumpLevel = jumpLevel + 1;
+            }
             return Mth.ceil(((roundabout$getGravity(blockmultiplier)) - 3.0F - jumpLevel) * fallLength);
         }
     }
@@ -4085,6 +4096,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 && ((TimeStop)entity.level()).getTimeStoppingEntities().contains(entity) &&
                 (damageSource.is(DamageTypes.ON_FIRE) || damageSource.is(DamageTypes.IN_FIRE))){
             ci.setReturnValue(false);
+        }
+
+        if (this.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+            Roundabout.LOGGER.info(""+this.roundabout$getAttackTimeDuring());
+            if (PA.pogoImmunity > 0) {
+                Roundabout.LOGGER.info("cancel");
+                ci.setReturnValue(false);
+                ci.cancel();
+                return;
+            }
         }
     }
 

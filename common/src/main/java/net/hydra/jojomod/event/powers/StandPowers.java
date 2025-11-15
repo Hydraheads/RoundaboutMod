@@ -1435,6 +1435,18 @@ public class StandPowers extends AbilityScapeBasis {
                 -Mth.cos(user.getYRot() * ((float) Math.PI / 180)));
 
     }
+
+    public Vec3 defaultKnockbackAngle(LivingEntity user,Entity target,float knockbackStrength) {
+        Vec3 vec3d2 = new Vec3(Mth.sin(
+                user.getYRot() * ((float) Math.PI / 180)),
+                0,
+                -Mth.cos(user.getYRot() * ((float) Math.PI / 180))).normalize().scale(knockbackStrength);
+        vec3d2 = new Vec3(-vec3d2.x,
+                target.onGround() ? 0.28 : 0,
+                -vec3d2.z);
+        return vec3d2;
+    }
+
     public void takeDeterminedKnockback(LivingEntity user, Entity target, float knockbackStrength){
 
         if (target instanceof LivingEntity && (knockbackStrength *= (float) (1.0 - ((LivingEntity)target).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
@@ -1444,17 +1456,10 @@ public class StandPowers extends AbilityScapeBasis {
         if (MainUtil.isKnockbackImmune(target)){
             return;
         }
-        target.hurtMarked = true;
-        Vec3 vec3d2 = new Vec3(Mth.sin(
-                user.getYRot() * ((float) Math.PI / 180)),
-                0,
-                -Mth.cos(user.getYRot() * ((float) Math.PI / 180))).normalize().scale(knockbackStrength);
-        target.setDeltaMovement(- vec3d2.x,
-                target.onGround() ? 0.28 : 0,
-                - vec3d2.z);
+        Vec3 vec3d2 = defaultKnockbackAngle(user,target,knockbackStrength);
+        target.setDeltaMovement(vec3d2);
         target.hasImpulse = true;
     }
-
 
 
 

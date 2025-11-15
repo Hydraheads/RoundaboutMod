@@ -1108,6 +1108,13 @@ public class MainUtil {
     public static double fixAngle(float angle){
        return (Math.abs(angle) % 360);
     }
+
+    public static void slowTarget(Entity e, float p) {
+        e.hurtMarked = true;
+        e.setDeltaMovement(e.getDeltaMovement().scale(p));
+        e.hasImpulse = true;
+    }
+
     public static void takeKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
 
         if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
@@ -1532,7 +1539,8 @@ public class MainUtil {
                 || sauce.is(ModDamageTypes.MELTING)
                 || sauce.is(ModDamageTypes.HEEL_SPIKE)
                 || sauce.is(ModDamageTypes.CREAM_VOID_BALL)
-                || sauce.is(ModDamageTypes.ANUBIS_POSSESS) ){
+                || sauce.is(ModDamageTypes.ANUBIS_POSSESS)
+                || sauce.is(ModDamageTypes.ANUBIS_SPIN) ){
             return true;
         }
         return false;
