@@ -65,7 +65,6 @@ public class FirearmLayer<T extends LivingEntity, A extends HumanoidModel<T>> ex
             float b = isHurt ? 0.0F : 1.0F;
             ModStrayModels.SNUBNOSE_REVOLVER_MODEL.render(livent, partialTicks, poseStack, bufferSource, packedLight,
                     r, g, b, heyFull);
-            poseStack.popPose();
         } else if (isHoldingFirearmLeft && offHeld.getItem() instanceof SnubnoseRevolverItem) {
             getParentModel().leftArm.translateAndRotate(poseStack);
             poseStack.translate(0.032F,0.55F,-0.66F);
@@ -77,8 +76,8 @@ public class FirearmLayer<T extends LivingEntity, A extends HumanoidModel<T>> ex
             float b = isHurt ? 0.0F : 1.0F;
             ModStrayModels.SNUBNOSE_REVOLVER_MODEL.render(livent, partialTicks, poseStack, bufferSource, packedLight,
                     r, g, b, heyFull);
-            poseStack.popPose();
         }
+        poseStack.popPose();
     }
 }
 

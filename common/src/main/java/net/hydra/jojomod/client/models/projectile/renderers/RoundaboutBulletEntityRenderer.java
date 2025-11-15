@@ -35,7 +35,6 @@ public class RoundaboutBulletEntityRenderer extends EntityRenderer<RoundaboutBul
     public void render(RoundaboutBulletEntity $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
         if (!ClientUtil.getScreenFreeze()) {
             if (((Entity)$$0).tickCount < 2 && this.entityRenderDispatcher.camera.getEntity().distanceToSqr((Entity)$$0) < 12.25) {
-                Roundabout.LOGGER.info("We are the sigma force! Ha. Ha. Ha");
                 return;
             }
             $$3.pushPose();

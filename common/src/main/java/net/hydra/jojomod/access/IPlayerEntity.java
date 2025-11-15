@@ -97,6 +97,8 @@ public interface IPlayerEntity {
     AnimationState roundabout$getAnubisUnsheath();
     AnimationState roundabout$getThirdPersonAnubisUnsheath();
 
+    AnimationState roundabout$getSnubnoseAim();
+
     AnimationState roundabout$getBubbleShotAim();
     AnimationState roundabout$getOffsetCorrect();
     AnimationState getWry();

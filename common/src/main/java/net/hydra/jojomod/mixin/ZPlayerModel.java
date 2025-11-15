@@ -6,14 +6,13 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.animations.AnubisAnimations;
+import net.hydra.jojomod.client.models.layers.animations.FirearmFirstPersonAnimations;
 import net.hydra.jojomod.client.models.layers.animations.FirstPersonLayerAnimations;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
-import net.hydra.jojomod.item.MaskItem;
-import net.hydra.jojomod.item.ModificationMaskItem;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.animation.AnimationChannel;
@@ -128,6 +127,20 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 ipe.roundabout$getAnubisUnsheath();
             } else {
                 ipe.roundabout$getAnubisUnsheath().stop();
+            }
+
+            ItemStack itemstack = $$0.getMainHandItem();
+            if (itemstack.getItem() instanceof SnubnoseRevolverItem) {
+                Roundabout.LOGGER.info("Tokiha");
+                if (((FirearmItem) itemstack.getItem()).interceptAttack(itemstack, $$0)) {
+                    ipe.roundabout$getSnubnoseAim().startIfStopped($$0.tickCount);
+                    change = true;
+                    this.roundabout$animate(ipe.roundabout$getSnubnoseAim(), FirearmFirstPersonAnimations.snubnose_aim, yes, 1f);
+                    Roundabout.LOGGER.info("wow");
+                    ipe.roundabout$getSnubnoseAim();
+                }
+            } else {
+                ipe.roundabout$getSnubnoseAim().stop();
             }
 
             if (change){
