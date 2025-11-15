@@ -50,6 +50,9 @@ public class VampireFate extends VampiricFate {
             case SKILL_3_CROUCH -> {
                 bloodSpeedClient();
             }
+            case SKILL_3_NORMAL -> {
+                dashOrWallWalk();
+            }
             case SKILL_4_NORMAL -> {
                 clientChangeVision();
             }
@@ -57,6 +60,17 @@ public class VampireFate extends VampiricFate {
         super.powerActivate(context);
     };
     public static final byte HYPNOSIS = 50;
+
+    public void dashOrWallWalk(){
+        if (canLatchOntoWall() && canWallWalkConfig())
+            doWallLatchClient();
+        else
+            dash();
+    }
+
+    public void doWallLatchClient(){
+
+    }
 
     public void hypnosis(){
         tryPowerPacket(HYPNOSIS);
@@ -81,6 +95,8 @@ public class VampireFate extends VampiricFate {
     public int hypnoTicks = 0;
 
     public boolean isAttackIneptVisually(byte activeP, int slot){
+        if (slot == 3 && isPlantedInWall() && !canLatchOntoWall())
+            return true;
         if (slot == 3 && isHoldingSneak() && !canUseBloodSpeed())
             return true;
         if (slot == 2 && isHoldingSneak() && !canUseRegen())
@@ -149,11 +165,14 @@ public class VampireFate extends VampiricFate {
             setSkillIcon(context, x, y, 2, StandIcons.BLOOD_DRINK, PowerIndex.FATE_2);
         }
 
-        if (isHoldingSneak()) {
+        if ((canLatchOntoWall() || isPlantedInWall()) && canWallWalkConfig()) {
+            setSkillIcon(context, x, y, 3, StandIcons.WALL_WALK, PowerIndex.SKILL_3);
+        } else if (isHoldingSneak()) {
             setSkillIcon(context, x, y, 3, StandIcons.CHEETAH_SPEED, PowerIndex.FATE_3_SNEAK);
         } else {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         }
+
         if (isHoldingSneak()) {
             setSkillIcon(context, x, y, 4, StandIcons.HEARING_MODE, PowerIndex.FATE_4_SNEAK);
         } else {

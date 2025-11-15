@@ -3,6 +3,7 @@ package net.hydra.jojomod.fates.powers;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.AccessFateFoodData;
 import net.hydra.jojomod.access.IFatePlayer;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
@@ -17,7 +18,10 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
@@ -30,6 +34,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 public class VampiricFate extends FatePowers {
@@ -277,6 +282,61 @@ public class VampiricFate extends FatePowers {
         }
     }
 
+    public boolean isPlantedInWall(){
+        return false;
+    }
+
+
+    public boolean forceBlock(){
+        if (!MainUtil.isBlockWalkableSimplified(self.level().getBlockState(self.getOnPos())))
+            return true;
+        return false;
+    }
+
+
+    public boolean canLatchOntoWall(){
+        if (onCooldown(PowerIndex.SKILL_2) || self.isSwimming())
+            return false;
+
+        if (forceBlock())
+            return false;
+
+        if ((this.self.onGround() && !isPlantedInWall()) || (!this.self.onGround() && isPlantedInWall()))
+            return false;
+
+        Vec3 mpos = this.self.getPosition(1F);
+        Direction gravdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+        switch (gravdir) {
+            case DOWN -> {
+                mpos = mpos.add(0,0.1F,0);
+            }
+            case UP -> {
+                mpos = mpos.add(0,-0.1F,0);
+            }
+            case NORTH -> {
+                mpos = mpos.add(0,0,0.1F);
+            }
+            case SOUTH -> {
+                mpos = mpos.add(0,0,-0.1F);
+            }
+            case WEST -> {
+                mpos = mpos.add(0.1F,0,0);
+            }
+            case EAST -> {
+                mpos = mpos.add(-0.1F,0,0);
+            }
+        }
+        BlockPos pos1 = BlockPos.containing(mpos);
+
+        Direction rd = RotationUtil.getRealFacingDirection2(this.self);
+        if (rd == gravdir)
+            return false;
+        pos1 = pos1.relative(RotationUtil.getRealFacingDirection2(this.self));
+        BlockState bs = this.self.level().getBlockState(pos1);
+        return MainUtil.isBlockWalkable(bs);
+    }
+
+
     public void finishSucking(){
         if (bloodSuckingTarget != null && self instanceof Player pl) {
 
@@ -457,6 +517,11 @@ public class VampiricFate extends FatePowers {
         if (slot == 2 && !MainUtil.canDrinkBloodFair(TE, self) && !isHoldingSneak())
             return true;
         return super.isAttackIneptVisually(activeP,slot);
+    }
+
+
+    public boolean canWallWalkConfig(){
+        return ClientNetworking.getAppropriateConfig().walkingHeartSettings.enableWallWalking;
     }
 
     @Override
