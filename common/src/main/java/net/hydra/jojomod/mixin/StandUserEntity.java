@@ -3644,6 +3644,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         || stack.getItem() instanceof KnifeItem || stack.getItem() instanceof AxeItem
                         || stack.getItem() instanceof GlaiveItem
                         || stack.getItem() instanceof HarpoonItem
+                        || stack.getItem() instanceof SacrificialDaggerItem
                         || stack.getItem() instanceof TridentItem
                         || stack.getItem() instanceof ShearsItem
                         || stack.getItem() instanceof PickaxeItem
