@@ -24,6 +24,7 @@ import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
@@ -37,6 +38,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
@@ -60,10 +62,26 @@ public class VampiricFate extends FatePowers {
     public void setWallWalkDirection(Direction dir){
         wallWalkDirection = dir;
     }
+
+    public float walkDistLast = 0;
     public void wallLatch(){
         if (canLatchOntoWall() && canWallWalkConfig()){
             this.setCooldown(PowerIndex.SKILL_3, 10);
             if (!this.self.level().isClientSide()) {
+                //if (!isOnWrongAxis())
+                if (saveState != null){
+                    this.self.level().playSound(
+                            null,
+                            this.self.blockPosition(),
+                            saveState.getSoundType().getBreakSound(),
+                            SoundSource.PLAYERS,
+                            1.0F,
+                            0.9F);
+                    blockBreakParticles(saveState.getBlock(),
+                            new Vec3(self.getX(),
+                                    self.getY(),
+                                    self.getZ()));
+                }
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.WALL_LATCH_EVENT, SoundSource.PLAYERS, 1F, 1f);
                 //toggleSpikes(true);
                 Direction gd = RotationUtil.getRealFacingDirection2(this.self);
@@ -74,7 +92,18 @@ public class VampiricFate extends FatePowers {
         }
     }
 
-    public int speedActivated = 0;
+
+    public void blockBreakParticles(Block block, Vec3 pos){
+        if (!this.self.level().isClientSide()) {
+            ((ServerLevel) this.self.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
+                            block.defaultBlockState()),
+                    pos.x, pos.y, pos.z,
+                    100, 0.2, 0.2, 0.2, 0.5);
+        }
+    }
+
+
+public int speedActivated = 0;
     public boolean isFast(){
         return speedActivated > 0;
     }
@@ -494,8 +523,10 @@ public class VampiricFate extends FatePowers {
             return false;
         pos1 = pos1.relative(RotationUtil.getRealFacingDirection2(this.self));
         BlockState bs = this.self.level().getBlockState(pos1);
+        saveState = bs;
         return MainUtil.isBlockWalkable(bs);
     }
+    public BlockState saveState = null;
 
 
     public void finishSucking(){
@@ -581,6 +612,11 @@ public class VampiricFate extends FatePowers {
     /**Stand related things that slow you down or speed you up, override and call super to make
      * any stand ability slow you down*/
     public float inputSpeedModifiers(float basis){
+
+        if (isPlantedInWall()){
+            basis *= 0.5F;
+        }
+
         if (getActivePower() == BLOOD_SUCK){
             basis*=0.2F;
         } else if (getActivePower() == BLOOD_REGEN){
@@ -663,7 +699,8 @@ public class VampiricFate extends FatePowers {
     }
     @Override
     public boolean cancelSprintParticles(){
-        return getActivePower() == BLOOD_SUCK || getActivePower() == BLOOD_REGEN;
+        return getActivePower() == BLOOD_SUCK || getActivePower() == BLOOD_REGEN
+                || isPlantedInWall();
     }
 
     @Override
