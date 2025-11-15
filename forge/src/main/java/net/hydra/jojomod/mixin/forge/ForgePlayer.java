@@ -79,6 +79,13 @@ public abstract class ForgePlayer extends LivingEntity {
         }
 
         if (overwrite){
+            if (f > 1.0F) {
+                int i = EnchantmentHelper.getBlockEfficiency(this);
+                ItemStack itemstack = this.getMainHandItem();
+                if (i > 0 && !itemstack.isEmpty()) {
+                    f += (float)(i * i + 1);
+                }
+            }
             if (MobEffectUtil.hasDigSpeed(this)) {
                 f *= 1.0F + (float)(MobEffectUtil.getDigSpeedAmplification(this) + 1) * 0.2F;
             }
