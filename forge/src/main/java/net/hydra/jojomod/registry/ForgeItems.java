@@ -333,6 +333,9 @@ public class ForgeItems {
     public static final RegistryObject<Item> SNUBNOSE_REVOLVER = addToWIPTab(ITEMS.register("snubnose_revolver",
             () -> new SnubnoseRevolverItem(new Item.Properties().stacksTo(1))
     ));
+    public static final RegistryObject<Item> SNUBNOSE_AMMO = addToWIPTab(ITEMS.register("snubnose_ammo",
+            () -> new SnubnoseAmmoItem(new Item.Properties().stacksTo(64))
+    ));
 
 
 

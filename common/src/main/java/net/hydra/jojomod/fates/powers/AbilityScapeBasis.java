@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.util.C2SPacketUtil;
@@ -384,6 +385,105 @@ public class AbilityScapeBasis {
         return false;
     }
 
+    /**This is called fourth by the server, it sends a packet to cancel the sound.*/
+    public final void stopSoundsIfNearby(byte soundNumber, double range, boolean onSelf) {
+        if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, range)) {
+                    if (!onSelf){
+                        S2CPacketUtil.sendCancelSoundPacket(serverPlayerEntity,this.self.getId(),soundNumber);
+                    } else {
+                        S2CPacketUtil.sendCancelSoundPacket(serverPlayerEntity,serverPlayerEntity.getId(),soundNumber);
+                    }
+                }
+            }
+        }
+    }
+
+    /**The Sound Event to cancel when your barrage is canceled*/
+
+
+    public final void playSoundsIfNearby(byte soundNo, double range, boolean onSelf, boolean isVoice) {
+        if (isVoice && this.getSelf() instanceof Player PE &&
+                ((IPlayerEntity) PE).roundabout$getMaskInventory().getItem(1).is(ModItems.BLANK_MASK)) {
+            return;
+        }
+        if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, range)) {
+                    if (onSelf) {
+                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, serverPlayerEntity.getId(), soundNo);
+                    } else {
+                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, this.self.getId(), soundNo);
+                    }
+                }
+            }
+        }
+    }
+    /**The Sound Event to cancel when your barrage is canceled*/
+
+    public final void playStandUserOnlySoundsIfNearby(byte soundNo, double range, boolean onSelf, boolean isVoice) {
+        if (isVoice && this.getSelf() instanceof Player PE &&
+                ((IPlayerEntity)PE).roundabout$getMaskInventory().getItem(1).is(ModItems.BLANK_MASK)){
+            return;
+        }
+        if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, range) && !((StandUser)serverPlayerEntity).roundabout$getStandDisc().isEmpty()) {
+                    if (onSelf) {
+                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, serverPlayerEntity.getId(), soundNo);
+                    } else {
+                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, this.self.getId(), soundNo);
+                    }
+                }
+            }
+        }
+    }
+
+    public final void playSoundsIfNearby(byte soundNo, double range, boolean onSelf) {
+        playSoundsIfNearby(soundNo,range,onSelf,false);
+    }
+    /**This is called first by the server, it chooses the sfx and sends packets to nearby players*/
+    public void playBarrageCrySound(){
+        if (!this.self.level().isClientSide()) {
+            byte barrageCrySound = this.chooseBarrageSound();
+            if (barrageCrySound != SoundIndex.NO_SOUND) {
+                playStandUserOnlySoundsIfNearby(barrageCrySound, 27, false,true);
+            }
+        }
+    }
+
+    /**Override this function for alternate rush noises*/
+    public byte chooseBarrageSound(){
+        return 0;
+    }
     public void syncActivePower(){
         if (!this.self.level().isClientSide && this.self instanceof ServerPlayer SP){
             S2CPacketUtil.sendActivePowerPacket(SP,activePower);

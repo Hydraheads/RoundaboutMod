@@ -51,6 +51,10 @@ public class FatePowers extends AbilityScapeBasis {
         }
     }
 
+    public float getJumpHeightAddon(){
+        return 0;
+    }
+
     @Override
     public void tryPowerPacket(byte packet){
         if (this.self.level().isClientSide()) {

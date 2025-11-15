@@ -34,7 +34,7 @@ public class RoundaboutBulletEntityRenderer extends EntityRenderer<RoundaboutBul
         if (!ClientUtil.getScreenFreeze()) {
             $$3.pushPose();
             $$3.mulPose(Axis.YP.rotationDegrees(Mth.lerp($$2, $$0.yRotO, $$0.getYRot()) - 0.0F));
-            $$3.mulPose(Axis.ZP.rotationDegrees(Mth.lerp($$2, $$0.xRotO, $$0.getXRot()) + 0.0F));
+            $$3.mulPose(Axis.XP.rotationDegrees(-Mth.lerp($$2, $$0.xRotO, $$0.getXRot())));
             $$3.scale(1.1f, 1.1f, 1.1f);
             VertexConsumer $$6 = ItemRenderer.getFoilBufferDirect($$4, this.model.renderType(this.getTextureLocation($$0)), false, false);
             this.model.renderToBuffer($$3, $$6, $$5, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);

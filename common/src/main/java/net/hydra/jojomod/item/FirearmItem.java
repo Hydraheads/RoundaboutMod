@@ -48,11 +48,6 @@ public class FirearmItem extends Item {
         stack.getOrCreateTag().putInt(AMMO_COUNT_TAG, count);
     }
 
-//    @Override
-//    public UseAnim getUseAnimation(ItemStack stack) {
-//        return UseAnim.BOW;
-//    }
-
     @Override
     public int getUseDuration(ItemStack stack) {
         return 72000;
@@ -69,7 +64,7 @@ public class FirearmItem extends Item {
         return false;
     }
 
-    public void fireBullet(Level level, Player player) {
+    public void fireBullet(Level level, Player player, InteractionHand hand) {
         LivingEntity livingEntity = player;
         RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity(level, livingEntity);
         $$7.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.5F, 1.0F);

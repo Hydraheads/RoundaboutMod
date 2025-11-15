@@ -247,6 +247,8 @@ public class FabricSounds {
         addSound(ModSounds.HARPOON_CRIT_ID, ModSounds.HARPOON_CRIT_EVENT);
         addSound(ModSounds.HARPOON_GROUND_ID, ModSounds.HARPOON_GROUND_EVENT);
         addSound(ModSounds.HARPOON_RETURN_ID, ModSounds.HARPOON_RETURN_EVENT);
+        addSound(ModSounds.BLOOD_REGEN_FINISH_ID, ModSounds.BLOOD_REGEN_FINISH_EVENT);
+        addSound(ModSounds.BLOOD_REGEN_ID, ModSounds.BLOOD_REGEN_EVENT);
 
         addSound(ModSounds.BOWLER_HAT_AIM_ID, ModSounds.BOWLER_HAT_AIM_SOUND_EVENT);
         addSound(ModSounds.BOWLER_HAT_FLY_ID, ModSounds.BOWLER_HAT_FLY_SOUND_EVENT);

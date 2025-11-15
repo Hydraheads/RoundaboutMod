@@ -84,6 +84,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
@@ -1620,11 +1621,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         float TOT = 0;
         if (roundabout$getBubbleEncased() == 1){
             TOT+=4;
-        }
-        StandUser SU = (StandUser) rdbt$this();
-        if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA && SU.roundabout$getActive()) {
-                TOT += 1;
-        }
+            }
+        TOT+=FateTypes.getJumpHeightAddon((LivingEntity) (Object)this);
         return TOT;
     }
     @Unique
@@ -3270,6 +3268,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return ogGrav;
     }
 
+
     @SuppressWarnings("deprecation")
     @Unique
     @Override
@@ -3277,17 +3276,30 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         roundabout$adjustGravity();
 
         if (this.isControlledByLocalInstance()) {
+            if (MainUtil.isPlayerBonkingHead(((LivingEntity)(Object)this)) || isUsingItem()){
+                roundabout$setBigJumpCurrentProgress(0);
+                roundabout$setBigJump(false);
+            }
             float curr = roundabout$getBigJumpCurrentProgress();
             float max = roundabout$getBonusJumpHeight();
+
             if (roundabout$getBigJump() || (curr < 1 && getDeltaMovement().y >= 0)) {
                 if (curr < max+1) {
-                    roundabout$setBigJumpCurrentProgress(curr+0.495F);
+                    if (roundabout$isBubbleEncased()) {
+                        roundabout$setBigJumpCurrentProgress(curr + 0.495F);
+                    } else {
+                        roundabout$setBigJumpCurrentProgress(curr + 0.68F);
+                    }
                     Vec3 $$0 = this.getDeltaMovement();
 
 
                     if (!onGround()){
                         if (roundabout$getBigJump()){
-                            this.setDeltaMovement($$0.x*0.91, (double) this.getJumpPower(), $$0.z*0.91);
+                            if (roundabout$isBubbleEncased()){
+                                this.setDeltaMovement($$0.x*0.91, (double) this.getJumpPower(), $$0.z*0.91);
+                            } else {
+                                this.setDeltaMovement($$0.x*0.91, (double) this.getJumpPower()*1.2, $$0.z*0.91);
+                            }
                         }
                     }
 
@@ -3632,6 +3644,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         || stack.getItem() instanceof KnifeItem || stack.getItem() instanceof AxeItem
                         || stack.getItem() instanceof GlaiveItem
                         || stack.getItem() instanceof HarpoonItem
+                        || stack.getItem() instanceof SacrificialDaggerItem
                         || stack.getItem() instanceof TridentItem
                         || stack.getItem() instanceof ShearsItem
                         || stack.getItem() instanceof PickaxeItem
@@ -3673,8 +3686,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             $$1/=2;
             adj = true;
         }
-        if (this.roundabout$getStandPowers() instanceof PowersAnubis) {
-            adj = true;
+        if ((LivingEntity)(Object)this instanceof Player pl){
+            float fd = ((IFatePlayer)pl).rdbt$getFatePowers().getJumpHeightAddon();
+            if (fd > 0){
+                adj = true;
+                Roundabout.LOGGER.info("1: "+$$0+" 2: "+fd);
+                $$0 = Math.max(0,$$0-fd);
+            }
         }
         int yesInt = roundabout$getAdjustedGravity();
         if (yesInt > 0 || adj){
@@ -3692,10 +3710,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         } else {
             MobEffectInstance jumpEffect = this.getEffect(MobEffects.JUMP);
             float jumpLevel = jumpEffect == null ? 0.0F : (float)(jumpEffect.getAmplifier() + 1);
-
-            if (this.roundabout$getStandPowers() instanceof PowersAnubis) {
-                jumpLevel = jumpLevel + 1;
-            }
             return Mth.ceil(((roundabout$getGravity(blockmultiplier)) - 3.0F - jumpLevel) * fallLength);
         }
     }
@@ -4096,16 +4110,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 && ((TimeStop)entity.level()).getTimeStoppingEntities().contains(entity) &&
                 (damageSource.is(DamageTypes.ON_FIRE) || damageSource.is(DamageTypes.IN_FIRE))){
             ci.setReturnValue(false);
-        }
-
-        if (this.roundabout$getStandPowers() instanceof PowersAnubis PA) {
-            Roundabout.LOGGER.info(""+this.roundabout$getAttackTimeDuring());
-            if (PA.pogoImmunity > 0) {
-                Roundabout.LOGGER.info("cancel");
-                ci.setReturnValue(false);
-                ci.cancel();
-                return;
-            }
         }
     }
 
@@ -4581,6 +4585,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Shadow
     @Final
     public WalkAnimationState walkAnimation;
+
+    @Shadow public abstract boolean isUsingItem();
+
     @Unique private boolean roundabout$isPRunning = false;
 
     @Override
@@ -4755,6 +4762,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public boolean rdbt$isForceCrawl() {
         return CrawlTicks > 0;
     }
+
+    @Unique
+    @Override
+    public int rdbt$getCrawlTicks() {
+        return CrawlTicks;
+    }
+
+
 
     @Inject(method = "travel", at = @At(value = "HEAD"),cancellable = true)
     public void rdbt$crawltick(Vec3 movement, CallbackInfo ci) {

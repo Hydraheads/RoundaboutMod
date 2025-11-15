@@ -3,14 +3,14 @@ package net.hydra.jojomod.fates.powers;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.AccessFateFoodData;
 import net.hydra.jojomod.access.IFatePlayer;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.FateTypes;
-import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.index.PlayerPosIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
@@ -20,7 +20,10 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
@@ -30,9 +33,11 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 public class VampiricFate extends FatePowers {
@@ -45,11 +50,29 @@ public class VampiricFate extends FatePowers {
     public static final byte BLOOD_SUCK = 27;
     public static final byte BLOOD_SPEED = 28;
     public static final byte BLOOD_REGEN = 29;
-    @Override
-    public void tick(){
+    public static final byte WALL_WALK = 30;
+
+    public Direction wallWalkDirection = Direction.DOWN;
+
+    public Direction getWallWalkDirection(){
+        return wallWalkDirection;
     }
-
-
+    public void setWallWalkDirection(Direction dir){
+        wallWalkDirection = dir;
+    }
+    public void wallLatch(){
+        if (canLatchOntoWall() && canWallWalkConfig()){
+            this.setCooldown(PowerIndex.SKILL_3, 10);
+            if (!this.self.level().isClientSide()) {
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.WALL_LATCH_EVENT, SoundSource.PLAYERS, 1F, 1f);
+                //toggleSpikes(true);
+                Direction gd = RotationUtil.getRealFacingDirection2(this.self);
+                setWallWalkDirection(gd);
+                ((IGravityEntity) this.self).roundabout$setGravityDirection(gd);
+                justFlippedTicks = 7;
+            }
+        }
+    }
 
     public int speedActivated = 0;
     public boolean isFast(){
@@ -68,8 +91,104 @@ public class VampiricFate extends FatePowers {
         tickSpeed();
         tickBloodRegen();
         super.tickPower();
+
+
+        if (this.self.level().isClientSide()) {
+            if (isPlantedInWall() && !getStandUserSelf().rdbt$getJumping()){
+                if (!self.onGround()) {
+                    if (this.self.getDeltaMovement().y < 0){
+                        this.self.setDeltaMovement(this.self.getDeltaMovement().add(0,-0.14,0));
+                    }
+                }
+            }
+        } else {
+
+            if (self.isSwimming()) {
+                setWallWalkDirection(getIntendedDirection());
+            }
+
+            if (isPlantedInWall()){
+                if (justFlippedTicks > 0){
+                    justFlippedTicks--;
+                } else {
+                    Vec3 newVec = new Vec3(0,-0.2,0);
+                    Vec3 newVec2 = new Vec3(0,-1.0,0);
+                    Vec3 newVec4 = new Vec3(0,-0.5,0);
+                    Vec3 newVec5 = new Vec3(0,-1.1,0);
+
+                    newVec = RotationUtil.vecPlayerToWorld(newVec,((IGravityEntity)self).roundabout$getGravityDirection());
+                    BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
+                    newVec2 = RotationUtil.vecPlayerToWorld(newVec2,((IGravityEntity)self).roundabout$getGravityDirection());
+                    BlockPos pos2 = BlockPos.containing(self.getPosition(1).add(newVec2));
+                    newVec4 = RotationUtil.vecPlayerToWorld(newVec4,((IGravityEntity)self).roundabout$getGravityDirection());
+                    BlockPos pos4 = BlockPos.containing(self.getPosition(1).add(newVec4));
+                    newVec5 = RotationUtil.vecPlayerToWorld(newVec5,((IGravityEntity)self).roundabout$getGravityDirection());
+                    BlockPos pos5 = BlockPos.containing(self.getPosition(1).add(newVec5));
+
+                    BlockState state1 = self.level().getBlockState(pos);
+                    BlockState state2 = self.level().getBlockState(pos2);
+                    BlockState state4 = self.level().getBlockState(pos4);
+                    BlockState state5 = self.level().getBlockState(pos5);
+                    boolean isOnValidBlock =  MainUtil.isBlockWalkableSimplified(state1)
+                            && MainUtil.isBlockWalkableSimplified(state4);
+
+                    if (self.onGround() && MainUtil.isBlockWalkableSimplified(self.getBlockStateOn())
+                            && isOnValidBlock){
+                        mercyTicks = 5;
+                    } else {
+                        if (
+                                (
+                                        MainUtil.isBlockWalkable(self.level().getBlockState(pos))
+                                                || MainUtil.isBlockWalkable(self.level().getBlockState(pos2))
+                                                || MainUtil.isBlockWalkable(self.level().getBlockState(pos4))
+                                                || MainUtil.isBlockWalkable(self.level().getBlockState(pos5))
+                                )){
+                            mercyTicks--;
+                        } else {
+                            mercyTicks = 0;
+                        }
+                    }
+                    if (self.isSleeping() || ((!self.onGround() || !isOnValidBlock) && mercyTicks <= 0) || self.getRootVehicle() != this.self) {
+                        wallWalkDirection = getIntendedDirection();
+                        ((IGravityEntity) this.self).roundabout$setGravityDirection(wallWalkDirection);
+                        setWallWalkDirection(wallWalkDirection);
+                    }
+                }
+
+            } else {
+                setWallWalkDirection(getIntendedDirection());
+            }
+        }
     }
 
+
+    public Direction getIntendedDirection(){
+        Direction rightAxis = Direction.DOWN;
+        MobEffectInstance mi = self.getEffect(ModEffects.GRAVITY_FLIP);
+        if (mi != null) {
+            if (mi.getAmplifier() == 0) {
+                rightAxis = Direction.NORTH;
+            }
+            if (mi.getAmplifier() == 1) {
+                rightAxis = Direction.SOUTH;
+            }
+            if (mi.getAmplifier() == 2) {
+                rightAxis = Direction.EAST;
+            }
+            if (mi.getAmplifier() == 3) {
+                rightAxis = Direction.WEST;
+            }
+            if (mi.getAmplifier() == 4) {
+                rightAxis = Direction.UP;
+            }
+        }
+        return rightAxis;
+    }
+
+    public int justFlippedTicks = 0;
+
+
+    public final float bloodSpread = 3;
     public final int duration = 100;
     public void tickBloodRegen(){
         if (!this.self.level().isClientSide()) {
@@ -77,9 +196,25 @@ public class VampiricFate extends FatePowers {
                 if (self instanceof Player PE && !PE.isCreative()){
                     PE.getFoodData().setFoodLevel(0);
                 }
-                float healthBack = sunkRegen/duration * 0.8F;
+                //Particle
+                float spreadX = (float) (Math.random()*bloodSpread - (bloodSpread/2));
+                float spreadY = (float) (Math.random()*bloodSpread - (bloodSpread/2));
+                float spreadZ = (float) (Math.random()*bloodSpread - (bloodSpread/2));
+
+                Vec3 shotPos = new Vec3(spreadX,spreadY,spreadZ);
+                Vec3 spawnPos = shotPos.add(self.getEyePosition(1f));
+                shotPos = shotPos.multiply(new Vec3(-1,-1,-1));
+
+                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.BLOOD_MIST,
+                        spawnPos.x, spawnPos.y, spawnPos.z,
+                        0, shotPos.x, shotPos.y,shotPos.z, 0.03);
+
+
+                //heal
+                float healthBack = sunkRegen/duration * 0.9F;
                 float health = self.getHealth();
                 float maxHealth = self.getMaxHealth();
+
                 if (health < maxHealth){
                     health+=healthBack;
                     if (health < maxHealth){
@@ -90,10 +225,13 @@ public class VampiricFate extends FatePowers {
                 }
                 if (attackTimeDuring > duration || self.getHealth() >= maxHealth){
                     xTryPower(PowerIndex.NONE, true);
+                    this.stopSoundsIfNearby(SoundIndex.BLOOD_REGEN, 100,false);
+                    self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_REGEN_FINISH_EVENT, SoundSource.PLAYERS, 1F, 1F);
                 }
             }
         }
     }
+    public int mercyTicks = 0;
     public void tickSpeed(){
         if (isFast()){
             setSpeedActivated(getSpeedActivated()-1);
@@ -107,6 +245,36 @@ public class VampiricFate extends FatePowers {
                     }
                 }
             }
+        }
+    }
+
+
+
+    public boolean isOnWrongAxis(){
+        if (self.level().isClientSide()) {
+            return ClientUtil.getDirectionRight(self);
+        } else {
+
+            Direction rightAxis = Direction.DOWN;
+            MobEffectInstance mi = self.getEffect(ModEffects.GRAVITY_FLIP);
+            if (mi != null) {
+                if (mi.getAmplifier() == 0) {
+                    rightAxis = Direction.NORTH;
+                }
+                if (mi.getAmplifier() == 1) {
+                    rightAxis = Direction.SOUTH;
+                }
+                if (mi.getAmplifier() == 2) {
+                    rightAxis = Direction.EAST;
+                }
+                if (mi.getAmplifier() == 3) {
+                    rightAxis = Direction.WEST;
+                }
+                if (mi.getAmplifier() == 4) {
+                    rightAxis = Direction.UP;
+                }
+            }
+            return ((IGravityEntity)self).roundabout$getGravityDirection() != rightAxis;
         }
     }
 
@@ -200,7 +368,7 @@ public class VampiricFate extends FatePowers {
                 && getActivePower() != BLOOD_REGEN;
     }
     public boolean canUseRegen(){
-        return self instanceof Player PE && PE.getFoodData().getFoodLevel() >= 4 && !isFast()
+        return self instanceof Player PE && PE.getFoodData().getFoodLevel() >= 1 && !isFast()
                 && getActivePower() != BLOOD_REGEN;
     }
     public void regenClient(){
@@ -208,9 +376,23 @@ public class VampiricFate extends FatePowers {
             tryPowerPacket(BLOOD_REGEN);
         }
     }
-    public void bloodSpeedClient(){
-        if (canUseBloodSpeed() && !onCooldown(PowerIndex.FATE_3_SNEAK)){
+    public void bloodSpeedClient() {
+        if (canLatchOntoWall() && canWallWalkConfig()){
+            doWallLatchClient();
+        } else if (canUseBloodSpeed() && !onCooldown(PowerIndex.FATE_3_SNEAK)){
             tryPowerPacket(BLOOD_SPEED);
+        }
+    }
+    public void dashOrWallWalk(){
+        if (canLatchOntoWall() && canWallWalkConfig())
+            doWallLatchClient();
+        else if (!isPlantedInWall())
+            dash();
+    }
+    public void doWallLatchClient(){
+        if (!this.onCooldown(PowerIndex.FATE_3)) {
+            ((StandUser) this.getSelf()).roundabout$tryPower(WALL_WALK, true);
+            tryPowerPacket(WALL_WALK);
         }
     }
 
@@ -224,7 +406,7 @@ public class VampiricFate extends FatePowers {
             }
             setAttackTimeDuring(0);
             setActivePower(BLOOD_REGEN);
-            self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SPEED_EVENT, SoundSource.PLAYERS, 1F, 0.95F+(float)(Math.random()*0.1));
+            playSoundsIfNearby(SoundIndex.BLOOD_REGEN, 100, true);
 
         }
     }
@@ -250,7 +432,7 @@ public class VampiricFate extends FatePowers {
 
     @Override
     public boolean interceptAttack(){
-        return this.getActivePower() == BLOOD_SUCK || this.getActivePower() == BLOOD_REGEN;
+        return this.getActivePower() == BLOOD_SUCK;
     }
 
     public void clientChangeVision(){
@@ -260,6 +442,61 @@ public class VampiricFate extends FatePowers {
             ConfigManager.saveClientConfig();
         }
     }
+
+    public boolean isPlantedInWall(){
+        return isOnWrongAxis();
+    }
+
+
+    public boolean forceBlock(){
+        if (!MainUtil.isBlockWalkableSimplified(self.level().getBlockState(self.getOnPos())))
+            return true;
+        return false;
+    }
+
+
+    public boolean canLatchOntoWall(){
+        if (onCooldown(PowerIndex.SKILL_2) || self.isSwimming())
+            return false;
+
+        if (forceBlock())
+            return false;
+
+        if ((this.self.onGround() && !isPlantedInWall()) || (!this.self.onGround() && isPlantedInWall()))
+            return false;
+
+        Vec3 mpos = this.self.getPosition(1F);
+        Direction gravdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+        switch (gravdir) {
+            case DOWN -> {
+                mpos = mpos.add(0,0.1F,0);
+            }
+            case UP -> {
+                mpos = mpos.add(0,-0.1F,0);
+            }
+            case NORTH -> {
+                mpos = mpos.add(0,0,0.1F);
+            }
+            case SOUTH -> {
+                mpos = mpos.add(0,0,-0.1F);
+            }
+            case WEST -> {
+                mpos = mpos.add(0.1F,0,0);
+            }
+            case EAST -> {
+                mpos = mpos.add(-0.1F,0,0);
+            }
+        }
+        BlockPos pos1 = BlockPos.containing(mpos);
+
+        Direction rd = RotationUtil.getRealFacingDirection2(this.self);
+        if (rd == gravdir)
+            return false;
+        pos1 = pos1.relative(RotationUtil.getRealFacingDirection2(this.self));
+        BlockState bs = this.self.level().getBlockState(pos1);
+        return MainUtil.isBlockWalkable(bs);
+    }
+
 
     public void finishSucking(){
         if (bloodSuckingTarget != null && self instanceof Player pl) {
@@ -441,6 +678,11 @@ public class VampiricFate extends FatePowers {
         if (slot == 2 && !MainUtil.canDrinkBloodFair(TE, self) && !isHoldingSneak())
             return true;
         return super.isAttackIneptVisually(activeP,slot);
+    }
+
+
+    public boolean canWallWalkConfig(){
+        return ClientNetworking.getAppropriateConfig().walkingHeartSettings.enableWallWalking;
     }
 
     @Override

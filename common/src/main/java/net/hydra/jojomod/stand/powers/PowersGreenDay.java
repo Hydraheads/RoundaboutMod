@@ -1,5 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 
+import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -8,6 +9,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
@@ -64,6 +66,44 @@ public class PowersGreenDay extends NewPunchingStand {
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
         return new PowersGreenDay(entity);
+    }
+
+    @Override
+    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas) {
+
+        List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        // manual scope
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,2, "ability.roundabout.gd_punch_left",
+                "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_PUNCH_LEFT,1,level,bypas));
+        // charge fire
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+118,3, "ability.roundabout.gd_return_left",
+                "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_ARM_RETURN_LEFT,0,level,bypas));
+        // burst fire
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+99,2, "ability.roundabout.gd_spin_left",
+                "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_SPIN_LEFT,2,level,bypas));
+        // place ratt
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.gd_punch_right",
+                "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_PUNCH_RIGHT,2,level,bypas));
+        // place burst
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.gd_spin_right",
+                "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_ARM_RETURN_RIGHT,1,level,bypas));
+        // place auto
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,1, "ability.roundabout.gd_return_right",
+                "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_MOLD_SPIN_RIGHT,1,level,bypas));
+        // dodge
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.dodge",
+                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
+        // passive
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.gd_mold_leap",
+                "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_LEAP,3,level,bypas));
+        // bucket passive
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.gd_mold_field",
+                "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_FIELD,3,level,bypas));
+        // ratt leap
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+76,topPos+80,4, "ability.roundabout.gd_stitch",
+                "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_STITCH,4,level,bypas));
+
+        return $$1;
     }
 
     @Override
@@ -156,13 +196,24 @@ public class PowersGreenDay extends NewPunchingStand {
     }
     @Override
     public void tickPower() {
-        if(false) {
-            if (!isClient()) {
-                setcrawlserver(this.self);
-            }
-        }
         moldShenanigans();
+        if(legGoneTicks>0) {
+            if (!this.self.level().isClientSide()) {
+                for (int i = 0; i < 2; i = i + 1) {
+                    double randX = Roundabout.RANDOM.nextDouble(-0.4, 0.4);
+                    double randY = Roundabout.RANDOM.nextDouble(-0.4, 0.4);
+                    double randZ = Roundabout.RANDOM.nextDouble(-0.4, 0.4);
+                    ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MOLD,
+                            this.getSelf().getX() + randX,
+                            this.getSelf().getY()+0.2 + randY,
+                            this.getSelf().getZ() + randZ,
+                            0, 0, 0, 0, 0);
+                }
+            }
+            legGoneTicks = legGoneTicks - 1;
+        }
         super.tickPower();
+
 
     }
 
@@ -218,6 +269,7 @@ public class PowersGreenDay extends NewPunchingStand {
                         } else {
                             this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
                         }
+                        legGoneTicks = 240;
                         ((StandUser)this.self).rdbt$SetCrawlTicks(240);
                         tryPowerPacket(PowerIndex.POWER_3_EXTRA);
                         bonusLeapCount = 3;
@@ -231,8 +283,9 @@ public class PowersGreenDay extends NewPunchingStand {
             }
         }
     }
-
+    public int legGoneTicks = 0;
     public boolean moldLeapServer() {
+        legGoneTicks = 240;
         for(int i = 0; i < 11; i = i + 1) {
             double randX = Roundabout.RANDOM.nextDouble(-0.5, 0.5);
             double randY = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
@@ -317,7 +370,7 @@ public class PowersGreenDay extends NewPunchingStand {
     }
 
     public void moldShenanigans() {
-        if (!isClient()) {
+        if (!this.getSelf().level().isClientSide()) {
             if(isMoldFieldOn()) {
                 for(int i = 0; i < 84; i = i + 1) {
                     double randX = Roundabout.RANDOM.nextDouble(-50, 50);
