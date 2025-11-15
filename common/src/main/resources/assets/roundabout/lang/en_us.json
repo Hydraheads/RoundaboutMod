@@ -8,6 +8,8 @@
   "text.roundabout.warn_trap_triggered": " has been triggered!",
   "text.roundabout.warn_unnamed_trap_triggered": "A fog trap has been triggered!",
 
+  "text.roundabout.out_of_bullets": "Shift right click to reload!",
+
   "item.roundabout.stand_arrow": "Stand Arrow",
   "item.roundabout.stand_beetle_arrow": "Stand Arrow",
   "item.roundabout.worthy_arrow": "Worthiness Arrow",
@@ -626,6 +628,13 @@
   "sounds.roundabout.achtung_burst":  "Gone",
 
   "sounds.roundabout.cream_void_attack":  "Cream eating",
+
+  "sounds.roundabout.snubnose_fire":  "Gun fired!",
+  "sounds.roundabout.snubnose_dry_fire":  "Gun click",
+  "sounds.roundabout.snubnose_reload":  "Gun reloaded",
+
+  "sounds.roundabout.bullet_penetration":  "Bullet penetrating",
+
 
   "sounds.roundabout.snap":  "Snap",
   "sounds.roundabout.star_finger_silent":  "Star Finger",

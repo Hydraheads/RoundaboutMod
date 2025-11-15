@@ -298,7 +298,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
     }
 
-    @Inject(method = "setModelProperties", at = @At(value = "HEAD"))
+    @Inject(method = "setModelProperties", at = @At(value = "TAIL"))
     private void roundabout$setModelPropertiesCream(AbstractClientPlayer $$0, CallbackInfo ci) {
         if ($$0 instanceof StandUser standUser) {
             if (((StandUser) $$0).roundabout$getStandPowers() instanceof PowersCream PC) {
@@ -339,19 +339,6 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                         playerModel.head.visible = true;
                         playerModel.hat.visible = true;
                     }
-                } else if (PC.getTransformDirection() == 0) {
-                    playerModel.leftLeg.visible = true;
-                    playerModel.rightLeg.visible = true;
-                    playerModel.leftPants.visible = true;
-                    playerModel.rightPants.visible = true;
-                    playerModel.leftArm.visible = true;
-                    playerModel.rightArm.visible = true;
-                    playerModel.body.visible = true;
-                    playerModel.leftSleeve.visible = true;
-                    playerModel.rightSleeve.visible = true;
-                    playerModel.jacket.visible = true;
-                    playerModel.head.visible = true;
-                    playerModel.hat.visible = true;
                 }
             }
         }

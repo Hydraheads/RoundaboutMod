@@ -99,6 +99,16 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> CREAM_VOID_ATTACK_EVENT =
             register(ModSounds.CREAM_VOID_ATTACK, ModSounds.CREAM_VOID_ATTACK_ID);
 
+    public static final RegistryObject<SoundEvent> SNUBNOSE_FIRE_EVENT =
+            register(ModSounds.SNUBNOSE_FIRE, ModSounds.SNUBNOSE_FIRE_ID);
+    public static final RegistryObject<SoundEvent> SNUBNOSE_DRY_FIRE_EVENT =
+            register(ModSounds.SNUBNOSE_DRY_FIRE, ModSounds.SNUBNOSE_DRY_FIRE_ID);
+    public static final RegistryObject<SoundEvent> SNUBNOSE_RELOAD_EVENT =
+            register(ModSounds.SNUBNOSE_RELOAD, ModSounds.SNUBNOSE_RELOAD_ID);
+
+    public static final RegistryObject<SoundEvent> BULLET_PENTRATION_EVENT =
+            register(ModSounds.BULLET_PENTRATION, ModSounds.BULLET_PENTRATION_ID);
+
     public static final RegistryObject<SoundEvent> ROAD_ROLLER_AMBIENT_EVENT =
             register(ModSounds.ROAD_ROLLER_AMBIENT, ModSounds.ROAD_ROLLER_AMBIENT_ID);
     public static final RegistryObject<SoundEvent> ROAD_ROLLER_EXPLOSION_EVENT =

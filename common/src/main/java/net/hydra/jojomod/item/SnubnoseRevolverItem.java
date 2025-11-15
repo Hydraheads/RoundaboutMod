@@ -5,9 +5,14 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.BladedBowlerHatEntity;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.C2SPacketUtil;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -18,6 +23,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+
+import java.io.Serial;
 
 public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
 
@@ -98,8 +105,9 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
             Roundabout.LOGGER.info("Ammo shot:"+getAmmo(itemStack));
             LivingEntity livingEntity = player;
             RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity(level, livingEntity);
-            $$7.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.5F, 1.0F);
+            $$7.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 4.0F, 0.0F);
             level.addFreshEntity($$7);
+            level.playSound(null, player, ModSounds.SNUBNOSE_FIRE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             if (livingEntity != null && ((StandUser) livingEntity).roundabout$isBubbleEncased()) {
                 StandUser SE = ((StandUser) livingEntity);
                 if (!level.isClientSide()) {
@@ -110,6 +118,11 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
                             livingEntity.getX(), livingEntity.getY() + livingEntity.getBbHeight() * 0.5, livingEntity.getZ(),
                             5, 0.25, 0.25, 0.25, 0.025);
                 }
+            }
+        } else {
+            level.playSound(null, player, ModSounds.SNUBNOSE_DRY_FIRE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            if (player instanceof ServerPlayer SP) {
+                SP.displayClientMessage(Component.translatable("text.roundabout.out_of_bullets").withStyle(ChatFormatting.LIGHT_PURPLE), true);
             }
         }
     }
@@ -133,6 +146,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
                 if (ammoLoaded > 0) {
                     setAmmo(itemStack, currentAmmo + ammoLoaded);
                     Roundabout.LOGGER.info("Final ammo:"+(currentAmmo + ammoLoaded));
+                    level.playSound(null, player, ModSounds.SNUBNOSE_RELOAD_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
             } else {
                 player.startUsingItem(hand);

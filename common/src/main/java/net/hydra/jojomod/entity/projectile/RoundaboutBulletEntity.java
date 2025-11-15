@@ -65,6 +65,22 @@ public class RoundaboutBulletEntity extends AbstractArrow {
     }
 
     @Override
+    public void onHitEntity(EntityHitResult result) {
+        Entity entity = result.getEntity();
+        this.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), ModSounds.BULLET_PENTRATION_EVENT, this.getSoundSource(), 1.0F, 1.0F);
+        super.onHitEntity(result);
+    }
+
+    @Override
+    protected SoundEvent getDefaultHitGroundSoundEvent() {
+        return ModSounds.BULLET_PENTRATION_EVENT;
+    }
+
+    @Override
+    protected void doPostHurtEffects(LivingEntity target) {
+    }
+
+    @Override
     public void tick() {
         Vec3 delta = this.getDeltaMovement();
 
