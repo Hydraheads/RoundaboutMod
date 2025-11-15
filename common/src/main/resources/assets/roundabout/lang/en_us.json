@@ -744,6 +744,10 @@
   "sounds.roundabout.ratt_mode_change": "Mode Change",
 
   "sounds.roundabout.anubis_possession": "Ominous Roar",
+  "sounds.roundabout.anubis_summon" : "Be Calm",
+  "sounds.roundabout.anubis_backflip": "Dodge",
+  "sounds.roundabout.anubis_alluring": "Alluring Light",
+  "sounds.roundabout.anubis_raging": "Raging Light",
 
 
   "sounds.roundabout.arcade_impale":  "[Arcade Impale]",
@@ -1128,7 +1132,7 @@
   "ability.roundabout.place_invis.desc": "Place blocks, passing your invisibility duration down to them. Only works while you are invisible. To activate this skill, you must be holding a block and invisible.",
 
   "ability.roundabout.ratt_scope": "Scoped Mode",
-  "ability.roundabout.ratt_scope.desc": "Hold Ratt and scope in, allowing you to shoot while moving. The darts in this form bounce on surfaces",
+  "ability.roundabout.ratt_scope.desc": "Hold Ratt and scope in, allowing you to shoot while moving. Interacting builds chargs, and punching releases it as a flurry of darts.",
   "ability.roundabout.ratt_single": "Single Fire",
   "ability.roundabout.ratt_single.desc": "Shoots an alternate form instead, dealing more knockback and inflicting a longer melt duration",
   "ability.roundabout.ratt_burst": "Burst Fire",
@@ -1431,11 +1435,14 @@
   "skins.roundabout.diver_down.firediver": "Fire Down",
 
   "death.attack.anubis_possess": "%1$s couldn't challenge %2$s",
+  "death.attack.anubis_spin": "%1$s was shredded by %2$s",
 
   "item.roundabout.anubis_item": "Mysterious Sword",
   "item.roundabout.anubis_item.message1" : "The sword is cursed! Seek out a cleric!",
   "item.roundabout.anubis_item.sword_cleansed": "Anubis Cleansed!",
+
   "skins.roundabout.anubis.anime" : "Anime",
+  "skins.roundabout.anubis.evil" : "Evil",
 
   "skins.roundabout.achtung_baby.base": "Has No Form",
 

@@ -82,13 +82,13 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public RattSettings rattSettings;
     @NestedOption(group = "modded")
+    public CreamSettings creamSettings;
+    @NestedOption(group = "modded")
     public TheWorldSettings theWorldSettings;
     @NestedOption(group = "modded")
     public StarPlatinumSettings starPlatinumSettings;
     @NestedOption(group = "modded")
     public TimeStopSettings timeStopSettings;
-    @NestedOption(group = "modded")
-    public CreamSettings creamSettings;
 
     public static class VanillaMCTweaks {
         @BooleanOption(group = "inherit", value = true)

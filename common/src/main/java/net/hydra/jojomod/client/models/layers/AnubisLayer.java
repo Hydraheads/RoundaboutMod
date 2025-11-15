@@ -160,7 +160,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                     1, 1, 1, 1F, (byte) 1);
         } else if ( (user.roundabout$getStandPowers() instanceof PowersAnubis PA && user.roundabout$getActive() ) || (heyTicks != 0) ) {
             ModStrayModels.ANUBIS.render(entity, partialTicks, poseStack, bufferSource, packedLight,
-                    1, 1, 1, heyFull, (byte)1 /*user.roundabout$getStandSkin()*/ );
+                    1, 1, 1, heyFull, user.roundabout$getStandSkin() );
         } else if (entity.getMainHandItem().getItem() instanceof AnubisItem && !user.roundabout$getEffectiveCombatMode()) {
             ModStrayModels.ANUBIS.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                     1, 1, 1, 1F, (byte) 0);

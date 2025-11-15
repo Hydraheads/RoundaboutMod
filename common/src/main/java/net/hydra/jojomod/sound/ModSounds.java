@@ -684,6 +684,19 @@ public class ModSounds {
     public static final String ANUBIS_POSSESSION = "anubis_possession";
     public static final ResourceLocation ANUBIS_POSSESSION_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_POSSESSION);
     public static SoundEvent ANUBIS_POSSESSION_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_POSSESSION_ID);
+    public static final String ANUBIS_SUMMON = "anubis_summon";
+    public static final ResourceLocation ANUBIS_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_SUMMON);
+    public static SoundEvent ANUBIS_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_SUMMON_ID);
+    public static final String ANUBIS_ALLURING = "anubis_alluring";
+    public static final ResourceLocation ANUBIS_ALLURING_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_ALLURING);
+    public static SoundEvent ANUBIS_ALLURING_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_ALLURING_ID);
+    public static final String ANUBIS_RAGING = "anubis_raging";
+    public static final ResourceLocation ANUBIS_RAGING_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_RAGING);
+    public static SoundEvent ANUBIS_RAGING_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_RAGING_ID);
+    public static final String ANUBIS_BACKFLIP = "anubis_backflip";
+    public static final ResourceLocation ANUBIS_BACKFLIP_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_BACKFLIP);
+    public static SoundEvent ANUBIS_BACKFLIP_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_BACKFLIP_ID);
+
 
 
     public static final String UNLOCK_SKIN = "unlock_skin";

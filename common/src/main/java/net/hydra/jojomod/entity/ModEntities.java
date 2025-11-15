@@ -83,6 +83,7 @@ public class ModEntities {
     public static EntityType<SoftAndWetExplosiveBubbleEntity> EXPLOSIVE_BUBBLE;
     public static EntityType<SoftAndWetItemLaunchingBubbleEntity> ITEM_LAUNCHING_BUBBLE_ENTITY;
     public static EntityType<AnubisPossessorEntity> ANUBIS_POSSESSOR;
+    public static EntityType<AnubisSlipstreamEntity> ANUBIS_SLIPSTREAM;
 
     public static EntityType<GoBeyondEntity> GO_BEYOND;
     public static EntityType<EncasementBubbleEntity> ENCASEMENT_BUBBLE;
