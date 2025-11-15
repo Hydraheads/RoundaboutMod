@@ -22,6 +22,7 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
@@ -1128,7 +1129,7 @@ public class AbilityScapeBasis {
                 activatedPower = PowerContext.SKILL_3_GUARD;
                 else activatedPower = PowerContext.SKILL_3_NORMAL;
 
-            if (!((StandUser) this.getSelf()).roundabout$getStandPowers().standlessAbilities().contains(activatedPower) && source == STAND)
+            if (!((StandUser) this.getSelf()).roundabout$getStandPowers().standlessAbilities().contains(activatedPower) && source == STAND || !ConfigManager.getConfig().miscellaneousSettings.standlessAbilities)
                 KeyInputs.forceSummon(Minecraft.getInstance().player, keyIsDown);
             powerActivate(activatedPower);
         }

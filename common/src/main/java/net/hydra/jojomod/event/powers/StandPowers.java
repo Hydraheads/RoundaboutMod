@@ -382,7 +382,7 @@ public class StandPowers extends AbilityScapeBasis {
     public void updateMove(float flot){
     }
 
-    /** Stand abilities that the user can use without the stand actively being out. **/
+    /** Stand abilities that the user can use without the stand actively being out (if the config is enabled). **/
     public List<PowerContext> standlessAbilities(){
         List<PowerContext> $$1 = Lists.newArrayList();
         return $$1;
