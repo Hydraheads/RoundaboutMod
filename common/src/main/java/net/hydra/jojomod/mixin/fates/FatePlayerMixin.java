@@ -64,13 +64,14 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
         if (rdbt$getFatePowers() instanceof VampiricFate VP && VP.isPlantedInWall()){
             if (this.isInWater()) {
                 this.waterSwimSound();
-                this.playMuffledStepSound($$1);
             } else {
                 BlockPos $$2 = this.getPrimaryStepSoundBlockPos($$0);
                 if (!$$0.equals($$2)) {
                     BlockState $$3 = this.level().getBlockState($$2);
                     if ($$3.is(BlockTags.COMBINATION_STEP_SOUND_BLOCKS)) {
-                        this.playCombinationStepSounds($$3, $$1);
+                        SoundType st = $$1.getSoundType();
+                        super.playStepSound($$2, $$3);
+                        this.playSound(st.getBreakSound(), st.getVolume() * 0.25F, st.getPitch());
                     } else {
                         SoundType st = $$1.getSoundType();
                         super.playStepSound($$2, $$3);
