@@ -58,6 +58,8 @@ public class StandIcons {
             "textures/gui//icons/fates/vampire/vision_off.png");
     public static final ResourceLocation HEARING_MODE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/vampire/hearing_mode.png");
+    public static final ResourceLocation WALL_WALK_VAMP = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/fates/vampire/wall_walk.png");
 
     public static final ResourceLocation SURVIVOR_ANGER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/survivor_anger.png");
@@ -381,6 +383,9 @@ public class StandIcons {
     public static final ResourceLocation RATT_BUCKET = Roundabout.location("textures/item/flesh_bucket.png");
     public static final ResourceLocation RATT_LEAP = Roundabout.location("textures/gui/icons/ratt/ratt_leap.png");
 
+    public static final ResourceLocation ANUBIS_ALLURING_LIGHT = Roundabout.location("textures/gui/icons/anubis/alluring_light.png");
+    public static final ResourceLocation ANUBIS_RAGING_LIGHT = Roundabout.location("textures/gui/icons/anubis/raging_light.png");
+    public static final ResourceLocation ANUBIS_BACKFLIP = Roundabout.location("textures/gui/icons/anubis/backflip.png");
 
 
     public static final ResourceLocation SOFT_AND_WET_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,

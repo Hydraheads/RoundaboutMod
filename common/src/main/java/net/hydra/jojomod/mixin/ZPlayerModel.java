@@ -9,10 +9,14 @@ import net.hydra.jojomod.client.models.layers.animations.AnubisAnimations;
 import net.hydra.jojomod.client.models.layers.animations.FirearmFirstPersonAnimations;
 import net.hydra.jojomod.client.models.layers.animations.FirstPersonLayerAnimations;
 import net.hydra.jojomod.event.index.Poses;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
+import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.item.ModificationMaskItem;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.animation.AnimationChannel;
@@ -121,6 +125,21 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 ipe.roundabout$getBubbleShotAim().stop();
             }
 
+            if (SE.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+                switch (SE.roundabout$getStandAnimation()) {
+                    case PowerIndex.GUARD -> {
+                        change = true;
+                        SE.roundabout$getHandLayerAnimation().startIfStopped($$0.tickCount);
+                        this.roundabout$animate(SE.roundabout$getHandLayerAnimation(), AnubisAnimations.UP,yes,1F);
+                    }
+                    default -> {
+                        change = false;
+                        SE.roundabout$getHandLayerAnimation().stop();
+                    }
+                }
+
+            }
+
             if ( $$0.getUseItem().is(ModItems.ANUBIS_ITEM)  ) {
                 ipe.roundabout$getAnubisUnsheath().startIfStopped($$0.tickCount); change = true;
                 this.roundabout$animate(ipe.roundabout$getAnubisUnsheath(), AnubisAnimations.Unsheathe, yes, 1f);
@@ -169,7 +188,8 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/geom/ModelPart;copyFrom(Lnet/minecraft/client/model/geom/ModelPart;)V", shift = At.Shift.BEFORE, ordinal = 0))
     public void roundabout$SetupAnim2(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
 
-        if ($$0 instanceof Player) {
+        if ($$0 instanceof Player P) {
+            StandUser SU = (StandUser) P;
             IPlayerEntity ipe = ((IPlayerEntity) $$0);
             byte poseEmote = ipe.roundabout$GetPoseEmote();
             boolean pose = poseEmote != Poses.NONE.id;
@@ -200,7 +220,10 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 this.roundabout$animate(ipe.getSitting(), Poses.SITTING.ad, $$3, 1f);
                 this.roundabout$animate(ipe.getVampire(), Poses.VAMPIRE_TRANSFORMATION.ad, $$3, 1f);
 
-                if ($$0.getUseItem().is(ModItems.ANUBIS_ITEM)) {
+                if ($$0.getUseItem().is(ModItems.ANUBIS_ITEM)
+                        || (SU.roundabout$getStandPowers() instanceof PowersAnubis
+                        && SU.roundabout$getActive()
+                        && SU.roundabout$getStandAnimation() != PowerIndex.NONE) ) {
                     this.body.resetPose();
                     this.rightLeg.resetPose();
                     this.leftLeg.resetPose();
@@ -211,6 +234,27 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     ipe.roundabout$getAnubisUnsheath().stop();
                 }
                 this.roundabout$animate(ipe.roundabout$getThirdPersonAnubisUnsheath(), AnubisAnimations.ThirdPersonUnsheathe,$$3,1F);
+
+                if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA && SU.roundabout$getActive()) {
+                    boolean start = false;
+                    AnimationDefinition anim = null;
+                    switch (SU.roundabout$getStandAnimation()) {
+                        case PowerIndex.SNEAK_MOVEMENT -> {
+                            start = false;
+                        }
+                    }
+                    if (start) {
+                        SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);
+                        if (anim != null) {
+                            this.roundabout$animate(SU.roundabout$getWornStandAnimation(), anim, $$3, 1F);
+                        }
+                    } else {
+                        SU.roundabout$getWornStandAnimation().stop();
+                    }
+
+                }
+
+
             }
 
             /**Shoot mode aiming*/

@@ -33,6 +33,8 @@ import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
+import net.hydra.jojomod.util.gravity.GravityAPI;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -811,7 +813,9 @@ public class MainUtil {
 
     public static boolean isPlayerBonkingHead(LivingEntity player) {
         Level level = player.level();
-        AABB headSpace = player.getBoundingBox().expandTowards(0, 0.05, 0);
+        Vec3 mainVec = new Vec3(0, 0.05, 0);
+        mainVec = RotationUtil.vecPlayerToWorld(mainVec,((IGravityEntity)player).roundabout$getGravityDirection());
+        AABB headSpace = player.getBoundingBox().expandTowards(mainVec.x,mainVec.y,mainVec.z);
         return !level.noCollision(player, headSpace);
     }
 
@@ -1114,6 +1118,13 @@ public class MainUtil {
     public static double fixAngle(float angle){
        return (Math.abs(angle) % 360);
     }
+
+    public static void slowTarget(Entity e, float p) {
+        e.hurtMarked = true;
+        e.setDeltaMovement(e.getDeltaMovement().scale(p));
+        e.hasImpulse = true;
+    }
+
     public static void takeKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
 
         if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
@@ -1538,7 +1549,8 @@ public class MainUtil {
                 || sauce.is(ModDamageTypes.MELTING)
                 || sauce.is(ModDamageTypes.HEEL_SPIKE)
                 || sauce.is(ModDamageTypes.CREAM_VOID_BALL)
-                || sauce.is(ModDamageTypes.ANUBIS_POSSESS) ){
+                || sauce.is(ModDamageTypes.ANUBIS_POSSESS)
+                || sauce.is(ModDamageTypes.ANUBIS_SPIN) ){
             return true;
         }
         return false;

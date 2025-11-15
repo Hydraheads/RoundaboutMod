@@ -517,7 +517,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "anubis_possessor").toString())
             );
-
+    public static final RegistryObject<EntityType<AnubisSlipstreamEntity>> ANUBIS_SLIPSTREAM =
+            ENTITY_TYPES.register("anubis_slipstream", () ->
+                    EntityType.Builder.<AnubisSlipstreamEntity>of(AnubisSlipstreamEntity::new, MobCategory.MISC).sized(3f, 3f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "anubis_slipstream").toString())
+            );
     public static final RegistryObject<EntityType<RoadRollerEntity>> ROAD_ROLLER_ENTITY =
             ENTITY_TYPES.register("road_roller_entity", () ->
                     EntityType.Builder.<RoadRollerEntity>of(RoadRollerEntity::new, MobCategory.MISC).

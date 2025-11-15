@@ -71,7 +71,7 @@ public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                             heyFull = mandomTicks - fixedPartial;
                             heyFull = Math.max(heyFull / 10, 0);
                         }
-
+                        ClientUtil.pushPoseAndCooperate(poseStack,26);
 
                         // Translate to the right/left hand
                         getParentModel().body.translateAndRotate(poseStack); // Use leftArm for off-hand

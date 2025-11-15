@@ -10,10 +10,7 @@ import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.mobs.*;
-import net.hydra.jojomod.event.index.LocacacaCurseIndex;
-import net.hydra.jojomod.event.index.PlayerPosIndex;
-import net.hydra.jojomod.event.index.Poses;
-import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
@@ -249,9 +246,10 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         IH = $$1;
 
         // ratt scope spyglass hand position
+        StandUser SU = ((StandUser) $$0);
         if ($$1.equals(InteractionHand.MAIN_HAND)) {
-            if (((StandUser) (Player) $$0).roundabout$getStandPowers() instanceof PowersRatt) {
-                if (((StandUser) (Player) $$0).roundabout$getStandPowers().getStandUserSelf().roundabout$getCombatMode()) {
+            if (SU.roundabout$getStandPowers() instanceof PowersRatt) {
+                if (SU.roundabout$getStandPowers().getStandUserSelf().roundabout$getCombatMode()) {
                     ci.setReturnValue(HumanoidModel.ArmPose.SPYGLASS);
                     return;
                 }

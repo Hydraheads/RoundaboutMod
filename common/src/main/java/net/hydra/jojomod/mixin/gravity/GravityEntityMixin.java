@@ -3,12 +3,14 @@ package net.hydra.jojomod.mixin.gravity;
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import net.hydra.jojomod.access.IClientEntity;
+import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.GEntityTags;
@@ -517,6 +519,9 @@ public abstract class GravityEntityMixin implements IGravityEntity {
                             ((StandUser) LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()
                     ) {
                         dr = PW.getHeelDirection();
+                    } else if (rdbt$this() instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof
+                            VampiricFate VP && VP.getWallWalkDirection() != VP.getIntendedDirection()) {
+                        dr = VP.getWallWalkDirection();
                     } else if (rdbt$this() instanceof LivingEntity LE && LE.hasEffect(ModEffects.GRAVITY_FLIP)) {
                         MobEffectInstance mi = LE.getEffect(ModEffects.GRAVITY_FLIP);
                         if (mi != null) {
@@ -795,6 +800,9 @@ public abstract class GravityEntityMixin implements IGravityEntity {
                 ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW) {
             PW.setHeelDirection(gd);
             PW.toggleSpikes(true);
+        } else if (gd != Direction.DOWN && rdbt$this() instanceof Player PL &&
+                ((IFatePlayer)PL).rdbt$getFatePowers() instanceof VampiricFate VP) {
+            VP.setWallWalkDirection(gd);
         }
     }
 

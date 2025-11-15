@@ -364,6 +364,16 @@ public class ForgeSounds {
 
     public static final RegistryObject<SoundEvent> ANUBIS_POSSESSION =
             register(ModSounds.ANUBIS_POSSESSION, ModSounds.ANUBIS_POSSESSION_ID);
+    public static final RegistryObject<SoundEvent> ANUBIS_SUMMON =
+            register(ModSounds.ANUBIS_SUMMON, ModSounds.ANUBIS_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> ANUBIS_ALLURING=
+            register(ModSounds.ANUBIS_ALLURING, ModSounds.ANUBIS_ALLURING_ID);
+    public static final RegistryObject<SoundEvent> ANUBIS_RAGING=
+            register(ModSounds.ANUBIS_RAGING, ModSounds.ANUBIS_RAGING_ID);
+    public static final RegistryObject<SoundEvent> ANUBIS_BACKFLIP=
+            register(ModSounds.ANUBIS_BACKFLIP, ModSounds.ANUBIS_BACKFLIP_ID);
+
+
 
 
     public static final RegistryObject<SoundEvent> THE_WORLD_OVER_HEAVEN_EVENT =

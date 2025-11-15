@@ -2,7 +2,7 @@
   "text.roundabout.barrage_clash": "替身對拳！按下跳躍、隨後釋放跳躍以進行連打力度判定！",
   "text.roundabout.launch_bubble_encased": "被泡泡包裹住了！快使用尖銳物品刺破它！",
   "text.roundabout.riding_flying_creature": "長按 跳躍 使幻翼上升，長按 沖刺 使幻翼下降！",
-  "text.roundabout.riding_road_roller": "向壓路機填充混凝土以開始鋪路！",
+  "text.roundabout.riding_road_roller": "向壓路機填充混凝土粉末以開始鋪設道路！",
   "text.roundabout.riding_flying_creature.day": "白天可飛不起來……",
   "text.roundabout.riding_flying_creature.dimension": "這個維度可飛不了……",
   "text.roundabout.warn_trap_triggered": " 被觸發了！",
@@ -35,7 +35,7 @@
   "item.roundabout.match_bundle": "一把火柴",
   "item.roundabout.gasoline_can": "汽油罐",
   "item.roundabout.gasoline_bucket": "桶裝汽油",
-  "item.roundabout.flesh_bucket": "桶裝融化血肉",
+  "item.roundabout.flesh_bucket": "桶裝肉泥",
   "item.roundabout.locacaca": "洛卡卡卡果實",
   "item.roundabout.locacaca_pit": "洛卡卡卡果核",
   "item.roundabout.locacaca_branch": "洛卡卡卡枝條",
@@ -71,6 +71,8 @@
   "item.roundabout.killer_queen_disc": "替身光碟",
   "item.roundabout.achtung_baby_disc": "替身光碟",
   "item.roundabout.diver_down_disc": "替身光碟",
+  "item.roundabout.anubis_disc": "替身光碟",
+  "item.roundabout.max_anubis_disc": "滿級替身光碟",
   "item.roundabout.max_walking_heart_disc": "滿級替身光碟",
   "item.roundabout.max_ratt_disc": "滿級替身光碟",
   "item.roundabout.max_star_platinum_disc": "滿級替身光碟",
@@ -98,6 +100,8 @@
   "item.roundabout.killer_queen_disc.desc": "殺手皇後",
   "item.roundabout.diver_down_disc.desc": "潛行者",
   "item.roundabout.max_diver_down_disc.desc": "潛行者",
+  "item.roundabout.anubis_disc.desc": "阿努比斯神",
+  "item.roundabout.max_anubis_disc.desc": "阿努比斯神",
   "item.roundabout.walking_heart_disc.desc": "步行之心",
   "item.roundabout.achtung_baby_disc.desc": "透明寶寶",
   "item.roundabout.none_disc.desc": "無替身",
@@ -286,7 +290,6 @@
   "entity.roundabout.go_beyond": "Go Beyond（超越）",
   "entity.roundabout.ground_bubble": "地底泡泡",
 
-
   "entity.roundabout.water_bottle": "水瓶",
   "entity.roundabout.bowler_hat": "鋸帽",
 
@@ -379,17 +382,17 @@
   "block.roundabout.cultivated_cherry_sapling": "盆栽櫻花樹苗",
   "block.roundabout.cultivated_oak_sapling": "盆栽橡樹樹苗",
   "block.roundabout.cultivated_locacaca": "盆栽洛卡卡卡植株",
-  "block.roundabout.melon_parfait": "西瓜凍糕",
+  "block.roundabout.melon_parfait": "西瓜聖代",
 
   "itemgroup.jojo": "徘徊",
   "itemgroup.jojo_discs": "替身光碟",
   "itemgroup.jojo_wip_features": "徘徊——開發中",
   "itemgroup.jojo_building_blocks": "徘徊：建築方塊",
   "itemgroup.justice_fog_items": "[正義]的幻象方塊",
-  "roundabout.dev_status.dev_status": "創作者狀態：",
-  "roundabout.dev_status.active": "活躍",
-  "roundabout.dev_status.paused": "暫停中",
-  "roundabout.dev_status.dropped": "已放棄",
+  "roundabout.dev_status.dev_status": "開發狀態：",
+  "roundabout.dev_status.active": "開發中",
+  "roundabout.dev_status.paused": "進度暫停",
+  "roundabout.dev_status.dropped": "擱置",
   "roundabout.dev_status.dev_name": "創作者：",
 
   "key.roundabout.summon.stand": "召喚替身",
@@ -402,6 +405,7 @@
   "key.roundabout.switch_rows": "切換潛行技能欄",
   "key.roundabout.show_exp": "切換替身經驗顯示",
   "key.roundabout.pose": "擺出JOJO立",
+  "key.roundabout.hide_icons": "隱藏能力圖標",
 
   "roundabout:item.roundabout.smithing_template.execution_upgrade.applies_to": "鐵斧",
   "roundabout:item.roundabout.smithing_template.execution_upgrade.base_slot_description": "Add to iron axe",
@@ -507,7 +511,10 @@
   "death.attack.road_roller_entity.item": "%1$s的墓地壓好了",
   "death.attack.road_roller.player": "%1$s上路了。",
   "death.attack.road_roller.player.item": "%1$s的墓地壓好了",
-
+  "death.attack.blood_drain": "%1$s失去了血色。",
+  "death.attack.blood_drain.item": "%1$s蒼白如紙。",
+  "death.attack.blood_drain.player": "%1$s被榨幹了。",
+  "death.attack.blood_drain.player.item": "%1$s成了幹屍。",
 
   "item.glaive.charge_power": "蓄力攻擊",
 
@@ -579,6 +586,7 @@
   "sounds.roundabout.cackle":  "輕笑",
   "sounds.roundabout.go_beyond_launch":  "???",
   "sounds.roundabout.go_beyond_hit":  "[看不見]的事物命中了……",
+  "sounds.roundabout.hypnosis":  "催眠",
 
   "sounds.roundabout.bubble_hover_over":  "冒泡",
   "sounds.roundabout.bubble_pop":  "泡泡破裂",
@@ -726,6 +734,9 @@
   "sounds.roundabout.ratt_leap": "小跳",
   "sounds.roundabout.ratt_mode_change": "切換射擊模式",
 
+  "sounds.roundabout.anubis_possession": "不詳咆哮",
+
+
   "sounds.roundabout.arcade_impale":  "[街機穿胸]",
   "sounds.roundabout.arcade_long_ts":  "[停止時間]",
   "sounds.roundabout.arcade_muda":  "[街機：木大]",
@@ -761,13 +772,13 @@
   "sounds.roundabout.gasoline_explosion": "汽油燃燒",
   "sounds.roundabout.gas_can_throw": "汽油桶投擲",
   "sounds.roundabout.match_throw": "火柴投擲",
-  "sounds.roundabout.hey_ya_1": "替身的話語",
-  "sounds.roundabout.hey_ya_2": "替身的話語",
-  "sounds.roundabout.hey_ya_3": "替身的話語",
-  "sounds.roundabout.hey_ya_4": "替身的話語",
-  "sounds.roundabout.hey_ya_5": "替身的話語",
-  "sounds.roundabout.hey_ya_6": "替身的話語",
-  "sounds.roundabout.hey_ya_7": "替身的話語",
+  "sounds.roundabout.hey_ya_1": "替身發言",
+  "sounds.roundabout.hey_ya_2": "替身發言",
+  "sounds.roundabout.hey_ya_3": "替身發言",
+  "sounds.roundabout.hey_ya_4": "替身發言",
+  "sounds.roundabout.hey_ya_5": "替身發言",
+  "sounds.roundabout.hey_ya_6": "替身發言",
+  "sounds.roundabout.hey_ya_7": "替身發言",
 
   "sounds.roundabout.killer_queen_summon": "替身被召喚！",
   "sounds.roundabout.killer_queen_barrage": "Shibabababa!",
@@ -863,6 +874,8 @@
   "sounds.roundabout.jotaro_judgement":  "裁決你的……",
   "sounds.roundabout.jotaro_dio":  "DIO!",
   "sounds.roundabout.jotaro_getting_closer":  "不靠近你我怎麽……",
+  "sounds.roundabout.blood_suck":  "吸血音效",
+  "sounds.roundabout.blood_suck_crit":  "吸血音效",
 
   "sounds.roundabout.aesthetician_exhale":  "呼氣",
   "sounds.roundabout.female_zombie_ambient":  "僵屍美容師：咆哮",
@@ -1025,6 +1038,9 @@
   "ability.roundabout.wall_walk_move.desc": "讓自己鞋子「抓地」上墻，使你可以在墻上行走。植入鞋跟狀態下面對墻壁或是在空中時觸發。",
   "ability.roundabout.firm_swing": "出手穩重",
   "ability.roundabout.firm_swing.desc": "使得你在植入鞋跟期間所有的攻擊都為暴擊，因為你「立場堅定」。",
+  "ability.roundabout.fall_disperse": "沖擊吸收",
+  "ability.roundabout.fall_disperse.desc": "減半受到的摔落傷害，將其通過鞋跟傳遞。",
+
 
 
 
@@ -1388,6 +1404,11 @@
   "skins.roundabout.diver_down.birthdaydiver": "生日快樂！",
   "skins.roundabout.diver_down.firediver": "潛火者",
 
+  "item.roundabout.anubis_item": "奇怪的長刀",
+  "item.roundabout.anubis_item.message1" : "這把刀被詛咒了！快去找牧師！",
+  "item.roundabout.anubis_item.sword_cleansed": "阿努比斯神出鞘！",
+  "skins.roundabout.anubis.anime" : "動漫版",
+
   "skins.roundabout.achtung_baby.base": "無形",
 
   "unlock_skin.roundabout.the_world.over_heaven": "世界：超越天堂皮膚解鎖！",
@@ -1395,7 +1416,7 @@
   "unlock_skin.roundabout.justice.bad_bone": "正義：壞入骨髓皮膚解鎖！",
   "unlock_skin.roundabout.magicians_red.chagaroth": "魔術師之紅：深淵巨獸皮膚解鎖！",
   "unlock_skin.roundabout.soft_and_wet.kira": "殺手皇後（第八部）皮膚解鎖！",
-  "unlock_skin.roundabout.ratt.rat": "溶蝕針解鎖！等下，解鎖了什麽？",
+  "unlock_skin.roundabout.ratt.rat": "溶蝕鼠解鎖！等下，解鎖了什麽？",
   "unlock_skin.roundabout.walking_heart.spider": "纏絲之心皮膚解鎖！",
 
   "justice.morph.player": "玩家",
@@ -2058,7 +2079,7 @@
   "config.roundabout.buffToMeleeAttacksWhenZapped.name": "物理增強",
   "config.roundabout.buffToMeleeAttacksWhenZapped.desc": "接近時，玩家和生物的物理傷害增強此數值。（默認為1.2，即有20%的傷害加成）",
   "config.roundabout.bonusDamageWhenPunching.name": "增強空手傷害",
-  "config.roundabout.bonusDamageWhenPunching.desc": "就像伍斯伍德一樣，當你戰鬥時你的空手傷害將會增加到3點（默認傷害），然而攻擊將會使自己流血。註意，盡管這份傷害可以與其他傷害疊加，這份附加傷害是獨立計算護甲減傷部分的，所以對pvp用處不大（說得好像這對模組pvp有什麽幫助是的……）",
+  "config.roundabout.bonusDamageWhenPunching.desc": "就像伍斯伍德一樣，當你戰鬥時你的空手傷害將會增加到3點（默認傷害），然而攻擊將會使自己流血。註意，盡管這份傷害可以與其他傷害叠加，這份附加傷害是獨立計算護甲減傷部分的，所以對pvp用處不大（說得好像這對模組pvp有什麽幫助是的……）",
   "config.roundabout.survivorRange.name": "基礎範圍",
   "config.roundabout.survivorRange.desc": "生存者替身在基礎模式下能夠用電流影響玩家和生物的最大範圍。（默認為8格）",
   "config.roundabout.survivorCupidRange.name": "丘比特生存模式範圍",
@@ -2208,6 +2229,8 @@
   "config.roundabout.drownSpeedModifier.desc": "當氧氣耗盡時，吸血鬼玩家不會獲得傷害，只會獲得此值引起的遊泳速度減益。將此值降低將會讓吸血鬼玩家遊的更慢。",
   "config.roundabout.sunDamagePercentPerDamageTick.name": "每次的陽光傷害",
   "config.roundabout.sunDamagePercentPerDamageTick.desc": "作為吸血鬼玩家，每次被陽光照射將會失去的最大生命值的比例。",
+  "config.roundabout.vampireUsesInternalSaturation.name": "內置飽和度",
+  "config.roundabout.vampireUsesInternalSaturation.desc": "當使用forge的蘋果皮時設為false以讓飽和度的金色饑餓雞腿顯現在吸血槽上方。",
 
   "config.roundabout.levelsToGetStand.name": "替身箭獲取替身消耗等級",
   "config.roundabout.levelsToGetStand.desc": "使用替身箭獲取替身消耗的等級，默認為15級。",

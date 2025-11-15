@@ -37,10 +37,12 @@ public class AnubisModel extends PsuedoHierarchicalModel {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.05F, -28.5F, 2.0F, 0.0F, 27.0F, new CubeDeformation(0.0F))
+        PartDefinition stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create()
+                .texOffs(-2, 0).addBox(-6.0F, -0.05F, -28.5F, 6.0F, 0.0F, 27.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 27).addBox(-4.0F, -0.55F, 0.5F, 2.0F, 1.0F, 7.0F, new CubeDeformation(0.0F))
                 .texOffs(18, 27).addBox(-7.0F, -0.55F, -1.5F, 8.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(21, 31).addBox(-3.5F, -1.1F, -1.0F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(21, 31).addBox(-4F, 1F, -1F, 1.0F, 0.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(21, 31).addBox(-4F, -1F, -1F, 1.0F, 0.0F, 1.0F, new CubeDeformation(0.0F))
                 .texOffs(30, 30).addBox(-8.0F, -0.05F, -2.5F, 2.0F, 0.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(30, 34).addBox(0.0F, -0.05F, -2.5F, 2.0F, 0.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.0F, -4.75F, -1.0F, 1.5708F, 0.0F, 0.0F));
 
@@ -70,6 +72,7 @@ public class AnubisModel extends PsuedoHierarchicalModel {
 
     public static ResourceLocation item = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/anime_item.png");
     public static ResourceLocation anime = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/anime.png");
+    public static ResourceLocation evil = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/evil.png");
 
 
     public ResourceLocation getTextureLocation(Entity context, byte skin){
@@ -77,6 +80,7 @@ public class AnubisModel extends PsuedoHierarchicalModel {
         {
             case 0 -> {return item;}
             case 1 -> {return anime;}
+            case 2 -> {return evil;}
             default -> {return anime;}
         }
     }

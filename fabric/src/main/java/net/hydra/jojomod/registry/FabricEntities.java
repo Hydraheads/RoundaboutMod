@@ -532,6 +532,13 @@ public class FabricEntities {
                     EntityType.Builder.<AnubisPossessorEntity>of(AnubisPossessorEntity::new, MobCategory.MISC).
                             sized(0.6f, 2f).clientTrackingRange(10).build(Roundabout.MOD_ID+":anubis_possessor")
             );
+    public static final EntityType<AnubisSlipstreamEntity> ANUBIS_SLIPSTREAM =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "anubis_slipstream"),
+                    EntityType.Builder.<AnubisSlipstreamEntity>of(AnubisSlipstreamEntity::new, MobCategory.MISC).
+                            sized(3F, 3F).clientTrackingRange(10).build(Roundabout.MOD_ID+":anubis_slipstream")
+            );
         public static final EntityType<GroundHurricaneEntity> GROUND_HURRICANE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -673,6 +680,7 @@ public class FabricEntities {
                 ModEntities.ENCASEMENT_BUBBLE = ENCASEMENT_BUBBLE;
                 ModEntities.CINDERELLA_VISAGE_DISPLAY = CINDERELLA_VISAGE_DISPLAY;
                 ModEntities.ANUBIS_POSSESSOR = ANUBIS_POSSESSOR;
+                ModEntities.ANUBIS_SLIPSTREAM = ANUBIS_SLIPSTREAM;
 
 
                 ModEntities.FALLEN_ZOMBIE = FALLEN_ZOMBIE;

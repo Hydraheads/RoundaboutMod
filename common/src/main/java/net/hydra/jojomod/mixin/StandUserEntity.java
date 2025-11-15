@@ -1623,6 +1623,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             TOT+=4;
             }
         TOT+=FateTypes.getJumpHeightAddon((LivingEntity) (Object)this);
+        StandUser SU = (StandUser) rdbt$this();
+        if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA && SU.roundabout$getActive()) {
+            TOT += 1;
+        }
         return TOT;
     }
     @Unique

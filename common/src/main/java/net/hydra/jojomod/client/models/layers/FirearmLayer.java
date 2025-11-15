@@ -76,6 +76,7 @@ public class FirearmLayer<T extends LivingEntity, A extends HumanoidModel<T>> ex
             float b = isHurt ? 0.0F : 1.0F;
             ModStrayModels.SNUBNOSE_REVOLVER_MODEL.render(livent, partialTicks, poseStack, bufferSource, packedLight,
                     r, g, b, heyFull);
+
         }
         poseStack.popPose();
     }
