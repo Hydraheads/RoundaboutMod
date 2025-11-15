@@ -6,9 +6,10 @@ public class SoundIndex {
      * basis. Mostly exists to cancel barrage sounds. Packets transfer bytes easily.*/
     public static final byte NO_SOUND = -1;
     public static final byte ALL_SOUNDS = 0;
-    public static final byte GLAIVE_CHARGE = -2;
-    public static final byte BOWLER_HAT_AIM_SOUND = -5;
-    public static final byte STAND_ARROW_CHARGE = -3;
+    public static final byte GLAIVE_CHARGE = -20;
+    public static final byte BOWLER_HAT_AIM_SOUND = -22;
+    public static final byte BLOOD_REGEN = -6;
+    public static final byte STAND_ARROW_CHARGE = -21;
     public static final byte CACKLE = -4;
     public static final byte BARRAGE_CHARGE_SOUND = 1;
     public static final byte ALT_CHARGE_SOUND_1 = 2;

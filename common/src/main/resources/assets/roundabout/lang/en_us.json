@@ -594,6 +594,8 @@
   "sounds.roundabout.go_beyond_launch":  "???",
   "sounds.roundabout.go_beyond_hit":  "Something Invisible",
   "sounds.roundabout.hypnosis":  "Hypnosis",
+  "sounds.roundabout.blood_regen":  "Flesh",
+  "sounds.roundabout.blood_regen_finish":  "Healed",
 
   "sounds.roundabout.bubble_hover_over":  "Bubble",
   "sounds.roundabout.bubble_pop":  "Bubble popping",
@@ -1152,6 +1154,19 @@
   "ability.roundabout.ratt_bucket.desc": "Buckets can pick up ratt flesh in a wide area, allowing you to quickly pick and place them down.",
   "ability.roundabout.ratt_leap": "Ratt Leap",
   "ability.roundabout.ratt_leap.desc": "Launches Ratt in a direction, allowing you to quickly reposition them",
+
+  "ability.roundabout.gd_punch_left": "Left Arm Launch",
+  "ability.roundabout.gd_return_left": "Left Arm Reattach",
+  "ability.roundabout.gd_spin_left": "Left Arm Spin",
+  "ability.roundabout.gd_punch_right": "Right Arm Launch",
+  "ability.roundabout.gd_return_right": "Right Arm Reattach",
+  "ability.roundabout.gd_spin_right": "Right Arm Spin",
+  "ability.roundabout.gd_mold_leap": "Separation Leap",
+  "ability.roundabout.gd_mold_leap.desc": "Separates your torso and legs, and launches you in the direction you are looking, allowing for great Vertical moblity. Leaves you crawling while your legs [your legs dont do anything, they dont exist for now]",
+  "ability.roundabout.gd_mold_field": "Mold Field",
+  "ability.roundabout.gd_mold_field.desc": "Releases mold spores in a large area around you. Any mob in that area that lowers in elevation whilst being below you takes massive damage that ramps up over time. Players and certain mobs killed by the mold field with drop their heads. Organic projectiles below you in the mold field will rapidly disintegrate.",
+  "ability.roundabout.gd_stitch": "Stitch up",
+  "ability.roundabout.gd_stitch.desc": "Stitches you up, recovering a tiny bit of health, and reducing bleed by 1 level",
 
   "ability.roundabout.diver_selection": "Diver Selection",
   "ability.roundabout.diver_selection.desc": "Opens an impairment wheel which you can apply effects onto yourself",

@@ -19,10 +19,7 @@ import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ModificationMaskItem;
-import net.hydra.jojomod.stand.powers.PowersCream;
-import net.hydra.jojomod.stand.powers.PowersRatt;
-import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
-import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
+import net.hydra.jojomod.stand.powers.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -296,6 +293,25 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                 }
             }
         }
+        if ($$0 instanceof StandUser standUser) {
+            if (((StandUser) $$0).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+                      PlayerModel<AbstractClientPlayer> playerModel = (PlayerModel) this.getModel();
+
+                if (PGD.legGoneTicks == 1) {
+                    playerModel.leftLeg.visible = true;
+                    playerModel.leftPants.visible = true;
+                    playerModel.rightLeg.visible = true;
+                    playerModel.rightPants.visible = true;
+                } else if (PGD.legGoneTicks > 0) {
+                    playerModel.leftLeg.visible = false;
+                    playerModel.leftPants.visible = false;
+                    playerModel.rightLeg.visible = false;
+                    playerModel.rightPants.visible = false;
+                }
+
+            }
+
+        }
     }
 
     @Inject(method = "setModelProperties", at = @At(value = "TAIL"))
@@ -344,6 +360,8 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
     }
 
+
+
     /**Render external layers like soft and wet shooting mode out of context. This particular inject is for Achtung Baby*/
     @Inject(method = "renderHand", at = @At(value = "HEAD"), cancellable = true)
     private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderHandHEAD(PoseStack stack, MultiBufferSource buffer, int integer,
@@ -370,6 +388,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             roundabout$renderHandLayers2(stack,buffer,integer,acl,$$4,$$5);
         }
     }
+    
 
     /**Render external layers like soft and wet shooting mode out of context*/
     @Inject(method = "renderHand", at = @At(value = "TAIL"))

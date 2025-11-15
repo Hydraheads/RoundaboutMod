@@ -36,6 +36,7 @@ public abstract class LayerPlayerRendererMixin<T extends LivingEntity, M extends
         this.addLayer(new FirearmLayer<>($$0, this));
         this.addLayer(new RoadRollerLayer<>($$0, this));
         this.addLayer(new WornStoneMaskLayer<>($$0, this));
+        this.addLayer(new MoldSpineLayer<>($$0, this));
     }
 
     /**Shadows, ignore

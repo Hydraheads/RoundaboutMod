@@ -89,6 +89,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.*;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 
 import javax.annotation.Nullable;
@@ -808,6 +809,11 @@ public class MainUtil {
         return !(ent instanceof Mob mb && mb.getTarget() != null && mb.getTarget().is(drinker));
     }
 
+    public static boolean isPlayerBonkingHead(LivingEntity player) {
+        Level level = player.level();
+        AABB headSpace = player.getBoundingBox().expandTowards(0, 0.05, 0);
+        return !level.noCollision(player, headSpace);
+    }
 
     public static void makeFaceless(Entity entity, int ticks, int power, Entity user){
         if (entity instanceof LivingEntity LE){

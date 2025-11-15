@@ -7,10 +7,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.FateTypes;
-import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.index.PlayerPosIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
@@ -70,6 +67,7 @@ public class VampiricFate extends FatePowers {
         super.tickPower();
     }
 
+    public final float bloodSpread = 3;
     public final int duration = 100;
     public void tickBloodRegen(){
         if (!this.self.level().isClientSide()) {
@@ -77,9 +75,25 @@ public class VampiricFate extends FatePowers {
                 if (self instanceof Player PE && !PE.isCreative()){
                     PE.getFoodData().setFoodLevel(0);
                 }
-                float healthBack = sunkRegen/duration * 0.8F;
+                //Particle
+                float spreadX = (float) (Math.random()*bloodSpread - (bloodSpread/2));
+                float spreadY = (float) (Math.random()*bloodSpread - (bloodSpread/2));
+                float spreadZ = (float) (Math.random()*bloodSpread - (bloodSpread/2));
+
+                Vec3 shotPos = new Vec3(spreadX,spreadY,spreadZ);
+                Vec3 spawnPos = shotPos.add(self.getEyePosition(1f));
+                shotPos = shotPos.multiply(new Vec3(-1,-1,-1));
+
+                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.BLOOD_MIST,
+                        spawnPos.x, spawnPos.y, spawnPos.z,
+                        0, shotPos.x, shotPos.y,shotPos.z, 0.03);
+
+
+                //heal
+                float healthBack = sunkRegen/duration * 0.9F;
                 float health = self.getHealth();
                 float maxHealth = self.getMaxHealth();
+
                 if (health < maxHealth){
                     health+=healthBack;
                     if (health < maxHealth){
@@ -90,6 +104,8 @@ public class VampiricFate extends FatePowers {
                 }
                 if (attackTimeDuring > duration || self.getHealth() >= maxHealth){
                     xTryPower(PowerIndex.NONE, true);
+                    this.stopSoundsIfNearby(SoundIndex.BLOOD_REGEN, 100,false);
+                    self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_REGEN_FINISH_EVENT, SoundSource.PLAYERS, 1F, 1F);
                 }
             }
         }
@@ -200,7 +216,7 @@ public class VampiricFate extends FatePowers {
                 && getActivePower() != BLOOD_REGEN;
     }
     public boolean canUseRegen(){
-        return self instanceof Player PE && PE.getFoodData().getFoodLevel() >= 4 && !isFast()
+        return self instanceof Player PE && PE.getFoodData().getFoodLevel() >= 1 && !isFast()
                 && getActivePower() != BLOOD_REGEN;
     }
     public void regenClient(){
@@ -224,7 +240,7 @@ public class VampiricFate extends FatePowers {
             }
             setAttackTimeDuring(0);
             setActivePower(BLOOD_REGEN);
-            self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SPEED_EVENT, SoundSource.PLAYERS, 1F, 0.95F+(float)(Math.random()*0.1));
+            playSoundsIfNearby(SoundIndex.BLOOD_REGEN, 100, true);
 
         }
     }
@@ -250,7 +266,7 @@ public class VampiricFate extends FatePowers {
 
     @Override
     public boolean interceptAttack(){
-        return this.getActivePower() == BLOOD_SUCK || this.getActivePower() == BLOOD_REGEN;
+        return this.getActivePower() == BLOOD_SUCK;
     }
 
     public void clientChangeVision(){

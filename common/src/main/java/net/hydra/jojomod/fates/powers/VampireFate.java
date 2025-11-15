@@ -87,7 +87,10 @@ public class VampireFate extends VampiricFate {
             return true;
         return super.isAttackIneptVisually(activeP,slot);
     }
-
+    @Override
+    public float getJumpHeightAddon(){
+        return 4;
+    }
 
 
     @Override
