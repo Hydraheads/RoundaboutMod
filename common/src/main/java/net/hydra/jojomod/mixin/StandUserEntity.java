@@ -84,6 +84,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
@@ -1620,7 +1621,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         float TOT = 0;
         if (roundabout$getBubbleEncased() == 1){
             TOT+=4;
-        }
+            }
+        TOT+=FateTypes.getJumpHeightAddon((LivingEntity) (Object)this);
         return TOT;
     }
     @Unique
@@ -3266,6 +3268,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return ogGrav;
     }
 
+
     @SuppressWarnings("deprecation")
     @Unique
     @Override
@@ -3273,17 +3276,30 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         roundabout$adjustGravity();
 
         if (this.isControlledByLocalInstance()) {
+            if (MainUtil.isPlayerBonkingHead(((LivingEntity)(Object)this)) || isUsingItem()){
+                roundabout$setBigJumpCurrentProgress(0);
+                roundabout$setBigJump(false);
+            }
             float curr = roundabout$getBigJumpCurrentProgress();
             float max = roundabout$getBonusJumpHeight();
+
             if (roundabout$getBigJump() || (curr < 1 && getDeltaMovement().y >= 0)) {
                 if (curr < max+1) {
-                    roundabout$setBigJumpCurrentProgress(curr+0.495F);
+                    if (roundabout$isBubbleEncased()) {
+                        roundabout$setBigJumpCurrentProgress(curr + 0.495F);
+                    } else {
+                        roundabout$setBigJumpCurrentProgress(curr + 0.68F);
+                    }
                     Vec3 $$0 = this.getDeltaMovement();
 
 
                     if (!onGround()){
                         if (roundabout$getBigJump()){
-                            this.setDeltaMovement($$0.x*0.91, (double) this.getJumpPower(), $$0.z*0.91);
+                            if (roundabout$isBubbleEncased()){
+                                this.setDeltaMovement($$0.x*0.91, (double) this.getJumpPower(), $$0.z*0.91);
+                            } else {
+                                this.setDeltaMovement($$0.x*0.91, (double) this.getJumpPower()*1.2, $$0.z*0.91);
+                            }
                         }
                     }
 
@@ -4560,6 +4576,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Shadow
     @Final
     public WalkAnimationState walkAnimation;
+
+    @Shadow public abstract boolean isUsingItem();
+
     @Unique private boolean roundabout$isPRunning = false;
 
     @Override

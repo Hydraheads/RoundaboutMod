@@ -107,6 +107,12 @@ public enum FateTypes {
             ((IPlayerEntity)PE).roundabout$setFate(HUMAN.id);
         }
     }
+    public static float getJumpHeightAddon(LivingEntity entity){
+        if (entity instanceof Player PE){
+            return ((IFatePlayer)PE).rdbt$getFatePowers().getJumpHeightAddon();
+        }
+        return 0;
+    }
 
 
 
