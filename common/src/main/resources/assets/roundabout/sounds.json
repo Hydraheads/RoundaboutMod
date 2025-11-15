@@ -83,6 +83,12 @@
       "roundabout:vampire_speed"
     ]
   },
+  "vampire_wall_grip": {
+    "subtitle": "sounds.roundabout.vampire_wall_grip",
+    "sounds": [
+      "roundabout:vampire_wall_grip"
+    ]
+  },
   "hypnosis": {
     "subtitle": "sounds.roundabout.hypnosis",
     "sounds": [

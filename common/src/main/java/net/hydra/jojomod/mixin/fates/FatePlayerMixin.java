@@ -70,19 +70,16 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
                     BlockState $$3 = this.level().getBlockState($$2);
                     if ($$3.is(BlockTags.COMBINATION_STEP_SOUND_BLOCKS)) {
                         SoundType st = $$1.getSoundType();
-                        super.playStepSound($$2, $$3);
-                        this.playSound(st.getBreakSound(), st.getVolume() * 0.25F, st.getPitch());
+                        this.playSound(st.getBreakSound(), st.getVolume(), st.getPitch());
                     } else {
                         SoundType st = $$1.getSoundType();
-                        super.playStepSound($$2, $$3);
-                        this.playSound(st.getBreakSound(), st.getVolume() * 0.25F, st.getPitch());
+                        this.playSound(st.getBreakSound(), st.getVolume(), st.getPitch());
                     }
                 } else {
                     SoundType st = $$1.getSoundType();
                     BlockState $$3 = this.level().getBlockState($$2);
                     super.playStepSound($$2, $$3);
-                    this.playSound(st.getBreakSound(), st.getVolume() * 0.25F, st.getPitch());
-                    super.playStepSound($$0, $$1);
+                    this.playSound(st.getBreakSound(), st.getVolume(), st.getPitch());
                 }
             }
             ci.cancel();
