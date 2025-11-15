@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -57,21 +58,20 @@ public class VampireFate extends VampiricFate {
                 clientChangeVision();
             }
         }
-        super.powerActivate(context);
     };
     public static final byte HYPNOSIS = 50;
 
-    public void dashOrWallWalk(){
-        if (canLatchOntoWall() && canWallWalkConfig())
-            doWallLatchClient();
-        else
-            dash();
+
+
+    @Override
+    public boolean tryPower(int move, boolean forced) {
+        switch (move) {
+            case WALL_WALK -> {
+                wallLatch();
+            }
+        }
+        return super.tryPower(move,forced);
     }
-
-    public void doWallLatchClient(){
-
-    }
-
     public void hypnosis(){
         tryPowerPacket(HYPNOSIS);
     }
@@ -166,7 +166,7 @@ public class VampireFate extends VampiricFate {
         }
 
         if ((canLatchOntoWall() || isPlantedInWall()) && canWallWalkConfig()) {
-            setSkillIcon(context, x, y, 3, StandIcons.WALL_WALK, PowerIndex.SKILL_3);
+            setSkillIcon(context, x, y, 3, StandIcons.WALL_WALK_VAMP, PowerIndex.SKILL_3);
         } else if (isHoldingSneak()) {
             setSkillIcon(context, x, y, 3, StandIcons.CHEETAH_SPEED, PowerIndex.FATE_3_SNEAK);
         } else {

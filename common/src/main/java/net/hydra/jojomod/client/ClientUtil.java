@@ -22,6 +22,7 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.networking.ServerToClientPackets;
@@ -35,6 +36,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.zetalasis.client.shader.D4CShaderFX;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
@@ -78,10 +80,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Unique;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.StringTokenizer;
+import java.util.*;
 
 
 public class ClientUtil {
@@ -546,6 +545,30 @@ public class ClientUtil {
                 //        }
             }
         });
+    }
+
+    public static boolean getDirectionRight(LivingEntity self){
+
+        Direction rightAxis = Direction.DOWN;
+        MobEffectInstance mi = Minecraft.getInstance().player.getEffect(ModEffects.GRAVITY_FLIP);
+        if (mi != null) {
+            if (mi.getAmplifier() == 0) {
+                rightAxis = Direction.NORTH;
+            }
+            if (mi.getAmplifier() == 1) {
+                rightAxis = Direction.SOUTH;
+            }
+            if (mi.getAmplifier() == 2) {
+                rightAxis = Direction.EAST;
+            }
+            if (mi.getAmplifier() == 3) {
+                rightAxis = Direction.WEST;
+            }
+            if (mi.getAmplifier() == 4) {
+                rightAxis = Direction.UP;
+            }
+        }
+        return ((IGravityEntity)self).roundabout$getGravityDirection() != rightAxis;
     }
 
     /**
