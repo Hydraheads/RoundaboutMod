@@ -3,6 +3,7 @@ package net.hydra.jojomod.util;
 
 /// THIS IS A TOOL TO MAKE ADDING SOUNDS EASY
 
+import java.util.Objects;
 import java.util.Scanner;
 
 class RunnableSoundGenerator {
@@ -49,19 +50,19 @@ class RunnableSoundGenerator {
 
             for (int i = 0; i < strings.length; i++) {
                 String title = string_titles[i];
-                if (title != "") {
+                if (!Objects.equals(title, "")) {
                     System.out.println(title + ":\n");
                 }
                 System.out.println(replaceValues(strings[i], string_replacers[i]));
                 String append = string_appends[i];
-                if (append != "") {
+                if (!Objects.equals(append, "")) {
                     System.out.println(append);
                 }
 
             }
 
             System.out.println("Type \"AGAIN\" to print again!");
-            if (!s.nextLine().toLowerCase().equals("again")) {
+            if (!s.nextLine().equalsIgnoreCase("again")) {
                 running = false;
             }
 
