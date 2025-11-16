@@ -220,7 +220,7 @@ public int speedActivated = 0;
     public final int duration = 100;
     public void tickBloodRegen(){
         if (!this.self.level().isClientSide()) {
-            if (getActivePower() == BLOOD_REGEN){
+            if (getActivePower() == BLOOD_REGEN && self.isAlive() && !self.isRemoved()){
                 if (self instanceof Player PE && !PE.isCreative()){
                     PE.getFoodData().setFoodLevel(0);
                 }
