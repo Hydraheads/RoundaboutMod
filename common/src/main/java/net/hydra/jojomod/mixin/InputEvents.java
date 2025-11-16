@@ -198,7 +198,7 @@ public abstract class InputEvents implements IInputEvents {
     @Inject(method = "startAttack", at = @At("HEAD"), cancellable = true)
     public void roundabout$Attack(CallbackInfoReturnable<Boolean> ci) {
         if (player != null) {
-            Roundabout.LOGGER.info("startAttack");
+            //oundabout.LOGGER.info("startAttack");
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
             ItemStack itemStack = player.getUseItem();

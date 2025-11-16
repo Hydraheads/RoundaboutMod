@@ -66,7 +66,6 @@ public class VampireFate extends VampiricFate {
 
     @Override
     public boolean tryPower(int move, boolean forced) {
-        Roundabout.LOGGER.info("1");
         switch (move) {
             case WALL_WALK -> {
                 wallLatch();
