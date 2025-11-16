@@ -32,7 +32,7 @@ class RunnableSoundGenerator {
         while (running) {
             System.out.println("THE NAME OF THE EVENT, WITH UNDERSCORES:");
             Scanner s = new Scanner(System.in);
-            String result = s.nextLine();
+            String result = s.nextLine().toLowerCase();
             String upper = result.toUpperCase();
 
             String ID = upper + "_ID";
