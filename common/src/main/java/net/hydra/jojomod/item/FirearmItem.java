@@ -47,9 +47,9 @@ public class FirearmItem extends Item {
 
     public boolean interceptAttack(ItemStack itemStack, Player player) {
         Roundabout.LOGGER.info("1"+player.getUseItem());
-        if (player != null && MainUtil.roundaboutGetUsedItem(player) != null) {
+        if (player != null && player.getUseItem() != null) {
             Roundabout.LOGGER.info("2"+player.getUseItem());
-            if (MainUtil.roundaboutGetUsedItem(player) == itemStack) {
+            if (player.getUseItem() == itemStack) {
                 Roundabout.LOGGER.info("3");
                 return true;
             }
@@ -85,7 +85,7 @@ public class FirearmItem extends Item {
     public void releaseUsing(ItemStack stack, Level dimension, LivingEntity livingEntity, int timeLeft) {
         if (!dimension.isClientSide && livingEntity instanceof Player player) {
             ItemStack itemStack = player.getMainHandItem();
-            if (!(MainUtil.roundaboutGetUsedItem(player) == itemStack)) {
+            if (!(player.getUseItem() == itemStack)) {
                 player.stopUsingItem();
             }
         }

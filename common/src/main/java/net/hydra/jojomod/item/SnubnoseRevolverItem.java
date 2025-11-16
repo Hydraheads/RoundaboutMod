@@ -10,7 +10,6 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
-import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -155,7 +154,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
         if (!(itemStack.getItem() instanceof SnubnoseRevolverItem)) {
             return InteractionResultHolder.fail(itemStack);
         }
-        if (MainUtil.roundaboutGetUsedItem(player) == itemStack) {
+        if (!(player.getUseItem() == itemStack)) {
             if ((player.isCrouching() && hasSnubnoseAmmo(player) && getAmmo(itemStack) != maxAmmo) || (player.isCrouching() && player.isCreative())) {
                 int currentAmmo = getAmmo(itemStack);
                 int ammoNeeded = maxAmmo - currentAmmo;
