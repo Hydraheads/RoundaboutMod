@@ -5,11 +5,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
@@ -18,7 +14,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
 
@@ -30,23 +25,9 @@ public abstract class FirearmMinecraftStartAttackMixin {
     public Options options;
 
     @Shadow
-    protected int missTime;
-    @Shadow
-    @Nullable
-    public HitResult hitResult;
-    @Shadow
-    @Final
-    private static Logger LOGGER;
-    @Shadow
-    @Nullable
-    public MultiPlayerGameMode gameMode;
-    @Shadow
-    @Nullable
-    public ClientLevel level;
-
-    @Shadow
     protected abstract boolean startAttack();
 
+    @Shadow
     @Nullable
     public LocalPlayer player;
 

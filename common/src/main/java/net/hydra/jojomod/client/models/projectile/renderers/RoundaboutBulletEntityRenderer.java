@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.models.projectile.RattDartModel;
 import net.hydra.jojomod.client.models.projectile.RoundaboutBulletModel;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -34,7 +35,7 @@ public class RoundaboutBulletEntityRenderer extends EntityRenderer<RoundaboutBul
 
     public void render(RoundaboutBulletEntity $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
         if (!ClientUtil.getScreenFreeze()) {
-            if (((Entity)$$0).tickCount < 2 && this.entityRenderDispatcher.camera.getEntity().distanceToSqr((Entity)$$0) < 12.25) {
+            if (((Entity)$$0).tickCount < 2 && this.entityRenderDispatcher.camera.getEntity().distanceToSqr((Entity)$$0) < 12.25 && !((TimeStop) $$0.level()).inTimeStopRange($$0)) {
                 return;
             }
             $$3.pushPose();

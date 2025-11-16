@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
@@ -69,9 +70,21 @@ public class RoundaboutBulletEntity extends AbstractArrow {
         }
     }
 
+    boolean timeStopShot = false;
+    int outsideOfTimeStop = 0;
+
     @Override
     public void onHitEntity(EntityHitResult result) {
         Entity entity = result.getEntity();
+
+        if (entity instanceof LivingEntity livingEntity) {
+            if ((livingEntity.hurtTime > 0 || livingEntity.invulnerableTime > 0) && outsideOfTimeStop == 0) {
+                return;
+            } else if (outsideOfTimeStop > 0) {
+                entity.invulnerableTime = 0;
+            }
+        }
+
         this.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), ModSounds.BULLET_PENTRATION_EVENT, this.getSoundSource(), 1.0F, 1.0F);
         super.onHitEntity(result);
     }
@@ -88,6 +101,19 @@ public class RoundaboutBulletEntity extends AbstractArrow {
     @Override
     public void tick() {
         Vec3 delta = this.getDeltaMovement();
+
+        if (((IProjectileAccess) this).roundabout$getRoundaboutIsTimeStopCreated()) {
+            timeStopShot = true;
+        }
+
+        if (timeStopShot) {
+            if (outsideOfTimeStop < 5) {
+                outsideOfTimeStop++;
+            } else if (outsideOfTimeStop >= 5) {
+                timeStopShot = false;
+                outsideOfTimeStop = 0;
+            }
+        }
 
         if (inGroundTime >= 160) {
             this.remove(RemovalReason.DISCARDED);
