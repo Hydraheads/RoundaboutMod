@@ -1859,6 +1859,10 @@
   "config.roundabout.rattManualChargeRate.name": "Manual Ratt Charge Speed",
   "config.roundabout.rattManualChargeRate.desc": "How quickly manually charging Ratt takes. default is 2 per tick which equals about 2.5 seconds to reach full charge.",
 
+  "config.roundabout.rattLeapCooldown.name": "Ratt Leap Cooldown",
+  "config.roundabout.rattLeapCooldown.desc": "The cooldown for Ratt's 4th move, Ratt Leap",
+  "config.roundabout.rattLeapStrength.name": "Ratt Leap Strength",
+  "config.roundabout.rattLeapStrength.desc": "How strong Ratt's leap is",
 
 
 
