@@ -1,6 +1,8 @@
 package net.hydra.jojomod.util;
 
 
+/// THIS IS A TOOL TO MAKE ADDING SOUNDS EASY
+
 import java.util.Scanner;
 
 class RunnableSoundGenerator {
@@ -64,7 +66,14 @@ class RunnableSoundGenerator {
             }
 
         }
-        System.out.println(""+running);
+        System.out.println("Make sure to:");
+        System.out.println("A: add the sound to the en_us lang file");
+        System.out.println("B: rename the sound to the id's name");
+        System.out.println("C: make sure the sound is .ogg");
+        System.out.println("D: make sure the sound is mono (look it up if you're unsure)");
+
+
+
 
 
 
