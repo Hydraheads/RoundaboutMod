@@ -795,10 +795,10 @@ public class PowersRatt extends NewDashPreset {
             }
 
             case PowersRatt.RATT_LEAP -> {
-                this.setCooldown(PowersRatt.RATT_LEAP,150);
+                this.setCooldown(PowersRatt.RATT_LEAP,ClientNetworking.getAppropriateConfig().rattSettings.rattLeapCooldown);
                 Vec3 dir = this.getSelf().getViewVector(1);
                 if (this.getStandEntity(this.getSelf()) != null) {
-                    dir = dir.scale(1.12);
+                    dir = dir.scale(ClientNetworking.getAppropriateConfig().rattSettings.rattLeapStrength);
                     Vec3 vec3 = new Vec3(dir.x, Mth.clamp(dir.y+0.2F,0.1,100), dir.z);
                     this.getStandEntity(this.getSelf()).setDeltaMovement(vec3);
                 }

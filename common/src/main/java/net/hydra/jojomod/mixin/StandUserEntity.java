@@ -20,6 +20,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.*;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
@@ -3694,8 +3695,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             float fd = ((IFatePlayer)pl).rdbt$getFatePowers().getJumpHeightAddon();
             if (fd > 0){
                 adj = true;
-                Roundabout.LOGGER.info("1: "+$$0+" 2: "+fd);
                 $$0 = Math.max(0,$$0-fd);
+            }
+
+            float jd = ((IFatePlayer)pl).rdbt$getFatePowers().getJumpDamageMult();
+            if (jd != 1){
+                adj = true;
+                $$1*= jd;
             }
         }
         int yesInt = roundabout$getAdjustedGravity();

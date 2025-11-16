@@ -1,5 +1,6 @@
 package net.hydra.jojomod.fates.powers;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.ModParticles;
@@ -65,6 +66,7 @@ public class VampireFate extends VampiricFate {
 
     @Override
     public boolean tryPower(int move, boolean forced) {
+        Roundabout.LOGGER.info("1");
         switch (move) {
             case WALL_WALK -> {
                 wallLatch();
@@ -95,7 +97,7 @@ public class VampireFate extends VampiricFate {
     public int hypnoTicks = 0;
 
     public boolean isAttackIneptVisually(byte activeP, int slot){
-        if (slot == 3 && isPlantedInWall() && !canLatchOntoWall())
+        if (slot == 3 && isPlantedInWall() && !isHoldingSneak() && !canLatchOntoWall())
             return true;
         if (slot == 3 && isHoldingSneak() && !canUseBloodSpeed())
             return true;
@@ -165,8 +167,8 @@ public class VampireFate extends VampiricFate {
             setSkillIcon(context, x, y, 2, StandIcons.BLOOD_DRINK, PowerIndex.FATE_2);
         }
 
-        if ((canLatchOntoWall() || isPlantedInWall()) && canWallWalkConfig()) {
-            setSkillIcon(context, x, y, 3, StandIcons.WALL_WALK_VAMP, PowerIndex.SKILL_3);
+        if ((canLatchOntoWall() || (isPlantedInWall() && !isHoldingSneak())) && canWallWalkConfig()) {
+            setSkillIcon(context, x, y, 3, StandIcons.WALL_WALK_VAMP, PowerIndex.FATE_3);
         } else if (isHoldingSneak()) {
             setSkillIcon(context, x, y, 3, StandIcons.CHEETAH_SPEED, PowerIndex.FATE_3_SNEAK);
         } else {

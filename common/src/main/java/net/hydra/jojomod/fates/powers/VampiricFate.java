@@ -2,9 +2,7 @@ package net.hydra.jojomod.fates.powers;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.AccessFateFoodData;
-import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IGravityEntity;
-import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
@@ -29,7 +27,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -65,8 +62,10 @@ public class VampiricFate extends FatePowers {
 
     public float walkDistLast = 0;
     public void wallLatch(){
+        Roundabout.LOGGER.info("2");
         if (canLatchOntoWall() && canWallWalkConfig()){
-            this.setCooldown(PowerIndex.SKILL_3, 10);
+            Roundabout.LOGGER.info("3");
+            this.setCooldown(PowerIndex.FATE_3, 10);
             if (!this.self.level().isClientSide()) {
                 //if (!isOnWrongAxis())
                 if (saveState != null){
@@ -82,7 +81,7 @@ public class VampiricFate extends FatePowers {
                                     self.getY(),
                                     self.getZ()));
                 }
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.WALL_LATCH_EVENT, SoundSource.PLAYERS, 1F, 1f);
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.VAMPIRE_WALL_GRIP_EVENT, SoundSource.PLAYERS, 2F, 1f);
                 //toggleSpikes(true);
                 Direction gd = RotationUtil.getRealFacingDirection2(this.self);
                 setWallWalkDirection(gd);
@@ -420,7 +419,9 @@ public int speedActivated = 0;
     }
     public void doWallLatchClient(){
         if (!this.onCooldown(PowerIndex.FATE_3)) {
-            ((StandUser) this.getSelf()).roundabout$tryPower(WALL_WALK, true);
+            Roundabout.LOGGER.info("0");
+            //test
+            tryPower(WALL_WALK, true);
             tryPowerPacket(WALL_WALK);
         }
     }
@@ -589,6 +590,11 @@ public int speedActivated = 0;
             super.setPlayerPos2(PlayerPosIndex.NONE_2);
         }
         return super.tryPower(move, forced);
+    }
+
+    @Override
+    public float getJumpDamageMult(){
+        return 0.5F;
     }
 
     @Override

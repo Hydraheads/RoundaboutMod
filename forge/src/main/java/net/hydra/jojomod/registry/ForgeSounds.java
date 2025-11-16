@@ -516,6 +516,8 @@ public class ForgeSounds {
             register(ModSounds.VAMPIRE_DRAIN, ModSounds.VAMPIRE_DRAIN_ID);
     public static final RegistryObject<SoundEvent> VAMPIRE_CRUMBLE =
             register(ModSounds.VAMPIRE_CRUMBLE, ModSounds.VAMPIRE_CRUMBLE_ID);
+    public static final RegistryObject<SoundEvent> VAMPIRE_WALL_GRIP =
+            register(ModSounds.VAMPIRE_WALL_GRIP, ModSounds.VAMPIRE_WALL_GRIP_ID);
 
     public static final RegistryObject<SoundEvent> DIO_HOHO =
             register(ModSounds.DIO_HOHO, ModSounds.DIO_HOHO_ID);

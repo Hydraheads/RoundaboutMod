@@ -891,6 +891,11 @@ public class ModSounds {
     public static final ResourceLocation VAMPIRE_CRUMBLE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VAMPIRE_CRUMBLE);
     public static SoundEvent VAMPIRE_CRUMBLE_EVENT = SoundEvent.createVariableRangeEvent(VAMPIRE_CRUMBLE_ID);
 
+    public static final String VAMPIRE_WALL_GRIP = "vampire_wall_grip";
+    public static final ResourceLocation VAMPIRE_WALL_GRIP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VAMPIRE_WALL_GRIP);
+    public static SoundEvent VAMPIRE_WALL_GRIP_EVENT = SoundEvent.createVariableRangeEvent(VAMPIRE_WALL_GRIP_ID);
+
+
 
 
     public static final String DIO_HOHO = "dio_hoho";
