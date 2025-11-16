@@ -59,6 +59,30 @@
       "roundabout:cream_void_attack"
     ]
   },
+  "snubnose_fire": {
+    "subtitle": "sounds.roundabout.snubnose_fire",
+    "sounds": [
+      "roundabout:snubnose_fire"
+    ]
+  },
+  "snubnose_dry_fire": {
+    "subtitle": "sounds.roundabout.snubnose_dry_fire",
+    "sounds": [
+      "roundabout:snubnose_dry_fire"
+    ]
+  },
+  "snubnose_reload": {
+    "subtitle": "sounds.roundabout.snubnose_reload",
+    "sounds": [
+      "roundabout:snubnose_reload"
+    ]
+  },
+  "bullet_penetration": {
+    "subtitle": "sounds.roundabout.bullet_penetration",
+    "sounds": [
+      "roundabout:bullet_penetration"
+    ]
+  },
   "road_roller_ambient": {
     "subtitle": "sounds.roundabout.road_roller_ambient",
     "sounds": [

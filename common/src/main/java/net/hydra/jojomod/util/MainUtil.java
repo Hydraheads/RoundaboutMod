@@ -49,6 +49,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
@@ -2046,6 +2047,16 @@ public class MainUtil {
             }
         }
         return false;
+    }
+
+    public static ItemStack roundaboutGetUsedItem(Entity entity) {
+        if (entity instanceof Player) {
+            InteractionHand interactionHand = ((Player) entity).getUsedItemHand();
+            ItemStack itemInHand = ((Player) entity).getItemInHand(interactionHand);
+            Roundabout.LOGGER.info("Get used item print:"+itemInHand);
+            return itemInHand;
+        }
+        return ItemStack.EMPTY;
     }
 
     /**Code for determining if it is appropriate to place a splatter down*/

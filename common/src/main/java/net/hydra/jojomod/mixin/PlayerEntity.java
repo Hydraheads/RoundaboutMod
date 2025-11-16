@@ -703,6 +703,14 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
 
     @Unique
+    public final AnimationState roundabout$snubnoseAim = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getSnubnoseAim(){
+        return roundabout$snubnoseAim;
+    }
+
+    @Unique
     public final AnimationState roundabout$BubbleShotAim = new AnimationState();
     @Unique
     @Override

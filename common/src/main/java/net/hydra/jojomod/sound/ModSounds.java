@@ -187,6 +187,20 @@ public class ModSounds {
     public static final ResourceLocation CREAM_VOID_ATTACK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CREAM_VOID_ATTACK);
     public static SoundEvent CREAM_VOID_ATTACK_EVENT = SoundEvent.createVariableRangeEvent(CREAM_VOID_ATTACK_ID);
 
+    public static final String SNUBNOSE_FIRE = "snubnose_fire";
+    public static final ResourceLocation SNUBNOSE_FIRE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SNUBNOSE_FIRE);
+    public static SoundEvent SNUBNOSE_FIRE_EVENT = SoundEvent.createVariableRangeEvent(SNUBNOSE_FIRE_ID);
+    public static final String SNUBNOSE_DRY_FIRE = "snubnose_dry_fire";
+    public static final ResourceLocation SNUBNOSE_DRY_FIRE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SNUBNOSE_DRY_FIRE);
+    public static SoundEvent SNUBNOSE_DRY_FIRE_EVENT = SoundEvent.createVariableRangeEvent(SNUBNOSE_DRY_FIRE_ID);
+    public static final String SNUBNOSE_RELOAD = "snubnose_reload";
+    public static final ResourceLocation SNUBNOSE_RELOAD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SNUBNOSE_RELOAD);
+    public static SoundEvent SNUBNOSE_RELOAD_EVENT = SoundEvent.createVariableRangeEvent(SNUBNOSE_RELOAD_ID);
+
+    public static final String BULLET_PENTRATION = "bullet_penetration";
+    public static final ResourceLocation BULLET_PENTRATION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BULLET_PENTRATION);
+    public static SoundEvent BULLET_PENTRATION_EVENT = SoundEvent.createVariableRangeEvent(BULLET_PENTRATION_ID);
+
 
     public static final String ROAD_ROLLER_AMBIENT = "road_roller_ambient";
     public static final ResourceLocation ROAD_ROLLER_AMBIENT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ROAD_ROLLER_AMBIENT);

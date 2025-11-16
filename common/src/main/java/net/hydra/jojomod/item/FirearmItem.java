@@ -38,16 +38,6 @@ public class FirearmItem extends Item {
         super($$0);
     }
 
-    private static final String AMMO_COUNT_TAG = "AmmoCount";
-
-    private int getAmmo(ItemStack stack) {
-        return stack.getOrCreateTag().getInt(AMMO_COUNT_TAG);
-    }
-
-    private void setAmmo(ItemStack stack, int count) {
-        stack.getOrCreateTag().putInt(AMMO_COUNT_TAG, count);
-    }
-
     @Override
     public int getUseDuration(ItemStack stack) {
         return 72000;
@@ -56,12 +46,21 @@ public class FirearmItem extends Item {
     int maxAmmo = 6;
 
     public boolean interceptAttack(ItemStack itemStack, Player player) {
-        if (player != null && player.getUseItem() != null && player.getUseItem() == itemStack) {
+        Roundabout.LOGGER.info("1"+player.getUseItem());
+        if (player != null && player.getUseItem() != null) {
+            Roundabout.LOGGER.info("2"+player.getUseItem());
             if (player.getUseItem() == itemStack) {
+                Roundabout.LOGGER.info("3");
                 return true;
             }
         }
+        Roundabout.LOGGER.info("4");
         return false;
+    }
+
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack itemStack = player.getItemInHand(hand);
+        return InteractionResultHolder.consume(itemStack);
     }
 
     public void fireBullet(Level level, Player player, InteractionHand hand) {
@@ -80,24 +79,6 @@ public class FirearmItem extends Item {
                         5, 0.25, 0.25, 0.25, 0.025);
             }
         }
-    }
-
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        ItemStack itemStack = player.getItemInHand(hand);
-        if (!(itemStack.getItem() instanceof SnubnoseRevolverItem)) {
-            return InteractionResultHolder.fail(itemStack);
-        }
-        if (!(player.getUseItem() == itemStack)) {
-            if (player.isCrouching()) {
-                setAmmo(itemStack, maxAmmo);
-            } else {
-                player.startUsingItem(hand);
-            }
-        }
-        super.use(level, player, hand);
-
-        return InteractionResultHolder.consume(itemStack);
     }
 
     @Override

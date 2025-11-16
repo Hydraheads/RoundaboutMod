@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "T": {
+      "item": "minecraft:iron_trapdoor"
+    },
+    "I":
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    "B":
+    {
+      "item": "minecraft:nether_brick"
+    },
+    "N":
+    {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "pattern": [
+    "NII",
+    "ITI",
+    "B  "
+  ],
+  "result": {
+    "count": 1,
+    "item": "roundabout:snubnose_revolver"
+  },
+  "show_notification": true
+}

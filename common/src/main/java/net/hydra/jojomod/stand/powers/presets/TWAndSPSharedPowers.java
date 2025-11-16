@@ -768,7 +768,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
     public boolean clientForwardBarrage(){
         if ((this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2)){
-            if (attackTimeDuring >= 0){
+            if (attackTimeDuring < 0){
                 return true;
             }
 

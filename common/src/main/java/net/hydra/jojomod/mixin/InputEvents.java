@@ -198,12 +198,20 @@ public abstract class InputEvents implements IInputEvents {
     @Inject(method = "startAttack", at = @At("HEAD"), cancellable = true)
     public void roundabout$Attack(CallbackInfoReturnable<Boolean> ci) {
         if (player != null) {
+            //oundabout.LOGGER.info("startAttack");
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
             ItemStack itemStack = player.getUseItem();
 
             if (standComp.roundabout$isPossessed()) {
                 ci.setReturnValue(false);
+                return;
+            }
+
+            if (itemStack.getItem() != null && itemStack.getItem() instanceof FirearmItem && ((FirearmItem) itemStack.getItem()).interceptAttack(itemStack, player) && !player.getCooldowns().isOnCooldown(itemStack.getItem())) {
+                ci.setReturnValue(false);
+                Roundabout.LOGGER.info("Gun shot attempt");
+                C2SPacketUtil.gunShot();
                 return;
             }
 
@@ -247,10 +255,6 @@ public abstract class InputEvents implements IInputEvents {
                         return;
                     }
                 }
-            } else if (itemStack.getItem() != null && itemStack.getItem() instanceof FirearmItem && ((FirearmItem) itemStack.getItem()).interceptAttack(itemStack, player)) {
-                ci.setReturnValue(false);
-                C2SPacketUtil.gunShot();
-                return;
             }
             //while (this.options.attackKey.wasPressed()) {
             //}
