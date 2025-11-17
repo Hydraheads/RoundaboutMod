@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
@@ -214,7 +215,11 @@ public int speedActivated = 0;
     }
 
     public int justFlippedTicks = 0;
-
+    public boolean shouldReset(byte activeP){
+        if (activeP == BLOOD_REGEN)
+            return false;
+        return super.shouldReset(activeP);
+    }
 
     public final float bloodSpread = 3;
     public final int duration = 100;
