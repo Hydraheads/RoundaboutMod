@@ -64,9 +64,7 @@ public class VampiricFate extends FatePowers {
 
     public float walkDistLast = 0;
     public void wallLatch(){
-        Roundabout.LOGGER.info("2");
         if (canLatchOntoWall() && canWallWalkConfig()){
-            Roundabout.LOGGER.info("3");
             this.setCooldown(PowerIndex.FATE_3, 10);
             if (!this.self.level().isClientSide()) {
                 //if (!isOnWrongAxis())

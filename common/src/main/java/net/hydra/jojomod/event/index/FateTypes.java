@@ -3,6 +3,7 @@ package net.hydra.jojomod.event.index;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
@@ -117,30 +118,34 @@ public enum FateTypes {
 
 
     public static boolean isInSunlight(LivingEntity ent) {
-        Vec3 yes = ent.getEyePosition();
-        Vec3 yes2 = ent.position();
+        //You don't take sun damage in stopped time (like the ova)
+        if (!((TimeStop) ent.level()).inTimeStopRange(ent)) {
+            Vec3 yes = ent.getEyePosition();
+            Vec3 yes2 = ent.position();
 
-        /**Vampires die under the sun, even under liquids*/
-        int waterReach = ClientNetworking.getAppropriateConfig().vampireSettings.sunDamageUnderwaterReach;
-        if (waterReach > 0) {
-            for (var i = 0; i < waterReach; i++) {
-                if (ent.level().getBlockState(BlockPos.containing(yes)).liquid()) {
-                    yes = yes.add(0, 1, 0);
-                } else {
-                    i = 100;
+            /**Vampires die under the sun, even under liquids*/
+            int waterReach = ClientNetworking.getAppropriateConfig().vampireSettings.sunDamageUnderwaterReach;
+            if (waterReach > 0) {
+                for (var i = 0; i < waterReach; i++) {
+                    if (ent.level().getBlockState(BlockPos.containing(yes)).liquid()) {
+                        yes = yes.add(0, 1, 0);
+                    } else {
+                        i = 100;
+                    }
                 }
             }
-        }
 
-        long timeOfDay = ent.level().getDayTime() % 24000L;
-        boolean isDay = timeOfDay < 12555L || timeOfDay > 23360; // 0–12000 = day, 12000–24000 = night
-        BlockPos atVec = BlockPos.containing(yes);
-        BlockPos atVec2 = BlockPos.containing(yes2);
-        if ((ent.level().canSeeSky(atVec) || ent.level().canSeeSky(atVec2)) &&
-                ent.level().dimension().location().getPath().equals("overworld") &&
-                isDay
-        ) {
-            return true;
+            long timeOfDay = ent.level().getDayTime() % 24000L;
+            boolean isDay = timeOfDay < 12555L || timeOfDay > 23360; // 0–12000 = day, 12000–24000 = night
+            BlockPos atVec = BlockPos.containing(yes);
+            BlockPos atVec2 = BlockPos.containing(yes2);
+            if ((ent.level().canSeeSky(atVec) || ent.level().canSeeSky(atVec2)) &&
+                    ent.level().dimension().location().getPath().equals("overworld") &&
+                    isDay
+            ) {
+                return true;
+            }
+            return false;
         }
         return false;
     }
