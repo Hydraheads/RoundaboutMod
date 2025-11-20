@@ -358,6 +358,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
                     relativeRotationCenter
             );
         }
+        /// here???
 
         Vec3 revGrav = new Vec3(0,0.002,0);
         Vec3 revGrav2 = new Vec3(0,0.002,0);
@@ -415,11 +416,16 @@ public abstract class GravityEntityMixin implements IGravityEntity {
             }
         }
 
+        //here?
+        //if (MainUtil.isPlayerBonkingHead(this)){
         if (totalCollisionBox != null) {
             Vec3 positionAdjustmentOffset = roundabout$getPositionAdjustmentOffset(
                     entityBoundingBox, totalCollisionBox, movingDirection
             );
-            ent.setPos(ent.position().add(positionAdjustmentOffset));
+            Vec3 addPos = ent.position().add(positionAdjustmentOffset);
+            if (!ent.level().getBlockState(BlockPos.containing(addPos)).isSolid()){
+                ent.setPos(ent.position().add(positionAdjustmentOffset));
+            }
         }
     }
     @Unique

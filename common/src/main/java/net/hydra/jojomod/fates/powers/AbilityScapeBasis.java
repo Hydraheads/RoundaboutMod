@@ -490,6 +490,9 @@ public class AbilityScapeBasis {
         }
     }
 
+
+
+
     public void baseTickPower(){
         if (this.self.isAlive() && !this.self.isRemoved()) {
             if (this.self.level().isClientSide){

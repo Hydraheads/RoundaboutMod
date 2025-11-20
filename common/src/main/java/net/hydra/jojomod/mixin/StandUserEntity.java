@@ -3303,7 +3303,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             if (roundabout$isBubbleEncased()){
                                 this.setDeltaMovement($$0.x*0.91, (double) this.getJumpPower(), $$0.z*0.91);
                             } else {
-                                this.setDeltaMovement($$0.x*0.91, (double) this.getJumpPower()*1.2, $$0.z*0.91);
+                                this.setDeltaMovement($$0.x, (double) this.getJumpPower()*1.2, $$0.z);
                             }
                         }
                     }
