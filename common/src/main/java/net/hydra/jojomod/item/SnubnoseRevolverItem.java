@@ -1,6 +1,7 @@
 package net.hydra.jojomod.item;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.ChatFormatting;
@@ -121,6 +122,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
 
     public void cancelReload(ItemStack stack, Player player) {
         if (isReloading(stack)) {
+            ((StandUser) player).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 10, false);
             setReloading(stack, false);
             player.getCooldowns().removeCooldown(this);
         }
@@ -177,7 +179,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
                 if (!isReloading(itemStack)) {
                     setReloading(itemStack, true);
                     player.getCooldowns().addCooldown(this, 60);
-                    level.playSound(null, player, ModSounds.SNUBNOSE_RELOAD_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.REVOLVER_RELOAD, 10, false);
                 }
 
                 return InteractionResultHolder.consume(itemStack);
