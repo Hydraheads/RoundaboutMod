@@ -59,6 +59,19 @@ public class PowersCream extends NewPunchingStand {
     }
 
     @Override
+    public boolean isWip(){
+        return true;
+    }
+    @Override
+    public Component ifWipListDevStatus(){
+        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
+    }
+    @Override
+    public Component ifWipListDev(){
+        return Component.literal(  "Secret").withStyle(ChatFormatting.YELLOW);
+    }
+
+    @Override
     public void playSummonSound() {
         if (this.self.isCrouching()){
             return;

@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.RattDartEntity;
+import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -67,6 +68,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
@@ -797,6 +799,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                             } else if (ent instanceof RattDartEntity RD) {
                                 success = true;
                                 RD.applyEffect(this.getSelf());
+                            } else if (ent instanceof RoundaboutBulletEntity BE) {
+                                success = true;
+                                SE.canAcquireHeldItem = true;
+                                ItemStack bulletItem = BE.getBulletItemStack();
+                                SE.setHeldItem(bulletItem);
                             }
                         } else if (ent instanceof ThrownObjectEntity TO) {
                             ItemStack ii = TO.getItem();

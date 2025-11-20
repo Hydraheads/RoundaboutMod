@@ -234,7 +234,6 @@ public class RattDartEntity extends AbstractArrow {
                     return;
                 }
             }
-
         }
 
         float degrees = MainUtil.getLookAtEntityYaw(this, $$1);
