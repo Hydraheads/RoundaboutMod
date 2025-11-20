@@ -135,6 +135,7 @@
     "gravity.fall_distance.GravityServerPlayerFall",
     "gravity.item.GravityBehaviorUtilsMixin",
     "green_day.ZProjectile",
+    "green_day.GreenDayArmourLayer",
     "items.AbilityCancelsEnderPearlItem",
     "items.BucketItemMixin",
     "items.ExecutionerAxeRaid",
