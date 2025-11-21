@@ -85,11 +85,11 @@ public class KeyInputs {
     }
 
     public static void MoveKey(Player player, int buttonPressed, Options option){
-        if (!((StandUser) player).roundabout$isSealed() && !((StandUser)player).roundabout$isPossessed()) {
-            ((StandUser) player).roundabout$getStandPowers().preButtonInput(buttonPressed, option);
-        }
-        if (!FateTypes.isHuman(player)) {
+        if (!FateTypes.isHuman(player) && !((StandUser)player).roundabout$getActive()) {
             ((IFatePlayer) player).rdbt$getFatePowers().preButtonInput(buttonPressed, option);
+        }
+        else if (!((StandUser) player).roundabout$isSealed() && !((StandUser)player).roundabout$isPossessed()) {
+            ((StandUser) player).roundabout$getStandPowers().preButtonInput(buttonPressed, option);
         }
     }
 
