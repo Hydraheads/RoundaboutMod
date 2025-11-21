@@ -9,6 +9,7 @@ import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
+import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -810,6 +811,8 @@ public class StandPowers extends AbilityScapeBasis {
             return this.getBarrageChargeSound();
         } else if (soundChoice == SoundIndex.GLAIVE_CHARGE) {
             return ModSounds.GLAIVE_CHARGE_EVENT;
+        } else if (soundChoice == SoundIndex.REVOLVER_RELOAD) {
+            return ModSounds.SNUBNOSE_RELOAD_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE) {
             return ModSounds.TIME_STOP_STAR_PLATINUM_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_4) {
@@ -903,8 +906,10 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
     public byte getSoundCancelingGroupByte(byte soundChoice) {
-        if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND){
+        if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND) {
             return SoundIndex.BARRAGE_SOUND_GROUP;
+        } else if (soundChoice <= SoundIndex.REVOLVER_RELOAD) {
+            return SoundIndex.ITEM_GROUP;
         } else if (soundChoice <= SoundIndex.GLAIVE_CHARGE) {
             return SoundIndex.ITEM_GROUP;
         }

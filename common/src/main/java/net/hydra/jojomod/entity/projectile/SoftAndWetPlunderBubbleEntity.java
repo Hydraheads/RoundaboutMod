@@ -680,9 +680,15 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                 ac.discard();
                 return;
             }
-            if ($$0.getEntity() instanceof EnderMan em) {
-                    ((IEnderMan)em).roundabout$teleport();
-                return;
+            if (!level().isClientSide && $$0.getEntity() instanceof EnderMan em) {
+
+                if (((IEnderMan) em).roundabout$teleport()) return;
+
+                for (int i = 0; i < 64; i++) {
+                    if (((IEnderMan) em).roundabout$teleport()) {
+                        return;
+                    }
+                }
             }
             if (!($$0.getEntity() instanceof SoftAndWetBubbleEntity)) {
                 if (!getActivated() && !getFinished() && !(MainUtil.isMobOrItsMounts($$0.getEntity(),getStandUser()))

@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
+import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.RattEntity;
@@ -31,6 +32,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.boss.EnderDragonPart;
+import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
@@ -225,6 +227,16 @@ public class RattDartEntity extends AbstractArrow {
 
         if ($$1.equals(this.getOwner())) {return;}
 
+        if (!level().isClientSide && $$0.getEntity() instanceof EnderMan em) {
+
+            if (((IEnderMan) em).roundabout$teleport()) return;
+
+            for (int i = 0; i < 64; i++) {
+                if (((IEnderMan) em).roundabout$teleport()) {
+                    return;
+                }
+            }
+        }
 
         if ($$1 instanceof LivingEntity $$3) {
             StandPowers entityPowers = ((StandUser) $$3).roundabout$getStandPowers();
@@ -234,7 +246,6 @@ public class RattDartEntity extends AbstractArrow {
                     return;
                 }
             }
-
         }
 
         float degrees = MainUtil.getLookAtEntityYaw(this, $$1);

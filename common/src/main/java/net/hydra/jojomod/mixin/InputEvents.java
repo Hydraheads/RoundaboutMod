@@ -198,7 +198,6 @@ public abstract class InputEvents implements IInputEvents {
     @Inject(method = "startAttack", at = @At("HEAD"), cancellable = true)
     public void roundabout$Attack(CallbackInfoReturnable<Boolean> ci) {
         if (player != null) {
-            //oundabout.LOGGER.info("startAttack");
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
             ItemStack itemStack = player.getUseItem();
@@ -210,7 +209,6 @@ public abstract class InputEvents implements IInputEvents {
 
             if (itemStack.getItem() != null && itemStack.getItem() instanceof FirearmItem && ((FirearmItem) itemStack.getItem()).interceptAttack(itemStack, player) && !player.getCooldowns().isOnCooldown(itemStack.getItem())) {
                 ci.setReturnValue(false);
-                Roundabout.LOGGER.info("Gun shot attempt");
                 C2SPacketUtil.gunShot();
                 return;
             }
@@ -1107,16 +1105,20 @@ public abstract class InputEvents implements IInputEvents {
                 if (rdbt$isInitialized(player)) {
                 powers.preCheckButtonInputUse(this.options.keyUse.isDown(),this.options);
                 }
-                if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {
-                    if (rdbt$isInitialized(player)) {
-                        powers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
-                        ((IFatePlayer)player).rdbt$getFatePowers().buttonInputAttack(this.options.keyAttack.isDown(), this.options);
+                if (!(player.getMainHandItem().getItem() instanceof FirearmItem)) {
+                    if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {
+                        if (rdbt$isInitialized(player)) {
+                            powers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
+                            ((IFatePlayer) player).rdbt$getFatePowers().buttonInputAttack(this.options.keyAttack.isDown(), this.options);
+                        }
                     }
                 }
 
-                if (!isMining && standComp.roundabout$isGuarding() && !standComp.roundabout$isBarraging()){
-                    if (rdbt$isInitialized(player)) {
-                        powers.preCheckButtonInputBarrage(this.options.keyAttack.isDown(), this.options);
+                if (!(player.getMainHandItem().getItem() instanceof FirearmItem)) {
+                    if (!isMining && standComp.roundabout$isGuarding() && !standComp.roundabout$isBarraging()) {
+                        if (rdbt$isInitialized(player)) {
+                            powers.preCheckButtonInputBarrage(this.options.keyAttack.isDown(), this.options);
+                        }
                     }
                 }
             }
