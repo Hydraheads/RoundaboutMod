@@ -114,6 +114,13 @@ public enum FateTypes {
         }
         return 0;
     }
+    public static float getJumpHeightPower(LivingEntity entity, boolean isOverOriginal){
+        if (entity instanceof Player PE){
+            return ((IFatePlayer)PE).rdbt$getFatePowers().getJumpHeightPower(isOverOriginal);
+        }
+        return 0;
+    }
+
 
 
 
