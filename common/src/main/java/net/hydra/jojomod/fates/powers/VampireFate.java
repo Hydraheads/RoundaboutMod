@@ -58,6 +58,9 @@ public class VampireFate extends VampiricFate {
             case SKILL_4_NORMAL -> {
                 clientChangeVision();
             }
+            case SKILL_4_CROUCH -> {
+                setSuperHearingClient();
+            }
         }
     };
     public static final byte HYPNOSIS = 50;
@@ -98,7 +101,7 @@ public class VampireFate extends VampiricFate {
     public boolean isAttackIneptVisually(byte activeP, int slot){
         if (slot == 3 && isPlantedInWall() && !isHoldingSneak() && !canLatchOntoWall())
             return true;
-        if (slot == 3 && isHoldingSneak() && !canUseBloodSpeed())
+        if (slot == 3 && isHoldingSneak() && !canUseBloodSpeed() && !canLatchOntoWall())
             return true;
         if (slot == 2 && isHoldingSneak() && !canUseRegen())
             return true;
@@ -106,7 +109,12 @@ public class VampireFate extends VampiricFate {
     }
     @Override
     public float getJumpHeightAddon(){
-        return 4;
+        //if (self.isCrouching() || isFast()){
+        //    return super.getJumpHeightAddon()+4;
+        //} else {
+        //    return super.getJumpHeightAddon();
+        //}
+        return super.getJumpHeightAddon()+4;
     }
 
 

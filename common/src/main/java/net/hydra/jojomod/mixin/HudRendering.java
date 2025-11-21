@@ -175,6 +175,13 @@ public abstract class HudRendering implements IHudAccess {
                     RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.STONE_MASK_OVERLAY, 0.6F);
                 }
+                if (((IFatePlayer)this.minecraft.player).rdbt$getFatePowers() instanceof VampiricFate vp){
+                    //put hearing stuff here
+                    if (vp.getActivePower() == VampiricFate.SUPER_HEARING){
+                        RenderSystem.enableBlend();
+                        this.renderTextureOverlay($$1, StandIcons.SUPER_HEARING, 0.5F);
+                    }
+                }
                 if (MainUtil.isWearingBloodyStoneMask(this.minecraft.player)){
                     RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.BLOODY_MASK_OVERLAY, 0.55F);

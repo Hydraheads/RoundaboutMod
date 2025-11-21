@@ -52,6 +52,7 @@ public class VampiricFate extends FatePowers {
     public static final byte BLOOD_SPEED = 28;
     public static final byte BLOOD_REGEN = 29;
     public static final byte WALL_WALK = 30;
+    public static final byte SUPER_HEARING = 31;
 
     public Direction wallWalkDirection = Direction.DOWN;
 
@@ -89,6 +90,15 @@ public class VampiricFate extends FatePowers {
                 justFlippedTicks = 7;
             }
         }
+    }
+
+    public void setSuperHearingClient(){
+        tryPower(SUPER_HEARING, true);
+        tryPowerPacket(SUPER_HEARING);
+    }
+    public void setSuperHearing(){
+        setAttackTimeDuring(0);
+        setActivePower(SUPER_HEARING);
     }
 
 
@@ -409,10 +419,12 @@ public int speedActivated = 0;
         }
     }
     public void bloodSpeedClient() {
-        if (canLatchOntoWall() && canWallWalkConfig()){
+        if (canLatchOntoWall() && canWallWalkConfig()) {
             doWallLatchClient();
-        } else if (canUseBloodSpeed() && !onCooldown(PowerIndex.FATE_3_SNEAK)){
-            tryPowerPacket(BLOOD_SPEED);
+        } else if (canUseBloodSpeed() && !onCooldown(PowerIndex.FATE_3_SNEAK)) {
+            if (self.onGround()) {
+                tryPowerPacket(BLOOD_SPEED);
+            }
         }
     }
     public void dashOrWallWalk(){
@@ -423,7 +435,6 @@ public int speedActivated = 0;
     }
     public void doWallLatchClient(){
         if (!this.onCooldown(PowerIndex.FATE_3)) {
-            Roundabout.LOGGER.info("0");
             //test
             tryPower(WALL_WALK, true);
             tryPowerPacket(WALL_WALK);
@@ -631,6 +642,8 @@ public int speedActivated = 0;
             basis*=0.2F;
         } else if (getActivePower() == BLOOD_REGEN){
             basis*=0.1F;
+        } else if (getActivePower() == SUPER_HEARING){
+            basis*=0.2F;
         } else if (isFast()){
             basis*=2F;
         }
@@ -663,6 +676,8 @@ public int speedActivated = 0;
             bloodSpeed();
         } else if (move == BLOOD_REGEN) {
             bloodRegen();
+        } else if (move == SUPER_HEARING) {
+            setSuperHearing();
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -700,17 +715,19 @@ public int speedActivated = 0;
     }
     @Override
     public boolean cancelSprintJump(){
-        return getActivePower() == BLOOD_SUCK || getActivePower() == BLOOD_REGEN;
+        return getActivePower() == BLOOD_SUCK || getActivePower() == BLOOD_REGEN
+                || getActivePower() == SUPER_HEARING;
     }
     @Override
     /**Cancel all sprinting*/
     public boolean cancelSprint(){
-        return getActivePower() == BLOOD_SUCK || getActivePower() == BLOOD_REGEN;
+        return getActivePower() == BLOOD_SUCK || getActivePower() == BLOOD_REGEN
+                || getActivePower() == SUPER_HEARING;
     }
     @Override
     public boolean cancelSprintParticles(){
         return getActivePower() == BLOOD_SUCK || getActivePower() == BLOOD_REGEN
-                || isPlantedInWall();
+                || isPlantedInWall() || getActivePower() == SUPER_HEARING;
     }
 
     @Override
@@ -734,7 +751,9 @@ public int speedActivated = 0;
 
     @Override
     public ResourceLocation getIconYes(int slot){
-        if ((slot == 2 || slot == 3) && isHoldingSneak()){
+        if (slot == 2 && isHoldingSneak()){
+            return StandIcons.SQUARE_ICON_BLOOD;
+        } else if (slot == 3 && isHoldingSneak() && !canLatchOntoWall()){
             return StandIcons.SQUARE_ICON_BLOOD;
         }
         return StandIcons.SQUARE_ICON;
