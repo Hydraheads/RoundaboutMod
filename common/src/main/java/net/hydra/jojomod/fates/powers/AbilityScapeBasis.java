@@ -1058,146 +1058,30 @@ public class AbilityScapeBasis {
     private boolean held3 = false;
     private boolean held4 = false;
 
-    public void buttonInput1(boolean keyIsDown, Options options, int source) {
-        if (keyIsDown)
-        {
-            if (held1)
-                return;
-            held1 = true;
+    public void buttonInput(int buttonPressed, int source) {
+        PowerContext activatedPower;
+        int power;
 
-            PowerContext activatedPower;
+        if(isHoldingSneak())
+            if(isGuarding())
+                power = 4;
+            else power = 2;
+        else if(isGuarding())
+            power = 3;
+            else power = 1;
 
-            if(isHoldingSneak())
-                if(isGuarding())
-                    activatedPower = PowerContext.SKILL_1_CROUCH_GUARD;
-                else activatedPower = PowerContext.SKILL_1_CROUCH;
-            else if(isGuarding())
-                activatedPower = PowerContext.SKILL_1_GUARD;
-                else activatedPower = PowerContext.SKILL_1_NORMAL;
+            activatedPower = PowerContext.values()[power + ((buttonPressed - 1) * 4) - 1];
 
-            if ((!((StandUser) this.getSelf()).roundabout$getStandPowers().standlessAbilities().contains(activatedPower) || !ConfigManager.getConfig().miscellaneousSettings.standlessAbilities) && source == STAND)
-                KeyInputs.forceSummon(Minecraft.getInstance().player, keyIsDown);
-            powerActivate(activatedPower);
-        }
-        else
-        {
-            held1 = false;
-        }
+        if ((!((StandUser) this.getSelf()).roundabout$getStandPowers().standlessAbilities().contains(activatedPower) || !ConfigManager.getConfig().miscellaneousSettings.standlessAbilities) && source == STAND)
+            KeyInputs.forceSummon(Minecraft.getInstance().player);
+        powerActivate(activatedPower);
     }
 
-    public void buttonInput2(boolean keyIsDown, Options options, int source) {
-        if (keyIsDown)
-        {
-            if (held2)
-                return;
-            held2 = true;
-
-            PowerContext activatedPower;
-
-            if(isHoldingSneak())
-                if(isGuarding())
-                    activatedPower = PowerContext.SKILL_2_CROUCH_GUARD;
-                else activatedPower = PowerContext.SKILL_2_CROUCH;
-            else if(isGuarding())
-                activatedPower = PowerContext.SKILL_2_GUARD;
-                else activatedPower = PowerContext.SKILL_2_NORMAL;
-
-            if ((!((StandUser) this.getSelf()).roundabout$getStandPowers().standlessAbilities().contains(activatedPower) || !ConfigManager.getConfig().miscellaneousSettings.standlessAbilities) && source == STAND)
-                KeyInputs.forceSummon(Minecraft.getInstance().player, keyIsDown);
-            powerActivate(activatedPower);
-        }
-        else
-        {
-            held2 = false;
-        }
-    }
-
-    public void buttonInput3(boolean keyIsDown, Options options, int source) {
-        if (keyIsDown)
-        {
-            if (held3)
-                return;
-            held3 = true;
-
-            PowerContext activatedPower;
-
-            if(isHoldingSneak())
-                if(isGuarding())
-                    activatedPower = PowerContext.SKILL_3_CROUCH_GUARD;
-                else activatedPower = PowerContext.SKILL_3_CROUCH;
-            else if(isGuarding())
-                activatedPower = PowerContext.SKILL_3_GUARD;
-                else activatedPower = PowerContext.SKILL_3_NORMAL;
-
-            if ((!((StandUser) this.getSelf()).roundabout$getStandPowers().standlessAbilities().contains(activatedPower) || !ConfigManager.getConfig().miscellaneousSettings.standlessAbilities) && source == STAND)
-                KeyInputs.forceSummon(Minecraft.getInstance().player, keyIsDown);
-            powerActivate(activatedPower);
-        }
-        else
-        {
-            held3 = false;
-        }
-    }
-
-    public void buttonInput4(boolean keyIsDown, Options options, int source) {
-        if (keyIsDown)
-        {
-            if (held4)
-                return;
-            held4 = true;
-
-            PowerContext activatedPower;
-
-            if(isHoldingSneak())
-                if(isGuarding())
-                    activatedPower = PowerContext.SKILL_4_CROUCH_GUARD;
-                else activatedPower = PowerContext.SKILL_4_CROUCH;
-            else if(isGuarding())
-                activatedPower = PowerContext.SKILL_4_GUARD;
-                else activatedPower = PowerContext.SKILL_4_NORMAL;
-
-            if ((!((StandUser) this.getSelf()).roundabout$getStandPowers().standlessAbilities().contains(activatedPower) || !ConfigManager.getConfig().miscellaneousSettings.standlessAbilities) && source == STAND)
-                KeyInputs.forceSummon(Minecraft.getInstance().player, keyIsDown);
-            powerActivate(activatedPower);
-        }
-        else
-        {
-            held4 = false;
-        }
-    }
-
-
-    public void preButtonInput4(boolean keyIsDown, Options options){
+    public void preButtonInput(int buttonPressed, Options options){
         if (!hasStandActive(this.getSelf())) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()  ) {
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
-                buttonInput4(keyIsDown, options, FATE);
-            }
-        }
-    }
-    public void preButtonInput3(boolean keyIsDown, Options options){
-        if (!hasStandActive(this.getSelf())) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()  ) {
-                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
-                buttonInput3(keyIsDown, options, FATE);
-            }
-        }
-    }
-
-    public void preButtonInput2(boolean keyIsDown, Options options){
-        if (!hasStandActive(this.getSelf())) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()   ) {
-                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
-                buttonInput2(keyIsDown, options, FATE);
-            }
-        }
-    }
-
-    public void preButtonInput1(boolean keyIsDown, Options options){
-        if (!hasStandActive(this.getSelf())) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()   ) {
-                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
-                buttonInput1(keyIsDown, options, FATE);
+                buttonInput(buttonPressed, FATE);
             }
         }
     }

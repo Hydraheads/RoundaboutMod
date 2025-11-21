@@ -785,11 +785,13 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
 
     @Override
-    public void preButtonInput4(boolean keyIsDown, Options options){
-        if (hasStandActive(this.getSelf()) && !this.isClashing()) {
-            ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
-            buttonInput4(keyIsDown, options, STAND);
-        }
+    public void preButtonInput(int buttonPressed, Options options){
+        if (buttonPressed == 4){
+            if (hasStandActive(this.getSelf()) && !this.isClashing()) {
+                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
+                buttonInput(buttonPressed, STAND);
+            }
+        } else buttonInput(buttonPressed, STAND);
     }
 
 

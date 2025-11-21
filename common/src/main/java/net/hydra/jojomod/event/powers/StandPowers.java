@@ -1824,40 +1824,11 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
     @Override
-    public void preButtonInput4(boolean keyIsDown, Options options){
-        if (hasStandActive(this.getSelf()) || FateTypes.isHuman((this.getSelf())) && !this.isClashing()) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())  && !this.getStandUserSelf().roundabout$isPossessed()   ) {
-                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
-                buttonInput4(keyIsDown, options, STAND);
-            }
-        }
-    }
-    @Override
-    public void preButtonInput3(boolean keyIsDown, Options options){
-        if (hasStandActive(this.getSelf()) || FateTypes.isHuman((this.getSelf())) && !this.isClashing()) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())  && !this.getStandUserSelf().roundabout$isPossessed()   ) {
-                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
-                buttonInput3(keyIsDown, options, STAND);
-            }
-        }
-    }
-
-    @Override
-    public void preButtonInput2(boolean keyIsDown, Options options){
+    public void preButtonInput(int buttonPressed, Options options){
         if (hasStandActive(this.getSelf()) || FateTypes.isHuman(this.getSelf()) && !this.isClashing()) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())  && !this.getStandUserSelf().roundabout$isPossessed()   ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
-                buttonInput2(keyIsDown, options, STAND);
-            }
-        }
-    }
-
-    @Override
-    public void preButtonInput1(boolean keyIsDown, Options options){
-        if (hasStandActive(this.getSelf()) || FateTypes.isHuman(this.getSelf()) && !this.isClashing()) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())  && !this.getStandUserSelf().roundabout$isPossessed()   ) {
-                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
-                buttonInput1(keyIsDown, options, STAND);
+                buttonInput(buttonPressed, STAND);
             }
         }
     }
