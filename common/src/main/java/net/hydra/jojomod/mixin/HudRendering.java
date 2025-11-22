@@ -177,9 +177,15 @@ public abstract class HudRendering implements IHudAccess {
                 }
                 if (((IFatePlayer)this.minecraft.player).rdbt$getFatePowers() instanceof VampiricFate vp){
                     //put hearing stuff here
-                    if (vp.getActivePower() == VampiricFate.SUPER_HEARING){
+                    if (vp.dimTickHearing > 0) {
                         RenderSystem.enableBlend();
-                        this.renderTextureOverlay($$1, StandIcons.SUPER_HEARING, 0.5F);
+                        if (vp.isHearing()){
+                            this.renderTextureOverlay($$1, StandIcons.SUPER_HEARING, 0.5F *
+                                    (Math.min(((float)vp.dimTickHearing)+tsdelta,10f)*0.1f));
+                        } else {
+                            this.renderTextureOverlay($$1, StandIcons.SUPER_HEARING, 0.5F *
+                                    ((((float)vp.dimTickHearing)-tsdelta)*0.1f));
+                        }
                     }
                 }
                 if (MainUtil.isWearingBloodyStoneMask(this.minecraft.player)){

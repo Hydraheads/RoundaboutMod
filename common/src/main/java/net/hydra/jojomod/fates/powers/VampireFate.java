@@ -77,6 +77,9 @@ public class VampireFate extends VampiricFate {
         return super.tryPower(move,forced);
     }
     public void hypnosis(){
+        if (isHearing()){
+            stopHearingClient();
+        }
         tryPowerPacket(HYPNOSIS);
     }
     @Override
@@ -114,6 +117,9 @@ public class VampireFate extends VampiricFate {
         //} else {
         //    return super.getJumpHeightAddon();
         //}
+        if (self.level().isClientSide() && !isVisionOn()){
+            return super.getJumpHeightAddon();
+        }
         return super.getJumpHeightAddon()+4;
     }
 
@@ -182,7 +188,7 @@ public class VampireFate extends VampiricFate {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         }
 
-        if (isHoldingSneak()) {
+        if (isHoldingSneak() || isHearing()) {
             setSkillIcon(context, x, y, 4, StandIcons.HEARING_MODE, PowerIndex.FATE_4_SNEAK);
         } else {
             if (isVisionOn()){

@@ -132,6 +132,27 @@ public int speedActivated = 0;
 
 
         if (this.self.level().isClientSide()) {
+
+            if (isVisionOn()){
+                if (dimTickEye > 0) {
+                    dimTickEye--;
+                }
+            } else {
+                if (dimTickEye < 10) {
+                    dimTickEye++;
+                }
+            }
+
+            if (!isHearing()){
+                if (dimTickHearing > 0) {
+                    dimTickHearing--;
+                }
+            } else {
+                if (dimTickHearing < 10) {
+                    dimTickHearing++;
+                }
+            }
+
             if (isPlantedInWall() && !getStandUserSelf().rdbt$getJumping()){
                 if (!self.onGround()) {
                     if (this.self.getDeltaMovement().y < 0){
@@ -415,14 +436,24 @@ public int speedActivated = 0;
     }
     public void regenClient(){
         if (canUseRegen() && !onCooldown(PowerIndex.FATE_2_SNEAK)){
+            if (isHearing()){
+                stopHearingClient();
+            }
             tryPowerPacket(BLOOD_REGEN);
         }
     }
     public void bloodSpeedClient() {
+
         if (canLatchOntoWall() && canWallWalkConfig()) {
+            if (isHearing()){
+                stopHearingClient();
+            }
             doWallLatchClient();
         } else if (canUseBloodSpeed() && !onCooldown(PowerIndex.FATE_3_SNEAK)) {
             if (self.onGround()) {
+                if (isHearing()){
+                    stopHearingClient();
+                }
                 tryPowerPacket(BLOOD_SPEED);
             }
         }
@@ -436,6 +467,9 @@ public int speedActivated = 0;
     public void doWallLatchClient(){
         if (!this.onCooldown(PowerIndex.FATE_3)) {
             //test
+            if (isHearing()){
+                stopHearingClient();
+            }
             tryPower(WALL_WALK, true);
             tryPowerPacket(WALL_WALK);
         }
@@ -481,6 +515,10 @@ public int speedActivated = 0;
     }
 
     public void clientChangeVision(){
+        if (isHearing()){
+            stopHearingClient();
+            return;
+        }
         ClientConfig clientConfig = ConfigManager.getClientConfig();
         if (clientConfig != null && clientConfig.dynamicSettings != null) {
             clientConfig.dynamicSettings.vampireVisionMode = !clientConfig.dynamicSettings.vampireVisionMode;
@@ -586,10 +624,17 @@ public int speedActivated = 0;
         }
     }
 
+    public void stopHearingClient(){
+        tryPower(PowerIndex.NONE,true);
+        tryPowerPacket(PowerIndex.NONE);
+    }
     public void suckBlood(){
         if (!onCooldown(PowerIndex.FATE_2)) {
             Entity TE = getTargetEntity(self, 3, 15);
             if (TE != null && MainUtil.canDrinkBloodFair(TE, self) && getActivePower() != BLOOD_REGEN) {
+                if (isHearing()){
+                    stopHearingClient();
+                }
                 setActivePower(BLOOD_SUCK);
                 self.setSprinting(false);
                 tryIntPowerPacket(BLOOD_SUCK, TE.getId());
@@ -682,6 +727,10 @@ public int speedActivated = 0;
         return super.setPowerOther(move,lastMove);
     }
 
+    public int dimTickEye = 0;
+    public int dimTickHearing = 0;
+
+
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
@@ -742,6 +791,10 @@ public int speedActivated = 0;
         if (slot == 2 && !MainUtil.canDrinkBloodFair(TE, self) && !isHoldingSneak())
             return true;
         return super.isAttackIneptVisually(activeP,slot);
+    }
+
+    public boolean isHearing(){
+        return getActivePower() == SUPER_HEARING;
     }
 
 
