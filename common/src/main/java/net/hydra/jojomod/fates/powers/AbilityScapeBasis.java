@@ -1053,11 +1053,6 @@ public class AbilityScapeBasis {
         }
     };
 
-    private boolean held1 = false;
-    private boolean held2 = false;
-    private boolean held3 = false;
-    private boolean held4 = false;
-
     public void buttonInput(int buttonPressed, int source) {
         PowerContext activatedPower;
         int power;
