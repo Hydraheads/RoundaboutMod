@@ -17,6 +17,7 @@ import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
@@ -717,6 +718,7 @@ public class ClientUtil {
         if (player != null) {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
+            FatePowers fatePowers = ((IFatePlayer)player).rdbt$getFatePowers();
 
             if (powers.getGoBeyondTarget() != null && powers.getGoBeyondTarget().is(entity)) {
                 return 10978493;
@@ -739,6 +741,9 @@ public class ClientUtil {
 
             if (powers.highlightsEntity(entity, player))
                 return powers.highlightsEntityColor(entity,player);
+
+            if (fatePowers.highlightsEntity(entity, player))
+                return fatePowers.highlightsEntityColor(entity,player);
 
             if (MainUtil.isZapper(player,entity)){
                 //15974080

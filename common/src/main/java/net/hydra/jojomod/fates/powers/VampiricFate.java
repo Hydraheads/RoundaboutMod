@@ -691,8 +691,6 @@ public int speedActivated = 0;
             basis*=0.2F;
         } else if (getActivePower() == BLOOD_REGEN){
             basis*=0.1F;
-        } else if (getActivePower() == SUPER_HEARING){
-            basis*=0.2F;
         } else if (isFast()){
             basis*=2F;
         }
@@ -768,19 +766,17 @@ public int speedActivated = 0;
     }
     @Override
     public boolean cancelSprintJump(){
-        return getActivePower() == BLOOD_SUCK || getActivePower() == BLOOD_REGEN
-                || getActivePower() == SUPER_HEARING;
+        return getActivePower() == BLOOD_SUCK || getActivePower() == BLOOD_REGEN;
     }
     @Override
     /**Cancel all sprinting*/
     public boolean cancelSprint(){
-        return getActivePower() == BLOOD_SUCK || getActivePower() == BLOOD_REGEN
-                || getActivePower() == SUPER_HEARING;
+        return getActivePower() == BLOOD_SUCK || getActivePower() == BLOOD_REGEN;
     }
     @Override
     public boolean cancelSprintParticles(){
         return getActivePower() == BLOOD_SUCK || getActivePower() == BLOOD_REGEN
-                || isPlantedInWall() || getActivePower() == SUPER_HEARING;
+                || isPlantedInWall();
     }
 
     @Override
@@ -815,4 +811,28 @@ public int speedActivated = 0;
         }
         return StandIcons.SQUARE_ICON;
     }
+
+    public float hearingDistance(){
+        return 20;
+    }
+
+    /**every entity the client renders is checked against this, overrride and use it to see if they can be highlighted
+     * for detection or attack highlighting related skills*/
+    @Override
+    public boolean highlightsEntity(Entity ent,Player player){
+        return isHearing() && ent.distanceTo(player) <= hearingDistance()
+                && MainUtil.getMobBleed(ent);
+    }
+    /**The color id for this entity to be displayed as if the above returns true, it is in decimal rather than
+     * hexadecimal*/
+    @Override
+    public int highlightsEntityColor(Entity ent, Player player){
+        if (MainUtil.hasEnderBlood(ent))
+            return 15139071;
+        if (MainUtil.hasBlueBlood(ent))
+            return 52991;
+        return 16711680;
+    }
+
+
 }

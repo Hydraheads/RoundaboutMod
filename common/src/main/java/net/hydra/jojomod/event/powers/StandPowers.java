@@ -312,17 +312,6 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    /**every entity the client renders is checked against this, overrride and use it to see if they can be highlighted
-     * for detection or attack highlighting related skills*/
-    public boolean highlightsEntity(Entity ent,Player player){
-        return false;
-    }
-    /**The color id for this entity to be displayed as if the above returns true, it is in decimal rather than
-     * hexadecimal*/
-    public int highlightsEntityColor(Entity ent, Player player){
-        return 0;
-    }
-
     /**How much bonus oxygen does the stand provide? Might be useful for stands that are more water focused,
      * if it makes sense. Currently only applies to The World.*/
     public void setAirAmount(int airAmount){}

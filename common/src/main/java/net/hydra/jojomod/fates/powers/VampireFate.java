@@ -56,10 +56,10 @@ public class VampireFate extends VampiricFate {
                 dashOrWallWalk();
             }
             case SKILL_4_NORMAL -> {
-                clientChangeVision();
+                setSuperHearingClient();
             }
             case SKILL_4_CROUCH -> {
-                setSuperHearingClient();
+                clientChangeVision();
             }
         }
     };
@@ -188,7 +188,7 @@ public class VampireFate extends VampiricFate {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         }
 
-        if (isHoldingSneak() || isHearing()) {
+        if (!isHoldingSneak() || isHearing()) {
             setSkillIcon(context, x, y, 4, StandIcons.HEARING_MODE, PowerIndex.FATE_4_SNEAK);
         } else {
             if (isVisionOn()){
