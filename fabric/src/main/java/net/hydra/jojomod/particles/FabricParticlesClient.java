@@ -17,6 +17,7 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.POINTER, PointerParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.POINTER_SOFT, SmallPointerParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.AIR_CRACKLE, AirCrackleParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.HEARTBEAT, HeartbeatParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.STAR, StarParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.HEART_ATTACK_MINI, HeartAttackMini.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.ENERGY_DISTORTION, EnergyDistortionParticle.Provider::new);

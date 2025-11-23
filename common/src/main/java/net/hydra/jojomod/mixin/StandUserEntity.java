@@ -795,6 +795,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             this.roundabout$getStandPowers().tickPowerEnd();
         }
 
+        if (level().isClientSide()){
+            ClientUtil.tickHeartbeat(this);
+        }
+
         if (roundabout$prepUglyFace) {
             roundabout$prepUglyFace = false;
             roundabout$setGlow((byte) 2);
@@ -3303,7 +3307,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             if (roundabout$isBubbleEncased()){
                                 this.setDeltaMovement($$0.x*0.91, (double) this.getJumpPower(), $$0.z*0.91);
                             } else {
-                                this.setDeltaMovement($$0.x, (double) this.getJumpPower()*1.2, $$0.z);
+                                curr = roundabout$getBigJumpCurrentProgress();
+                                this.setDeltaMovement($$0.x,
+                                        (double) this.getJumpPower()*FateTypes.getJumpHeightPower(
+                                                ((LivingEntity)(Object)this),
+                                                (curr > 2)
+                                        ),
+                                        $$0.z);
                             }
                         }
                     }

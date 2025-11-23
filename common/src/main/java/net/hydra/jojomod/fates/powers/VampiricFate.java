@@ -29,6 +29,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -52,6 +53,7 @@ public class VampiricFate extends FatePowers {
     public static final byte BLOOD_SPEED = 28;
     public static final byte BLOOD_REGEN = 29;
     public static final byte WALL_WALK = 30;
+    public static final byte SUPER_HEARING = 31;
 
     public Direction wallWalkDirection = Direction.DOWN;
 
@@ -91,6 +93,19 @@ public class VampiricFate extends FatePowers {
         }
     }
 
+    public void setSuperHearingClient(){
+        if (isHearing()){
+            stopHearingClient();
+            return;
+        }
+        tryPower(SUPER_HEARING, true);
+        tryPowerPacket(SUPER_HEARING);
+    }
+    public void setSuperHearing(){
+        setAttackTimeDuring(0);
+        setActivePower(SUPER_HEARING);
+    }
+
 
     public void blockBreakParticles(Block block, Vec3 pos){
         if (!this.self.level().isClientSide()) {
@@ -122,6 +137,27 @@ public int speedActivated = 0;
 
 
         if (this.self.level().isClientSide()) {
+
+            if (isVisionOn()){
+                if (dimTickEye > 0) {
+                    dimTickEye--;
+                }
+            } else {
+                if (dimTickEye < 10) {
+                    dimTickEye++;
+                }
+            }
+
+            if (!isHearing()){
+                if (dimTickHearing > 0) {
+                    dimTickHearing--;
+                }
+            } else {
+                if (dimTickHearing < 10) {
+                    dimTickHearing++;
+                }
+            }
+
             if (isPlantedInWall() && !getStandUserSelf().rdbt$getJumping()){
                 if (!self.onGround()) {
                     if (this.self.getDeltaMovement().y < 0){
@@ -405,14 +441,26 @@ public int speedActivated = 0;
     }
     public void regenClient(){
         if (canUseRegen() && !onCooldown(PowerIndex.FATE_2_SNEAK)){
+            if (isHearing()){
+                stopHearingClient();
+            }
             tryPowerPacket(BLOOD_REGEN);
         }
     }
     public void bloodSpeedClient() {
-        if (canLatchOntoWall() && canWallWalkConfig()){
+
+        if (canLatchOntoWall() && canWallWalkConfig()) {
+            if (isHearing()){
+                stopHearingClient();
+            }
             doWallLatchClient();
-        } else if (canUseBloodSpeed() && !onCooldown(PowerIndex.FATE_3_SNEAK)){
-            tryPowerPacket(BLOOD_SPEED);
+        } else if (canUseBloodSpeed() && !onCooldown(PowerIndex.FATE_3_SNEAK)) {
+            if (self.onGround()) {
+                if (isHearing()){
+                    stopHearingClient();
+                }
+                tryPowerPacket(BLOOD_SPEED);
+            }
         }
     }
     public void dashOrWallWalk(){
@@ -423,8 +471,10 @@ public int speedActivated = 0;
     }
     public void doWallLatchClient(){
         if (!this.onCooldown(PowerIndex.FATE_3)) {
-            Roundabout.LOGGER.info("0");
             //test
+            if (isHearing()){
+                stopHearingClient();
+            }
             tryPower(WALL_WALK, true);
             tryPowerPacket(WALL_WALK);
         }
@@ -470,6 +520,10 @@ public int speedActivated = 0;
     }
 
     public void clientChangeVision(){
+        if (isHearing()){
+            stopHearingClient();
+            return;
+        }
         ClientConfig clientConfig = ConfigManager.getClientConfig();
         if (clientConfig != null && clientConfig.dynamicSettings != null) {
             clientConfig.dynamicSettings.vampireVisionMode = !clientConfig.dynamicSettings.vampireVisionMode;
@@ -575,10 +629,17 @@ public int speedActivated = 0;
         }
     }
 
+    public void stopHearingClient(){
+        tryPower(PowerIndex.NONE,true);
+        tryPowerPacket(PowerIndex.NONE);
+    }
     public void suckBlood(){
         if (!onCooldown(PowerIndex.FATE_2)) {
             Entity TE = getTargetEntity(self, 3, 15);
             if (TE != null && MainUtil.canDrinkBloodFair(TE, self) && getActivePower() != BLOOD_REGEN) {
+                if (isHearing()){
+                    stopHearingClient();
+                }
                 setActivePower(BLOOD_SUCK);
                 self.setSprinting(false);
                 tryIntPowerPacket(BLOOD_SUCK, TE.getId());
@@ -663,8 +724,25 @@ public int speedActivated = 0;
             bloodSpeed();
         } else if (move == BLOOD_REGEN) {
             bloodRegen();
+        } else if (move == SUPER_HEARING) {
+            setSuperHearing();
         }
         return super.setPowerOther(move,lastMove);
+    }
+
+    public int dimTickEye = 0;
+    public int dimTickHearing = 0;
+
+
+    public SoundEvent randomHeart(){
+        double rand = Math.random();
+        if (rand < 0.33){
+            return ModSounds.HEARTBEAT_EVENT;
+        } else if (rand < 0.66){
+            return ModSounds.HEARTBEAT2_EVENT;
+        } else {
+            return ModSounds.HEARTBEAT3_EVENT;
+        }
     }
 
     @Override
@@ -712,7 +790,6 @@ public int speedActivated = 0;
         return getActivePower() == BLOOD_SUCK || getActivePower() == BLOOD_REGEN
                 || isPlantedInWall();
     }
-
     @Override
     public boolean cancelJump(){
         return getActivePower() == BLOOD_REGEN;
@@ -727,6 +804,10 @@ public int speedActivated = 0;
         return super.isAttackIneptVisually(activeP,slot);
     }
 
+    public boolean isHearing(){
+        return getActivePower() == SUPER_HEARING;
+    }
+
 
     public boolean canWallWalkConfig(){
         return ClientNetworking.getAppropriateConfig().walkingHeartSettings.enableWallWalking;
@@ -734,9 +815,72 @@ public int speedActivated = 0;
 
     @Override
     public ResourceLocation getIconYes(int slot){
-        if ((slot == 2 || slot == 3) && isHoldingSneak()){
+        if (slot == 2 && isHoldingSneak()){
+            return StandIcons.SQUARE_ICON_BLOOD;
+        } else if (slot == 3 && isHoldingSneak() && !canLatchOntoWall()){
             return StandIcons.SQUARE_ICON_BLOOD;
         }
         return StandIcons.SQUARE_ICON;
+    }
+
+    public float hearingDistance(){
+        return 20;
+    }
+
+    /**every entity the client renders is checked against this, overrride and use it to see if they can be highlighted
+     * for detection or attack highlighting related skills*/
+    @Override
+    public boolean highlightsEntity(Entity ent,Player player){
+        return isHearing() && MainUtil.getMobBleed(ent) && ent.distanceTo(player) <= hearingDistance();
+    }
+    /**The color id for this entity to be displayed as if the above returns true, it is in decimal rather than
+     * hexadecimal*/
+    @Override
+    public int highlightsEntityColor(Entity ent, Player player){
+        if (MainUtil.hasEnderBlood(ent))
+            return 15139071;
+        if (MainUtil.hasBlueBlood(ent))
+            return 52991;
+        return 16711680;
+    }
+
+    public void tickHeartbeat(Entity entity){
+        if (entity != null && !self.is(entity)){
+        if (MainUtil.getMobBleed(entity) && entity.distanceTo(self) <= hearingDistance()) {
+            Vec3 center = MainUtil.getMobCenter(entity, 0.58f);
+            int heartRate = 20;
+            float heartpitch = 1;
+            if (entity instanceof LivingEntity lv) {
+                float percent = lv.getHealth() / lv.getMaxHealth();
+                if (percent <= 0.2) {
+                    heartRate = 8;
+                    heartpitch = 1.6F;
+                } else if (percent < 0.4) {
+                    heartRate = 11;
+                    heartpitch = 1.45F;
+                } else if (percent < 0.6) {
+                    heartRate = 14;
+                    heartpitch = 1.3F;
+                } else if (percent < 0.8) {
+                    heartRate = 17;
+                    heartpitch = 1.15F;
+                }
+
+                if (entity.tickCount % heartRate == 0) {
+                    entity.level()
+                            .addParticle(
+                                    ModParticles.HEARTBEAT,
+                                    center.x,
+                                    center.y,
+                                    center.z,
+                                    0,
+                                    0.1,
+                                    0
+                            );
+                    ClientUtil.playSound(randomHeart(),entity,0.5F,heartpitch);
+                }
+            }
+        }
+        }
     }
 }

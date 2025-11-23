@@ -906,7 +906,9 @@
   "sounds.roundabout.jotaro_getting_closer":  "How else can I...",
   "sounds.roundabout.blood_suck":  "Blood",
   "sounds.roundabout.blood_suck_crit":  "Blood",
-  "sounds.roundabout.vampire_speed":  "Boost",
+  "sounds.roundabout.heartbeat":  "Heartbeat",
+  "sounds.roundabout.heartbeat2":  "Heartbeat",
+  "sounds.roundabout.heartbeat3":  "Heartbeat",
 
   "sounds.roundabout.aesthetician_exhale":  "Huff",
   "sounds.roundabout.female_zombie_ambient":  "Zombie Aesthetician groans",

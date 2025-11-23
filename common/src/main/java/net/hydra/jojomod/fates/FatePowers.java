@@ -54,6 +54,13 @@ public class FatePowers extends AbilityScapeBasis {
     public float getJumpHeightAddon(){
         return 0;
     }
+    public float getJumpHeightPower(boolean isOverOriginal){
+        if (isOverOriginal){
+            return 1.2F;
+        } else {
+            return 1F;
+        }
+    }
     public float getJumpDamageMult(){
         return 1;
     }

@@ -22,6 +22,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.FirearmItem;
 import net.hydra.jojomod.item.SnubnoseRevolverItem;
 import net.hydra.jojomod.stand.powers.PowersCream;
@@ -99,6 +100,7 @@ public abstract class InputEvents implements IInputEvents {
         if (player != null) {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
+            FatePowers fatePowers = ((IFatePlayer)player).rdbt$getFatePowers();
 
             if (standComp.roundabout$getStand() instanceof D4CEntity)
             {
@@ -133,6 +135,10 @@ public abstract class InputEvents implements IInputEvents {
 
             powers.synchToCamera();
             if (powers.highlightsEntity(entity, player)) {
+                ci.setReturnValue(true);
+                return;
+            }
+            if (fatePowers.highlightsEntity(entity, player)) {
                 ci.setReturnValue(true);
                 return;
             }

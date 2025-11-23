@@ -47,4 +47,9 @@ public class StandUsingNPC extends JojoNPC{
         rollStand();
     }
 
+    @Override
+    public boolean canSummonStandThroughFightOrFlightActive(){
+        return true;
+    }
+
 }

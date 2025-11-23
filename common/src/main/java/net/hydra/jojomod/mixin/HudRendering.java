@@ -175,6 +175,7 @@ public abstract class HudRendering implements IHudAccess {
                     RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.STONE_MASK_OVERLAY, 0.6F);
                 }
+
                 if (MainUtil.isWearingBloodyStoneMask(this.minecraft.player)){
                     RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.BLOODY_MASK_OVERLAY, 0.55F);
@@ -215,11 +216,26 @@ public abstract class HudRendering implements IHudAccess {
                 }
             }
 
-            if (((IFatePlayer) this.minecraft.player).rdbt$getFatePowers() instanceof VampiricFate VP && VP.isFast()) {
-                RenderSystem.enableBlend();
-                roundabout$renderTextureOverlay($$1, new ResourceLocation(Roundabout.MOD_ID,
-                        "textures/misc/vamp_speed/frame_" + (minecraft.player.tickCount % 10) + ".png"), 0.2F, 1F, 1F, 1F);
+            if (((IFatePlayer)this.minecraft.player).rdbt$getFatePowers() instanceof VampiricFate vp){
+                //put hearing stuff here
+                if (vp.dimTickHearing > 0) {
+                    RenderSystem.enableBlend();
+                    if (vp.isHearing()){
+                        this.renderTextureOverlay($$1, StandIcons.SUPER_HEARING, 0.5F *
+                                (Math.min(((float)vp.dimTickHearing)+tsdelta,10f)*0.1f));
+                    } else {
+                        this.renderTextureOverlay($$1, StandIcons.SUPER_HEARING, 0.5F *
+                                ((((float)vp.dimTickHearing)-tsdelta)*0.1f));
+                    }
+                }
+
+                if (vp.isFast()){
+                        RenderSystem.enableBlend();
+                        roundabout$renderTextureOverlay($$1, new ResourceLocation(Roundabout.MOD_ID,
+                                "textures/misc/vamp_speed/frame_" + (minecraft.player.tickCount % 10) + ".png"), 0.2F, 1F, 1F, 1F);
+                }
             }
+
 
              StandPowers powers = user.roundabout$getStandPowers();
                 if (powers.timeRewindOverlayTicks > -1) {
