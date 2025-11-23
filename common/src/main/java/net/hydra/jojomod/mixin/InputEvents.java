@@ -86,6 +86,13 @@ public abstract class InputEvents implements IInputEvents {
     @Unique
     public Level roundabout$playerlev;
 
+    private boolean[] heldKeys = {
+            false,
+            false,
+            false,
+            false
+    };
+
     protected InputEvents() {
     }
 
@@ -975,17 +982,14 @@ public abstract class InputEvents implements IInputEvents {
                 ((StandUser)player).roundabout$getStandPowers().visualFrameTick();
 
                 if (rdbt$isInitialized(player)) {
-                    KeyInputs.MoveKey1(player, ((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.abilityOneKey),
-                            this.options);
-
-                    KeyInputs.MoveKey2(player, ((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.abilityTwoKey),
-                            this.options);
-
-                    KeyInputs.MoveKey3(player, ((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.abilityThreeKey),
-                            this.options);
-
-                    KeyInputs.MoveKey4(player, ((Minecraft) (Object) this), roundabout$sameKeyOne(KeyInputRegistry.abilityFourKey),
-                            this.options);
+                    for (int i = 0; i < KeyInputRegistry.abilityKeyList.length; i++) {
+                        if (roundabout$sameKeyOne(KeyInputRegistry.abilityKeyList[i])) {
+                            if (!heldKeys[i]) {
+                                heldKeys[i] = true;
+                                KeyInputs.MoveKey(player, i + 1, this.options);
+                            }
+                        } else heldKeys[i] = false;
+                    }
                 }
 
                 KeyInputs.showEXPKey(player,((Minecraft) (Object) this), roundabout$sameKeyThree(KeyInputRegistry.showExp),

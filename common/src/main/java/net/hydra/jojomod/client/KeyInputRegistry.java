@@ -48,6 +48,14 @@ public class KeyInputRegistry {
             InputConstants.KEY_V,
             KeyInputRegistry.KEY_CATEGORY_JOJO
     );
+
+    public static KeyMapping[] abilityKeyList = {
+            abilityOneKey,
+            abilityTwoKey,
+            abilityThreeKey,
+            abilityFourKey
+    };
+
     public static KeyMapping menuKey = new KeyMapping(
             KeyInputRegistry.KEY_JOJO_MENU,
             InputConstants.KEY_Y,

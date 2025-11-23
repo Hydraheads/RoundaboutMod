@@ -232,9 +232,13 @@ public class PowersKillerQueen extends NewPunchingStand {
 
 
     @Override
-    public void buttonInput2(boolean KeyIsDown, Options options) {
-
+    public void buttonInput(int buttonPressed, int source) {
+        if (buttonPressed == 2){
+            
+        }
+        else super.buttonInput(buttonPressed, source);
     }
+    
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
 

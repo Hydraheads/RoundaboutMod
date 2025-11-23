@@ -171,6 +171,8 @@ public class Config implements Cloneable {
         public Boolean disableBleedingAndBloodSplatters;
         @BooleanOption(group = "inherit", value = false)
         public Boolean banDirectionalBlockPlacingFailure;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean standlessAbilities;
     }
     public static class VampireSettings {
         @BooleanOption(group = "inherit", value = false)
