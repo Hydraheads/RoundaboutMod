@@ -791,7 +791,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
                 buttonInput(buttonPressed, STAND);
             }
-        } else buttonInput(buttonPressed, STAND);
+        } else super.preButtonInput(buttonPressed, options);
     }
 
 
