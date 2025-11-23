@@ -12,6 +12,7 @@ public class ModParticles {
     public static SimpleParticleType MELTING;
 
     public static SimpleParticleType AIR_CRACKLE;
+    public static SimpleParticleType HEARTBEAT;
     public static SimpleParticleType MENACING;
     public static SimpleParticleType VACUUM;
     public static SimpleParticleType STAR;

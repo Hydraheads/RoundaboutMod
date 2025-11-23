@@ -93,6 +93,10 @@ public class VampiricFate extends FatePowers {
     }
 
     public void setSuperHearingClient(){
+        if (isHearing()){
+            stopHearingClient();
+            return;
+        }
         tryPower(SUPER_HEARING, true);
         tryPowerPacket(SUPER_HEARING);
     }

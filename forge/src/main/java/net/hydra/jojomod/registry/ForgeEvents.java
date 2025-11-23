@@ -382,6 +382,7 @@ public class ForgeEvents {
         ModParticles.POINTER = ForgeParticles.POINTER.get();
         ModParticles.POINTER_SOFT = ForgeParticles.POINTER_SOFT.get();
         ModParticles.AIR_CRACKLE = ForgeParticles.AIR_CRACKLE.get();
+        ModParticles.HEARTBEAT = ForgeParticles.HEARTBEAT.get();
         ModParticles.MENACING = ForgeParticles.MENACING.get();
         ModParticles.VACUUM = ForgeParticles.VACUUM.get();
         ModParticles.ORANGE_FLAME = ForgeParticles.ORANGE_FLAME.get();
