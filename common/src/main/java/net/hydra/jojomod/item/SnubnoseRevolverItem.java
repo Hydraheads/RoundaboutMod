@@ -5,6 +5,7 @@ import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,11 +15,13 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -148,6 +151,22 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
             $$7.setAmmoType(RoundaboutBulletEntity.REVOLVER);
             level.addFreshEntity($$7);
             level.playSound(null, player, ModSounds.SNUBNOSE_FIRE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            if (level instanceof ServerLevel serverLevel) {
+                Vec3 look = player.getLookAngle().normalize();
+                Vec3 up = new Vec3(0, 1, 0);
+                Vec3 right = look.cross(up).normalize();
+
+                double forwardOffset = 1.0;
+                double sideOffset = 0.24;
+                double verticalOffset = -0.15;
+
+                if (player.getMainArm() == HumanoidArm.LEFT) {
+                    sideOffset -= sideOffset * 2;
+                }
+
+                Vec3 pos = player.getEyePosition().add(look.scale(forwardOffset)).add(right.scale(sideOffset)).add(0, verticalOffset, 0);
+                serverLevel.sendParticles(ParticleTypes.SMOKE, pos.x, pos.y, pos.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+            }
             if (livingEntity != null && ((StandUser) livingEntity).roundabout$isBubbleEncased()) {
                 StandUser SE = ((StandUser) livingEntity);
                 if (!level.isClientSide()) {

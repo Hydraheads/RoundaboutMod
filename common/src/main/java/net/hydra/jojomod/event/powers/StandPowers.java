@@ -433,6 +433,10 @@ public class StandPowers extends AbilityScapeBasis {
         if (ent instanceof Projectile PE){
             IProjectileAccess ipa = (IProjectileAccess) PE;
             if (!ipa.roundabout$getIsDeflected()){
+                if (PE instanceof RoundaboutBulletEntity) {
+                    ((RoundaboutBulletEntity) PE).setDeflected(true);
+                    return;
+                }
                 ipa.roundabout$setIsDeflected(true);
                 ent.setDeltaMovement(ent.getDeltaMovement().scale(-0.4));
                 ent.setYRot(ent.getYRot() + 180.0F);
@@ -2334,7 +2338,7 @@ public class StandPowers extends AbilityScapeBasis {
         return (posList != null && !posList.isEmpty() && posList.size() > 1);
     }
 
-    /**gets arrows for barrage to deflect*/
+    /**gets projectiles for barrage to deflect*/
     public void findDeflectables(){
         float halfReach = (float) (getReach()*0.5);
         Vec3 pointVec = DamageHandler.getRayPoint(this.self, halfReach);

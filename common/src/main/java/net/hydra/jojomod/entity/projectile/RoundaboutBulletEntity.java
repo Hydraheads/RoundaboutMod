@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -31,6 +32,8 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -90,12 +93,30 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$SUPER_THROWN = SynchedEntityData.defineId(RoundaboutBulletEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Byte> AMMO_TYPE = SynchedEntityData.defineId(RoundaboutBulletEntity.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Boolean> DEFLECTED = SynchedEntityData.defineId(RoundaboutBulletEntity.class, EntityDataSerializers.BOOLEAN);
 
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ROUNDABOUT$SUPER_THROWN, true);
         this.entityData.define(AMMO_TYPE, (byte) 0);
+        this.entityData.define(DEFLECTED, false);
+    }
+
+    public boolean getSuperThrown() {
+        return this.entityData.get(ROUNDABOUT$SUPER_THROWN);
+    }
+
+    public void setSuperThrown(boolean value) {
+        this.entityData.set(ROUNDABOUT$SUPER_THROWN, value);
+    }
+
+    public boolean getDeflected() {
+        return this.entityData.get(DEFLECTED);
+    }
+
+    public void setDeflected(boolean value) {
+        this.entityData.set(DEFLECTED, value);
     }
 
     public final void setAmmoType(byte ammoType) {
@@ -132,6 +153,24 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 
     boolean timeStopShot = false;
     int outsideOfTimeStop = 0;
+
+    private void flipTrajectory() {
+        Vec3 motion = this.getDeltaMovement();
+
+        if (motion.lengthSqr() < 1.0E-6) {
+            return;
+        }
+
+        Vec3 flipped = motion.scale(-1.0D);
+
+        this.setDeltaMovement(flipped);
+        this.hasImpulse = true;
+        this.setNoGravity(true);
+        this.setDeltaMovement(flipped);
+    }
+
+
+
 
     @Override
     public void onHitEntity(EntityHitResult result) {
@@ -187,14 +226,29 @@ public class RoundaboutBulletEntity extends AbstractArrow {
         this.discard();
     }
 
-    @Override
-    protected SoundEvent getDefaultHitGroundSoundEvent() {
-        return ModSounds.BULLET_PENTRATION_EVENT;
+    protected void onHitBlock2(BlockHitResult $$0) {
+        ((IAbstractArrowAccess)this).roundabout$setLastState(this.level().getBlockState($$0.getBlockPos()));
+        BlockState BSS = this.level().getBlockState($$0.getBlockPos());
+        BSS.onProjectileHit(this.level(), BSS, $$0, this);
+        Vec3 $$1 = $$0.getLocation().subtract(this.getX(), this.getY(), this.getZ());
+        this.setDeltaMovement($$1);
+        Vec3 $$2 = $$1.normalize().scale(0.05F);
+        this.setPosRaw(this.getX() - $$2.x, this.getY() - $$2.y, this.getZ() - $$2.z);
+        this.playSound(ModSounds.BULLET_PENTRATION_EVENT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
+        this.inGround = true;
+        this.shakeTime = 7;
+        this.setCritArrow(false);
+        this.setPierceLevel((byte)0);
+        this.setSoundEvent(SoundEvents.ARROW_HIT);
+        this.setShotFromCrossbow(false);
+        ((IAbstractArrowAccess)this).roundabout$resetPiercedEntities();
     }
 
     @Override
     protected void doPostHurtEffects(LivingEntity target) {
     }
+
+    boolean deflectSoundPlayed = false;
 
     @Override
     public void tick() {
@@ -221,9 +275,21 @@ public class RoundaboutBulletEntity extends AbstractArrow {
             this.entityData.set(ROUNDABOUT$SUPER_THROWN,false);
         }
 
+        if (getDeflected()) {
+            this.flipTrajectory();
+
+            this.setPos(
+                    this.getX() + this.getDeltaMovement().x,
+                    this.getY() + this.getDeltaMovement().y,
+                    this.getZ() + this.getDeltaMovement().z
+            );
+
+            return;
+        }
+
         super.tick();
 
-        if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
+        if (this.getSuperThrown() && !this.getDeflected()) {
             this.setDeltaMovement(delta);
         }
 
@@ -271,7 +337,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
             }
         }
 
-        super.onHitBlock($$0);
+        onHitBlock2($$0);
     }
 
 

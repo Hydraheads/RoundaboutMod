@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
+import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -2109,7 +2110,7 @@ public class AbilityScapeBasis {
                 lookVec = RotationUtil.rotPlayerToWorld(lookVec.x, lookVec.y, gravD);
             }
 
-            if (!(value instanceof Arrow) && !(value instanceof KnifeEntity) && !(value instanceof ThrownObjectEntity)){
+            if (!(value instanceof Arrow) && !(value instanceof RoundaboutBulletEntity) && !(value instanceof KnifeEntity) && !(value instanceof ThrownObjectEntity)){
                 hitEntities.remove(value);
             } else if (!(angleDistance(lookVec.x, (User.getYHeadRot()%360f)) <= angle && angleDistance(lookVec.y, User.getXRot()) <= angle)){
                 hitEntities.remove(value);
