@@ -232,7 +232,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
 
     @Override
-    public void buttonInput2(boolean KeyIsDown, Options options) {
+    public void buttonInput2(boolean KeyIsDown, Options options, int source) {
 
     }
     @Override

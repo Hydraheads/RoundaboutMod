@@ -2355,6 +2355,8 @@
   "config.roundabout.generalDetectionGoThroughDoorsAndCorners.desc": "Some of the mod's area of affect or line of sight mechanics stop when they hit a block, turning  this off lets you hit past corners and doors with certain things. Not recommended.",
   "config.roundabout.disableBleedingAndBloodSplatters.name": "Disable Blood",
   "config.roundabout.disableBleedingAndBloodSplatters.desc": "If you are sensitive to blood, this setting might help.",
+  "config.roundabout.standlessAbilities.name": "Stand Abilities Without Stand Summoned",
+  "config.roundabout.standlessAbilities.desc": "If this is enabled, certain stand abilities can be used without summoning the stand.",
 
   "config.roundabout.major.done": "Done",
   "config.roundabout.major.reset": "Reset",
