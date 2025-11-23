@@ -18,7 +18,7 @@ public class HeartbeatParticle extends TextureSheetParticle {
         super($$0, $$1, $$2, $$3, 0.0, 0.0, 0.0);
         this.age = 0;
         this.lifetime = 8;
-        this.quadSize = 0.35F;
+        this.quadSize = 0.55F;
         this.sprites = $$7;
         this.setSpriteFromAge($$7);
     }
@@ -141,7 +141,7 @@ public class HeartbeatParticle extends TextureSheetParticle {
 
         public Particle createParticle(SimpleParticleType $$0, ClientLevel $$1, double $$2, double $$3, double $$4, double $$5, double $$6, double $$7) {
             HeartbeatParticle part = new HeartbeatParticle($$1, $$2, $$3, $$4, $$5,$$6,$$7, this.sprites);
-            part.setColor(0.9F, 0.9F, 0.9F);
+            part.setColor(0.99F, 0.99F, 0.99F);
             part.setAlpha(0.7F);
             return part;
         }

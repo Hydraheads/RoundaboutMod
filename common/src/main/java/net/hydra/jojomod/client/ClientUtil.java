@@ -23,7 +23,10 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
+import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.networking.ServerToClientPackets;
@@ -782,6 +785,29 @@ public class ClientUtil {
             return hasATimeStopSeeingStand();
         }
         return false;
+    }
+
+    public static void playSound(SoundEvent event, Entity entity, float volume, float pitch){
+        SoundInstance qSound = new EntityBoundSoundInstance(
+                event,
+                SoundSource.NEUTRAL,
+                volume,
+                pitch,
+                entity,
+                entity.level().random.nextLong()
+        );
+        Minecraft.getInstance().getSoundManager().play(qSound);
+    }
+
+    public static void tickHeartbeat(Entity entity){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            if (((IFatePlayer)player).rdbt$getFatePowers() instanceof VampiricFate vp){
+                if (vp.isHearing()){
+                    vp.tickHeartbeat(entity);
+                }
+            }
+        }
     }
 
     public static boolean hasATimeStopSeeingStand(){

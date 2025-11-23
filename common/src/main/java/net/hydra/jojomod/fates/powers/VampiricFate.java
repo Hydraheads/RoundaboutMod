@@ -29,6 +29,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -733,6 +734,17 @@ public int speedActivated = 0;
     public int dimTickHearing = 0;
 
 
+    public SoundEvent randomHeart(){
+        double rand = Math.random();
+        if (rand < 0.33){
+            return ModSounds.HEARTBEAT_EVENT;
+        } else if (rand < 0.66){
+            return ModSounds.HEARTBEAT2_EVENT;
+        } else {
+            return ModSounds.HEARTBEAT3_EVENT;
+        }
+    }
+
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
@@ -778,7 +790,6 @@ public int speedActivated = 0;
         return getActivePower() == BLOOD_SUCK || getActivePower() == BLOOD_REGEN
                 || isPlantedInWall();
     }
-
     @Override
     public boolean cancelJump(){
         return getActivePower() == BLOOD_REGEN;
@@ -820,8 +831,7 @@ public int speedActivated = 0;
      * for detection or attack highlighting related skills*/
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
-        return isHearing() && ent.distanceTo(player) <= hearingDistance()
-                && MainUtil.getMobBleed(ent);
+        return isHearing() && MainUtil.getMobBleed(ent) && ent.distanceTo(player) <= hearingDistance();
     }
     /**The color id for this entity to be displayed as if the above returns true, it is in decimal rather than
      * hexadecimal*/
@@ -834,5 +844,43 @@ public int speedActivated = 0;
         return 16711680;
     }
 
+    public void tickHeartbeat(Entity entity){
+        if (entity != null && !self.is(entity)){
+        if (MainUtil.getMobBleed(entity) && entity.distanceTo(self) <= hearingDistance()) {
+            Vec3 center = MainUtil.getMobCenter(entity, 0.58f);
+            int heartRate = 20;
+            float heartpitch = 1;
+            if (entity instanceof LivingEntity lv) {
+                float percent = lv.getHealth() / lv.getMaxHealth();
+                if (percent <= 0.2) {
+                    heartRate = 8;
+                    heartpitch = 1.6F;
+                } else if (percent < 0.4) {
+                    heartRate = 11;
+                    heartpitch = 1.45F;
+                } else if (percent < 0.6) {
+                    heartRate = 14;
+                    heartpitch = 1.3F;
+                } else if (percent < 0.8) {
+                    heartRate = 17;
+                    heartpitch = 1.15F;
+                }
 
+                if (entity.tickCount % heartRate == 0) {
+                    entity.level()
+                            .addParticle(
+                                    ModParticles.HEARTBEAT,
+                                    center.x,
+                                    center.y,
+                                    center.z,
+                                    0,
+                                    0.1,
+                                    0
+                            );
+                    ClientUtil.playSound(randomHeart(),entity,0.5F,heartpitch);
+                }
+            }
+        }
+        }
+    }
 }

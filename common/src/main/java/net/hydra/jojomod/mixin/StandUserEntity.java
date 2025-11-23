@@ -795,6 +795,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             this.roundabout$getStandPowers().tickPowerEnd();
         }
 
+        if (level().isClientSide()){
+            ClientUtil.tickHeartbeat(this);
+        }
+
         if (roundabout$prepUglyFace) {
             roundabout$prepUglyFace = false;
             roundabout$setGlow((byte) 2);
