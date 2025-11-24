@@ -240,10 +240,24 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             if (rdbt$qmessageTime == 0){
                 switch (rdbt$qmessage){
                     case 1 -> displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireStand_2").withStyle(ChatFormatting.WHITE), true);
+                    case 2 -> rdbt$vamp1();
+                    case 3 -> rdbt$vamp2();
+                    case 4 -> displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireVampire4").withStyle(ChatFormatting.DARK_RED).withStyle(ChatFormatting.BOLD), true);
                     default -> displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireStand").withStyle(ChatFormatting.WHITE), true);
                 }
             }
         }
+    }
+
+    @Unique
+    public void rdbt$vamp1(){
+        displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireVampire2").withStyle(ChatFormatting.WHITE).withStyle(ChatFormatting.BOLD), true);
+        roundabout$qmessage(3);
+    }
+    @Unique
+    public void rdbt$vamp2(){
+        displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireVampire3").withStyle(ChatFormatting.WHITE).withStyle(ChatFormatting.BOLD), true);
+        roundabout$qmessage(4);
     }
 
     @Unique
