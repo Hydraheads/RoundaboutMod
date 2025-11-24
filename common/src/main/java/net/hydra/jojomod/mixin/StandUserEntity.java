@@ -1624,6 +1624,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public float roundabout$getBonusJumpHeight(){
         float TOT = 0;
+
+        if (roundabout$isDazed())
+            return TOT;
+
         if (roundabout$getBubbleEncased() == 1){
             TOT+=4;
             }
