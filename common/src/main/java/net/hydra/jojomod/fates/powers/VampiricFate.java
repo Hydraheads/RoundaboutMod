@@ -3,6 +3,7 @@ package net.hydra.jojomod.fates.powers;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.AccessFateFoodData;
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
@@ -166,6 +167,10 @@ public int speedActivated = 0;
                 }
             }
         } else {
+
+            if (hasStandActive(self) && getActivePower() == SUPER_HEARING){
+                xTryPower(PowerIndex.NONE,true);
+            }
 
             if (self.isSwimming()) {
                 setWallWalkDirection(getIntendedDirection());
@@ -831,7 +836,17 @@ public int speedActivated = 0;
      * for detection or attack highlighting related skills*/
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
-        return isHearing() && MainUtil.getMobBleed(ent) && ent.distanceTo(player) <= hearingDistance();
+        return isHearing() && MainUtil.getMobBleed(ent) && (
+       !isSoundStolen(ent)
+                ) &&ent.distanceTo(player) <= hearingDistance();
+    }
+
+    public boolean isSoundStolen(Entity ent){
+        if ((((ILevelAccess)ent.level()).roundabout$isSoundPlunderedEntity(ent)) ||
+        (((ILevelAccess)ent.level()).roundabout$isSoundPlundered(ent.blockPosition()))){
+            return true;
+        }
+        return false;
     }
     /**The color id for this entity to be displayed as if the above returns true, it is in decimal rather than
      * hexadecimal*/
@@ -847,37 +862,41 @@ public int speedActivated = 0;
     public void tickHeartbeat(Entity entity){
         if (entity != null && !self.is(entity)){
         if (MainUtil.getMobBleed(entity) && entity.distanceTo(self) <= hearingDistance()) {
-            Vec3 center = MainUtil.getMobCenter(entity, 0.58f);
-            int heartRate = 20;
-            float heartpitch = 1;
-            if (entity instanceof LivingEntity lv) {
-                float percent = lv.getHealth() / lv.getMaxHealth();
-                if (percent <= 0.2) {
-                    heartRate = 8;
-                    heartpitch = 1.6F;
-                } else if (percent < 0.4) {
-                    heartRate = 11;
-                    heartpitch = 1.45F;
-                } else if (percent < 0.6) {
-                    heartRate = 14;
-                    heartpitch = 1.3F;
-                } else if (percent < 0.8) {
-                    heartRate = 17;
-                    heartpitch = 1.15F;
-                }
 
-                if (entity.tickCount % heartRate == 0) {
-                    entity.level()
-                            .addParticle(
-                                    ModParticles.HEARTBEAT,
-                                    center.x,
-                                    center.y,
-                                    center.z,
-                                    0,
-                                    0.1,
-                                    0
-                            );
-                    ClientUtil.playSound(randomHeart(),entity,0.5F,heartpitch);
+            ILevelAccess access = ((ILevelAccess) entity.level());
+            if (!isSoundStolen(entity)) {
+                Vec3 center = MainUtil.getMobCenter(entity, 0.58f);
+                int heartRate = 20;
+                float heartpitch = 1;
+                if (entity instanceof LivingEntity lv) {
+                    float percent = lv.getHealth() / lv.getMaxHealth();
+                    if (percent <= 0.2) {
+                        heartRate = 8;
+                        heartpitch = 1.6F;
+                    } else if (percent < 0.4) {
+                        heartRate = 11;
+                        heartpitch = 1.45F;
+                    } else if (percent < 0.6) {
+                        heartRate = 14;
+                        heartpitch = 1.3F;
+                    } else if (percent < 0.8) {
+                        heartRate = 17;
+                        heartpitch = 1.15F;
+                    }
+
+                    if (entity.tickCount % heartRate == 0) {
+                        entity.level()
+                                .addParticle(
+                                        ModParticles.HEARTBEAT,
+                                        center.x,
+                                        center.y,
+                                        center.z,
+                                        0,
+                                        0.1,
+                                        0
+                                );
+                        ClientUtil.playSound(randomHeart(), entity, 0.5F, heartpitch);
+                    }
                 }
             }
         }
