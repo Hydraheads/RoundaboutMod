@@ -865,6 +865,19 @@ public class PowersWalkingHeart extends NewDashPreset {
         super.tickPower();
     }
 
+    @Override
+    public float getStepHeightAddon(){
+        if (hasExtendedHeelsForWalking()){
+            if (canWallWalkConfig())
+                return 0.4F;
+            else
+                return 2.0F;
+        } else if (!(self instanceof Player)){
+            return 3.0F;
+        }
+        return 0;
+    }
+
     public int getRaiseTicks(){
         return 40;
     }

@@ -133,6 +133,10 @@ public class AbilityScapeBasis {
         return false;
     }
 
+    public float getStepHeightAddon(){
+        return 0;
+    }
+
     /** Make a stand ability cancel you using items */
     public boolean cancelItemUse() {
         return false;

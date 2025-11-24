@@ -230,6 +230,12 @@ public int speedActivated = 0;
         }
     }
 
+    public float getStepHeightAddon(){
+        if (isFast()) {
+            return 0.4F;
+        }
+        return 0;
+    }
 
     public Direction getIntendedDirection(){
         Direction rightAxis = Direction.DOWN;
@@ -442,7 +448,7 @@ public int speedActivated = 0;
     }
     public boolean canUseRegen(){
         return self instanceof Player PE && PE.getFoodData().getFoodLevel() >= 1 && !isFast()
-                && getActivePower() != BLOOD_REGEN;
+                && getActivePower() != BLOOD_REGEN && self.getHealth() < self.getMaxHealth();
     }
     public void regenClient(){
         if (canUseRegen() && !onCooldown(PowerIndex.FATE_2_SNEAK)){
