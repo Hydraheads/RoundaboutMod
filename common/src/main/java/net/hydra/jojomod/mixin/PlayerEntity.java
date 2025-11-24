@@ -22,8 +22,10 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.PlayerMaskSlots;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -222,6 +224,28 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
         return 0;
     }
+    @Unique
+    @Override
+    public void roundabout$qmessage(int messageID){
+        rdbt$qmessage = messageID;
+        rdbt$qmessageTime = 60;
+    }
+    public int rdbt$qmessage = 0;
+    public int rdbt$qmessageTime = 0;
+    @Unique
+    public void roundabout$qmessageTick(){
+        if (rdbt$qmessageTime > 0){
+            rdbt$qmessageTime--;
+
+            if (rdbt$qmessageTime == 0){
+                switch (rdbt$qmessage){
+                    case 1 -> displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireStand_2").withStyle(ChatFormatting.WHITE), true);
+                    default -> displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireStand").withStyle(ChatFormatting.WHITE), true);
+                }
+            }
+        }
+    }
+
     @Unique
     private PlayerMaskSlots roundabout$maskInventory = new PlayerMaskSlots(((Player)(Object)this));
 
@@ -1205,6 +1229,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 }
 
             }
+        } else {
+            roundabout$qmessageTick();
         }
         if (!(this.getVehicle() != null && this.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted())) {
             ((StandUser) this).roundabout$setRestrainedTicks(-1);
@@ -1423,6 +1449,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public HumanoidArm getMainArm() {
         return null;
     }
+
+    @Shadow public abstract void displayClientMessage(Component component, boolean bl);
 
     @Inject(method = "canHarmPlayer", at=@At("HEAD"), cancellable = true)
     private void roundabout$canHarmPlayer(Player player, CallbackInfoReturnable<Boolean> cir)
