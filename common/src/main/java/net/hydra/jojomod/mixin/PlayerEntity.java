@@ -22,6 +22,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.PlayerMaskSlots;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -242,7 +243,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                     case 1 -> displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireStand_2").withStyle(ChatFormatting.WHITE), true);
                     case 2 -> rdbt$vamp1();
                     case 3 -> rdbt$vamp2();
-                    case 4 -> displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireVampire4").withStyle(ChatFormatting.DARK_RED).withStyle(ChatFormatting.BOLD), true);
+                    case 4 -> rdbt$vamp3();
                     default -> displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireStand").withStyle(ChatFormatting.WHITE), true);
                 }
             }
@@ -259,6 +260,12 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireVampire3").withStyle(ChatFormatting.WHITE).withStyle(ChatFormatting.BOLD), true);
         roundabout$qmessage(4);
     }
+    @Unique
+    public void rdbt$vamp3(){
+        displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireVampire4").withStyle(ChatFormatting.DARK_RED).withStyle(ChatFormatting.BOLD), true);
+        S2CPacketUtil.vampireMessage(((Player) (Object)this));
+    }
+
 
     @Unique
     private PlayerMaskSlots roundabout$maskInventory = new PlayerMaskSlots(((Player)(Object)this));

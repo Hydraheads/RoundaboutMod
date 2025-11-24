@@ -295,6 +295,7 @@ public class FabricSounds {
         addSound(ModSounds.HEARTBEAT_ID, ModSounds.HEARTBEAT_EVENT);
         addSound(ModSounds.HEARTBEAT2_ID, ModSounds.HEARTBEAT2_EVENT);
         addSound(ModSounds.HEARTBEAT3_ID, ModSounds.HEARTBEAT3_EVENT);
+        addSound(ModSounds.VAMPIRE_MESSAGE_ID, ModSounds.VAMPIRE_MESSAGE_EVENT);
 
         addSound(ModSounds.EXTEND_SPIKES_ID, ModSounds.EXTEND_SPIKES_EVENT);
         addSound(ModSounds.WALL_LATCH_ID, ModSounds.WALL_LATCH_EVENT);
