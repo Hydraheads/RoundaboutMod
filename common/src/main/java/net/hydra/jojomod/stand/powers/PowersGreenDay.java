@@ -25,6 +25,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.network.chat.Component;
 
 import net.minecraft.server.level.ServerLevel;
@@ -32,9 +33,16 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FlowerBlock;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -72,36 +80,44 @@ public class PowersGreenDay extends NewPunchingStand {
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas) {
 
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,2, "ability.roundabout.punch",
+                "instruction.roundabout.press_attack", StandIcons.GREEN_DAY_PUNCH,1,level,bypas));
+        // charge fire
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+118,3, "ability.roundabout.guard",
+                "instruction.roundabout.hold_block", StandIcons.GREEN_DAY_GUARD,0,level,bypas));
+        // burst fire
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+99,2, "ability.roundabout.barrage",
+                "instruction.roundabout.barrage", StandIcons.GREEN_DAY_BARRAGE,2,level,bypas));
         // manual scope
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,2, "ability.roundabout.gd_punch_left",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,2, "ability.roundabout.gd_punch_left",
                 "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_PUNCH_LEFT,1,level,bypas));
         // charge fire
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+118,3, "ability.roundabout.gd_return_left",
-                "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_ARM_RETURN_LEFT,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39, topPos+118,3, "ability.roundabout.gd_return_left",
+                "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_ARM_RETURN_LEFT,0,level,bypas));
         // burst fire
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+99,2, "ability.roundabout.gd_spin_left",
-                "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_SPIN_LEFT,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,2, "ability.roundabout.gd_spin_left",
+                "instruction.roundabout.press_skill_block", StandIcons.GREEN_DAY_MOLD_SPIN_LEFT,2,level,bypas));
         // place ratt
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.gd_punch_right",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.gd_punch_right",
                 "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_PUNCH_RIGHT,2,level,bypas));
         // place burst
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.gd_spin_right",
-                "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_ARM_RETURN_RIGHT,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.gd_spin_right",
+                "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_ARM_RETURN_RIGHT,1,level,bypas));
         // place auto
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,1, "ability.roundabout.gd_return_right",
-                "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_MOLD_SPIN_RIGHT,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,1, "ability.roundabout.gd_return_right",
+                "instruction.roundabout.press_skill_block", StandIcons.GREEN_DAY_MOLD_SPIN_RIGHT,1,level,bypas));
         // dodge
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.dodge",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
         // passive
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.gd_mold_leap",
-                "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_LEAP,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,0, "ability.roundabout.gd_mold_leap",
+                "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_MOLD_LEAP,3,level,bypas));
         // bucket passive
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.gd_mold_field",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,0, "ability.roundabout.gd_mold_field",
                 "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_FIELD,3,level,bypas));
         // ratt leap
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+76,topPos+80,4, "ability.roundabout.gd_stitch",
-                "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_STITCH,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,4, "ability.roundabout.gd_stitch",
+                "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_STITCH,4,level,bypas));
 
         return $$1;
     }
@@ -307,12 +323,7 @@ public class PowersGreenDay extends NewPunchingStand {
         return true;
     }
 
-
-
-
-
     public boolean StitchHeal(float hp, LivingEntity entity) {
-
         if(!isClient()) {
             float maxhp = entity.getMaxHealth();
             float currenthp = entity.getHealth();
@@ -383,7 +394,6 @@ public class PowersGreenDay extends NewPunchingStand {
                             0,1,-1,1,0.12);
 
                 }
-
             }
         }
     }
@@ -391,8 +401,6 @@ public class PowersGreenDay extends NewPunchingStand {
     public boolean isMoldFieldOn() {
         return((IPermaCasting) this.getSelf().level()).roundabout$isPermaCastingEntity(this.self);
     };
-
-
 
 
     @Override
