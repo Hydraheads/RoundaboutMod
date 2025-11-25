@@ -432,6 +432,10 @@ public abstract class EntityAndData implements IEntityAndData {
         roundabout$PrevTick = 0;
     }
 
+    @Override
+    public float roundabout$getStepHeight() {
+        return this.maxUpStep;
+    }
 
     /**In a timestop, fire doesn't tick*/
     @Inject(method = "setRemainingFireTicks", at = @At("HEAD"), cancellable = true)
@@ -581,6 +585,8 @@ public abstract class EntityAndData implements IEntityAndData {
     @Shadow public abstract SynchedEntityData getEntityData();
 
     @Shadow public abstract boolean isInLava();
+
+    @Shadow private float maxUpStep;
 
     @Override
     @Unique

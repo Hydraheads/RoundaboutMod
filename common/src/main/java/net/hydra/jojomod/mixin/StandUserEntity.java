@@ -795,6 +795,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             this.roundabout$getStandPowers().tickPowerEnd();
         }
 
+        if (level().isClientSide()){
+            ClientUtil.tickHeartbeat(this);
+        }
+
         if (roundabout$prepUglyFace) {
             roundabout$prepUglyFace = false;
             roundabout$setGlow((byte) 2);
@@ -1620,6 +1624,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public float roundabout$getBonusJumpHeight(){
         float TOT = 0;
+
+        if (roundabout$isDazed())
+            return TOT;
+
         if (roundabout$getBubbleEncased() == 1){
             TOT+=4;
             }
@@ -3239,16 +3247,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             cancellable = true
     )
     private void roundabout$maxUpStep(CallbackInfoReturnable<Float> cir) {
-        if (roundabout$getStandPowers() instanceof PowersWalkingHeart PW){
-            if (PW.hasExtendedHeelsForWalking()){
-                if (PW.canWallWalkConfig())
-                    cir.setReturnValue(1.0F);
-                else
-                    cir.setReturnValue(2.0F);
-                return;
-            } else if (!(rdbt$this() instanceof Player)){
-                cir.setReturnValue(3.0F);
-            }
+        float stepAddon = roundabout$getStandPowers().getStepHeightAddon();
+        if (rdbt$this() instanceof Player pl){
+            stepAddon += ((IFatePlayer)pl).rdbt$getFatePowers().getStepHeightAddon();
+        }
+        if (stepAddon > 0){
+            cir.setReturnValue(((IEntityAndData)this).roundabout$getStepHeight() + stepAddon);
         }
     }
 
@@ -3303,7 +3307,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             if (roundabout$isBubbleEncased()){
                                 this.setDeltaMovement($$0.x*0.91, (double) this.getJumpPower(), $$0.z*0.91);
                             } else {
-                                this.setDeltaMovement($$0.x, (double) this.getJumpPower()*1.2, $$0.z);
+                                curr = roundabout$getBigJumpCurrentProgress();
+                                this.setDeltaMovement($$0.x,
+                                        (double) this.getJumpPower()*FateTypes.getJumpHeightPower(
+                                                ((LivingEntity)(Object)this),
+                                                (curr > 2)
+                                        ),
+                                        $$0.z);
                             }
                         }
                     }

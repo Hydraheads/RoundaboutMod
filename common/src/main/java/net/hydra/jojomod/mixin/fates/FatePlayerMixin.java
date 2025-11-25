@@ -15,7 +15,9 @@ import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
@@ -40,6 +42,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class FatePlayerMixin extends LivingEntity implements IFatePlayer {
 
     @Shadow public abstract FoodData getFoodData();
+
+    @Shadow public abstract void displayClientMessage(Component component, boolean bl);
 
     @Unique
     public FatePowers rdbt$fatePowers = null;
@@ -161,6 +165,11 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
                 if (FateTypes.isHuman(this)){
                     MainUtil.popOffStoneMask(this);
                     FateTypes.setVampire(this);
+                    displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireVampire1").withStyle(ChatFormatting.WHITE).withStyle(ChatFormatting.BOLD), true);
+                    (((IPlayerEntity)this)).roundabout$qmessage(2);
+                    if (hasEffect(ModEffects.BLEED)){
+                        removeEffect(ModEffects.BLEED);
+                    }
                 }
                 //12 is the id of vampire stone mask transformation animation in Poses.java
                 if (((IPlayerEntity)this).roundabout$GetPoseEmote() == 12){

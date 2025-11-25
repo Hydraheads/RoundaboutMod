@@ -133,6 +133,15 @@ public class BlockGrabPreset extends NewPunchingStand {
         /*Return false in an override if you don't want to sync cooldowns, if for example you want a simple data update*/
     }
 
+
+    @Override
+    public boolean isMiningStand() {
+        if (hasBlock() || hasEntity()){
+            return false;
+        }
+        return super.isMiningStand();
+    }
+
     public boolean hasBlock(){
         if (((StandUser) this.getSelf()).roundabout$getStand() != null){
             if (!((StandUser) this.getSelf()).roundabout$getStand().getHeldItem().isEmpty()){
@@ -252,6 +261,21 @@ public class BlockGrabPreset extends NewPunchingStand {
                 ) {
                     ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     animateStand(StandEntity.IDLE);
+                }
+
+
+                if (getActivePower() == PowerIndex.MINING && !self.level().isClientSide()){
+                    if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
+                        if (hasBlock()) {
+                            if (standEntity.canAcquireHeldItem) {
+                                this.addItem(standEntity);
+                            }
+                            standEntity.setHeldItem(ItemStack.EMPTY);
+                        }
+                        if (hasEntity()) {
+                            standEntity.ejectPassengers();
+                        }
+                    }
                 }
             }
             if (this.getAnimation() == StandEntity.BLOCK_RETRACT || this.getAnimation() == StandEntity.ITEM_RETRACT) {

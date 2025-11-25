@@ -56,6 +56,9 @@ public class VampireFate extends VampiricFate {
                 dashOrWallWalk();
             }
             case SKILL_4_NORMAL -> {
+                setSuperHearingClient();
+            }
+            case SKILL_4_CROUCH -> {
                 clientChangeVision();
             }
         }
@@ -74,6 +77,9 @@ public class VampireFate extends VampiricFate {
         return super.tryPower(move,forced);
     }
     public void hypnosis(){
+        if (isHearing()){
+            stopHearingClient();
+        }
         tryPowerPacket(HYPNOSIS);
     }
     @Override
@@ -98,7 +104,7 @@ public class VampireFate extends VampiricFate {
     public boolean isAttackIneptVisually(byte activeP, int slot){
         if (slot == 3 && isPlantedInWall() && !isHoldingSneak() && !canLatchOntoWall())
             return true;
-        if (slot == 3 && isHoldingSneak() && !canUseBloodSpeed())
+        if (slot == 3 && isHoldingSneak() && !canUseBloodSpeed() && !canLatchOntoWall())
             return true;
         if (slot == 2 && isHoldingSneak() && !canUseRegen())
             return true;
@@ -106,7 +112,15 @@ public class VampireFate extends VampiricFate {
     }
     @Override
     public float getJumpHeightAddon(){
-        return 4;
+        //if (self.isCrouching() || isFast()){
+        //    return super.getJumpHeightAddon()+4;
+        //} else {
+        //    return super.getJumpHeightAddon();
+        //}
+        if (self.level().isClientSide() && !isVisionOn()){
+            return super.getJumpHeightAddon();
+        }
+        return super.getJumpHeightAddon()+4;
     }
 
 
@@ -174,7 +188,7 @@ public class VampireFate extends VampiricFate {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         }
 
-        if (isHoldingSneak()) {
+        if (!isHoldingSneak() || isHearing()) {
             setSkillIcon(context, x, y, 4, StandIcons.HEARING_MODE, PowerIndex.FATE_4_SNEAK);
         } else {
             if (isVisionOn()){

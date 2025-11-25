@@ -34,6 +34,7 @@ public class StandUsingNPC extends JojoNPC{
             if (stack == null || stack.isEmpty()){
                 if (getDisc() != null){
                     ((StandUser)this).roundabout$setStandDisc(getDisc().getDefaultInstance().copy());
+                    getDisc().generateStandPowers(this);
                     applySkin();
                 }
             }
@@ -45,6 +46,11 @@ public class StandUsingNPC extends JojoNPC{
         super.readAdditionalSaveData($$0);
         isInitialized = $$0.getBoolean("isInitialized");
         rollStand();
+    }
+
+    @Override
+    public boolean canSummonStandThroughFightOrFlightActive(){
+        return true;
     }
 
 }

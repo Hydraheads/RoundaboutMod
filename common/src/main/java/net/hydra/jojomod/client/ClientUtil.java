@@ -17,12 +17,17 @@ import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
+import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.networking.ServerToClientPackets;
@@ -536,6 +541,10 @@ public class ClientUtil {
                         PC.setTransformDirection(sigmaDirection);
                     }
                 }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.VampireMessage.value)) {
+
+                    player.playSound(ModSounds.VAMPIRE_MESSAGE_EVENT,10,1);
+                }
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();
                 //        ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));
@@ -717,6 +726,7 @@ public class ClientUtil {
         if (player != null) {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
+            FatePowers fatePowers = ((IFatePlayer)player).rdbt$getFatePowers();
 
             if (powers.getGoBeyondTarget() != null && powers.getGoBeyondTarget().is(entity)) {
                 return 10978493;
@@ -739,6 +749,9 @@ public class ClientUtil {
 
             if (powers.highlightsEntity(entity, player))
                 return powers.highlightsEntityColor(entity,player);
+
+            if (fatePowers.highlightsEntity(entity, player))
+                return fatePowers.highlightsEntityColor(entity,player);
 
             if (MainUtil.isZapper(player,entity)){
                 //15974080
@@ -777,6 +790,29 @@ public class ClientUtil {
             return hasATimeStopSeeingStand();
         }
         return false;
+    }
+
+    public static void playSound(SoundEvent event, Entity entity, float volume, float pitch){
+        SoundInstance qSound = new EntityBoundSoundInstance(
+                event,
+                SoundSource.NEUTRAL,
+                volume,
+                pitch,
+                entity,
+                entity.level().random.nextLong()
+        );
+        Minecraft.getInstance().getSoundManager().play(qSound);
+    }
+
+    public static void tickHeartbeat(Entity entity){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            if (((IFatePlayer)player).rdbt$getFatePowers() instanceof VampiricFate vp){
+                if (vp.isHearing()){
+                    vp.tickHeartbeat(entity);
+                }
+            }
+        }
     }
 
     public static boolean hasATimeStopSeeingStand(){

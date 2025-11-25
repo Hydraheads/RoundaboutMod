@@ -895,6 +895,22 @@ public class ModSounds {
     public static final ResourceLocation VAMPIRE_WALL_GRIP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VAMPIRE_WALL_GRIP);
     public static SoundEvent VAMPIRE_WALL_GRIP_EVENT = SoundEvent.createVariableRangeEvent(VAMPIRE_WALL_GRIP_ID);
 
+    //eraweB
+    public static final String VAMPIRE_MESSAGE = "vampire_message";
+    public static final ResourceLocation VAMPIRE_MESSAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VAMPIRE_MESSAGE);
+    public static SoundEvent VAMPIRE_MESSAGE_EVENT = SoundEvent.createVariableRangeEvent(VAMPIRE_MESSAGE_ID);
+
+
+
+    public static final String HEARTBEAT = "heartbeat";
+    public static final ResourceLocation HEARTBEAT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HEARTBEAT);
+    public static SoundEvent HEARTBEAT_EVENT = SoundEvent.createVariableRangeEvent(HEARTBEAT_ID);
+    public static final String HEARTBEAT2= "heartbeat2";
+    public static final ResourceLocation HEARTBEAT2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HEARTBEAT2);
+    public static SoundEvent HEARTBEAT2_EVENT = SoundEvent.createVariableRangeEvent(HEARTBEAT2_ID);
+    public static final String HEARTBEAT3 = "heartbeat3";
+    public static final ResourceLocation HEARTBEAT3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HEARTBEAT3);
+    public static SoundEvent HEARTBEAT3_EVENT = SoundEvent.createVariableRangeEvent(HEARTBEAT3_ID);
 
 
 

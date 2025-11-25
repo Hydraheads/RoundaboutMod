@@ -275,6 +275,13 @@ public class S2CPacketUtil {
             );
         }
     }
+    public static void vampireMessage(Player player){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.VampireMessage.value
+            );
+        }
+    }
     public static void creamUpdateTransformTimer(Player player, int time){
         if (player instanceof ServerPlayer SP) {
             ModMessageEvents.sendToPlayer(SP,

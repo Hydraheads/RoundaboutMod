@@ -113,6 +113,30 @@
       "roundabout:vampire_wall_grip"
     ]
   },
+  "vampire_message": {
+    "subtitle": "sounds.roundabout.vampire_message",
+    "sounds": [
+      "roundabout:vampire_message"
+    ]
+  },
+  "heartbeat": {
+    "subtitle": "sounds.roundabout.heartbeat",
+    "sounds": [
+      "roundabout:heartbeat"
+    ]
+  },
+  "heartbeat2": {
+    "subtitle": "sounds.roundabout.heartbeat2",
+    "sounds": [
+      "roundabout:heartbeat2"
+    ]
+  },
+  "heartbeat3": {
+    "subtitle": "sounds.roundabout.heartbeat3",
+    "sounds": [
+      "roundabout:heartbeat3"
+    ]
+  },
   "hypnosis": {
     "subtitle": "sounds.roundabout.hypnosis",
     "sounds": [

@@ -43,7 +43,8 @@ public class ServerToClientPackets {
             AffirmAllCooldowns("affirm_cooldown_sync"),
             CreamUpdateTimer("cream_update_timer"),
             CreamUpdateTransformTimer("cream_update_transform_timer"),
-            CreamUpdateTransformDirection("cream_update_transform_direction");
+            CreamUpdateTransformDirection("cream_update_transform_direction"),
+            VampireMessage("vampire_message");
 
             public final String value;
 

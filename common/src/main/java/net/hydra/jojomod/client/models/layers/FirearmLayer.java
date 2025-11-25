@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -54,29 +55,57 @@ public class FirearmLayer<T extends LivingEntity, A extends HumanoidModel<T>> ex
         }
 
         poseStack.pushPose();
-        if (isHoldingFirearmRight && held.getItem() instanceof SnubnoseRevolverItem) {
-            getParentModel().rightArm.translateAndRotate(poseStack);
-            poseStack.translate(-0.032F,0.55F,-0.66F);
-            poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
-            poseStack.scale(1.0F, 1.0F, 1.0F);
-            boolean isHurt = livent.hurtTime > 0;
-            float r = isHurt ? 1.0F : 1.0F;
-            float g = isHurt ? 0.0F : 1.0F;
-            float b = isHurt ? 0.0F : 1.0F;
-            ModStrayModels.SNUBNOSE_REVOLVER_MODEL.render(livent, partialTicks, poseStack, bufferSource, packedLight,
-                    r, g, b, heyFull);
-        } else if (isHoldingFirearmLeft && offHeld.getItem() instanceof SnubnoseRevolverItem) {
-            getParentModel().leftArm.translateAndRotate(poseStack);
-            poseStack.translate(0.032F,0.55F,-0.66F);
-            poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
-            poseStack.scale(1.0F, 1.0F, 1.0F);
-            boolean isHurt = livent.hurtTime > 0;
-            float r = isHurt ? 1.0F : 1.0F;
-            float g = isHurt ? 0.0F : 1.0F;
-            float b = isHurt ? 0.0F : 1.0F;
-            ModStrayModels.SNUBNOSE_REVOLVER_MODEL.render(livent, partialTicks, poseStack, bufferSource, packedLight,
-                    r, g, b, heyFull);
+        if (entity instanceof Player player) {
+            if (player.getMainArm() == HumanoidArm.RIGHT) {
+                if (isHoldingFirearmRight && held.getItem() instanceof SnubnoseRevolverItem) {
+                    getParentModel().rightArm.translateAndRotate(poseStack);
+                    poseStack.translate(-0.032F,0.55F,-0.66F);
+                    poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+                    poseStack.scale(1.0F, 1.0F, 1.0F);
+                    boolean isHurt = livent.hurtTime > 0;
+                    float r = isHurt ? 1.0F : 1.0F;
+                    float g = isHurt ? 0.0F : 1.0F;
+                    float b = isHurt ? 0.0F : 1.0F;
+                    ModStrayModels.SNUBNOSE_REVOLVER_MODEL.render(livent, partialTicks, poseStack, bufferSource, packedLight,
+                            r, g, b, heyFull);
+                } else if (isHoldingFirearmLeft && offHeld.getItem() instanceof SnubnoseRevolverItem) {
+                    getParentModel().leftArm.translateAndRotate(poseStack);
+                    poseStack.translate(0.032F,0.55F,-0.66F);
+                    poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+                    poseStack.scale(1.0F, 1.0F, 1.0F);
+                    boolean isHurt = livent.hurtTime > 0;
+                    float r = isHurt ? 1.0F : 1.0F;
+                    float g = isHurt ? 0.0F : 1.0F;
+                    float b = isHurt ? 0.0F : 1.0F;
+                    ModStrayModels.SNUBNOSE_REVOLVER_MODEL.render(livent, partialTicks, poseStack, bufferSource, packedLight,
+                            r, g, b, heyFull);
 
+                }
+            } else {
+                if (isHoldingFirearmRight && held.getItem() instanceof SnubnoseRevolverItem) {
+                    getParentModel().leftArm.translateAndRotate(poseStack);
+                    poseStack.translate(0.032F,0.55F,-0.66F);
+                    poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+                    poseStack.scale(1.0F, 1.0F, 1.0F);
+                    boolean isHurt = livent.hurtTime > 0;
+                    float r = isHurt ? 1.0F : 1.0F;
+                    float g = isHurt ? 0.0F : 1.0F;
+                    float b = isHurt ? 0.0F : 1.0F;
+                    ModStrayModels.SNUBNOSE_REVOLVER_MODEL.render(livent, partialTicks, poseStack, bufferSource, packedLight,
+                            r, g, b, heyFull);
+                } else if (isHoldingFirearmLeft && offHeld.getItem() instanceof SnubnoseRevolverItem) {
+                    getParentModel().rightArm.translateAndRotate(poseStack);
+                    poseStack.translate(-0.032F,0.55F,-0.66F);
+                    poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+                    poseStack.scale(1.0F, 1.0F, 1.0F);
+                    boolean isHurt = livent.hurtTime > 0;
+                    float r = isHurt ? 1.0F : 1.0F;
+                    float g = isHurt ? 0.0F : 1.0F;
+                    float b = isHurt ? 0.0F : 1.0F;
+                    ModStrayModels.SNUBNOSE_REVOLVER_MODEL.render(livent, partialTicks, poseStack, bufferSource, packedLight,
+                            r, g, b, heyFull);
+                }
+            }
         }
         poseStack.popPose();
     }

@@ -9,6 +9,9 @@
   "text.roundabout.warn_unnamed_trap_triggered": "A fog trap has been triggered!",
 
   "text.roundabout.out_of_bullets": "Shift right click to reload!",
+  "text.roundabout.already_reloaded": "You have already reloaded.",
+  "text.roundabout.no_more_usable_ammo": "You have no more ammunition!",
+
 
   "item.roundabout.stand_arrow": "Stand Arrow",
   "item.roundabout.stand_beetle_arrow": "Stand Arrow",
@@ -204,6 +207,11 @@
   "item.roundabout.stand_arrow.usedUp": "Out of power, craft with meteorite.",
   "item.roundabout.stand_arrow.haveStand": "You already have a stand, to remove it use stand disc",
   "item.roundabout.stand_arrow.acquireStand": "Stand Acquired! Press the summon key!",
+  "item.roundabout.stand_arrow.acquireStand_2": "Press the power inventory key to see skills!",
+  "item.roundabout.stand_arrow.acquireVampire1": "You are now a Vampire",
+  "item.roundabout.stand_arrow.acquireVampire2": "The Summon Key switches Attack Modes",
+  "item.roundabout.stand_arrow.acquireVampire3": "Avoid Sunlight",
+  "item.roundabout.stand_arrow.acquireVampire4": "Drink Blood to Become Stronger",
   "item.roundabout.stand_arrow.bowTip": "In offhand, bows use it as ammo.",
   "item.roundabout.stand_arrow.reroll": "Crouch to use %1$s experience",
   "item.roundabout.stand_arrow.reroll2": "level for a different stand!",
@@ -443,6 +451,7 @@
   "key.category.roundabout.jojo": "Roundabout Controls",
   "hud.roundabout.standout": "Stand Summoned",
   "sounds.roundabout.dsp_summon": "Explosive Stand Summon",
+  "sounds.roundabout.vampire_message": "-serrated-",
 
   "death.attack.stand": "%1$s died to a mysterious power whilst fighting %2$s",
   "death.attack.stand.item": "%1$s died to a mysterious power whilst fighting %2$s",
@@ -524,6 +533,7 @@
   "death.attack.blood_drain.item": "%1$s lost all color.",
   "death.attack.blood_drain.player": "%1$s lost all color.",
   "death.attack.blood_drain.player.item": "%1$s lost all color.",
+  "death.attack.bullet": "%1$s became a pin cushion.",
 
   "item.glaive.charge_power": "Charge Attack",
 
@@ -623,6 +633,7 @@
   "sounds.roundabout.spike_hit":  "Spike hit",
   "sounds.roundabout.spike_miss":  "Spike extend",
   "sounds.roundabout.vampire_crumble":  "Crumbling",
+  "sounds.roundabout.vampire_speed":  "Zoom",
   "sounds.roundabout.vampire_wall_grip":  "Bang",
 
   "sounds.roundabout.mandom_rewind":  "Time Rewind",
@@ -902,7 +913,9 @@
   "sounds.roundabout.jotaro_getting_closer":  "How else can I...",
   "sounds.roundabout.blood_suck":  "Blood",
   "sounds.roundabout.blood_suck_crit":  "Blood",
-  "sounds.roundabout.vampire_speed":  "Boost",
+  "sounds.roundabout.heartbeat":  "Heartbeat",
+  "sounds.roundabout.heartbeat2":  "Heartbeat",
+  "sounds.roundabout.heartbeat3":  "Heartbeat",
 
   "sounds.roundabout.aesthetician_exhale":  "Huff",
   "sounds.roundabout.female_zombie_ambient":  "Zombie Aesthetician groans",
@@ -1681,6 +1694,8 @@
   "config.roundabout.enableJustice.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableWalkingHeart.name": "Enable Stand",
   "config.roundabout.enableWalkingHeart.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+  "config.roundabout.enableCream.name": "Enable Stand",
+  "config.roundabout.enableCream.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableRatt.name": "Enable Stand",
   "config.roundabout.enableRatt.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableMandom.name": "Enable Stand",
@@ -1751,8 +1766,8 @@
   "config.roundabout.barrageHasAreaOfEffect.desc": "Makes barrages deal small AOE damage around them.",
   "config.roundabout.barragesOnlyKillOnLastHit.name": "Barrages Kill on Last Hit",
   "config.roundabout.barragesOnlyKillOnLastHit.desc": "Makes barrages only kill on the last hit to send mobs flying like in the anime and manga.",
-  "config.roundabout.barrageDeflectsArrows.name": "Barrages Deflect Arrows",
-  "config.roundabout.barrageDeflectsArrows.desc": "Makes stand barrages deflect arrows.",
+  "config.roundabout.barrageDeflectsArrows.name": "Barrages Deflect Projectiles",
+  "config.roundabout.barrageDeflectsArrows.desc": "Makes stand barrages deflect projectiles.",
   "config.roundabout.standPunchesGoThroughDoorsAndCorners.name": "Stand Attack Through Walls",
   "config.roundabout.standPunchesGoThroughDoorsAndCorners.desc": "Turn on if you want the legacy feature (that was unintended) of stands punching through corners and doors. Off by default. Very easy cheesing, and also may make other things go through walls like go beyond highlighting.",
   "config.roundabout.standGuardDelayTicks.name": "Guard Delay Ticks",
@@ -1858,6 +1873,19 @@
   "config.roundabout.walkingHeartAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
   "config.roundabout.walkingHeartAttackMultOnMobs.name": "Mob Damage Multiplier",
   "config.roundabout.walkingHeartAttackMultOnMobs.desc": "How much damage the stand deals to every other mob, same math as above.",
+
+  "config.roundabout.creamAttackMultOnPlayers.name": "Player Damage Multiplier",
+  "config.roundabout.creamAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
+  "config.roundabout.creamAttackMultOnMobs.name": "Mob Damage Multiplier",
+  "config.roundabout.creamAttackMultOnMobs.desc": "How much damage the stand deals to every other mob, same math as above.",
+  "config.roundabout.creamGuardPoints.name": "Guard Points",
+  "config.roundabout.creamGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
+  "config.roundabout.miningSpeedMultiplierCream.name": "Mining Speed Multiplier",
+  "config.roundabout.miningSpeedMultiplierCream.desc": "Adjust how fast the stand can mine.",
+  "config.roundabout.getMiningTierCream.name": "Mining Tier",
+  "config.roundabout.getMiningTierCream.desc": "Tier 0 is the default, it does not replace tools for harvesting blocks. Tier 1 is wood tier, tier 2 is stone tier, tier 3 is iron tier, and tier 4 is diamond tier.",
+  "config.roundabout.creamVoidTime.name": "Void Time",
+  "config.roundabout.creamVoidTime.desc": "How long you are able to stay in the void mode attack for",
 
   "config.roundabout.rattAttackBonusOnMobs.name": "Bonus Mob Damage",
   "config.roundabout.rattAttackBonusOnMobs.desc": "How much bonus damage Ratt darts deal to a mob.",
@@ -2245,7 +2273,7 @@
   "config.roundabout.postTSiframes.name": "Invincibility Ticks",
   "config.roundabout.postTSiframes.desc": "The amount of ticks after taking time damage in which you are immune to damage. Default is 19.",
   "config.roundabout.postTSSoften.name": "Post Stop Soften",
-  "config.roundabout.postTSsoftenFrames.desc": "Whether or not players take reduced damage from things beyond your control (gasoline, stand attacks) after a time stop ends. The duration is proportionate to how long they are stopped, and only applies for stops that last more than a second.",
+  "config.roundabout.postTSsoften.desc": "Whether or not players take reduced damage from things beyond your control (gasoline, stand attacks) after a time stop ends. The duration is proportionate to how long they are stopped, and only applies for stops that last more than a second.",
   "config.roundabout.postTSCancel.name": "Post Stop Cancel",
   "config.roundabout.postTSCancel.desc": "Whether or not certain moves get canceled when time resumes. Disable for legacy version.",
 
@@ -2357,6 +2385,7 @@
   "config.roundabout.softAndWetSettings.name": "Soft And Wet",
   "config.roundabout.magiciansRedSettings.name": "Magician's Red",
   "config.roundabout.walkingHeartSettings.name": "Walking Heart",
+  "config.roundabout.creamSettings.name": "Cream",
   "config.roundabout.rattSettings.name": "Ratt",
   "config.roundabout.justiceSettings.name": "Justice",
   "config.roundabout.cinderellaSettings.name": "Cinderella",

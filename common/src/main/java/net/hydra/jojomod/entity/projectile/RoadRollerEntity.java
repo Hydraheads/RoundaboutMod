@@ -281,10 +281,6 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
 
     protected void onHitEntity(EntityHitResult hitResult) {
         if (!this.level().isClientSide()) {
-            if (hitResult.getEntity() instanceof EnderMan em) {
-                ((IEnderMan) em).roundabout$teleport();
-                return;
-            }
 
             if (this.noPhysics) {
                 return;
@@ -293,6 +289,19 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
             final double roadRollerSped = this.getDeltaMovement().length();
             if (roadRollerSped < 1D) {
                 return;
+            }
+
+            if (!level().isClientSide
+                    && hitResult.getEntity() instanceof EnderMan em
+                    && this.getVehicle() == null) {
+
+                if (((IEnderMan) em).roundabout$teleport()) return;
+
+                for (int i = 0; i < 64; i++) {
+                    if (((IEnderMan) em).roundabout$teleport()) {
+                        return;
+                    }
+                }
             }
 
             float damage = 5.0f;

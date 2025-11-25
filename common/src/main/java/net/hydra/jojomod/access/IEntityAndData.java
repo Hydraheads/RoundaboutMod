@@ -16,6 +16,8 @@ public interface IEntityAndData {
     void roundabout$setNoGravTicks(int ticks);
     int roundabout$getNoGravTicks();
 
+    float roundabout$getStepHeight();
+
     void roundabout$setNoAAB();
 
     Entity roundabout$getVehicle();

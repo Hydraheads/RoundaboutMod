@@ -1,33 +1,29 @@
 package net.hydra.jojomod.item;
-
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.projectile.BladedBowlerHatEntity;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
-import java.io.Serial;
 import java.util.List;
 
 public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
@@ -42,6 +38,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
     }
 
     private static final String AMMO_COUNT_TAG = "AmmoCount";
+    private static final String RELOADING_TAG = "IsReloading";
 
     private int getAmmo(ItemStack stack) {
         return stack.getOrCreateTag().getInt(AMMO_COUNT_TAG);
@@ -51,7 +48,19 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
         stack.getOrCreateTag().putInt(AMMO_COUNT_TAG, count);
     }
 
+    private boolean getReloading(ItemStack stack) {
+        return stack.getOrCreateTag().getBoolean(RELOADING_TAG);
+    }
+
+    private void setReloading(ItemStack stack, boolean value) {
+        stack.getOrCreateTag().putBoolean(RELOADING_TAG, value);
+    }
+
     int maxAmmo = 6;
+
+    private boolean isReloading(ItemStack stack) {
+        return stack.getOrCreateTag().getBoolean(RELOADING_TAG);
+    }
 
     @Override
     public UseAnim getUseAnimation(ItemStack $$0) {
@@ -85,7 +94,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
 
         for (int i = 0; i < inv.items.size() && amount > 0; i++) {
             ItemStack stack = inv.items.get(i);
-            if (stack.getItem() instanceof SnubnoseAmmoItem) {
+            if (stack.getItem() instanceof SnubnoseAmmoItem && !player.isCreative()) {
                 int remove = Math.min(stack.getCount(), amount);
                 stack.shrink(remove);
                 consumed += remove;
@@ -97,7 +106,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
 
         for (int i = 0; i < inv.offhand.size() && amount > 0; i++) {
             ItemStack stack = inv.offhand.get(i);
-            if (stack.getItem() instanceof SnubnoseAmmoItem) {
+            if (stack.getItem() instanceof SnubnoseAmmoItem && !player.isCreative()) {
                 int remove = Math.min(stack.getCount(), amount);
                 stack.shrink(remove);
                 consumed += remove;
@@ -114,10 +123,24 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
         return consumed;
     }
 
+    public void cancelReload(ItemStack stack, Player player) {
+        if (isReloading(stack)) {
+            ((StandUser) player).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 10, false);
+            setReloading(stack, false);
+            player.getCooldowns().removeCooldown(this);
+        }
+    }
+
+
+
     @Override
     public void fireBullet(Level level, Player player, InteractionHand hand) {
+        if (!level.isClientSide && player.getCooldowns().isOnCooldown(this)) {
+            return;
+        }
         ItemStack itemStack = player.getItemInHand(hand);
         if (getAmmo(itemStack) > 0) {
+            player.getCooldowns().addCooldown(this, 5);
             if (player.isCreative()) {
             } else {
                 setAmmo(itemStack, getAmmo(itemStack) - 1);
@@ -125,8 +148,25 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
             LivingEntity livingEntity = player;
             RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity(level, livingEntity);
             $$7.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 4.0F, 0.0F);
+            $$7.setAmmoType(RoundaboutBulletEntity.REVOLVER);
             level.addFreshEntity($$7);
             level.playSound(null, player, ModSounds.SNUBNOSE_FIRE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            if (level instanceof ServerLevel serverLevel) {
+                Vec3 look = player.getLookAngle().normalize();
+                Vec3 up = new Vec3(0, 1, 0);
+                Vec3 right = look.cross(up).normalize();
+
+                double forwardOffset = 1.0;
+                double sideOffset = 0.24;
+                double verticalOffset = -0.15;
+
+                if (player.getMainArm() == HumanoidArm.LEFT) {
+                    sideOffset -= sideOffset * 2;
+                }
+
+                Vec3 pos = player.getEyePosition().add(look.scale(forwardOffset)).add(right.scale(sideOffset)).add(0, verticalOffset, 0);
+                serverLevel.sendParticles(ParticleTypes.SMOKE, pos.x, pos.y, pos.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+            }
             if (livingEntity != null && ((StandUser) livingEntity).roundabout$isBubbleEncased()) {
                 StandUser SE = ((StandUser) livingEntity);
                 if (!level.isClientSide()) {
@@ -138,7 +178,6 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
                             5, 0.25, 0.25, 0.25, 0.025);
                 }
             }
-            player.getCooldowns().addCooldown(this, 5);
         } else {
             level.playSound(null, player, ModSounds.SNUBNOSE_DRY_FIRE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             if (player instanceof ServerPlayer SP) {
@@ -156,27 +195,72 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
         }
         if (!(player.getUseItem() == itemStack)) {
             if ((player.isCrouching() && hasSnubnoseAmmo(player) && getAmmo(itemStack) != maxAmmo) || (player.isCrouching() && player.isCreative())) {
-                int currentAmmo = getAmmo(itemStack);
-                int ammoNeeded = maxAmmo - currentAmmo;
-
-                int ammoLoaded = consumeSnubnoseAmmo(player, ammoNeeded);
-
-                if (ammoLoaded > 0) {
-                    if (player.isCreative()) {
-                        setAmmo(itemStack, maxAmmo);
-                    } else {
-                        setAmmo(itemStack, currentAmmo + ammoLoaded);
-                        player.getCooldowns().addCooldown(this, 60);
-                    }
-                    level.playSound(null, player, ModSounds.SNUBNOSE_RELOAD_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                if (!isReloading(itemStack)) {
+                    setReloading(itemStack, true);
+                    player.getCooldowns().addCooldown(this, 60);
+                    ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.REVOLVER_RELOAD, 10, false);
                 }
+
+                return InteractionResultHolder.consume(itemStack);
             } else {
-                Roundabout.LOGGER.info("Started using gun");
-                player.startUsingItem(hand);
+                if (player.isCrouching() && getAmmo(itemStack) == maxAmmo) {
+                    if (player instanceof ServerPlayer SP) {
+                        SP.displayClientMessage(Component.translatable("text.roundabout.already_reloaded").withStyle(ChatFormatting.GRAY), true);
+                    }
+                } else if (player.isCrouching() && getAmmo(itemStack) != maxAmmo && !hasSnubnoseAmmo(player)) {
+                    if (player instanceof ServerPlayer SP) {
+                        SP.displayClientMessage(Component.translatable("text.roundabout.no_more_usable_ammo").withStyle(ChatFormatting.GRAY), true);
+                    }
+                } else {
+                    player.startUsingItem(hand);
+                }
             }
         }
         return InteractionResultHolder.consume(itemStack);
     }
+
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+        super.inventoryTick(stack, level, entity, slot, selected);
+
+        if (!(entity instanceof Player player)) return;
+        if (level.isClientSide) return;
+
+        if (isReloading(stack)) {
+            boolean justTookDamage = player.hurtTime == player.hurtDuration - 1;
+
+            if (justTookDamage) {
+                DamageSource last = player.getLastDamageSource();
+                if (last != null && last.getEntity() instanceof Entity) {
+                    cancelReload(stack, player);
+                    return;
+                }
+            }
+        }
+
+        if (isReloading(stack) && player.getMainHandItem() != stack) {
+            cancelReload(stack, player);
+            return;
+        }
+
+        if (isReloading(stack) && !player.getCooldowns().isOnCooldown(this) && player.getMainHandItem() == stack) {
+            int currentAmmo = getAmmo(stack);
+            int ammoNeeded = maxAmmo - currentAmmo;
+
+            int ammoLoaded = consumeSnubnoseAmmo(player, ammoNeeded);
+
+            if (ammoLoaded > 0) {
+                if (player.isCreative()) {
+                    setAmmo(stack, maxAmmo);
+                } else {
+                    setAmmo(stack, currentAmmo + ammoLoaded);
+                }
+            }
+
+            setReloading(stack, false);
+        }
+    }
+
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {

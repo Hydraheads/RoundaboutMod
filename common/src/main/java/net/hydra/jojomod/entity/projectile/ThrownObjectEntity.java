@@ -254,28 +254,28 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     thrower.level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                 }
             }
-        } else if (item.getItem() instanceof ArrowItem && !(item.getItem() instanceof RoundaboutArrowItem)){
+        } else if (item.getItem() instanceof ArrowItem && !(item.getItem() instanceof RoundaboutArrowItem)) {
             ArrowItem $$10 = (ArrowItem) item.getItem();
             AbstractArrow $$11 = $$10.createArrow(thrower.level(), item, thrower);
             $$11.setPos(pos);
-            $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F*mult, getShotAccuracy);
+            $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F * mult, getShotAccuracy);
             $$11.setCritArrow(true);
             StandEntity standEntity = ((StandUser) thrower).roundabout$getStand();
             if (standEntity != null && (styleType == SPTHROW || styleType == TWTHROW)) {
-                if (!standEntity.canAcquireHeldItem){
+                if (!standEntity.canAcquireHeldItem) {
                     $$11.pickup = AbstractArrow.Pickup.DISALLOWED;
                 }
             }
 
-            if (!canGiveYouItem){
+            if (!canGiveYouItem) {
                 $$11.pickup = AbstractArrow.Pickup.DISALLOWED;
             }
 
-            if (canSnipe){
-                ((ISuperThrownAbstractArrow)$$11).roundabout$starThrowInit();
+            if (canSnipe) {
+                ((ISuperThrownAbstractArrow) $$11).roundabout$starThrowInit();
             }
             thrower.level().addFreshEntity($$11);
-            if (playSounds){
+            if (playSounds) {
                 thrower.level().playSound(null, $$11, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
             }
         } else if (item.is(Items.TRIDENT)){
@@ -321,7 +321,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             thrower.level().addFreshEntity(thrownBlockOrItem);
 
             if (playSounds) {
-                if (item.is(Items.IRON_NUGGET) || item.is(Items.GOLD_NUGGET) || item.is(Items.DIAMOND) || item.is(Items.FLINT)) {
+                if (item.is(Items.IRON_NUGGET) || item.is(Items.GOLD_NUGGET) || item.is(Items.DIAMOND) || item.is(Items.FLINT) || item.is(ModItems.SNUBNOSE_AMMO)) {
                     thrower.level().playSound(null, thrownBlockOrItem, ModSounds.BALL_BEARING_SHOT_EVENT, SoundSource.PLAYERS, 1.0F, 1F);
                 } else {
                     thrower.level().playSound(null, thrownBlockOrItem, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
@@ -583,6 +583,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 enchant = true;
             } else if (this.getItem().is(Items.IRON_NUGGET)){
                 damage = 10;
+            } else if (this.getItem().is(ModItems.SNUBNOSE_AMMO)){
+                damage = 6;
             } else if (this.getItem().is(Items.PRISMARINE_SHARD)){
                 damage = 7;
             } else if (this.getItem().is(Items.BRICK)){

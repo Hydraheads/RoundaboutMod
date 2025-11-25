@@ -22,6 +22,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.FirearmItem;
 import net.hydra.jojomod.item.SnubnoseRevolverItem;
 import net.hydra.jojomod.stand.powers.PowersCream;
@@ -99,6 +100,7 @@ public abstract class InputEvents implements IInputEvents {
         if (player != null) {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
+            FatePowers fatePowers = ((IFatePlayer)player).rdbt$getFatePowers();
 
             if (standComp.roundabout$getStand() instanceof D4CEntity)
             {
@@ -133,6 +135,10 @@ public abstract class InputEvents implements IInputEvents {
 
             powers.synchToCamera();
             if (powers.highlightsEntity(entity, player)) {
+                ci.setReturnValue(true);
+                return;
+            }
+            if (fatePowers.highlightsEntity(entity, player)) {
                 ci.setReturnValue(true);
                 return;
             }
@@ -198,7 +204,6 @@ public abstract class InputEvents implements IInputEvents {
     @Inject(method = "startAttack", at = @At("HEAD"), cancellable = true)
     public void roundabout$Attack(CallbackInfoReturnable<Boolean> ci) {
         if (player != null) {
-            //oundabout.LOGGER.info("startAttack");
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
             ItemStack itemStack = player.getUseItem();
@@ -210,7 +215,6 @@ public abstract class InputEvents implements IInputEvents {
 
             if (itemStack.getItem() != null && itemStack.getItem() instanceof FirearmItem && ((FirearmItem) itemStack.getItem()).interceptAttack(itemStack, player) && !player.getCooldowns().isOnCooldown(itemStack.getItem())) {
                 ci.setReturnValue(false);
-                Roundabout.LOGGER.info("Gun shot attempt");
                 C2SPacketUtil.gunShot();
                 return;
             }
@@ -1107,16 +1111,20 @@ public abstract class InputEvents implements IInputEvents {
                 if (rdbt$isInitialized(player)) {
                 powers.preCheckButtonInputUse(this.options.keyUse.isDown(),this.options);
                 }
-                if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {
-                    if (rdbt$isInitialized(player)) {
-                        powers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
-                        ((IFatePlayer)player).rdbt$getFatePowers().buttonInputAttack(this.options.keyAttack.isDown(), this.options);
+                if (!(player.getMainHandItem().getItem() instanceof FirearmItem)) {
+                    if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {
+                        if (rdbt$isInitialized(player)) {
+                            powers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
+                            ((IFatePlayer) player).rdbt$getFatePowers().buttonInputAttack(this.options.keyAttack.isDown(), this.options);
+                        }
                     }
                 }
 
-                if (!isMining && standComp.roundabout$isGuarding() && !standComp.roundabout$isBarraging()){
-                    if (rdbt$isInitialized(player)) {
-                        powers.preCheckButtonInputBarrage(this.options.keyAttack.isDown(), this.options);
+                if (!(player.getMainHandItem().getItem() instanceof FirearmItem)) {
+                    if (!isMining && standComp.roundabout$isGuarding() && !standComp.roundabout$isBarraging()) {
+                        if (rdbt$isInitialized(player)) {
+                            powers.preCheckButtonInputBarrage(this.options.keyAttack.isDown(), this.options);
+                        }
                     }
                 }
             }

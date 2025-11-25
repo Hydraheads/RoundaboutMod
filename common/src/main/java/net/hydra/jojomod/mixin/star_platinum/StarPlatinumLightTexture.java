@@ -1,7 +1,9 @@
 package net.hydra.jojomod.mixin.star_platinum;
 
+import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import org.spongepowered.asm.mixin.Final;
@@ -23,8 +25,8 @@ public class StarPlatinumLightTexture {
         if (this.minecraft.player != null){
             if (((StandUser)this.minecraft.player).roundabout$getStandPowers().scopeTime > -1) {
                 return (float) Math.min($$0 + (((((StandUser) this.minecraft.player).roundabout$getStandPowers().scopeTime) * 0.1)), 1F);
-            } else if (FateTypes.canSeeInTheDark(this.minecraft.player)) {
-                return (float) Math.min($$0 + 0.3F, 1F);
+            } else if (((IFatePlayer)this.minecraft.player).rdbt$getFatePowers() instanceof VampiricFate vp) {
+                return (float) Math.min($$0 + 0.3F*((10-vp.dimTickEye)*0.1F), 1F);
             }
         }
         return $$0;

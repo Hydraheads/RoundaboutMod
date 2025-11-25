@@ -801,6 +801,14 @@ public class MainUtil {
         return false;
     }
 
+    public static Vec3 getMobCenter(Entity entity, float centerpercent){
+        Vec3 start = entity.getPosition(1f);
+        Vec3 hitbox = new Vec3(0,entity.getBbHeight()*centerpercent,0);
+        hitbox = RotationUtil.vecPlayerToWorld(hitbox,
+                ((IGravityEntity)entity).roundabout$getGravityDirection());
+        return start.add(hitbox);
+    }
+
     public static boolean canDrinkBlood(Entity mob){
         return (getMobBleed(mob) && !hasEnderBlood(mob) && mob.isAlive() && !mob.isRemoved());
     }

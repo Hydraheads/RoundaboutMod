@@ -35,6 +35,10 @@ public class ForgeParticles {
             "air_crackle",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> HEARTBEAT = PARTICLES.register(
+            "heartbeat",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> MENACING = PARTICLES.register(
             "menacing",
             () -> new SimpleParticleType(true)

@@ -1,5 +1,6 @@
 package net.hydra.jojomod.item;
 
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.ModGamerules;
@@ -224,6 +225,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
                                         if (grantStand(itemstack, $$2)) {
                                             $$1.playSound(null, $$2.blockPosition(), ModSounds.STAND_ARROW_USE_EVENT, SoundSource.PLAYERS, 1.5F, 1F);
                                             PE.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireStand").withStyle(ChatFormatting.WHITE), true);
+                                            ((IPlayerEntity)PE).roundabout$qmessage(1);
                                             ((ServerLevel) $$1).sendParticles(ParticleTypes.FIREWORK, $$2.getX(),
                                                     $$2.getY() + $$2.getEyeHeight(), $$2.getZ(),
                                                     20, 0, 0, 0, 0.4);
