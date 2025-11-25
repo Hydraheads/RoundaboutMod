@@ -852,6 +852,8 @@ public int speedActivated = 0;
         (((ILevelAccess)ent.level()).roundabout$isSoundPlundered(ent.blockPosition()))){
             return true;
         }
+        if (ent instanceof LivingEntity LE && ((StandUser)LE).roundabout$getLocacacaCurse() == LocacacaCurseIndex.HEART)
+            return true;
         return false;
     }
     /**The color id for this entity to be displayed as if the above returns true, it is in decimal rather than
