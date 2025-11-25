@@ -205,13 +205,11 @@ public class RattDartEntity extends AbstractArrow {
         MobEffectInstance effect = $$1.getEffect(ModEffects.MELTING);
 
 
-        int stack = 0;
-        if ( effect != null) {
-            stack = effect.getAmplifier() + this.melting;
-        } else if (melting > 0) {stack = melting -1;}
+        int stack = effect != null ? effect.getAmplifier() : -1;
+        stack += this.melting;
+
 
         if (stack != -1) {
-            if (stack == 0) {stack = 1;}
             int duration =(int)  (600 * (this.charged > PowersRatt.MaxThreshold ? 1.5 : 1));
             int originalDuration = effect != null ? effect.getDuration() : 0;
             ((LivingEntity) $$1).addEffect(new MobEffectInstance(ModEffects.MELTING, Math.max(duration,originalDuration) , stack), this);
