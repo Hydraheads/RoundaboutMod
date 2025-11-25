@@ -395,5 +395,7 @@ public class FabricSounds {
 
         addSound(ModSounds.TORTURE_DANCE_ID, ModSounds.TORTURE_DANCE_EVENT);
         addSound(ModSounds.HALLELUJAH_ID, ModSounds.HALLELUJAH_EVENT);
+        addSound(ModSounds.VSONG_SILENT_REVERIES_ID, ModSounds.VSONG_SILENT_REVERIES_EVENT);
+        addSound(ModSounds.VSONG_TWISTED_ID, ModSounds.VSONG_TWISTED_EVENT);
     }
 }

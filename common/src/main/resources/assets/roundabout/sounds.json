@@ -2081,5 +2081,23 @@
         "stream": true
       }
     ]
+  },
+  "vsong_silent_reveries": {
+    "subtitle": "sounds.roundabout.vsong_silent_reveries",
+    "sounds": [
+      {
+        "name":"roundabout:vsong_silent_reveries",
+        "stream": true
+      }
+    ]
+  },
+  "vsong_twisted": {
+    "subtitle": "sounds.roundabout.vsong_twisted",
+    "sounds": [
+      {
+        "name":"roundabout:vsong_twisted",
+        "stream": true
+      }
+    ]
   }
 }

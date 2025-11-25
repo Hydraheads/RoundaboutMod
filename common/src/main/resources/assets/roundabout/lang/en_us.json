@@ -458,6 +458,8 @@
   "hud.roundabout.standout": "Stand Summoned",
   "sounds.roundabout.dsp_summon": "Explosive Stand Summon",
   "sounds.roundabout.vampire_message": "-serrated-",
+  "sounds.roundabout.vsong_silent_reveries": "Silent Reveries",
+  "sounds.roundabout.vsong_twisted": "Twisted",
 
   "death.attack.stand": "%1$s died to a mysterious power whilst fighting %2$s",
   "death.attack.stand.item": "%1$s died to a mysterious power whilst fighting %2$s",

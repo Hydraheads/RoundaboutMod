@@ -1220,6 +1220,17 @@ public class ModSounds {
     public static SoundEvent HALLELUJAH_EVENT = SoundEvent.createVariableRangeEvent(HALLELUJAH_ID);
 
 
+
+    public static final String VSONG_SILENT_REVERIES = "vsong_silent_reveries";
+    public static final ResourceLocation VSONG_SILENT_REVERIES_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VSONG_SILENT_REVERIES);
+    public static SoundEvent VSONG_SILENT_REVERIES_EVENT = SoundEvent.createVariableRangeEvent(VSONG_SILENT_REVERIES_ID);
+
+    public static final String VSONG_TWISTED = "vsong_twisted";
+    public static final ResourceLocation VSONG_TWISTED_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VSONG_TWISTED);
+    public static SoundEvent VSONG_TWISTED_EVENT = SoundEvent.createVariableRangeEvent(VSONG_TWISTED_ID);
+
+
+
     public static void registerSoundEvents(){
     }
 

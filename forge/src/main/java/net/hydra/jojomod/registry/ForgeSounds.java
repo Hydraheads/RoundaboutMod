@@ -535,6 +535,10 @@ public class ForgeSounds {
             register(ModSounds.HEARTBEAT3, ModSounds.HEARTBEAT3_ID);
     public static final RegistryObject<SoundEvent> VAMPIRE_MESSAGE =
             register(ModSounds.VAMPIRE_MESSAGE, ModSounds.VAMPIRE_MESSAGE_ID);
+    public static final RegistryObject<SoundEvent> VSONG_SILENT_REVERIES =
+            register(ModSounds.VSONG_SILENT_REVERIES, ModSounds.VSONG_SILENT_REVERIES_ID);
+    public static final RegistryObject<SoundEvent> VSONG_TWISTED =
+            register(ModSounds.VSONG_TWISTED, ModSounds.VSONG_TWISTED_ID);
 
     public static final RegistryObject<SoundEvent> DIO_HOHO =
             register(ModSounds.DIO_HOHO, ModSounds.DIO_HOHO_ID);
