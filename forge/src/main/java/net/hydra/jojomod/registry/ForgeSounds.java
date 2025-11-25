@@ -372,6 +372,15 @@ public class ForgeSounds {
             register(ModSounds.ANUBIS_RAGING, ModSounds.ANUBIS_RAGING_ID);
     public static final RegistryObject<SoundEvent> ANUBIS_BACKFLIP=
             register(ModSounds.ANUBIS_BACKFLIP, ModSounds.ANUBIS_BACKFLIP_ID);
+    public static final RegistryObject<SoundEvent> ANUBIS_POGO_LAUNCH =
+            register(ModSounds.ANUBIS_POGO_LAUNCH, ModSounds.ANUBIS_POGO_LAUNCH_ID);
+    public static final RegistryObject<SoundEvent> ANUBIS_POGO_HIT =
+            register(ModSounds.ANUBIS_POGO_HIT, ModSounds.ANUBIS_POGO_HIT_ID);
+    public static final RegistryObject<SoundEvent> ANUBIS_BARRAGE_1 =
+            register(ModSounds.ANUBIS_BARRAGE_1, ModSounds.ANUBIS_BARRAGE_1_ID);
+    public static final RegistryObject<SoundEvent> ANUBIS_BARRAGE_1_HIT =
+            register(ModSounds.ANUBIS_BARRAGE_1_HIT, ModSounds.ANUBIS_BARRAGE_1_HIT_ID);
+
 
 
 

@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.AnubisItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -19,7 +20,6 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import org.joml.Quaternionf;
 
-import java.util.Map;
 
 public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> extends RenderLayer<T, A> {
     private final EntityRenderDispatcher dispatcher;
@@ -28,10 +28,10 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
         this.dispatcher = context.getEntityRenderDispatcher();
     }
 
-    float scale = 1;
 
     public static HumanoidArm shouldRender(LivingEntity entity) {
         StandUser user = ((StandUser)entity);
+        if (entity.isUsingItem() && !entity.getUseItem().is(ModItems.ANUBIS_ITEM)) {return null;}
         if (entity.getMainHandItem().getItem() instanceof AnubisItem
                 || entity.getOffhandItem().getItem() instanceof AnubisItem
                 || user.roundabout$isPossessed()

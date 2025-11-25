@@ -3,27 +3,19 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILivingEntityRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.client.IAlphaModel;
 import net.hydra.jojomod.client.models.layers.BigBubbleLayer;
-import net.hydra.jojomod.entity.corpses.FallenMob;
-import net.hydra.jojomod.entity.corpses.FallenPhantom;
-import net.hydra.jojomod.entity.corpses.FallenSpider;
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
 import net.hydra.jojomod.entity.visages.mobs.JosukePartEightNPC;
 import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
 import net.hydra.jojomod.entity.visages.mobs.PlayerSteveNPC;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.visagedata.JosukePartEightVisage;
-import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.AgeableListModel;
+import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -37,6 +29,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -45,7 +38,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import javax.annotation.Nullable;
 
@@ -119,7 +111,29 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
     @Inject(method = "setupRotations(Lnet/minecraft/world/entity/LivingEntity;Lcom/mojang/blaze3d/vertex/PoseStack;FFF)V", at = @At(value = "TAIL"), cancellable = true)
     private void roundabout$rotations(T $$0, PoseStack $$1, float $$2, float $$3, float $$4, CallbackInfo ci) {
-        if ($$0 instanceof Player) {
+        if ($$0 instanceof Player P) {
+
+            StandUser SU = (StandUser) P;
+            if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+                int backflip = PA.getAttackTime();
+                if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_MOVEMENT) {
+                    if (backflip < 16) {
+                        $$1.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,360 * (backflip/15F)), 0, P.getEyeHeight()*0.6F, 0 );
+                    }
+                } else if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+                    if (true) {
+                        float scale = Math.min((float)backflip/PowersAnubis.PogoDelay,1);
+                        $$1.translate(0,0.5*scale,0.5*scale);
+                        $$1.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,-100-P.getViewXRot(0F) * scale), 0, P.getEyeHeight()*0.4F, 0 );
+                    }
+                } /* else if (SU.roundabout$getStandAnimation() == PowerIndex.BARRAGE) {
+                    int backflip = PA.getAttackTime();
+
+                    $$1.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,360* 5 * (backflip/30F)), 0, P.getEyeHeight()*0.6F, 0 );
+
+                } */
+            }
+
             byte playerP = ((IPlayerEntity)$$0).roundabout$GetPos();
 
             /*Dodge makes you lean forward visually*/

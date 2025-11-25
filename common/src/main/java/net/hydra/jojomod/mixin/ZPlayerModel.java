@@ -223,22 +223,41 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         && SU.roundabout$getActive()
                         && SU.roundabout$getStandAnimation() != PowerIndex.NONE) ) {
                     this.body.resetPose();
-                    this.rightLeg.resetPose();
-                    this.leftLeg.resetPose();
                     this.rightArm.resetPose();
                     this.leftArm.resetPose();
+                    if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+                        if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_MOVEMENT) {
+                            this.head.resetPose();
+                        }
+                        if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+                            this.leftLeg.resetPose();
+                            this.rightLeg.resetPose();
+                            this.head.resetPose();
+                        }
+                    }
+
                 } else {
                     ipe.roundabout$getThirdPersonAnubisUnsheath().stop();
                     ipe.roundabout$getAnubisUnsheath().stop();
                 }
                 this.roundabout$animate(ipe.roundabout$getThirdPersonAnubisUnsheath(), AnubisAnimations.ThirdPersonUnsheathe,$$3,1F);
-
                 if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA && SU.roundabout$getActive()) {
                     boolean start = false;
                     AnimationDefinition anim = null;
                     switch (SU.roundabout$getStandAnimation()) {
                         case PowerIndex.SNEAK_MOVEMENT -> {
-                            start = false;
+                            start = true;
+                            if (PA.getAttackTime() < 16) {
+                                anim = AnubisAnimations.Backflip;
+                            }
+                        }
+                        case PowerIndex.GUARD -> {
+                            start = true;
+                            anim = AnubisAnimations.ThirdPersonBlock;
+                        }
+                        case PowerIndex.SNEAK_ATTACK_CHARGE -> {
+                            start = true;
+                            anim = AnubisAnimations.PogoReady;
                         }
                     }
                     if (start) {
