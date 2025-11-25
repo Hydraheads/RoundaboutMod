@@ -362,6 +362,9 @@ public class StandIcons {
     public static final ResourceLocation D4C_GENERATE_KEY = Roundabout.location("textures/gui/icons/d4c/key_generation.png");
     public static final ResourceLocation D4C_PARALLEL_RUNNING = Roundabout.location("textures/gui/icons/d4c/parallel_running.png");
 
+    public static final ResourceLocation GREEN_DAY_GUARD = Roundabout.location("textures/gui/icons/green_day/guard.png");
+    public static final ResourceLocation GREEN_DAY_PUNCH = Roundabout.location("textures/gui/icons/green_day/punch.png");
+    public static final ResourceLocation GREEN_DAY_BARRAGE = Roundabout.location("textures/gui/icons/green_day/punch_barrage.png");
     public static final ResourceLocation GREEN_DAY_STITCH = Roundabout.location("textures/gui/icons/green_day/stitch.png");
     public static final ResourceLocation GREEN_DAY_ARM_RETURN_RIGHT = Roundabout.location("textures/gui/icons/green_day/arm_return_right.png");
     public static final ResourceLocation GREEN_DAY_ARM_RETURN_LEFT = Roundabout.location("textures/gui/icons/green_day/arm_return_left.png");
