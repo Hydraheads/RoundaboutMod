@@ -1401,7 +1401,7 @@ public class AbilityScapeBasis {
     public int impactAirTime = -1;
     public int impactSlowdown = -1;
     public boolean canFallBrace(){
-        return this.getSelf().fallDistance > 3 && impactSlowdown <= -1 && !((StandUser)this.self).roundabout$isBubbleEncased();
+        return this.getSelf().fallDistance > (3+ getStandUserSelf().roundabout$getBonusJumpHeight()) && impactSlowdown <= -1 && !((StandUser)this.self).roundabout$isBubbleEncased();
     }
 
     /**every entity the client renders is checked against this, overrride and use it to see if they can be highlighted
