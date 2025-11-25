@@ -255,6 +255,9 @@
   "entity.roundabout.justice_pirate": "Justice",
   "entity.roundabout.dark_mirage": "Dark Mirage",
   "entity.roundabout.cinderella": "Cinderella",
+  "entity.roundabout.ratt": "Ratt",
+  "entity.roundabout.chair_ratt": "Ratt",
+  "entity.roundabout.redd": "Redd",
   "entity.roundabout.soft_and_wet": "Soft And Wet",
   "entity.roundabout.soft_and_wet_debut": "Soft And Wet",
   "entity.roundabout.soft_and_wet_king": "Soft And Wet",
@@ -319,6 +322,9 @@
   "entity.roundabout.painting_mona_lisa": "ML Painting",
   "entity.roundabout.painting_venus": "V Painting",
   "entity.roundabout.road_roller_entity": "Road Roller",
+  "entity.roundabout.anubis_possessor": "Anubis Possessor",
+  "entity.roundabout.anubis_slipstream": "Anubis Slipstream",
+
 
   "block.roundabout.meteor_block": "Meteorite Block",
   "block.roundabout.regal_wall": "Regal Wall",
@@ -772,6 +778,12 @@
   "sounds.roundabout.anubis_backflip": "Dodge",
   "sounds.roundabout.anubis_alluring": "Alluring Light",
   "sounds.roundabout.anubis_raging": "Raging Light",
+  "sounds.roundabout.anubis_pogo_launch": "Woosh",
+  "sounds.roundabout.anubis_pogo_hit": "Sword Swing",
+  "sounds.roundabout.anubis_barrage_1": "Sword Swing",
+  "sounds.roundabout.anubis_barrage_1_hit": "Sword Barrage",
+
+
 
 
   "sounds.roundabout.arcade_impale":  "[Arcade Impale]",
@@ -1159,10 +1171,10 @@
 
   "ability.roundabout.ratt_scope": "Scoped Mode",
   "ability.roundabout.ratt_scope.desc": "Hold Ratt and scope in, allowing you to shoot while moving. Interacting builds chargs, and punching releases it as a flurry of darts.",
-  "ability.roundabout.ratt_single": "Single Fire",
-  "ability.roundabout.ratt_single.desc": "Shoots an alternate form instead, dealing more knockback and inflicting a longer melt duration",
-  "ability.roundabout.ratt_burst": "Burst Fire",
-  "ability.roundabout.ratt_burst.desc": "Charge up a volley of three darts, each which inflict melt",
+  "ability.roundabout.ratt_single": "Fire Darts",
+  "ability.roundabout.ratt_single.desc": "Shoots a volley of three darts, inflicting melt. Single Fire instead shoots one, stronger dart with greater knockback and damage",
+  "ability.roundabout.ratt_burst": "Mode Change",
+  "ability.roundabout.ratt_burst.desc": "Changes your manual firing mode between Single Fire and Burst Fire",
   "ability.roundabout.ratt_place": "Ratt Place",
   "ability.roundabout.ratt_place.desc": "Place Ratt down, allowing Ratt to fire alongside you. Sneaking highlights ratt and displays the distance to you.",
   "ability.roundabout.ratt_place_burst": "Placed Burst Fire",
@@ -1469,6 +1481,9 @@
 
   "skins.roundabout.anubis.anime" : "Anime",
   "skins.roundabout.anubis.evil" : "Evil",
+
+  "roundabout.anubis.playback_title": "Replay Memories",
+  "roundabout.anubis.memory_title": "Record Memories",
 
   "skins.roundabout.achtung_baby.base": "Has No Form",
 
@@ -1904,6 +1919,9 @@
   "config.roundabout.rattLeapCooldown.desc": "The cooldown for Ratt's 4th move, Ratt Leap",
   "config.roundabout.rattLeapStrength.name": "Ratt Leap Strength",
   "config.roundabout.rattLeapStrength.desc": "How strong Ratt's leap is",
+
+  "config.roundabout.anubisPogoCounter.name": "Anubis Pogo Indicator",
+  "config.roundabout.anubisPogoCounter.desc": "Displays a counter showing how many pogos you have done.",
 
 
 
@@ -2387,6 +2405,7 @@
   "config.roundabout.walkingHeartSettings.name": "Walking Heart",
   "config.roundabout.creamSettings.name": "Cream",
   "config.roundabout.rattSettings.name": "Ratt",
+  "config.roundabout.standTweak.name": "Ratt",
   "config.roundabout.justiceSettings.name": "Justice",
   "config.roundabout.cinderellaSettings.name": "Cinderella",
   "config.roundabout.heyYaSettings.name": "Hey Ya",
@@ -2396,6 +2415,7 @@
   "config.roundabout.theWorldSettings.name": "The World",
   "config.roundabout.starPlatinumSettings.name": "Star Platinum",
   "config.roundabout.timeStopSettings.name": "Time Stop",
+
 
 
 
@@ -2506,6 +2526,7 @@
   "config.roundabout.particleSettings.name": "Particle Settings",
   "config.roundabout.opacitySettings.name": "Opacity Settings",
   "config.roundabout.dynamicSettings.name": "Dynamic Settings",
+  "config.roundabout.standTweakSettings.name": "Stand Tweaks",
 
   "config.roundabout.roundaboutconfig.name": "JoJo",
   "config.roundabout.z.name": "",

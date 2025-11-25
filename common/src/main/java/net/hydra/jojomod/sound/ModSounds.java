@@ -710,6 +710,18 @@ public class ModSounds {
     public static final String ANUBIS_BACKFLIP = "anubis_backflip";
     public static final ResourceLocation ANUBIS_BACKFLIP_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_BACKFLIP);
     public static SoundEvent ANUBIS_BACKFLIP_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_BACKFLIP_ID);
+    public static final String ANUBIS_POGO_LAUNCH = "anubis_pogo_launch";
+    public static final ResourceLocation ANUBIS_POGO_LAUNCH_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_POGO_LAUNCH);
+    public static SoundEvent ANUBIS_POGO_LAUNCH_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_POGO_LAUNCH_ID);
+    public static final String ANUBIS_POGO_HIT = "anubis_pogo_hit";
+    public static final ResourceLocation ANUBIS_POGO_HIT_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_POGO_HIT);
+    public static SoundEvent ANUBIS_POGO_HIT_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_POGO_HIT_ID);
+    public static final String ANUBIS_BARRAGE_1 = "anubis_barrage_1";
+    public static final ResourceLocation ANUBIS_BARRAGE_1_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_BARRAGE_1);
+    public static SoundEvent ANUBIS_BARRAGE_1_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_BARRAGE_1_ID);
+    public static final String ANUBIS_BARRAGE_1_HIT = "anubis_barrage_1_hit";
+    public static final ResourceLocation ANUBIS_BARRAGE_1_HIT_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_BARRAGE_1_HIT);
+    public static SoundEvent ANUBIS_BARRAGE_1_HIT_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_BARRAGE_1_HIT_ID);
 
 
 

@@ -1142,6 +1142,30 @@
       "roundabout:anubis_summon"
     ]
   },
+  "anubis_pogo_launch": {
+    "subtitle": "sounds.roundabout.anubis_pogo_launch",
+    "sounds": [
+      "roundabout:anubis_pogo_launch"
+    ]
+  },
+  "anubis_pogo_hit": {
+    "subtitle": "sounds.roundabout.anubis_pogo_hit",
+    "sounds": [
+      "roundabout:anubis_pogo_hit"
+    ]
+  },
+  "anubis_barrage_1": {
+    "subtitle": "sounds.roundabout.anubis_barrage_1",
+    "sounds": [
+      "roundabout:anubis_barrage_1"
+    ]
+  },
+  "anubis_barrage_1_hit": {
+    "subtitle": "sounds.roundabout.anubis_barrage_1_hit",
+    "sounds": [
+      "roundabout:anubis_barrage_1_hit"
+    ]
+  },
 
 
 
