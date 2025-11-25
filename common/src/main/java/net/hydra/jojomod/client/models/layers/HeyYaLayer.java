@@ -70,9 +70,13 @@ public class HeyYaLayer<T extends LivingEntity, A extends HumanoidModel<T>> exte
                             poseStack.translate(-0.27F, -0.25, 0.19F); //1 1
                             // The first value goes to the right (negative) and left (positive)
                             // The second value is correlated with up (negative) and down (positive)
-                        // the third is further and closer, positive to head towards bakc negative for away
+                        // the third is further and closer, positive to head towards the mob's facing direction negative for away
                         // Render your model here
                         poseStack.scale(0.6F, 0.6F, 0.6F);
+                        if (entity.isBaby()){
+                            poseStack.scale(0.6F, 0.6F, 0.6F);
+                            poseStack.translate(0.3, 3, -0.3);
+                            }
                         boolean isHurt = livent.hurtTime > 0;
                         float r = isHurt ? 1.0F : 1.0F;
                         float g = isHurt ? 0.0F : 1.0F;
