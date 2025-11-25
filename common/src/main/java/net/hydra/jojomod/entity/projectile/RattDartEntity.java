@@ -99,7 +99,6 @@ public class RattDartEntity extends AbstractArrow {
 
     public RattDartEntity(Level world, LivingEntity player, int i) {
         super(ModEntities.RATT_DART, player, world);
-       // alignDart(player);
         this.melting = i > 90 || i == -1 ? 0 : 1;
         this.damage = i < 90 ? 0.1F : 3.2F;
         this.charged = i;
