@@ -2081,5 +2081,50 @@
         "stream": true
       }
     ]
+  },
+  "vsong_silent_reveries": {
+    "subtitle": "sounds.roundabout.vsong_silent_reveries",
+    "sounds": [
+      {
+        "name":"roundabout:vsong_silent_reveries",
+        "stream": true
+      }
+    ]
+  },
+  "vsong_twisted": {
+    "subtitle": "sounds.roundabout.vsong_twisted",
+    "sounds": [
+      {
+        "name":"roundabout:vsong_twisted",
+        "stream": true
+      }
+    ]
+  },
+  "vsong_bloodcurdling_moments": {
+    "subtitle": "sounds.roundabout.vsong_bloodcurdling_moments",
+    "sounds": [
+      {
+        "name":"roundabout:vsong_bloodcurdling_moments",
+        "stream": true
+      }
+    ]
+  },
+  "vsong_damnable_ceremony": {
+    "subtitle": "sounds.roundabout.vsong_damnable_ceremony",
+    "sounds": [
+      {
+        "name":"roundabout:vsong_damnable_ceremony",
+        "stream": true
+      }
+    ]
+  },
+  "vsong_gothic_organ": {
+    "subtitle": "sounds.roundabout.vsong_gothic_organ",
+    "sounds": [
+      {
+        "name":"roundabout:vsong_gothic_organ",
+        "stream": true
+      }
+    ]
   }
 }

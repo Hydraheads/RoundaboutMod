@@ -458,6 +458,12 @@
   "hud.roundabout.standout": "Stand Summoned",
   "sounds.roundabout.dsp_summon": "Explosive Stand Summon",
   "sounds.roundabout.vampire_message": "-serrated-",
+  "sounds.roundabout.vsong_silent_reveries": "Silent Reveries",
+  "sounds.roundabout.vsong_twisted": "Twisted",
+  "sounds.roundabout.vsong_bloodcurdling_moments": "Bloodcurdling Moments",
+  "sounds.roundabout.vsong_damnable_ceremony": "Damnable Ceremony",
+  "sounds.roundabout.vsong_gothic_organ": "Gothic Organ",
+
 
   "death.attack.stand": "%1$s died to a mysterious power whilst fighting %2$s",
   "death.attack.stand.item": "%1$s died to a mysterious power whilst fighting %2$s",
@@ -2419,7 +2425,6 @@
 
 
 
-
   "config.roundabout.onlyStandUsersCanSeeStands.name": "Standless = Invisible Stands",
   "config.roundabout.onlyStandUsersCanSeeStands.desc": "If you do not have a stand, this setting makes stands invisible to you like in the series.",
   "config.roundabout.onlyStandUsersCanSeeVanillaGhostMobs.name": "Standless = Invisible Vanilla",
@@ -2520,6 +2525,8 @@
   "config.roundabout.enableRoadRollerRender.name": "Render Held Road Roller",
   "config.roundabout.enableRoadRollerRender.desc": "Disable to make it not render above your head when held.",
 
+  "config.roundabout.vampireOSTChange.name": "Vampire OST",
+  "config.roundabout.vampireOSTChange.desc": "Disable to make vampires share the game OST with regular players.",
 
   "config.roundabout.generalSettings.name": "General Settings",
   "config.roundabout.configSettings.name": "Config Settings",
@@ -2527,6 +2534,7 @@
   "config.roundabout.opacitySettings.name": "Opacity Settings",
   "config.roundabout.dynamicSettings.name": "Dynamic Settings",
   "config.roundabout.standTweakSettings.name": "Stand Tweaks",
+
 
   "config.roundabout.roundaboutconfig.name": "JoJo",
   "config.roundabout.z.name": "",

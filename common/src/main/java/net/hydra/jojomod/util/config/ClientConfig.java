@@ -38,6 +38,8 @@ public class ClientConfig implements Cloneable {
     @BooleanOption(group = "inherit", value = false)
     public Boolean renderGasSplatterOverlay;
     @BooleanOption(group = "inherit", value = true)
+    public Boolean vampireOSTChange;
+    @BooleanOption(group = "inherit", value = true)
     public Boolean showCreativeTextOnWorthinessArrow;
     @IntOption(group = "inherit", value = 190)
     public Integer justiceFogBrightness;

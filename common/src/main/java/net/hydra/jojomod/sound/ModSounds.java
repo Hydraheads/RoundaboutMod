@@ -1220,6 +1220,29 @@ public class ModSounds {
     public static SoundEvent HALLELUJAH_EVENT = SoundEvent.createVariableRangeEvent(HALLELUJAH_ID);
 
 
+
+    public static final String VSONG_SILENT_REVERIES = "vsong_silent_reveries";
+    public static final ResourceLocation VSONG_SILENT_REVERIES_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VSONG_SILENT_REVERIES);
+    public static SoundEvent VSONG_SILENT_REVERIES_EVENT = SoundEvent.createVariableRangeEvent(VSONG_SILENT_REVERIES_ID);
+
+    public static final String VSONG_TWISTED = "vsong_twisted";
+    public static final ResourceLocation VSONG_TWISTED_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VSONG_TWISTED);
+    public static SoundEvent VSONG_TWISTED_EVENT = SoundEvent.createVariableRangeEvent(VSONG_TWISTED_ID);
+
+    public static final String VSONG_GOTHIC_ORGAN = "vsong_gothic_organ";
+    public static final ResourceLocation VSONG_GOTHIC_ORGAN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VSONG_GOTHIC_ORGAN);
+    public static SoundEvent VSONG_GOTHIC_ORGAN_EVENT = SoundEvent.createVariableRangeEvent(VSONG_GOTHIC_ORGAN_ID);
+
+    public static final String VSONG_BLOODCURDLING_MOMENTS = "vsong_bloodcurdling_moments";
+    public static final ResourceLocation VSONG_BLOODCURDLING_MOMENTS_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VSONG_BLOODCURDLING_MOMENTS);
+    public static SoundEvent VSONG_BLOODCURDLING_MOMENTS_EVENT = SoundEvent.createVariableRangeEvent(VSONG_BLOODCURDLING_MOMENTS_ID);
+
+    public static final String VSONG_DAMNABLE_CEREMONY = "vsong_damnable_ceremony";
+    public static final ResourceLocation VSONG_DAMNABLE_CEREMONY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VSONG_DAMNABLE_CEREMONY);
+    public static SoundEvent VSONG_DAMNABLE_CEREMONY_EVENT = SoundEvent.createVariableRangeEvent(VSONG_DAMNABLE_CEREMONY_ID);
+
+
+
     public static void registerSoundEvents(){
     }
 

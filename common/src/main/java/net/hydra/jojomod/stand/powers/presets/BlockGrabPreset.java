@@ -915,7 +915,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                 PW.hasExtendedHeelsForWalking())
                 && !(entity instanceof StandEntity)){
             if (entity instanceof Player pl && this.getSelf().getVehicle() != null && ((StandUser) pl).roundabout$getStand() != null &&
-                    ((StandUser) pl).roundabout$getStand().is(this.getSelf().getVehicle())){
+                    ((StandUser) pl).roundabout$getStand().is(this.getSelf().getRootVehicle())){
                 return false;
             } else if (entity.getRootVehicle().hasPassenger(this.getSelf())){
                 return false;

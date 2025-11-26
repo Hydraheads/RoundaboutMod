@@ -67,6 +67,12 @@ public enum FateTypes {
         }
         return false;
     }
+    public static boolean isEvil(LivingEntity entity){
+        if (entity instanceof Player PE){
+            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.id;
+        }
+        return false;
+    }
     public static boolean isVampireStrong(LivingEntity entity){
         if (entity instanceof Player PE){
             return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.id;
