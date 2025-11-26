@@ -455,7 +455,7 @@ public class Config implements Cloneable {
         public Integer maxCorpses;
         @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
         public Integer standUserMobMinionCount;
-        @IntOption(group = "inherit", value = 90, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 90, min = 1, max = 72000)
         public Integer skeletonFireInterval;
         @BooleanOption(group = "inherit", value = true)
         public Boolean corpsesUseOwnerTeam;
