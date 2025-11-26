@@ -529,10 +529,9 @@ public class ForgeEntities {
                     EntityType.Builder.<RoadRollerEntity>of(RoadRollerEntity::new, MobCategory.MISC).
                             sized(2f, 2f).clientTrackingRange(10).build(Roundabout.MOD_ID+":road_roller_entity")
             );
-    public static final EntityType<SeperatedLegsEntity> SEPERATED_LEGS =
-            Registry.register(
-                    BuiltInRegistries.ENTITY_TYPE,
-                    new ResourceLocation(Roundabout.MOD_ID, "seperated_legs"),
+
+    public static final RegistryObject<EntityType<SeperatedLegsEntity>> SEPERATED_LEGS =
+            ENTITY_TYPES.register("seperated_legs", () ->
                     EntityType.Builder.<SeperatedLegsEntity>of(SeperatedLegsEntity::new, MobCategory.MISC).
                             sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_legs")
             );
