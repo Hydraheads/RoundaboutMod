@@ -1065,6 +1065,8 @@ public class AbilityScapeBasis {
                 return;
             held1 = true;
 
+            cancelPlayerPose();
+
             if (!isHoldingSneak() && !isGuarding())
             {
                 powerActivate(PowerContext.SKILL_1_NORMAL);
@@ -1098,6 +1100,8 @@ public class AbilityScapeBasis {
             if (held2)
                 return;
             held2 = true;
+
+            cancelPlayerPose();
 
             if (!isHoldingSneak() && !isGuarding())
             {
@@ -1133,6 +1137,8 @@ public class AbilityScapeBasis {
                 return;
             held3 = true;
 
+            cancelPlayerPose();
+
             if (!isHoldingSneak() && !isGuarding())
             {
                 powerActivate(PowerContext.SKILL_3_NORMAL);
@@ -1167,6 +1173,8 @@ public class AbilityScapeBasis {
                 return;
             held4 = true;
 
+            cancelPlayerPose();
+
             if (!isHoldingSneak() && !isGuarding())
             {
                 powerActivate(PowerContext.SKILL_4_NORMAL);
@@ -1194,6 +1202,15 @@ public class AbilityScapeBasis {
         }
     }
 
+    public void cancelPlayerPose(){
+        if (self instanceof Player player) {
+            Poses poseEmote = Poses.getPosFromByte(((IPlayerEntity)player).roundabout$GetPoseEmote());
+            if (poseEmote != Poses.NONE && poseEmote != Poses.VAMPIRE_TRANSFORMATION) {
+                ((IPlayerEntity) player).roundabout$SetPos(Poses.NONE.id);
+                C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_STRIKE_POSE, Poses.NONE.id);
+            }
+        }
+    }
 
     public void preButtonInput4(boolean keyIsDown, Options options){
         if (!hasStandActive(this.getSelf())) {
