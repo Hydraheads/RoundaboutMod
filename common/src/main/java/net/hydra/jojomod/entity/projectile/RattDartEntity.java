@@ -107,32 +107,34 @@ public class RattDartEntity extends AbstractArrow {
 
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
-        if (bounces > 0) {
-            bounces--;
+        if (!this.level().isClientSide()) {
+            if (bounces > 0) {
+                bounces--;
 
-            // yoinked from BladedBowlerHatEntity
-            Vec3 velocity = this.getDeltaMovement();
-            Direction hitDir = $$0.getDirection();
-            Vec3 normal = Vec3.atLowerCornerOf(hitDir.getNormal());
+                // yoinked from BladedBowlerHatEntity
+                Vec3 velocity = this.getDeltaMovement();
+                Direction hitDir = $$0.getDirection();
+                Vec3 normal = Vec3.atLowerCornerOf(hitDir.getNormal());
 
-            // Makes it bounce
-            Vec3 reflected = velocity.subtract(normal.scale(2 * velocity.dot(normal)));
+                // Makes it bounce
+                Vec3 reflected = velocity.subtract(normal.scale(2 * velocity.dot(normal)));
 
-            // Slowly stops it bouncing
-            reflected = reflected.scale(0.5); // less bounce / more bounce :)
+                // Slowly stops it bouncing
+                reflected = reflected.scale(0.5); // less bounce / more bounce :)
 
-            this.setDeltaMovement(reflected);
+                this.setDeltaMovement(reflected);
 
-            Vec3 hitLoc = $$0.getLocation();
-            Vec3 pushOut = normal.scale(0.5);
-            this.setPos(hitLoc.x + pushOut.x, hitLoc.y + pushOut.y, hitLoc.z + pushOut.z);
+                Vec3 hitLoc = $$0.getLocation();
+                Vec3 pushOut = normal.scale(0.2);
+                this.setPos(hitLoc.x + pushOut.x, hitLoc.y + pushOut.y, hitLoc.z + pushOut.z);
 
-        } else {
+            } else {
+                setParticleTrails(false);
+                onHitBlock2($$0);
+            }
             this.DisableSuperThrow();
-            setParticleTrails(false);
-            onHitBlock2($$0);
-        }
 
+        }
     }
 
     public void shootWithVariance(double $$0, double $$1, double $$2, float $$3, float $$4) {
