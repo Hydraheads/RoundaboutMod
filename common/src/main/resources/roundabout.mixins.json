@@ -262,6 +262,7 @@
     "barrage.DazeGameRenderer",
     "cream.CreamCancelPlayerRendererMixin",
     "d4c.D4CDisableBlockInteraction",
+    "fates.FateDeathScreenMixin",
     "fates.FateMusicManager",
     "fates.FatesLocalPlayerMixin",
     "gravity.client.GravityBiomeAmbientSoundsHandlerMixin",

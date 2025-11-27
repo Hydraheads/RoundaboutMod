@@ -8,6 +8,9 @@
   "text.roundabout.warn_trap_triggered": " has been triggered!",
   "text.roundabout.warn_unnamed_trap_triggered": "A fog trap has been triggered!",
 
+
+  "text.roundabout.respawn_as_human": "Respawn as Human",
+
   "text.roundabout.out_of_bullets": "Shift right click to reload!",
   "text.roundabout.already_reloaded": "You have already reloaded.",
   "text.roundabout.no_more_usable_ammo": "You have no more ammunition!",
