@@ -2200,6 +2200,9 @@ public class MainUtil {
                 ((IPlayerEntity) player).roundabout$setShapeShift(data);
             }
 
+        } else if (context == PacketDataIndex.BYTE_RESPAWN_STRATEGY) {
+            ((IPlayerEntity) player).rdbt$setRespawnStrategy(data);
+            S2CPacketUtil.sendSimpleByteToClientPacket(player,PacketDataIndex.S2C_RESPAWN);
         }
     }
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/

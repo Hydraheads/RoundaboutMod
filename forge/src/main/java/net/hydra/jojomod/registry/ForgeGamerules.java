@@ -23,5 +23,7 @@ public class ForgeGamerules {
                 GameRules.Category.MOBS,GameRules.BooleanValue.create(true));
         ModGamerules.ROUNDABOUT_ROAD_ROLLER_BREAK_ICE = GameRules.register("roundaboutRoadRollerBreakIce",
                 GameRules.Category.MOBS,GameRules.BooleanValue.create(true));
+        ModGamerules.ROUNDABOUT_LOSE_FATE_ON_DEATH = GameRules.register("roundaboutLoseFateOnDeath",
+                GameRules.Category.PLAYER,GameRules.BooleanValue.create(false));
     }
 }

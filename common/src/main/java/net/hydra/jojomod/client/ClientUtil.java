@@ -1296,6 +1296,8 @@ public class ClientUtil {
             if (Minecraft.getInstance().screen instanceof VisageStoreScreen vs){
                 setScreenNull = true;
             }
+        } else if (context == PacketDataIndex.S2C_RESPAWN){
+            Minecraft.getInstance().player.respawn();
         }
     } public static void handleSimpleBytePacketS2C(byte context){
         LocalPlayer player = Minecraft.getInstance().player;

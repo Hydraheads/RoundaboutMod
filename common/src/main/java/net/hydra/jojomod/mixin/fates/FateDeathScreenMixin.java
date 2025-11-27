@@ -2,6 +2,8 @@ package net.hydra.jojomod.mixin.fates;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
@@ -15,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -41,6 +44,7 @@ public abstract class FateDeathScreenMixin extends Screen {
 
                 Component humanRespawn = Component.translatable("text.roundabout.respawn_as_human");
                 this.exitButtons.add(this.addRenderableWidget(Button.builder(humanRespawn, $$0x -> {
+                    rdbt$respawnHumanPacket();
                     $$0x.active = false;
                 }).bounds(this.width / 2 - 100, this.height / 4 + 96, 200, 20).build()));
 
@@ -62,11 +66,13 @@ public abstract class FateDeathScreenMixin extends Screen {
     }
 
 
+    @Unique
     protected void rdbt$respawnPacket(){
-        this.minecraft.player.respawn();
+        C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_RESPAWN_STRATEGY,(byte)0);
     }
+    @Unique
     protected void rdbt$respawnHumanPacket(){
-        this.minecraft.player.respawn();
+        C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_RESPAWN_STRATEGY,(byte)1);
     }
 
     @Shadow private int delayTicker;
