@@ -1194,6 +1194,13 @@ public class MainUtil {
         }
         takeUnresistableKnockbackWithY(entity,strength,x,y,z);
     }
+    public static void takeNoKnockback(Entity entity) {
+        entity.hurtMarked = true;
+        entity.setDeltaMovement(0,
+                0,
+                0);
+        entity.hasImpulse = true;
+    }
     public static void takeUnresistableKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
         entity.hurtMarked = true;
         Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);

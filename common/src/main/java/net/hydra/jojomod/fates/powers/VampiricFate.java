@@ -634,6 +634,7 @@ public int speedActivated = 0;
                     pl.getFoodData().eat(2, 0.0F);
                 }
                 MainUtil.makeBleed(bloodSuckingTarget, 0, 200, null);
+                MainUtil.takeNoKnockback(bloodSuckingTarget);
             }
             bloodSuckingTarget = null;
             xTryPower(PowerIndex.NONE, true);

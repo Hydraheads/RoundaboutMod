@@ -42,6 +42,8 @@ public abstract class JusticeNearestAttackableTargetGoal<T extends LivingEntity>
             } else {
                 //vampires cannot be targeted
                 if (FateTypes.isEvil(target)){
+                    if (target.getLastHurtMob() instanceof Zombie)
+                        return;
                     target = null;
                 }
             }

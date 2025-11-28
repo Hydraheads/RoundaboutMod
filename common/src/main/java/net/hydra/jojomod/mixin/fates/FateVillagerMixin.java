@@ -33,7 +33,6 @@ public abstract class FateVillagerMixin extends AbstractVillager {
         LivingEntity living = ((IMob)this).roundabout$getHypnotizedBy();
         if (living != null && $$0 != null && $$0.is(living)){
             ci.cancel();
-            super.setLastHurtByMob($$0);
         }
     }
     public FateVillagerMixin(EntityType<? extends AbstractVillager> $$0, Level $$1) {
