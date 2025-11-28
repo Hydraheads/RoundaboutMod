@@ -604,7 +604,7 @@ public int speedActivated = 0;
 
             boolean canDrainGood = MainUtil.canDrinkBloodCrit(bloodSuckingTarget,self);
             DamageSource sauce = ModDamageTypes.of(self.level(),
-                    ModDamageTypes.BLOOD_DRAIN);
+                    ModDamageTypes.BLOOD_DRAIN,pl);
             if (bloodSuckingTarget.hurt(sauce, getSuckDamage()) && bloodSuckingTarget instanceof LivingEntity LE) {//this.setCooldown(PowerIndex.FATE_2, 30);
                 //if (!self.level().isClientSide()){
                 //    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
