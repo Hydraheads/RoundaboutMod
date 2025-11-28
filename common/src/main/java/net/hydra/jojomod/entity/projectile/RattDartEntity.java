@@ -260,14 +260,9 @@ public class RattDartEntity extends AbstractArrow {
 
 
         Entity $$4 = this.getOwner();
-        DamageSource $$5 = ModDamageTypes.of($$1.level(),ModDamageTypes.STAND,$$4);
-        if ( $$4 instanceof Player P  ) {
-            if (((StandUser) P).roundabout$getStandPowers() instanceof PowersRatt PR) {
-                if (PR.isPlaced()) {
-                    $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.STAND, this,$$4);
-
-                }
-            }
+        DamageSource $$5 = ModDamageTypes.of($$1.level(),ModDamageTypes.STAND);
+        if (this.getOwner() != null) {
+            $$5 = ModDamageTypes.of($$1.level(),ModDamageTypes.STAND,$$4);
         }
         SoundEvent $$6 = ModSounds.RATT_DART_IMPACT_EVENT;
         if ($$1.hurt($$5,this.damage + (($$1 instanceof Mob) ? ClientNetworking.getAppropriateConfig().rattSettings.rattAttackBonusOnMobs : 0) )) {
