@@ -73,6 +73,7 @@
     "fates.FatePlayerMixin",
     "fates.FateServerPlayerMixin",
     "fates.FatesMobEffectMixin",
+    "fates.FateVillagerHostilesSensor",
     "fates.FateVillagerMixin",
     "gravity.GravityAbstractArrowMixin",
     "gravity.GravityAbstractHorseMixin",

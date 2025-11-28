@@ -15,15 +15,16 @@ import net.minecraft.world.phys.Vec3;
 public enum FateTypes {
     HUMAN((byte) 0, new FatePowers()),
     VAMPIRE((byte) 1, new VampireFate()),
-    SHADOW_CREATURE((byte) 2, new FatePowers()),
-    PILLAR_MAN((byte) 3, new FatePowers()),
-    ULTIMATE_LIFEFORM((byte) 4, new FatePowers()),
-    ROCK_HUMAN((byte) 5, new FatePowers()),
-    GHOST((byte) 6, new FatePowers()),
-    DOG((byte) 7, new FatePowers()),
-    RAT((byte) 8, new FatePowers()),
-    FALCON((byte) 9, new FatePowers()),
-    PLANKTON_COLONY((byte) 10, new FatePowers());
+    ZOMBIE((byte) 2, new FatePowers()),
+    SHADOW_CREATURE((byte) 3, new FatePowers()),
+    PILLAR_MAN((byte) 4, new FatePowers()),
+    ULTIMATE_LIFEFORM((byte) 5, new FatePowers()),
+    ROCK_HUMAN((byte) 6, new FatePowers()),
+    GHOST((byte) 7, new FatePowers()),
+    DOG((byte) 8, new FatePowers()),
+    RAT((byte) 9, new FatePowers()),
+    FALCON((byte) 10, new FatePowers()),
+    PLANKTON_COLONY((byte) 11, new FatePowers());
 
     public final byte id;
     public final FatePowers fatePowers;
@@ -69,7 +70,14 @@ public enum FateTypes {
     }
     public static boolean isEvil(LivingEntity entity){
         if (entity instanceof Player PE){
-            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.id;
+            Byte fate = ((IPlayerEntity)PE).roundabout$getFate();
+            return fate == VAMPIRE.id || fate == ZOMBIE.id || fate == PILLAR_MAN.id || fate == ULTIMATE_LIFEFORM.id;
+        }
+        return false;
+    }
+    public static boolean isScary(LivingEntity entity){
+        if (entity instanceof Player PE){
+            return ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.id;
         }
         return false;
     }
