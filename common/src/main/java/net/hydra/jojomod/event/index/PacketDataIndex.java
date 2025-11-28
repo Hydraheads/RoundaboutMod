@@ -70,12 +70,14 @@ public class PacketDataIndex {
     public static final byte BYTE_UPDATE_COOLDOWN = 8;
     public static final byte BYTE_SUMMON_CORPSE = 9;
     public static final byte BYTE_CORPSE_TACTICS = 10;
+    public static final byte BYTE_RESPAWN_STRATEGY = 11;
 
     /**S2C Simple packets*/
     public static final byte S2C_SIMPLE_GENERATE_POWERS = 1;
     public static final byte S2C_SIMPLE_FREEZE_STAND = 2;
     public static final byte S2C_SIMPLE_SUSPEND_RIGHT_CLICK = 3;
     public static final byte S2C_SIMPLE_CLOSE_THE_RELLA = 4;
+    public static final byte S2C_RESPAWN = 5;
 
 
     /**S2C Int packets*/

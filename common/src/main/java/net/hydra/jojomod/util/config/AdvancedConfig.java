@@ -85,6 +85,8 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
+
+
     public Set<String> humanoidOnlyStandUserMobPoolv2 = new HashSet<>(
             Arrays.asList(
                     "roundabout:hey_ya_disc",
@@ -118,6 +120,31 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:ender_dragon",
                     "minecraft:wither",
                     "minecraft:warden"
+            )
+    );
+
+    public Set<String> addedMobsWithRedBlood = new HashSet<>(
+            Arrays.asList(
+                    "mod_id:add_entry_here",
+                    "mod_id:add_other_entry_here"
+            )
+    );
+    public Set<String> addedMobsWithBlueBlood = new HashSet<>(
+            Arrays.asList(
+                    "mod_id:add_entry_here",
+                    "mod_id:add_other_entry_here"
+            )
+    );
+    public Set<String> addedMobsWithEnderBlood = new HashSet<>(
+            Arrays.asList(
+                    "mod_id:add_entry_here",
+                    "mod_id:add_other_entry_here"
+            )
+    );
+    public Set<String> removeBloodFromThese = new HashSet<>(
+            Arrays.asList(
+                    "mod_id:add_entry_here",
+                    "mod_id:add_other_entry_here"
             )
     );
 }

@@ -165,6 +165,20 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     protected boolean rdbt$attemptedQuery = false;
 
     @Unique
+    private byte rdbt$respawnStrategy = 0;
+    @Unique
+    @Override
+    public void rdbt$setRespawnStrategy(byte strat){
+        rdbt$respawnStrategy = strat;
+    }
+    @Unique
+    @Override
+    public byte rdbt$getRespawnStrategy(){
+        return rdbt$respawnStrategy;
+    }
+
+
+    @Unique
     @Override
     public void rdbt$queryServerForCooldowns(){
 

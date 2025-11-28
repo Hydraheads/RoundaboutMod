@@ -156,6 +156,13 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
                     ipe.roundabout$getIdleRotation(),
                     ipe.roundabout$getIdleYOffset(),
                     anchorPlaceAttack);
+
+            if (!this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_LOSE_FATE_ON_DEATH)) {
+                byte strat = ((IPlayerEntity) $$0).rdbt$getRespawnStrategy();
+                if (strat < 1) {
+                    ipe.roundabout$setFate(((IPlayerEntity) $$0).roundabout$getFate());
+                }
+            }
         }
     }
 

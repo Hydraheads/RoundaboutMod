@@ -80,6 +80,26 @@ public abstract class ConfigManager {
             MainUtil.hypnotismMobBlackList.clear();
             MainUtil.hypnotismMobBlackList.addAll(getAdvancedConfig().hypnotismMobBlackList);
         }
+        if (getAdvancedConfig().addedMobsWithRedBlood != null)
+        {
+            MainUtil.addedMobsWithRedBlood.clear();
+            MainUtil.addedMobsWithRedBlood.addAll(getAdvancedConfig().addedMobsWithRedBlood);
+        }
+        if (getAdvancedConfig().addedMobsWithBlueBlood != null)
+        {
+            MainUtil.addedMobsWithBlueBlood.clear();
+            MainUtil.addedMobsWithBlueBlood.addAll(getAdvancedConfig().addedMobsWithBlueBlood);
+        }
+        if (getAdvancedConfig().addedMobsWithEnderBlood != null)
+        {
+            MainUtil.addedMobsWithEnderBlood.clear();
+            MainUtil.addedMobsWithEnderBlood.addAll(getAdvancedConfig().addedMobsWithEnderBlood);
+        }
+        if (getAdvancedConfig().removeBloodFromThese != null)
+        {
+            MainUtil.removeBloodFromThese.clear();
+            MainUtil.removeBloodFromThese.addAll(getAdvancedConfig().removeBloodFromThese);
+        }
         if (getAdvancedConfig().foodThatGivesBloodListV3 != null)
         {
             MainUtil.foodMap = MainUtil.parseFoodList(getAdvancedConfig().foodThatGivesBloodListV3);
