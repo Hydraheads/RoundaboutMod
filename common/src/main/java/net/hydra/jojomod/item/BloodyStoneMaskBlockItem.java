@@ -2,7 +2,9 @@ package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -25,6 +27,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class BloodyStoneMaskBlockItem extends BlockItem {
     public BloodyStoneMaskBlockItem(Block $$0, Properties $$1) {
@@ -40,5 +43,19 @@ public class BloodyStoneMaskBlockItem extends BlockItem {
                 LE.getSlot($$3).set(stack2);
             }
         }
+    }
+
+    @Override
+    public void appendHoverText(ItemStack $$0, @org.jetbrains.annotations.Nullable Level $$1, List<Component> $$2, TooltipFlag $$3) {
+        $$2.add(Component.translatable("leveling.roundabout.disc_wip").withStyle(ChatFormatting.RED));
+        $$2.add(Component.translatable("leveling.roundabout.disc_wip_2").withStyle(ChatFormatting.RED));
+
+        $$2.add(Component.translatable("roundabout.dev_status.dev_status").withStyle(ChatFormatting.WHITE)
+                .append(" ")
+                .append(Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA)));
+        $$2.add(Component.translatable("roundabout.dev_status.dev_name").withStyle(ChatFormatting.WHITE)
+                .append(" ")
+                .append(Component.literal(  "Hydra").withStyle(ChatFormatting.YELLOW))
+        );
     }
 }
