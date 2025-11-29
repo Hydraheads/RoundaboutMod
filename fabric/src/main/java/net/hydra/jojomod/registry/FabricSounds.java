@@ -239,6 +239,7 @@ public class FabricSounds {
         addSound(ModSounds.ANUBIS_POGO_HIT_ID, ModSounds.ANUBIS_POGO_HIT_EVENT);
         addSound(ModSounds.ANUBIS_BARRAGE_1_ID, ModSounds.ANUBIS_BARRAGE_1_EVENT);
         addSound(ModSounds.ANUBIS_BARRAGE_1_HIT_ID, ModSounds.ANUBIS_BARRAGE_1_HIT_EVENT);
+        addSound(ModSounds.ANUBIS_BARRAGE_END_ID, ModSounds.ANUBIS_BARRAGE_END_EVENT);
 
 
         addSound(ModSounds.KILLER_QUEEN_BARRAGE_ID, ModSounds.KILLER_QUEEN_BARRAGE_EVENT);

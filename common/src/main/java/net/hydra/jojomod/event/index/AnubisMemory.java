@@ -2,6 +2,8 @@ package net.hydra.jojomod.event.index;
 
 import net.minecraft.world.item.Item;
 
+import java.util.List;
+
 public class AnubisMemory {
 
     public static final byte INPUT_ONLY = (byte)0;
@@ -12,8 +14,8 @@ public class AnubisMemory {
 
     public Item item;
     public byte type = (byte)0;
-    public AnubisMoment[] moments;
-    public AnubisMemory(Item item, byte type, AnubisMoment[] moments) {
+    public List<AnubisMoment> moments;
+    public AnubisMemory(Item item, byte type, List<AnubisMoment> moments) {
         this.item = item;
         this.type = type;
         this.moments = moments;

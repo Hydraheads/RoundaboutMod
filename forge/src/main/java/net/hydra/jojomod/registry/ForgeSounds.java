@@ -380,6 +380,8 @@ public class ForgeSounds {
             register(ModSounds.ANUBIS_BARRAGE_1, ModSounds.ANUBIS_BARRAGE_1_ID);
     public static final RegistryObject<SoundEvent> ANUBIS_BARRAGE_1_HIT =
             register(ModSounds.ANUBIS_BARRAGE_1_HIT, ModSounds.ANUBIS_BARRAGE_1_HIT_ID);
+    public static final RegistryObject<SoundEvent> ANUBIS_BARRAGE_END =
+            register(ModSounds.ANUBIS_BARRAGE_END, ModSounds.ANUBIS_BARRAGE_END_ID);
 
 
 

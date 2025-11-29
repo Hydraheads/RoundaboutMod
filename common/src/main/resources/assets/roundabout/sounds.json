@@ -1166,7 +1166,12 @@
       "roundabout:anubis_barrage_1_hit"
     ]
   },
-
+  "anubis_barrage_end": {
+    "subtitle": "sounds.roundabout.anubis_barrage_end",
+    "sounds": [
+      "roundabout:anubis_barrage_end"
+    ]
+  },
 
 
 

@@ -123,12 +123,24 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
             MobSlot.setSelected(this.currentlyHovered == MobSlot.icon.id);
             if (bl || !MobSlot.isHoveredOrFocused()) continue;
             this.currentlyHovered = MobSlot.icon.id;
+
+            Player player = Minecraft.getInstance().player;
+            StandUser SU = (StandUser) player;
+            if (SU.roundabout$getStandPowers() != null) {
+                if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+                    PA.convertToVisual(currentlyHovered == 8 ? -1 : currentlyHovered,PA.memories.get(currentlyHovered == 8 || currentlyHovered == -1 ? 0 : currentlyHovered).moments);
+                }
+            }
+
+
         }
 
     }
 
     private void switchToHoveredGameMode() {
-        switchToHoveredGameMode(this.minecraft, slots.get((currentlyHovered == -1 ? 0 :(int)currentlyHovered )).icon );
+        if (this.currentlyHovered != -1 && this.currentlyHovered != 8) {
+            switchToHoveredGameMode(this.minecraft,slots.get(this.currentlyHovered).icon);
+        }
     }
 
     private void switchToHoveredGameMode(Minecraft minecraft, corpseIcon pIcon) {
