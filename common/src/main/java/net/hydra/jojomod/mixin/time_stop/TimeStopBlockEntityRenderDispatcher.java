@@ -27,7 +27,8 @@ public class TimeStopBlockEntityRenderDispatcher {
             method = "render",
             at = @At(value = "HEAD"), cancellable = true)
     private <E extends BlockEntity> void roundabout$doNotDeltaTickBlockWhenTimeIsStopped(E $$0, float $$1, PoseStack $$2, MultiBufferSource $$3, CallbackInfo ci) {
-        if ($$0 != null && $$0.getBlockPos() != null) {
+        if ($$0 != null && $$0.getBlockPos() != null && $$0.getLevel() != null && $$0.getLevel().getBlockState($$0.getBlockPos()) != null
+        && $$0.getType() != null) {
             if (((TimeStop) $$0.getLevel()).inTimeStopRange($$0.getBlockPos()) && !($$0.getLevel().getBlockState($$0.getBlockPos()).is(Blocks.MOVING_PISTON))) {
                 if (((IBlockEntityAccess) $$0).roundabout$getRoundaboutTimeInteracted()) {
                     return;
