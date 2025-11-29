@@ -304,10 +304,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             EntityDataSerializers.BOOLEAN);
 
     @Unique
-    private static final EntityDataAccessor<String> ROUNDABOUT$STAND_DISC = SynchedEntityData.defineId(LivingEntity.class,
-            EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<ItemStack> ROUNDABOUT$STAND_DISC = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.ITEM_STACK);
 
-    public ItemStack roundabout$standDisc = ItemStack.EMPTY;
     @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$COMBAT_MODE = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.BOOLEAN);
@@ -1865,14 +1864,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     @Override
     public ItemStack roundabout$getStandDisc() {
-        return roundabout$standDisc;
+        if (getEntityData().hasItem(ROUNDABOUT$STAND_DISC)) {
+            return this.getEntityData().get(ROUNDABOUT$STAND_DISC);
+        } else {
+            return ItemStack.EMPTY;
+        }
     }
     @Unique
     @Override
     public void roundabout$setStandDisc(ItemStack stack) {
         if (!(this.level().isClientSide)) {
-            roundabout$standDisc = stack;
-            this.getEntityData().set(ROUNDABOUT$STAND_DISC, BuiltInRegistries.ITEM.getKey(stack.getItem()).toString());
+            this.getEntityData().set(ROUNDABOUT$STAND_DISC, stack);
             if (stack.getItem() instanceof StandDiscItem SD){
                 MainUtil.extractDiscData(((LivingEntity)(Object)this), SD, stack);
             }
@@ -1949,6 +1951,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "onSyncedDataUpdated", at = @At(value = "TAIL"), cancellable = true)
     public void roundabout$onSyncedDataUpdated(EntityDataAccessor<?> $$0, CallbackInfo ci){
+        /**
         if ($$0.equals(ROUNDABOUT$STAND_DISC)){
             String updateString = this.entityData.get(ROUNDABOUT$STAND_DISC);
             if (!updateString.isEmpty()){
@@ -1968,6 +1971,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
         }
+         **/
     }
 
     /**The items that shoot and brawl mode are allowed to use*/
@@ -2850,7 +2854,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ADJUSTED_GRAVITY, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ONLY_BLEEDING, true);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$COMBAT_MODE, false);
-            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_DISC, "");
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_DISC, ItemStack.EMPTY);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_ACTIVE, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IDLE_POS, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_SKIN, (byte) 0);
