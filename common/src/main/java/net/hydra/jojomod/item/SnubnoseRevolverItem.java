@@ -269,5 +269,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
                 Component.literal("Ammo: " + ammo + " / " + maxAmmo)
                         .withStyle(ChatFormatting.GRAY)
         );
+
+        tooltip.add(Component.translatable("leveling.roundabout.disc_wip").withStyle(ChatFormatting.RED));
     }
 }

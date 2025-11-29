@@ -14,6 +14,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Position;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
@@ -43,6 +44,9 @@ public class VampireFate extends VampiricFate {
             case SKILL_1_NORMAL -> {
                 hypnosis();
             }
+            case SKILL_1_CROUCH -> {
+                hairExtendClient();
+            }
             case SKILL_2_NORMAL -> {
                 suckBlood();
             }
@@ -64,6 +68,7 @@ public class VampireFate extends VampiricFate {
         }
     };
     public static final byte HYPNOSIS = 50;
+    public static final byte HAIR_EXTENDED = 51;
 
 
 
@@ -73,14 +78,26 @@ public class VampireFate extends VampiricFate {
             case WALL_WALK -> {
                 wallLatch();
             }
+            case HAIR_EXTENDED -> {
+                hairExtendServer();
+            }
         }
         return super.tryPower(move,forced);
+    }
+    public void hairExtendClient(){
+        if (isHearing()){
+            stopHearingClient();
+        }
+        tryPowerPacket(HAIR_EXTENDED);
     }
     public void hypnosis(){
         if (isHearing()){
             stopHearingClient();
         }
         tryPowerPacket(HYPNOSIS);
+    }
+    public boolean hasHairExtended(){
+        return getActivePower() == HAIR_EXTENDED;
     }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
@@ -96,6 +113,16 @@ public class VampireFate extends VampiricFate {
         } else {
             isHypnotizing = true;
             hypnoTicks = 0;
+        }
+    }
+    public void hairExtendServer() {
+        if (getActivePower() != BLOOD_REGEN) {
+            if (hasHairExtended()) {
+                xTryPower(PowerIndex.NONE, true);
+            } else {
+                setActivePower(HAIR_EXTENDED);
+                this.attackTimeDuring = 0;
+            }
         }
     }
     public boolean isHypnotizing = false;
@@ -163,7 +190,14 @@ public class VampireFate extends VampiricFate {
             }
     }
 
-
+    @Override
+    /**Stand related things that slow you down or speed you up, override and call super to make
+     * any stand ability slow you down*/
+    public float inputSpeedModifiers(float basis){
+        if (hasHairExtended())
+            basis*=0.8F;
+        return super.inputSpeedModifiers(basis);
+    }
 
     private final TargetingConditions hypnosisTargeting = TargetingConditions.forCombat().range(7);
     @Override
