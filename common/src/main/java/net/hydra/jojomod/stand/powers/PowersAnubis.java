@@ -124,6 +124,9 @@ public class PowersAnubis extends NewDashPreset {
             float scale = Math.min((this.getAttackTimeDuring()-v)/(float)v,1.0F);
             basis *= 1 - (float) 0.7*scale;
         }
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
+            basis *= 2;
+        }
         return super.inputSpeedModifiers(basis);
     }
 
@@ -304,14 +307,16 @@ public class PowersAnubis extends NewDashPreset {
                     P.getAbilities().flying = false;
                 }
                 if (!isClient()) {
-                    Vec3 look = getSelf().getLookAngle().multiply(1,0,1).normalize();
+                    Vec3 look = getSelf().getLookAngle().multiply(1, 0, 1).normalize();
                     SU.roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
                     SU.roundabout$setLeapIntentionally(true);
 
                     float strength = 1.25F;
-                    if ( Math.abs(look.x) + Math.abs(look.z) == 0  ) {strength *= 0.7F;}
+                    if (Math.abs(look.x) + Math.abs(look.z) == 0) {
+                        strength *= 0.7F;
+                    }
 
-                    MainUtil.takeUnresistableKnockbackWithY(this.getSelf(),strength,look.x*1,-1,look.z*1);
+                    MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), strength, look.x * 1, -1 * (this.getSelf().onGround() ? 1 : 0.7), look.z * 1);
                 }
             }
         }
@@ -1201,7 +1206,9 @@ public class PowersAnubis extends NewDashPreset {
         ((StandUser)this.getSelf()).roundabout$setMeleeImmunity(3);
         int duration = 15;
         for (Entity entity : this.targets) {
-            ((StandUser)entity).roundabout$setDazed((byte) 3);
+            if (entity instanceof LivingEntity LE) {
+                ((StandUser) entity).roundabout$setDazed((byte) 3);
+            }
             if (this.getAttackTimeDuring() > duration) {
                 if (StandRushDamageEntityAttack(entity, 3F, 0F, this.getSelf())) {
                     MainUtil.takeKnockbackWithY(entity, 0.9, 0, -1, 0);
