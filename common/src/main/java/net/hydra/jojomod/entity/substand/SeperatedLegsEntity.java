@@ -5,17 +5,20 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.Main;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -40,12 +43,25 @@ public class SeperatedLegsEntity extends LivingEntity {
     public boolean isEffectivelyInWater() {
         return this.wasTouchingWater;
     }
+    public LivingEntity lastcontact;
+    public int StartupTicks = 10;
 
     @Override
     public void tick() {
         boolean client = this.level().isClientSide();
         LivingEntity user = this.getUser();
         if (!client) {
+            if(StartupTicks==0){
+                if(!(this.User == null)){
+                    this.lookAt(EntityAnchorArgument.Anchor.EYES,User.getEyePosition());
+                    this.setDeltaMovement(this.getLookAngle().multiply(00.2,0.2,0.2));
+                }else{
+                    this.discard();
+                }
+            }else{
+                StartupTicks--;
+            }
+
             for(int i = 0; i < 4; i = i + 1) {
                 double randX = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
                 double randY = Roundabout.RANDOM.nextDouble(-0.1, 0.1);
@@ -56,9 +72,13 @@ public class SeperatedLegsEntity extends LivingEntity {
                         this.getZ() + randZ,
                         1,0,0,0,0);
             }
-
-
-
+            List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),0.6,1,0.6);
+            for(int j = 0;j<damages.size();j++){
+                Entity entity = damages.get(j);
+                if(!entity.equals((Object)this)) {
+                    entity.hurt(ModDamageTypes.of(level(), ModDamageTypes.KICKED, this, user), 5);
+                }
+            }
 
         }
         super.tick();
