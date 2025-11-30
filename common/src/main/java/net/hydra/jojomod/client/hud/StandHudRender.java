@@ -642,7 +642,7 @@ public class StandHudRender {
                                            int scaledWidth, int scaledHeight, int x) {
         int l = scaledHeight - 32 + 3;
         StandPowers p = ((StandUser)playerEntity).roundabout$getStandPowers();
-        int k = (int)(((float) 182 / PowersAnubis.MaxPlayTime) * (float) ((PowersAnubis)p).playTime );
+        int k = (int)(((float) 182 / ((PowersAnubis)p).maxPlayTime) * (float) ((PowersAnubis)p).playTime );
 
         context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 30, 182, 5);
 
