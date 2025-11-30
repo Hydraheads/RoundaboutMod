@@ -306,7 +306,7 @@ public class BlockGrabPreset extends NewPunchingStand {
     @SuppressWarnings("deprecation")
     @Override
     public boolean setPowerAttack(){
-        if (this.getSelf() instanceof Player) {
+        if (this.getSelf() instanceof Player && getAttackTimeDuring()>0) {
             StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
                 if (!standEntity.getHeldItem().isEmpty()) {
