@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.keyboard;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.gui.NoCancelInputScreen;
