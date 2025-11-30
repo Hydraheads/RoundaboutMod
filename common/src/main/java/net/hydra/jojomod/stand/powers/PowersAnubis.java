@@ -292,6 +292,9 @@ public class PowersAnubis extends NewDashPreset {
                 this.setCooldown(PowerIndex.GLOBAL_DASH,260 + (this.getSelf().onGround() ? 0 : 60));
                 this.getSelf().level().playSound(null,this.getSelf().blockPosition(), ModSounds.ANUBIS_BACKFLIP_EVENT, SoundSource.PLAYERS,1.0F,1.0F);
                 this.getStandUserSelf().roundabout$setStandAnimation(PowerIndex.SNEAK_MOVEMENT);
+                if (this.getSelf() instanceof Player P) {
+                    P.getAbilities().flying = false;
+                }
                 if (!isClient()) {
                     Vec3 look = getSelf().getLookAngle().multiply(1,0,1).normalize();
                     SU.roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
