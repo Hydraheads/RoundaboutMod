@@ -67,8 +67,10 @@ public class KeysKeyMapping implements IKeyMapping {
                     for(int i=0;i<PA.playKeys.size();i++) {
                         KeyMapping key = PA.playKeys.get(i);
                         if (((IKeyMapping) key).roundabout$justTellMeTheKey() == this.roundabout$justTellMeTheKey()) {
-                            cir.setReturnValue(PA.isPressed(PA.playBytes.get(i), time));
-                            cir.cancel();
+                            if (PA.isPressed(PA.playBytes.get(i), time)) {
+                                cir.setReturnValue(true);
+                                cir.cancel();
+                            }
                         }
 
                     }
