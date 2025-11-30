@@ -125,7 +125,7 @@ public class PowersAnubis extends NewDashPreset {
             basis *= 1 - (float) 0.7*scale;
         }
         if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
-            basis *= 2;
+            basis *= 1.5;
         }
         return super.inputSpeedModifiers(basis);
     }
