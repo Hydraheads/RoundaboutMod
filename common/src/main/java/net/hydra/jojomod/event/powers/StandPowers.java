@@ -2347,6 +2347,13 @@ public class StandPowers extends AbilityScapeBasis {
         }
     }
 
+    //Stands sending simple message
+    public void serverQueried(){
+    }
+
+    //Stands sending simple message
+    public void clientIntUpdated(int integer){
+    }
 
 
     /**The stand is named on the disc so we just use that*/

@@ -2321,6 +2321,10 @@ public class MainUtil {
                     vp.setSpeedActivated(0);
                 }
             }
+        } else if (context == PacketDataIndex.QUERY_STAND_UPDATE) {
+            if (player != null) {
+                ((StandUser)player).roundabout$getStandPowers().serverQueried();
+            }
         }
     }
 

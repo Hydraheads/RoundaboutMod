@@ -1631,6 +1631,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (roundabout$isDazed())
             return TOT;
 
+
         if (roundabout$getBubbleEncased() == 1){
             TOT+=4;
             }
@@ -1638,6 +1639,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         StandUser SU = (StandUser) rdbt$this();
         if (SU.roundabout$getStandPowers() != null) {
             TOT += SU.roundabout$getStandPowers().getJumpHeightAddon();
+            if (SU.roundabout$getStandPowers().cancelJump())
+                return 0;
         }
         return TOT;
     }

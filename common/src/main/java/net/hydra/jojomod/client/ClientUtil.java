@@ -613,6 +613,8 @@ public class ClientUtil {
             if (((IFatePlayer)player).rdbt$getFatePowers() instanceof VampiricFate VP){
                 VP.setSpeedActivated(data);
             }
+        } else if (context == PacketDataIndex.S2C_INT_STAND_MODE){
+            ((StandUser) player).roundabout$getStandPowers().clientIntUpdated(data);
         }
     }
 
