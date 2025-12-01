@@ -42,7 +42,7 @@ public class RattShoulderLayer<T extends LivingEntity, A extends HumanoidModel<T
     float scale = 1;
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
-        if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+        if (ClientUtil.canSeeStands(ClientUtil.getPlayer()) && !entity.isBaby()) {
             if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
                 return;
             LivingEntity livent = entity;

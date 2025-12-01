@@ -25,6 +25,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -540,6 +541,10 @@ public class ClientUtil {
                         PC.setTransformDirection(sigmaDirection);
                     }
                 }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.VampireMessage.value)) {
+
+                    player.playSound(ModSounds.VAMPIRE_MESSAGE_EVENT,10,1);
+                }
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();
                 //        ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));
@@ -608,6 +613,8 @@ public class ClientUtil {
             if (((IFatePlayer)player).rdbt$getFatePowers() instanceof VampiricFate VP){
                 VP.setSpeedActivated(data);
             }
+        } else if (context == PacketDataIndex.S2C_INT_STAND_MODE){
+            ((StandUser) player).roundabout$getStandPowers().clientIntUpdated(data);
         }
     }
 
@@ -880,6 +887,9 @@ public class ClientUtil {
     }
     public static void openModificationVisageUI(ItemStack visage){
         Minecraft.getInstance().setScreen(new ModificationVisageScreen(visage));
+    }
+    public static void openMemoryRecordScreen(boolean recording){
+        Minecraft.getInstance().setScreen(new MemoryRecordScreen(recording));
     }
     public static void strikePose(Player player, Minecraft C, boolean keyIsDown, Options option) {
         if (keyIsDown){
@@ -1288,6 +1298,8 @@ public class ClientUtil {
             if (Minecraft.getInstance().screen instanceof VisageStoreScreen vs){
                 setScreenNull = true;
             }
+        } else if (context == PacketDataIndex.S2C_RESPAWN){
+            Minecraft.getInstance().player.respawn();
         }
     } public static void handleSimpleBytePacketS2C(byte context){
         LocalPlayer player = Minecraft.getInstance().player;

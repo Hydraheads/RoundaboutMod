@@ -113,6 +113,12 @@
       "roundabout:vampire_wall_grip"
     ]
   },
+  "vampire_message": {
+    "subtitle": "sounds.roundabout.vampire_message",
+    "sounds": [
+      "roundabout:vampire_message"
+    ]
+  },
   "heartbeat": {
     "subtitle": "sounds.roundabout.heartbeat",
     "sounds": [
@@ -1136,7 +1142,36 @@
       "roundabout:anubis_summon"
     ]
   },
-
+  "anubis_pogo_launch": {
+    "subtitle": "sounds.roundabout.anubis_pogo_launch",
+    "sounds": [
+      "roundabout:anubis_pogo_launch"
+    ]
+  },
+  "anubis_pogo_hit": {
+    "subtitle": "sounds.roundabout.anubis_pogo_hit",
+    "sounds": [
+      "roundabout:anubis_pogo_hit"
+    ]
+  },
+  "anubis_barrage_1": {
+    "subtitle": "sounds.roundabout.anubis_barrage_1",
+    "sounds": [
+      "roundabout:anubis_barrage_1"
+    ]
+  },
+  "anubis_barrage_1_hit": {
+    "subtitle": "sounds.roundabout.anubis_barrage_1_hit",
+    "sounds": [
+      "roundabout:anubis_barrage_1_hit"
+    ]
+  },
+  "anubis_barrage_end": {
+    "subtitle": "sounds.roundabout.anubis_barrage_end",
+    "sounds": [
+      "roundabout:anubis_barrage_end"
+    ]
+  },
 
 
 
@@ -2048,6 +2083,51 @@
     "sounds": [
       {
         "name":"roundabout:torture_dance",
+        "stream": true
+      }
+    ]
+  },
+  "vsong_silent_reveries": {
+    "subtitle": "sounds.roundabout.vsong_silent_reveries",
+    "sounds": [
+      {
+        "name":"roundabout:vsong_silent_reveries",
+        "stream": true
+      }
+    ]
+  },
+  "vsong_twisted": {
+    "subtitle": "sounds.roundabout.vsong_twisted",
+    "sounds": [
+      {
+        "name":"roundabout:vsong_twisted",
+        "stream": true
+      }
+    ]
+  },
+  "vsong_bloodcurdling_moments": {
+    "subtitle": "sounds.roundabout.vsong_bloodcurdling_moments",
+    "sounds": [
+      {
+        "name":"roundabout:vsong_bloodcurdling_moments",
+        "stream": true
+      }
+    ]
+  },
+  "vsong_damnable_ceremony": {
+    "subtitle": "sounds.roundabout.vsong_damnable_ceremony",
+    "sounds": [
+      {
+        "name":"roundabout:vsong_damnable_ceremony",
+        "stream": true
+      }
+    ]
+  },
+  "vsong_gothic_organ": {
+    "subtitle": "sounds.roundabout.vsong_gothic_organ",
+    "sounds": [
+      {
+        "name":"roundabout:vsong_gothic_organ",
         "stream": true
       }
     ]

@@ -326,9 +326,14 @@ public class ForgeItems {
             () -> new BowlerHatItem(Tiers.IRON, 0F, -1.6F, new Item.Properties())
     ));
 
-    public static final RegistryObject<Item> ANUBIS_ITEM = addToTab(ITEMS.register("anubis_item",
+    public static final RegistryObject<Item> ANUBIS_ITEM = addToWIPTab(ITEMS.register("anubis_item",
             () -> new AnubisItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC))
     ));
+    public static final RegistryObject<Item> STAND_DISC_ANUBIS = addToWIPTab(ITEMS.register("anubis_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null))));
+    public static final RegistryObject<Item> MAX_STAND_DISC_ANUBIS = addToWIPTab(ITEMS.register("max_anubis_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null))));
+
 
     public static final RegistryObject<Item> SNUBNOSE_REVOLVER = addToWIPTab(ITEMS.register("snubnose_revolver",
             () -> new SnubnoseRevolverItem(new Item.Properties().stacksTo(1))
@@ -512,10 +517,6 @@ public class ForgeItems {
     public static final RegistryObject<Item> MAX_STAND_DISC_CREAM = addToWIPTab(ITEMS.register("max_cream_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersCream(null))));
 
-    public static final RegistryObject<Item> STAND_DISC_ANUBIS = ITEMS.register("anubis_disc",
-            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null)));
-    public static final RegistryObject<Item> MAX_STAND_DISC_ANUBIS = ITEMS.register("max_anubis_disc",
-            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null)));
 
     public static final RegistryObject<Item> WORTHY_ARROW = addToTab(ITEMS.register("worthy_arrow",
             () -> new WorthyArrowItem(new Item.Properties().stacksTo(1))));

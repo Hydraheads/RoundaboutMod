@@ -638,6 +638,23 @@ public class StandHudRender {
 
         context.blit(StandIcons.JOJO_ICONS, iconX, iconY, 182, 161, 11, 9);
     }
+    public static void renderRecordingHud(GuiGraphics context, Minecraft client, Player playerEntity,
+                                           int scaledWidth, int scaledHeight, int x) {
+        int l = scaledHeight - 32 + 3;
+        StandPowers p = ((StandUser)playerEntity).roundabout$getStandPowers();
+        int k = (int)(((float) 182 / ((PowersAnubis)p).maxPlayTime) * (float) ((PowersAnubis)p).playTime );
+
+        context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 30, 182, 5);
+
+        if (k > 0) {
+            context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 35, k, 5);
+        }
+
+        int iconX = scaledWidth / 2 - 5;
+        int iconY = scaledHeight - 32 - 4;
+
+        context.blit(StandIcons.JOJO_ICONS_2, iconX, iconY, 182, 29, 11, 10);
+    }
 
     public static void renderTSHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                       int scaledWidth, int scaledHeight, int ticks, int x,

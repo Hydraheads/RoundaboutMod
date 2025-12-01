@@ -38,6 +38,8 @@ public class ClientConfig implements Cloneable {
     @BooleanOption(group = "inherit", value = false)
     public Boolean renderGasSplatterOverlay;
     @BooleanOption(group = "inherit", value = true)
+    public Boolean vampireOSTChange;
+    @BooleanOption(group = "inherit", value = true)
     public Boolean showCreativeTextOnWorthinessArrow;
     @IntOption(group = "inherit", value = 190)
     public Integer justiceFogBrightness;
@@ -90,6 +92,8 @@ public class ClientConfig implements Cloneable {
     public ClientConfig.VanillaMCTweaks vanillaMinecraftTweaks;
     @NestedOption(group = "modded")
     public ClientConfig.TimeStopSettings timeStopSettings;
+    @NestedOption(group = "modded")
+    public ClientConfig.StandTweakSettings standTweakSettings;
 
 
 
@@ -177,6 +181,10 @@ public class ClientConfig implements Cloneable {
         public Boolean tsStandsSeeTSTeleportAndDontFreeze;
         @BooleanOption(group = "inherit", value = true)
         public Boolean simpleTimeStopShader;
+    }
+    public static class StandTweakSettings {
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean anubisPogoCounter;
     }
 
     //CommentedOption(comment = "Should use the hue shift shader to symbolize being in an alternate world?")

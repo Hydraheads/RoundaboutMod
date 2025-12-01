@@ -230,6 +230,8 @@ public class StandPowers extends AbilityScapeBasis {
         return this.isBarraging();
     }
 
+    public int getJumpHeightAddon() {return 0;}
+
     /**If a power can be interrupted, that means you can hit the person using the power to cancel it,
      * like when someone charging a barrage gets their barrage canceled to damage*/
     public boolean canInterruptPower(){
@@ -1887,6 +1889,11 @@ public class StandPowers extends AbilityScapeBasis {
         return false;
     }
 
+
+
+    /// called when clickRelease() cancels something
+    public boolean onClickRelease() {return false;}
+
     /**Ticks through the overlays on your screen such as mandom's time rewind function*/
     public void tickOverlayTicks(){
         if (timeRewindOverlayTicks > -1) {
@@ -2340,6 +2347,13 @@ public class StandPowers extends AbilityScapeBasis {
         }
     }
 
+    //Stands sending simple message
+    public void serverQueried(){
+    }
+
+    //Stands sending simple message
+    public void clientIntUpdated(int integer){
+    }
 
 
     /**The stand is named on the disc so we just use that*/

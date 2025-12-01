@@ -99,7 +99,6 @@ public class RattDartEntity extends AbstractArrow {
 
     public RattDartEntity(Level world, LivingEntity player, int i) {
         super(ModEntities.RATT_DART, player, world);
-       // alignDart(player);
         this.melting = i > 90 || i == -1 ? 0 : 1;
         this.damage = i < 90 ? 0.1F : 3.2F;
         this.charged = i;
@@ -108,32 +107,34 @@ public class RattDartEntity extends AbstractArrow {
 
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
-        if (bounces > 0) {
-            bounces--;
+        if (!this.level().isClientSide()) {
+            if (bounces > 0) {
+                bounces--;
 
-            // yoinked from BladedBowlerHatEntity
-            Vec3 velocity = this.getDeltaMovement();
-            Direction hitDir = $$0.getDirection();
-            Vec3 normal = Vec3.atLowerCornerOf(hitDir.getNormal());
+                // yoinked from BladedBowlerHatEntity
+                Vec3 velocity = this.getDeltaMovement();
+                Direction hitDir = $$0.getDirection();
+                Vec3 normal = Vec3.atLowerCornerOf(hitDir.getNormal());
 
-            // Makes it bounce
-            Vec3 reflected = velocity.subtract(normal.scale(2 * velocity.dot(normal)));
+                // Makes it bounce
+                Vec3 reflected = velocity.subtract(normal.scale(2 * velocity.dot(normal)));
 
-            // Slowly stops it bouncing
-            reflected = reflected.scale(0.5); // less bounce / more bounce :)
+                // Slowly stops it bouncing
+                reflected = reflected.scale(0.5); // less bounce / more bounce :)
 
-            this.setDeltaMovement(reflected);
+                this.setDeltaMovement(reflected);
 
-            Vec3 hitLoc = $$0.getLocation();
-            Vec3 pushOut = normal.scale(0.5);
-            this.setPos(hitLoc.x + pushOut.x, hitLoc.y + pushOut.y, hitLoc.z + pushOut.z);
+                Vec3 hitLoc = $$0.getLocation();
+                Vec3 pushOut = normal.scale(0.2);
+                this.setPos(hitLoc.x + pushOut.x, hitLoc.y + pushOut.y, hitLoc.z + pushOut.z);
 
-        } else {
+            } else {
+                setParticleTrails(false);
+                onHitBlock2($$0);
+            }
             this.DisableSuperThrow();
-            setParticleTrails(false);
-            onHitBlock2($$0);
-        }
 
+        }
     }
 
     public void shootWithVariance(double $$0, double $$1, double $$2, float $$3, float $$4) {
@@ -207,13 +208,11 @@ public class RattDartEntity extends AbstractArrow {
         MobEffectInstance effect = $$1.getEffect(ModEffects.MELTING);
 
 
-        int stack = 0;
-        if ( effect != null) {
-            stack = effect.getAmplifier() + this.melting;
-        } else if (melting > 0) {stack = melting -1;}
+        int stack = effect != null ? effect.getAmplifier() : -1;
+        stack += this.melting;
+
 
         if (stack != -1) {
-            if (stack == 0) {stack = 1;}
             int duration =(int)  (600 * (this.charged > PowersRatt.MaxThreshold ? 1.5 : 1));
             int originalDuration = effect != null ? effect.getDuration() : 0;
             ((LivingEntity) $$1).addEffect(new MobEffectInstance(ModEffects.MELTING, Math.max(duration,originalDuration) , stack), this);
@@ -261,14 +260,9 @@ public class RattDartEntity extends AbstractArrow {
 
 
         Entity $$4 = this.getOwner();
-        DamageSource $$5 = ModDamageTypes.of($$1.level(),ModDamageTypes.STAND,$$4);
-        if ( $$4 instanceof Player P  ) {
-            if (((StandUser) P).roundabout$getStandPowers() instanceof PowersRatt PR) {
-                if (PR.isPlaced()) {
-                    $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.STAND, this,$$4);
-
-                }
-            }
+        DamageSource $$5 = ModDamageTypes.of($$1.level(),ModDamageTypes.STAND);
+        if (this.getOwner() != null) {
+            $$5 = ModDamageTypes.of($$1.level(),ModDamageTypes.STAND,$$4);
         }
         SoundEvent $$6 = ModSounds.RATT_DART_IMPACT_EVENT;
         if ($$1.hurt($$5,this.damage + (($$1 instanceof Mob) ? ClientNetworking.getAppropriateConfig().rattSettings.rattAttackBonusOnMobs : 0) )) {

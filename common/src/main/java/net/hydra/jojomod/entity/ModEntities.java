@@ -16,6 +16,7 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
+import net.hydra.jojomod.entity.substand.SeperatedLegsEntity;
 import net.hydra.jojomod.entity.visages.mobs.*;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -45,6 +46,7 @@ public class ModEntities {
     public static EntityType<CreamEntity> CREAM;
     public static EntityType<SurvivorEntity> SURVIVOR;
     public static EntityType<GreenDayEntity> GREEN_DAY;
+    public static EntityType<SeperatedLegsEntity> SEPERATED_LEGS;
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET;
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET_KING;
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET_DROWNED;

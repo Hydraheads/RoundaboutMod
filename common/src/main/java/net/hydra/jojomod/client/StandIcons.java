@@ -340,6 +340,10 @@ public class StandIcons {
             "textures/gui/icons/walking_heart/spike_attack_mode.png");
     public static final ResourceLocation SPIDER_SKIN = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/walking_heart/spider_skin.png");
+    public static final ResourceLocation WALL_PASS = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/walking_heart/wall_walk_pass.png");
+    public static final ResourceLocation WALL_CUT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/walking_heart/wall_walk_cut.png");
 
     public static final ResourceLocation CINDERELLA_SCALP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/cinderella/deface.png");
@@ -362,6 +366,9 @@ public class StandIcons {
     public static final ResourceLocation D4C_GENERATE_KEY = Roundabout.location("textures/gui/icons/d4c/key_generation.png");
     public static final ResourceLocation D4C_PARALLEL_RUNNING = Roundabout.location("textures/gui/icons/d4c/parallel_running.png");
 
+    public static final ResourceLocation GREEN_DAY_GUARD = Roundabout.location("textures/gui/icons/green_day/guard.png");
+    public static final ResourceLocation GREEN_DAY_PUNCH = Roundabout.location("textures/gui/icons/green_day/punch.png");
+    public static final ResourceLocation GREEN_DAY_BARRAGE = Roundabout.location("textures/gui/icons/green_day/punch_barrage.png");
     public static final ResourceLocation GREEN_DAY_STITCH = Roundabout.location("textures/gui/icons/green_day/stitch.png");
     public static final ResourceLocation GREEN_DAY_ARM_RETURN_RIGHT = Roundabout.location("textures/gui/icons/green_day/arm_return_right.png");
     public static final ResourceLocation GREEN_DAY_ARM_RETURN_LEFT = Roundabout.location("textures/gui/icons/green_day/arm_return_left.png");
@@ -388,6 +395,10 @@ public class StandIcons {
     public static final ResourceLocation ANUBIS_ALLURING_LIGHT = Roundabout.location("textures/gui/icons/anubis/alluring_light.png");
     public static final ResourceLocation ANUBIS_RAGING_LIGHT = Roundabout.location("textures/gui/icons/anubis/raging_light.png");
     public static final ResourceLocation ANUBIS_BACKFLIP = Roundabout.location("textures/gui/icons/anubis/backflip.png");
+    public static final ResourceLocation ANUBIS_RECORD = Roundabout.location("textures/gui/icons/anubis/record.png");
+    public static final ResourceLocation ANUBIS_REPLAY = Roundabout.location("textures/gui/icons/anubis/replay.png");
+    public static final ResourceLocation ANUBIS_SAVE = Roundabout.location("textures/gui/icons/anubis/save.png");
+    public static final ResourceLocation ANUBIS_CANCEL = Roundabout.location("textures/gui/icons/anubis/cancel.png");
 
 
     public static final ResourceLocation SOFT_AND_WET_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,

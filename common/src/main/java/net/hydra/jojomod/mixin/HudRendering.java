@@ -18,6 +18,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersCream;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
@@ -550,6 +551,9 @@ public abstract class HudRendering implements IHudAccess {
                 return true;
             } if (user.roundabout$isPossessed()) {
                 StandHudRender.renderPossessionHud(context,minecraft,getCameraPlayer(),screenWidth,screenHeight,x);
+                return true;
+            } else if (user.roundabout$getStandPowers() instanceof PowersAnubis PA && PA.playTime > 0) {
+                StandHudRender.renderRecordingHud(context,minecraft,getCameraPlayer(),screenWidth,screenHeight,x);
                 return true;
             } else if (user.roundabout$isClashing()) {
                 ((StandUserClientPlayer) minecraft.player).roundabout$setClashDisplayExtraTimestamp(this.minecraft.player.tickCount);

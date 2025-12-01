@@ -304,10 +304,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             EntityDataSerializers.BOOLEAN);
 
     @Unique
-    private static final EntityDataAccessor<String> ROUNDABOUT$STAND_DISC = SynchedEntityData.defineId(LivingEntity.class,
-            EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<ItemStack> ROUNDABOUT$STAND_DISC = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.ITEM_STACK);
 
-    public ItemStack roundabout$standDisc = ItemStack.EMPTY;
     @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$COMBAT_MODE = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.BOOLEAN);
@@ -1260,6 +1259,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
 
+            if (this.roundabout$isMeleeImmune()) {
+                this.roundabout$setMeleeImmunity(this.roundabout$getMeleeImmunity()- 1 );
+            }
+
             //**Stone Mask Clearing*/
             if (isInWater())
                 MainUtil.clearStoneMask(rdbt$this());
@@ -1624,13 +1627,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public float roundabout$getBonusJumpHeight(){
         float TOT = 0;
+
+        if (roundabout$isDazed())
+            return TOT;
+
+
         if (roundabout$getBubbleEncased() == 1){
             TOT+=4;
             }
         TOT+=FateTypes.getJumpHeightAddon((LivingEntity) (Object)this);
         StandUser SU = (StandUser) rdbt$this();
-        if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA && SU.roundabout$getActive()) {
-            TOT += 1;
+        if (SU.roundabout$getStandPowers() != null) {
+            TOT += SU.roundabout$getStandPowers().getJumpHeightAddon();
+            if (SU.roundabout$getStandPowers().cancelJump())
+                return 0;
         }
         return TOT;
     }
@@ -1857,14 +1867,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     @Override
     public ItemStack roundabout$getStandDisc() {
-        return roundabout$standDisc;
+        if (getEntityData().hasItem(ROUNDABOUT$STAND_DISC)) {
+            return this.getEntityData().get(ROUNDABOUT$STAND_DISC);
+        } else {
+            return ItemStack.EMPTY;
+        }
     }
     @Unique
     @Override
     public void roundabout$setStandDisc(ItemStack stack) {
         if (!(this.level().isClientSide)) {
-            roundabout$standDisc = stack;
-            this.getEntityData().set(ROUNDABOUT$STAND_DISC, BuiltInRegistries.ITEM.getKey(stack.getItem()).toString());
+            this.getEntityData().set(ROUNDABOUT$STAND_DISC, stack);
             if (stack.getItem() instanceof StandDiscItem SD){
                 MainUtil.extractDiscData(((LivingEntity)(Object)this), SD, stack);
             }
@@ -1941,6 +1954,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "onSyncedDataUpdated", at = @At(value = "TAIL"), cancellable = true)
     public void roundabout$onSyncedDataUpdated(EntityDataAccessor<?> $$0, CallbackInfo ci){
+        /**
         if ($$0.equals(ROUNDABOUT$STAND_DISC)){
             String updateString = this.entityData.get(ROUNDABOUT$STAND_DISC);
             if (!updateString.isEmpty()){
@@ -1960,6 +1974,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
         }
+         **/
     }
 
     /**The items that shoot and brawl mode are allowed to use*/
@@ -2842,12 +2857,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ADJUSTED_GRAVITY, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ONLY_BLEEDING, true);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$COMBAT_MODE, false);
-            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_DISC, "");
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_DISC, ItemStack.EMPTY);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_ACTIVE, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IDLE_POS, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_SKIN, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_ANIMATION, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$UNIQUE_STAND_MODE_TOGGLE, false);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$MELEE_IMMUNITY, (byte)0 );
         }
     }
 
@@ -2911,6 +2927,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (((IGravityEntity)rdbt$this()).roundabout$getSuffocationTicks() > 0){
                 ci.setReturnValue(false);
                 return;
+            }
+        }
+
+        //melee immunity ticks
+        if (this.roundabout$isMeleeImmune() && !((TimeStop)this.level()).isTimeStoppingEntity(this.rdbt$this()) ) {
+            if ( ($$0.is(DamageTypes.MOB_ATTACK)
+                    || $$0.is(DamageTypes.PLAYER_ATTACK)
+                    || $$0.is(ModDamageTypes.STAND)) && $$0.getEntity() != null ) {
+                ci.cancel();
+                return;
+            } else {
+                this.roundabout$setMeleeImmunity(-1);
             }
         }
 
@@ -3243,16 +3271,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             cancellable = true
     )
     private void roundabout$maxUpStep(CallbackInfoReturnable<Float> cir) {
-        if (roundabout$getStandPowers() instanceof PowersWalkingHeart PW){
-            if (PW.hasExtendedHeelsForWalking()){
-                if (PW.canWallWalkConfig())
-                    cir.setReturnValue(1.0F);
-                else
-                    cir.setReturnValue(2.0F);
-                return;
-            } else if (!(rdbt$this() instanceof Player)){
-                cir.setReturnValue(3.0F);
-            }
+        float stepAddon = roundabout$getStandPowers().getStepHeightAddon();
+        if (rdbt$this() instanceof Player pl){
+            stepAddon += ((IFatePlayer)pl).rdbt$getFatePowers().getStepHeightAddon();
+        }
+        if (stepAddon > 0){
+            cir.setReturnValue(((IEntityAndData)this).roundabout$getStepHeight() + stepAddon);
         }
     }
 
@@ -3702,7 +3726,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             adj = true;
         }
         if ((LivingEntity)(Object)this instanceof Player pl){
+            StandUser SU = (StandUser) pl;
             float fd = ((IFatePlayer)pl).rdbt$getFatePowers().getJumpHeightAddon();
+            if (SU.roundabout$getStandPowers() != null) {
+                fd += SU.roundabout$getStandPowers().getJumpHeightAddon();
+            }
             if (fd > 0){
                 adj = true;
                 $$0 = Math.max(0,$$0-fd);
@@ -3894,6 +3922,32 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         }
     }
+
+
+    @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$MELEE_IMMUNITY = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.BYTE);
+    @Unique
+    @Override
+    public byte roundabout$getMeleeImmunity() {
+        return this.getEntityData().get(ROUNDABOUT$MELEE_IMMUNITY);
+    }
+    @Unique
+    @Override
+    public boolean roundabout$isMeleeImmune() {
+        return this.getEntityData().get(ROUNDABOUT$MELEE_IMMUNITY) > 0;
+    }
+    @Unique
+    @Override
+    public void roundabout$setMeleeImmunity(int i) {
+        this.getEntityData().set(ROUNDABOUT$MELEE_IMMUNITY,(byte)i);
+    }
+    @Unique
+    @Override
+    public void roundabout$setMeleeImmunity(byte i) {
+        this.getEntityData().set(ROUNDABOUT$MELEE_IMMUNITY,i);
+    }
+
         @SuppressWarnings("deprecation")
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
         private void roundabout$roundabouthurt(DamageSource damageSource, float $$1, CallbackInfoReturnable<Boolean> ci) {

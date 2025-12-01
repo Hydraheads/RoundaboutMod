@@ -235,6 +235,12 @@ public class FabricSounds {
         addSound(ModSounds.ANUBIS_ALLURING_ID, ModSounds.ANUBIS_ALLURING_EVENT);
         addSound(ModSounds.ANUBIS_RAGING_ID, ModSounds.ANUBIS_RAGING_EVENT);
         addSound(ModSounds.ANUBIS_BACKFLIP_ID, ModSounds.ANUBIS_BACKFLIP_EVENT);
+        addSound(ModSounds.ANUBIS_POGO_LAUNCH_ID, ModSounds.ANUBIS_POGO_LAUNCH_EVENT);
+        addSound(ModSounds.ANUBIS_POGO_HIT_ID, ModSounds.ANUBIS_POGO_HIT_EVENT);
+        addSound(ModSounds.ANUBIS_BARRAGE_1_ID, ModSounds.ANUBIS_BARRAGE_1_EVENT);
+        addSound(ModSounds.ANUBIS_BARRAGE_1_HIT_ID, ModSounds.ANUBIS_BARRAGE_1_HIT_EVENT);
+        addSound(ModSounds.ANUBIS_BARRAGE_END_ID, ModSounds.ANUBIS_BARRAGE_END_EVENT);
+
 
         addSound(ModSounds.KILLER_QUEEN_BARRAGE_ID, ModSounds.KILLER_QUEEN_BARRAGE_EVENT);
         addSound(ModSounds.KILLER_QUEEN_SUMMON_ID, ModSounds.KILLER_QUEEN_SUMMON_EVENT);
@@ -295,6 +301,7 @@ public class FabricSounds {
         addSound(ModSounds.HEARTBEAT_ID, ModSounds.HEARTBEAT_EVENT);
         addSound(ModSounds.HEARTBEAT2_ID, ModSounds.HEARTBEAT2_EVENT);
         addSound(ModSounds.HEARTBEAT3_ID, ModSounds.HEARTBEAT3_EVENT);
+        addSound(ModSounds.VAMPIRE_MESSAGE_ID, ModSounds.VAMPIRE_MESSAGE_EVENT);
 
         addSound(ModSounds.EXTEND_SPIKES_ID, ModSounds.EXTEND_SPIKES_EVENT);
         addSound(ModSounds.WALL_LATCH_ID, ModSounds.WALL_LATCH_EVENT);
@@ -389,5 +396,10 @@ public class FabricSounds {
 
         addSound(ModSounds.TORTURE_DANCE_ID, ModSounds.TORTURE_DANCE_EVENT);
         addSound(ModSounds.HALLELUJAH_ID, ModSounds.HALLELUJAH_EVENT);
+        addSound(ModSounds.VSONG_SILENT_REVERIES_ID, ModSounds.VSONG_SILENT_REVERIES_EVENT);
+        addSound(ModSounds.VSONG_TWISTED_ID, ModSounds.VSONG_TWISTED_EVENT);
+        addSound(ModSounds.VSONG_GOTHIC_ORGAN_ID, ModSounds.VSONG_GOTHIC_ORGAN_EVENT);
+        addSound(ModSounds.VSONG_DAMNABLE_CEREMONY_ID, ModSounds.VSONG_DAMNABLE_CEREMONY_EVENT);
+        addSound(ModSounds.VSONG_BLOODCURDLING_MOMENTS_ID, ModSounds.VSONG_BLOODCURDLING_MOMENTS_EVENT);
     }
 }

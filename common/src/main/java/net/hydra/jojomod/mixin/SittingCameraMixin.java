@@ -28,7 +28,7 @@ public abstract class SittingCameraMixin {
     @Inject(method = "setup", at = @At("TAIL"))
     private void sittingFixClipping(BlockGetter $$0, Entity $$1, boolean $$2, boolean $$3, float $$4, CallbackInfo ci) {
         if ($$1 instanceof Player player && player instanceof IPlayerEntity ipe) {
-            if (ipe.roundabout$GetPoseEmote() == Poses.SITTING.id) {
+            if (ipe.roundabout$GetPoseEmote() == Poses.SITTING.id && !player.isPassenger()) {
                 Camera self = (Camera)(Object)this;
                 Vec3 fixpos = self.getPosition().add(0.0D, 0.40D, 0.0D);
                 if (ClientUtil.checkIfFirstPerson()) {

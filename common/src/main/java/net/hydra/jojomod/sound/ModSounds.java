@@ -710,6 +710,21 @@ public class ModSounds {
     public static final String ANUBIS_BACKFLIP = "anubis_backflip";
     public static final ResourceLocation ANUBIS_BACKFLIP_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_BACKFLIP);
     public static SoundEvent ANUBIS_BACKFLIP_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_BACKFLIP_ID);
+    public static final String ANUBIS_POGO_LAUNCH = "anubis_pogo_launch";
+    public static final ResourceLocation ANUBIS_POGO_LAUNCH_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_POGO_LAUNCH);
+    public static SoundEvent ANUBIS_POGO_LAUNCH_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_POGO_LAUNCH_ID);
+    public static final String ANUBIS_POGO_HIT = "anubis_pogo_hit";
+    public static final ResourceLocation ANUBIS_POGO_HIT_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_POGO_HIT);
+    public static SoundEvent ANUBIS_POGO_HIT_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_POGO_HIT_ID);
+    public static final String ANUBIS_BARRAGE_1 = "anubis_barrage_1";
+    public static final ResourceLocation ANUBIS_BARRAGE_1_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_BARRAGE_1);
+    public static SoundEvent ANUBIS_BARRAGE_1_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_BARRAGE_1_ID);
+    public static final String ANUBIS_BARRAGE_1_HIT = "anubis_barrage_1_hit";
+    public static final ResourceLocation ANUBIS_BARRAGE_1_HIT_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_BARRAGE_1_HIT);
+    public static SoundEvent ANUBIS_BARRAGE_1_HIT_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_BARRAGE_1_HIT_ID);
+    public static final String ANUBIS_BARRAGE_END = "anubis_barrage_end";
+    public static final ResourceLocation ANUBIS_BARRAGE_END_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_BARRAGE_END);
+    public static SoundEvent ANUBIS_BARRAGE_END_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_BARRAGE_END_ID);
 
 
 
@@ -894,6 +909,12 @@ public class ModSounds {
     public static final String VAMPIRE_WALL_GRIP = "vampire_wall_grip";
     public static final ResourceLocation VAMPIRE_WALL_GRIP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VAMPIRE_WALL_GRIP);
     public static SoundEvent VAMPIRE_WALL_GRIP_EVENT = SoundEvent.createVariableRangeEvent(VAMPIRE_WALL_GRIP_ID);
+
+    //eraweB
+    public static final String VAMPIRE_MESSAGE = "vampire_message";
+    public static final ResourceLocation VAMPIRE_MESSAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VAMPIRE_MESSAGE);
+    public static SoundEvent VAMPIRE_MESSAGE_EVENT = SoundEvent.createVariableRangeEvent(VAMPIRE_MESSAGE_ID);
+
 
 
     public static final String HEARTBEAT = "heartbeat";
@@ -1200,6 +1221,29 @@ public class ModSounds {
     public static final String HALLELUJAH = "hallelujah";
     public static final ResourceLocation HALLELUJAH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HALLELUJAH);
     public static SoundEvent HALLELUJAH_EVENT = SoundEvent.createVariableRangeEvent(HALLELUJAH_ID);
+
+
+
+    public static final String VSONG_SILENT_REVERIES = "vsong_silent_reveries";
+    public static final ResourceLocation VSONG_SILENT_REVERIES_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VSONG_SILENT_REVERIES);
+    public static SoundEvent VSONG_SILENT_REVERIES_EVENT = SoundEvent.createVariableRangeEvent(VSONG_SILENT_REVERIES_ID);
+
+    public static final String VSONG_TWISTED = "vsong_twisted";
+    public static final ResourceLocation VSONG_TWISTED_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VSONG_TWISTED);
+    public static SoundEvent VSONG_TWISTED_EVENT = SoundEvent.createVariableRangeEvent(VSONG_TWISTED_ID);
+
+    public static final String VSONG_GOTHIC_ORGAN = "vsong_gothic_organ";
+    public static final ResourceLocation VSONG_GOTHIC_ORGAN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VSONG_GOTHIC_ORGAN);
+    public static SoundEvent VSONG_GOTHIC_ORGAN_EVENT = SoundEvent.createVariableRangeEvent(VSONG_GOTHIC_ORGAN_ID);
+
+    public static final String VSONG_BLOODCURDLING_MOMENTS = "vsong_bloodcurdling_moments";
+    public static final ResourceLocation VSONG_BLOODCURDLING_MOMENTS_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VSONG_BLOODCURDLING_MOMENTS);
+    public static SoundEvent VSONG_BLOODCURDLING_MOMENTS_EVENT = SoundEvent.createVariableRangeEvent(VSONG_BLOODCURDLING_MOMENTS_ID);
+
+    public static final String VSONG_DAMNABLE_CEREMONY = "vsong_damnable_ceremony";
+    public static final ResourceLocation VSONG_DAMNABLE_CEREMONY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VSONG_DAMNABLE_CEREMONY);
+    public static SoundEvent VSONG_DAMNABLE_CEREMONY_EVENT = SoundEvent.createVariableRangeEvent(VSONG_DAMNABLE_CEREMONY_ID);
+
 
 
     public static void registerSoundEvents(){

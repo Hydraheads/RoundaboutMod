@@ -133,6 +133,10 @@ public class AbilityScapeBasis {
         return false;
     }
 
+    public float getStepHeightAddon(){
+        return 0;
+    }
+
     /** Make a stand ability cancel you using items */
     public boolean cancelItemUse() {
         return false;
@@ -1061,6 +1065,8 @@ public class AbilityScapeBasis {
                 return;
             held1 = true;
 
+            cancelPlayerPose();
+
             if (!isHoldingSneak() && !isGuarding())
             {
                 powerActivate(PowerContext.SKILL_1_NORMAL);
@@ -1094,6 +1100,8 @@ public class AbilityScapeBasis {
             if (held2)
                 return;
             held2 = true;
+
+            cancelPlayerPose();
 
             if (!isHoldingSneak() && !isGuarding())
             {
@@ -1129,6 +1137,8 @@ public class AbilityScapeBasis {
                 return;
             held3 = true;
 
+            cancelPlayerPose();
+
             if (!isHoldingSneak() && !isGuarding())
             {
                 powerActivate(PowerContext.SKILL_3_NORMAL);
@@ -1163,6 +1173,8 @@ public class AbilityScapeBasis {
                 return;
             held4 = true;
 
+            cancelPlayerPose();
+
             if (!isHoldingSneak() && !isGuarding())
             {
                 powerActivate(PowerContext.SKILL_4_NORMAL);
@@ -1190,6 +1202,15 @@ public class AbilityScapeBasis {
         }
     }
 
+    public void cancelPlayerPose(){
+        if (self instanceof Player player) {
+            Poses poseEmote = Poses.getPosFromByte(((IPlayerEntity)player).roundabout$GetPoseEmote());
+            if (poseEmote != Poses.NONE && poseEmote != Poses.VAMPIRE_TRANSFORMATION) {
+                ((IPlayerEntity) player).roundabout$SetPos(Poses.NONE.id);
+                C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_STRIKE_POSE, Poses.NONE.id);
+            }
+        }
+    }
 
     public void preButtonInput4(boolean keyIsDown, Options options){
         if (!hasStandActive(this.getSelf())) {
@@ -1397,7 +1418,7 @@ public class AbilityScapeBasis {
     public int impactAirTime = -1;
     public int impactSlowdown = -1;
     public boolean canFallBrace(){
-        return this.getSelf().fallDistance > 3 && impactSlowdown <= -1 && !((StandUser)this.self).roundabout$isBubbleEncased();
+        return this.getSelf().fallDistance > (3+ getStandUserSelf().roundabout$getBonusJumpHeight()) && impactSlowdown <= -1 && !((StandUser)this.self).roundabout$isBubbleEncased();
     }
 
     /**every entity the client renders is checked against this, overrride and use it to see if they can be highlighted

@@ -35,6 +35,8 @@ public class JusticeTargetGoal {
                     mob.setLastHurtByPlayer(null);
                     mob.setLastHurtByMob(null);
                 }
+            } else {
+
             }
         } else if (mob instanceof IronGolem ZE && targetMob instanceof Player $$0){
             IPlayerEntity ple = ((IPlayerEntity) $$0);

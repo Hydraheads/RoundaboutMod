@@ -455,7 +455,7 @@ public class Config implements Cloneable {
         public Integer maxCorpses;
         @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
         public Integer standUserMobMinionCount;
-        @IntOption(group = "inherit", value = 90, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 90, min = 1, max = 72000)
         public Integer skeletonFireInterval;
         @BooleanOption(group = "inherit", value = true)
         public Boolean corpsesUseOwnerTeam;
@@ -612,7 +612,7 @@ public class Config implements Cloneable {
         public Boolean enableRatt;
         @FloatOption(group = "inherit", value = 1F, min = 0F, max = 100F)
         public Float rattAttackBonusOnMobs;
-        @FloatOption(group = "inherit", value = 1F, min = 0F, max = 100F)
+        @FloatOption(group = "inherit", value = 2.5F, min = 0F, max = 100F)
         public Float rattAttackBonusOnBosses;
         @IntOption(group = "inherit", value = 30, min = 0, max = 100)
         public Integer rattMaxDespawnRange;

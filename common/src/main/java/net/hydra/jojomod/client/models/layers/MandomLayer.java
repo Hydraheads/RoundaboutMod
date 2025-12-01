@@ -84,6 +84,10 @@ public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                         float r = isHurt ? 1.0F : 1.0F;
                         float g = isHurt ? 0.4F : 1.0F;
                         float b = isHurt ? 0.4F : 1.0F;
+                        if (entity.isBaby()){
+                            poseStack.scale(0.6F, 0.6F, 0.6F);
+                            poseStack.translate(0.3, 1, -0.3);
+                        }
                         ModStrayModels.MANDOM.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                                 r, g, b, heyFull, skin);
                         ClientUtil.popPoseAndCooperate(poseStack,26);

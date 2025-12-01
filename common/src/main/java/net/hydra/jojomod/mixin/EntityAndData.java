@@ -180,7 +180,9 @@ public abstract class EntityAndData implements IEntityAndData {
 
             /**Every 20 ticks save a second on the entity for mandom rewinding*/
             if (roundabout$secondQue.isEmpty() || this.tickCount % 20 == 0) {
-                roundabout$addSecondToQueue(SavedSecond.saveEntitySecond((Entity) (Object) this));
+                if (!((TimeStop)level()).inTimeStopRange(((Entity) (Object)this))) {
+                    roundabout$addSecondToQueue(SavedSecond.saveEntitySecond((Entity) (Object) this));
+                }
             }
         }
     }
@@ -432,6 +434,10 @@ public abstract class EntityAndData implements IEntityAndData {
         roundabout$PrevTick = 0;
     }
 
+    @Override
+    public float roundabout$getStepHeight() {
+        return this.maxUpStep;
+    }
 
     /**In a timestop, fire doesn't tick*/
     @Inject(method = "setRemainingFireTicks", at = @At("HEAD"), cancellable = true)
@@ -581,6 +587,8 @@ public abstract class EntityAndData implements IEntityAndData {
     @Shadow public abstract SynchedEntityData getEntityData();
 
     @Shadow public abstract boolean isInLava();
+
+    @Shadow private float maxUpStep;
 
     @Override
     @Unique

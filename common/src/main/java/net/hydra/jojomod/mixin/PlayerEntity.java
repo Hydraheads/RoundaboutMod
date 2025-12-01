@@ -22,8 +22,11 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.PlayerMaskSlots;
+import net.hydra.jojomod.util.S2CPacketUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -162,6 +165,20 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     protected boolean rdbt$attemptedQuery = false;
 
     @Unique
+    private byte rdbt$respawnStrategy = 0;
+    @Unique
+    @Override
+    public void rdbt$setRespawnStrategy(byte strat){
+        rdbt$respawnStrategy = strat;
+    }
+    @Unique
+    @Override
+    public byte rdbt$getRespawnStrategy(){
+        return rdbt$respawnStrategy;
+    }
+
+
+    @Unique
     @Override
     public void rdbt$queryServerForCooldowns(){
 
@@ -222,6 +239,48 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
         return 0;
     }
+    @Unique
+    @Override
+    public void roundabout$qmessage(int messageID){
+        rdbt$qmessage = messageID;
+        rdbt$qmessageTime = 60;
+    }
+    public int rdbt$qmessage = 0;
+    public int rdbt$qmessageTime = 0;
+    @Unique
+    public void roundabout$qmessageTick(){
+        if (rdbt$qmessageTime > 0){
+            rdbt$qmessageTime--;
+
+            if (rdbt$qmessageTime == 0){
+                switch (rdbt$qmessage){
+                    case 1 -> displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireStand_2").withStyle(ChatFormatting.WHITE), true);
+                    case 2 -> rdbt$vamp1();
+                    case 3 -> rdbt$vamp2();
+                    case 4 -> rdbt$vamp3();
+                    default -> displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireStand").withStyle(ChatFormatting.WHITE), true);
+                }
+            }
+        }
+    }
+
+    @Unique
+    public void rdbt$vamp1(){
+        displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireVampire2").withStyle(ChatFormatting.WHITE).withStyle(ChatFormatting.BOLD), true);
+        roundabout$qmessage(3);
+    }
+    @Unique
+    public void rdbt$vamp2(){
+        displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireVampire3").withStyle(ChatFormatting.WHITE).withStyle(ChatFormatting.BOLD), true);
+        roundabout$qmessage(4);
+    }
+    @Unique
+    public void rdbt$vamp3(){
+        displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireVampire4").withStyle(ChatFormatting.DARK_RED).withStyle(ChatFormatting.BOLD), true);
+        S2CPacketUtil.vampireMessage(((Player) (Object)this));
+    }
+
+
     @Unique
     private PlayerMaskSlots roundabout$maskInventory = new PlayerMaskSlots(((Player)(Object)this));
 
@@ -1205,6 +1264,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 }
 
             }
+        } else {
+            roundabout$qmessageTick();
         }
         if (!(this.getVehicle() != null && this.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted())) {
             ((StandUser) this).roundabout$setRestrainedTicks(-1);
@@ -1423,6 +1484,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public HumanoidArm getMainArm() {
         return null;
     }
+
+    @Shadow public abstract void displayClientMessage(Component component, boolean bl);
 
     @Inject(method = "canHarmPlayer", at=@At("HEAD"), cancellable = true)
     private void roundabout$canHarmPlayer(Player player, CallbackInfoReturnable<Boolean> cir)

@@ -184,7 +184,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             IPlayerEntity ipe = ((IPlayerEntity) $$0);
             byte poseEmote = ipe.roundabout$GetPoseEmote();
             boolean pose = poseEmote != Poses.NONE.id;
-            if (pose) {
+            if (pose && !P.isPassenger()) {
                 if (poseEmote != Poses.SITTING.id) {
                     this.head.resetPose();
                 }
@@ -198,40 +198,61 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             boolean firstPerson = net.minecraft.client.Minecraft.getInstance().options.getCameraType().isFirstPerson();
             Player mainP = ClientUtil.getPlayer();
             if (!firstPerson || !(mainP != null && $$0.is(mainP))){
-                this.roundabout$animate(ipe.getWry(), Poses.WRY.ad, $$3, 1f);
-                this.roundabout$animate(ipe.getGiorno(), Poses.GIORNO.ad, $$3, 1f);
-                this.roundabout$animate(ipe.getJoseph(), Poses.JOSEPH.ad, $$3, 1f);
-                this.roundabout$animate(ipe.getKoichi(), Poses.KOICHI.ad, $$3, 1f);
-                this.roundabout$animate(ipe.getOhNo(), Poses.OH_NO.ad, $$3, 1f);
-                this.roundabout$animate(ipe.getTortureDance(), Poses.TORTURE_DANCE.ad, $$3, 1f);
-                this.roundabout$animate(ipe.getWamuu(), Poses.WAMUU.ad, $$3, 1f);
-                this.roundabout$animate(ipe.getJotaro(), Poses.JOTARO.ad, $$3, 1f);
-                this.roundabout$animate(ipe.getJonathan(), Poses.JONATHAN.ad, $$3, 1f);
-                this.roundabout$animate(ipe.getWatch(), Poses.WATCH.ad, $$3, 1f);
-                this.roundabout$animate(ipe.getSitting(), Poses.SITTING.ad, $$3, 1f);
-                this.roundabout$animate(ipe.getVampire(), Poses.VAMPIRE_TRANSFORMATION.ad, $$3, 1f);
+                if (!P.isPassenger()) {
+                    this.roundabout$animate(ipe.getWry(), Poses.WRY.ad, $$3, 1f);
+                    this.roundabout$animate(ipe.getGiorno(), Poses.GIORNO.ad, $$3, 1f);
+                    this.roundabout$animate(ipe.getJoseph(), Poses.JOSEPH.ad, $$3, 1f);
+                    this.roundabout$animate(ipe.getKoichi(), Poses.KOICHI.ad, $$3, 1f);
+                    this.roundabout$animate(ipe.getOhNo(), Poses.OH_NO.ad, $$3, 1f);
+                    this.roundabout$animate(ipe.getTortureDance(), Poses.TORTURE_DANCE.ad, $$3, 1f);
+                    this.roundabout$animate(ipe.getWamuu(), Poses.WAMUU.ad, $$3, 1f);
+                    this.roundabout$animate(ipe.getJotaro(), Poses.JOTARO.ad, $$3, 1f);
+                    this.roundabout$animate(ipe.getJonathan(), Poses.JONATHAN.ad, $$3, 1f);
+                    this.roundabout$animate(ipe.getWatch(), Poses.WATCH.ad, $$3, 1f);
+                    this.roundabout$animate(ipe.getSitting(), Poses.SITTING.ad, $$3, 1f);
+                    this.roundabout$animate(ipe.getVampire(), Poses.VAMPIRE_TRANSFORMATION.ad, $$3, 1f);
+                }
 
                 if ($$0.getUseItem().is(ModItems.ANUBIS_ITEM)
                         || (SU.roundabout$getStandPowers() instanceof PowersAnubis
                         && SU.roundabout$getActive()
                         && SU.roundabout$getStandAnimation() != PowerIndex.NONE) ) {
                     this.body.resetPose();
-                    this.rightLeg.resetPose();
-                    this.leftLeg.resetPose();
                     this.rightArm.resetPose();
                     this.leftArm.resetPose();
+                    if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+                        if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_MOVEMENT) {
+                            this.head.resetPose();
+                        }
+                        if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+                            this.leftLeg.resetPose();
+                            this.rightLeg.resetPose();
+                            this.head.resetPose();
+                        }
+                    }
+
                 } else {
                     ipe.roundabout$getThirdPersonAnubisUnsheath().stop();
                     ipe.roundabout$getAnubisUnsheath().stop();
                 }
                 this.roundabout$animate(ipe.roundabout$getThirdPersonAnubisUnsheath(), AnubisAnimations.ThirdPersonUnsheathe,$$3,1F);
-
                 if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA && SU.roundabout$getActive()) {
                     boolean start = false;
                     AnimationDefinition anim = null;
                     switch (SU.roundabout$getStandAnimation()) {
                         case PowerIndex.SNEAK_MOVEMENT -> {
-                            start = false;
+                            start = true;
+                            if (PA.getAttackTime() < 16) {
+                                anim = AnubisAnimations.Backflip;
+                            }
+                        }
+                        case PowerIndex.GUARD -> {
+                            start = true;
+                            anim = AnubisAnimations.ThirdPersonBlock;
+                        }
+                        case PowerIndex.SNEAK_ATTACK_CHARGE -> {
+                            start = true;
+                            anim = AnubisAnimations.PogoReady;
                         }
                     }
                     if (start) {
@@ -320,25 +341,27 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
     }
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "TAIL"))
     public void roundabout$SetupAnim3(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
-        if ($$0 instanceof Player) {
+        if ($$0 instanceof Player P) {
             IPlayerEntity ipe = ((IPlayerEntity) $$0);
 
 
             if (ipe.roundabout$GetPoseEmote() != Poses.NONE.id) {
 
                 this.cloak.resetPose();
-                this.roundabout$animate2(ipe.getWry(), Poses.WRY.ad, $$3, 1f);
-                this.roundabout$animate2(ipe.getGiorno(), Poses.GIORNO.ad, $$3, 1f);
-                this.roundabout$animate2(ipe.getJoseph(), Poses.JOSEPH.ad, $$3, 1f);
-                this.roundabout$animate2(ipe.getKoichi(), Poses.KOICHI.ad, $$3, 1f);
-                this.roundabout$animate2(ipe.getOhNo(), Poses.OH_NO.ad, $$3, 1f);
-                this.roundabout$animate2(ipe.getTortureDance(), Poses.TORTURE_DANCE.ad, $$3, 1f);
-                this.roundabout$animate2(ipe.getWamuu(), Poses.WAMUU.ad, $$3, 1f);
-                this.roundabout$animate2(ipe.getJotaro(), Poses.JOTARO.ad, $$3, 1f);
-                this.roundabout$animate2(ipe.getJonathan(), Poses.JONATHAN.ad, $$3, 1f);
-                this.roundabout$animate2(ipe.getWatch(), Poses.WATCH.ad, $$3, 1f);
-                this.roundabout$animate2(ipe.getSitting(), Poses.SITTING.ad, $$3, 1f);
-                this.roundabout$animate2(ipe.getVampire(), Poses.VAMPIRE_TRANSFORMATION.ad, $$3, 1f);
+                if (!P.isPassenger()) {
+                    this.roundabout$animate2(ipe.getWry(), Poses.WRY.ad, $$3, 1f);
+                    this.roundabout$animate2(ipe.getGiorno(), Poses.GIORNO.ad, $$3, 1f);
+                    this.roundabout$animate2(ipe.getJoseph(), Poses.JOSEPH.ad, $$3, 1f);
+                    this.roundabout$animate2(ipe.getKoichi(), Poses.KOICHI.ad, $$3, 1f);
+                    this.roundabout$animate2(ipe.getOhNo(), Poses.OH_NO.ad, $$3, 1f);
+                    this.roundabout$animate2(ipe.getTortureDance(), Poses.TORTURE_DANCE.ad, $$3, 1f);
+                    this.roundabout$animate2(ipe.getWamuu(), Poses.WAMUU.ad, $$3, 1f);
+                    this.roundabout$animate2(ipe.getJotaro(), Poses.JOTARO.ad, $$3, 1f);
+                    this.roundabout$animate2(ipe.getJonathan(), Poses.JONATHAN.ad, $$3, 1f);
+                    this.roundabout$animate2(ipe.getWatch(), Poses.WATCH.ad, $$3, 1f);
+                    this.roundabout$animate2(ipe.getSitting(), Poses.SITTING.ad, $$3, 1f);
+                    this.roundabout$animate2(ipe.getVampire(), Poses.VAMPIRE_TRANSFORMATION.ad, $$3, 1f);
+                }
 
                 this.roundabout$animate(ipe.roundabout$getThirdPersonAnubisUnsheath(), AnubisAnimations.ThirdPersonUnsheathe,$$3,1F);
 

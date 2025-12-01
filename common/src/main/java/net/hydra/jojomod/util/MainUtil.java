@@ -145,6 +145,11 @@ public class MainUtil {
     public static ArrayList<String> standBlockGrabBlacklist = Lists.newArrayList();
     public static ArrayList<String> naturalStandUserMobBlacklist = Lists.newArrayList();
     public static ArrayList<String> hypnotismMobBlackList = Lists.newArrayList();
+
+    public static ArrayList<String> addedMobsWithRedBlood = Lists.newArrayList();
+    public static ArrayList<String> addedMobsWithBlueBlood = Lists.newArrayList();
+    public static ArrayList<String> addedMobsWithEnderBlood = Lists.newArrayList();
+    public static ArrayList<String> removeBloodFromThese = Lists.newArrayList();
     public static Set<String> foodThatGivesBloodList = Set.of();
     Map<String, FoodBloodStats> foodThatGivesBloodMap;
 
@@ -223,8 +228,46 @@ public class MainUtil {
         return false;
     }
     public static boolean isHypnotismTargetBlacklisted(Entity ent){
+        if (ent == null)
+            return false;
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
         if (hypnotismMobBlackList != null && !hypnotismMobBlackList.isEmpty() && rl != null && hypnotismMobBlackList.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isWhitelistedRedBlood(Entity ent){
+        if (ent == null)
+            return false;
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        if (addedMobsWithRedBlood != null && !addedMobsWithRedBlood.isEmpty() && rl != null && addedMobsWithRedBlood.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isWhitelistedBlueBlood(Entity ent){
+        if (ent == null)
+            return false;
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        if (addedMobsWithBlueBlood != null && !addedMobsWithBlueBlood.isEmpty() && rl != null && addedMobsWithBlueBlood.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isWhitelistedEnderBlood(Entity ent){
+        if (ent == null)
+            return false;
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        if (addedMobsWithEnderBlood != null && !addedMobsWithEnderBlood.isEmpty() && rl != null && addedMobsWithEnderBlood.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isBloodBlacklisted(Entity ent){
+        if (ent == null)
+            return false;
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        if (removeBloodFromThese != null && !removeBloodFromThese.isEmpty() && rl != null && removeBloodFromThese.contains(rl.toString())){
             return true;
         }
         return false;
@@ -786,17 +829,23 @@ public class MainUtil {
         }
         return null;
     }
-    public static boolean getMobBleed(Entity Mob) {
+    public static boolean getMobBleed(Entity mob) {
         if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.disableBleedingAndBloodSplatters){
             return false;
         }
 
-        if (Mob instanceof LivingEntity){
-            return Mob instanceof Zombie || (Mob instanceof Animal && !(Mob instanceof SkeletonHorse) && !(Mob instanceof ZombieHorse))
-                    || Mob instanceof Villager || Mob instanceof WaterAnimal || Mob instanceof WanderingTrader || Mob instanceof Witch
-                    || Mob instanceof AbstractIllager || Mob instanceof Creeper || Mob instanceof Player || Mob instanceof AbstractPiglin
-                    || Mob instanceof JojoNPC || Mob instanceof Zoglin || Mob instanceof Ravager
-                    || Mob instanceof Spider || Mob instanceof EnderDragon || Mob instanceof EnderMan;
+        if (isBloodBlacklisted(mob))
+            return false;
+
+        if (isWhitelistedRedBlood(mob) || isWhitelistedBlueBlood(mob) || isWhitelistedEnderBlood(mob))
+            return true;
+
+        if (mob instanceof LivingEntity){
+            return mob instanceof Zombie || (mob instanceof Animal && !(mob instanceof SkeletonHorse) && !(mob instanceof ZombieHorse))
+                    || mob instanceof Villager || mob instanceof WaterAnimal || mob instanceof WanderingTrader || mob instanceof Witch
+                    || mob instanceof AbstractIllager || mob instanceof Creeper || mob instanceof Player || mob instanceof AbstractPiglin
+                    || mob instanceof JojoNPC || mob instanceof Zoglin || mob instanceof Ravager
+                    || mob instanceof Spider || mob instanceof EnderDragon || mob instanceof EnderMan;
         }
         return false;
     }
@@ -866,14 +915,14 @@ public class MainUtil {
         }
     }
     public static boolean hasBlueBlood(Entity target){
-        if (target instanceof Spider || target instanceof Bee || target instanceof Silverfish  || target instanceof Squid){
+        if (isWhitelistedBlueBlood(target) || target instanceof Spider || target instanceof Bee || target instanceof Silverfish  || target instanceof Squid){
             return true;
         } else {
             return false;
         }
     }
     public static boolean hasEnderBlood(Entity target){
-        if (target instanceof EnderMan || target instanceof Endermite || target instanceof EnderDragon){
+        if (isWhitelistedEnderBlood(target) || target instanceof EnderMan || target instanceof Endermite || target instanceof EnderDragon){
             return true;
         } else {
             return false;
@@ -1144,6 +1193,13 @@ public class MainUtil {
             return;
         }
         takeUnresistableKnockbackWithY(entity,strength,x,y,z);
+    }
+    public static void takeNoKnockback(Entity entity) {
+        entity.hurtMarked = true;
+        entity.setDeltaMovement(0,
+                0,
+                0);
+        entity.hasImpulse = true;
     }
     public static void takeUnresistableKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
         entity.hurtMarked = true;
@@ -2151,6 +2207,9 @@ public class MainUtil {
                 ((IPlayerEntity) player).roundabout$setShapeShift(data);
             }
 
+        } else if (context == PacketDataIndex.BYTE_RESPAWN_STRATEGY) {
+            ((IPlayerEntity) player).rdbt$setRespawnStrategy(data);
+            S2CPacketUtil.sendSimpleByteToClientPacket(player,PacketDataIndex.S2C_RESPAWN);
         }
     }
     /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
@@ -2261,6 +2320,10 @@ public class MainUtil {
                 if (((IFatePlayer)player).rdbt$getFatePowers() instanceof VampiricFate vp){
                     vp.setSpeedActivated(0);
                 }
+            }
+        } else if (context == PacketDataIndex.QUERY_STAND_UPDATE) {
+            if (player != null) {
+                ((StandUser)player).roundabout$getStandPowers().serverQueried();
             }
         }
     }

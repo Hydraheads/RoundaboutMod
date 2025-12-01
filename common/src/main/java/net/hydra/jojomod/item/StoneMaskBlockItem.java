@@ -1,5 +1,7 @@
 package net.hydra.jojomod.item;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
@@ -8,15 +10,13 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Equipable;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class StoneMaskBlockItem extends BlockItem {
     public StoneMaskBlockItem(Block $$0, Properties $$1) {
@@ -72,5 +72,20 @@ public class StoneMaskBlockItem extends BlockItem {
 
             return null;
         }
+    }
+
+
+    @Override
+    public void appendHoverText(ItemStack $$0, @org.jetbrains.annotations.Nullable Level $$1, List<Component> $$2, TooltipFlag $$3) {
+        $$2.add(Component.translatable("leveling.roundabout.disc_wip").withStyle(ChatFormatting.RED));
+        $$2.add(Component.translatable("leveling.roundabout.disc_wip_2").withStyle(ChatFormatting.RED));
+
+        $$2.add(Component.translatable("roundabout.dev_status.dev_status").withStyle(ChatFormatting.WHITE)
+                .append(" ")
+                .append(Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA)));
+        $$2.add(Component.translatable("roundabout.dev_status.dev_name").withStyle(ChatFormatting.WHITE)
+                .append(" ")
+                .append(Component.literal(  "Hydra").withStyle(ChatFormatting.YELLOW))
+        );
     }
 }

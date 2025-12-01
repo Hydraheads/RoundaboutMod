@@ -31,7 +31,7 @@ public abstract class ChairCameraMixin implements ICamera {
             if (ClientUtil.checkIfFirstPerson()) {
                 IPlayerEntity ipe = (IPlayerEntity) player;
                 byte poseEmote = ipe.roundabout$GetPoseEmote();
-                if (poseEmote == Poses.SITTING.id) {
+                if (poseEmote == Poses.SITTING.id && !player.isPassenger()) {
                     this.eyeHeightOld = this.eyeHeight;
                     this.eyeHeight += (this.entity.getEyeHeight() - this.eyeHeight) * 0.5F;
                     ci.cancel();
@@ -46,7 +46,7 @@ public abstract class ChairCameraMixin implements ICamera {
             if (ClientUtil.checkIfFirstPerson()) {
                 IPlayerEntity ipe = (IPlayerEntity) player;
                 byte poseEmote = ipe.roundabout$GetPoseEmote();
-                if (poseEmote == Poses.SITTING.id) {
+                if (poseEmote == Poses.SITTING.id && !player.isPassenger()) {
                     Camera self = (Camera) (Object) this;
                     Vec3 pos = self.getPosition();
                     double loweredY = pos.y - (player.getEyeHeight() * 0.35F);
