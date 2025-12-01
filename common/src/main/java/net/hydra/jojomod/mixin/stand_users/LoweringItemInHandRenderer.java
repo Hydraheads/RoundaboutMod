@@ -69,7 +69,7 @@ public class LoweringItemInHandRenderer {
                 )
 
                 &&
-        !this.minecraft.player.isUsingItem()){
+        !this.minecraft.player.isUsingItem()) {
             if (roundabout$ticker == 0){
                 this.mainHandHeight = 0;
                 this.offHandHeight = 0;

@@ -2288,6 +2288,13 @@ public class MainUtil {
         return false;
     }
 
+    public static boolean isUsingSnubnose(Player player) {
+        if (player.getUseItem().getItem() instanceof SnubnoseRevolverItem) {
+            return true;
+        }
+        return false;
+    }
+
     /**A generalized packet for sending floats to the server. Context is what to do with the data byte*/
     public static void handleFloatPacketC2S(Player player, float data, byte context){
         if (context == PacketDataIndex.FLOAT_VELOCITY_BARBED_WIRE) {

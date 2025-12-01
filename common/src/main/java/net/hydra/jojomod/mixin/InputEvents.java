@@ -385,8 +385,10 @@ public abstract class InputEvents implements IInputEvents {
         @Unique
         public boolean roundabout$TryGuard(){
             StandUser standComp = ((StandUser) player);
-            if (standComp.roundabout$getActive() && standComp.roundabout$getStandPowers().interceptGuard()) {
-                return standComp.roundabout$getStandPowers().preCheckButtonInputGuard(this.options.keyUse.isDown(),this.options);
+            if (!(player.getMainHandItem().getItem() instanceof FirearmItem) && !(player.getOffhandItem().getItem() instanceof FirearmItem)) {
+                if (standComp.roundabout$getActive() && standComp.roundabout$getStandPowers().interceptGuard()) {
+                    return standComp.roundabout$getStandPowers().preCheckButtonInputGuard(this.options.keyUse.isDown(), this.options);
+                }
             }
             return false;
         }
@@ -1111,7 +1113,7 @@ public abstract class InputEvents implements IInputEvents {
                 if (rdbt$isInitialized(player)) {
                 powers.preCheckButtonInputUse(this.options.keyUse.isDown(),this.options);
                 }
-                if (!(player.getMainHandItem().getItem() instanceof FirearmItem)) {
+                if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
                     if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {
                         if (rdbt$isInitialized(player)) {
                             powers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
@@ -1120,7 +1122,7 @@ public abstract class InputEvents implements IInputEvents {
                     }
                 }
 
-                if (!(player.getMainHandItem().getItem() instanceof FirearmItem)) {
+                if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
                     if (!isMining && standComp.roundabout$isGuarding() && !standComp.roundabout$isBarraging()) {
                         if (rdbt$isInitialized(player)) {
                             powers.preCheckButtonInputBarrage(this.options.keyAttack.isDown(), this.options);

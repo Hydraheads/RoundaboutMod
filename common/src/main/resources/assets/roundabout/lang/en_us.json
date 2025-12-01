@@ -527,7 +527,7 @@
   "death.attack.blood_drain.item": "%1$s lost all color.",
   "death.attack.blood_drain.player": "%1$s lost all color.",
   "death.attack.blood_drain.player.item": "%1$s lost all color.",
-  "death.attack.bullet": "%1$s became a pin cushion.",
+  "death.attack.bullet": "%1$s was shot through the heart.",
 
   "item.glaive.charge_power": "Charge Attack",
 

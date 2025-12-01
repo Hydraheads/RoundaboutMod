@@ -20,8 +20,8 @@ public class FirearmFirstPersonAnimations {
                     new Keyframe(0.125F, KeyframeAnimations.degreeVec(-4.5F, 16.0F, 31.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
-                    new Keyframe(0.0F, KeyframeAnimations.posVec(4.0F, -0.5F, -1.45F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.125F, KeyframeAnimations.posVec(4.0F, -0.5F, -1.45F), AnimationChannel.Interpolations.CATMULLROM)
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 8.5F, 7.55F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.125F, KeyframeAnimations.posVec(0.0F, 8.5F, 8.55F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .build();
 

@@ -35,8 +35,9 @@ public abstract class FirearmMinecraftStartAttackMixin {
     private void ifStatementForStartItemForFirearms(CallbackInfo ci) {
         if (player != null) {
             ItemStack itemStack = player.getMainHandItem();
+            ItemStack itemStack2 = player.getOffhandItem();
 
-            if (this.player.isUsingItem() && itemStack.getItem() instanceof FirearmItem) {
+            if ((this.player.isUsingItem() && itemStack.getItem() instanceof FirearmItem) || (this.player.isUsingItem() && itemStack2.getItem() instanceof FirearmItem)) {
                 while(this.options.keyAttack.consumeClick()) {
                     this.startAttack();
                 }
