@@ -811,7 +811,6 @@ public class PowersWalkingHeart extends NewDashPreset {
         } else if (tryCut(mpos.add(new Vec3(0,-0.1,0)))
                 || tryCut(mpos.add(new Vec3(0,-self.getBbWidth()*1.1f,0)))
                 || tryCut(mpos.add(new Vec3(0,-self.getBbWidth()*1.5f,0)))
-                || tryCut(mpos.add(new Vec3(0,-self.getBbWidth()*2.5f,0)))
         ){
             cutDirection = Direction.DOWN;
         } else {
