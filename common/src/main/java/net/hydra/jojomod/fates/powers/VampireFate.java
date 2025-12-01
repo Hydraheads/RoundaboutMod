@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
@@ -14,10 +15,12 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Position;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -74,6 +77,11 @@ public class VampireFate extends VampiricFate {
 
     @Override
     public boolean tryPower(int move, boolean forced) {
+        if (move != BLOOD_SUCK && !self.level().isClientSide() &&
+                getPlayerPos2() == PlayerPosIndex.BLOOD_SUCK) {
+            super.setPlayerPos2(PlayerPosIndex.NONE_2);
+        }
+
         switch (move) {
             case WALL_WALK -> {
                 wallLatch();
@@ -121,6 +129,7 @@ public class VampireFate extends VampiricFate {
                 xTryPower(PowerIndex.NONE, true);
             } else {
                 setActivePower(HAIR_EXTENDED);
+                setPlayerPos2(PlayerPosIndex.HAIR_EXTENDED);
                 this.attackTimeDuring = 0;
             }
         }
@@ -154,7 +163,16 @@ public class VampireFate extends VampiricFate {
     @Override
     public void tickPower(){
         tickHypnosis();
+        tickHair();
         super.tickPower();
+    }
+
+    public void tickHair(){
+        if (activePower == HAIR_EXTENDED){
+            if (attackTimeDuring >= getMaxAttackTimeDuringHair()) {
+                xTryPower(PowerIndex.NONE, true);
+            }
+        }
     }
     public void tickHypnosis() {
         if (!self.level().isClientSide())
@@ -231,5 +249,36 @@ public class VampireFate extends VampiricFate {
                 setSkillIcon(context, x, y, 4, StandIcons.VAMP_VISION_OFF, PowerIndex.FATE_4);
             }
         }
+    }
+
+    public int getMaxAttackTimeDuringHair(){
+        return 20;
+    }
+
+    @Override
+    public void renderAttackHud(GuiGraphics context, Player playerEntity,
+                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+                                float flashAlpha, float otherFlashAlpha) {
+
+        StandUser standUser = ((StandUser) playerEntity);
+        boolean standOn = standUser.roundabout$getActive();
+        int j = scaledHeight / 2 - 7 - 4;
+        int k = scaledWidth / 2 - 8;
+        if (!standOn){
+            Entity TE = getTargetEntity(playerEntity, 7, 15);
+
+            if (getActivePower() == HAIR_EXTENDED){
+                float finalATime = (float) attackTimeDuring / getMaxAttackTimeDuringHair();
+                int barTexture = 0;
+                if (TE != null && MainUtil.canDrinkBloodFair(TE, self)){
+                    barTexture = 68;
+                }
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+                int finalATimeInt = Math.round(finalATime * 15);
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, barTexture, finalATimeInt, 6);
+                return;
+            }
+        }
+        super.renderAttackHud(context,playerEntity,scaledWidth,scaledHeight,ticks,vehicleHeartCount,flashAlpha,otherFlashAlpha);
     }
 }

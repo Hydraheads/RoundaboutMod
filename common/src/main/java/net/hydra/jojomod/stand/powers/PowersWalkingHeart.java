@@ -168,8 +168,9 @@ public class PowersWalkingHeart extends NewDashPreset {
                     return;
                 }
             }
-
-            tryPowerPacket(PowerIndex.POWER_4_BONUS);
+            if (canWallWalkConfig()) {
+                tryPowerPacket(PowerIndex.POWER_4_BONUS);
+            }
         }
     }
 
@@ -418,10 +419,12 @@ public class PowersWalkingHeart extends NewDashPreset {
         }
 
         if (!isSpider){
-            if (canCutCorners()){
-                setSkillIcon(context, x, y, 4, StandIcons.WALL_CUT, PowerIndex.NONE);
-            } else {
-                setSkillIcon(context, x, y, 4, StandIcons.WALL_PASS, PowerIndex.NONE);
+            if (canWallWalkConfig()) {
+                if (canCutCorners()) {
+                    setSkillIcon(context, x, y, 4, StandIcons.WALL_CUT, PowerIndex.NONE);
+                } else {
+                    setSkillIcon(context, x, y, 4, StandIcons.WALL_PASS, PowerIndex.NONE);
+                }
             }
         }
     }
@@ -1170,8 +1173,6 @@ public class PowersWalkingHeart extends NewDashPreset {
                     "instruction.roundabout.passive", StandIcons.FIRM_SWING, 0, level, bypass));
             $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.fall_disperse",
                     "instruction.roundabout.passive", StandIcons.FALL_ABSORB, 0, level, bypass));
-            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.corner_cut",
-                    "instruction.roundabout.press_skill", StandIcons.WALL_CUT, 4, level, bypass));
         }
         return $$1;
     }

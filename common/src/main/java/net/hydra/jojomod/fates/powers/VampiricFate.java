@@ -663,7 +663,8 @@ public int speedActivated = 0;
     }
     @Override
     public boolean tryPower(int move, boolean forced){
-        if (activePower == BLOOD_SUCK && move != BLOOD_SUCK && !self.level().isClientSide()) {
+        if (move != BLOOD_SUCK && !self.level().isClientSide()
+        &&  getPlayerPos2() == PlayerPosIndex.HAIR_EXTENDED) {
             super.setPlayerPos2(PlayerPosIndex.NONE_2);
         }
         return super.tryPower(move, forced);
@@ -681,7 +682,7 @@ public int speedActivated = 0;
             setActivePower(BLOOD_SUCK);
             self.setSprinting(false);
             if (!self.level().isClientSide()) {
-                super.setPlayerPos2(PlayerPosIndex.BLOOD_SUCK);
+                setPlayerPos2(PlayerPosIndex.BLOOD_SUCK);
             }
             this.attackTimeDuring = 0;
             if (bloodSuckingTarget != null) {
