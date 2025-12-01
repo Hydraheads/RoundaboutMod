@@ -300,7 +300,7 @@ public class PowersAnubis extends NewDashPreset {
                 canPogo = true;
                 this.setAttackTime(0);
                 this.setActivePower(PowerIndex.SNEAK_MOVEMENT);
-                this.setCooldown(PowerIndex.GLOBAL_DASH,260 + (this.getSelf().onGround() ? 0 : 60));
+                this.setCooldown(PowerIndex.GLOBAL_DASH,260);
                 this.getSelf().level().playSound(null,this.getSelf().blockPosition(), ModSounds.ANUBIS_BACKFLIP_EVENT, SoundSource.PLAYERS,1.0F,1.0F);
                 this.getStandUserSelf().roundabout$setStandAnimation(PowerIndex.SNEAK_MOVEMENT);
                 if (this.getSelf() instanceof Player P) {
@@ -314,9 +314,10 @@ public class PowersAnubis extends NewDashPreset {
                     float strength = 1.25F;
                     if (Math.abs(look.x) + Math.abs(look.z) == 0) {
                         strength *= 0.7F;
+                    } else if (!this.getSelf().onGround()) {
+                        strength *= 0.5F;
                     }
-
-                    MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), strength, look.x * 1, -1 * (this.getSelf().onGround() ? 1 : 0.7), look.z * 1);
+                    MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), strength, look.x * 1, -1 * (this.getSelf().onGround() ? 1 : 0.8), look.z * 1);
                 }
             }
         }
@@ -1558,6 +1559,7 @@ public class PowersAnubis extends NewDashPreset {
             if (!moments.isEmpty()) {
                 playSlot = slot;
                 setPlayTime(Math.min(PowersAnubis.MaxPlayTime,moments.get(moments.size()-1).time) );
+                this.playTime = this.maxPlayTime-moments.get(playBytes.size()).time;
                 this.getStandUserSelf().roundabout$setUniqueStandModeToggle(true);
             }
 
@@ -1632,7 +1634,7 @@ public class PowersAnubis extends NewDashPreset {
 
 
         int maxTime = Math.min(PowersAnubis.MaxPlayTime,moments.get(moments.size()-1).time);
-        for(int time=0;time<maxTime;time++ ) {
+        for(int time = moments.get(playBytes.size()).time; time<maxTime; time++ ) {
             List<Byte> value = new ArrayList<>();
             for (int i = 0; i < this.playBytes.size(); i++) {
                 if (isPressed(slot,playBytes.get(i), time)) {
