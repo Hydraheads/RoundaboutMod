@@ -1,8 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -12,19 +10,15 @@ import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.event.AbilityIconInstance;
-import net.hydra.jojomod.event.index.LocacacaCurseIndex;
-import net.hydra.jojomod.event.index.OffsetIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
-import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
-import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -33,7 +27,6 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Position;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -143,6 +136,7 @@ public class PowersWalkingHeart extends NewDashPreset {
         super.levelUp();
     }
 
+
     @Override
     public void powerActivate(PowerContext context) {
         switch (context)
@@ -171,8 +165,11 @@ public class PowersWalkingHeart extends NewDashPreset {
                 ItemStack stack = self.getMainHandItem();
                 if (!stack.isEmpty() && stack.is(Items.COBWEB) && stack.getCount() >= 64){
                     tryPowerPacket(PowerIndex.POWER_3_BONUS);
+                    return;
                 }
             }
+
+            tryPowerPacket(PowerIndex.POWER_4_BONUS);
         }
     }
 
@@ -407,6 +404,7 @@ public class PowersWalkingHeart extends NewDashPreset {
         else
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
 
+        boolean isSpider = false;
         if (this.getSelf() instanceof Player PE) {
             ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
@@ -414,10 +412,26 @@ public class PowersWalkingHeart extends NewDashPreset {
                 ItemStack stack = self.getMainHandItem();
                 if (!stack.isEmpty() && stack.is(Items.COBWEB) && stack.getCount() >= 64){
                     setSkillIcon(context, x, y, 4, StandIcons.SPIDER_SKIN, PowerIndex.NONE);
+                    isSpider = true;
                 }
             }
         }
+
+        if (!isSpider){
+            if (canCutCorners()){
+                setSkillIcon(context, x, y, 4, StandIcons.WALL_CUT, PowerIndex.NONE);
+            } else {
+                setSkillIcon(context, x, y, 4, StandIcons.WALL_PASS, PowerIndex.NONE);
+            }
+        }
     }
+
+    public int cutCorners = 0;
+
+    public boolean canCutCorners(){
+        return cutCorners == 2;
+    }
+
 
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
@@ -458,7 +472,7 @@ public class PowersWalkingHeart extends NewDashPreset {
 
     @Override
     public boolean cancelJump(){
-        return inCombatMode();
+        return inCombatMode() || ((hasExtendedHeelsForWalking() && canCutCorners()));
     }
     @Override
     public boolean cancelSprint(){
@@ -552,6 +566,10 @@ public class PowersWalkingHeart extends NewDashPreset {
 
             case PowerIndex.POWER_3_BONUS-> {
                 spiderUnlock();
+            }
+
+            case PowerIndex.POWER_4_BONUS-> {
+                serverSetCutCorners();
             }
 
         }
@@ -755,6 +773,117 @@ public class PowersWalkingHeart extends NewDashPreset {
         useSpikeAttackF(false);
     }
 
+
+    public Direction cutDirection;
+    public boolean tryCut(Vec3 cutPos){
+        BlockPos pos1 = BlockPos.containing(cutPos);
+        BlockState bs = this.self.level().getBlockState(pos1);
+        return MainUtil.isBlockWalkable(bs);
+    }
+
+    public boolean tryCutEast(Vec3 mpos){
+        return (tryCut(mpos.add(new Vec3(0.1,0,0)))
+                || tryCut(mpos.add(new Vec3(self.getBbWidth()*1.1f,0,0)))
+                || tryCut(mpos.add(new Vec3(self.getBbWidth()*1.4f,0,0)))
+                || tryCut(mpos.add(new Vec3(self.getBbWidth()*1.6f,0,0)))
+        );
+    }
+    public boolean tryCutWest(Vec3 mpos){
+        return (tryCut(mpos.add(new Vec3(-0.1,0,0)))
+                || tryCut(mpos.add(new Vec3(-self.getBbWidth()*1.1f,0,0)))
+                || tryCut(mpos.add(new Vec3(-self.getBbWidth()*1.4f,0,0)))
+                || tryCut(mpos.add(new Vec3(-self.getBbWidth()*1.6f,0,0)))
+        );
+    }
+    public boolean tryCutNorth(Vec3 mpos){
+        return (tryCut(mpos.add(new Vec3(0,0,-0.1)))
+                || tryCut(mpos.add(new Vec3(0,0,-self.getBbWidth()*1.1f)))
+                || tryCut(mpos.add(new Vec3(0,0,-self.getBbWidth()*1.4f)))
+                || tryCut(mpos.add(new Vec3(0,0,-self.getBbWidth()*1.6f)))
+        );
+    }
+    public boolean tryCutSouth(Vec3 mpos){
+        return (tryCut(mpos.add(new Vec3(0,0,0.1)))
+                || tryCut(mpos.add(new Vec3(0,0,self.getBbWidth()*1.1f)))
+                || tryCut(mpos.add(new Vec3(0,0,self.getBbWidth()*1.4f)))
+                || tryCut(mpos.add(new Vec3(0,0,self.getBbWidth()*1.6f)))
+        );
+    }
+    public boolean tryCutUp(Vec3 mpos){
+        return (tryCut(mpos.add(new Vec3(0,0.1,0)))
+                || tryCut(mpos.add(new Vec3(0,self.getBbWidth()*1.1f,0)))
+                || tryCut(mpos.add(new Vec3(0,self.getBbWidth()*1.4f,0)))
+                || tryCut(mpos.add(new Vec3(0,self.getBbWidth()*1.6f,0)))
+        );
+    }
+    public boolean tryCutDown(Vec3 mpos){
+        return (tryCut(mpos.add(new Vec3(0,-0.1,0)))
+                || tryCut(mpos.add(new Vec3(0,-self.getBbWidth()*1.1f,0)))
+                || tryCut(mpos.add(new Vec3(0,-self.getBbWidth()*1.4f,0)))
+                || tryCut(mpos.add(new Vec3(0,-self.getBbWidth()*1.6f,0)))
+        );
+    }
+
+    public boolean canCut(){
+
+        Vec3 mpos = this.self.getPosition(1F);
+        if (tryCutEast(mpos)){
+            if (tryCutWest(mpos))
+                return false;
+            cutDirection = Direction.EAST;
+        } else if (tryCutWest(mpos)){
+            cutDirection = Direction.WEST;
+        } else if (tryCutSouth(mpos)){
+            if (tryCutNorth(mpos))
+                return false;
+            cutDirection = Direction.SOUTH;
+        } else if (tryCutNorth(mpos)){
+            cutDirection = Direction.NORTH;
+        } else if (tryCutUp(mpos)){
+            if (tryCutDown(mpos))
+                return false;
+            cutDirection = Direction.UP;
+        } else if (tryCutDown(mpos)){
+            cutDirection = Direction.DOWN;
+        } else {
+            return false;
+        }
+        return true;
+    }
+    @Override
+    //Stands sending simple message
+    public void serverQueried(){
+        //Make
+        if (self instanceof ServerPlayer pl) {
+            S2CPacketUtil.sendGenericIntToClientPacket(pl, PacketDataIndex.S2C_INT_STAND_MODE,
+                    cutCorners);
+        }
+    }
+
+    public void serverSetCutCorners(){
+        if (canCutCorners()){
+            setCutCorners(1);
+            ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.walking.cut_ff").withStyle(ChatFormatting.DARK_PURPLE), true);
+        } else {
+            setCutCorners(2);
+            ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.walking.cut_on").withStyle(ChatFormatting.DARK_PURPLE), true);
+        }
+    }
+
+    public void setCutCorners(int corners){
+        //Make
+        if (self instanceof ServerPlayer pl) {
+            cutCorners = corners;
+            S2CPacketUtil.sendGenericIntToClientPacket(pl, PacketDataIndex.S2C_INT_STAND_MODE,
+                    corners);
+        }
+    }
+
+    @Override
+    public void clientIntUpdated(int integer){
+        cutCorners = integer;
+    }
+
     public int lastTick = 0;
     public void tickPower() {
         if (lastTick != self.tickCount){
@@ -762,6 +891,13 @@ public class PowersWalkingHeart extends NewDashPreset {
             lastTick = self.tickCount;
         }
         if (this.self.level().isClientSide()) {
+
+            if (cutCorners == 0 && self instanceof Player){
+                cutCorners = 1;
+                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.QUERY_STAND_UPDATE);
+            }
+
+
             if (!inCombatMode()){
                 currentKickTicks = 0;
             } else if (currentKickTicks < chargeKickTicks()){
@@ -802,9 +938,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                     BlockPos pos5 = BlockPos.containing(self.getPosition(1).add(newVec5));
 
                     BlockState state1 = self.level().getBlockState(pos);
-                    BlockState state2 = self.level().getBlockState(pos2);
                     BlockState state4 = self.level().getBlockState(pos4);
-                    BlockState state5 = self.level().getBlockState(pos5);
                     boolean isOnValidBlock =  MainUtil.isBlockWalkableSimplified(state1)
                             && MainUtil.isBlockWalkableSimplified(state4);
 
@@ -821,7 +955,19 @@ public class PowersWalkingHeart extends NewDashPreset {
                                 )){
                             mercyTicks--;
                         } else {
-                            mercyTicks = 0;
+                            if (canCutCorners()){
+                                if (mercyTicks > 4){
+                                    mercyTicks = 4;
+                                }
+                                mercyTicks-=1;
+                                if (canCut() && cutDirection != ((IGravityEntity) this.self).roundabout$getGravityDirection()){
+                                    ((IGravityEntity) this.self).roundabout$setGravityDirection(cutDirection);
+                                    setHeelDirection(cutDirection);
+                                    justFlippedTicks = 5;
+                                }
+                            } else {
+                                mercyTicks = 0;
+                            }
                         }
                     }
                     if (self.isSleeping() || ((!self.onGround() || !isOnValidBlock) && mercyTicks <= 0) || self.getRootVehicle() != this.self) {
@@ -1017,11 +1163,15 @@ public class PowersWalkingHeart extends NewDashPreset {
                     "instruction.roundabout.passive", StandIcons.FIRM_SWING, 0, level, bypass));
             $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.fall_disperse",
                     "instruction.roundabout.passive", StandIcons.FALL_ABSORB, 0, level, bypass));
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 57, topPos + 80, 0, "ability.roundabout.corner_cut",
+                    "instruction.roundabout.press_skill", StandIcons.WALL_CUT, 4, level, bypass));
         } else {
             $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.firm_swing",
                     "instruction.roundabout.passive", StandIcons.FIRM_SWING, 0, level, bypass));
             $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.fall_disperse",
                     "instruction.roundabout.passive", StandIcons.FALL_ABSORB, 0, level, bypass));
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.corner_cut",
+                    "instruction.roundabout.press_skill", StandIcons.WALL_CUT, 4, level, bypass));
         }
         return $$1;
     }

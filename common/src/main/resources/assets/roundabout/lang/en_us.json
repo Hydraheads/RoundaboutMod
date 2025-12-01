@@ -548,7 +548,7 @@
   "death.attack.blood_drain.item": "%1$s lost all color.",
   "death.attack.blood_drain.player": "%1$s lost all color.",
   "death.attack.blood_drain.player.item": "%1$s lost all color.",
-  "death.attack.bullet": "%1$s became a pin cushion.",
+  "death.attack.bullet": "%1$s was shot through the heart.",
 
   "item.glaive.charge_power": "Charge Attack",
 
@@ -1102,7 +1102,8 @@
   "ability.roundabout.firm_swing.desc": "Makes all attacks critical attacks while your heel is planted, due to the increased force from a sturdy stance.",
   "ability.roundabout.fall_disperse": "Fall Absorb",
   "ability.roundabout.fall_disperse.desc": "Halves incoming fall damage, spreading the impact across your heels.",
-
+  "ability.roundabout.corner_cut": "Corner Cut",
+  "ability.roundabout.corner_cut.desc": "Enable this to skip the process of direction adjustment when running off a wall to cut corners. Also inhibits accidental jumps. Think of it as training wheels.",
 
 
 
@@ -1701,6 +1702,8 @@
   "text.roundabout.achtung.vision_off": "Invisi-Vision Off",
   "text.roundabout.achtung.vision_on": "Invisi-Vision On",
 
+  "text.roundabout.walking.cut_on": "Corner Cutting On",
+  "text.roundabout.walking.cut_ff": "Corner Cutting Off",
 
 
 

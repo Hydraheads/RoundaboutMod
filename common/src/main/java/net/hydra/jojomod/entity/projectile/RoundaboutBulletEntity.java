@@ -155,18 +155,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
     int outsideOfTimeStop = 0;
 
     private void flipTrajectory() {
-        Vec3 motion = this.getDeltaMovement();
 
-        if (motion.lengthSqr() < 1.0E-6) {
-            return;
-        }
-
-        Vec3 flipped = motion.scale(-1.0D);
-
-        this.setDeltaMovement(flipped);
-        this.hasImpulse = true;
-        this.setNoGravity(true);
-        this.setDeltaMovement(flipped);
     }
 
 
@@ -275,21 +264,14 @@ public class RoundaboutBulletEntity extends AbstractArrow {
             this.entityData.set(ROUNDABOUT$SUPER_THROWN,false);
         }
 
-        if (getDeflected()) {
-            this.flipTrajectory();
-
-            this.setPos(
-                    this.getX() + this.getDeltaMovement().x,
-                    this.getY() + this.getDeltaMovement().y,
-                    this.getZ() + this.getDeltaMovement().z
-            );
-
-            return;
-        }
+//        if (getDeflected()) {
+//            this.flipTrajectory();
+//            return;
+//        }
 
         super.tick();
 
-        if (this.getSuperThrown() && !this.getDeflected()) {
+        if (this.getSuperThrown()) {
             this.setDeltaMovement(delta);
         }
 

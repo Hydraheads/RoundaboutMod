@@ -135,7 +135,6 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         SE.roundabout$getHandLayerAnimation().stop();
                     }
                 }
-
             }
 
             if ( $$0.getUseItem().is(ModItems.ANUBIS_ITEM)  ) {
@@ -146,16 +145,10 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 ipe.roundabout$getAnubisUnsheath().stop();
             }
 
-            ItemStack itemstack = $$0.getMainHandItem();
-            if (itemstack.getItem() instanceof SnubnoseRevolverItem) {
-                Roundabout.LOGGER.info("Tokiha");
-                if (((FirearmItem) itemstack.getItem()).interceptAttack(itemstack, $$0)) {
-                    ipe.roundabout$getSnubnoseAim().startIfStopped($$0.tickCount);
-                    change = true;
-                    this.roundabout$animate(ipe.roundabout$getSnubnoseAim(), FirearmFirstPersonAnimations.snubnose_aim, yes, 1f);
-                    Roundabout.LOGGER.info("wow");
-                    ipe.roundabout$getSnubnoseAim();
-                }
+            if ($$0.getUseItem().is(ModItems.SNUBNOSE_REVOLVER)) {
+                ipe.roundabout$getSnubnoseAim().startIfStopped($$0.tickCount); change = true;
+                this.roundabout$animate(ipe.roundabout$getSnubnoseAim(), FirearmFirstPersonAnimations.snubnose_aim, yes, 1f);
+                ipe.roundabout$getSnubnoseAim();
             } else {
                 ipe.roundabout$getSnubnoseAim().stop();
             }

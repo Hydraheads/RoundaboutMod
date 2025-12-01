@@ -46,15 +46,11 @@ public class FirearmItem extends Item {
     int maxAmmo = 6;
 
     public boolean interceptAttack(ItemStack itemStack, Player player) {
-        Roundabout.LOGGER.info("1"+player.getUseItem());
         if (player != null && player.getUseItem() != null) {
-            Roundabout.LOGGER.info("2"+player.getUseItem());
             if (player.getUseItem() == itemStack) {
-                Roundabout.LOGGER.info("3");
                 return true;
             }
         }
-        Roundabout.LOGGER.info("4");
         return false;
     }
 

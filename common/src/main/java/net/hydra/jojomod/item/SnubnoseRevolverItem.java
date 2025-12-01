@@ -150,7 +150,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
             $$7.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 4.0F, 0.0F);
             $$7.setAmmoType(RoundaboutBulletEntity.REVOLVER);
             level.addFreshEntity($$7);
-            level.playSound(null, player, ModSounds.SNUBNOSE_FIRE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            level.playSound(null, player, ModSounds.SNUBNOSE_FIRE_EVENT, SoundSource.PLAYERS, 100.0F, 1.0F);
             if (level instanceof ServerLevel serverLevel) {
                 Vec3 look = player.getLookAngle().normalize();
                 Vec3 up = new Vec3(0, 1, 0);
@@ -238,12 +238,13 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
             }
         }
 
-        if (isReloading(stack) && player.getMainHandItem() != stack) {
+        if ((isReloading(stack) && player.getMainHandItem() != stack) && (isReloading(stack) && player.getOffhandItem() != stack)) {
             cancelReload(stack, player);
             return;
         }
 
-        if (isReloading(stack) && !player.getCooldowns().isOnCooldown(this) && player.getMainHandItem() == stack) {
+        if (isReloading(stack) && !player.getCooldowns().isOnCooldown(this) && player.getMainHandItem() == stack
+                || isReloading(stack) && !player.getCooldowns().isOnCooldown(this) && (player.getOffhandItem() == stack)) {
             int currentAmmo = getAmmo(stack);
             int ammoNeeded = maxAmmo - currentAmmo;
 
