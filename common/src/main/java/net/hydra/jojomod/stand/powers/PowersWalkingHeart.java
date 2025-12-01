@@ -785,32 +785,27 @@ public class PowersWalkingHeart extends NewDashPreset {
         Vec3 mpos = this.self.getPosition(1F);
         if (tryCut(mpos.add(new Vec3(0.1,0,0)))
                 || tryCut(mpos.add(new Vec3(self.getBbWidth()*1.1f,0,0)))
-                || tryCut(mpos.add(new Vec3(self.getBbWidth()*1.5f,0,0)))
-                || tryCut(mpos.add(new Vec3(self.getBbWidth()*2.5f,0,0)))
+                || tryCut(mpos.add(new Vec3(self.getBbWidth()*1.3f,0,0)))
         ){
             cutDirection = Direction.EAST;
         } else if (tryCut(mpos.add(new Vec3(-0.1,0,0)))
                 || tryCut(mpos.add(new Vec3(-self.getBbWidth()*1.1f,0,0)))
-                || tryCut(mpos.add(new Vec3(-self.getBbWidth()*1.5f,0,0)))
-                || tryCut(mpos.add(new Vec3(-self.getBbWidth()*2.5f,0,0)))
+                || tryCut(mpos.add(new Vec3(-self.getBbWidth()*1.3f,0,0)))
         ){
             cutDirection = Direction.WEST;
         } else if (tryCut(mpos.add(new Vec3(0,0,0.1)))
                 || tryCut(mpos.add(new Vec3(0,0,self.getBbWidth()*1.1f)))
-                || tryCut(mpos.add(new Vec3(0,0,self.getBbWidth()*1.5f)))
-                || tryCut(mpos.add(new Vec3(0,0,self.getBbWidth()*2.5f)))
+                || tryCut(mpos.add(new Vec3(0,0,self.getBbWidth()*1.3f)))
         ){
             cutDirection = Direction.SOUTH;
         } else if (tryCut(mpos.add(new Vec3(0,0,-0.1)))
                 || tryCut(mpos.add(new Vec3(0,0,-self.getBbWidth()*1.1f)))
-                || tryCut(mpos.add(new Vec3(0,0,-self.getBbWidth()*1.5f)))
-                || tryCut(mpos.add(new Vec3(0,0,-self.getBbWidth()*2.5f)))
+                || tryCut(mpos.add(new Vec3(0,0,-self.getBbWidth()*1.3f)))
         ){
             cutDirection = Direction.NORTH;
         } else if (tryCut(mpos.add(new Vec3(0,0.1,0)))
                 || tryCut(mpos.add(new Vec3(0,self.getBbWidth()*1.1f,0)))
-                || tryCut(mpos.add(new Vec3(0,self.getBbWidth()*1.5f,0)))
-                || tryCut(mpos.add(new Vec3(0,self.getBbWidth()*2.5f,0)))
+                || tryCut(mpos.add(new Vec3(0,self.getBbWidth()*1.3f,0)))
         ){
             cutDirection = Direction.UP;
         } else if (tryCut(mpos.add(new Vec3(0,-0.1,0)))
@@ -930,11 +925,14 @@ public class PowersWalkingHeart extends NewDashPreset {
                             mercyTicks--;
                         } else {
                             if (canCutCorners()){
-                                mercyTicks--;
+                                if (mercyTicks > 4){
+                                    mercyTicks = 4;
+                                }
+                                mercyTicks-=1;
                                 if (canCut() && cutDirection != ((IGravityEntity) this.self).roundabout$getGravityDirection()){
                                     ((IGravityEntity) this.self).roundabout$setGravityDirection(cutDirection);
                                     setHeelDirection(cutDirection);
-                                    justFlippedTicks = 7;
+                                    justFlippedTicks = 5;
                                 }
                             } else {
                                 mercyTicks = 0;
@@ -1134,11 +1132,15 @@ public class PowersWalkingHeart extends NewDashPreset {
                     "instruction.roundabout.passive", StandIcons.FIRM_SWING, 0, level, bypass));
             $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.fall_disperse",
                     "instruction.roundabout.passive", StandIcons.FALL_ABSORB, 0, level, bypass));
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 57, topPos + 80, 0, "ability.roundabout.corner_cut",
+                    "instruction.roundabout.press_skill", StandIcons.WALL_CUT, 4, level, bypass));
         } else {
             $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.firm_swing",
                     "instruction.roundabout.passive", StandIcons.FIRM_SWING, 0, level, bypass));
             $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.fall_disperse",
                     "instruction.roundabout.passive", StandIcons.FALL_ABSORB, 0, level, bypass));
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.corner_cut",
+                    "instruction.roundabout.press_skill", StandIcons.WALL_CUT, 4, level, bypass));
         }
         return $$1;
     }

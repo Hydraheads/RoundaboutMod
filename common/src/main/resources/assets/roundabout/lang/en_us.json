@@ -1102,7 +1102,8 @@
   "ability.roundabout.firm_swing.desc": "Makes all attacks critical attacks while your heel is planted, due to the increased force from a sturdy stance.",
   "ability.roundabout.fall_disperse": "Fall Absorb",
   "ability.roundabout.fall_disperse.desc": "Halves incoming fall damage, spreading the impact across your heels.",
-
+  "ability.roundabout.corner_cut": "Corner Cut",
+  "ability.roundabout.corner_cut.desc": "Enable this to skip the process of direction adjustment when running off a wall to cut corners. Also inhibits accidental jumps. Think of it as training wheels.",
 
 
 
