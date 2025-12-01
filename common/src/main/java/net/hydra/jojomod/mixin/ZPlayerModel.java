@@ -140,7 +140,6 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             if ( $$0.getUseItem().is(ModItems.ANUBIS_ITEM)  ) {
                 ipe.roundabout$getAnubisUnsheath().startIfStopped($$0.tickCount); change = true;
                 this.roundabout$animate(ipe.roundabout$getAnubisUnsheath(), AnubisAnimations.Unsheathe, yes, 1f);
-                ipe.roundabout$getAnubisUnsheath();
             } else {
                 ipe.roundabout$getAnubisUnsheath().stop();
             }
@@ -148,7 +147,6 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             if ($$0.getUseItem().is(ModItems.SNUBNOSE_REVOLVER)) {
                 ipe.roundabout$getSnubnoseAim().startIfStopped($$0.tickCount); change = true;
                 this.roundabout$animate(ipe.roundabout$getSnubnoseAim(), FirearmFirstPersonAnimations.snubnose_aim, yes, 1f);
-                ipe.roundabout$getSnubnoseAim();
             } else {
                 ipe.roundabout$getSnubnoseAim().stop();
             }

@@ -200,6 +200,7 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
 
         if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
             List<AnubisMemory> memories = PA.memories;
+            if (this.currentlyHovered == -1 || this.currentlyHovered == 8) {return false;}
             for (int i=0;i<mc.options.keyHotbarSlots.length;i++) {
                 KeyMapping key = mc.options.keyHotbarSlots[i];
                 if (key.isDown()) {

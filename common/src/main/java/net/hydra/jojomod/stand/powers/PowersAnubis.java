@@ -106,7 +106,13 @@ public class PowersAnubis extends NewDashPreset {
         }
 
         ResourceLocation icon4 = StandIcons.ANUBIS_RECORD;
-        if (this.playTime > 0) {icon4 = StandIcons.ANUBIS_SAVE;}
+        if (this.playTime > 0) {
+            if (this.getStandUserSelf().roundabout$getUniqueStandModeToggle()) {
+                icon4 = StandIcons.ANUBIS_CANCEL;
+            } else {
+                icon4 = StandIcons.ANUBIS_SAVE;
+            }
+        }
         setSkillIcon(context, x, y, 4, icon4, PowerIndex.SKILL_4);
 
         super.renderIcons(context, x, y);
@@ -174,7 +180,11 @@ public class PowersAnubis extends NewDashPreset {
             }
             case SKILL_4_NORMAL, SKILL_4_CROUCH -> {
                 if (this.playTime > 0) {
-                    MemoryCancelSaveClient();
+                    if (this.getStandUserSelf().roundabout$getUniqueStandModeToggle()) {
+                        MemoryCancelClient();
+                    } else {
+                        MemoryCancelSaveClient();
+                    }
                 } else {
                     MemoryRecordClient();
                 }
@@ -315,7 +325,7 @@ public class PowersAnubis extends NewDashPreset {
                     if (Math.abs(look.x) + Math.abs(look.z) == 0) {
                         strength *= 0.7F;
                     } else if (!this.getSelf().onGround()) {
-                        strength *= 0.5F;
+                        strength *= 0.8F;
                     }
                     MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), strength, look.x * 1, -1 * (this.getSelf().onGround() ? 1 : 0.8), look.z * 1);
                 }
@@ -476,6 +486,7 @@ public class PowersAnubis extends NewDashPreset {
                     }
                 }
             }
+
 
 
             this.playTime--;
@@ -1516,9 +1527,11 @@ public class PowersAnubis extends NewDashPreset {
                 case AnubisMoment.DASH -> 8;
                 case AnubisMoment.ATTACK -> 9;
                 case AnubisMoment.INTERACT -> 10;
-
                 default -> 11;
             };
+            if (moments[i] > 20 && moments[i] < 30) {
+                xIcon = 7 * (10+moments[i]-20);
+            }
             context.blit(StandIcons.JOJO_ICONS_2,xoff,Offset,xIcon,40,7,7);
             xoff += 8;
         }
@@ -1587,6 +1600,11 @@ public class PowersAnubis extends NewDashPreset {
         PA.playKeys.add(KeyInputRegistry.abilityThreeKey);PA.playBytes.add(AnubisMoment.DASH);
         PA.playKeys.add(o.keyAttack);PA.playBytes.add(AnubisMoment.ATTACK);
         PA.playKeys.add(o.keyUse);PA.playBytes.add(AnubisMoment.INTERACT);
+
+        for(int i=0;i<AnubisMoment.HOTBAR.length;i++) {
+            PA.playKeys.add(o.keyHotbarSlots[i]);PA.playBytes.add(AnubisMoment.HOTBAR[i]);
+        }
+
 
 
 

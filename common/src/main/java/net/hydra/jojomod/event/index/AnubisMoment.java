@@ -15,6 +15,10 @@ public class AnubisMoment {
     public static final byte ATTACK = (byte) 10;
     public static final byte INTERACT = (byte) 11;
 
+    public static final byte[] HOTBAR = {21,22,23,24,25,26,27,28,29};
+
+
+
 
 
 
