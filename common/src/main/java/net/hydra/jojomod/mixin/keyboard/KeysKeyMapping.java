@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.keyboard;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.gui.NoCancelInputScreen;
@@ -62,12 +63,14 @@ public class KeysKeyMapping implements IKeyMapping {
         if (SU.roundabout$getStandPowers() != null) {
             if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
                 if (SU.roundabout$getUniqueStandModeToggle()) {
-                    int time = PowersAnubis.MaxPlayTime-PA.playTime;
+                    int time = PA.maxPlayTime-PA.playTime;
                     for(int i=0;i<PA.playKeys.size();i++) {
                         KeyMapping key = PA.playKeys.get(i);
                         if (((IKeyMapping) key).roundabout$justTellMeTheKey() == this.roundabout$justTellMeTheKey()) {
-                            cir.setReturnValue(PA.isPressed(PA.playBytes.get(i), time));
-                            cir.cancel();
+                            if (PA.isPressed(PA.playBytes.get(i), time)) {
+                                cir.setReturnValue(true);
+                                cir.cancel();
+                            }
                         }
 
                     }

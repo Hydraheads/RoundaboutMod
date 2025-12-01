@@ -39,13 +39,12 @@ public class SeperatedLegsRenderer extends EntityRenderer<SeperatedLegsEntity> {
 
         p_114531_.pushPose();
         p_114531_.mulPose(Axis.YP.rotationDegrees(0));
-        float f2 = 1F;
         p_114531_.translate(0.0D, -0.4D, 0.0D);
         p_114531_.scale(1F,1F,1F);
         //p_114531_.scale(0.5F, 0.5F, 0.5F);
         this.model.setupAnim(p_114528_, f, 0.0F, 0.0F, p_114528_.getYRot(), p_114528_.getXRot());
         VertexConsumer vertexconsumer = p_114532_.getBuffer(RenderType.entityCutout(getTextureLocation(p_114528_)));
-        this.model.renderToBuffer(p_114531_, vertexconsumer, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.6F);
+        this.model.renderToBuffer(p_114531_, vertexconsumer, p_114533_, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.6F);
         p_114531_.popPose();
     }
 

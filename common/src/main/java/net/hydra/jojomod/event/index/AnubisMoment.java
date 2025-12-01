@@ -10,17 +10,19 @@ public class AnubisMoment {
     public static final byte JUMP = (byte) 5;
     public static final byte SPRINT = (byte) 6;
     public static final byte CROUCH = (byte) 7;
+    public static final byte SUMMON = (byte) 8;
+    public static final byte DASH = (byte) 9;
+    public static final byte ATTACK = (byte) 10;
+    public static final byte INTERACT = (byte) 11;
 
 
-    public static final byte MOUSE_MOVEMENT = (byte) 0;
-    public static final byte KEY_PRESS = (byte) 1;
-    public static final byte MOUSE_PRESS = (byte) 2;
+
 
     public byte type;
     public int time;
-    public Object[] vargs;
+    public boolean vargs;
 
-    public AnubisMoment(byte type, int time, Object[] vargs) {
+    public AnubisMoment(byte type, int time, boolean vargs) {
         this.type = type;
         this.time = time;
         this.vargs = vargs;
@@ -29,10 +31,8 @@ public class AnubisMoment {
     @Override
     public String toString() {
         String a = "time: " + time + " type: " + type + " vargs: ";
-        String b = vargs.toString();
-        if (type == AnubisMoment.UP || type == AnubisMoment.DOWN || type == AnubisMoment.LEFT || type == AnubisMoment.RIGHT) {
-            b = this.vargs[0].toString();
-        }
+        String b = ""+vargs;
+
         return a + b + "\n";
     }
 }

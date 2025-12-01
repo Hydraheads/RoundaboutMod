@@ -2931,14 +2931,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
         //melee immunity ticks
-        if (this.roundabout$isMeleeImmune()) {
-            if ($$0.is(DamageTypes.MOB_ATTACK)
+        if (this.roundabout$isMeleeImmune() && !((TimeStop)this.level()).isTimeStoppingEntity(this.rdbt$this()) ) {
+            if ( ($$0.is(DamageTypes.MOB_ATTACK)
                     || $$0.is(DamageTypes.PLAYER_ATTACK)
-                    || $$0.is(ModDamageTypes.STAND) ) {
-                if ($$0.getEntity() != null) {
-                    ci.cancel();
-                    return;
-                }
+                    || $$0.is(ModDamageTypes.STAND)) && $$0.getEntity() != null ) {
+                ci.cancel();
+                return;
+            } else {
+                this.roundabout$setMeleeImmunity(-1);
             }
         }
 

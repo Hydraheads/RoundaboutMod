@@ -395,6 +395,10 @@ public class StandIcons {
     public static final ResourceLocation ANUBIS_ALLURING_LIGHT = Roundabout.location("textures/gui/icons/anubis/alluring_light.png");
     public static final ResourceLocation ANUBIS_RAGING_LIGHT = Roundabout.location("textures/gui/icons/anubis/raging_light.png");
     public static final ResourceLocation ANUBIS_BACKFLIP = Roundabout.location("textures/gui/icons/anubis/backflip.png");
+    public static final ResourceLocation ANUBIS_RECORD = Roundabout.location("textures/gui/icons/anubis/record.png");
+    public static final ResourceLocation ANUBIS_REPLAY = Roundabout.location("textures/gui/icons/anubis/replay.png");
+    public static final ResourceLocation ANUBIS_SAVE = Roundabout.location("textures/gui/icons/anubis/save.png");
+    public static final ResourceLocation ANUBIS_CANCEL = Roundabout.location("textures/gui/icons/anubis/cancel.png");
 
 
     public static final ResourceLocation SOFT_AND_WET_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
