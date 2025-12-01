@@ -780,38 +780,70 @@ public class PowersWalkingHeart extends NewDashPreset {
         BlockState bs = this.self.level().getBlockState(pos1);
         return MainUtil.isBlockWalkable(bs);
     }
+
+    public boolean tryCutEast(Vec3 mpos){
+        return (tryCut(mpos.add(new Vec3(0.1,0,0)))
+                || tryCut(mpos.add(new Vec3(self.getBbWidth()*1.1f,0,0)))
+                || tryCut(mpos.add(new Vec3(self.getBbWidth()*1.4f,0,0)))
+                || tryCut(mpos.add(new Vec3(self.getBbWidth()*1.6f,0,0)))
+        );
+    }
+    public boolean tryCutWest(Vec3 mpos){
+        return (tryCut(mpos.add(new Vec3(-0.1,0,0)))
+                || tryCut(mpos.add(new Vec3(-self.getBbWidth()*1.1f,0,0)))
+                || tryCut(mpos.add(new Vec3(-self.getBbWidth()*1.4f,0,0)))
+                || tryCut(mpos.add(new Vec3(-self.getBbWidth()*1.6f,0,0)))
+        );
+    }
+    public boolean tryCutNorth(Vec3 mpos){
+        return (tryCut(mpos.add(new Vec3(0,0,-0.1)))
+                || tryCut(mpos.add(new Vec3(0,0,-self.getBbWidth()*1.1f)))
+                || tryCut(mpos.add(new Vec3(0,0,-self.getBbWidth()*1.4f)))
+                || tryCut(mpos.add(new Vec3(0,0,-self.getBbWidth()*1.6f)))
+        );
+    }
+    public boolean tryCutSouth(Vec3 mpos){
+        return (tryCut(mpos.add(new Vec3(0,0,0.1)))
+                || tryCut(mpos.add(new Vec3(0,0,self.getBbWidth()*1.1f)))
+                || tryCut(mpos.add(new Vec3(0,0,self.getBbWidth()*1.4f)))
+                || tryCut(mpos.add(new Vec3(0,0,self.getBbWidth()*1.6f)))
+        );
+    }
+    public boolean tryCutUp(Vec3 mpos){
+        return (tryCut(mpos.add(new Vec3(0,0.1,0)))
+                || tryCut(mpos.add(new Vec3(0,self.getBbWidth()*1.1f,0)))
+                || tryCut(mpos.add(new Vec3(0,self.getBbWidth()*1.4f,0)))
+                || tryCut(mpos.add(new Vec3(0,self.getBbWidth()*1.6f,0)))
+        );
+    }
+    public boolean tryCutDown(Vec3 mpos){
+        return (tryCut(mpos.add(new Vec3(0,-0.1,0)))
+                || tryCut(mpos.add(new Vec3(0,-self.getBbWidth()*1.1f,0)))
+                || tryCut(mpos.add(new Vec3(0,-self.getBbWidth()*1.4f,0)))
+                || tryCut(mpos.add(new Vec3(0,-self.getBbWidth()*1.6f,0)))
+        );
+    }
+
     public boolean canCut(){
 
         Vec3 mpos = this.self.getPosition(1F);
-        if (tryCut(mpos.add(new Vec3(0.1,0,0)))
-                || tryCut(mpos.add(new Vec3(self.getBbWidth()*1.1f,0,0)))
-                || tryCut(mpos.add(new Vec3(self.getBbWidth()*1.3f,0,0)))
-        ){
+        if (tryCutEast(mpos)){
+            if (tryCutWest(mpos))
+                return false;
             cutDirection = Direction.EAST;
-        } else if (tryCut(mpos.add(new Vec3(-0.1,0,0)))
-                || tryCut(mpos.add(new Vec3(-self.getBbWidth()*1.1f,0,0)))
-                || tryCut(mpos.add(new Vec3(-self.getBbWidth()*1.3f,0,0)))
-        ){
+        } else if (tryCutWest(mpos)){
             cutDirection = Direction.WEST;
-        } else if (tryCut(mpos.add(new Vec3(0,0,0.1)))
-                || tryCut(mpos.add(new Vec3(0,0,self.getBbWidth()*1.1f)))
-                || tryCut(mpos.add(new Vec3(0,0,self.getBbWidth()*1.3f)))
-        ){
+        } else if (tryCutSouth(mpos)){
+            if (tryCutNorth(mpos))
+                return false;
             cutDirection = Direction.SOUTH;
-        } else if (tryCut(mpos.add(new Vec3(0,0,-0.1)))
-                || tryCut(mpos.add(new Vec3(0,0,-self.getBbWidth()*1.1f)))
-                || tryCut(mpos.add(new Vec3(0,0,-self.getBbWidth()*1.3f)))
-        ){
+        } else if (tryCutNorth(mpos)){
             cutDirection = Direction.NORTH;
-        } else if (tryCut(mpos.add(new Vec3(0,0.1,0)))
-                || tryCut(mpos.add(new Vec3(0,self.getBbWidth()*1.1f,0)))
-                || tryCut(mpos.add(new Vec3(0,self.getBbWidth()*1.3f,0)))
-        ){
+        } else if (tryCutUp(mpos)){
+            if (tryCutDown(mpos))
+                return false;
             cutDirection = Direction.UP;
-        } else if (tryCut(mpos.add(new Vec3(0,-0.1,0)))
-                || tryCut(mpos.add(new Vec3(0,-self.getBbWidth()*1.1f,0)))
-                || tryCut(mpos.add(new Vec3(0,-self.getBbWidth()*1.5f,0)))
-        ){
+        } else if (tryCutDown(mpos)){
             cutDirection = Direction.DOWN;
         } else {
             return false;
