@@ -8,26 +8,23 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.VampireFate;
-import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
-public class VampireHairOnePart extends PsuedoHierarchicalModel {
+public class VampireHairTwoPart extends PsuedoHierarchicalModel {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
    private final ModelPart hair;
     private final ModelPart Root;
 
-    public VampireHairOnePart() {
+    public VampireHairTwoPart() {
         super(RenderType::entityTranslucent);
 
         this.Root = createBodyLayer().bakeRoot();
@@ -40,17 +37,11 @@ public class VampireHairOnePart extends PsuedoHierarchicalModel {
 
         PartDefinition hair = partdefinition.addOrReplaceChild("hair", CubeListBuilder.create(), PartPose.offset(0.0F, -1.0F, 0.0F));
 
-        PartDefinition hair_left_r1 = hair.addOrReplaceChild("hair_left_r1", CubeListBuilder.create().texOffs(0, 0).mirror().addBox(0.0F, -10.0F, 0.0F, 9.0F, 10.0F, 0.0F, new CubeDeformation(0.01F)).mirror(false), PartPose.offsetAndRotation(0.0F, 1.0F, 0.0F, 0.0F, -0.7854F, 0.0F));
+        PartDefinition hair_top_r1 = hair.addOrReplaceChild("hair_top_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-8.0F, -4.0F, 0.0F, 16.0F, 8.0F, 0.0F, new CubeDeformation(0.01F)), PartPose.offsetAndRotation(0.0F, -10.5F, 0.0F, 0.0F, -0.7854F, 0.0F));
 
-        PartDefinition hair_left_r2 = hair.addOrReplaceChild("hair_left_r2", CubeListBuilder.create().texOffs(0, 0).mirror().addBox(0.0F, -13.0F, 0.0F, 9.0F, 13.0F, 0.0F, new CubeDeformation(0.01F)).mirror(false), PartPose.offsetAndRotation(0.0F, 1.0F, 0.0F, 0.0F, -0.2618F, 0.0F));
+        PartDefinition hair_top_r2 = hair.addOrReplaceChild("hair_top_r2", CubeListBuilder.create().texOffs(0, 0).mirror().addBox(-8.0F, -4.0F, 0.0F, 16.0F, 8.0F, 0.0F, new CubeDeformation(0.01F)).mirror(false), PartPose.offsetAndRotation(0.0F, -10.5F, 0.0F, 0.0F, 0.7854F, 0.0F));
 
-        PartDefinition hair_right_r1 = hair.addOrReplaceChild("hair_right_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-9.0F, -10.0F, 0.0F, 9.0F, 10.0F, 0.0F, new CubeDeformation(0.01F)), PartPose.offsetAndRotation(0.0F, 1.0F, 0.0F, 0.0F, 0.7854F, 0.0F));
-
-        PartDefinition hair_right_r2 = hair.addOrReplaceChild("hair_right_r2", CubeListBuilder.create().texOffs(0, 0).addBox(-9.0F, -13.0F, 0.0F, 9.0F, 13.0F, 0.0F, new CubeDeformation(0.01F)), PartPose.offsetAndRotation(0.0F, 1.0F, 0.0F, 0.0F, 0.2618F, 0.0F));
-
-        PartDefinition hair_back_r1 = hair.addOrReplaceChild("hair_back_r1", CubeListBuilder.create().texOffs(0, 0).mirror().addBox(0.0F, -12.0F, 0.0F, 9.0F, 13.0F, 0.0F, new CubeDeformation(0.01F)).mirror(false), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
-
-        return LayerDefinition.create(meshdefinition, 18, 13);
+        return LayerDefinition.create(meshdefinition, 32, 8);
     }
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
@@ -77,18 +68,28 @@ public class VampireHairOnePart extends PsuedoHierarchicalModel {
         }
         int finale = 0;
         switch (poggers) {
-            case 2,3,14,15,26,27 ->
+            case 2,3 ->
                 finale = 1;
-            case 4,5,16,17,28,29 ->
+            case 4,5 ->
                 finale = 2;
-            case 6,7,18,19,30,31 ->
+            case 6,7 ->
                 finale = 3;
-            case 8,9,20,21,32,33 ->
+            case 8,9 ->
                 finale = 4;
-            case 10,11,22,23,34,35 ->
+            case 10,11 ->
                 finale = 6;
+            case 12,13 ->
+                    finale = 7;
+            case 14,15 ->
+                    finale = 8;
+            case 16,17 ->
+                    finale = 9;
+            case 18,19 ->
+                    finale = 10;
+            case 20,21 ->
+                    finale = 11;
         }
-        return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/hair/vampire_2/vampire_hair_white_"+(finale)+".png");
+        return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/hair/vampire_1/vampire_hair_white_"+(finale)+".png");
     }
 
     public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light) {

@@ -18,15 +18,15 @@ public class vampire_hair_p1<T extends Entity> extends EntityModel<T> {
 
 		PartDefinition hair = partdefinition.addOrReplaceChild("hair", CubeListBuilder.create(), PartPose.offset(0.0F, -1.0F, 0.0F));
 
-		PartDefinition hair_left_r1 = hair.addOrReplaceChild("hair_left_r1", CubeListBuilder.create().texOffs(0, 0).mirror().addBox(0.0F, -10.0F, 0.0F, 9.0F, 10.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, 1.0F, 0.0F, 0.0F, -0.7854F, 0.0F));
+		PartDefinition hair_left_r1 = hair.addOrReplaceChild("hair_left_r1", CubeListBuilder.create().texOffs(0, 0).mirror().addBox(0.0F, -10.0F, 0.0F, 9.0F, 10.0F, 0.0F, new CubeDeformation(0.01F)).mirror(false), PartPose.offsetAndRotation(0.0F, 1.0F, 0.0F, 0.0F, -0.7854F, 0.0F));
 
-		PartDefinition hair_left_r2 = hair.addOrReplaceChild("hair_left_r2", CubeListBuilder.create().texOffs(0, 0).mirror().addBox(0.0F, -13.0F, 0.0F, 9.0F, 13.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, 1.0F, 0.0F, 0.0F, -0.2618F, 0.0F));
+		PartDefinition hair_left_r2 = hair.addOrReplaceChild("hair_left_r2", CubeListBuilder.create().texOffs(0, 0).mirror().addBox(0.0F, -13.0F, 0.0F, 9.0F, 13.0F, 0.0F, new CubeDeformation(0.01F)).mirror(false), PartPose.offsetAndRotation(0.0F, 1.0F, 0.0F, 0.0F, -0.2618F, 0.0F));
 
-		PartDefinition hair_right_r1 = hair.addOrReplaceChild("hair_right_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-9.0F, -10.0F, 0.0F, 9.0F, 10.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 1.0F, 0.0F, 0.0F, 0.7854F, 0.0F));
+		PartDefinition hair_right_r1 = hair.addOrReplaceChild("hair_right_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-9.0F, -10.0F, 0.0F, 9.0F, 10.0F, 0.0F, new CubeDeformation(0.01F)), PartPose.offsetAndRotation(0.0F, 1.0F, 0.0F, 0.0F, 0.7854F, 0.0F));
 
-		PartDefinition hair_right_r2 = hair.addOrReplaceChild("hair_right_r2", CubeListBuilder.create().texOffs(0, 0).addBox(-9.0F, -13.0F, 0.0F, 9.0F, 13.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 1.0F, 0.0F, 0.0F, 0.2618F, 0.0F));
+		PartDefinition hair_right_r2 = hair.addOrReplaceChild("hair_right_r2", CubeListBuilder.create().texOffs(0, 0).addBox(-9.0F, -13.0F, 0.0F, 9.0F, 13.0F, 0.0F, new CubeDeformation(0.01F)), PartPose.offsetAndRotation(0.0F, 1.0F, 0.0F, 0.0F, 0.2618F, 0.0F));
 
-		PartDefinition hair_back_r1 = hair.addOrReplaceChild("hair_back_r1", CubeListBuilder.create().texOffs(0, 0).mirror().addBox(0.0F, -12.0F, 0.0F, 9.0F, 13.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
+		PartDefinition hair_back_r1 = hair.addOrReplaceChild("hair_back_r1", CubeListBuilder.create().texOffs(0, 0).mirror().addBox(0.0F, -12.0F, 0.0F, 9.0F, 13.0F, 0.0F, new CubeDeformation(0.01F)).mirror(false), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 18, 13);
 	}

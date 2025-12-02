@@ -202,8 +202,9 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 if (entity instanceof Player play) {
                     IPlayerEntity pl = ((IPlayerEntity) play);
                     if (pl.roundabout$GetPos2() == PlayerPosIndex.HAIR_EXTENSION){
-                        Roundabout.LOGGER.info("s");
                         renderVampireHairOne(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
+                                r, g, b);
+                        renderVampireHairTwo(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
                                 r, g, b);
                     }
                 }
@@ -338,6 +339,15 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ClientUtil.pushPoseAndCooperate(poseStack,38);
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.VampireHairOne.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1);
+        ClientUtil.popPoseAndCooperate(poseStack,38);
+    }
+    public void renderVampireHairTwo(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                                     float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,38);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.VampireHairTwo.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1);
         ClientUtil.popPoseAndCooperate(poseStack,38);
     }
