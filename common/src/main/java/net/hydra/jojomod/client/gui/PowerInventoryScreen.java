@@ -444,7 +444,7 @@ public class PowerInventoryScreen
     @Override
     protected void init() {
         super.init();
-        this.widthTooNarrow = this.width < 379;
+        this.widthTooNarrow = this.width < 20;
         isOptionsOut = false;
         pageNumber = 1;
             //this.recipeBookComponent.init(this.width, this.height, this.minecraft, this.widthTooNarrow, this.menu);
