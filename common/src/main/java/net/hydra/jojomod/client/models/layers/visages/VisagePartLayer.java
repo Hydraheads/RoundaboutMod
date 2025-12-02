@@ -202,6 +202,11 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 if (entity instanceof Player play) {
                     IPlayerEntity pl = ((IPlayerEntity) play);
                     if (pl.roundabout$GetPos2() == PlayerPosIndex.HAIR_EXTENSION){
+                        if (!isHurt){
+                            r = 1;
+                            g = 1;
+                            b = 0;
+                        }
                         renderVampireHairOne(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
                                 r, g, b);
                         renderVampireHairTwo(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
