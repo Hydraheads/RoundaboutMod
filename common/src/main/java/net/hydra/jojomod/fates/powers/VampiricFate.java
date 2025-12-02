@@ -1,6 +1,5 @@
 package net.hydra.jojomod.fates.powers;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.AccessFateFoodData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.ILevelAccess;
@@ -12,7 +11,6 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
@@ -664,7 +662,7 @@ public int speedActivated = 0;
     @Override
     public boolean tryPower(int move, boolean forced){
         if (move != BLOOD_SUCK && !self.level().isClientSide()
-        &&  getPlayerPos2() == PlayerPosIndex.HAIR_EXTENDED) {
+        &&  getPlayerPos2() == PlayerPosIndex.BLOOD_SUCK) {
             super.setPlayerPos2(PlayerPosIndex.NONE_2);
         }
         return super.tryPower(move, forced);

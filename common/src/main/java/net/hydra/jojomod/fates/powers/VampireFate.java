@@ -1,6 +1,5 @@
 package net.hydra.jojomod.fates.powers;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.ModParticles;
@@ -15,7 +14,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Position;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -77,8 +75,8 @@ public class VampireFate extends VampiricFate {
 
     @Override
     public boolean tryPower(int move, boolean forced) {
-        if (move != BLOOD_SUCK && !self.level().isClientSide() &&
-                getPlayerPos2() == PlayerPosIndex.BLOOD_SUCK) {
+        if (move != HAIR_EXTENDED && !self.level().isClientSide() &&
+                getPlayerPos2() == PlayerPosIndex.HAIR_EXTENSION) {
             super.setPlayerPos2(PlayerPosIndex.NONE_2);
         }
 
@@ -103,6 +101,10 @@ public class VampireFate extends VampiricFate {
             stopHearingClient();
         }
         tryPowerPacket(HYPNOSIS);
+    }
+    public int animationProgress = 0;
+    public int getProgressIntoAnimation(){
+        return animationProgress;
     }
     public boolean hasHairExtended(){
         return getActivePower() == HAIR_EXTENDED;
@@ -129,11 +131,12 @@ public class VampireFate extends VampiricFate {
                 xTryPower(PowerIndex.NONE, true);
             } else {
                 setActivePower(HAIR_EXTENDED);
-                setPlayerPos2(PlayerPosIndex.HAIR_EXTENDED);
+                setPlayerPos2(PlayerPosIndex.HAIR_EXTENSION);
                 this.attackTimeDuring = 0;
             }
         }
     }
+    public static final int hairChargeLength = 20;
     public boolean isHypnotizing = false;
     public int hypnoTicks = 0;
 
@@ -168,7 +171,16 @@ public class VampireFate extends VampiricFate {
     }
 
     public void tickHair(){
+        if (self.level().isClientSide()){
+            if (getPlayerPos2() == PlayerPosIndex.HAIR_EXTENSION){
+                animationProgress++;
+            } else {
+                animationProgress = 0;
+            }
+        }
+
         if (activePower == HAIR_EXTENDED){
+
             if (attackTimeDuring >= getMaxAttackTimeDuringHair()) {
                 xTryPower(PowerIndex.NONE, true);
             }
@@ -252,7 +264,7 @@ public class VampireFate extends VampiricFate {
     }
 
     public int getMaxAttackTimeDuringHair(){
-        return 20;
+        return hairChargeLength;
     }
 
     @Override
