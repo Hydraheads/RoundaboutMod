@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -65,30 +66,10 @@ public class VampireHairTwoPart extends PsuedoHierarchicalModel {
         int poggers = 0;
         if (context instanceof Player PL && ((IFatePlayer)context).rdbt$getFatePowers() instanceof VampireFate vf){
             poggers = vf.getProgressIntoAnimation();
+        } else {
+            poggers = context.tickCount;
         }
-        int finale = 0;
-        switch (poggers) {
-            case 2,3 ->
-                finale = 1;
-            case 4,5 ->
-                finale = 2;
-            case 6,7 ->
-                finale = 3;
-            case 8,9 ->
-                finale = 4;
-            case 10,11 ->
-                finale = 6;
-            case 12,13 ->
-                    finale = 7;
-            case 14,15 ->
-                    finale = 8;
-            case 16,17 ->
-                    finale = 9;
-            case 18,19 ->
-                    finale = 10;
-            case 20,21 ->
-                    finale = 11;
-        }
+        int finale = Mth.floor((((float)poggers)/2))%12;
         return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/hair/vampire_1/vampire_hair_white_"+(finale)+".png");
     }
 

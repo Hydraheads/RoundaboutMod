@@ -74,20 +74,10 @@ public class VampireHairOnePart extends PsuedoHierarchicalModel {
         int poggers = 0;
         if (context instanceof Player PL && ((IFatePlayer)context).rdbt$getFatePowers() instanceof VampireFate vf){
             poggers = vf.getProgressIntoAnimation();
+        } else {
+            poggers = context.tickCount;
         }
-        int finale = 0;
-        switch (poggers) {
-            case 2,3,14,15,26,27 ->
-                finale = 1;
-            case 4,5,16,17,28,29 ->
-                finale = 2;
-            case 6,7,18,19,30,31 ->
-                finale = 3;
-            case 8,9,20,21,32,33 ->
-                finale = 4;
-            case 10,11,22,23,34,35 ->
-                finale = 6;
-        }
+        int finale = Mth.floor((((float)poggers)/2))%7;
         return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/hair/vampire_2/vampire_hair_white_"+(finale)+".png");
     }
 

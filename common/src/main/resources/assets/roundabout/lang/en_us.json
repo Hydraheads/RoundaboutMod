@@ -1103,7 +1103,7 @@
   "ability.roundabout.fall_disperse": "Fall Absorb",
   "ability.roundabout.fall_disperse.desc": "Halves incoming fall damage, spreading the impact across your heels.",
   "ability.roundabout.corner_cut": "Corner Cut",
-  "ability.roundabout.corner_cut.desc": "Enable this to skip the process of direction adjustment when running off a wall to cut corners. Also inhibits accidental jumps. Think of it as training wheels.",
+  "ability.roundabout.corner_cut.desc": "Enable this to skip the process of direction adjustment when running off a wall to cut corners. Also inhibits accidental jumps and lowers speed. Think of it as training wheels.",
 
 
 
@@ -2208,6 +2208,10 @@
   "config.roundabout.fallProtectionOnRelease.desc": "When you exit a wall, grants fall immunity like a stand leap.",
   "config.roundabout.enableWallWalking.name": "Enable Wall Walking",
   "config.roundabout.enableWallWalking.desc": "Allows flipping directions to walk on walls. Generally, this feature is stable, but if you have a modpack that causes it to bug out/not work smoothly turn this off. Without wall walking, you gain an additional block of step height while your spikes are planted.",
+
+  "config.roundabout.enableCornerCutting.name": "Enable Corner Cutting",
+  "config.roundabout.enableCornerCutting.desc": "Allows training wheel mode of Walking Heart by pressing V, so you can flip over corners.",
+
 
   "config.roundabout.invisibilityPotionAsWell.name": "Apply Invis Potion",
   "config.roundabout.invisibilityPotionAsWell.desc": "If you want the invisibility power to apply the potion effect as well, turn this on. This could be useful for map mods that respect players invisibility.",

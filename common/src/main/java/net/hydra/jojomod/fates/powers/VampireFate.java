@@ -180,9 +180,8 @@ public class VampireFate extends VampiricFate {
         }
 
         if (activePower == HAIR_EXTENDED){
-
-            if (attackTimeDuring >= getMaxAttackTimeDuringHair()) {
-                xTryPower(PowerIndex.NONE, true);
+            if (attackTimeDuring >= getMaxAttackTimeDuringHair() && !isClient()) {
+                setAttackTimeDuring(-20);
             }
         }
     }
@@ -280,7 +279,8 @@ public class VampireFate extends VampiricFate {
             Entity TE = getTargetEntity(playerEntity, 7, 15);
 
             if (getActivePower() == HAIR_EXTENDED){
-                float finalATime = (float) attackTimeDuring / getMaxAttackTimeDuringHair();
+                float finalATime = (Math.min((float)attackTimeDuring,(float)getMaxAttackTimeDuringHair())) /
+                        getMaxAttackTimeDuringHair();
                 int barTexture = 0;
                 if (TE != null && MainUtil.canDrinkBloodFair(TE, self)){
                     barTexture = 68;
