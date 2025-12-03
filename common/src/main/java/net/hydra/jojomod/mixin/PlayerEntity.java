@@ -12,6 +12,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
 import net.hydra.jojomod.item.MaskItem;
@@ -24,6 +25,8 @@ import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.PlayerMaskSlots;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Rotations;
 import net.minecraft.nbt.CompoundTag;
@@ -303,6 +306,52 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
         return 0;
     }
+
+
+    ///  hacky solution for really odd anubis bug, check this if something breaks
+    @Inject(method = "jumpFromGround",at=@At(value = "HEAD"))
+    public void huhh(CallbackInfo ci) {
+        Player player = (Player)(Object)(this);
+        Options options = Minecraft.getInstance().options;
+        if ( ((StandUser)player).roundabout$getStandPowers() instanceof PowersAnubis PA && ((StandUser)player).roundabout$getUniqueStandModeToggle()) {
+            float bigJump = ((StandUser) player).roundabout$getBonusJumpHeight();
+            float totalHeight = bigJump + 1;
+            boolean canJump = bigJump > 0;
+            boolean isJumping = ((StandUser) player).roundabout$getBigJump();
+            float getCurrentJump = ((StandUser) player).roundabout$getBigJumpCurrentProgress();
+
+            if (canJump) {
+                if (player.getAbilities().flying) {
+                    if (isJumping) {
+                        this.roundabout$SetBonusJump(false, totalHeight, getCurrentJump);
+                    }
+                } else {
+                    if (isJumping && player.onGround()) {
+                        this.roundabout$SetBonusJump(false, totalHeight, getCurrentJump);
+                    }
+                    if (options.keyJump.isDown()) {
+                        if (player.onGround() && getCurrentJump > 0) {
+                        } else {
+                            if (player.onGround() || isJumping) {
+                                this.roundabout$SetBonusJump(true, totalHeight, getCurrentJump);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Unique
+    public void roundabout$SetBonusJump(boolean bigJump, float jumpHeight, float current){
+        ((StandUser)Minecraft.getInstance().player).roundabout$setBigJump(bigJump);
+        if (bigJump){
+            C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_BIG_JUMP,current);
+        } else {
+            C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_BIG_JUMP_CANCEL,current);
+        }
+    }
+
     @Unique
     @Override
     public void roundabout$qmessage(int messageID){

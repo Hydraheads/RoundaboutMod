@@ -65,7 +65,7 @@ public abstract class KeysKeyMapping implements IKeyMapping {
         if (SU.roundabout$getStandPowers() != null) {
             if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
                 if (SU.roundabout$getUniqueStandModeToggle()) {
-                    int time = PA.maxPlayTime-PA.playTime;
+                    int time = PowersAnubis.MaxPlayTime-PA.playTime;
                     for(int i=0;i<PA.playKeys.size();i++) {
                         KeyMapping key = PA.playKeys.get(i);
 
@@ -74,8 +74,8 @@ public abstract class KeysKeyMapping implements IKeyMapping {
                                 cir.setReturnValue(true);
                                 cir.cancel();
                             }
-                        } else { /// admittedly a little scuffed, I'll change it if it breaks
-                            if (PA.isPressed(PA.playBytes.get(i), time)) {
+                        } else {/// admittedly a little scuffed, I'll change it if it breaks
+                            if (PA.isPressed(PA.playBytes.get(i), time) && PA.playBytes.get(i) > 20) {
                                 player.getInventory().selected = ((int)PA.playBytes.get(i))-21;
                             }
                         }
