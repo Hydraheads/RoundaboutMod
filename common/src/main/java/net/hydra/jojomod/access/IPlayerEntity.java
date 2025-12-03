@@ -39,6 +39,9 @@ public interface IPlayerEntity {
     float rdbt$getHairColorX();
     float rdbt$getHairColorY();
     float rdbt$getHairColorZ();
+    void rdbt$setHairColorX(float color);
+    void rdbt$setHairColorY(float color);
+    void rdbt$setHairColorZ(float color);
 
     void roundabout$setFate(byte style);
     byte roundabout$getFate();
