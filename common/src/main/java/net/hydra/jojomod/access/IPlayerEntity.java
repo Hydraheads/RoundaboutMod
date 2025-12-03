@@ -36,6 +36,10 @@ public interface IPlayerEntity {
     void rdbt$setRespawnStrategy(byte strat);
     byte rdbt$getRespawnStrategy();
 
+    float rdbt$getHairColorX();
+    float rdbt$getHairColorY();
+    float rdbt$getHairColorZ();
+
     void roundabout$setFate(byte style);
     byte roundabout$getFate();
     void roundabout$qmessage(int messageID);

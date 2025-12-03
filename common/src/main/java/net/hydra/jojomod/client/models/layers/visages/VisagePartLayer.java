@@ -203,9 +203,9 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     IPlayerEntity pl = ((IPlayerEntity) play);
                     if (pl.roundabout$GetPos2() == PlayerPosIndex.HAIR_EXTENSION){
                         if (!isHurt){
-                            r = 1;
-                            g = 1;
-                            b = 0;
+                            r = pl.rdbt$getHairColorX();
+                            g = pl.rdbt$getHairColorY();
+                            b = pl.rdbt$getHairColorZ();
                         }
                         renderVampireHairOne(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
                                 r, g, b);
