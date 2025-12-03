@@ -76,6 +76,8 @@ public class AnubisModel extends PsuedoHierarchicalModel {
     public static ResourceLocation item = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/anime_item.png");
     public static ResourceLocation anime = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/anime.png");
     public static ResourceLocation evil = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/evil.png");
+    public static ResourceLocation aquamarine = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/aquamarine.png");
+
 
 
     public ResourceLocation getTextureLocation(Entity context, byte skin){
@@ -84,6 +86,7 @@ public class AnubisModel extends PsuedoHierarchicalModel {
             case 0 -> {return item;}
             case 1 -> {return anime;}
             case 2 -> {return evil;}
+            case 3 -> {return aquamarine;}
             default -> {return anime;}
         }
     }

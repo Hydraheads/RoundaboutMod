@@ -296,7 +296,7 @@ public class PowersAnubis extends NewDashPreset {
             }
         }
 
-        Roundabout.LOGGER.info(this.getUsedMemory().moments.toString());
+    //    Roundabout.LOGGER.info(this.getUsedMemory().moments.toString());
 
 
         setPlayTime(-1);
@@ -309,7 +309,8 @@ public class PowersAnubis extends NewDashPreset {
     }
     public void MemoryCancelClient() {
         if (!this.getStandUserSelf().roundabout$getUniqueStandModeToggle()) {
-            this.getUsedMemory().moments = new ArrayList<>();
+            this.memories.set(this.playSlot,lastMemory);
+            lastMemory = null;
         }
         this.visualValues = new ArrayList<>();
         setPlayTime(-1);
@@ -1376,13 +1377,15 @@ public class PowersAnubis extends NewDashPreset {
 
     public static final byte
             ANIME = 1,
-            EVIL = 2;
+            EVIL = 2,
+            AQUAMARINE = 3;
 
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 ANIME,
-                EVIL
+                EVIL,
+                AQUAMARINE
         );
     }
 
@@ -1390,6 +1393,7 @@ public class PowersAnubis extends NewDashPreset {
         return switch (skinId)
         {
             case PowersAnubis.EVIL -> Component.translatable("skins.roundabout.anubis.evil");
+            case PowersAnubis.AQUAMARINE -> Component.translatable("skins.roundabout.anubis.aquamarine");
             default -> Component.translatable("skins.roundabout.anubis.anime");
         };
     }
@@ -1469,6 +1473,7 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     List<Pair<List<Byte>,Integer>> visualValues = new ArrayList<>();
+    AnubisMemory lastMemory = null;
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
@@ -1608,13 +1613,13 @@ public class PowersAnubis extends NewDashPreset {
         if (slot == (byte) -1 || slot == 8) {return;}
 
 
-
         playSlot = slot;
         setPlayTime(PowersAnubis.MaxPlayTime);
 
         visualValues = new ArrayList<>();
 
         AnubisMemory mem = this.memories.get(slot);
+        lastMemory = this.memories.get(slot);
         this.memories.set(slot,new AnubisMemory(mem.item,new ArrayList<>() ) );
     }
     public void playbackMemory(byte slot) {
@@ -1626,7 +1631,7 @@ public class PowersAnubis extends NewDashPreset {
 
             playSlot = slot;
             setPlayTime(PowersAnubis.MaxPlayTime-moments.get(0).time );
-            Roundabout.LOGGER.info("{}/{}",moments.get(moments.size()-1).time,moments.get(0).time);
+            //Roundabout.LOGGER.info("{}/{}",moments.get(moments.size()-1).time,moments.get(0).time);
             this.getStandUserSelf().roundabout$setUniqueStandModeToggle(true);
 
         }
