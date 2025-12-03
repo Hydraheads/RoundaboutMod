@@ -162,6 +162,29 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     private float roundabout$idleYOffset = 0.1F;
 
+    //0.00392156862
+    @Unique
+    private float rdbt$hairColorX =245f/255f;
+    @Unique
+    private float rdbt$hairColorY =225f/255f;
+    @Unique
+    private float rdbt$hairColorZ =97f/255f;
+    @Unique
+    @Override
+    public float rdbt$getHairColorX(){
+        return rdbt$hairColorX;
+    }
+    @Unique
+    @Override
+    public float rdbt$getHairColorY(){
+        return rdbt$hairColorY;
+    }
+    @Unique
+    @Override
+    public float rdbt$getHairColorZ(){
+        return rdbt$hairColorZ;
+    }
+
     @Unique
     protected boolean rdbt$cooldownQuery = false;
     @Unique

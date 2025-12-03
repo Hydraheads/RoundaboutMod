@@ -47,6 +47,11 @@ public class ModStrayModels {
     public static LeftLegPart LeftLeg;
     public static LeftHeelPart LeftHeel;
     public static RightHeelPart RightHeel;
+
+
+    public static VampireHairOnePart VampireHairOne;
+    public static VampireHairTwoPart VampireHairTwo;
+
     public static MoldSpineModel MoldSpine;
 
     public static RoadRollerStrayModel ROAD_ROLLER;

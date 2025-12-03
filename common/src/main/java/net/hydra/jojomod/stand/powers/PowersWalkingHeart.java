@@ -168,7 +168,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                     return;
                 }
             }
-            if (canWallWalkConfig()) {
+            if (canWallWalkConfig() && canCornerCutConfig()) {
                 tryPowerPacket(PowerIndex.POWER_4_BONUS);
             }
         }
@@ -419,7 +419,7 @@ public class PowersWalkingHeart extends NewDashPreset {
         }
 
         if (!isSpider){
-            if (canWallWalkConfig()) {
+            if (canWallWalkConfig() && canCornerCutConfig()) {
                 if (canCutCorners()) {
                     setSkillIcon(context, x, y, 4, StandIcons.WALL_CUT, PowerIndex.NONE);
                 } else {
@@ -462,15 +462,23 @@ public class PowersWalkingHeart extends NewDashPreset {
         return super.getSoundFromByte(soundChoice);
     }
 
+    public int slowHeelTicks = 0;
+
     @Override
     public float inputSpeedModifiers(float basis){
         if (inCombatMode()) {
             return 0;
+        } else if (hasExtendedHeelsForWalking() && (canCutCorners() || slowHeelTicks > 0)){
+            return basis*0.8F;
         }
         return super.inputSpeedModifiers(basis);
     }
     public boolean inCombatMode(){
         return getStandUserSelf().roundabout$getCombatMode();
+    }
+
+    public boolean canCornerCutConfig(){
+        return ClientNetworking.getAppropriateConfig().walkingHeartSettings.enableCornerCutting;
     }
 
     @Override
@@ -898,6 +906,12 @@ public class PowersWalkingHeart extends NewDashPreset {
             if (cutCorners == 0 && self instanceof Player){
                 cutCorners = 1;
                 C2SPacketUtil.trySingleBytePacket(PacketDataIndex.QUERY_STAND_UPDATE);
+            } else if (canCutCorners()){
+                slowHeelTicks = 20;
+            } else {
+                if (slowHeelTicks > 0){
+                    slowHeelTicks--;
+                }
             }
 
 
@@ -1166,8 +1180,10 @@ public class PowersWalkingHeart extends NewDashPreset {
                     "instruction.roundabout.passive", StandIcons.FIRM_SWING, 0, level, bypass));
             $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.fall_disperse",
                     "instruction.roundabout.passive", StandIcons.FALL_ABSORB, 0, level, bypass));
-            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 57, topPos + 80, 0, "ability.roundabout.corner_cut",
-                    "instruction.roundabout.press_skill", StandIcons.WALL_CUT, 4, level, bypass));
+            if (canCornerCutConfig()) {
+                $$1.add(drawSingleGUIIcon(context, 18, leftPos + 57, topPos + 80, 0, "ability.roundabout.corner_cut",
+                        "instruction.roundabout.press_skill", StandIcons.WALL_CUT, 4, level, bypass));
+            }
         } else {
             $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.firm_swing",
                     "instruction.roundabout.passive", StandIcons.FIRM_SWING, 0, level, bypass));
