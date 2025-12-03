@@ -2,6 +2,7 @@ package net.hydra.jojomod.client.hud;
 
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -10,6 +11,8 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
+import net.hydra.jojomod.event.index.AnubisMemory;
+import net.hydra.jojomod.event.index.AnubisMoment;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -32,6 +35,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+
+import java.util.List;
 
 public class StandHudRender {
     /** Renders the HUD for stand attacks/abilities.
@@ -641,8 +646,31 @@ public class StandHudRender {
     public static void renderRecordingHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                            int scaledWidth, int scaledHeight, int x) {
         int l = scaledHeight - 32 + 3;
-        StandPowers p = ((StandUser)playerEntity).roundabout$getStandPowers();
-        int k = (int)(((float) 182 / ((PowersAnubis)p).maxPlayTime) * (float) ((PowersAnubis)p).playTime );
+        StandUser SU = (StandUser) playerEntity;
+        StandPowers p = SU.roundabout$getStandPowers();
+        PowersAnubis PA = (PowersAnubis) p;
+        int max = PA.maxPlayTime;
+        int inc = PA.playTime;
+
+        if (SU.roundabout$getUniqueStandModeToggle()) {
+            AnubisMemory memory = PA.getUsedMemory();
+            if (memory != null) {
+                List<AnubisMoment> moments = memory.moments;
+
+                int sTime = moments.get(0).time;
+                int eTime = moments.get(moments.size()-1).time;
+
+                int time = PowersAnubis.MaxPlayTime-PA.playTime-sTime;
+                int maxTime = eTime-sTime;
+            //    Roundabout.LOGGER.info("{}/{}",time,maxTime);
+
+                inc = maxTime-time;
+                max = maxTime;
+
+            }
+        }
+
+        int k = (int) (((float) 182 ) *  ((float) inc/ max) );
 
         context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 30, 182, 5);
 
