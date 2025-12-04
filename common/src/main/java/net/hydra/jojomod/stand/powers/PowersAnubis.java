@@ -424,22 +424,14 @@ public class PowersAnubis extends NewDashPreset {
     public void tickPower() {
 
         // Roundabout.LOGGER.info(" CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax());
-
-
-
-
         StandUser SU = this.getStandUserSelf();
 
-        if (SU.roundabout$getStandSkin() == (byte) 0) {
-            SU.roundabout$setStandSkin((byte)1);
-        }
+        if (SU.roundabout$getStandSkin() == (byte) 0) {SU.roundabout$setStandSkin((byte)1);}
 
         if (this.getSelf().onGround()) {
-
             if (this.getActivePower() != PowerIndex.SNEAK_ATTACK_CHARGE || this.attackTime > PogoDelay + 3) {
                 canPogo = true;
             }
-
 
             if (this.isClient()) {
                 if (this.getSelf() instanceof Player P){
@@ -449,14 +441,27 @@ public class PowersAnubis extends NewDashPreset {
                 }
                 pogoCounter = 0;
             }
-
         } else if (!canPogo) {
             if (this.getSelf() instanceof Player P) {
                 if (P.isCreative()) { canPogo = true;}
             }
         }
+        SU.roundabout$setCombatMode(SU.roundabout$getActive());
 
-        /** slipstream creation */
+        tickSlipStream();
+
+        tickMemories();
+
+        tickExtras();
+
+/// WARNING: THIS WILL BREAK AT SOME POINT
+        this.getSelf().setNoGravity(this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE && this.attackTimeDuring < PogoDelay);
+
+        super.tickPower();
+    }
+
+    public void tickSlipStream() {
+        StandUser SU = this.getStandUserSelf();
         if (!this.isClient()) {
             Level level = this.getSelf().level();
             boolean noSlip = this.getActivePower() == PowerIndex.SNEAK_MOVEMENT || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE;
@@ -475,9 +480,9 @@ public class PowersAnubis extends NewDashPreset {
                 }
             }
         }
+    }
 
-        SU.roundabout$setCombatMode(SU.roundabout$getActive());
-
+    public void tickMemories() {
         if (this.memories.size() != 8) {
             generateMemories(this);
         }
@@ -552,7 +557,10 @@ public class PowersAnubis extends NewDashPreset {
                 this.MemoryCancelSaveClient();
             }
         }
+    }
 
+    public void tickExtras() {
+        StandUser SU = this.getStandUserSelf();
         if (isGuarding()) {
             getStandUserSelf().roundabout$setStandAnimation(PowerIndex.GUARD);
         } else if (getStandUserSelf().roundabout$getStandAnimation() == PowerIndex.GUARD) {
@@ -578,12 +586,6 @@ public class PowersAnubis extends NewDashPreset {
                 this.setPowerNone();
             }
         }
-
-
-/// WARNING: THIS WILL BREAK AT SOME POINT
-        this.getSelf().setNoGravity(this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE && this.attackTimeDuring < PogoDelay);
-
-        super.tickPower();
     }
 
 
@@ -676,14 +678,12 @@ public class PowersAnubis extends NewDashPreset {
                 BarrageSlash();
             }
             case PowerIndex.RANGED_BARRAGE -> {
-                if (this.getAttackTime() == quickdrawDelay) {
+                if (this.getAttackTime() < quickdrawDelay) {
+                    scopeLevel = 1;
+                } else if (this.getAttackTime() == quickdrawDelay) {
                     StartQuickdraw(8);
                 } else {
                     UpdateQuickdraw();
-                }
-                if (this.getAttackTime() < quickdrawDelay) {
-                    scopeLevel = 1;
-                } else {
                     scopeLevel = 0;
                 }
 
@@ -986,6 +986,9 @@ public class PowersAnubis extends NewDashPreset {
                     if (e instanceof LivingEntity LE) {
                         addEXP(2);
                     }
+                    if (first) {
+                        ((StandUser)e).roundabout$setDazed((byte)3);
+                    }
                     this.takeDeterminedKnockback(this.getSelf(), e, knockbackStrength);
 
                 } else if (!first) {
@@ -1267,7 +1270,7 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     public void UpdateQuickdraw() {
-        ((StandUser)this.getSelf()).roundabout$setMeleeImmunity(3);
+        this.getStandUserSelf().roundabout$setMeleeImmunity(3);
         int duration = 15;
         for (Entity entity : this.targets) {
             if (entity instanceof LivingEntity LE) {
@@ -1665,10 +1668,6 @@ public class PowersAnubis extends NewDashPreset {
         for(int i=0;i<AnubisMoment.HOTBAR.length;i++) {
             PA.playKeys.add(o.keyHotbarSlots[i]);PA.playBytes.add(AnubisMoment.HOTBAR[i]);
         }
-
-
-
-
     }
     public AnubisMemory getUsedMemory() {
         if (this.playSlot != -1) {

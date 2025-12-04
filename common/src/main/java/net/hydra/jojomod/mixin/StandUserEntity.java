@@ -4206,12 +4206,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (poss != null) {
              //   Roundabout.LOGGER.info("HO");
                 if (poss.getTarget() != null) {
+                  /*
                     Vec3 tpos = poss.getPosition(1);
                     Vec3 pos = P.getPosition(1);
                     float f = (float) tpos.subtract(pos).length();
                     float g = Math.min(f * 4.0f, 1.0f);
                     this.walkAnimation.update(g, 0.4f);
-                    P.calculateEntityAnimation(true);
+                    P.calculateEntityAnimation(true); */
                 }
             }
         }
