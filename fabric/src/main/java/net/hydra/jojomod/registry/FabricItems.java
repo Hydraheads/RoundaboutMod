@@ -140,6 +140,8 @@ public class FabricItems {
     public static Item KNIFE = registerItem("knife", new KnifeItem(new Item.Properties().stacksTo(64)));
     public static Item KNIFE_BUNDLE = registerItem("knife_bundle", new KnifeItem(new Item.Properties().stacksTo(16)));
 
+    public static Item HAIRSPRAY = registerItem("hairspray", new HairsprayItem(new Item.Properties().stacksTo(64)));
+
     public static Item MATCH = registerItem("match", new MatchItem(new Item.Properties().stacksTo(64)));
     public static Item MATCH_BUNDLE = registerItem("match_bundle", new MatchItem(new Item.Properties().stacksTo(16)));
     public static Item GASOLINE_CAN = registerItem("gasoline_can", new GasolineCanItem(new Item.Properties().stacksTo(16)));
@@ -538,6 +540,7 @@ public class FabricItems {
         ModItems.CREATIVE_BODY_BAG = CREATIVE_BODY_BAG;
         ModItems.HARPOON = HARPOON;
         ModItems.BOWLER_HAT = BOWLER_HAT;
+        ModItems.HAIRSPRAY = HAIRSPRAY;
         ModItems.KNIFE = KNIFE;
         ModItems.KNIFE_BUNDLE = KNIFE_BUNDLE;
         ModItems.MATCH = MATCH;

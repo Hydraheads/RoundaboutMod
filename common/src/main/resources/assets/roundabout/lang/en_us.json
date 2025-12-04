@@ -61,6 +61,7 @@
   "item.roundabout.lucky_lipstick.desc": "For better trades, apply until you sleep",
   "item.roundabout.sacrificial_dagger": "Sacrificial Dagger",
   "item.roundabout.cherries": "Cherries",
+  "item.roundabout.hairspray": "Hairspray",
 
 
   "item.roundabout.star_platinum_disc": "Stand Disc",
@@ -224,6 +225,7 @@
 
   "item.roundabout.worthy_arrow.info": "Creative only, grants worthiness.",
   "item.roundabout.worthy_arrow.info_2": "If shot in creative, can also remove stands/worth.",
+  "item.roundabout.hairspray.info": "Creative only",
 
   "effect.roundabout.bleed": "Bleed",
   "effect.roundabout.hex": "Hex",
@@ -1592,6 +1594,11 @@
   "roundabout.cinderella.mod_visage_gui.chest_type.three": "C",
   "roundabout.cinderella.mod_visage_gui.chest_type.four": "D",
   "roundabout.cinderella.mod_visage.voice_available": "Compatible With Voice Slot",
+
+  "roundabout.hairspray.red": "Red",
+  "roundabout.hairspray.green": "Green",
+  "roundabout.hairspray.blue": "Blue",
+  "roundabout.hairspray.base": "Hair",
 
   "power_inventory.roundabout.settings.general": "Stand Settings",
   "power_inventory.roundabout.settings.offset": "Following Position",

@@ -937,6 +937,15 @@ public class MainUtil {
         return Mth.clamp($$0, -3.0E7, 3.0E7);
     }
 
+    public static void updateHairColor(Player player,float red, float green, float blue){
+        if (player != null){
+            IPlayerEntity iplayer = ((IPlayerEntity)player);
+            iplayer.rdbt$setHairColorX(red);
+            iplayer.rdbt$setHairColorY(green);
+            iplayer.rdbt$setHairColorZ(blue);
+        }
+
+    }
     private static double clampVertical(double $$0) {
         return Mth.clamp($$0, -2.0E7, 2.0E7);
     }

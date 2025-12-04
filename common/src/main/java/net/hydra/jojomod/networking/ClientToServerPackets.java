@@ -62,6 +62,7 @@ public class ClientToServerPackets {
             Inventory("inventory"),
             ItemContext("item_context"),
             GuardCancel("guard_cancel"),
+            HairColor("hair_color"),
             FinishSucking("finish_sucking"),
             CancelSucking("cancel_sucking"),
             HandshakeCooldowns("handshake_cooldowns"),
@@ -386,6 +387,13 @@ public class ClientToServerPackets {
                 if (message.equals(MESSAGES.StandSummon.value)) {
                     ServerLevel world = (ServerLevel) sender.level();
                     ((StandUser) sender).roundabout$summonStand(world, false, true);
+                }
+                /**Change Hair Color*/
+                if (message.equals(MESSAGES.HairColor.value)) {
+                    float red = (float)vargs[0];
+                    float green = (float)vargs[1];
+                    float blue = (float)vargs[2];
+                    MainUtil.updateHairColor(sender,red,green,blue);
                 }
                 /**Update Piloting Stand*/
                 if (message.equals(MESSAGES.UpdatePilot.value)) {
