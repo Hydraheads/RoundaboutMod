@@ -1595,6 +1595,11 @@
   "roundabout.cinderella.mod_visage_gui.chest_type.four": "D",
   "roundabout.cinderella.mod_visage.voice_available": "Compatible With Voice Slot",
 
+  "roundabout.hairspray.red": "Red",
+  "roundabout.hairspray.green": "Green",
+  "roundabout.hairspray.blue": "Blue",
+  "roundabout.hairspray.base": "Hair",
+
   "power_inventory.roundabout.settings.general": "Stand Settings",
   "power_inventory.roundabout.settings.offset": "Following Position",
   "power_inventory.roundabout.settings.attack_offset": "Attack Position",

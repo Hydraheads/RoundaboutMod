@@ -888,6 +888,9 @@ public class ClientUtil {
     public static void openModificationVisageUI(ItemStack visage){
         Minecraft.getInstance().setScreen(new ModificationVisageScreen(visage));
     }
+    public static void openHairspryUI(){
+        Minecraft.getInstance().setScreen(new HairColorChangeScreen());
+    }
     public static void openMemoryRecordScreen(boolean recording){
         Minecraft.getInstance().setScreen(new MemoryRecordScreen(recording));
     }

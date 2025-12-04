@@ -236,6 +236,15 @@ public class C2SPacketUtil {
         );
     }
 
+    /**Release right click to stop guarding*/
+    public static void hairColorUpdatePacket(float red,float green,float blue){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.HairColor.value,
+                red,
+                green,
+                blue
+        );
+    }
 
     /**Release right click to stop guarding*/
     public static void guardCancelPacket(){
