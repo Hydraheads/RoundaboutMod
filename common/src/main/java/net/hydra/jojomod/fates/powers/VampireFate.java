@@ -159,12 +159,26 @@ public class VampireFate extends VampiricFate {
         if (self.level().isClientSide() && !isVisionOn()){
             return super.getJumpHeightAddon();
         }
-        return super.getJumpHeightAddon()+4;
+        return super.getJumpHeightAddon()+getAddon();
     }
+
+    public float getAddon(){
+        if (self.isCrouching() && rechargeJump){
+            return 4;
+        } else {
+            return 2;
+        }
+    }
+    public boolean rechargeJump = false;
 
 
     @Override
     public void tickPower(){
+        if (self.onGround()){
+            rechargeJump = true;
+        } else if (!self.isCrouching()){
+            rechargeJump = false;
+        }
         tickHypnosis();
         tickHair();
         super.tickPower();
