@@ -79,6 +79,7 @@ public class VampireHairFleshBud extends PsuedoHierarchicalModel {
             int poggers = vf.getProgressIntoAnimation();
             if (poggers >= 16 && poggers <= 22) {
                 poggers -= 16;
+                hair.zScale = 2.5f;
                 VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(context,poggers)));
                 root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
             }

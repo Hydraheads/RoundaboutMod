@@ -18,14 +18,19 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.fates.FatePowers;
+import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
-import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -1353,6 +1358,31 @@ public class ClientUtil {
         return null;
     }
 
+    public static<T extends LivingEntity, M extends EntityModel<T>> void renderFirstPersonModelParts(Player $$0, double $$1, double $$2, double $$3, float $$4, PoseStack stack, MultiBufferSource source, int light){
+
+        if ($$0 != null && ((IFatePlayer)$$0).rdbt$getFatePowers() instanceof VampireFate vf){
+            int poggers = vf.getProgressIntoAnimation();
+            if (poggers >= 16 && poggers <= 22) {
+                stack.pushPose();
+                poggers -= 16;
+                Roundabout.LOGGER.info("yes");
+                Vec3 vec = $$0.getPosition($$4).add(0.0, (double) $$0.getEyeHeight() * 0.7, 0.0);
+
+                IPlayerEntity pl = ((IPlayerEntity) $$0);
+                float r = pl.rdbt$getHairColorX();
+                float g = pl.rdbt$getHairColorY();
+                float b = pl.rdbt$getHairColorZ();
+                EntityRenderer<? super T> ERA = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer($$0);
+                if (ERA instanceof PlayerRenderer ELA && ELA.getModel() != null) {
+                    //ELA.getModel().head.yRot = $$0.getYHeadRot() * (float) (Math.PI / 180.0);
+                    //ELA.getModel().setupAnim((AbstractClientPlayer) $$0, 0, 0, $$4 %1, $$0.getYHeadRot(), $$0.getXRot());
+                    //ELA.getModel().head.translateAndRotate(stack);
+                    ModStrayModels.VampireHairFlesh.render($$0, $$4, stack, source, poggers, r, g, b, 1);
+                }
+                stack.popPose();
+            }
+        }
+    }
     @Unique
     public static void roundabout$renderBound(LivingEntity victim, float delta, PoseStack poseStack, MultiBufferSource mb, Entity binder, float focus) {
         poseStack.pushPose();
