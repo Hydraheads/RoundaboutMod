@@ -23,6 +23,9 @@ import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.RotationAnimation;
+import net.hydra.jojomod.util.gravity.GravityAPI;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -48,6 +51,7 @@ import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.phys.Vec2;
 import net.zetalasis.client.shader.D4CShaderFX;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.D4CCloneEntity;
@@ -87,6 +91,7 @@ import net.zetalasis.networking.packet.api.IClientNetworking;
 import net.zetalasis.world.DynamicWorld;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Unique;
 
@@ -1358,26 +1363,48 @@ public class ClientUtil {
         return null;
     }
 
-    public static<T extends LivingEntity, M extends EntityModel<T>> void renderFirstPersonModelParts(Player $$0, double $$1, double $$2, double $$3, float $$4, PoseStack stack, MultiBufferSource source, int light){
+    public static<T extends LivingEntity, M extends EntityModel<T>> void renderFirstPersonModelParts(Entity cameraEnt, double $$1, double $$2, double $$3, float $$4, PoseStack stack, MultiBufferSource source, int light){
 
-        if ($$0 != null && ((IFatePlayer)$$0).rdbt$getFatePowers() instanceof VampireFate vf){
+        if (cameraEnt instanceof Player play && ((IFatePlayer)cameraEnt).rdbt$getFatePowers() instanceof VampireFate vf){
             int poggers = vf.getProgressIntoAnimation();
             if (poggers >= 16 && poggers <= 22) {
                 stack.pushPose();
                 poggers -= 16;
-                Roundabout.LOGGER.info("yes");
-                Vec3 vec = $$0.getPosition($$4).add(0.0, (double) $$0.getEyeHeight() * 0.7, 0.0);
+                Vec3 vec = cameraEnt.getEyePosition();
 
-                IPlayerEntity pl = ((IPlayerEntity) $$0);
+                IPlayerEntity pl = ((IPlayerEntity) cameraEnt);
                 float r = pl.rdbt$getHairColorX();
                 float g = pl.rdbt$getHairColorY();
                 float b = pl.rdbt$getHairColorZ();
-                EntityRenderer<? super T> ERA = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer($$0);
+                EntityRenderer<? super T> ERA = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(cameraEnt);
                 if (ERA instanceof PlayerRenderer ELA && ELA.getModel() != null) {
-                    //ELA.getModel().head.yRot = $$0.getYHeadRot() * (float) (Math.PI / 180.0);
-                    //ELA.getModel().setupAnim((AbstractClientPlayer) $$0, 0, 0, $$4 %1, $$0.getYHeadRot(), $$0.getXRot());
-                    //ELA.getModel().head.translateAndRotate(stack);
-                    ModStrayModels.VampireHairFlesh.render($$0, $$4, stack, source, poggers, r, g, b, 1);
+                    Direction gravityDirection = GravityAPI.getGravityDirection(cameraEnt);
+
+                    //RotationUtil.rotPlayerToWorld(cameraEnt.getYHeadRot(), cameraEnt.getXRot(), gravityDirection);
+                    Vec2 rot = RotationUtil.rotPlayerToWorld(cameraEnt.getYHeadRot(), cameraEnt.getXRot(), gravityDirection);
+                    ELA.getModel().head.yRot = -1*((rot.x+180) * (float) (Math.PI / 180.0));
+                    ELA.getModel().head.xRot = -1*((rot.y) * (float) (Math.PI / 180.0));
+//                    RotationAnimation animation = GravityAPI.getRotationAnimation(player);
+//                    if (animation == null) {
+//                        return;
+//                    }
+//                    long timeMs = player.level().getGameTime() * 50 + (long) ($$4 * 50);
+//                    //ELA.getModel().setupAnim((AbstractClientPlayer) $$0, 0, 0, $$4 %1, $$8, $$11);
+                    ELA.getModel().head.translateAndRotate(stack);
+
+                    if (gravityDirection == Direction.UP){
+                        Vec3 vector = new Vec3(0,cameraEnt.getEyeHeight()*0.4f,0);
+                        stack.translate(vector.x,vector.y,vector.z);
+                    } else {
+                        Vec3 vector = new Vec3(0,cameraEnt.getEyeHeight()*0.15f,0);
+                        stack.translate(vector.x,vector.y,vector.z);
+                    }
+
+
+                    //stack.mulPose(new Quaternionf(animation.getCurrentGravityRotation(gravityDirection, timeMs)).conjugate());
+
+
+                    ModStrayModels.VampireHairFlesh.render(cameraEnt, $$4, stack, source, poggers, r, g, b, 1);
                 }
                 stack.popPose();
             }

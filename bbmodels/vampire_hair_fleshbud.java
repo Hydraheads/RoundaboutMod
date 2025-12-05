@@ -20,15 +20,19 @@ public class vampire_hair_fleshbud<T extends Entity> extends EntityModel<T> {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition hair = partdefinition.addOrReplaceChild("hair", CubeListBuilder.create(), PartPose.offset(0.0F, -1.0F, 0.0F));
+		PartDefinition hair = partdefinition.addOrReplaceChild("hair", CubeListBuilder.create(), PartPose.offset(0.0F, -6.5F, 0.0F));
 
-		PartDefinition right_flesh_bud = hair.addOrReplaceChild("right_flesh_bud", CubeListBuilder.create().texOffs(-18, 0).addBox(-8.0F, 0.0F, -26.0F, 8.0F, 0.0F, 26.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -5.5F, 0.0F));
+		PartDefinition right_flesh_bud = hair.addOrReplaceChild("right_flesh_bud", CubeListBuilder.create().texOffs(-17, 0).addBox(-8.0F, 0.0F, -26.0F, 8.0F, 0.0F, 26.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+		PartDefinition left_flesh_bud_strand_r1 = right_flesh_bud.addOrReplaceChild("left_flesh_bud_strand_r1", CubeListBuilder.create().texOffs(-17, 0).mirror().addBox(-4.625F, -0.024F, -26.0F, 8.0F, 0.0F, 26.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-4.625F, 0.0F, 0.0F, 0.0F, 0.0F, -3.1416F));
 
 		PartDefinition right_flesh_bud_r1 = right_flesh_bud.addOrReplaceChild("right_flesh_bud_r1", CubeListBuilder.create().texOffs(30, 0).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 3.0F, new CubeDeformation(-0.3F)), PartPose.offsetAndRotation(-2.5F, 0.0F, -23.0F, 0.0F, 0.0F, 0.7854F));
 
 		PartDefinition right_incomplete_bud_r1 = right_flesh_bud.addOrReplaceChild("right_incomplete_bud_r1", CubeListBuilder.create().texOffs(30, 6).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 3.0F, new CubeDeformation(-0.5F)), PartPose.offsetAndRotation(-4.5F, 0.0F, -19.0F, 0.0F, 0.0F, 0.7854F));
 
-		PartDefinition left_flesh_bud = hair.addOrReplaceChild("left_flesh_bud", CubeListBuilder.create().texOffs(-26, 0).mirror().addBox(0.0F, 0.0F, -26.0F, 8.0F, 0.0F, 26.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(0.0F, -5.5F, 0.0F));
+		PartDefinition left_flesh_bud = hair.addOrReplaceChild("left_flesh_bud", CubeListBuilder.create().texOffs(-17, 0).mirror().addBox(0.0F, 0.0F, -26.0F, 8.0F, 0.0F, 26.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+		PartDefinition right_flesh_bud_strand_r1 = left_flesh_bud.addOrReplaceChild("right_flesh_bud_strand_r1", CubeListBuilder.create().texOffs(-17, 0).addBox(-4.0F, 0.001F, -26.0F, 8.0F, 0.0F, 26.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.0F, 0.025F, 0.0F, 0.0F, 0.0F, -3.1416F));
 
 		PartDefinition left_flesh_bud_r1 = left_flesh_bud.addOrReplaceChild("left_flesh_bud_r1", CubeListBuilder.create().texOffs(30, 0).mirror().addBox(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 3.0F, new CubeDeformation(-0.3F)).mirror(false), PartPose.offsetAndRotation(3.5F, 0.0F, -23.0F, 0.0F, 0.0F, -0.7854F));
 
