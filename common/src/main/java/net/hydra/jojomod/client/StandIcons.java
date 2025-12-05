@@ -399,6 +399,11 @@ public class StandIcons {
     public static final ResourceLocation ANUBIS_REPLAY = Roundabout.location("textures/gui/icons/anubis/replay.png");
     public static final ResourceLocation ANUBIS_SAVE = Roundabout.location("textures/gui/icons/anubis/save.png");
     public static final ResourceLocation ANUBIS_CANCEL = Roundabout.location("textures/gui/icons/anubis/cancel.png");
+    public static final ResourceLocation ANUBIS_DMOUSE = Roundabout.location("textures/gui/icons/anubis/delta_mouse.png");
+
+    public static final ResourceLocation ANUBIS_MEMORY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/anubis_memory.png");
+
 
 
     public static final ResourceLocation SOFT_AND_WET_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,

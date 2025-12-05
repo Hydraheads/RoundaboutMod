@@ -28,10 +28,10 @@ import java.util.List;
 
 public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
     //Check out GamemodeSwitcherScreen
-    static final ResourceLocation CORPSE_CHOOSER_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/corpse_chooser.png");
+    static final ResourceLocation MEMORY_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/anubis_memory.png");
 
-    private byte currentlyHovered;
+    public byte currentlyHovered;
     private int firstMouseX;
     private int firstMouseY;
     private boolean setFirstMousePos;
@@ -41,7 +41,7 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
 
     private final List<PoseSlot> slots = Lists.newArrayList();
 
-    boolean recording = false;
+    public boolean recording = false;
     public MemoryRecordScreen(boolean recording) {
         super(GameNarrator.NO_TITLE);
         this.currentlyHovered = (byte)-1;
@@ -104,7 +104,7 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
         RenderSystem.enableBlend();
         int k = this.width / 2 - 62;
         int l = this.height / 2 - 31 - 39;
-        guiGraphics.blit(CORPSE_CHOOSER_LOCATION, k, l, 0.0f, 0.0f, 125, 63, 256, 256);
+        guiGraphics.blit(MEMORY_LOCATION, k, l, 0.0f, 0.0f, 125, 24 , 256, 256);
         guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
 
@@ -128,7 +128,7 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
             StandUser SU = (StandUser) player;
             if (SU.roundabout$getStandPowers() != null) {
                 if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
-                    PA.convertToVisual(currentlyHovered == 8 ? -1 : currentlyHovered,PA.memories.get(currentlyHovered == 8 || currentlyHovered == -1 ? 0 : currentlyHovered).moments);
+                    PA.convertToVisual(currentlyHovered == 8 ? -1 : currentlyHovered,    PA.memories.get( (currentlyHovered == 8 || currentlyHovered == -1) ? 0 : currentlyHovered).moments);
                 }
             }
 
@@ -200,6 +200,7 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
 
         if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
             List<AnubisMemory> memories = PA.memories;
+            if (this.currentlyHovered == -1 || this.currentlyHovered == 8) {return false;}
             for (int i=0;i<mc.options.keyHotbarSlots.length;i++) {
                 KeyMapping key = mc.options.keyHotbarSlots[i];
                 if (key.isDown()) {
@@ -233,6 +234,19 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
             this.xoff = xoff;
             this.yoff = yoff;
         }
+        public boolean getDMouse() {
+            Player p = Minecraft.getInstance().player;
+            StandUser SU = (StandUser) p;
+            if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+                if(!PA.memories.isEmpty()) {
+                    AnubisMemory memory = PA.memories.get(this.id);
+                    if (memory != null) {
+                        return memory.delta_mouse;
+                    }
+                }
+            }
+            return false;
+        }
     }
 
     public class PoseSlot
@@ -251,11 +265,11 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
             if (!(this.icon.id == (byte)8) ) {
                 guiGraphics.setColor(1f, 1f, 1f, 1f);
 
-                this.drawSlot(guiGraphics);
+                this.drawSlot(guiGraphics,this.icon.getDMouse());
                 guiGraphics.setColor(1f, 1f, 1f, 1f);
                 guiGraphics.renderItem(this.icon.item.getDefaultInstance(),this.getX() + 5, this.getY() + 5);
                 if (this.isSelected) {
-                    this.drawSelection(guiGraphics);
+                    this.drawSelection(guiGraphics,this.icon.getDMouse());
                 }
             }
         }
@@ -274,12 +288,12 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
             this.isSelected = bl;
         }
 
-        private void drawSlot(GuiGraphics guiGraphics) {
-            guiGraphics.blit(CORPSE_CHOOSER_LOCATION, this.getX(), this.getY(), 144.0f, 0.0f, 26, 26, 256, 256);
+        private void drawSlot(GuiGraphics guiGraphics, boolean b) {
+            guiGraphics.blit(MEMORY_LOCATION, this.getX(), this.getY(), 144, b ? 26 : 0, 26, 26, 256, 256);
         }
 
-        private void drawSelection(GuiGraphics guiGraphics) {
-            guiGraphics.blit(CORPSE_CHOOSER_LOCATION, this.getX(), this.getY(), 170.0f, 0.0f, 26, 26, 256, 256);
+        private void drawSelection(GuiGraphics guiGraphics, boolean b) {
+            guiGraphics.blit(MEMORY_LOCATION, this.getX(), this.getY(), 170, b ? 26 : 0, 26, 26, 256, 256);
         }
     }
 }

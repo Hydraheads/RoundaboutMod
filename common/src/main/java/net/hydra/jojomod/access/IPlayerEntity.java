@@ -36,6 +36,13 @@ public interface IPlayerEntity {
     void rdbt$setRespawnStrategy(byte strat);
     byte rdbt$getRespawnStrategy();
 
+    float rdbt$getHairColorX();
+    float rdbt$getHairColorY();
+    float rdbt$getHairColorZ();
+    void rdbt$setHairColorX(float color);
+    void rdbt$setHairColorY(float color);
+    void rdbt$setHairColorZ(float color);
+
     void roundabout$setFate(byte style);
     byte roundabout$getFate();
     void roundabout$qmessage(int messageID);
@@ -43,6 +50,7 @@ public interface IPlayerEntity {
     void rdbt$queryServerForCooldowns();
     boolean rdbt$getCooldownQuery();
     void rdbt$setCooldownQuery(boolean query);
+
 
     void roundabout$setShapeShiftExtraData(byte level);
     byte roundabout$getShapeShift();

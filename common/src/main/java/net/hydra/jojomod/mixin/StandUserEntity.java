@@ -1321,7 +1321,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$cancelConsumableItem((LivingEntity) (Object) this);
             roundabout$leapTicks--;
             if (!this.level().isClientSide && roundabout$leapIntentionally) {
-                ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(1f, 0.65f, 0), 1f), this.getX(), this.getY(), this.getZ(),
+                Vector3f color = new Vector3f(1f, 0.65f, 0);
+                if (this.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+                    color = new Vector3f(171F/255F,141F/255F,230F/255F   );
+                }
+                ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(color, 1f), this.getX(), this.getY(), this.getZ(),
                         1, 0, 0, 0, 0.1);
             }
         }
@@ -4202,12 +4206,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (poss != null) {
              //   Roundabout.LOGGER.info("HO");
                 if (poss.getTarget() != null) {
+                  /*
                     Vec3 tpos = poss.getPosition(1);
                     Vec3 pos = P.getPosition(1);
                     float f = (float) tpos.subtract(pos).length();
                     float g = Math.min(f * 4.0f, 1.0f);
                     this.walkAnimation.update(g, 0.4f);
-                    P.calculateEntityAnimation(true);
+                    P.calculateEntityAnimation(true); */
                 }
             }
         }

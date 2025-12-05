@@ -168,8 +168,9 @@ public class PowersWalkingHeart extends NewDashPreset {
                     return;
                 }
             }
-
-            tryPowerPacket(PowerIndex.POWER_4_BONUS);
+            if (canWallWalkConfig() && canCornerCutConfig()) {
+                tryPowerPacket(PowerIndex.POWER_4_BONUS);
+            }
         }
     }
 
@@ -418,10 +419,12 @@ public class PowersWalkingHeart extends NewDashPreset {
         }
 
         if (!isSpider){
-            if (canCutCorners()){
-                setSkillIcon(context, x, y, 4, StandIcons.WALL_CUT, PowerIndex.NONE);
-            } else {
-                setSkillIcon(context, x, y, 4, StandIcons.WALL_PASS, PowerIndex.NONE);
+            if (canWallWalkConfig() && canCornerCutConfig()) {
+                if (canCutCorners()) {
+                    setSkillIcon(context, x, y, 4, StandIcons.WALL_CUT, PowerIndex.NONE);
+                } else {
+                    setSkillIcon(context, x, y, 4, StandIcons.WALL_PASS, PowerIndex.NONE);
+                }
             }
         }
     }
@@ -459,15 +462,23 @@ public class PowersWalkingHeart extends NewDashPreset {
         return super.getSoundFromByte(soundChoice);
     }
 
+    public int slowHeelTicks = 0;
+
     @Override
     public float inputSpeedModifiers(float basis){
         if (inCombatMode()) {
             return 0;
+        } else if (hasExtendedHeelsForWalking() && (canCutCorners() || slowHeelTicks > 0)){
+            return basis*0.8F;
         }
         return super.inputSpeedModifiers(basis);
     }
     public boolean inCombatMode(){
         return getStandUserSelf().roundabout$getCombatMode();
+    }
+
+    public boolean canCornerCutConfig(){
+        return ClientNetworking.getAppropriateConfig().walkingHeartSettings.enableCornerCutting;
     }
 
     @Override
@@ -780,38 +791,70 @@ public class PowersWalkingHeart extends NewDashPreset {
         BlockState bs = this.self.level().getBlockState(pos1);
         return MainUtil.isBlockWalkable(bs);
     }
+
+    public boolean tryCutEast(Vec3 mpos){
+        return (tryCut(mpos.add(new Vec3(0.1,0,0)))
+                || tryCut(mpos.add(new Vec3(self.getBbWidth()*1.1f,0,0)))
+                || tryCut(mpos.add(new Vec3(self.getBbWidth()*1.4f,0,0)))
+                || tryCut(mpos.add(new Vec3(self.getBbWidth()*1.6f,0,0)))
+        );
+    }
+    public boolean tryCutWest(Vec3 mpos){
+        return (tryCut(mpos.add(new Vec3(-0.1,0,0)))
+                || tryCut(mpos.add(new Vec3(-self.getBbWidth()*1.1f,0,0)))
+                || tryCut(mpos.add(new Vec3(-self.getBbWidth()*1.4f,0,0)))
+                || tryCut(mpos.add(new Vec3(-self.getBbWidth()*1.6f,0,0)))
+        );
+    }
+    public boolean tryCutNorth(Vec3 mpos){
+        return (tryCut(mpos.add(new Vec3(0,0,-0.1)))
+                || tryCut(mpos.add(new Vec3(0,0,-self.getBbWidth()*1.1f)))
+                || tryCut(mpos.add(new Vec3(0,0,-self.getBbWidth()*1.4f)))
+                || tryCut(mpos.add(new Vec3(0,0,-self.getBbWidth()*1.6f)))
+        );
+    }
+    public boolean tryCutSouth(Vec3 mpos){
+        return (tryCut(mpos.add(new Vec3(0,0,0.1)))
+                || tryCut(mpos.add(new Vec3(0,0,self.getBbWidth()*1.1f)))
+                || tryCut(mpos.add(new Vec3(0,0,self.getBbWidth()*1.4f)))
+                || tryCut(mpos.add(new Vec3(0,0,self.getBbWidth()*1.6f)))
+        );
+    }
+    public boolean tryCutUp(Vec3 mpos){
+        return (tryCut(mpos.add(new Vec3(0,0.1,0)))
+                || tryCut(mpos.add(new Vec3(0,self.getBbWidth()*1.1f,0)))
+                || tryCut(mpos.add(new Vec3(0,self.getBbWidth()*1.4f,0)))
+                || tryCut(mpos.add(new Vec3(0,self.getBbWidth()*1.6f,0)))
+        );
+    }
+    public boolean tryCutDown(Vec3 mpos){
+        return (tryCut(mpos.add(new Vec3(0,-0.1,0)))
+                || tryCut(mpos.add(new Vec3(0,-self.getBbWidth()*1.1f,0)))
+                || tryCut(mpos.add(new Vec3(0,-self.getBbWidth()*1.4f,0)))
+                || tryCut(mpos.add(new Vec3(0,-self.getBbWidth()*1.6f,0)))
+        );
+    }
+
     public boolean canCut(){
 
         Vec3 mpos = this.self.getPosition(1F);
-        if (tryCut(mpos.add(new Vec3(0.1,0,0)))
-                || tryCut(mpos.add(new Vec3(self.getBbWidth()*1.1f,0,0)))
-                || tryCut(mpos.add(new Vec3(self.getBbWidth()*1.3f,0,0)))
-        ){
+        if (tryCutEast(mpos)){
+            if (tryCutWest(mpos))
+                return false;
             cutDirection = Direction.EAST;
-        } else if (tryCut(mpos.add(new Vec3(-0.1,0,0)))
-                || tryCut(mpos.add(new Vec3(-self.getBbWidth()*1.1f,0,0)))
-                || tryCut(mpos.add(new Vec3(-self.getBbWidth()*1.3f,0,0)))
-        ){
+        } else if (tryCutWest(mpos)){
             cutDirection = Direction.WEST;
-        } else if (tryCut(mpos.add(new Vec3(0,0,0.1)))
-                || tryCut(mpos.add(new Vec3(0,0,self.getBbWidth()*1.1f)))
-                || tryCut(mpos.add(new Vec3(0,0,self.getBbWidth()*1.3f)))
-        ){
+        } else if (tryCutSouth(mpos)){
+            if (tryCutNorth(mpos))
+                return false;
             cutDirection = Direction.SOUTH;
-        } else if (tryCut(mpos.add(new Vec3(0,0,-0.1)))
-                || tryCut(mpos.add(new Vec3(0,0,-self.getBbWidth()*1.1f)))
-                || tryCut(mpos.add(new Vec3(0,0,-self.getBbWidth()*1.3f)))
-        ){
+        } else if (tryCutNorth(mpos)){
             cutDirection = Direction.NORTH;
-        } else if (tryCut(mpos.add(new Vec3(0,0.1,0)))
-                || tryCut(mpos.add(new Vec3(0,self.getBbWidth()*1.1f,0)))
-                || tryCut(mpos.add(new Vec3(0,self.getBbWidth()*1.3f,0)))
-        ){
+        } else if (tryCutUp(mpos)){
+            if (tryCutDown(mpos))
+                return false;
             cutDirection = Direction.UP;
-        } else if (tryCut(mpos.add(new Vec3(0,-0.1,0)))
-                || tryCut(mpos.add(new Vec3(0,-self.getBbWidth()*1.1f,0)))
-                || tryCut(mpos.add(new Vec3(0,-self.getBbWidth()*1.5f,0)))
-        ){
+        } else if (tryCutDown(mpos)){
             cutDirection = Direction.DOWN;
         } else {
             return false;
@@ -863,6 +906,12 @@ public class PowersWalkingHeart extends NewDashPreset {
             if (cutCorners == 0 && self instanceof Player){
                 cutCorners = 1;
                 C2SPacketUtil.trySingleBytePacket(PacketDataIndex.QUERY_STAND_UPDATE);
+            } else if (canCutCorners()){
+                slowHeelTicks = 20;
+            } else {
+                if (slowHeelTicks > 0){
+                    slowHeelTicks--;
+                }
             }
 
 
@@ -1131,15 +1180,15 @@ public class PowersWalkingHeart extends NewDashPreset {
                     "instruction.roundabout.passive", StandIcons.FIRM_SWING, 0, level, bypass));
             $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.fall_disperse",
                     "instruction.roundabout.passive", StandIcons.FALL_ABSORB, 0, level, bypass));
-            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 57, topPos + 80, 0, "ability.roundabout.corner_cut",
-                    "instruction.roundabout.press_skill", StandIcons.WALL_CUT, 4, level, bypass));
+            if (canCornerCutConfig()) {
+                $$1.add(drawSingleGUIIcon(context, 18, leftPos + 57, topPos + 80, 0, "ability.roundabout.corner_cut",
+                        "instruction.roundabout.press_skill", StandIcons.WALL_CUT, 4, level, bypass));
+            }
         } else {
             $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.firm_swing",
                     "instruction.roundabout.passive", StandIcons.FIRM_SWING, 0, level, bypass));
             $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.fall_disperse",
                     "instruction.roundabout.passive", StandIcons.FALL_ABSORB, 0, level, bypass));
-            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.corner_cut",
-                    "instruction.roundabout.press_skill", StandIcons.WALL_CUT, 4, level, bypass));
         }
         return $$1;
     }

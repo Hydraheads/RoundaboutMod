@@ -18,14 +18,22 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.fates.FatePowers;
+import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.RotationAnimation;
+import net.hydra.jojomod.util.gravity.GravityAPI;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
-import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -43,6 +51,7 @@ import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.phys.Vec2;
 import net.zetalasis.client.shader.D4CShaderFX;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.D4CCloneEntity;
@@ -82,6 +91,7 @@ import net.zetalasis.networking.packet.api.IClientNetworking;
 import net.zetalasis.world.DynamicWorld;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Unique;
 
@@ -888,6 +898,9 @@ public class ClientUtil {
     public static void openModificationVisageUI(ItemStack visage){
         Minecraft.getInstance().setScreen(new ModificationVisageScreen(visage));
     }
+    public static void openHairspryUI(){
+        Minecraft.getInstance().setScreen(new HairColorChangeScreen());
+    }
     public static void openMemoryRecordScreen(boolean recording){
         Minecraft.getInstance().setScreen(new MemoryRecordScreen(recording));
     }
@@ -1350,6 +1363,48 @@ public class ClientUtil {
         return null;
     }
 
+    public static<T extends LivingEntity, M extends EntityModel<T>> void renderFirstPersonModelParts(Entity cameraEnt, float $$4, PoseStack stack, MultiBufferSource source, int light){
+
+        if (cameraEnt instanceof Player play && ((IFatePlayer)cameraEnt).rdbt$getFatePowers() instanceof VampireFate vf){
+            int poggers = vf.getProgressIntoAnimation();
+            if (poggers >= 16 && poggers <= 22) {
+                stack.pushPose();
+                poggers -= 16;
+                Vec3 vec = cameraEnt.getEyePosition();
+
+                IPlayerEntity pl = ((IPlayerEntity) cameraEnt);
+                float r = pl.rdbt$getHairColorX();
+                float g = pl.rdbt$getHairColorY();
+                float b = pl.rdbt$getHairColorZ();
+                    Direction gravityDirection = GravityAPI.getGravityDirection(cameraEnt);
+
+                    //RotationUtil.rotPlayerToWorld(cameraEnt.getYHeadRot(), cameraEnt.getXRot(), gravityDirection);
+
+//                    RotationAnimation animation = GravityAPI.getRotationAnimation(player);
+//                    if (animation == null) {
+//                        return;
+//                    }
+//                    long timeMs = player.level().getGameTime() * 50 + (long) ($$4 * 50);
+//                    //ELA.getModel().setupAnim((AbstractClientPlayer) $$0, 0, 0, $$4 %1, $$8, $$11);
+
+
+                    if (gravityDirection == Direction.UP){
+                        Vec3 vector = new Vec3(0,cameraEnt.getEyeHeight()*0.4f,0);
+                    } else {
+                        Vec3 vector = new Vec3(0,cameraEnt.getEyeHeight()*0.15f,0);
+                        stack.translate(vector.x,vector.y,vector.z);
+                    }
+
+
+                    //stack.mulPose(new Quaternionf(animation.getCurrentGravityRotation(gravityDirection, timeMs)).conjugate());
+
+
+                    ModStrayModels.VampireHairFlesh.render(cameraEnt, $$4, stack, source, poggers, r, g, b, 1);
+
+                stack.popPose();
+            }
+        }
+    }
     @Unique
     public static void roundabout$renderBound(LivingEntity victim, float delta, PoseStack poseStack, MultiBufferSource mb, Entity binder, float focus) {
         poseStack.pushPose();

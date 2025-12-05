@@ -252,6 +252,9 @@ public class ForgeItems {
                     new Item.Properties()
             ));
 
+    public static final RegistryObject<Item> HAIRSPRAY = ITEMS.register("hairspray",
+            () -> new HairsprayItem(new Item.Properties().stacksTo(64)
+    ));
 
     public static final RegistryObject<Item> PAINTING_VAN_GOUGH = addToBuildingTab(ITEMS.register("painting_van_gough",
             () -> new VanGoughPaintingItem(new Item.Properties().stacksTo(1))

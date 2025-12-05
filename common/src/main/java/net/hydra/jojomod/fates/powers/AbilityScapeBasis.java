@@ -2219,4 +2219,10 @@ public class AbilityScapeBasis {
             ((IPlayerEntity) self).roundabout$SetPos2(pos);
         }
     }
+    public byte getPlayerPos2(){
+        if (self instanceof Player){
+            return ((IPlayerEntity) self).roundabout$GetPos2();
+        }
+        return 0;
+    }
 }

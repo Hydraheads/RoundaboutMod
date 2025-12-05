@@ -12,6 +12,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
 import net.hydra.jojomod.item.MaskItem;
@@ -24,7 +25,10 @@ import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.PlayerMaskSlots;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Rotations;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -57,6 +61,7 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -136,6 +141,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$IS_BLINDED = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.BOOLEAN);
+    @Unique
+    private static final EntityDataAccessor<Rotations> ROUNDABOUT$HAIR_COLOR = SynchedEntityData.defineId(Player.class,
+            EntityDataSerializers.ROTATIONS);
 
     @Shadow
     @Final
@@ -158,6 +166,66 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     private float roundabout$idleRotation = 0;
     @Unique
     private float roundabout$idleYOffset = 0.1F;
+
+    //0.00392156862
+    @Unique
+    private static final float rdbt$hairColorX =245f/255f;
+    @Unique
+    private static final float rdbt$hairColorY =225f/255f;
+    @Unique
+    private static final float rdbt$hairColorZ =97f/255f;
+    @Unique
+    @Override
+    public void rdbt$setHairColorX(float color){
+        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$HAIR_COLOR)) {
+            Rotations rot = ((Player) (Object) this).getEntityData().get(ROUNDABOUT$HAIR_COLOR);
+            ((Player) (Object) this).getEntityData().set(ROUNDABOUT$HAIR_COLOR,
+                    new Rotations(color,rot.getY(),rot.getZ()));
+        }
+    }
+    @Unique
+    @Override
+    public void rdbt$setHairColorY(float color){
+        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$HAIR_COLOR)) {
+            Rotations rot = ((Player) (Object) this).getEntityData().get(ROUNDABOUT$HAIR_COLOR);
+            ((Player) (Object) this).getEntityData().set(ROUNDABOUT$HAIR_COLOR,
+                    new Rotations(rot.getX(),color,rot.getZ()));
+        }
+    }
+    @Unique
+    @Override
+    public void rdbt$setHairColorZ(float color){
+        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$HAIR_COLOR)) {
+            Rotations rot = ((Player) (Object) this).getEntityData().get(ROUNDABOUT$HAIR_COLOR);
+            ((Player) (Object) this).getEntityData().set(ROUNDABOUT$HAIR_COLOR,
+                    new Rotations(rot.getX(),rot.getY(),color));
+        }
+    }
+    @Unique
+    @Override
+    public float rdbt$getHairColorX(){
+        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$HAIR_COLOR)) {
+            return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$HAIR_COLOR).getX();
+        }
+        return rdbt$hairColorX;
+    }
+    @Unique
+    @Override
+    public float rdbt$getHairColorY(){
+        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$HAIR_COLOR)) {
+            return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$HAIR_COLOR).getY();
+        }
+        return rdbt$hairColorY;
+    }
+    @Unique
+    @Override
+    public float rdbt$getHairColorZ(){
+        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$HAIR_COLOR)) {
+            return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$HAIR_COLOR).getZ();
+        }
+        return rdbt$hairColorZ;
+    }
+
 
     @Unique
     protected boolean rdbt$cooldownQuery = false;
@@ -239,6 +307,52 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
         return 0;
     }
+
+
+    ///  hacky solution for really odd anubis bug, check this if something breaks
+    @Inject(method = "jumpFromGround",at=@At(value = "HEAD"))
+    public void huhh(CallbackInfo ci) {
+        Player player = (Player)(Object)(this);
+        Options options = Minecraft.getInstance().options;
+        if ( ((StandUser)player).roundabout$getStandPowers() instanceof PowersAnubis PA && ((StandUser)player).roundabout$getUniqueStandModeToggle()) {
+            float bigJump = ((StandUser) player).roundabout$getBonusJumpHeight();
+            float totalHeight = bigJump + 1;
+            boolean canJump = bigJump > 0;
+            boolean isJumping = ((StandUser) player).roundabout$getBigJump();
+            float getCurrentJump = ((StandUser) player).roundabout$getBigJumpCurrentProgress();
+
+            if (canJump) {
+                if (player.getAbilities().flying) {
+                    if (isJumping) {
+                        this.roundabout$SetBonusJump(false, totalHeight, getCurrentJump);
+                    }
+                } else {
+                    if (isJumping && player.onGround()) {
+                        this.roundabout$SetBonusJump(false, totalHeight, getCurrentJump);
+                    }
+                    if (options.keyJump.isDown()) {
+                        if (player.onGround() && getCurrentJump > 0) {
+                        } else {
+                            if (player.onGround() || isJumping) {
+                                this.roundabout$SetBonusJump(true, totalHeight, getCurrentJump);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Unique
+    public void roundabout$SetBonusJump(boolean bigJump, float jumpHeight, float current){
+        ((StandUser)Minecraft.getInstance().player).roundabout$setBigJump(bigJump);
+        if (bigJump){
+            C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_BIG_JUMP,current);
+        } else {
+            C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_BIG_JUMP_CANCEL,current);
+        }
+    }
+
     @Unique
     @Override
     public void roundabout$qmessage(int messageID){
@@ -1041,6 +1155,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         compoundtag.putByte("teamColor",roundabout$getTeamColor());
         compoundtag.putByte("watchStyle",roundabout$getWatchStyle());
         compoundtag.putByte("fate",roundabout$getFate());
+        compoundtag.putFloat("hairColorX",rdbt$getHairColorX());
+        compoundtag.putFloat("hairColorY",rdbt$getHairColorY());
+        compoundtag.putFloat("hairColorZ",rdbt$getHairColorZ());
         $$0.put("roundabout",compoundtag);
 
         return $$0;
@@ -1089,6 +1206,15 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
         if (compoundtag2.contains("fate")) {
             roundabout$setFate(compoundtag2.getByte("fate"));
+        }
+        if (compoundtag2.contains("hairColorX")) {
+            rdbt$setHairColorX(compoundtag2.getFloat("hairColorX"));
+        }
+        if (compoundtag2.contains("hairColorY")) {
+            rdbt$setHairColorY(compoundtag2.getFloat("hairColorY"));
+        }
+        if (compoundtag2.contains("hairColorZ")) {
+            rdbt$setHairColorZ(compoundtag2.getFloat("hairColorZ"));
         }
 
         //roundabout$maskInventory.addItem()
@@ -1418,6 +1544,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$WATCH_STYLE, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$FATE, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BLINDED, false);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$HAIR_COLOR, new Rotations(rdbt$hairColorX,rdbt$hairColorY,rdbt$hairColorZ));
         }
     }
 

@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.level.LightLayer;
 import net.zetalasis.client.shader.RPostShaderRegistry;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.client.models.layers.PreRenderEntity;
@@ -293,8 +294,20 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             double $$11 = $$9.y();
             double $$12 = $$9.z();
             MultiBufferSource.BufferSource $$20 = this.renderBuffers.bufferSource();
+            //ClientUtil.renderFirstPersonModelParts($$4.getEntity(), $$10, $$11, $$12, partialTick, $$0, (MultiBufferSource) $$20, rdbt$getPackedLightCoords(player,partialTick));
             this.roundabout$renderStringOnPlayer(player, $$10, $$11, $$12, partialTick, $$0, (MultiBufferSource) $$20);
         }
+    }
+    public final int rdbt$getPackedLightCoords(LivingEntity $$0, float $$1) {
+        BlockPos $$2 = BlockPos.containing($$0.getLightProbePosition($$1));
+        return LightTexture.pack(this.rdbt$getBlockLightLevel($$0, $$2), this.rdbt$getSkyLightLevel($$0, $$2));
+    }
+    protected int rdbt$getSkyLightLevel(LivingEntity $$0, BlockPos $$1) {
+        return $$0.level().getBrightness(LightLayer.SKY, $$1);
+    }
+
+    protected int rdbt$getBlockLightLevel(LivingEntity $$0, BlockPos $$1) {
+        return $$0.isOnFire() ? 15 : $$0.level().getBrightness(LightLayer.BLOCK, $$1);
     }
 
     @Unique

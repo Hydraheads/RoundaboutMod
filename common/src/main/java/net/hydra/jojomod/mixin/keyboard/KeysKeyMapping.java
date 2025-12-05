@@ -23,7 +23,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Map;
 
 @Mixin(KeyMapping.class)
-public class KeysKeyMapping implements IKeyMapping {
+public abstract class KeysKeyMapping implements IKeyMapping {
+
+    @Shadow
+    public abstract String getName();
 
     /**No cancel input screens let you continue walking and pressing buttons like jump while in a gui,
      * they are important for active combat selection like the soft and wet bubble menu*/
@@ -57,19 +60,23 @@ public class KeysKeyMapping implements IKeyMapping {
     @Inject(method = "isDown",at = @At(value = "HEAD"),cancellable = true)
     public void roundabout$forcePressed(CallbackInfoReturnable<Boolean> cir) {
         Minecraft mc = Minecraft.getInstance();
-        Options o = mc.options;
         Player player = mc.player;
         StandUser SU = (StandUser) player;
         if (SU.roundabout$getStandPowers() != null) {
             if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
                 if (SU.roundabout$getUniqueStandModeToggle()) {
-                    int time = PA.maxPlayTime-PA.playTime;
+                    int time = PowersAnubis.MaxPlayTime-PA.playTime;
                     for(int i=0;i<PA.playKeys.size();i++) {
                         KeyMapping key = PA.playKeys.get(i);
-                        if (((IKeyMapping) key).roundabout$justTellMeTheKey() == this.roundabout$justTellMeTheKey()) {
+
+                        if (key.getName().equals(this.getName())) {
                             if (PA.isPressed(PA.playBytes.get(i), time)) {
                                 cir.setReturnValue(true);
                                 cir.cancel();
+                            }
+                        } else {/// admittedly a little scuffed, I'll change it if it breaks
+                            if (PA.isPressed(PA.playBytes.get(i), time) && PA.playBytes.get(i) > 20) {
+                                player.getInventory().selected = ((int)PA.playBytes.get(i))-21;
                             }
                         }
 

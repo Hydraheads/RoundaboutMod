@@ -81,6 +81,7 @@ public class KeyInputs {
     }
     public static void switchRowsKey(Player player, Minecraft client, boolean keyIsDown, Options option){
         ((StandUser) player).roundabout$getStandPowers().switchRowsKey(keyIsDown, option);
+        ((IFatePlayer) player).rdbt$getFatePowers().switchRowsKey(keyIsDown, option);
     }
     public static void showEXPKey(Player player, Minecraft client, boolean keyIsDown, Options option){
         ((IPlayerEntity) player).roundabout$showExp(keyIsDown);

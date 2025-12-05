@@ -61,6 +61,7 @@
   "item.roundabout.lucky_lipstick.desc": "For better trades, apply until you sleep",
   "item.roundabout.sacrificial_dagger": "Sacrificial Dagger",
   "item.roundabout.cherries": "Cherries",
+  "item.roundabout.hairspray": "Hairspray",
 
 
   "item.roundabout.star_platinum_disc": "Stand Disc",
@@ -224,6 +225,7 @@
 
   "item.roundabout.worthy_arrow.info": "Creative only, grants worthiness.",
   "item.roundabout.worthy_arrow.info_2": "If shot in creative, can also remove stands/worth.",
+  "item.roundabout.hairspray.info": "Creative only",
 
   "effect.roundabout.bleed": "Bleed",
   "effect.roundabout.hex": "Hex",
@@ -1103,7 +1105,7 @@
   "ability.roundabout.fall_disperse": "Fall Absorb",
   "ability.roundabout.fall_disperse.desc": "Halves incoming fall damage, spreading the impact across your heels.",
   "ability.roundabout.corner_cut": "Corner Cut",
-  "ability.roundabout.corner_cut.desc": "Enable this to skip the process of direction adjustment when running off a wall to cut corners. Also inhibits accidental jumps. Think of it as training wheels.",
+  "ability.roundabout.corner_cut.desc": "Enable this to skip the process of direction adjustment when running off a wall to cut corners. Also inhibits accidental jumps and lowers speed. Think of it as training wheels.",
 
 
 
@@ -1496,6 +1498,7 @@
 
   "skins.roundabout.anubis.anime" : "Anime",
   "skins.roundabout.anubis.evil" : "Evil",
+  "skins.roundabout.anubis.aquamarine" : "Aquamarine",
 
   "roundabout.anubis.playback_title": "Replay Memories",
   "roundabout.anubis.memory_title": "Record Memories",
@@ -1591,6 +1594,11 @@
   "roundabout.cinderella.mod_visage_gui.chest_type.three": "C",
   "roundabout.cinderella.mod_visage_gui.chest_type.four": "D",
   "roundabout.cinderella.mod_visage.voice_available": "Compatible With Voice Slot",
+
+  "roundabout.hairspray.red": "Red",
+  "roundabout.hairspray.green": "Green",
+  "roundabout.hairspray.blue": "Blue",
+  "roundabout.hairspray.base": "Hair",
 
   "power_inventory.roundabout.settings.general": "Stand Settings",
   "power_inventory.roundabout.settings.offset": "Following Position",
@@ -2208,6 +2216,10 @@
   "config.roundabout.fallProtectionOnRelease.desc": "When you exit a wall, grants fall immunity like a stand leap.",
   "config.roundabout.enableWallWalking.name": "Enable Wall Walking",
   "config.roundabout.enableWallWalking.desc": "Allows flipping directions to walk on walls. Generally, this feature is stable, but if you have a modpack that causes it to bug out/not work smoothly turn this off. Without wall walking, you gain an additional block of step height while your spikes are planted.",
+
+  "config.roundabout.enableCornerCutting.name": "Enable Corner Cutting",
+  "config.roundabout.enableCornerCutting.desc": "Allows training wheel mode of Walking Heart by pressing V, so you can flip over corners.",
+
 
   "config.roundabout.invisibilityPotionAsWell.name": "Apply Invis Potion",
   "config.roundabout.invisibilityPotionAsWell.desc": "If you want the invisibility power to apply the potion effect as well, turn this on. This could be useful for map mods that respect players invisibility.",

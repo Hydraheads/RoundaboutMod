@@ -11,9 +11,16 @@ public class AnubisMoment {
     public static final byte SPRINT = (byte) 6;
     public static final byte CROUCH = (byte) 7;
     public static final byte SUMMON = (byte) 8;
-    public static final byte DASH = (byte) 9;
-    public static final byte ATTACK = (byte) 10;
-    public static final byte INTERACT = (byte) 11;
+    public static final byte ABILITY_1 = (byte) 9;
+    public static final byte ABILITY_2 = (byte) 10;
+    public static final byte DASH = (byte) 11;
+    public static final byte ABILITY_3 = (byte) 12;
+    public static final byte ATTACK = (byte) 13;
+    public static final byte INTERACT = (byte) 14;
+
+    public static final byte[] HOTBAR = {21,22,23,24,25,26,27,28,29};
+
+
 
 
 

@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.gui.MemoryRecordScreen;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.AnubisSlipstreamEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -96,8 +97,12 @@ public class PowersAnubis extends NewDashPreset {
         }
 
         ResourceLocation icon2 = StandIcons.ANUBIS_REPLAY;
-        if (this.playTime > 0) {icon2 = StandIcons.ANUBIS_CANCEL;}
-        setSkillIcon(context, x, y, 2, icon2, PowerIndex.SKILL_4);
+        if (this.playTime > 0) {
+            icon2 = StandIcons.ANUBIS_CANCEL;
+        } else if (Minecraft.getInstance().screen instanceof MemoryRecordScreen MA && MA.recording) {
+            icon2 = StandIcons.ANUBIS_DMOUSE;
+        }
+        setSkillIcon(context, x, y, 2, icon2, PowerIndex.SKILL_2);
 
         if (!isHoldingSneak()) {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
@@ -106,7 +111,13 @@ public class PowersAnubis extends NewDashPreset {
         }
 
         ResourceLocation icon4 = StandIcons.ANUBIS_RECORD;
-        if (this.playTime > 0) {icon4 = StandIcons.ANUBIS_SAVE;}
+        if (this.playTime > 0) {
+            if (this.getStandUserSelf().roundabout$getUniqueStandModeToggle()) {
+                icon4 = StandIcons.ANUBIS_CANCEL;
+            } else {
+                icon4 = StandIcons.ANUBIS_SAVE;
+            }
+        }
         setSkillIcon(context, x, y, 4, icon4, PowerIndex.SKILL_4);
 
         super.renderIcons(context, x, y);
@@ -160,6 +171,8 @@ public class PowersAnubis extends NewDashPreset {
             case SKILL_2_NORMAL, SKILL_2_CROUCH -> {
                 if (this.playTime > 0) {
                     MemoryCancelClient();
+                } else if (Minecraft.getInstance().screen instanceof MemoryRecordScreen MA && MA.recording) {
+                    MemoryDeltaClient();
                 } else {
                     MemoryPlayClient();
                 }
@@ -174,7 +187,11 @@ public class PowersAnubis extends NewDashPreset {
             }
             case SKILL_4_NORMAL, SKILL_4_CROUCH -> {
                 if (this.playTime > 0) {
-                    MemoryCancelSaveClient();
+                    if (this.getStandUserSelf().roundabout$getUniqueStandModeToggle()) {
+                        MemoryCancelClient();
+                    } else {
+                        MemoryCancelSaveClient();
+                    }
                 } else {
                     MemoryRecordClient();
                 }
@@ -258,13 +275,42 @@ public class PowersAnubis extends NewDashPreset {
         }
     }
 
+    public void MemoryDeltaClient() {
+        if (!isAttackIneptVisually(PowerIndex.SKILL_2,2)) {
+            MemoryRecordScreen MA = (MemoryRecordScreen) Minecraft.getInstance().screen;
+            boolean b = this.memories.get(MA.currentlyHovered).delta_mouse;
+            this.memories.get(MA.currentlyHovered).delta_mouse = !b;
+        }
+    }
+
     public void MemoryCancelSaveClient() {
-        setPlayTime(-1);
+       // Roundabout.LOGGER.info(""+this.memories.get(playSlot).moments.toString());
         this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
+
+        int time = PowersAnubis.MaxPlayTime-this.playTime;
+        for (int i=0;i<playBytes.size();i++) {
+            if (isPressed(playBytes.get(i),time)) {
+                AnubisMemory memory = this.getUsedMemory();
+                List<AnubisMoment> moments = memory.moments;
+                moments.add(new AnubisMoment(this.playBytes.get(i),Math.min(PowersAnubis.MaxPlayTime,time),false));
+            }
+        }
+
+    //    Roundabout.LOGGER.info(this.getUsedMemory().moments.toString());
+
+
+        setPlayTime(-1);
+        this.playSlot = (byte)-1;
+
+
+
+        // visualValues = new ArrayList<>();
+
     }
     public void MemoryCancelClient() {
         if (!this.getStandUserSelf().roundabout$getUniqueStandModeToggle()) {
-            this.getUsedMemory().moments = new ArrayList<>();
+            this.memories.set(this.playSlot,lastMemory);
+            lastMemory = null;
         }
         this.visualValues = new ArrayList<>();
         setPlayTime(-1);
@@ -274,8 +320,11 @@ public class PowersAnubis extends NewDashPreset {
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         switch (activeP) {
-            case PowerIndex.SKILL_2, PowerIndex.SKILL_4 -> {
+            case PowerIndex.SKILL_4 -> {
                 return !Minecraft.getInstance().mouseHandler.isMouseGrabbed();
+            }
+            case PowerIndex.SKILL_2 -> {
+                return (Minecraft.getInstance().screen instanceof MemoryRecordScreen MA && (MA.currentlyHovered == -1 || MA.currentlyHovered == 8) );
             }
         }
         return super.isAttackIneptVisually(activeP, slot);
@@ -300,7 +349,7 @@ public class PowersAnubis extends NewDashPreset {
                 canPogo = true;
                 this.setAttackTime(0);
                 this.setActivePower(PowerIndex.SNEAK_MOVEMENT);
-                this.setCooldown(PowerIndex.GLOBAL_DASH,260 + (this.getSelf().onGround() ? 0 : 60));
+                this.setCooldown(PowerIndex.GLOBAL_DASH,260);
                 this.getSelf().level().playSound(null,this.getSelf().blockPosition(), ModSounds.ANUBIS_BACKFLIP_EVENT, SoundSource.PLAYERS,1.0F,1.0F);
                 this.getStandUserSelf().roundabout$setStandAnimation(PowerIndex.SNEAK_MOVEMENT);
                 if (this.getSelf() instanceof Player P) {
@@ -314,9 +363,10 @@ public class PowersAnubis extends NewDashPreset {
                     float strength = 1.25F;
                     if (Math.abs(look.x) + Math.abs(look.z) == 0) {
                         strength *= 0.7F;
+                    } else if (!this.getSelf().onGround()) {
+                        strength *= 0.8F;
                     }
-
-                    MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), strength, look.x * 1, -1 * (this.getSelf().onGround() ? 1 : 0.7), look.z * 1);
+                    MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), strength, look.x * 1, -1 * (this.getSelf().onGround() ? 1 : 0.8), look.z * 1);
                 }
             }
         }
@@ -374,22 +424,14 @@ public class PowersAnubis extends NewDashPreset {
     public void tickPower() {
 
         // Roundabout.LOGGER.info(" CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax());
-
-
-
-
         StandUser SU = this.getStandUserSelf();
 
-        if (SU.roundabout$getStandSkin() == (byte) 0) {
-            SU.roundabout$setStandSkin((byte)1);
-        }
+        if (SU.roundabout$getStandSkin() == (byte) 0) {SU.roundabout$setStandSkin((byte)1);}
 
         if (this.getSelf().onGround()) {
-
             if (this.getActivePower() != PowerIndex.SNEAK_ATTACK_CHARGE || this.attackTime > PogoDelay + 3) {
                 canPogo = true;
             }
-
 
             if (this.isClient()) {
                 if (this.getSelf() instanceof Player P){
@@ -399,14 +441,27 @@ public class PowersAnubis extends NewDashPreset {
                 }
                 pogoCounter = 0;
             }
-
         } else if (!canPogo) {
             if (this.getSelf() instanceof Player P) {
                 if (P.isCreative()) { canPogo = true;}
             }
         }
+        SU.roundabout$setCombatMode(SU.roundabout$getActive());
 
-        /** slipstream creation */
+        tickSlipStream();
+
+        tickMemories();
+
+        tickExtras();
+
+/// WARNING: THIS WILL BREAK AT SOME POINT
+        this.getSelf().setNoGravity(this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE && this.attackTimeDuring < PogoDelay);
+
+        super.tickPower();
+    }
+
+    public void tickSlipStream() {
+        StandUser SU = this.getStandUserSelf();
         if (!this.isClient()) {
             Level level = this.getSelf().level();
             boolean noSlip = this.getActivePower() == PowerIndex.SNEAK_MOVEMENT || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE;
@@ -425,9 +480,9 @@ public class PowersAnubis extends NewDashPreset {
                 }
             }
         }
+    }
 
-        SU.roundabout$setCombatMode(SU.roundabout$getActive());
-
+    public void tickMemories() {
         if (this.memories.size() != 8) {
             generateMemories(this);
         }
@@ -457,8 +512,15 @@ public class PowersAnubis extends NewDashPreset {
                             bl = true;
                         }
                     }
+                    boolean bl2 = true;
+                    if (id == AnubisMoment.ABILITY_2 || id == AnubisMoment.ABILITY_3) {
+
+                        if(this.getStandUserSelf().roundabout$getActive()) {
+                            bl2 = false;
+                        }
+                    }
                     ///  if either the key has not been saved or the values are different add a new moment
-                    if (lastMoment == -1 || bl) {
+                    if ( bl2 && ( (lastMoment == -1 && vargs ) || bl) ) {
                         getUsedMemory().moments.add(new AnubisMoment(id, time,vargs ));
                     }
                 }
@@ -477,18 +539,28 @@ public class PowersAnubis extends NewDashPreset {
             }
 
 
-            this.playTime--;
-            if (this.playTime == 0) {
-             /*   for(int i=0;i<playBytes.size();i++) {
 
-                } */
-                visualValues = new ArrayList<>();
-               // Roundabout.LOGGER.info(""+this.memories.get(playSlot).moments.toString());
-                this.playSlot = (byte)-1;
-                this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
+            this.playTime--;
+            boolean bl = false;
+            AnubisMemory memory = this.getUsedMemory();
+            if (this.getStandUserSelf().roundabout$getUniqueStandModeToggle()) {
+                if (memory != null) {
+                    if (!memory.moments.isEmpty()) {
+                        if (PowersAnubis.MaxPlayTime - this.playTime > memory.moments.get(memory.moments.size() - 1).time) {
+                            bl = true;
+                        }
+                    }
+                }
+            }
+
+            if (this.playTime <= 0 || bl) {
+                this.MemoryCancelSaveClient();
             }
         }
+    }
 
+    public void tickExtras() {
+        StandUser SU = this.getStandUserSelf();
         if (isGuarding()) {
             getStandUserSelf().roundabout$setStandAnimation(PowerIndex.GUARD);
         } else if (getStandUserSelf().roundabout$getStandAnimation() == PowerIndex.GUARD) {
@@ -514,12 +586,6 @@ public class PowersAnubis extends NewDashPreset {
                 this.setPowerNone();
             }
         }
-
-
-/// WARNING: THIS WILL BREAK AT SOME POINT
-        this.getSelf().setNoGravity(this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE && this.attackTimeDuring < PogoDelay);
-
-        super.tickPower();
     }
 
 
@@ -612,14 +678,12 @@ public class PowersAnubis extends NewDashPreset {
                 BarrageSlash();
             }
             case PowerIndex.RANGED_BARRAGE -> {
-                if (this.getAttackTime() == quickdrawDelay) {
+                if (this.getAttackTime() < quickdrawDelay) {
+                    scopeLevel = 1;
+                } else if (this.getAttackTime() == quickdrawDelay) {
                     StartQuickdraw(8);
                 } else {
                     UpdateQuickdraw();
-                }
-                if (this.getAttackTime() < quickdrawDelay) {
-                    scopeLevel = 1;
-                } else {
                     scopeLevel = 0;
                 }
 
@@ -922,6 +986,9 @@ public class PowersAnubis extends NewDashPreset {
                     if (e instanceof LivingEntity LE) {
                         addEXP(2);
                     }
+                    if (first) {
+                        ((StandUser)e).roundabout$setDazed((byte)3);
+                    }
                     this.takeDeterminedKnockback(this.getSelf(), e, knockbackStrength);
 
                 } else if (!first) {
@@ -1203,7 +1270,7 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     public void UpdateQuickdraw() {
-        ((StandUser)this.getSelf()).roundabout$setMeleeImmunity(3);
+        this.getStandUserSelf().roundabout$setMeleeImmunity(3);
         int duration = 15;
         for (Entity entity : this.targets) {
             if (entity instanceof LivingEntity LE) {
@@ -1313,13 +1380,15 @@ public class PowersAnubis extends NewDashPreset {
 
     public static final byte
             ANIME = 1,
-            EVIL = 2;
+            EVIL = 2,
+            AQUAMARINE = 3;
 
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 ANIME,
-                EVIL
+                EVIL,
+                AQUAMARINE
         );
     }
 
@@ -1327,6 +1396,7 @@ public class PowersAnubis extends NewDashPreset {
         return switch (skinId)
         {
             case PowersAnubis.EVIL -> Component.translatable("skins.roundabout.anubis.evil");
+            case PowersAnubis.AQUAMARINE -> Component.translatable("skins.roundabout.anubis.aquamarine");
             default -> Component.translatable("skins.roundabout.anubis.anime");
         };
     }
@@ -1406,6 +1476,7 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     List<Pair<List<Byte>,Integer>> visualValues = new ArrayList<>();
+    AnubisMemory lastMemory = null;
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
@@ -1476,7 +1547,7 @@ public class PowersAnubis extends NewDashPreset {
 
                 }
             }
-            if (standOn) {
+            if (standOn)  {
                 if (!TE.isEmpty()) {
                     if (barTexture == 0) {
                         renderingSomething = true;
@@ -1500,10 +1571,10 @@ public class PowersAnubis extends NewDashPreset {
 
     }
     public void renderMoment(GuiGraphics context, Byte[] moments,int offset, int time) {
-        int Offset = offset + 4 + (this.getStandUserSelf().roundabout$getActive() ? 24 : 0);
+        int Offset = offset + 4 + ( (this.getStandUserSelf().roundabout$getActive() || !FateTypes.isHuman(this.getSelf())) ? 24 : 0);
         int xoff = 1;
         for (int i=0;i<moments.length;i++) {
-            int xIcon =7 * switch (moments[i]) {
+            int xIcon = 7 * switch (moments[i]) {
                 case AnubisMoment.UP -> 0;
                 case AnubisMoment.DOWN -> 1;
                 case AnubisMoment.LEFT -> 2;
@@ -1512,13 +1583,18 @@ public class PowersAnubis extends NewDashPreset {
                 case AnubisMoment.SPRINT -> 5;
                 case AnubisMoment.CROUCH -> 6;
                 case AnubisMoment.SUMMON -> 7;
-                case AnubisMoment.DASH -> 8;
-                case AnubisMoment.ATTACK -> 9;
-                case AnubisMoment.INTERACT -> 10;
-
+                case AnubisMoment.ABILITY_1 -> 8;
+                case AnubisMoment.ABILITY_2 -> 9;
+                case AnubisMoment.DASH -> 10;
+                case AnubisMoment.ABILITY_3 -> 11;
+                case AnubisMoment.ATTACK -> 12;
+                case AnubisMoment.INTERACT -> 13;
                 default -> 11;
             };
-            context.blit(StandIcons.JOJO_ICONS_2,xoff,Offset,xIcon,40,7,7);
+            if (moments[i] > 20 && moments[i] < 30) {
+                xIcon = 7 * (10+moments[i]-20);
+            }
+            context.blit(StandIcons.ANUBIS_MEMORY,xoff,Offset,xIcon,55,7,7);
             xoff += 8;
         }
         if (moments.length == 0) {xoff +=8;}
@@ -1540,26 +1616,26 @@ public class PowersAnubis extends NewDashPreset {
         if (slot == (byte) -1 || slot == 8) {return;}
 
 
-
         playSlot = slot;
         setPlayTime(PowersAnubis.MaxPlayTime);
 
         visualValues = new ArrayList<>();
 
         AnubisMemory mem = this.memories.get(slot);
-        this.memories.set(slot,new AnubisMemory(mem.item,AnubisMemory.INPUT_ONLY,new ArrayList<>() ) );
+        lastMemory = this.memories.get(slot);
+        this.memories.set(slot,new AnubisMemory(mem.item,new ArrayList<>() ) );
     }
     public void playbackMemory(byte slot) {
         if (memories.isEmpty()) {return;}
         if (slot == (byte) -1 || slot == 8) {return;}
         AnubisMemory memory = this.memories.get(slot);
-        if (memory != null) {
+        if (memory != null && !memory.moments.isEmpty()) {
             List<AnubisMoment> moments = this.memories.get(slot).moments;
-            if (!moments.isEmpty()) {
-                playSlot = slot;
-                setPlayTime(Math.min(PowersAnubis.MaxPlayTime,moments.get(moments.size()-1).time) );
-                this.getStandUserSelf().roundabout$setUniqueStandModeToggle(true);
-            }
+
+            playSlot = slot;
+            setPlayTime(PowersAnubis.MaxPlayTime-moments.get(0).time );
+            //Roundabout.LOGGER.info("{}/{}",moments.get(moments.size()-1).time,moments.get(0).time);
+            this.getStandUserSelf().roundabout$setUniqueStandModeToggle(true);
 
         }
 
@@ -1569,7 +1645,7 @@ public class PowersAnubis extends NewDashPreset {
     public static void generateMemories(PowersAnubis PA) {
         for (int i=0;i<8;i++) {
             List<AnubisMoment>  moment = new ArrayList<>();
-            AnubisMemory AM = new AnubisMemory(ModItems.ANUBIS_ITEM,AnubisMemory.DELTA_MOUSE, moment);
+            AnubisMemory AM = new AnubisMemory(ModItems.ANUBIS_ITEM, moment);
             PA.memories.add(AM);
         }
 
@@ -1581,13 +1657,17 @@ public class PowersAnubis extends NewDashPreset {
         PA.playKeys.add(o.keyJump);PA.playBytes.add(AnubisMoment.JUMP);
         PA.playKeys.add(o.keySprint);PA.playBytes.add(AnubisMoment.SPRINT);
         PA.playKeys.add(o.keyShift);PA.playBytes.add(AnubisMoment.CROUCH);
-        PA.playKeys.add(KeyInputRegistry.summonKey);PA.playBytes.add(AnubisMoment.SUMMON);
         PA.playKeys.add(KeyInputRegistry.abilityThreeKey);PA.playBytes.add(AnubisMoment.DASH);
+        PA.playKeys.add(KeyInputRegistry.summonKey);PA.playBytes.add(AnubisMoment.SUMMON);
+        PA.playKeys.add(KeyInputRegistry.abilityOneKey);PA.playBytes.add(AnubisMoment.ABILITY_1);
+        PA.playKeys.add(KeyInputRegistry.abilityTwoKey);PA.playBytes.add(AnubisMoment.ABILITY_2);
+        PA.playKeys.add(KeyInputRegistry.abilityFourKey);PA.playBytes.add(AnubisMoment.ABILITY_3);
         PA.playKeys.add(o.keyAttack);PA.playBytes.add(AnubisMoment.ATTACK);
         PA.playKeys.add(o.keyUse);PA.playBytes.add(AnubisMoment.INTERACT);
 
-
-
+        for(int i=0;i<AnubisMoment.HOTBAR.length;i++) {
+            PA.playKeys.add(o.keyHotbarSlots[i]);PA.playBytes.add(AnubisMoment.HOTBAR[i]);
+        }
     }
     public AnubisMemory getUsedMemory() {
         if (this.playSlot != -1) {
@@ -1630,9 +1710,9 @@ public class PowersAnubis extends NewDashPreset {
         if (moments.isEmpty()) {return;}
 
 
-
         int maxTime = Math.min(PowersAnubis.MaxPlayTime,moments.get(moments.size()-1).time);
-        for(int time=0;time<maxTime;time++ ) {
+
+        for(int time = 0; time<maxTime; time++ ) {
             List<Byte> value = new ArrayList<>();
             for (int i = 0; i < this.playBytes.size(); i++) {
                 if (isPressed(slot,playBytes.get(i), time)) {
