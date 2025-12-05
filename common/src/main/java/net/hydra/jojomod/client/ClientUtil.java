@@ -1363,7 +1363,7 @@ public class ClientUtil {
         return null;
     }
 
-    public static<T extends LivingEntity, M extends EntityModel<T>> void renderFirstPersonModelParts(Entity cameraEnt, double $$1, double $$2, double $$3, float $$4, PoseStack stack, MultiBufferSource source, int light){
+    public static<T extends LivingEntity, M extends EntityModel<T>> void renderFirstPersonModelParts(Entity cameraEnt, float $$4, PoseStack stack, MultiBufferSource source, int light){
 
         if (cameraEnt instanceof Player play && ((IFatePlayer)cameraEnt).rdbt$getFatePowers() instanceof VampireFate vf){
             int poggers = vf.getProgressIntoAnimation();
@@ -1376,25 +1376,20 @@ public class ClientUtil {
                 float r = pl.rdbt$getHairColorX();
                 float g = pl.rdbt$getHairColorY();
                 float b = pl.rdbt$getHairColorZ();
-                EntityRenderer<? super T> ERA = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(cameraEnt);
-                if (ERA instanceof PlayerRenderer ELA && ELA.getModel() != null) {
                     Direction gravityDirection = GravityAPI.getGravityDirection(cameraEnt);
 
                     //RotationUtil.rotPlayerToWorld(cameraEnt.getYHeadRot(), cameraEnt.getXRot(), gravityDirection);
-                    Vec2 rot = RotationUtil.rotPlayerToWorld(cameraEnt.getYHeadRot(), cameraEnt.getXRot(), gravityDirection);
-                    ELA.getModel().head.yRot = -1*((rot.x+180) * (float) (Math.PI / 180.0));
-                    ELA.getModel().head.xRot = -1*((rot.y) * (float) (Math.PI / 180.0));
+
 //                    RotationAnimation animation = GravityAPI.getRotationAnimation(player);
 //                    if (animation == null) {
 //                        return;
 //                    }
 //                    long timeMs = player.level().getGameTime() * 50 + (long) ($$4 * 50);
 //                    //ELA.getModel().setupAnim((AbstractClientPlayer) $$0, 0, 0, $$4 %1, $$8, $$11);
-                    ELA.getModel().head.translateAndRotate(stack);
+
 
                     if (gravityDirection == Direction.UP){
                         Vec3 vector = new Vec3(0,cameraEnt.getEyeHeight()*0.4f,0);
-                        stack.translate(vector.x,vector.y,vector.z);
                     } else {
                         Vec3 vector = new Vec3(0,cameraEnt.getEyeHeight()*0.15f,0);
                         stack.translate(vector.x,vector.y,vector.z);
@@ -1405,7 +1400,7 @@ public class ClientUtil {
 
 
                     ModStrayModels.VampireHairFlesh.render(cameraEnt, $$4, stack, source, poggers, r, g, b, 1);
-                }
+
                 stack.popPose();
             }
         }
