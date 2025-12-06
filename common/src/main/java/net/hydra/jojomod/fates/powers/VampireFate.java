@@ -1,5 +1,6 @@
 package net.hydra.jojomod.fates.powers;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.StandIcons;
@@ -221,6 +222,9 @@ public class VampireFate extends VampiricFate {
                             if (canPlantDrink(TE) || canPlantHealth(TE)) {
                                 fleshBudIfNearby(100, TE.getId());
                                 ((StandUser) TE).rdbt$setFleshBud(self.getUUID());
+                                if (TE instanceof Mob mb){
+                                    ((StandUser)mb).roundabout$deeplyRemoveAttackTarget();
+                                }
                             } else {
                                 if (!canPlantHealth(TE)) {
                                     if (self instanceof Player PE) {

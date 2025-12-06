@@ -67,6 +67,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -397,6 +398,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
     @Shadow public abstract void setAggressive(boolean $$0);
 
+    @Shadow @org.jetbrains.annotations.Nullable private LivingEntity target;
     @Unique
     protected int roundabout$unseenMemoryTicks = 300;
 
@@ -748,11 +750,18 @@ public abstract class ZMob extends LivingEntity implements IMob {
         }
     }
 
-    /**Stands that react to aggro like hey ya and wonder of u*/
+
     @Inject(method = "setTarget",
-            at = @At(value = "HEAD"))
+            at = @At(value = "HEAD"), cancellable = true)
     private <T extends Mob> void roundabout$setTarget(LivingEntity $$0, CallbackInfo ci) {
         if ($$0 != null) {
+            /**Flesh buds prevent aggro on the planter*/
+            UUID fleshPlanter = (((StandUser)this).rdbt$getFleshBud());
+            if (fleshPlanter != null && $$0.getUUID() ==fleshPlanter){
+                ci.cancel();
+                return;
+            }
+            /**Stands that react to aggro like hey ya and wonder of u*/
             ((StandUser)$$0).roundabout$getStandPowers().reactToAggro(((Mob) (Object)this));
         }
     }
