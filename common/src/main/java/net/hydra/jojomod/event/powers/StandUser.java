@@ -20,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 public interface StandUser {
@@ -56,6 +57,10 @@ public interface StandUser {
     Entity roundabout$getBoundTo();
     void roundabout$setBoundTo(Entity $$0);
     int roundabout$getBoundToID();
+
+
+    void rdbt$setFleshBud(UUID bud);
+    UUID rdbt$getFleshBud();
 
     void roundabout$setBoundToID(int bound);
     boolean roundabout$isStringBound();
