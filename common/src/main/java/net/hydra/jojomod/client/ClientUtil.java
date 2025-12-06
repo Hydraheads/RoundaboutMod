@@ -625,6 +625,12 @@ public class ClientUtil {
             }
         } else if (context == PacketDataIndex.S2C_INT_STAND_MODE){
             ((StandUser) player).roundabout$getStandPowers().clientIntUpdated(data);
+        } else if (context == PacketDataIndex.S2C_INT_FLESH_BUD){
+            Entity target = player.level().getEntity(data);
+            Roundabout.LOGGER.info("yeah, I'm feeling pretty sigma");
+            if (target != null && !target.isRemoved() && target.isAlive()) {
+                playSound(ModSounds.FLESH_BUD_EVENT,target,1,1);
+            }
         }
     }
 

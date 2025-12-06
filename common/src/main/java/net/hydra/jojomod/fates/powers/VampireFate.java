@@ -1,18 +1,24 @@
 package net.hydra.jojomod.fates.powers;
 
 import net.hydra.jojomod.access.IMob;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Position;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -94,7 +100,12 @@ public class VampireFate extends VampiricFate {
         if (isHearing()){
             stopHearingClient();
         }
-        tryPowerPacket(HAIR_EXTENDED);
+        if (!onCooldown(PowerIndex.FATE_1_SNEAK) || activePower == HAIR_EXTENDED) {
+            if (activePower != HAIR_EXTENDED) {
+                this.setCooldown(PowerIndex.FATE_1_SNEAK, 44);
+            }
+            tryPowerPacket(HAIR_EXTENDED);
+        }
     }
     public void hypnosis(){
         if (isHearing()){
@@ -133,6 +144,9 @@ public class VampireFate extends VampiricFate {
                 setActivePower(HAIR_EXTENDED);
                 setPlayerPos2(PlayerPosIndex.HAIR_EXTENSION);
                 this.attackTimeDuring = 0;
+
+                self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.HAIR_TOGGLE_EVENT, SoundSource.PLAYERS, 1F, 1F);
+
             }
         }
     }
@@ -161,7 +175,10 @@ public class VampireFate extends VampiricFate {
         }
         return super.getJumpHeightAddon()+getAddon();
     }
-
+    @Override
+    public float getJumpHeightAddonMax(){
+        return 4;
+    }
     public float getAddon(){
         if (self.isCrouching() && rechargeJump){
             return 4;
@@ -195,10 +212,40 @@ public class VampireFate extends VampiricFate {
 
         if (activePower == HAIR_EXTENDED){
             if (attackTimeDuring >= getMaxAttackTimeDuringHair() && !isClient()) {
+                Entity TE = getTargetEntity(self, 7, 15);
+                if (TE != null && MainUtil.canDrinkBloodFair(TE, self)){
+                    fleshBudIfNearby(100, TE.getId());
+                }
+
                 setAttackTimeDuring(-20);
             }
         }
     }
+
+
+    /***/
+
+
+    public final void fleshBudIfNearby(double range, int entid) {
+        if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, range)) {
+                        S2CPacketUtil.sendGenericIntToClientPacket(serverPlayerEntity,
+                                PacketDataIndex.S2C_INT_FLESH_BUD,entid);
+                }
+            }
+        }
+    }
+
     public void tickHypnosis() {
         if (!self.level().isClientSide())
             if (isHypnotizing) {

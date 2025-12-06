@@ -3731,7 +3731,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         if ((LivingEntity)(Object)this instanceof Player pl){
             StandUser SU = (StandUser) pl;
-            float fd = ((IFatePlayer)pl).rdbt$getFatePowers().getJumpHeightAddon();
+            float fd = ((IFatePlayer)pl).rdbt$getFatePowers().getJumpHeightAddonMax();
             if (SU.roundabout$getStandPowers() != null) {
                 fd += SU.roundabout$getStandPowers().getJumpHeightAddon();
             }
