@@ -2099,7 +2099,8 @@ public class MainUtil {
     public static boolean forceAggression(LivingEntity LE){
         if (LE != null){
             StandUser user = ((StandUser) LE);
-            return (user.roundabout$hasAStand() || user.roundabout$getZappedToID() > -1);
+            return (user.roundabout$hasAStand() || user.roundabout$getZappedToID() > -1
+                    || user.rdbt$getFleshBud() != null);
         }
         return false;
     }

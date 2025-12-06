@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.fates;
 
 import net.hydra.jojomod.access.IMob;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,6 +14,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.UUID;
+
 @Mixin(Villager.class)
 public abstract class FateVillagerMixin extends AbstractVillager {
 
@@ -24,6 +27,14 @@ public abstract class FateVillagerMixin extends AbstractVillager {
             if (living != null && PL.is(living)){
                 if (!$$0.equals(ReputationEventType.VILLAGER_KILLED)){
                     ci.cancel();
+                    return;
+                }
+            }
+            UUID fleshBudPlanted = ((StandUser)this).rdbt$getFleshBud();
+            if (fleshBudPlanted != null && fleshBudPlanted == PL.getUUID()){
+                if (!$$0.equals(ReputationEventType.VILLAGER_KILLED)){
+                    ci.cancel();
+                    return;
                 }
             }
         }

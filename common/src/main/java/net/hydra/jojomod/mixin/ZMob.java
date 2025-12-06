@@ -801,6 +801,35 @@ public abstract class ZMob extends LivingEntity implements IMob {
     private void roundabout$Tick(CallbackInfo ci) {
         if (this.isAlive() && !this.level().isClientSide()) {
 
+            //Flesh Bud sets aggro
+            UUID fleshTarget = ((StandUser) this).rdbt$getFleshBud();
+            if (fleshTarget != null && level() instanceof ServerLevel SL){
+                Entity fleshTargetEntity = SL.getEntity(fleshTarget);
+                if (fleshTargetEntity instanceof LivingEntity LE){
+                    LivingEntity hurtMob = LE.getLastHurtMob();
+                    if (hurtMob != null && hurtMob.isAlive() && !hurtMob.is(this) && !hurtMob.is(LE)
+                    && ((StandUser)hurtMob).rdbt$getFleshBud() != fleshTarget){
+                        setLastHurtByMob(hurtMob);
+                        setLastHurtMob(hurtMob);
+                        setTarget(hurtMob);
+                        if (hurtMob instanceof Player pl){
+                            setLastHurtByPlayer(pl);
+                        }
+                    } else {
+                        LivingEntity hurtByMob = LE.getLastHurtByMob();
+                        if (hurtByMob != null && hurtByMob.isAlive() && !hurtByMob.is(this) && !hurtByMob.is(LE)
+                                && ((StandUser)hurtByMob).rdbt$getFleshBud() != fleshTarget){
+                            setLastHurtByMob(hurtByMob);
+                            setLastHurtMob(hurtByMob);
+                            setTarget(hurtByMob);
+                            if (hurtByMob instanceof Player pl){
+                                setLastHurtByPlayer(pl);
+                            }
+                        }
+                    }
+                }
+            }
+
             if (roundabout$sightProtectionTicks > 0){
                 roundabout$sightProtectionTicks--;
             }
