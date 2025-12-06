@@ -14,9 +14,11 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Position;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -213,8 +215,19 @@ public class VampireFate extends VampiricFate {
         if (activePower == HAIR_EXTENDED){
             if (attackTimeDuring >= getMaxAttackTimeDuringHair() && !isClient()) {
                 Entity TE = getTargetEntity(self, 7, 15);
-                if (TE != null && MainUtil.canDrinkBloodFair(TE, self)){
-                    fleshBudIfNearby(100, TE.getId());
+                if (TE != null){
+                    if (MainUtil.canDrinkBloodFair(TE, self)){
+                        if (canPlantDrink(TE) || canPlantHealth(TE)){
+                            fleshBudIfNearby(100, TE.getId());
+                            ((StandUser)TE).rdbt$setFleshBud(self.getUUID());
+                        } else {
+                            if (!canPlantHealth(TE)){
+                                if (self instanceof Player PE){
+                                    PE.displayClientMessage(Component.translatable("text.roundabout.vampire.flesh_bud_fail").withStyle(ChatFormatting.RED), true);
+                                }
+                            }
+                        }
+                    }
                 }
 
                 setAttackTimeDuring(-20);
@@ -222,6 +235,19 @@ public class VampireFate extends VampiricFate {
         }
     }
 
+
+    public boolean canPlantDrink(Entity ent) {
+        if (MainUtil.canDrinkBloodCrit(ent,self) ) {
+            return true;
+        }
+        return false;
+    }
+    public boolean canPlantHealth(Entity ent) {
+        if (ent instanceof LivingEntity LE && LE.getHealth()-getSuckDamage() <= 0){
+            return true;
+        }
+        return false;
+    }
 
     /***/
 
