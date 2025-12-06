@@ -46,6 +46,8 @@ public class EditValueScreen extends Screen {
                     field.set(instance, Integer.parseInt(text));
                 } else if (type == float.class || type == Float.class) {
                     field.set(instance, Float.parseFloat(text));
+                } else if (type == String.class) {
+                    field.set(instance, text);
                 } else {
                     throw new RuntimeException("Unsupported type caught while creating EditValueScreen!");
                 }

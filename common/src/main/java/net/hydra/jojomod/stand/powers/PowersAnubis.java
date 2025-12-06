@@ -10,9 +10,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.gui.MemoryRecordScreen;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.AnubisSlipstreamEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -20,7 +18,6 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
-import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -47,11 +44,11 @@ import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3f;
 import oshi.util.tuples.Pair;
 
 import java.util.*;
@@ -68,18 +65,11 @@ public class PowersAnubis extends NewDashPreset {
     public static final byte SWING = 50;
 
 
-    public List<AnubisMemory> memories = new ArrayList<AnubisMemory>();
+    public List<AnubisMemory> memories = new ArrayList<>();
     public final List<KeyMapping> playKeys = new ArrayList<>();
     public final List<Byte> playBytes = new ArrayList<>();
     @Override
-    public StandPowers generateStandPowers(LivingEntity entity) {
-        Options o = Minecraft.getInstance().options;
-
-
-
-        PowersAnubis PA = new PowersAnubis(entity);
-        return PA;
-    }
+    public StandPowers generateStandPowers(LivingEntity entity) {return new PowersAnubis(entity);}
 
     public boolean canSummonStandAsEntity(){
         return false;
@@ -136,7 +126,7 @@ public class PowersAnubis extends NewDashPreset {
             basis *= 1 - (float) 0.7*scale;
         }
         if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
-            basis *= 1.5;
+            basis *= 1.5F;
         }
         return super.inputSpeedModifiers(basis);
     }
@@ -161,13 +151,8 @@ public class PowersAnubis extends NewDashPreset {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
-            case SKILL_1_NORMAL, SKILL_1_GUARD -> {
-                AlluringLightClient();
-            }
-            case SKILL_1_CROUCH, SKILL_1_CROUCH_GUARD -> {
-                RagingLightClient();
-            }
-
+            case SKILL_1_NORMAL, SKILL_1_GUARD -> AlluringLightClient();
+            case SKILL_1_CROUCH, SKILL_1_CROUCH_GUARD -> RagingLightClient();
             case SKILL_2_NORMAL, SKILL_2_CROUCH -> {
                 if (this.playTime > 0) {
                     MemoryCancelClient();
@@ -177,14 +162,10 @@ public class PowersAnubis extends NewDashPreset {
                     MemoryPlayClient();
                 }
             }
+            case SKILL_3_NORMAL -> this.dash();
+            case SKILL_3_CROUCH -> BackflipClient();
 
-            case SKILL_3_NORMAL -> {
-                this.dash();
-            }
 
-            case SKILL_3_CROUCH -> {
-                BackflipClient();
-            }
             case SKILL_4_NORMAL, SKILL_4_CROUCH -> {
                 if (this.playTime > 0) {
                     if (this.getStandUserSelf().roundabout$getUniqueStandModeToggle()) {
@@ -214,10 +195,10 @@ public class PowersAnubis extends NewDashPreset {
         }
 
         Vec3 pos = this.getSelf().getPosition(1);
-        Vector3f[] colors = {
+        /*    Vector3f[] colors = {
                 new Vector3f(0.96F, 0.96F, 0.92F),
                 new Vector3f(0.93F, 0.87F, 0.57F)
-        };
+        }; */
         //TODO: PARTICLE SPRAY (with colors)
         ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.FIREWORK,
                 pos.x,
@@ -242,10 +223,10 @@ public class PowersAnubis extends NewDashPreset {
         }
 
         Vec3 pos = this.getSelf().getPosition(1);
-        Vector3f[] colors = {
+        /* Vector3f[] colors = {
                 new Vector3f(0.85F, 0.31F, 0.15F),
                 new Vector3f(0.31F, 0.22F, 0.20F )
-        };
+        }; */
         //TODO: PARTICLE SPRAY (with colors)
         ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.FIREWORK,
                 pos.x,
@@ -287,6 +268,13 @@ public class PowersAnubis extends NewDashPreset {
        // Roundabout.LOGGER.info(""+this.memories.get(playSlot).moments.toString());
         this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
 
+  /**      String cf = convertToConfig(playSlot);
+        if (cf != null) {
+
+            Roundabout.LOGGER.info(playSlot+1 + " | " + cf);
+            ConfigManager.getClientConfig().anubisMemories.saveToMemory(playSlot+1,cf);
+        }
+ */
         int time = PowersAnubis.MaxPlayTime-this.playTime;
         for (int i=0;i<playBytes.size();i++) {
             if (isPressed(playBytes.get(i),time)) {
@@ -435,7 +423,7 @@ public class PowersAnubis extends NewDashPreset {
 
             if (this.isClient()) {
                 if (this.getSelf() instanceof Player P){
-                    if (pogoCounter != 0 && ConfigManager.getClientConfig().standTweakSettings.anubisPogoCounter) {
+                    if (pogoCounter != 0 && ConfigManager.getClientConfig().anubisMemories.anubisPogoCounter) {
                         P.displayClientMessage(Component.literal("" + pogoCounter).withStyle(ChatFormatting.RED), true);
                     }
                 }
@@ -1131,7 +1119,7 @@ public class PowersAnubis extends NewDashPreset {
                 this.setPowerNone();
 
                 pogoCounter += 1;
-                if (ConfigManager.getClientConfig().standTweakSettings.anubisPogoCounter) {
+                if (ConfigManager.getClientConfig().anubisMemories.anubisPogoCounter) {
                     ((Player) this.getSelf()).displayClientMessage(Component.literal("" + pogoCounter).withStyle(ChatFormatting.WHITE), true);
                 }
             }
@@ -1161,7 +1149,7 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     public boolean canGuard(){
-        return !this.isBarraging() && !this.isClashing() && this.getActivePower() != PowerIndex.SNEAK_ATTACK_CHARGE;
+        return !this.isBarraging() && !this.isClashing() && this.getActivePower() != PowerIndex.SNEAK_ATTACK_CHARGE && this.getActivePower() != PowerIndex.RANGED_BARRAGE;
     }
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
@@ -1642,9 +1630,47 @@ public class PowersAnubis extends NewDashPreset {
 
     }
 
+    public String convertToConfig(int i) {
+        AnubisMemory AM = this.memories.get(i);
+        String ret = "";
+        if (AM != null) {
+
+            Item item = AM.item;
+            if (item != null) {
+                ret = ret + Item.getId(item);
+            } else {
+                Roundabout.LOGGER.warn("Null Memory Item: " + i);
+            }
+
+        } else {
+            Roundabout.LOGGER.warn("Null Memory: " + i);
+        }
+        return ret;
+    }
+
+
+    public static AnubisMemory convertToMemory(int i) {
+        String cf = ConfigManager.getClientConfig().anubisMemories.getFromMemory(i);
+        Item item = null;
+        if (!cf.isEmpty()) {
+            Roundabout.LOGGER.info(cf);
+            Scanner s = new Scanner(cf);
+         //   item = Item.byId();
+        } else {
+            Roundabout.LOGGER.warn("Received Empty String from anubisMemories");
+        }
+
+        if (item != null) {
+            return new AnubisMemory(item, new ArrayList<>());
+        } else {
+            Roundabout.LOGGER.warn("Invalid Memory Item");
+        }
+        return null;
+    }
+
     public static void generateMemories(PowersAnubis PA) {
         for (int i=0;i<8;i++) {
-            List<AnubisMoment>  moment = new ArrayList<>();
+            List<AnubisMoment> moment = new ArrayList<>();
             AnubisMemory AM = new AnubisMemory(ModItems.ANUBIS_ITEM, moment);
             PA.memories.add(AM);
         }
@@ -1664,7 +1690,6 @@ public class PowersAnubis extends NewDashPreset {
         PA.playKeys.add(KeyInputRegistry.abilityFourKey);PA.playBytes.add(AnubisMoment.ABILITY_3);
         PA.playKeys.add(o.keyAttack);PA.playBytes.add(AnubisMoment.ATTACK);
         PA.playKeys.add(o.keyUse);PA.playBytes.add(AnubisMoment.INTERACT);
-
         for(int i=0;i<AnubisMoment.HOTBAR.length;i++) {
             PA.playKeys.add(o.keyHotbarSlots[i]);PA.playBytes.add(AnubisMoment.HOTBAR[i]);
         }

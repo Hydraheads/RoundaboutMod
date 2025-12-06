@@ -1,9 +1,6 @@
 package net.hydra.jojomod.util.config;
 
-import net.hydra.jojomod.util.config.annotation.BooleanOption;
-import net.hydra.jojomod.util.config.annotation.CommentedOption;
-import net.hydra.jojomod.util.config.annotation.FloatOption;
-import net.hydra.jojomod.util.config.annotation.IntOption;
+import net.hydra.jojomod.util.config.annotation.*;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -136,10 +133,14 @@ public class ConfigParser {
         BooleanOption booleanOption = field.getAnnotation(BooleanOption.class);
         FloatOption floatOption = field.getAnnotation(FloatOption.class);
         IntOption intOption = field.getAnnotation(IntOption.class);
+        StringOption stringOption = field.getAnnotation(StringOption.class);
 
-        if (booleanOption == null && floatOption == null && intOption == null)
+
+        if (booleanOption == null && floatOption == null && intOption == null && stringOption == null)
             return "/* -- error reading type info -- */";
-
+        if (stringOption != null) {
+            return String.format("/* Default Value: %s */",stringOption.value());
+        }
         if (booleanOption != null)
             return String.format("/* Default Value: %s */", booleanOption.value());
         if (floatOption != null)
