@@ -211,6 +211,8 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                 r, g, b);
                         renderVampireHairTwo(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
                                 r, g, b);
+                        renderVampireHairFleshBud(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
+                                r, g, b);
                     }
                 }
 
@@ -353,6 +355,15 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ClientUtil.pushPoseAndCooperate(poseStack,38);
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.VampireHairTwo.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1);
+        ClientUtil.popPoseAndCooperate(poseStack,38);
+    }
+    public void renderVampireHairFleshBud(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                                     float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,38);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.VampireHairFlesh.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1);
         ClientUtil.popPoseAndCooperate(poseStack,38);
     }

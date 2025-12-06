@@ -51,6 +51,7 @@ public class ModStrayModels {
 
     public static VampireHairOnePart VampireHairOne;
     public static VampireHairTwoPart VampireHairTwo;
+    public static VampireHairFleshBudLayer VampireHairFlesh;
 
     public static MoldSpineModel MoldSpine;
 

@@ -122,7 +122,16 @@ public abstract class ZItemInHandRenderer {
                 }
                 ci.cancel();
             }
+
         }
+    }
+    @Inject(method = "renderHandsWithItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endBatch()V", shift = At.Shift.BEFORE), cancellable = true)
+    public<T extends LivingEntity, M extends EntityModel<T>>
+    void roundabout$renderHandsWithItemsX(float partialTick, PoseStack poseStack, MultiBufferSource.BufferSource bufferSource,
+                                         LocalPlayer localPlayer, int light, CallbackInfo ci) {
+
+        //We can render any model here in first person
+        ClientUtil.renderFirstPersonModelParts(localPlayer,partialTick,poseStack, bufferSource, light);
     }
 
     @Unique

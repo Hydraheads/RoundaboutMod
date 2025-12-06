@@ -267,7 +267,7 @@ public class HairColorChangeScreen extends Screen {
 
         int i = this.width / 2 - 30;
         int j = this.height / 2 - 70;
-        guiGraphics.drawString(this.font, Component.translatable("roundabout.hairspray.red").withStyle(ChatFormatting.GRAY), i +1, j - 9, 4210752, false);
+        guiGraphics.drawString(this.font, Component.translatable("roundabout.hairspray.red").withStyle(ChatFormatting.GRAY).append(Component.literal(" "+Math.round(hairColorX * 100.0) / 100.0).withStyle(ChatFormatting.DARK_GRAY)), i +1, j - 9, 4210752, false);
         guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i, j, 11, 173, 118, 11);
         int renderSpot1 = (int) Math.floor(((double) 114 / maxRed) * (hairColorX));
         if (isSurelyHovering(i, j, 118, 11, mouseX, mouseY) || sliderHeld == 1) {
@@ -276,7 +276,7 @@ public class HairColorChangeScreen extends Screen {
             guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i + renderSpot1, j, 5, 173, 5, 11);
         }
 
-        guiGraphics.drawString(this.font, Component.translatable("roundabout.hairspray.green").withStyle(ChatFormatting.GRAY), i+1, j + 13, 4210752, false);
+        guiGraphics.drawString(this.font, Component.translatable("roundabout.hairspray.green").withStyle(ChatFormatting.GRAY).append(Component.literal(" "+Math.round(hairColorY * 100.0) / 100.0).withStyle(ChatFormatting.DARK_GRAY)), i+1, j + 13, 4210752, false);
         guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i, j + 22, 11, 173, 118, 11);
 
         int renderSpot2 =(int) Math.floor(((double) 114 / maxGreen) * (hairColorY));
@@ -286,7 +286,7 @@ public class HairColorChangeScreen extends Screen {
             guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i+ renderSpot2, j + 22, 5, 173, 5, 11);
         }
 
-        guiGraphics.drawString(this.font, Component.translatable("roundabout.hairspray.blue").withStyle(ChatFormatting.GRAY), i +1, j + 35, 4210752, false);
+        guiGraphics.drawString(this.font, Component.translatable("roundabout.hairspray.blue").withStyle(ChatFormatting.GRAY).append(Component.literal(" "+Math.round(hairColorZ * 100.0) / 100.0).withStyle(ChatFormatting.DARK_GRAY)), i +1, j + 35, 4210752, false);
         guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i, j + 44, 11, 173, 118, 11);
         int renderSpot3 = (int) Math.floor(((double) 114 / maxBlue) * (hairColorZ));
         if (isSurelyHovering(i , j + 44, 118, 11, mouseX, mouseY) || sliderHeld == 3) {
@@ -294,6 +294,7 @@ public class HairColorChangeScreen extends Screen {
         } else {
             guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i + renderSpot3, j + 44, 5, 173, 5, 11);
         }
+
 
         k = this.width / 2 - 75;
         l = this.height / 2 +17;
