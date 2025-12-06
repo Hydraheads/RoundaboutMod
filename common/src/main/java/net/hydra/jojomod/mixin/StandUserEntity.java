@@ -2025,8 +2025,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (rdbt$fleshBudPlanted !=null){
             compoundtag.putUUID("fleshBud", rdbt$fleshBudPlanted);
         } else {
-            if (compoundtag.contains("fleshbud")){
-                compoundtag.remove("fleshbud");
+            if (compoundtag.contains("fleshBud")){
+                compoundtag.remove("fleshBud");
             }
         }
 

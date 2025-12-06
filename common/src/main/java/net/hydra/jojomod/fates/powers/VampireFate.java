@@ -217,7 +217,7 @@ public class VampireFate extends VampiricFate {
                 Entity TE = getTargetEntity(self, 7, 15);
                 if (TE != null){
                     if (MainUtil.canDrinkBloodFair(TE, self)){
-                        if (((StandUser)TE).rdbt$getFleshBud() != self.getUUID()) {
+                        if (((StandUser)TE).rdbt$getFleshBud() == null) {
                             if (canPlantDrink(TE) || canPlantHealth(TE)) {
                                 fleshBudIfNearby(100, TE.getId());
                                 ((StandUser) TE).rdbt$setFleshBud(self.getUUID());
