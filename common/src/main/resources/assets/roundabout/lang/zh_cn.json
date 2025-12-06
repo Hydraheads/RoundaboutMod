@@ -1,12 +1,15 @@
 {
   "text.roundabout.barrage_clash": "替身对拳！按下跳跃、随后释放跳跃以进行连打力度判定！",
   "text.roundabout.launch_bubble_encased": "被泡泡包裹住了！快使用尖锐物品刺破它！",
-  "text.roundabout.riding_flying_creature": "长按 跳跃 使幻翼上升，长按 猛冲 使幻翼下降！",
+  "text.roundabout.riding_flying_creature": "长按跳跃使幻翼上升，长按猛冲使幻翼下降！",
   "text.roundabout.riding_road_roller": "向压路机填充混凝土粉末以开始铺设道路！",
   "text.roundabout.riding_flying_creature.day": "白天可飞不起来……",
   "text.roundabout.riding_flying_creature.dimension": "这个维度可飞不了……",
   "text.roundabout.warn_trap_triggered": " 被触发了！",
   "text.roundabout.warn_unnamed_trap_triggered": "有一个迷雾陷阱被触发了！",
+
+
+  "text.roundabout.respawn_as_human": "Respawn as Human",
 
   "text.roundabout.out_of_bullets": "弹药耗尽，潜行状态下按下交互键以装填子弹！",
   "text.roundabout.already_reloaded": "看起来枪里已经装满子弹了。",
@@ -254,9 +257,12 @@
   "entity.roundabout.justice": "正义",
   "entity.roundabout.justice_pirate": "【正义】的海盗",
   "entity.roundabout.dark_mirage": "黑暗海市蜃楼",
+  "entity.roundabout.ratt": "溶蚀针",
+  "entity.roundabout.chair_ratt": "溶蚀针",
+  "entity.roundabout.redd": "雷德",
   "entity.roundabout.cinderella": "灰姑娘",
   "entity.roundabout.soft_and_wet": "软又湿",
-  "entity.roundabout.soft_and_wet_debut": "软又湿（初次登场）",
+  "entity.roundabout.soft_and_wet_debut": "软又湿（初版）",
   "entity.roundabout.soft_and_wet_king": "软又湿（国王）",
   "entity.roundabout.soft_and_wet_drowned": "软又湿（溺尸）",
   "entity.roundabout.soft_and_wet_killer_queen": "杀手皇后（第八部）",
@@ -319,6 +325,9 @@
   "entity.roundabout.painting_mona_lisa": "蒙娜丽莎画像",
   "entity.roundabout.painting_venus": "维纳斯画像",
   "entity.roundabout.road_roller_entity": "压路机",
+  "entity.roundabout.anubis_possessor": "被阿努比斯附身之人",
+  "entity.roundabout.anubis_slipstream": "冲刺气旋",
+
 
   "block.roundabout.meteor_block": "陨锭块",
   "block.roundabout.regal_wall": "豪华墙",
@@ -451,7 +460,13 @@
   "key.category.roundabout.jojo": "[徘徊]操控",
   "hud.roundabout.standout": "替身已召唤",
   "sounds.roundabout.dsp_summon": "炸裂的替身召唤",
-  "sounds.roundabout.vampire_message": "-尖牙图标-",
+  "sounds.roundabout.vampire_message": "-尖牙啃咬-",
+  "sounds.roundabout.vsong_silent_reveries": "Silent Reveries-沉默的幻想",
+  "sounds.roundabout.vsong_twisted": "Twisted-扭曲",
+  "sounds.roundabout.vsong_bloodcurdling_moments": "Bloodcurdling Moments-毛骨悚然的时刻",
+  "sounds.roundabout.vsong_damnable_ceremony": "Damnable Ceremony-该死的纪念会",
+  "sounds.roundabout.vsong_gothic_organ": "Gothic Organ-哥特风管风琴",
+
 
   "death.attack.stand.item": "%1$s在与%2$s战斗时死于神秘的力量",
   "death.attack.stand_rush.item": "%1$s被%2$s击倒了",
@@ -694,7 +709,7 @@
   "sounds.roundabout.bowler_hat_aim":  "锯帽瞄准中",
   "sounds.roundabout.bowler_hat_fly":  "锯帽被投出",
   "sounds.roundabout.locacaca_petrify":  "什么东西变成了石头",
-  "sounds.roundabout.locacaca_fusion":  "身体逐渐融合",
+  "sounds.roundabout.locacaca_fusion":  "身体融合在一起",
   "sounds.roundabout.dodge":  "闪避",
   "sounds.roundabout.inhale":  "吸气",
   "sounds.roundabout.stand_leap":  "有力的跳跃",
@@ -772,6 +787,12 @@
   "sounds.roundabout.anubis_backflip": "擦肩而过",
   "sounds.roundabout.anubis_alluring": "散发出迷人的光芒",
   "sounds.roundabout.anubis_raging": "强烈的愤怒之光",
+  "sounds.roundabout.anubis_pogo_launch": "嗖",
+  "sounds.roundabout.anubis_pogo_hit": "转体命中",
+  "sounds.roundabout.anubis_barrage_1": "剑刃挥动",
+  "sounds.roundabout.anubis_barrage_1_hit": "剑刃快速连击",
+
+
 
 
   "sounds.roundabout.arcade_impale":  "[街机穿胸]",
@@ -824,9 +845,9 @@
 
   "sounds.roundabout.vampire_drain": "吸取血液",
 
-  "sounds.roundabout.road_roller_ambient":  "柴油机运作……",
-  "sounds.roundabout.road_roller_explosion":  "爆炸",
-  "sounds.roundabout.road_roller_mixing":  "持续搅拌混凝土",
+  "sounds.roundabout.road_roller_ambient":  "压路机：柴油机运作……",
+  "sounds.roundabout.road_roller_explosion":  "压路机：爆炸",
+  "sounds.roundabout.road_roller_mixing":  "压路机：搅拌着混凝土",
 
   "sounds.roundabout.dio_hoho":  "吼吼！",
   "sounds.roundabout.dio_hoho_2":  "吼~",
@@ -876,10 +897,10 @@
   "sounds.roundabout.diego_kono_dio":  "迪亚哥",
   "sounds.roundabout.diego_attack":  "迪亚哥",
   "sounds.roundabout.diego_attack_2":  "迪亚哥",
-  "sounds.roundabout.diego_the_world":  "The World",
-  "sounds.roundabout.diego_the_world_2":  "The World",
-  "sounds.roundabout.diego_the_world_3":  "The World",
-  "sounds.roundabout.diego_the_world_4":  "The World",
+  "sounds.roundabout.diego_the_world":  "[THE WORLD]",
+  "sounds.roundabout.diego_the_world_2":  "[THE WORLD]",
+  "sounds.roundabout.diego_the_world_3":  "[THE WORLD]",
+  "sounds.roundabout.diego_the_world_4":  "[THE WORLD]",
   "sounds.roundabout.diego_taunt":  "迪亚哥嘲讽",
   "sounds.roundabout.diego_interesting":  "真是有趣！",
 
@@ -969,7 +990,7 @@
   "ability.roundabout.phase_grab": "虚化抓取",
   "ability.roundabout.phase_grab.desc": "你的替身向前飞去，穿过有缝隙的方块比如铁栏杆和台阶。可拿取远方地上的物品或是与拉杆和门交互。",
   "ability.roundabout.dodge": "猛冲",
-  "ability.roundabout.dodge.desc": "猛地加速，可用于躲避技能。如果你在跑跳的最高处时使用冲刺距离将增加，然而冷却时间也会变长。",
+  "ability.roundabout.dodge.desc": "猛地加速，可用于躲避技能。如果你在起跳时按下技能（即为跳跃和此技能同时按下）将会跳的更远，然而冷却时间也会变长。",
   "ability.roundabout.stand_leap": "替身跳",
   "ability.roundabout.stand_leap.desc": "利用替身的力量向你面朝的方块跳去。纵向跳跃能力强于横向。",
   "ability.roundabout.stand_leap_rebound": "借力跳跃",
@@ -1079,7 +1100,7 @@
   "ability.roundabout.firm_swing": "出手稳重",
   "ability.roundabout.firm_swing.desc": "使得你在植入鞋跟期间所有的攻击都为暴击，因为你“立场坚定”。",
   "ability.roundabout.fall_disperse": "冲击吸收",
-  "ability.roundabout.fall_disperse.desc": "减半受到的摔落伤害，将其通过鞋跟传递。",
+  "ability.roundabout.fall_disperse.desc": "减半受到的摔落伤害，将其通过鞋跟传递地面之中。",
 
 
 
@@ -1226,6 +1247,10 @@
   "gamerule.roundaboutSpawnStandUserMobs.description": "是否能生成自带替身的生物",
   "gamerule.roundaboutKeepStandsOnDeath": "死亡保留替身",
   "gamerule.roundaboutKeepStandsOnDeath.description": "死亡之后是否会失去/掉落替身",
+  "gamerule.roundaboutLoseFateOnDeath": "死亡时失去命运",
+  "gamerule.roundaboutLoseFateOnDeath.description": "是否在死亡时失去像吸血鬼一样的“命运”（此处指的是独特类种族的战斗方式）",
+  "gamerule.roundaboutRoadRollerBreakIce": "压路机破坏冰块",
+  "gamerule.roundaboutRoadRollerBreakIce.description": "压路机是否会破坏易碎方块",
 
   "idle.roundabout.passive": "闲置",
   "idle.roundabout.battle": "准备作战",
@@ -1461,14 +1486,17 @@
   "skins.roundabout.diver_down.firediver": "潜火者",
 
   "death.attack.anubis_possess": "%1$s不该质疑%2$s的实力的。",
-  "death.attack.anubis_spin": "%1$s品尝了%2$s做的臊子面——臊子由%1$s自己提供",
+  "death.attack.anubis_spin": "%1$s品尝了%2$s做的臊子面——臊子来源于%1$s自己。",
 
   "item.roundabout.anubis_item": "奇怪的长刀",
   "item.roundabout.anubis_item.message1" : "这把刀被诅咒了！快去找牧师！",
-  "item.roundabout.anubis_item.sword_cleansed": "阿努比斯神出鞘！",
+  "item.roundabout.anubis_item.sword_cleansed": "阿努比斯神被净化了！",
 
   "skins.roundabout.anubis.anime" : "动漫版",
   "skins.roundabout.anubis.evil" : "邪恶之剑",
+
+  "roundabout.anubis.playback_title": "重现学到的招式",
+  "roundabout.anubis.memory_title": "学习敌人的招式",
 
   "skins.roundabout.achtung_baby.base": "无形",
 
@@ -1665,12 +1693,15 @@
   "text.roundabout.mandom.watch_on": "佩戴手表",
   "text.roundabout.mandom.watch_on_rolex": "佩戴劳力士手表",
 
-  "text.roundabout.survivor.match": "和%1$s战斗吧！",
+  "text.roundabout.survivor.match": "战斗吧%1$s！",
   "text.roundabout.survivor.anger_selection": "开启丘比特之怒模式",
   "text.roundabout.survivor.anger_selection_off": "关闭丘比特之怒模式",
 
   "text.roundabout.achtung.vision_off": "隐形视角 关闭",
   "text.roundabout.achtung.vision_on": "隐形视角 开启",
+
+  "text.roundabout.walking.cut_on": "开启爬墙角接处自动转面",
+  "text.roundabout.walking.cut_ff": "关闭爬墙角接处自动转面",
 
 
 
@@ -1789,7 +1820,7 @@
   "config.roundabout.barrageRecoilCooldown.name": "连打力竭时间",
   "config.roundabout.barrageRecoilCooldown.desc": "替身连打完成（全部打完并打出最后一击）后的长冷却时间，此时间内无法使用普通攻击和最终攻击（世界和白金的潜行蓄力攻击）",
   "config.roundabout.kickBarrageRecoilCooldown.name": "踢击连打力竭时间",
-  "config.roundabout.kickBarrageRecoilCooldown.desc": "完成踢击连打（全部打完并打出最后一击）后的长冷却时间，预设比替身连打的",
+  "config.roundabout.kickBarrageRecoilCooldown.desc": "完成踢击连打（全部打完并打出最后一击）后的长冷却时间，预设比替身连打的冷却时间短",
   "config.roundabout.dashCooldown.name": "冲刺冷却",
   "config.roundabout.dashCooldown.desc": "替身使者的普通冲刺技能的冷却（为什么一定要获取替身才能冲刺）",
   "config.roundabout.jumpingDashCooldown.name": "跳跃冲刺冷却",
@@ -1904,6 +1935,9 @@
   "config.roundabout.rattLeapCooldown.desc": "溶蚀针的第四个技能，溶蚀针飞跃的冷却时间。",
   "config.roundabout.rattLeapStrength.name": "溶蚀针飞跃的跳跃力度",
   "config.roundabout.rattLeapStrength.desc": "溶蚀针的跳跃力度，影响其跳跃的高度和距离。",
+
+  "config.roundabout.anubisPogoCounter.name": "阿努比斯踩头攻击指示器",
+  "config.roundabout.anubisPogoCounter.desc": "为你进行踩头攻击设置一个计数器。",
 
 
 
@@ -2207,7 +2241,7 @@
   "config.roundabout.invisibleBlockDepthF.name": "方块透明度",
   "config.roundabout.invisibleBlockDepthF.desc": "设置将会改变方块透明度，初始为60，数字最大可为255，255为完全可见。",
   "config.roundabout.invisibleBlocksDistanceAwaySeenI.name": "透明方块可见距离",
-  "config.roundabout.invisibleBlocksDistanceAwaySeenI.desc": "作为替身使者可以保证大致看见透明方块的最大距离。提高此值将会妨碍挖掘，但是对于战斗会有一定提升。",
+  "config.roundabout.invisibleBlocksDistanceAwaySeenI.desc": "作为替身使者可以保证大致看见透明方块的最大距离。提高此值将会对挖矿有所阻碍，但是对于战斗会有一定提升。",
 
   "config.roundabout.theWorldAttackMultOnPlayers.name": "对玩家伤害倍率",
   "config.roundabout.theWorldAttackMultOnPlayers.desc": "对玩家和替身使者生物造成的伤害倍率。数字为百分比，即100代表伤害为100%，必须大于0，可以小于100以降低造成伤害。若高于100将会造成更高伤害。",
@@ -2272,8 +2306,8 @@
   "config.roundabout.blockRangeNegativeOneIsInfinite.desc": "默认的有效范围为100格，这样只有附近的玩家才会受影响。若设置为-1时停范围将会变为世界时停并可以停止游戏时间流逝。但是出于服务器中的性能考虑和其他玩家体感不建议。",
   "config.roundabout.postTSiframes.name": "时停伤害结算保护",
   "config.roundabout.postTSiframes.desc": "承受时停伤害后的无敌帧。默认为19刻。（调低就能时停飞刀配合拳击了）",
-  "config.roundabout.postTSSoften.name": "时停后减伤",
-  "config.roundabout.postTSsoftenFrames.desc": "玩家是否会在时停之后对不可避免的攻击有一定时间的减伤。（如汽油爆炸和替身攻击）。此减伤持续时间与时停的时间成正比，且对于1s以下的时停不会有任何时停减伤时间。",
+  "config.roundabout.postTSSoften.name": "时停后特定攻击抗性",
+  "config.roundabout.postTSsoften.desc": "玩家是否会在时停之后对不可避免的攻击有一定时间的减伤。（如汽油爆炸和替身攻击）。此减伤持续时间与时停的时间成正比，且对于1s以下的时停不会有任何时停减伤时间。",
   "config.roundabout.postTSCancel.name": "时停后取消特定动作",
   "config.roundabout.postTSCancel.desc": "时停结束后是否会有特定动作失效或被终止。对旧版本禁用。（例如替身重拳，因为紧急时停可以用于将其实际前摇缩短为0.5s，此时此技能极难躲避）",
 
@@ -2501,11 +2535,16 @@
   "config.roundabout.enableRoadRollerRender.name": "压路机手持渲染",
   "config.roundabout.enableRoadRollerRender.desc": "关闭此项以让压路机手持时不为举过头顶。",
 
+  "config.roundabout.vampireOSTChange.name": "吸血鬼原声带",
+  "config.roundabout.vampireOSTChange.desc": "关闭以让吸血鬼玩家播放的音乐与其他玩家一致。",
+
   "config.roundabout.generalSettings.name": "总设置",
   "config.roundabout.configSettings.name": "设置配置文件",
   "config.roundabout.particleSettings.name": "设置粒子",
   "config.roundabout.opacitySettings.name": "设置不透明度",
   "config.roundabout.dynamicSettings.name": "演出效果设置",
+  "config.roundabout.standTweakSettings.name": "替身调整设置",
+
 
   "config.roundabout.roundaboutconfig.name": "JoJo",
   "config.roundabout.z.name": "",
