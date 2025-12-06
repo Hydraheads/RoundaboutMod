@@ -1,5 +1,6 @@
 package net.hydra.jojomod.util.config;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.util.config.annotation.*;
 
 @Groups({
@@ -91,9 +92,11 @@ public class ClientConfig implements Cloneable {
     @NestedOption(group = "modded")
     public ClientConfig.VanillaMCTweaks vanillaMinecraftTweaks;
     @NestedOption(group = "modded")
-    public ClientConfig.TimeStopSettings timeStopSettings;
+    public ClientConfig.AnubisMemories anubisMemories;
     @NestedOption(group = "modded")
-    public ClientConfig.StandTweakSettings standTweakSettings;
+    public ClientConfig.TimeStopSettings timeStopSettings;
+  /*  @NestedOption(group = "modded")
+    public ClientConfig.StandTweakSettings standTweakSettings; */
 
 
 
@@ -182,9 +185,59 @@ public class ClientConfig implements Cloneable {
         @BooleanOption(group = "inherit", value = true)
         public Boolean simpleTimeStopShader;
     }
-    public static class StandTweakSettings {
+    public static class AnubisMemories {
+
         @BooleanOption(group = "inherit", value = false)
         public Boolean anubisPogoCounter;
+
+        @StringOption(group = "inherit", value = "nothing yet :P")
+        public String mem1;
+        @StringOption(group = "inherit", value = "nothing yet :P")
+        public String mem2;
+        @StringOption(group = "inherit", value = "nothing yet :P")
+        public String mem3;
+        @StringOption(group = "inherit", value = "nothing yet :P")
+        public String mem4;
+        @StringOption(group = "inherit", value = "nothing yet :P")
+        public String mem5;
+        @StringOption(group = "inherit", value = "nothing yet :P")
+        public String mem6;
+        @StringOption(group = "inherit", value = "nothing yet :P")
+        public String mem7;
+        @StringOption(group = "inherit", value = "nothing yet :P")
+        public String mem8;
+
+        public void saveToMemory(int index, String id) {
+            switch (index) {
+                case 1 -> mem1 = id;
+                case 2 -> mem2 = id;
+                case 3 -> mem3 = id;
+                case 4 -> mem4 = id;
+                case 5 -> mem5 = id;
+                case 6 -> mem6 = id;
+                case 7 -> mem7 = id;
+                case 8 -> mem8 = id;
+                default -> Roundabout.LOGGER.warn("Invalid Memory Save Id " + index);
+            }
+        }
+        public String getFromMemory(int index) {
+            if (index > 0 && index < 9) {
+                return switch (index) {
+                    case 1 -> mem1;
+                    case 2 -> mem2;
+                    case 3 -> mem3;
+                    case 4 -> mem4;
+                    case 5 -> mem5;
+                    case 6 -> mem6;
+                    case 7 -> mem7;
+                    case 8 -> mem8;
+                    default -> mem1;
+                };
+            } else {
+                Roundabout.LOGGER.warn("Invalid Memory Load Id " + index);
+                return "";
+            }
+        }
     }
 
     //CommentedOption(comment = "Should use the hue shift shader to symbolize being in an alternate world?")

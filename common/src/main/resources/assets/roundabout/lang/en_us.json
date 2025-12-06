@@ -1951,8 +1951,26 @@
   "config.roundabout.rattLeapStrength.name": "Ratt Leap Strength",
   "config.roundabout.rattLeapStrength.desc": "How strong Ratt's leap is",
 
+  "config.roundabout.anubisMemories.name": "Anubis Client Settings",
   "config.roundabout.anubisPogoCounter.name": "Anubis Pogo Indicator",
   "config.roundabout.anubisPogoCounter.desc": "Displays a counter showing how many pogos you have done.",
+
+  "config.roundabout.mem1.name": "Memory 1",
+  "config.roundabout.mem1.desc": "Memory 1",
+  "config.roundabout.mem2.name": "Memory 2",
+  "config.roundabout.mem2.desc": "Memory 2",
+  "config.roundabout.mem3.name": "Memory 3",
+  "config.roundabout.mem3.desc": "Memory 3",
+  "config.roundabout.mem4.name": "Memory 4",
+  "config.roundabout.mem4.desc": "Memory 4",
+  "config.roundabout.mem5.name": "Memory 5",
+  "config.roundabout.mem5.desc": "Memory 5",
+  "config.roundabout.mem6.name": "Memory 6",
+  "config.roundabout.mem6.desc": "Memory 6",
+  "config.roundabout.mem7.name": "Memory 7",
+  "config.roundabout.mem7.desc": "Memory 7",
+  "config.roundabout.mem8.name": "Memory 8",
+  "config.roundabout.mem9.desc": "Memory 8",
 
 
 
