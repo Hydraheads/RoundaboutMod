@@ -869,6 +869,17 @@ public class MainUtil {
         return !(ent instanceof Mob mb && mb.getTarget() != null && mb.getTarget().is(drinker));
     }
 
+    public static void removeFleshBud(Entity entity){
+        if (entity instanceof LivingEntity LE && entity.level() instanceof ServerLevel sl && ((StandUser)LE).rdbt$getFleshBud() != null){
+            ((StandUser)LE).rdbt$setFleshBud(null);
+            SoundEvent sound = ModSounds.FLESH_BUD_REMOVAL_EVENT;
+            entity.level().playSound(null, BlockPos.containing(entity.position()), sound, SoundSource.BLOCKS, 1F, 1F);
+
+            sl.sendParticles(ParticleTypes.CRIT, entity.getEyePosition().x, entity.getEyePosition().y,entity.getEyePosition().z,
+                    10, 0.5F, 0.5F, 0.5F, 0.4);
+        }
+    }
+
     public static boolean isPlayerBonkingHead(LivingEntity player) {
         Level level = player.level();
         Vec3 mainVec = new Vec3(0, 0.05, 0);

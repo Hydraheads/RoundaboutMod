@@ -1,39 +1,28 @@
 package net.hydra.jojomod.entity.TickableSoundInstances;
 
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
+import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 
-public class FleshBudSound extends AbstractTickableSoundInstance {
+public class FleshBudSound extends EntityBoundSoundInstance {
     private final Entity hatEntity;
 
-    public FleshBudSound(SoundEvent soundEvent, SoundSource category, float volume, float pitch, Entity entity) {
-        super(soundEvent, category, SoundInstance.createUnseededRandom());
+    public FleshBudSound(SoundEvent soundEvent, SoundSource category, float volume, float pitch, Entity entity, long seed) {
+        super(soundEvent, category, volume,pitch, entity, seed);
         this.hatEntity = entity;
-
-        this.looping = false;
-        this.delay = 0;
-        this.volume = volume;
-        this.attenuation = Attenuation.LINEAR;
-        this.relative = false;
-
-        this.x = (float) entity.getX();
-        this.y = (float) entity.getY();
-        this.z = (float) entity.getZ();
     }
 
     @Override
     public void tick() {
-        if (!hatEntity.isAlive() || hatEntity.isRemoved()) {
+        if (hatEntity != null && ((StandUser)hatEntity).rdbt$getFleshBud() == null) {
             stop();
             return;
         }
-
-        this.x = (float) hatEntity.getX();
-        this.y = (float) hatEntity.getY();
-        this.z = (float) hatEntity.getZ();
+        super.tick();
     }
 
     @Override

@@ -1225,6 +1225,9 @@ public class ModSounds {
     public static final String FLESH_BUD = "flesh_bud_goes";
     public static final ResourceLocation FLESH_BUD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FLESH_BUD);
     public static SoundEvent FLESH_BUD_EVENT = SoundEvent.createVariableRangeEvent(FLESH_BUD_ID);
+    public static final String FLESH_BUD_REMOVAL = "flesh_bud_removal";
+    public static final ResourceLocation FLESH_BUD_REMOVAL_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FLESH_BUD_REMOVAL);
+    public static SoundEvent FLESH_BUD_REMOVAL_EVENT = SoundEvent.createVariableRangeEvent(FLESH_BUD_REMOVAL_ID);
     public static final String HAIR_TOGGLE = "hair_toggle";
     public static final ResourceLocation HAIR_TOGGLE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HAIR_TOGGLE);
     public static SoundEvent HAIR_TOGGLE_EVENT = SoundEvent.createVariableRangeEvent(HAIR_TOGGLE_ID);

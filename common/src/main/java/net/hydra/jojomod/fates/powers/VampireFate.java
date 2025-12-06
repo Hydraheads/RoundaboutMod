@@ -217,13 +217,15 @@ public class VampireFate extends VampiricFate {
                 Entity TE = getTargetEntity(self, 7, 15);
                 if (TE != null){
                     if (MainUtil.canDrinkBloodFair(TE, self)){
-                        if (canPlantDrink(TE) || canPlantHealth(TE)){
-                            fleshBudIfNearby(100, TE.getId());
-                            ((StandUser)TE).rdbt$setFleshBud(self.getUUID());
-                        } else {
-                            if (!canPlantHealth(TE)){
-                                if (self instanceof Player PE){
-                                    PE.displayClientMessage(Component.translatable("text.roundabout.vampire.flesh_bud_fail").withStyle(ChatFormatting.RED), true);
+                        if (((StandUser)TE).rdbt$getFleshBud() != self.getUUID()) {
+                            if (canPlantDrink(TE) || canPlantHealth(TE)) {
+                                fleshBudIfNearby(100, TE.getId());
+                                ((StandUser) TE).rdbt$setFleshBud(self.getUUID());
+                            } else {
+                                if (!canPlantHealth(TE)) {
+                                    if (self instanceof Player PE) {
+                                        PE.displayClientMessage(Component.translatable("text.roundabout.vampire.flesh_bud_fail").withStyle(ChatFormatting.RED), true);
+                                    }
                                 }
                             }
                         }

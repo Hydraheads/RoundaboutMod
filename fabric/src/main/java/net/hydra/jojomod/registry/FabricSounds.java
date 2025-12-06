@@ -403,6 +403,7 @@ public class FabricSounds {
         addSound(ModSounds.VSONG_BLOODCURDLING_MOMENTS_ID, ModSounds.VSONG_BLOODCURDLING_MOMENTS_EVENT);
 
         addSound(ModSounds.FLESH_BUD_ID, ModSounds.FLESH_BUD_EVENT);
+        addSound(ModSounds.FLESH_BUD_REMOVAL_ID, ModSounds.FLESH_BUD_REMOVAL_EVENT);
         addSound(ModSounds.HAIR_TOGGLE_ID, ModSounds.HAIR_TOGGLE_EVENT);
     }
 }
