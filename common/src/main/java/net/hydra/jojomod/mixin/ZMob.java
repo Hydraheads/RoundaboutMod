@@ -757,7 +757,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
         if ($$0 != null) {
             /**Flesh buds prevent aggro on the planter*/
             UUID fleshPlanter = (((StandUser)this).rdbt$getFleshBud());
-            if (fleshPlanter != null && $$0.getUUID() ==fleshPlanter){
+            if (fleshPlanter != null && ($$0.getUUID() ==fleshPlanter ||
+                    ((StandUser)$$0).rdbt$getFleshBud() == fleshPlanter)){
                 ci.cancel();
                 return;
             }
@@ -804,6 +805,13 @@ public abstract class ZMob extends LivingEntity implements IMob {
             //Flesh Bud sets aggro
             UUID fleshTarget = ((StandUser) this).rdbt$getFleshBud();
             if (fleshTarget != null && level() instanceof ServerLevel SL){
+
+                if (getTarget() != null){
+                    if (((StandUser)getTarget()).rdbt$getFleshBud() == fleshTarget){
+                        ((StandUser) this).roundabout$deeplyRemoveAttackTarget();
+                    }
+                }
+
                 Entity fleshTargetEntity = SL.getEntity(fleshTarget);
                 if (fleshTargetEntity instanceof LivingEntity LE){
                     LivingEntity hurtMob = LE.getLastHurtMob();
