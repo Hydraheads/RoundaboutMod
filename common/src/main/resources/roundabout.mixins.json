@@ -43,7 +43,7 @@
     "barrage.DazeWitch",
     "block_throw.ThrowBlockFaceContext",
     "block_throw.ThrowBoat",
-    "cinderella.CinderellaCreeper",
+    "cinderella.ZCreeper",
     "cinderella.CinderellaVillager",
     "cream.CreamCancelHealthRegenMixin",
     "cream.CreamCancelPlayerHurtMixin",

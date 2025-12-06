@@ -27,15 +27,18 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.boss.EnderDragonPart;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -205,8 +208,13 @@ public class RattDartEntity extends AbstractArrow {
             return;
         }
 
-        MobEffectInstance effect = $$1.getEffect(ModEffects.MELTING);
+        if (this.getOwner() != null) {
+            if (this.getOwner() instanceof Creeper C) {
+                $$1.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN,30,4));
+            }
+        }
 
+        MobEffectInstance effect = $$1.getEffect(ModEffects.MELTING);
 
         int stack = effect != null ? effect.getAmplifier() : -1;
         stack += this.melting;
@@ -269,7 +277,7 @@ public class RattDartEntity extends AbstractArrow {
             force *= blockDamp;
 
 
-            if (charged == 51) {
+            if (charged == 51 && $$4 != null) {
                 if ( ((StandUser)$$4).roundabout$getStandPowers() instanceof PowersRatt PR ) {
                     if ($$4 instanceof Player P) {
                         S2CPacketUtil.sendIntPowerDataPacket(P, PowersRatt.UPDATE_CHARGE, Math.min(PR.getChargeTime()+ClientNetworking.getAppropriateConfig().rattSettings.rattChargePerHit,100));
