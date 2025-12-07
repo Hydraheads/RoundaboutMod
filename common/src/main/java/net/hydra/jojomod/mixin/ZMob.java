@@ -817,22 +817,12 @@ public abstract class ZMob extends LivingEntity implements IMob {
                     LivingEntity hurtMob = LE.getLastHurtMob();
                     if (hurtMob != null && hurtMob.isAlive() && !hurtMob.is(this) && !hurtMob.is(LE)
                     && ((StandUser)hurtMob).rdbt$getFleshBud() != fleshTarget){
-                        setLastHurtByMob(hurtMob);
-                        setLastHurtMob(hurtMob);
                         setTarget(hurtMob);
-                        if (hurtMob instanceof Player pl){
-                            setLastHurtByPlayer(pl);
-                        }
                     } else {
                         LivingEntity hurtByMob = LE.getLastHurtByMob();
                         if (hurtByMob != null && hurtByMob.isAlive() && !hurtByMob.is(this) && !hurtByMob.is(LE)
                                 && ((StandUser)hurtByMob).rdbt$getFleshBud() != fleshTarget){
-                            setLastHurtByMob(hurtByMob);
-                            setLastHurtMob(hurtByMob);
                             setTarget(hurtByMob);
-                            if (hurtByMob instanceof Player pl){
-                                setLastHurtByPlayer(pl);
-                            }
                         }
                     }
                 }

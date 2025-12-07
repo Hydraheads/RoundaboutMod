@@ -61,6 +61,8 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                     this.addEntry(new BooleanEntry(field, instance));
                 } else if (value instanceof Integer || value instanceof Float) {
                     this.addEntry(new NumberEntry(field, instance));
+                } else if (value instanceof String) {
+                    this.addEntry(new StringEntry(field,instance));
                 }
                 else {
                     Object nestedObject = field.get(instance);
@@ -79,6 +81,8 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                             this.addEntry(new BooleanEntry(clazzField, nestedObject));
                         } else if (clazzValue instanceof Integer || clazzValue instanceof Float) {
                             this.addEntry(new NumberEntry(clazzField, nestedObject));
+                        } else if (clazzValue instanceof String) {
+                            this.addEntry(new StringEntry(clazzField, nestedObject));
                         }
                     }
                 }
@@ -217,6 +221,52 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
             return List.of(editButton);
         }
     }
+
+
+    public class StringEntry extends Entry {
+        private final Field field;
+        private final Object instance;
+        private final Button editButton;
+
+        public StringEntry(Field field, Object instance) {
+            this.field = field;
+            this.instance = instance;
+
+            String display = getFieldDisplay();
+            editButton = Button.builder(Component.literal(display), btn -> {
+                Minecraft.getInstance().setScreen(new EditValueScreen(ConfigListWidget.this.parent, field, instance, configType,getScrollAmount()));
+            }).size(constant2, 20).build();
+        }
+
+        private String getFieldDisplay() {
+            try {
+                return field.getName() + ": " + field.get(instance);
+            } catch (IllegalAccessException e) {
+                return field.getName() + ": [error]";
+            }
+        }
+
+        @Override
+        public void render(GuiGraphics drawContext, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
+            editButton.setX(x);
+            editButton.setY(y);
+            editButton.setMessage(Component.translatable("config.roundabout."+field.getName()+".name"));
+            editButton.render(drawContext, mouseX, mouseY, partialTick);
+            renderHover(drawContext,index,y,x,width,height,mouseX,mouseY,hovering,partialTick,field, editButton);
+
+        }
+
+        @Override
+        public List<? extends GuiEventListener> children() {
+            return List.of(editButton);
+        }
+
+        @Override
+        public List<? extends NarratableEntry> narratables() {
+            return List.of(editButton);
+        }
+    }
+
 
     public class CommentEntry extends Entry {
         private final String comment;

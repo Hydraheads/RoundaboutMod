@@ -25,8 +25,6 @@ import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.PlayerMaskSlots;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Rotations;
 import net.minecraft.nbt.CompoundTag;
@@ -52,7 +50,6 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.IronGolem;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -61,11 +58,9 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.apache.http.client.utils.DateUtils;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -313,7 +308,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Inject(method = "jumpFromGround",at=@At(value = "HEAD"))
     public void huhh(CallbackInfo ci) {
         Player player = (Player)(Object)(this);
-        Options options = Minecraft.getInstance().options;
         if ( ((StandUser)player).roundabout$getStandPowers() instanceof PowersAnubis PA && ((StandUser)player).roundabout$getUniqueStandModeToggle()) {
             float bigJump = ((StandUser) player).roundabout$getBonusJumpHeight();
             float totalHeight = bigJump + 1;
@@ -330,12 +324,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                     if (isJumping && player.onGround()) {
                         this.roundabout$SetBonusJump(false, totalHeight, getCurrentJump);
                     }
-                    if (options.keyJump.isDown()) {
-                        if (player.onGround() && getCurrentJump > 0) {
-                        } else {
-                            if (player.onGround() || isJumping) {
-                                this.roundabout$SetBonusJump(true, totalHeight, getCurrentJump);
-                            }
+                    if (isJumping && player.onGround() && getCurrentJump > 0) {
+                    } else {
+                        if (player.onGround() || isJumping) {
+                            this.roundabout$SetBonusJump(true, totalHeight, getCurrentJump);
                         }
                     }
                 }
@@ -345,7 +337,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
     @Unique
     public void roundabout$SetBonusJump(boolean bigJump, float jumpHeight, float current){
-        ((StandUser)Minecraft.getInstance().player).roundabout$setBigJump(bigJump);
+        ((StandUser)this).roundabout$setBigJump(bigJump);
         if (bigJump){
             C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_BIG_JUMP,current);
         } else {
