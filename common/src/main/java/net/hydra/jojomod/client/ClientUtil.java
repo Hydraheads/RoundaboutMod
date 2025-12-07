@@ -26,15 +26,9 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
 import net.hydra.jojomod.item.SnubnoseRevolverItem;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.util.RotationAnimation;
 import net.hydra.jojomod.util.gravity.GravityAPI;
-import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.Direction;
@@ -54,7 +48,6 @@ import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.phys.Vec2;
 import net.zetalasis.client.shader.D4CShaderFX;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.D4CCloneEntity;
@@ -628,6 +621,11 @@ public class ClientUtil {
             }
         } else if (context == PacketDataIndex.S2C_INT_STAND_MODE){
             ((StandUser) player).roundabout$getStandPowers().clientIntUpdated(data);
+        } else if (context == PacketDataIndex.S2C_INT_FLESH_BUD){
+            Entity target = player.level().getEntity(data);
+            if (target != null && !target.isRemoved() && target.isAlive()) {
+                playSound(ModSounds.FLESH_BUD_EVENT,target,1,1);
+            }
         }
     }
 

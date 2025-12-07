@@ -1,23 +1,33 @@
 package net.hydra.jojomod.fates.powers;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Position;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -94,7 +104,12 @@ public class VampireFate extends VampiricFate {
         if (isHearing()){
             stopHearingClient();
         }
-        tryPowerPacket(HAIR_EXTENDED);
+        if (!onCooldown(PowerIndex.FATE_1_SNEAK) || activePower == HAIR_EXTENDED) {
+            if (activePower != HAIR_EXTENDED) {
+                this.setCooldown(PowerIndex.FATE_1_SNEAK, 44);
+            }
+            tryPowerPacket(HAIR_EXTENDED);
+        }
     }
     public void hypnosis(){
         if (isHearing()){
@@ -133,6 +148,9 @@ public class VampireFate extends VampiricFate {
                 setActivePower(HAIR_EXTENDED);
                 setPlayerPos2(PlayerPosIndex.HAIR_EXTENSION);
                 this.attackTimeDuring = 0;
+
+                self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.HAIR_TOGGLE_EVENT, SoundSource.PLAYERS, 1F, 1F);
+
             }
         }
     }
@@ -161,7 +179,10 @@ public class VampireFate extends VampiricFate {
         }
         return super.getJumpHeightAddon()+getAddon();
     }
-
+    @Override
+    public float getJumpHeightAddonMax(){
+        return 4;
+    }
     public float getAddon(){
         if (self.isCrouching() && rechargeJump){
             return 4;
@@ -195,10 +216,69 @@ public class VampireFate extends VampiricFate {
 
         if (activePower == HAIR_EXTENDED){
             if (attackTimeDuring >= getMaxAttackTimeDuringHair() && !isClient()) {
+                Entity TE = getTargetEntity(self, 7, 15);
+                if (TE != null){
+                    if (MainUtil.canDrinkBloodFair(TE, self)){
+                        if (((StandUser)TE).rdbt$getFleshBud() == null) {
+                            if (canPlantDrink(TE) || canPlantHealth(TE)) {
+                                fleshBudIfNearby(100, TE.getId());
+                                ((StandUser) TE).rdbt$setFleshBud(self.getUUID());
+                                if (TE instanceof Mob mb){
+                                    ((StandUser)mb).roundabout$deeplyRemoveAttackTarget();
+                                }
+                            } else {
+                                if (!canPlantHealth(TE)) {
+                                    if (self instanceof Player PE) {
+                                        PE.displayClientMessage(Component.translatable("text.roundabout.vampire.flesh_bud_fail").withStyle(ChatFormatting.RED), true);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 setAttackTimeDuring(-20);
             }
         }
     }
+
+
+    public boolean canPlantDrink(Entity ent) {
+        if (MainUtil.canDrinkBloodCrit(ent,self) && !(ent instanceof Monster)) {
+            return true;
+        }
+        return false;
+    }
+    public boolean canPlantHealth(Entity ent) {
+        if (ent instanceof LivingEntity LE && LE.getHealth()-getSuckDamage() <= 0){
+            return true;
+        }
+        return false;
+    }
+
+    /***/
+
+
+    public final void fleshBudIfNearby(double range, int entid) {
+        if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, range)) {
+                        S2CPacketUtil.sendGenericIntToClientPacket(serverPlayerEntity,
+                                PacketDataIndex.S2C_INT_FLESH_BUD,entid);
+                }
+            }
+        }
+    }
+
     public void tickHypnosis() {
         if (!self.level().isClientSide())
             if (isHypnotizing) {

@@ -31,7 +31,7 @@ public class HairsprayItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
         ItemStack $$3 = $$1.getItemInHand($$2);
-        if ($$0.isClientSide) {
+        if ($$0.isClientSide()) {
             ClientUtil.openHairspryUI();
         }
         return InteractionResultHolder.fail($$3);

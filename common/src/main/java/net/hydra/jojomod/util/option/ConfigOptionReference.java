@@ -1,8 +1,5 @@
 package net.hydra.jojomod.util.option;
-import net.hydra.jojomod.util.config.annotation.BooleanOption;
-import net.hydra.jojomod.util.config.annotation.FloatOption;
-import net.hydra.jojomod.util.config.annotation.IntOption;
-import net.hydra.jojomod.util.config.annotation.NestedOption;
+import net.hydra.jojomod.util.config.annotation.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -33,6 +30,7 @@ public class ConfigOptionReference {
             case INTEGER -> field.getAnnotation(IntOption.class).group();
             case FLOAT -> field.getAnnotation(FloatOption.class).group();
             case NESTED -> field.getAnnotation(NestedOption.class).group();
+            case STRING -> field.getAnnotation(StringOption.class).group();
         });
     }
 
@@ -42,7 +40,7 @@ public class ConfigOptionReference {
             throw new IllegalStateException("Field \"" + field.getName() + "\" has no annotations.");
         boolean hasType = false;
         for (Annotation annotation : annotations) {
-            if (annotation instanceof BooleanOption || annotation instanceof IntOption || annotation instanceof FloatOption || annotation instanceof NestedOption) {
+            if (annotation instanceof BooleanOption || annotation instanceof IntOption || annotation instanceof FloatOption || annotation instanceof NestedOption  || annotation instanceof StringOption) {
                 if (hasType)
                     throw new IllegalStateException("Field \"" + field.getName() + "\" has multiple type annotations.");
                 hasType = true;
@@ -109,6 +107,7 @@ public class ConfigOptionReference {
             case INTEGER -> field.getAnnotation(IntOption.class).group();
             case FLOAT -> field.getAnnotation(FloatOption.class).group();
             case NESTED -> field.getAnnotation(NestedOption.class).group();
+            case STRING -> field.getAnnotation(StringOption.class).group();
         };
     }
 
@@ -152,7 +151,7 @@ public class ConfigOptionReference {
         return switch (getType()) {
             case FLOAT -> field.getAnnotation(FloatOption.class).min();
             case INTEGER -> field.getAnnotation(IntOption.class).min();
-            case BOOLEAN, NESTED -> throw new IllegalArgumentException("Cannot get min value for type " + getType());
+            case BOOLEAN, NESTED, STRING -> throw new IllegalArgumentException("Cannot get min value for type " + getType());
         };
     }
 
@@ -160,7 +159,7 @@ public class ConfigOptionReference {
         return switch (getType()) {
             case FLOAT -> field.getAnnotation(FloatOption.class).max();
             case INTEGER -> field.getAnnotation(IntOption.class).max();
-            case BOOLEAN, NESTED -> throw new IllegalArgumentException("Cannot get max value for type " + getType());
+            case BOOLEAN, NESTED, STRING -> throw new IllegalArgumentException("Cannot get max value for type " + getType());
         };
     }
 
@@ -202,12 +201,14 @@ public class ConfigOptionReference {
         BOOLEAN,
         INTEGER,
         FLOAT,
-        NESTED;
+        NESTED,
+        STRING;
 
         public static FieldType of(Class<?> clazz) {
             if (Boolean.class.isAssignableFrom(clazz)) return BOOLEAN;
             if (Integer.class.isAssignableFrom(clazz)) return INTEGER;
             if (Float.class.isAssignableFrom(clazz)) return FLOAT;
+            if (String.class.isAssignableFrom(clazz)) return STRING;
             if (Object.class.isAssignableFrom(clazz)) return NESTED;
             throw new IllegalArgumentException("Unknown type " + clazz.getName());
         }
@@ -218,6 +219,7 @@ public class ConfigOptionReference {
                 case INTEGER -> IntOption.class;
                 case FLOAT -> FloatOption.class;
                 case NESTED -> NestedOption.class;
+                case STRING -> StringOption.class;
             };
         }
     }

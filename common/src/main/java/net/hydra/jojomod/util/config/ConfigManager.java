@@ -7,10 +7,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.util.MainUtil;
-import net.hydra.jojomod.util.config.annotation.BooleanOption;
-import net.hydra.jojomod.util.config.annotation.FloatOption;
-import net.hydra.jojomod.util.config.annotation.IntOption;
-import net.hydra.jojomod.util.config.annotation.NestedOption;
+import net.hydra.jojomod.util.config.annotation.*;
 import net.hydra.jojomod.util.option.ConfigOptionReference;
 import net.hydra.jojomod.util.option.Reflection;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -252,7 +249,9 @@ public abstract class ConfigManager {
         validateFloatFields(instance);
         validateIntFields(instance);
         validateBooleanFields(instance);
+        validateStringFields(instance);
         validateNestedFields(instance);
+
     }
 
     private static void validateFloatFields(Object instance) {
@@ -278,6 +277,12 @@ public abstract class ConfigManager {
             ConfigOptionReference reference = ConfigOptionReference.of(instance, field);
             setIfNull(reference, annotation.value());
         });
+    }
+
+    private static void validateStringFields(Object instance) {
+        Reflection.forEachFieldByAnnotation(instance, StringOption.class, (field, annotation) -> {
+            ConfigOptionReference reference = ConfigOptionReference.of(instance, field);
+            setIfNull(reference, annotation.value());});
     }
 
     private static void validateNestedFields(Object instance) {
@@ -461,7 +466,9 @@ public abstract class ConfigManager {
 
     public static void resetClient()
     {
-        ClientConfig.updateLocal(ClientConfig.getDefaultInstance().clone());
+        ClientConfig config = ClientConfig.getDefaultInstance().clone();
+        config.anubisMemories = ClientConfig.getLocalInstance().anubisMemories;
+        ClientConfig.updateLocal(config);
     }
 
     public static void resetServer()

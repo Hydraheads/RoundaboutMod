@@ -2621,6 +2621,8 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
                     value.discard();
                 }
+            } else if (value instanceof LivingEntity le){
+                MainUtil.removeFleshBud(le);
             }
         }
         return hitEntities;

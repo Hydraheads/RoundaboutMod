@@ -19,6 +19,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.RoadRollerItem;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersStarPlatinum;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
@@ -877,6 +878,13 @@ public class BlockGrabPreset extends NewPunchingStand {
                     if (entity instanceof RoadRollerEntity RRE && RRE.getExploded()) {
                         this.setPowerNone();
                         return false;
+                    }
+
+                    if (entity instanceof LivingEntity le && this instanceof PowersStarPlatinum){
+                        if (((StandUser)entity).rdbt$getFleshBud() != null){
+                                MainUtil.removeFleshBud(le);
+                                return true;
+                        }
                     }
 
                     if (entity.startRiding(standEntity)) {

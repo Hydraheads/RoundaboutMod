@@ -2022,6 +2022,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         compoundtag.putByte("bubbleEncased",roundabout$getBubbleEncased());
 
+        if (rdbt$fleshBudPlanted !=null){
+            compoundtag.putUUID("fleshBud", rdbt$fleshBudPlanted);
+        } else {
+            if (compoundtag.contains("fleshBud")){
+                compoundtag.remove("fleshBud");
+            }
+        }
+
         StandPowers powers = roundabout$getStandPowers();
         List<CooldownInstance> CDCopy = new ArrayList<>(rdbt$PowerCooldowns) {
         };
@@ -2060,6 +2068,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         roundabout$setBubbleEncased(compoundtag.getByte("bubbleEncased"));
+        if (compoundtag.contains("fleshBud")) {
+            rdbt$fleshBudPlanted = compoundtag.getUUID("fleshBud");
+        }
 
         StandPowers powers = roundabout$getStandPowers();
         List<CooldownInstance> CDCopy = new ArrayList<>(rdbt$PowerCooldowns) {
@@ -3731,7 +3742,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         if ((LivingEntity)(Object)this instanceof Player pl){
             StandUser SU = (StandUser) pl;
-            float fd = ((IFatePlayer)pl).rdbt$getFatePowers().getJumpHeightAddon();
+            float fd = ((IFatePlayer)pl).rdbt$getFatePowers().getJumpHeightAddonMax();
             if (SU.roundabout$getStandPowers() != null) {
                 fd += SU.roundabout$getStandPowers().getJumpHeightAddon();
             }
@@ -4455,6 +4466,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return false;
     }
 
+
     /**If you have a chest turned to stone, decreases breath faster*/
     @Inject(method = "decreaseAirSupply", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$decreaseAirSupply(int $$0, CallbackInfoReturnable<Integer> cir) {
@@ -4525,6 +4537,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
     }
+
+
+    @Unique
+    public UUID rdbt$fleshBudPlanted = null;
+    //Flesh bud stuff
+
+    public void rdbt$setFleshBud(UUID bud){
+        rdbt$fleshBudPlanted = bud;
+    }
+
+    public UUID rdbt$getFleshBud(){
+        return rdbt$fleshBudPlanted;
+    }
+
 
     /**While using item, leave idle state*/
     @Inject(method = "updateUsingItem", at = @At(value = "HEAD"))

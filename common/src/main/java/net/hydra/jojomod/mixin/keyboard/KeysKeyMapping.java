@@ -62,24 +62,26 @@ public abstract class KeysKeyMapping implements IKeyMapping {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
         StandUser SU = (StandUser) player;
-        if (SU.roundabout$getStandPowers() != null) {
-            if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
-                if (SU.roundabout$getUniqueStandModeToggle()) {
-                    int time = PowersAnubis.MaxPlayTime-PA.playTime;
-                    for(int i=0;i<PA.playKeys.size();i++) {
-                        KeyMapping key = PA.playKeys.get(i);
+        if (SU != null) {
+            if (SU.roundabout$getStandPowers() != null) {
+                if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+                    if (SU.roundabout$getUniqueStandModeToggle()) {
+                        int time = PowersAnubis.MaxPlayTime - PA.playTime;
+                        for (int i = 0; i < PA.playKeys.size(); i++) {
+                            KeyMapping key = PA.playKeys.get(i);
 
-                        if (key.getName().equals(this.getName())) {
-                            if (PA.isPressed(PA.playBytes.get(i), time)) {
-                                cir.setReturnValue(true);
-                                cir.cancel();
+                            if (key.getName().equals(this.getName())) {
+                                if (PA.isPressed(PA.playBytes.get(i), time)) {
+                                    cir.setReturnValue(true);
+                                    cir.cancel();
+                                }
+                            } else {/// admittedly a little scuffed, I'll change it if it breaks
+                                if (PA.isPressed(PA.playBytes.get(i), time) && PA.playBytes.get(i) > 20) {
+                                    player.getInventory().selected = ((int) PA.playBytes.get(i)) - 21;
+                                }
                             }
-                        } else {/// admittedly a little scuffed, I'll change it if it breaks
-                            if (PA.isPressed(PA.playBytes.get(i), time) && PA.playBytes.get(i) > 20) {
-                                player.getInventory().selected = ((int)PA.playBytes.get(i))-21;
-                            }
+
                         }
-
                     }
                 }
             }

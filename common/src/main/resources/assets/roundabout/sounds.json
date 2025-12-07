@@ -143,6 +143,24 @@
       "roundabout:hypnosis"
     ]
   },
+  "flesh_bud_goes": {
+    "subtitle": "sounds.roundabout.flesh_bud_goes",
+    "sounds": [
+      "roundabout:flesh_bud_goes"
+    ]
+  },
+  "hair_toggle": {
+    "subtitle": "sounds.roundabout.hair_toggle",
+    "sounds": [
+      "roundabout:hair_toggle"
+    ]
+  },
+  "flesh_bud_removal": {
+    "subtitle": "sounds.roundabout.flesh_bud_removal",
+    "sounds": [
+      "roundabout:flesh_bud_removal"
+    ]
+  },
   "road_roller_explosion": {
     "subtitle": "sounds.roundabout.road_roller_explosion",
     "sounds": [

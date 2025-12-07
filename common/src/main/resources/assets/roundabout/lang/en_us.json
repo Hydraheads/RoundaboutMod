@@ -536,6 +536,8 @@
   "death.attack.stand_virus.item": "%1$s was turned into tomato sauce",
   "death.attack.disintegration": "%1$s disintegrated",
   "death.attack.disintegration.player": "%1$s was disintegrated by %$2s",
+  "death.attack.kick": "%1$s was ran over",
+  "death.attack.kick.player": "%$2s trampled %1$s",
   "death.attack.melting": "%1$s became a fluid",
   "death.attack.melting.player":"%1$s was reduced to a puddle by %2$s",
   "death.attack.dagger": "%1$s became a human sacrifice",
@@ -851,6 +853,9 @@
   "sounds.roundabout.road_roller_ambient":  "Road Roller Ambient",
   "sounds.roundabout.road_roller_explosion":  "Road Roller Explosion",
   "sounds.roundabout.road_roller_mixing":  "Road Roller Mixing",
+  "sounds.roundabout.flesh_bud_goes":  "Flesh Infection",
+  "sounds.roundabout.flesh_bud_removal":  "Flesh Bud Removed",
+  "sounds.roundabout.hair_toggle":  "Hair Extends",
 
   "sounds.roundabout.dio_hoho":  "Hoho!",
   "sounds.roundabout.dio_hoho_2":  "Ho!",
@@ -990,6 +995,8 @@
   "ability.roundabout.item_grab.desc": "Grabs the item you are holding in your inventory to throw. Many of them have unique attributes.",
   "ability.roundabout.mob_grab": "Power Grab (Entities)",
   "ability.roundabout.mob_grab.desc": "Grabs the entity you are facing, if it is close enough and able to be grabbed. Throw them, transport them, or gently set them down. If you are crouching, you do an attack on them.",
+  "ability.roundabout.mob_grab_sp": "Power Grab (Entities)",
+  "ability.roundabout.mob_grab_sp.desc": "Grabs the entity you are facing, if it is close enough and able to be grabbed. Throw them, transport them, or gently set them down. If you are crouching, you do an attack on them. Can also remove flesh buds.",
   "ability.roundabout.phase_grab": "Phase Grab",
   "ability.roundabout.phase_grab.desc": "Your stand floats forward, phasing through some blocks with slits in them like iron bars or slabs. Grabs items on the ground from afar, or interacts with levers and doors.",
   "ability.roundabout.dodge": "Dash",
@@ -1086,7 +1093,7 @@
   "ability.roundabout.flame_extinguish": "Fire Extinguish",
   "ability.roundabout.flame_extinguish.desc": "Snap away all stand fire you created at once.",
   "ability.roundabout.projectile_burn": "Flame Guard",
-  "ability.roundabout.projectile_burn.desc": "Burns away incoming projectiles, and ignites incoming gasoline projectiles.",
+  "ability.roundabout.projectile_burn.desc": "Burns away incoming projectiles, and ignites incoming gasoline projectiles. Destroys flesh buds.",
   "ability.roundabout.crossfire_firestorm": "Crossfire Firestorm",
   "ability.roundabout.crossfire_firestorm.desc": "Creates a large ankh which scatters tiny flames everywhere, buffing your crossfire hurricane abilities and allowing you to use them in rain. The massive toll on stand energy, however, increases their cooldowns.",
   "ability.roundabout.fire_slam": "Maximum Flame Crash",
@@ -1208,7 +1215,7 @@
   "ability.roundabout.gd_return_right": "Right Arm Reattach",
   "ability.roundabout.gd_spin_right": "Right Arm Spin",
   "ability.roundabout.gd_mold_leap": "Separation Leap",
-  "ability.roundabout.gd_mold_leap.desc": "Separates your torso and legs, and launches you in the direction you are looking, allowing for great Vertical moblity. Leaves you crawling while your legs [your legs dont do anything, they dont exist for now]",
+  "ability.roundabout.gd_mold_leap.desc": "Separates your torso and legs, and launches you in the direction you are looking, allowing for great omnidirectional moblity whilst letting you avoid fall damage. Leaves you crawling while your legs float back to you, damaging mobs they come into contact with and letting you walk again. Your legs automatically return after a time",
   "ability.roundabout.gd_mold_field": "Mold Field",
   "ability.roundabout.gd_mold_field.desc": "Releases mold spores in a large area around you. Any mob in that area that lowers in elevation whilst being below you takes massive damage that ramps up over time. Players and certain mobs killed by the mold field with drop their heads. Organic projectiles below you in the mold field will rapidly disintegrate.",
   "ability.roundabout.gd_stitch": "Stitch up",
@@ -1713,6 +1720,7 @@
   "text.roundabout.walking.cut_on": "Corner Cutting On",
   "text.roundabout.walking.cut_ff": "Corner Cutting Off",
 
+  "text.roundabout.vampire.flesh_bud_fail": "The victim is not weakened, or is agitated",
 
 
 
@@ -1945,8 +1953,26 @@
   "config.roundabout.rattLeapStrength.name": "Ratt Leap Strength",
   "config.roundabout.rattLeapStrength.desc": "How strong Ratt's leap is",
 
+  "config.roundabout.anubisMemories.name": "Anubis Client Settings",
   "config.roundabout.anubisPogoCounter.name": "Anubis Pogo Indicator",
   "config.roundabout.anubisPogoCounter.desc": "Displays a counter showing how many pogos you have done.",
+
+  "config.roundabout.mem1.name": "Memory 1",
+  "config.roundabout.mem1.desc": "Memory 1",
+  "config.roundabout.mem2.name": "Memory 2",
+  "config.roundabout.mem2.desc": "Memory 2",
+  "config.roundabout.mem3.name": "Memory 3",
+  "config.roundabout.mem3.desc": "Memory 3",
+  "config.roundabout.mem4.name": "Memory 4",
+  "config.roundabout.mem4.desc": "Memory 4",
+  "config.roundabout.mem5.name": "Memory 5",
+  "config.roundabout.mem5.desc": "Memory 5",
+  "config.roundabout.mem6.name": "Memory 6",
+  "config.roundabout.mem6.desc": "Memory 6",
+  "config.roundabout.mem7.name": "Memory 7",
+  "config.roundabout.mem7.desc": "Memory 7",
+  "config.roundabout.mem8.name": "Memory 8",
+  "config.roundabout.mem9.desc": "Memory 8",
 
 
 
