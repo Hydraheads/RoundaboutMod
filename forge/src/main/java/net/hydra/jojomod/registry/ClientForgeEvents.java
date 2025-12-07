@@ -226,6 +226,7 @@ public class ClientForgeEvents {
         ModStrayModels.VampireHairOne = new VampireHairOnePart();
         ModStrayModels.VampireHairTwo = new VampireHairTwoPart();
         ModStrayModels.VampireHairFlesh = new VampireHairFleshBudLayer();
+        ModStrayModels.FirstPersonArmsModel = new FirstPersonArmsLayer();
         ModStrayModels.ROAD_ROLLER = new RoadRollerStrayModel();
         ModStrayModels.SNUBNOSE_REVOLVER_MODEL = new SnubnoseRevolverModel();
         //BlockEntityRenderers.register(ModBlocks.STAND_FIRE_BLOCK_ENTITY, StandFireRenderer::new);

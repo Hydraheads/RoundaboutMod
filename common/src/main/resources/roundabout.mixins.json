@@ -283,7 +283,6 @@
     "items.BowlerHatPlayerRendererMixin",
     "items.BowlerHatUnRenderHelmetMixin",
     "items.ChairCameraMixin",
-    "items.FirearmForceHandRenderingMixin",
     "items.FirearmHideItemInHandLayerMixin",
     "items.FirearmItemInHandMixin",
     "items.FirearmItemRendererMixin",
