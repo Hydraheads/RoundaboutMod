@@ -6,7 +6,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.gui.*;
-import net.hydra.jojomod.client.models.visages.parts.VampireHairFleshBudLayer;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerAmbientSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerExplosionSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerMixingSound;
@@ -23,6 +22,7 @@ import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
+import net.hydra.jojomod.item.SnubnoseRevolverItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.minecraft.client.gui.GuiGraphics;
@@ -1397,10 +1397,34 @@ public class ClientUtil {
 
                     //stack.mulPose(new Quaternionf(animation.getCurrentGravityRotation(gravityDirection, timeMs)).conjugate());
 
+
                     ModStrayModels.VampireHairFlesh.render(cameraEnt, $$4, stack, source, poggers, r, g, b, 1);
 
                 stack.popPose();
             }
+        }
+
+        if (cameraEnt instanceof Player play && play.getUseItem().getItem() instanceof SnubnoseRevolverItem){
+            stack.pushPose();
+            Vec3 vec = cameraEnt.getEyePosition();
+
+            IPlayerEntity pl = ((IPlayerEntity) cameraEnt);
+            float r = pl.rdbt$getHairColorX();
+            float g = pl.rdbt$getHairColorY();
+            float b = pl.rdbt$getHairColorZ();
+            Direction gravityDirection = GravityAPI.getGravityDirection(cameraEnt);
+
+            if (gravityDirection == Direction.UP){
+                Vec3 vector = new Vec3(0,cameraEnt.getEyeHeight()*0.4f,0);
+            } else {
+                Vec3 vector = new Vec3(0,cameraEnt.getEyeHeight()*0.15f,0);
+                stack.translate(vector.x,vector.y,vector.z);
+            }
+
+            FirstPersonArmsLayer.player = play;
+            ModStrayModels.FirstPersonArmsModel.render(cameraEnt, $$4, stack, source, 0, r, g, b, 1);
+
+            stack.popPose();
         }
     }
     @Unique

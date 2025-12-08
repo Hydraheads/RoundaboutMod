@@ -5,6 +5,9 @@ package net.hydra.jojomod.client.models.substand;// Made with Blockbench 4.10.4
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.hydra.jojomod.client.models.stand.StandModel;
+import net.hydra.jojomod.client.models.stand.animations.CinderellaAnimations;
+import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.entity.substand.SeperatedLegsEntity;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -25,6 +28,7 @@ public class SeperatedLegsModel<T extends SeperatedLegsEntity> extends EntityMod
 	private final ModelPart LeftLeg;
 
 	public SeperatedLegsModel(ModelPart root) {
+
 		this.Head = root.getChild("Head");
 		this.Body = root.getChild("Body");
 		this.RightArm = root.getChild("RightArm");
@@ -35,7 +39,9 @@ public class SeperatedLegsModel<T extends SeperatedLegsEntity> extends EntityMod
 
 	public static LayerDefinition createBodyLayer() {
 		MeshDefinition meshdefinition = new MeshDefinition();
-		PartDefinition partdefinition = meshdefinition.getRoot();
+		PartDefinition partdefinition = meshdefinition.getRoot();;
+
+
 
 		PartDefinition Head = partdefinition.addOrReplaceChild("Head", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
@@ -66,7 +72,7 @@ public class SeperatedLegsModel<T extends SeperatedLegsEntity> extends EntityMod
 	}
 
 	@Override
-	public void setupAnim(T t, float v, float v1, float v2, float v3, float v4) {
+	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
 
 	}
 }

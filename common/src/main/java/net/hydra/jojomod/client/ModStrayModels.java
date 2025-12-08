@@ -12,6 +12,7 @@ import net.hydra.jojomod.client.models.worn_stand.*;
 
 public class ModStrayModels {
     public static SoftAndWetShootingArmModel SHOOTING_ARM;
+    public static FirstPersonArmsLayer FirstPersonArmsModel;
     public static HeyYaModel HEY_YA;
     public static BowlerHatModel BOWLER_HAT;
     public static WornStoneMaskModel WORN_STONE_MASK;

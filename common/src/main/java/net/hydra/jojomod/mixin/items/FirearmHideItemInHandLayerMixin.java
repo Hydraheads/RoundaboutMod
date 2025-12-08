@@ -27,7 +27,7 @@ public class FirearmHideItemInHandLayerMixin {
 
     private void hideItemsWhenAiming(AbstractClientPlayer $$0, float $$1, float $$2, InteractionHand $$3, float $$4, ItemStack $$5, float $$6, PoseStack $$7, MultiBufferSource $$8, int $$9, CallbackInfo ci) {
         if ($$0.isUsingItem() && $$0.getUseItem().getItem() instanceof FirearmItem) {
-            ci.cancel();
+            // ci.cancel();
         }
     }
 }

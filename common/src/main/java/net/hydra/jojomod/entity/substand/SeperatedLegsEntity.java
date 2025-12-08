@@ -62,7 +62,7 @@ public class SeperatedLegsEntity extends LivingEntity {
             List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),0.6,1,0.6);
             for(int j = 0;j<damages.size();j++){
                 Entity entity = damages.get(j);
-                if(!entity.equals((Object)this)) {
+                if(!(entity.equals((Object)this) ||entity.equals((Object)user))) {
                     entity.hurt(ModDamageTypes.of(level(), ModDamageTypes.KICKED, this, user), 5);
                 }
             }
@@ -74,6 +74,11 @@ public class SeperatedLegsEntity extends LivingEntity {
     @Override
     public HumanoidArm getMainArm() {
         return null;
+    }
+
+    @Override
+    public boolean isInvulnerableTo(DamageSource $$0) {
+        return true;
     }
 
     @Override
