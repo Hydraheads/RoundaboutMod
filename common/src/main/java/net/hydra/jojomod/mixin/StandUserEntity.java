@@ -2592,15 +2592,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
-        if (this.roundabout$Powers == null) {
             ItemStack StandDisc = this.roundabout$getStandDisc();
             if (!StandDisc.isEmpty() && StandDisc.getItem() instanceof StandDiscItem SD){
-                SD.generateStandPowers((LivingEntity)(Object)this);
+                if (this.roundabout$Powers == null || !SD.standPowers.getClass().equals(this.roundabout$Powers.getClass())) {
+                    SD.generateStandPowers((LivingEntity) (Object) this);
+                }
             } else {
-
-                this.roundabout$Powers = new StandPowers(roundabout$User);
+                if (this.roundabout$Powers == null) {
+                    this.roundabout$Powers = new StandPowers(roundabout$User);
+                }
             }
-        }
         return this.roundabout$Powers;
     }
 
