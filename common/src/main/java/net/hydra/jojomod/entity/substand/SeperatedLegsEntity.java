@@ -1,37 +1,24 @@
 package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.entity.corpses.FallenMob;
-import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
-import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.util.MainUtil;
-import net.hydra.jojomod.util.gravity.GravityAPI;
-import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
-import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.Main;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -54,7 +41,7 @@ public class SeperatedLegsEntity extends LivingEntity {
             if(StartupTicks==0){
                 if(!(this.User == null)){
                     this.lookAt(EntityAnchorArgument.Anchor.EYES,User.getEyePosition());
-                    this.setDeltaMovement(this.getLookAngle().multiply(00.2,0.2,0.2));
+                    this.setDeltaMovement(this.getLookAngle().multiply(0.2,0.2,0.2));
                 }else{
                     this.discard();
                 }
@@ -75,7 +62,7 @@ public class SeperatedLegsEntity extends LivingEntity {
             List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),0.6,1,0.6);
             for(int j = 0;j<damages.size();j++){
                 Entity entity = damages.get(j);
-                if(!entity.equals((Object)this)) {
+                if(!(entity.equals((Object)this) ||entity.equals((Object)user))) {
                     entity.hurt(ModDamageTypes.of(level(), ModDamageTypes.KICKED, this, user), 5);
                 }
             }
@@ -87,6 +74,11 @@ public class SeperatedLegsEntity extends LivingEntity {
     @Override
     public HumanoidArm getMainArm() {
         return null;
+    }
+
+    @Override
+    public boolean isInvulnerableTo(DamageSource $$0) {
+        return true;
     }
 
     @Override

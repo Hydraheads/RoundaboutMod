@@ -146,7 +146,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
             if ($$0.getUseItem().is(ModItems.SNUBNOSE_REVOLVER)) {
                 ipe.roundabout$getSnubnoseAim().startIfStopped($$0.tickCount); change = true;
-                this.roundabout$animate(ipe.roundabout$getSnubnoseAim(), AnubisAnimations.Unsheathe, yes, 1f);
+                this.roundabout$animate(ipe.roundabout$getSnubnoseAim(), FirearmFirstPersonAnimations.snubnose_aim, yes, 1f);
             } else {
                 ipe.roundabout$getSnubnoseAim().stop();
             }

@@ -151,7 +151,7 @@ public class PowersGreenDay extends NewPunchingStand {
             setSkillIcon(context, x, y, 2, StandIcons.GREEN_DAY_MOLD_PUNCH_RIGHT, PowerIndex.SKILL_2);
 
         if (isHoldingSneak())
-            setSkillIcon(context, x, y, 3, StandIcons.GREEN_DAY_MOLD_LEAP, PowerIndex.SKILL_3_CROUCH_GUARD);
+            setSkillIcon(context, x, y, 3, StandIcons.GREEN_DAY_MOLD_LEAP, PowerIndex.SNEAK_MOVEMENT);
         else
         if(isGuarding())
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
@@ -246,7 +246,7 @@ public class PowersGreenDay extends NewPunchingStand {
                 }
             }else{
                 if (!this.self.level().isClientSide()) {
-                    if(MainUtil.cheapDistanceTo(this.self.getX(),this.self.getY(),this.self.getZ(),currentlegs.getX(),currentlegs.getY(),currentlegs.getZ())<1.5 && currentlegs.StartupTicks == 0) {
+                    if(MainUtil.cheapDistanceTo(this.self.getX(),this.self.getY(),this.self.getZ(),currentlegs.getX(),currentlegs.getY(),currentlegs.getZ())<1 && currentlegs.StartupTicks == 0) {
                         legGoneTicks = 0;
                         ((StandUser) this.self).rdbt$SetCrawlTicks(0);
                         setActivePower(PowerIndex.POWER_3_BONUS);
@@ -260,7 +260,7 @@ public class PowersGreenDay extends NewPunchingStand {
                         for (int i = 0; i < 11; i = i + 1) {
                             ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.STITCH,
                                     this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
-                                    this.getSelf().getY() + 1.4,
+                                    this.getSelf().getY() + 0.5,
                                     this.getSelf().getZ() + (diameter * Math.cos(i * 4)) * Math.cos(Zangle),
                                     0, 0, 0, 0, 0);
                         }
@@ -288,15 +288,8 @@ public class PowersGreenDay extends NewPunchingStand {
                 ((StandUser)this.self).rdbt$SetCrawlTicks(data);
                 legGoneTicks = data;
             }
-            /// pogo counter synching
-            case PowerIndex.SNEAK_ATTACK_CHARGE -> {
 
-            }
-            /// canPogo synching
-            case PowerIndex.EXTRA -> {
-            }
-            case PowerIndex.BARRAGE -> {
-            }
+
 
         }
         super.updatePowerInt(activePower,data);
@@ -335,9 +328,9 @@ public class PowersGreenDay extends NewPunchingStand {
                 new Vec3(blockHit.getLocation().x, blockHit.getLocation().y,blockHit.getLocation().z))*0.75+1;
 
         MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
-                ((blockHit.getLocation().x - this.getSelf().getX())/mag)*mult,
-                (0.6+Math.max((blockHit.getLocation().y - this.getSelf().getY())/mag,0))*mult,
-                ((blockHit.getLocation().z - this.getSelf().getZ())/mag)*mult
+                ((blockHit.getLocation().x - this.getSelf().getX())/mag)*mult*1.7,
+                (0.3+ Math.max((blockHit.getLocation().y - this.getSelf().getY())/mag,0))*mult*1.7,
+                ((blockHit.getLocation().z - this.getSelf().getZ())/mag)*mult*1.7
         );
 
     }
@@ -354,6 +347,7 @@ public class PowersGreenDay extends NewPunchingStand {
                             this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
                         } else {
                             this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
+                            this.setCooldown(PowerIndex.SNEAK_MOVEMENT, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
                         }
 
                         legGoneTicks = 240;
@@ -389,6 +383,8 @@ public class PowersGreenDay extends NewPunchingStand {
             currentlegs.discard();
         }
 
+        ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+        ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(false);
         setcrawlserver(this.self);
         SpawnLegs();
         return true;

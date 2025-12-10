@@ -307,171 +307,174 @@ public class BlockGrabPreset extends NewPunchingStand {
     @SuppressWarnings("deprecation")
     @Override
     public boolean setPowerAttack(){
-        if (this.getSelf() instanceof Player && getAttackTimeDuring()>0) {
+        if (this.getSelf() instanceof Player) {
             StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
                 if (!standEntity.getHeldItem().isEmpty()) {
                     if (!this.getSelf().level().isClientSide) {
-                        if (throwObject(standEntity.getHeldItem())) {
-                            if (MainUtil.isThrownBlockItem(standEntity.getHeldItem().getItem())) {
-                                animateStand(StandEntity.BLOCK_THROW);
-                            } else {
-                                animateStand(StandEntity.ITEM_THROW);
-                            }
-                            poseStand(OffsetIndex.FOLLOW);
-                            standEntity.setHeldItem(ItemStack.EMPTY);
-                            if (this.getSelf() instanceof Player) {
-                                S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
-                                        PacketDataIndex.S2C_INT_ATD, -10);
-                            }
-                            this.setAttackTimeDuring(-10);
+                            if (throwObject(standEntity.getHeldItem())) {
+                                if (MainUtil.isThrownBlockItem(standEntity.getHeldItem().getItem())) {
+                                    animateStand(StandEntity.BLOCK_THROW);
+                                } else {
+                                    animateStand(StandEntity.ITEM_THROW);
+                                }
+                                poseStand(OffsetIndex.FOLLOW);
+                                standEntity.setHeldItem(ItemStack.EMPTY);
+                                if (this.getSelf() instanceof Player) {
+                                    S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
+                                            PacketDataIndex.S2C_INT_ATD, -10);
+                                }
+                                this.setAttackTimeDuring(-10);
 
-                            return true;
-                        }
+                                return true;
+                            }
                     }
                     return false;
                 } else if (standEntity.getFirstPassenger() != null){
                     if (!this.getSelf().level().isClientSide) {
-                        int cdr = 0;
-                        if (this.getSelf() instanceof Player pl && pl.isCrouching()){
-                            cdr = ClientNetworking.getAppropriateConfig().generalStandSettings.mobThrowAttackCooldown;
-                        } else {
-                            cdr = ClientNetworking.getAppropriateConfig().generalStandSettings.mobThrowCooldown;
-                        }
 
-                        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, cdr);
-                        this.setCooldown(PowerIndex.SKILL_2, cdr);
-                        Entity ent = standEntity.getFirstPassenger();
-
-                        Vec3 vec3d = this.getSelf().getEyePosition(0);
-                        Vec3 vec3d2 = this.getSelf().getViewVector(0);
-                        double width = (this.getSelf().getBbWidth()*0.6)+ent.getBbWidth()*1.8F;
-                        double y = vec3d2.y;
-                        if (this.getSelf() instanceof Player pl && pl.isCrouching()){
-                            y-= (ent.getEyeHeight()*0.3);
-                        }
-                        Vec3 vec3d3 = vec3d.add(vec3d2.x * width, y * width, vec3d2.z * width);
-                        standEntity.ejectPassengers();
-                        boolean candoit = true;
-                        for (var i = 0; i< ent.getBbHeight(); i++){
-                            if (this.getSelf().level().getBlockState(new BlockPos(
-                                    (int) vec3d3.x(), (int) (vec3d3.y+i),
-                                    (int) vec3d3.z)).isSolid()){
-                                candoit = false;
-                                break;
-                            }
-                        }
-                        Vec3 qVec2 = Vec3.ZERO;
-                        if (candoit){
-                            if (!vec3d3.equals(Vec3.ZERO) && vec3d3.distanceTo(this.self.position()) < 100) {
-                                qVec2 = new Vec3(vec3d3.x, vec3d3.y, vec3d3.z);
-                                ent.dismountTo(vec3d3.x, vec3d3.y, vec3d3.z);
-                            }
-                        } else {
-                            qVec2 = new Vec3(this.getSelf().getX(),this.getSelf().getY(),this.getSelf().getZ());
-                            ent.dismountTo(this.getSelf().getX(),this.getSelf().getY(),this.getSelf().getZ());
-                        }
-
-                        if (ent instanceof Player){
-                            ((IEntityAndData)ent).roundabout$setQVec2Params(qVec2);
-                        }
-
-
-                        int degrees = (int) (this.getSelf().getYRot() % 360);
-                        int degreesY = (int) this.getSelf().getXRot();
-                        float strength = 2.8F;
-                        if (ent instanceof Player){
-                            strength = 2.3F;
-                        } else if (ent instanceof Boat){
-                            strength = 6F;
-                        } else if (ent instanceof Minecart){
-                            strength = 4F;
-                        }
-
-                        if (ent instanceof LivingEntity LE){
-                            ((StandUser)LE).roundabout$setLeapTicks(ClientNetworking.getAppropriateConfig().generalStandSettings.standThrownEntityFallDamageImmmunityTicks);
-                        }
-
-                        float ybias = (90F - Math.abs(degreesY)) /90F;
-                        if (this.getSelf() instanceof Player pl && pl.isCrouching()){
-                            if (ent instanceof Player){
-                                strength *= 0.8F;
+                        if (getAttackTimeDuring()>0) {
+                            int cdr = 0;
+                            if (this.getSelf() instanceof Player pl && pl.isCrouching()) {
+                                cdr = ClientNetworking.getAppropriateConfig().generalStandSettings.mobThrowAttackCooldown;
                             } else {
-                                strength *= 0.6F;
+                                cdr = ClientNetworking.getAppropriateConfig().generalStandSettings.mobThrowCooldown;
                             }
-                            hitParticlesCenter(ent);
-                            if (DamageHandler.PenetratingStandDamageEntity(ent, getGrabThrowStrength(ent), this.getSelf())){
+
+                            S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, cdr);
+                            this.setCooldown(PowerIndex.SKILL_2, cdr);
+                            Entity ent = standEntity.getFirstPassenger();
+
+                            Vec3 vec3d = this.getSelf().getEyePosition(0);
+                            Vec3 vec3d2 = this.getSelf().getViewVector(0);
+                            double width = (this.getSelf().getBbWidth() * 0.6) + ent.getBbWidth() * 1.8F;
+                            double y = vec3d2.y;
+                            if (this.getSelf() instanceof Player pl && pl.isCrouching()) {
+                                y -= (ent.getEyeHeight() * 0.3);
+                            }
+                            Vec3 vec3d3 = vec3d.add(vec3d2.x * width, y * width, vec3d2.z * width);
+                            standEntity.ejectPassengers();
+                            boolean candoit = true;
+                            for (var i = 0; i < ent.getBbHeight(); i++) {
+                                if (this.getSelf().level().getBlockState(new BlockPos(
+                                        (int) vec3d3.x(), (int) (vec3d3.y + i),
+                                        (int) vec3d3.z)).isSolid()) {
+                                    candoit = false;
+                                    break;
+                                }
+                            }
+                            Vec3 qVec2 = Vec3.ZERO;
+                            if (candoit) {
+                                if (!vec3d3.equals(Vec3.ZERO) && vec3d3.distanceTo(this.self.position()) < 100) {
+                                    qVec2 = new Vec3(vec3d3.x, vec3d3.y, vec3d3.z);
+                                    ent.dismountTo(vec3d3.x, vec3d3.y, vec3d3.z);
+                                }
+                            } else {
+                                qVec2 = new Vec3(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
+                                ent.dismountTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
+                            }
+
+                            if (ent instanceof Player) {
+                                ((IEntityAndData) ent).roundabout$setQVec2Params(qVec2);
+                            }
+
+
+                            int degrees = (int) (this.getSelf().getYRot() % 360);
+                            int degreesY = (int) this.getSelf().getXRot();
+                            float strength = 2.8F;
+                            if (ent instanceof Player) {
+                                strength = 2.3F;
+                            } else if (ent instanceof Boat) {
+                                strength = 6F;
+                            } else if (ent instanceof Minecart) {
+                                strength = 4F;
+                            }
+
+                            if (ent instanceof LivingEntity LE) {
+                                ((StandUser) LE).roundabout$setLeapTicks(ClientNetworking.getAppropriateConfig().generalStandSettings.standThrownEntityFallDamageImmmunityTicks);
+                            }
+
+                            float ybias = (90F - Math.abs(degreesY)) / 90F;
+                            if (this.getSelf() instanceof Player pl && pl.isCrouching()) {
+                                if (ent instanceof Player) {
+                                    strength *= 0.8F;
+                                } else {
+                                    strength *= 0.6F;
+                                }
+                                hitParticlesCenter(ent);
+                                if (DamageHandler.PenetratingStandDamageEntity(ent, getGrabThrowStrength(ent), this.getSelf())) {
+                                    if ((ent instanceof Player || ((TimeStop) this.getSelf().level()).CanTimeStopEntity(ent))) {
+                                        ((IEntityAndData) ent).roundabout$setQVec(new Vec3(Mth.sin(((degrees * ((float) Math.PI / 180)))),
+                                                Mth.sin(degreesY * ((float) Math.PI / 180)),
+                                                -Mth.cos((degrees * ((float) Math.PI / 180)))));
+                                        ((IEntityAndData) ent).roundabout$setQVecParams(new Vec3(strength * (0.75 + (ybias / 4)),
+                                                ybias,
+                                                0F));
+                                    } else {
+                                        MainUtil.takeUnresistableKnockbackWithYBias(ent, strength * (0.75 + (ybias / 4)),
+                                                Mth.sin(((degrees * ((float) Math.PI / 180)))),
+                                                Mth.sin(degreesY * ((float) Math.PI / 180)),
+                                                -Mth.cos((degrees * ((float) Math.PI / 180))),
+                                                ybias);
+                                    }
+                                    animateStand(StandEntity.THIRD_PUNCH);
+
+                                    if (this.getSelf() instanceof Player) {
+                                        S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
+                                                PacketDataIndex.S2C_INT_ATD, -15);
+                                    }
+                                    poseStand(OffsetIndex.ATTACK);
+                                    this.setAttackTimeDuring(-15);
+                                    this.getSelf().level().playSound(null, ent, ModSounds.PUNCH_4_SOUND_EVENT, SoundSource.PLAYERS, 1.0F, 1.18F);
+                                } else {
+                                    animateStand(StandEntity.BLOCK_THROW);
+                                    poseStand(OffsetIndex.FOLLOW);
+                                    if (this.getSelf() instanceof Player) {
+                                        S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
+                                                PacketDataIndex.S2C_INT_ATD, -10);
+                                    }
+                                    this.setAttackTimeDuring(-10);
+                                }
+                            } else {
+                                if (ent instanceof Mob && ent.getBbHeight() < 1 && ent.getPassengers().isEmpty()) {
+                                    ((StandUser) ent).roundabout$setThrower(this.getSelf());
+                                    ((StandUser) ent).roundabout$startAutoSpinAttack(20);
+                                }
+                                if (!this.getSelf().level().isClientSide) {
+                                    if (ent instanceof NeutralMob NE && !(ent instanceof Animal) && !((ServerPlayer) this.getSelf()).isCreative()) {
+                                        if (!(ent instanceof IronGolem ig && ig.isPlayerCreated())) {
+                                            NE.setTarget(this.getSelf());
+                                        }
+                                    }
+                                }
+                                this.getSelf().level().playSound(null, ent, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+
                                 if ((ent instanceof Player || ((TimeStop) this.getSelf().level()).CanTimeStopEntity(ent))) {
-                                    ((IEntityAndData)ent).roundabout$setQVec(new Vec3(Mth.sin(((degrees * ((float) Math.PI / 180)))),
+                                    ((IEntityAndData) ent).roundabout$setQVec(new Vec3(Mth.sin(((degrees * ((float) Math.PI / 180)))),
                                             Mth.sin(degreesY * ((float) Math.PI / 180)),
                                             -Mth.cos((degrees * ((float) Math.PI / 180)))));
-                                    ((IEntityAndData)ent).roundabout$setQVecParams(new Vec3(strength * (0.75 + (ybias / 4)),
+                                    ((IEntityAndData) ent).roundabout$setQVecParams(new Vec3(strength * (0.5 + (ybias / 2)),
                                             ybias,
                                             0F));
+
                                 } else {
-                                    MainUtil.takeUnresistableKnockbackWithYBias(ent, strength * (0.75 + (ybias / 4)),
+                                    MainUtil.takeUnresistableKnockbackWithYBias(ent, strength * (0.5 + (ybias / 2)),
                                             Mth.sin(((degrees * ((float) Math.PI / 180)))),
                                             Mth.sin(degreesY * ((float) Math.PI / 180)),
                                             -Mth.cos((degrees * ((float) Math.PI / 180))),
                                             ybias);
                                 }
-                                animateStand(StandEntity.THIRD_PUNCH);
-
-                                if (this.getSelf() instanceof Player){
-                                    S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
-                                            PacketDataIndex.S2C_INT_ATD, -15);
-                                }
-                                poseStand(OffsetIndex.ATTACK);
-                                this.setAttackTimeDuring(-15);
-                                this.getSelf().level().playSound(null, ent, ModSounds.PUNCH_4_SOUND_EVENT, SoundSource.PLAYERS, 1.0F, 1.18F);
-                            } else {
                                 animateStand(StandEntity.BLOCK_THROW);
                                 poseStand(OffsetIndex.FOLLOW);
-                                if (this.getSelf() instanceof Player){
+                                if (this.getSelf() instanceof Player) {
                                     S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
                                             PacketDataIndex.S2C_INT_ATD, -10);
                                 }
                                 this.setAttackTimeDuring(-10);
                             }
-                        } else {
-                            if (ent instanceof Mob && ent.getBbHeight() < 1 && ent.getPassengers().isEmpty()){
-                                ((StandUser)ent).roundabout$setThrower(this.getSelf());
-                                ((StandUser)ent).roundabout$startAutoSpinAttack(20);
-                            }
-                            if (!this.getSelf().level().isClientSide) {
-                                if (ent instanceof NeutralMob NE && !(ent instanceof Animal) && !((ServerPlayer) this.getSelf()).isCreative()) {
-                                    if (!(ent instanceof IronGolem ig && ig.isPlayerCreated())) {
-                                        NE.setTarget(this.getSelf());
-                                    }
-                                }
-                            }
-                            this.getSelf().level().playSound(null, ent, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
 
-                            if ((ent instanceof Player || ((TimeStop) this.getSelf().level()).CanTimeStopEntity(ent))) {
-                                ((IEntityAndData)ent).roundabout$setQVec(new Vec3(Mth.sin(((degrees * ((float) Math.PI / 180)))),
-                                        Mth.sin(degreesY * ((float) Math.PI / 180)),
-                                        -Mth.cos((degrees * ((float) Math.PI / 180)))));
-                                ((IEntityAndData)ent).roundabout$setQVecParams(new Vec3(strength * (0.5 + (ybias / 2)),
-                                        ybias,
-                                        0F));
-
-                            } else {
-                                MainUtil.takeUnresistableKnockbackWithYBias(ent, strength * (0.5 + (ybias / 2)),
-                                        Mth.sin(((degrees * ((float) Math.PI / 180)))),
-                                        Mth.sin(degreesY * ((float) Math.PI / 180)),
-                                        -Mth.cos((degrees * ((float) Math.PI / 180))),
-                                        ybias);
-                            }
-                            animateStand(StandEntity.BLOCK_THROW);
-                            poseStand(OffsetIndex.FOLLOW);
-                            if (this.getSelf() instanceof Player) {
-                                S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
-                                        PacketDataIndex.S2C_INT_ATD, -10);
-                            }
-                            this.setAttackTimeDuring(-10);
+                            return true;
                         }
-
-                        return true;
                     } else {
                         this.setAttackTime(0);
                         this.setActivePowerPhase(getActivePowerPhaseMax());
