@@ -843,7 +843,7 @@ public class PowersAnubis extends NewDashPreset {
                         this.getSelf().resetFallDistance();
                     }
                 }
-                if (this.attackTimeDuring > windup + 9) {
+                if (this.attackTimeDuring >= windup + 9) {
                     this.setPowerNone();
                 }
 
@@ -1172,7 +1172,7 @@ public class PowersAnubis extends NewDashPreset {
                 this.tryPower(PowerIndex.BARRAGE_CHARGE_2);
                 this.tryPowerPacket(PowerIndex.BARRAGE_CHARGE_2);
 
-            } else {
+            } else if (getSelf().getVehicle() == null) {
                 super.buttonInputBarrage(keyIsDown, options);
             }
         }
@@ -1260,28 +1260,30 @@ public class PowersAnubis extends NewDashPreset {
     public void UpdateQuickdraw() {
         this.getStandUserSelf().roundabout$setMeleeImmunity(3);
         int duration = 15;
-        for (Entity entity : this.targets) {
-            if (entity instanceof LivingEntity) {
-                ((StandUser) entity).roundabout$setDazed((byte) 3);
+        if (!this.isClient()) {
+            for (Entity entity : this.targets) {
+                if (entity instanceof LivingEntity) {
+                    ((StandUser) entity).roundabout$setDazed((byte) 3);
+                }
+                if (this.getAttackTimeDuring() > duration) {
+                    if (StandRushDamageEntityAttack(entity, 3F, 0F, this.getSelf())) {
+                        MainUtil.takeKnockbackWithY(entity, 0.9, 0, -1, 0);
+                    }
+                    this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.ANUBIS_BARRAGE_1_EVENT, SoundSource.PLAYERS, 1.5F, 1.0F);
+                } else if (this.getSelf().tickCount % 2 == 1) {
+                    if (StandRushDamageEntityAttack(entity, getBarrageHitStrength(entity), 0F, this.getSelf())) {
+                        MainUtil.takeUnresistableKnockbackWithY(entity, 0.01, 0, -1, 0);
+                        this.hitParticles(entity);
+                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.ANUBIS_BARRAGE_1_HIT_EVENT, SoundSource.PLAYERS, 1.0F, 0.9F + (float) (Math.random() * 0.2));
+                    }
+                }
             }
             if (this.getAttackTimeDuring() > duration) {
-                if (StandRushDamageEntityAttack(entity, 3F, 0F, this.getSelf())) {
-                    MainUtil.takeKnockbackWithY(entity, 0.9, 0, -1, 0);
+                this.targets = new ArrayList<>();
+                setPowerNone();
+                if (this.getSelf() instanceof Player P) {
+                    S2CPacketUtil.sendActivePowerPacket(P, PowerIndex.NONE);
                 }
-                this.getSelf().level().playSound(null,this.getSelf().blockPosition(), ModSounds.ANUBIS_BARRAGE_1_EVENT,SoundSource.PLAYERS,1.5F,1.0F);
-            } else if (this.getSelf().tickCount%2 == 1) {
-                if (StandRushDamageEntityAttack(entity, getBarrageHitStrength(entity), 0F, this.getSelf())) {
-                    MainUtil.takeUnresistableKnockbackWithY(entity, 0.01, 0, -1, 0);
-                    this.hitParticles(entity);
-                    this.getSelf().level().playSound(null,this.getSelf().blockPosition(), ModSounds.ANUBIS_BARRAGE_1_HIT_EVENT,SoundSource.PLAYERS,1.0F,0.9F +(float)(Math.random()*0.2));
-                }
-            }
-        }
-        if (this.getAttackTimeDuring() > duration) {
-            this.targets = new ArrayList<>();
-            setPowerNone();
-            if (this.getSelf() instanceof Player P) {
-                S2CPacketUtil.sendActivePowerPacket(P, PowerIndex.NONE);
             }
         }
 
