@@ -44,8 +44,8 @@ public class AnubisModel extends PsuedoHierarchicalModel {
                 .texOffs(-2, 0).addBox(-6.0F, -0.05F, -28.5F, 6.0F, 0.0F, 27.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 27).addBox(-4.0F, -0.55F, 0.5F, 2.0F, 1.0F, 7.0F, new CubeDeformation(0.0F))
                 .texOffs(18, 27).addBox(-7.0F, -0.55F, -1.5F, 8.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(21, 31).addBox(-4F, 0.75F, -1F, 1.0F, 0.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(21, 31).addBox(-4F, -0.75F, -1F, 1.0F, 0.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(21, 31).addBox(-4F, 0.5F, -1F, 1.0F, 0.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(21, 31).addBox(-4F, -0.6F, -1F, 1.0F, 0.0F, 1.0F, new CubeDeformation(0.0F))
                 .texOffs(-10, 35).addBox(-8.0F, 0.0F, -2.5F, 10.0F, 0.0F, 10.0F, new CubeDeformation(0.0F))
                 ,PartPose.offsetAndRotation(-2.0F, -4.75F, -1.0F, 1.5708F, 0.0F, 0.0F));
 

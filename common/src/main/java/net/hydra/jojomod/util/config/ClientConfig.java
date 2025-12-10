@@ -190,21 +190,21 @@ public class ClientConfig implements Cloneable {
         @BooleanOption(group = "inherit", value = false)
         public Boolean anubisPogoCounter;
 
-        @StringOption(group = "inherit", value = "nothing yet :P")
+        @StringOption(group = "inherit", value = "")
         public String mem1;
-        @StringOption(group = "inherit", value = "nothing yet :P")
+        @StringOption(group = "inherit", value = "")
         public String mem2;
-        @StringOption(group = "inherit", value = "nothing yet :P")
+        @StringOption(group = "inherit", value = "")
         public String mem3;
-        @StringOption(group = "inherit", value = "nothing yet :P")
+        @StringOption(group = "inherit", value = "")
         public String mem4;
-        @StringOption(group = "inherit", value = "nothing yet :P")
+        @StringOption(group = "inherit", value = "")
         public String mem5;
-        @StringOption(group = "inherit", value = "nothing yet :P")
+        @StringOption(group = "inherit", value = "")
         public String mem6;
-        @StringOption(group = "inherit", value = "nothing yet :P")
+        @StringOption(group = "inherit", value = "")
         public String mem7;
-        @StringOption(group = "inherit", value = "nothing yet :P")
+        @StringOption(group = "inherit", value = "")
         public String mem8;
 
         public void saveToMemory(int index, String id) {

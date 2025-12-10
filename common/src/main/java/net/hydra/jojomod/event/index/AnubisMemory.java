@@ -9,12 +9,15 @@ import java.util.List;
 public class AnubisMemory {
 
 
+    public static final byte INPUTS = (byte) 0;
+    public static final byte MOUSE = (byte)1;
+    public static final byte MOUSE_INVENTORY = (byte)2;
 
 
     public Item item;
     public List<AnubisMoment> moments;
     public List<Vec3> rots;
-    public boolean delta_mouse = false;
+    public byte memory_type = 0;
     public AnubisMemory(Item item, List<AnubisMoment> moments) {
         this.item = item;
         this.moments = moments;
