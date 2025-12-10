@@ -409,7 +409,7 @@ public class PowersAnubis extends NewDashPreset {
     @Override
     public void tickPower() {
 
-        // Roundabout.LOGGER.info(" CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax());
+       // Roundabout.LOGGER.info(" CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax());
         StandUser SU = this.getStandUserSelf();
 
         if (SU.roundabout$getStandSkin() == (byte) 0) {SU.roundabout$setStandSkin((byte)1);}
@@ -789,9 +789,9 @@ public class PowersAnubis extends NewDashPreset {
                 this.attackTimeMax = 0;
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
             } else {
+                final int windup = PogoDelay;
                 if (!isClient()) {
                     /**  Pogo is broken up into 4 stages: Hover, Launch, Attack, and Aftershock */
-                    int windup = PogoDelay;
                     if (attackTimeDuring == windup) {
 
                         PogoLaunch();
@@ -841,9 +841,10 @@ public class PowersAnubis extends NewDashPreset {
                     } else if (attackTimeDuring < windup + 9) { /// Slows the user after a duration
                         MainUtil.slowTarget(this.getSelf(),0.7F);
                         this.getSelf().resetFallDistance();
-                    } else {
-                        this.setPowerNone();
                     }
+                }
+                if (this.attackTimeDuring > windup + 9) {
+                    this.setPowerNone();
                 }
 
             }
