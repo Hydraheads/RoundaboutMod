@@ -793,12 +793,15 @@ public class PowersAnubis extends NewDashPreset {
                     /**  Pogo is broken up into 4 stages: Hover, Launch, Attack, and Aftershock */
                     int windup = PogoDelay;
                     if (attackTimeDuring == windup) {
+
                         PogoLaunch();
 
                     } else if (attackTimeDuring < windup) {
+
                         MainUtil.slowTarget(this.getSelf(), 0.8F);
 
                     } else if (attackTimeDuring < windup + 6) {
+
                         Vec3 pos = this.getSelf().getEyePosition(0F).add(this.getSelf().getLookAngle().scale(1));
                         List<Entity> targets = MainUtil.genHitbox(this.getSelf().level(),
                                 pos.x,pos.y,pos.z,
@@ -838,6 +841,8 @@ public class PowersAnubis extends NewDashPreset {
                     } else if (attackTimeDuring < windup + 9) { /// Slows the user after a duration
                         MainUtil.slowTarget(this.getSelf(),0.7F);
                         this.getSelf().resetFallDistance();
+                    } else {
+                        this.setPowerNone();
                     }
                 }
 
@@ -1698,7 +1703,7 @@ public class PowersAnubis extends NewDashPreset {
                             }
 
                         } else {
-                            Roundabout.LOGGER.warn("Invalid Memory");
+                           // Roundabout.LOGGER.warn("Invalid Memory");
                         }
 
                     }
