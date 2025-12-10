@@ -259,19 +259,20 @@ public class PowersAnubis extends NewDashPreset {
     public void MemoryChangeClient() {
         if (!isAttackIneptVisually(PowerIndex.SKILL_2,2)) {
             MemoryRecordScreen MA = (MemoryRecordScreen) Minecraft.getInstance().screen;
-            byte type = this.memories.get(MA.currentlyHovered).memory_type;
-            this.memories.get(MA.currentlyHovered).memory_type =(byte) ((type+1)%3);
-            SaveMemories();
+            if (MA != null) {
+                byte type = this.memories.get(MA.currentlyHovered).memory_type;
+                this.memories.get(MA.currentlyHovered).memory_type = (byte) ((type + 1) % 3);
+                SaveMemories();
+            }
         }
     }
 
     public void MemoryCancelSaveClient() {
-       // Roundabout.LOGGER.info(""+this.memories.get(playSlot).moments.toString());
+       // Roundabout.LOGGER.info(this.memories.get(playSlot).moments.toString());
         this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
 
-        SaveMemories();
 
-        int time = PowersAnubis.MaxPlayTime-this.playTime;
+        int time = (PowersAnubis.MaxPlayTime-this.playTime)+1;
         for (Byte playByte : playBytes) {
             if (isPressed(playByte, time)) {
                 AnubisMemory memory = this.getUsedMemory();
@@ -279,6 +280,9 @@ public class PowersAnubis extends NewDashPreset {
                 moments.add(new AnubisMoment(playByte, Math.min(PowersAnubis.MaxPlayTime, time), false));
             }
         }
+
+        SaveMemories();
+
         setPlayTime(-1);
         this.playSlot = (byte)-1;
     }
@@ -332,7 +336,7 @@ public class PowersAnubis extends NewDashPreset {
             }
             case PowerIndex.SNEAK_MOVEMENT -> {
                 ///  gives you another pogo
-                canPogo = true;
+                enablePogo();
                 this.setAttackTime(0);
                 this.setActivePower(PowerIndex.SNEAK_MOVEMENT);
                 this.setCooldown(PowerIndex.GLOBAL_DASH,260);
@@ -404,7 +408,11 @@ public class PowersAnubis extends NewDashPreset {
 
     float slipstreamTimer = 3;
 
-    boolean canPogo = true;
+    int pogoTime = 0;
+    public boolean canPogo() {return pogoTime == 0;}
+    public void enablePogo() {pogoTime = 0;}
+    public void disablePogo() {pogoTime = -1;}
+    public void setPogo(int i) {pogoTime = i;}
     int pogoCounter = 0;
     @Override
     public void tickPower() {
@@ -414,9 +422,19 @@ public class PowersAnubis extends NewDashPreset {
 
         if (SU.roundabout$getStandSkin() == (byte) 0) {SU.roundabout$setStandSkin((byte)1);}
 
+        if (pogoTime > 0) {
+            pogoTime -= 1;
+        }
+
         if (this.getSelf().onGround()) {
             if (this.getActivePower() != PowerIndex.SNEAK_ATTACK_CHARGE || this.attackTime > PogoDelay + 3) {
-                canPogo = true;
+                if (pogoTime == -1) {
+                    if (pogoCounter == 0) {
+                        setPogo(30);
+                    } else {
+                        setPogo(0);
+                    }
+                }
             }
 
             if (this.isClient()) {
@@ -427,9 +445,9 @@ public class PowersAnubis extends NewDashPreset {
                 }
                 pogoCounter = 0;
             }
-        } else if (!canPogo) {
+        } else if (!canPogo()) {
             if (this.getSelf() instanceof Player P) {
-                if (P.isCreative()) { canPogo = true;}
+                if (P.isCreative()) { enablePogo();}
             }
         }
         SU.roundabout$setCombatMode(SU.roundabout$getActive());
@@ -589,8 +607,8 @@ public class PowersAnubis extends NewDashPreset {
 
                 byte index = PowerIndex.ATTACK;
                 if (this.isHoldingSneak()) {
-                    if (!this.getSelf().onGround() && canPogo) {
-                        canPogo = false;
+                    if (!this.getSelf().onGround() && canPogo()) {
+                        disablePogo();
                         index = PowerIndex.SNEAK_ATTACK_CHARGE;
                     } else {
                         index = PowerIndex.SNEAK_ATTACK;
@@ -667,7 +685,9 @@ public class PowersAnubis extends NewDashPreset {
                 if (this.getAttackTime() < quickdrawDelay) {
                     scopeLevel = 1;
                 } else if (this.getAttackTime() == quickdrawDelay) {
-                    StartQuickdraw(8);
+                    if(!isClient()) {
+                        StartQuickdraw(8);
+                    }
                 } else {
                     UpdateQuickdraw();
                     scopeLevel = 0;
@@ -936,7 +956,7 @@ public class PowersAnubis extends NewDashPreset {
         if (this.getSelf() instanceof Player P) {
             S2CPacketUtil.sendIntPowerDataPacket(P,PowersAnubis.SWING,0);
         }
-        if (!canPogo) {
+        if (!canPogo()) {
             this.setAttackTime(0);
             this.setAttackTimeMax(this.getAttackTimeMax()+10);
         }
@@ -1125,7 +1145,11 @@ public class PowersAnubis extends NewDashPreset {
             }
             /// canPogo syncing
             case PowerIndex.EXTRA -> {
-                canPogo = data == 1;
+                if (data == 1) {
+                    enablePogo();
+                } else {
+                    disablePogo();
+                }
             }
             case PowerIndex.BARRAGE -> {
                 if (data == 1) {
@@ -1160,6 +1184,10 @@ public class PowersAnubis extends NewDashPreset {
             return true;
         }
         return false;
+    }
+
+    public boolean isRecording() {
+        return this.playTime > 0 && !this.getStandUserSelf().roundabout$getUniqueStandModeToggle();
     }
 
 
@@ -1465,7 +1493,7 @@ public class PowersAnubis extends NewDashPreset {
         return super.getSoundFromByte(soundChoice);
     }
 
-    List<Pair<List<Byte>,Integer>> visualValues = new ArrayList<>();
+    public List<Pair<List<Byte>,Integer>> visualValues = new ArrayList<>();
     AnubisMemory lastMemory = null;
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
@@ -1546,8 +1574,9 @@ public class PowersAnubis extends NewDashPreset {
                 }
             }
         }
-        if (canPogo && this.getAttackTimeDuring() == -1 && renderingSomething) {
-            context.blit(StandIcons.JOJO_ICONS,k,j,193,60,15,6);
+        if (this.getAttackTimeDuring() == -1 && renderingSomething) {
+          //  int h = 7 - ((int) (7 * ( (float)pogoTime/30.0F )) );
+            context.blit(StandIcons.JOJO_ICONS,k,j,193,60,15,7);
         }
 
 
@@ -1580,12 +1609,12 @@ public class PowersAnubis extends NewDashPreset {
                 case AnubisMoment.ABILITY_3 -> 12;
                 case AnubisMoment.ATTACK -> 13;
                 case AnubisMoment.INTERACT -> 14;
-                default -> 11;
+                default -> 90;
             };
             if (moment > 20 && moment < 30) {
-                xIcon = 7 * (10 + moment - 20);
+                xIcon = 1 + 7 * (14 + (moment - 20));
             }
-            context.blit(StandIcons.ANUBIS_MEMORY, xoff, Offset, xIcon, 79, 7, 7);
+            context.blit(StandIcons.ANUBIS_MEMORY, xoff, Offset, xIcon, 79, 7, 8);
             xoff += 8;
         }
         if (moments.length == 0) {xoff +=8;}

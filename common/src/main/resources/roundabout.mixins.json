@@ -324,7 +324,7 @@
     "stand_users.PowersMultiPlayerGameMode",
     "star_platinum.ScopeGameRenderer",
     "star_platinum.StarPlatinumLightTexture",
-    "star_platinum.StarPlatinumMouseHandler",
+    "star_platinum.MouseHandlerMixin",
     "time_stop.DayInterpolationClientLevelData",
     "time_stop.TimeStopBannerRenderer",
     "time_stop.TimeStopBlockEntityClient",
