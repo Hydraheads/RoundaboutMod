@@ -2346,6 +2346,10 @@ public class MainUtil {
             if (player != null) {
                 ((StandUser)player).roundabout$getStandPowers().serverQueried();
             }
+        } else if (context == PacketDataIndex.QUERY_STAND_UPDATE_2) {
+            if (player != null) {
+                ((StandUser)player).roundabout$getStandPowers().serverQueried2();
+            }
         }
     }
 
@@ -2542,12 +2546,25 @@ public class MainUtil {
             }
         } else if (context == PacketDataIndex.INT_GRAVITY_FLIP){
             StandPowers powers = ((StandUser)player).roundabout$getStandPowers();
-            if (powers instanceof PowersWalkingHeart pw && pw.hasExtendedHeelsForWalking()){
-                Direction cd = MainUtil.getDirectionFromInt(data);
-                ((IGravityEntity) player).roundabout$setGravityDirection(cd);
+            Direction cd = MainUtil.getDirectionFromInt(data);
+            ((IGravityEntity) player).roundabout$setGravityDirection(cd);
+            if (powers instanceof PowersWalkingHeart pw){
                 pw.setHeelDirection(cd);
                 pw.justFlippedTicks = 5;
             }
+        } else if (context == PacketDataIndex.INT_GRAVITY_FLIP_2){
+            StandPowers powers = ((StandUser)player).roundabout$getStandPowers();
+            Direction cd = MainUtil.getDirectionFromInt(data);
+            if (powers instanceof PowersWalkingHeart pw){
+                if (!player.level().isClientSide()) {
+                    player.level().playSound(null, player.blockPosition(), ModSounds.WALL_LATCH_EVENT, SoundSource.PLAYERS, 1F, 1f);
+
+                }
+                pw.toggleSpikes(true);
+                pw.setHeelDirection(cd);
+                pw.justFlippedTicks = 7;
+            }
+            ((IGravityEntity) player).roundabout$setGravityDirection(cd);
         }
     }
     public static void addItem(Player player, ItemStack stack){

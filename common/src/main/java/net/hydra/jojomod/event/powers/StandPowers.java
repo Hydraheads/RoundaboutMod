@@ -2350,6 +2350,9 @@ public class StandPowers extends AbilityScapeBasis {
     //Stands sending simple message
     public void serverQueried(){
     }
+    public void serverQueried2(){
+    }
+
 
     //Stands sending simple message
     public void clientIntUpdated(int integer){

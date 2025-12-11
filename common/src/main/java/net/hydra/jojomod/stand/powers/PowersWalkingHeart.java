@@ -30,6 +30,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.PacketUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -208,8 +209,9 @@ public class PowersWalkingHeart extends NewDashPreset {
 
     public void doWallLatchClient(){
         if (!this.onCooldown(PowerIndex.SKILL_3) && !onCooldown(PowerIndex.SKILL_2)) {
-            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
-            tryPowerPacket(PowerIndex.POWER_3);
+            if (canLatchOntoWall() && canWallWalkConfig()) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+            }
         }
     }
 
@@ -361,16 +363,16 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public void wallLatch(){
-        if (canLatchOntoWall() && canWallWalkConfig()){
             this.setCooldown(PowerIndex.SKILL_3, 10);
-            if (!this.self.level().isClientSide()) {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.WALL_LATCH_EVENT, SoundSource.PLAYERS, 1F, 1f);
-                toggleSpikes(true);
-                Direction gd = RotationUtil.getRealFacingDirection2(this.self);
-                setHeelDirection(gd);
-                ((IGravityEntity) this.self).roundabout$setGravityDirection(gd);
-                justFlippedTicks = 7;
-            }
+            toggleSpikes(true);
+            Direction gd = RotationUtil.getRealFacingDirection2(this.self);
+            setHeelDirection(gd);
+            ((IGravityEntity) this.self).roundabout$setGravityDirection(gd);
+            justFlippedTicks = 7;
+        if (self.level().isClientSide()){
+            C2SPacketUtil.intToServerPacket(
+                    PacketDataIndex.INT_GRAVITY_FLIP_2,MainUtil.getIntFromDirection(gd)
+            );
         }
     }
 
@@ -932,6 +934,11 @@ public class PowersWalkingHeart extends NewDashPreset {
                     cutCorners);
         }
     }
+    public void serverQueried2(){
+        if (self instanceof ServerPlayer pl) {
+            toggleSpikes(false);
+        }
+    }
 
     public void serverSetCutCorners(){
         if (canCutCorners()){
@@ -1014,10 +1021,15 @@ public class PowersWalkingHeart extends NewDashPreset {
                     }
                 }
             }
-        } else {
 
-            if (self.isSwimming())
+
+
+            if (self.isSwimming()) {
                 toggleSpikes(false);
+                C2SPacketUtil.trySingleBytePacket(
+                        PacketDataIndex.QUERY_STAND_UPDATE_2
+                );
+            }
             if (inCombatMode() && isBlockedByStone()){
                 switchModes();
             }
@@ -1027,7 +1039,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                     justFlippedTicks--;
                 } else {
                     if (self.onGround() && MainUtil.isBlockWalkableSimplified(self.getBlockStateOn())
-                    && isOnValidBlock){
+                            && isOnValidBlock){
                         mercyTicks = 5;
                         lastGroundPosition = self.position();
                     } else {
@@ -1049,6 +1061,9 @@ public class PowersWalkingHeart extends NewDashPreset {
                                     ((IGravityEntity) this.self).roundabout$setGravityDirection(cutDirection);
                                     setHeelDirection(cutDirection);
                                     justFlippedTicks = 5;
+                                    C2SPacketUtil.intToServerPacket(
+                                            PacketDataIndex.INT_GRAVITY_FLIP,MainUtil.getIntFromDirection(heelDirection)
+                                    );
                                 }
                             } else {
                                 mercyTicks = 0;
@@ -1061,8 +1076,15 @@ public class PowersWalkingHeart extends NewDashPreset {
                             grantFallImmunity();
                         }
                         toggleSpikes(false);
+                        C2SPacketUtil.trySingleBytePacket(
+                                PacketDataIndex.QUERY_STAND_UPDATE_2
+                        );
                         ((IGravityEntity) this.self).roundabout$setGravityDirection(heelDirection);
                         setHeelDirection(heelDirection);
+                        justFlippedTicks = 5;
+                        C2SPacketUtil.intToServerPacket(
+                                PacketDataIndex.INT_GRAVITY_FLIP,MainUtil.getIntFromDirection(heelDirection)
+                        );
                     }
                 }
 
@@ -1070,8 +1092,12 @@ public class PowersWalkingHeart extends NewDashPreset {
                 setHeelDirection(Direction.DOWN);
             }
 
+        } else {
+
+
             if (!hasExtendedHeelsForWalking()){
                 hitsSinceAttached = 0;
+                setHeelDirection(Direction.DOWN);
             }
         }
 

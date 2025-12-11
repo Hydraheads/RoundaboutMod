@@ -44,6 +44,7 @@ public class PacketDataIndex {
     public static final byte INT_RELLA_CANCEL = 13;
     public static final byte INT_CURRENT_ITEM = 14;
     public static final byte INT_GRAVITY_FLIP = 15;
+    public static final byte INT_GRAVITY_FLIP_2 = 16;
 
     /**Single Byte packets*/
     public static final byte SINGLE_BYTE_GLAIVE_START_SOUND = 1;
@@ -65,7 +66,7 @@ public class PacketDataIndex {
     public static final byte SINGLE_BYTE_SKIN_RIGHT_SEALED = 31;
     public static final byte END_BLOOD_SPEED = 32;
     public static final byte QUERY_STAND_UPDATE = 33;
-    public static final byte QUERY_STAND_UPDATE_2 = 33;
+    public static final byte QUERY_STAND_UPDATE_2 = 34;
 
     /**Byte packets*/
     public static final byte BYTE_CHANGE_MORPH = 6;
