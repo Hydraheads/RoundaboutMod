@@ -2349,6 +2349,35 @@ public class MainUtil {
         }
     }
 
+    public static Direction getDirectionFromInt(int integer){
+        if (integer == 0)
+            return Direction.UP;
+        if (integer == 1)
+            return Direction.DOWN;
+        if (integer == 2)
+            return Direction.NORTH;
+        if (integer == 3)
+            return Direction.SOUTH;
+        if (integer == 4)
+            return Direction.EAST;
+
+            return Direction.WEST;
+    }
+    public static int getIntFromDirection(Direction dir){
+        if (dir == Direction.UP)
+            return 0;
+        if (dir == Direction.DOWN)
+            return 1;
+        if (dir == Direction.NORTH)
+            return 2;
+        if (dir == Direction.SOUTH)
+            return 3;
+        if (dir == Direction.EAST)
+            return 4;
+
+        return 5;
+    }
+
     public static boolean getIsGamemodeApproriateForGrief(Entity Li){
         if (Li != null && !Li.level().isClientSide()) {
             if ((!(Li instanceof Player) || (((ServerPlayer) Li).gameMode.getGameModeForPlayer() != GameType.SPECTATOR
@@ -2510,6 +2539,14 @@ public class MainUtil {
             Entity target = player.level().getEntity(data);
             if (target instanceof Aesthetician aes){
                 aes.removePlayerFromList(player);
+            }
+        } else if (context == PacketDataIndex.INT_GRAVITY_FLIP){
+            StandPowers powers = ((StandUser)player).roundabout$getStandPowers();
+            if (powers instanceof PowersWalkingHeart pw && pw.hasExtendedHeelsForWalking()){
+                Direction cd = MainUtil.getDirectionFromInt(data);
+                ((IGravityEntity) player).roundabout$setGravityDirection(cd);
+                pw.setHeelDirection(cd);
+                pw.justFlippedTicks = 5;
             }
         }
     }
