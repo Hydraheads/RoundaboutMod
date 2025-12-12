@@ -1995,10 +1995,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             } else if ($$0 == InteractionHand.OFF_HAND) {
                 stack = this.getItemBySlot(EquipmentSlot.OFFHAND);
             }
-            if (stack.isEdible() || stack.getItem() instanceof HarpoonItem || stack.getItem() instanceof TridentItem
-                    || stack.getItem() instanceof KnifeItem){
-                cir.setReturnValue(stack);
-                return;
+            StandPowers SP = this.roundabout$getStandPowers();
+            if (SP != null) {
+                if (SP.canCombatModeUse(stack)) {
+                    cir.setReturnValue(stack);
+                    return;
+                }
             }
             cir.setReturnValue(ItemStack.EMPTY);
         }
@@ -2592,15 +2594,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
-        if (this.roundabout$Powers == null) {
             ItemStack StandDisc = this.roundabout$getStandDisc();
             if (!StandDisc.isEmpty() && StandDisc.getItem() instanceof StandDiscItem SD){
-                SD.generateStandPowers((LivingEntity)(Object)this);
+                if (this.roundabout$Powers == null || !SD.standPowers.getClass().equals(this.roundabout$Powers.getClass())) {
+                    SD.generateStandPowers((LivingEntity) (Object) this);
+                }
             } else {
-
-                this.roundabout$Powers = new StandPowers(roundabout$User);
+                if (this.roundabout$Powers == null) {
+                    this.roundabout$Powers = new StandPowers(roundabout$User);
+                }
             }
-        }
         return this.roundabout$Powers;
     }
 

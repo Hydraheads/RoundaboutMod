@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -29,6 +30,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.PacketUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -48,7 +50,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -204,8 +209,9 @@ public class PowersWalkingHeart extends NewDashPreset {
 
     public void doWallLatchClient(){
         if (!this.onCooldown(PowerIndex.SKILL_3) && !onCooldown(PowerIndex.SKILL_2)) {
-            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
-            tryPowerPacket(PowerIndex.POWER_3);
+            if (canLatchOntoWall() && canWallWalkConfig()) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+            }
         }
     }
 
@@ -357,16 +363,16 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public void wallLatch(){
-        if (canLatchOntoWall() && canWallWalkConfig()){
             this.setCooldown(PowerIndex.SKILL_3, 10);
-            if (!this.self.level().isClientSide()) {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.WALL_LATCH_EVENT, SoundSource.PLAYERS, 1F, 1f);
-                toggleSpikes(true);
-                Direction gd = RotationUtil.getRealFacingDirection2(this.self);
-                setHeelDirection(gd);
-                ((IGravityEntity) this.self).roundabout$setGravityDirection(gd);
-                justFlippedTicks = 7;
-            }
+            toggleSpikes(true);
+            Direction gd = RotationUtil.getRealFacingDirection2(this.self);
+            setHeelDirection(gd);
+            ((IGravityEntity) this.self).roundabout$setGravityDirection(gd);
+            justFlippedTicks = 7;
+        if (self.level().isClientSide()){
+            C2SPacketUtil.intToServerPacket(
+                    PacketDataIndex.INT_GRAVITY_FLIP_2,MainUtil.getIntFromDirection(gd)
+            );
         }
     }
 
@@ -835,7 +841,7 @@ public class PowersWalkingHeart extends NewDashPreset {
         );
     }
 
-    public boolean canCut(){
+    public boolean canCutX(){
 
         Vec3 mpos = this.self.getPosition(1F);
         if (tryCutEast(mpos)){
@@ -861,6 +867,64 @@ public class PowersWalkingHeart extends NewDashPreset {
         }
         return true;
     }
+    record DirDist(Direction dir, float dist) {}
+    public boolean canCut(){
+
+        Vec3 mpos = this.self.getPosition(1F);
+
+        float northTest = -1*-1*(float) (lastGroundPosition.z - mpos.z);
+        float southTest = -1*(float) (lastGroundPosition.z - mpos.z);
+        float eastTest = -1*(float) (lastGroundPosition.x - mpos.x);
+        float westTest =  -1*-1*(float) (lastGroundPosition.x - mpos.x);
+        float upTest = -1*(float) (lastGroundPosition.y - mpos.y);
+        float downTest = -1*-1*(float) (lastGroundPosition.y - mpos.y);
+        List<DirDist> tests = List.of(
+                new DirDist(Direction.NORTH, northTest),
+                new DirDist(Direction.SOUTH, southTest),
+                new DirDist(Direction.EAST,  eastTest),
+                new DirDist(Direction.WEST,  westTest),
+                new DirDist(Direction.UP,    upTest),
+                new DirDist(Direction.DOWN,  downTest)
+        );
+
+        List<DirDist> ordered = new ArrayList<>(tests);
+        ordered.sort(Comparator.comparing(d -> d.dist()));
+
+        for (DirDist test : ordered) {
+            boolean success = switch (test.dir()) {
+                case EAST  -> tryCutEast(mpos);
+                case WEST  -> tryCutWest(mpos);
+                case NORTH -> tryCutNorth(mpos);
+                case SOUTH -> tryCutSouth(mpos);
+                case UP    -> tryCutUp(mpos);
+                case DOWN  -> tryCutDown(mpos);
+            };
+
+            if (success) {
+                cutDirection = test.dir();
+                if (cutDirection == Direction.EAST)
+                    if (tryCutWest(mpos))
+                        return false;
+                if (cutDirection == Direction.WEST)
+                    if (tryCutEast(mpos))
+                        return false;
+                if (cutDirection == Direction.NORTH)
+                    if (tryCutSouth(mpos))
+                        return false;
+                if (cutDirection == Direction.SOUTH)
+                    if (tryCutNorth(mpos))
+                        return false;
+                if (cutDirection == Direction.UP)
+                    if (tryCutDown(mpos))
+                        return false;
+                if (cutDirection == Direction.DOWN)
+                    if (tryCutUp(mpos))
+                        return false;
+                return true;
+            }
+        }
+        return false;
+    }
     @Override
     //Stands sending simple message
     public void serverQueried(){
@@ -868,6 +932,11 @@ public class PowersWalkingHeart extends NewDashPreset {
         if (self instanceof ServerPlayer pl) {
             S2CPacketUtil.sendGenericIntToClientPacket(pl, PacketDataIndex.S2C_INT_STAND_MODE,
                     cutCorners);
+        }
+    }
+    public void serverQueried2(){
+        if (self instanceof ServerPlayer pl) {
+            toggleSpikes(false);
         }
     }
 
@@ -895,13 +964,37 @@ public class PowersWalkingHeart extends NewDashPreset {
         cutCorners = integer;
     }
 
+    public Vec3 lastGroundPosition = Vec3.ZERO;
+
     public int lastTick = 0;
     public void tickPower() {
         if (lastTick != self.tickCount){
             setHeelExtension(getHeelExtension()-1);
             lastTick = self.tickCount;
         }
+
+
+
         if (this.self.level().isClientSide()) {
+
+            Vec3 newVec = new Vec3(0,-0.2,0);
+            Vec3 newVec2 = new Vec3(0,-1.0,0);
+            Vec3 newVec4 = new Vec3(0,-0.5,0);
+            Vec3 newVec5 = new Vec3(0,-1.1,0);
+
+            newVec = RotationUtil.vecPlayerToWorld(newVec,((IGravityEntity)self).roundabout$getGravityDirection());
+            BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
+            newVec2 = RotationUtil.vecPlayerToWorld(newVec2,((IGravityEntity)self).roundabout$getGravityDirection());
+            BlockPos pos2 = BlockPos.containing(self.getPosition(1).add(newVec2));
+            newVec4 = RotationUtil.vecPlayerToWorld(newVec4,((IGravityEntity)self).roundabout$getGravityDirection());
+            BlockPos pos4 = BlockPos.containing(self.getPosition(1).add(newVec4));
+            newVec5 = RotationUtil.vecPlayerToWorld(newVec5,((IGravityEntity)self).roundabout$getGravityDirection());
+            BlockPos pos5 = BlockPos.containing(self.getPosition(1).add(newVec5));
+
+            BlockState state1 = self.level().getBlockState(pos);
+            BlockState state4 = self.level().getBlockState(pos4);
+            boolean isOnValidBlock =  MainUtil.isBlockWalkableSimplified(state1)
+                    && MainUtil.isBlockWalkableSimplified(state4);
 
             if (cutCorners == 0 && self instanceof Player){
                 cutCorners = 1;
@@ -924,14 +1017,19 @@ public class PowersWalkingHeart extends NewDashPreset {
             if (hasExtendedHeelsForWalking() && !getStandUserSelf().rdbt$getJumping()){
                 if (!self.onGround()) {
                     if (this.self.getDeltaMovement().y < 0){
-                        this.self.setDeltaMovement(this.self.getDeltaMovement().add(0,-0.14,0));
+                            this.self.setDeltaMovement(this.self.getDeltaMovement().add(0, -0.14, 0));
                     }
                 }
             }
-        } else {
 
-            if (self.isSwimming())
+
+
+            if (self.isSwimming()) {
                 toggleSpikes(false);
+                C2SPacketUtil.trySingleBytePacket(
+                        PacketDataIndex.QUERY_STAND_UPDATE_2
+                );
+            }
             if (inCombatMode() && isBlockedByStone()){
                 switchModes();
             }
@@ -940,28 +1038,10 @@ public class PowersWalkingHeart extends NewDashPreset {
                 if (justFlippedTicks > 0){
                     justFlippedTicks--;
                 } else {
-                    Vec3 newVec = new Vec3(0,-0.2,0);
-                    Vec3 newVec2 = new Vec3(0,-1.0,0);
-                    Vec3 newVec4 = new Vec3(0,-0.5,0);
-                    Vec3 newVec5 = new Vec3(0,-1.1,0);
-
-                    newVec = RotationUtil.vecPlayerToWorld(newVec,((IGravityEntity)self).roundabout$getGravityDirection());
-                    BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
-                    newVec2 = RotationUtil.vecPlayerToWorld(newVec2,((IGravityEntity)self).roundabout$getGravityDirection());
-                    BlockPos pos2 = BlockPos.containing(self.getPosition(1).add(newVec2));
-                    newVec4 = RotationUtil.vecPlayerToWorld(newVec4,((IGravityEntity)self).roundabout$getGravityDirection());
-                    BlockPos pos4 = BlockPos.containing(self.getPosition(1).add(newVec4));
-                    newVec5 = RotationUtil.vecPlayerToWorld(newVec5,((IGravityEntity)self).roundabout$getGravityDirection());
-                    BlockPos pos5 = BlockPos.containing(self.getPosition(1).add(newVec5));
-
-                    BlockState state1 = self.level().getBlockState(pos);
-                    BlockState state4 = self.level().getBlockState(pos4);
-                    boolean isOnValidBlock =  MainUtil.isBlockWalkableSimplified(state1)
-                            && MainUtil.isBlockWalkableSimplified(state4);
-
                     if (self.onGround() && MainUtil.isBlockWalkableSimplified(self.getBlockStateOn())
-                    && isOnValidBlock){
+                            && isOnValidBlock){
                         mercyTicks = 5;
+                        lastGroundPosition = self.position();
                     } else {
                         if (
                                 (
@@ -981,6 +1061,9 @@ public class PowersWalkingHeart extends NewDashPreset {
                                     ((IGravityEntity) this.self).roundabout$setGravityDirection(cutDirection);
                                     setHeelDirection(cutDirection);
                                     justFlippedTicks = 5;
+                                    C2SPacketUtil.intToServerPacket(
+                                            PacketDataIndex.INT_GRAVITY_FLIP,MainUtil.getIntFromDirection(heelDirection)
+                                    );
                                 }
                             } else {
                                 mercyTicks = 0;
@@ -993,8 +1076,15 @@ public class PowersWalkingHeart extends NewDashPreset {
                             grantFallImmunity();
                         }
                         toggleSpikes(false);
+                        C2SPacketUtil.trySingleBytePacket(
+                                PacketDataIndex.QUERY_STAND_UPDATE_2
+                        );
                         ((IGravityEntity) this.self).roundabout$setGravityDirection(heelDirection);
                         setHeelDirection(heelDirection);
+                        justFlippedTicks = 5;
+                        C2SPacketUtil.intToServerPacket(
+                                PacketDataIndex.INT_GRAVITY_FLIP,MainUtil.getIntFromDirection(heelDirection)
+                        );
                     }
                 }
 
@@ -1002,8 +1092,12 @@ public class PowersWalkingHeart extends NewDashPreset {
                 setHeelDirection(Direction.DOWN);
             }
 
+        } else {
+
+
             if (!hasExtendedHeelsForWalking()){
                 hitsSinceAttached = 0;
+                setHeelDirection(Direction.DOWN);
             }
         }
 

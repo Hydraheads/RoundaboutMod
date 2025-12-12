@@ -30,6 +30,7 @@ public class EditValueScreen extends Screen {
     @Override
     protected void init() {
         this.inputBox = new EditBox(this.font, this.width / 2 - 100, this.height / 2 - 10, 200, 20, Component.translatable("config.roundabout.major.value"));
+        this.inputBox.setMaxLength(256);
         try {
             this.inputBox.setValue(String.valueOf(field.get(instance)));
         } catch (IllegalAccessException e) {

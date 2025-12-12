@@ -399,7 +399,7 @@ public class PowersGreenDay extends NewPunchingStand {
 
     public void SpawnLegs(){
         SeperatedLegsEntity SLE = ModEntities.SEPERATED_LEGS.create(this.self.level());
-        if(SLE instanceof  SeperatedLegsEntity) {
+        if(SLE != null) {
             SLE.setUser(this.self);
             SLE.setXRot(this.self.getXRot());
             SLE.setYRot(this.self.getYRot());

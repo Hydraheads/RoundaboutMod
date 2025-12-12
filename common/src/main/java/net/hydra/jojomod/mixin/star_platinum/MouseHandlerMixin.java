@@ -1,19 +1,72 @@
 package net.hydra.jojomod.mixin.star_platinum;
 
 import com.mojang.blaze3d.Blaze3D;
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.event.index.AnubisMoment;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.util.SmoothDouble;
+import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import oshi.util.tuples.Pair;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Mixin(MouseHandler.class)
-public class StarPlatinumMouseHandler {
+public class MouseHandlerMixin {
+
+
+    @Inject(method = "onMove",at = @At(value = "HEAD"))
+    public void roundabout$anubisRecordMouse(long $$0, double $$1, double $$2, CallbackInfo ci) {
+        Player p = this.minecraft.player;
+        if (p != null) {
+            StandUser SU = (StandUser) p;
+            if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+                if (PA.isRecording()) {
+
+            //        Roundabout.LOGGER.info("{}, {}", $$1, $$2);
+                }
+            }
+        }
+    }
+
+    /** anubis saves mouse scroll movements */
+    @Inject(method = "onScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Inventory;swapPaint(D)V",shift = At.Shift.AFTER))
+    public void roundabout$anubisSaveScroll(long $$0, double $$1, double $$2, CallbackInfo ci) {
+        Player p = this.minecraft.player;
+        StandUser SU = (StandUser) p;
+        int s = this.minecraft.player.getInventory().selected;
+        if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+            if (PA.isRecording()) {
+                List<AnubisMoment> moments = PA.getUsedMemory().moments;
+
+                int lastTime = PowersAnubis.MaxPlayTime-PA.playTime;
+
+                moments.add(new AnubisMoment(AnubisMoment.HOTBAR[s], lastTime-1,true ));
+                moments.add(new AnubisMoment(AnubisMoment.HOTBAR[s], lastTime,false ));
+                PA.getUsedMemory().moments = moments;
+
+                Pair<List<Byte>,Integer> lastVisual = PA.visualValues.get(PA.visualValues.size()-1);
+                if (lastVisual != null) {
+                    Roundabout.LOGGER.info(lastVisual.toString());
+                    List<Byte> newList = new ArrayList<>();
+                    newList.addAll(lastVisual.getA());
+                    newList.add(AnubisMoment.HOTBAR[s]);
+                    PA.visualValues.add(new Pair<>(newList,0) );
+                }
+
+            }
+        }
+    }
 
     /**Star Platinum makes the mouse sensitivity go down so you move your view slower, this is because
      * it is hard to keep up with full speed, and so the community requested this feature.
@@ -84,6 +137,7 @@ public class StarPlatinumMouseHandler {
                 }
             }
         }
+
     }
 
 

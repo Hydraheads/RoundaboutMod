@@ -187,6 +187,8 @@ public class VampireFate extends VampiricFate {
         if (self.isCrouching() && rechargeJump){
             return 4;
         } else {
+            if (jumpedOffWall)
+                return 0;
             return 2;
         }
     }
