@@ -2565,6 +2565,37 @@ public class MainUtil {
                 pw.justFlippedTicks = 7;
             }
             ((IGravityEntity) player).roundabout$setGravityDirection(cd);
+        } else if (context == PacketDataIndex.INT_GRAVITY_FLIP_3){
+            FatePowers powers = ((IFatePlayer)player).rdbt$getFatePowers();
+            Direction cd = MainUtil.getDirectionFromInt(data);
+            if (powers instanceof VampiricFate vf) {
+                vf.canLatchOntoWall();
+                if (vf.saveState != null) {
+                    player.level().playSound(
+                            null,
+                            player.blockPosition(),
+                            vf.saveState.getSoundType().getBreakSound(),
+                            SoundSource.PLAYERS,
+                            1.0F,
+                            0.9F);
+                    vf.blockBreakParticles(vf.saveState.getBlock(),
+                            new Vec3(player.getX(),
+                                    player.getY(),
+                                    player.getZ()));
+                }
+                vf.setWallWalkDirection(cd);
+                vf.justFlippedTicks = 7;
+                player.level().playSound(null, player.blockPosition(), ModSounds.VAMPIRE_WALL_GRIP_EVENT, SoundSource.PLAYERS, 2F, 1f);
+            }
+            ((IGravityEntity) player).roundabout$setGravityDirection(cd);
+        } else if (context == PacketDataIndex.INT_GRAVITY_FLIP_4){
+            FatePowers powers = ((IFatePlayer)player).rdbt$getFatePowers();
+            Direction cd = MainUtil.getDirectionFromInt(data);
+            if (powers instanceof VampiricFate vf) {
+                vf.setWallWalkDirection(cd);
+                vf.justFlippedTicks = 5;
+            }
+            ((IGravityEntity) player).roundabout$setGravityDirection(cd);
         }
     }
     public static void addItem(Player player, ItemStack stack){

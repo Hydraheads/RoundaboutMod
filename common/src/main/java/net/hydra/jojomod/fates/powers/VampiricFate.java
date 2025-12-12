@@ -65,30 +65,18 @@ public class VampiricFate extends FatePowers {
 
     public float walkDistLast = 0;
     public void wallLatch(){
-        if (canLatchOntoWall() && canWallWalkConfig()){
-            this.setCooldown(PowerIndex.FATE_3, 10);
-            if (!this.self.level().isClientSide()) {
+        this.setCooldown(PowerIndex.FATE_3, 10);
                 //if (!isOnWrongAxis())
-                if (saveState != null){
-                    this.self.level().playSound(
-                            null,
-                            this.self.blockPosition(),
-                            saveState.getSoundType().getBreakSound(),
-                            SoundSource.PLAYERS,
-                            1.0F,
-                            0.9F);
-                    blockBreakParticles(saveState.getBlock(),
-                            new Vec3(self.getX(),
-                                    self.getY(),
-                                    self.getZ()));
-                }
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.VAMPIRE_WALL_GRIP_EVENT, SoundSource.PLAYERS, 2F, 1f);
                 //toggleSpikes(true);
                 Direction gd = RotationUtil.getRealFacingDirection2(this.self);
                 setWallWalkDirection(gd);
                 ((IGravityEntity) this.self).roundabout$setGravityDirection(gd);
                 justFlippedTicks = 7;
-            }
+        jumpedOffWall = true;
+        if (this.self.level().isClientSide()) {
+            C2SPacketUtil.intToServerPacket(
+                    PacketDataIndex.INT_GRAVITY_FLIP_3,MainUtil.getIntFromDirection(gd)
+            );
         }
     }
 
@@ -115,6 +103,7 @@ public class VampiricFate extends FatePowers {
         }
     }
 
+    public boolean jumpedOffWall = false;
 
 public int speedActivated = 0;
     public boolean isFast(){
@@ -136,6 +125,31 @@ public int speedActivated = 0;
 
 
         if (this.self.level().isClientSide()) {
+
+            if (!isPlantedInWall() && self.onGround()){
+                jumpedOffWall = false;
+            }
+
+            Vec3 newVec = new Vec3(0,-0.2,0);
+            Vec3 newVec2 = new Vec3(0,-1.0,0);
+            Vec3 newVec4 = new Vec3(0,-0.5,0);
+            Vec3 newVec5 = new Vec3(0,-1.1,0);
+
+            newVec = RotationUtil.vecPlayerToWorld(newVec,((IGravityEntity)self).roundabout$getGravityDirection());
+            BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
+            newVec2 = RotationUtil.vecPlayerToWorld(newVec2,((IGravityEntity)self).roundabout$getGravityDirection());
+            BlockPos pos2 = BlockPos.containing(self.getPosition(1).add(newVec2));
+            newVec4 = RotationUtil.vecPlayerToWorld(newVec4,((IGravityEntity)self).roundabout$getGravityDirection());
+            BlockPos pos4 = BlockPos.containing(self.getPosition(1).add(newVec4));
+            newVec5 = RotationUtil.vecPlayerToWorld(newVec5,((IGravityEntity)self).roundabout$getGravityDirection());
+            BlockPos pos5 = BlockPos.containing(self.getPosition(1).add(newVec5));
+
+            BlockState state1 = self.level().getBlockState(pos);
+            BlockState state2 = self.level().getBlockState(pos2);
+            BlockState state4 = self.level().getBlockState(pos4);
+            BlockState state5 = self.level().getBlockState(pos5);
+            boolean isOnValidBlock =  MainUtil.isBlockWalkableSimplified(state1)
+                    && MainUtil.isBlockWalkableSimplified(state4);
 
             if (isVisionOn()){
                 if (dimTickEye > 0) {
@@ -164,40 +178,19 @@ public int speedActivated = 0;
                     }
                 }
             }
-        } else {
-
-            if (hasStandActive(self) && getActivePower() == SUPER_HEARING){
-                xTryPower(PowerIndex.NONE,true);
-            }
 
             if (self.isSwimming()) {
                 setWallWalkDirection(getIntendedDirection());
+                ((IGravityEntity) this.self).roundabout$setGravityDirection(getIntendedDirection());
+                C2SPacketUtil.intToServerPacket(
+                        PacketDataIndex.INT_GRAVITY_FLIP_4,MainUtil.getIntFromDirection(getIntendedDirection())
+                );
             }
 
             if (isPlantedInWall()){
                 if (justFlippedTicks > 0){
                     justFlippedTicks--;
                 } else {
-                    Vec3 newVec = new Vec3(0,-0.2,0);
-                    Vec3 newVec2 = new Vec3(0,-1.0,0);
-                    Vec3 newVec4 = new Vec3(0,-0.5,0);
-                    Vec3 newVec5 = new Vec3(0,-1.1,0);
-
-                    newVec = RotationUtil.vecPlayerToWorld(newVec,((IGravityEntity)self).roundabout$getGravityDirection());
-                    BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
-                    newVec2 = RotationUtil.vecPlayerToWorld(newVec2,((IGravityEntity)self).roundabout$getGravityDirection());
-                    BlockPos pos2 = BlockPos.containing(self.getPosition(1).add(newVec2));
-                    newVec4 = RotationUtil.vecPlayerToWorld(newVec4,((IGravityEntity)self).roundabout$getGravityDirection());
-                    BlockPos pos4 = BlockPos.containing(self.getPosition(1).add(newVec4));
-                    newVec5 = RotationUtil.vecPlayerToWorld(newVec5,((IGravityEntity)self).roundabout$getGravityDirection());
-                    BlockPos pos5 = BlockPos.containing(self.getPosition(1).add(newVec5));
-
-                    BlockState state1 = self.level().getBlockState(pos);
-                    BlockState state2 = self.level().getBlockState(pos2);
-                    BlockState state4 = self.level().getBlockState(pos4);
-                    BlockState state5 = self.level().getBlockState(pos5);
-                    boolean isOnValidBlock =  MainUtil.isBlockWalkableSimplified(state1)
-                            && MainUtil.isBlockWalkableSimplified(state4);
 
                     if (self.onGround() && MainUtil.isBlockWalkableSimplified(self.getBlockStateOn())
                             && isOnValidBlock){
@@ -219,11 +212,19 @@ public int speedActivated = 0;
                         wallWalkDirection = getIntendedDirection();
                         ((IGravityEntity) this.self).roundabout$setGravityDirection(wallWalkDirection);
                         setWallWalkDirection(wallWalkDirection);
+                        C2SPacketUtil.intToServerPacket(
+                                PacketDataIndex.INT_GRAVITY_FLIP_4,MainUtil.getIntFromDirection(wallWalkDirection)
+                        );
                     }
                 }
 
             } else {
                 setWallWalkDirection(getIntendedDirection());
+            }
+        } else {
+
+            if (hasStandActive(self) && getActivePower() == SUPER_HEARING){
+                xTryPower(PowerIndex.NONE,true);
             }
         }
     }
@@ -480,12 +481,13 @@ public int speedActivated = 0;
     }
     public void doWallLatchClient(){
         if (!this.onCooldown(PowerIndex.FATE_3)) {
+            if (canLatchOntoWall() && canWallWalkConfig()){
             //test
-            if (isHearing()){
-                stopHearingClient();
+                if (isHearing()){
+                    stopHearingClient();
+                }
+                tryPower(WALL_WALK, true);
             }
-            tryPower(WALL_WALK, true);
-            tryPowerPacket(WALL_WALK);
         }
     }
 
