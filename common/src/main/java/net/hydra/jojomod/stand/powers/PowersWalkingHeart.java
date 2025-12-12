@@ -232,6 +232,9 @@ public class PowersWalkingHeart extends NewDashPreset {
         if (onCooldown(PowerIndex.SKILL_2) || self.isSwimming())
             return false;
 
+        if (MainUtil.isStandingInBlock(self))
+            return false;
+
         if (forceBlock())
             return false;
 
