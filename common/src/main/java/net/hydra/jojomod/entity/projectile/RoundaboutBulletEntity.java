@@ -186,17 +186,18 @@ public class RoundaboutBulletEntity extends AbstractArrow {
         }
 
         if (entity instanceof LivingEntity livingEntity) {
-            if ((livingEntity.hurtTime > 0 || livingEntity.invulnerableTime > 0) && outsideOfTimeStop == 0) {
+
+            if (livingEntity.isInvulnerable()) {
                 return;
-            } else if (livingEntity.isInvulnerable()) {
-                return;
-            } else if (outsideOfTimeStop > 0) {
-                entity.invulnerableTime = 0;
+            }
+
+            if (outsideOfTimeStop > 0) {
+                livingEntity.hurtTime = 0;
+                livingEntity.invulnerableTime = 0;
             }
 
             boolean didDamage;
             float bulletDamage = timeStopShot ? 3.7F : 4.0F;
-
             didDamage = livingEntity.hurt(ModDamageTypes.of(level(), ModDamageTypes.BULLET, this, this.getOwner()), bulletDamage);
 
             if (didDamage) {

@@ -41,6 +41,16 @@ public class RegisterBlockEntityWithoutLevelRenderer implements IBlockEntityWith
             }
             ClientUtil.popPoseAndCooperate($$2,19);
         }
+        if ($$0.is(ModItems.SNUBNOSE_REVOLVER)) {
+            ClientUtil.pushPoseAndCooperate($$2,19);
+
+            $$2.scale(1.0F, -1.0F, -1.0F);
+            if (ModItemModels.SNUBNOSE_MODEL != null) {
+                VertexConsumer vertexconsumer1 = ItemRenderer.getFoilBufferDirect($$3, ModItemModels.SNUBNOSE_MODEL.renderType(ModEntities.SNUBNOSE_IN_HAND_TEXTURE), false, $$0.hasFoil());
+                ModItemModels.SNUBNOSE_MODEL.renderToBuffer($$2, vertexconsumer1, $$4, $$5, 1.0F, 1.0F, 1.0F, 1.0F);
+            }
+            ClientUtil.popPoseAndCooperate($$2,19);
+        }
        if ($$0.is(ModItems.ANUBIS_ITEM)) {
             ClientUtil.pushPoseAndCooperate($$2, 18);
 

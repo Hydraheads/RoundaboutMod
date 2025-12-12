@@ -25,7 +25,7 @@ public class FirearmItemRendererMixin {
         if (!stack.isEmpty() && stack.getItem() instanceof FirearmItem) {
 
             if (transformType == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND || transformType == ItemDisplayContext.FIRST_PERSON_LEFT_HAND || transformType == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND || transformType == ItemDisplayContext.THIRD_PERSON_LEFT_HAND) {
-                ci.cancel();
+                //ci.cancel();
             }
         }
     }

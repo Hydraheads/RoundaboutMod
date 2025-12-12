@@ -25,6 +25,7 @@ public abstract class RegisterModelBakery {
     @Inject(method = "<init>", at = @At(value = "TAIL"))
     public void roundabout$addITEMNAME(BlockColors $$0, ProfilerFiller $$1, Map $$2, Map $$3, CallbackInfo ci) {
         this.loadTopLevel(ModItemModels.HARPOON_IN_HAND);
+        this.loadTopLevel(ModItemModels.SNUBNOSE_REVOLVER_IN_HAND);
         this.loadTopLevel(ModItemModels.ANUBIS_IN_HAND);
         this.loadTopLevel(ModItemModels.STAND_BOW);
         this.loadTopLevel(ModItemModels.STAND_BEETLE_BOW);

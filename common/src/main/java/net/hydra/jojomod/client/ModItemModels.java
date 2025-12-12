@@ -4,11 +4,13 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.projectile.BladedBowlerHatModel;
 import net.hydra.jojomod.client.models.projectile.BowlerHatModel;
 import net.hydra.jojomod.client.models.projectile.HarpoonModel;
+import net.hydra.jojomod.client.models.projectile.SnubnoseRevolverModel;
 import net.hydra.jojomod.client.models.stand.AnubisModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 
 public class ModItemModels {
     public static ModelResourceLocation HARPOON_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "harpoon_in_hand", "inventory");
+    public static ModelResourceLocation SNUBNOSE_REVOLVER_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "snubnose_revolver_in_hand", "inventory");
     public static ModelResourceLocation ANUBIS_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "anubis_in_hand", "inventory");
     public static ModelResourceLocation STAND_BOW = new ModelResourceLocation(Roundabout.MOD_ID, "stand_bow_arrow", "inventory");
     public static ModelResourceLocation STAND_BEETLE_BOW = new ModelResourceLocation(Roundabout.MOD_ID, "stand_beetle_bow_arrow", "inventory");
@@ -59,6 +61,7 @@ public class ModItemModels {
             new ModelResourceLocation(Roundabout.MOD_ID, "dread_book", "inventory");
 
     public static HarpoonModel HARPOON_MODEL;
+    public static SnubnoseRevolverModel SNUBNOSE_MODEL;
     public static AnubisModel ANUBIS_MODEL;
 
     public static BowlerHatModel BOWLER_HAT_MODEL;

@@ -1477,49 +1477,6 @@ public class ClientUtil {
                 ModStrayModels.FirstPersonSnubnoseModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
 
                 stack.popPose();
-            } else if (play.getMainHandItem().getItem() instanceof SnubnoseRevolverItem || play.getOffhandItem().getItem() instanceof SnubnoseRevolverItem) {
-                if (play.getUseItem().getItem() instanceof SnubnoseRevolverItem) {
-                    return;
-                }
-
-                stack.pushPose();
-
-                ItemStack mainHand = play.getMainHandItem();
-                ItemStack offHand = play.getOffhandItem();
-                if (play.getMainArm() == HumanoidArm.RIGHT) {
-                    if (mainHand.getItem() instanceof SnubnoseRevolverItem) {
-                        snubnoseRenderCleanupHelper(cameraEnt);
-                        pl.roundabout$getSnubnoseModelIdleLeft().stop();
-                        pl.roundabout$getSnubnoseModelIdle().stop();
-
-                        pl.roundabout$getSnubnoseModelIdle().startIfStopped(cameraEnt.tickCount);
-                        ModStrayModels.FirstPersonSnubnoseModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
-                    } else if (offHand.getItem() instanceof SnubnoseRevolverItem) {
-                        snubnoseRenderCleanupHelper(cameraEnt);
-                        pl.roundabout$getSnubnoseModelIdleLeft().stop();
-                        pl.roundabout$getSnubnoseModelIdle().stop();
-
-                        pl.roundabout$getSnubnoseModelIdleLeft().startIfStopped(cameraEnt.tickCount);
-                        ModStrayModels.FirstPersonSnubnoseModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
-                    }
-                } else if (play.getMainArm() == HumanoidArm.LEFT) {
-                    if (mainHand.getItem() instanceof SnubnoseRevolverItem) {
-                        snubnoseRenderCleanupHelper(cameraEnt);
-                        pl.roundabout$getSnubnoseModelIdleLeft().stop();
-                        pl.roundabout$getSnubnoseModelIdle().stop();
-
-                        pl.roundabout$getSnubnoseModelIdleLeft().startIfStopped(cameraEnt.tickCount);
-                        ModStrayModels.FirstPersonSnubnoseModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
-                    } else if (offHand.getItem() instanceof SnubnoseRevolverItem) {
-                        snubnoseRenderCleanupHelper(cameraEnt);
-                        pl.roundabout$getSnubnoseModelIdleLeft().stop();
-                        pl.roundabout$getSnubnoseModelIdle().stop();
-
-                        pl.roundabout$getSnubnoseModelIdle().startIfStopped(cameraEnt.tickCount);
-                        ModStrayModels.FirstPersonSnubnoseModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
-                    }
-                }
-                stack.popPose();
             } else {
                 snubnoseRenderCleanupHelper(cameraEnt);
             }
