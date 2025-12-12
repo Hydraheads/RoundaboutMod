@@ -1995,10 +1995,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             } else if ($$0 == InteractionHand.OFF_HAND) {
                 stack = this.getItemBySlot(EquipmentSlot.OFFHAND);
             }
-            if (stack.isEdible() || stack.getItem() instanceof HarpoonItem || stack.getItem() instanceof TridentItem
-                    || stack.getItem() instanceof KnifeItem){
-                cir.setReturnValue(stack);
-                return;
+            StandPowers SP = this.roundabout$getStandPowers();
+            if (SP != null) {
+                if (SP.canCombatModeUse(stack)) {
+                    cir.setReturnValue(stack);
+                    return;
+                }
             }
             cir.setReturnValue(ItemStack.EMPTY);
         }

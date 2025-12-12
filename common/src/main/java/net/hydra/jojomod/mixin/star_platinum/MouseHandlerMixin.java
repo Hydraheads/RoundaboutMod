@@ -17,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import oshi.util.tuples.Pair;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,21 @@ import java.util.List;
 public class MouseHandlerMixin {
 
 
-    /** saves mouse scroll movements */
+    @Inject(method = "onMove",at = @At(value = "HEAD"))
+    public void roundabout$anubisRecordMouse(long $$0, double $$1, double $$2, CallbackInfo ci) {
+        Player p = this.minecraft.player;
+        if (p != null) {
+            StandUser SU = (StandUser) p;
+            if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+                if (PA.isRecording()) {
+
+            //        Roundabout.LOGGER.info("{}, {}", $$1, $$2);
+                }
+            }
+        }
+    }
+
+    /** anubis saves mouse scroll movements */
     @Inject(method = "onScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Inventory;swapPaint(D)V",shift = At.Shift.AFTER))
     public void roundabout$anubisSaveScroll(long $$0, double $$1, double $$2, CallbackInfo ci) {
         Player p = this.minecraft.player;

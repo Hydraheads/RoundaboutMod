@@ -37,12 +37,11 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
@@ -52,6 +51,7 @@ import net.minecraft.world.phys.Vec3;
 import oshi.util.tuples.Pair;
 
 import java.util.*;
+import java.util.List;
 
 public class PowersAnubis extends NewDashPreset {
     public PowersAnubis(LivingEntity self) {
@@ -124,9 +124,6 @@ public class PowersAnubis extends NewDashPreset {
             int v = this.getBarrageWindup()-this.getBarrageMinimum();
             float scale = Math.min((this.getAttackTimeDuring()-v)/(float)v,1.0F);
             basis *= 1 - (float) 0.7*scale;
-        }
-        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
-            basis *= 1.5F;
         }
         return super.inputSpeedModifiers(basis);
     }
@@ -217,7 +214,12 @@ public class PowersAnubis extends NewDashPreset {
         this.setCooldown(PowerIndex.SKILL_1_SNEAK,200);
         int radius = 13;
         AABB box = this.getSelf().getBoundingBox().inflate(radius,2,radius);
-        for (Mob M : this.getSelf().level().getNearbyEntities(Mob.class, TargetingConditions.DEFAULT,this.getSelf(),box)) {
+        List<Mob> entities = this.getSelf().level().getNearbyEntities(Mob.class, TargetingConditions.DEFAULT,this.getSelf(),box);
+        entities.removeIf(entity ->  (entity instanceof TamableAnimal TA && TA.isTame()) );
+        entities.removeIf(entity -> entity instanceof Villager);
+        entities.removeIf(entity -> entity instanceof NeutralMob && entity.getTarget() == null);
+        entities.removeIf(entity -> entity instanceof Piglin && entity.getTarget() == null);
+        for (Mob M : entities) {
             M.setTarget(this.getSelf());
             M.setLastHurtByMob(this.getSelf());
         }
@@ -388,6 +390,9 @@ public class PowersAnubis extends NewDashPreset {
                 this.setActivePower(PowerIndex.RANGED_BARRAGE);
                 this.setAttackTime(0);
             }
+            case PowerIndex.BARRAGE_2 -> {
+                BarrageSlash();
+            }
 
         }
         if (isVariant((byte)move)) {
@@ -487,7 +492,7 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     public void tickMemories() {
-        if (this.memories.size() != 8) {
+        if (this.memories.size() != 8 && isClient()) {
             generateMemories(this);
         }
         if (this.playTime > 0 && isClient()) {
@@ -593,13 +598,13 @@ public class PowersAnubis extends NewDashPreset {
     }
 
 
-
-
+    @Override
+    public boolean canAttack() {
+        return super.canAttack() || this.getActivePower() == PowerIndex.SNEAK_MOVEMENT;
+    }
 
     @Override
-    public boolean interceptAttack(){
-        return true;
-    }
+    public boolean interceptAttack(){return true;}
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (keyIsDown) {
@@ -673,14 +678,6 @@ public class PowersAnubis extends NewDashPreset {
             case PowerIndex.SNEAK_ATTACK_CHARGE -> {
                 updatePogoAttack();
             }
-            case PowerIndex.BARRAGE_CHARGE_2 -> {
-                if (this.attackTimeDuring >= this.getKickBarrageWindup()) {
-                    setActivePower(PowerIndex.BARRAGE_2);
-                }
-            }
-            case PowerIndex.BARRAGE_2 -> {
-                BarrageSlash();
-            }
             case PowerIndex.RANGED_BARRAGE -> {
                 if (this.getAttackTime() < quickdrawDelay) {
                     scopeLevel = 1;
@@ -725,8 +722,8 @@ public class PowersAnubis extends NewDashPreset {
                         }
 
                         case PowersAnubis.DOUBLE ->  {
-                            if (this.attackTimeDuring%4 == 0) {
-                                DoubleCut(attackTimeDuring < 8);
+                            if (this.attackTimeDuring%4 == 1) {
+                                DoubleCut(attackTimeDuring < 5);
                             }
                         }
 
@@ -1230,6 +1227,9 @@ public class PowersAnubis extends NewDashPreset {
             tryPower(PowerIndex.BARRAGE);
             tryPowerPacket(PowerIndex.BARRAGE);
             return true;
+        } else if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 && this.getAttackTimeDuring() >= this.getKickBarrageWindup()) {
+            tryPower(PowerIndex.BARRAGE_2);
+            tryPowerPacket(PowerIndex.BARRAGE_2);
         }
         return super.onClickRelease();
     }
@@ -1524,8 +1524,8 @@ public class PowersAnubis extends NewDashPreset {
             int windup = this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 ? this.getKickBarrageWindup() : this.getBarrageWindup();
             int ClashTime = Math.round(( Math.min(attackTimeDuring,windup) / windup) * 15);
             int height = 30;
-            if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE) {
-                if (this.getAttackTimeDuring() > this.getBarrageMinimum()) {
+            if (this.isBarrageCharging()) {
+                if (this.getAttackTimeDuring() > ( (this.getActivePower() == PowerIndex.BARRAGE_CHARGE) ? this.getBarrageWindup() : this.getKickBarrageWindup() ) ) {
                     height -= 6;
                 }
             }
@@ -1574,7 +1574,7 @@ public class PowersAnubis extends NewDashPreset {
                 }
             }
         }
-        if (this.getAttackTimeDuring() == -1 && renderingSomething) {
+        if (this.getAttackTimeDuring() == -1 && renderingSomething && canPogo()) {
           //  int h = 7 - ((int) (7 * ( (float)pogoTime/30.0F )) );
             context.blit(StandIcons.JOJO_ICONS,k,j,193,60,15,7);
         }

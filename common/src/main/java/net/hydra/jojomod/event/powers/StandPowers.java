@@ -17,10 +17,11 @@ import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
-import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
+import net.hydra.jojomod.item.HarpoonItem;
+import net.hydra.jojomod.item.KnifeItem;
 import net.hydra.jojomod.item.MaxStandDiscItem;
-import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
@@ -616,6 +617,18 @@ public class StandPowers extends AbilityScapeBasis {
         return ((this.self.isUsingItem() &&
                 !(this.getActivePower() == PowerIndex.BARRAGE_CLASH)) || this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())));
     }
+
+    /** Items that combat mode can use. NOTE: maybe move to AbilityScapeBasis if needed
+        Note that this doesn't necessarily apply to  rendering items. */
+    public boolean canCombatModeUse(ItemStack stack) {
+        return canCombatModeUse(stack.getItem());
+    }
+    public boolean canCombatModeUse(Item item) {
+        return item.isEdible() || item instanceof HarpoonItem || item instanceof TridentItem
+                || item instanceof KnifeItem;
+    }
+
+
 
     public void xTryPower(byte index, boolean forced){
         ((StandUser) this.self).roundabout$tryPower(index,true);
