@@ -9,6 +9,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.event.index.Poses;
+import net.hydra.jojomod.item.SnubnoseRevolverItem;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -23,6 +24,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 public class FirstPersonSnubnoseModel<T extends Entity> extends PsuedoHierarchicalModel {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
@@ -90,16 +92,21 @@ public class FirstPersonSnubnoseModel<T extends Entity> extends PsuedoHierarchic
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
             boolean mainHandRight = true;
             if (LE instanceof Player player) {
-                mainHandRight = player.getMainArm() == HumanoidArm.RIGHT;
-            }
-            if (mainHandRight) {
-                this.animate(ipe.roundabout$getSnubnoseModelAim(), Poses.SNUBNOSE_MODEL_AIM.ad, partialTicks, 1f);
-                this.animate(ipe.roundabout$getSnubnoseModelRecoil(), Poses.SNUBNOSE_MODEL_RECOIL.ad, partialTicks, 1f);
-                this.animate(ipe.roundabout$getSnubnoseModelIdle(), Poses.SNUBNOSE_MODEL_IDLE.ad, partialTicks, 1f);
-            } else {
-                this.animate(ipe.roundabout$getSnubnoseModelAimLeft(), Poses.SNUBNOSE_MODEL_AIM_LEFT.ad, partialTicks, 1f);
-                this.animate(ipe.roundabout$getSnubnoseModelRecoilLeft(), Poses.SNUBNOSE_MODEL_RECOIL_LEFT.ad, partialTicks, 1f);
-                this.animate(ipe.roundabout$getSnubnoseModelIdleLeft(), Poses.SNUBNOSE_MODEL_IDLE_LEFT.ad, partialTicks, 1f);
+                if (!(player.getUseItem().getItem() instanceof SnubnoseRevolverItem)) {
+                    this.animate(ipe.roundabout$getSnubnoseModelIdle(), Poses.SNUBNOSE_MODEL_IDLE.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getSnubnoseModelIdleLeft(), Poses.SNUBNOSE_MODEL_IDLE_LEFT.ad, partialTicks, 1f);
+                } else {
+                    mainHandRight = player.getMainArm() == HumanoidArm.RIGHT;
+                    if (mainHandRight) {
+                        this.animate(ipe.roundabout$getSnubnoseModelAim(), Poses.SNUBNOSE_MODEL_AIM.ad, partialTicks, 1f);
+                        this.animate(ipe.roundabout$getSnubnoseModelRecoil(), Poses.SNUBNOSE_MODEL_RECOIL.ad, partialTicks, 1f);
+                        this.animate(ipe.roundabout$getSnubnoseModelIdle(), Poses.SNUBNOSE_MODEL_IDLE.ad, partialTicks, 1f);
+                    } else if (!mainHandRight) {
+                        this.animate(ipe.roundabout$getSnubnoseModelAimLeft(), Poses.SNUBNOSE_MODEL_AIM_LEFT.ad, partialTicks, 1f);
+                        this.animate(ipe.roundabout$getSnubnoseModelRecoilLeft(), Poses.SNUBNOSE_MODEL_RECOIL_LEFT.ad, partialTicks, 1f);
+                        this.animate(ipe.roundabout$getSnubnoseModelIdleLeft(), Poses.SNUBNOSE_MODEL_IDLE_LEFT.ad, partialTicks, 1f);
+                    }
+                }
             }
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
         }

@@ -131,16 +131,16 @@ public class FirearmFirstPersonAnimations {
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(-0.2476F, -2.5F, -180.0278F), AnimationChannel.Interpolations.LINEAR)
             ))
             .addAnimation("SexyGun", new AnimationChannel(AnimationChannel.Targets.POSITION,
-                    new Keyframe(0.0F, KeyframeAnimations.posVec(4.0F, 23.0F, -1.0F), AnimationChannel.Interpolations.LINEAR)
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(8.0F, 22.0F, -10.0F), AnimationChannel.Interpolations.LINEAR)
             ))
             .build();
 
     public static final AnimationDefinition snubnose_model_idle_left = AnimationDefinition.Builder.withLength(0.0417F).looping()
             .addAnimation("SexyGun", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(-0.2476F, -2.5F, -180.0278F), AnimationChannel.Interpolations.LINEAR)
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(-0.2476F, 2.5F, 180.0278F), AnimationChannel.Interpolations.LINEAR)
             ))
             .addAnimation("SexyGun", new AnimationChannel(AnimationChannel.Targets.POSITION,
-                    new Keyframe(0.0F, KeyframeAnimations.posVec(4.0F, 23.0F, -1.0F), AnimationChannel.Interpolations.LINEAR)
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(-8.0F, 22.0F, -10.0F), AnimationChannel.Interpolations.LINEAR)
             ))
             .build();
 }
