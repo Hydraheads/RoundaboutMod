@@ -221,9 +221,11 @@ public class FabricEntityClient {
         ModStrayModels.VampireHairOne = new VampireHairOnePart();
         ModStrayModels.VampireHairTwo = new VampireHairTwoPart();
         ModStrayModels.VampireHairFlesh = new VampireHairFleshBudLayer();
-        ModStrayModels.FirstPersonArmsModel = new FirstPersonArmsLayer();
+        ModStrayModels.FirstPersonArmsModel = new FirstPersonArmsModel();
+        ModStrayModels.FirstPersonArmsSlimModel = new FirstPersonArmsSlimModel();
         ModStrayModels.LeftHeel = new LeftHeelPart();
         ModStrayModels.ROAD_ROLLER = new RoadRollerStrayModel();
         ModStrayModels.SNUBNOSE_REVOLVER_MODEL = new SnubnoseRevolverModel();
+        ModStrayModels.FirstPersonSnubnoseModel = new FirstPersonSnubnoseModel();
     }
 }

@@ -6,7 +6,11 @@ package net.hydra.jojomod.client.models.visages.parts;// Made with Blockbench 5.
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
+import net.hydra.jojomod.client.models.layers.animations.FirearmFirstPersonAnimations;
+import net.hydra.jojomod.client.models.layers.animations.HeyYaAnimations;
+import net.hydra.jojomod.event.index.Poses;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -20,10 +24,11 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
-public class FirstPersonArmsLayer<T extends Entity> extends PsuedoHierarchicalModel {
+public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalModel {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "actualplayerarms"), "main");
     private final ModelPart transform;
@@ -31,11 +36,13 @@ public class FirstPersonArmsLayer<T extends Entity> extends PsuedoHierarchicalMo
     private final ModelPart right_arm;
     private final ModelPart lform;
     private final ModelPart left_arm;
-    private final ModelPart root;
+    private final ModelPart Root;
 
-    public FirstPersonArmsLayer() {
-        this.root = createBodyLayer().bakeRoot();
-        this.transform = root.getChild("transform");
+    public FirstPersonArmsModel() {
+        super(RenderType::entityTranslucent);
+
+        this.Root = createBodyLayer().bakeRoot();
+        this.transform = Root.getChild("transform");
         this.rform = this.transform.getChild("rform");
         this.right_arm = this.rform.getChild("right_arm");
         this.lform = this.transform.getChild("lform");
@@ -61,7 +68,7 @@ public class FirstPersonArmsLayer<T extends Entity> extends PsuedoHierarchicalMo
 
     @Override
     public ModelPart root() {
-        return root;
+        return Root;
     }
 
     @Override
@@ -88,12 +95,23 @@ public class FirstPersonArmsLayer<T extends Entity> extends PsuedoHierarchicalMo
         root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
     }
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
-                       int light, float r, float g, float b, float alpha, byte skin) {
+                       int light) {
         if (context instanceof LivingEntity LE) {
+            IPlayerEntity ipe = ((IPlayerEntity) LE);
             this.root().getAllParts().forEach(ModelPart::resetPose);
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
-            //r = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
-            root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
+            boolean mainHandRight = true;
+            if (LE instanceof Player player) {
+                mainHandRight = player.getMainArm() == HumanoidArm.RIGHT;
+            }
+            if (mainHandRight) {
+                this.animate(ipe.roundabout$getSnubnoseAim(), Poses.SNUBNOSE_AIM.ad, partialTicks, 1f);
+                this.animate(ipe.roundabout$getSnubnoseRecoil(), Poses.SNUBNOSE_RECOIL.ad, partialTicks, 1f);
+            } else {
+                this.animate(ipe.roundabout$getSnubnoseAimLeft(), Poses.SNUBNOSE_AIM_LEFT.ad, partialTicks, 1f);
+                this.animate(ipe.roundabout$getSnubnoseRecoilLeft(), Poses.SNUBNOSE_RECOIL_LEFT.ad, partialTicks, 1f);
+            }
+            root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
         }
     }
 }

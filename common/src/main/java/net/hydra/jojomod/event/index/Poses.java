@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.index;
 
+import net.hydra.jojomod.client.models.layers.animations.FirearmFirstPersonAnimations;
 import net.minecraft.client.animation.AnimationDefinition;
 
 public enum Poses {
@@ -19,7 +20,16 @@ public enum Poses {
     WATCH((byte) 10, PoseAnimations.watch),
     SITTING((byte) 11, PoseAnimations.SITTING),
     VAMPIRE_TRANSFORMATION((byte) 12, PoseAnimations.VAMPIRE),
-    SITTING_CHAIR((byte) 12, PoseAnimations.SITTING);
+    SITTING_CHAIR((byte) 12, PoseAnimations.SITTING),
+
+    SNUBNOSE_AIM((byte) 13, FirearmFirstPersonAnimations.snubnose_aim),
+    SNUBNOSE_RECOIL((byte) 14, FirearmFirstPersonAnimations.snubnose_fire_recoil),
+    SNUBNOSE_MODEL_AIM((byte) 15, FirearmFirstPersonAnimations.snubnose_model_aim),
+    SNUBNOSE_MODEL_RECOIL((byte) 16, FirearmFirstPersonAnimations.snubnose_model_recoil),
+    SNUBNOSE_AIM_LEFT((byte) 17, FirearmFirstPersonAnimations.snubnose_aim_left),
+    SNUBNOSE_RECOIL_LEFT((byte) 18, FirearmFirstPersonAnimations.snubnose_fire_recoil_left),
+    SNUBNOSE_MODEL_AIM_LEFT((byte) 19, FirearmFirstPersonAnimations.snubnose_model_aim_left),
+    SNUBNOSE_MODEL_RECOIL_LEFT((byte) 20, FirearmFirstPersonAnimations.snubnose_model_recoil_left);
 
     public final byte id;
 
@@ -55,6 +65,22 @@ public enum Poses {
             return SITTING;
         } if (bt== VAMPIRE_TRANSFORMATION.id) {
             return VAMPIRE_TRANSFORMATION;
+        } if (bt== SNUBNOSE_AIM.id) {
+            return SNUBNOSE_AIM;
+        } if (bt== SNUBNOSE_RECOIL.id) {
+            return SNUBNOSE_RECOIL;
+        } if (bt== SNUBNOSE_MODEL_AIM.id) {
+            return SNUBNOSE_MODEL_AIM;
+        } if (bt== SNUBNOSE_MODEL_RECOIL.id) {
+            return SNUBNOSE_MODEL_RECOIL;
+        } if (bt== SNUBNOSE_AIM_LEFT.id) {
+            return SNUBNOSE_AIM_LEFT;
+        } if (bt== SNUBNOSE_RECOIL_LEFT.id) {
+            return SNUBNOSE_RECOIL_LEFT;
+        } if (bt== SNUBNOSE_MODEL_AIM_LEFT.id) {
+            return SNUBNOSE_MODEL_AIM_LEFT;
+        } if (bt== SNUBNOSE_MODEL_RECOIL_LEFT.id) {
+            return SNUBNOSE_MODEL_RECOIL_LEFT;
         }
         return NONE;
     }

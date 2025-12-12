@@ -1,4 +1,4 @@
-package net.hydra.jojomod.client.models.projectile;// Made with Blockbench 5.0.3
+package net.hydra.jojomod.client.models.visages.parts;// Made with Blockbench 5.0.4
 // Exported for Minecraft version 1.17 or later with Mojang mappings
 // Paste this class into your mod and generate all required imports
 
@@ -6,34 +6,40 @@ package net.hydra.jojomod.client.models.projectile;// Made with Blockbench 5.0.3
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.HierarchicalModel;
+import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
+import net.hydra.jojomod.event.index.Poses;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 
-public class SnubnoseRevolverModel<T extends Entity> extends HierarchicalModel<T> {
-	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "snubnosed_revolver"), "main");
-	private final ModelPart SexyGun;
-	private final ModelPart cylinder;
-    private final ModelPart root;
+public class FirstPersonSnubnoseModel<T extends Entity> extends PsuedoHierarchicalModel {
+    // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "snubnosed_revolver"), "main");
+    private final ModelPart SexyGun;
+    private final ModelPart cylinder;
+    private final ModelPart Root;
 
-	public SnubnoseRevolverModel() {
+    public FirstPersonSnubnoseModel() {
+        super(RenderType::entityTranslucent);
 
-        this.root = createBodyLayer().bakeRoot();
-		this.SexyGun = root.getChild("SexyGun");
-		this.cylinder = this.SexyGun.getChild("cylinder");
-	}
+        this.Root = createBodyLayer().bakeRoot();
+        this.SexyGun = Root.getChild("SexyGun");
+        this.cylinder = this.SexyGun.getChild("cylinder");
+    }
 
-	public static LayerDefinition createBodyLayer() {
+    public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
@@ -51,39 +57,49 @@ public class SnubnoseRevolverModel<T extends Entity> extends HierarchicalModel<T
         PartDefinition cylinder = SexyGun.addOrReplaceChild("cylinder", CubeListBuilder.create().texOffs(3, 10).addBox(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(-0.35F)), PartPose.offset(0.0F, -3.5F, -3.375F));
 
         return LayerDefinition.create(meshdefinition, 16, 16);
-	}
+    }
 
-	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		SexyGun.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-	}
+    @Override
+    public void setupAnim(Entity var1, float ageInTicks) {
+
+    }
 
     @Override
     public ModelPart root() {
-        return root;
+        return Root;
     }
 
     @Override
-    public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        SexyGun.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
-    public ResourceLocation getTextureLocation(){
-        return new ResourceLocation(Roundabout.MOD_ID,
-                "textures/item/snubnose_revolver.png");
+    public static ResourceLocation getTextureLocation(Entity entity) {
+        return new ResourceLocation(Roundabout.MOD_ID, "textures/item/snubnose_revolver.png");
     }
 
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int light, float r, float g, float b, float heyFull) {
-        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucentCull(getTextureLocation()));
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
         root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
     }
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
-                       int light, float r, float g, float b, float alpha, byte skin) {
+                       int light) {
         if (context instanceof LivingEntity LE) {
+            IPlayerEntity ipe = ((IPlayerEntity) LE);
             this.root().getAllParts().forEach(ModelPart::resetPose);
-            VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation()));
-            //r = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
-            root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
+            VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
+            boolean mainHandRight = true;
+            if (LE instanceof Player player) {
+                mainHandRight = player.getMainArm() == HumanoidArm.RIGHT;
+            }
+            if (mainHandRight) {
+                this.animate(ipe.roundabout$getSnubnoseModelAim(), Poses.SNUBNOSE_MODEL_AIM.ad, partialTicks, 1f);
+                this.animate(ipe.roundabout$getSnubnoseModelRecoil(), Poses.SNUBNOSE_MODEL_RECOIL.ad, partialTicks, 1f);
+            } else {
+                this.animate(ipe.roundabout$getSnubnoseModelAimLeft(), Poses.SNUBNOSE_MODEL_AIM_LEFT.ad, partialTicks, 1f);
+                this.animate(ipe.roundabout$getSnubnoseModelRecoilLeft(), Poses.SNUBNOSE_MODEL_RECOIL_LEFT.ad, partialTicks, 1f);
+            }
+            root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
         }
     }
 }

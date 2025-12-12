@@ -6,8 +6,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.gui.*;
-import net.hydra.jojomod.client.models.layers.animations.FirearmFirstPersonAnimations;
-import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsLayer;
+import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsModel;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerAmbientSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerExplosionSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerMixingSound;
@@ -29,6 +28,10 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.Direction;
@@ -47,6 +50,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.zetalasis.client.shader.D4CShaderFX;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
@@ -1406,27 +1410,73 @@ public class ClientUtil {
             }
         }
 
-        if (cameraEnt instanceof Player play && play.getUseItem().getItem() instanceof SnubnoseRevolverItem){
-            stack.pushPose();
-            Vec3 vec = cameraEnt.getEyePosition();
-
+        if (cameraEnt instanceof Player play) {
             IPlayerEntity pl = ((IPlayerEntity) cameraEnt);
-            float r = pl.rdbt$getHairColorX();
-            float g = pl.rdbt$getHairColorY();
-            float b = pl.rdbt$getHairColorZ();
-            Direction gravityDirection = GravityAPI.getGravityDirection(cameraEnt);
 
-            if (gravityDirection == Direction.UP){
-                Vec3 vector = new Vec3(0,cameraEnt.getEyeHeight()*0.4f,0);
-            } else {
-                Vec3 vector = new Vec3(0,cameraEnt.getEyeHeight()*0.15f,0);
-                stack.translate(vector.x,vector.y,vector.z);
+            boolean slimBoolean = false;
+
+            EntityRenderer<?> renderer =
+                    Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(play);
+            if (renderer instanceof PlayerRenderer playerRenderer) {
+                PlayerModel<?> model = playerRenderer.getModel();
+                IPlayerModel ipm = (IPlayerModel) model;
+                slimBoolean = ipm.roundabout$getSlim();
             }
 
-            FirstPersonArmsLayer.player = play;
-            ModStrayModels.FirstPersonArmsModel.render(cameraEnt, $$4, stack, source, 0, r, g, b, 1);
+            if (play.getUseItem().getItem() instanceof SnubnoseRevolverItem && !play.getCooldowns().isOnCooldown(play.getUseItem().getItem())) {
+                stack.pushPose();
 
-            stack.popPose();
+                FirstPersonArmsModel.player = play;
+                if (play.getMainArm() == HumanoidArm.RIGHT) {
+                    pl.roundabout$getSnubnoseModelRecoil().stop();
+                    pl.roundabout$getSnubnoseModelAim().startIfStopped(cameraEnt.tickCount);
+                    pl.roundabout$getSnubnoseRecoil().stop();
+                    pl.roundabout$getSnubnoseAim().startIfStopped(cameraEnt.tickCount);
+                } else if (play.getMainArm() == HumanoidArm.LEFT) {
+                    pl.roundabout$getSnubnoseModelRecoilLeft().stop();
+                    pl.roundabout$getSnubnoseModelAimLeft().startIfStopped(cameraEnt.tickCount);
+                    pl.roundabout$getSnubnoseRecoilLeft().stop();
+                    pl.roundabout$getSnubnoseAimLeft().startIfStopped(cameraEnt.tickCount);
+                }
+                if (!slimBoolean) {
+                    ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+                } else if (slimBoolean) {
+                    ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+                }
+                ModStrayModels.FirstPersonSnubnoseModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+
+                stack.popPose();
+            } else if (play.getUseItem().getItem() instanceof SnubnoseRevolverItem && play.getCooldowns().isOnCooldown(play.getUseItem().getItem())) {
+                stack.pushPose();
+
+                FirstPersonArmsModel.player = play;
+                if (play.getMainArm() == HumanoidArm.RIGHT) {
+                    pl.roundabout$getSnubnoseModelAim().stop();
+                    pl.roundabout$getSnubnoseModelRecoil().startIfStopped(cameraEnt.tickCount);
+                    pl.roundabout$getSnubnoseAim().stop();
+                    pl.roundabout$getSnubnoseRecoil().startIfStopped(cameraEnt.tickCount);
+                } else if (play.getMainArm() == HumanoidArm.LEFT) {
+                    pl.roundabout$getSnubnoseModelAimLeft().stop();
+                    pl.roundabout$getSnubnoseModelRecoilLeft().startIfStopped(cameraEnt.tickCount);
+                    pl.roundabout$getSnubnoseAimLeft().stop();
+                    pl.roundabout$getSnubnoseRecoilLeft().startIfStopped(cameraEnt.tickCount);
+                }
+                if (!slimBoolean) {
+                    ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+                } else if (slimBoolean) {
+                    ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+                }
+                ModStrayModels.FirstPersonSnubnoseModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+            } else {
+                pl.roundabout$getSnubnoseModelAim().stop();
+                pl.roundabout$getSnubnoseModelRecoil().stop();
+                pl.roundabout$getSnubnoseAim().stop();
+                pl.roundabout$getSnubnoseRecoil().stop();
+                pl.roundabout$getSnubnoseModelAimLeft().stop();
+                pl.roundabout$getSnubnoseModelRecoilLeft().stop();
+                pl.roundabout$getSnubnoseAimLeft().stop();
+                pl.roundabout$getSnubnoseRecoilLeft().stop();
+            }
         }
     }
     @Unique
