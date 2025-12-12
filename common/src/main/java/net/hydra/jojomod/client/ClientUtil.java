@@ -1428,11 +1428,15 @@ public class ClientUtil {
 
                 FirstPersonArmsModel.player = play;
                 if (play.getMainArm() == HumanoidArm.RIGHT) {
+                    pl.roundabout$getSnubnoseModelIdleLeft().stop();
+                    pl.roundabout$getSnubnoseModelIdle().stop();
                     pl.roundabout$getSnubnoseModelRecoil().stop();
                     pl.roundabout$getSnubnoseModelAim().startIfStopped(cameraEnt.tickCount);
                     pl.roundabout$getSnubnoseRecoil().stop();
                     pl.roundabout$getSnubnoseAim().startIfStopped(cameraEnt.tickCount);
                 } else if (play.getMainArm() == HumanoidArm.LEFT) {
+                    pl.roundabout$getSnubnoseModelIdleLeft().stop();
+                    pl.roundabout$getSnubnoseModelIdle().stop();
                     pl.roundabout$getSnubnoseModelRecoilLeft().stop();
                     pl.roundabout$getSnubnoseModelAimLeft().startIfStopped(cameraEnt.tickCount);
                     pl.roundabout$getSnubnoseRecoilLeft().stop();
@@ -1451,33 +1455,62 @@ public class ClientUtil {
 
                 FirstPersonArmsModel.player = play;
                 if (play.getMainArm() == HumanoidArm.RIGHT) {
+                    pl.roundabout$getSnubnoseModelIdleLeft().stop();
+                    pl.roundabout$getSnubnoseModelIdle().stop();
                     pl.roundabout$getSnubnoseModelAim().stop();
                     pl.roundabout$getSnubnoseModelRecoil().startIfStopped(cameraEnt.tickCount);
                     pl.roundabout$getSnubnoseAim().stop();
                     pl.roundabout$getSnubnoseRecoil().startIfStopped(cameraEnt.tickCount);
                 } else if (play.getMainArm() == HumanoidArm.LEFT) {
+                    pl.roundabout$getSnubnoseModelIdleLeft().stop();
+                    pl.roundabout$getSnubnoseModelIdle().stop();
                     pl.roundabout$getSnubnoseModelAimLeft().stop();
                     pl.roundabout$getSnubnoseModelRecoilLeft().startIfStopped(cameraEnt.tickCount);
                     pl.roundabout$getSnubnoseAimLeft().stop();
                     pl.roundabout$getSnubnoseRecoilLeft().startIfStopped(cameraEnt.tickCount);
                 }
                 if (!slimBoolean) {
-                    ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+                    ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
                 } else if (slimBoolean) {
-                    ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+                    ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
                 }
-                ModStrayModels.FirstPersonSnubnoseModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+                ModStrayModels.FirstPersonSnubnoseModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
+
+                stack.popPose();
+            } else if ((!(play.getUseItem().getItem() instanceof SnubnoseRevolverItem) && play.getMainHandItem().getItem() instanceof SnubnoseRevolverItem || play.getOffhandItem().getItem() instanceof SnubnoseRevolverItem)) {
+                stack.pushPose();
+
+                if (play.getMainArm() == HumanoidArm.RIGHT) {
+                    snubnoseRenderCleanupHelper(cameraEnt);
+                    pl.roundabout$getSnubnoseRecoilLeft().stop();
+                    pl.roundabout$getSnubnoseModelIdleLeft().stop();
+
+                    pl.roundabout$getSnubnoseModelIdle().startIfStopped(cameraEnt.tickCount);
+                    ModStrayModels.FirstPersonSnubnoseModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
+                } else if (play.getMainArm() == HumanoidArm.LEFT) {
+                    snubnoseRenderCleanupHelper(cameraEnt);
+                    pl.roundabout$getSnubnoseRecoilLeft().stop();
+                    pl.roundabout$getSnubnoseModelIdle().stop();
+
+                    pl.roundabout$getSnubnoseModelIdleLeft().startIfStopped(cameraEnt.tickCount);
+                    ModStrayModels.FirstPersonSnubnoseModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
+                }
+                stack.popPose();
             } else {
-                pl.roundabout$getSnubnoseModelAim().stop();
-                pl.roundabout$getSnubnoseModelRecoil().stop();
-                pl.roundabout$getSnubnoseAim().stop();
-                pl.roundabout$getSnubnoseRecoil().stop();
-                pl.roundabout$getSnubnoseModelAimLeft().stop();
-                pl.roundabout$getSnubnoseModelRecoilLeft().stop();
-                pl.roundabout$getSnubnoseAimLeft().stop();
-                pl.roundabout$getSnubnoseRecoilLeft().stop();
+                snubnoseRenderCleanupHelper(cameraEnt);
             }
         }
+    }
+    public static void snubnoseRenderCleanupHelper(Entity cameraEnt) {
+        IPlayerEntity pl = ((IPlayerEntity) cameraEnt);
+        pl.roundabout$getSnubnoseModelAim().stop();
+        pl.roundabout$getSnubnoseModelRecoil().stop();
+        pl.roundabout$getSnubnoseAim().stop();
+        pl.roundabout$getSnubnoseRecoil().stop();
+        pl.roundabout$getSnubnoseModelAimLeft().stop();
+        pl.roundabout$getSnubnoseModelRecoilLeft().stop();
+        pl.roundabout$getSnubnoseAimLeft().stop();
+        pl.roundabout$getSnubnoseRecoilLeft().stop();
     }
     @Unique
     public static void roundabout$renderBound(LivingEntity victim, float delta, PoseStack poseStack, MultiBufferSource mb, Entity binder, float focus) {

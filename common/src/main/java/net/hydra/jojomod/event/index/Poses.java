@@ -29,7 +29,10 @@ public enum Poses {
     SNUBNOSE_AIM_LEFT((byte) 17, FirearmFirstPersonAnimations.snubnose_aim_left),
     SNUBNOSE_RECOIL_LEFT((byte) 18, FirearmFirstPersonAnimations.snubnose_fire_recoil_left),
     SNUBNOSE_MODEL_AIM_LEFT((byte) 19, FirearmFirstPersonAnimations.snubnose_model_aim_left),
-    SNUBNOSE_MODEL_RECOIL_LEFT((byte) 20, FirearmFirstPersonAnimations.snubnose_model_recoil_left);
+    SNUBNOSE_MODEL_RECOIL_LEFT((byte) 20, FirearmFirstPersonAnimations.snubnose_model_recoil_left),
+    SNUBNOSE_MODEL_IDLE((byte) 21, FirearmFirstPersonAnimations.snubnose_model_idle),
+    SNUBNOSE_MODEL_IDLE_LEFT((byte) 22, FirearmFirstPersonAnimations.snubnose_model_idle_left);
+
 
     public final byte id;
 

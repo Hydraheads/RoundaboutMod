@@ -923,6 +923,20 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public AnimationState roundabout$getSnubnoseModelRecoilLeft(){
         return roundabout$snubnoseModelRecoilLeft;
     }
+    @Unique
+    public final AnimationState roundabout$snubnoseModelIdle = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getSnubnoseModelIdle(){
+        return roundabout$snubnoseModelIdle;
+    }
+    @Unique
+    public final AnimationState roundabout$snubnoseModelIdleLeft = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getSnubnoseModelIdleLeft(){
+        return roundabout$snubnoseModelIdleLeft;
+    }
 
 
     @Unique
