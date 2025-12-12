@@ -5,6 +5,7 @@ import com.google.common.collect.Multimap;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.sound.ModSounds;
@@ -85,8 +86,13 @@ public class SacrificialDaggerItem extends TieredItem implements Vanishable {
                     } else {
                         $$0.hurt(1,$$2.level().getRandom(),null);
                     }
-                    MainUtil.makeMobBleed($$2);
-                    MainUtil.makeBleed($$2,0,400,$$2);
+
+                    if (FateTypes.isDaggerUpgraded($$2)){
+
+                    } else {
+                        MainUtil.makeMobBleed($$2);
+                        MainUtil.makeBleed($$2,0,400,$$2);
+                    }
                     $$1.playSound(null, $$2, ModSounds.KNIFE_IMPACT_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                     $$2.hurt(ModDamageTypes.of($$1, ModDamageTypes.DAGGER), 2.01F);
                 }
