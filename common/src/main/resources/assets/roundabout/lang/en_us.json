@@ -1220,6 +1220,8 @@
   "ability.roundabout.gd_mold_field.desc": "Releases mold spores in a large area around you. Any mob in that area that lowers in elevation whilst being below you takes massive damage that ramps up over time. Players and certain mobs killed by the mold field with drop their heads. Organic projectiles below you in the mold field will rapidly disintegrate.",
   "ability.roundabout.gd_stitch": "Stitch up",
   "ability.roundabout.gd_stitch.desc": "Stitches you up, recovering a tiny bit of health, and reducing bleed by 1 level",
+  "ability.roundabout.gd_pardon": "Ally Selection",
+  "ability.roundabout.gd_pardon.desc": "Select entities as allies, making them unaffected by your mold field",
 
   "ability.roundabout.diver_selection": "Diver Selection",
   "ability.roundabout.diver_selection.desc": "Opens an impairment wheel which you can apply effects onto yourself",

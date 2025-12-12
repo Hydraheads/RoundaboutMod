@@ -4754,7 +4754,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         DamageType type = $$0.type();
         DamageSource uh = ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION);
         LivingEntity me = (LivingEntity) (Object) this;
-        if(type == uh.type() && Roundabout.RANDOM.nextDouble()>0.0){
+        if(type == uh.type() && (Roundabout.RANDOM.nextDouble()>0.8 ||me instanceof ServerPlayer)){
             if((LivingEntity) (Object) this instanceof Zombie){
                 spawnAtLocation(new ItemStack(Items.ZOMBIE_HEAD));
             } else if (me instanceof Creeper) {
@@ -4831,7 +4831,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void rdbt$doMoldDetection(Vec3 movement){
         if(((IPermaCasting)this.level()).roundabout$inPermaCastRange(this.getOnPos(), PermanentZoneCastInstance.MOLD_FIELD)) {
             LivingEntity MoldFieldCaster = ((IPermaCasting)this.level()).roundabout$inPermaCastRangeEntity(this.getOnPos(),PermanentZoneCastInstance.MOLD_FIELD);
-            if (MoldFieldCaster != null) {
+            if (MoldFieldCaster != null && !(((PowersGreenDay)((StandUser)MoldFieldCaster).roundabout$getStandPowers()).allies.contains(this))) {
                 boolean isUser = this.equals(MoldFieldCaster);
                 boolean down = previousYpos > this.getY();
                 boolean isStand = (((LivingEntity) (Object) this) instanceof StandEntity);

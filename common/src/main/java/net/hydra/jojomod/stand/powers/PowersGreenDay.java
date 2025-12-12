@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.entity.substand.SeperatedLegsEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
@@ -54,6 +55,7 @@ import net.minecraft.world.level.block.FlowerBlock;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -91,19 +93,19 @@ public class PowersGreenDay extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,2, "ability.roundabout.punch",
                 "instruction.roundabout.press_attack", StandIcons.GREEN_DAY_PUNCH,1,level,bypas));
         // charge fire
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+118,3, "ability.roundabout.guard",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+118,0, "ability.roundabout.guard",
                 "instruction.roundabout.hold_block", StandIcons.GREEN_DAY_GUARD,0,level,bypas));
         // burst fire
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+99,2, "ability.roundabout.barrage",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+99,0, "ability.roundabout.barrage",
                 "instruction.roundabout.barrage", StandIcons.GREEN_DAY_BARRAGE,2,level,bypas));
         // manual scope
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,2, "ability.roundabout.gd_punch_left",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.gd_punch_left",
                 "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_PUNCH_LEFT,1,level,bypas));
         // charge fire
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39, topPos+118,3, "ability.roundabout.gd_return_left",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39, topPos+118,0, "ability.roundabout.gd_return_left",
                 "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_ARM_RETURN_LEFT,0,level,bypas));
         // burst fire
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,2, "ability.roundabout.gd_spin_left",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.gd_spin_left",
                 "instruction.roundabout.press_skill_block", StandIcons.GREEN_DAY_MOLD_SPIN_LEFT,2,level,bypas));
         // place ratt
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.gd_punch_right",
@@ -112,7 +114,7 @@ public class PowersGreenDay extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.gd_spin_right",
                 "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_ARM_RETURN_RIGHT,1,level,bypas));
         // place auto
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,1, "ability.roundabout.gd_return_right",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.gd_return_right",
                 "instruction.roundabout.press_skill_block", StandIcons.GREEN_DAY_MOLD_SPIN_RIGHT,1,level,bypas));
         // dodge
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.roundabout.dodge",
@@ -124,8 +126,11 @@ public class PowersGreenDay extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,0, "ability.roundabout.gd_mold_field",
                 "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_FIELD,3,level,bypas));
         // ratt leap
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,4, "ability.roundabout.gd_stitch",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,0, "ability.roundabout.gd_stitch",
                 "instruction.roundabout.press_skill_crouch", StandIcons.GREEN_DAY_STITCH,4,level,bypas));
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.roundabout.gd_pardon",
+                "instruction.roundabout.press_skill_block", StandIcons.GREEN_DAY_PARDON,4,level,bypas));
 
         return $$1;
     }
@@ -136,6 +141,8 @@ public class PowersGreenDay extends NewPunchingStand {
 
         if (isHoldingSneak())
             setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_STITCH, PowerIndex.SKILL_4_SNEAK);
+        else if (isGuarding())
+            setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_PARDON, PowerIndex.SKILL_4_GUARD);
         else
             if(isMoldFieldOn())
                 setSkillIcon(context, x, y, 4, StandIcons.GREEN_DAY_MOLD_FIELD_OFF, PowerIndex.SKILL_4);
@@ -193,6 +200,9 @@ public class PowersGreenDay extends NewPunchingStand {
             case SKILL_4_NORMAL -> {
                 toggleMold();
             }
+            case SKILL_4_GUARD -> {
+                selectAllyClient();
+            }
             case SKILL_1_NORMAL -> {
               setcrawlserver(this.self);
             }
@@ -211,6 +221,9 @@ public class PowersGreenDay extends NewPunchingStand {
             }
             case PowerIndex.POWER_4 -> {
                 return toggleMoldField();
+            }
+            case PowerIndex.POWER_4_BLOCK -> {
+                return selectAllyServer();
             }
             case PowerIndex.POWER_3_EXTRA -> {
                 return moldLeapServer();
@@ -283,16 +296,97 @@ public class PowersGreenDay extends NewPunchingStand {
     @Override
     public void updatePowerInt(byte activePower, int data) {
         switch (activePower) {
-            ///  basic swing, will probably be vanished at some point
             case PowerIndex.POWER_3_BONUS -> {
                 ((StandUser)this.self).rdbt$SetCrawlTicks(data);
                 legGoneTicks = data;
             }
 
+        }
+        super.updatePowerInt(activePower,data);
+    }
+
+
+    public boolean selectAllyServer(){
+        //listInit();
+        if(!(((StandUser) this.self).roundabout$getTargetEntity(this.self,16)==null)) {
+            Entity targetEnt = ((StandUser) this.self).roundabout$getTargetEntity(this.self, 16);
+            if(!allies.contains(targetEnt)) {
+                allies.add(targetEnt);
+            }
+            else{
+                allies.remove(targetEnt);
+            }
 
 
         }
-        super.updatePowerInt(activePower,data);
+        return true;
+
+    }
+
+    public void selectAllyClient(){
+        //listInit();
+        if(!(((StandUser) this.self).roundabout$getTargetEntity(this.self,16)==null)) {
+            Entity targetEnt = ((StandUser) this.self).roundabout$getTargetEntity(this.self, 16);
+            if(!allies.contains(targetEnt)) {
+                allies.add(targetEnt);
+            }
+            else{
+                allies.remove(targetEnt);
+            }
+
+            tryPowerPacket(PowerIndex.POWER_4_BLOCK);
+        }
+
+    }
+
+    public List<Entity> allies = new ArrayList<>();
+
+    public void listInit(){
+        if (allies == null) {
+            allies = new ArrayList<>();
+        }
+    }
+
+    public void addEntityToAllies(Entity entity){
+        listInit();
+        if(!allies.contains(entity)) {
+            allies.add(entity);
+        }
+    }
+
+    public void removeEntityfromAllies(Entity entity){
+        listInit();
+        if(allies.contains(entity)) {
+            allies.remove(entity);
+        }
+    }
+
+    @Override
+    public boolean highlightsEntity(Entity ent, Player player) {
+        if(((StandUser)player).roundabout$isGuarding()) {
+            if (allies.contains(ent) && player.hasLineOfSight(ent)){
+                return true;
+            } else if (!(((StandUser) player).roundabout$getTargetEntity(player, 16) == null)) {
+                if (((StandUser) player).roundabout$getTargetEntity(player, 16).equals(ent)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int highlightsEntityColor(Entity ent, Player player) {
+        listInit();
+        if(allies.contains(ent)){
+            if(!(((StandUser) player).roundabout$getTargetEntity(player,16)== null)) {
+                if (((StandUser) player).roundabout$getTargetEntity(player, 16).equals(ent)) {
+                    return 12379456;
+                }
+            }
+            return 10349135;
+        }
+        return 15526430;
     }
 
     public void Stitch(){
@@ -487,6 +581,14 @@ public class PowersGreenDay extends NewPunchingStand {
         return((IPermaCasting) this.getSelf().level()).roundabout$isPermaCastingEntity(this.self);
     };
 
+    @Override
+    public float getPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.5F));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(4.2F));
+        }
+    }
 
     @Override
     public boolean isWip(){
