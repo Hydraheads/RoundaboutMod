@@ -90,6 +90,8 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -283,11 +285,18 @@ public class MainUtil {
         return true;
     }
     public static boolean isBlockWalkableSimplified(BlockState bs){
+
         ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
         if (walkableBlocks != null && !walkableBlocks.isEmpty() && rl != null && walkableBlocks.contains(rl.toString())){
             return false;
         }
         return true;
+    }
+    public static boolean isStandingInBlock(LivingEntity LE){
+        if (LE.level().getBlockState(BlockPos.containing(LE.getPosition(1))).isSolid()){
+            return true;
+        }
+        return false;
     }
 
     public static void clearCooldowns(Entity ent){

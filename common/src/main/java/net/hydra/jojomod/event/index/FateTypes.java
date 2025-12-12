@@ -75,6 +75,13 @@ public enum FateTypes {
         }
         return false;
     }
+    public static boolean isDaggerUpgraded(LivingEntity entity){
+        if (entity instanceof Player PE){
+            Byte fate = ((IPlayerEntity)PE).roundabout$getFate();
+            return fate == VAMPIRE.id;
+        }
+        return false;
+    }
     public static boolean isScary(LivingEntity entity){
         if (entity instanceof Player PE){
             return ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.id;
