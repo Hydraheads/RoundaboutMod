@@ -3,6 +3,7 @@ package net.hydra.jojomod.event.powers.visagedata;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -23,6 +24,11 @@ public class AyaVisage extends VisageData {
     @Override
     public Vec3 sizeModifier(){
         return new Vec3(0.95F,0.95F,0.95F);
+    }
+
+    @Override
+    public Vec3i getHairColor(){
+        return new Vec3i(220,198,147);
     }
 
     @Override

@@ -2,6 +2,7 @@ package net.hydra.jojomod.event.powers.visagedata;
 
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -29,6 +30,11 @@ public class AvdolVisage extends VisageData {
 
     public Vector3f scaleHead(){
         return new Vector3f(0.95F, 0.95F, 0.95F);
+    }
+
+    @Override
+    public Vec3i getHairColor(){
+        return new Vec3i(71,51,45);
     }
 
     public boolean rendersLegCloakPart(){

@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPlayerEntityAbstractClient;
 import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
@@ -34,6 +35,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.hydra.jojomod.item.BowlerHatItem;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.Map;
 
@@ -206,6 +208,15 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             r = pl.rdbt$getHairColorX();
                             g = pl.rdbt$getHairColorY();
                             b = pl.rdbt$getHairColorZ();
+
+                            if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
+                                VisageData vd = ME.visageData;
+                                if (vd != null && vd.isCharacterVisage()) {
+                                    r = ((float) vd.getHairColor().getX()) / 255;
+                                    g = ((float) vd.getHairColor().getY()) / 255;
+                                    b = ((float) vd.getHairColor().getZ()) / 255;
+                                }
+                            }
                         }
                         renderVampireHairOne(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
                                 r, g, b);
@@ -219,6 +230,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
             }
         }
     }
+
     public void renderRightLeg(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
                                float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
         if (getParentModel().rightLeg.visible) {

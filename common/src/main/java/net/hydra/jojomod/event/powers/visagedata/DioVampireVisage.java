@@ -5,6 +5,7 @@ import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.DIOVoice;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
 import net.hydra.jojomod.item.ModItems;
+import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
@@ -23,6 +24,10 @@ public class DioVampireVisage extends VisageData {
             jojoNPC.setTrueBasis(ModItems.DIO_VAMPIRE_MASK.getDefaultInstance());
         }
         return jojoNPC;
+    }
+    @Override
+    public Vec3i getHairColor(){
+        return new Vec3i(245,225,97);
     }
     @Override
     public Vec3 sizeModifier(){

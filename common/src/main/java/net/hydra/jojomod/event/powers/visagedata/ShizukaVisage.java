@@ -2,6 +2,7 @@ package net.hydra.jojomod.event.powers.visagedata;
 
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
@@ -21,7 +22,10 @@ public class ShizukaVisage extends VisageData {
     public Vec3 sizeModifier(){
         return new Vec3(0.96F,0.96F,0.96F);
     }
-
+    @Override
+    public Vec3i getHairColor(){
+        return new Vec3i(44,49,62);
+    }
     @Override
     public Vector3f scale(){
         return new Vector3f(0.89F, 0.89F, 0.89F);

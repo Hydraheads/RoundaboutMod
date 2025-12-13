@@ -4,6 +4,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.DIOVoice;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
+import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -24,7 +25,10 @@ public class DIOVisage extends VisageData {
     public Vec3 sizeModifier(){
         return new Vec3(1.09F,1.09F,1.09F);
     }
-
+    @Override
+    public Vec3i getHairColor(){
+        return new Vec3i(245,225,97);
+    }
     public boolean rendersSpikeyHair(){
         return true;
     }

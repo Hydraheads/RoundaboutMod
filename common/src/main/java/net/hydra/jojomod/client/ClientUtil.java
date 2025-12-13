@@ -18,9 +18,11 @@ import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
+import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
 import net.hydra.jojomod.item.SnubnoseRevolverItem;
@@ -29,6 +31,7 @@ import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
@@ -1368,6 +1371,8 @@ public class ClientUtil {
         return null;
     }
 
+
+
     public static<T extends LivingEntity, M extends EntityModel<T>> void renderFirstPersonModelParts(Entity cameraEnt, float $$4, PoseStack stack, MultiBufferSource source, int light){
 
         if (cameraEnt instanceof Player play && ((IFatePlayer)cameraEnt).rdbt$getFatePowers() instanceof VampireFate vf){
@@ -1381,6 +1386,18 @@ public class ClientUtil {
                 float r = pl.rdbt$getHairColorX();
                 float g = pl.rdbt$getHairColorY();
                 float b = pl.rdbt$getHairColorZ();
+
+
+                ItemStack visage = pl.roundabout$getMaskSlot();
+                if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
+                    VisageData vd = ME.visageData;
+                    if (vd != null && vd.isCharacterVisage()) {
+                        r = ((float) vd.getHairColor().getX()) / 255;
+                        g = ((float) vd.getHairColor().getY()) / 255;
+                        b = ((float) vd.getHairColor().getZ()) / 255;
+                    }
+                }
+
                     Direction gravityDirection = GravityAPI.getGravityDirection(cameraEnt);
 
                     //RotationUtil.rotPlayerToWorld(cameraEnt.getYHeadRot(), cameraEnt.getXRot(), gravityDirection);
