@@ -142,4 +142,8 @@ public class BloodSplatterEntity extends ThrowableProjectile {
         Vec3 $$9 = $$0.getDeltaMovement();
         this.setDeltaMovement(this.getDeltaMovement().add($$9.x, $$0.onGround() ? 0.0 : $$9.y, $$9.z));
     }
+    @Override
+    protected float getGravity() {
+        return 0.06F;
+    }
 }

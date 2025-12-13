@@ -25,6 +25,10 @@ public class BloodSplatterRenderer extends EntityRenderer<BloodSplatterEntity> {
             "textures/entity/projectile/blood_3.png");
     private static final ResourceLocation ITEM_4 = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/projectile/blood_4.png");
+    private static final ResourceLocation ITEM_5 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/projectile/blood_5.png");
+    private static final ResourceLocation ITEM_6 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/projectile/blood_6.png");
 
     private final float scale;
 
@@ -50,7 +54,7 @@ public class BloodSplatterRenderer extends EntityRenderer<BloodSplatterEntity> {
             poseStack.scale(this.scale, this.scale, this.scale);
             poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
             poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
-            poseStack.translate(0, entity.getBbHeight() / 2, 0);
+            poseStack.translate(0, entity.getBbWidth()/2, 0);
 
             // Draw flat quad here
             VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
@@ -68,11 +72,8 @@ public class BloodSplatterRenderer extends EntityRenderer<BloodSplatterEntity> {
                 }
             }
 
-            float scaleIt = 0.5f;
 
-
-
-            float size = (float) Math.min(scaleIt, (((float) entity.tickCount) + partialTicks) * (scaleIt * 0.1)); // Adjust to your needs
+            float size = 0.4f; // Adjust to your needs
 
             vertexConsumer.vertex(matrix, -size, -size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
             vertexConsumer.vertex(matrix, size, -size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
@@ -89,10 +90,12 @@ public class BloodSplatterRenderer extends EntityRenderer<BloodSplatterEntity> {
     public ResourceLocation getTextureLocation(BloodSplatterEntity entity) {
         int div = entity.tickCount;
         return switch (div) {
-            case 0,1,2 -> ITEM_1;
-            case 3,4,5 -> ITEM_2;
-            case 6,7,8 -> ITEM_3;
-            default -> ITEM_4;
+            case 0,1 -> ITEM_1;
+            case 2,3 -> ITEM_2;
+            case 4,5 -> ITEM_3;
+            case 6,7 -> ITEM_4;
+            case 8,9 -> ITEM_5;
+            default -> ITEM_6;
         };
     }
 }
