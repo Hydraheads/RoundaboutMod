@@ -276,15 +276,11 @@ public class RoundaboutBulletEntity extends AbstractArrow {
             this.setDeltaMovement(delta);
         }
 
-        if (level().isClientSide) {
-            boolean isFlying = getDeltaMovement().lengthSqr() > 0.01;
+        if (!level().isClientSide && !this.inGround) {
+            boolean isFlying = getDeltaMovement().lengthSqr() > 1;
 
             if (isFlying) {
-                if (this.tickCount%80 ==1) {
-                    if (!((TimeStop) this.level()).inTimeStopRange(this)) {
-                        // ClientUtil.handleBowlerHatFlySound(this);
-                    }
-                }
+                ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.2F, 0.2F, 0.2F), 1f), this.getX(), this.getY(), this.getZ(), 0, 0, 0, 0, 0);
             }
         }
     }
@@ -305,6 +301,8 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
+        this.setSuperThrown(false);
+        this.setDeltaMovement(Vec3.ZERO);
         if (!level().isClientSide) {
             Block blkk = this.level().getBlockState($$0.getBlockPos()).getBlock();
             if (blkk instanceof AbstractGlassBlock || blkk instanceof StainedGlassPaneBlock

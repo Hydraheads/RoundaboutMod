@@ -124,6 +124,8 @@
   "item.roundabout.snubnose_revolver": "Snubnose Revolver",
   "item.roundabout.snubnose_ammo": "Revolver Ammunition",
 
+  "item.roundabout.tommy_gun": "Tommy Gun",
+
   "item.roundabout.light_bulb": "Light Bulb",
 
   "item.roundabout.blank_mask": "Glass Visage",
@@ -664,6 +666,8 @@
   "sounds.roundabout.achtung_burst":  "Gone",
 
   "sounds.roundabout.cream_void_attack":  "Cream eating",
+
+  "sounds.roundabout.bullet_ricochet":  "Bullet ricochetted",
 
   "sounds.roundabout.snubnose_fire":  "Gun fired!",
   "sounds.roundabout.snubnose_dry_fire":  "Gun click",

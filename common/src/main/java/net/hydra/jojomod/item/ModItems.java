@@ -137,6 +137,8 @@ public class ModItems {
     public static Item SNUBNOSE_REVOLVER;
     public static Item SNUBNOSE_AMMO;
 
+    public static Item TOMMY_GUN;
+
 
     public static Item PAINTING_VAN_GOUGH;
     public static Item PAINTING_MONA_LISA;

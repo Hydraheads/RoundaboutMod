@@ -1,6 +1,5 @@
 package net.hydra.jojomod.item;
-import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.client.ClientUtil;
+
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -11,28 +10,29 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.Vanishable;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
+public class TommyGunItem extends FirearmItem implements Vanishable {
 
-    public SnubnoseRevolverItem(Properties $$0) {
+    public TommyGunItem(Properties $$0) {
         super($$0);
     }
 
@@ -60,7 +60,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
         stack.getOrCreateTag().putBoolean(RELOADING_TAG, value);
     }
 
-    int maxAmmo = 6;
+    int maxAmmo = 30;
 
     private boolean isReloading(ItemStack stack) {
         return stack.getOrCreateTag().getBoolean(RELOADING_TAG);
@@ -71,7 +71,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
         return UseAnim.BOW;
     }
 
-    private boolean hasSnubnoseAmmo(Player player) {
+    private boolean hasTommyAmmo(Player player) {
         Inventory inv = player.getInventory();
 
         for (ItemStack stack : inv.items) {
@@ -92,7 +92,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
         return false;
     }
 
-    private int consumeSnubnoseAmmo(Player player, int amount) {
+    private int consumeTommyAmmo(Player player, int amount) {
         Inventory inv = player.getInventory();
         int consumed = 0;
 
@@ -195,11 +195,11 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         super.use(level, player, hand);
         ItemStack itemStack = player.getItemInHand(hand);
-        if (!(itemStack.getItem() instanceof SnubnoseRevolverItem)) {
+        if (!(itemStack.getItem() instanceof TommyGunItem)) {
             return InteractionResultHolder.fail(itemStack);
         }
         if (!(player.getUseItem() == itemStack)) {
-            if ((player.isCrouching() && hasSnubnoseAmmo(player) && getAmmo(itemStack) != maxAmmo) || (player.isCrouching() && player.isCreative())) {
+            if ((player.isCrouching() && hasTommyAmmo(player) && getAmmo(itemStack) != maxAmmo) || (player.isCrouching() && player.isCreative())) {
                 if (!isReloading(itemStack)) {
                     setReloading(itemStack, true);
                     player.getCooldowns().addCooldown(this, 60);
@@ -212,7 +212,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
                     if (player instanceof ServerPlayer SP) {
                         SP.displayClientMessage(Component.translatable("text.roundabout.already_reloaded").withStyle(ChatFormatting.GRAY), true);
                     }
-                } else if (player.isCrouching() && getAmmo(itemStack) != maxAmmo && !hasSnubnoseAmmo(player)) {
+                } else if (player.isCrouching() && getAmmo(itemStack) != maxAmmo && !hasTommyAmmo(player)) {
                     if (player instanceof ServerPlayer SP) {
                         SP.displayClientMessage(Component.translatable("text.roundabout.no_more_usable_ammo").withStyle(ChatFormatting.GRAY), true);
                     }
@@ -253,7 +253,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
             int currentAmmo = getAmmo(stack);
             int ammoNeeded = maxAmmo - currentAmmo;
 
-            int ammoLoaded = consumeSnubnoseAmmo(player, ammoNeeded);
+            int ammoLoaded = consumeTommyAmmo(player, ammoNeeded);
 
             if (ammoLoaded > 0) {
                 if (player.isCreative()) {
