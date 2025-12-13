@@ -245,15 +245,7 @@ public class RattDartEntity extends AbstractArrow {
             }
         }
 
-        if ($$1 instanceof LivingEntity $$3) {
-            StandPowers entityPowers = ((StandUser) $$3).roundabout$getStandPowers();
-            if (entityPowers != null ) {
-                if (entityPowers.dealWithProjectile(this, $$0)) {
-                    this.discard();
-                    return;
-                }
-            }
-        }
+
 
         float degrees = MainUtil.getLookAtEntityYaw(this, $$1);
         float force = 0.45F;

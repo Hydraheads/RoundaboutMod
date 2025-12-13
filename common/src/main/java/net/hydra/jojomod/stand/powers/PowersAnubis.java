@@ -890,13 +890,13 @@ public class PowersAnubis extends NewDashPreset {
     public void punchImpact(Entity entity) {
         this.setAttackTimeDuring(-10);
         float knockbackStrength = 0.2F;
-        if (this.getActivePower() == PowerIndex.SNEAK_ATTACK) {knockbackStrength = 0.4F;}
+        if (this.getActivePower() == PowerIndex.SNEAK_ATTACK) {knockbackStrength = 0.55F;}
         if (this.getSelf().isSprinting()) {knockbackStrength += 0.05F;}
 
         List<Entity> entities = getBasicSwordHitBox(this.getActivePower() == PowerIndex.SNEAK_ATTACK);
         for (Entity e : entities ) {
             if (e != null) {
-                float pow = getPunchStrength(e) * (this.getActivePower() == PowerIndex.SNEAK_ATTACK ? 1.3F : 1F);
+                float pow = getPunchStrength(e) * (this.getActivePower() == PowerIndex.SNEAK_ATTACK ? 1.2F : 1F);
                 if (StandDamageEntityAttack(e, pow, 0, this.self)) {
                     if (e instanceof LivingEntity) {
                         addEXP(1);
@@ -970,7 +970,7 @@ public class PowersAnubis extends NewDashPreset {
         float knockbackStrength = 0.6F + (this.getSelf().isSprinting() ? 0.1F : 0F);
         if (first) {knockbackStrength = 0.2F;}
 
-        List<Entity> entities =  defaultSwordHitbox(this.getSelf(),1.3, 3.4);
+        List<Entity> entities = defaultSwordHitbox(this.getSelf(),4, 35,0.03);
         entities = doAttackChecks(entities);
         for (Entity e : entities ) {
             if (e != null) {
@@ -1024,11 +1024,11 @@ public class PowersAnubis extends NewDashPreset {
 
         this.setAttackTimeDuring(-10);
 
-        this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.ANUBIS_BARRAGE_1_EVENT,SoundSource.PLAYERS,0.8F,1.3F);
-        List<Entity> entities = defaultSwordHitbox(this.getSelf(),1,3.6);
+        boolean bl = false;
+        List<Entity> entities =  defaultSwordHitbox(this.getSelf(),4.2, 20,0);
         for (Entity entity : entities) {
             float dist = entity.distanceTo(this.getSelf());
-            boolean range = dist > 2.85F;
+            boolean range = dist > 3;
             float pow = this.getHeavyPunchStrength(entity);
             if (range) {
                 pow *= 1.4F;
@@ -1037,6 +1037,7 @@ public class PowersAnubis extends NewDashPreset {
             if (StandDamageEntityAttack(entity,pow,0.0F,this.getSelf())) {
                 int dur = 100;
                 if (range) {
+                    bl = true;
                     MainUtil.takeUnresistableKnockbackWithY(entity,0.45,0,-1,0);
                     dur = 200;
                 }
@@ -1051,6 +1052,12 @@ public class PowersAnubis extends NewDashPreset {
                 Entity e = entities.get(0);
                 Vec3 pos = e.getPosition(0F).add(0,e.getEyeHeight()/2,0);
                 ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.SWEEP_ATTACK, pos.x, pos.y, pos.z, 0, 0, 0.0, 0, 0.0);
+                if (bl) {
+                    this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.ANUBIS_BARRAGE_1_EVENT,SoundSource.PLAYERS,0.8F,1.3F);
+                } else {
+                    this.getSelf().level().playSound(null,this.getSelf().blockPosition(),SoundEvents.PLAYER_ATTACK_SWEEP,SoundSource.PLAYERS,0.8F,1.3F);
+                }
+
             }
 
         }
@@ -1064,7 +1071,7 @@ public class PowersAnubis extends NewDashPreset {
         this.setAttackTimeDuring(-10);
 
 
-        List<Entity> entities =  defaultSwordHitbox(this.getSelf(),1.3, 3);
+        List<Entity> entities = defaultSwordHitbox(this.getSelf(),3, 55,0.02);
         for (Entity e : entities ) {
             if (e != null) {
 
@@ -1329,7 +1336,7 @@ public class PowersAnubis extends NewDashPreset {
         this.setPowerNone();
         float knockbackStrength = 1.25F + (this.getSelf().isSprinting() ? 0.1F : 0F);
 
-        List<Entity> entities =  defaultSwordHitbox(this.getSelf(),1.5, 3.3);
+        List<Entity> entities = defaultSwordHitbox(this.getSelf(),4, 45,0.1);
         for (Entity e : entities ) {
             if (e != null) {
                 if (e.distanceTo(this.getSelf()) < 1.5F) {
@@ -1441,32 +1448,41 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     public List<Entity> getBasicSwordHitBox(boolean crouching) {
-        List<Entity> entities = defaultSwordHitbox(this.getSelf(),1.2, 3.5);
+        List<Entity> entities = defaultSwordHitbox(this.getSelf(),4.5, 45,0.1);
         if (crouching) {
-            entities = defaultSwordHitbox(this.getSelf(),1.7,2.5);
+            entities = defaultSwordHitbox(this.getSelf(),3, 60,0.02);
         }
         return entities;
     }
+    public List<Entity> defaultSwordHitbox(Entity e,double radius, double angle, double factor) {
+        final Vec3 Eyepos = new Vec3(e.getEyePosition(0F).x,0,e.getEyePosition().z);//.add(e.getLookAngle());
+        Vec3 pos = e.getEyePosition();
 
-    public List<Entity> defaultSwordHitbox(Entity e,double width, double forwards) {
-        Vec3 pos = e.getEyePosition(0F).add(e.getLookAngle().scale(forwards));
-        double yrot = Math.toRadians(this.getSelf().getViewYRot(0F));
-
-        Vec3 forward = new Vec3(Math.cos(yrot+Math.PI/2),0,Math.sin(yrot+Math.PI/2));
-        Vec3 left = new Vec3(forward.z,0,forward.x);
-
-
-        Vec3 offset = Vec3.ZERO;
-        offset = offset.add(left.scale(width));
-        offset = offset.add(forward.scale(forwards));
-
-        List<Entity> list = MainUtil.genHitbox(e.level(), pos.x, pos.y, pos.z,1+Math.abs(offset.x),2,1+Math.abs(offset.z));
-
-
-        list = doAttackChecks(doAttackChecks(list));
-        double size =Math.max(width,forwards);
-        list.removeIf(entity -> entity.getPosition(1F).distanceTo(e.getPosition(1F)) > size );
+        List<Entity> list = MainUtil.genHitbox(this.getSelf().level(),pos.x,pos.y,pos.z,8,radius*0.3,8);
+        list = doAttackChecks(list);
         list.remove(e);
+
+
+        list.removeIf(entity -> {
+            Vec3 ePos = entity.getPosition(0F);
+            ePos = new Vec3(ePos.x,0,ePos.z);
+
+            Vec3 vector = ePos.subtract(Eyepos);
+            double dist = vector.length();
+            vector = vector.normalize();
+
+            double b = Math.toRadians(e.getYRot());
+            final Vec3 Lookvec = new Vec3(Math.cos(b),0,Math.sin(b) );
+
+            double dungle = Math.abs(Math.toDegrees(vector.dot(Lookvec)));
+
+            if (dist > radius-(dungle*factor)) {return true;}
+            return (dungle > angle );
+        });
+
+
+
+
         return list;
     }
     public List<Entity> doAttackChecks(List<Entity> list) {

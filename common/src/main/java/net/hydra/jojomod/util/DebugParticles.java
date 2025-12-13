@@ -26,4 +26,14 @@ public class DebugParticles {
         }
     }
 
+    public static void drawCircle(Level level, Vec3 v1, int radius) {
+        drawCircle(level,v1,radius,new Vector3f(0,1,0) );
+    }
+    public static void drawCircle(Level level, Vec3 v1, int radius, Vector3f color) {
+        for(float i=0;i<=Math.PI/2;i+=0.05F) {
+            drawPoint(level,v1.add(new Vec3(Math.cos(i),0,Math.sin(i)).multiply(radius,radius,radius)  ),color);
+        }
+    }
+
+
 }
