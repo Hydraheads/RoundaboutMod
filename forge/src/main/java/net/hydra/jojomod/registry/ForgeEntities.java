@@ -441,6 +441,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "gasoline_splatter").toString())
             );
+    public static final RegistryObject<EntityType<BloodSplatterEntity>> BLOOD_SPLATTER =
+            ENTITY_TYPES.register("blood_splatter", () ->
+                    EntityType.Builder.<BloodSplatterEntity>of(BloodSplatterEntity::new, MobCategory.MISC).sized(0.8f, 0.8f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "blood_splatter").toString())
+            );
     public static final RegistryObject<EntityType<StandArrowEntity>> STAND_ARROW =
             ENTITY_TYPES.register("stand_arrow", () ->
                     EntityType.Builder.<StandArrowEntity>of(StandArrowEntity::new, MobCategory.MISC).sized(0.7f, 0.7f).
