@@ -108,6 +108,8 @@ public class ForgeSounds {
 
     public static final RegistryObject<SoundEvent> BULLET_PENTRATION_EVENT =
             register(ModSounds.BULLET_PENTRATION, ModSounds.BULLET_PENTRATION_ID);
+    public static final RegistryObject<SoundEvent> BULLET_RICOCHET_EVENT =
+            register(ModSounds.BULLET_RICOCHET, ModSounds.BULLET_RICOCHET_ID);
 
     public static final RegistryObject<SoundEvent> ROAD_ROLLER_AMBIENT_EVENT =
             register(ModSounds.ROAD_ROLLER_AMBIENT, ModSounds.ROAD_ROLLER_AMBIENT_ID);

@@ -877,6 +877,9 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                             ((IPlayerEntityAbstractClient)player).roundabout$setOGModel(this.model);
                             ((IPlayerEntityAbstractClient)player).roundabout$setSwitched(true);
                             model = roundabout$otherModel;
+                        } else {
+                            ((IPlayerEntityAbstractClient)player).roundabout$setSwitched(false);
+                            model = ((IPlayerEntityAbstractClient)player).roundabout$getOGModel();
                         }
                     }
                     return;

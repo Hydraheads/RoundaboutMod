@@ -2,26 +2,16 @@ package net.hydra.jojomod.item;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.entity.projectile.BloodSplatterEntity;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
-import net.hydra.jojomod.util.config.ConfigManager;
-import net.minecraft.ChatFormatting;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -30,12 +20,9 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.GrowingPlantHeadBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.gameevent.GameEvent;
 
 public class SacrificialDaggerItem extends TieredItem implements Vanishable {
     /**It is basically a hybrid speedy weapon + shears that also inflicts bleed on strike*/
@@ -65,6 +52,7 @@ public class SacrificialDaggerItem extends TieredItem implements Vanishable {
         return !$$3.isCreative();
     }
 
+    public static final float SHOOT_POWER = 0.9F;
 
     @Override
     public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot $$0) {
@@ -85,8 +73,16 @@ public class SacrificialDaggerItem extends TieredItem implements Vanishable {
                     } else {
                         $$0.hurt(1,$$2.level().getRandom(),null);
                     }
-                    MainUtil.makeMobBleed($$2);
-                    MainUtil.makeBleed($$2,0,400,$$2);
+
+                    if (FateTypes.isDaggerUpgraded($$2)){
+                        BloodSplatterEntity $$7 = new BloodSplatterEntity($$2, $$1);
+                        $$7.shootFromRotation($$2, $$2.getXRot(), $$2.getYRot(), -15, SHOOT_POWER, 1.0F);
+                        $$7.setPos($$2.getPosition(1).add(($$2.getEyePosition().subtract($$2.getPosition(1))).scale(0.5f)));
+                        $$1.addFreshEntity($$7);
+                    } else {
+                        MainUtil.makeMobBleed($$2);
+                        MainUtil.makeBleed($$2,0,400,$$2);
+                    }
                     $$1.playSound(null, $$2, ModSounds.KNIFE_IMPACT_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                     $$2.hurt(ModDamageTypes.of($$1, ModDamageTypes.DAGGER), 2.01F);
                 }

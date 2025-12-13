@@ -312,6 +312,8 @@ public class ForgeEvents {
         ModItems.SNUBNOSE_REVOLVER = ForgeItems.SNUBNOSE_REVOLVER.get();
         ModItems.SNUBNOSE_AMMO = ForgeItems.SNUBNOSE_AMMO.get();
 
+        ModItems.TOMMY_GUN = ForgeItems.TOMMY_GUN.get();
+
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_DIO.get()).referenceItem = ForgeItems.STREET_SIGN_DIO_BLOCK_ITEM.get().getDefaultInstance();
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_RIGHT.get()).referenceItem = ForgeItems.STREET_SIGN_RIGHT_BLOCK_ITEM.get().getDefaultInstance();
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_STOP.get()).referenceItem = ForgeItems.STREET_SIGN_STOP_BLOCK_ITEM.get().getDefaultInstance();
@@ -491,6 +493,7 @@ public class ForgeEvents {
         ModEntities.STAND_FIREBALL = ForgeEntities.STAND_FIREBALL.get();
         ModEntities.GASOLINE_CAN = ForgeEntities.GASOLINE_CAN.get();
         ModEntities.GASOLINE_SPLATTER = ForgeEntities.GASOLINE_SPLATTER.get();
+        ModEntities.BLOOD_SPLATTER = ForgeEntities.BLOOD_SPLATTER.get();
         ModEntities.STAND_ARROW = ForgeEntities.STAND_ARROW.get();
         ModEntities.ROAD_ROLLER_ENTITY = ForgeEntities.ROAD_ROLLER_ENTITY.get();
         ModEntities.SEPERATED_LEGS = ForgeEntities.SEPERATED_LEGS.get();

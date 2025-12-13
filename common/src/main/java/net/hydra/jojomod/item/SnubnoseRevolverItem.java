@@ -1,4 +1,6 @@
 package net.hydra.jojomod.item;
+import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -9,6 +11,8 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -128,6 +132,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
             ((StandUser) player).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 10, false);
             setReloading(stack, false);
             player.getCooldowns().removeCooldown(this);
+            player.level().playSound(null, player.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
         }
     }
 

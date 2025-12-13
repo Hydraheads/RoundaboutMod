@@ -6,17 +6,13 @@ import net.hydra.jojomod.access.IBlockEntityWithoutLevelRenderer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModItemModels;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.client.models.projectile.HarpoonModel;
 import net.hydra.jojomod.item.ModItems;
-import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -38,6 +34,26 @@ public class RegisterBlockEntityWithoutLevelRenderer implements IBlockEntityWith
             if (ModItemModels.HARPOON_MODEL != null) {
                 VertexConsumer vertexconsumer1 = ItemRenderer.getFoilBufferDirect($$3, ModItemModels.HARPOON_MODEL.renderType(ModEntities.HARPOON_TEXTURE), false, $$0.hasFoil());
                 ModItemModels.HARPOON_MODEL.renderToBuffer($$2, vertexconsumer1, $$4, $$5, 1.0F, 1.0F, 1.0F, 1.0F);
+            }
+            ClientUtil.popPoseAndCooperate($$2,19);
+        }
+        if ($$0.is(ModItems.SNUBNOSE_REVOLVER)) {
+            ClientUtil.pushPoseAndCooperate($$2,19);
+
+            $$2.scale(1.0F, -1.0F, -1.0F);
+            if (ModItemModels.SNUBNOSE_MODEL != null) {
+                VertexConsumer vertexconsumer1 = ItemRenderer.getFoilBufferDirect($$3, ModItemModels.SNUBNOSE_MODEL.renderType(ModEntities.SNUBNOSE_IN_HAND_TEXTURE), false, $$0.hasFoil());
+                ModItemModels.SNUBNOSE_MODEL.renderToBuffer($$2, vertexconsumer1, $$4, $$5, 1.0F, 1.0F, 1.0F, 1.0F);
+            }
+            ClientUtil.popPoseAndCooperate($$2,19);
+        }
+        if ($$0.is(ModItems.TOMMY_GUN)) {
+            ClientUtil.pushPoseAndCooperate($$2,19);
+
+            $$2.scale(1.0F, -1.0F, -1.0F);
+            if (ModItemModels.TOMMY_GUN_MODEL != null) {
+                VertexConsumer vertexconsumer1 = ItemRenderer.getFoilBufferDirect($$3, ModItemModels.TOMMY_GUN_MODEL.renderType(ModEntities.TOMMY_GUN_IN_HAND_TEXTURE), false, $$0.hasFoil());
+                ModItemModels.TOMMY_GUN_MODEL.renderToBuffer($$2, vertexconsumer1, $$4, $$5, 1.0F, 1.0F, 1.0F, 1.0F);
             }
             ClientUtil.popPoseAndCooperate($$2,19);
         }

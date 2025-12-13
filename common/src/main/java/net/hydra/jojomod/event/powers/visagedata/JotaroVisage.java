@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.powers.visagedata.voicedata.DIOVoice;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.JotaroVoice;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
 import net.hydra.jojomod.item.ModItems;
+import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -24,7 +25,10 @@ public class JotaroVisage extends VisageData {
     public VoiceData voiceData(LivingEntity slef){
         return new JotaroVoice(slef);
     }
-
+    @Override
+    public Vec3i getHairColor(){
+        return new Vec3i(22,22,22);
+    }
 
     public VisageData generateVisageData(LivingEntity entity){
         return new JotaroVisage(entity);

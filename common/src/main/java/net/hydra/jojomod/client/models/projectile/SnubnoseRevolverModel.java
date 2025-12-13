@@ -34,23 +34,23 @@ public class SnubnoseRevolverModel<T extends Entity> extends HierarchicalModel<T
 	}
 
 	public static LayerDefinition createBodyLayer() {
-		MeshDefinition meshdefinition = new MeshDefinition();
-		PartDefinition partdefinition = meshdefinition.getRoot();
+        MeshDefinition meshdefinition = new MeshDefinition();
+        PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition SexyGun = partdefinition.addOrReplaceChild("SexyGun", CubeListBuilder.create().texOffs(10, 4).addBox(-0.5F, -4.0F, -1.475F, 1.0F, 4.0F, 2.0F, new CubeDeformation(0.001F))
-		.texOffs(0, 2).addBox(-0.5F, -3.5F, -0.975F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.002F))
-		.texOffs(0, 0).addBox(-0.5F, -5.0F, -4.975F, 1.0F, 3.0F, 4.0F, new CubeDeformation(0.0F))
-		.texOffs(6, 0).addBox(-0.5F, -5.0F, -2.975F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-		.texOffs(10, 1).addBox(-0.5F, -4.6558F, -1.9755F, 1.0F, 1.0F, 2.0F, new CubeDeformation(-0.01F))
-		.texOffs(0, 8).addBox(0.0F, -2.5F, -4.975F, 0.0F, 2.0F, 3.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 7).addBox(-0.5F, -5.0F, -6.975F, 1.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-		.texOffs(4, 7).addBox(0.0F, -5.5F, -6.975F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-		.texOffs(4, 6).addBox(0.0F, -3.5F, -6.975F, 0.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 0).addBox(-0.5F, -4.5F, -6.985F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 11.75F, 0.475F));
+        PartDefinition SexyGun = partdefinition.addOrReplaceChild("SexyGun", CubeListBuilder.create().texOffs(10, 4).addBox(-0.5F, -4.0F, -1.475F, 1.0F, 4.0F, 2.0F, new CubeDeformation(0.001F))
+                .texOffs(0, 2).addBox(-0.5F, -3.0F, -0.5F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.002F))
+                .texOffs(0, 0).addBox(-0.5F, -5.0F, -4.975F, 1.0F, 3.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(6, 0).addBox(-0.5F, -5.0F, -2.975F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(10, 1).addBox(-0.5F, -4.9808F, -1.9755F, 1.0F, 1.0F, 2.0F, new CubeDeformation(-0.01F))
+                .texOffs(0, 8).addBox(0.0F, -2.5F, -4.975F, 0.0F, 2.0F, 3.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 7).addBox(-0.5F, -5.0F, -6.975F, 1.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(4, 7).addBox(0.0F, -5.5F, -6.975F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(4, 6).addBox(0.0F, -3.5F, -6.975F, 0.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 0).addBox(-0.5F, -4.5F, -6.985F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 11.75F, 0.475F));
 
-		PartDefinition cylinder = SexyGun.addOrReplaceChild("cylinder", CubeListBuilder.create().texOffs(3, 10).addBox(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(-0.35F)), PartPose.offset(0.0F, -3.5F, -3.375F));
+        PartDefinition cylinder = SexyGun.addOrReplaceChild("cylinder", CubeListBuilder.create().texOffs(3, 10).addBox(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(-0.35F)), PartPose.offset(0.0F, -3.5F, -3.375F));
 
-		return LayerDefinition.create(meshdefinition, 16, 16);
+        return LayerDefinition.create(meshdefinition, 16, 16);
 	}
 
 	@Override

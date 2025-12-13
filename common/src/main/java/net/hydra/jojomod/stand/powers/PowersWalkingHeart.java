@@ -232,6 +232,9 @@ public class PowersWalkingHeart extends NewDashPreset {
         if (onCooldown(PowerIndex.SKILL_2) || self.isSwimming())
             return false;
 
+        if (MainUtil.isStandingInBlock(self))
+            return false;
+
         if (forceBlock())
             return false;
 
@@ -1017,7 +1020,9 @@ public class PowersWalkingHeart extends NewDashPreset {
             if (hasExtendedHeelsForWalking() && !getStandUserSelf().rdbt$getJumping()){
                 if (!self.onGround()) {
                     if (this.self.getDeltaMovement().y < 0){
+                        if (!(canCutCorners() && justFlippedTicks > 0)) {
                             this.self.setDeltaMovement(this.self.getDeltaMovement().add(0, -0.14, 0));
+                        }
                     }
                 }
             }

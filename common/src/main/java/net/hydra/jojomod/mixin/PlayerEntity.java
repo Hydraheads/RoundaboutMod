@@ -874,6 +874,70 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public AnimationState roundabout$getSnubnoseAim(){
         return roundabout$snubnoseAim;
     }
+    @Unique
+    public final AnimationState roundabout$snubnoseRecoil = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getSnubnoseRecoil(){
+        return roundabout$snubnoseRecoil;
+    }
+    @Unique
+    public final AnimationState roundabout$snubnoseModelAim = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getSnubnoseModelAim(){
+        return roundabout$snubnoseModelAim;
+    }
+    @Unique
+    public final AnimationState roundabout$snubnoseModelRecoil = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getSnubnoseModelRecoil(){
+        return roundabout$snubnoseModelRecoil;
+    }
+    @Unique
+    public final AnimationState roundabout$snubnoseAimLeft = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getSnubnoseAimLeft(){
+        return roundabout$snubnoseAimLeft;
+    }
+    @Unique
+    public final AnimationState roundabout$snubnoseRecoilLeft = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getSnubnoseRecoilLeft(){
+        return roundabout$snubnoseRecoilLeft;
+    }
+    @Unique
+    public final AnimationState roundabout$snubnoseModelAimLeft = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getSnubnoseModelAimLeft(){
+        return roundabout$snubnoseModelAimLeft;
+    }
+    @Unique
+    public final AnimationState roundabout$snubnoseModelRecoilLeft = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getSnubnoseModelRecoilLeft(){
+        return roundabout$snubnoseModelRecoilLeft;
+    }
+    @Unique
+    public final AnimationState roundabout$snubnoseModelIdle = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getSnubnoseModelIdle(){
+        return roundabout$snubnoseModelIdle;
+    }
+    @Unique
+    public final AnimationState roundabout$snubnoseModelIdleLeft = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getSnubnoseModelIdleLeft(){
+        return roundabout$snubnoseModelIdleLeft;
+    }
+
 
     @Unique
     public final AnimationState roundabout$BubbleShotAim = new AnimationState();
@@ -1025,6 +1089,16 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             this.roundabout$SITTING.startIfStopped(this.tickCount);
         } else {
             this.roundabout$SITTING.stop();
+        }
+        if (roundabout$GetPoseEmote() == Poses.VAMPIRE_TRANSFORMATION.id) {
+            this.roundabout$VAMPIRE.startIfStopped(this.tickCount);
+        } else {
+            this.roundabout$VAMPIRE.stop();
+        }
+        if (roundabout$GetPoseEmote() == Poses.VAMPIRE_TRANSFORMATION.id) {
+            this.roundabout$VAMPIRE.startIfStopped(this.tickCount);
+        } else {
+            this.roundabout$VAMPIRE.stop();
         }
         if (roundabout$GetPoseEmote() == Poses.VAMPIRE_TRANSFORMATION.id) {
             this.roundabout$VAMPIRE.startIfStopped(this.tickCount);

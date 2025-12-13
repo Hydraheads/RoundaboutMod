@@ -83,6 +83,12 @@
       "roundabout:bullet_penetration"
     ]
   },
+  "bullet_ricochet": {
+    "subtitle": "sounds.roundabout.bullet_ricochet",
+    "sounds": [
+      "roundabout:bullet_ricochet"
+    ]
+  },
   "road_roller_ambient": {
     "subtitle": "sounds.roundabout.road_roller_ambient",
     "sounds": [

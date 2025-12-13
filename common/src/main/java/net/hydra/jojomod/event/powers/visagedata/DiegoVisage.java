@@ -4,6 +4,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.DiegoVoice;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
+import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
@@ -24,6 +25,10 @@ public class DiegoVisage extends VisageData {
         return new Vec3(0.98F,0.98F,0.98F);
     }
 
+    @Override
+    public Vec3i getHairColor(){
+        return new Vec3i(235,179,37);
+    }
     @Override
     public Vector3f scale(){
         return new Vector3f(0.915F, 0.915F, 0.915F);

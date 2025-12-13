@@ -28,6 +28,7 @@ import net.hydra.jojomod.client.models.npcs.ZombieAestheticianModel;
 import net.hydra.jojomod.client.models.npcs.renderers.ZombieAestheticianRenderer;
 import net.hydra.jojomod.client.models.projectile.renderers.NoRenderer;
 import net.hydra.jojomod.client.models.substand.LifeTrackerModel;
+import net.hydra.jojomod.entity.projectile.BloodSplatterEntity;
 import net.hydra.jojomod.particles.*;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.particle.ExplodeParticle;
@@ -89,6 +90,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.CROSSFIRE_HURRICANE.get(), CrossfireHurricaneRenderer::new);
         event.registerEntityRenderer(ForgeEntities.LIFE_TRACKER.get(), LifeTrackerRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STAND_FIREBALL.get(), StandFireballRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.BLOOD_SPLATTER.get(), BloodSplatterRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GASOLINE_CAN.get(), GasolineCanRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_OBJECT.get(), ThrownObjectRenderer::new);
         event.registerEntityRenderer(ForgeEntities.CONCEALED_FLAME_OBJECT.get(), ConcealedFlameObjectRenderer::new);
@@ -226,9 +228,11 @@ public class ClientForgeEvents {
         ModStrayModels.VampireHairOne = new VampireHairOnePart();
         ModStrayModels.VampireHairTwo = new VampireHairTwoPart();
         ModStrayModels.VampireHairFlesh = new VampireHairFleshBudLayer();
-        ModStrayModels.FirstPersonArmsModel = new FirstPersonArmsLayer();
+        ModStrayModels.FirstPersonArmsModel = new FirstPersonArmsModel();
+        ModStrayModels.FirstPersonArmsSlimModel = new FirstPersonArmsSlimModel();
         ModStrayModels.ROAD_ROLLER = new RoadRollerStrayModel();
         ModStrayModels.SNUBNOSE_REVOLVER_MODEL = new SnubnoseRevolverModel();
+        ModStrayModels.FirstPersonSnubnoseModel = new FirstPersonSnubnoseModel();
         //BlockEntityRenderers.register(ModBlocks.STAND_FIRE_BLOCK_ENTITY, StandFireRenderer::new);
     }
     @SubscribeEvent

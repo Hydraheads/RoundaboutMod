@@ -186,17 +186,18 @@ public class RoundaboutBulletEntity extends AbstractArrow {
         }
 
         if (entity instanceof LivingEntity livingEntity) {
-            if ((livingEntity.hurtTime > 0 || livingEntity.invulnerableTime > 0) && outsideOfTimeStop == 0) {
+
+            if (livingEntity.isInvulnerable()) {
                 return;
-            } else if (livingEntity.isInvulnerable()) {
-                return;
-            } else if (outsideOfTimeStop > 0) {
-                entity.invulnerableTime = 0;
+            }
+
+            if (outsideOfTimeStop > 0) {
+                livingEntity.hurtTime = 0;
+                livingEntity.invulnerableTime = 0;
             }
 
             boolean didDamage;
             float bulletDamage = timeStopShot ? 3.7F : 4.0F;
-
             didDamage = livingEntity.hurt(ModDamageTypes.of(level(), ModDamageTypes.BULLET, this, this.getOwner()), bulletDamage);
 
             if (didDamage) {
@@ -275,15 +276,11 @@ public class RoundaboutBulletEntity extends AbstractArrow {
             this.setDeltaMovement(delta);
         }
 
-        if (level().isClientSide) {
-            boolean isFlying = getDeltaMovement().lengthSqr() > 0.01;
+        if (!level().isClientSide && !this.inGround) {
+            boolean isFlying = getDeltaMovement().lengthSqr() > 1;
 
             if (isFlying) {
-                if (this.tickCount%80 ==1) {
-                    if (!((TimeStop) this.level()).inTimeStopRange(this)) {
-                        // ClientUtil.handleBowlerHatFlySound(this);
-                    }
-                }
+                ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.2F, 0.2F, 0.2F), 1f), this.getX(), this.getY(), this.getZ(), 0, 0, 0, 0, 0);
             }
         }
     }
@@ -304,6 +301,8 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
+        this.setSuperThrown(false);
+        this.setDeltaMovement(Vec3.ZERO);
         if (!level().isClientSide) {
             Block blkk = this.level().getBlockState($$0.getBlockPos()).getBlock();
             if (blkk instanceof AbstractGlassBlock || blkk instanceof StainedGlassPaneBlock

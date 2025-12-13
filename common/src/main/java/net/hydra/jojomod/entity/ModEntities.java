@@ -74,6 +74,7 @@ public class ModEntities {
     public static EntityType<RoadRollerEntity> ROAD_ROLLER_ENTITY;
 
     public static EntityType<GasolineSplatterEntity> GASOLINE_SPLATTER;
+    public static EntityType<BloodSplatterEntity> BLOOD_SPLATTER;
 
     public static EntityType<StandArrowEntity> STAND_ARROW;
     public static EntityType<ThrownObjectEntity> THROWN_OBJECT;
@@ -123,6 +124,8 @@ public class ModEntities {
     public static EntityType<FallenPhantom> FALLEN_PHANTOM;
     public static EntityType<FallenCreeper> FALLEN_CREEPER;
     public static final ResourceLocation HARPOON_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_harpoon.png");
+    public static final ResourceLocation SNUBNOSE_IN_HAND_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/item/snubnose_revolver.png");
+    public static final ResourceLocation TOMMY_GUN_IN_HAND_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/item/snubnose_revolver.png");
     public static final ResourceLocation BLADED_BOWLER_HAT_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/bladed_bowler_hat.png");
     public static final ResourceLocation ROUNDABOUT_BULLET_ENTITY_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/roundabout_bullet.png");
     public static final ResourceLocation KNIFE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_knife.png");

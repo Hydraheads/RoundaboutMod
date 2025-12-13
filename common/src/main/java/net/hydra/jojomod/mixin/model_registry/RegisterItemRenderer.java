@@ -3,8 +3,6 @@ package net.hydra.jojomod.mixin.model_registry;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.access.IItemRenderer;
-import net.hydra.jojomod.block.FogBlock;
-import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModItemModels;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.util.MainUtil;
@@ -20,9 +18,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
 
@@ -112,6 +108,12 @@ public abstract class RegisterItemRenderer implements IItemRenderer {
         if (stack.is(ModItems.HARPOON) && renderMode != ItemDisplayContext.GUI && renderMode != ItemDisplayContext.GROUND) {
             return this.itemModelShaper.getModelManager().
                     getModel(ModItemModels.HARPOON_IN_HAND);
+        } if (stack.is(ModItems.SNUBNOSE_REVOLVER) && renderMode != ItemDisplayContext.GUI && renderMode != ItemDisplayContext.GROUND) {
+            return this.itemModelShaper.getModelManager().
+                    getModel(ModItemModels.SNUBNOSE_REVOLVER_IN_HAND);
+        } if (stack.is(ModItems.TOMMY_GUN) && renderMode != ItemDisplayContext.GUI && renderMode != ItemDisplayContext.GROUND) {
+            return this.itemModelShaper.getModelManager().
+                    getModel(ModItemModels.TOMMY_GUN_IN_HAND);
         } if (stack.is(ModItems.STREET_SIGN_DIO_BLOCK_ITEM) && renderMode != ItemDisplayContext.GUI) {
 
             CompoundTag ct = stack.getOrCreateTagElement("BlockStateTag");

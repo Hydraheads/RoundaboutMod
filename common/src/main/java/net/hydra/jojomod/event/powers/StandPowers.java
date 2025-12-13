@@ -427,12 +427,12 @@ public class StandPowers extends AbilityScapeBasis {
             if (!ipa.roundabout$getIsDeflected()){
                 if (PE instanceof RoundaboutBulletEntity) {
                     ((RoundaboutBulletEntity) PE).setSuperThrown(false);
+                    PE.level().playSound(null, PE.blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
                 ipa.roundabout$setIsDeflected(true);
                 ent.setDeltaMovement(ent.getDeltaMovement().scale(-0.4));
                 ent.setYRot(ent.getYRot() + 180.0F);
                 ent.yRotO += 180.0F;
-                Roundabout.LOGGER.info("Delta movement applied");
             }
         }
     }
