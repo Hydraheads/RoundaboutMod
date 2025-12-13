@@ -36,7 +36,7 @@ public class PlayerEntityAbstractClient implements IPlayerEntityAbstractClient {
     }
 
     @Unique
-    public PlayerModel roundabout$playerModel;
+    public PlayerModel roundabout$playerModel = null;
 
     @Override
     @Unique
@@ -46,7 +46,7 @@ public class PlayerEntityAbstractClient implements IPlayerEntityAbstractClient {
     @Override
     @Unique
     public void roundabout$setOGModel(PlayerModel switched){
-        this.roundabout$playerModel = switched;
+            this.roundabout$playerModel = switched;
     }
     @Unique
     Mob roundabout$shapeShift = null;

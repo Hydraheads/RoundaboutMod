@@ -2,6 +2,7 @@ package net.hydra.jojomod.event.powers.visagedata;
 
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -23,6 +24,10 @@ public class ValentineVisage extends VisageData {
         return new Vec3(1.0F,1.0F,1.0F);
     }
 
+    @Override
+    public Vec3i getHairColor(){
+        return new Vec3i(247,238,106);
+    }
     @Override
     public Vector3f scale(){
         return new Vector3f(0.939F, 0.939F, 0.939F);
