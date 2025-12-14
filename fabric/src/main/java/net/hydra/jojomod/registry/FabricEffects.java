@@ -29,6 +29,8 @@ public class FabricEffects extends MobEffect{
             register("gravity_flip", new FabricEffects(MobEffectCategory.NEUTRAL, 4906114));
     public static final MobEffect WARDING =
             register("warding", new FabricEffects(MobEffectCategory.BENEFICIAL, 16760283));
+    public static final MobEffect VAMPIRE_BLOOD =
+            register("vampire_blood", new FabricEffects(MobEffectCategory.HARMFUL, 8662571));
 
     protected FabricEffects(MobEffectCategory mobEffectCategory, int i) {
         super(mobEffectCategory, i);
@@ -48,5 +50,6 @@ public class FabricEffects extends MobEffect{
         ModEffects.MELTING = MELTING;
         ModEffects.GRAVITY_FLIP = GRAVITY_FLIP;
         ModEffects.WARDING = WARDING;
+        ModEffects.VAMPIRE_BLOOD = VAMPIRE_BLOOD;
     }
 }

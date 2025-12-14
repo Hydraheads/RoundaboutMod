@@ -44,6 +44,9 @@ public class ForgeEffects{
     public static final RegistryObject<MobEffect> WARDING =
             POTION_EFFECTS.register("warding", () ->
                     new Effect(MobEffectCategory.BENEFICIAL, 16760283));
+    public static final RegistryObject<MobEffect> VAMPIRE_BLOOD =
+            POTION_EFFECTS.register("vampire_blood", () ->
+                    new Effect(MobEffectCategory.HARMFUL, 8662571));
 
 
     public static class Effect extends MobEffect{

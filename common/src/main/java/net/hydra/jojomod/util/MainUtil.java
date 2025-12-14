@@ -874,8 +874,13 @@ public class MainUtil {
     public static boolean canDrinkBloodFair(Entity ent,Entity drinker){
         return canDrinkBlood(ent) && !(ent instanceof Player);
     }
-    public static boolean canDrinkBloodCrit(Entity ent,Entity drinker){
+    public static boolean canDrinkBloodCritAggro(Entity ent,Entity drinker){
         return !(ent instanceof Mob mb && mb.getTarget() != null && mb.getTarget().is(drinker));
+    }
+    public static boolean canDrinkBloodCrit(Entity ent,Entity drinker){
+        if (drinker instanceof LivingEntity LE && !(LE.hasEffect(ModEffects.VAMPIRE_BLOOD)))
+            return false;
+        return canDrinkBloodCritAggro(ent,drinker);
     }
 
     public static void removeFleshBud(Entity entity){
@@ -1752,6 +1757,7 @@ public class MainUtil {
     }
     public static boolean isSpecialEffect(MobEffect value){
         return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS) ||
+                value.equals(ModEffects.VAMPIRE_BLOOD) ||
                 value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING);
     }
     public static boolean canHaveFrictionTaken(LivingEntity LE){

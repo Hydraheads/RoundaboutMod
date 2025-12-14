@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.projectile;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StandFireBlock;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
@@ -11,6 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -18,6 +20,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -49,6 +53,8 @@ public class BloodSplatterEntity extends ThrowableProjectile {
         super(ModEntities.BLOOD_SPLATTER, d0, d1,d2,level);
     }
 
+    public int healthAmt = 0;
+
 
     private static final EntityDataAccessor<Byte> SPLATTER_TYPE = SynchedEntityData.defineId(
             BloodSplatterEntity.class, EntityDataSerializers.BYTE
@@ -65,7 +71,7 @@ public class BloodSplatterEntity extends ThrowableProjectile {
         super.onHitBlock($$0);
         if (!this.level().isClientSide) {
 
-                ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
+                ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.BLOOD_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
                         15, 0.4, 0.4, 0.25, 0.4);
                 SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
                 this.playSound($$6, 1F, 1.5F);
@@ -91,24 +97,30 @@ public class BloodSplatterEntity extends ThrowableProjectile {
     protected void onHitEntity(EntityHitResult $$0) {
         if (!this.level().isClientSide) {
 
-            ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
+            ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.BLOOD_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
                     15, 0.4, 0.4, 0.25, 0.4);
             SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
             this.playSound($$6, 1F, 1.5F);
-            if ($$0.getEntity() instanceof LivingEntity) {
-                ((StandUser) $$0.getEntity()).roundabout$setGasolineTime(((StandUser) $$0.getEntity()).roundabout$getMaxBucketGasolineTime());
-            }
-            List<Entity> entities = MainUtil.hitbox(MainUtil.genHitbox(this.level(), $$0.getEntity().getX(),  $$0.getEntity().getY(),
-                    $$0.getEntity().getZ(), 2, 2, 2));
-            if (!entities.isEmpty()) {
-                for (Entity value : entities) {
-                    if (value instanceof LivingEntity){
-                        ((StandUser) value).roundabout$setGasolineTime(((StandUser) value).roundabout$getMaxBucketGasolineTime());
-                    }
-                }
+            if ($$0.getEntity() instanceof LivingEntity LE) {
+                LE.setHealth(Math.min(LE.getMaxHealth(),LE.getHealth()+healthAmt));
+                LE.addEffect(new MobEffectInstance(ModEffects.VAMPIRE_BLOOD, 12000, 0),getOwner());
             }
             this.discard();
         }
+    }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag $$0) {
+        super.addAdditionalSaveData($$0);
+
+        $$0.putInt("healthAmt", healthAmt);
+    }
+
+    @Override
+    protected void readAdditionalSaveData(CompoundTag $$0) {
+        super.readAdditionalSaveData($$0);
+
+        healthAmt = $$0.getInt("healthAmt");
     }
 
 
