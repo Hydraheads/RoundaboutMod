@@ -11,7 +11,8 @@
     "ExperimentalFixD4CFabric",
     "DimensionResourceKeyD4CFabric",
     "FabricFireBlock",
-    "FabricTerrainRenderContext"
+    "FabricTerrainRenderContext",
+    "MilkBucketMixin"
   ],
   "server": [
   ],

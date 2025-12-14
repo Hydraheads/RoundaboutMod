@@ -141,7 +141,6 @@
     "items.BucketItemMixin",
     "items.ExecutionerAxeRaid",
     "items.MaskItemEntity",
-    "items.MilkBucketMixin",
     "items.RaidItemEntity",
     "items.StandArrowBowItem",
     "items.StandCancelsShieldItem",

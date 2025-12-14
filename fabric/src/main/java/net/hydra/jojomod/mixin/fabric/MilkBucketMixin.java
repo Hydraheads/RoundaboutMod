@@ -1,4 +1,4 @@
-package net.hydra.jojomod.mixin.items;
+package net.hydra.jojomod.mixin.fabric;
 
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.world.effect.MobEffectInstance;
