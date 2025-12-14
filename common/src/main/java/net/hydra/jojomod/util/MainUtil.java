@@ -2119,7 +2119,8 @@ public class MainUtil {
         if (LE != null){
             StandUser user = ((StandUser) LE);
             return (user.roundabout$hasAStand() || user.roundabout$getZappedToID() > -1
-                    || user.rdbt$getFleshBud() != null);
+                    || user.rdbt$getFleshBud() != null ||
+                    (LE instanceof Mob mb && ((IMob)mb).roundabout$isVampire()));
         }
         return false;
     }
