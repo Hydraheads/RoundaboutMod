@@ -448,6 +448,7 @@ public class ForgeEvents {
         ModEffects.MELTING = ForgeEffects.MELTING.get();
         ModEffects.GRAVITY_FLIP = ForgeEffects.GRAVITY_FLIP.get();
         ModEffects.WARDING = ForgeEffects.WARDING.get();
+        ModEffects.VAMPIRE_BLOOD = ForgeEffects.VAMPIRE_BLOOD.get();
 
 
 

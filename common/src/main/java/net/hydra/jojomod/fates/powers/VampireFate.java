@@ -246,7 +246,7 @@ public class VampireFate extends VampiricFate {
 
 
     public boolean canPlantDrink(Entity ent) {
-        if (MainUtil.canDrinkBloodCrit(ent,self) && !(ent instanceof Monster)) {
+        if (MainUtil.canDrinkBloodCritAggro(ent,self) && !(ent instanceof Monster)) {
             return true;
         }
         return false;

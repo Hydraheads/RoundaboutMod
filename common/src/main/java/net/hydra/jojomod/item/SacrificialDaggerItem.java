@@ -75,16 +75,25 @@ public class SacrificialDaggerItem extends TieredItem implements Vanishable {
                     }
 
                     if (FateTypes.isDaggerUpgraded($$2)){
-                        BloodSplatterEntity $$7 = new BloodSplatterEntity($$2, $$1);
-                        $$7.shootFromRotation($$2, $$2.getXRot(), $$2.getYRot(), -15, SHOOT_POWER, 1.0F);
-                        $$7.setPos($$2.getPosition(1).add(($$2.getEyePosition().subtract($$2.getPosition(1))).scale(0.5f)));
-                        $$1.addFreshEntity($$7);
+                        if ($$2 instanceof Player pl && pl.getFoodData().getFoodLevel() > 0) {
+                            int food = pl.getFoodData().getFoodLevel();
+                            if (food > 0){
+                                BloodSplatterEntity $$7 = new BloodSplatterEntity($$2, $$1);
+                                $$7.healthAmt = Math.min(food,5);
+                                $$7.shootFromRotation($$2, $$2.getXRot(), $$2.getYRot(), -15, SHOOT_POWER, 1.0F);
+                                $$7.setPos($$2.getPosition(1).add(($$2.getEyePosition().subtract($$2.getPosition(1))).scale(0.5f)));
+                                $$1.addFreshEntity($$7);
+                                if (!pl.getAbilities().instabuild) {
+                                    pl.getFoodData().setFoodLevel((Math.min(Math.max(0, food - $$7.healthAmt), 20)));
+                                }
+                            }
+                        }
                     } else {
                         MainUtil.makeMobBleed($$2);
                         MainUtil.makeBleed($$2,0,400,$$2);
+                        $$2.hurt(ModDamageTypes.of($$1, ModDamageTypes.DAGGER), 2.01F);
                     }
                     $$1.playSound(null, $$2, ModSounds.KNIFE_IMPACT_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
-                    $$2.hurt(ModDamageTypes.of($$1, ModDamageTypes.DAGGER), 2.01F);
                 }
             }
         }
