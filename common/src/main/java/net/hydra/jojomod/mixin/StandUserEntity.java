@@ -3311,6 +3311,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 || roundabout$getStandPowers().cheatDeath()){
             cir.setReturnValue(true);
         } else if (hasEffect(ModEffects.VAMPIRE_BLOOD)){
+            removeEffect(ModEffects.VAMPIRE_BLOOD);
             if (rdbt$this() instanceof Player pl){
                 if (FateTypes.isHuman(pl)) {
                     ((IFatePlayer) pl).rdbt$startVampireTransformation(false);
@@ -3319,7 +3320,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             } else {
                 if (rdbt$this() instanceof Mob mb && !((IMob)mb).roundabout$isVampire()){
-                    removeEffect(ModEffects.VAMPIRE_BLOOD);
                     setHealth(getMaxHealth());
                     this.level().playSound(null, blockPosition(), ModSounds.VAMPIRE_AWAKEN_EVENT,
                             SoundSource.PLAYERS, 1F, 1F);
@@ -3825,6 +3825,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 $$1*= jd;
             }
         }
+
+        if (rdbt$this() instanceof Mob mb && ((IMob)mb).roundabout$isVampire()){
+            $$1/=2;
+            adj = true;
+        }
         int yesInt = roundabout$getAdjustedGravity();
         if (yesInt > 0 || adj){
             cir.setReturnValue(roundabout$calculateFallDamage($$0,$$1,yesInt));
@@ -3846,33 +3851,38 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
 
-    public float rdbt$mutuallyGetDamageAfterArmorAbsorb(DamageSource $$0, float $$1){
+    public float rdbt$mutuallyGetDamageAfterArmorAbsorb(DamageSource source, float damageAmount){
 
         boolean modified = false;
         if (((LivingEntity)(Object)this) instanceof Mob){
             if (!((StandUser)this).roundabout$getStandDisc().isEmpty()){
                 if (this.getMaxHealth() > 1) {
                     if (this.getMaxHealth() <= 3) {
-                        $$1 *= 0.5F;
+                        damageAmount *= 0.5F;
                     } else if (this.getMaxHealth() <= 6) {
-                        $$1 *= 0.75F;
+                        damageAmount *= 0.75F;
                     }
                 }
-                if (($$0.is(DamageTypes.MOB_ATTACK) || $$0.is(DamageTypes.MOB_PROJECTILE))
-                        || $$0.is(DamageTypes.MOB_ATTACK_NO_AGGRO)){
-                    $$1*=0.5F;
+                if ((source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.MOB_PROJECTILE))
+                        || source.is(DamageTypes.MOB_ATTACK_NO_AGGRO)){
+                    damageAmount*=0.5F;
                 }
                 modified = true;
             }
         }
         if (this.hasEffect(ModEffects.FACELESS)) {
             float amt = (float) (0.15* this.getEffect(ModEffects.FACELESS).getAmplifier()+0.15F);
-            $$1 = ($$1+($$1*amt));
+            damageAmount = (damageAmount+(damageAmount*amt));
+            modified = true;
+        }
+        float changeDamage = FateTypes.getDamageResist(rdbt$this(),source,damageAmount);
+        if (changeDamage > 0){
+            damageAmount = (damageAmount-(damageAmount*changeDamage));
             modified = true;
         }
         if (roundabout$getZappedToID() > -1){
-            if (!MainUtil.isMeleeDamage($$0)){
-                $$1 = $$1*ClientNetworking.getAppropriateConfig().survivorSettings.resilienceToNonMeleeAttacksWhenZapped;
+            if (!MainUtil.isMeleeDamage(source)){
+                damageAmount = damageAmount*ClientNetworking.getAppropriateConfig().survivorSettings.resilienceToNonMeleeAttacksWhenZapped;
                 modified = true;
             }
         }
@@ -3881,26 +3891,26 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 !(((TimeStop)this.level()).CanTimeStopEntity(this))){
             if (ClientNetworking.getAppropriateConfig().timeStopSettings.postTSSoften){
                 if (roundabout$getStandPowers().softenTicks > 20){
-                    if ($$0.is(ModDamageTypes.GASOLINE_EXPLOSION)
-                            || MainUtil.isStandDamage($$0)
-                            || $$0.is(DamageTypes.PLAYER_EXPLOSION)
-                            || $$0.is(DamageTypes.EXPLOSION)){
-                        $$1*=0.5F;
+                    if (source.is(ModDamageTypes.GASOLINE_EXPLOSION)
+                            || MainUtil.isStandDamage(source)
+                            || source.is(DamageTypes.PLAYER_EXPLOSION)
+                            || source.is(DamageTypes.EXPLOSION)){
+                        damageAmount*=0.5F;
                         modified = true;
                     }
                 }
             }
         }
-        if ($$0.getEntity() instanceof LivingEntity LE){
+        if (source.getEntity() instanceof LivingEntity LE){
             if (((StandUser)LE).roundabout$getZappedToID() > -1){
-                if (MainUtil.isMeleeDamage($$0)){
-                    $$1 = $$1*ClientNetworking.getAppropriateConfig().survivorSettings.buffToMeleeAttacksWhenZapped;
+                if (MainUtil.isMeleeDamage(source)){
+                    damageAmount = damageAmount*ClientNetworking.getAppropriateConfig().survivorSettings.buffToMeleeAttacksWhenZapped;
                     modified = true;
 
                     if (LE.getMainHandItem() != null && LE.getMainHandItem().isEmpty()){
                         float power = ClientNetworking.getAppropriateConfig().survivorSettings.bonusDamageWhenPunching;
                         if (power > 0){
-                            $$1 += (CombatRules.getDamageAfterAbsorb(power, (float)this.getArmorValue(), (float)this.getAttributeValue(Attributes.ARMOR_TOUGHNESS)));
+                            damageAmount += (CombatRules.getDamageAfterAbsorb(power, (float)this.getArmorValue(), (float)this.getAttributeValue(Attributes.ARMOR_TOUGHNESS)));
                         }
                         if (MainUtil.getMobBleed(LE)){
                             MainUtil.makeBleed(LE,0,200,LE);
@@ -3911,7 +3921,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
         if (modified){
-            return $$1;
+            return damageAmount;
         }
         return 1;
     }
@@ -4003,6 +4013,73 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
 
+        }
+
+
+        //Players have their own die event
+        if (FateTypes.takesSunlightDamage(rdbt$this())) {
+            if ($$0.is(ModDamageTypes.SUNLIGHT)){
+                if (this.level() instanceof ServerLevel SL){
+                    Vec3 position = this.getPosition(1);
+                    Vec3 position2 = this.getEyePosition();
+                    Vec3 position3 = this.getEyePosition().subtract(this.getPosition(1)).multiply(new Vec3(0.5F,
+                            0.5F,0.5F));
+                    position3 = position3.add(this.getPosition(1));
+                    SL.sendParticles(ModParticles.FIRE_CRUMBLE,
+                            position.x, position.y, position.z,
+                            0, 0.2, 0.2, 0.2, 0.1);
+                    SL.sendParticles(ModParticles.FIRE_CRUMBLE,
+                            position2.x, position2.y, position2.z,
+                            0, 0.2, 0.2, 0.2, 0.1);
+                    SL.sendParticles(ModParticles.FIRE_CRUMBLE,
+                            position3.x, position3.y, position3.z,
+                            0, 0.2, 0.2, 0.2, 0.1);
+
+
+                    SL.sendParticles(ModParticles.DUST_CRUMBLE,
+                            position.x, position.y, position.z,
+                            0, 0.2, 0.5, 0.2, 0.5);
+                    SL.sendParticles(ModParticles.DUST_CRUMBLE,
+                            position2.x, position2.y, position2.z,
+                            0, 0.2, 0.5, 0.2, 0.2);
+                    SL.sendParticles(ModParticles.DUST_CRUMBLE,
+                            position3.x, position3.y, position3.z,
+                            0, 0.2, 0.5, 0.2, 0.2);
+
+                    this.level().playSound(null, BlockPos.containing(this.position()), ModSounds.VAMPIRE_CRUMBLE_EVENT, SoundSource.PLAYERS, 1.0F, 1F);
+                }
+            } else {
+                if (FateTypes.isVampire(rdbt$this())){
+                    if (this.level() instanceof ServerLevel SL){
+                        if (MainUtil.isStandDamage($$0)) {
+                            Vec3 position = this.getPosition(1);
+                            Vec3 position2 = this.getEyePosition();
+                            Vec3 position3 = this.getEyePosition().subtract(this.getPosition(1)).multiply(new Vec3(0.5F,
+                                    0.5F, 0.5F));
+                            position3 = position3.add(this.getPosition(1));
+                            SL.sendParticles(ModParticles.SOUL_FIRE_CRUMBLE,
+                                    position.x, position.y, position.z,
+                                    0, 0.2, 0.2, 0.2, 0.1);
+                            SL.sendParticles(ModParticles.SOUL_FIRE_CRUMBLE,
+                                    position2.x, position2.y, position2.z,
+                                    0, 0.2, 0.2, 0.2, 0.1);
+                            SL.sendParticles(ModParticles.SOUL_FIRE_CRUMBLE,
+                                    position3.x, position3.y, position3.z,
+                                    0, 0.2, 0.2, 0.2, 0.1);
+
+                            SL.sendParticles(ModParticles.DUST_CRUMBLE,
+                                    position.x, position.y, position.z,
+                                    0, 0.2, 0.5, 0.2, 0.5);
+                            SL.sendParticles(ModParticles.DUST_CRUMBLE,
+                                    position2.x, position2.y, position2.z,
+                                    0, 0.2, 0.5, 0.2, 0.2);
+                            SL.sendParticles(ModParticles.DUST_CRUMBLE,
+                                    position3.x, position3.y, position3.z,
+                                    0, 0.2, 0.5, 0.2, 0.2);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -4699,6 +4776,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         ){
             basis *= 0.5F;
+        }
+
+        // Vampire mobs (not players) are faster
+        if (FateTypes.isVampire(rdbt$this())){
+            basis *= 1.3F;
         }
 
         if (basis != this.speed){

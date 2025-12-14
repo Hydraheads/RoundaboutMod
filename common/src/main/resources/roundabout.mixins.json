@@ -66,6 +66,7 @@
     "effects.hex.HexItem",
     "effects.warding.WardingArrowMixin",
     "effects.warding.WardingEntityMixin",
+    "fates.FateAbstractHorseMixin",
     "fates.FateCakeBlockMixin",
     "fates.FateEntityMixin",
     "fates.FateFoodDataMixin",

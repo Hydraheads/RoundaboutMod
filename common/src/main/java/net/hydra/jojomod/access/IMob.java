@@ -11,6 +11,8 @@ public interface IMob {
     void roundabout$setWorthy(boolean $$0);
     boolean roundabout$isVampire();
     void roundabout$setVampire(boolean $$0);
+    byte roundabout$getFate();
+    void roundabout$setFate(byte fate);
     void roundabout$deeplyRemoveTargets();
     void roundabout$deeplyEnforceTarget(Entity ent);
     int roundabout$getSightProtectionTicks();

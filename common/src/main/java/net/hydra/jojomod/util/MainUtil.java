@@ -834,6 +834,14 @@ public class MainUtil {
         }
         return null;
     }
+
+    // if splattered vampire blood can resurrect a mob when they die
+    public static boolean canMobResurrectWithBlood(Entity mob){
+        if (mob instanceof Mob mb && (mb.getMobType() == MobType.UNDEAD || mb instanceof ZombieHorse))
+            return false;
+        return true;
+    }
+
     public static boolean getMobBleed(Entity mob) {
         if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.disableBleedingAndBloodSplatters){
             return false;
@@ -864,7 +872,8 @@ public class MainUtil {
     }
 
     public static boolean canDrinkBlood(Entity mob){
-        return (getMobBleed(mob) && !hasEnderBlood(mob) && mob.isAlive() && !mob.isRemoved());
+        return (getMobBleed(mob) && !hasEnderBlood(mob) && mob.isAlive() && !mob.isRemoved() &&
+                !(mob instanceof Mob mb && ((IMob)mb).roundabout$isVampire()));
     }
 
     public static boolean canDrinkBloodFair(Entity ent,Entity drinker){
@@ -1753,7 +1762,6 @@ public class MainUtil {
     }
     public static boolean isSpecialEffect(MobEffect value){
         return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS) ||
-                value.equals(ModEffects.VAMPIRE_BLOOD) ||
                 value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING);
     }
     public static boolean canHaveFrictionTaken(LivingEntity LE){

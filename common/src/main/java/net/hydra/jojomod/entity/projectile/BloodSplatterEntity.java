@@ -109,7 +109,7 @@ public class BloodSplatterEntity extends ThrowableProjectile {
             if ($$0.getEntity() instanceof LivingEntity LE && (MainUtil.getMobBleed(LE) ||
             LE instanceof Player pl)) {
                 LE.setHealth(Math.min(LE.getMaxHealth(),LE.getHealth()+healthAmt));
-                if ((LE instanceof Mob mb && !((IMob)mb).roundabout$isVampire())
+                if ((LE instanceof Mob mb && !((IMob)mb).roundabout$isVampire() && MainUtil.canMobResurrectWithBlood(mb))
                 || (LE instanceof Player pl && FateTypes.isHuman(pl))){
                     LE.addEffect(new MobEffectInstance(ModEffects.VAMPIRE_BLOOD, 12000, 0),getOwner());
                 }
