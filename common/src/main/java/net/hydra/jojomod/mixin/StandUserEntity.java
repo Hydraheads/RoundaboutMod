@@ -3272,6 +3272,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
 
+    // Cheat Death and negate the death event
+    @Inject(method = "checkTotemDeathProtection(Lnet/minecraft/world/damagesource/DamageSource;)Z", at = @At(value = "HEAD"), cancellable = true)
+    public void rdbt$checkTotemDeathProtection(DamageSource $$0, CallbackInfoReturnable<Boolean> cir) {
+        if ( (rdbt$this() instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers().cheatDeath())
+                || roundabout$getStandPowers().cheatDeath()){
+            cir.setReturnValue(true);
+        }
+    }
     @Inject(method = "setSprinting", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$canSprintPlayer(boolean $$0, CallbackInfo ci) {
         if (roundabout$getStandPowers().cancelSprint() || FateTypes.isTransforming(rdbt$this()) ||
