@@ -8,6 +8,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.ModItems;
@@ -23,6 +24,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -246,6 +249,17 @@ public class VampireFate extends VampiricFate {
                 setAttackTimeDuring(-20);
             }
         }
+    }
+
+    @Override
+    public float getDamageReduction(DamageSource source, float amt){
+        if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)){
+            return 0.15F;
+        }
+        if (source.is(DamageTypes.ARROW) || source.is(ModDamageTypes.BULLET)){
+            return 0.2F;
+        }
+        return super.getDamageReduction(source,amt);
     }
 
 

@@ -3851,33 +3851,38 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
 
-    public float rdbt$mutuallyGetDamageAfterArmorAbsorb(DamageSource $$0, float $$1){
+    public float rdbt$mutuallyGetDamageAfterArmorAbsorb(DamageSource source, float damageAmount){
 
         boolean modified = false;
         if (((LivingEntity)(Object)this) instanceof Mob){
             if (!((StandUser)this).roundabout$getStandDisc().isEmpty()){
                 if (this.getMaxHealth() > 1) {
                     if (this.getMaxHealth() <= 3) {
-                        $$1 *= 0.5F;
+                        damageAmount *= 0.5F;
                     } else if (this.getMaxHealth() <= 6) {
-                        $$1 *= 0.75F;
+                        damageAmount *= 0.75F;
                     }
                 }
-                if (($$0.is(DamageTypes.MOB_ATTACK) || $$0.is(DamageTypes.MOB_PROJECTILE))
-                        || $$0.is(DamageTypes.MOB_ATTACK_NO_AGGRO)){
-                    $$1*=0.5F;
+                if ((source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.MOB_PROJECTILE))
+                        || source.is(DamageTypes.MOB_ATTACK_NO_AGGRO)){
+                    damageAmount*=0.5F;
                 }
                 modified = true;
             }
         }
         if (this.hasEffect(ModEffects.FACELESS)) {
             float amt = (float) (0.15* this.getEffect(ModEffects.FACELESS).getAmplifier()+0.15F);
-            $$1 = ($$1+($$1*amt));
+            damageAmount = (damageAmount+(damageAmount*amt));
+            modified = true;
+        }
+        float changeDamage = FateTypes.getDamageResist(rdbt$this(),source,damageAmount);
+        if (changeDamage > 0){
+            damageAmount = (damageAmount-(damageAmount*changeDamage));
             modified = true;
         }
         if (roundabout$getZappedToID() > -1){
-            if (!MainUtil.isMeleeDamage($$0)){
-                $$1 = $$1*ClientNetworking.getAppropriateConfig().survivorSettings.resilienceToNonMeleeAttacksWhenZapped;
+            if (!MainUtil.isMeleeDamage(source)){
+                damageAmount = damageAmount*ClientNetworking.getAppropriateConfig().survivorSettings.resilienceToNonMeleeAttacksWhenZapped;
                 modified = true;
             }
         }
@@ -3886,26 +3891,26 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 !(((TimeStop)this.level()).CanTimeStopEntity(this))){
             if (ClientNetworking.getAppropriateConfig().timeStopSettings.postTSSoften){
                 if (roundabout$getStandPowers().softenTicks > 20){
-                    if ($$0.is(ModDamageTypes.GASOLINE_EXPLOSION)
-                            || MainUtil.isStandDamage($$0)
-                            || $$0.is(DamageTypes.PLAYER_EXPLOSION)
-                            || $$0.is(DamageTypes.EXPLOSION)){
-                        $$1*=0.5F;
+                    if (source.is(ModDamageTypes.GASOLINE_EXPLOSION)
+                            || MainUtil.isStandDamage(source)
+                            || source.is(DamageTypes.PLAYER_EXPLOSION)
+                            || source.is(DamageTypes.EXPLOSION)){
+                        damageAmount*=0.5F;
                         modified = true;
                     }
                 }
             }
         }
-        if ($$0.getEntity() instanceof LivingEntity LE){
+        if (source.getEntity() instanceof LivingEntity LE){
             if (((StandUser)LE).roundabout$getZappedToID() > -1){
-                if (MainUtil.isMeleeDamage($$0)){
-                    $$1 = $$1*ClientNetworking.getAppropriateConfig().survivorSettings.buffToMeleeAttacksWhenZapped;
+                if (MainUtil.isMeleeDamage(source)){
+                    damageAmount = damageAmount*ClientNetworking.getAppropriateConfig().survivorSettings.buffToMeleeAttacksWhenZapped;
                     modified = true;
 
                     if (LE.getMainHandItem() != null && LE.getMainHandItem().isEmpty()){
                         float power = ClientNetworking.getAppropriateConfig().survivorSettings.bonusDamageWhenPunching;
                         if (power > 0){
-                            $$1 += (CombatRules.getDamageAfterAbsorb(power, (float)this.getArmorValue(), (float)this.getAttributeValue(Attributes.ARMOR_TOUGHNESS)));
+                            damageAmount += (CombatRules.getDamageAfterAbsorb(power, (float)this.getArmorValue(), (float)this.getAttributeValue(Attributes.ARMOR_TOUGHNESS)));
                         }
                         if (MainUtil.getMobBleed(LE)){
                             MainUtil.makeBleed(LE,0,200,LE);
@@ -3916,7 +3921,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
         if (modified){
-            return $$1;
+            return damageAmount;
         }
         return 1;
     }
