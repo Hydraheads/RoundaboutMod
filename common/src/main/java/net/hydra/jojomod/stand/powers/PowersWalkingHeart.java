@@ -994,10 +994,6 @@ public class PowersWalkingHeart extends NewDashPreset {
             newVec5 = RotationUtil.vecPlayerToWorld(newVec5,((IGravityEntity)self).roundabout$getGravityDirection());
             BlockPos pos5 = BlockPos.containing(self.getPosition(1).add(newVec5));
 
-            BlockState state1 = self.level().getBlockState(pos);
-            BlockState state4 = self.level().getBlockState(pos4);
-            boolean isOnValidBlock =  MainUtil.isBlockWalkableSimplified(state1)
-                    && MainUtil.isBlockWalkableSimplified(state4);
 
             if (cutCorners == 0 && self instanceof Player){
                 cutCorners = 1;
@@ -1043,8 +1039,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                 if (justFlippedTicks > 0){
                     justFlippedTicks--;
                 } else {
-                    if (self.onGround() && MainUtil.isBlockWalkableSimplified(self.getBlockStateOn())
-                            && isOnValidBlock){
+                    if (self.onGround() && MainUtil.isBlockWalkableSimplified(self.getBlockStateOn())){
                         mercyTicks = 5;
                         lastGroundPosition = self.position();
                     } else {
@@ -1075,7 +1070,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                             }
                         }
                     }
-                    if (self.isSleeping() || ((!self.onGround() || !isOnValidBlock) && mercyTicks <= 0) || self.getRootVehicle() != this.self) {
+                    if (self.isSleeping() || ((!self.onGround()) && mercyTicks <= 0) || self.getRootVehicle() != this.self) {
                         heelDirection = Direction.DOWN;
                         if (((IGravityEntity) this.self).roundabout$getGravityDirection() != heelDirection){
                             grantFallImmunity();
@@ -1103,6 +1098,21 @@ public class PowersWalkingHeart extends NewDashPreset {
             if (!hasExtendedHeelsForWalking()){
                 hitsSinceAttached = 0;
                 setHeelDirection(Direction.DOWN);
+            }
+
+            Vec3 newVec = new Vec3(0,-0.2,0);
+            Vec3 newVec4 = new Vec3(0,-0.5,0);
+
+            newVec = RotationUtil.vecPlayerToWorld(newVec,((IGravityEntity)self).roundabout$getGravityDirection());
+            BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
+            newVec4 = RotationUtil.vecPlayerToWorld(newVec4,((IGravityEntity)self).roundabout$getGravityDirection());
+            BlockPos pos4 = BlockPos.containing(self.getPosition(1).add(newVec4));
+            BlockState state1 = self.level().getBlockState(pos);
+            BlockState state4 = self.level().getBlockState(pos4);
+            boolean isOnValidBlock =  MainUtil.isBlockWalkableSimplified(state1)
+                    && MainUtil.isBlockWalkableSimplified(state4);
+            if (!isOnValidBlock){
+                toggleSpikes(false);
             }
         }
 

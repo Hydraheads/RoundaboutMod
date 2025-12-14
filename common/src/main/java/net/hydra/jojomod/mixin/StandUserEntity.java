@@ -3304,6 +3304,39 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
 
+    // Cheat Death and negate the death event
+    @Inject(method = "checkTotemDeathProtection(Lnet/minecraft/world/damagesource/DamageSource;)Z", at = @At(value = "HEAD"), cancellable = true)
+    public void rdbt$checkTotemDeathProtection(DamageSource $$0, CallbackInfoReturnable<Boolean> cir) {
+        if ( (rdbt$this() instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers().cheatDeath())
+                || roundabout$getStandPowers().cheatDeath()){
+            cir.setReturnValue(true);
+        } else if (hasEffect(ModEffects.VAMPIRE_BLOOD)){
+            if (rdbt$this() instanceof Player pl){
+                if (FateTypes.isHuman(pl)) {
+                    ((IFatePlayer) pl).rdbt$startVampireTransformation(false);
+                    pl.setHealth(1);
+                    cir.setReturnValue(true);
+                }
+            } else {
+                if (rdbt$this() instanceof Mob mb && !((IMob)mb).roundabout$isVampire()){
+                    removeEffect(ModEffects.VAMPIRE_BLOOD);
+                    setHealth(getMaxHealth());
+                    this.level().playSound(null, blockPosition(), ModSounds.VAMPIRE_AWAKEN_EVENT,
+                            SoundSource.PLAYERS, 1F, 1F);
+                    cir.setReturnValue(true);
+                    ((IMob)mb).roundabout$setVampire(true);
+                    if (level() instanceof ServerLevel SL) {
+                        SL.sendParticles(ModParticles.BLUE_SPARKLE,
+                                this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
+                                50, 0, 0, 0, 0.2);
+                        SL.sendParticles(ModParticles.BLOOD_MIST,
+                                this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
+                                10, 0.4, 0.4, 0.4, 0.025);
+                    }
+                }
+            }
+        }
+    }
     @Inject(method = "setSprinting", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$canSprintPlayer(boolean $$0, CallbackInfo ci) {
         if (roundabout$getStandPowers().cancelSprint() || FateTypes.isTransforming(rdbt$this()) ||

@@ -128,6 +128,10 @@ public class AbilityScapeBasis {
     public boolean cancelSprint(){
         return false;
     }
+    /**Cancel death, make sure to set player health if you do this*/
+    public boolean cheatDeath(){
+        return false;
+    }
     /**Cancel all jumping*/
     public boolean cancelJump(){
         return false;

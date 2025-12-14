@@ -1,9 +1,11 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StandFireBlock;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
@@ -25,6 +27,8 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.item.Item;
@@ -96,14 +100,19 @@ public class BloodSplatterEntity extends ThrowableProjectile {
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
         if (!this.level().isClientSide) {
-
+            if ($$0.getEntity() != null && ownedBy($$0.getEntity()))
+                return;
             ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.BLOOD_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
                     15, 0.4, 0.4, 0.25, 0.4);
             SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
             this.playSound($$6, 1F, 1.5F);
-            if ($$0.getEntity() instanceof LivingEntity LE) {
+            if ($$0.getEntity() instanceof LivingEntity LE && (MainUtil.getMobBleed(LE) ||
+            LE instanceof Player pl)) {
                 LE.setHealth(Math.min(LE.getMaxHealth(),LE.getHealth()+healthAmt));
-                LE.addEffect(new MobEffectInstance(ModEffects.VAMPIRE_BLOOD, 12000, 0),getOwner());
+                if ((LE instanceof Mob mb && !((IMob)mb).roundabout$isVampire())
+                || (LE instanceof Player pl && FateTypes.isHuman(pl))){
+                    LE.addEffect(new MobEffectInstance(ModEffects.VAMPIRE_BLOOD, 12000, 0),getOwner());
+                }
             }
             this.discard();
         }
