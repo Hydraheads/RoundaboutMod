@@ -666,7 +666,7 @@ public class MainUtil {
                 if (ent instanceof Player PE){
                     IFatePlayer ifp = (IFatePlayer) PE;
                     if (FateTypes.isHuman(PE)){
-                        ifp.rdbt$startVampireTransformation();
+                        ifp.rdbt$startVampireTransformation(true);
                     }
                 }
                 ItemStack stack2 = ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem().getDefaultInstance();

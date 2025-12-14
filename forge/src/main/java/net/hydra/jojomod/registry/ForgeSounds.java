@@ -297,6 +297,8 @@ public class ForgeSounds {
 
     public static final RegistryObject<SoundEvent> HYPNOSIS_EVENT =
             register(ModSounds.HYPNOSIS, ModSounds.HYPNOSIS_ID);
+    public static final RegistryObject<SoundEvent> VAMPIRE_AWAKEN_EVENT =
+            register(ModSounds.VAMPIRE_AWAKEN, ModSounds.VAMPIRE_AWAKEN_ID);
 
     public static final RegistryObject<SoundEvent> ARCADE_TIMESTOP_EVENT =
             register(ModSounds.ARCADE_TIMESTOP, ModSounds.ARCADE_TIMESTOP_ID);

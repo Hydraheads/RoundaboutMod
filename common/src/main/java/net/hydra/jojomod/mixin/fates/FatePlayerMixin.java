@@ -107,11 +107,18 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
 
     @Unique
     @Override
-    public void rdbt$startVampireTransformation(){
+    public void rdbt$startVampireTransformation(boolean mask){
         //starts the animation
         rdbt$vampireTransformation = 0;
-        ((StandUser)this).roundabout$setDazed((byte) 120);
-        level().playSound(null, this, ModSounds.STONE_MASK_ACTIVATE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+        if (mask){
+            ((StandUser)this).roundabout$setDazed((byte) 120);
+            level().playSound(null, this, ModSounds.STONE_MASK_ACTIVATE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+        } else {
+            ((StandUser)this).roundabout$setDazed((byte) 20);
+            rdbt$vampireTransformation = 100;
+            ((IPlayerEntity)this).roundabout$SetPoseEmote((byte)12);
+            level().playSound(null, this, ModSounds.VAMPIRE_AWAKEN_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+        }
     }
 
     @Unique
@@ -128,7 +135,7 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
             }
         } else if (FateTypes.isHuman(this)){
             if (MainUtil.isWearingBloodyStoneMask(this) && rdbt$vampireTransformation < 0){
-                rdbt$startVampireTransformation();
+                rdbt$startVampireTransformation(true);
             }
         }
         if (MainUtil.isWearingStoneMask(this) && hasEffect(ModEffects.BLEED)){
