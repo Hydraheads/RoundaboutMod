@@ -261,6 +261,17 @@ public class VampireFate extends VampiricFate {
         }
         return super.getDamageReduction(source,amt);
     }
+    @Override
+    public float getDamageAdd(DamageSource source, float amt, Entity target){
+        if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)){
+            if (target instanceof Player pl){
+                return 0.2F;
+            } else {
+                return 0.4F;
+            }
+        }
+        return super.getDamageAdd(source,amt,target);
+    }
 
 
     public boolean canPlantDrink(Entity ent) {

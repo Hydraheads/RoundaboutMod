@@ -8,6 +8,7 @@ import net.minecraft.client.Options;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -53,6 +54,9 @@ public class FatePowers extends AbilityScapeBasis {
     }
 
     public float getDamageReduction(DamageSource source, float amt){
+        return 0;
+    }
+    public float getDamageAdd(DamageSource source, float amt, Entity target){
         return 0;
     }
 
