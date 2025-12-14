@@ -697,6 +697,16 @@ public class PowersAnubis extends NewDashPreset {
         }
     }
 
+    @Override
+    public boolean tryIntPower(int move, boolean forced, int chargeTime) {
+        if (move == PowerIndex.BOUNCE) {
+            if (chargeTime != 0) {
+                pogoAttack(chargeTime);
+            }
+        }
+        return super.tryIntPower(move, forced, chargeTime);
+    }
+
     public void updateAttacks() {
         if (!isClient()) {
 
@@ -708,8 +718,8 @@ public class PowersAnubis extends NewDashPreset {
                 } else {
                     switch (this.getActivePower()) {
                         case PowersAnubis.UPPERCUT -> {
-                            if (this.getAttackTimeDuring() < 4) {
-                                if (this.getTargetEntity(this.getSelf(),2) == null) {
+                            if (this.getAttackTimeDuring() < 3) {
+                                if (this.getTargetEntity(this.getSelf(),2) == null && this.getSelf().onGround()) {
                                     Vec3 look = this.getSelf().getLookAngle();
                                     look = new Vec3(look.x,0, look.z).normalize().reverse();
                                     MainUtil.takeUnresistableKnockbackWithY(this.getSelf(),1F,look.x,look.y,look.z);
@@ -728,13 +738,12 @@ public class PowersAnubis extends NewDashPreset {
                         }
 
                         case PowersAnubis.SPIN -> {
-                            Options o = Minecraft.getInstance().options;
                             if (this.getAttackTimeDuring() > 5) {
                                 ThrustCut();
-                            } else if (this.getAttackTimeDuring() == 1 && !o.keyDown.isDown()) {
+                            } else if (this.getAttackTimeDuring() == 1) {
                                 Vec3 look = this.getSelf().getLookAngle().reverse();
                                 look = new Vec3(look.x,-0.2,look.z);
-                                float strength = 1F + (o.keyUp.isDown() ? 0.2F : 0) + (o.keyDown.isDown() ? -0.2F : 0);
+                                float strength = 1F;
                                 strength *= (this.getSelf().onGround() ? 1F : 0.6F);
                                 MainUtil.takeUnresistableKnockbackWithY(this.getSelf(),strength,look.x,look.y,look.z);
                             }
@@ -807,56 +816,20 @@ public class PowersAnubis extends NewDashPreset {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
             } else {
                 final int windup = PogoDelay;
-                if (!isClient()) {
-                    /**  Pogo is broken up into 4 stages: Hover, Launch, Attack, and Aftershock */
-                    if (attackTimeDuring == windup) {
-
-                        PogoLaunch();
-
-                    } else if (attackTimeDuring < windup) {
-
-                        MainUtil.slowTarget(this.getSelf(), 0.8F);
-
-                    } else if (attackTimeDuring < windup + 6) {
-
-                        Vec3 pos = this.getSelf().getEyePosition(0F).add(this.getSelf().getLookAngle().scale(1));
-                        List<Entity> targets = MainUtil.genHitbox(this.getSelf().level(),
-                                pos.x,pos.y,pos.z,
-                                1.4,1.4,1.4);
-                        targets.removeIf(entity -> entity.equals(this.getSelf()));
-                        targets = doAttackChecks(targets);
-                        Entity target = null;
-                        if (!targets.isEmpty()) {target = targets.get(0);}
-
-                        if (target != null) {
-                            this.setAttackTimeDuring(this.getAttackTimeDuring()+15);
-
-                            double strength = this.getSelf().isCrouching() ? 0.5 : 0.9;
-                            MainUtil.takeUnresistableKnockbackWithY(this.getSelf(),strength,0,-1,0);
-                            this.getStandUserSelf().roundabout$setLeapTicks(20);
-                            this.getStandUserSelf().roundabout$setLeapIntentionally(true);
-
-                            if (StandDamageEntityAttack(target,4,1,this.getSelf())) {
-                                if (target instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers().interceptGuard()
-                                        && LE.isBlocking() && !((StandUser) LE).roundabout$isGuarding()){
-                                    knockShield2(target, 30);
-                                }
-                            }
-                            this.setPowerNone();
-                            if (this.getSelf() instanceof Player P) {
-                                S2CPacketUtil.sendIntPowerDataPacket(P, PowerIndex.SNEAK_ATTACK_CHARGE, attackTime + 5);
-                                if (target instanceof ArmorStand) {
-                                    S2CPacketUtil.sendIntPowerDataPacket(P,PowerIndex.EXTRA,1);
-                                }
-                            }
-
-                            this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.ANUBIS_POGO_HIT_EVENT,SoundSource.PLAYERS,1F,0.9F+(float)Math.random()*0.2F);
-                            ((StandUser)this.getSelf()).roundabout$setMeleeImmunity((byte) (this.getSelf().isCrouching() ? 10 : 5) );
-
+                /**  Pogo is broken up into 4 stages: Hover, Launch, Attack, and Aftershock */
+                if (attackTimeDuring == windup) {
+                    if (!isClient()) {PogoLaunch();}
+                } else if (attackTimeDuring < windup) {
+                    if (!isClient()) {MainUtil.slowTarget(this.getSelf(), 0.8F);}
+                } else if (attackTimeDuring < windup + 6) {
+                    if (isClient()) {
+                        if (isPacketPlayer()) {
+                            pogoCheck();
                         }
-
-                    } else if (attackTimeDuring < windup + 9) { /// Slows the user after a duration
-                        MainUtil.slowTarget(this.getSelf(),0.7F);
+                    }
+                } else if (attackTimeDuring < windup + 9) { /// Slows the user after a duration
+                    if (!isClient()) {
+                        MainUtil.slowTarget(this.getSelf(), 0.7F);
                         this.getSelf().resetFallDistance();
                     }
                 }
@@ -884,6 +857,52 @@ public class PowersAnubis extends NewDashPreset {
         this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.ANUBIS_POGO_LAUNCH_EVENT,SoundSource.PLAYERS,1F,0.9F+(float)(Math.random()*0.2) );
         this.getStandUserSelf().roundabout$setMeleeImmunity((byte)6);
         MainUtil.takeUnresistableKnockbackWithY(this.getSelf(),power,lookAngle.x,lookAngle.y,lookAngle.z);
+
+    }
+
+    public void pogoCheck() {
+
+
+        Vec3 pos = this.getSelf().getEyePosition(0F).add(this.getSelf().getLookAngle().scale(1));
+        List<Entity> targets = MainUtil.genHitbox(this.getSelf().level(),
+                pos.x,pos.y,pos.z,
+                1.4,1.4,1.4);
+        targets.removeIf(entity -> entity.equals(this.getSelf()));
+        targets = doAttackChecks(targets);
+        Entity target = null;
+        if (!targets.isEmpty()) {target = targets.get(0);}
+
+        if (target != null) {
+            tryIntPowerPacket(PowerIndex.BOUNCE,target.getId());
+        }
+    }
+
+    public void pogoAttack(int id) {
+        Entity target = this.getSelf().level().getEntity(id);
+        Roundabout.LOGGER.info(target.toString());
+        this.setAttackTimeDuring(this.getAttackTimeDuring()+15);
+
+        double strength = this.getSelf().isCrouching() ? 0.5 : 0.7;
+        MainUtil.takeUnresistableKnockbackWithY(this.getSelf(),strength,0,-1,0);
+        this.getStandUserSelf().roundabout$setLeapTicks(20);
+        this.getStandUserSelf().roundabout$setLeapIntentionally(true);
+
+        if (StandDamageEntityAttack(target,4,1,this.getSelf())) {
+            if (target instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers().interceptGuard()
+                    && LE.isBlocking() && !((StandUser) LE).roundabout$isGuarding()){
+                knockShield2(target, 30);
+            }
+        }
+        this.setPowerNone();
+        if (this.getSelf() instanceof Player P) {
+            S2CPacketUtil.sendIntPowerDataPacket(P, PowerIndex.SNEAK_ATTACK_CHARGE, attackTime + 5);
+            if (target instanceof ArmorStand) {
+                S2CPacketUtil.sendIntPowerDataPacket(P,PowerIndex.EXTRA,1);
+            }
+        }
+
+        this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.ANUBIS_POGO_HIT_EVENT,SoundSource.PLAYERS,1F,0.9F+(float)Math.random()*0.2F);
+        ((StandUser)this.getSelf()).roundabout$setMeleeImmunity((byte) (this.getSelf().isCrouching() ? 10 : 5) );
     }
 
     @Override
@@ -1360,14 +1379,14 @@ public class PowersAnubis extends NewDashPreset {
                         addEXP(2);
                     }
                     this.takeDeterminedKnockback(this.getSelf(), e, knockbackStrength);
-
+/*
                     /// knocks you back slightly if you hit it
                     Options o = Minecraft.getInstance().options;
                     if (!o.keyUp.isDown()) {
                         Vec3 look = this.getSelf().getLookAngle();
                         look = new Vec3(look.x,-0.1,look.z).normalize();
                         MainUtil.takeUnresistableKnockbackWithY(this.getSelf(),0.15F,look.x,look.y,look.z);
-                    }
+                    } */
 
 
                 } else {

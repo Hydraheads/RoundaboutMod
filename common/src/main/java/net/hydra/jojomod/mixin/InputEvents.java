@@ -384,11 +384,32 @@ public abstract class InputEvents implements IInputEvents {
 
         @Unique
         public boolean roundabout$TryGuard(){
+
+            ///  gets if you're holding a firearm, then checks if you're in 'combat mode'.
+            ///  If so, run canCombatModeUse(ItemStack)
+
+            ///  Note: the reason this was implemented was because combat mode (S&W and Anubis) couldn't block while a gun was being held
+            ///  if you'd want combat mode to be able to use it like they can bows/harpoons/food then just add it to canCombatModeUse()
+
+            boolean fireArmCancel = false;
             StandUser standComp = ((StandUser) player);
-            if (!(player.getMainHandItem().getItem() instanceof FirearmItem) && !(player.getOffhandItem().getItem() instanceof FirearmItem)) {
-                if (standComp.roundabout$getActive() && standComp.roundabout$getStandPowers().interceptGuard()) {
-                    return standComp.roundabout$getStandPowers().preCheckButtonInputGuard(this.options.keyUse.isDown(), this.options);
+            ItemStack fireArm = null;
+            if (player.getMainHandItem().getItem() instanceof FirearmItem) {
+                fireArm = player.getMainHandItem();
+            } else if (player.getOffhandItem().getItem() instanceof FirearmItem) {
+                fireArm = player.getOffhandItem();
+            }
+            if (fireArm != null) {
+                if (standComp.roundabout$getEffectiveCombatMode()) {
+                    if (standComp.roundabout$getStandPowers() != null) {
+                        fireArmCancel = standComp.roundabout$getStandPowers().canCombatModeUse(fireArm);
+                    }
+                } else {
+                    fireArmCancel =  true;
                 }
+            }
+            if (!fireArmCancel && standComp.roundabout$getActive() && standComp.roundabout$getStandPowers().interceptGuard()) {
+                return standComp.roundabout$getStandPowers().preCheckButtonInputGuard(this.options.keyUse.isDown(), this.options);
             }
             return false;
         }

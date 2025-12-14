@@ -1981,6 +1981,38 @@ public abstract class StandUserEntity extends Entity implements StandUser {
          **/
     }
 
+    /// does what getItemInHand does
+    @Inject(method = "getMainHandItem",at = @At(value = "HEAD"),cancellable = true)
+    public void roundabout$getMainHandItem(CallbackInfoReturnable<ItemStack> cir) {
+        ItemStack ret = roundabout$XHandCancelItem(EquipmentSlot.MAINHAND);
+        if (ret.equals(ItemStack.EMPTY)) {
+            cir.setReturnValue(ret);
+            cir.cancel();
+        }
+    }
+    @Inject(method = "getOffhandItem",at = @At(value = "HEAD"),cancellable = true)
+    public void roundabout$getOffHandItem(CallbackInfoReturnable<ItemStack> cir) {
+        ItemStack ret = roundabout$XHandCancelItem(EquipmentSlot.OFFHAND);
+        if (ret.equals(ItemStack.EMPTY)) {
+            cir.setReturnValue(ret);
+            cir.cancel();
+        }
+    }
+
+    @Unique
+    public ItemStack roundabout$XHandCancelItem(EquipmentSlot ES) {
+        if (this.roundabout$isPossessed()) {return ItemStack.EMPTY;}
+        if (roundabout$getEffectiveCombatMode()) {
+            StandPowers SP = roundabout$getStandPowers();
+            if (SP != null) {
+                if (!SP.canCombatModeUse(getItemBySlot(ES))) {
+                    return ItemStack.EMPTY;
+                }
+            }
+        }
+        return getItemBySlot(ES);
+    }
+
     /**The items that shoot and brawl mode are allowed to use*/
     @Inject(method = "getItemInHand(Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/item/ItemStack;", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$getItemInHand(InteractionHand $$0, CallbackInfoReturnable<ItemStack> cir){
@@ -1988,7 +2020,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             cir.setReturnValue(ItemStack.EMPTY);
             return;
         }
-        if (roundabout$getEffectiveCombatMode() || roundabout$isPossessed()){
+        if (roundabout$getEffectiveCombatMode()){
             ItemStack stack = ItemStack.EMPTY;
             if ($$0 == InteractionHand.MAIN_HAND) {
                 stack = this.getItemBySlot(EquipmentSlot.MAINHAND);
