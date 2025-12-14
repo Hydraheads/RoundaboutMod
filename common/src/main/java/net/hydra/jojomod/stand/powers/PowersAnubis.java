@@ -972,6 +972,11 @@ public class PowersAnubis extends NewDashPreset {
 
         List<Entity> entities = defaultSwordHitbox(this.getSelf(),4, 35,0.03);
         entities = doAttackChecks(entities);
+
+        if (!entities.isEmpty()) {
+            this.getSelf().level().playSound(null,this.getSelf().blockPosition(),SoundEvents.PLAYER_ATTACK_SWEEP,SoundSource.PLAYERS,1F,0.4F + (float)(Math.random()*0.2) + (first ? 0.0F : 0.3F) );
+        }
+
         for (Entity e : entities ) {
             if (e != null) {
                 if (e.distanceTo(this.getSelf()) < 1.5F) {
@@ -988,7 +993,6 @@ public class PowersAnubis extends NewDashPreset {
                 }
                 if (StandDamageEntityAttack(e, pow, 0, this.self)) {
 
-                    this.getSelf().level().playSound(null,this.getSelf().blockPosition(),SoundEvents.PLAYER_ATTACK_SWEEP,SoundSource.PLAYERS,1F,0.4F + (float)(Math.random()*0.2) + (first ? 0.0F : 0.3F) );
                     if (e instanceof LivingEntity) {
                         addEXP(2);
                     }
@@ -1028,16 +1032,16 @@ public class PowersAnubis extends NewDashPreset {
         List<Entity> entities =  defaultSwordHitbox(this.getSelf(),4.2, 20,0);
         for (Entity entity : entities) {
             float dist = entity.distanceTo(this.getSelf());
-            boolean range = dist > 3;
+            boolean range = dist > 3.4;
             float pow = this.getHeavyPunchStrength(entity);
             if (range) {
                 pow *= 1.4F;
                 ((StandUser)this.getSelf()).roundabout$setMeleeImmunity(10);
             }
+            if (range) {bl = true;}
             if (StandDamageEntityAttack(entity,pow,0.0F,this.getSelf())) {
                 int dur = 100;
                 if (range) {
-                    bl = true;
                     MainUtil.takeUnresistableKnockbackWithY(entity,0.45,0,-1,0);
                     dur = 200;
                 }
@@ -1072,12 +1076,14 @@ public class PowersAnubis extends NewDashPreset {
 
 
         List<Entity> entities = defaultSwordHitbox(this.getSelf(),3, 55,0.02);
+        if (!entities.isEmpty()) {
+            this.getSelf().level().playSound(null,this.getSelf().blockPosition(),SoundEvents.PLAYER_ATTACK_KNOCKBACK,SoundSource.PLAYERS,1F,0.4F + (float)(Math.random()*0.2));
+        }
         for (Entity e : entities ) {
             if (e != null) {
 
                 float pow = getHeavyPunchStrength(e);
                 if (StandDamageEntityAttack(e, pow, 0, this.self)) {
-                    this.getSelf().level().playSound(null,this.getSelf().blockPosition(),SoundEvents.PLAYER_ATTACK_KNOCKBACK,SoundSource.PLAYERS,1F,0.4F + (float)(Math.random()*0.2));
                     if (e instanceof LivingEntity) {
                         addEXP(2);
                     }
@@ -1337,6 +1343,9 @@ public class PowersAnubis extends NewDashPreset {
         float knockbackStrength = 1.25F + (this.getSelf().isSprinting() ? 0.1F : 0F);
 
         List<Entity> entities = defaultSwordHitbox(this.getSelf(),4, 45,0.1);
+        if (!entities.isEmpty()) {
+            this.getSelf().level().playSound(null,this.getSelf().blockPosition(),SoundEvents.PLAYER_ATTACK_KNOCKBACK,SoundSource.PLAYERS,1F,0.4F + (float)(Math.random()*0.2));
+        }
         for (Entity e : entities ) {
             if (e != null) {
                 if (e.distanceTo(this.getSelf()) < 1.5F) {
@@ -1347,7 +1356,6 @@ public class PowersAnubis extends NewDashPreset {
 
                 float pow = getHeavyPunchStrength(e);
                 if (StandDamageEntityAttack(e, pow, 0, this.self)) {
-                    this.getSelf().level().playSound(null,this.getSelf().blockPosition(),SoundEvents.PLAYER_ATTACK_KNOCKBACK,SoundSource.PLAYERS,1F,0.4F + (float)(Math.random()*0.2));
                     if (e instanceof LivingEntity) {
                         addEXP(2);
                     }
@@ -1456,9 +1464,9 @@ public class PowersAnubis extends NewDashPreset {
     }
     public List<Entity> defaultSwordHitbox(Entity e,double radius, double angle, double factor) {
         final Vec3 Eyepos = new Vec3(e.getEyePosition(0F).x,0,e.getEyePosition().z);//.add(e.getLookAngle());
-        Vec3 pos = e.getEyePosition();
+        Vec3 pos = e.getEyePosition().add(0,e.getLookAngle().y,0);
 
-        List<Entity> list = MainUtil.genHitbox(this.getSelf().level(),pos.x,pos.y,pos.z,8,radius*0.3,8);
+        List<Entity> list = MainUtil.genHitbox(this.getSelf().level(),pos.x,pos.y,pos.z,8,1.5,8);
         list = doAttackChecks(list);
         list.remove(e);
 
