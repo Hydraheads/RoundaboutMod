@@ -278,10 +278,6 @@ public class MainUtil {
         if (!bs.isSolid()){
             return false;
         }
-        ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
-        if (walkableBlocks != null && !walkableBlocks.isEmpty() && rl != null && walkableBlocks.contains(rl.toString())){
-            return false;
-        }
         return true;
     }
     public static boolean isBlockWalkableSimplified(BlockState bs){

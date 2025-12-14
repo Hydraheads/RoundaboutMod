@@ -101,7 +101,7 @@ public class BloodSplatterEntity extends ThrowableProjectile {
                     15, 0.4, 0.4, 0.25, 0.4);
             SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
             this.playSound($$6, 1F, 1.5F);
-            if ($$0.getEntity() instanceof LivingEntity LE) {
+            if ($$0.getEntity() instanceof LivingEntity LE && MainUtil.getMobBleed(LE)) {
                 LE.setHealth(Math.min(LE.getMaxHealth(),LE.getHealth()+healthAmt));
                 LE.addEffect(new MobEffectInstance(ModEffects.VAMPIRE_BLOOD, 12000, 0),getOwner());
             }
