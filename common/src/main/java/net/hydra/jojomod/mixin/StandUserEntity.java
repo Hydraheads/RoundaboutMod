@@ -3825,6 +3825,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 $$1*= jd;
             }
         }
+
+        if (rdbt$this() instanceof Mob mb && ((IMob)mb).roundabout$isVampire()){
+            $$1/=2;
+            adj = true;
+        }
         int yesInt = roundabout$getAdjustedGravity();
         if (yesInt > 0 || adj){
             cir.setReturnValue(roundabout$calculateFallDamage($$0,$$1,yesInt));

@@ -1762,7 +1762,6 @@ public class MainUtil {
     }
     public static boolean isSpecialEffect(MobEffect value){
         return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS) ||
-                value.equals(ModEffects.VAMPIRE_BLOOD) ||
                 value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING);
     }
     public static boolean canHaveFrictionTaken(LivingEntity LE){
