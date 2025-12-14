@@ -28,7 +28,6 @@ import net.hydra.jojomod.client.models.npcs.ZombieAestheticianModel;
 import net.hydra.jojomod.client.models.npcs.renderers.ZombieAestheticianRenderer;
 import net.hydra.jojomod.client.models.projectile.renderers.NoRenderer;
 import net.hydra.jojomod.client.models.substand.LifeTrackerModel;
-import net.hydra.jojomod.entity.projectile.BloodSplatterEntity;
 import net.hydra.jojomod.particles.*;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.particle.ExplodeParticle;
@@ -284,6 +283,8 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.STITCH.get(), StitchParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.MOLD.get(), MoldParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.MOLD_DUST.get(), MoldDustParticle.CosyProvider::new);
+        event.registerSpriteSet(ForgeParticles.RAGING_LIGHT.get(), AnubisLightParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.ALLURING_LIGHT.get(), AnubisLightParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.HYPNO_SWIRL.get(), HypnoSwirlParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.BABY_CRACKLE.get(), BabyCrackleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.MAGIC_DUST.get(), MagicDustParticle.Provider::new);

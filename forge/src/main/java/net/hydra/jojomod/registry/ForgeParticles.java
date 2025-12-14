@@ -207,6 +207,14 @@ public class ForgeParticles {
             "mold",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> RAGING_LIGHT = PARTICLES.register(
+            "raging_light",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> ALLURING_LIGHT = PARTICLES.register(
+            "alluring_light",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> DUST_CRUMBLE = PARTICLES.register(
             "dust_crumble",
             () -> new SimpleParticleType(true)

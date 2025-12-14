@@ -11,6 +11,7 @@ import net.hydra.jojomod.client.gui.MemoryRecordScreen;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.AnubisSlipstreamEntity;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -197,11 +198,11 @@ public class PowersAnubis extends NewDashPreset {
                 new Vector3f(0.93F, 0.87F, 0.57F)
         }; */
         //TODO: PARTICLE SPRAY (with colors)
-        ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.FIREWORK,
+        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.ALLURING_LIGHT,
                 pos.x,
                 pos.y + this.getSelf().getEyeHeight(),
                 pos.z,
-                20, 0, 0, 0, 0.4);
+                30, 0, 0, 0, 0.4);
     }
 
     public void RagingLightClient() {
@@ -225,16 +226,12 @@ public class PowersAnubis extends NewDashPreset {
         }
 
         Vec3 pos = this.getSelf().getPosition(1);
-        /* Vector3f[] colors = {
-                new Vector3f(0.85F, 0.31F, 0.15F),
-                new Vector3f(0.31F, 0.22F, 0.20F )
-        }; */
-        //TODO: PARTICLE SPRAY (with colors)
-        ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.FIREWORK,
+
+        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.RAGING_LIGHT,
                 pos.x,
                 pos.y + this.getSelf().getEyeHeight(),
                 pos.z,
-                20, 0, 0, 0, 0.4);
+                30, 0, 0, 0, 0.4);
     }
 
 

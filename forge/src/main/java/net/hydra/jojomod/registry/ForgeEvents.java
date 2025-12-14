@@ -430,6 +430,8 @@ public class ForgeEvents {
         ModParticles.HYPNO_SWIRL = ForgeParticles.HYPNO_SWIRL.get();
         ModParticles.MOLD_DUST = ForgeParticles.MOLD_DUST.get();
         ModParticles.MOLD = ForgeParticles.MOLD.get();
+        ModParticles.RAGING_LIGHT = ForgeParticles.RAGING_LIGHT.get();
+        ModParticles.ALLURING_LIGHT = ForgeParticles.ALLURING_LIGHT.get();
         ModParticles.DUST_CRUMBLE = ForgeParticles.DUST_CRUMBLE.get();
         ModParticles.FIRE_CRUMBLE = ForgeParticles.FIRE_CRUMBLE.get();
         ModParticles.SOUL_FIRE_CRUMBLE = ForgeParticles.SOUL_FIRE_CRUMBLE.get();
