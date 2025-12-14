@@ -13,6 +13,7 @@ import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
@@ -782,6 +783,15 @@ public abstract class ZMob extends LivingEntity implements IMob {
         }
     }
 
+    @Inject(method = "tick",
+            at = @At(value = "TAIL"))
+    private void roundabout$tickMob(CallbackInfo ci) {
+        if (!level().isClientSide() && FateTypes.hasBloodHunger(this)) {
+            if (FateTypes.isInSunlight(this)) {
+                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth() * ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick);
+            }
+        }
+    }
 
     @Inject(method = "setTarget",
             at = @At(value = "HEAD"), cancellable = true)

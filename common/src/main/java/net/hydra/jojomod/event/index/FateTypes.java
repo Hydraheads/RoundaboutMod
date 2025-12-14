@@ -117,6 +117,8 @@ public enum FateTypes {
         if (entity instanceof Player PE){
             return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.id;
         }
+        if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire())
+            return true;
         return false;
     }
     public static boolean isTransforming(LivingEntity entity){

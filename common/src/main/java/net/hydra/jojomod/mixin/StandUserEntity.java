@@ -4004,6 +4004,73 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
 
         }
+
+
+        //Players have their own die event
+        if (FateTypes.takesSunlightDamage(rdbt$this())) {
+            if ($$0.is(ModDamageTypes.SUNLIGHT)){
+                if (this.level() instanceof ServerLevel SL){
+                    Vec3 position = this.getPosition(1);
+                    Vec3 position2 = this.getEyePosition();
+                    Vec3 position3 = this.getEyePosition().subtract(this.getPosition(1)).multiply(new Vec3(0.5F,
+                            0.5F,0.5F));
+                    position3 = position3.add(this.getPosition(1));
+                    SL.sendParticles(ModParticles.FIRE_CRUMBLE,
+                            position.x, position.y, position.z,
+                            0, 0.2, 0.2, 0.2, 0.1);
+                    SL.sendParticles(ModParticles.FIRE_CRUMBLE,
+                            position2.x, position2.y, position2.z,
+                            0, 0.2, 0.2, 0.2, 0.1);
+                    SL.sendParticles(ModParticles.FIRE_CRUMBLE,
+                            position3.x, position3.y, position3.z,
+                            0, 0.2, 0.2, 0.2, 0.1);
+
+
+                    SL.sendParticles(ModParticles.DUST_CRUMBLE,
+                            position.x, position.y, position.z,
+                            0, 0.2, 0.5, 0.2, 0.5);
+                    SL.sendParticles(ModParticles.DUST_CRUMBLE,
+                            position2.x, position2.y, position2.z,
+                            0, 0.2, 0.5, 0.2, 0.2);
+                    SL.sendParticles(ModParticles.DUST_CRUMBLE,
+                            position3.x, position3.y, position3.z,
+                            0, 0.2, 0.5, 0.2, 0.2);
+
+                    this.level().playSound(null, BlockPos.containing(this.position()), ModSounds.VAMPIRE_CRUMBLE_EVENT, SoundSource.PLAYERS, 1.0F, 1F);
+                }
+            } else {
+                if (FateTypes.isVampire(rdbt$this())){
+                    if (this.level() instanceof ServerLevel SL){
+                        if (MainUtil.isStandDamage($$0)) {
+                            Vec3 position = this.getPosition(1);
+                            Vec3 position2 = this.getEyePosition();
+                            Vec3 position3 = this.getEyePosition().subtract(this.getPosition(1)).multiply(new Vec3(0.5F,
+                                    0.5F, 0.5F));
+                            position3 = position3.add(this.getPosition(1));
+                            SL.sendParticles(ModParticles.SOUL_FIRE_CRUMBLE,
+                                    position.x, position.y, position.z,
+                                    0, 0.2, 0.2, 0.2, 0.1);
+                            SL.sendParticles(ModParticles.SOUL_FIRE_CRUMBLE,
+                                    position2.x, position2.y, position2.z,
+                                    0, 0.2, 0.2, 0.2, 0.1);
+                            SL.sendParticles(ModParticles.SOUL_FIRE_CRUMBLE,
+                                    position3.x, position3.y, position3.z,
+                                    0, 0.2, 0.2, 0.2, 0.1);
+
+                            SL.sendParticles(ModParticles.DUST_CRUMBLE,
+                                    position.x, position.y, position.z,
+                                    0, 0.2, 0.5, 0.2, 0.5);
+                            SL.sendParticles(ModParticles.DUST_CRUMBLE,
+                                    position2.x, position2.y, position2.z,
+                                    0, 0.2, 0.5, 0.2, 0.2);
+                            SL.sendParticles(ModParticles.DUST_CRUMBLE,
+                                    position3.x, position3.y, position3.z,
+                                    0, 0.2, 0.5, 0.2, 0.2);
+                        }
+                    }
+                }
+            }
+        }
     }
 
 
