@@ -273,6 +273,14 @@ public class VampireFate extends VampiricFate {
         return super.getDamageAdd(source,amt,target);
     }
 
+    /**For enhancement stands that adjust your normal player attack speed*/
+    public float getBonusAttackSpeed() {
+        return 1.15F;
+    }
+    /**For enhancement stands that adjust your normal player mining speed*/
+    public float getBonusPassiveMiningSpeed(){
+        return 1.4F;
+    }
 
     public boolean canPlantDrink(Entity ent) {
         if (MainUtil.canDrinkBloodCritAggro(ent,self) && !(ent instanceof Monster)) {
