@@ -207,11 +207,26 @@ public abstract class ZMob extends LivingEntity implements IMob {
     }
 
 
+    @Unique
+    public boolean rdbt$vampire = false;
+    @Unique
+    @Override
+    public boolean roundabout$isVampire(){
+        return rdbt$vampire;
+    }
+    @Unique
+    @Override
+    public void roundabout$setVampire(boolean vampire){
+        rdbt$vampire = vampire;
+    }
     @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
     public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
         $$0.putBoolean("roundabout.isWorthy", this.roundabout$isWorthy());
         $$0.putBoolean("roundabout.isNaturalStandUser", this.roundabout$isNaturalStandUser);
         $$0.putBoolean("roundabout.isBred", roundabout$getIsBred());
+        CompoundTag compoundtag = $$0.getCompound("roundabout");
+        compoundtag.putBoolean("vampire",roundabout$isVampire());
+        $$0.put("roundabout",compoundtag);
         return $$0;
     }
 
@@ -220,6 +235,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
         this.roundabout$setWorthy($$0.getBoolean("roundabout.isWorthy"));
         this.roundabout$setIsNaturalStandUser($$0.getBoolean("roundabout.isNaturalStandUser"));
         this.roundabout$setIsBred($$0.getBoolean("roundabout.isBred"));
+        CompoundTag compoundtag = $$0.getCompound("roundabout");
+            roundabout$setVampire(compoundtag.getBoolean("vampire"));
     }
 
     @Shadow

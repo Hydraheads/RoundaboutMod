@@ -3286,18 +3286,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     cir.setReturnValue(true);
                 }
             } else {
-                removeEffect(ModEffects.VAMPIRE_BLOOD);
-                setHealth(getMaxHealth());
-                this.level().playSound(null, blockPosition(), ModSounds.VAMPIRE_AWAKEN_EVENT,
-                        SoundSource.PLAYERS, 1F, 1F);
-                cir.setReturnValue(true);
-                if (level() instanceof ServerLevel SL) {
-                    SL.sendParticles(ModParticles.BLUE_SPARKLE,
-                            this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
-                            50, 0, 0, 0, 0.2);
-                    SL.sendParticles(ModParticles.BLOOD_MIST,
-                            this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
-                            10, 0.4, 0.4, 0.4, 0.025);
+                if (rdbt$this() instanceof Mob mb && !((IMob)mb).roundabout$isVampire()){
+                    removeEffect(ModEffects.VAMPIRE_BLOOD);
+                    setHealth(getMaxHealth());
+                    this.level().playSound(null, blockPosition(), ModSounds.VAMPIRE_AWAKEN_EVENT,
+                            SoundSource.PLAYERS, 1F, 1F);
+                    cir.setReturnValue(true);
+                    ((IMob)mb).roundabout$setVampire(true);
+                    if (level() instanceof ServerLevel SL) {
+                        SL.sendParticles(ModParticles.BLUE_SPARKLE,
+                                this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
+                                50, 0, 0, 0, 0.2);
+                        SL.sendParticles(ModParticles.BLOOD_MIST,
+                                this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
+                                10, 0.4, 0.4, 0.4, 0.025);
+                    }
                 }
             }
         }
