@@ -3880,6 +3880,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             damageAmount = (damageAmount-(damageAmount*changeDamage));
             modified = true;
         }
+
+        float addDamage = FateTypes.getDamageAdd(rdbt$this(),source,damageAmount);
+        if (addDamage > 0){
+            damageAmount = (damageAmount+(damageAmount*addDamage));
+            modified = true;
+        }
         if (roundabout$getZappedToID() > -1){
             if (!MainUtil.isMeleeDamage(source)){
                 damageAmount = damageAmount*ClientNetworking.getAppropriateConfig().survivorSettings.resilienceToNonMeleeAttacksWhenZapped;

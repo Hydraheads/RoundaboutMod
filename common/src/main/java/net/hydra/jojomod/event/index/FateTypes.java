@@ -89,6 +89,19 @@ public enum FateTypes {
         }
         return 0;
     }
+    public static float getDamageAdd(LivingEntity entity, DamageSource source, float amt){
+        if (source.getEntity() != null) {
+            if (source.getEntity() instanceof Player PE) {
+                return ((IFatePlayer) PE).rdbt$getFatePowers().getDamageAdd(source, amt,entity);
+            }
+            if (source.getEntity() instanceof Mob mb && ((IMob) mb).roundabout$isVampire()) {
+                if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)) {
+                    return 0.4F;
+                }
+            }
+        }
+        return 0;
+    }
     public static boolean isEvil(LivingEntity entity){
         if (entity instanceof Player PE){
             Byte fate = ((IPlayerEntity)PE).roundabout$getFate();
