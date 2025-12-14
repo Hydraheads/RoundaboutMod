@@ -834,6 +834,14 @@ public class MainUtil {
         }
         return null;
     }
+
+    // if splattered vampire blood can resurrect a mob when they die
+    public static boolean canMobResurrectWithBlood(Entity mob){
+        if (mob instanceof Mob mb && (mb.getMobType() == MobType.UNDEAD || mb instanceof ZombieHorse))
+            return false;
+        return true;
+    }
+
     public static boolean getMobBleed(Entity mob) {
         if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.disableBleedingAndBloodSplatters){
             return false;
