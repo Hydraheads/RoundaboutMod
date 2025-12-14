@@ -235,6 +235,10 @@ public class VampireFate extends VampiricFate {
                                     }
                                 }
                             }
+                        } else {
+                            if (self instanceof Player PE) {
+                                PE.displayClientMessage(Component.translatable("text.roundabout.vampire.flesh_bud_fail_already").withStyle(ChatFormatting.RED), true);
+                            }
                         }
                     }
                 }

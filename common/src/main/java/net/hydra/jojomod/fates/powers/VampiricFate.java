@@ -373,6 +373,7 @@ public int speedActivated = 0;
     public void tickBloodSuck(){
         if (!this.self.level().isClientSide()) {
 
+
             if (self.isUsingItem()) {
                 if (bloodSuckingTarget != null || this.getActivePower() == BLOOD_SUCK) {
                     bloodSuckingTarget = null;
@@ -382,27 +383,32 @@ public int speedActivated = 0;
 
 
             if (bloodSuckingTarget != null) {
-                Entity TE = getTargetEntity(self, 3, 15);
-                if (TE != null && MainUtil.canDrinkBloodFair(TE, self)
-                        && self.hurtTime <= 0 && bloodSuckingTarget.is(TE)) {
-                    if (TE instanceof LivingEntity LE) {
-                        ((StandUser) LE).roundabout$setDazed((byte) 3);
-                        LE.setDeltaMovement(0,-0.1F,0);
-                    }
 
-                    if (self.tickCount % 2 == 0) {
-                        double random = (Math.random() * 0.8) - 0.4;
-                        double random2 = (Math.random() * 0.8) - 0.4;
-                        double random3 = (Math.random() * 0.8) - 0.4;
-                        SimpleParticleType particle = ModParticles.BLOOD;
-                        if (MainUtil.hasBlueBlood(TE)) {
-                            particle = ModParticles.BLUE_BLOOD;
+                if (bloodSuckingTarget instanceof LivingEntity LE && FateTypes.isVampire(LE)){
+                    endSuckingVamp();
+                } else {
+                    Entity TE = getTargetEntity(self, 3, 15);
+                    if (TE != null && MainUtil.canDrinkBloodFair(TE, self)
+                            && self.hurtTime <= 0 && bloodSuckingTarget.is(TE)) {
+                        if (TE instanceof LivingEntity LE) {
+                            ((StandUser) LE).roundabout$setDazed((byte) 3);
+                            LE.setDeltaMovement(0, -0.1F, 0);
                         }
-                        ((ServerLevel) this.self.level()).sendParticles(particle, TE.getX() + random,
-                                TE.getY() + TE.getEyeHeight() + random2, TE.getZ() + random3,
-                                0,
-                                (this.self.getX() - TE.getX()), (this.self.getY() - TE.getY() + TE.getEyeHeight()), (this.self.getZ() - TE.getZ()),
-                                0.08);
+
+                        if (self.tickCount % 2 == 0) {
+                            double random = (Math.random() * 0.8) - 0.4;
+                            double random2 = (Math.random() * 0.8) - 0.4;
+                            double random3 = (Math.random() * 0.8) - 0.4;
+                            SimpleParticleType particle = ModParticles.BLOOD;
+                            if (MainUtil.hasBlueBlood(TE)) {
+                                particle = ModParticles.BLUE_BLOOD;
+                            }
+                            ((ServerLevel) this.self.level()).sendParticles(particle, TE.getX() + random,
+                                    TE.getY() + TE.getEyeHeight() + random2, TE.getZ() + random3,
+                                    0,
+                                    (this.self.getX() - TE.getX()), (this.self.getY() - TE.getY() + TE.getEyeHeight()), (this.self.getZ() - TE.getZ()),
+                                    0.08);
+                        }
                     }
                 }
             }
@@ -438,6 +444,11 @@ public int speedActivated = 0;
                 }
             }
         }
+    }
+
+    public void endSuckingVamp(){
+        bloodSuckingTarget = null;
+        xTryPower(PowerIndex.NONE, true);
     }
 
 
@@ -615,6 +626,11 @@ public int speedActivated = 0;
 
 
     public void finishSucking(){
+        if (bloodSuckingTarget instanceof LivingEntity LE && FateTypes.isVampire(LE)){
+            endSuckingVamp();
+            return;
+        }
+
         if (bloodSuckingTarget != null && self instanceof Player pl) {
 
             boolean canDrainGood = MainUtil.canDrinkBloodCrit(bloodSuckingTarget,self);

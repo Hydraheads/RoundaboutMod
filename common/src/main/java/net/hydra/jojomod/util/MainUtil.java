@@ -872,7 +872,8 @@ public class MainUtil {
     }
 
     public static boolean canDrinkBlood(Entity mob){
-        return (getMobBleed(mob) && !hasEnderBlood(mob) && mob.isAlive() && !mob.isRemoved());
+        return (getMobBleed(mob) && !hasEnderBlood(mob) && mob.isAlive() && !mob.isRemoved() &&
+                !(mob instanceof Mob mb && ((IMob)mb).roundabout$isVampire()));
     }
 
     public static boolean canDrinkBloodFair(Entity ent,Entity drinker){

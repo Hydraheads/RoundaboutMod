@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.index;
 
 import net.hydra.jojomod.access.IFatePlayer;
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -9,6 +10,7 @@ import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
@@ -66,6 +68,8 @@ public enum FateTypes {
         if (entity instanceof Player PE){
             return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.id;
         }
+        if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire())
+            return true;
         return false;
     }
     public static boolean isEvil(LivingEntity entity){
@@ -98,6 +102,8 @@ public enum FateTypes {
         if (entity instanceof Player PE){
             return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.id;
         }
+        if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire())
+            return true;
         return false;
     }
     public static boolean canSeeInTheDark(LivingEntity entity){

@@ -10,6 +10,7 @@ import net.hydra.jojomod.entity.goals.RoundaboutFollowGoal;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModGamerules;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -81,6 +82,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
     @Shadow @Final protected GoalSelector goalSelector;
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$IS_WORTHY = SynchedEntityData.defineId(Mob.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$FATE = SynchedEntityData.defineId(Mob.class, EntityDataSerializers.BYTE);
 
 
     /**Prevent aggro scumming with bubble spam*/
@@ -102,16 +104,26 @@ public abstract class ZMob extends LivingEntity implements IMob {
     public boolean roundabout$isWorthy() {
         return this.getEntityData().get(ROUNDABOUT$IS_WORTHY);
     }
+    @Override
+    @Unique
+    public void roundabout$setWorthy(boolean $$0) {
+        this.getEntityData().set(ROUNDABOUT$IS_WORTHY, $$0);
+    }
+    @Override
+    @Unique
+    public byte roundabout$getFate() {
+        return this.getEntityData().get(ROUNDABOUT$FATE);
+    }
+    @Override
+    @Unique
+    public void roundabout$setFate(byte fate) {
+        this.getEntityData().set(ROUNDABOUT$FATE, fate);
+    }
 
     @Override
     @Unique
     public GoalSelector roundabout$getGoalSelector() {
         return goalSelector;
-    }
-    @Override
-    @Unique
-    public void roundabout$setWorthy(boolean $$0) {
-        this.getEntityData().set(ROUNDABOUT$IS_WORTHY, $$0);
     }
     @Override
     @Unique
@@ -203,21 +215,24 @@ public abstract class ZMob extends LivingEntity implements IMob {
     private void initDataTrackerRoundabout(CallbackInfo ci) {
         if (!((Mob)(Object)this).getEntityData().hasItem(ROUNDABOUT$IS_WORTHY)) {
             this.getEntityData().define(ROUNDABOUT$IS_WORTHY, false);
+            this.getEntityData().define(ROUNDABOUT$FATE, (byte)0);
         }
     }
 
 
     @Unique
-    public boolean rdbt$vampire = false;
-    @Unique
     @Override
     public boolean roundabout$isVampire(){
-        return rdbt$vampire;
+        return roundabout$getFate() == FateTypes.VAMPIRE.id;
     }
     @Unique
     @Override
     public void roundabout$setVampire(boolean vampire){
-        rdbt$vampire = vampire;
+        if (vampire){
+            roundabout$setFate(FateTypes.VAMPIRE.id);
+        } else {
+            roundabout$setFate(FateTypes.HUMAN.id);
+        }
     }
     @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
     public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
