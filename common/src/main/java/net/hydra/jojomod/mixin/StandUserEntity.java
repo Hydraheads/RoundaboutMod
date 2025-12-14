@@ -3311,6 +3311,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 || roundabout$getStandPowers().cheatDeath()){
             cir.setReturnValue(true);
         } else if (hasEffect(ModEffects.VAMPIRE_BLOOD)){
+            removeEffect(ModEffects.VAMPIRE_BLOOD);
             if (rdbt$this() instanceof Player pl){
                 if (FateTypes.isHuman(pl)) {
                     ((IFatePlayer) pl).rdbt$startVampireTransformation(false);
@@ -3319,7 +3320,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             } else {
                 if (rdbt$this() instanceof Mob mb && !((IMob)mb).roundabout$isVampire()){
-                    removeEffect(ModEffects.VAMPIRE_BLOOD);
                     setHealth(getMaxHealth());
                     this.level().playSound(null, blockPosition(), ModSounds.VAMPIRE_AWAKEN_EVENT,
                             SoundSource.PLAYERS, 1F, 1F);
@@ -4766,6 +4766,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         ){
             basis *= 0.5F;
+        }
+
+        // Vampire mobs (not players) are faster
+        if (FateTypes.isVampire(rdbt$this())){
+            basis *= 1.3F;
         }
 
         if (basis != this.speed){
