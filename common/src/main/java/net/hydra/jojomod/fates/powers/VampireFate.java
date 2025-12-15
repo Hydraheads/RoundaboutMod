@@ -262,7 +262,7 @@ public class VampireFate extends VampiricFate {
     @Override
     /**Cancel death, make sure to set player health if you do this*/
     public boolean cheatDeath(DamageSource dsource){
-        if (!dsource.is(ModDamageTypes.SUNLIGHT) && self instanceof Player PE) {
+        if (!dsource.is(ModDamageTypes.SUNLIGHT) && !dsource.is(DamageTypes.GENERIC_KILL) && self instanceof Player PE) {
             if (canUseRegen()) {
                 if (!onCooldown(PowerIndex.FATE_2_SNEAK)) {
                     this.setCooldown(PowerIndex.FATE_2_SNEAK, 1200);
