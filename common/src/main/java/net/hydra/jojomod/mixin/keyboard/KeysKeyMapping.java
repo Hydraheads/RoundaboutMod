@@ -26,6 +26,9 @@ import java.util.Map;
 public abstract class KeysKeyMapping implements IKeyMapping {
 
     @Shadow
+    private int clickCount;
+
+    @Shadow
     public abstract String getName();
 
     /**No cancel input screens let you continue walking and pressing buttons like jump while in a gui,
@@ -72,6 +75,9 @@ public abstract class KeysKeyMapping implements IKeyMapping {
 
                             if (key.getName().equals(this.getName())) {
                                 if (PA.isPressed(PA.playBytes.get(i), time)) {
+                                    if (!PA.isPressed(PA.playBytes.get(i),time-1)) {
+                                        this.clickCount ++;
+                                    }
                                     cir.setReturnValue(true);
                                     cir.cancel();
                                 }
