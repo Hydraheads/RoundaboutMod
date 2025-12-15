@@ -1859,6 +1859,8 @@ public class MainUtil {
         }
         return basis;
     }
+
+    //Walls corners and doors check
     public static boolean canActuallyHitInvolved(Entity self, Entity entity){
         if (entity instanceof SoftAndWetPlunderBubbleEntity){
             return false;
