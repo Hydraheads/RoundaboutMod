@@ -116,8 +116,15 @@ public interface IPlayerEntity {
     AnimationState roundabout$getSnubnoseRecoilLeft();
     AnimationState roundabout$getSnubnoseModelAimLeft();
     AnimationState roundabout$getSnubnoseModelRecoilLeft();
-    AnimationState roundabout$getSnubnoseModelIdle();
-    AnimationState roundabout$getSnubnoseModelIdleLeft();
+
+    AnimationState roundabout$getTommyAim();
+    AnimationState roundabout$getTommyModelAim();
+    AnimationState roundabout$getTommyAimLeft();
+    AnimationState roundabout$getTommyModelAimLeft();
+    AnimationState roundabout$getTommyRecoil();
+    AnimationState roundabout$getTommyModelRecoil();
+    AnimationState roundabout$getTommyRecoilLeft();
+    AnimationState roundabout$getTommyModelRecoilLeft();
 
     AnimationState roundabout$getBubbleShotAim();
     AnimationState roundabout$getOffsetCorrect();

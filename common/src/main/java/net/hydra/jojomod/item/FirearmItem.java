@@ -43,8 +43,6 @@ public class FirearmItem extends Item {
         return 72000;
     }
 
-    int maxAmmo = 6;
-
     public boolean interceptAttack(ItemStack itemStack, Player player) {
         if (player != null && player.getUseItem() != null) {
             if (player.getUseItem() == itemStack) {

@@ -79,6 +79,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
         tag.putByte("AmmoType", this.entityData.get(AMMO_TYPE));
         tag.putBoolean("TimeStopShot", this.timeStopShot);
         tag.putInt("OutsideTimeStop", this.outsideOfTimeStop);
+        tag.putInt("SuperThrownTimer", this.superThrownTimer);
     }
 
     @Override
@@ -88,6 +89,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
         this.entityData.set(AMMO_TYPE, tag.getByte("AmmoType"));
         this.timeStopShot = tag.getBoolean("TimeStopShot");
         this.outsideOfTimeStop = tag.getInt("OutsideTimeStop");
+        this.superThrownTimer = tag.getInt("SuperThrownTimer");
     }
 
 
@@ -138,6 +140,9 @@ public class RoundaboutBulletEntity extends AbstractArrow {
         } else if (getAmmoType() == REVOLVER) {
             itemStack = ModItems.SNUBNOSE_AMMO.getDefaultInstance();
             return itemStack;
+        } else if (getAmmoType() == TOMMY_GUN) {
+            itemStack = ModItems.TOMMY_AMMO.getDefaultInstance();
+            return itemStack;
         }
         return ItemStack.EMPTY;
     }
@@ -154,10 +159,16 @@ public class RoundaboutBulletEntity extends AbstractArrow {
     boolean timeStopShot = false;
     int outsideOfTimeStop = 0;
 
-    private void flipTrajectory() {
+    private int superThrownTimer = 0;
 
+    private float getBulletDamage() {
+        return switch (getAmmoType()) {
+            case REVOLVER -> timeStopShot ? 3.7F : 4.0F;
+            case TOMMY_GUN -> timeStopShot ? 0.74F : 0.82F;
+            case SNIPER -> timeStopShot ? 3.7F : 4.0F;
+            default -> 0.0F;
+        };
     }
-
 
 
 
@@ -196,13 +207,14 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                 livingEntity.invulnerableTime = 0;
             }
 
-            boolean didDamage;
-            float bulletDamage = timeStopShot ? 3.7F : 4.0F;
-            didDamage = livingEntity.hurt(ModDamageTypes.of(level(), ModDamageTypes.BULLET, this, this.getOwner()), bulletDamage);
+            float damage = getBulletDamage();
+
+            boolean didDamage = livingEntity.hurt(ModDamageTypes.of(level(), ModDamageTypes.BULLET, this, this.getOwner()), damage);
 
             if (didDamage) {
                 applyEffect(livingEntity);
             }
+
         }
 
         Entity $$2 = this.getOwner();
@@ -246,6 +258,16 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 
         if (((IProjectileAccess) this).roundabout$getRoundaboutIsTimeStopCreated()) {
             timeStopShot = true;
+        }
+
+        if (this.getSuperThrown() && this.getAmmoType() != SNIPER) {
+            superThrownTimer++;
+            if (superThrownTimer >= 20) {
+                this.setSuperThrown(false);
+                superThrownTimer = 0;
+            }
+        } else {
+            superThrownTimer = 0;
         }
 
         if (timeStopShot) {

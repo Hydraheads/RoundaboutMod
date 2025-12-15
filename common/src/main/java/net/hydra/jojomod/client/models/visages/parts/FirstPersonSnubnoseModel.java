@@ -92,20 +92,13 @@ public class FirstPersonSnubnoseModel<T extends Entity> extends PsuedoHierarchic
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
             boolean mainHandRight = true;
             if (LE instanceof Player player) {
-                if (!(player.getUseItem().getItem() instanceof SnubnoseRevolverItem)) {
-                    this.animate(ipe.roundabout$getSnubnoseModelIdle(), Poses.SNUBNOSE_MODEL_IDLE.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getSnubnoseModelIdleLeft(), Poses.SNUBNOSE_MODEL_IDLE_LEFT.ad, partialTicks, 1f);
-                } else {
-                    mainHandRight = player.getMainArm() == HumanoidArm.RIGHT;
-                    if (mainHandRight) {
-                        this.animate(ipe.roundabout$getSnubnoseModelAim(), Poses.SNUBNOSE_MODEL_AIM.ad, partialTicks, 1f);
-                        this.animate(ipe.roundabout$getSnubnoseModelRecoil(), Poses.SNUBNOSE_MODEL_RECOIL.ad, partialTicks, 1f);
-                        this.animate(ipe.roundabout$getSnubnoseModelIdle(), Poses.SNUBNOSE_MODEL_IDLE.ad, partialTicks, 1f);
-                    } else if (!mainHandRight) {
-                        this.animate(ipe.roundabout$getSnubnoseModelAimLeft(), Poses.SNUBNOSE_MODEL_AIM_LEFT.ad, partialTicks, 1f);
-                        this.animate(ipe.roundabout$getSnubnoseModelRecoilLeft(), Poses.SNUBNOSE_MODEL_RECOIL_LEFT.ad, partialTicks, 1f);
-                        this.animate(ipe.roundabout$getSnubnoseModelIdleLeft(), Poses.SNUBNOSE_MODEL_IDLE_LEFT.ad, partialTicks, 1f);
-                    }
+                mainHandRight = player.getMainArm() == HumanoidArm.RIGHT;
+                if (mainHandRight) {
+                    this.animate(ipe.roundabout$getSnubnoseModelAim(), Poses.SNUBNOSE_MODEL_AIM.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getSnubnoseModelRecoil(), Poses.SNUBNOSE_MODEL_RECOIL.ad, partialTicks, 1f);
+                } else if (!mainHandRight) {
+                    this.animate(ipe.roundabout$getSnubnoseModelAimLeft(), Poses.SNUBNOSE_MODEL_AIM_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getSnubnoseModelRecoilLeft(), Poses.SNUBNOSE_MODEL_RECOIL_LEFT.ad, partialTicks, 1f);
                 }
             }
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);

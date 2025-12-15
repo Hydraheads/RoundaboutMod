@@ -44,7 +44,8 @@ public class ServerToClientPackets {
             CreamUpdateTimer("cream_update_timer"),
             CreamUpdateTransformTimer("cream_update_transform_timer"),
             CreamUpdateTransformDirection("cream_update_transform_direction"),
-            VampireMessage("vampire_message");
+            VampireMessage("vampire_message"),
+            GunRecoil("gun_recoil");
 
             public final String value;
 

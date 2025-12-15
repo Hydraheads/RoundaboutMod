@@ -931,19 +931,62 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public AnimationState roundabout$getSnubnoseModelRecoilLeft(){
         return roundabout$snubnoseModelRecoilLeft;
     }
+
     @Unique
-    public final AnimationState roundabout$snubnoseModelIdle = new AnimationState();
+    public final AnimationState roundabout$tommyAim = new AnimationState();
     @Unique
     @Override
-    public AnimationState roundabout$getSnubnoseModelIdle(){
-        return roundabout$snubnoseModelIdle;
+    public AnimationState roundabout$getTommyAim(){
+        return roundabout$tommyAim;
     }
     @Unique
-    public final AnimationState roundabout$snubnoseModelIdleLeft = new AnimationState();
+    public final AnimationState roundabout$tommyModelAim = new AnimationState();
     @Unique
     @Override
-    public AnimationState roundabout$getSnubnoseModelIdleLeft(){
-        return roundabout$snubnoseModelIdleLeft;
+    public AnimationState roundabout$getTommyModelAim(){
+        return roundabout$tommyModelAim;
+    }
+    @Unique
+    public final AnimationState roundabout$tommyAimLeft = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getTommyAimLeft(){
+        return roundabout$tommyAimLeft;
+    }
+    @Unique
+    public final AnimationState roundabout$tommyModelAimLeft = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getTommyModelAimLeft(){
+        return roundabout$tommyModelAimLeft;
+    }
+    @Unique
+    public final AnimationState roundabout$tommyRecoil = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getTommyRecoil(){
+        return roundabout$tommyRecoil;
+    }
+    @Unique
+    public final AnimationState roundabout$tommyModelRecoil = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getTommyModelRecoil(){
+        return roundabout$tommyModelRecoil;
+    }
+    @Unique
+    public final AnimationState roundabout$tommyRecoilLeft = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getTommyRecoilLeft(){
+        return roundabout$tommyRecoilLeft;
+    }
+    @Unique
+    public final AnimationState roundabout$tommyModelRecoilLeft = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getTommyModelRecoilLeft(){
+        return roundabout$tommyModelRecoilLeft;
     }
 
 

@@ -30,8 +30,14 @@ public enum Poses {
     SNUBNOSE_RECOIL_LEFT((byte) 18, FirearmFirstPersonAnimations.snubnose_fire_recoil_left),
     SNUBNOSE_MODEL_AIM_LEFT((byte) 19, FirearmFirstPersonAnimations.snubnose_model_aim_left),
     SNUBNOSE_MODEL_RECOIL_LEFT((byte) 20, FirearmFirstPersonAnimations.snubnose_model_recoil_left),
-    SNUBNOSE_MODEL_IDLE((byte) 21, FirearmFirstPersonAnimations.snubnose_model_idle),
-    SNUBNOSE_MODEL_IDLE_LEFT((byte) 22, FirearmFirstPersonAnimations.snubnose_model_idle_left);
+    TOMMY_AIM((byte) 23, FirearmFirstPersonAnimations.tommy_aim),
+    TOMMY_MODEL_AIM((byte) 24, FirearmFirstPersonAnimations.tommy_model_aim),
+    TOMMY_AIM_LEFT((byte) 25, FirearmFirstPersonAnimations.tommy_aim_left),
+    TOMMY_MODEL_AIM_LEFT((byte) 26, FirearmFirstPersonAnimations.tommy_model_aim_left),
+    TOMMY_RECOIL((byte) 27, FirearmFirstPersonAnimations.tommy_recoil),
+    TOMMY_MODEL_RECOIL((byte) 28, FirearmFirstPersonAnimations.tommy_model_recoil),
+    TOMMY_RECOIL_LEFT((byte) 29, FirearmFirstPersonAnimations.tommy_recoil_left),
+    TOMMY_MODEL_RECOIL_LEFT((byte) 30, FirearmFirstPersonAnimations.tommy_model_recoil_left);
 
 
     public final byte id;
@@ -84,6 +90,22 @@ public enum Poses {
             return SNUBNOSE_MODEL_AIM_LEFT;
         } if (bt== SNUBNOSE_MODEL_RECOIL_LEFT.id) {
             return SNUBNOSE_MODEL_RECOIL_LEFT;
+        } if (bt== TOMMY_AIM.id) {
+            return TOMMY_AIM;
+        } if (bt== TOMMY_MODEL_AIM.id) {
+            return TOMMY_MODEL_AIM;
+        } if (bt== TOMMY_AIM_LEFT.id) {
+            return TOMMY_AIM_LEFT;
+        } if (bt== TOMMY_MODEL_AIM_LEFT.id) {
+            return TOMMY_MODEL_AIM_LEFT;
+        } if (bt== TOMMY_RECOIL.id) {
+            return TOMMY_RECOIL;
+        } if (bt== TOMMY_MODEL_RECOIL.id) {
+            return TOMMY_MODEL_RECOIL;
+        } if (bt== TOMMY_RECOIL_LEFT.id) {
+            return TOMMY_RECOIL_LEFT;
+        } if (bt== TOMMY_MODEL_RECOIL_LEFT.id) {
+            return TOMMY_MODEL_RECOIL_LEFT;
         }
         return NONE;
     }

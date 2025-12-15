@@ -8,6 +8,8 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.event.index.Poses;
+import net.hydra.jojomod.item.SnubnoseRevolverItem;
+import net.hydra.jojomod.item.TommyGunItem;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -101,12 +103,22 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
             if (LE instanceof Player player) {
                 mainHandRight = player.getMainArm() == HumanoidArm.RIGHT;
             }
-            if (mainHandRight) {
-                this.animate(ipe.roundabout$getSnubnoseAim(), Poses.SNUBNOSE_AIM.ad, partialTicks, 1f);
-                this.animate(ipe.roundabout$getSnubnoseRecoil(), Poses.SNUBNOSE_RECOIL.ad, partialTicks, 1f);
-            } else {
-                this.animate(ipe.roundabout$getSnubnoseAimLeft(), Poses.SNUBNOSE_AIM_LEFT.ad, partialTicks, 1f);
-                this.animate(ipe.roundabout$getSnubnoseRecoilLeft(), Poses.SNUBNOSE_RECOIL_LEFT.ad, partialTicks, 1f);
+            if (player.getUseItem().getItem() instanceof SnubnoseRevolverItem) {
+                if (mainHandRight) {
+                    this.animate(ipe.roundabout$getSnubnoseAim(), Poses.SNUBNOSE_AIM.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getSnubnoseRecoil(), Poses.SNUBNOSE_RECOIL.ad, partialTicks, 1f);
+                } else {
+                    this.animate(ipe.roundabout$getSnubnoseAimLeft(), Poses.SNUBNOSE_AIM_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getSnubnoseRecoilLeft(), Poses.SNUBNOSE_RECOIL_LEFT.ad, partialTicks, 1f);
+                }
+            } else if (player.getUseItem().getItem() instanceof TommyGunItem) {
+                if (mainHandRight) {
+                    this.animate(ipe.roundabout$getTommyAim(), Poses.TOMMY_AIM.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getTommyRecoil(), Poses.TOMMY_RECOIL.ad, partialTicks, 1f);
+                } else {
+                    this.animate(ipe.roundabout$getTommyAimLeft(), Poses.TOMMY_AIM_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getTommyRecoilLeft(), Poses.TOMMY_RECOIL_LEFT.ad, partialTicks, 1f);
+                }
             }
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
 //            Roundabout.LOGGER.info("Is Aiming:"+ipe.roundabout$getSnubnoseAim().isStarted());
