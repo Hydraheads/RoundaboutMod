@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.forge;
 
+import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
@@ -75,7 +76,12 @@ public abstract class ForgePlayer extends LivingEntity {
                         f*= bpow;
                         overwrite = true;
                     }
+        }
 
+        float bpow = ((IFatePlayer)this).rdbt$getFatePowers().getBonusPassiveMiningSpeed();
+        if (bpow != 1){
+            f*= bpow;
+            overwrite = true;
         }
 
         if (overwrite){

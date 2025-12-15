@@ -113,6 +113,12 @@
       "roundabout:vampire_speed"
     ]
   },
+  "vampire_awaken": {
+    "subtitle": "sounds.roundabout.vampire_awaken",
+    "sounds": [
+      "roundabout:vampire_awaken"
+    ]
+  },
   "vampire_wall_grip": {
     "subtitle": "sounds.roundabout.vampire_wall_grip",
     "sounds": [

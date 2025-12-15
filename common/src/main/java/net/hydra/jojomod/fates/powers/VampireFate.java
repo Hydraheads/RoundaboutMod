@@ -8,6 +8,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.ModItems;
@@ -23,6 +24,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -235,6 +238,10 @@ public class VampireFate extends VampiricFate {
                                     }
                                 }
                             }
+                        } else {
+                            if (self instanceof Player PE) {
+                                PE.displayClientMessage(Component.translatable("text.roundabout.vampire.flesh_bud_fail_already").withStyle(ChatFormatting.RED), true);
+                            }
                         }
                     }
                 }
@@ -244,9 +251,39 @@ public class VampireFate extends VampiricFate {
         }
     }
 
+    @Override
+    public float getDamageReduction(DamageSource source, float amt){
+        if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)){
+            return 0.15F;
+        }
+        if (source.is(DamageTypes.ARROW) || source.is(ModDamageTypes.BULLET)){
+            return 0.2F;
+        }
+        return super.getDamageReduction(source,amt);
+    }
+    @Override
+    public float getDamageAdd(DamageSource source, float amt, Entity target){
+        if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)){
+            if (target instanceof Player pl){
+                return 0.2F;
+            } else {
+                return 0.4F;
+            }
+        }
+        return super.getDamageAdd(source,amt,target);
+    }
+
+    /**For enhancement stands that adjust your normal player attack speed*/
+    public float getBonusAttackSpeed() {
+        return 1.15F;
+    }
+    /**For enhancement stands that adjust your normal player mining speed*/
+    public float getBonusPassiveMiningSpeed(){
+        return 1.4F;
+    }
 
     public boolean canPlantDrink(Entity ent) {
-        if (MainUtil.canDrinkBloodCrit(ent,self) && !(ent instanceof Monster)) {
+        if (MainUtil.canDrinkBloodCritAggro(ent,self) && !(ent instanceof Monster)) {
             return true;
         }
         return false;

@@ -6,10 +6,12 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "ExperimentalFixD4CForge",
+    "ForgeMilkBucketMixin",
     "ForgePlayer",
     "ForgeServerPlayer"
   ],
   "client": [
+    "AnubisForgeToggleKeyMapping",
     "DimensionResourceKeyD4CForge",
     "ForgeClientPacketListener",
     "ForgeFireBlock",

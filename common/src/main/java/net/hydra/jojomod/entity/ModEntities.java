@@ -74,6 +74,7 @@ public class ModEntities {
     public static EntityType<RoadRollerEntity> ROAD_ROLLER_ENTITY;
 
     public static EntityType<GasolineSplatterEntity> GASOLINE_SPLATTER;
+    public static EntityType<BloodSplatterEntity> BLOOD_SPLATTER;
 
     public static EntityType<StandArrowEntity> STAND_ARROW;
     public static EntityType<ThrownObjectEntity> THROWN_OBJECT;

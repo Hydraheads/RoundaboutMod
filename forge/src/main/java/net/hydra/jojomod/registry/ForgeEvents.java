@@ -431,6 +431,8 @@ public class ForgeEvents {
         ModParticles.HYPNO_SWIRL = ForgeParticles.HYPNO_SWIRL.get();
         ModParticles.MOLD_DUST = ForgeParticles.MOLD_DUST.get();
         ModParticles.MOLD = ForgeParticles.MOLD.get();
+        ModParticles.RAGING_LIGHT = ForgeParticles.RAGING_LIGHT.get();
+        ModParticles.ALLURING_LIGHT = ForgeParticles.ALLURING_LIGHT.get();
         ModParticles.DUST_CRUMBLE = ForgeParticles.DUST_CRUMBLE.get();
         ModParticles.FIRE_CRUMBLE = ForgeParticles.FIRE_CRUMBLE.get();
         ModParticles.SOUL_FIRE_CRUMBLE = ForgeParticles.SOUL_FIRE_CRUMBLE.get();
@@ -449,6 +451,7 @@ public class ForgeEvents {
         ModEffects.MELTING = ForgeEffects.MELTING.get();
         ModEffects.GRAVITY_FLIP = ForgeEffects.GRAVITY_FLIP.get();
         ModEffects.WARDING = ForgeEffects.WARDING.get();
+        ModEffects.VAMPIRE_BLOOD = ForgeEffects.VAMPIRE_BLOOD.get();
 
 
 
@@ -494,6 +497,7 @@ public class ForgeEvents {
         ModEntities.STAND_FIREBALL = ForgeEntities.STAND_FIREBALL.get();
         ModEntities.GASOLINE_CAN = ForgeEntities.GASOLINE_CAN.get();
         ModEntities.GASOLINE_SPLATTER = ForgeEntities.GASOLINE_SPLATTER.get();
+        ModEntities.BLOOD_SPLATTER = ForgeEntities.BLOOD_SPLATTER.get();
         ModEntities.STAND_ARROW = ForgeEntities.STAND_ARROW.get();
         ModEntities.ROAD_ROLLER_ENTITY = ForgeEntities.ROAD_ROLLER_ENTITY.get();
         ModEntities.SEPERATED_LEGS = ForgeEntities.SEPERATED_LEGS.get();

@@ -64,6 +64,9 @@ public class FabricParticles {
     public static final SimpleParticleType MOLD_DUST = FabricParticleTypes.simple();
     public static final SimpleParticleType HYPNO_SWIRL = FabricParticleTypes.simple();
     public static final SimpleParticleType MOLD = FabricParticleTypes.simple();
+    public static final SimpleParticleType RAGING_LIGHT = FabricParticleTypes.simple();
+    public static final SimpleParticleType ALLURING_LIGHT = FabricParticleTypes.simple();
+
     public static final SimpleParticleType DUST_CRUMBLE = FabricParticleTypes.simple();
     public static final SimpleParticleType FIRE_CRUMBLE = FabricParticleTypes.simple();
     public static final SimpleParticleType SOUL_FIRE_CRUMBLE = FabricParticleTypes.simple();
@@ -109,6 +112,8 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("stitch"), STITCH);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("mold_dust"), MOLD_DUST);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("mold"), MOLD);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("raging_light"), RAGING_LIGHT);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("alluring_light"), ALLURING_LIGHT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("hypno_swirl"), HYPNO_SWIRL);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("clock"), CLOCK);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("red_clock"), RED_CLOCK);
@@ -179,7 +184,8 @@ public class FabricParticles {
         ModParticles.MOLD_DUST = MOLD_DUST;
         ModParticles.HYPNO_SWIRL = HYPNO_SWIRL;
         ModParticles.MOLD = MOLD;
-
+        ModParticles.RAGING_LIGHT = RAGING_LIGHT;
+        ModParticles.ALLURING_LIGHT = ALLURING_LIGHT;
 
         ModParticles.ROAD_ROLLER_EXPLOSION = ROAD_ROLLER_EXPLOSION;
         ModParticles.ROAD_ROLLER_SMOKE = ROAD_ROLLER_SMOKE;

@@ -1,14 +1,19 @@
 package net.hydra.jojomod.event.index;
 
 import net.hydra.jojomod.access.IFatePlayer;
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
@@ -66,7 +71,36 @@ public enum FateTypes {
         if (entity instanceof Player PE){
             return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.id;
         }
+        if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire())
+            return true;
         return false;
+    }
+    public static float getDamageResist(LivingEntity entity, DamageSource source, float amt){
+        if (entity instanceof Player PE){
+            return ((IFatePlayer)PE).rdbt$getFatePowers().getDamageReduction(source,amt);
+        }
+        if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire()) {
+            if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)){
+                return 0.15F;
+            }
+            if (source.is(DamageTypes.ARROW) || source.is(ModDamageTypes.BULLET)){
+                return 0.2F;
+            }
+        }
+        return 0;
+    }
+    public static float getDamageAdd(LivingEntity entity, DamageSource source, float amt){
+        if (source.getEntity() != null) {
+            if (source.getEntity() instanceof Player PE) {
+                return ((IFatePlayer) PE).rdbt$getFatePowers().getDamageAdd(source, amt,entity);
+            }
+            if (source.getEntity() instanceof Mob mb && ((IMob) mb).roundabout$isVampire()) {
+                if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)) {
+                    return 0.4F;
+                }
+            }
+        }
+        return 0;
     }
     public static boolean isEvil(LivingEntity entity){
         if (entity instanceof Player PE){
@@ -98,6 +132,8 @@ public enum FateTypes {
         if (entity instanceof Player PE){
             return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.id;
         }
+        if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire())
+            return true;
         return false;
     }
     public static boolean canSeeInTheDark(LivingEntity entity){
@@ -111,6 +147,8 @@ public enum FateTypes {
         if (entity instanceof Player PE){
             return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.id;
         }
+        if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire())
+            return true;
         return false;
     }
     public static boolean isTransforming(LivingEntity entity){

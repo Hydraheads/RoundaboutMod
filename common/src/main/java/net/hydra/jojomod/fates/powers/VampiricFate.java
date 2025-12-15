@@ -145,9 +145,7 @@ public int speedActivated = 0;
             BlockPos pos5 = BlockPos.containing(self.getPosition(1).add(newVec5));
 
             BlockState state1 = self.level().getBlockState(pos);
-            BlockState state2 = self.level().getBlockState(pos2);
             BlockState state4 = self.level().getBlockState(pos4);
-            BlockState state5 = self.level().getBlockState(pos5);
             boolean isOnValidBlock =  MainUtil.isBlockWalkableSimplified(state1)
                     && MainUtil.isBlockWalkableSimplified(state4);
 
@@ -192,8 +190,7 @@ public int speedActivated = 0;
                     justFlippedTicks--;
                 } else {
 
-                    if (self.onGround() && MainUtil.isBlockWalkableSimplified(self.getBlockStateOn())
-                            && isOnValidBlock){
+                    if (self.onGround()){
                         mercyTicks = 5;
                     } else {
                         if (
@@ -208,7 +205,7 @@ public int speedActivated = 0;
                             mercyTicks = 0;
                         }
                     }
-                    if (self.isSleeping() || ((!self.onGround() || !isOnValidBlock) && mercyTicks <= 0) || self.getRootVehicle() != this.self) {
+                    if (self.isSleeping() || ((!self.onGround()) && mercyTicks <= 0) || self.getRootVehicle() != this.self) {
                         wallWalkDirection = getIntendedDirection();
                         ((IGravityEntity) this.self).roundabout$setGravityDirection(wallWalkDirection);
                         setWallWalkDirection(wallWalkDirection);
@@ -225,6 +222,21 @@ public int speedActivated = 0;
 
             if (hasStandActive(self) && getActivePower() == SUPER_HEARING){
                 xTryPower(PowerIndex.NONE,true);
+            }
+
+            Vec3 newVec = new Vec3(0,-0.2,0);
+            Vec3 newVec4 = new Vec3(0,-0.5,0);
+
+            newVec = RotationUtil.vecPlayerToWorld(newVec,((IGravityEntity)self).roundabout$getGravityDirection());
+            BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
+            newVec4 = RotationUtil.vecPlayerToWorld(newVec4,((IGravityEntity)self).roundabout$getGravityDirection());
+            BlockPos pos4 = BlockPos.containing(self.getPosition(1).add(newVec4));
+            BlockState state1 = self.level().getBlockState(pos);
+            BlockState state4 = self.level().getBlockState(pos4);
+            boolean isOnValidBlock =  MainUtil.isBlockWalkableSimplified(state1)
+                    && MainUtil.isBlockWalkableSimplified(state4);
+            if (!isOnValidBlock){
+                setWallWalkDirection(getIntendedDirection());
             }
         }
     }
@@ -361,6 +373,7 @@ public int speedActivated = 0;
     public void tickBloodSuck(){
         if (!this.self.level().isClientSide()) {
 
+
             if (self.isUsingItem()) {
                 if (bloodSuckingTarget != null || this.getActivePower() == BLOOD_SUCK) {
                     bloodSuckingTarget = null;
@@ -370,27 +383,32 @@ public int speedActivated = 0;
 
 
             if (bloodSuckingTarget != null) {
-                Entity TE = getTargetEntity(self, 3, 15);
-                if (TE != null && MainUtil.canDrinkBloodFair(TE, self)
-                        && self.hurtTime <= 0 && bloodSuckingTarget.is(TE)) {
-                    if (TE instanceof LivingEntity LE) {
-                        ((StandUser) LE).roundabout$setDazed((byte) 3);
-                        LE.setDeltaMovement(0,-0.1F,0);
-                    }
 
-                    if (self.tickCount % 2 == 0) {
-                        double random = (Math.random() * 0.8) - 0.4;
-                        double random2 = (Math.random() * 0.8) - 0.4;
-                        double random3 = (Math.random() * 0.8) - 0.4;
-                        SimpleParticleType particle = ModParticles.BLOOD;
-                        if (MainUtil.hasBlueBlood(TE)) {
-                            particle = ModParticles.BLUE_BLOOD;
+                if (bloodSuckingTarget instanceof LivingEntity LE && FateTypes.isVampire(LE)){
+                    endSuckingVamp();
+                } else {
+                    Entity TE = getTargetEntity(self, 3, 15);
+                    if (TE != null && MainUtil.canDrinkBloodFair(TE, self)
+                            && self.hurtTime <= 0 && bloodSuckingTarget.is(TE)) {
+                        if (TE instanceof LivingEntity LE) {
+                            ((StandUser) LE).roundabout$setDazed((byte) 3);
+                            LE.setDeltaMovement(0, -0.1F, 0);
                         }
-                        ((ServerLevel) this.self.level()).sendParticles(particle, TE.getX() + random,
-                                TE.getY() + TE.getEyeHeight() + random2, TE.getZ() + random3,
-                                0,
-                                (this.self.getX() - TE.getX()), (this.self.getY() - TE.getY() + TE.getEyeHeight()), (this.self.getZ() - TE.getZ()),
-                                0.08);
+
+                        if (self.tickCount % 2 == 0) {
+                            double random = (Math.random() * 0.8) - 0.4;
+                            double random2 = (Math.random() * 0.8) - 0.4;
+                            double random3 = (Math.random() * 0.8) - 0.4;
+                            SimpleParticleType particle = ModParticles.BLOOD;
+                            if (MainUtil.hasBlueBlood(TE)) {
+                                particle = ModParticles.BLUE_BLOOD;
+                            }
+                            ((ServerLevel) this.self.level()).sendParticles(particle, TE.getX() + random,
+                                    TE.getY() + TE.getEyeHeight() + random2, TE.getZ() + random3,
+                                    0,
+                                    (this.self.getX() - TE.getX()), (this.self.getY() - TE.getY() + TE.getEyeHeight()), (this.self.getZ() - TE.getZ()),
+                                    0.08);
+                        }
                     }
                 }
             }
@@ -426,6 +444,11 @@ public int speedActivated = 0;
                 }
             }
         }
+    }
+
+    public void endSuckingVamp(){
+        bloodSuckingTarget = null;
+        xTryPower(PowerIndex.NONE, true);
     }
 
 
@@ -603,6 +626,11 @@ public int speedActivated = 0;
 
 
     public void finishSucking(){
+        if (bloodSuckingTarget instanceof LivingEntity LE && FateTypes.isVampire(LE)){
+            endSuckingVamp();
+            return;
+        }
+
         if (bloodSuckingTarget != null && self instanceof Player pl) {
 
             boolean canDrainGood = MainUtil.canDrinkBloodCrit(bloodSuckingTarget,self);

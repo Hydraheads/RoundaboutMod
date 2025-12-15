@@ -59,6 +59,8 @@ public class ModParticles {
     public static SimpleParticleType STITCH;
     public static SimpleParticleType MOLD_DUST;
     public static SimpleParticleType MOLD;
+    public static SimpleParticleType RAGING_LIGHT; // anubis particles
+    public static SimpleParticleType ALLURING_LIGHT;
 
     public static SimpleParticleType HYPNO_SWIRL;
 

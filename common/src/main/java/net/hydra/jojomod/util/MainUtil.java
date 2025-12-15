@@ -278,10 +278,6 @@ public class MainUtil {
         if (!bs.isSolid()){
             return false;
         }
-        ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
-        if (walkableBlocks != null && !walkableBlocks.isEmpty() && rl != null && walkableBlocks.contains(rl.toString())){
-            return false;
-        }
         return true;
     }
     public static boolean isBlockWalkableSimplified(BlockState bs){
@@ -670,7 +666,7 @@ public class MainUtil {
                 if (ent instanceof Player PE){
                     IFatePlayer ifp = (IFatePlayer) PE;
                     if (FateTypes.isHuman(PE)){
-                        ifp.rdbt$startVampireTransformation();
+                        ifp.rdbt$startVampireTransformation(true);
                     }
                 }
                 ItemStack stack2 = ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem().getDefaultInstance();
@@ -838,6 +834,14 @@ public class MainUtil {
         }
         return null;
     }
+
+    // if splattered vampire blood can resurrect a mob when they die
+    public static boolean canMobResurrectWithBlood(Entity mob){
+        if (mob instanceof Mob mb && (mb.getMobType() == MobType.UNDEAD || mb instanceof ZombieHorse))
+            return false;
+        return true;
+    }
+
     public static boolean getMobBleed(Entity mob) {
         if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.disableBleedingAndBloodSplatters){
             return false;
@@ -868,14 +872,20 @@ public class MainUtil {
     }
 
     public static boolean canDrinkBlood(Entity mob){
-        return (getMobBleed(mob) && !hasEnderBlood(mob) && mob.isAlive() && !mob.isRemoved());
+        return (getMobBleed(mob) && !hasEnderBlood(mob) && mob.isAlive() && !mob.isRemoved() &&
+                !(mob instanceof Mob mb && ((IMob)mb).roundabout$isVampire()));
     }
 
     public static boolean canDrinkBloodFair(Entity ent,Entity drinker){
         return canDrinkBlood(ent) && !(ent instanceof Player);
     }
-    public static boolean canDrinkBloodCrit(Entity ent,Entity drinker){
+    public static boolean canDrinkBloodCritAggro(Entity ent,Entity drinker){
         return !(ent instanceof Mob mb && mb.getTarget() != null && mb.getTarget().is(drinker));
+    }
+    public static boolean canDrinkBloodCrit(Entity ent,Entity drinker){
+        if (drinker instanceof LivingEntity LE && !(LE.hasEffect(ModEffects.VAMPIRE_BLOOD)))
+            return false;
+        return canDrinkBloodCritAggro(ent,drinker);
     }
 
     public static void removeFleshBud(Entity entity){
@@ -1849,6 +1859,8 @@ public class MainUtil {
         }
         return basis;
     }
+
+    //Walls corners and doors check
     public static boolean canActuallyHitInvolved(Entity self, Entity entity){
         if (entity instanceof SoftAndWetPlunderBubbleEntity){
             return false;
@@ -2109,7 +2121,8 @@ public class MainUtil {
         if (LE != null){
             StandUser user = ((StandUser) LE);
             return (user.roundabout$hasAStand() || user.roundabout$getZappedToID() > -1
-                    || user.rdbt$getFleshBud() != null);
+                    || user.rdbt$getFleshBud() != null ||
+                    (LE instanceof Mob mb && ((IMob)mb).roundabout$isVampire()));
         }
         return false;
     }

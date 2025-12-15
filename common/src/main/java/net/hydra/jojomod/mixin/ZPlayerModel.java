@@ -208,14 +208,13 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         || (SU.roundabout$getStandPowers() instanceof PowersAnubis
                         && SU.roundabout$getActive()
                         && SU.roundabout$getStandAnimation() != PowerIndex.NONE) ) {
-                    this.body.resetPose();
-                    this.rightArm.resetPose();
-                    this.leftArm.resetPose();
-                    if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+
+                    this.rightArm.xRot = 0;this.rightArm.yRot = 0;
+                    this.leftArm.xRot = 0;this.leftArm.yRot = 0;
+                    if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
                         if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_MOVEMENT) {
                             this.head.resetPose();
-                        }
-                        if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+                        }else if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_ATTACK_CHARGE) {
                             this.leftLeg.resetPose();
                             this.rightLeg.resetPose();
                             this.head.resetPose();

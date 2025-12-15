@@ -89,6 +89,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.CROSSFIRE_HURRICANE.get(), CrossfireHurricaneRenderer::new);
         event.registerEntityRenderer(ForgeEntities.LIFE_TRACKER.get(), LifeTrackerRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STAND_FIREBALL.get(), StandFireballRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.BLOOD_SPLATTER.get(), BloodSplatterRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GASOLINE_CAN.get(), GasolineCanRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_OBJECT.get(), ThrownObjectRenderer::new);
         event.registerEntityRenderer(ForgeEntities.CONCEALED_FLAME_OBJECT.get(), ConcealedFlameObjectRenderer::new);
@@ -284,6 +285,8 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.STITCH.get(), StitchParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.MOLD.get(), MoldParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.MOLD_DUST.get(), MoldDustParticle.CosyProvider::new);
+        event.registerSpriteSet(ForgeParticles.RAGING_LIGHT.get(), AnubisLightParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.ALLURING_LIGHT.get(), AnubisLightParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.HYPNO_SWIRL.get(), HypnoSwirlParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.BABY_CRACKLE.get(), BabyCrackleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.MAGIC_DUST.get(), MagicDustParticle.Provider::new);

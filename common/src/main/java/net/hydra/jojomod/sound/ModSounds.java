@@ -235,6 +235,10 @@ public class ModSounds {
     public static final ResourceLocation HYPNOSIS_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HYPNOSIS);
     public static SoundEvent HYPNOSIS_EVENT = SoundEvent.createVariableRangeEvent(HYPNOSIS_ID);
 
+    public static final String VAMPIRE_AWAKEN = "vampire_awaken";
+    public static final ResourceLocation VAMPIRE_AWAKEN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VAMPIRE_AWAKEN);
+    public static SoundEvent VAMPIRE_AWAKEN_EVENT = SoundEvent.createVariableRangeEvent(VAMPIRE_AWAKEN_ID);
+
 
 
     public static final String BUBBLE_CREATE = "bubble_create";
