@@ -169,6 +169,7 @@ public class FabricItems {
     public static Item BLANK_MASK = registerItem("blank_mask", new MaskItem(new Item.Properties().stacksTo(1), new NonCharacterVisage(null)));
     public static Item MODIFICATION_MASK = registerItem("modification_mask", new ModificationMaskItem(new Item.Properties().stacksTo(1), new ModificationVisage(null)));
     public static Item SPEEDWAGON_MASK = registerItem("speedwagon_mask", new MaskItem(new Item.Properties().stacksTo(1), new SpeedwagonVisage(null)));
+    public static Item SPEEDWAGON_FOUNDATION_MASK = registerItem("speedwagon_foundation_mask", new MaskItem(new Item.Properties().stacksTo(1), new SpeedwagonFoundationVisage(null)));
     public static Item JOTARO_MASK = registerItem("jotaro_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroVisage(null)));
     public static Item JOTARO_4_MASK = registerItem("jotaro_4_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroFourVisage(null)));
     public static Item JOTARO_6_MASK = registerItem("jotaro_6_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroSixVisage(null)));
@@ -301,6 +302,7 @@ public class FabricItems {
                         entries.accept(DIO_VAMPIRE_MASK);
                         entries.accept(JOTARO_MASK);
                         entries.accept(AVDOL_MASK);
+                        entries.accept(SPEEDWAGON_FOUNDATION_MASK);
                         entries.accept(DIO_MASK);
                         entries.accept(ENYA_MASK);
                         entries.accept(JOTARO_4_MASK);
@@ -583,6 +585,7 @@ public class FabricItems {
         ModItems.BLANK_MASK = BLANK_MASK;
         ModItems.MODIFICATION_MASK = MODIFICATION_MASK;
         ModItems.SPEEDWAGON_MASK = SPEEDWAGON_MASK;
+        ModItems.SPEEDWAGON_FOUNDATION_MASK = SPEEDWAGON_FOUNDATION_MASK;
         ModItems.JOTARO_MASK = JOTARO_MASK;
         ModItems.JOTARO_4_MASK = JOTARO_4_MASK;
         ModItems.JOTARO_6_MASK = JOTARO_6_MASK;

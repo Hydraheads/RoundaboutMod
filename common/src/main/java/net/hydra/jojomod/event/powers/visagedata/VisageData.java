@@ -90,6 +90,9 @@ public class VisageData {
     public boolean rendersDiegoHat(){
         return false;
     }
+    public boolean rendersSpeedwagonFoundationHat(){
+        return false;
+    }
     public boolean rendersBasicHat(){
         return false;
     }
