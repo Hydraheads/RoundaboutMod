@@ -269,6 +269,9 @@ public abstract class ZMob extends LivingEntity implements IMob {
     private void roundabout$TryAttack(Entity $$0, CallbackInfoReturnable<Boolean> ci) {
             if (MainUtil.forceAggression(this)){
                 float $$1 = 1F;
+                if (roundabout$isVampire()){
+                    $$1 = 3F;
+                }
                 if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)){
                     $$1 = (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
                 }
