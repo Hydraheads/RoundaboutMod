@@ -36,7 +36,10 @@
             "sodium": [
                 "${mod_id}.sodium.mixins.json"
             ]
-        }
+        },
+      "badoptimizations:cache_hooks": {
+        "common": "net.hydra.jojomod.util.BadOptimizationsFixer"
+      }
     },
     "depends": {
         "fabricloader": ">=0.14",
