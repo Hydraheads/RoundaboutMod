@@ -7,6 +7,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.gui.*;
 import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsModel;
+import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsSlimModel;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerAmbientSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerExplosionSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerMixingSound;
@@ -22,10 +23,9 @@ import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
-import net.hydra.jojomod.item.MaskItem;
-import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
-import net.hydra.jojomod.item.SnubnoseRevolverItem;
+import net.hydra.jojomod.networking.ClientToServerPackets;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.minecraft.client.gui.GuiGraphics;
@@ -68,7 +68,6 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.item.BodyBagItem;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -557,6 +556,9 @@ public class ClientUtil {
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.VampireMessage.value)) {
 
                     player.playSound(ModSounds.VAMPIRE_MESSAGE_EVENT,10,1);
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.GunRecoil.value)) {
+                    ClientUtil.applyClientRecoil(player);
                 }
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();
@@ -1371,7 +1373,15 @@ public class ClientUtil {
         return null;
     }
 
+    public static void applyClientRecoil(Player player) {
+        Minecraft mc = Minecraft.getInstance();
+        LocalPlayer localPlayer = mc.player;
 
+        if (player == null) return;
+
+        float recoilPitch = -10F;
+        localPlayer.turn(0.0F, recoilPitch);
+    }
 
     public static<T extends LivingEntity, M extends EntityModel<T>> void renderFirstPersonModelParts(Entity cameraEnt, float $$4, PoseStack stack, MultiBufferSource source, int light){
 
@@ -1444,16 +1454,13 @@ public class ClientUtil {
                 stack.pushPose();
 
                 FirstPersonArmsModel.player = play;
+                FirstPersonArmsSlimModel.player = play;
                 if (play.getMainArm() == HumanoidArm.RIGHT) {
-                    pl.roundabout$getSnubnoseModelIdleLeft().stop();
-                    pl.roundabout$getSnubnoseModelIdle().stop();
                     pl.roundabout$getSnubnoseModelRecoil().stop();
                     pl.roundabout$getSnubnoseModelAim().startIfStopped(cameraEnt.tickCount);
                     pl.roundabout$getSnubnoseRecoil().stop();
                     pl.roundabout$getSnubnoseAim().startIfStopped(cameraEnt.tickCount);
                 } else if (play.getMainArm() == HumanoidArm.LEFT) {
-                    pl.roundabout$getSnubnoseModelIdleLeft().stop();
-                    pl.roundabout$getSnubnoseModelIdle().stop();
                     pl.roundabout$getSnubnoseModelRecoilLeft().stop();
                     pl.roundabout$getSnubnoseModelAimLeft().startIfStopped(cameraEnt.tickCount);
                     pl.roundabout$getSnubnoseRecoilLeft().stop();
@@ -1471,16 +1478,13 @@ public class ClientUtil {
                 stack.pushPose();
 
                 FirstPersonArmsModel.player = play;
+                FirstPersonArmsSlimModel.player = play;
                 if (play.getMainArm() == HumanoidArm.RIGHT) {
-                    pl.roundabout$getSnubnoseModelIdleLeft().stop();
-                    pl.roundabout$getSnubnoseModelIdle().stop();
                     pl.roundabout$getSnubnoseModelAim().stop();
                     pl.roundabout$getSnubnoseModelRecoil().startIfStopped(cameraEnt.tickCount);
                     pl.roundabout$getSnubnoseAim().stop();
                     pl.roundabout$getSnubnoseRecoil().startIfStopped(cameraEnt.tickCount);
                 } else if (play.getMainArm() == HumanoidArm.LEFT) {
-                    pl.roundabout$getSnubnoseModelIdleLeft().stop();
-                    pl.roundabout$getSnubnoseModelIdle().stop();
                     pl.roundabout$getSnubnoseModelAimLeft().stop();
                     pl.roundabout$getSnubnoseModelRecoilLeft().startIfStopped(cameraEnt.tickCount);
                     pl.roundabout$getSnubnoseAimLeft().stop();
@@ -1494,8 +1498,57 @@ public class ClientUtil {
                 ModStrayModels.FirstPersonSnubnoseModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
 
                 stack.popPose();
+            } else if (play.getUseItem().getItem() instanceof TommyGunItem && !play.getCooldowns().isOnCooldown(play.getUseItem().getItem())) {
+                stack.pushPose();
+
+                FirstPersonArmsModel.player = play;
+                FirstPersonArmsSlimModel.player = play;
+                if (play.getMainArm() == HumanoidArm.RIGHT) {
+                    pl.roundabout$getTommyModelRecoil().stop();
+                    pl.roundabout$getTommyRecoil().stop();
+                    pl.roundabout$getTommyModelAim().startIfStopped(cameraEnt.tickCount);
+                    pl.roundabout$getTommyAim().startIfStopped(cameraEnt.tickCount);
+                } else if (play.getMainArm() == HumanoidArm.LEFT) {
+                    pl.roundabout$getTommyModelRecoilLeft().stop();
+                    pl.roundabout$getTommyRecoilLeft().stop();
+                    pl.roundabout$getTommyModelAimLeft().startIfStopped(cameraEnt.tickCount);
+                    pl.roundabout$getTommyAimLeft().startIfStopped(cameraEnt.tickCount);
+                }
+                if (!slimBoolean) {
+                    ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+                } else if (slimBoolean) {
+                    ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+                }
+                ModStrayModels.FirstPersonTommyGunModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+
+                stack.popPose();
+            } else if (play.getUseItem().getItem() instanceof TommyGunItem && play.getCooldowns().isOnCooldown(play.getUseItem().getItem())) {
+                stack.pushPose();
+
+                FirstPersonArmsModel.player = play;
+                FirstPersonArmsSlimModel.player = play;
+                if (play.getMainArm() == HumanoidArm.RIGHT) {
+                    pl.roundabout$getTommyModelAim().stop();
+                    pl.roundabout$getTommyAim().stop();
+                    pl.roundabout$getTommyModelRecoil().startIfStopped(cameraEnt.tickCount);
+                    pl.roundabout$getTommyRecoil().startIfStopped(cameraEnt.tickCount);
+                } else if (play.getMainArm() == HumanoidArm.LEFT) {
+                    pl.roundabout$getTommyModelAimLeft().stop();
+                    pl.roundabout$getTommyAimLeft().stop();
+                    pl.roundabout$getTommyModelRecoilLeft().startIfStopped(cameraEnt.tickCount);
+                    pl.roundabout$getTommyRecoilLeft().startIfStopped(cameraEnt.tickCount);
+                }
+                if (!slimBoolean) {
+                    ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
+                } else if (slimBoolean) {
+                    ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
+                }
+                ModStrayModels.FirstPersonTommyGunModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
+
+                stack.popPose();
             } else {
                 snubnoseRenderCleanupHelper(cameraEnt);
+                tommyRenderCleanupHelper(cameraEnt);
             }
         }
     }
@@ -1509,6 +1562,17 @@ public class ClientUtil {
         pl.roundabout$getSnubnoseModelRecoilLeft().stop();
         pl.roundabout$getSnubnoseAimLeft().stop();
         pl.roundabout$getSnubnoseRecoilLeft().stop();
+    }
+    public static void tommyRenderCleanupHelper(Entity cameraEnt) {
+        IPlayerEntity pl = ((IPlayerEntity) cameraEnt);
+        pl.roundabout$getTommyModelAim().stop();
+        pl.roundabout$getTommyModelRecoil().stop();
+        pl.roundabout$getTommyAim().stop();
+        pl.roundabout$getTommyRecoil().stop();
+        pl.roundabout$getTommyModelAimLeft().stop();
+        pl.roundabout$getTommyModelRecoilLeft().stop();
+        pl.roundabout$getTommyAimLeft().stop();
+        pl.roundabout$getTommyRecoilLeft().stop();
     }
     @Unique
     public static void roundabout$renderBound(LivingEntity victim, float delta, PoseStack poseStack, MultiBufferSource mb, Entity binder, float focus) {

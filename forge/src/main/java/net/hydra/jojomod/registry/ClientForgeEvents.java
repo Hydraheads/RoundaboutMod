@@ -230,7 +230,9 @@ public class ClientForgeEvents {
         ModStrayModels.FirstPersonArmsSlimModel = new FirstPersonArmsSlimModel();
         ModStrayModels.ROAD_ROLLER = new RoadRollerStrayModel();
         ModStrayModels.SNUBNOSE_REVOLVER_MODEL = new SnubnoseRevolverModel();
+        ModStrayModels.TOMMY_GUN_MODEL = new TommyGunModel();
         ModStrayModels.FirstPersonSnubnoseModel = new FirstPersonSnubnoseModel();
+        ModStrayModels.FirstPersonTommyGunModel = new FirstPersonTommyGunModel();
         //BlockEntityRenderers.register(ModBlocks.STAND_FIRE_BLOCK_ENTITY, StandFireRenderer::new);
     }
     @SubscribeEvent

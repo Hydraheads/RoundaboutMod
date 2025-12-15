@@ -128,6 +128,7 @@ public class FabricItems {
     public static Item SNUBNOSE_AMMO = registerItem("snubnose_ammo", new SnubnoseAmmoItem(new Item.Properties().stacksTo(64)));
 
     public static Item TOMMY_GUN = registerItem("tommy_gun", new TommyGunItem(new Item.Properties().stacksTo(1)));
+    public static Item TOMMY_AMMO = registerItem("tommy_ammo", new TommyAmmoItem(new Item.Properties().stacksTo(64)));
 
     public static Item WOODEN_GLAIVE = registerItem("wooden_glaive", new GlaiveItem(Tiers.WOOD, 4F, -2.9F, new Item.Properties(),4));
     public static Item STONE_GLAIVE = registerItem("stone_glaive", new GlaiveItem(Tiers.STONE, 4F, -2.9F, new Item.Properties(),6));
@@ -454,8 +455,9 @@ public class FabricItems {
                         //entries.accept(STAND_DISC_DIVER_DOWN);
                         //entries.accept(MAX_STAND_DISC_DIVER_DOWN);
                         entries.accept(SNUBNOSE_REVOLVER);
-                        entries.accept(TOMMY_GUN);
                         entries.accept(SNUBNOSE_AMMO);
+                        entries.accept(TOMMY_GUN);
+                        entries.accept(TOMMY_AMMO);
                         entries.accept(STAND_DISC_CREAM);
                         entries.accept(MAX_STAND_DISC_CREAM);
 
@@ -554,6 +556,7 @@ public class FabricItems {
         ModItems.SNUBNOSE_REVOLVER = SNUBNOSE_REVOLVER;
         ModItems.SNUBNOSE_AMMO = SNUBNOSE_AMMO;
         ModItems.TOMMY_GUN = TOMMY_GUN;
+        ModItems.TOMMY_AMMO = TOMMY_AMMO;
         ModItems.STAND_DISC = STAND_DISC;
         ModItems.COFFEE_GUM = COFFEE_GUM;
         ModItems.METEORITE = METEORITE;

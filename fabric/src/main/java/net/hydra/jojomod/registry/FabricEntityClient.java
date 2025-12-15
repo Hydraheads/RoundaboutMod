@@ -226,6 +226,8 @@ public class FabricEntityClient {
         ModStrayModels.LeftHeel = new LeftHeelPart();
         ModStrayModels.ROAD_ROLLER = new RoadRollerStrayModel();
         ModStrayModels.SNUBNOSE_REVOLVER_MODEL = new SnubnoseRevolverModel();
+        ModStrayModels.TOMMY_GUN_MODEL = new TommyGunModel();
         ModStrayModels.FirstPersonSnubnoseModel = new FirstPersonSnubnoseModel();
+        ModStrayModels.FirstPersonTommyGunModel = new FirstPersonTommyGunModel();
     }
 }
