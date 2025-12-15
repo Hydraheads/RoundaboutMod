@@ -1,10 +1,13 @@
 package net.hydra.jojomod.item;
 
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -75,12 +78,12 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
         Inventory inv = player.getInventory();
 
         for (ItemStack stack : inv.items) {
-            if (stack.getItem() instanceof SnubnoseAmmoItem && stack.getCount() > 0) {
+            if (stack.getItem() instanceof TommyAmmoItem && stack.getCount() > 0) {
                 return true;
             }
         }
         for (ItemStack stack : inv.offhand) {
-            if (stack.getItem() instanceof SnubnoseAmmoItem && stack.getCount() > 0) {
+            if (stack.getItem() instanceof TommyAmmoItem && stack.getCount() > 0) {
                 return true;
             }
         }
@@ -98,7 +101,7 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
 
         for (int i = 0; i < inv.items.size() && amount > 0; i++) {
             ItemStack stack = inv.items.get(i);
-            if (stack.getItem() instanceof SnubnoseAmmoItem && !player.isCreative()) {
+            if (stack.getItem() instanceof TommyAmmoItem && !player.isCreative()) {
                 int remove = Math.min(stack.getCount(), amount);
                 stack.shrink(remove);
                 consumed += remove;
@@ -110,7 +113,7 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
 
         for (int i = 0; i < inv.offhand.size() && amount > 0; i++) {
             ItemStack stack = inv.offhand.get(i);
-            if (stack.getItem() instanceof SnubnoseAmmoItem && !player.isCreative()) {
+            if (stack.getItem() instanceof TommyAmmoItem && !player.isCreative()) {
                 int remove = Math.min(stack.getCount(), amount);
                 stack.shrink(remove);
                 consumed += remove;
@@ -136,36 +139,36 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
         }
     }
 
-
-
     @Override
     public void fireBullet(Level level, Player player, InteractionHand hand) {
-        if (!level.isClientSide && player.getCooldowns().isOnCooldown(this)) {
+
+        if (player.getCooldowns().isOnCooldown(this)) {
             return;
         }
         ItemStack itemStack = player.getItemInHand(hand);
         if (getAmmo(itemStack) > 0) {
-            player.getCooldowns().addCooldown(this, 5);
+            player.getCooldowns().addCooldown(this, 2);
             if (player.isCreative()) {
             } else {
                 setAmmo(itemStack, getAmmo(itemStack) - 1);
             }
             LivingEntity livingEntity = player;
             RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity(level, livingEntity);
-            $$7.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 4.0F, 0.0F);
-            $$7.setAmmoType(RoundaboutBulletEntity.REVOLVER);
+            $$7.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 4.0F, 5.0F);
+            $$7.setAmmoType(RoundaboutBulletEntity.TOMMY_GUN);
             level.addFreshEntity($$7);
+            S2CPacketUtil.gunRecoil(player);
             level.playSound(null, player, ModSounds.SNUBNOSE_FIRE_EVENT, SoundSource.PLAYERS, 100.0F, 1.0F);
             if (level instanceof ServerLevel serverLevel) {
                 Vec3 look = player.getLookAngle().normalize();
                 Vec3 up = new Vec3(0, 1, 0);
                 Vec3 right = look.cross(up).normalize();
 
-                double forwardOffset = 1.0;
-                double sideOffset = 0.24;
+                double forwardOffset = 1.5;
+                double sideOffset = 0.10;
                 double verticalOffset = -0.15;
 
-                if (player.getMainArm() == HumanoidArm.LEFT) {
+                if ((player.getMainArm() == HumanoidArm.LEFT && player.getMainHandItem().getItem() instanceof SnubnoseRevolverItem) || (player.getMainArm() == HumanoidArm.RIGHT && player.getOffhandItem().getItem() instanceof SnubnoseRevolverItem)) {
                     sideOffset -= sideOffset * 2;
                 }
 

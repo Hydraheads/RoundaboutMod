@@ -1,10 +1,8 @@
 package net.hydra.jojomod.client;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.client.models.projectile.BladedBowlerHatModel;
-import net.hydra.jojomod.client.models.projectile.BowlerHatModel;
-import net.hydra.jojomod.client.models.projectile.HarpoonModel;
-import net.hydra.jojomod.client.models.projectile.SnubnoseRevolverModel;
+import net.hydra.jojomod.client.models.projectile.*;
+import net.hydra.jojomod.client.models.projectile.TommyGunModel;
 import net.hydra.jojomod.client.models.stand.AnubisModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 
@@ -63,7 +61,7 @@ public class ModItemModels {
 
     public static HarpoonModel HARPOON_MODEL;
     public static SnubnoseRevolverModel SNUBNOSE_MODEL;
-    public static SnubnoseRevolverModel TOMMY_GUN_MODEL;
+    public static TommyGunModel TOMMY_GUN_MODEL;
     public static AnubisModel ANUBIS_MODEL;
 
     public static BowlerHatModel BOWLER_HAT_MODEL;

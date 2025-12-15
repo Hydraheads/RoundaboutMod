@@ -17,13 +17,17 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
@@ -269,6 +273,9 @@ public abstract class ZMob extends LivingEntity implements IMob {
     private void roundabout$TryAttack(Entity $$0, CallbackInfoReturnable<Boolean> ci) {
             if (MainUtil.forceAggression(this)){
                 float $$1 = 1F;
+                if (roundabout$isVampire()){
+                    $$1 = 3F;
+                }
                 if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)){
                     $$1 = (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
                 }
@@ -432,6 +439,9 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Shadow public abstract void setAggressive(boolean $$0);
 
     @Shadow @org.jetbrains.annotations.Nullable private LivingEntity target;
+
+    @Shadow public abstract void lookAt(Entity entity, float f, float g);
+
     @Unique
     protected int roundabout$unseenMemoryTicks = 300;
 
@@ -843,6 +853,34 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void roundabout$Tick(CallbackInfo ci) {
         if (this.isAlive() && !this.level().isClientSide()) {
+            if (getHealth() < getMaxHealth()){
+                if (roundabout$isVampire()){
+                    if (tickCount % 82 == 0){
+                        AABB $$0 = this.getBoundingBox().inflate(10.0, 8.0, 10.0);
+                        List<? extends LivingEntity> $$1 = this.level().getNearbyEntities(LivingEntity.class, MainUtil.attackTargeting, this, $$0);
+
+                        for (LivingEntity $$3 : $$1) {
+                            if (MainUtil.canDrinkBloodFair($$3,((Mob)(Object)this)) && MainUtil.canDrinkBloodCritAggro($$3,((Mob)(Object)this))){
+                                if (MainUtil.canActuallyHitInvolved(this,$$3) && distanceTo($$3) < 3){
+                                    DamageSource sauce = ModDamageTypes.of(level(),
+                                            ModDamageTypes.BLOOD_DRAIN,((Mob)(Object)this));
+                                    if ($$3.hurt(sauce, 4)) {
+                                        heal(4);
+                                        lookAt($$3, 300, 300);
+                                        ((ServerLevel) level()).sendParticles(ParticleTypes.CRIT,
+                                                $$3.getEyePosition().x,
+                                                $$3.getEyePosition().y,
+                                                $$3.getEyePosition().z,
+                                                15, 0.2, 0.2, 0.2, 0.0);
+                                        level().playSound(null, getX(), getY(), getZ(), ModSounds.BLOOD_SUCK_DRAIN_EVENT, SoundSource.PLAYERS, 1F, 1.4F + (float) (Math.random() * 0.1));
+                                        level().playSound(null, getX(), getY(), getZ(), SoundEvents.PLAYER_ATTACK_CRIT, SoundSource.PLAYERS, 1F, 1F + (float) (Math.random() * 0.1));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             //Flesh Bud sets aggro
             UUID fleshTarget = ((StandUser) this).rdbt$getFleshBud();

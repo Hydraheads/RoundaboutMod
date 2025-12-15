@@ -2,6 +2,7 @@ package net.hydra.jojomod.networking;
 
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.advancement.criteria.ModCriteria;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.D4CEntity;
@@ -17,6 +18,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -67,6 +69,7 @@ public class ClientToServerPackets {
             CancelSucking("cancel_sucking"),
             HandshakeCooldowns("handshake_cooldowns"),
             GunShot("gun_shot"),
+            GunRecoil("gun_recoil"),
             DimensionHopD4C("thread_hop_d4c_request_dimension_hop");
 
             public final String value;

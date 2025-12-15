@@ -282,6 +282,13 @@ public class S2CPacketUtil {
             );
         }
     }
+    public static void gunRecoil(Player player){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.GunRecoil.value
+            );
+        }
+    }
     public static void creamUpdateTransformTimer(Player player, int time){
         if (player instanceof ServerPlayer SP) {
             ModMessageEvents.sendToPlayer(SP,

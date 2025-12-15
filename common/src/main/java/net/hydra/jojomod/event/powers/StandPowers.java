@@ -719,14 +719,6 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    /**For enhancement stands that adjust your normal player attack speed*/
-    public float getBonusAttackSpeed() {
-        return 1F;
-    }
-    /**For enhancement stands that adjust your normal player mining speed*/
-    public float getBonusPassiveMiningSpeed(){
-        return 1F;
-    }
     /**exp from standard tool mining*/
     public void gainExpFromStandardMining(BlockState $$1, BlockPos $$2) {
     }

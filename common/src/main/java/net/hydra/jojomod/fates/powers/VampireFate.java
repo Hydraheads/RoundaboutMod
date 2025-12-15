@@ -223,7 +223,7 @@ public class VampireFate extends VampiricFate {
             if (attackTimeDuring >= getMaxAttackTimeDuringHair() && !isClient()) {
                 Entity TE = getTargetEntity(self, 7, 15);
                 if (TE != null){
-                    if (MainUtil.canDrinkBloodFair(TE, self)){
+                    if (MainUtil.canPlantBud(TE, self)){
                         if (((StandUser)TE).rdbt$getFleshBud() == null) {
                             if (canPlantDrink(TE) || canPlantHealth(TE)) {
                                 fleshBudIfNearby(100, TE.getId());
@@ -273,9 +273,18 @@ public class VampireFate extends VampiricFate {
         return super.getDamageAdd(source,amt,target);
     }
 
+    /**For enhancement stands that adjust your normal player attack speed*/
+    public float getBonusAttackSpeed() {
+        return 1.15F;
+    }
+    /**For enhancement stands that adjust your normal player mining speed*/
+    public float getBonusPassiveMiningSpeed(){
+        return 1.4F;
+    }
 
     public boolean canPlantDrink(Entity ent) {
-        if (MainUtil.canDrinkBloodCritAggro(ent,self) && !(ent instanceof Monster)) {
+        if (MainUtil.canDrinkBloodCritAggro(ent,self) && !(ent instanceof Monster)
+                && !(ent instanceof Mob mb && ((IMob)mb).roundabout$isVampire())) {
             return true;
         }
         return false;

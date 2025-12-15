@@ -875,9 +875,15 @@ public class MainUtil {
         return (getMobBleed(mob) && !hasEnderBlood(mob) && mob.isAlive() && !mob.isRemoved() &&
                 !(mob instanceof Mob mb && ((IMob)mb).roundabout$isVampire()));
     }
+    public static boolean canDrinkBlood2(Entity mob){
+        return (getMobBleed(mob) && !hasEnderBlood(mob) && mob.isAlive() && !mob.isRemoved());
+    }
 
     public static boolean canDrinkBloodFair(Entity ent,Entity drinker){
         return canDrinkBlood(ent) && !(ent instanceof Player);
+    }
+    public static boolean canPlantBud(Entity ent,Entity drinker){
+        return canDrinkBlood2(ent) && !(ent instanceof Player);
     }
     public static boolean canDrinkBloodCritAggro(Entity ent,Entity drinker){
         return !(ent instanceof Mob mb && mb.getTarget() != null && mb.getTarget().is(drinker));
@@ -1859,6 +1865,8 @@ public class MainUtil {
         }
         return basis;
     }
+
+    //Walls corners and doors check
     public static boolean canActuallyHitInvolved(Entity self, Entity entity){
         if (entity instanceof SoftAndWetPlunderBubbleEntity){
             return false;
@@ -2119,7 +2127,8 @@ public class MainUtil {
         if (LE != null){
             StandUser user = ((StandUser) LE);
             return (user.roundabout$hasAStand() || user.roundabout$getZappedToID() > -1
-                    || user.rdbt$getFleshBud() != null);
+                    || user.rdbt$getFleshBud() != null ||
+                    (LE instanceof Mob mb && ((IMob)mb).roundabout$isVampire()));
         }
         return false;
     }

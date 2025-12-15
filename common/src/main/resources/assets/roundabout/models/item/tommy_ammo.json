@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "roundabout:item/tommy_gun_sprite"
+    "layer0": "roundabout:item/tommy_ammo"
   }
 }

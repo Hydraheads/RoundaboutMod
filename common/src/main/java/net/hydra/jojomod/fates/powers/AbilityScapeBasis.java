@@ -141,6 +141,15 @@ public class AbilityScapeBasis {
         return 0;
     }
 
+    /**For enhancement stands that adjust your normal player attack speed*/
+    public float getBonusAttackSpeed() {
+        return 1F;
+    }
+    /**For enhancement stands that adjust your normal player mining speed*/
+    public float getBonusPassiveMiningSpeed(){
+        return 1F;
+    }
+
     /** Make a stand ability cancel you using items */
     public boolean cancelItemUse() {
         return false;

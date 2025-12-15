@@ -745,6 +745,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (standActive){
             modifier*= ((StandUser)this).roundabout$getStandPowers().getBonusAttackSpeed();
         }
+        float bpow = ((IFatePlayer)this).rdbt$getFatePowers().getBonusAttackSpeed();
+        if (bpow != 1){
+            modifier*= bpow;
+        }
         if (modifier != 1){
             cir.setReturnValue((float)(1.0D / (this.getAttributeValue(Attributes.ATTACK_SPEED)*modifier) * 20.0D));
         }
@@ -779,6 +783,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             boolean standActive = ((StandUser) this).roundabout$getActive();
             if (standActive){
                 dSpeed*= ((StandUser)this).roundabout$getStandPowers().getBonusPassiveMiningSpeed();
+            }
+            float bpow = ((IFatePlayer)this).rdbt$getFatePowers().getBonusPassiveMiningSpeed();
+            if (bpow != 1){
+                dSpeed*= bpow;
             }
             cir.setReturnValue(dSpeed);
         }
@@ -923,19 +931,62 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public AnimationState roundabout$getSnubnoseModelRecoilLeft(){
         return roundabout$snubnoseModelRecoilLeft;
     }
+
     @Unique
-    public final AnimationState roundabout$snubnoseModelIdle = new AnimationState();
+    public final AnimationState roundabout$tommyAim = new AnimationState();
     @Unique
     @Override
-    public AnimationState roundabout$getSnubnoseModelIdle(){
-        return roundabout$snubnoseModelIdle;
+    public AnimationState roundabout$getTommyAim(){
+        return roundabout$tommyAim;
     }
     @Unique
-    public final AnimationState roundabout$snubnoseModelIdleLeft = new AnimationState();
+    public final AnimationState roundabout$tommyModelAim = new AnimationState();
     @Unique
     @Override
-    public AnimationState roundabout$getSnubnoseModelIdleLeft(){
-        return roundabout$snubnoseModelIdleLeft;
+    public AnimationState roundabout$getTommyModelAim(){
+        return roundabout$tommyModelAim;
+    }
+    @Unique
+    public final AnimationState roundabout$tommyAimLeft = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getTommyAimLeft(){
+        return roundabout$tommyAimLeft;
+    }
+    @Unique
+    public final AnimationState roundabout$tommyModelAimLeft = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getTommyModelAimLeft(){
+        return roundabout$tommyModelAimLeft;
+    }
+    @Unique
+    public final AnimationState roundabout$tommyRecoil = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getTommyRecoil(){
+        return roundabout$tommyRecoil;
+    }
+    @Unique
+    public final AnimationState roundabout$tommyModelRecoil = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getTommyModelRecoil(){
+        return roundabout$tommyModelRecoil;
+    }
+    @Unique
+    public final AnimationState roundabout$tommyRecoilLeft = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getTommyRecoilLeft(){
+        return roundabout$tommyRecoilLeft;
+    }
+    @Unique
+    public final AnimationState roundabout$tommyModelRecoilLeft = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getTommyModelRecoilLeft(){
+        return roundabout$tommyModelRecoilLeft;
     }
 
 

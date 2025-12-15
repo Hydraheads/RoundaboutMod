@@ -3332,6 +3332,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         SL.sendParticles(ModParticles.BLOOD_MIST,
                                 this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
                                 10, 0.4, 0.4, 0.4, 0.025);
+                        roundabout$deeplyRemoveAttackTarget();
                     }
                 }
             }

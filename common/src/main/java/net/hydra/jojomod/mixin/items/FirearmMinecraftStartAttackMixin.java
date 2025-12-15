@@ -1,5 +1,8 @@
 package net.hydra.jojomod.mixin.items;
 import net.hydra.jojomod.item.FirearmItem;
+import net.hydra.jojomod.item.SnubnoseRevolverItem;
+import net.hydra.jojomod.item.TommyGunItem;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -40,6 +43,15 @@ public abstract class FirearmMinecraftStartAttackMixin {
             if ((this.player.isUsingItem() && itemStack.getItem() instanceof FirearmItem) || (this.player.isUsingItem() && itemStack2.getItem() instanceof FirearmItem)) {
                 while(this.options.keyAttack.consumeClick()) {
                     this.startAttack();
+                    return;
+                }
+            }
+
+            if ((itemStack.getItem() instanceof FirearmItem) || (itemStack2.getItem() instanceof FirearmItem) && (!player.getCooldowns().isOnCooldown(itemStack.getItem()))) {
+                if (options.keyAttack.isDown()) {
+                    if (!(player.getUseItem().getItem() instanceof TommyGunItem)) return;
+                    C2SPacketUtil.gunShot();
+                    return;
                 }
             }
         }
