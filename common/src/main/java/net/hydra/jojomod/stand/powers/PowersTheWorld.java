@@ -1182,7 +1182,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 } else if (this.getSelf() instanceof FlyingMob) {
                     tptype = TPTYPE.AIR;
                 }
-                if (this.attackTimeDuring <= -1) {
+                if (this.attackTimeDuring <= -1 && !isClashing()) {
                     if (!this.getSelf().isPassenger()) {
                         teleportTime = Math.max(0, teleportTime - 1);
                         if (teleportTime == 0 &&
