@@ -889,7 +889,7 @@ public class MainUtil {
         return !(ent instanceof Mob mb && mb.getTarget() != null && mb.getTarget().is(drinker));
     }
     public static boolean canDrinkBloodCrit(Entity ent,Entity drinker){
-        if (drinker instanceof LivingEntity LE && !(LE.hasEffect(ModEffects.VAMPIRE_BLOOD)))
+        if (drinker instanceof LivingEntity LE && (LE.hasEffect(ModEffects.VAMPIRE_BLOOD)))
             return false;
         return canDrinkBloodCritAggro(ent,drinker);
     }

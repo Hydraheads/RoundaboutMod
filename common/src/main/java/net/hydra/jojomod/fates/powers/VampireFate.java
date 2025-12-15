@@ -3,7 +3,9 @@ package net.hydra.jojomod.fates.powers;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
@@ -26,6 +28,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -187,6 +191,9 @@ public class VampireFate extends VampiricFate {
         return 4;
     }
     public float getAddon(){
+        if (activePower == BLOOD_REGEN)
+            return 0;
+
         if (self.isCrouching() && rechargeJump){
             return 4;
         } else {
@@ -249,6 +256,34 @@ public class VampireFate extends VampiricFate {
                 setAttackTimeDuring(-20);
             }
         }
+    }
+
+
+    @Override
+    /**Cancel death, make sure to set player health if you do this*/
+    public boolean cheatDeath(DamageSource dsource){
+        if (!dsource.is(ModDamageTypes.SUNLIGHT) && self instanceof Player PE) {
+            if (canUseRegen()) {
+                if (!onCooldown(PowerIndex.FATE_2_SNEAK)) {
+                    this.setCooldown(PowerIndex.FATE_2_SNEAK, 1200);
+                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.FATE_2_SNEAK,
+                            1200
+                    );
+                    PE.setHealth(1);
+                    PE.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20, 4), PE);
+                    PE.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 1), PE);
+                    PE.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 200, 0), PE);
+                    xTryPower(BLOOD_REGEN,true);
+                    self.level().playSound(null, self.blockPosition(), ModSounds.VAMPIRE_AWAKEN_EVENT,
+                            SoundSource.PLAYERS, 1F, 1F);
+                    ((ServerLevel) self.level()).sendParticles(ModParticles.MENACING,
+                            self.getX(), self.getY(), self.getZ(),
+                            10, 0, 0, 0, 0.1);
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
