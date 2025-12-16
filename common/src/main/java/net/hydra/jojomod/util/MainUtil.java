@@ -855,7 +855,7 @@ public class MainUtil {
 
         if (mob instanceof LivingEntity){
             return mob instanceof Zombie || (mob instanceof Animal && !(mob instanceof SkeletonHorse) && !(mob instanceof ZombieHorse))
-                    || mob instanceof Villager || mob instanceof WaterAnimal || mob instanceof WanderingTrader || mob instanceof Witch
+                    || mob instanceof Villager || mob instanceof Bat || mob instanceof WaterAnimal || mob instanceof WanderingTrader || mob instanceof Witch
                     || mob instanceof AbstractIllager || mob instanceof Creeper || mob instanceof Player || mob instanceof AbstractPiglin
                     || mob instanceof JojoNPC || mob instanceof Zoglin || mob instanceof Ravager
                     || mob instanceof Spider || mob instanceof EnderDragon || mob instanceof EnderMan;
@@ -889,7 +889,7 @@ public class MainUtil {
         return !(ent instanceof Mob mb && mb.getTarget() != null && mb.getTarget().is(drinker));
     }
     public static boolean canDrinkBloodCrit(Entity ent,Entity drinker){
-        if (drinker instanceof LivingEntity LE && !(LE.hasEffect(ModEffects.VAMPIRE_BLOOD)))
+        if (drinker instanceof LivingEntity LE && (LE.hasEffect(ModEffects.VAMPIRE_BLOOD)))
             return false;
         return canDrinkBloodCritAggro(ent,drinker);
     }
