@@ -78,10 +78,13 @@ public abstract class ForgePlayer extends LivingEntity {
                     }
         }
 
-        float bpow = ((IFatePlayer)this).rdbt$getFatePowers().getBonusPassiveMiningSpeed();
-        if (bpow != 1){
-            f*= bpow;
-            overwrite = true;
+        StandPowers powers = ((StandUser) this).roundabout$getStandPowers();
+        if (!(standActive && ((((StandUser) this).roundabout$getStandPowers().canUseMiningStand())))) {
+            float bpow = ((IFatePlayer) this).rdbt$getFatePowers().getBonusPassiveMiningSpeed();
+            if (bpow != 1) {
+                f *= bpow;
+                overwrite = true;
+            }
         }
 
         if (overwrite){

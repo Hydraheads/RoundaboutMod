@@ -784,9 +784,13 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             if (standActive){
                 dSpeed*= ((StandUser)this).roundabout$getStandPowers().getBonusPassiveMiningSpeed();
             }
-            float bpow = ((IFatePlayer)this).rdbt$getFatePowers().getBonusPassiveMiningSpeed();
-            if (bpow != 1){
-                dSpeed*= bpow;
+
+            if (!(((StandUser) this).roundabout$getActive() && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()
+            )) {
+                float bpow = ((IFatePlayer) this).rdbt$getFatePowers().getBonusPassiveMiningSpeed();
+                if (bpow != 1){
+                    dSpeed*= bpow;
+                }
             }
             cir.setReturnValue(dSpeed);
         }

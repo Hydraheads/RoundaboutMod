@@ -116,6 +116,7 @@ public class ModItems {
     public static Item ENYA_MASK;
     public static Item ENYA_OVA_MASK;
     public static Item AVDOL_MASK;
+    public static Item KAKYOIN_MASK;
     public static Item DIEGO_MASK;
     public static Item VALENTINE_MASK;
     public static Item JOSUKE_PART_EIGHT_MASK;
@@ -187,6 +188,7 @@ public class ModItems {
         addToVisageStore(SPEEDWAGON_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(JOTARO_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(AVDOL_MASK,1, characterCostExp, characterCostEmerald);
+        addToVisageStore(KAKYOIN_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(SPEEDWAGON_FOUNDATION_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(DIO_MASK,1, characterCostExp, characterCostEmerald);
         addToVisageStore(ENYA_MASK,1, characterCostExp, characterCostEmerald);

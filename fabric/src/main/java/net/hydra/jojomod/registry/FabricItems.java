@@ -176,6 +176,7 @@ public class FabricItems {
     public static Item DIO_MASK = registerItem("dio_mask", new MaskItem(new Item.Properties().stacksTo(1), new DIOVisage(null)));
     public static Item DIO_VAMPIRE_MASK = registerItem("dio_vampire_mask", new MaskItem(new Item.Properties().stacksTo(1), new DioVampireVisage(null)));
     public static Item AVDOL_MASK = registerItem("avdol_mask", new MaskItem(new Item.Properties().stacksTo(1), new AvdolVisage(null)));
+    public static Item KAKYOIN_MASK = registerItem("kakyoin_mask", new MaskItem(new Item.Properties().stacksTo(1), new KakyoinVisage(null)));
     public static Item DIEGO_MASK = registerItem("diego_mask", new MaskItem(new Item.Properties().stacksTo(1), new DiegoVisage(null)));
     public static Item VALENTINE_MASK = registerItem("valentine_mask", new MaskItem(new Item.Properties().stacksTo(1), new ValentineVisage(null)));
     public static Item JOSUKE_PART_EIGHT_MASK = registerItem("josuke_part_eight_mask", new MaskItem(new Item.Properties().stacksTo(1), new JosukePartEightVisage(null)));
@@ -302,6 +303,7 @@ public class FabricItems {
                         entries.accept(DIO_VAMPIRE_MASK);
                         entries.accept(JOTARO_MASK);
                         entries.accept(AVDOL_MASK);
+                        entries.accept(KAKYOIN_MASK);
                         entries.accept(SPEEDWAGON_FOUNDATION_MASK);
                         entries.accept(DIO_MASK);
                         entries.accept(ENYA_MASK);
@@ -592,6 +594,7 @@ public class FabricItems {
         ModItems.DIO_MASK = DIO_MASK;
         ModItems.DIO_VAMPIRE_MASK = DIO_VAMPIRE_MASK;
         ModItems.AVDOL_MASK = AVDOL_MASK;
+        ModItems.KAKYOIN_MASK = KAKYOIN_MASK;
         ModItems.DIEGO_MASK = DIEGO_MASK;
         ModItems.POCOLOCO_MASK = POCOLOCO_MASK;
         ModItems.RINGO_MASK = RINGO_MASK;

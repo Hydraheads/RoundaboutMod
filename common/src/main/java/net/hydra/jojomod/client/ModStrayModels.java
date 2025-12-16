@@ -33,6 +33,7 @@ public class ModStrayModels {
     public static SmallChestPart SmallChestPart;
     public static PonytailPart PonytailPart;
     public static BigHairPart BigHairPart;
+    public static KakyoinHairPart KakyoinHairPart;
     public static DiegoHatPart DiegoHatPart;
     public static SpeedwagonFoundationHatPart SpeedwagonFoundationHatPart;
     public static BasicHatPart BasicHatPart;
