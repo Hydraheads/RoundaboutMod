@@ -266,10 +266,6 @@ public class VampireFate extends VampiricFate {
                 && !MainUtil.isStandDamage(dsource) && self instanceof Player PE) {
             if (canUseRegen()) {
                 if (!onCooldown(PowerIndex.FATE_2_SNEAK)) {
-                    this.setCooldown(PowerIndex.FATE_2_SNEAK, 1200);
-                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.FATE_2_SNEAK,
-                            1200
-                    );
                     PE.setHealth(1);
                     PE.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20, 4), PE);
                     PE.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 1), PE);
@@ -359,18 +355,19 @@ public class VampireFate extends VampiricFate {
         if (!self.level().isClientSide())
             if (isHypnotizing) {
                 if (hypnoTicks % 9 == 0){
-
                     Vec3 lvec = self.getLookAngle();
                     Position pn = self.getEyePosition().add(lvec.scale(3));
                     Vec3 rev = lvec.reverse();
-                    ((ServerLevel) this.self.level()).sendParticles(ModParticles.HYPNO_SWIRL, pn.x(),
-                            pn.y(), pn.z(),
-                            0,
-                            rev.x,rev.y,rev.z,
-                            0.08);
-                    self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.HYPNOSIS_EVENT, SoundSource.PLAYERS, 1F, 1F);
+                    if (hypnoTicks % 18 == 0) {
+                        ((ServerLevel) this.self.level()).sendParticles(ModParticles.HYPNO_SWIRL, pn.x(),
+                                pn.y(), pn.z(),
+                                0,
+                                rev.x, rev.y, rev.z,
+                                0.08);
+                        self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.HYPNOSIS_EVENT, SoundSource.PLAYERS, 1F, 1F);
 
-                    AABB aab = this.getSelf().getBoundingBox().inflate(10.0, 8.0, 10.0);
+                    }
+                    AABB aab = this.getSelf().getBoundingBox().inflate(12.0, 8.0, 12.0);
                     List<? extends LivingEntity> le = this.self.level().getNearbyEntities(Mob.class, hypnosisTargeting, ((LivingEntity)(Object)self), aab);
                     Iterator var4 = le.iterator();
                     while(var4.hasNext()) {
@@ -398,7 +395,7 @@ public class VampireFate extends VampiricFate {
         return super.inputSpeedModifiers(basis);
     }
 
-    private final TargetingConditions hypnosisTargeting = TargetingConditions.forCombat().range(7);
+    private final TargetingConditions hypnosisTargeting = TargetingConditions.forCombat().range(11);
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         if (isHoldingSneak()) {
