@@ -44,8 +44,8 @@ public class AnubisModel extends PsuedoHierarchicalModel {
                 .texOffs(-2, 0).addBox(-6.0F, -0.05F, -28.5F, 6.0F, 0.0F, 27.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 27).addBox(-4.0F, -0.55F, 0.5F, 2.0F, 1.0F, 7.0F, new CubeDeformation(0.0F))
                 .texOffs(18, 27).addBox(-7.0F, -0.55F, -1.5F, 8.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(21, 31).addBox(-4F, 0.5F, -1F, 1.0F, 0.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(21, 31).addBox(-4F, -0.6F, -1F, 1.0F, 0.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(21, 31).addBox(-3.5F, 0.5F, -1F, 1.0F, 0.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(21, 31).addBox(-3.5F, -0.6F, -1F, 1.0F, 0.0F, 1.0F, new CubeDeformation(0.0F))
                 .texOffs(-10, 35).addBox(-8.0F, 0.0F, -2.5F, 10.0F, 0.0F, 10.0F, new CubeDeformation(0.0F))
                 ,PartPose.offsetAndRotation(-2.0F, -4.75F, -1.0F, 1.5708F, 0.0F, 0.0F));
 
@@ -76,7 +76,12 @@ public class AnubisModel extends PsuedoHierarchicalModel {
     public static ResourceLocation item = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/anime_item.png");
     public static ResourceLocation anime = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/anime.png");
     public static ResourceLocation evil = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/evil.png");
+    public static ResourceLocation wooden = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/wooden.png");
+    public static ResourceLocation stone = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/stone.png");
     public static ResourceLocation aquamarine = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/aquamarine.png");
+    public static ResourceLocation golden = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/golden.png");
+    public static ResourceLocation diamond = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/diamond.png");
+    public static ResourceLocation ancient = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/ancient.png");
 
 
 
@@ -86,7 +91,12 @@ public class AnubisModel extends PsuedoHierarchicalModel {
             case 0 -> {return item;}
             case 1 -> {return anime;}
             case 2 -> {return evil;}
-            case 3 -> {return aquamarine;}
+            case 3 -> {return wooden;}
+            case 4 -> {return stone;}
+            case 5 -> {return aquamarine;}
+            case 6 -> {return golden;}
+            case 7 -> {return diamond;}
+            case 8 -> {return ancient;}
             default -> {return anime;}
         }
     }
