@@ -851,10 +851,10 @@ public class PowersAnubis extends NewDashPreset {
         if (this.getSelf() instanceof Player P) {
             S2CPacketUtil.sendIntPowerDataPacket(P,PowersAnubis.SWING,0);
         }
-        float power = 1.5F;
+        float power = 1.2F;
         Vec3 lookAngle = this.getSelf().getLookAngle().reverse();
         this.getSelf().resetFallDistance();
-        if (lookAngle.y < -0.15) {
+        if (lookAngle.y < -0) {
             power *= 0.5F;
         }
         this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.ANUBIS_POGO_LAUNCH_EVENT,SoundSource.PLAYERS,1F,0.9F+(float)(Math.random()*0.2) );
@@ -1442,14 +1442,24 @@ public class PowersAnubis extends NewDashPreset {
     public static final byte
             ANIME = 1,
             EVIL = 2,
-            AQUAMARINE = 3;
+            WOODEN = 3,
+            STONE = 4,
+            AQUAMARINE = 5,
+            GILDED = 6,
+            DIAMOND = 7,
+            ANCIENT = 8;
 
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 ANIME,
                 EVIL,
-                AQUAMARINE
+                WOODEN,
+                STONE,
+                AQUAMARINE,
+                GILDED,
+                DIAMOND,
+                ANCIENT
         );
     }
 
@@ -1457,7 +1467,12 @@ public class PowersAnubis extends NewDashPreset {
         return switch (skinId)
         {
             case PowersAnubis.EVIL -> Component.translatable("skins.roundabout.anubis.evil");
+            case PowersAnubis.WOODEN -> Component.translatable("skins.roundabout.anubis.wooden");
+            case PowersAnubis.STONE -> Component.translatable("skins.roundabout.anubis.stone");
             case PowersAnubis.AQUAMARINE -> Component.translatable("skins.roundabout.anubis.aquamarine");
+            case PowersAnubis.GILDED -> Component.translatable("skins.roundabout.anubis.golden");
+            case PowersAnubis.DIAMOND -> Component.translatable("skins.roundabout.anubis.diamond");
+            case PowersAnubis.ANCIENT -> Component.translatable("skins.roundabout.anubis.ancient");
             default -> Component.translatable("skins.roundabout.anubis.anime");
         };
     }
@@ -1498,6 +1513,9 @@ public class PowersAnubis extends NewDashPreset {
         list = doAttackChecks(list);
         list.remove(e);
 
+        final Vec3 forward = new Vec3(e.getLookAngle().x,0,e.getLookAngle().z).normalize();
+        final Vec3 backward = new Vec3(e.getLookAngle().x,0,e.getLookAngle().z).normalize().reverse();
+
 
         list.removeIf(entity -> {
             Vec3 ePos = entity.getPosition(0F);
@@ -1512,6 +1530,11 @@ public class PowersAnubis extends NewDashPreset {
 
             double dungle = Math.abs(Math.toDegrees(vector.dot(Lookvec)));
 
+
+            final double FVec = Math.acos(vector.x)-Math.acos(forward.x);
+            final double BVec = Math.acos(vector.x)-Math.acos(backward.x);
+
+            if (Math.abs(FVec) > Math.abs(BVec)) {return true;}
             if (dist > radius-(dungle*factor)) {return true;}
             return (dungle > angle );
         });

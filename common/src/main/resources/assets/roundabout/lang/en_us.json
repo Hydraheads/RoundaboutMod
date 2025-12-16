@@ -1521,7 +1521,13 @@
 
   "skins.roundabout.anubis.anime" : "Anime",
   "skins.roundabout.anubis.evil" : "Evil",
+  "skins.roundabout.anubis.wooden" : "Wooden",
+  "skins.roundabout.anubis.stone" : "Stone",
   "skins.roundabout.anubis.aquamarine" : "Aquamarine",
+  "skins.roundabout.anubis.golden" : "Gilded",
+  "skins.roundabout.anubis.diamond" : "Diamond",
+  "skins.roundabout.anubis.ancient" : "Ancient",
+
 
   "roundabout.anubis.playback_title": "Replay Memories",
   "roundabout.anubis.memory_title": "Record Memories",
