@@ -315,6 +315,8 @@ public class ForgeEvents {
         ModItems.TOMMY_GUN = ForgeItems.TOMMY_GUN.get();
         ModItems.TOMMY_AMMO = ForgeItems.TOMMY_AMMO.get();
 
+        ModItems.COLT_REVOLVER = ForgeItems.COLT_REVOLVER.get();
+
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_DIO.get()).referenceItem = ForgeItems.STREET_SIGN_DIO_BLOCK_ITEM.get().getDefaultInstance();
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_RIGHT.get()).referenceItem = ForgeItems.STREET_SIGN_RIGHT_BLOCK_ITEM.get().getDefaultInstance();
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_STOP.get()).referenceItem = ForgeItems.STREET_SIGN_STOP_BLOCK_ITEM.get().getDefaultInstance();
@@ -355,6 +357,7 @@ public class ForgeEvents {
         ModItems.AESTHETICIAN_MASK_5 = ForgeItems.AESTHETICIAN_MASK_5.get();
         ModItems.AESTHETICIAN_MASK_ZOMBIE = ForgeItems.AESTHETICIAN_MASK_ZOMBIE.get();
         ModItems.AVDOL_MASK = ForgeItems.AVDOL_MASK.get();
+        ModItems.KAKYOIN_MASK = ForgeItems.KAKYOIN_MASK.get();
         ModItems.DIEGO_MASK = ForgeItems.DIEGO_MASK.get();
         ModItems.RINGO_MASK = ForgeItems.RINGO_MASK.get();
         ModItems.HATO_MASK = ForgeItems.HATO_MASK.get();

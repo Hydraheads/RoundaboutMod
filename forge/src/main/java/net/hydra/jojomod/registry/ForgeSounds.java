@@ -106,6 +106,9 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> SNUBNOSE_RELOAD_EVENT =
             register(ModSounds.SNUBNOSE_RELOAD, ModSounds.SNUBNOSE_RELOAD_ID);
 
+    public static final RegistryObject<SoundEvent> TOMMY_FIRE_EVENT =
+            register(ModSounds.TOMMY_FIRE, ModSounds.TOMMY_FIRE_ID);
+
     public static final RegistryObject<SoundEvent> BULLET_PENTRATION_EVENT =
             register(ModSounds.BULLET_PENTRATION, ModSounds.BULLET_PENTRATION_ID);
     public static final RegistryObject<SoundEvent> BULLET_RICOCHET_EVENT =

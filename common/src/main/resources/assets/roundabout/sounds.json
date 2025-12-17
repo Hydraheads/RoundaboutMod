@@ -77,6 +77,12 @@
       "roundabout:snubnose_reload"
     ]
   },
+  "tommy_fire": {
+    "subtitle": "sounds.roundabout.tommy_gun_fire",
+    "sounds": [
+      "roundabout:tommy_gun_fire"
+    ]
+  },
   "bullet_penetration": {
     "subtitle": "sounds.roundabout.bullet_penetration",
     "sounds": [

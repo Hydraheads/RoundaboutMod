@@ -1,4 +1,5 @@
 package net.hydra.jojomod.item;
+
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -19,16 +20,19 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.Vanishable;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
+public class ColtRevolverItem extends FirearmItem implements Vanishable {
 
-    public SnubnoseRevolverItem(Properties $$0) {
+    public ColtRevolverItem(Properties $$0) {
         super($$0);
     }
 
@@ -141,7 +145,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
         }
         ItemStack itemStack = player.getItemInHand(hand);
         if (getAmmo(itemStack) > 0) {
-            player.getCooldowns().addCooldown(this, 5);
+            player.getCooldowns().addCooldown(this, 15);
             if (player.isCreative()) {
             } else {
                 setAmmo(itemStack, getAmmo(itemStack) - 1);
@@ -149,7 +153,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
             LivingEntity livingEntity = player;
             RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity(level, livingEntity);
             $$7.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 4.0F, 1.3F);
-            $$7.setAmmoType(RoundaboutBulletEntity.SNUBNOSE);
+            $$7.setAmmoType(RoundaboutBulletEntity.COLT);
             level.addFreshEntity($$7);
             level.playSound(null, player, ModSounds.SNUBNOSE_FIRE_EVENT, SoundSource.PLAYERS, 100.0F, 1.0F);
             if (level instanceof ServerLevel serverLevel) {
@@ -161,7 +165,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
                 double sideOffset = 0.24;
                 double verticalOffset = -0.15;
 
-                if ((player.getMainArm() == HumanoidArm.LEFT && player.getMainHandItem().getItem() instanceof SnubnoseRevolverItem) || (player.getMainArm() == HumanoidArm.RIGHT && player.getOffhandItem().getItem() instanceof SnubnoseRevolverItem)) {
+                if ((player.getMainArm() == HumanoidArm.LEFT && player.getMainHandItem().getItem() instanceof ColtRevolverItem) || (player.getMainArm() == HumanoidArm.RIGHT && player.getOffhandItem().getItem() instanceof ColtRevolverItem)) {
                     sideOffset -= sideOffset * 2;
                 }
 
@@ -191,7 +195,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         super.use(level, player, hand);
         ItemStack itemStack = player.getItemInHand(hand);
-        if (!(itemStack.getItem() instanceof SnubnoseRevolverItem)) {
+        if (!(itemStack.getItem() instanceof ColtRevolverItem)) {
             return InteractionResultHolder.fail(itemStack);
         }
         if (!(player.getUseItem() == itemStack)) {

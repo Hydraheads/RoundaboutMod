@@ -169,6 +169,9 @@
   "item.roundabout.avdol_mask": "Avdol Visage",
   "item.roundabout.avdol_mask.desc": "Muhammad Avdol",
   "item.roundabout.avdol_mask.tag": "Avdol",
+  "item.roundabout.kakyoin_mask": "Kakyoin Visage",
+  "item.roundabout.kakyoin_mask.desc": "Noriaki Kakyoin",
+  "item.roundabout.kakyoin_mask.tag": "Kakyoin",
   "item.roundabout.aya_mask": "Aya Visage",
   "item.roundabout.aya_mask.desc": "Aya Tsuji",
   "item.roundabout.aya_mask.tag": "Aya",
@@ -679,6 +682,9 @@
   "sounds.roundabout.snubnose_fire":  "Gun fired!",
   "sounds.roundabout.snubnose_dry_fire":  "Gun click",
   "sounds.roundabout.snubnose_reload":  "Gun reloaded",
+
+  "sounds.roundabout.tommy_gun_fire":  "Gun fired!",
+
 
   "sounds.roundabout.bullet_penetration":  "Bullet penetrating",
 

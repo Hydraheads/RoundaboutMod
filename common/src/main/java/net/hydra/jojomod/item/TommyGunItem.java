@@ -32,6 +32,7 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Random;
 
 public class TommyGunItem extends FirearmItem implements Vanishable {
 
@@ -148,6 +149,7 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
         ItemStack itemStack = player.getItemInHand(hand);
         if (getAmmo(itemStack) > 0) {
             player.getCooldowns().addCooldown(this, 2);
+            Random random = new Random();
             if (player.isCreative()) {
             } else {
                 setAmmo(itemStack, getAmmo(itemStack) - 1);
@@ -158,7 +160,8 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
             $$7.setAmmoType(RoundaboutBulletEntity.TOMMY_GUN);
             level.addFreshEntity($$7);
             S2CPacketUtil.gunRecoil(player);
-            level.playSound(null, player, ModSounds.SNUBNOSE_FIRE_EVENT, SoundSource.PLAYERS, 100.0F, 1.0F);
+            float randomPitch = random.nextFloat(1.7F - 1.5F) + 1.5F;
+            level.playSound(null, player, ModSounds.TOMMY_FIRE_EVENT, SoundSource.PLAYERS, 100.0F, randomPitch);
             if (level instanceof ServerLevel serverLevel) {
                 Vec3 look = player.getLookAngle().normalize();
                 Vec3 up = new Vec3(0, 1, 0);
@@ -205,7 +208,7 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
             if ((player.isCrouching() && hasTommyAmmo(player) && getAmmo(itemStack) != maxAmmo) || (player.isCrouching() && player.isCreative())) {
                 if (!isReloading(itemStack)) {
                     setReloading(itemStack, true);
-                    player.getCooldowns().addCooldown(this, 60);
+                    player.getCooldowns().addCooldown(this, 340);
                     ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.REVOLVER_RELOAD, 10, false);
                 }
 

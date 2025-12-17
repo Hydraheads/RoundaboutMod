@@ -130,6 +130,8 @@ public class FabricItems {
     public static Item TOMMY_GUN = registerItem("tommy_gun", new TommyGunItem(new Item.Properties().stacksTo(1)));
     public static Item TOMMY_AMMO = registerItem("tommy_ammo", new TommyAmmoItem(new Item.Properties().stacksTo(64)));
 
+    public static Item COLT_REVOLVER = registerItem("colt_revolver", new ColtRevolverItem(new Item.Properties().stacksTo(1)));
+
     public static Item WOODEN_GLAIVE = registerItem("wooden_glaive", new GlaiveItem(Tiers.WOOD, 4F, -2.9F, new Item.Properties(),4));
     public static Item STONE_GLAIVE = registerItem("stone_glaive", new GlaiveItem(Tiers.STONE, 4F, -2.9F, new Item.Properties(),6));
     public static Item IRON_GLAIVE = registerItem("iron_glaive", new GlaiveItem(Tiers.IRON, 4F, -2.9F, new Item.Properties(),7));
@@ -176,6 +178,7 @@ public class FabricItems {
     public static Item DIO_MASK = registerItem("dio_mask", new MaskItem(new Item.Properties().stacksTo(1), new DIOVisage(null)));
     public static Item DIO_VAMPIRE_MASK = registerItem("dio_vampire_mask", new MaskItem(new Item.Properties().stacksTo(1), new DioVampireVisage(null)));
     public static Item AVDOL_MASK = registerItem("avdol_mask", new MaskItem(new Item.Properties().stacksTo(1), new AvdolVisage(null)));
+    public static Item KAKYOIN_MASK = registerItem("kakyoin_mask", new MaskItem(new Item.Properties().stacksTo(1), new KakyoinVisage(null)));
     public static Item DIEGO_MASK = registerItem("diego_mask", new MaskItem(new Item.Properties().stacksTo(1), new DiegoVisage(null)));
     public static Item VALENTINE_MASK = registerItem("valentine_mask", new MaskItem(new Item.Properties().stacksTo(1), new ValentineVisage(null)));
     public static Item JOSUKE_PART_EIGHT_MASK = registerItem("josuke_part_eight_mask", new MaskItem(new Item.Properties().stacksTo(1), new JosukePartEightVisage(null)));
@@ -302,6 +305,7 @@ public class FabricItems {
                         entries.accept(DIO_VAMPIRE_MASK);
                         entries.accept(JOTARO_MASK);
                         entries.accept(AVDOL_MASK);
+                        entries.accept(KAKYOIN_MASK);
                         entries.accept(SPEEDWAGON_FOUNDATION_MASK);
                         entries.accept(DIO_MASK);
                         entries.accept(ENYA_MASK);
@@ -460,6 +464,7 @@ public class FabricItems {
                         entries.accept(SNUBNOSE_AMMO);
                         entries.accept(TOMMY_GUN);
                         entries.accept(TOMMY_AMMO);
+                        entries.accept(COLT_REVOLVER);
                         entries.accept(STAND_DISC_CREAM);
                         entries.accept(MAX_STAND_DISC_CREAM);
 
@@ -559,6 +564,7 @@ public class FabricItems {
         ModItems.SNUBNOSE_AMMO = SNUBNOSE_AMMO;
         ModItems.TOMMY_GUN = TOMMY_GUN;
         ModItems.TOMMY_AMMO = TOMMY_AMMO;
+        ModItems.COLT_REVOLVER = COLT_REVOLVER;
         ModItems.STAND_DISC = STAND_DISC;
         ModItems.COFFEE_GUM = COFFEE_GUM;
         ModItems.METEORITE = METEORITE;
@@ -592,6 +598,7 @@ public class FabricItems {
         ModItems.DIO_MASK = DIO_MASK;
         ModItems.DIO_VAMPIRE_MASK = DIO_VAMPIRE_MASK;
         ModItems.AVDOL_MASK = AVDOL_MASK;
+        ModItems.KAKYOIN_MASK = KAKYOIN_MASK;
         ModItems.DIEGO_MASK = DIEGO_MASK;
         ModItems.POCOLOCO_MASK = POCOLOCO_MASK;
         ModItems.RINGO_MASK = RINGO_MASK;
