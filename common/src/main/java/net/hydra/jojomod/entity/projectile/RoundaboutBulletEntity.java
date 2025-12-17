@@ -208,10 +208,17 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                 applyEffect(livingEntity);
             }
 
-            if (didDamage && getAmmoType() == SNUBNOSE) {
+            if (didDamage && getAmmoType() == SNUBNOSE && outsideOfTimeStop == 0) {
                 livingEntity.invulnerableTime = 10;
                 livingEntity.hurtTime = 10;
             }
+
+            if (didDamage && getAmmoType() == COLT && outsideOfTimeStop == 0) {
+                livingEntity.invulnerableTime = 15;
+                livingEntity.hurtTime = 15;
+            }
+
+            Roundabout.LOGGER.info("Damage Dealt:"+damage);
         }
 
         Entity $$2 = this.getOwner();
