@@ -217,8 +217,6 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                 livingEntity.invulnerableTime = 15;
                 livingEntity.hurtTime = 15;
             }
-
-            Roundabout.LOGGER.info("Damage Dealt:"+damage);
         }
 
         Entity $$2 = this.getOwner();
