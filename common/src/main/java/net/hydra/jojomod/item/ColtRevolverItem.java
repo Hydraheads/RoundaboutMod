@@ -145,7 +145,7 @@ public class ColtRevolverItem extends FirearmItem implements Vanishable {
         }
         ItemStack itemStack = player.getItemInHand(hand);
         if (getAmmo(itemStack) > 0) {
-            player.getCooldowns().addCooldown(this, 10);
+            player.getCooldowns().addCooldown(this, 15);
             if (player.isCreative()) {
             } else {
                 setAmmo(itemStack, getAmmo(itemStack) - 1);

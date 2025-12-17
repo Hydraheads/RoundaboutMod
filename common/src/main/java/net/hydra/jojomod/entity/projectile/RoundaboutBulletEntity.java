@@ -144,9 +144,9 @@ public class RoundaboutBulletEntity extends AbstractArrow {
     private float getBulletDamage() {
         return switch (getAmmoType()) {
             case SNUBNOSE -> timeStopShot ? 3.7F : 4.0F;
-            case TOMMY_GUN -> timeStopShot ? 0.74F : 0.82F;
+            case TOMMY_GUN -> timeStopShot ? 0.74F : 0.94F;
             case SNIPER -> timeStopShot ? 3.7F : 4.0F;
-            case COLT -> timeStopShot ? 3.8F : 4.7F;
+            case COLT -> timeStopShot ? 3.8F : 5.7F;
             default -> 0.0F;
         };
     }
@@ -211,11 +211,6 @@ public class RoundaboutBulletEntity extends AbstractArrow {
             if (didDamage && getAmmoType() == SNUBNOSE && outsideOfTimeStop == 0) {
                 livingEntity.invulnerableTime = 10;
                 livingEntity.hurtTime = 10;
-            }
-
-            if (didDamage && getAmmoType() == COLT && outsideOfTimeStop == 0) {
-                livingEntity.invulnerableTime = 15;
-                livingEntity.hurtTime = 15;
             }
         }
 
