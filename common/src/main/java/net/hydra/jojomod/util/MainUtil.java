@@ -83,6 +83,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
@@ -2478,6 +2479,19 @@ public class MainUtil {
             ((StandUser)player).roundabout$setBigJumpCurrentProgress(data);
         }
     }
+    public static boolean isCollidingWithAnyBlock(Entity entity) {
+        Level level = entity.level();
+        AABB box = entity.getBoundingBox();
+
+        for (VoxelShape shape : level.getBlockCollisions(entity, box)) {
+            if (!shape.isEmpty()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     @SuppressWarnings("deprecation")
     public static void handleIntPacketC2S(Player player, int data, byte context){
         if (context == PacketDataIndex.INT_GLAIVE_TARGET){
@@ -2506,12 +2520,9 @@ public class MainUtil {
             ((StandUser)player).roundabout$getStandPowers().updateIntMove(data);
         } else if (context == PacketDataIndex.INT_UPDATE_PILOT){
             StandEntity SE = ((StandUser)player).roundabout$getStand();
-            if (SE != null){
-                BlockPos veci3 = BlockPos.containing(new Vec3(SE.getEyePosition().x, SE.getEyePosition().y, SE.getEyePosition().z));
-                BlockState bl3 = SE.level().getBlockState(veci3);
-                if (!(bl3.isSolid() && (bl3.getBlock().isCollisionShapeFullBlock(bl3,player.level(),veci3) ||
-                        (bl3.getBlock() instanceof SlabBlock ||
-                        bl3.getBlock() instanceof StairBlock)))){
+            Entity target = player.level().getEntity(data);
+            if (target != null){
+                if (!isCollidingWithAnyBlock(target)){
                     ((StandUser)player).roundabout$getStandPowers().setPiloting(data);
                 }
             } else {
