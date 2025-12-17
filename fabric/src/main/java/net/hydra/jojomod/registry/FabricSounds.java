@@ -106,6 +106,8 @@ public class FabricSounds {
         addSound(ModSounds.SNUBNOSE_DRY_FIRE_ID, ModSounds.SNUBNOSE_DRY_FIRE_EVENT);
         addSound(ModSounds.SNUBNOSE_RELOAD_ID, ModSounds.SNUBNOSE_RELOAD_EVENT);
 
+        addSound(ModSounds.TOMMY_FIRE_ID, ModSounds.TOMMY_FIRE_EVENT);
+
         addSound(ModSounds.BULLET_PENTRATION_ID, ModSounds.BULLET_PENTRATION_EVENT);
         addSound(ModSounds.BULLET_RICOCHET_ID, ModSounds.BULLET_RICOCHET_EVENT);
 

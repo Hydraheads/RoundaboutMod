@@ -989,6 +989,63 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         return roundabout$tommyModelRecoilLeft;
     }
 
+    @Unique
+    public final AnimationState roundabout$coltAim = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getColtAim(){
+        return roundabout$coltAim;
+    }
+    @Unique
+    public final AnimationState roundabout$coltModelAim = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getColtModelAim(){
+        return roundabout$coltModelAim;
+    }
+    @Unique
+    public final AnimationState roundabout$coltAimLeft = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getColtAimLeft(){
+        return roundabout$coltAimLeft;
+    }
+    @Unique
+    public final AnimationState roundabout$coltModelAimLeft = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getColtModelAimLeft(){
+        return roundabout$coltModelAimLeft;
+    }
+    @Unique
+    public final AnimationState roundabout$coltRecoil = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getColtRecoil(){
+        return roundabout$coltRecoil;
+    }
+    @Unique
+    public final AnimationState roundabout$coltModelRecoil = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getColtModelRecoil(){
+        return roundabout$coltModelRecoil;
+    }
+    @Unique
+    public final AnimationState roundabout$coltRecoilLeft = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getColtRecoilLeft(){
+        return roundabout$coltRecoilLeft;
+    }
+    @Unique
+    public final AnimationState roundabout$coltModelRecoilLeft = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getColtModelRecoilLeft(){
+        return roundabout$coltModelRecoilLeft;
+    }
+
 
     @Unique
     public final AnimationState roundabout$BubbleShotAim = new AnimationState();

@@ -187,10 +187,6 @@ public class ModSounds {
     public static final ResourceLocation CREAM_VOID_ATTACK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CREAM_VOID_ATTACK);
     public static SoundEvent CREAM_VOID_ATTACK_EVENT = SoundEvent.createVariableRangeEvent(CREAM_VOID_ATTACK_ID);
 
-    public static final String BULLET_RICOCHET = "bullet_ricochet";
-    public static final ResourceLocation BULLET_RICOCHET_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BULLET_RICOCHET);
-    public static SoundEvent BULLET_RICOCHET_EVENT = SoundEvent.createVariableRangeEvent(BULLET_RICOCHET_ID);
-
     public static final String SNUBNOSE_FIRE = "snubnose_fire";
     public static final ResourceLocation SNUBNOSE_FIRE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SNUBNOSE_FIRE);
     public static SoundEvent SNUBNOSE_FIRE_EVENT = SoundEvent.createVariableRangeEvent(SNUBNOSE_FIRE_ID);
@@ -201,9 +197,17 @@ public class ModSounds {
     public static final ResourceLocation SNUBNOSE_RELOAD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SNUBNOSE_RELOAD);
     public static SoundEvent SNUBNOSE_RELOAD_EVENT = SoundEvent.createVariableRangeEvent(SNUBNOSE_RELOAD_ID);
 
+    public static final String TOMMY_FIRE = "tommy_fire";
+    public static final ResourceLocation TOMMY_FIRE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TOMMY_FIRE);
+    public static SoundEvent TOMMY_FIRE_EVENT = SoundEvent.createVariableRangeEvent(TOMMY_FIRE_ID);
+
     public static final String BULLET_PENTRATION = "bullet_penetration";
     public static final ResourceLocation BULLET_PENTRATION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BULLET_PENTRATION);
     public static SoundEvent BULLET_PENTRATION_EVENT = SoundEvent.createVariableRangeEvent(BULLET_PENTRATION_ID);
+
+    public static final String BULLET_RICOCHET = "bullet_ricochet";
+    public static final ResourceLocation BULLET_RICOCHET_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BULLET_RICOCHET);
+    public static SoundEvent BULLET_RICOCHET_EVENT = SoundEvent.createVariableRangeEvent(BULLET_RICOCHET_ID);
 
 
     public static final String ROAD_ROLLER_AMBIENT = "road_roller_ambient";

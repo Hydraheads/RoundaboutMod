@@ -140,6 +140,9 @@ public class ModItems {
     public static Item TOMMY_GUN;
     public static Item TOMMY_AMMO;
 
+    public static Item COLT_REVOLVER;
+//    public static Item TOMMY_AMMO;
+
 
     public static Item PAINTING_VAN_GOUGH;
     public static Item PAINTING_MONA_LISA;

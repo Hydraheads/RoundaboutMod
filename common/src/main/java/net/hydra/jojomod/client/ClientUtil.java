@@ -1546,6 +1546,54 @@ public class ClientUtil {
                 ModStrayModels.FirstPersonTommyGunModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
 
                 stack.popPose();
+            } else if (play.getUseItem().getItem() instanceof ColtRevolverItem && !play.getCooldowns().isOnCooldown(play.getUseItem().getItem())) {
+                stack.pushPose();
+
+                FirstPersonArmsModel.player = play;
+                FirstPersonArmsSlimModel.player = play;
+                if (play.getMainArm() == HumanoidArm.RIGHT) {
+                    pl.roundabout$getSnubnoseModelRecoil().stop();
+                    pl.roundabout$getSnubnoseModelAim().startIfStopped(cameraEnt.tickCount);
+                    pl.roundabout$getSnubnoseRecoil().stop();
+                    pl.roundabout$getSnubnoseAim().startIfStopped(cameraEnt.tickCount);
+                } else if (play.getMainArm() == HumanoidArm.LEFT) {
+                    pl.roundabout$getSnubnoseModelRecoilLeft().stop();
+                    pl.roundabout$getSnubnoseModelAimLeft().startIfStopped(cameraEnt.tickCount);
+                    pl.roundabout$getSnubnoseRecoilLeft().stop();
+                    pl.roundabout$getSnubnoseAimLeft().startIfStopped(cameraEnt.tickCount);
+                }
+                if (!slimBoolean) {
+                    ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+                } else if (slimBoolean) {
+                    ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+                }
+                ModStrayModels.FirstPersonSnubnoseModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+
+                stack.popPose();
+            } else if (play.getUseItem().getItem() instanceof ColtRevolverItem && play.getCooldowns().isOnCooldown(play.getUseItem().getItem())) {
+                stack.pushPose();
+
+                FirstPersonArmsModel.player = play;
+                FirstPersonArmsSlimModel.player = play;
+                if (play.getMainArm() == HumanoidArm.RIGHT) {
+                    pl.roundabout$getSnubnoseModelAim().stop();
+                    pl.roundabout$getSnubnoseModelRecoil().startIfStopped(cameraEnt.tickCount);
+                    pl.roundabout$getSnubnoseAim().stop();
+                    pl.roundabout$getSnubnoseRecoil().startIfStopped(cameraEnt.tickCount);
+                } else if (play.getMainArm() == HumanoidArm.LEFT) {
+                    pl.roundabout$getSnubnoseModelAimLeft().stop();
+                    pl.roundabout$getSnubnoseModelRecoilLeft().startIfStopped(cameraEnt.tickCount);
+                    pl.roundabout$getSnubnoseAimLeft().stop();
+                    pl.roundabout$getSnubnoseRecoilLeft().startIfStopped(cameraEnt.tickCount);
+                }
+                if (!slimBoolean) {
+                    ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
+                } else if (slimBoolean) {
+                    ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
+                }
+                ModStrayModels.FirstPersonSnubnoseModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
+
+                stack.popPose();
             } else {
                 snubnoseRenderCleanupHelper(cameraEnt);
                 tommyRenderCleanupHelper(cameraEnt);

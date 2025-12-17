@@ -4,24 +4,14 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.access.IProjectileAccess;
-import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.stand.RattEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.stand.powers.PowersRatt;
-import net.hydra.jojomod.stand.powers.PowersStarPlatinum;
 import net.hydra.jojomod.util.MainUtil;
-import net.hydra.jojomod.util.S2CPacketUtil;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -30,34 +20,23 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.boss.EnderDragonPart;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
-
-import java.util.List;
 
 public class RoundaboutBulletEntity extends AbstractArrow {
 
@@ -129,15 +108,16 @@ public class RoundaboutBulletEntity extends AbstractArrow {
     }
 
     public static final byte NONE = 0;
-    public static final byte REVOLVER = 1;
+    public static final byte SNUBNOSE = 1;
     public static final byte TOMMY_GUN = 2;
     public static final byte SNIPER = 3;
+    public static final byte COLT = 4;
 
     public ItemStack getBulletItemStack() {
         ItemStack itemStack;
         if (getAmmoType() == NONE) {
             return ItemStack.EMPTY;
-        } else if (getAmmoType() == REVOLVER) {
+        } else if (getAmmoType() == SNUBNOSE) {
             itemStack = ModItems.SNUBNOSE_AMMO.getDefaultInstance();
             return itemStack;
         } else if (getAmmoType() == TOMMY_GUN) {
@@ -163,9 +143,10 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 
     private float getBulletDamage() {
         return switch (getAmmoType()) {
-            case REVOLVER -> timeStopShot ? 3.7F : 4.0F;
+            case SNUBNOSE -> timeStopShot ? 3.7F : 4.0F;
             case TOMMY_GUN -> timeStopShot ? 0.74F : 0.82F;
             case SNIPER -> timeStopShot ? 3.7F : 4.0F;
+            case COLT -> timeStopShot ? 3.8F : 4.7F;
             default -> 0.0F;
         };
     }
@@ -198,16 +179,28 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 
         if (entity instanceof LivingEntity livingEntity) {
 
+            boolean hadIFrames = livingEntity.invulnerableTime > 0 || livingEntity.hurtTime > 0;
+
             if (livingEntity.isInvulnerable()) {
                 return;
             }
 
-            if (outsideOfTimeStop > 0) {
+            if (outsideOfTimeStop > 0 || getAmmoType() == TOMMY_GUN) {
                 livingEntity.hurtTime = 0;
                 livingEntity.invulnerableTime = 0;
             }
 
+            if (getAmmoType() == SNUBNOSE && hadIFrames) {
+                livingEntity.invulnerableTime = 0;
+                livingEntity.hurtTime = 0;
+            }
+
+
             float damage = getBulletDamage();
+
+            if (getAmmoType() == SNUBNOSE && !hadIFrames) {
+                damage += 1.0F;
+            }
 
             boolean didDamage = livingEntity.hurt(ModDamageTypes.of(level(), ModDamageTypes.BULLET, this, this.getOwner()), damage);
 
@@ -215,6 +208,10 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                 applyEffect(livingEntity);
             }
 
+            if (didDamage && getAmmoType() == SNUBNOSE) {
+                livingEntity.invulnerableTime = 10;
+                livingEntity.hurtTime = 10;
+            }
         }
 
         Entity $$2 = this.getOwner();
