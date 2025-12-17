@@ -3,7 +3,9 @@ package net.hydra.jojomod.fates.powers;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
@@ -26,6 +28,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -187,6 +191,9 @@ public class VampireFate extends VampiricFate {
         return 4;
     }
     public float getAddon(){
+        if (activePower == BLOOD_REGEN)
+            return 0;
+
         if (self.isCrouching() && rechargeJump){
             return 4;
         } else {
@@ -223,7 +230,7 @@ public class VampireFate extends VampiricFate {
             if (attackTimeDuring >= getMaxAttackTimeDuringHair() && !isClient()) {
                 Entity TE = getTargetEntity(self, 7, 15);
                 if (TE != null){
-                    if (MainUtil.canDrinkBloodFair(TE, self)){
+                    if (MainUtil.canPlantBud(TE, self)){
                         if (((StandUser)TE).rdbt$getFleshBud() == null) {
                             if (canPlantDrink(TE) || canPlantHealth(TE)) {
                                 fleshBudIfNearby(100, TE.getId());
@@ -249,6 +256,31 @@ public class VampireFate extends VampiricFate {
                 setAttackTimeDuring(-20);
             }
         }
+    }
+
+
+    @Override
+    /**Cancel death, make sure to set player health if you do this*/
+    public boolean cheatDeath(DamageSource dsource){
+        if (!dsource.is(ModDamageTypes.SUNLIGHT) && !dsource.is(DamageTypes.GENERIC_KILL)
+                && !MainUtil.isStandDamage(dsource) && self instanceof Player PE) {
+            if (canUseRegen()) {
+                if (!onCooldown(PowerIndex.FATE_2_SNEAK)) {
+                    PE.setHealth(1);
+                    PE.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20, 4), PE);
+                    PE.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 1), PE);
+                    PE.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 200, 0), PE);
+                    xTryPower(BLOOD_REGEN,true);
+                    self.level().playSound(null, self.blockPosition(), ModSounds.VAMPIRE_AWAKEN_EVENT,
+                            SoundSource.PLAYERS, 1F, 1F);
+                    ((ServerLevel) self.level()).sendParticles(ModParticles.MENACING,
+                            self.getX(), self.getY(), self.getZ(),
+                            10, 0, 0, 0, 0.1);
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -283,7 +315,8 @@ public class VampireFate extends VampiricFate {
     }
 
     public boolean canPlantDrink(Entity ent) {
-        if (MainUtil.canDrinkBloodCritAggro(ent,self) && !(ent instanceof Monster)) {
+        if (MainUtil.canDrinkBloodCritAggro(ent,self) && !(ent instanceof Monster)
+                && !(ent instanceof Mob mb && ((IMob)mb).roundabout$isVampire())) {
             return true;
         }
         return false;
@@ -322,18 +355,19 @@ public class VampireFate extends VampiricFate {
         if (!self.level().isClientSide())
             if (isHypnotizing) {
                 if (hypnoTicks % 9 == 0){
-
                     Vec3 lvec = self.getLookAngle();
                     Position pn = self.getEyePosition().add(lvec.scale(3));
                     Vec3 rev = lvec.reverse();
-                    ((ServerLevel) this.self.level()).sendParticles(ModParticles.HYPNO_SWIRL, pn.x(),
-                            pn.y(), pn.z(),
-                            0,
-                            rev.x,rev.y,rev.z,
-                            0.08);
-                    self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.HYPNOSIS_EVENT, SoundSource.PLAYERS, 1F, 1F);
+                    if (hypnoTicks % 18 == 0) {
+                        ((ServerLevel) this.self.level()).sendParticles(ModParticles.HYPNO_SWIRL, pn.x(),
+                                pn.y(), pn.z(),
+                                0,
+                                rev.x, rev.y, rev.z,
+                                0.08);
+                        self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.HYPNOSIS_EVENT, SoundSource.PLAYERS, 1F, 1F);
 
-                    AABB aab = this.getSelf().getBoundingBox().inflate(10.0, 8.0, 10.0);
+                    }
+                    AABB aab = this.getSelf().getBoundingBox().inflate(12.0, 8.0, 12.0);
                     List<? extends LivingEntity> le = this.self.level().getNearbyEntities(Mob.class, hypnosisTargeting, ((LivingEntity)(Object)self), aab);
                     Iterator var4 = le.iterator();
                     while(var4.hasNext()) {
@@ -361,7 +395,7 @@ public class VampireFate extends VampiricFate {
         return super.inputSpeedModifiers(basis);
     }
 
-    private final TargetingConditions hypnosisTargeting = TargetingConditions.forCombat().range(7);
+    private final TargetingConditions hypnosisTargeting = TargetingConditions.forCombat().range(11);
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         if (isHoldingSneak()) {

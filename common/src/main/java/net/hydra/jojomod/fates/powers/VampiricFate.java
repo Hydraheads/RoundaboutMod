@@ -28,6 +28,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -525,6 +526,10 @@ public int speedActivated = 0;
             setAttackTimeDuring(0);
             setActivePower(BLOOD_REGEN);
             playSoundsIfNearby(SoundIndex.BLOOD_REGEN, 100, true);
+            this.setCooldown(PowerIndex.FATE_2_SNEAK, 1200);
+            S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.FATE_2_SNEAK,
+                    1200
+            );
 
         }
     }
@@ -534,6 +539,15 @@ public int speedActivated = 0;
                 int foodLevel = PE.getFoodData().getFoodLevel();
                 PE.getFoodData().setFoodLevel(foodLevel-10);
             }
+
+            this.setCooldown(PowerIndex.GLOBAL_DASH, 600);
+            S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.GLOBAL_DASH,
+                    600
+            );
+            this.setCooldown(PowerIndex.FATE_3_SNEAK, 600);
+            S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.FATE_3_SNEAK,
+                    600
+            );
             setFast();
             self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SPEED_EVENT, SoundSource.PLAYERS, 1F, 0.95F+(float)(Math.random()*0.1));
 

@@ -69,6 +69,9 @@ public class VisageData {
     public boolean rendersBigHair(){
         return false;
     }
+    public boolean rendersKakyoinHair(){
+        return false;
+    }
     public boolean rendersJosukeDecals(){
         return false;
     }
@@ -88,6 +91,9 @@ public class VisageData {
         return false;
     }
     public boolean rendersDiegoHat(){
+        return false;
+    }
+    public boolean rendersSpeedwagonFoundationHat(){
         return false;
     }
     public boolean rendersBasicHat(){

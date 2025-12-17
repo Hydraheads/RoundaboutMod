@@ -193,11 +193,7 @@ public class PowersAnubis extends NewDashPreset {
         }
 
         Vec3 pos = this.getSelf().getPosition(1);
-        /*    Vector3f[] colors = {
-                new Vector3f(0.96F, 0.96F, 0.92F),
-                new Vector3f(0.93F, 0.87F, 0.57F)
-        }; */
-        //TODO: PARTICLE SPRAY (with colors)
+
         ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.ALLURING_LIGHT,
                 pos.x,
                 pos.y + this.getSelf().getEyeHeight(),
@@ -344,19 +340,18 @@ public class PowersAnubis extends NewDashPreset {
                 if (this.getSelf() instanceof Player P) {
                     P.getAbilities().flying = false;
                 }
-                if (!isClient()) {
-                    Vec3 look = getSelf().getLookAngle().multiply(1, 0, 1).normalize();
-                    SU.roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
-                    SU.roundabout$setLeapIntentionally(true);
 
-                    float strength = 1.25F;
-                    if (Math.abs(look.x) + Math.abs(look.z) == 0) {
-                        strength *= 0.7F;
-                    } else if (!this.getSelf().onGround()) {
-                        strength *= 0.8F;
-                    }
-                    MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), strength, look.x * 1, -1 * (this.getSelf().onGround() ? 1 : 0.8), look.z * 1);
+                Vec3 look = getSelf().getLookAngle().multiply(1, 0, 1).normalize();
+                SU.roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+                SU.roundabout$setLeapIntentionally(true);
+
+                float strength = 1.25F;
+                if (Math.abs(look.x) + Math.abs(look.z) == 0) {
+                    strength *= 0.7F;
+                } else if (!this.getSelf().onGround()) {
+                    strength *= 0.8F;
                 }
+                MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), strength, look.x * 1, -1 * (this.getSelf().onGround() ? 1 : 0.8), look.z * 1);
             }
         }
         return super.tryPower(move, forced);
@@ -428,7 +423,7 @@ public class PowersAnubis extends NewDashPreset {
             pogoTime -= 1;
         }
 
-        if (this.getSelf().onGround()) {
+        if (this.getSelf().onGround() && isClient()) {
             if (this.getActivePower() != PowerIndex.SNEAK_ATTACK_CHARGE || this.attackTime > PogoDelay + 3) {
                 if (pogoTime == -1) {
                     if (pogoCounter == 0) {
@@ -696,9 +691,17 @@ public class PowersAnubis extends NewDashPreset {
 
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime) {
-        if (move == PowerIndex.BOUNCE) {
-            if (chargeTime != 0) {
-                pogoAttack(chargeTime);
+        switch (move) {
+            case PowerIndex.BOUNCE -> {
+                if (chargeTime != 0) {
+                    pogoAttack(chargeTime);
+                }
+            }
+            case PowerIndex.POWER_1_BONUS -> {
+                MainUtil.slowTarget(this.getSelf(),chargeTime/100F);
+            }
+            case PowerIndex.POWER_2_BONUS -> {
+                this.getStandUserSelf().roundabout$setMeleeImmunity(chargeTime);
             }
         }
         return super.tryIntPower(move, forced, chargeTime);
@@ -751,7 +754,7 @@ public class PowersAnubis extends NewDashPreset {
                     ///  NORMAL AND SNEAK CLICK
                     if (this.getActivePower() == PowerIndex.SNEAK_ATTACK ||
                             this.getActivePower() == PowerIndex.ATTACK) {
-                        /// the actual attack
+
                         if (getActivePower() == PowerIndex.SNEAK_ATTACK) {
                             SAttack();
                         } else {
@@ -814,24 +817,27 @@ public class PowersAnubis extends NewDashPreset {
             } else {
                 final int windup = PogoDelay;
                 /**  Pogo is broken up into 4 stages: Hover, Launch, Attack, and Aftershock */
-                if (attackTimeDuring == windup) {
-                    if (!isClient()) {PogoLaunch();}
-                } else if (attackTimeDuring < windup) {
-                    if (!isClient()) {MainUtil.slowTarget(this.getSelf(), 0.8F);}
-                } else if (attackTimeDuring < windup + 6) {
-                    if (isClient()) {
-                        if (isPacketPlayer()) {
+                if ( (isClient() && isPacketPlayer())) {
+
+                    if (attackTimeDuring == windup) {
+                        PogoLaunch();
+                    } else if (attackTimeDuring < windup) {
+                        if (isClient()) {
+                            MainUtil.slowTarget(this.getSelf(),0.8F);
+                        }
+                    } else if (attackTimeDuring < windup + 6) {
+                        if (isClient()) {
                             pogoCheck();
                         }
+                    } else if (attackTimeDuring < windup + 9) { /// Slows the user after a duration
+                        if (isClient()) {
+                            MainUtil.slowTarget(this.getSelf(),0.7F);
+                            this.getSelf().resetFallDistance();
+                        }
                     }
-                } else if (attackTimeDuring < windup + 9) { /// Slows the user after a duration
-                    if (!isClient()) {
-                        MainUtil.slowTarget(this.getSelf(), 0.7F);
-                        this.getSelf().resetFallDistance();
+                    if (this.attackTimeDuring >= windup + 9) {
+                        this.setPowerNone();
                     }
-                }
-                if (this.attackTimeDuring >= windup + 9) {
-                    this.setPowerNone();
                 }
 
             }
@@ -841,18 +847,19 @@ public class PowersAnubis extends NewDashPreset {
 
 
 
-    public void PogoLaunch(){
+    public void PogoLaunch() {
         if (this.getSelf() instanceof Player P) {
             S2CPacketUtil.sendIntPowerDataPacket(P,PowersAnubis.SWING,0);
         }
-        float power = 1.5F;
+        float power = 1.2F;
         Vec3 lookAngle = this.getSelf().getLookAngle().reverse();
         this.getSelf().resetFallDistance();
-        if (lookAngle.y < -0.15) {
+        if (lookAngle.y < -0) {
             power *= 0.5F;
         }
         this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.ANUBIS_POGO_LAUNCH_EVENT,SoundSource.PLAYERS,1F,0.9F+(float)(Math.random()*0.2) );
         this.getStandUserSelf().roundabout$setMeleeImmunity((byte)6);
+        this.tryIntPowerPacket(PowerIndex.POWER_2_BONUS,6);
         MainUtil.takeUnresistableKnockbackWithY(this.getSelf(),power,lookAngle.x,lookAngle.y,lookAngle.z);
 
     }
@@ -863,13 +870,21 @@ public class PowersAnubis extends NewDashPreset {
         Vec3 pos = this.getSelf().getEyePosition(0F).add(this.getSelf().getLookAngle().scale(1));
         List<Entity> targets = MainUtil.genHitbox(this.getSelf().level(),
                 pos.x,pos.y,pos.z,
-                1.4,1.4,1.4);
+                0.75,0.75,0.75);
         targets.removeIf(entity -> entity.equals(this.getSelf()));
         targets = doAttackChecks(targets);
         Entity target = null;
         if (!targets.isEmpty()) {target = targets.get(0);}
 
         if (target != null) {
+            this.setPowerNone();
+
+            double strength = this.getSelf().isCrouching() ? 0.5 : 0.7;
+            MainUtil.takeUnresistableKnockbackWithY(this.getSelf(),strength,0,-1,0);
+            this.getStandUserSelf().roundabout$setLeapTicks(20);
+            this.getStandUserSelf().roundabout$setLeapIntentionally(true);
+
+
             tryIntPowerPacket(PowerIndex.BOUNCE,target.getId());
         }
     }
@@ -879,10 +894,7 @@ public class PowersAnubis extends NewDashPreset {
         Roundabout.LOGGER.info(target.toString());
         this.setAttackTimeDuring(this.getAttackTimeDuring()+15);
 
-        double strength = this.getSelf().isCrouching() ? 0.5 : 0.7;
-        MainUtil.takeUnresistableKnockbackWithY(this.getSelf(),strength,0,-1,0);
-        this.getStandUserSelf().roundabout$setLeapTicks(20);
-        this.getStandUserSelf().roundabout$setLeapIntentionally(true);
+
 
         if (StandDamageEntityAttack(target,4,1,this.getSelf())) {
             if (target instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers().interceptGuard()
@@ -1430,14 +1442,24 @@ public class PowersAnubis extends NewDashPreset {
     public static final byte
             ANIME = 1,
             EVIL = 2,
-            AQUAMARINE = 3;
+            WOODEN = 3,
+            STONE = 4,
+            AQUAMARINE = 5,
+            GILDED = 6,
+            DIAMOND = 7,
+            ANCIENT = 8;
 
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 ANIME,
                 EVIL,
-                AQUAMARINE
+                WOODEN,
+                STONE,
+                AQUAMARINE,
+                GILDED,
+                DIAMOND,
+                ANCIENT
         );
     }
 
@@ -1445,7 +1467,12 @@ public class PowersAnubis extends NewDashPreset {
         return switch (skinId)
         {
             case PowersAnubis.EVIL -> Component.translatable("skins.roundabout.anubis.evil");
+            case PowersAnubis.WOODEN -> Component.translatable("skins.roundabout.anubis.wooden");
+            case PowersAnubis.STONE -> Component.translatable("skins.roundabout.anubis.stone");
             case PowersAnubis.AQUAMARINE -> Component.translatable("skins.roundabout.anubis.aquamarine");
+            case PowersAnubis.GILDED -> Component.translatable("skins.roundabout.anubis.golden");
+            case PowersAnubis.DIAMOND -> Component.translatable("skins.roundabout.anubis.diamond");
+            case PowersAnubis.ANCIENT -> Component.translatable("skins.roundabout.anubis.ancient");
             default -> Component.translatable("skins.roundabout.anubis.anime");
         };
     }
@@ -1486,6 +1513,9 @@ public class PowersAnubis extends NewDashPreset {
         list = doAttackChecks(list);
         list.remove(e);
 
+        final Vec3 forward = new Vec3(e.getLookAngle().x,0,e.getLookAngle().z).normalize();
+        final Vec3 backward = new Vec3(e.getLookAngle().x,0,e.getLookAngle().z).normalize().reverse();
+
 
         list.removeIf(entity -> {
             Vec3 ePos = entity.getPosition(0F);
@@ -1500,6 +1530,11 @@ public class PowersAnubis extends NewDashPreset {
 
             double dungle = Math.abs(Math.toDegrees(vector.dot(Lookvec)));
 
+
+            final double FVec = Math.acos(vector.x)-Math.acos(forward.x);
+            final double BVec = Math.acos(vector.x)-Math.acos(backward.x);
+
+            if (Math.abs(FVec) > Math.abs(BVec)) {return true;}
             if (dist > radius-(dungle*factor)) {return true;}
             return (dungle > angle );
         });
@@ -1649,10 +1684,12 @@ public class PowersAnubis extends NewDashPreset {
                 case AnubisMoment.ABILITY_3 -> 12;
                 case AnubisMoment.ATTACK -> 13;
                 case AnubisMoment.INTERACT -> 14;
+                case AnubisMoment.SWAP_OFFHAND -> 15;
+                case AnubisMoment.USE_OFFHAND -> 16;
                 default -> 90;
             };
             if (moment > 20 && moment < 30) {
-                xIcon = 1 + 7 * (14 + (moment - 20));
+                xIcon = 1 + 7 * (16 + (moment - 20));
             }
             context.blit(StandIcons.ANUBIS_MEMORY, xoff, Offset, xIcon, 79, 7, 8);
             xoff += 8;
@@ -1811,17 +1848,23 @@ public class PowersAnubis extends NewDashPreset {
         PA.playKeys.add(o.keyDown);PA.playBytes.add(AnubisMoment.DOWN);
         PA.playKeys.add(o.keyLeft);PA.playBytes.add(AnubisMoment.LEFT);
         PA.playKeys.add(o.keyRight);PA.playBytes.add(AnubisMoment.RIGHT);
+
         PA.playKeys.add(o.keyJump);PA.playBytes.add(AnubisMoment.JUMP);
         PA.playKeys.add(o.keySprint);PA.playBytes.add(AnubisMoment.SPRINT);
         PA.playKeys.add(o.keyShift);PA.playBytes.add(AnubisMoment.CROUCH);
+
         PA.playKeys.add(KeyInputRegistry.switchRow);PA.playBytes.add(AnubisMoment.CROUCH_TOGGLE);
         PA.playKeys.add(KeyInputRegistry.abilityThreeKey);PA.playBytes.add(AnubisMoment.DASH);
         PA.playKeys.add(KeyInputRegistry.summonKey);PA.playBytes.add(AnubisMoment.SUMMON);
         PA.playKeys.add(KeyInputRegistry.abilityOneKey);PA.playBytes.add(AnubisMoment.ABILITY_1);
         PA.playKeys.add(KeyInputRegistry.abilityTwoKey);PA.playBytes.add(AnubisMoment.ABILITY_2);
         PA.playKeys.add(KeyInputRegistry.abilityFourKey);PA.playBytes.add(AnubisMoment.ABILITY_3);
+
         PA.playKeys.add(o.keyAttack);PA.playBytes.add(AnubisMoment.ATTACK);
         PA.playKeys.add(o.keyUse);PA.playBytes.add(AnubisMoment.INTERACT);
+
+        PA.playKeys.add(o.keySwapOffhand);PA.playBytes.add(AnubisMoment.SWAP_OFFHAND);
+        PA.playKeys.add(KeyInputRegistry.guardKey);PA.playBytes.add(AnubisMoment.USE_OFFHAND);
         for(int i=0;i<AnubisMoment.HOTBAR.length;i++) {
             PA.playKeys.add(o.keyHotbarSlots[i]);PA.playBytes.add(AnubisMoment.HOTBAR[i]);
         }

@@ -18,6 +18,9 @@ public class AnubisMoment {
     public static final byte ABILITY_3 = (byte) 13;
     public static final byte ATTACK = (byte) 14;
     public static final byte INTERACT = (byte) 15;
+    public static final byte SWAP_OFFHAND = (byte) 16;
+    public static final byte USE_OFFHAND = (byte) 17;
+
 
     public static final byte[] HOTBAR = {21,22,23,24,25,26,27,28,29};
 

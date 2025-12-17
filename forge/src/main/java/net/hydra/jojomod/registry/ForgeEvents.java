@@ -338,6 +338,7 @@ public class ForgeEvents {
         ModItems.BLANK_MASK = ForgeItems.BLANK_MASK.get();
         ModItems.MODIFICATION_MASK = ForgeItems.MODIFICATION_MASK.get();
         ModItems.SPEEDWAGON_MASK = ForgeItems.SPEEDWAGON_MASK.get();
+        ModItems.SPEEDWAGON_FOUNDATION_MASK = ForgeItems.SPEEDWAGON_FOUNDATION_MASK.get();
         ModItems.JOTARO_MASK = ForgeItems.JOTARO_MASK.get();
         ModItems.JOTARO_4_MASK = ForgeItems.JOTARO_4_MASK.get();
         ModItems.JOTARO_6_MASK = ForgeItems.JOTARO_6_MASK.get();
@@ -356,6 +357,7 @@ public class ForgeEvents {
         ModItems.AESTHETICIAN_MASK_5 = ForgeItems.AESTHETICIAN_MASK_5.get();
         ModItems.AESTHETICIAN_MASK_ZOMBIE = ForgeItems.AESTHETICIAN_MASK_ZOMBIE.get();
         ModItems.AVDOL_MASK = ForgeItems.AVDOL_MASK.get();
+        ModItems.KAKYOIN_MASK = ForgeItems.KAKYOIN_MASK.get();
         ModItems.DIEGO_MASK = ForgeItems.DIEGO_MASK.get();
         ModItems.RINGO_MASK = ForgeItems.RINGO_MASK.get();
         ModItems.HATO_MASK = ForgeItems.HATO_MASK.get();

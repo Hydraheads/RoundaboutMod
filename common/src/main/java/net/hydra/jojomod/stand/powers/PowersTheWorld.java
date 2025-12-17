@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.ICreeper;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -1181,10 +1182,12 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 } else if (this.getSelf() instanceof FlyingMob) {
                     tptype = TPTYPE.AIR;
                 }
-                if (this.attackTimeDuring <= -1) {
+                if (this.attackTimeDuring <= -1 && !isClashing()) {
                     if (!this.getSelf().isPassenger()) {
                         teleportTime = Math.max(0, teleportTime - 1);
-                        if (teleportTime == 0 && !(this.getSelf() instanceof Creeper CREEP && CREEP.isIgnited())) {
+                        if (teleportTime == 0 &&
+                                !(this.getSelf() instanceof Creeper CREEP
+                                        && (CREEP.isIgnited() || ((ICreeper)CREEP).roundabout$getSwell() > 0))) {
                             if (dist <= 8 && !(this.getSelf() instanceof Creeper)) {
                                 Vec3 pos = this.getSelf().position().add(0, this.getSelf().getEyeHeight(), 0);
                                 float p = 0;
@@ -1312,9 +1315,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     protected boolean teleport(TPTYPE tptype) {
         if (!this.getSelf().level().isClientSide() && this.getSelf().isAlive()) {
-            double $$0 = this.getSelf().getX() + (this.getSelf().getRandom().nextDouble() - 0.5) * 19.0;
+            double $$0 = this.getSelf().getX() + (this.getSelf().getRandom().nextDouble() - 0.5) * 10.0;
             double $$1 = this.getSelf().getY() + (double)(this.getSelf().getRandom().nextInt(16) - 8);
-            double $$2 = this.getSelf().getZ() + (this.getSelf().getRandom().nextDouble() - 0.5) * 19.0;
+            double $$2 = this.getSelf().getZ() + (this.getSelf().getRandom().nextDouble() - 0.5) * 10.0;
             return this.teleport($$0, $$1, $$2,tptype);
         } else {
             return false;

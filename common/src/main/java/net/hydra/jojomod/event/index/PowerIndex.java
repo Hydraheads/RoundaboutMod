@@ -76,7 +76,7 @@ public class PowerIndex {
     public static final byte FATE_4 = 13;
     public static final byte FATE_1_SNEAK = 14;
     public static final byte FATE_2_SNEAK = 15;
-    public static final byte FATE_3_SNEAK = 15;
+    public static final byte FATE_3_SNEAK = 16;
     public static final byte FATE_4_SNEAK = 17;
     public static final byte FATE_EXTRA = 18;
     public static final byte FATE_EXTRA_2 = 19;

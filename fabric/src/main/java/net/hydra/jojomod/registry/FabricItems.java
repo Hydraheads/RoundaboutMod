@@ -171,12 +171,14 @@ public class FabricItems {
     public static Item BLANK_MASK = registerItem("blank_mask", new MaskItem(new Item.Properties().stacksTo(1), new NonCharacterVisage(null)));
     public static Item MODIFICATION_MASK = registerItem("modification_mask", new ModificationMaskItem(new Item.Properties().stacksTo(1), new ModificationVisage(null)));
     public static Item SPEEDWAGON_MASK = registerItem("speedwagon_mask", new MaskItem(new Item.Properties().stacksTo(1), new SpeedwagonVisage(null)));
+    public static Item SPEEDWAGON_FOUNDATION_MASK = registerItem("speedwagon_foundation_mask", new MaskItem(new Item.Properties().stacksTo(1), new SpeedwagonFoundationVisage(null)));
     public static Item JOTARO_MASK = registerItem("jotaro_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroVisage(null)));
     public static Item JOTARO_4_MASK = registerItem("jotaro_4_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroFourVisage(null)));
     public static Item JOTARO_6_MASK = registerItem("jotaro_6_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroSixVisage(null)));
     public static Item DIO_MASK = registerItem("dio_mask", new MaskItem(new Item.Properties().stacksTo(1), new DIOVisage(null)));
     public static Item DIO_VAMPIRE_MASK = registerItem("dio_vampire_mask", new MaskItem(new Item.Properties().stacksTo(1), new DioVampireVisage(null)));
     public static Item AVDOL_MASK = registerItem("avdol_mask", new MaskItem(new Item.Properties().stacksTo(1), new AvdolVisage(null)));
+    public static Item KAKYOIN_MASK = registerItem("kakyoin_mask", new MaskItem(new Item.Properties().stacksTo(1), new KakyoinVisage(null)));
     public static Item DIEGO_MASK = registerItem("diego_mask", new MaskItem(new Item.Properties().stacksTo(1), new DiegoVisage(null)));
     public static Item VALENTINE_MASK = registerItem("valentine_mask", new MaskItem(new Item.Properties().stacksTo(1), new ValentineVisage(null)));
     public static Item JOSUKE_PART_EIGHT_MASK = registerItem("josuke_part_eight_mask", new MaskItem(new Item.Properties().stacksTo(1), new JosukePartEightVisage(null)));
@@ -303,6 +305,8 @@ public class FabricItems {
                         entries.accept(DIO_VAMPIRE_MASK);
                         entries.accept(JOTARO_MASK);
                         entries.accept(AVDOL_MASK);
+                        entries.accept(KAKYOIN_MASK);
+                        entries.accept(SPEEDWAGON_FOUNDATION_MASK);
                         entries.accept(DIO_MASK);
                         entries.accept(ENYA_MASK);
                         entries.accept(JOTARO_4_MASK);
@@ -587,12 +591,14 @@ public class FabricItems {
         ModItems.BLANK_MASK = BLANK_MASK;
         ModItems.MODIFICATION_MASK = MODIFICATION_MASK;
         ModItems.SPEEDWAGON_MASK = SPEEDWAGON_MASK;
+        ModItems.SPEEDWAGON_FOUNDATION_MASK = SPEEDWAGON_FOUNDATION_MASK;
         ModItems.JOTARO_MASK = JOTARO_MASK;
         ModItems.JOTARO_4_MASK = JOTARO_4_MASK;
         ModItems.JOTARO_6_MASK = JOTARO_6_MASK;
         ModItems.DIO_MASK = DIO_MASK;
         ModItems.DIO_VAMPIRE_MASK = DIO_VAMPIRE_MASK;
         ModItems.AVDOL_MASK = AVDOL_MASK;
+        ModItems.KAKYOIN_MASK = KAKYOIN_MASK;
         ModItems.DIEGO_MASK = DIEGO_MASK;
         ModItems.POCOLOCO_MASK = POCOLOCO_MASK;
         ModItems.RINGO_MASK = RINGO_MASK;
