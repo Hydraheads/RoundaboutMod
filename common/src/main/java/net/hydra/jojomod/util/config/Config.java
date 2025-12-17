@@ -48,6 +48,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public WorldGenSettings worldgenSettings;
     @NestedOption(group = "modded")
+    public WanderingTraderSettings wanderingTraderSettings;
+    @NestedOption(group = "modded")
     public ItemSettings itemSettings;
     @NestedOption(group = "modded")
     public NameTagSettings nameTagSettings;
@@ -161,6 +163,20 @@ public class Config implements Cloneable {
         @BooleanOption(group = "inherit", value = true)
         public Boolean modifyStructureWeights;
     }
+    public static class WanderingTraderSettings {
+        @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
+        public Float beetleArrowTradeChance;
+        @IntOption(group = "inherit", value = 10, min = 0, max = 64)
+        public Integer beetleArrowCost;
+        @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
+        public Float brokenArrowTradeChance;
+        @IntOption(group = "inherit", value = 7, min = 0, max = 64)
+        public Integer brokenArrowCost;
+        @BooleanOption(group = "inherit",value = true)
+        public Boolean brokenArrowsHaveStands;
+    }
+
+
     public static class MiscSettings {
         @BooleanOption(group = "inherit", value = false)
         public Boolean generalDetectionGoThroughDoorsAndCorners;
