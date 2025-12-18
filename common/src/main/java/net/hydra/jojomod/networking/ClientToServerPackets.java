@@ -336,7 +336,8 @@ public class ClientToServerPackets {
                 if (message.equals(MESSAGES.ModVisageConfigure.value)) {
                     server.execute(() -> {
                         byte chest = (byte) vargs[0];
-                        ItemStack stack = (ItemStack) vargs[1];
+                        int slot = (int) vargs[1];
+                        ItemStack stack = sender.getInventory().getItem(slot);
                         Vector3f vec = (Vector3f) vargs[2];
 
                         boolean offh = ItemStack.isSameItemSameTags(sender.getOffhandItem(),stack);
