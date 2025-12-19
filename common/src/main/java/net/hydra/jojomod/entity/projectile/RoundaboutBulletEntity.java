@@ -1,6 +1,5 @@
 package net.hydra.jojomod.entity.projectile;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.access.IProjectileAccess;
@@ -145,7 +144,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
         return switch (getAmmoType()) {
             case SNUBNOSE -> timeStopShot ? 3.7F : 4.0F;
             case TOMMY_GUN -> timeStopShot ? 0.74F : 0.94F;
-            case SNIPER -> timeStopShot ? 3.7F : 4.0F;
+            case SNIPER -> timeStopShot ? 3.7F : 28.0F;
             case COLT -> timeStopShot ? 3.8F : 5.7F;
             default -> 0.0F;
         };
@@ -195,8 +194,12 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                 livingEntity.hurtTime = 0;
             }
 
-
             float damage = getBulletDamage();
+
+            if (getAmmoType() == SNIPER) {
+                float multiplier = Math.min(travelTicks / 7.0F, 1.0F);
+                damage = damage * multiplier;
+            }
 
             if (getAmmoType() == SNUBNOSE && !hadIFrames) {
                 damage += 1.0F;
@@ -248,6 +251,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
     }
 
     boolean deflectSoundPlayed = false;
+    private int travelTicks = 0;
 
     @Override
     public void tick() {
@@ -290,6 +294,8 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 //        }
 
         super.tick();
+
+        travelTicks++;
 
         if (this.getSuperThrown()) {
             this.setDeltaMovement(delta);

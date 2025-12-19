@@ -317,6 +317,10 @@ public class ForgeEvents {
 
         ModItems.COLT_REVOLVER = ForgeItems.COLT_REVOLVER.get();
 
+        ModItems.JACKAL_RIFLE = ForgeItems.JACKAL_RIFLE.get();
+        ModItems.SNIPER_AMMO = ForgeItems.SNIPER_AMMO.get();
+
+
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_DIO.get()).referenceItem = ForgeItems.STREET_SIGN_DIO_BLOCK_ITEM.get().getDefaultInstance();
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_RIGHT.get()).referenceItem = ForgeItems.STREET_SIGN_RIGHT_BLOCK_ITEM.get().getDefaultInstance();
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_STOP.get()).referenceItem = ForgeItems.STREET_SIGN_STOP_BLOCK_ITEM.get().getDefaultInstance();

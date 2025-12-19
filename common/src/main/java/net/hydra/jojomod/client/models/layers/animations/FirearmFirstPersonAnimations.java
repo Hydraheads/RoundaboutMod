@@ -268,4 +268,26 @@ public class FirearmFirstPersonAnimations {
                     ))
                     .build();
 
+    public static final AnimationDefinition jackal_model_aim = AnimationDefinition.Builder.withLength(0.0F)
+            .addAnimation("JackalRifle", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -180.0F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .addAnimation("JackalRifle", new AnimationChannel(AnimationChannel.Targets.POSITION,
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(-4.0F, 27.0F, -12.0F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .build();
+
+    public static final AnimationDefinition jackal_model_recoil = AnimationDefinition.Builder.withLength(0.125F)
+            .addAnimation("JackalRifle", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -180.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.0417F, KeyframeAnimations.degreeVec(-5.0F, 0.0F, -180.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.75F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -180.0F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .addAnimation("JackalRifle", new AnimationChannel(AnimationChannel.Targets.POSITION,
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(-4.0F, 27.0F, -12.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.0417F, KeyframeAnimations.posVec(-4.0F, 26.0F, -12.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.75F, KeyframeAnimations.posVec(-4.0F, 27.0F, -12.0F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .build();
+
 }

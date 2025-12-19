@@ -9,27 +9,31 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.event.index.Poses;
+import net.hydra.jojomod.item.SnubnoseRevolverItem;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
-public class FirstPersonSnubnoseModel<T extends Entity> extends PsuedoHierarchicalModel {
+public class FirstPersonColtRevolverModel<T extends Entity> extends PsuedoHierarchicalModel {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "snubnosed_revolver"), "main");
     private final ModelPart SexyGun;
     private final ModelPart cylinder;
     private final ModelPart Root;
 
-    public FirstPersonSnubnoseModel() {
+    public FirstPersonColtRevolverModel() {
         super(RenderType::entityTranslucent);
 
         this.Root = createBodyLayer().bakeRoot();

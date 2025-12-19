@@ -9,6 +9,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.item.ColtRevolverItem;
+import net.hydra.jojomod.item.JackalRifleItem;
 import net.hydra.jojomod.item.SnubnoseRevolverItem;
 import net.hydra.jojomod.item.TommyGunItem;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -127,6 +128,14 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                 } else {
                     this.animate(ipe.roundabout$getSnubnoseAimLeft(), Poses.SNUBNOSE_AIM_LEFT.ad, partialTicks, 1f);
                     this.animate(ipe.roundabout$getSnubnoseRecoilLeft(), Poses.SNUBNOSE_RECOIL_LEFT.ad, partialTicks, 1f);
+                }
+            } else if (player.getUseItem().getItem() instanceof JackalRifleItem) {
+                if (mainHandRight) {
+                    this.animate(ipe.roundabout$getJackalAim(), Poses.TOMMY_AIM.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getJackalRecoil(), Poses.TOMMY_RECOIL.ad, partialTicks, 1f);
+                } else {
+                    this.animate(ipe.roundabout$getJackalAimLeft(), Poses.TOMMY_AIM_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getJackalRecoilLeft(), Poses.TOMMY_RECOIL_LEFT.ad, partialTicks, 1f);
                 }
             }
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);

@@ -1,12 +1,10 @@
 package net.hydra.jojomod.item;
 
-import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
@@ -32,11 +30,10 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Random;
 
-public class TommyGunItem extends FirearmItem implements Vanishable {
+public class JackalRifleItem extends FirearmItem implements Vanishable {
 
-    public TommyGunItem(Properties $$0) {
+    public JackalRifleItem(Properties $$0) {
         super($$0);
     }
 
@@ -64,7 +61,7 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
         stack.getOrCreateTag().putBoolean(RELOADING_TAG, value);
     }
 
-    int maxAmmo = 30;
+    int maxAmmo = 1;
 
     private boolean isReloading(ItemStack stack) {
         return stack.getOrCreateTag().getBoolean(RELOADING_TAG);
@@ -75,16 +72,16 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
         return UseAnim.BOW;
     }
 
-    private boolean hasTommyAmmo(Player player) {
+    private boolean hasSniperAmmo(Player player) {
         Inventory inv = player.getInventory();
 
         for (ItemStack stack : inv.items) {
-            if (stack.getItem() instanceof TommyAmmoItem && stack.getCount() > 0) {
+            if (stack.getItem() instanceof SniperAmmoItem && stack.getCount() > 0) {
                 return true;
             }
         }
         for (ItemStack stack : inv.offhand) {
-            if (stack.getItem() instanceof TommyAmmoItem && stack.getCount() > 0) {
+            if (stack.getItem() instanceof SniperAmmoItem && stack.getCount() > 0) {
                 return true;
             }
         }
@@ -96,13 +93,13 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
         return false;
     }
 
-    private int consumeTommyAmmo(Player player, int amount) {
+    private int consumeSniperAmmo(Player player, int amount) {
         Inventory inv = player.getInventory();
         int consumed = 0;
 
         for (int i = 0; i < inv.items.size() && amount > 0; i++) {
             ItemStack stack = inv.items.get(i);
-            if (stack.getItem() instanceof TommyAmmoItem && !player.isCreative()) {
+            if (stack.getItem() instanceof SniperAmmoItem && !player.isCreative()) {
                 int remove = Math.min(stack.getCount(), amount);
                 stack.shrink(remove);
                 consumed += remove;
@@ -114,7 +111,7 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
 
         for (int i = 0; i < inv.offhand.size() && amount > 0; i++) {
             ItemStack stack = inv.offhand.get(i);
-            if (stack.getItem() instanceof TommyAmmoItem && !player.isCreative()) {
+            if (stack.getItem() instanceof SniperAmmoItem && !player.isCreative()) {
                 int remove = Math.min(stack.getCount(), amount);
                 stack.shrink(remove);
                 consumed += remove;
@@ -140,38 +137,37 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
         }
     }
 
+
+
     @Override
     public void fireBullet(Level level, Player player, InteractionHand hand) {
-
-        if (player.getCooldowns().isOnCooldown(this)) {
+        if (!level.isClientSide && player.getCooldowns().isOnCooldown(this)) {
             return;
         }
         ItemStack itemStack = player.getItemInHand(hand);
         if (getAmmo(itemStack) > 0) {
-            player.getCooldowns().addCooldown(this, 2);
-            Random random = new Random();
+            player.getCooldowns().addCooldown(this, 15);
             if (player.isCreative()) {
             } else {
                 setAmmo(itemStack, getAmmo(itemStack) - 1);
             }
             LivingEntity livingEntity = player;
             RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity(level, livingEntity);
-            $$7.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 4.0F, 5.0F);
-            $$7.setAmmoType(RoundaboutBulletEntity.TOMMY_GUN);
+            $$7.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 6.0F, 0.0F);
+            $$7.setAmmoType(RoundaboutBulletEntity.SNIPER);
             level.addFreshEntity($$7);
-            S2CPacketUtil.gunRecoil(player, "tommy");
-            float randomPitch = random.nextFloat(1.7F - 1.5F) + 1.5F;
-            level.playSound(null, player, ModSounds.TOMMY_FIRE_EVENT, SoundSource.PLAYERS, 100.0F, randomPitch);
+            S2CPacketUtil.gunRecoil(player, "sniper");
+            level.playSound(null, player, ModSounds.SNUBNOSE_FIRE_EVENT, SoundSource.PLAYERS, 100.0F, 1.0F);
             if (level instanceof ServerLevel serverLevel) {
                 Vec3 look = player.getLookAngle().normalize();
                 Vec3 up = new Vec3(0, 1, 0);
                 Vec3 right = look.cross(up).normalize();
 
-                double forwardOffset = 1.5;
-                double sideOffset = 0.10;
+                double forwardOffset = 1.0;
+                double sideOffset = 0.24;
                 double verticalOffset = -0.15;
 
-                if ((player.getMainArm() == HumanoidArm.LEFT && player.getMainHandItem().getItem() instanceof SnubnoseRevolverItem) || (player.getMainArm() == HumanoidArm.RIGHT && player.getOffhandItem().getItem() instanceof SnubnoseRevolverItem)) {
+                if ((player.getMainArm() == HumanoidArm.LEFT && player.getMainHandItem().getItem() instanceof JackalRifleItem) || (player.getMainArm() == HumanoidArm.RIGHT && player.getOffhandItem().getItem() instanceof JackalRifleItem)) {
                     sideOffset -= sideOffset * 2;
                 }
 
@@ -201,14 +197,14 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         super.use(level, player, hand);
         ItemStack itemStack = player.getItemInHand(hand);
-        if (!(itemStack.getItem() instanceof TommyGunItem)) {
+        if (!(itemStack.getItem() instanceof JackalRifleItem)) {
             return InteractionResultHolder.fail(itemStack);
         }
         if (!(player.getUseItem() == itemStack)) {
-            if ((player.isCrouching() && hasTommyAmmo(player) && getAmmo(itemStack) != maxAmmo) || (player.isCrouching() && player.isCreative())) {
+            if ((player.isCrouching() && hasSniperAmmo(player) && getAmmo(itemStack) != maxAmmo) || (player.isCrouching() && player.isCreative())) {
                 if (!isReloading(itemStack)) {
                     setReloading(itemStack, true);
-                    player.getCooldowns().addCooldown(this, 340);
+                    player.getCooldowns().addCooldown(this, 60);
                     ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.REVOLVER_RELOAD, 10, false);
                 }
 
@@ -218,7 +214,7 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
                     if (player instanceof ServerPlayer SP) {
                         SP.displayClientMessage(Component.translatable("text.roundabout.already_reloaded").withStyle(ChatFormatting.GRAY), true);
                     }
-                } else if (player.isCrouching() && getAmmo(itemStack) != maxAmmo && !hasTommyAmmo(player)) {
+                } else if (player.isCrouching() && getAmmo(itemStack) != maxAmmo && !hasSniperAmmo(player)) {
                     if (player instanceof ServerPlayer SP) {
                         SP.displayClientMessage(Component.translatable("text.roundabout.no_more_usable_ammo").withStyle(ChatFormatting.GRAY), true);
                     }
@@ -259,7 +255,7 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
             int currentAmmo = getAmmo(stack);
             int ammoNeeded = maxAmmo - currentAmmo;
 
-            int ammoLoaded = consumeTommyAmmo(player, ammoNeeded);
+            int ammoLoaded = consumeSniperAmmo(player, ammoNeeded);
 
             if (ammoLoaded > 0) {
                 if (player.isCreative()) {

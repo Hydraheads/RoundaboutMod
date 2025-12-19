@@ -470,8 +470,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     }
                 } else if (this.getItem().is(Items.BRICK) || this.getItem().is(Items.NETHER_BRICK)) {
                     Block blkk = this.level().getBlockState($$0.getBlockPos()).getBlock();
-                    if (this.places && blkk instanceof AbstractGlassBlock || blkk instanceof StainedGlassPaneBlock
-                            || blkk.defaultBlockState().is(Blocks.GLASS_PANE)){
+                    if (this.places && (blkk instanceof AbstractGlassBlock || blkk instanceof StainedGlassPaneBlock
+                            || blkk.defaultBlockState().is(Blocks.GLASS_PANE))){
                         if (this.level().removeBlock($$0.getBlockPos(),false)){
                             blockBreakParticles(blkk,
                                     new Vec3($$0.getBlockPos().getX()+0.5,

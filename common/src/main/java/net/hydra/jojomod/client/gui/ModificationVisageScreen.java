@@ -162,11 +162,14 @@ public class ModificationVisageScreen extends Screen {
                 delStack.removeTagKey("modifications");
             }
 
-            ModMessageEvents.sendToServer(
-                    ClientToServerPackets.StandPowerPackets.MESSAGES.ModVisageConfigure.value,
-                    (byte)chestType, delStack,
-                    new Vector3f(visageHeight,visageWidth,visageHeadSize)
-            );
+            Player pl = Minecraft.getInstance().player;
+            if (pl != null) {
+                ModMessageEvents.sendToServer(
+                        ClientToServerPackets.StandPowerPackets.MESSAGES.ModVisageConfigure.value,
+                        (byte) chestType, pl.getInventory().findSlotMatchingItem(delStack),
+                        new Vector3f(visageHeight, visageWidth, visageHeadSize)
+                );
+            }
             //SAVE
             this.minecraft.setScreen(null);
             return true;

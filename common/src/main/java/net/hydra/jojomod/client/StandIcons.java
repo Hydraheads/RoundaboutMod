@@ -65,6 +65,8 @@ public class StandIcons {
             "textures/misc/survivor_anger.png");
     public static final ResourceLocation CREAM_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/cream_overlay.png");
+    public static final ResourceLocation SNIPER_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/misc/sniper_overlay.png");
     public static final ResourceLocation ANUBIS_POSSESSION_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/anubis_possession.png");
     public static final ResourceLocation IN_BUBBLE_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
