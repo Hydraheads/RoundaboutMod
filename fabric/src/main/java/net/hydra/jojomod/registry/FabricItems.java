@@ -132,6 +132,9 @@ public class FabricItems {
 
     public static Item COLT_REVOLVER = registerItem("colt_revolver", new ColtRevolverItem(new Item.Properties().stacksTo(1)));
 
+    public static Item JACKAL_RIFLE = registerItem("jackal_rifle", new JackalRifleItem(new Item.Properties().stacksTo(1)));
+    public static Item SNIPER_AMMO = registerItem("sniper_ammo", new SniperAmmoItem(new Item.Properties().stacksTo(64)));
+
     public static Item WOODEN_GLAIVE = registerItem("wooden_glaive", new GlaiveItem(Tiers.WOOD, 4F, -2.9F, new Item.Properties(),4));
     public static Item STONE_GLAIVE = registerItem("stone_glaive", new GlaiveItem(Tiers.STONE, 4F, -2.9F, new Item.Properties(),6));
     public static Item IRON_GLAIVE = registerItem("iron_glaive", new GlaiveItem(Tiers.IRON, 4F, -2.9F, new Item.Properties(),7));
@@ -465,6 +468,8 @@ public class FabricItems {
                         entries.accept(TOMMY_GUN);
                         entries.accept(TOMMY_AMMO);
                         entries.accept(COLT_REVOLVER);
+                        entries.accept(JACKAL_RIFLE);
+                        entries.accept(SNIPER_AMMO);
                         entries.accept(STAND_DISC_CREAM);
                         entries.accept(MAX_STAND_DISC_CREAM);
 
@@ -565,6 +570,8 @@ public class FabricItems {
         ModItems.TOMMY_GUN = TOMMY_GUN;
         ModItems.TOMMY_AMMO = TOMMY_AMMO;
         ModItems.COLT_REVOLVER = COLT_REVOLVER;
+        ModItems.JACKAL_RIFLE = JACKAL_RIFLE;
+        ModItems.SNIPER_AMMO = SNIPER_AMMO;
         ModItems.STAND_DISC = STAND_DISC;
         ModItems.COFFEE_GUM = COFFEE_GUM;
         ModItems.METEORITE = METEORITE;

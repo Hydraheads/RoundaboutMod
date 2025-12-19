@@ -558,7 +558,8 @@ public class ClientUtil {
                     player.playSound(ModSounds.VAMPIRE_MESSAGE_EVENT,10,1);
                 }
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.GunRecoil.value)) {
-                    ClientUtil.applyClientRecoil(player);
+                    String sigmaString = (String) vargs[0];
+                    ClientUtil.applyClientRecoil(player, sigmaString);
                 }
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();
@@ -1373,13 +1374,16 @@ public class ClientUtil {
         return null;
     }
 
-    public static void applyClientRecoil(Player player) {
+    public static void applyClientRecoil(Player player, String string) {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer localPlayer = mc.player;
 
         if (player == null) return;
 
         float recoilPitch = -10F;
+        if (Objects.equals(string, "sniper")) {
+            recoilPitch = -13F;
+        }
         localPlayer.turn(0.0F, recoilPitch);
     }
 
@@ -1567,7 +1571,7 @@ public class ClientUtil {
                 } else if (slimBoolean) {
                     ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
                 }
-                ModStrayModels.FirstPersonSnubnoseModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+                ModStrayModels.FirstPersonColtRevolverModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
 
                 stack.popPose();
             } else if (play.getUseItem().getItem() instanceof ColtRevolverItem && play.getCooldowns().isOnCooldown(play.getUseItem().getItem())) {
@@ -1591,9 +1595,9 @@ public class ClientUtil {
                 } else if (slimBoolean) {
                     ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
                 }
-                ModStrayModels.FirstPersonSnubnoseModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
+                ModStrayModels.FirstPersonColtRevolverModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
 
-                stack.popPose();
+        stack.popPose();
             } else {
                 snubnoseRenderCleanupHelper(cameraEnt);
                 tommyRenderCleanupHelper(cameraEnt);

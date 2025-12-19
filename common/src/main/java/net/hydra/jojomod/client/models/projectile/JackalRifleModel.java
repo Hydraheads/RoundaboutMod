@@ -1,4 +1,4 @@
-package net.hydra.jojomod.client.models.visages.parts;// Made with Blockbench 5.0.4
+package net.hydra.jojomod.client.models.projectile;// Made with Blockbench 5.0.3
 // Exported for Minecraft version 1.17 or later with Mojang mappings
 // Paste this class into your mod and generate all required imports
 
@@ -22,43 +22,56 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
-public class FirstPersonTommyGunModel<T extends Entity> extends HierarchicalModel<T> {
+public class JackalRifleModel<T extends Entity> extends HierarchicalModel<T> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "tommy_gun"), "main");
-    private final ModelPart TommyGun;
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "snubnosed_revolver"), "main");
+    private final ModelPart JackalRifle;
+    private final ModelPart structure;
+    private final ModelPart barrel;
+    private final ModelPart muzzle;
+    private final ModelPart handle;
     private final ModelPart root;
 
-    public FirstPersonTommyGunModel() {
+    public JackalRifleModel() {
+
         this.root = createBodyLayer().bakeRoot();
-        this.TommyGun = root.getChild("TommyGun");
+        this.JackalRifle = root.getChild("JackalRifle");
+        this.structure = this.JackalRifle.getChild("structure");
+        this.barrel = this.structure.getChild("barrel");
+        this.muzzle = this.barrel.getChild("muzzle");
+        this.handle = this.JackalRifle.getChild("handle");
     }
 
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition TommyGun = partdefinition.addOrReplaceChild("TommyGun", CubeListBuilder.create().texOffs(22, 19).addBox(-0.5F, -4.0F, -17.501F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 0).addBox(-0.5F, -4.0F, -17.25F, 1.0F, 1.0F, 3.0F, new CubeDeformation(0.25F))
-                .texOffs(15, 21).addBox(-0.5F, -4.0F, -14.0F, 1.0F, 1.0F, 8.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 22).addBox(-1.0F, -3.0F, -11.0F, 2.0F, 2.0F, 5.0F, new CubeDeformation(0.001F))
-                .texOffs(0, 0).addBox(-1.5F, -4.0F, -6.0F, 3.0F, 3.0F, 9.0F, new CubeDeformation(0.0F))
-                .texOffs(15, 19).addBox(-0.5F, -5.0F, -0.5F, 1.0F, 1.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(22, -1).addBox(0.0F, -1.0F, -3.25F, 0.0F, 2.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 20.7349F, 5.8871F));
+        PartDefinition JackalRifle = partdefinition.addOrReplaceChild("JackalRifle", CubeListBuilder.create(), PartPose.offset(0.0F, 19.4F, 5.765F));
 
-        PartDefinition buttstock_r1 = TommyGun.addOrReplaceChild("buttstock_r1", CubeListBuilder.create().texOffs(0, 12).addBox(-1.25F, -1.5F, -3.0F, 2.5F, 3.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -1.0F, 5.25F, -0.3054F, 0.0F, 0.0F));
+        PartDefinition structure = JackalRifle.addOrReplaceChild("structure", CubeListBuilder.create().texOffs(2, 22).addBox(-0.5F, -1.0F, -2.75F, 1.0F, 1.0F, 7.0F, new CubeDeformation(0.0F))
+                .texOffs(15, 2).addBox(-0.5F, -1.5F, 2.25F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.15F))
+                .texOffs(0, 11).addBox(-1.0F, 0.0F, -4.75F, 2.0F, 1.0F, 9.0F, new CubeDeformation(0.0F))
+                .texOffs(40, 1).addBox(-1.0F, -1.0F, -4.75F, 2.0F, 1.0F, 9.0F, new CubeDeformation(0.0F))
+                .texOffs(15, 22).addBox(0.0F, 0.0F, 2.25F, 0.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(16, 13).addBox(-0.5F, 0.0F, 2.25F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.1F, -2.25F));
 
-        PartDefinition back_grip_r1 = TommyGun.addOrReplaceChild("back_grip_r1", CubeListBuilder.create().texOffs(15, 1).addBox(-1.0F, -3.0F, -1.5F, 2.0F, 5.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 1.0F, 0.5F, 0.3491F, 0.0F, 0.0F));
+        PartDefinition barrel = structure.addOrReplaceChild("barrel", CubeListBuilder.create().texOffs(1, 1).addBox(-0.5F, -0.49F, -3.0F, 1.0F, 1.0F, 9.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, -8.75F));
 
-        PartDefinition drum_r1 = TommyGun.addOrReplaceChild("drum_r1", CubeListBuilder.create().texOffs(11, 12).addBox(-2.5F, -2.5F, -1.0F, 5.0F, 5.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -0.25F, -4.25F, 0.0F, 0.0F, 0.7854F));
+        PartDefinition muzzle = barrel.addOrReplaceChild("muzzle", CubeListBuilder.create().texOffs(22, 5).addBox(-0.5F, -0.5F, -0.75F, 1.0F, 1.0F, 3.0F, new CubeDeformation(0.25F))
+                .texOffs(25, 7).addBox(0.0F, -1.0F, 3.0F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(29, 10).addBox(-0.5F, -0.5F, -1.01F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
+                .texOffs(22, 13).addBox(-0.5F, 0.25F, -0.65F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, -5.5F));
 
-        PartDefinition front_grip_r1 = TommyGun.addOrReplaceChild("front_grip_r1", CubeListBuilder.create().texOffs(14, 23).addBox(-1.0F, 0.0F, 0.0F, 2.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -1.0F, -11.0F, 0.48F, 0.0F, 0.0F));
+        PartDefinition handle = JackalRifle.addOrReplaceChild("handle", CubeListBuilder.create().texOffs(20, 21).addBox(-1.0F, -3.95F, 3.51F, 2.0F, 8.0F, 2.0F, new CubeDeformation(0.01F))
+                .texOffs(22, 0).addBox(-1.0F, -0.95F, 0.49F, 2.0F, 2.0F, 3.0F, new CubeDeformation(0.01F))
+                .texOffs(22, 9).addBox(-1.0F, -0.45F, -0.51F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.015F)), PartPose.offset(0.0F, 0.05F, 1.47F));
 
-        return LayerDefinition.create(meshdefinition, 33, 33);
+        return LayerDefinition.create(meshdefinition, 64, 64);
     }
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        TommyGun.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        JackalRifle.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
     @Override
@@ -72,7 +85,7 @@ public class FirstPersonTommyGunModel<T extends Entity> extends HierarchicalMode
     }
 
     public ResourceLocation getTextureLocation(Entity entity){
-        return new ResourceLocation(Roundabout.MOD_ID, "textures/item/tommy_gun.png");
+        return new ResourceLocation(Roundabout.MOD_ID, "textures/item/jackal_rifle.png");
     }
 
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int light, float r, float g, float b, float heyFull) {

@@ -5,6 +5,8 @@ import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
+import net.hydra.jojomod.item.FirearmItem;
+import net.hydra.jojomod.item.JackalRifleItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.GameRenderer;
@@ -29,6 +31,13 @@ public class ScopeGameRenderer {
             StandPowers SP = ((StandUser)player).roundabout$getStandPowers();
             FatePowers fp = ((IFatePlayer)player).rdbt$getFatePowers();
             float zoomMod = fp.zoomMod();
+
+            if (player.getUseItem().getItem() instanceof JackalRifleItem) {
+                AbstractClientPlayer abstractclientplayer = (AbstractClientPlayer) this.minecraft.getCameraEntity();
+                if (abstractclientplayer != null && Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
+                    zoomMod *= 0.2F;
+                }
+            }
 
             float zoomMod2 = zoomMod - 1;
             zoomMod2*=Minecraft.getInstance().options.fovEffectScale().get();

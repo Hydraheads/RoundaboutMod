@@ -4,6 +4,7 @@ import com.mojang.blaze3d.Blaze3D;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.index.AnubisMoment;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.JackalRifleItem;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
@@ -79,7 +80,8 @@ public class MouseHandlerMixin {
         if (Minecraft.getInstance().player != null){
             if (Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
                 int scopelvl = ((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers().scopeLevel;
-                if (scopelvl > 0) {
+                boolean isUsingRifle = Minecraft.getInstance().player.getUseItem().getItem() instanceof JackalRifleItem;
+                if (scopelvl > 0 || isUsingRifle) {
                     ci.cancel();
 
                     double $$0 = Blaze3D.getTime();
@@ -95,6 +97,8 @@ public class MouseHandlerMixin {
                             $$3 /= 4;
                         } else if (scopelvl == 3) {
                             $$3 /= 8;
+                        } else if (isUsingRifle) {
+                            $$3 /= 6;
                         }
 
                         double $$4 = $$3 * 8.0;
@@ -132,8 +136,6 @@ public class MouseHandlerMixin {
                         this.accumulatedDX = 0.0;
                         this.accumulatedDY = 0.0;
                     }
-
-
                 }
             }
         }

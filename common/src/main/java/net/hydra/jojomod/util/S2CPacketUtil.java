@@ -282,10 +282,10 @@ public class S2CPacketUtil {
             );
         }
     }
-    public static void gunRecoil(Player player){
+    public static void gunRecoil(Player player, String string){
         if (player instanceof ServerPlayer SP) {
             ModMessageEvents.sendToPlayer(SP,
-                    ServerToClientPackets.S2CPackets.MESSAGES.GunRecoil.value
+                    ServerToClientPackets.S2CPackets.MESSAGES.GunRecoil.value, string
             );
         }
     }

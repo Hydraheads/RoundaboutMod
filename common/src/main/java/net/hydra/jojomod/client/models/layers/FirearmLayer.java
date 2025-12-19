@@ -5,10 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ModStrayModels;
-import net.hydra.jojomod.item.BowlerHatItem;
-import net.hydra.jojomod.item.FirearmItem;
-import net.hydra.jojomod.item.SnubnoseRevolverItem;
-import net.hydra.jojomod.item.TommyGunItem;
+import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -35,6 +32,8 @@ public class FirearmLayer<T extends LivingEntity, A extends HumanoidModel<T>> ex
     private void renderFirearm(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float partialTicks, ItemStack stack, boolean rightSide, boolean mainArmRight) {
         boolean isSnub = stack.getItem() instanceof SnubnoseRevolverItem;
         boolean isTommy = stack.getItem() instanceof TommyGunItem;
+        boolean isColt = stack.getItem() instanceof ColtRevolverItem;
+        boolean isJackal = stack.getItem() instanceof JackalRifleItem;
 
         if (!isSnub && !isTommy) return;
 
@@ -68,6 +67,34 @@ public class FirearmLayer<T extends LivingEntity, A extends HumanoidModel<T>> ex
             poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
             poseStack.scale(0.9F, 0.9F, 0.9F);
             ModStrayModels.TOMMY_GUN_MODEL.render(
+                    entity, partialTicks, poseStack, bufferSource, packedLight,
+                    1.0F, entity.hurtTime > 0 ? 0.0F : 1.0F, entity.hurtTime > 0 ? 0.0F : 1.0F, 1.0F
+            );
+        }
+
+        if (isColt) {
+            poseStack.translate(
+                    actualRightArm ? 0.09F : -0.09F,
+                    0.77F,
+                    -1.2F
+            );
+            poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+            poseStack.scale(0.9F, 0.9F, 0.9F);
+            ModStrayModels.COLT_REVOLVER_MODEL.render(
+                    entity, partialTicks, poseStack, bufferSource, packedLight,
+                    1.0F, entity.hurtTime > 0 ? 0.0F : 1.0F, entity.hurtTime > 0 ? 0.0F : 1.0F, 1.0F
+            );
+        }
+
+        if (isJackal) {
+            poseStack.translate(
+                    actualRightArm ? 0.09F : -0.09F,
+                    0.77F,
+                    -1.2F
+            );
+            poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+            poseStack.scale(0.9F, 0.9F, 0.9F);
+            ModStrayModels.JACKAL_RIFLE.render(
                     entity, partialTicks, poseStack, bufferSource, packedLight,
                     1.0F, entity.hurtTime > 0 ? 0.0F : 1.0F, entity.hurtTime > 0 ? 0.0F : 1.0F, 1.0F
             );

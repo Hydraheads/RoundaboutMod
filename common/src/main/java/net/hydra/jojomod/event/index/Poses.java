@@ -37,7 +37,9 @@ public enum Poses {
     TOMMY_RECOIL((byte) 27, FirearmFirstPersonAnimations.tommy_recoil),
     TOMMY_MODEL_RECOIL((byte) 28, FirearmFirstPersonAnimations.tommy_model_recoil),
     TOMMY_RECOIL_LEFT((byte) 29, FirearmFirstPersonAnimations.tommy_recoil_left),
-    TOMMY_MODEL_RECOIL_LEFT((byte) 30, FirearmFirstPersonAnimations.tommy_model_recoil_left);
+    TOMMY_MODEL_RECOIL_LEFT((byte) 30, FirearmFirstPersonAnimations.tommy_model_recoil_left),
+    JACKAL_MODEL_AIM((byte) 31, FirearmFirstPersonAnimations.jackal_model_aim),
+    JACKAL_MODEL_RECOIL((byte) 32, FirearmFirstPersonAnimations.jackal_model_recoil);
 
 
     public final byte id;
@@ -106,6 +108,10 @@ public enum Poses {
             return TOMMY_RECOIL_LEFT;
         } if (bt== TOMMY_MODEL_RECOIL_LEFT.id) {
             return TOMMY_MODEL_RECOIL_LEFT;
+        } if (bt== JACKAL_MODEL_AIM.id) {
+            return JACKAL_MODEL_AIM;
+        } if (bt== JACKAL_MODEL_RECOIL.id) {
+            return JACKAL_MODEL_RECOIL;
         }
         return NONE;
     }

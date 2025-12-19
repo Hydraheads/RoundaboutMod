@@ -18,6 +18,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.item.JackalRifleItem;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersCream;
 import net.hydra.jojomod.fates.powers.VampiricFate;
@@ -184,6 +185,10 @@ public abstract class HudRendering implements IHudAccess {
                 if (user.roundabout$getStandPowers() instanceof PowersCream PC && PC.insideVoidInt > 0) {
                     RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.CREAM_OVERLAY, 1F);
+                }
+                if (this.minecraft.player.getUseItem().getItem() instanceof JackalRifleItem) {
+                    RenderSystem.enableBlend();
+                    this.renderTextureOverlay($$1, StandIcons.SNIPER_OVERLAY, 1F);
                 }
                 if (user.roundabout$getLocacacaCurse() == LocacacaCurseIndex.HEAD) {
                     if (((IPlayerEntity) this.minecraft.player).roundabout$getMaskSlot() != null &&

@@ -232,5 +232,6 @@ public class FabricEntityClient {
         ModStrayModels.TOMMY_GUN_MODEL = new TommyGunModel();
         ModStrayModels.FirstPersonSnubnoseModel = new FirstPersonSnubnoseModel();
         ModStrayModels.FirstPersonTommyGunModel = new FirstPersonTommyGunModel();
+        ModStrayModels.FirstPersonColtRevolverModel = new FirstPersonColtRevolverModel();
     }
 }

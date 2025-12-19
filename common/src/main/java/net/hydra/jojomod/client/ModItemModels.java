@@ -11,6 +11,7 @@ public class ModItemModels {
     public static ModelResourceLocation SNUBNOSE_REVOLVER_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "snubnose_revolver_in_hand", "inventory");
     public static ModelResourceLocation TOMMY_GUN_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "tommy_gun_in_hand", "inventory");
     public static ModelResourceLocation COLT_REVOLVER_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "colt_revolver_in_hand", "inventory");
+    public static ModelResourceLocation JACKAL_RIFLE_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "jackal_rifle_in_hand", "inventory");
     public static ModelResourceLocation ANUBIS_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "anubis_in_hand", "inventory");
     public static ModelResourceLocation STAND_BOW = new ModelResourceLocation(Roundabout.MOD_ID, "stand_bow_arrow", "inventory");
     public static ModelResourceLocation STAND_BEETLE_BOW = new ModelResourceLocation(Roundabout.MOD_ID, "stand_beetle_bow_arrow", "inventory");
@@ -64,6 +65,7 @@ public class ModItemModels {
     public static SnubnoseRevolverModel SNUBNOSE_MODEL;
     public static TommyGunModel TOMMY_GUN_MODEL;
     public static ColtRevolverModel COLT_REVOLVER_MODEL;
+    public static JackalRifleModel JACKAL_RIFLE_MODEL;
     public static AnubisModel ANUBIS_MODEL;
 
     public static BowlerHatModel BOWLER_HAT_MODEL;

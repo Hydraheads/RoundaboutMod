@@ -67,6 +67,16 @@ public class RegisterBlockEntityWithoutLevelRenderer implements IBlockEntityWith
             }
             ClientUtil.popPoseAndCooperate($$2,19);
         }
+        if ($$0.is(ModItems.JACKAL_RIFLE)) {
+            ClientUtil.pushPoseAndCooperate($$2,19);
+
+            $$2.scale(1.0F, -1.0F, -1.0F);
+            if (ModItemModels.JACKAL_RIFLE_MODEL != null) {
+                VertexConsumer vertexconsumer1 = ItemRenderer.getFoilBufferDirect($$3, ModItemModels.JACKAL_RIFLE_MODEL.renderType(ModEntities.JACKAL_RIFLE_IN_HAND_TEXTURE), false, $$0.hasFoil());
+                ModItemModels.JACKAL_RIFLE_MODEL.renderToBuffer($$2, vertexconsumer1, $$4, $$5, 1.0F, 1.0F, 1.0F, 1.0F);
+            }
+            ClientUtil.popPoseAndCooperate($$2,19);
+        }
        if ($$0.is(ModItems.ANUBIS_ITEM)) {
             ClientUtil.pushPoseAndCooperate($$2, 18);
 

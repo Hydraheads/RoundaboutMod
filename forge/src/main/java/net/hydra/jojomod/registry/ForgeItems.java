@@ -356,6 +356,14 @@ public class ForgeItems {
             () -> new ColtRevolverItem(new Item.Properties().stacksTo(64))
     ));
 
+    public static final RegistryObject<Item> JACKAL_RIFLE = addToWIPTab(ITEMS.register("jackal_rifle",
+            () -> new JackalRifleItem(new Item.Properties().stacksTo(1))
+    ));
+
+    public static final RegistryObject<Item> SNIPER_AMMO = addToWIPTab(ITEMS.register("sniper_ammo",
+            () -> new SniperAmmoItem(new Item.Properties().stacksTo(64))
+    ));
+
 
 
 
