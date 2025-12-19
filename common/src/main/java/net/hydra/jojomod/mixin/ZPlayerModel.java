@@ -175,7 +175,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             IPlayerEntity ipe = ((IPlayerEntity) $$0);
             byte poseEmote = ipe.roundabout$GetPoseEmote();
             boolean pose = poseEmote != Poses.NONE.id;
-            if (pose && !P.isPassenger()) {
+            if (pose && !P.isPassenger() && !P.isVisuallySwimming() && !P.isFallFlying()) {
                 if (poseEmote != Poses.SITTING.id) {
                     this.head.resetPose();
                 }
@@ -189,7 +189,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             boolean firstPerson = net.minecraft.client.Minecraft.getInstance().options.getCameraType().isFirstPerson();
             Player mainP = ClientUtil.getPlayer();
             if (!firstPerson || !(mainP != null && $$0.is(mainP))){
-                if (!P.isPassenger()) {
+                if (!P.isPassenger() && !P.isVisuallySwimming() && !P.isFallFlying()) {
                     this.roundabout$animate(ipe.getWry(), Poses.WRY.ad, $$3, 1f);
                     this.roundabout$animate(ipe.getGiorno(), Poses.GIORNO.ad, $$3, 1f);
                     this.roundabout$animate(ipe.getJoseph(), Poses.JOSEPH.ad, $$3, 1f);
@@ -338,7 +338,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             if (ipe.roundabout$GetPoseEmote() != Poses.NONE.id) {
 
                 this.cloak.resetPose();
-                if (!P.isPassenger()) {
+                if (!P.isPassenger() && !P.isVisuallySwimming() && !P.isFallFlying()) {
                     this.roundabout$animate2(ipe.getWry(), Poses.WRY.ad, $$3, 1f);
                     this.roundabout$animate2(ipe.getGiorno(), Poses.GIORNO.ad, $$3, 1f);
                     this.roundabout$animate2(ipe.getJoseph(), Poses.JOSEPH.ad, $$3, 1f);
