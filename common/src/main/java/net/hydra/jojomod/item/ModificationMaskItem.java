@@ -22,8 +22,8 @@ public class ModificationMaskItem extends MaskItem{
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
         ItemStack $$3 = $$1.getItemInHand($$2);
-        if ($$0.isClientSide) {
-            ClientUtil.openModificationVisageUI($$3);
+        if ($$0.isClientSide && $$2 == InteractionHand.MAIN_HAND) {
+            ClientUtil.openModificationVisageUI($$3, $$1.getInventory().selected);
         }
         return InteractionResultHolder.fail($$3);
     }
