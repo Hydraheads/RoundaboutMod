@@ -3,7 +3,6 @@ package net.hydra.jojomod.client.models.layers;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -35,7 +34,7 @@ public class FirearmLayer<T extends LivingEntity, A extends HumanoidModel<T>> ex
         boolean isColt = stack.getItem() instanceof ColtRevolverItem;
         boolean isJackal = stack.getItem() instanceof JackalRifleItem;
 
-        if (!isSnub && !isTommy) return;
+        if (!isSnub && !isTommy && !isColt && !isJackal) return;
 
         boolean actualRightArm = rightSide == mainArmRight;
 
@@ -74,12 +73,11 @@ public class FirearmLayer<T extends LivingEntity, A extends HumanoidModel<T>> ex
 
         if (isColt) {
             poseStack.translate(
-                    actualRightArm ? 0.09F : -0.09F,
-                    0.77F,
-                    -1.2F
+                    actualRightArm ? -0.032F : 0.032F,
+                    0.52F,
+                    -1.50F
             );
             poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
-            poseStack.scale(0.9F, 0.9F, 0.9F);
             ModStrayModels.COLT_REVOLVER_MODEL.render(
                     entity, partialTicks, poseStack, bufferSource, packedLight,
                     1.0F, entity.hurtTime > 0 ? 0.0F : 1.0F, entity.hurtTime > 0 ? 0.0F : 1.0F, 1.0F
@@ -94,7 +92,7 @@ public class FirearmLayer<T extends LivingEntity, A extends HumanoidModel<T>> ex
             );
             poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
             poseStack.scale(0.9F, 0.9F, 0.9F);
-            ModStrayModels.JACKAL_RIFLE.render(
+            ModStrayModels.JACKAL_RIFLE_MODEL.render(
                     entity, partialTicks, poseStack, bufferSource, packedLight,
                     1.0F, entity.hurtTime > 0 ? 0.0F : 1.0F, entity.hurtTime > 0 ? 0.0F : 1.0F, 1.0F
             );

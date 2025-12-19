@@ -26,34 +26,31 @@ public class FirstPersonTommyGunModel<T extends Entity> extends HierarchicalMode
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "tommy_gun"), "main");
     private final ModelPart TommyGun;
-    private final ModelPart root;
+    private final ModelPart Root;
 
     public FirstPersonTommyGunModel() {
-        this.root = createBodyLayer().bakeRoot();
-        this.TommyGun = root.getChild("TommyGun");
+        this.Root = createBodyLayer().bakeRoot();
+        this.TommyGun = Root.getChild("TommyGun");
     }
 
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition TommyGun = partdefinition.addOrReplaceChild("TommyGun", CubeListBuilder.create().texOffs(22, 19).addBox(-0.5F, -4.0F, -17.501F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 0).addBox(-0.5F, -4.0F, -17.25F, 1.0F, 1.0F, 3.0F, new CubeDeformation(0.25F))
-                .texOffs(15, 21).addBox(-0.5F, -4.0F, -14.0F, 1.0F, 1.0F, 8.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 22).addBox(-1.0F, -3.0F, -11.0F, 2.0F, 2.0F, 5.0F, new CubeDeformation(0.001F))
+        PartDefinition TommyGun = partdefinition.addOrReplaceChild("TommyGun", CubeListBuilder.create().texOffs(0, 22).addBox(-1.0F, -3.0F, -11.0F, 2.0F, 2.0F, 5.0F, new CubeDeformation(0.001F))
+                .texOffs(0, 4).addBox(-1.0F, -1.0F, -10.0F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 0).addBox(-1.5F, -4.0F, -6.0F, 3.0F, 3.0F, 9.0F, new CubeDeformation(0.0F))
-                .texOffs(15, 19).addBox(-0.5F, -5.0F, -0.5F, 1.0F, 1.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(22, -1).addBox(0.0F, -1.0F, -3.25F, 0.0F, 2.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 20.7349F, 5.8871F));
+                .texOffs(24, 6).addBox(-0.5F, -5.0F, -0.5F, 1.0F, 1.0F, 3.0F, new CubeDeformation(0.0F))
+                .texOffs(22, -1).addBox(0.0F, -1.0F, -3.25F, 0.0F, 2.0F, 3.0F, new CubeDeformation(0.0F))
+                .texOffs(7, 19).addBox(-0.5F, -4.0F, -17.0F, 1.0F, 1.0F, 11.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 20.7349F, 5.8871F));
 
-        PartDefinition buttstock_r1 = TommyGun.addOrReplaceChild("buttstock_r1", CubeListBuilder.create().texOffs(0, 12).addBox(-1.25F, -1.5F, -3.0F, 2.5F, 3.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -1.0F, 5.25F, -0.3054F, 0.0F, 0.0F));
+        PartDefinition buttstock_r1 = TommyGun.addOrReplaceChild("buttstock_r1", CubeListBuilder.create().texOffs(0, 12).addBox(-1.25F, -1.5F, -3.0F, 2.5F, 3.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -1.5F, 5.25F, -0.3054F, 0.0F, 0.0F));
 
         PartDefinition back_grip_r1 = TommyGun.addOrReplaceChild("back_grip_r1", CubeListBuilder.create().texOffs(15, 1).addBox(-1.0F, -3.0F, -1.5F, 2.0F, 5.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 1.0F, 0.5F, 0.3491F, 0.0F, 0.0F));
 
         PartDefinition drum_r1 = TommyGun.addOrReplaceChild("drum_r1", CubeListBuilder.create().texOffs(11, 12).addBox(-2.5F, -2.5F, -1.0F, 5.0F, 5.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -0.25F, -4.25F, 0.0F, 0.0F, 0.7854F));
 
-        PartDefinition front_grip_r1 = TommyGun.addOrReplaceChild("front_grip_r1", CubeListBuilder.create().texOffs(14, 23).addBox(-1.0F, 0.0F, 0.0F, 2.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -1.0F, -11.0F, 0.48F, 0.0F, 0.0F));
-
-        return LayerDefinition.create(meshdefinition, 33, 33);
+        return LayerDefinition.create(meshdefinition, 32, 32);
     }
 
     @Override
@@ -63,7 +60,7 @@ public class FirstPersonTommyGunModel<T extends Entity> extends HierarchicalMode
 
     @Override
     public ModelPart root() {
-        return root;
+        return Root;
     }
 
     @Override

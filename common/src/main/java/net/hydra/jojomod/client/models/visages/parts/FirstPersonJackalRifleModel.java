@@ -95,20 +95,8 @@ public class FirstPersonJackalRifleModel<T extends Entity> extends PsuedoHierarc
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
                        int light) {
         if (context instanceof LivingEntity LE) {
-            IPlayerEntity ipe = ((IPlayerEntity) LE);
             this.root().getAllParts().forEach(ModelPart::resetPose);
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
-            boolean mainHandRight = true;
-            if (LE instanceof Player player) {
-                mainHandRight = player.getMainArm() == HumanoidArm.RIGHT;
-                if (mainHandRight) {
-                    this.animate(ipe.roundabout$getJackalModelAim(), Poses.JACKAL_MODEL_AIM.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getJackalModelRecoil(), Poses.JACKAL_MODEL_RECOIL.ad, partialTicks, 1f);
-                } else if (!mainHandRight) {
-//                    this.animate(ipe.roundabout$getJackalModelAimLeft(), Poses.JACKAL_MODEL_AIM_LEFT.ad, partialTicks, 1f);
-//                    this.animate(ipe.roundabout$getJackalModelRecoilLeft(), Poses.JACKAL_MODEL_RECOIL_LEFT.ad, partialTicks, 1f);
-                }
-            }
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
         }
     }

@@ -38,8 +38,10 @@ public enum Poses {
     TOMMY_MODEL_RECOIL((byte) 28, FirearmFirstPersonAnimations.tommy_model_recoil),
     TOMMY_RECOIL_LEFT((byte) 29, FirearmFirstPersonAnimations.tommy_recoil_left),
     TOMMY_MODEL_RECOIL_LEFT((byte) 30, FirearmFirstPersonAnimations.tommy_model_recoil_left),
-    JACKAL_MODEL_AIM((byte) 31, FirearmFirstPersonAnimations.jackal_model_aim),
-    JACKAL_MODEL_RECOIL((byte) 32, FirearmFirstPersonAnimations.jackal_model_recoil);
+    COLT_MODEL_AIM((byte) 31, FirearmFirstPersonAnimations.colt_model_aim),
+    COLT_MODEL_RECOIL((byte) 32, FirearmFirstPersonAnimations.colt_model_recoil),
+    COLT_MODEL_AIM_LEFT((byte) 33, FirearmFirstPersonAnimations.colt_model_aim_left),
+    COLT_MODEL_RECOIL_LEFT((byte) 34, FirearmFirstPersonAnimations.colt_model_recoil_left);
 
 
     public final byte id;
@@ -108,10 +110,14 @@ public enum Poses {
             return TOMMY_RECOIL_LEFT;
         } if (bt== TOMMY_MODEL_RECOIL_LEFT.id) {
             return TOMMY_MODEL_RECOIL_LEFT;
-        } if (bt== JACKAL_MODEL_AIM.id) {
-            return JACKAL_MODEL_AIM;
-        } if (bt== JACKAL_MODEL_RECOIL.id) {
-            return JACKAL_MODEL_RECOIL;
+        } if (bt== COLT_MODEL_AIM.id) {
+            return COLT_MODEL_AIM;
+        } if (bt== COLT_MODEL_RECOIL.id) {
+            return COLT_MODEL_RECOIL;
+        } if (bt== COLT_MODEL_AIM_LEFT.id) {
+            return COLT_MODEL_AIM_LEFT;
+        } if (bt== COLT_MODEL_RECOIL_LEFT.id) {
+            return COLT_MODEL_RECOIL_LEFT;
         }
         return NONE;
     }

@@ -20,46 +20,41 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class ColtRevolverModel<T extends Entity> extends HierarchicalModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "snubnosed_revolver"), "main");
-	private final ModelPart SexyGun;
-	private final ModelPart cylinder;
-    private final ModelPart root;
+	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "colt_revolver"), "main");
+    private final ModelPart ColtSAA;
+    private final ModelPart Root;
 
 	public ColtRevolverModel() {
 
-        this.root = createBodyLayer().bakeRoot();
-		this.SexyGun = root.getChild("SexyGun");
-		this.cylinder = this.SexyGun.getChild("cylinder");
+        this.Root = createBodyLayer().bakeRoot();
+        this.ColtSAA = Root.getChild("ColtSAA");
 	}
 
 	public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition SexyGun = partdefinition.addOrReplaceChild("SexyGun", CubeListBuilder.create().texOffs(10, 4).addBox(-0.5F, -4.0F, -1.475F, 1.0F, 4.0F, 2.0F, new CubeDeformation(0.001F))
-                .texOffs(0, 2).addBox(-0.5F, -3.0F, -0.5F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.002F))
-                .texOffs(0, 0).addBox(-0.5F, -5.0F, -4.975F, 1.0F, 3.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(6, 0).addBox(-0.5F, -5.0F, -2.975F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(10, 1).addBox(-0.5F, -4.9808F, -1.9755F, 1.0F, 1.0F, 2.0F, new CubeDeformation(-0.01F))
-                .texOffs(0, 8).addBox(0.0F, -2.5F, -4.975F, 0.0F, 2.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 7).addBox(-0.5F, -5.0F, -6.975F, 1.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(4, 7).addBox(0.0F, -5.5F, -6.975F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(4, 6).addBox(0.0F, -3.5F, -6.975F, 0.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 0).addBox(-0.5F, -4.5F, -6.985F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 11.75F, 0.475F));
+        PartDefinition ColtSAA = partdefinition.addOrReplaceChild("ColtSAA", CubeListBuilder.create().texOffs(10, 6).addBox(-0.5F, -4.875F, -4.725F, 1.0F, 3.0F, 3.0F, new CubeDeformation(0.001F))
+                .texOffs(10, 12).addBox(0.0F, -2.375F, -3.725F, 0.0F, 2.0F, 3.0F, new CubeDeformation(0.0F))
+                .texOffs(7, 16).addBox(0.0F, -4.875F, -0.725F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 6).addBox(-0.5F, -4.625F, -8.725F, 1.0F, 1.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(16, 15).addBox(0.0F, -5.125F, -8.225F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(16, 12).addBox(-1.0F, -4.25F, -1.725F, 2.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 0).addBox(-1.5F, -4.9F, -4.375F, 3.0F, 3.0F, 3.0F, new CubeDeformation(-0.35F)), PartPose.offset(0.0F, 23.75F, 0.0F));
 
-        PartDefinition cylinder = SexyGun.addOrReplaceChild("cylinder", CubeListBuilder.create().texOffs(3, 10).addBox(-1.5F, -1.5F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(-0.35F)), PartPose.offset(0.0F, -3.5F, -3.375F));
+        PartDefinition handle_r1 = ColtSAA.addOrReplaceChild("handle_r1", CubeListBuilder.create().texOffs(12, 0).addBox(-0.5F, -1.5F, -1.0F, 1.0F, 3.0F, 2.0F, new CubeDeformation(-0.001F)), PartPose.offsetAndRotation(0.0F, -1.2F, -0.5F, 0.4363F, 0.0F, 0.0F));
 
-        return LayerDefinition.create(meshdefinition, 16, 16);
+        return LayerDefinition.create(meshdefinition, 32, 32);
 	}
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		SexyGun.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        ColtSAA.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 
     @Override
     public ModelPart root() {
-        return root;
+        return Root;
     }
 
     @Override
@@ -69,7 +64,7 @@ public class ColtRevolverModel<T extends Entity> extends HierarchicalModel<T> {
 
     public ResourceLocation getTextureLocation(){
         return new ResourceLocation(Roundabout.MOD_ID,
-                "textures/item/snubnose_revolver.png");
+                "textures/item/colt_revolver.png");
     }
 
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int light, float r, float g, float b, float heyFull) {

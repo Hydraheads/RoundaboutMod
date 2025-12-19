@@ -67,5 +67,5 @@ public class ModStrayModels {
     public static SnubnoseRevolverModel SNUBNOSE_REVOLVER_MODEL;
     public static TommyGunModel TOMMY_GUN_MODEL;
     public static ColtRevolverModel COLT_REVOLVER_MODEL;
-    public static JackalRifleModel JACKAL_RIFLE;
+    public static JackalRifleModel JACKAL_RIFLE_MODEL;
 }

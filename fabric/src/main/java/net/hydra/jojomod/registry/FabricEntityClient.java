@@ -230,6 +230,8 @@ public class FabricEntityClient {
         ModStrayModels.ROAD_ROLLER = new RoadRollerStrayModel();
         ModStrayModels.SNUBNOSE_REVOLVER_MODEL = new SnubnoseRevolverModel();
         ModStrayModels.TOMMY_GUN_MODEL = new TommyGunModel();
+        ModStrayModels.COLT_REVOLVER_MODEL = new ColtRevolverModel();
+        ModStrayModels.JACKAL_RIFLE_MODEL = new JackalRifleModel();
         ModStrayModels.FirstPersonSnubnoseModel = new FirstPersonSnubnoseModel();
         ModStrayModels.FirstPersonTommyGunModel = new FirstPersonTommyGunModel();
         ModStrayModels.FirstPersonColtRevolverModel = new FirstPersonColtRevolverModel();
