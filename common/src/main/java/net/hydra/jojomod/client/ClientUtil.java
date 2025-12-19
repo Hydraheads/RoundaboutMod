@@ -905,8 +905,8 @@ public class ClientUtil {
     public static void openStandSwitchUI(ItemStack arrow){
         Minecraft.getInstance().setScreen(new StandArrowRerollScreen(arrow));
     }
-    public static void openModificationVisageUI(ItemStack visage){
-        Minecraft.getInstance().setScreen(new ModificationVisageScreen(visage));
+    public static void openModificationVisageUI(ItemStack visage, int slot){
+        Minecraft.getInstance().setScreen(new ModificationVisageScreen(visage, slot));
     }
     public static void openHairspryUI(){
         Minecraft.getInstance().setScreen(new HairColorChangeScreen());

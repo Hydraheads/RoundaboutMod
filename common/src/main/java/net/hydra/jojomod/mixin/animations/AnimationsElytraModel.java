@@ -42,7 +42,7 @@ public abstract class AnimationsElytraModel<T extends LivingEntity> extends Agea
     public void roundabout$SetupAnim5(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
         if ($$0 instanceof Player P) {
             IPlayerEntity ipe = ((IPlayerEntity) $$0);
-            if (!P.isPassenger()) {
+            if (!P.isPassenger() && !$$0.isVisuallySwimming() && !$$0.isFallFlying()) {
                 this.roundabout$animate(ipe.getWry(), Poses.WRY.ad, $$3, 1f);
                 this.roundabout$animate(ipe.getGiorno(), Poses.GIORNO.ad, $$3, 1f);
                 this.roundabout$animate(ipe.getJoseph(), Poses.JOSEPH.ad, $$3, 1f);

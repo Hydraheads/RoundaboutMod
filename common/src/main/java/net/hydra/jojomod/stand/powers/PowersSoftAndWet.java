@@ -2487,6 +2487,9 @@ public void unlockSkin(){
 
 
     public boolean canDoBubbleItemLaunch(){
+        if (this.getSelf() instanceof Player P) {
+            return !((IPlayerEntity)P).roundabout$getForRealMainHand().isEmpty();
+        }
         ItemStack stack = this.getSelf().getMainHandItem();
         return !stack.isEmpty();
     }

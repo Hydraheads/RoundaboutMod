@@ -2,19 +2,20 @@ package net.hydra.jojomod.mixin.shaders;
 
 import com.mojang.blaze3d.shaders.Uniform;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IShaderGameRenderer;
+import net.minecraft.client.Camera;
 import net.zetalasis.client.shader.IPostChainAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.PostChain;
 import net.minecraft.client.renderer.PostPass;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
+import org.joml.*;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
+import java.lang.Math;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL11C.GL_ONE_MINUS_SRC_ALPHA;
@@ -39,9 +40,7 @@ public class PostChainMixin implements IPostChainAccessor {
     @Override
     public void roundabout$process(float tickDelta) {
         Minecraft client = Minecraft.getInstance();
-
         processCount += 1;
-        roundabout$setUniform("FrameCount", processCount);
 
         this.roundabout$resize();
 
@@ -68,18 +67,18 @@ public class PostChainMixin implements IPostChainAccessor {
                     return false;
 
                 // thanks Mojang for making this the only way by having 3 million overloads
-                if ((value) instanceof Float)
-                { u.set((float) value); }
-                else if (value instanceof Integer) {
-                    u.set((int) value); }
-                else if (value instanceof Matrix3f) {
-                    u.set((Matrix3f) value); }
-                else if (value instanceof Matrix4f) {
-                    u.set((Matrix4f) value); }
-                else if (value instanceof Vector3f) {
-                    u.set((Vector3f) value); }
-                else if (value instanceof Vector4f) {
-                    u.set((Vector4f) value); }
+                if ((value) instanceof Float f)
+                { u.set(f); }
+                else if (value instanceof Integer i) {
+                    u.set(i); }
+                else if (value instanceof Matrix3f m) {
+                    u.set(m); }
+                else if (value instanceof Matrix4f m) {
+                    u.set(m); }
+                else if (value instanceof Vector3f v) {
+                    u.set(v); }
+                else if (value instanceof Vector4f v) {
+                    u.set(v); }
                 else
                 {
                     return false;

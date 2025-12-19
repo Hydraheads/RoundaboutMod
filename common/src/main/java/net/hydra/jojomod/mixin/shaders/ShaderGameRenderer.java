@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.minecraft.client.Camera;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
@@ -17,6 +18,7 @@ import net.minecraft.server.packs.resources.ResourceProvider;
 import net.minecraft.world.entity.Entity;
 import net.zetalasis.client.shader.RCoreShader;
 import net.zetalasis.client.shader.RPostShaderRegistry;
+import net.zetalasis.client.shader.TimestopShaderManager;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -33,6 +35,10 @@ import java.util.Objects;
 
 @Mixin(GameRenderer.class)
 public abstract class ShaderGameRenderer implements IShaderGameRenderer {
+
+    @Shadow private int tick;
+
+    @Shadow protected abstract double getFov(Camera camera, float f, boolean bl);
 
     /**Enables handling of shader logic and access to shader related function,
      * such as time stop desaturation*/
@@ -65,8 +71,10 @@ public abstract class ShaderGameRenderer implements IShaderGameRenderer {
         if (RPostShaderRegistry.DESATURATE != null) {
             if (((IShaderGameRenderer)Minecraft.getInstance().gameRenderer).roundabout$tsShaderStatus())
             {
-                RPostShaderRegistry.DESATURATE.roundabout$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
-                RPostShaderRegistry.DESATURATE.roundabout$process(tickDelta);
+                //RPostShaderRegistry.DESATURATE.roundabout$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
+                //RPostShaderRegistry.DESATURATE.roundabout$process(tickDelta);
+
+                RPostShaderRegistry.TIMESTOP.roundabout$process(tickDelta);
             }
         }
     }
@@ -161,6 +169,17 @@ public abstract class ShaderGameRenderer implements IShaderGameRenderer {
                 mc.levelRenderer.needsUpdate();
             }
         }
+    }
+
+    @Override
+    public float roundabout$getFov(Camera activeRenderInfo, float partialTicks, boolean useFOVSetting) {
+        return (float) getFov(activeRenderInfo, partialTicks, useFOVSetting);
+    }
+
+    @Inject(method = "resize", at = @At("TAIL"))
+    private void onResize(int width, int height, CallbackInfo ci)
+    {
+        TimestopShaderManager.TIMESTOP_DEPTH_BUFFER.resize(width, height, true);
     }
 
     /**Shadows, ignore

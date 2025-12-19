@@ -1,5 +1,6 @@
 package net.hydra.jojomod.networking;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.advancement.criteria.ModCriteria;
 import net.hydra.jojomod.client.ClientUtil;
@@ -22,6 +23,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -51,7 +53,7 @@ public class ClientToServerPackets {
             ByteToServer("byte_to_server"),
             SingleByteToServer("single_byte_to_server"),
             BodyBag("body_bag"),
-            ModVisageConfigure("thread_hop_mod_visage"),
+            ModVisageConfigure("mod_visage"),
             TimeStopHovering("thread_hop_time_stop_hovering"),
             GlaiveHit("glaive_hit"),
             StandSummon("stand_summon"),
@@ -336,23 +338,14 @@ public class ClientToServerPackets {
                 if (message.equals(MESSAGES.ModVisageConfigure.value)) {
                     server.execute(() -> {
                         byte chest = (byte) vargs[0];
-                        int slot = (int) vargs[1];
-                        ItemStack stack = sender.getInventory().getItem(slot);
-                        Vector3f vec = (Vector3f) vargs[2];
+                        Vector3f vec = (Vector3f) vargs[1];
+                        ItemStack stack = sender.getMainHandItem();
 
-                        boolean offh = ItemStack.isSameItemSameTags(sender.getOffhandItem(),stack);
-                        if (stack.getItem() instanceof ModificationMaskItem || sender.getInventory().contains(stack) || offh) {
-                            ItemStack item;
-                            if (offh) {
-                                item = sender.getOffhandItem();
-                            } else {
-                                int yes = sender.getInventory().findSlotMatchingItem(stack);
-                                item = sender.getInventory().getItem(yes);
-                            }
-                            item.getOrCreateTagElement("modifications").putInt("height", (int) vec.x);
-                            item.getOrCreateTagElement("modifications").putInt("width", (int) vec.y);
-                            item.getOrCreateTagElement("modifications").putInt("head", (int) vec.z);
-                            item.getOrCreateTagElement("modifications").putInt("chest", chest);
+                        if (stack.getItem() instanceof ModificationMaskItem) {
+                            stack.getOrCreateTagElement("modifications").putInt("height", (int) vec.x);
+                            stack.getOrCreateTagElement("modifications").putInt("width", (int) vec.y);
+                            stack.getOrCreateTagElement("modifications").putInt("head", (int) vec.z);
+                            stack.getOrCreateTagElement("modifications").putInt("chest", chest);
                         }
                     });
                 }

@@ -38,7 +38,6 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -4935,6 +4934,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
 
+        ///  ratt skin unlocking
         if (cause != null) {
             if (this.getEffect(ModEffects.MELTING) != null) {
                 if (((StandUserEntity) cause).roundabout$getStandPowers() instanceof PowersRatt PR) {
@@ -4961,13 +4961,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
 
-        //ratt
+        /// ratt flesh dropping
         MobEffectInstance melting = this.getEffect(ModEffects.MELTING);
         if (melting != null && MainUtil.getMobBleed(rdbt$this())) {
             int amount =  Mth.clamp(melting.getAmplifier()/2,1,6) + (int) (Math.random() * 1 + 0.5);
             if ( !(this.roundabout$getStandPowers() instanceof PowersRatt) ) {
                 if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
-                    FleshPileEntity r = new FleshPileEntity((LivingEntity) ((Object) this), this.level(), 5);
+                    FleshPileEntity r = new FleshPileEntity((LivingEntity) ((Object) this), this.level(), amount);
                     r.setPos(this.getPosition(0));
                     this.level().addFreshEntity(r);
                 } else {

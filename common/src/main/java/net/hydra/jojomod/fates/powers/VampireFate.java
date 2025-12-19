@@ -267,7 +267,6 @@ public class VampireFate extends VampiricFate {
             if (canUseRegen()) {
                 if (!onCooldown(PowerIndex.FATE_2_SNEAK)) {
                     PE.setHealth(1);
-                    PE.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20, 4), PE);
                     PE.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 1), PE);
                     PE.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 200, 0), PE);
                     xTryPower(BLOOD_REGEN,true);

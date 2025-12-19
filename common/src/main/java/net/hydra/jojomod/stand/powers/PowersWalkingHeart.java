@@ -980,117 +980,119 @@ public class PowersWalkingHeart extends NewDashPreset {
 
         if (this.self.level().isClientSide()) {
 
-            Vec3 newVec = new Vec3(0,-0.2,0);
-            Vec3 newVec2 = new Vec3(0,-1.0,0);
-            Vec3 newVec4 = new Vec3(0,-0.5,0);
-            Vec3 newVec5 = new Vec3(0,-1.1,0);
+            if (isPacketPlayer()){
 
-            newVec = RotationUtil.vecPlayerToWorld(newVec,((IGravityEntity)self).roundabout$getGravityDirection());
-            BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
-            newVec2 = RotationUtil.vecPlayerToWorld(newVec2,((IGravityEntity)self).roundabout$getGravityDirection());
-            BlockPos pos2 = BlockPos.containing(self.getPosition(1).add(newVec2));
-            newVec4 = RotationUtil.vecPlayerToWorld(newVec4,((IGravityEntity)self).roundabout$getGravityDirection());
-            BlockPos pos4 = BlockPos.containing(self.getPosition(1).add(newVec4));
-            newVec5 = RotationUtil.vecPlayerToWorld(newVec5,((IGravityEntity)self).roundabout$getGravityDirection());
-            BlockPos pos5 = BlockPos.containing(self.getPosition(1).add(newVec5));
+                Vec3 newVec = new Vec3(0, -0.2, 0);
+                Vec3 newVec2 = new Vec3(0, -1.0, 0);
+                Vec3 newVec4 = new Vec3(0, -0.5, 0);
+                Vec3 newVec5 = new Vec3(0, -1.1, 0);
 
-
-            if (cutCorners == 0 && self instanceof Player){
-                cutCorners = 1;
-                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.QUERY_STAND_UPDATE);
-            } else if (canCutCorners()){
-                slowHeelTicks = 20;
-            } else {
-                if (slowHeelTicks > 0){
-                    slowHeelTicks--;
-                }
-            }
+                newVec = RotationUtil.vecPlayerToWorld(newVec, ((IGravityEntity) self).roundabout$getGravityDirection());
+                BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
+                newVec2 = RotationUtil.vecPlayerToWorld(newVec2, ((IGravityEntity) self).roundabout$getGravityDirection());
+                BlockPos pos2 = BlockPos.containing(self.getPosition(1).add(newVec2));
+                newVec4 = RotationUtil.vecPlayerToWorld(newVec4, ((IGravityEntity) self).roundabout$getGravityDirection());
+                BlockPos pos4 = BlockPos.containing(self.getPosition(1).add(newVec4));
+                newVec5 = RotationUtil.vecPlayerToWorld(newVec5, ((IGravityEntity) self).roundabout$getGravityDirection());
+                BlockPos pos5 = BlockPos.containing(self.getPosition(1).add(newVec5));
 
 
-            if (!inCombatMode()){
-                currentKickTicks = 0;
-            } else if (currentKickTicks < chargeKickTicks()){
-                currentKickTicks++;
-            }
-
-            if (hasExtendedHeelsForWalking() && !getStandUserSelf().rdbt$getJumping()){
-                if (!self.onGround()) {
-                    if (this.self.getDeltaMovement().y < 0){
-                        if (!(canCutCorners() && justFlippedTicks > 0)) {
-                            this.self.setDeltaMovement(this.self.getDeltaMovement().add(0, -0.14, 0));
-                        }
+                if (cutCorners == 0 && self instanceof Player) {
+                    cutCorners = 1;
+                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.QUERY_STAND_UPDATE);
+                } else if (canCutCorners()) {
+                    slowHeelTicks = 20;
+                } else {
+                    if (slowHeelTicks > 0) {
+                        slowHeelTicks--;
                     }
                 }
-            }
 
 
+                if (!inCombatMode()) {
+                    currentKickTicks = 0;
+                } else if (currentKickTicks < chargeKickTicks()) {
+                    currentKickTicks++;
+                }
 
-            if (self.isSwimming()) {
-                toggleSpikes(false);
-                C2SPacketUtil.trySingleBytePacket(
-                        PacketDataIndex.QUERY_STAND_UPDATE_2
-                );
-            }
-            if (inCombatMode() && isBlockedByStone()){
-                switchModes();
-            }
-
-            if (hasExtendedHeelsForWalking()){
-                if (justFlippedTicks > 0){
-                    justFlippedTicks--;
-                } else {
-                    if (self.onGround() && MainUtil.isBlockWalkableSimplified(self.getBlockStateOn())){
-                        mercyTicks = 5;
-                        lastGroundPosition = self.position();
-                    } else {
-                        if (
-                                (
-                                        MainUtil.isBlockWalkable(self.level().getBlockState(pos))
-                                                || MainUtil.isBlockWalkable(self.level().getBlockState(pos2))
-                                                || MainUtil.isBlockWalkable(self.level().getBlockState(pos4))
-                                                || MainUtil.isBlockWalkable(self.level().getBlockState(pos5))
-                                )){
-                            mercyTicks--;
-                        } else {
-                            if (canCutCorners()){
-                                if (mercyTicks > 4){
-                                    mercyTicks = 4;
-                                }
-                                mercyTicks-=1;
-                                if (canCut() && cutDirection != ((IGravityEntity) this.self).roundabout$getGravityDirection()){
-                                    ((IGravityEntity) this.self).roundabout$setGravityDirection(cutDirection);
-                                    setHeelDirection(cutDirection);
-                                    justFlippedTicks = 5;
-                                    C2SPacketUtil.intToServerPacket(
-                                            PacketDataIndex.INT_GRAVITY_FLIP,MainUtil.getIntFromDirection(heelDirection)
-                                    );
-                                }
-                            } else {
-                                mercyTicks = 0;
+                if (hasExtendedHeelsForWalking() && !getStandUserSelf().rdbt$getJumping()) {
+                    if (!self.onGround()) {
+                        if (this.self.getDeltaMovement().y < 0) {
+                            if (!(canCutCorners() && justFlippedTicks > 0)) {
+                                this.self.setDeltaMovement(this.self.getDeltaMovement().add(0, -0.14, 0));
                             }
                         }
                     }
-                    if (self.isSleeping() || ((!self.onGround()) && mercyTicks <= 0) || self.getRootVehicle() != this.self) {
-                        heelDirection = Direction.DOWN;
-                        if (((IGravityEntity) this.self).roundabout$getGravityDirection() != heelDirection){
-                            grantFallImmunity();
-                        }
-                        toggleSpikes(false);
-                        C2SPacketUtil.trySingleBytePacket(
-                                PacketDataIndex.QUERY_STAND_UPDATE_2
-                        );
-                        ((IGravityEntity) this.self).roundabout$setGravityDirection(heelDirection);
-                        setHeelDirection(heelDirection);
-                        justFlippedTicks = 5;
-                        C2SPacketUtil.intToServerPacket(
-                                PacketDataIndex.INT_GRAVITY_FLIP,MainUtil.getIntFromDirection(heelDirection)
-                        );
-                    }
                 }
 
-            } else {
-                setHeelDirection(Direction.DOWN);
-            }
+
+                if (self.isSwimming()) {
+                    toggleSpikes(false);
+                    C2SPacketUtil.trySingleBytePacket(
+                            PacketDataIndex.QUERY_STAND_UPDATE_2
+                    );
+                }
+                if (inCombatMode() && isBlockedByStone()) {
+                    switchModes();
+                }
+
+                if (hasExtendedHeelsForWalking()) {
+                    if (justFlippedTicks > 0) {
+                        justFlippedTicks--;
+                    } else {
+                        if (self.onGround() && MainUtil.isBlockWalkableSimplified(self.getBlockStateOn())) {
+                            mercyTicks = 5;
+                            lastGroundPosition = self.position();
+                        } else {
+                            if (
+                                    (
+                                            MainUtil.isBlockWalkable(self.level().getBlockState(pos))
+                                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos2))
+                                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos4))
+                                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos5))
+                                    )) {
+                                mercyTicks--;
+                            } else {
+                                if (canCutCorners()) {
+                                    if (mercyTicks > 4) {
+                                        mercyTicks = 4;
+                                    }
+                                    mercyTicks -= 1;
+                                    if (canCut() && cutDirection != ((IGravityEntity) this.self).roundabout$getGravityDirection()) {
+                                        ((IGravityEntity) this.self).roundabout$setGravityDirection(cutDirection);
+                                        setHeelDirection(cutDirection);
+                                        justFlippedTicks = 5;
+                                        C2SPacketUtil.intToServerPacket(
+                                                PacketDataIndex.INT_GRAVITY_FLIP, MainUtil.getIntFromDirection(heelDirection)
+                                        );
+                                    }
+                                } else {
+                                    mercyTicks = 0;
+                                }
+                            }
+                        }
+                        if (self.isSleeping() || ((!self.onGround()) && mercyTicks <= 0) || self.getRootVehicle() != this.self) {
+                            heelDirection = Direction.DOWN;
+                            if (((IGravityEntity) this.self).roundabout$getGravityDirection() != heelDirection) {
+                                grantFallImmunity();
+                            }
+                            toggleSpikes(false);
+                            C2SPacketUtil.trySingleBytePacket(
+                                    PacketDataIndex.QUERY_STAND_UPDATE_2
+                            );
+                            ((IGravityEntity) this.self).roundabout$setGravityDirection(heelDirection);
+                            setHeelDirection(heelDirection);
+                            justFlippedTicks = 5;
+                            C2SPacketUtil.intToServerPacket(
+                                    PacketDataIndex.INT_GRAVITY_FLIP, MainUtil.getIntFromDirection(heelDirection)
+                            );
+                        }
+                    }
+
+                } else {
+                    setHeelDirection(Direction.DOWN);
+                }
+        }
 
         } else {
 

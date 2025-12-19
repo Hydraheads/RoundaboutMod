@@ -839,6 +839,17 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
     }
 
+    /// bypasses the combat mode overrides
+    @Unique
+    public ItemStack roundabout$getForRealMainHand() {
+        return this.inventory.getSelected();
+    }
+
+    @Unique
+    public ItemStack roundabout$getForRealOffHand() {
+        return this.inventory.offhand.get(0);
+    }
+
     private final TargetingConditions roundabout$attackTargeting = TargetingConditions.forCombat().range(64.0);
     @Unique
     public Poses roundabout$standPos = null;
