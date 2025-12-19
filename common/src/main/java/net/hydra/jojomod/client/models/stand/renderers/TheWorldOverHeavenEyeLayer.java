@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -33,8 +34,7 @@ public class TheWorldOverHeavenEyeLayer <T extends TheWorldEntity, M extends Sta
         }
 
         if ($$3.getSkin()== TheWorldEntity.OVER_HEAVEN && Minecraft.getInstance().player != null &&
-                !(((StandUser)Minecraft.getInstance().player).roundabout$getStandDisc().isEmpty() ||
-                Minecraft.getInstance().player.isSpectator())){
+                ClientUtil.canSeeStands(Minecraft.getInstance().player)){
             VertexConsumer $$10 = $$1.getBuffer(this.renderType());
             this.getParentModel().renderToBuffer($$0, $$10, 15728640, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         }
