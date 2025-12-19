@@ -278,8 +278,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     ///  hides the arms if you're holding anubis
     @Inject(method = "setModelProperties", at = @At(value = "TAIL"))
     private void roundabout$setModelProperties(AbstractClientPlayer $$0, CallbackInfo ci) {
-        if (ClientUtil.checkIfIsFirstPerson($$0)
-                && !(Minecraft.getInstance().player.containerMenu instanceof PowerInventoryMenu))  {
+        if (ClientUtil.checkIfIsFirstPerson($$0))  {
             if (AnubisLayer.shouldRender($$0) != null) {
                 PlayerModel<AbstractClientPlayer> playerModel = (PlayerModel)this.getModel();
                 if (AnubisLayer.shouldRender($$0) == HumanoidArm.RIGHT) {
@@ -292,15 +291,10 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             }
         }
         if ($$0 instanceof StandUser standUser) {
-            if (((StandUser) $$0).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
-                      PlayerModel<AbstractClientPlayer> playerModel = (PlayerModel) this.getModel();
+            if (standUser.roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+                      PlayerModel<AbstractClientPlayer> playerModel = this.getModel();
 
-                if (PGD.legGoneTicks == 1) {
-                    playerModel.leftLeg.visible = true;
-                    playerModel.leftPants.visible = true;
-                    playerModel.rightLeg.visible = true;
-                    playerModel.rightPants.visible = true;
-                } else if (PGD.legGoneTicks > 0) {
+                if (PGD.legGoneTicks > 0) {
                     playerModel.leftLeg.visible = false;
                     playerModel.leftPants.visible = false;
                     playerModel.rightLeg.visible = false;
@@ -315,8 +309,8 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     @Inject(method = "setModelProperties", at = @At(value = "TAIL"))
     private void roundabout$setModelPropertiesCream(AbstractClientPlayer $$0, CallbackInfo ci) {
         if ($$0 instanceof StandUser standUser) {
-            if (((StandUser) $$0).roundabout$getStandPowers() instanceof PowersCream PC) {
-                PlayerModel<AbstractClientPlayer> playerModel = (PlayerModel)this.getModel();
+            if (standUser.roundabout$getStandPowers() instanceof PowersCream PC) {
+                PlayerModel<AbstractClientPlayer> playerModel = this.getModel();
                 int transformTimer = PC.getTransformTimer();
 
                 if (PC.getTransformDirection() == 1) {
@@ -336,7 +330,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                         playerModel.leftPants.visible = false;
                         playerModel.rightPants.visible = false;
                     }
-                } else if (PC.getTransformDirection() == 2) {
+                } else if (PC.getTransformDirection() == 2) { ///  Note to Chlope here: the limbs are visible by default so I'm not sure why you'd have to force this to be visible and it may lead to mod incompa
                     if (transformTimer == 10) {
                         playerModel.leftLeg.visible = true;
                         playerModel.rightLeg.visible = true;

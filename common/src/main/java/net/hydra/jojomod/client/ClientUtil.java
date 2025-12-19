@@ -554,8 +554,7 @@ public class ClientUtil {
                     }
                 }
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.VampireMessage.value)) {
-
-                    player.playSound(ModSounds.VAMPIRE_MESSAGE_EVENT,10,1);
+                    playSound(ModSounds.VAMPIRE_MESSAGE_EVENT,player,2,1);
                 }
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.GunRecoil.value)) {
                     String sigmaString = (String) vargs[0];

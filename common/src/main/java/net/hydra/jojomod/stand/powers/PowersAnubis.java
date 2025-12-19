@@ -95,7 +95,7 @@ public class PowersAnubis extends NewDashPreset {
         }
         setSkillIcon(context, x, y, 2, icon2, PowerIndex.SKILL_2);
 
-        if (!isHoldingSneak()) {
+        if (!isHoldingSneak()  || isGuarding()) {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         } else {
             setSkillIcon(context, x, y, 3, StandIcons.ANUBIS_BACKFLIP, PowerIndex.GLOBAL_DASH);
@@ -317,6 +317,11 @@ public class PowersAnubis extends NewDashPreset {
 
     @Override
     public boolean tryPower(int move, boolean forced) {
+
+        if (!isClient() && this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
+            this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP,100,false);
+        }
+
         StandUser SU = (StandUser) this.getSelf();
         switch (move) {
             case PowerIndex.POWER_1 ->  {
@@ -375,7 +380,9 @@ public class PowersAnubis extends NewDashPreset {
             }
             case PowerIndex.BARRAGE_CHARGE_2 -> {
                 this.attackTimeDuring = 0;
-                this.playBarrageChargeSound();
+                if (!isClient()) {
+                    this.playBarrageChargeSound();
+                }
                 this.setActivePower(PowerIndex.BARRAGE_CHARGE_2);
             }
             case PowerIndex.RANGED_BARRAGE -> {
@@ -416,12 +423,12 @@ public class PowersAnubis extends NewDashPreset {
 
        // Roundabout.LOGGER.info(" CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax());
         StandUser SU = this.getStandUserSelf();
-
         if (SU.roundabout$getStandSkin() == (byte) 0) {SU.roundabout$setStandSkin((byte)1);}
 
-        if (pogoTime > 0) {
-            pogoTime -= 1;
-        }
+        if (SU.roundabout$isSealed()) {MemoryCancelClient();}
+
+
+        if (pogoTime > 0) {pogoTime -= 1;}
 
         if (this.getSelf().onGround() && isClient()) {
             if (this.getActivePower() != PowerIndex.SNEAK_ATTACK_CHARGE || this.attackTime > PogoDelay + 3) {
@@ -719,11 +726,7 @@ public class PowersAnubis extends NewDashPreset {
                     switch (this.getActivePower()) {
                         case PowersAnubis.UPPERCUT -> {
                             if (this.getAttackTimeDuring() < 3) {
-                                if (this.getTargetEntity(this.getSelf(),2) == null && this.getSelf().onGround()) {
-                                    Vec3 look = this.getSelf().getLookAngle();
-                                    look = new Vec3(look.x,0, look.z).normalize().reverse();
-                                    MainUtil.takeUnresistableKnockbackWithY(this.getSelf(),1F,look.x,look.y,look.z);
-                                } else {
+                                if (this.getTargetEntity(this.getSelf(),2) != null || !this.getSelf().onGround()) {
                                     Uppercut();
                                 }
                             } else {
@@ -740,12 +743,6 @@ public class PowersAnubis extends NewDashPreset {
                         case PowersAnubis.SPIN -> {
                             if (this.getAttackTimeDuring() > 5) {
                                 ThrustCut();
-                            } else if (this.getAttackTimeDuring() == 1) {
-                                Vec3 look = this.getSelf().getLookAngle().reverse();
-                                look = new Vec3(look.x,-0.2,look.z);
-                                float strength = 1F;
-                                strength *= (this.getSelf().onGround() ? 1F : 0.6F);
-                                MainUtil.takeUnresistableKnockbackWithY(this.getSelf(),strength,look.x,look.y,look.z);
                             }
                         }
 
@@ -770,6 +767,35 @@ public class PowersAnubis extends NewDashPreset {
                         }
                     }
 
+
+                }
+            }
+
+        } else {
+            /// client ticking
+            if (this.attackTimeDuring > -1) {
+                if (this.attackTimeDuring <= this.attackTimeMax) {
+                    switch (this.getActivePower()) {
+                        case PowersAnubis.SPIN -> {
+                            if (getAttackTimeDuring() == 1) {
+                                Vec3 look = this.getSelf().getLookAngle().reverse();
+                                look = new Vec3(look.x,-0.2,look.z);
+                                float strength = 1F;
+                                strength *= (this.getSelf().onGround() ? 1F : 0.6F);
+                                MainUtil.takeUnresistableKnockbackWithY(this.getSelf(),strength,look.x,look.y,look.z);
+                            }
+                        }
+                        case PowersAnubis.UPPERCUT -> {
+                            if (this.getAttackTimeDuring() < 3) {
+                                if (this.getTargetEntity(this.getSelf(),2) == null && this.getSelf().onGround()) {
+                                    Vec3 look = this.getSelf().getLookAngle();
+                                    look = new Vec3(look.x,0, look.z).normalize().reverse();
+                                    MainUtil.takeUnresistableKnockbackWithY(this.getSelf(),1F,look.x,look.y,look.z);
+                                }
+                            }
+
+                        }
+                    }
 
                 }
             }
@@ -1264,13 +1290,19 @@ public class PowersAnubis extends NewDashPreset {
     }
     @Override
     public boolean onClickRelease() {
-        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE && this.getAttackTimeDuring() > this.getBarrageMinimum()) {
-            tryPower(PowerIndex.BARRAGE);
-            tryPowerPacket(PowerIndex.BARRAGE);
-            return true;
-        } else if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 && this.getAttackTimeDuring() >= this.getKickBarrageWindup()) {
-            tryPower(PowerIndex.BARRAGE_2);
-            tryPowerPacket(PowerIndex.BARRAGE_2);
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE) {
+            if (this.getAttackTimeDuring() > this.getBarrageMinimum()) {
+                tryPower(PowerIndex.BARRAGE);
+                tryPowerPacket(PowerIndex.BARRAGE);
+                return true;
+            }
+
+        } else if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
+            if (this.getAttackTimeDuring() >= this.getKickBarrageWindup()) {
+                tryPower(PowerIndex.BARRAGE_2);
+                tryPowerPacket(PowerIndex.BARRAGE_2);
+                return true;
+            }
         }
         return super.onClickRelease();
     }

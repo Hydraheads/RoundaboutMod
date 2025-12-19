@@ -1829,6 +1829,18 @@
   "config.roundabout.hideGUI.name": "Hide Ability Icons",
   "config.roundabout.hideGUI.desc": "Actively turn on or off rendering of HUD.",
 
+  "config.roundabout.beetleArrowTradeChance.name": "Stand Arrow Trade Chance",
+  "config.roundabout.beetleArrowTradeChance.desc": "Changes the weighting of the trade. Think of it like adding an extra, identical, trade to the possible options ",
+  "config.roundabout.beetleArrowCost.name": "Beetle Arrow Trade Cost",
+  "config.roundabout.beetleArrowCost.desc": "Number of emeralds that the single trade costs, up to 64",
+  "config.roundabout.brokenArrowTradeChance.name": "Broken Stand Arrow Trade Chance",
+  "config.roundabout.brokenArrowTradeChance.desc": "Changes the weighting of the trade. Think of it like adding an extra, identical, trade to the possible options",
+  "config.roundabout.brokenArrowCost.name": "Broken Stand Arrow Trade Cost",
+  "config.roundabout.brokenArrowCost.desc": "Number of emeralds that a single trade costs, up to 64",
+  "config.roundabout.brokenArrowsHaveStands.name": "Broken Arrow Traders Spawn With a Stand",
+  "config.roundabout.brokenArrowsHaveStands.desc": "Whether or not Wandering Traders with a Broken Stand Arrow trade will spawn with a Stand or not",
+
+
   "config.roundabout.disableMeleeWhileStandActive.name": "Disable Melee With Stands",
   "config.roundabout.disableMeleeWhileStandActive.desc": "Stands that have stand punches disable melee by default. Change this value if you want to use both at the same time.",
   "config.roundabout.basePunchAngle.name": "Base Punching Angle",
@@ -2479,6 +2491,7 @@
   "config.roundabout.generalStandUserMobSettings.name": "Stand User Mobs",
   "config.roundabout.vanillaMinecraftTweaks.name": "Vanilla Tweaks",
   "config.roundabout.worldgenSettings.name": "Worldgen",
+  "config.roundabout.wanderingTraderSettings.name": "Wandering Trades",
   "config.roundabout.itemSettings.name": "Items",
   "config.roundabout.nameTagSettings.name": "Nametags",
   "config.roundabout.griefSettings.name": "Griefing",

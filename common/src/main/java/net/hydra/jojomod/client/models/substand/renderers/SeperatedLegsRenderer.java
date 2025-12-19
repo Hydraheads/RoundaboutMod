@@ -41,8 +41,13 @@ public class SeperatedLegsRenderer extends StandRenderer<SeperatedLegsEntity> {
     public ResourceLocation getTextureLocation(SeperatedLegsEntity seperatedLegsEntity) {
         //Player user = (Player)seperatedLegsEntity.getUser();
         //GameProfile profile = user.getGameProfile();
-        if(!(((Player)seperatedLegsEntity.getUser()).getGameProfile() == null)) {
-            return getSkin(((Player) seperatedLegsEntity.getUser()).getGameProfile());
+        Player P =((Player)seperatedLegsEntity.getUser());
+        if( P != null) {
+            if (P.getGameProfile() != null) {
+                return getSkin(((Player) seperatedLegsEntity.getUser()).getGameProfile());
+            } else {
+                return PART_FIVE_GREEN_DAY;
+            }
         }else{
             return PART_FIVE_GREEN_DAY;
         }
