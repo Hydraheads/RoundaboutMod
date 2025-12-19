@@ -36,6 +36,10 @@ public interface IPlayerEntity {
     void rdbt$setRespawnStrategy(byte strat);
     byte rdbt$getRespawnStrategy();
 
+    /// bypasses the combat mode overrides
+    ItemStack roundabout$getForRealMainHand();
+    ItemStack roundabout$getForRealOffHand();
+
     float rdbt$getHairColorX();
     float rdbt$getHairColorY();
     float rdbt$getHairColorZ();
