@@ -72,9 +72,9 @@ public abstract class ShaderGameRenderer implements IShaderGameRenderer {
             if (((IShaderGameRenderer)Minecraft.getInstance().gameRenderer).roundabout$tsShaderStatus())
             {
                 //RPostShaderRegistry.DESATURATE.roundabout$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
-                //RPostShaderRegistry.DESATURATE.roundabout$process(tickDelta);
+                RPostShaderRegistry.DESATURATE.roundabout$process(tickDelta);
 
-                RPostShaderRegistry.TIMESTOP.roundabout$process(tickDelta);
+                //RPostShaderRegistry.TIMESTOP.roundabout$process(tickDelta);
             }
         }
     }
