@@ -282,6 +282,13 @@ public class FabricItems {
                         entries.accept(MATCH_BUNDLE);
                         entries.accept(GASOLINE_CAN);
                         entries.accept(GASOLINE_BUCKET);
+                        entries.accept(SNUBNOSE_REVOLVER);
+                        entries.accept(TOMMY_GUN);
+                        entries.accept(COLT_REVOLVER);
+                        entries.accept(JACKAL_RIFLE);
+                        entries.accept(SNUBNOSE_AMMO);
+                        entries.accept(TOMMY_AMMO);
+                        entries.accept(SNIPER_AMMO);
                         entries.accept(ROAD_ROLLER);
                         entries.accept(AESTHETICIAN_SPAWN_EGG);
                         entries.accept(ZOMBIE_AESTHETICIAN_SPAWN_EGG);
@@ -463,13 +470,6 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_ANUBIS);
                         //entries.accept(STAND_DISC_DIVER_DOWN);
                         //entries.accept(MAX_STAND_DISC_DIVER_DOWN);
-                        entries.accept(SNUBNOSE_REVOLVER);
-                        entries.accept(SNUBNOSE_AMMO);
-                        entries.accept(TOMMY_GUN);
-                        entries.accept(TOMMY_AMMO);
-                        entries.accept(COLT_REVOLVER);
-                        entries.accept(JACKAL_RIFLE);
-                        entries.accept(SNIPER_AMMO);
                         entries.accept(STAND_DISC_CREAM);
                         entries.accept(MAX_STAND_DISC_CREAM);
 
@@ -566,10 +566,10 @@ public class FabricItems {
         ModItems.GASOLINE_BUCKET = GASOLINE_BUCKET;
         ModItems.ANUBIS_ITEM = ANUBIS_ITEM;
         ModItems.SNUBNOSE_REVOLVER = SNUBNOSE_REVOLVER;
-        ModItems.SNUBNOSE_AMMO = SNUBNOSE_AMMO;
         ModItems.TOMMY_GUN = TOMMY_GUN;
-        ModItems.TOMMY_AMMO = TOMMY_AMMO;
         ModItems.COLT_REVOLVER = COLT_REVOLVER;
+        ModItems.SNUBNOSE_AMMO = SNUBNOSE_AMMO;
+        ModItems.TOMMY_AMMO = TOMMY_AMMO;
         ModItems.JACKAL_RIFLE = JACKAL_RIFLE;
         ModItems.SNIPER_AMMO = SNIPER_AMMO;
         ModItems.STAND_DISC = STAND_DISC;

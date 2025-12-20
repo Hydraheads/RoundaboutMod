@@ -338,29 +338,31 @@ public class ForgeItems {
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null))));
 
 
-    public static final RegistryObject<Item> SNUBNOSE_REVOLVER = addToWIPTab(ITEMS.register("snubnose_revolver",
+    public static final RegistryObject<Item> SNUBNOSE_REVOLVER = addToTab(ITEMS.register("snubnose_revolver",
             () -> new SnubnoseRevolverItem(new Item.Properties().stacksTo(1))
     ));
-    public static final RegistryObject<Item> SNUBNOSE_AMMO = addToWIPTab(ITEMS.register("snubnose_ammo",
-            () -> new SnubnoseAmmoItem(new Item.Properties().stacksTo(64))
+
+    public static final RegistryObject<Item> COLT_REVOLVER = addToTab(ITEMS.register("colt_revolver",
+            () -> new ColtRevolverItem(new Item.Properties().stacksTo(1))
     ));
 
-    public static final RegistryObject<Item> TOMMY_GUN = addToWIPTab(ITEMS.register("tommy_gun",
+    public static final RegistryObject<Item> TOMMY_GUN = addToTab(ITEMS.register("tommy_gun",
             () -> new TommyGunItem(new Item.Properties().stacksTo(1))
     ));
-    public static final RegistryObject<Item> TOMMY_AMMO = addToWIPTab(ITEMS.register("tommy_ammo",
-            () -> new TommyAmmoItem(new Item.Properties().stacksTo(64))
-    ));
 
-    public static final RegistryObject<Item> COLT_REVOLVER = addToWIPTab(ITEMS.register("colt_revolver",
-            () -> new ColtRevolverItem(new Item.Properties().stacksTo(64))
-    ));
-
-    public static final RegistryObject<Item> JACKAL_RIFLE = addToWIPTab(ITEMS.register("jackal_rifle",
+    public static final RegistryObject<Item> JACKAL_RIFLE = addToTab(ITEMS.register("jackal_rifle",
             () -> new JackalRifleItem(new Item.Properties().stacksTo(1))
     ));
 
-    public static final RegistryObject<Item> SNIPER_AMMO = addToWIPTab(ITEMS.register("sniper_ammo",
+    public static final RegistryObject<Item> SNUBNOSE_AMMO = addToTab(ITEMS.register("snubnose_ammo",
+            () -> new SnubnoseAmmoItem(new Item.Properties().stacksTo(64))
+    ));
+
+    public static final RegistryObject<Item> TOMMY_AMMO = addToTab(ITEMS.register("tommy_ammo",
+            () -> new TommyAmmoItem(new Item.Properties().stacksTo(64))
+    ));
+
+    public static final RegistryObject<Item> SNIPER_AMMO = addToTab(ITEMS.register("sniper_ammo",
             () -> new SniperAmmoItem(new Item.Properties().stacksTo(64))
     ));
 
