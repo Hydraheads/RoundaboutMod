@@ -4,7 +4,9 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.TimeStopInstance;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Camera;
@@ -15,6 +17,7 @@ import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.Position;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.zetalasis.client.shader.TimestopShaderManager;
 import org.jetbrains.annotations.Nullable;
@@ -47,17 +50,7 @@ public class ShaderLevelRenderer {
                         TimeStopInstance tinstance = listTs.get(i);
                         if (tinstance != null) {
 
-                            // Determine the position of bubble precisely with interpolation
-                            Vec3 locationVec = new Vec3(tinstance.x, tinstance.y, tinstance.z);
-                            if (level != null){
-                                Entity ent = level.getEntity(tinstance.id);
-                                if (ent != null){
-                                    Vec3 pos = ent.getEyePosition(partialTick).subtract(ent.getPosition(partialTick)).scale(0.5);
-                                    pos = pos.add(ent.getPosition(partialTick));
-                                    locationVec = new Vec3(pos.x(),pos.y(),pos.z());
-                                }
-                            }
-
+                            Vec3 color = Vec3.ZERO;
                             //Determine the bubble's radius so it grows but only on full size time stops
                             float radius = ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite;
                             if (radius < 0){radius = 100000;}
@@ -67,9 +60,30 @@ public class ShaderLevelRenderer {
                             boolean full2 = false;
                             boolean subBubble = false;
                             boolean colorless = true;
-                            if (tinstance.maxDuration >= 100){
-                                radius = Math.min(((tinstance.maxDuration-tinstance.durationInterpolation) + partialTick)*6, maxRadius);
-                                radius2 = Math.min(((tinstance.maxDuration-tinstance.durationInterpolation) + partialTick)*6, maxRadius*2);
+
+                            // Determine the position of bubble precisely with interpolation
+                            Vec3 locationVec = new Vec3(tinstance.x, tinstance.y, tinstance.z);
+                            if (level != null){
+                                Entity ent = level.getEntity(tinstance.id);
+                                if (ent != null){
+                                    Vec3 pos = ent.getEyePosition(partialTick).subtract(ent.getPosition(partialTick)).scale(0.5);
+                                    pos = pos.add(ent.getPosition(partialTick));
+                                    locationVec = new Vec3(pos.x(),pos.y(),pos.z());
+
+                                    if (ent instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers()
+                                    instanceof TWAndSPSharedPowers tp){
+                                        color = tp.getTSColor();
+                                        if (!color.equals(Vec3.ZERO)){
+                                            colorless = false;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (tinstance.firstDuration >= 100){
+                                subBubble = true;
+                                radius = Math.min(((tinstance.maxDuration-tinstance.durationInterpolation) + partialTick)*(maxRadius/16.66f), maxRadius);
+                                radius2 = Math.min(((tinstance.maxDuration-tinstance.durationInterpolation) + partialTick)*(maxRadius/16.66f), maxRadius*2);
                                 if (radius >= 24){
                                     full = true;
                                 }
@@ -80,14 +94,16 @@ public class ShaderLevelRenderer {
                                     full2 = true;
                                 }
                                 colorless = false;
+                            } else {
+                                full = true;
                             }
 
-                            if (radius2 > 0 && !colorless) {
+                            if (radius2 > 0 && !colorless && subBubble) {
                                 TimestopShaderManager.renderBubble(new TimestopShaderManager.Bubble(
                                         new Vec3(locationVec.x, locationVec.y, locationVec.z),
                                         radius2,
                                         maxRadius,
-                                        new Vec3(1.5f, 0.5f, 0.5f),
+                                        color,
                                         (full2),
                                         0.8f
                                 ));

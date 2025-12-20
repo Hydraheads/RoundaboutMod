@@ -122,6 +122,16 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         return ClientNetworking.getAppropriateConfig().theWorldSettings.theWorldGuardPoints;
     }
     @Override
+    public Vec3 getTSColor(){
+        byte skin = ((StandUser) self).roundabout$getStandSkin();
+        if (skin == TheWorldEntity.OVA_SKIN || skin == TheWorldEntity.THE_NETHER)
+            return new Vec3(1.5f, 0.5f, 0.5f);
+        if (skin == TheWorldEntity.OVER_HEAVEN)
+            return new Vec3(1.5f, 0.5f, 1.5f);
+
+        return super.getTSColor();
+    }
+    @Override
     public void playTheLastHitSound(){
         Byte LastHitSound = this.getLastHitSound();
         if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DIOVoice DV) {
