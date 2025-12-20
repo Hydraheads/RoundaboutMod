@@ -786,7 +786,7 @@ public class Config implements Cloneable {
         public Boolean creativeModeInfiniteTimeStop;
         @IntOption(group = "inherit", value = 100, min = -1, max = 72000)
         public Integer blockRangeNegativeOneIsInfinite;
-        @BooleanOption(group = "inherit", value = false)
+        @BooleanOption(group = "inherit", value = true)
         public Boolean usePreciseMath;
         @IntOption(group = "inherit", value = 19, min = 0, max = 100)
         public Integer postTSiframes;
