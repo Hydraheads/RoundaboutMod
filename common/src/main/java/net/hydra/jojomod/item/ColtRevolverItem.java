@@ -33,7 +33,7 @@ import java.util.List;
 public class ColtRevolverItem extends FirearmItem implements Vanishable {
 
     public ColtRevolverItem(Properties $$0) {
-        super($$0);
+        super($$0.durability(300));
     }
 
     @Override
@@ -146,6 +146,9 @@ public class ColtRevolverItem extends FirearmItem implements Vanishable {
         ItemStack itemStack = player.getItemInHand(hand);
         if (getAmmo(itemStack) > 0) {
             player.getCooldowns().addCooldown(this, 15);
+            itemStack.hurtAndBreak(1, player, player1 -> {
+
+            });
             if (player.isCreative()) {
             } else {
                 setAmmo(itemStack, getAmmo(itemStack) - 1);

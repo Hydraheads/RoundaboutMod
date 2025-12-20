@@ -34,7 +34,7 @@ import java.util.List;
 public class JackalRifleItem extends FirearmItem implements Vanishable {
 
     public JackalRifleItem(Properties $$0) {
-        super($$0);
+        super($$0.durability(200));
     }
 
     @Override
@@ -147,6 +147,9 @@ public class JackalRifleItem extends FirearmItem implements Vanishable {
         ItemStack itemStack = player.getItemInHand(hand);
         if (getAmmo(itemStack) > 0) {
             player.getCooldowns().addCooldown(this, 15);
+            itemStack.hurtAndBreak(1, player, player1 -> {
+
+            });
             if (player.isCreative()) {
             } else {
                 setAmmo(itemStack, getAmmo(itemStack) - 1);

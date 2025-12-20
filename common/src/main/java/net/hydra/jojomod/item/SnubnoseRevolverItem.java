@@ -29,7 +29,7 @@ import java.util.List;
 public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
 
     public SnubnoseRevolverItem(Properties $$0) {
-        super($$0);
+        super($$0.durability(300));
     }
 
     @Override
@@ -142,6 +142,9 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
         ItemStack itemStack = player.getItemInHand(hand);
         if (getAmmo(itemStack) > 0) {
             player.getCooldowns().addCooldown(this, 5);
+            itemStack.hurtAndBreak(1, player, player1 -> {
+
+            });
             if (player.isCreative()) {
             } else {
                 setAmmo(itemStack, getAmmo(itemStack) - 1);
