@@ -72,16 +72,21 @@ public abstract class ShaderGameRenderer implements IShaderGameRenderer {
     private void roundabout$renderShaders(float tickDelta, long $$1, boolean renderLevel, CallbackInfo ci)
     {
         TimestopShaderManager.renderAll(tickDelta);
-        /*
+
         RenderCallbackRegistry.roundabout$GAME_RENDERER_FINISH(tickDelta);
 
-        if (RPostShaderRegistry.DESATURATE != null) {
-            if (((IShaderGameRenderer)Minecraft.getInstance().gameRenderer).roundabout$tsShaderStatus())
-            {
-                //RPostShaderRegistry.DESATURATE.roundabout$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
-                //RPostShaderRegistry.DESATURATE.roundabout$process(tickDelta);
+
+        ClientConfig clientConfig = ConfigManager.getClientConfig();
+        if (clientConfig != null && clientConfig.timeStopSettings != null){
+            if (!ConfigManager.getClientConfig().timeStopSettings.advancedTimeStopShader && ConfigManager.getClientConfig().timeStopSettings.simpleTimeStopShader) {
+                if (RPostShaderRegistry.DESATURATE != null) {
+                    if (((IShaderGameRenderer) Minecraft.getInstance().gameRenderer).roundabout$tsShaderStatus()) {
+                        RPostShaderRegistry.DESATURATE.roundabout$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
+                        RPostShaderRegistry.DESATURATE.roundabout$process(tickDelta);
+                    }
+                }
             }
-        }*/
+        }
     }
 
     @Inject(method = "reloadShaders", at=@At("HEAD"))
