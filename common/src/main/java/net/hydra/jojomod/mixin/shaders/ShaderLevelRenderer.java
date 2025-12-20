@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.Position;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
@@ -60,6 +61,26 @@ public class ShaderLevelRenderer {
                             boolean full2 = false;
                             boolean subBubble = false;
                             boolean colorless = true;
+                            boolean leg2 = false;
+
+                            if (tinstance.firstDuration >= 100){
+                                subBubble = true;
+                                radius = Math.min(((tinstance.maxDuration-tinstance.durationInterpolation) + partialTick)*(maxRadius/16.66f), maxRadius);
+                                radius2 = Math.min(((tinstance.maxDuration-tinstance.durationInterpolation) + partialTick)*(maxRadius/16.66f), maxRadius*2);
+                                if (radius >= 24){
+                                    full = true;
+                                }
+                                if (radius2 > maxRadius){
+                                    radius2 = maxRadius - (radius2-maxRadius);
+                                    leg2 = true;
+                                }
+                                if (radius2 >= 24){
+                                    full2 = true;
+                                }
+                                colorless = false;
+                            } else {
+                                full = true;
+                            }
 
                             // Determine the position of bubble precisely with interpolation
                             Vec3 locationVec = new Vec3(tinstance.x, tinstance.y, tinstance.z);
@@ -71,8 +92,18 @@ public class ShaderLevelRenderer {
                                     locationVec = new Vec3(pos.x(),pos.y(),pos.z());
 
                                     if (ent instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers()
-                                    instanceof TWAndSPSharedPowers tp){
+                                            instanceof TWAndSPSharedPowers tp){
                                         color = tp.getTSColor();
+                                        if (color.equals(new Vec3(1,1,1))){
+                                            double t = radius2 / maxRadius;
+                                            t = Mth.clamp(t, 0.0, 1.0);// smoothstep easing
+                                            t = t * t * (3.0 - 2.0 * t);
+                                            if (leg2){
+                                                color = new Vec3(1.5f-t,1.5f,0.5f);
+                                            } else {
+                                                color = new Vec3(0.5f,0.5f+t,1.5f-t);
+                                            }
+                                        }
                                         if (!color.equals(Vec3.ZERO)){
                                             colorless = false;
                                         }
@@ -80,23 +111,6 @@ public class ShaderLevelRenderer {
                                 }
                             }
 
-                            if (tinstance.firstDuration >= 100){
-                                subBubble = true;
-                                radius = Math.min(((tinstance.maxDuration-tinstance.durationInterpolation) + partialTick)*(maxRadius/16.66f), maxRadius);
-                                radius2 = Math.min(((tinstance.maxDuration-tinstance.durationInterpolation) + partialTick)*(maxRadius/16.66f), maxRadius*2);
-                                if (radius >= 24){
-                                    full = true;
-                                }
-                                if (radius2 > maxRadius){
-                                    radius2 = maxRadius - (radius2-maxRadius);
-                                }
-                                if (radius2 >= 24){
-                                    full2 = true;
-                                }
-                                colorless = false;
-                            } else {
-                                full = true;
-                            }
 
                             if (radius2 > 0 && !colorless && subBubble) {
                                 TimestopShaderManager.renderBubble(new TimestopShaderManager.Bubble(

@@ -123,7 +123,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
     }
     public Vec3 getTSColor(){
-        return new Vec3(0.5f,1.5f,0.5f);
+        return new Vec3(1f,1f,1f);
     }
     public void tryToStandLeapClient() {
         if (hasBlock() || hasEntity())
