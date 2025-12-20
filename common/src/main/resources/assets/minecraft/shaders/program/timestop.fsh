@@ -47,57 +47,63 @@ void main() {
 
     vec3 camPos = CameraPos.xyz;
 
-    vec2 ndc = vec2(
-        texCoord.x * 2.0 - 1.0,
-        1.0 - texCoord.y * 2.0
-    );
-
-    float FOV = CameraPos.w;
-    float fovTan = tan(radians(FOV)/2.);
-    vec3 forward = normalize(rotateByQuat(vec3(0., 0., 1.), CameraRot));
-    vec3 up = normalize(rotateByQuat(vec3(0., 1., 0.), CameraRot));
-    vec3 right = normalize(cross(forward, up));
-
-    vec3 rayDir = normalize(
-        forward +
-        right * ndc.x * fovTan * aspect +
-        up * (-ndc.y) * fovTan
-    );
-
-    vec3 rayPos = camPos;
-    bool hit = false;
-#ifdef BUBBLE
-    // Raymarch the physical bubble (WARNING: expensive!)
-    for (int i = 0; i < 64; i++)
+    if (distance(camPos, BubblePos) <= BubbleRadius)
     {
-        float d = length(rayPos-BubblePos)-BubbleRadius;
-        rayPos += rayDir*d;
-        if (d < 0.01)
-        {
-            hit = true;
-            break;
-        }
+        col.rgb = generic_desaturate(col.rgb, DESATURATION).rgb*BubbleTint;
     }
+    else {
+        vec2 ndc = vec2(
+            texCoord.x * 2.0 - 1.0,
+            1.0 - texCoord.y * 2.0
+        );
+
+        float FOV = CameraPos.w;
+        float fovTan = tan(radians(FOV)/2.);
+        vec3 forward = normalize(rotateByQuat(vec3(0., 0., 1.), CameraRot));
+        vec3 up = normalize(rotateByQuat(vec3(0., 1., 0.), CameraRot));
+        vec3 right = normalize(cross(forward, up));
+
+        vec3 rayDir = normalize(
+            forward +
+            right * ndc.x * fovTan * aspect +
+            up * (-ndc.y) * fovTan
+        );
+
+        vec3 rayPos = camPos;
+        bool hit = false;
+#ifdef BUBBLE
+        // Raymarch the physical bubble (WARNING: expensive!)
+        for (int i = 0; i < 64; i++)
+        {
+            float d = length(rayPos-BubblePos)-BubbleRadius;
+            rayPos += rayDir*d;
+            if (d < 0.01)
+            {
+                hit = true;
+                break;
+            }
+        }
 #endif
 
-    float depth = linearizeDepth(texture(MainDepthSampler, texCoord).r);
-    float worldDist = length(vec3(1., (2.*texCoord - 1.) * vec2(aspect, 1.) * tan(radians(FOV / 2.))) * depth);
-    // Cast a ray from our camera to pixel, see where it lands in the world. Not a perfect replication of screenspace -> worldspace, but a good enough one at that! (and also cheap!)
-    vec3 worldPos = camPos+rayDir*worldDist;
+        float depth = linearizeDepth(texture(MainDepthSampler, texCoord).r);
+        float worldDist = length(vec3(1., (2.*texCoord - 1.) * vec2(aspect, 1.) * tan(radians(FOV / 2.))) * depth);
+        // Cast a ray from our camera to pixel, see where it lands in the world. Not a perfect replication of screenspace -> worldspace, but a good enough one at that! (and also cheap!)
+        vec3 worldPos = camPos+rayDir*worldDist;
 
-    float bubbleDist = distance(worldPos, BubblePos);
-    if (bubbleDist < BubbleRadius
+        float bubbleDist = distance(worldPos, BubblePos);
+        if (bubbleDist < BubbleRadius
 #ifdef BUBBLE
         || (hit && distance(rayPos, camPos) < worldDist)
 #endif
-    )
-    {
+        )
+        {
         col.rgb = generic_desaturate(col.rgb, DESATURATION).rgb*BubbleTint;
 #ifdef BUBBLE
-        // Add the fresnel effect
+            // Add the fresnel effect
         vec3 normal = normalize(BubblePos-rayPos);
-        col.rgb += pow(1.-clamp(dot(normal, rayDir), 0., 1.), BubbleRadius-5.);
+        col.rgb += pow(1.-clamp(dot(normal, rayDir), 0., 1.), 5.);
 #endif
+        }
     }
 
     fragColor = col;

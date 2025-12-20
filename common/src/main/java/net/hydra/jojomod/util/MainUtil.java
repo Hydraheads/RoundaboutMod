@@ -1343,6 +1343,13 @@ public class MainUtil {
         if (cdist > mdist){mdist=cdist;}
         return mdist;
     }
+    public static double timeStopDistanceTo(double x,double y,double z,double x2,double y2, double z2){
+        if (ClientNetworking.getAppropriateConfig() != null && ClientNetworking.getAppropriateConfig().timeStopSettings != null
+        && ClientNetworking.getAppropriateConfig().timeStopSettings.usePreciseMath){
+            return new Vec3(x,y,z).distanceTo(new Vec3(x2,y2,z2));
+        }
+        return cheapDistanceTo(x,y,z,x2,y2,z2);
+    }
     public static double cheapDistanceTo2(double x,double z,double x2,double z2){
         double mdist = 0;
         double cdist = Math.abs(x-x2);

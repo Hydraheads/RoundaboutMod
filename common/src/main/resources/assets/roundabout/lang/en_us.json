@@ -2606,11 +2606,16 @@
   "config.roundabout.tsStandsSeeTSTeleportAndDontFreeze.desc": "Whether or not having a time stop seeing stand (The World, Star Platinum, or C-Moon) will allow you to see things teleport like endermen instead of blipping into a new location. If you have screen freeze on, this setting instead makes you see time stop normally.",
   "config.roundabout.simpleTimeStopShader.name": "Simple Shader",
   "config.roundabout.simpleTimeStopShader.desc": "Whether or not stopping time renders a simple shader.",
+  "config.roundabout.advancedTimeStopShader.name": "Advanced Shader",
+  "config.roundabout.advancedTimeStopShader.desc": "Whether or not stopping time renders a bubble shader. Overrides simple shader when on.",
 
   "config.roundabout.walkingHeartMaxHits.name": "Max Planted Hits",
   "config.roundabout.walkingHeartMaxHits.desc": "How many hits can you take in heel planted/wall walking mode before you are knocked out of that state.",
   "config.roundabout.walkingHeartCooldownPerHit.name": "Cooldown Per Hit",
   "config.roundabout.walkingHeartCooldownPerHit.desc": "How many cooldown ticks per hit in heel planted/wall walking mode.",
+
+  "config.roundabout.usePreciseMath.name": "Use Precise Sphere Math",
+  "config.roundabout.usePreciseMath.desc": "If you want the bubble of time stop to accurately cover the radius of the completed sphere rather than just being a simple box calculation. By default it is resource efficient.",
 
   "config.roundabout.configButtonOffsetX.name": "Config Button X Offset",
   "config.roundabout.configButtonOffsetX.desc": "Adjust the position of the ingame config. If you mess this up too badly to press the button ingame, you can change the file manually in the config folder.",
