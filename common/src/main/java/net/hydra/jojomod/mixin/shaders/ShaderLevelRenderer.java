@@ -92,7 +92,7 @@ public class ShaderLevelRenderer {
                                 ));
                             }
                             float gop = 0;
-                            if (colorless)
+                            if (colorless && radius < maxRadius)
                                 gop = 0.8f;
                             TimestopShaderManager.renderBubble(new TimestopShaderManager.Bubble(
                                     new Vec3(locationVec.x, locationVec.y, locationVec.z),
