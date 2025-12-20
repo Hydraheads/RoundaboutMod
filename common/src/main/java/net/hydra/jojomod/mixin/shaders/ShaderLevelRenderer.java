@@ -86,6 +86,7 @@ public class ShaderLevelRenderer {
                                 TimestopShaderManager.renderBubble(new TimestopShaderManager.Bubble(
                                         new Vec3(locationVec.x, locationVec.y, locationVec.z),
                                         radius2,
+                                        maxRadius,
                                         new Vec3(1.5f, 0.5f, 0.5f),
                                         (full2),
                                         0.8f
@@ -97,6 +98,7 @@ public class ShaderLevelRenderer {
                             TimestopShaderManager.renderBubble(new TimestopShaderManager.Bubble(
                                     new Vec3(locationVec.x, locationVec.y, locationVec.z),
                                     radius,
+                                    maxRadius,
                                     new Vec3(1., 1., 1.),
                                     full,
                                     gop

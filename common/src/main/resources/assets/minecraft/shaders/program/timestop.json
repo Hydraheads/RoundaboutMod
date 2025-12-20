@@ -17,7 +17,8 @@
     { "name": "CameraPos", "type": "float", "count": 4, "values":  [ 0.0, 0.0, 0.0, 0.0 ] },
     { "name": "CameraRot", "type": "float", "count": 4, "values":  [ 0.0, 0.0, 0.0, 0.0 ] },
     { "name": "BubblePos", "type": "float", "count": 3, "values":  [ 0.0, 0.0, 0.0 ] },
-    { "name": "BubbleRadius", "type": "float", "count": 1, "values":  [ 20.0 ] },
+    { "name": "BubbleRadius", "type": "float", "count": 1, "values":  [ 0.0 ] },
+    { "name": "BubbleMaxRadius", "type": "float", "count": 1, "values":  [ 100.0 ] },
     { "name": "BubbleTint", "type": "float", "count": 3, "values":  [ 1.0, 1.0, 1.0 ] },
     { "name": "DesaturateAllInside", "type": "float", "count": 1, "values":  [ 1.0 ] },
     { "name": "GroundLinesOpacity", "type": "float", "count": 1, "values":  [ 0.0 ] }
