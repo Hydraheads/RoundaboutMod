@@ -66,6 +66,7 @@ public class ShaderLevelRenderer {
                             boolean full = false;
                             boolean full2 = false;
                             boolean subBubble = false;
+                            boolean colorless = true;
                             if (tinstance.maxDuration >= 100){
                                 radius = Math.min(((tinstance.maxDuration-tinstance.durationInterpolation) + partialTick)*6, maxRadius);
                                 radius2 = Math.min(((tinstance.maxDuration-tinstance.durationInterpolation) + partialTick)*6, maxRadius*2);
@@ -75,12 +76,13 @@ public class ShaderLevelRenderer {
                                 if (radius2 > maxRadius){
                                     radius2 = maxRadius - (radius2-maxRadius);
                                 }
-                                if (radius2 >= 30){
+                                if (radius2 >= 24){
                                     full2 = true;
                                 }
+                                colorless = false;
                             }
 
-                            if (radius2 > 0) {
+                            if (radius2 > 0 && !colorless) {
                                 TimestopShaderManager.renderBubble(new TimestopShaderManager.Bubble(
                                         new Vec3(locationVec.x, locationVec.y, locationVec.z),
                                         radius2,
@@ -89,12 +91,15 @@ public class ShaderLevelRenderer {
                                         0.8f
                                 ));
                             }
+                            float gop = 0;
+                            if (colorless)
+                                gop = 0.8f;
                             TimestopShaderManager.renderBubble(new TimestopShaderManager.Bubble(
                                     new Vec3(locationVec.x, locationVec.y, locationVec.z),
                                     radius,
                                     new Vec3(1., 1., 1.),
                                     full,
-                                    0f
+                                    gop
                             ));
 
                         }
