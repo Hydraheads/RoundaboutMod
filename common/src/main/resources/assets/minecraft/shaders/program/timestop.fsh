@@ -96,7 +96,7 @@ void main() {
 #ifdef BUBBLE
         // Add the fresnel effect
         vec3 normal = normalize(BubblePos-rayPos);
-        col.rgb += pow(1.-clamp(dot(normal, rayDir), 0., 1.), BubbleRadius-5.);
+        col.rgb += pow(1.-clamp(dot(normal, rayDir), 0., 1.), 5.);
 #endif
     }
 
