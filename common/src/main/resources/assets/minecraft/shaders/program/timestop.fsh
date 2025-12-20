@@ -13,6 +13,7 @@ uniform vec3 BubblePos;
 uniform float BubbleRadius;
 uniform vec3 BubbleTint;
 uniform float DesaturateAllInside;
+uniform float GroundLinesOpacity;
 
 in vec2 texCoord;
 out vec4 fragColor;
@@ -115,7 +116,7 @@ void main() {
             col.rgb = generic_desaturate(col.rgb, DESATURATION).rgb*BubbleTint;
 
         float edge = smoothstep(0., 1., clamp(bubbleDist/BubbleRadius, 0., 1.));
-        col.rgb += pow(edge, BubbleRadius*2.);
+        col.rgb += clamp(pow(edge, BubbleRadius*2.), 0., 1.)*GroundLinesOpacity;
     }
 
     fragColor = col;
