@@ -62,13 +62,13 @@ public class ShaderLevelRenderer {
                             float radius = ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite;
                             if (radius < 0){radius = 100000;}
                             if (tinstance.maxDuration >= 100){
-                                radius = Math.min(((tinstance.maxDuration-tinstance.duration) + partialTick), radius);
+                                radius = Math.min(((tinstance.maxDuration-tinstance.durationInterpolation) + partialTick), radius);
                             }
 
                             TimestopShaderManager.renderBubble(new TimestopShaderManager.Bubble(
                                     new Vec3(locationVec.x, locationVec.y, locationVec.z),
                                     radius,
-                                    new Vec3(1., 1., 1.))
+                                    new Vec3(1.5, 0.5, 0.5))
                             );
                         }
                     }

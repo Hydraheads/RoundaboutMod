@@ -407,6 +407,8 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
                 roundabout$setBlockInstance = ImmutableList.of();
             }
         }
+
+        ((TimeStop)this).tickAllTimeStops();
     }
 
     @Inject(method = "tick", at = @At(value = "TAIL"))

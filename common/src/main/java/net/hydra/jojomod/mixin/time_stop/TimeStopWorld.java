@@ -85,12 +85,16 @@ public class TimeStopWorld implements TimeStop {
             } else {
                 List<TimeStopInstance> $$0 = Lists.newArrayList(this.roundabout$timeStoppingEntitiesClient);
                 List<TimeStopInstance> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntitiesClient);
+                int durationInterpolation = duration;
                 for (int i = $$0.size() - 1; i >= 0; --i) {
                     if ($$0.get(i).id == id) {
+                        durationInterpolation = $$0.get(i).durationInterpolation;
                         $$1.remove($$0.get(i));
                     }
                 }
-                $$1.add(new TimeStopInstance(id, x, y, z, range, duration, maxDuration));
+                TimeStopInstance tsi = new TimeStopInstance(id, x, y, z, range, duration, maxDuration);
+                tsi.durationInterpolation = durationInterpolation;
+                $$1.add(tsi);
                 this.roundabout$timeStoppingEntitiesClient = ImmutableList.copyOf($$1);
             }
         }
@@ -198,19 +202,28 @@ public class TimeStopWorld implements TimeStop {
     /**Ticks through time stop entities list, and then removes them from the list if they are dead or gone*/
     @Override
     public void tickAllTimeStops() {
-        if (!this.roundabout$timeStoppingEntities.isEmpty()) {
-            List<LivingEntity> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntities);
-            for (int i = $$1.size() - 1; i >= 0; --i) {
-                if ($$1.get(i).isRemoved() || !$$1.get(i).isAlive() || $$1.get(i).level().dimensionTypeId() != this.dimensionTypeId){
-                    if ($$1.get(i).level().dimensionTypeId() != this.dimensionTypeId &&
-                            (((StandUser)$$1.get(i)).roundabout$getStandPowers()) instanceof TWAndSPSharedPowers TP
-                    ){
-                        TP.resumeTime(((Level) (Object) this));
+        if (!((Level) (Object) this).isClientSide) {
+            if (!this.roundabout$timeStoppingEntities.isEmpty()) {
+                List<LivingEntity> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntities);
+                for (int i = $$1.size() - 1; i >= 0; --i) {
+                    if ($$1.get(i).isRemoved() || !$$1.get(i).isAlive() || $$1.get(i).level().dimensionTypeId() != this.dimensionTypeId) {
+                        if ($$1.get(i).level().dimensionTypeId() != this.dimensionTypeId &&
+                                (((StandUser) $$1.get(i)).roundabout$getStandPowers()) instanceof TWAndSPSharedPowers TP
+                        ) {
+                            TP.resumeTime(((Level) (Object) this));
+                        } else {
+                            removeTimeStoppingEntity($$1.get(i));
+                        }
                     } else {
-                        removeTimeStoppingEntity($$1.get(i));
+                        ((StandUser) $$1.get(i)).roundabout$getStandPowers().timeTickStopPower();
                     }
-                } else if (!((Level) (Object) this).isClientSide) {
-                    ((StandUser)$$1.get(i)).roundabout$getStandPowers().timeTickStopPower();
+                }
+            }
+        } else {
+            if (this.roundabout$timeStoppingEntitiesClient != null && !this.roundabout$timeStoppingEntitiesClient.isEmpty()) {
+                List<TimeStopInstance> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntitiesClient);
+                for (int i = $$1.size() - 1; i >= 0; --i) {
+                    $$1.get(i).durationInterpolation = Math.max(0,$$1.get(i).durationInterpolation-1);
                 }
             }
         }
