@@ -868,6 +868,27 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         return false;
     }
 
+    @Override
+    public Vec3 getTSColor(){
+        byte skin = ((StandUser) self).roundabout$getStandSkin();
+        if (skin == StarPlatinumEntity.ARCADE || skin == StarPlatinumEntity.ARCADE_2)
+            return Vec3.ZERO;
+        if (skin == StarPlatinumEntity.MANGA_SKIN || skin == StarPlatinumEntity.MANGA_PURPLE_SKIN
+                || skin == StarPlatinumEntity.FIRST_SKIN)
+            return new Vec3(1.5,0.5,1.5);
+        if (skin == StarPlatinumEntity.LIGHT)
+            return new Vec3(1.5,1.5,0.5);
+        if (skin == StarPlatinumEntity.BASEBALL_SKIN)
+            return new Vec3(0.5f, 0.5f, 1.5f);
+        if (skin == StarPlatinumEntity.GREEN_SKIN || skin == StarPlatinumEntity.TREE || skin == StarPlatinumEntity.GREEN_2)
+            return new Vec3(0.5,1.5,0.5);
+        if (skin == StarPlatinumEntity.NETHER)
+            return new Vec3(1.5,1.0,0.5);
+        if (skin == StarPlatinumEntity.ATOMIC_SKIN || skin == StarPlatinumEntity.PHANTOM)
+            return new Vec3(0.5,0.5,0.5);
+        return super.getTSColor();
+    }
+
     public void doFingerHit(List<Entity> entities){
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };

@@ -104,8 +104,8 @@ public class ShaderLevelRenderer {
                                                 color = new Vec3(0.5f,0.5f+t,1.5f-t);
                                             }
                                         }
-                                        if (!color.equals(Vec3.ZERO)){
-                                            colorless = false;
+                                        if (color.equals(Vec3.ZERO)){
+                                            colorless = true;
                                         }
                                     }
                                 }
