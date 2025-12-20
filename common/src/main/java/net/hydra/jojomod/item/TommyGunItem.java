@@ -1,12 +1,10 @@
 package net.hydra.jojomod.item;
 
-import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
@@ -37,7 +35,7 @@ import java.util.Random;
 public class TommyGunItem extends FirearmItem implements Vanishable {
 
     public TommyGunItem(Properties $$0) {
-        super($$0);
+        super($$0.durability(1500));
     }
 
     @Override
@@ -149,6 +147,9 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
         ItemStack itemStack = player.getItemInHand(hand);
         if (getAmmo(itemStack) > 0) {
             player.getCooldowns().addCooldown(this, 2);
+            itemStack.hurtAndBreak(1, player, player1 -> {
+
+            });
             Random random = new Random();
             if (player.isCreative()) {
             } else {
