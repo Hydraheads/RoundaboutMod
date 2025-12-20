@@ -14,6 +14,7 @@ import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -66,7 +67,6 @@ public class BlockGrabPreset extends NewPunchingStand {
 
     public boolean throwObject(ItemStack item){
         int cdr = ClientNetworking.getAppropriateConfig().generalStandSettings.objectThrowCooldown;
-        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, cdr);
         this.setCooldown(PowerIndex.SKILL_2, cdr);
         /***/
 
@@ -224,7 +224,6 @@ public class BlockGrabPreset extends NewPunchingStand {
                     int cdr = ClientNetworking.getAppropriateConfig().generalStandSettings.mobThrowInterruptCooldown;
 
                     setCooldown(PowerIndex.SKILL_2, cdr);
-                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) PE), PowerIndex.SKILL_2, cdr);
                 }
                 stand.ejectPassengers();
             }
@@ -331,7 +330,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                     }
                     return false;
                 } else if (standEntity.getFirstPassenger() != null){
-                    if (!this.getSelf().level().isClientSide) {
+                    if (!this.getSelf().level().isClientSide && !onCooldown(PowerIndex.SKILL_2)) {
 
                         if (getAttackTimeDuring()>0) {
                             int cdr = 0;
@@ -341,7 +340,6 @@ public class BlockGrabPreset extends NewPunchingStand {
                                 cdr = ClientNetworking.getAppropriateConfig().generalStandSettings.mobThrowCooldown;
                             }
 
-                            S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, cdr);
                             this.setCooldown(PowerIndex.SKILL_2, cdr);
                             Entity ent = standEntity.getFirstPassenger();
 
@@ -544,7 +542,6 @@ public class BlockGrabPreset extends NewPunchingStand {
                     standEntity.setHeldItem(ItemStack.EMPTY);
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     animateStand(StandEntity.IDLE);
-                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 20);
                     this.setCooldown(PowerIndex.SKILL_2, 20);
                 }
                 return true;
@@ -741,6 +738,12 @@ public class BlockGrabPreset extends NewPunchingStand {
             return true;
         }
         return false;
+    }
+    public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
+        if (num == PowerIndex.SKILL_2) {
+            return true;
+        }
+        return super.isServerControlledCooldown(ci, num);
     }
     public void addItem(StandEntity standEntity){
         addItemLight(standEntity);
