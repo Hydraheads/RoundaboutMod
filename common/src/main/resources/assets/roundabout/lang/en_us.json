@@ -453,6 +453,7 @@
   "key.roundabout.show_exp": "Toggle Stand EXP Display",
   "key.roundabout.pose": "Strike Pose",
   "key.roundabout.hide_icons": "Hide Ability Icons",
+  "key.roundabout.fire_firearms": "Fire Held Gun",
 
   "roundabout:item.roundabout.smithing_template.execution_upgrade.applies_to": "Iron Axe",
   "roundabout:item.roundabout.smithing_template.execution_upgrade.base_slot_description": "Add to iron axe",

@@ -26,6 +26,7 @@ public final class ForgeKeyInputs {
          event.register(KeyInputRegistry.switchRow);
          event.register(KeyInputRegistry.showExp);
          event.register(KeyInputRegistry.pose);
-        event.register(KeyInputRegistry.hide_good_info);
+         event.register(KeyInputRegistry.hide_good_info);
+         event.register(KeyInputRegistry.fire_firearms);
     }
 }

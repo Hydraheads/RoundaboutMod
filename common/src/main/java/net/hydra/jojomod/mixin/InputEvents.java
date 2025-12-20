@@ -1015,6 +1015,8 @@ public abstract class InputEvents implements IInputEvents {
                         this.options);
                 KeyInputs.hideIcons(player,((Minecraft) (Object) this), roundabout$sameKeyThree(KeyInputRegistry.hide_good_info),
                         this.options);
+                KeyInputs.hideIcons(player,((Minecraft) (Object) this), roundabout$sameKeyThree(KeyInputRegistry.fire_firearms),
+                        this.options);
                 KeyInputs.switchRowsKey(player,((Minecraft) (Object) this), roundabout$sameKeyThree(KeyInputRegistry.switchRow),
                         this.options);
                 KeyInputs.strikePose(player,((Minecraft) (Object) this), KeyInputRegistry.pose.isDown(),

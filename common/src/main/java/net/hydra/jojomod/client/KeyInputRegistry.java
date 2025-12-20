@@ -20,6 +20,7 @@ public class KeyInputRegistry {
     public static final String KEY_SHOW_EXP = "key.roundabout.show_exp";
     public static final String KEY_POSE = "key.roundabout.pose";
     public static final String KEY_HIDE_ICONS = "key.roundabout.hide_icons";
+    public static final String KEY_FIRE_FIREARMS = "key.roundabout.fire_firearms";
 
     public static final KeyMapping summonKey = new KeyMapping(
             KeyInputRegistry.KEY_SUMMON_STAND,
@@ -75,6 +76,11 @@ public class KeyInputRegistry {
     );
     public static KeyMapping hide_good_info = new KeyMapping(
             KeyInputRegistry.KEY_HIDE_ICONS,
+            -1,
+            KeyInputRegistry.KEY_CATEGORY_JOJO
+    );
+    public static KeyMapping fire_firearms = new KeyMapping(
+            KeyInputRegistry.KEY_FIRE_FIREARMS,
             -1,
             KeyInputRegistry.KEY_CATEGORY_JOJO
     );

@@ -1,8 +1,10 @@
 package net.hydra.jojomod.mixin.items;
+import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.item.FirearmItem;
 import net.hydra.jojomod.item.SnubnoseRevolverItem;
 import net.hydra.jojomod.item.TommyGunItem;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -34,6 +36,8 @@ public abstract class FirearmMinecraftStartAttackMixin {
     @Nullable
     public LocalPlayer player;
 
+    public boolean rdbt$firearmHoldingDownKey = false;
+
     @Inject(method = "handleKeybinds()V", at = @At("HEAD"))
     private void ifStatementForStartItemForFirearms(CallbackInfo ci) {
         if (player != null) {
@@ -45,10 +49,17 @@ public abstract class FirearmMinecraftStartAttackMixin {
                     this.startAttack();
                     return;
                 }
+                if (KeyInputRegistry.fire_firearms.isDown() && !rdbt$firearmHoldingDownKey) {
+                    rdbt$firearmHoldingDownKey = true;
+                    this.startAttack();
+                    return;
+                } else if (!KeyInputRegistry.fire_firearms.isDown() && rdbt$firearmHoldingDownKey) {
+                    rdbt$firearmHoldingDownKey = false;
+                }
             }
 
             if ((itemStack.getItem() instanceof FirearmItem) || (itemStack2.getItem() instanceof FirearmItem) && (!player.getCooldowns().isOnCooldown(itemStack.getItem()))) {
-                if (options.keyAttack.isDown()) {
+                if (options.keyAttack.isDown() || KeyInputRegistry.fire_firearms.isDown()) {
                     if (!(player.getUseItem().getItem() instanceof TommyGunItem)) return;
                     C2SPacketUtil.gunShot();
                     return;
