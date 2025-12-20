@@ -60,16 +60,21 @@ public class ShaderLevelRenderer {
 
                             //Determine the bubble's radius so it grows but only on full size time stops
                             float radius = ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite;
-                            if (radius < 0){radius = 100000;}
+                            float maxRadius = radius;
+                            boolean full = false;
+                            if (radius < 0){radius = 100000; maxRadius = 100000;}
                             if (tinstance.maxDuration >= 100){
-                                radius = Math.min(((tinstance.maxDuration-tinstance.durationInterpolation) + partialTick), radius);
+                                radius = Math.min(((tinstance.maxDuration-tinstance.durationInterpolation) + partialTick)*6, maxRadius);
+                                if (radius >= 20){
+                                    full = true;
+                                }
                             }
 
                             TimestopShaderManager.renderBubble(new TimestopShaderManager.Bubble(
                                     new Vec3(locationVec.x, locationVec.y, locationVec.z),
                                     radius,
                                     new Vec3(1., 1., 1.),
-                                    false
+                                    full
                             ));
                         }
                     }
