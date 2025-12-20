@@ -183,6 +183,8 @@ public class ClientConfig implements Cloneable {
         @BooleanOption(group = "inherit", value = true)
         public Boolean tsStandsSeeTSTeleportAndDontFreeze;
         @BooleanOption(group = "inherit", value = true)
+        public Boolean advancedTimeStopShader;
+        @BooleanOption(group = "inherit", value = true)
         public Boolean simpleTimeStopShader;
     }
     public static class AnubisMemories {
