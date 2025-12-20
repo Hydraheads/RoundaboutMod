@@ -60,22 +60,37 @@ public class ShaderLevelRenderer {
 
                             //Determine the bubble's radius so it grows but only on full size time stops
                             float radius = ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite;
+                            if (radius < 0){radius = 100000;}
+                            float radius2 = radius;
                             float maxRadius = radius;
                             boolean full = false;
-                            if (radius < 0){radius = 100000; maxRadius = 100000;}
+                            boolean subBubble = false;
                             if (tinstance.maxDuration >= 100){
                                 radius = Math.min(((tinstance.maxDuration-tinstance.durationInterpolation) + partialTick)*6, maxRadius);
-                                if (radius >= 20){
+                                radius2 = Math.min(((tinstance.maxDuration-tinstance.durationInterpolation) + partialTick)*6, maxRadius*2);
+                                if (radius >= 30){
                                     full = true;
+                                }
+                                if (radius2 > maxRadius){
+                                    radius2 = maxRadius - (radius2-maxRadius);
                                 }
                             }
 
+                            if (radius2 > 0) {
+                                TimestopShaderManager.renderBubble(new TimestopShaderManager.Bubble(
+                                        new Vec3(locationVec.x, locationVec.y, locationVec.z),
+                                        radius2,
+                                        new Vec3(3, 1., 1),
+                                        full
+                                ));
+                            }
                             TimestopShaderManager.renderBubble(new TimestopShaderManager.Bubble(
                                     new Vec3(locationVec.x, locationVec.y, locationVec.z),
                                     radius,
                                     new Vec3(1., 1., 1.),
                                     full
                             ));
+
                         }
                     }
                 }
