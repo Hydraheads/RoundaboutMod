@@ -1,0 +1,39 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "minecraft:nether_brick"
+    },
+    "N":
+    {
+      "item": "minecraft:iron_nugget"
+    },
+    "I":
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    "P":
+    {
+      "item": "minecraft:oak_planks"
+    },
+    "F":
+    {
+      "item": "minecraft:blaze_powder"
+    },
+    "G":
+    {
+      "item": "minecraft:gold_nugget"
+    }
+  },
+  "pattern": [
+    "B N",
+    "IFN",
+    "PG "
+  ],
+  "result": {
+    "count": 1,
+    "item": "roundabout:colt_revolver"
+  },
+  "show_notification": true
+}

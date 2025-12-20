@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "minecraft:nether_brick"
+    },
+    "N":
+    {
+      "item": "minecraft:iron_nugget"
+    },
+    "I":
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    "P":
+    {
+      "item": "minecraft:oak_planks"
+    },
+    "F":
+    {
+      "item": "minecraft:blaze_powder"
+    }
+  },
+  "pattern": [
+    "BNN",
+    "IFN",
+    "PN "
+  ],
+  "result": {
+    "count": 1,
+    "item": "roundabout:snubnose_revolver"
+  },
+  "show_notification": true
+}

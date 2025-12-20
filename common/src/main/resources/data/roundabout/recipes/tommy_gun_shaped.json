@@ -1,0 +1,39 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "L": {
+      "item": "minecraft:oak_log"
+    },
+    "I":
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    "P":
+    {
+      "item": "minecraft:iron_nugget"
+    },
+    "F":
+    {
+      "item": "minecraft:blaze_powder"
+    },
+    "B":
+    {
+      "item": "minecraft:barrel"
+    },
+    "S":
+    {
+      "item": "minecraft:oak_stairs"
+    }
+  },
+  "pattern": [
+    "IP ",
+    "LFP",
+    "SB "
+  ],
+  "result": {
+    "count": 1,
+    "item": "roundabout:tommy_gun"
+  },
+  "show_notification": true
+}
