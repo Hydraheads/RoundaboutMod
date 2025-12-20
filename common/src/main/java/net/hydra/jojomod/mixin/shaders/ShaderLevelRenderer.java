@@ -64,6 +64,7 @@ public class ShaderLevelRenderer {
                             float radius2 = radius;
                             float maxRadius = radius;
                             boolean full = false;
+                            boolean full2 = false;
                             boolean subBubble = false;
                             if (tinstance.maxDuration >= 100){
                                 radius = Math.min(((tinstance.maxDuration-tinstance.durationInterpolation) + partialTick)*6, maxRadius);
@@ -74,14 +75,18 @@ public class ShaderLevelRenderer {
                                 if (radius2 > maxRadius){
                                     radius2 = maxRadius - (radius2-maxRadius);
                                 }
+                                if (radius2 >= 30){
+                                    full2 = true;
+                                }
                             }
 
                             if (radius2 > 0) {
                                 TimestopShaderManager.renderBubble(new TimestopShaderManager.Bubble(
                                         new Vec3(locationVec.x, locationVec.y, locationVec.z),
                                         radius2,
-                                        new Vec3(3, 1., 1),
-                                        full
+                                        new Vec3(1.5f, 0.5f, 0.5f),
+                                        (full2),
+                                        0.8f
                                 ));
                             }
                             TimestopShaderManager.renderBubble(new TimestopShaderManager.Bubble(
@@ -89,7 +94,7 @@ public class ShaderLevelRenderer {
                                     radius,
                                     new Vec3(1., 1., 1.),
                                     full,
-                                    1.f
+                                    0f
                             ));
 
                         }
