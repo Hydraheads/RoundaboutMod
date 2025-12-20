@@ -70,7 +70,7 @@ public class ShaderLevelRenderer {
                             if (tinstance.maxDuration >= 100){
                                 radius = Math.min(((tinstance.maxDuration-tinstance.durationInterpolation) + partialTick)*6, maxRadius);
                                 radius2 = Math.min(((tinstance.maxDuration-tinstance.durationInterpolation) + partialTick)*6, maxRadius*2);
-                                if (radius >= 30){
+                                if (radius >= 24){
                                     full = true;
                                 }
                                 if (radius2 > maxRadius){
