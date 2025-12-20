@@ -88,7 +88,8 @@ public class ShaderLevelRenderer {
                                     new Vec3(locationVec.x, locationVec.y, locationVec.z),
                                     radius,
                                     new Vec3(1., 1., 1.),
-                                    full
+                                    full,
+                                    1.f
                             ));
 
                         }

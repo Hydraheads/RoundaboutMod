@@ -19,6 +19,7 @@
     { "name": "BubblePos", "type": "float", "count": 3, "values":  [ 0.0, 0.0, 0.0 ] },
     { "name": "BubbleRadius", "type": "float", "count": 1, "values":  [ 20.0 ] },
     { "name": "BubbleTint", "type": "float", "count": 3, "values":  [ 1.0, 1.0, 1.0 ] },
-    { "name": "DesaturateAllInside", "type": "float", "count": 1, "values":  [ 1.0 ] }
+    { "name": "DesaturateAllInside", "type": "float", "count": 1, "values":  [ 1.0 ] },
+    { "name": "GroundLinesOpacity", "type": "float", "count": 1, "values":  [ 0.0 ] }
   ]
 }
