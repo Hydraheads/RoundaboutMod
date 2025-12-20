@@ -76,9 +76,6 @@ public class ClientConfig implements Cloneable {
     public Boolean enableBowlerHatRender;
 
     @BooleanOption(group = "inherit", value = true)
-    public Boolean enableFirearmRender;
-
-    @BooleanOption(group = "inherit", value = true)
     public Boolean enableRoadRollerRender;
 
     @NestedOption(group = "modded")

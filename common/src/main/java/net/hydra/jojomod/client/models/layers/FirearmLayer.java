@@ -116,12 +116,6 @@ public class FirearmLayer<T extends LivingEntity, A extends HumanoidModel<T>> ex
         boolean isHoldingFirearmRight = (held.getItem() instanceof FirearmItem);
         boolean isHoldingFirearmLeft = (offHeld.getItem() instanceof FirearmItem);
 
-        if ((!isHoldingFirearmRight && !isHoldingFirearmLeft) ||
-                ConfigManager.getClientConfig() == null ||
-                !ConfigManager.getClientConfig().enableFirearmRender) {
-            return;
-        }
-
         boolean mainArmRight = entity instanceof Player player && player.getMainArm() == HumanoidArm.RIGHT;
 
         poseStack.pushPose();
