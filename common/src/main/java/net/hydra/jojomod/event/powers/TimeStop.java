@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 
 public interface TimeStop {
+    ImmutableList<TimeStopInstance> rdbt$getTimeStoppingEntitiesClient();
     ImmutableList<LivingEntity> getTimeStoppingEntities();
     boolean inTimeStopRange(Vec3i pos);
     boolean inTimeStopRange(Entity entity);

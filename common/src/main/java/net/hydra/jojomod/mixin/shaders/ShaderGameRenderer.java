@@ -1,9 +1,12 @@
 package net.hydra.jojomod.mixin.shaders;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.access.IShaderGameRenderer;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -16,6 +19,8 @@ import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceProvider;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 import net.zetalasis.client.shader.RCoreShader;
 import net.zetalasis.client.shader.RPostShaderRegistry;
 import net.zetalasis.client.shader.TimestopShaderManager;
@@ -63,20 +68,20 @@ public abstract class ShaderGameRenderer implements IShaderGameRenderer {
     }
 
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;doEntityOutline()V", shift = At.Shift.AFTER))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;doEntityOutline()V", shift = At.Shift.BEFORE))
     private void roundabout$renderShaders(float tickDelta, long $$1, boolean renderLevel, CallbackInfo ci)
     {
+        TimestopShaderManager.renderAll(tickDelta);
+        /*
         RenderCallbackRegistry.roundabout$GAME_RENDERER_FINISH(tickDelta);
 
         if (RPostShaderRegistry.DESATURATE != null) {
             if (((IShaderGameRenderer)Minecraft.getInstance().gameRenderer).roundabout$tsShaderStatus())
             {
                 //RPostShaderRegistry.DESATURATE.roundabout$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
-                RPostShaderRegistry.DESATURATE.roundabout$process(tickDelta);
-
-                //RPostShaderRegistry.TIMESTOP.roundabout$process(tickDelta);
+                //RPostShaderRegistry.DESATURATE.roundabout$process(tickDelta);
             }
-        }
+        }*/
     }
 
     @Inject(method = "reloadShaders", at=@At("HEAD"))
@@ -127,13 +132,17 @@ public abstract class ShaderGameRenderer implements IShaderGameRenderer {
     private void roundabout$checkEntityPostEffect(Entity $$0, CallbackInfo ci){
         //$$0 is matrcices, $$1 is tickdelta
         ClientConfig clientConfig = ConfigManager.getClientConfig();
-        if (clientConfig != null && clientConfig.timeStopSettings != null && ConfigManager.getClientConfig().timeStopSettings.simpleTimeStopShader) {
-            if (minecraft.player != null && ((TimeStop) minecraft.player.level()).inTimeStopRange(minecraft.player)) {
-                if (!(ClientUtil.getScreenFreeze() && !((TimeStop) minecraft.player.level()).isTimeStoppingEntity(minecraft.player))) {
-                    //this.loadEffect(new ResourceLocation("shaders/post/desaturate.json"));
+        if (clientConfig != null && clientConfig.timeStopSettings != null) {
+            if (ConfigManager.getClientConfig().timeStopSettings.advancedTimeStopShader) {
+
+            } else if (ConfigManager.getClientConfig().timeStopSettings.simpleTimeStopShader) {
+                if (minecraft.player != null && ((TimeStop) minecraft.player.level()).inTimeStopRange(minecraft.player)) {
+                    if (!(ClientUtil.getScreenFreeze() && !((TimeStop) minecraft.player.level()).isTimeStoppingEntity(minecraft.player))) {
+                        //this.loadEffect(new ResourceLocation("shaders/post/desaturate.json"));
+                    }
+                } else {
+                    this.postEffect = null;
                 }
-            } else {
-                this.postEffect = null;
             }
         }
     }
@@ -141,32 +150,37 @@ public abstract class ShaderGameRenderer implements IShaderGameRenderer {
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void roundabout$tick(CallbackInfo ci) {
         ClientConfig clientConfig = ConfigManager.getClientConfig();
-        if (clientConfig != null && clientConfig.timeStopSettings != null && ConfigManager.getClientConfig().timeStopSettings.simpleTimeStopShader) {
-            boolean changed = false;
-            if (minecraft.player != null && ((TimeStop) minecraft.player.level()).inTimeStopRange(minecraft.player)) {
-                if (roundabout$tsShaderStatus == 0) {
-                    if (!(ClientUtil.getScreenFreeze() && !((TimeStop) minecraft.player.level()).isTimeStoppingEntity(minecraft.player))) {
+        if (clientConfig != null && clientConfig.timeStopSettings != null){
+            if (ConfigManager.getClientConfig().timeStopSettings.advancedTimeStopShader) {
+
+            } else if (ConfigManager.getClientConfig().timeStopSettings.simpleTimeStopShader) {
+                boolean changed = false;
+                if (minecraft.player != null && ((TimeStop) minecraft.player.level()).inTimeStopRange(minecraft.player)) {
+                    if (roundabout$tsShaderStatus == 0) {
+                        if (!(ClientUtil.getScreenFreeze() && !((TimeStop) minecraft.player.level()).isTimeStoppingEntity(minecraft.player))) {
+                            changed = true;
+                            roundabout$tsShaderStatus = 1;
+                            //this.loadEffect(new ResourceLocation("shaders/post/desaturate.json"));
+                        }
+                    }
+                } else {
+                    if (roundabout$tsShaderStatus == 1) {
                         changed = true;
-                        roundabout$tsShaderStatus = 1;
-                        //this.loadEffect(new ResourceLocation("shaders/post/desaturate.json"));
+                        roundabout$tsShaderStatus = 0;
+                        this.postEffect = null;
                     }
                 }
-            } else {
-                if (roundabout$tsShaderStatus == 1) {
-                    changed = true;
-                    roundabout$tsShaderStatus = 0;
-                    this.postEffect = null;
-                }
-            }
 
-            if (changed) {
-                Minecraft mc = Minecraft.getInstance();
-                CameraType $$0 = mc.options.getCameraType();
-                if ($$0.isFirstPerson() != mc.options.getCameraType().isFirstPerson()) {
-                    mc.gameRenderer.checkEntityPostEffect(mc.options.getCameraType().isFirstPerson() ? mc.getCameraEntity() : null);
+                if (changed) {
+                    Minecraft mc = Minecraft.getInstance();
+                    CameraType $$0 = mc.options.getCameraType();
+                    if ($$0.isFirstPerson() != mc.options.getCameraType().isFirstPerson()) {
+                        mc.gameRenderer.checkEntityPostEffect(mc.options.getCameraType().isFirstPerson() ? mc.getCameraEntity() : null);
+                    }
+
+                    mc.levelRenderer.needsUpdate();
                 }
 
-                mc.levelRenderer.needsUpdate();
             }
         }
     }
@@ -179,7 +193,8 @@ public abstract class ShaderGameRenderer implements IShaderGameRenderer {
     @Inject(method = "resize", at = @At("TAIL"))
     private void onResize(int width, int height, CallbackInfo ci)
     {
-        TimestopShaderManager.TIMESTOP_DEPTH_BUFFER.resize(width, height, true);
+        if (TimestopShaderManager.TIMESTOP_DEPTH_BUFFER != null)
+            TimestopShaderManager.TIMESTOP_DEPTH_BUFFER.resize(width, height, true);
     }
 
     /**Shadows, ignore

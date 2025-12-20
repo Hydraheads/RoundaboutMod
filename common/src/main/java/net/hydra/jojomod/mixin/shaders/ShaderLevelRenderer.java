@@ -21,7 +21,8 @@ public class ShaderLevelRenderer {
         if (Minecraft.getInstance().player == null)
             return;
 
-        TimestopShaderManager.TIMESTOP_DEPTH_BUFFER.copyDepthFrom(Minecraft.getInstance().getMainRenderTarget());
-        TimestopShaderManager.renderAll(partialTick);
+        if (TimestopShaderManager.TIMESTOP_DEPTH_BUFFER != null)
+            TimestopShaderManager.TIMESTOP_DEPTH_BUFFER.copyDepthFrom(Minecraft.getInstance().getMainRenderTarget());
+        //TimestopShaderManager.renderAll(partialTick);
     }
 }
