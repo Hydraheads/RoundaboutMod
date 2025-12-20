@@ -22,7 +22,7 @@ public class TimestopShaderManager {
         BUBBLE_QUEUE.add(bubble);
     }
 
-    public static void renderBubble(float tickDelta, Vec3 pos, float radius, Vec3 tint)
+    public static void renderBubble(float tickDelta, Vec3 pos, float radius, Vec3 tint, boolean altType)
     {
         Minecraft client = Minecraft.getInstance();
         Camera camera = client.gameRenderer.getMainCamera();
@@ -43,15 +43,16 @@ public class TimestopShaderManager {
         RPostShaderRegistry.TIMESTOP.roundabout$setUniform("BubblePos", pos.toVector3f());
         RPostShaderRegistry.TIMESTOP.roundabout$setUniform("BubbleRadius", radius);
         RPostShaderRegistry.TIMESTOP.roundabout$setUniform("BubbleTint", tint.toVector3f());
+        RPostShaderRegistry.TIMESTOP.roundabout$setUniform("DesaturateAllInside", altType ? 1.f : 0.f);
 
         RPostShaderRegistry.TIMESTOP.roundabout$process(tickDelta);
     }
 
     public static void renderAll(float tickDelta)
     {
-        BUBBLE_QUEUE.forEach(bubble -> renderBubble(tickDelta, bubble.pos, bubble.radius, bubble.tint));
+        BUBBLE_QUEUE.forEach(bubble -> renderBubble(tickDelta, bubble.pos, bubble.radius, bubble.tint, bubble.altType));
         BUBBLE_QUEUE.clear();
     }
 
-    public record Bubble(Vec3 pos, float radius, Vec3 tint) {}
+    public record Bubble(Vec3 pos, float radius, Vec3 tint, boolean altType) {}
 }
