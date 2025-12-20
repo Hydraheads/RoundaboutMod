@@ -15,7 +15,7 @@ import java.util.List;
 
 public class TimestopShaderManager {
     private static final List<Bubble> BUBBLE_QUEUE = new ArrayList<>();
-    public static final RenderTarget TIMESTOP_DEPTH_BUFFER = new TextureTarget(1920, 1080, true, true);
+    public static RenderTarget TIMESTOP_DEPTH_BUFFER = new TextureTarget(1920, 1080, true, true);
 
     public static void renderBubble(Bubble bubble)
     {

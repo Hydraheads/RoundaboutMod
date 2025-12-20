@@ -14,7 +14,7 @@
         },
         {
           "name": "MainDepthSampler",
-          "id": "minecraft:main:depth"
+          "id": "timestop:depth"
         }
       ]
     },

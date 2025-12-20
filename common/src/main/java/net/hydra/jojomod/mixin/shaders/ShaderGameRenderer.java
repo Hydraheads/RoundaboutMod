@@ -68,20 +68,20 @@ public abstract class ShaderGameRenderer implements IShaderGameRenderer {
     }
 
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;doEntityOutline()V", shift = At.Shift.AFTER))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;doEntityOutline()V", shift = At.Shift.BEFORE))
     private void roundabout$renderShaders(float tickDelta, long $$1, boolean renderLevel, CallbackInfo ci)
     {
+        TimestopShaderManager.renderAll(tickDelta);
+        /*
         RenderCallbackRegistry.roundabout$GAME_RENDERER_FINISH(tickDelta);
 
         if (RPostShaderRegistry.DESATURATE != null) {
             if (((IShaderGameRenderer)Minecraft.getInstance().gameRenderer).roundabout$tsShaderStatus())
             {
                 //RPostShaderRegistry.DESATURATE.roundabout$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
-                RPostShaderRegistry.DESATURATE.roundabout$process(tickDelta);
-
-                //RPostShaderRegistry.TIMESTOP.roundabout$process(tickDelta);
+                //RPostShaderRegistry.DESATURATE.roundabout$process(tickDelta);
             }
-        }
+        }*/
     }
 
     @Inject(method = "reloadShaders", at=@At("HEAD"))
@@ -193,7 +193,8 @@ public abstract class ShaderGameRenderer implements IShaderGameRenderer {
     @Inject(method = "resize", at = @At("TAIL"))
     private void onResize(int width, int height, CallbackInfo ci)
     {
-        TimestopShaderManager.TIMESTOP_DEPTH_BUFFER.resize(width, height, true);
+        if (TimestopShaderManager.TIMESTOP_DEPTH_BUFFER != null)
+            TimestopShaderManager.TIMESTOP_DEPTH_BUFFER.resize(width, height, true);
     }
 
     /**Shadows, ignore
