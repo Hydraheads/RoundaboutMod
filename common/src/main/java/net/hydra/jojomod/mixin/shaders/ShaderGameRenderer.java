@@ -152,22 +152,7 @@ public abstract class ShaderGameRenderer implements IShaderGameRenderer {
         ClientConfig clientConfig = ConfigManager.getClientConfig();
         if (clientConfig != null && clientConfig.timeStopSettings != null){
             if (ConfigManager.getClientConfig().timeStopSettings.advancedTimeStopShader) {
-                if (minecraft.player != null) {
-                    ImmutableList<TimeStopInstance> listTs =  ImmutableList.copyOf(((TimeStop) minecraft.player.level()).rdbt$getTimeStoppingEntitiesClient());
-                    if (!listTs.isEmpty()){
-                        for (int i = listTs.size() - 1; i >= 0; --i) {
-                            TimeStopInstance tinstance = listTs.get(i);
-                            if (tinstance != null){
-                                Roundabout.LOGGER.info("we're in "+tinstance);
-                                TimestopShaderManager.renderBubble(new TimestopShaderManager.Bubble(
-                                        new Vec3(tinstance.x,tinstance.y,tinstance.z),
-                                        10,
-                                        new Vec3(1.,1.,1.))
-                                       );
-                            }
-                        }
-                    }
-                }
+
             } else if (ConfigManager.getClientConfig().timeStopSettings.simpleTimeStopShader) {
                 boolean changed = false;
                 if (minecraft.player != null && ((TimeStop) minecraft.player.level()).inTimeStopRange(minecraft.player)) {
