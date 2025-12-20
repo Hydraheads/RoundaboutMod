@@ -11,7 +11,10 @@ uniform vec4 CameraPos;
 uniform vec4 CameraRot;
 uniform vec3 BubblePos;
 uniform float BubbleRadius;
+uniform float BubbleMaxRadius;
 uniform vec3 BubbleTint;
+uniform float DesaturateAllInside;
+uniform float GroundLinesOpacity;
 
 in vec2 texCoord;
 out vec4 fragColor;
@@ -47,63 +50,78 @@ void main() {
 
     vec3 camPos = CameraPos.xyz;
 
-    if (distance(camPos, BubblePos) <= BubbleRadius)
+    bool desaturateAll = (DesaturateAllInside > 0.5);
+
+    vec2 ndc = vec2(
+        texCoord.x * 2.0 - 1.0,
+        1.0 - texCoord.y * 2.0
+    );
+
+    float FOV = CameraPos.w;
+    float fovTan = tan(radians(FOV)/2.);
+    vec3 forward = normalize(rotateByQuat(vec3(0., 0., 1.), CameraRot));
+    vec3 up = normalize(rotateByQuat(vec3(0., 1., 0.), CameraRot));
+    vec3 right = normalize(cross(forward, up));
+
+    vec3 rayDir = normalize(
+        forward +
+        right * ndc.x * fovTan * aspect +
+        up * (-ndc.y) * fovTan
+    );
+
+    vec3 rayPos = camPos;
+    bool hit = false;
+
+    float depth = linearizeDepth(texture(MainDepthSampler, texCoord).r);
+    float worldDist = length(vec3(1., (2.*texCoord - 1.) * vec2(aspect, 1.) * tan(radians(FOV / 2.))) * depth);
+    // Cast a ray from our camera to pixel, see where it lands in the world. Not a perfect replication of screenspace -> worldspace, but a good enough one at that! (and also cheap!)
+    vec3 worldPos = camPos+rayDir*worldDist;
+
+    float bubbleRadius = BubbleRadius/BubbleMaxRadius;
+    bubbleRadius = 1.-pow(1.-bubbleRadius, 3);
+    bubbleRadius *= 100.;
+
+    bool camInside = (distance(camPos, BubblePos) <= bubbleRadius);
+    if (!camInside)
     {
-        col.rgb = generic_desaturate(col.rgb, DESATURATION).rgb*BubbleTint;
-    }
-    else {
-        vec2 ndc = vec2(
-            texCoord.x * 2.0 - 1.0,
-            1.0 - texCoord.y * 2.0
-        );
-
-        float FOV = CameraPos.w;
-        float fovTan = tan(radians(FOV)/2.);
-        vec3 forward = normalize(rotateByQuat(vec3(0., 0., 1.), CameraRot));
-        vec3 up = normalize(rotateByQuat(vec3(0., 1., 0.), CameraRot));
-        vec3 right = normalize(cross(forward, up));
-
-        vec3 rayDir = normalize(
-            forward +
-            right * ndc.x * fovTan * aspect +
-            up * (-ndc.y) * fovTan
-        );
-
-        vec3 rayPos = camPos;
-        bool hit = false;
 #ifdef BUBBLE
         // Raymarch the physical bubble (WARNING: expensive!)
         for (int i = 0; i < 64; i++)
         {
-            float d = length(rayPos-BubblePos)-BubbleRadius;
+            float d = length(rayPos-BubblePos)-bubbleRadius;
             rayPos += rayDir*d;
             if (d < 0.01)
             {
+                if (distance(rayPos, camPos) < worldDist)
+                {
+                    col.rgb = generic_desaturate(col.rgb, DESATURATION).rgb*BubbleTint;
+
+                    // Add the fresnel effect
+                    vec3 normal = normalize(BubblePos-rayPos);
+                    col.rgb += pow(1.-clamp(dot(normal, rayDir), 0., 1.), 5.);
+                }
+
                 hit = true;
                 break;
             }
         }
 #endif
-
-        float depth = linearizeDepth(texture(MainDepthSampler, texCoord).r);
-        float worldDist = length(vec3(1., (2.*texCoord - 1.) * vec2(aspect, 1.) * tan(radians(FOV / 2.))) * depth);
-        // Cast a ray from our camera to pixel, see where it lands in the world. Not a perfect replication of screenspace -> worldspace, but a good enough one at that! (and also cheap!)
-        vec3 worldPos = camPos+rayDir*worldDist;
-
-        float bubbleDist = distance(worldPos, BubblePos);
-        if (bubbleDist < BubbleRadius
-#ifdef BUBBLE
-        || (hit && distance(rayPos, camPos) < worldDist)
-#endif
-        )
+    }
+    else {
+        if (desaturateAll)
         {
-        col.rgb = generic_desaturate(col.rgb, DESATURATION).rgb*BubbleTint;
-#ifdef BUBBLE
-            // Add the fresnel effect
-        vec3 normal = normalize(BubblePos-rayPos);
-        col.rgb += pow(1.-clamp(dot(normal, rayDir), 0., 1.), 5.);
-#endif
+            col.rgb = generic_desaturate(col.rgb, DESATURATION).rgb*BubbleTint;
         }
+    }
+
+    float bubbleDist = distance(worldPos, BubblePos);
+    if (bubbleDist < bubbleRadius)
+    {
+        if (!(camInside && desaturateAll))
+            col.rgb = generic_desaturate(col.rgb, DESATURATION).rgb*BubbleTint;
+
+        float edge = smoothstep(0., 1., clamp(bubbleDist/bubbleRadius, 0., 1.));
+        col.rgb += clamp(pow(edge, bubbleRadius*2.), 0., 1.)*GroundLinesOpacity;
     }
 
     fragColor = col;

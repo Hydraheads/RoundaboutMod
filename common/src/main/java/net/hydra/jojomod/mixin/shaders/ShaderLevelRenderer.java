@@ -61,15 +61,49 @@ public class ShaderLevelRenderer {
                             //Determine the bubble's radius so it grows but only on full size time stops
                             float radius = ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite;
                             if (radius < 0){radius = 100000;}
+                            float radius2 = radius;
+                            float maxRadius = radius;
+                            boolean full = false;
+                            boolean full2 = false;
+                            boolean subBubble = false;
+                            boolean colorless = true;
                             if (tinstance.maxDuration >= 100){
-                                radius = Math.min(((tinstance.maxDuration-tinstance.duration) + partialTick), radius);
+                                radius = Math.min(((tinstance.maxDuration-tinstance.durationInterpolation) + partialTick)*6, maxRadius);
+                                radius2 = Math.min(((tinstance.maxDuration-tinstance.durationInterpolation) + partialTick)*6, maxRadius*2);
+                                if (radius >= 24){
+                                    full = true;
+                                }
+                                if (radius2 > maxRadius){
+                                    radius2 = maxRadius - (radius2-maxRadius);
+                                }
+                                if (radius2 >= 24){
+                                    full2 = true;
+                                }
+                                colorless = false;
                             }
 
+                            if (radius2 > 0 && !colorless) {
+                                TimestopShaderManager.renderBubble(new TimestopShaderManager.Bubble(
+                                        new Vec3(locationVec.x, locationVec.y, locationVec.z),
+                                        radius2,
+                                        maxRadius,
+                                        new Vec3(1.5f, 0.5f, 0.5f),
+                                        (full2),
+                                        0.8f
+                                ));
+                            }
+                            float gop = 0;
+                            if (colorless && radius < maxRadius)
+                                gop = 0.8f;
                             TimestopShaderManager.renderBubble(new TimestopShaderManager.Bubble(
                                     new Vec3(locationVec.x, locationVec.y, locationVec.z),
                                     radius,
-                                    new Vec3(1., 1., 1.))
-                            );
+                                    maxRadius,
+                                    new Vec3(1., 1., 1.),
+                                    full,
+                                    gop
+                            ));
+
                         }
                     }
                 }

@@ -2618,7 +2618,7 @@
   "config.roundabout.walkingHeartCooldownPerHit.desc": "How many cooldown ticks per hit in heel planted/wall walking mode.",
 
   "config.roundabout.usePreciseMath.name": "Use Precise Sphere Math",
-  "config.roundabout.usePreciseMath.desc": "If you want the bubble of time stop to accurately cover the radius of the completed sphere rather than just being a simple box calculation. By default it is resource efficient.",
+  "config.roundabout.usePreciseMath.desc": "If you want the bubble of time stop to accurately cover the radius of the completed sphere rather than just being a simple box calculation. By default it is true because time stop prevents lots of things from ticking and saves performance as is.",
 
   "config.roundabout.configButtonOffsetX.name": "Config Button X Offset",
   "config.roundabout.configButtonOffsetX.desc": "Adjust the position of the ingame config. If you mess this up too badly to press the button ingame, you can change the file manually in the config folder.",
