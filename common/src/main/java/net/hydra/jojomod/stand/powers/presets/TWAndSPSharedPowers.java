@@ -8,6 +8,8 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.TimeStopInstance;
@@ -121,6 +123,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 tryPowerPacket(PowerIndex.POWER_2_BLOCK);
             }
         }
+    }
+    public Vec3 getTSColor(){
+        return new Vec3(1f,1f,1f);
     }
     public void tryToStandLeapClient() {
         if (hasBlock() || hasEntity())

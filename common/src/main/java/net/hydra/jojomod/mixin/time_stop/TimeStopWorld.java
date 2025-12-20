@@ -86,14 +86,17 @@ public class TimeStopWorld implements TimeStop {
                 List<TimeStopInstance> $$0 = Lists.newArrayList(this.roundabout$timeStoppingEntitiesClient);
                 List<TimeStopInstance> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntitiesClient);
                 int durationInterpolation = duration;
+                int firstDuration = duration;
                 for (int i = $$0.size() - 1; i >= 0; --i) {
                     if ($$0.get(i).id == id) {
                         durationInterpolation = $$0.get(i).durationInterpolation;
+                        firstDuration = $$0.get(i).firstDuration;
                         $$1.remove($$0.get(i));
                     }
                 }
                 TimeStopInstance tsi = new TimeStopInstance(id, x, y, z, range, duration, maxDuration);
                 tsi.durationInterpolation = durationInterpolation;
+                tsi.firstDuration = firstDuration;
                 $$1.add(tsi);
                 this.roundabout$timeStoppingEntitiesClient = ImmutableList.copyOf($$1);
             }

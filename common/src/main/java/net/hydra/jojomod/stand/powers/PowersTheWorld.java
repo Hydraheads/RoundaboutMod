@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.entity.visages.mobs.DIONPC;
 import net.hydra.jojomod.entity.visages.mobs.DiegoNPC;
@@ -120,6 +121,28 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public int getMaxGuardPoints(){
         return ClientNetworking.getAppropriateConfig().theWorldSettings.theWorldGuardPoints;
+    }
+    @Override
+    public Vec3 getTSColor(){
+        byte skin = ((StandUser) self).roundabout$getStandSkin();
+        if (skin == TheWorldEntity.OVA_SKIN)
+            return new Vec3(1.5f, 0.5f, 0.5f);
+        if (skin == TheWorldEntity.THE_NETHER)
+            return new Vec3(1.5f, 1.0f, 0.5f);
+        if (skin == TheWorldEntity.OVER_HEAVEN)
+            return new Vec3(1.5f, 0.5f, 1.5f);
+        if (skin == TheWorldEntity.ARCADE_SKIN || skin == TheWorldEntity.ARCADE_SKIN_2)
+            return Vec3.ZERO;
+        if (skin == TheWorldEntity.PART_7_SKIN)
+            return new Vec3(1.5f, 1.5f, 0.5f);
+        if (skin == TheWorldEntity.PART_7_BLUE || skin == TheWorldEntity.BLACK_SKIN)
+            return new Vec3(0.5f, 0.5f, 1.5f);
+        if (skin == TheWorldEntity.ULTIMATE_SKIN || skin == TheWorldEntity.ULTIMATE_KARS_SKIN
+                || skin == TheWorldEntity.DARK_SKIN
+        )
+            return new Vec3(0.5,0.5,0.5);
+
+        return super.getTSColor();
     }
     @Override
     public void playTheLastHitSound(){
