@@ -35,7 +35,6 @@ public class ShaderLevelRenderer {
                     for (int i = listTs.size() - 1; i >= 0; --i) {
                         TimeStopInstance tinstance = listTs.get(i);
                         if (tinstance != null) {
-                            Roundabout.LOGGER.info("we're in " + tinstance);
                             TimestopShaderManager.renderBubble(new TimestopShaderManager.Bubble(
                                     new Vec3(tinstance.x, tinstance.y, tinstance.z),
                                     11,
