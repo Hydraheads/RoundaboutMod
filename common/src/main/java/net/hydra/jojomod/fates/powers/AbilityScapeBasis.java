@@ -947,6 +947,10 @@ public class AbilityScapeBasis {
         if (!getPowerCooldowns().isEmpty() && getPowerCooldowns().size() >= power){
             getPowerCooldowns().get(power).time = cooldown;
             getPowerCooldowns().get(power).maxTime = cooldown;
+
+            if (self instanceof ServerPlayer sp && isServerControlledCooldown(getPowerCooldowns().get(power),power)){
+                S2CPacketUtil.sendMaxCooldownSyncPacket(sp, power, cooldown, cooldown);
+            }
         }
     }
     /**set an ability on cooldown, and change the max cooldown*/
@@ -954,6 +958,10 @@ public class AbilityScapeBasis {
         if (!getPowerCooldowns().isEmpty() && getPowerCooldowns().size() >= power){
             getPowerCooldowns().get(power).time = cooldown;
             getPowerCooldowns().get(power).maxTime = maxCooldown;
+
+            if (self instanceof ServerPlayer sp && isServerControlledCooldown(getPowerCooldowns().get(power),power)){
+                S2CPacketUtil.sendMaxCooldownSyncPacket(sp, power, cooldown, maxCooldown);
+            }
         }
     }
 
