@@ -813,6 +813,12 @@ public class StandPowers extends AbilityScapeBasis {
             return ModSounds.GLAIVE_CHARGE_EVENT;
         } else if (soundChoice == SoundIndex.REVOLVER_RELOAD) {
             return ModSounds.SNUBNOSE_RELOAD_EVENT;
+        } else if (soundChoice == SoundIndex.SNIPER_RELOAD) {
+            return ModSounds.JACKAL_RELOAD_EVENT;
+        } else if (soundChoice == SoundIndex.COLT_RELOAD) {
+            return ModSounds.COLT_RELOAD_EVENT;
+        } else if (soundChoice == SoundIndex.TOMMY_RELOAD) {
+            return ModSounds.TOMMY_RELOAD_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE) {
             return ModSounds.TIME_STOP_STAR_PLATINUM_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_4) {
@@ -909,6 +915,12 @@ public class StandPowers extends AbilityScapeBasis {
         if (soundChoice == SoundIndex.BARRAGE_CHARGE_SOUND) {
             return SoundIndex.BARRAGE_SOUND_GROUP;
         } else if (soundChoice <= SoundIndex.REVOLVER_RELOAD) {
+            return SoundIndex.ITEM_GROUP;
+        } else if (soundChoice <= SoundIndex.SNIPER_RELOAD) {
+            return SoundIndex.ITEM_GROUP;
+        } else if (soundChoice <= SoundIndex.COLT_RELOAD) {
+            return SoundIndex.ITEM_GROUP;
+        } else if (soundChoice <= SoundIndex.TOMMY_RELOAD) {
             return SoundIndex.ITEM_GROUP;
         } else if (soundChoice <= SoundIndex.GLAIVE_CHARGE) {
             return SoundIndex.ITEM_GROUP;

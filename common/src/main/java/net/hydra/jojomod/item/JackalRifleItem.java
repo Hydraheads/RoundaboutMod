@@ -160,7 +160,7 @@ public class JackalRifleItem extends FirearmItem implements Vanishable {
             $$7.setAmmoType(RoundaboutBulletEntity.SNIPER);
             level.addFreshEntity($$7);
             S2CPacketUtil.gunRecoil(player, "sniper");
-            level.playSound(null, player, ModSounds.SNUBNOSE_FIRE_EVENT, SoundSource.PLAYERS, 100.0F, 1.0F);
+            level.playSound(null, player, ModSounds.JACKAL_FIRE_EVENT, SoundSource.PLAYERS, 100.0F, 1.0F);
             if (level instanceof ServerLevel serverLevel) {
                 Vec3 look = player.getLookAngle().normalize();
                 Vec3 up = new Vec3(0, 1, 0);
@@ -207,8 +207,8 @@ public class JackalRifleItem extends FirearmItem implements Vanishable {
             if ((player.isCrouching() && hasSniperAmmo(player) && getAmmo(itemStack) != maxAmmo) || (player.isCrouching() && player.isCreative())) {
                 if (!isReloading(itemStack)) {
                     setReloading(itemStack, true);
-                    player.getCooldowns().addCooldown(this, 60);
-                    ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.REVOLVER_RELOAD, 10, false);
+                    player.getCooldowns().addCooldown(this, 20);
+                    ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.SNIPER_RELOAD, 10, false);
                 }
 
                 return InteractionResultHolder.consume(itemStack);

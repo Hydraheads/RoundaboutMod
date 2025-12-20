@@ -210,7 +210,7 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
                 if (!isReloading(itemStack)) {
                     setReloading(itemStack, true);
                     player.getCooldowns().addCooldown(this, 140);
-                    ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.REVOLVER_RELOAD, 10, false);
+                    ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.TOMMY_RELOAD, 10, false);
                 }
 
                 return InteractionResultHolder.consume(itemStack);

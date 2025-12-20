@@ -83,6 +83,36 @@
       "roundabout:tommy_gun_fire"
     ]
   },
+  "tommy_reload": {
+    "subtitle": "sounds.roundabout.tommy_reload",
+    "sounds": [
+      "roundabout:tommy_reload"
+    ]
+  },
+  "jackal_fire": {
+    "subtitle": "sounds.roundabout.jackal_fire",
+    "sounds": [
+      "roundabout:jackal_fire"
+    ]
+  },
+  "jackal_reload": {
+    "subtitle": "sounds.roundabout.jackal_reload",
+    "sounds": [
+      "roundabout:jackal_reload"
+    ]
+  },
+  "colt_fire": {
+    "subtitle": "sounds.roundabout.colt_fire",
+    "sounds": [
+      "roundabout:colt_fire"
+    ]
+  },
+  "colt_reload": {
+    "subtitle": "sounds.roundabout.colt_reload",
+    "sounds": [
+      "roundabout:colt_reload"
+    ]
+  },
   "bullet_penetration": {
     "subtitle": "sounds.roundabout.bullet_penetration",
     "sounds": [

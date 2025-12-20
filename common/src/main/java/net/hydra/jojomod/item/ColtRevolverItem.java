@@ -71,7 +71,7 @@ public class ColtRevolverItem extends FirearmItem implements Vanishable {
         return UseAnim.BOW;
     }
 
-    private boolean hasSnubnoseAmmo(Player player) {
+    private boolean hasColtAmmo(Player player) {
         Inventory inv = player.getInventory();
 
         for (ItemStack stack : inv.items) {
@@ -92,7 +92,7 @@ public class ColtRevolverItem extends FirearmItem implements Vanishable {
         return false;
     }
 
-    private int consumeSnubnoseAmmo(Player player, int amount) {
+    private int consumeColtAmmo(Player player, int amount) {
         Inventory inv = player.getInventory();
         int consumed = 0;
 
@@ -158,7 +158,7 @@ public class ColtRevolverItem extends FirearmItem implements Vanishable {
             $$7.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 4.0F, 1.3F);
             $$7.setAmmoType(RoundaboutBulletEntity.COLT);
             level.addFreshEntity($$7);
-            level.playSound(null, player, ModSounds.SNUBNOSE_FIRE_EVENT, SoundSource.PLAYERS, 100.0F, 1.0F);
+            level.playSound(null, player, ModSounds.COLT_FIRE_EVENT, SoundSource.PLAYERS, 100.0F, 1.0F);
             if (level instanceof ServerLevel serverLevel) {
                 Vec3 look = player.getLookAngle().normalize();
                 Vec3 up = new Vec3(0, 1, 0);
@@ -202,11 +202,11 @@ public class ColtRevolverItem extends FirearmItem implements Vanishable {
             return InteractionResultHolder.fail(itemStack);
         }
         if (!(player.getUseItem() == itemStack)) {
-            if ((player.isCrouching() && hasSnubnoseAmmo(player) && getAmmo(itemStack) != maxAmmo) || (player.isCrouching() && player.isCreative())) {
+            if ((player.isCrouching() && hasColtAmmo(player) && getAmmo(itemStack) != maxAmmo) || (player.isCrouching() && player.isCreative())) {
                 if (!isReloading(itemStack)) {
                     setReloading(itemStack, true);
                     player.getCooldowns().addCooldown(this, 60);
-                    ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.REVOLVER_RELOAD, 10, false);
+                    ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.COLT_RELOAD, 10, false);
                 }
 
                 return InteractionResultHolder.consume(itemStack);
@@ -215,7 +215,7 @@ public class ColtRevolverItem extends FirearmItem implements Vanishable {
                     if (player instanceof ServerPlayer SP) {
                         SP.displayClientMessage(Component.translatable("text.roundabout.already_reloaded").withStyle(ChatFormatting.GRAY), true);
                     }
-                } else if (player.isCrouching() && getAmmo(itemStack) != maxAmmo && !hasSnubnoseAmmo(player)) {
+                } else if (player.isCrouching() && getAmmo(itemStack) != maxAmmo && !hasColtAmmo(player)) {
                     if (player instanceof ServerPlayer SP) {
                         SP.displayClientMessage(Component.translatable("text.roundabout.no_more_usable_ammo").withStyle(ChatFormatting.GRAY), true);
                     }
@@ -256,7 +256,7 @@ public class ColtRevolverItem extends FirearmItem implements Vanishable {
             int currentAmmo = getAmmo(stack);
             int ammoNeeded = maxAmmo - currentAmmo;
 
-            int ammoLoaded = consumeSnubnoseAmmo(player, ammoNeeded);
+            int ammoLoaded = consumeColtAmmo(player, ammoNeeded);
 
             if (ammoLoaded > 0) {
                 if (player.isCreative()) {

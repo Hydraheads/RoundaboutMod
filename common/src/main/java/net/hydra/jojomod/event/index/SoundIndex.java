@@ -8,6 +8,9 @@ public class SoundIndex {
     public static final byte ALL_SOUNDS = 0;
     public static final byte GLAIVE_CHARGE = -20;
     public static final byte REVOLVER_RELOAD = -23;
+    public static final byte SNIPER_RELOAD = -24;
+    public static final byte COLT_RELOAD = -25;
+    public static final byte TOMMY_RELOAD = -26;
     public static final byte BOWLER_HAT_AIM_SOUND = -22;
     public static final byte BLOOD_REGEN = -6;
     public static final byte STAND_ARROW_CHARGE = -21;

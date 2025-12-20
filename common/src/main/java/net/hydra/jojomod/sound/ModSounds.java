@@ -200,6 +200,23 @@ public class ModSounds {
     public static final String TOMMY_FIRE = "tommy_fire";
     public static final ResourceLocation TOMMY_FIRE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TOMMY_FIRE);
     public static SoundEvent TOMMY_FIRE_EVENT = SoundEvent.createVariableRangeEvent(TOMMY_FIRE_ID);
+    public static final String TOMMY_RELOAD = "tommy_reload";
+    public static final ResourceLocation TOMMY_RELOAD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TOMMY_RELOAD);
+    public static SoundEvent TOMMY_RELOAD_EVENT = SoundEvent.createVariableRangeEvent(TOMMY_RELOAD_ID);
+
+    public static final String COLT_FIRE = "colt_fire";
+    public static final ResourceLocation COLT_FIRE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+COLT_FIRE);
+    public static SoundEvent COLT_FIRE_EVENT = SoundEvent.createVariableRangeEvent(COLT_FIRE_ID);
+    public static final String COLT_RELOAD = "colt_reload";
+    public static final ResourceLocation COLT_RELOAD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+COLT_RELOAD);
+    public static SoundEvent COLT_RELOAD_EVENT = SoundEvent.createVariableRangeEvent(COLT_RELOAD_ID);
+
+    public static final String JACKAL_FIRE = "jackal_fire";
+    public static final ResourceLocation JACKAL_FIRE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JACKAL_FIRE);
+    public static SoundEvent JACKAL_FIRE_EVENT = SoundEvent.createVariableRangeEvent(JACKAL_FIRE_ID);
+    public static final String JACKAL_RELOAD = "jackal_reload";
+    public static final ResourceLocation JACKAL_RELOAD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JACKAL_RELOAD);
+    public static SoundEvent JACKAL_RELOAD_EVENT = SoundEvent.createVariableRangeEvent(JACKAL_RELOAD_ID);
 
     public static final String BULLET_PENTRATION = "bullet_penetration";
     public static final ResourceLocation BULLET_PENTRATION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BULLET_PENTRATION);
