@@ -39,7 +39,7 @@ public class TimeStopInstance {
         this.range = range;
         this.duration = duration;
         this.firstDuration = duration;
-        this.durationInterpolation = duration;
+        this.durationInterpolation = 0;
         this.maxDuration = maxDuration;
     }
 }

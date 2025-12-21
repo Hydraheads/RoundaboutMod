@@ -2,10 +2,12 @@ package net.hydra.jojomod.mixin.shaders;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersTheWorld;
 import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -34,8 +36,17 @@ public class ShaderLevelRenderer {
     @Shadow @Nullable private ClientLevel level;
 
     @Inject(method = "renderLevel", at= @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/Lighting;setupLevel(Lorg/joml/Matrix4f;)V", shift = At.Shift.AFTER))
-    private void render(PoseStack $$0, float partialTick, long $$2, boolean $$3, Camera $$4, GameRenderer $$5, LightTexture $$6, Matrix4f $$7, CallbackInfo ci)
+    private void rdbt$renderLevTS(PoseStack $$0, float partialTick, long $$2, boolean $$3, Camera $$4, GameRenderer $$5, LightTexture $$6, Matrix4f $$7, CallbackInfo ci)
     {
+        rdbt$fix($$0,partialTick,$$2,$$3,$$4,$$5,$$6,$$7);
+    }
+    @Inject(method = "renderLevel", at= @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/Lighting;setupNetherLevel(Lorg/joml/Matrix4f;)V", shift = At.Shift.AFTER))
+    private void rdbt$renderLevTS2(PoseStack $$0, float partialTick, long $$2, boolean $$3, Camera $$4, GameRenderer $$5, LightTexture $$6, Matrix4f $$7, CallbackInfo ci)
+    {
+        rdbt$fix($$0,partialTick,$$2,$$3,$$4,$$5,$$6,$$7);
+    }
+
+    public void rdbt$fix(PoseStack $$0, float partialTick, long $$2, boolean $$3, Camera $$4, GameRenderer $$5, LightTexture $$6, Matrix4f $$7){
         if (Minecraft.getInstance().player == null)
             return;
 
@@ -62,11 +73,22 @@ public class ShaderLevelRenderer {
                             boolean subBubble = false;
                             boolean colorless = true;
                             boolean leg2 = false;
+                            int maxDuration = ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum;
 
-                            if (tinstance.firstDuration >= 100){
+
+                            if (level != null) {
+                                Entity ent = level.getEntity(tinstance.id);
+                                if (ent instanceof LivingEntity LE) {
+                                    if (((StandUser)LE).roundabout$getStandPowers() instanceof PowersTheWorld){
+                                        maxDuration = ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld;
+                                    }
+                                }
+                            }
+
+                            if (tinstance.firstDuration >= maxDuration){
                                 subBubble = true;
-                                radius = Math.min(((tinstance.maxDuration-tinstance.durationInterpolation) + partialTick)*(maxRadius/16.66f), maxRadius);
-                                radius2 = Math.min(((tinstance.maxDuration-tinstance.durationInterpolation) + partialTick)*(maxRadius/16.66f), maxRadius*2);
+                                radius = Math.min(((tinstance.durationInterpolation) + partialTick)*(maxRadius/16.66f), maxRadius);
+                                radius2 = Math.min(((tinstance.durationInterpolation) + partialTick)*(maxRadius/16.66f), maxRadius*2);
                                 if (radius >= 24){
                                     full = true;
                                 }
