@@ -1,11 +1,15 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import java.util.List;
@@ -30,6 +34,37 @@ public class PowersTheGratefulDead extends NewPunchingStand {
         return ModEntities.THE_GRATEFUL_DEAD.create(this.getSelf().level());
     }
 
+    @Override
+    public int getMaxGuardPoints(){
+        return 15;
+    }
+
+    public boolean tryPower(int move, boolean forced) {
+        return super.tryPower(move, forced);
+    }
+
+    @Override
+    public void renderIcons(GuiGraphics context, int x, int y) {
+        ClientUtil.fx.roundabout$onGUI(context);
+
+        if(!isMiasmaActive()){
+            setSkillIcon(context, x, y ,1, StandIcons.MIASMA_TOGGLE_ACTIVE, PowerIndex.SKILL_1);
+        }else{
+            setSkillIcon(context, x, y, 1, StandIcons.MIASMA_TOGGLE_INACTIVE, PowerIndex.SKILL_1);
+        }
+
+        if(!isHoldingSneak()){
+            setSkillIcon(context, x, y, 2, StandIcons.AGE_GRAB, PowerIndex.SKILL_2);
+        }else{
+            setSkillIcon(context, x, y, 2, StandIcons.SNEAK_X, PowerIndex.SKILL_2);
+        }
+
+        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+
+        super.renderIcons(context, x, y);
+    }
+
+    public boolean isMiasmaActive() {return false;}
 
     @Override
     public boolean isWip(){

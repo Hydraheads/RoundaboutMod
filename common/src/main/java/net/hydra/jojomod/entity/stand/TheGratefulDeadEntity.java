@@ -23,108 +23,18 @@ public class TheGratefulDeadEntity extends FollowingStandEntity{
 
     public final AnimationState idleAnimationState2 = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
-    public final AnimationState customBlock = new AnimationState(); //10
-    public final AnimationState customBarrageCharge = new AnimationState(); //11
-    public final AnimationState customBarrage = new AnimationState(); //12
-    public final AnimationState customBarrageEnd = new AnimationState(); //13
-    public final AnimationState customBrokenGuard = new AnimationState(); //15
-    public final AnimationState customMiningBarrage = new AnimationState(); //16
 
     @Override
     public void setupAnimationStates() {
         if (this.getUser() != null) {
             byte idle = getIdleAnimation();
             byte animation = getAnimation();
-            if(animation == 0 && this.getGrounded()){
-                this.idleAnimationState.startIfStopped(this.tickCount);
-            }else{
-                this.idleAnimationState.stop();
-            }
-            if(animation == 0 && !this.getGrounded()){
-                this.idleAnimationState2.startIfStopped(this.tickCount);
-            }else{
-                this.idleAnimationState2.stop();
-            }
-            if(animation == 12 && this.getGrounded()){
-                this.customBarrage.startIfStopped(this.tickCount);
-            }else{
-                this.customBarrage.stop();
-            }
-            if(animation == 12 && !this.getGrounded()){
-                this.barrageAnimationState.startIfStopped(this.tickCount);
-            }else{
-                this.barrageAnimationState.stop();
-            }
-            if(animation == 11 && this.getGrounded()){
-                this.customBarrageCharge.startIfStopped(this.tickCount);
-            }else{
-                this.customBarrageCharge.stop();
-            }
-            if(animation == 11 && !this.getGrounded()){
-                this.barrageChargeAnimationState.startIfStopped(this.tickCount);
-            }else{
-                this.barrageChargeAnimationState.stop();
-            }
-            if(animation == 10 && this.getGrounded()){
-                this.customBlock.startIfStopped(this.tickCount);
-            }else{
-                this.customBlock.stop();
-            }
-            if(animation == 10 && !this.getGrounded()){
-                this.blockAnimationState.startIfStopped(this.tickCount);
-            }else{
-                this.blockAnimationState.stop();
-            }
-            if(animation == 13 && this.getGrounded()){
-                this.customBarrageEnd.startIfStopped(this.tickCount);
-            }else{
-                this.customBarrageEnd.stop();
-            }
-            if(animation == 13 && !this.getGrounded()){
-                this.barrageEndAnimationState.startIfStopped(this.tickCount);
-            }else{
-                this.barrageEndAnimationState.stop();
-            }
-            if(animation == 15 && this.getGrounded()){
-                this.customBrokenGuard.startIfStopped(this.tickCount);
-            }else{
-                this.customBrokenGuard.stop();
-            }
-            if(animation == 15 && !this.getGrounded()){
-                this.brokenBlockAnimationState.startIfStopped(this.tickCount);
-            }else{
-                this.brokenBlockAnimationState.stop();
-            }
-            if(animation == 16 && this.getGrounded()){
-                this.customMiningBarrage.startIfStopped(this.tickCount);
-            }else{
-                this.customMiningBarrage.stop();
-            }
-            if(animation == 16 && !this.getGrounded()){
-                this.miningBarrageAnimationState.startIfStopped(this.tickCount);
-            }else{
-                this.miningBarrageAnimationState.stop();
-            }
-            if(animation != 12){
+            if(animation != BARRAGE){
                 this.hideFists.startIfStopped(this.tickCount);
             }else{
                 this.hideFists.stop();
             }
-            if(animation == 1){
-                this.punchState1.startIfStopped(this.tickCount);
-            }else{
-                this.punchState1.stop();
-            }
-            if(animation == 2){
-                this.punchState2.startIfStopped(this.tickCount);
-            }else{
-                this.punchState2.stop();
-            }
-            if(animation == 3){
-                this.punchState3.startIfStopped(this.tickCount);
-            }else{
-                this.punchState3.stop();
-            }
+            super.setupAnimationStates();
         }
     }
 
@@ -197,7 +107,6 @@ public class TheGratefulDeadEntity extends FollowingStandEntity{
         }
 
         double x1 = standUser.getX() +offset.x;
-        double y1 = standUser.getY() +offset.y;
         double z1 = standUser.getZ() +offset.z;
 
         return new Vec3(x1, standUser.getY(), z1);

@@ -387,6 +387,15 @@ public class StandIcons {
     public static final ResourceLocation DIVER_SELECTION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/diver_down/diver_selection.png");
 
+    public static final ResourceLocation AGE_GRAB = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_grateful_dead/age_grab.png");
+    public static final ResourceLocation MIASMA_TOGGLE_ACTIVE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_grateful_dead/miasma_toggle_active.png");
+    public static final ResourceLocation MIASMA_TOGGLE_INACTIVE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_grateful_dead/miasma_toggle_inactive.png");
+    public static final ResourceLocation SNEAK_X = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_grateful_dead/sneak_x.png");
+
     public static final ResourceLocation EERIE_SKIN = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/eerie_shift.png");
     public static final ResourceLocation EERIE_SKIN_ALEX = new ResourceLocation(Roundabout.MOD_ID,
