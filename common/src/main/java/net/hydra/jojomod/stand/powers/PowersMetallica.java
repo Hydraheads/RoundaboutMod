@@ -61,6 +61,20 @@ public class PowersMetallica extends NewDashPreset {
         }
     }
 
+
+    @Override
+    public boolean isWip(){
+        return true;
+    }
+    @Override
+    public Component ifWipListDevStatus(){
+        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
+    }
+    @Override
+    public Component ifWipListDev(){
+        return Component.literal(  "Lucio").withStyle(ChatFormatting.YELLOW);
+    }
+
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) { return new PowersMetallica(entity); }
     @Override
