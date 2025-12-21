@@ -195,4 +195,9 @@ public class KnifeEntity extends AbstractArrow {
 
     }
 
+    public KnifeEntity(EntityType<? extends KnifeEntity> type, Level level, LivingEntity shooter) {
+        super(type, shooter, level);
+        this.setBaseDamage(3.0);
+    }
+
 }

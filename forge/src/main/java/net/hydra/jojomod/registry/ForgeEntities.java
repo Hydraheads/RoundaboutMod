@@ -375,6 +375,13 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "knife").toString())
             );
+    public static final RegistryObject<EntityType<MetallicaKnifeEntity>> METALLICA_KNIFE =
+            ENTITY_TYPES.register("metallica_knife", () ->
+                    EntityType.Builder.<MetallicaKnifeEntity>of(MetallicaKnifeEntity::new, MobCategory.MISC)
+                            .sized(0.5f, 0.5f)
+                            .clientTrackingRange(10)
+                            .build(new ResourceLocation(Roundabout.MOD_ID, "metallica_knife").toString())
+            );
     public static final RegistryObject<EntityType<RattDartEntity>> RATT_DART =
             ENTITY_TYPES.register("ratt_dart", () ->
                     EntityType.Builder.<RattDartEntity>of(RattDartEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).

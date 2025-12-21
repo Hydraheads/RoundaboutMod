@@ -109,6 +109,29 @@ public class StandIcons {
     public static final ResourceLocation CREAM_VOID_ATTACK = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/cream/void_attack.png");
 
+    public static final ResourceLocation METALLICA_NAIL = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/metallica/nail_icon.png");
+    public static final ResourceLocation METALLICA_RAZOR = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/metallica/razor_icon.png");
+    public static final ResourceLocation METALLICA_SCISSORS = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/metallica/scissors_icon.png");
+    public static final ResourceLocation METALLICA_FIELD_ON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/metallica/metallica_field_on.png");
+    public static final ResourceLocation METALLICA_FIELD_OFF = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/metallica/metallica_field_off.png");
+    public static final ResourceLocation METALLICA_KNIFE_RAISE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/metallica/knife_raise.png");
+    public static final ResourceLocation METALLICA_KNIFE_FIRE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/metallica/knife_raise.png");
+    public static final ResourceLocation METALLICA_HARVEST = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/metallica/flower_metal.png");
+    public static final ResourceLocation METALLICA_HEAL = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/metallica/reattatch.png");
+    public static final ResourceLocation METALLICA_INVIS = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/metallica/metallica_invis.png");
+    public static final ResourceLocation METALLICA_REPAIR = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/metallica/fix_tools.png");
+
     public static final ResourceLocation MUSCLE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/other_layers/muscle_full.png");
     public static final ResourceLocation MUSCLE_SLIM = new ResourceLocation(Roundabout.MOD_ID,

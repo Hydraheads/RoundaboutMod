@@ -64,6 +64,7 @@ public class ModEntities {
     public static EntityType<RoundaboutBulletEntity> ROUNDABOUT_BULLET_ENTITY;
     public static EntityType<RattDartEntity> RATT_DART;
     public static EntityType<KnifeEntity> THROWN_KNIFE;
+    public static EntityType<MetallicaKnifeEntity> METALLICA_KNIFE;
     public static EntityType<MatchEntity> THROWN_MATCH;
     public static EntityType<ThrownWaterBottleEntity> THROWN_WATER_BOTTLE;
     public static EntityType<CrossfireHurricaneEntity> CROSSFIRE_HURRICANE;
