@@ -80,12 +80,14 @@ public class PowersTheGratefulDead extends NewPunchingStand {
     }
 
     public static final byte
-            ANIME_THE_GRATEFUL_DEAD = 1;
+            ANIME_THE_GRATEFUL_DEAD = 0,
+            MANGA_THE_GRATEFUL_DEAD = 1;
 
     @Override
     public List<Byte> getSkinList(){
         return Arrays.asList(
-                ANIME_THE_GRATEFUL_DEAD
+                ANIME_THE_GRATEFUL_DEAD,
+                MANGA_THE_GRATEFUL_DEAD
         );
     }
 

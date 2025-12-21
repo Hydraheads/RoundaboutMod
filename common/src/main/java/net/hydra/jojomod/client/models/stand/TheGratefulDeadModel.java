@@ -44,7 +44,7 @@ public class TheGratefulDeadModel<T extends TheGratefulDeadEntity> extends Stand
         PartDefinition upper_chest = torso.addOrReplaceChild("upper_chest", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition upper_chest_only = upper_chest.addOrReplaceChild("upper_chest_only", CubeListBuilder.create().texOffs(2, 54).addBox(-4.5F, -0.0228F, -2.5229F, 9.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(4, 65).addBox(-4.5F, -0.0228F, -2.5229F, 9.0F, 6.0F, 4.0F, new CubeDeformation(0.21F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+                .texOffs(4, 65).addBox(-4.5F, -0.0228F, -2.5229F, 9.0F, 6.0F, 4.0F, new CubeDeformation(0.21F)), PartPose.offset(0.0F, 0.0F, 0.5F));
 
         PartDefinition right_arm = upper_chest.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.offset(-4.5F, 1.0F, 0.0F));
 
@@ -85,11 +85,13 @@ public class TheGratefulDeadModel<T extends TheGratefulDeadEntity> extends Stand
         PartDefinition lower_chest = torso.addOrReplaceChild("lower_chest", CubeListBuilder.create().texOffs(34, 57).addBox(-4.0F, 0.0F, -1.5F, 8.0F, 4.0F, 3.0F, new CubeDeformation(0.0F))
                 .texOffs(34, 48).addBox(-4.0F, 0.0F, -1.5F, 8.0F, 4.0F, 3.0F, new CubeDeformation(0.21F)), PartPose.offset(0.0F, 6.0F, 0.0F));
 
-        PartDefinition cube_r5 = lower_chest.addOrReplaceChild("cube_r5", CubeListBuilder.create().texOffs(14, 16).addBox(-3.5F, -3.0F, 0.0F, 7.0F, 6.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 7.0F, 0.0F, 0.0F, 0.2618F, 0.0F));
+        PartDefinition pipes = lower_chest.addOrReplaceChild("pipes", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition cube_r6 = lower_chest.addOrReplaceChild("cube_r6", CubeListBuilder.create().texOffs(0, 16).addBox(-3.5F, -3.0F, 0.0F, 7.0F, 6.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 7.0F, 0.0F, 0.0F, -0.2618F, 0.0F));
+        PartDefinition cube_r5 = pipes.addOrReplaceChild("cube_r5", CubeListBuilder.create().texOffs(14, 16).addBox(-3.5F, -3.0F, 0.0F, 7.0F, 6.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 7.0F, 0.0F, 0.0F, 0.2618F, 0.0F));
 
-        PartDefinition BAM = stand2.addOrReplaceChild("BAM", CubeListBuilder.create(), PartPose.offset(1.0F, -18.5F, -5.0F));
+        PartDefinition cube_r6 = pipes.addOrReplaceChild("cube_r6", CubeListBuilder.create().texOffs(0, 16).addBox(-3.5F, -3.0F, 0.0F, 7.0F, 6.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 7.0F, 0.0F, 0.0F, -0.2618F, 0.0F));
+
+        PartDefinition BAM = stand2.addOrReplaceChild("BAM", CubeListBuilder.create(), PartPose.offset(1.0F, -13.5F, -4.0F));
 
         PartDefinition RightArmBAM = BAM.addOrReplaceChild("RightArmBAM", CubeListBuilder.create(), PartPose.offset(-13.5F, -7.25F, 0.0F));
 
@@ -157,8 +159,8 @@ public class TheGratefulDeadModel<T extends TheGratefulDeadEntity> extends Stand
 
     @Override
     public void defaultAnimations(T entity, float animationProgress, float windupLength){
-        this.animate(entity.idleAnimationState, StandAnimations.IDLE_2, animationProgress, 1f);
-        this.animate(entity.idleAnimationState2, StandAnimations.STAND_IDLE_FLOAT, animationProgress, 1f);
+        this.animate(entity.idleAnimationState, TheGratefulDeadAnimations.IDLE_GROUND, animationProgress, 1f);
+        this.animate(entity.idleAnimationState2, TheGratefulDeadAnimations.IDLE_FLOAT, animationProgress, 1f);
         this.animate(entity.punchState1, StandAnimations.COMBO1, animationProgress, 1.4f);
         this.animate(entity.punchState2, StandAnimations.COMBO2, animationProgress, 1.16666f); /*1.1666 for 6 ticks, 1.4 for 5*/
         this.animate(entity.punchState3, StandAnimations.COMBO3, animationProgress, 1.16666f);

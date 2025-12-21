@@ -1,4 +1,4 @@
-// Made with Blockbench 5.0.3
+// Made with Blockbench 5.0.4
 // Exported for Minecraft version 1.17 or later with Mojang mappings
 // Paste this class into your mod and generate all required imports
 
@@ -28,6 +28,7 @@ public class the_grateful_dead<T extends Entity> extends EntityModel<T> {
 	private final ModelPart left_finger2;
 	private final ModelPart left_finger3;
 	private final ModelPart lower_chest;
+	private final ModelPart pipes;
 	private final ModelPart BAM;
 	private final ModelPart RightArmBAM;
 	private final ModelPart RightArmBAM2;
@@ -59,6 +60,7 @@ public class the_grateful_dead<T extends Entity> extends EntityModel<T> {
 		this.left_finger2 = this.lower_left_arm.getChild("left_finger2");
 		this.left_finger3 = this.lower_left_arm.getChild("left_finger3");
 		this.lower_chest = this.torso.getChild("lower_chest");
+		this.pipes = this.lower_chest.getChild("pipes");
 		this.BAM = this.stand2.getChild("BAM");
 		this.RightArmBAM = this.BAM.getChild("RightArmBAM");
 		this.RightArmBAM2 = this.BAM.getChild("RightArmBAM2");
@@ -92,7 +94,7 @@ public class the_grateful_dead<T extends Entity> extends EntityModel<T> {
 		PartDefinition upper_chest = torso.addOrReplaceChild("upper_chest", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
 		PartDefinition upper_chest_only = upper_chest.addOrReplaceChild("upper_chest_only", CubeListBuilder.create().texOffs(2, 54).addBox(-4.5F, -0.0228F, -2.5229F, 9.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
-		.texOffs(4, 65).addBox(-4.5F, -0.0228F, -2.5229F, 9.0F, 6.0F, 4.0F, new CubeDeformation(0.21F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		.texOffs(4, 65).addBox(-4.5F, -0.0228F, -2.5229F, 9.0F, 6.0F, 4.0F, new CubeDeformation(0.21F)), PartPose.offset(0.0F, 0.0F, 0.5F));
 
 		PartDefinition right_arm = upper_chest.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.offset(-4.5F, 1.0F, 0.0F));
 
@@ -133,11 +135,13 @@ public class the_grateful_dead<T extends Entity> extends EntityModel<T> {
 		PartDefinition lower_chest = torso.addOrReplaceChild("lower_chest", CubeListBuilder.create().texOffs(34, 57).addBox(-4.0F, 0.0F, -1.5F, 8.0F, 4.0F, 3.0F, new CubeDeformation(0.0F))
 		.texOffs(34, 48).addBox(-4.0F, 0.0F, -1.5F, 8.0F, 4.0F, 3.0F, new CubeDeformation(0.21F)), PartPose.offset(0.0F, 6.0F, 0.0F));
 
-		PartDefinition cube_r5 = lower_chest.addOrReplaceChild("cube_r5", CubeListBuilder.create().texOffs(14, 16).addBox(-3.5F, -3.0F, 0.0F, 7.0F, 6.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 7.0F, 0.0F, 0.0F, 0.2618F, 0.0F));
+		PartDefinition pipes = lower_chest.addOrReplaceChild("pipes", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition cube_r6 = lower_chest.addOrReplaceChild("cube_r6", CubeListBuilder.create().texOffs(0, 16).addBox(-3.5F, -3.0F, 0.0F, 7.0F, 6.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 7.0F, 0.0F, 0.0F, -0.2618F, 0.0F));
+		PartDefinition cube_r5 = pipes.addOrReplaceChild("cube_r5", CubeListBuilder.create().texOffs(14, 16).addBox(-3.5F, -3.0F, 0.0F, 7.0F, 6.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 7.0F, 0.0F, 0.0F, 0.2618F, 0.0F));
 
-		PartDefinition BAM = stand2.addOrReplaceChild("BAM", CubeListBuilder.create(), PartPose.offset(1.0F, -18.5F, -5.0F));
+		PartDefinition cube_r6 = pipes.addOrReplaceChild("cube_r6", CubeListBuilder.create().texOffs(0, 16).addBox(-3.5F, -3.0F, 0.0F, 7.0F, 6.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 7.0F, 0.0F, 0.0F, -0.2618F, 0.0F));
+
+		PartDefinition BAM = stand2.addOrReplaceChild("BAM", CubeListBuilder.create(), PartPose.offset(1.0F, -13.5F, -4.0F));
 
 		PartDefinition RightArmBAM = BAM.addOrReplaceChild("RightArmBAM", CubeListBuilder.create(), PartPose.offset(-13.5F, -7.25F, 0.0F));
 
