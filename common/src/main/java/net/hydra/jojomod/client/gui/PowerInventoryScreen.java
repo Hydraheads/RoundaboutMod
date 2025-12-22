@@ -224,13 +224,6 @@ public class PowerInventoryScreen
                     context.blit(POWER_INVENTORY_LOCATION, lefXPos, bottomYPos, 185, 19, 7, 11);
                 }}
 
-                int leftGearPos = leftPos + 5;
-                int topGearPos = topPos + 60;
-                if (isSurelyHovering(leftGearPos, topGearPos, 19, 18, mouseX, mouseY)) {
-                    context.blit(POWER_INVENTORY_LOCATION, leftGearPos, topGearPos, 198, 0, 19, 18);
-                } else {
-                    context.blit(POWER_INVENTORY_LOCATION, leftGearPos, topGearPos, 178, 0, 19, 18);
-                }
 
                 int ss = this.leftPos + 78;
                 int sss = this.topPos + 57;
@@ -251,6 +244,14 @@ public class PowerInventoryScreen
                 int blt = (int) Math.floor(((double) 92 / maxXP) * (exp));
                 context.blit(POWER_INVENTORY_LOCATION, ss, sss, 10, 244, 92, 4);
                 context.blit(POWER_INVENTORY_LOCATION, ss, sss, 10, 240, blt, 4);
+            }
+
+            int leftGearPos = leftPos + 5;
+            int topGearPos = topPos + 60;
+            if (isSurelyHovering(leftGearPos, topGearPos, 19, 18, mouseX, mouseY)) {
+                context.blit(POWER_INVENTORY_LOCATION, leftGearPos, topGearPos, 198, 0, 19, 18);
+            } else {
+                context.blit(POWER_INVENTORY_LOCATION, leftGearPos, topGearPos, 178, 0, 19, 18);
             }
         }
 
@@ -684,6 +685,11 @@ public class PowerInventoryScreen
     public boolean updateClicked(double $$0, double $$1, int $$2){
         Player pl = Minecraft.getInstance().player;
         if (pl != null) {
+
+
+
+
+
             if (isOptionsOut) {
                 int i = this.leftPos;
                 int j = this.topPos;
@@ -811,12 +817,43 @@ public class PowerInventoryScreen
                 return true;
             }
 
+
+            int i = this.leftPos;
+            int j = this.topPos;
+
+            int slot = 1;
+            boolean hasFate = !FateTypes.isHuman(pl);
+            StandUser user = ((StandUser) pl);
+            boolean hasStand =user.roundabout$hasAStand();
+            tab = ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab;
+
+            if (hasFate){
+                if (tab != 1) {
+                    if (isSurelyHovering(i - 25 + (25 * slot), j - 24, 24, 26, $$0, $$1)) {
+                        tab = ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab = 1;
+                        ConfigManager.saveClientConfig();
+                        SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
+                        soundmanager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                    }
+                }
+                slot++;
+            }
+            if (hasStand){
+                if (tab != 2) {
+                    if (isSurelyHovering(i - 25 + (25 * slot), j - 24, 24, 26, $$0, $$1)) {
+                        tab = ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab = 2;
+                        ConfigManager.saveClientConfig();
+                        SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
+                        soundmanager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                    }
+                }
+                slot++;
+            }
+
             if (updateClicked($$0, $$1, $$2)) {
                 return true;
             }
             IPlayerEntity ipe = ((IPlayerEntity) pl);
-            int i = this.leftPos;
-            int j = this.topPos;
             if (isSurelyHovering(i - 136, j + 146, 65, 11, $$0, $$1)) {
                 if (pageNumber == 1) {
                     ipe.roundabout$setAnchorPlace(55);
