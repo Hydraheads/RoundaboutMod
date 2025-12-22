@@ -2,7 +2,6 @@ package net.hydra.jojomod.mixin.shaders;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -17,7 +16,6 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.core.Position;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -35,23 +33,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ShaderLevelRenderer {
     @Shadow @Nullable private ClientLevel level;
 
-    @Inject(method = "renderLevel", at= @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/Lighting;setupLevel(Lorg/joml/Matrix4f;)V", shift = At.Shift.AFTER))
-    private void rdbt$renderLevTS(PoseStack $$0, float partialTick, long $$2, boolean $$3, Camera $$4, GameRenderer $$5, LightTexture $$6, Matrix4f $$7, CallbackInfo ci)
-    {
-        rdbt$fix($$0,partialTick,$$2,$$3,$$4,$$5,$$6,$$7);
-    }
-    @Inject(method = "renderLevel", at= @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/Lighting;setupNetherLevel(Lorg/joml/Matrix4f;)V", shift = At.Shift.AFTER))
-    private void rdbt$renderLevTS2(PoseStack $$0, float partialTick, long $$2, boolean $$3, Camera $$4, GameRenderer $$5, LightTexture $$6, Matrix4f $$7, CallbackInfo ci)
-    {
-        rdbt$fix($$0,partialTick,$$2,$$3,$$4,$$5,$$6,$$7);
-    }
+    @Inject(method = "renderLevel", at = {
+            @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/Lighting;setupLevel(Lorg/joml/Matrix4f;)V", shift = At.Shift.AFTER),
+            @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/Lighting;setupNetherLevel(Lorg/joml/Matrix4f;)V", shift = At.Shift.AFTER)
 
-    public void rdbt$fix(PoseStack $$0, float partialTick, long $$2, boolean $$3, Camera $$4, GameRenderer $$5, LightTexture $$6, Matrix4f $$7){
+    })
+    private void renderShaders(PoseStack $$0, float partialTick, long $$2, boolean $$3, Camera $$4, GameRenderer $$5, LightTexture $$6, Matrix4f $$7, CallbackInfo ci){
         if (Minecraft.getInstance().player == null)
             return;
 
-        if (TimestopShaderManager.TIMESTOP_DEPTH_BUFFER != null)
+        if (TimestopShaderManager.TIMESTOP_DEPTH_BUFFER != null) {
+            TimestopShaderManager.TIMESTOP_DEPTH_BUFFER.clear(Minecraft.ON_OSX);
             TimestopShaderManager.TIMESTOP_DEPTH_BUFFER.copyDepthFrom(Minecraft.getInstance().getMainRenderTarget());
+            Minecraft.getInstance().getMainRenderTarget().bindWrite(false);
+        }
 
         ClientConfig clientConfig = ConfigManager.getClientConfig();
         if (clientConfig != null && clientConfig.timeStopSettings != null) {
