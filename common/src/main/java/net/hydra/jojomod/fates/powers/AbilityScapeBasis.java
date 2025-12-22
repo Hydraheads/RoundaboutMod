@@ -822,6 +822,16 @@ public class AbilityScapeBasis {
         return $$1;
     }
 
+    public void drawOtherGUIElements(GuiGraphics context, float delta, int mouseX, int mouseY, int i, int j, ResourceLocation rl){
+
+    }
+    public void handleCustomGUIClick(int i, int j, double mouseX, double mouseY){
+
+    }
+
+    protected boolean isSurelyHovering(int p_97768_, int p_97769_, int p_97770_, int p_97771_, double p_97772_, double p_97773_) {
+        return p_97772_ >= (double)(p_97768_) && p_97772_ <= (double)(p_97768_ + p_97770_) && p_97773_ >= (double)(p_97769_) && p_97773_ <= (double)(p_97769_ + p_97771_);
+    }
 
     public static Component fixKey(Component textIn){
 

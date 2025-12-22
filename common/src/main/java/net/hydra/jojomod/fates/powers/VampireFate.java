@@ -1,9 +1,11 @@
 package net.hydra.jojomod.fates.powers;
 
+import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -19,10 +21,12 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Position;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -41,6 +45,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 public class VampireFate extends VampiricFate {
 
@@ -94,6 +99,31 @@ public class VampireFate extends VampiricFate {
     public static final byte HAIR_EXTENDED = 51;
 
 
+    @Override
+    public void drawOtherGUIElements(GuiGraphics context, float delta, int mouseX, int mouseY, int i, int j, ResourceLocation rl){
+        context.blit(rl, i +80, j + 19, 192, 152, 20, 20);
+        context.blit(rl, i +102, j + 19, 214, 152, 20, 20);
+        context.blit(rl, i +124, j + 19, 236, 152, 20, 20);
+        if (isSurelyHovering(i +147, j + 20,19,18,mouseX,mouseY)){
+            context.blit(rl, i +147, j + 20, 236, 131, 19, 18);
+            List<Component> compList = Lists.newArrayList();
+            compList.add(Component.translatable("text.roundabout.fate.vampire_hair").withStyle(ChatFormatting.WHITE));
+            context.renderTooltip(Minecraft.getInstance().font, compList, Optional.empty(), mouseX, mouseY);
+        } else {
+            context.blit(rl, i +147, j + 20, 236, 112, 19, 18);
+        }
+    }
+
+
+    @Override
+
+    public void handleCustomGUIClick(int i, int j, double mouseX, double mouseY){
+        if (isSurelyHovering(i +147, j + 20,19,18,mouseX,mouseY)){
+            if (self.level().isClientSide()){
+                ClientUtil.openHairspryUI();
+            }
+        }
+    }
 
     @Override
     public boolean tryPower(int move, boolean forced) {
