@@ -1264,7 +1264,10 @@
   "ability.roundabout.vamp_dexterity.desc": "Practice moving your limbs at unnatural speeds. +%1$s percent mining speed, +%2$s percent attack speed.",
   "ability.roundabout.vamp_resilience": "Dark Resilience",
   "ability.roundabout.vamp_resilience.desc": "Practice shifting your body to cushion against certain attack types. +%1$s percent reduced incoming melee damage, +%2$s percent reduced incoming damage from some projectiles.",
-
+  "ability.roundabout.hypnotism": "Hypnotism",
+  "ability.roundabout.hypnotism.locked": "???",
+  "ability.roundabout.hypnotism.desc": "Turn on and off hypnotic pulses that cause nearby mobs to follow you. Hypnotized villagers do not alert for reputation changes when their blood is drained.",
+  "ability.roundabout.hypnotism.locked.desc": "Unlock your hypnotic potential...",
 
 
 

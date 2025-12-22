@@ -588,7 +588,7 @@ public class VampireFate extends VampiricFate {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.wall_walk_vamp",
                 "instruction.roundabout.press_skill_air", StandIcons.WALL_WALK_VAMP,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.vampire_vision",
-                "instruction.roundabout.press_skill", StandIcons.VAMP_VISION_ON,4,level,bypas));
+                "instruction.roundabout.press_skill_crouch", StandIcons.VAMP_VISION_ON,4,level,bypas));
 
 
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+67,topPos+80,
@@ -600,6 +600,14 @@ public class VampireFate extends VampiricFate {
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+67,topPos+118,
                 resilienceLevel, reslienceMaxLevel, "ability.roundabout.vamp_resilience",
                 "instruction.roundabout.passive", StandIcons.VAMPIRE_RESILIENCE,0, 10+(resilienceLevel), 10+(resilienceLevel*2)));
+
+        String tring = "ability.roundabout.hypnotism.locked";
+        if (hypnotismLevel > 0)
+            tring = "ability.roundabout.hypnotism";
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+86,topPos+80,
+                hypnotismLevel, hypnotismMaxLevel, tring,
+                "instruction.roundabout.press_skill", StandIcons.HYPNOTISM,1, 0,0));
+
 
         return $$1;
     }
