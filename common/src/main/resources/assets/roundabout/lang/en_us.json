@@ -1247,18 +1247,26 @@
 
   "ability.roundabout.blood_drink": "Blood Suck",
   "ability.roundabout.blood_drink.desc": "Consume blood through your hands so long as you remain facing your target, damaging them to restore your blood. If a mob has drinkable blood, the indicator will appear in the middle of the screen. If a mob is not agitated, you can score a critical blood suck. Villagers will zombify upon being killed by this skill, and can be controlled.",
-
   "ability.roundabout.vampire_passive": "Vampiric",
   "ability.roundabout.vampire_passive.desc": "You evaporate in sunlight. You run on blood instead of hunger, and eating raw foods and monster drops provide blood with no penalties. You cannot die of starvation. Drowning only lowers your speed. Iron Golems detest you, while zombies are neutral with your presence.",
-
   "ability.roundabout.mass_heal": "Blood Healing",
   "ability.roundabout.mass_heal.desc": "Funnels all of your blood into health regeneration, temporarily slowing you down. This ability triggers automatically when you die, if possible, providing a last stand.",
-
   "ability.roundabout.wall_walk_vamp": "Wall Walking",
   "ability.roundabout.wall_walk_vamp.desc": "Latches onto walls, allowing you to walk slowly on them. Trigger by facing a wall in the air. Press again while wall walking and facing another wall to switch walls, or to step onto ceilings.",
-
   "ability.roundabout.vampire_vision": "Vampire Perspective",
   "ability.roundabout.vampire_vision.desc": "While enabled, allows for passive dark vision as well as a longer jump height while jump is held.",
+
+
+  "ability.roundabout.vamp_strength": "Evolved Strength",
+  "ability.roundabout.vamp_strength.desc": "Exceed the limits of humanity. +%1$s percent damage for direct melee attacks against mobs, +%2$s against players.",
+  "ability.roundabout.vampire_growth_room": "Remaining Growth Levels: %1$s",
+  "ability.roundabout.vamp_dexterity": "Supreme Dexterity",
+  "ability.roundabout.vamp_dexterity.desc": "Practice moving your limbs at unnatural speeds. +%1$s percent mining speed, +%2$s percent attack speed.",
+  "ability.roundabout.vamp_resilience": "Dark Resilience",
+  "ability.roundabout.vamp_resilience.desc": "Practice shifting your body to cushion against certain attack types. +%1$s percent reduced incoming melee damage, +%2$s percent reduced incoming damage from some projectiles.",
+
+
+
 
   "ability.roundabout.gd_punch_left": "Left Arm Launch",
   "ability.roundabout.gd_return_left": "Left Arm Reattach",

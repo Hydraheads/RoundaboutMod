@@ -28,6 +28,8 @@ public class StandIcons {
             "textures/gui/move_square_novelty.png");
     public static final ResourceLocation LOCKED_SQUARE_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_square3.png");
+    public static final ResourceLocation UNLOCK_SQUARE_ICON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/move_square5.png");
     public static final ResourceLocation COOLDOWN_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_cooldown.png");
     public static final ResourceLocation FROZEN_COOLDOWN_ICON = new ResourceLocation(Roundabout.MOD_ID,
@@ -62,6 +64,12 @@ public class StandIcons {
             "textures/gui//icons/fates/vampire/hearing_mode.png");
     public static final ResourceLocation WALL_WALK_VAMP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/fates/vampire/wall_walk.png");
+    public static final ResourceLocation VAMPIRE_STRENGTH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/strength.png");
+    public static final ResourceLocation VAMPIRE_RESILIENCE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/resilience.png");
+    public static final ResourceLocation VAMPIRE_DEXTERITY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/dexterity.png");
 
     public static final ResourceLocation SURVIVOR_ANGER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/survivor_anger.png");

@@ -542,6 +542,9 @@ public class PowerInventoryScreen
                     for (String s : strung2) {
                         compList.add(Component.literal(s));
                     }
+                    if (aii.description2 != null){
+                        compList.add(aii.description2);
+                    }
                     context.renderTooltip(this.font, compList, Optional.empty(), mouseX, mouseY);
                 }
             }

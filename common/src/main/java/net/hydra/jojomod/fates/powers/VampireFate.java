@@ -371,10 +371,10 @@ public class VampireFate extends VampiricFate {
     @Override
     public float getDamageReduction(DamageSource source, float amt){
         if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)){
-            return 0.15F;
+            return 0.10F + 0.01F*resilienceLevel;
         }
         if (source.is(DamageTypes.ARROW) || source.is(ModDamageTypes.BULLET)){
-            return 0.2F;
+            return 0.1F + 0.02F*resilienceLevel;
         }
         return super.getDamageReduction(source,amt);
     }
@@ -382,9 +382,9 @@ public class VampireFate extends VampiricFate {
     public float getDamageAdd(DamageSource source, float amt, Entity target){
         if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)){
             if (target instanceof Player pl){
-                return 0.2F;
+                return 0.1F + (strengthLevel*0.02F);
             } else {
-                return 0.4F;
+                return 0.2F + (strengthLevel*0.04F);
             }
         }
         return super.getDamageAdd(source,amt,target);
@@ -392,11 +392,11 @@ public class VampireFate extends VampiricFate {
 
     /**For enhancement stands that adjust your normal player attack speed*/
     public float getBonusAttackSpeed() {
-        return 1.15F;
+        return 1.1F+ (0.1F*dexterityLevel);
     }
     /**For enhancement stands that adjust your normal player mining speed*/
     public float getBonusPassiveMiningSpeed(){
-        return 1.4F;
+        return 1.2F+ (0.4F*dexterityLevel);
     }
 
     public boolean canPlantDrink(Entity ent) {
@@ -546,6 +546,34 @@ public class VampireFate extends VampiricFate {
         super.renderAttackHud(context,playerEntity,scaledWidth,scaledHeight,ticks,vehicleHeartCount,flashAlpha,otherFlashAlpha);
     }
 
+    public int strengthLevel = 0;
+    public static int strengthMaxLevel = 5;
+    public int dexterityLevel = 0;
+    public static int dexterityMaxLevel = 5;
+    public int resilienceLevel = 0;
+    public static int reslienceMaxLevel = 5;
+
+    public int hypnotismLevel = 0;
+    public static int hypnotismMaxLevel = 1;
+    public int superHearingLevel = 0;
+    public static int superHearingMaxLevel = 5;
+    public int bloodSpeedLevel = 0;
+    public static int bloodSpeedMaxLevel = 5;
+
+    public int graftingLevel = 0;
+    public static int graftingMaxLevel = 1;
+    public int fleshBudLevel = 0;
+    public static int fleshBudMaxLevel = 1;
+    public int daggerSplatterLevel = 0;
+    public static int daggerSplatterMaxLevel = 1;
+
+    public int jumpLevel = 0;
+    public static int jumpMaxLevel = 1;
+    public int ripperEyesLevel = 0;
+    public static int ripperEyesMaxLevel = 5;
+    public int freezeLevel = 0;
+    public static int freezeMaxLevel = 5;
+
     @Override
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
@@ -561,6 +589,18 @@ public class VampireFate extends VampiricFate {
                 "instruction.roundabout.press_skill_air", StandIcons.WALL_WALK_VAMP,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.vampire_vision",
                 "instruction.roundabout.press_skill", StandIcons.VAMP_VISION_ON,4,level,bypas));
+
+
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+67,topPos+80,
+                strengthLevel, strengthMaxLevel, "ability.roundabout.vamp_strength",
+                "instruction.roundabout.passive", StandIcons.VAMPIRE_STRENGTH,0, 10+(strengthLevel*2), 20+(strengthLevel*4)));
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+67,topPos+99,
+                dexterityLevel, dexterityMaxLevel, "ability.roundabout.vamp_dexterity",
+                "instruction.roundabout.passive", StandIcons.VAMPIRE_DEXTERITY,0, 10+(dexterityLevel), 20+(resilienceLevel*4)));
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+67,topPos+118,
+                resilienceLevel, reslienceMaxLevel, "ability.roundabout.vamp_resilience",
+                "instruction.roundabout.passive", StandIcons.VAMPIRE_RESILIENCE,0, 10+(resilienceLevel), 10+(resilienceLevel*2)));
+
         return $$1;
     }
 }
