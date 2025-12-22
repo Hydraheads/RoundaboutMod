@@ -44,6 +44,8 @@ public class StandIcons {
 
     public static final ResourceLocation BLOOD_DRINK = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/fates/vampire/drink.png");
+    public static final ResourceLocation VAMPIRE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/fates/vampire/vampire.png");
     public static final ResourceLocation CHEETAH_SPEED = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/vampire/cheetah_speed.png");
     public static final ResourceLocation REGENERATE = new ResourceLocation(Roundabout.MOD_ID,
