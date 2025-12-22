@@ -6,11 +6,13 @@ import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -20,6 +22,7 @@ import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.GraphicsStatus;
@@ -38,6 +41,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 
@@ -71,8 +76,62 @@ public class PowerInventoryScreen
     public PowerInventoryScreen(Player player, PowerInventoryMenu pim) {
         super(pim, player.getInventory(), ((StandUser)player).roundabout$getStandPowers().getStandName());
         this.titleLabelX = 80;
+
+        if (player != null){
+            tab = ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab;
+            int tab2 = tab;
+            boolean hasFate = !FateTypes.isHuman(player);
+            StandUser standUser = ((StandUser) player);
+            boolean hasStand =standUser.roundabout$hasAStand();
+            if (tab == 2 && !hasStand){
+                if (hasFate){
+                    tab2 = 1;
+                }
+            }
+            if (tab == 1 && !hasFate){
+                if (hasStand){
+                    tab2 = 2;
+                } else {
+                    tab2 = 2;
+                }
+            }
+            if (tab != tab2){
+                ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab = tab2;
+                ConfigManager.saveClientConfig();
+            }
+        }
     }
 
+    int tab = 1;
+
+    public void renderTabChosen(int slot, boolean isOn, GuiGraphics context,
+                                int i, int j, ItemStack render,
+                                int mouseX, int mouseY, String translatable){
+        if (!isOn){
+            if (slot == 1){
+                context.blit(POWER_INVENTORY_LOCATION, i-25+(25*slot), j-24, 209, 123, 24, 27);
+            } else {
+                context.blit(POWER_INVENTORY_LOCATION, i-25+(25*slot), j-24, 209, 96, 24, 26);
+            }
+        } else {
+            if (slot == 1){
+                context.blit(POWER_INVENTORY_LOCATION, i-25+(25*slot), j-24, 209, 67, 24, 28);
+            } else {
+                context.blit(POWER_INVENTORY_LOCATION, i-25+(25*slot), j-24, 209, 38, 24, 28);
+            }
+        }
+        RenderSystem.enableBlend();
+        context.renderItem(render, i-25+(25*slot) +4, j-18);  // Draw the item itself
+
+        RenderSystem.enableBlend();
+        if (isSurelyHovering(i-25+(25*slot), j-24, 24, 26, mouseX, mouseY)) {
+
+
+            List<Component> compList = Lists.newArrayList();
+            compList.add(Component.translatable(translatable).withStyle(ChatFormatting.LIGHT_PURPLE));
+            context.renderTooltip(Minecraft.getInstance().font, compList, Optional.empty(), mouseX, mouseY);
+        }
+    }
 
     @Override
     protected void renderBg(GuiGraphics context, float delta, int mouseX, int mouseY) {
@@ -93,8 +152,29 @@ public class PowerInventoryScreen
 
 
         if (pl != null) {
+
             StandUser standUser = ((StandUser) pl);
-            if (standUser.roundabout$hasAStand()) {
+
+            int slot = 1;
+            boolean hasFate = !FateTypes.isHuman(pl);
+            boolean hasStand =standUser.roundabout$hasAStand();
+            tab = ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab;
+
+            if (hasFate){
+                renderTabChosen(slot,tab == 1, context, i, j, ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem().getDefaultInstance(),
+                        mouseX,mouseY,"power_inventory.roundabout.tabs.fate");
+                slot++;
+            }
+            if (hasStand){
+                renderTabChosen(slot,tab == 2, context, i, j, ModItems.STAND_DISC.getDefaultInstance(),
+                        mouseX,mouseY,"power_inventory.roundabout.tabs.stand");
+                slot++;
+            }
+
+
+            if (hasFate && tab == 1){
+
+            } else if (hasStand && tab == 2) {
 
                 StandPowers sp = standUser.roundabout$getStandPowers();
                 if (sp.rendersPlayer()) {
