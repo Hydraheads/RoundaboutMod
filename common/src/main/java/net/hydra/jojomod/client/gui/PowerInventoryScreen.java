@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -18,6 +19,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
+import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -479,36 +481,39 @@ public class PowerInventoryScreen
                             .withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC), i- 65, j+148, 4210752, false);
                 }
             }
-            StandUser standUser = ((StandUser) pl);
-            boolean bypass = false;
-            if ((!((StandUser) pl).roundabout$getStandDisc().isEmpty() &&
-                    ((StandUser) pl).roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem) ||
-            pl.isCreative()){
-                bypass = true;
-            }
-            if (!ClientNetworking.getAppropriateConfig().standLevelingSettings.enableStandLeveling) {
-                bypass=true;
-            }
-            abilityList = standUser.roundabout$getStandPowers().drawGUIIcons(context, delta, mouseX, mouseY, i, j,
-                    ((IPlayerEntity)pl).roundabout$getStandLevel(),bypass);
 
-            if (!this.abilityList.isEmpty()) {
-                AbilityIconInstance aii;
-                for (int g = abilityList.size() - 1; g >= 0; --g) {
-                    aii = abilityList.get(g);
-                    if (isSurelyHovering(aii.startingLeft, aii.startingTop, aii.size, aii.size, mouseX, mouseY)) {
-                        List<Component> compList = Lists.newArrayList();
-                        compList.add(aii.name);
-                        compList.add(aii.instruction);
-                        String[] strung2 = ClientUtil.splitIntoLine(aii.description.getString(), 30);
-                        for (String s : strung2) {
-                            compList.add(Component.literal(s));
-                        }
-                        context.renderTooltip(this.font, compList, Optional.empty(), mouseX, mouseY);
-                    }
+
+            boolean hasFate = !FateTypes.isHuman(pl);
+            StandUser user = ((StandUser) pl);
+            boolean hasStand =user.roundabout$hasAStand();
+            tab = ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab;
+            if (tab == 1 && hasFate) {
+                FatePowers fp = ((IFatePlayer)pl).rdbt$getFatePowers();
+                boolean bypass = false;
+                if (pl.isCreative()) {
+                    bypass = true;
                 }
+                abilityList = fp.drawGUIIcons(context, delta, mouseX, mouseY, i, j,
+                        ((IPlayerEntity) pl).roundabout$getStandLevel(), bypass);
+                drawIcons(context,mouseX,mouseY);
+            } if (tab == 2 && hasStand) {
+                StandUser standUser = ((StandUser) pl);
+                boolean bypass = false;
+                if ((!((StandUser) pl).roundabout$getStandDisc().isEmpty() &&
+                        ((StandUser) pl).roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem) ||
+                        pl.isCreative()) {
+                    bypass = true;
+                }
+                if (!ClientNetworking.getAppropriateConfig().standLevelingSettings.enableStandLeveling) {
+                    bypass = true;
+                }
+                abilityList = standUser.roundabout$getStandPowers().drawGUIIcons(context, delta, mouseX, mouseY, i, j,
+                        ((IPlayerEntity) pl).roundabout$getStandLevel(), bypass);
+
+                drawIcons(context,mouseX,mouseY);
             }
         }
+
 
         //this.recipeBookComponent.renderTooltip(context, this.leftPos, this.topPos, mouseX, mouseY);
         this.xMouse = (float)mouseX;
@@ -517,6 +522,24 @@ public class PowerInventoryScreen
     }
 
 
+    public void drawIcons(GuiGraphics context, int mouseX, int mouseY){
+        if (!this.abilityList.isEmpty()) {
+            AbilityIconInstance aii;
+            for (int g = abilityList.size() - 1; g >= 0; --g) {
+                aii = abilityList.get(g);
+                if (isSurelyHovering(aii.startingLeft, aii.startingTop, aii.size, aii.size, mouseX, mouseY)) {
+                    List<Component> compList = Lists.newArrayList();
+                    compList.add(aii.name);
+                    compList.add(aii.instruction);
+                    String[] strung2 = ClientUtil.splitIntoLine(aii.description.getString(), 30);
+                    for (String s : strung2) {
+                        compList.add(Component.literal(s));
+                    }
+                    context.renderTooltip(this.font, compList, Optional.empty(), mouseX, mouseY);
+                }
+            }
+        }
+    }
 
     @Override
     public void containerTick() {
@@ -542,6 +565,17 @@ public class PowerInventoryScreen
 
     @Override
     protected void renderLabels(GuiGraphics $$0, int $$1, int $$2) {
+        tab = ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab;
+        Player pl = Minecraft.getInstance().player;
+        if (pl != null) {
+            boolean hasFate = !FateTypes.isHuman(pl);
+            if (tab == 1 && hasFate){
+                $$0.drawString(this.font,
+                        ((IFatePlayer)pl).rdbt$getFatePowers().getFateName().getString(),
+                        this.titleLabelX, this.titleLabelY, 4210752, false);
+                return;
+            }
+        }
         $$0.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false);
     }
 

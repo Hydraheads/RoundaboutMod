@@ -8,6 +8,8 @@
   "text.roundabout.warn_trap_triggered": " has been triggered!",
   "text.roundabout.warn_unnamed_trap_triggered": "A fog trap has been triggered!",
 
+  "text.roundabout.fate.vampire": "Vampire",
+
   "text.roundabout.bullets.revolver": "Compatible with Snubnosed Revolvers and Colt Revolvers.",
   "text.roundabout.bullets.tommy": "Compatible with Tommy Guns.",
   "text.roundabout.bullets.sniper": "Compatible with Jackal Rifles.",

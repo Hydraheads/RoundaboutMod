@@ -56,6 +56,11 @@ public class VampireFate extends VampiricFate {
         return new VampireFate(entity);
     }
     @Override
+    /**The text name of the fate*/
+    public Component getFateName(){
+        return Component.translatable("text.roundabout.fate.vampire");
+    }
+    @Override
     public void powerActivate(PowerContext context) {
         switch (context)
         {
