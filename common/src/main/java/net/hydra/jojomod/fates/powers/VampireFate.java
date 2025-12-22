@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
+import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -22,6 +23,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Position;
@@ -100,10 +102,32 @@ public class VampireFate extends VampiricFate {
 
 
     @Override
-    public void drawOtherGUIElements(GuiGraphics context, float delta, int mouseX, int mouseY, int i, int j, ResourceLocation rl){
+    public void drawOtherGUIElements(Font font, GuiGraphics context, float delta, int mouseX, int mouseY, int i, int j, ResourceLocation rl){
         context.blit(rl, i +80, j + 19, 192, 152, 20, 20);
+        int bloodAmt = 100;
+        int bloodLmt = 200;
+        int blt = (int) Math.floor(((double) 20 / bloodLmt) * (bloodAmt));
+        int blt2 = 20-blt;
+        if (blt > 0){
+            context.blit(rl, i +80, j + 19+blt2, 192, 173+blt, 20, blt);
+        }
+
         context.blit(rl, i +102, j + 19, 214, 152, 20, 20);
+        bloodAmt = 40;
+        blt = (int) Math.floor(((double) 20 / bloodLmt) * (bloodAmt));
+        blt2 = 20-blt;
+        if (blt > 0){
+            context.blit(rl, i +102, j + 19+blt2, 214, 173+blt2, 20, blt);
+        }
+
         context.blit(rl, i +124, j + 19, 236, 152, 20, 20);
+        bloodAmt = 130;
+        blt = (int) Math.floor(((double) 20 / bloodLmt) * (bloodAmt));
+        blt2 = 20-blt;
+        if (blt > 0){
+            context.blit(rl, i +124, j + 19+blt2, 236, 173+blt2, 20, blt);
+        }
+
         if (isSurelyHovering(i +147, j + 20,19,18,mouseX,mouseY)){
             context.blit(rl, i +147, j + 20, 236, 131, 19, 18);
             List<Component> compList = Lists.newArrayList();
@@ -112,6 +136,32 @@ public class VampireFate extends VampiricFate {
         } else {
             context.blit(rl, i +147, j + 20, 236, 112, 19, 18);
         }
+
+        Component display = Component.translatable("leveling.roundabout.fate_development_potential_level",
+                    0);
+        //display = Component.translatable("leveling.roundabout.disc_maxed",
+        //        0);
+        context.drawString(font, display, i  +80, j+64, 4210752, false);
+
+        int points = 2;
+        if (points > 0){
+            if (points == 1){
+                display = Component.translatable("leveling.roundabout.fate_development_point",
+                        points);
+            } else {
+                display = Component.translatable("leveling.roundabout.fate_development_points",
+                        points);
+            }
+            context.drawString(font, display, i  +80, j+46, 10170412, false);
+        }
+
+        int ss = i + 78;
+        int sss = j + 57;
+        int exp = 100;
+        int maxXP = 200;
+        blt = (int) Math.floor(((double) 92 / maxXP) * (exp));
+        context.blit(rl, ss, sss, 10, 244, 92, 4);
+        context.blit(rl, ss, sss, 10, 248, blt, 4);
     }
 
 

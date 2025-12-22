@@ -1268,6 +1268,10 @@
   "ability.roundabout.locked.ctrl": "Locked",
   "ability.roundabout.locked.desc": "Unlock at Development Stage %1$s",
 
+  "leveling.roundabout.fate_development_point": "1 Point!",
+  "leveling.roundabout.fate_development_points": "%s Points!",
+  "leveling.roundabout.fate_development_potential_level": "Level: %s",
+  "leveling.roundabout.fate_maxed": "Full Power",
   "leveling.roundabout.disc_development_potential_level": "Development: %s",
   "leveling.roundabout.disc_skin": "Style: ",
   "leveling.roundabout.disc_maxed": "Complete",

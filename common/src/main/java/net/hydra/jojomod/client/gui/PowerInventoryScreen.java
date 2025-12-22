@@ -176,7 +176,9 @@ public class PowerInventoryScreen
 
 
             if (hasFate && tab == 1){
-
+                renderEntityInInventoryFollowsMouse2(
+                        context, i + 51, j + 75, 30, (float) (i + 51) - this.xMouse, (float) (j + 75 - 50) - this.yMouse, this.minecraft.player
+                );
             } else if (hasStand && tab == 2) {
 
                 StandPowers sp = standUser.roundabout$getStandPowers();
@@ -492,7 +494,7 @@ public class PowerInventoryScreen
                 if (pl.isCreative()) {
                     bypass = true;
                 }
-                fp.drawOtherGUIElements(context, delta, mouseX, mouseY, i, j, POWER_INVENTORY_LOCATION);
+                fp.drawOtherGUIElements(this.font, context, delta, mouseX, mouseY, i, j, POWER_INVENTORY_LOCATION);
                 abilityList = fp.drawGUIIcons(context, delta, mouseX, mouseY, i, j,
                         ((IPlayerEntity) pl).roundabout$getStandLevel(), bypass);
                 drawIcons(context,mouseX,mouseY);

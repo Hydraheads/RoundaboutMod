@@ -822,7 +822,7 @@ public class AbilityScapeBasis {
         return $$1;
     }
 
-    public void drawOtherGUIElements(GuiGraphics context, float delta, int mouseX, int mouseY, int i, int j, ResourceLocation rl){
+    public void drawOtherGUIElements(Font font, GuiGraphics context, float delta, int mouseX, int mouseY, int i, int j, ResourceLocation rl){
 
     }
     public void handleCustomGUIClick(int i, int j, double mouseX, double mouseY){
