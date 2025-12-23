@@ -1,12 +1,12 @@
 package net.hydra.jojomod.event;
 
-import net.hydra.jojomod.access.IAbstractArrowAccess;
-import net.hydra.jojomod.access.ICreeper;
-import net.hydra.jojomod.access.IEntityAndData;
-import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.fates.powers.VampiricFate;
+import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
@@ -51,6 +51,7 @@ public class SavedSecond {
         this.deltaMovement = new Vec3(deltaMovement.x,deltaMovement.y,deltaMovement.z);
         this.fallDistance = fallDistance;
         dimensionTypeId = dimensionId;
+        this.gravityDirection = gravityDirection;
     }
 
     public static SavedSecond saveEntitySecond(Entity ent) {
@@ -157,6 +158,19 @@ public class SavedSecond {
     public void loadTime(Entity ent){
         if (ent == null || (dimensionTypeId != ent.level().dimensionTypeId()))
             return;
+
+        if (ent instanceof LivingEntity LE){
+            if (((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW){
+                PW.setHeelDirection(gravityDirection);
+            }
+            if (ent instanceof Player PL){
+                if (((IFatePlayer)PL).rdbt$getFatePowers() instanceof VampiricFate VP){
+                    VP.setWallWalkDirection(gravityDirection);
+                }
+            }
+        }
+        ((IGravityEntity)ent).roundabout$setGravityDirection(gravityDirection);
+
         boolean canBeRepositioned = true;
         boolean suffocationBlocker = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindStopsSuffocation;
         if (suffocationBlocker) {
@@ -192,6 +206,7 @@ public class SavedSecond {
                 targetPos.x - width / 2.0, targetPos.y, targetPos.z - width / 2.0,
                 targetPos.x + width / 2.0, targetPos.y + height, targetPos.z + width / 2.0
         );
+        targetBox = RotationUtil.boxPlayerToWorld(targetBox,((IGravityEntity)entity).roundabout$getGravityDirection());
 
         // 1. Check if space is clear
         if (!level.noCollision(entity, targetBox)) {
