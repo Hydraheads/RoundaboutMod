@@ -576,6 +576,7 @@
   "death.attack.blood_drain.player": "%1$s lost all color.",
   "death.attack.blood_drain.player.item": "%1$s lost all color.",
   "death.attack.bullet": "%1$s was shot through the heart.",
+  "death.attack.bullet.item": "%1$s was shot through the heart.",
   "death.attack.bullet.player": "%1$s was shot through the heart.",
   "death.attack.bullet.player.item": "%1$s was shot through the heart.",
 
@@ -1295,9 +1296,14 @@
   "ability.roundabout.sacrificial_dagger.locked.desc": "Your blood has special healing properties. Maybe you can use that to your advantage...",
 
   "ability.roundabout.unleash_the_cold": "Unleash The Cold",
-  "ability.roundabout.unleash_the_cold.desc": ".",
+  "ability.roundabout.unleash_the_cold.desc": "Grants vaporization freeze to the powers moveset.",
   "ability.roundabout.unleash_the_cold.locked": "???",
   "ability.roundabout.unleash_the_cold.locked.desc": "You notice your body temperature is below that of a human. Can you make use of this unique property? (powers moveset)",
+
+  "ability.roundabout.eye_manipulation": "Eye Manipulation",
+  "ability.roundabout.eye_manipulation.desc": "Grants space ripper stingy eyes to the powers moveset.",
+  "ability.roundabout.eye_manipulation.locked": "???",
+  "ability.roundabout.eye_manipulation.locked.desc": "As you practice your newfound body manipulation skills, you wonder what would happen if you manipulate your eye fluids. (powers moveset)",
 
 
   "ability.roundabout.gd_punch_left": "Left Arm Launch",

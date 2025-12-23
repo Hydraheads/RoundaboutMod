@@ -650,10 +650,26 @@ public class VampireFate extends VampiricFate {
                 "instruction.roundabout.passive", StandIcons.DAGGER,0, 0,0));
 
         tring = "ability.roundabout.vamp_jump_boost";
-        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+128,topPos+80,
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+129,topPos+80,
                 jumpLevel, jumpMaxLevel, tring,
                 "instruction.roundabout.passive", StandIcons.VAMP_JUMP_BOOST,0, 3+(2*jumpLevel),
                 5+(3*jumpLevel)));
+
+        tring = "ability.roundabout.unleash_the_cold.locked";
+        if (freezeLevel > 0)
+            tring = "ability.roundabout.unleash_the_cold";
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+129,topPos+99,
+                freezeLevel, freezeMaxLevel, tring,
+                "instruction.roundabout.passive", StandIcons.GRAFTING,0, 0,
+                0));
+
+        tring = "ability.roundabout.eye_manipulation.locked";
+        if (ripperEyesLevel > 0)
+            tring = "ability.roundabout.eye_manipulation";
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+129,topPos+118,
+                ripperEyesLevel, ripperEyesMaxLevel, tring,
+                "instruction.roundabout.passive", StandIcons.GRAFTING,0, 0,
+                0));
 
 
         return $$1;
