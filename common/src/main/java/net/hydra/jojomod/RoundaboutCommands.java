@@ -2,6 +2,7 @@ package net.hydra.jojomod;
 
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -155,6 +156,86 @@ public class RoundaboutCommands {
         return targets.size();
     }
 
+    public static int roundaboutClearFateSkills(CommandSourceStack source, Collection<? extends Entity> targets) {
+        for (Entity entity : targets) {
+            if (entity instanceof LivingEntity LE) {
+                if (FateTypes.isVampire(LE)){
+                    if (LE instanceof Player PL){
+                        VampireData vdata = ((IPlayerEntity)PL).rdbt$getVampireData();
+                        vdata.strengthLevel = 0;
+                        vdata.dexterityLevel = 0;
+                        vdata.resilienceLevel = 0;
+                        vdata.hypnotismLevel = 0;
+                        vdata.superHearingLevel = 0;
+                        vdata.bloodSpeedLevel = 0;
+                        vdata.graftingLevel = 0;
+                        vdata.fleshBudLevel = 0;
+                        vdata.daggerSplatterLevel = 0;
+                        vdata.jumpLevel = 0;
+                        vdata.ripperEyesLevel = 0;
+                        vdata.freezeLevel = 0;
+                        S2CPacketUtil.beamVampireData(PL);
+                    }
+                }
+            }
+        }
+        return targets.size();
+    }
+    public static int roundaboutMaxFateSkills(CommandSourceStack source, Collection<? extends Entity> targets) {
+        for (Entity entity : targets) {
+            if (entity instanceof LivingEntity LE) {
+                if (FateTypes.isVampire(LE)){
+                    if (LE instanceof Player PL){
+                        VampireData vdata = ((IPlayerEntity)PL).rdbt$getVampireData();
+                        vdata.strengthLevel = VampireData.strengthMaxLevel;
+                        vdata.dexterityLevel = VampireData.dexterityMaxLevel;
+                        vdata.resilienceLevel = VampireData.reslienceMaxLevel;
+                        vdata.hypnotismLevel = VampireData.hypnotismMaxLevel;
+                        vdata.superHearingLevel = VampireData.superHearingMaxLevel;
+                        vdata.bloodSpeedLevel = VampireData.bloodSpeedMaxLevel;
+                        vdata.graftingLevel = VampireData.graftingMaxLevel;
+                        vdata.fleshBudLevel = VampireData.fleshBudMaxLevel;
+                        vdata.daggerSplatterLevel = VampireData.daggerSplatterMaxLevel;
+                        vdata.jumpLevel = VampireData.jumpMaxLevel;
+                        vdata.ripperEyesLevel = VampireData.ripperEyesMaxLevel;
+                        vdata.freezeLevel = VampireData.freezeMaxLevel;
+                        S2CPacketUtil.beamVampireData(PL);
+                    }
+                }
+            }
+        }
+        return targets.size();
+    }
+
+    public static int roundaboutSetVampireSkills(CommandSourceStack source, Collection<? extends Entity> targets,
+                                                 int strengthLevel, int dexterityLevel, int resilienceLevel,
+                                                 int hypnotismLevel, int superHearingLevel, int bloodSpeedLevel,
+                                                 int graftingLevel, int fleshBudLevel, int daggerSplatterLevel,
+                                                 int jumpLevel, int ripperEyesLevel, int freezeLevel) {
+        for (Entity entity : targets) {
+            if (entity instanceof LivingEntity LE) {
+                if (FateTypes.isVampire(LE)){
+                    if (LE instanceof Player PL){
+                        VampireData vdata = ((IPlayerEntity)PL).rdbt$getVampireData();
+                        vdata.setStrengthLevel(strengthLevel);
+                        vdata.setDexterityLevel(dexterityLevel);
+                        vdata.setResilienceLevel(resilienceLevel);
+                        vdata.setHypnotismLevel(hypnotismLevel);
+                        vdata.setSuperHearingLevel(superHearingLevel);
+                        vdata.setBloodSpeedLevel(bloodSpeedLevel);
+                        vdata.setGraftingLevel(graftingLevel);
+                        vdata.setFleshBudLevel(fleshBudLevel);
+                        vdata.setDaggerSplatterLevel(daggerSplatterLevel);
+                        vdata.setJumpLevel(jumpLevel);
+                        vdata.setRipperEyesLevel(ripperEyesLevel);
+                        vdata.setFreezeLevel(freezeLevel);
+                        S2CPacketUtil.beamVampireData(PL);
+                    }
+                }
+            }
+        }
+        return targets.size();
+    }
 
 
     public static int roundaboutSetStandLevel(CommandSourceStack source, Collection<? extends Entity> targets, int level) {

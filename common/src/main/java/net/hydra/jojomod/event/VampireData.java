@@ -1,7 +1,9 @@
 package net.hydra.jojomod.event;
 
 
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 public class VampireData {
@@ -43,6 +45,44 @@ public class VampireData {
     public static byte ripperEyesMaxLevel = 5;
     public byte freezeLevel = 0;
     public static byte freezeMaxLevel = 5;
+
+
+    public void setStrengthLevel(int level){
+        strengthLevel = (byte) Mth.clamp(level,0,strengthMaxLevel);
+    }
+    public void setDexterityLevel(int level){
+        dexterityLevel = (byte) Mth.clamp(level,0,dexterityMaxLevel);
+    }
+    public void setResilienceLevel(int level){
+        resilienceLevel = (byte) Mth.clamp(level,0,reslienceMaxLevel);
+    }
+    public void setHypnotismLevel(int level){
+        hypnotismLevel = (byte) Mth.clamp(level,0,hypnotismMaxLevel);
+    }
+    public void setSuperHearingLevel(int level){
+        superHearingLevel = (byte) Mth.clamp(level,0,superHearingMaxLevel);
+    }
+    public void setBloodSpeedLevel(int level){
+        bloodSpeedLevel = (byte) Mth.clamp(level,0,bloodSpeedMaxLevel);
+    }
+    public void setGraftingLevel(int level){
+        graftingLevel = (byte) Mth.clamp(level,0,graftingMaxLevel);
+    }
+    public void setFleshBudLevel(int level){
+        fleshBudLevel = (byte) Mth.clamp(level,0,fleshBudMaxLevel);
+    }
+    public void setDaggerSplatterLevel(int level){
+        daggerSplatterLevel = (byte) Mth.clamp(level,0,daggerSplatterMaxLevel);
+    }
+    public void setJumpLevel(int level){
+        jumpMaxLevel = (byte) Mth.clamp(level,0,jumpMaxLevel);
+    }
+    public void setRipperEyesLevel(int level){
+        ripperEyesLevel = (byte) Mth.clamp(level,0,ripperEyesMaxLevel);
+    }
+    public void setFreezeLevel(int level){
+        freezeLevel = (byte) Mth.clamp(level,0,freezeMaxLevel);
+    }
 
     public int getPoints(){
         int points = Mth.clamp((vampireLevel-strengthLevel-dexterityLevel-resilienceLevel-hypnotismLevel
