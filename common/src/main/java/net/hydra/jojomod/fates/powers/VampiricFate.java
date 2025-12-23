@@ -789,7 +789,7 @@ public int speedActivated = 0;
         } else if (getActivePower() == BLOOD_REGEN){
             basis*=0.1F;
         } else if (isFast()){
-            basis*=2F;
+            basis*=getSpeedMod();
         }
 
         return basis;
@@ -920,9 +920,11 @@ public int speedActivated = 0;
     }
 
     public float hearingDistance(){
-        return 20;
+        return 10;
     }
-
+    public float getSpeedMod(){
+        return 1.5F;
+    }
     /**every entity the client renders is checked against this, overrride and use it to see if they can be highlighted
      * for detection or attack highlighting related skills*/
     @Override

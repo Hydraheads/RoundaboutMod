@@ -1268,7 +1268,18 @@
   "ability.roundabout.hypnotism.locked": "???",
   "ability.roundabout.hypnotism.desc": "Turn on and off hypnotic pulses that cause nearby mobs to follow you. Hypnotized villagers do not alert for reputation changes when their blood is drained.",
   "ability.roundabout.hypnotism.locked.desc": "Unlock your hypnotic potential...",
+  "ability.roundabout.super_hearing": "Super Hearing",
+  "ability.roundabout.super_hearing.desc": "Concentrate entirely on the sound of heartbeats, allowing you to find mobs through walls and estimate their health. %1$s block radius.",
 
+  "ability.roundabout.blood_speed": "Blood Speed",
+  "ability.roundabout.blood_speed.desc": "A massive cheetah-like speed boost at the cost of half of your blood, allowing you to step up blocks as well. Speed increases by %1$s percent.",
+  "ability.roundabout.blood_speed.locked": "???",
+  "ability.roundabout.blood_speed.locked.desc": "Use consumed life force to amplify your speed...",
+
+  "ability.roundabout.grafting": "Zombie Grafting",
+  "ability.roundabout.grafting.desc": "Makes certain mobs drop parts which can be applied to your zombie minions through interaction. Changes their properties and/or grants new abilities.",
+  "ability.roundabout.grafting.locked": "???",
+  "ability.roundabout.grafting.locked.desc": "Give your undead army an upgrade...",
 
 
   "ability.roundabout.gd_punch_left": "Left Arm Launch",

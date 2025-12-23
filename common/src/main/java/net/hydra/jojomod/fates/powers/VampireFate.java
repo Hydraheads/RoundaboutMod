@@ -472,6 +472,10 @@ public class VampireFate extends VampiricFate {
     }
 
     @Override
+    public float getSpeedMod(){
+        return 1.5F+(0.1F*bloodSpeedLevel);
+    }
+    @Override
     /**Stand related things that slow you down or speed you up, override and call super to make
      * any stand ability slow you down*/
     public float inputSpeedModifiers(float basis){
@@ -516,6 +520,11 @@ public class VampireFate extends VampiricFate {
 
     public int getMaxAttackTimeDuringHair(){
         return hairChargeLength;
+    }
+
+    @Override
+    public float hearingDistance(){
+        return 15+(3*superHearingLevel);
     }
 
     @Override
@@ -607,6 +616,24 @@ public class VampireFate extends VampiricFate {
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+86,topPos+80,
                 hypnotismLevel, hypnotismMaxLevel, tring,
                 "instruction.roundabout.press_skill", StandIcons.HYPNOTISM,1, 0,0));
+
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+86,topPos+99,
+                superHearingLevel, superHearingMaxLevel, "ability.roundabout.super_hearing",
+                "instruction.roundabout.press_skill", StandIcons.HEARING_MODE,4, 15+(3*superHearingLevel),0));
+
+        tring = "ability.roundabout.blood_speed.locked";
+        if (bloodSpeedLevel > 0)
+            tring = "ability.roundabout.blood_speed";
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+86,topPos+118,
+                bloodSpeedLevel, bloodSpeedMaxLevel, tring,
+                "instruction.roundabout.press_skill_crouch", StandIcons.CHEETAH_SPEED,3, 50+(10*bloodSpeedLevel),0));
+
+        tring = "ability.roundabout.grafting.locked";
+        if (bloodSpeedLevel > 0)
+            tring = "ability.roundabout.grafting";
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+105,topPos+80,
+                graftingLevel, graftingMaxLevel, tring,
+                "instruction.roundabout.passive", StandIcons.GRAFTING,0, 0,0));
 
 
         return $$1;

@@ -50,6 +50,8 @@ public class StandIcons {
             "textures/gui/icons/fates/vampire/vampire.png");
     public static final ResourceLocation CHEETAH_SPEED = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/vampire/cheetah_speed.png");
+    public static final ResourceLocation GRAFTING = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/grafting.png");
     public static final ResourceLocation REGENERATE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/vampire/regenerate.png");
     public static final ResourceLocation HYPNOTISM = new ResourceLocation(Roundabout.MOD_ID,
