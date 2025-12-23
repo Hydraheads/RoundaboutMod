@@ -1,6 +1,8 @@
 package net.hydra.jojomod;
 
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -10,6 +12,7 @@ import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -17,6 +20,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -59,8 +63,6 @@ public class RoundaboutCommands {
     }
     public static int roundaboutSetStand(CommandSourceStack source, Collection<? extends Entity> targets,
                                          String standType, int level, byte skin, byte pose, boolean hiddenUnlocked) {
-
-
         String name = "";
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity LE) {
@@ -116,6 +118,45 @@ public class RoundaboutCommands {
         }
         return targets.size();
     }
+
+
+    public static int roundaboutSetFate(CommandSourceStack source, Collection<? extends Entity> targets,
+                                         String fate, int level, int experience) {
+
+        for (Entity entity : targets) {
+            if (entity instanceof LivingEntity LE) {
+                if (fate.equalsIgnoreCase("vampire")){
+                    if (LE instanceof Player PL){
+                        ((IPlayerEntity)PL).roundabout$setFate(FateTypes.VAMPIRE.id);
+                        ((IPlayerEntity)PL).rdbt$getVampireData().vampireLevel = Mth.clamp(level,0,40);
+                        ((IPlayerEntity)PL).rdbt$getVampireData().bloodExp = experience;
+                        S2CPacketUtil.beamVampireData(PL);
+                    } else if (LE instanceof Mob mb){
+                        ((IMob)mb).roundabout$setVampire(true);
+                    }
+                } else if (fate.equalsIgnoreCase("human") || fate.equalsIgnoreCase("none")){
+                    if (LE instanceof Player PL){
+                        ((IPlayerEntity)PL).roundabout$setFate(FateTypes.HUMAN.id);
+                    } else if (LE instanceof Mob mb){
+                        ((IMob)mb).roundabout$setVampire(false);
+                    }
+                } else {
+                    source.sendFailure(Component.translatable("commands.roundabout.argument.fate_type.invalid", fate.toLowerCase()));
+                    return targets.size();
+                }
+            }
+        }
+
+        if (targets.size() == 1) {
+            source.sendSuccess(() -> Component.translatable("commands.roundabout.argument.fate_type.valid_2", ((Entity)targets.iterator().next()).getDisplayName(),fate), true);
+        } else {
+            source.sendSuccess(() -> Component.translatable(  "commands.roundabout.argument.fate_type.valid", targets.size(), fate), true);
+        }
+        return targets.size();
+    }
+
+
+
     public static int roundaboutSetStandLevel(CommandSourceStack source, Collection<? extends Entity> targets, int level) {
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity) {

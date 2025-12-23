@@ -599,6 +599,9 @@
   "commands.roundabout.argument.standtype.valid_2": "Set Stand of %s to %s",
   "commands.roundabout.argument.standtype.invalid": "Unknown stand type: %s",
   "commands.roundabout.argument.standtype.invalid_2": "Must enter a stand type, or 'none'.",
+  "commands.roundabout.argument.fate_type.invalid": "Unknown Fate type: %s (Fate Types: human, vampire)",
+  "commands.roundabout.argument.fate_type.valid": "Set Fate of %s entities to %s",
+  "commands.roundabout.argument.fate_type.valid_2": "Set Fate of %s to %s",
   "commands.roundabaout.d4c_world": "Generated world \"%s\" successfully.",
   "commands.roundabout.d4c_world.tooltip": "Click to teleport.",
 

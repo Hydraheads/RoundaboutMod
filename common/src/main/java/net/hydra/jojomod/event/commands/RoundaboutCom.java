@@ -56,6 +56,27 @@ public class RoundaboutCom {
                                         )
                                 )))
                 )));
+
+        dispatcher.register(Commands.literal("roundaboutSetFate")
+                .requires(source
+                        -> source.hasPermission(2))
+                .executes(context -> net.hydra.jojomod.RoundaboutCommands.roundaboutSetFate((CommandSourceStack)context.getSource(),
+                        ImmutableList.of(((CommandSourceStack)context.getSource()).getEntityOrException()),
+                        "human",
+                        0, 0))
+                .then(Commands.argument("targets", EntityArgument.entities())
+                        .then(Commands.argument("fate_name", StringArgumentType.word())
+                                .then(Commands.argument("level", IntegerArgumentType.integer())
+                                        .then(Commands.argument("exp", IntegerArgumentType.integer())
+                                             .executes(context -> RoundaboutCommands.roundaboutSetFate((CommandSourceStack)context.getSource(),
+                                                                        EntityArgument.getEntities(context, "targets"),
+                                                                        StringArgumentType.getString(context, "fate_name"),
+                                                                        IntegerArgumentType.getInteger(context,"level"),
+                                                                        IntegerArgumentType.getInteger(context,"exp")))
+                                                        )
+                                )
+                        )));
+
         dispatcher.register(Commands.literal("roundaboutSetStandExp")
                 .requires(source
                         -> source.hasPermission(2))

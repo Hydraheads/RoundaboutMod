@@ -139,9 +139,11 @@ public class VampireFate extends VampiricFate {
             context.blit(rl, i +147, j + 20, 236, 112, 19, 18);
         }
 
+        VampireData vdata =getVampireData();
+
         Component display = Component.translatable("leveling.roundabout.fate_development_potential_level",
-                vampireLevel+1);
-        if (vampireLevel > 40){
+                vdata.vampireLevel+1);
+        if (vdata.vampireLevel >= 40){
             display = Component.translatable("leveling.roundabout.fate_maxed");
         }
         //display = Component.translatable("leveling.roundabout.disc_maxed",
@@ -558,8 +560,6 @@ public class VampireFate extends VampiricFate {
         }
         super.renderAttackHud(context,playerEntity,scaledWidth,scaledHeight,ticks,vehicleHeartCount,flashAlpha,otherFlashAlpha);
     }
-
-    public int vampireLevel = 0;
 
 
     public VampireData getVampireData(){
