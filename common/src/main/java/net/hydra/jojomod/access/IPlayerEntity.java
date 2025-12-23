@@ -1,5 +1,6 @@
 package net.hydra.jojomod.access;
 
+import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
@@ -56,6 +57,7 @@ public interface IPlayerEntity {
     void rdbt$setCooldownQuery(boolean query);
 
 
+    VampireData rdbt$getVampireData();
     void roundabout$setShapeShiftExtraData(byte level);
     byte roundabout$getShapeShift();
     byte roundabout$getShapeShiftExtraData();

@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -139,7 +140,10 @@ public class VampireFate extends VampiricFate {
         }
 
         Component display = Component.translatable("leveling.roundabout.fate_development_potential_level",
-                    0);
+                vampireLevel+1);
+        if (vampireLevel > 40){
+            display = Component.translatable("leveling.roundabout.fate_maxed");
+        }
         //display = Component.translatable("leveling.roundabout.disc_maxed",
         //        0);
         context.drawString(font, display, i  +80, j+64, 4210752, false);
@@ -371,10 +375,10 @@ public class VampireFate extends VampiricFate {
     @Override
     public float getDamageReduction(DamageSource source, float amt){
         if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)){
-            return 0.10F + 0.01F*resilienceLevel;
+            return 0.10F + 0.01F*getVampireData().resilienceLevel;
         }
         if (source.is(DamageTypes.ARROW) || source.is(ModDamageTypes.BULLET)){
-            return 0.1F + 0.02F*resilienceLevel;
+            return 0.1F + 0.02F*getVampireData().resilienceLevel;
         }
         return super.getDamageReduction(source,amt);
     }
@@ -382,9 +386,9 @@ public class VampireFate extends VampiricFate {
     public float getDamageAdd(DamageSource source, float amt, Entity target){
         if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)){
             if (target instanceof Player pl){
-                return 0.1F + (strengthLevel*0.02F);
+                return 0.1F + (getVampireData().strengthLevel*0.02F);
             } else {
-                return 0.2F + (strengthLevel*0.04F);
+                return 0.2F + (getVampireData().strengthLevel*0.04F);
             }
         }
         return super.getDamageAdd(source,amt,target);
@@ -392,11 +396,11 @@ public class VampireFate extends VampiricFate {
 
     /**For enhancement stands that adjust your normal player attack speed*/
     public float getBonusAttackSpeed() {
-        return 1.1F+ (0.1F*dexterityLevel);
+        return 1.1F+ (0.1F*getVampireData().dexterityLevel);
     }
     /**For enhancement stands that adjust your normal player mining speed*/
     public float getBonusPassiveMiningSpeed(){
-        return 1.2F+ (0.4F*dexterityLevel);
+        return 1.2F+ (0.4F*getVampireData().dexterityLevel);
     }
 
     public boolean canPlantDrink(Entity ent) {
@@ -473,7 +477,7 @@ public class VampireFate extends VampiricFate {
 
     @Override
     public float getSpeedMod(){
-        return 1.5F+(0.1F*bloodSpeedLevel);
+        return 1.5F+(0.1F*getVampireData().bloodSpeedLevel);
     }
     @Override
     /**Stand related things that slow you down or speed you up, override and call super to make
@@ -524,7 +528,7 @@ public class VampireFate extends VampiricFate {
 
     @Override
     public float hearingDistance(){
-        return 15+(3*superHearingLevel);
+        return 15+(3*getVampireData().superHearingLevel);
     }
 
     @Override
@@ -555,33 +559,16 @@ public class VampireFate extends VampiricFate {
         super.renderAttackHud(context,playerEntity,scaledWidth,scaledHeight,ticks,vehicleHeartCount,flashAlpha,otherFlashAlpha);
     }
 
-    public int strengthLevel = 0;
-    public static int strengthMaxLevel = 5;
-    public int dexterityLevel = 0;
-    public static int dexterityMaxLevel = 5;
-    public int resilienceLevel = 0;
-    public static int reslienceMaxLevel = 5;
+    public int vampireLevel = 0;
 
-    public int hypnotismLevel = 0;
-    public static int hypnotismMaxLevel = 1;
-    public int superHearingLevel = 0;
-    public static int superHearingMaxLevel = 5;
-    public int bloodSpeedLevel = 0;
-    public static int bloodSpeedMaxLevel = 5;
 
-    public int graftingLevel = 0;
-    public static int graftingMaxLevel = 1;
-    public int fleshBudLevel = 0;
-    public static int fleshBudMaxLevel = 1;
-    public int daggerSplatterLevel = 0;
-    public static int daggerSplatterMaxLevel = 1;
-
-    public int jumpLevel = 0;
-    public static int jumpMaxLevel = 1;
-    public int ripperEyesLevel = 0;
-    public static int ripperEyesMaxLevel = 5;
-    public int freezeLevel = 0;
-    public static int freezeMaxLevel = 5;
+    public VampireData getVampireData(){
+        if (self instanceof Player pl){
+            return ((IPlayerEntity)pl).rdbt$getVampireData();
+        } else {
+            return new VampireData(self.level());
+        }
+    }
 
     @Override
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
@@ -599,75 +586,76 @@ public class VampireFate extends VampiricFate {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.vampire_vision",
                 "instruction.roundabout.press_skill_crouch", StandIcons.VAMP_VISION_ON,4,level,bypas));
 
+        VampireData data = getVampireData();
 
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+67,topPos+80,
-                strengthLevel, strengthMaxLevel, "ability.roundabout.vamp_strength",
-                "instruction.roundabout.passive", StandIcons.VAMPIRE_STRENGTH,0, 10+(strengthLevel*2), 20+(strengthLevel*4)));
+                data.strengthLevel, VampireData.strengthMaxLevel, "ability.roundabout.vamp_strength",
+                "instruction.roundabout.passive", StandIcons.VAMPIRE_STRENGTH,0, 10+(data.strengthLevel*2), 20+(data.strengthLevel*4)));
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+67,topPos+99,
-                dexterityLevel, dexterityMaxLevel, "ability.roundabout.vamp_dexterity",
-                "instruction.roundabout.passive", StandIcons.VAMPIRE_DEXTERITY,0, 10+(dexterityLevel), 20+(resilienceLevel*4)));
+                data.dexterityLevel, VampireData.dexterityMaxLevel, "ability.roundabout.vamp_dexterity",
+                "instruction.roundabout.passive", StandIcons.VAMPIRE_DEXTERITY,0, 10+(data.dexterityLevel), 20+(data.resilienceLevel*4)));
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+67,topPos+118,
-                resilienceLevel, reslienceMaxLevel, "ability.roundabout.vamp_resilience",
-                "instruction.roundabout.passive", StandIcons.VAMPIRE_RESILIENCE,0, 10+(resilienceLevel), 10+(resilienceLevel*2)));
+                data.resilienceLevel, VampireData.reslienceMaxLevel, "ability.roundabout.vamp_resilience",
+                "instruction.roundabout.passive", StandIcons.VAMPIRE_RESILIENCE,0, 10+(data.resilienceLevel), 10+(data.resilienceLevel*2)));
 
         String tring = "ability.roundabout.hypnotism.locked";
-        if (hypnotismLevel > 0)
+        if (data.hypnotismLevel > 0)
             tring = "ability.roundabout.hypnotism";
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+86,topPos+80,
-                hypnotismLevel, hypnotismMaxLevel, tring,
+                data.hypnotismLevel, VampireData.hypnotismMaxLevel, tring,
                 "instruction.roundabout.press_skill", StandIcons.HYPNOTISM,1, 0,0));
 
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+86,topPos+99,
-                superHearingLevel, superHearingMaxLevel, "ability.roundabout.super_hearing",
-                "instruction.roundabout.press_skill", StandIcons.HEARING_MODE,4, 15+(3*superHearingLevel),0));
+                data.superHearingLevel, VampireData.superHearingMaxLevel, "ability.roundabout.super_hearing",
+                "instruction.roundabout.press_skill", StandIcons.HEARING_MODE,4, 15+(3*data.superHearingLevel),0));
 
         tring = "ability.roundabout.blood_speed.locked";
-        if (bloodSpeedLevel > 0)
+        if (data.bloodSpeedLevel > 0)
             tring = "ability.roundabout.blood_speed";
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+86,topPos+118,
-                bloodSpeedLevel, bloodSpeedMaxLevel, tring,
-                "instruction.roundabout.press_skill_crouch", StandIcons.CHEETAH_SPEED,3, 50+(10*bloodSpeedLevel),0));
+                data.bloodSpeedLevel, VampireData.bloodSpeedMaxLevel, tring,
+                "instruction.roundabout.press_skill_crouch", StandIcons.CHEETAH_SPEED,3, 50+(10*data.bloodSpeedLevel),0));
 
         tring = "ability.roundabout.grafting.locked";
-        if (graftingLevel > 0)
+        if (data.graftingLevel > 0)
             tring = "ability.roundabout.grafting";
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+105,topPos+80,
-                graftingLevel, graftingMaxLevel, tring,
+                data.graftingLevel, VampireData.graftingMaxLevel, tring,
                 "instruction.roundabout.passive", StandIcons.GRAFTING,0, 0,0));
 
         tring = "ability.roundabout.flesh_bud.locked";
-        if (fleshBudLevel > 0)
+        if (data.fleshBudLevel > 0)
             tring = "ability.roundabout.flesh_bud";
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+105,topPos+99,
-                fleshBudLevel, fleshBudMaxLevel, tring,
+                data.fleshBudLevel, VampireData.fleshBudMaxLevel, tring,
                 "instruction.roundabout.press_skill_crouch", StandIcons.FLESH_BUD,1, 0,0));
 
         tring = "ability.roundabout.sacrificial_dagger.locked";
-        if (daggerSplatterLevel > 0)
+        if (data.daggerSplatterLevel > 0)
             tring = "ability.roundabout.sacrificial_dagger";
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+105,topPos+118,
-                daggerSplatterLevel, daggerSplatterMaxLevel, tring,
+                data.daggerSplatterLevel, VampireData.daggerSplatterMaxLevel, tring,
                 "instruction.roundabout.passive", StandIcons.DAGGER,0, 0,0));
 
         tring = "ability.roundabout.vamp_jump_boost";
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+129,topPos+80,
-                jumpLevel, jumpMaxLevel, tring,
-                "instruction.roundabout.passive", StandIcons.VAMP_JUMP_BOOST,0, 3+(2*jumpLevel),
-                5+(3*jumpLevel)));
+                data.jumpLevel, VampireData.jumpMaxLevel, tring,
+                "instruction.roundabout.passive", StandIcons.VAMP_JUMP_BOOST,0, 3+(2*data.jumpLevel),
+                5+(3*data.jumpLevel)));
 
         tring = "ability.roundabout.unleash_the_cold.locked";
-        if (freezeLevel > 0)
+        if (data.freezeLevel > 0)
             tring = "ability.roundabout.unleash_the_cold";
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+129,topPos+99,
-                freezeLevel, freezeMaxLevel, tring,
+                data.freezeLevel, VampireData.freezeMaxLevel, tring,
                 "instruction.roundabout.passive", StandIcons.GRAFTING,0, 0,
                 0));
 
         tring = "ability.roundabout.eye_manipulation.locked";
-        if (ripperEyesLevel > 0)
+        if (data.ripperEyesLevel > 0)
             tring = "ability.roundabout.eye_manipulation";
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+129,topPos+118,
-                ripperEyesLevel, ripperEyesMaxLevel, tring,
+                data.ripperEyesLevel, VampireData.ripperEyesMaxLevel, tring,
                 "instruction.roundabout.passive", StandIcons.GRAFTING,0, 0,
                 0));
 

@@ -2386,6 +2386,10 @@ public class MainUtil {
             if (player != null) {
                 ((StandUser)player).roundabout$getStandPowers().serverQueried2();
             }
+        } else if (context == PacketDataIndex.QUERY_VAMPIRE_UPDATE) {
+            if (player != null) {
+                S2CPacketUtil.beamVampireData(player);
+            }
         }
     }
 

@@ -18,6 +18,7 @@ import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.fates.FatePowers;
@@ -555,6 +556,30 @@ public class ClientUtil {
                 }
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.VampireMessage.value)) {
                     playSound(ModSounds.VAMPIRE_MESSAGE_EVENT,player,2,1);
+                }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData.value)) {
+                    VampireData vdata = ((IPlayerEntity)player).rdbt$getVampireData();
+                    vdata.vampireLevel = (int) vargs[0];
+                    vdata.bloodExp = (int) vargs[1];
+                    vdata.animalExp = (int) vargs[2];
+                    vdata.monsterEXP = (int) vargs[3];
+                    vdata.npcExp = (int) vargs[4];
+                    vdata.timeSinceAnimal = (int) vargs[5];
+                    vdata.timeSinceMonster = (int) vargs[6];
+                    vdata.timeSinceNpc = (int) vargs[7];
+
+                    vdata.strengthLevel = (byte) vargs[8];
+                    vdata.dexterityLevel = (byte) vargs[9];
+                    vdata.resilienceLevel = (byte) vargs[10];
+                    vdata.hypnotismLevel = (byte) vargs[11];
+                    vdata.superHearingLevel = (byte) vargs[12];
+                    vdata.bloodSpeedLevel = (byte) vargs[13];
+                    vdata.graftingLevel = (byte) vargs[14];
+                    vdata.fleshBudLevel = (byte) vargs[15];
+                    vdata.daggerSplatterLevel = (byte) vargs[16];
+                    vdata.jumpLevel = (byte) vargs[17];
+                    vdata.ripperEyesLevel = (byte) vargs[18];
+                    vdata.freezeLevel = (byte) vargs[19];
                 }
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.GunRecoil.value)) {
                     String sigmaString = (String) vargs[0];

@@ -69,6 +69,7 @@ public class PacketDataIndex {
     public static final byte END_BLOOD_SPEED = 32;
     public static final byte QUERY_STAND_UPDATE = 33;
     public static final byte QUERY_STAND_UPDATE_2 = 34;
+    public static final byte QUERY_VAMPIRE_UPDATE = 35;
 
     /**Byte packets*/
     public static final byte BYTE_CHANGE_MORPH = 6;
