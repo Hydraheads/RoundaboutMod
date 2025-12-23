@@ -590,7 +590,7 @@ public class VampireFate extends VampiricFate {
 
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+67,topPos+80,
                 data.strengthLevel, VampireData.strengthMaxLevel, "ability.roundabout.vamp_strength",
-                "instruction.roundabout.passive", StandIcons.VAMPIRE_STRENGTH,0, 10+(data.strengthLevel*2), 20+(data.strengthLevel*4)));
+                "instruction.roundabout.passive", StandIcons.VAMPIRE_STRENGTH,0, 20+(data.strengthLevel*4), 10+(data.strengthLevel*2)));
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+67,topPos+99,
                 data.dexterityLevel, VampireData.dexterityMaxLevel, "ability.roundabout.vamp_dexterity",
                 "instruction.roundabout.passive", StandIcons.VAMPIRE_DEXTERITY,0, 20+(data.dexterityLevel*4), 10+(data.dexterityLevel)));
