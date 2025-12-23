@@ -576,6 +576,8 @@
   "death.attack.blood_drain.player": "%1$s lost all color.",
   "death.attack.blood_drain.player.item": "%1$s lost all color.",
   "death.attack.bullet": "%1$s was shot through the heart.",
+  "death.attack.bullet.player": "%1$s was shot through the heart.",
+  "death.attack.bullet.player.item": "%1$s was shot through the heart.",
 
   "item.glaive.charge_power": "Charge Attack",
 
@@ -1256,7 +1258,8 @@
   "ability.roundabout.vampire_vision": "Vampire Perspective",
   "ability.roundabout.vampire_vision.desc": "While enabled, allows for passive dark vision as well as a longer jump height while jump is held.",
 
-
+  "ability.roundabout.vamp_jump_boost": "Ultra Athleticism",
+  "ability.roundabout.vamp_jump_boost.desc": "Grants 3 meter jump height and 5 meters while sneaking. Hold down for the longer jumps, and tap for shorter ones. With the power moveset active, grants %1$s meter jump height and %2$s meters while sneaking.",
   "ability.roundabout.vamp_strength": "Evolved Strength",
   "ability.roundabout.vamp_strength.desc": "Exceed the limits of humanity. +%1$s percent damage for direct melee attacks against mobs, +%2$s against players.",
   "ability.roundabout.vampire_growth_room": "Remaining Growth Levels: %1$s",
@@ -1280,6 +1283,21 @@
   "ability.roundabout.grafting.desc": "Makes certain mobs drop parts which can be applied to your zombie minions through interaction. Changes their properties and/or grants new abilities.",
   "ability.roundabout.grafting.locked": "???",
   "ability.roundabout.grafting.locked.desc": "Give your undead army an upgrade...",
+
+  "ability.roundabout.flesh_bud": "Flesh Bud",
+  "ability.roundabout.flesh_bud.desc": "Plants a flesh bud in the mob, making them attack your enemies (and never you). Some mobs need to be at low health first.",
+  "ability.roundabout.flesh_bud.locked": "???",
+  "ability.roundabout.flesh_bud.locked.desc": "Assert further control over most mobs...",
+
+  "ability.roundabout.sacrificial_dagger": "Vampire Blood Splash",
+  "ability.roundabout.sacrificial_dagger.desc": "Instead of hurting you, sacrificial daggers now shoot out your blood as healing projectiles. It also puts living mobs under a special effect, and if they die under this effect they become vampire versions and fully heal. As a vampire, they are stronger but die in the sun- and drink blood of nearby mobs to heal.",
+  "ability.roundabout.sacrificial_dagger.locked": "???",
+  "ability.roundabout.sacrificial_dagger.locked.desc": "Your blood has special healing properties. Maybe you can use that to your advantage...",
+
+  "ability.roundabout.unleash_the_cold": "Unleash The Cold",
+  "ability.roundabout.unleash_the_cold.desc": ".",
+  "ability.roundabout.unleash_the_cold.locked": "???",
+  "ability.roundabout.unleash_the_cold.locked.desc": "You notice your body temperature is below that of a human. Can you make use of this unique property? (powers moveset)",
 
 
   "ability.roundabout.gd_punch_left": "Left Arm Launch",

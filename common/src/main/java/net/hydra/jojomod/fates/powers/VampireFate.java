@@ -629,11 +629,31 @@ public class VampireFate extends VampiricFate {
                 "instruction.roundabout.press_skill_crouch", StandIcons.CHEETAH_SPEED,3, 50+(10*bloodSpeedLevel),0));
 
         tring = "ability.roundabout.grafting.locked";
-        if (bloodSpeedLevel > 0)
+        if (graftingLevel > 0)
             tring = "ability.roundabout.grafting";
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+105,topPos+80,
                 graftingLevel, graftingMaxLevel, tring,
                 "instruction.roundabout.passive", StandIcons.GRAFTING,0, 0,0));
+
+        tring = "ability.roundabout.flesh_bud.locked";
+        if (fleshBudLevel > 0)
+            tring = "ability.roundabout.flesh_bud";
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+105,topPos+99,
+                fleshBudLevel, fleshBudMaxLevel, tring,
+                "instruction.roundabout.press_skill_crouch", StandIcons.FLESH_BUD,1, 0,0));
+
+        tring = "ability.roundabout.sacrificial_dagger.locked";
+        if (daggerSplatterLevel > 0)
+            tring = "ability.roundabout.sacrificial_dagger";
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+105,topPos+118,
+                daggerSplatterLevel, daggerSplatterMaxLevel, tring,
+                "instruction.roundabout.passive", StandIcons.DAGGER,0, 0,0));
+
+        tring = "ability.roundabout.vamp_jump_boost";
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+128,topPos+80,
+                jumpLevel, jumpMaxLevel, tring,
+                "instruction.roundabout.passive", StandIcons.VAMP_JUMP_BOOST,0, 3+(2*jumpLevel),
+                5+(3*jumpLevel)));
 
 
         return $$1;

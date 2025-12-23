@@ -58,6 +58,10 @@ public class StandIcons {
             "textures/gui//icons/fates/vampire/hypnotism.png");
     public static final ResourceLocation FLESH_BUD = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/vampire/flesh_bud.png");
+    public static final ResourceLocation DAGGER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/dagger.png");
+    public static final ResourceLocation VAMP_JUMP_BOOST = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/jump_boost.png");
     public static final ResourceLocation VAMP_VISION_ON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/vampire/vision_on.png");
     public static final ResourceLocation VAMP_VISION_OFF = new ResourceLocation(Roundabout.MOD_ID,
