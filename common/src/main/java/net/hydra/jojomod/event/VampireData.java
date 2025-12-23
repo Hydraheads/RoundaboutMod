@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event;
 
 
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 
 public class VampireData {
@@ -42,6 +43,13 @@ public class VampireData {
     public static byte ripperEyesMaxLevel = 5;
     public byte freezeLevel = 0;
     public static byte freezeMaxLevel = 5;
+
+    public int getPoints(){
+        int points = Mth.clamp((vampireLevel-strengthLevel-dexterityLevel-resilienceLevel-hypnotismLevel
+        -superHearingLevel-bloodSpeedLevel-graftingLevel-fleshBudLevel-daggerSplatterLevel-jumpLevel
+        -ripperEyesLevel-freezeLevel),0,40);
+        return points;
+    }
 
     public VampireData(Level lv){
         if (!lv.isClientSide()){

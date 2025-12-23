@@ -150,7 +150,7 @@ public class VampireFate extends VampiricFate {
         //        0);
         context.drawString(font, display, i  +80, j+64, 4210752, false);
 
-        int points = 2;
+        int points = vdata.getPoints();
         if (points > 0){
             if (points == 1){
                 display = Component.translatable("leveling.roundabout.fate_development_point",
