@@ -47,6 +47,7 @@ public class PacketDataIndex {
     public static final byte INT_GRAVITY_FLIP_2 = 16;
     public static final byte INT_GRAVITY_FLIP_3 = 17;
     public static final byte INT_GRAVITY_FLIP_4 = 18;
+    public static final byte INT_VAMPIRE_SKILL_BUY = 19;
 
     /**Single Byte packets*/
     public static final byte SINGLE_BYTE_GLAIVE_START_SOUND = 1;

@@ -24,6 +24,7 @@ import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModGamerules;
+import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
@@ -2646,6 +2647,71 @@ public class MainUtil {
                 vf.justFlippedTicks = 5;
             }
             ((IGravityEntity) player).roundabout$setGravityDirection(cd);
+        } else if (context == PacketDataIndex.INT_VAMPIRE_SKILL_BUY){
+            VampireData vdata = ((IPlayerEntity)player).rdbt$getVampireData();
+            if (vdata.getPoints() > 0){
+                if (data==1) {
+                    if (vdata.strengthLevel < VampireData.strengthMaxLevel) {
+                        vdata.setStrengthLevel(vdata.strengthLevel + 1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 2) {
+                    if (vdata.dexterityLevel < VampireData.dexterityMaxLevel){
+                        vdata.setDexterityLevel(vdata.dexterityLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 3) {
+                    if (vdata.resilienceLevel < VampireData.reslienceMaxLevel){
+                        vdata.setResilienceLevel(vdata.resilienceLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 4) {
+                    if (vdata.hypnotismLevel < VampireData.hypnotismMaxLevel){
+                        vdata.setHypnotismLevel(vdata.hypnotismLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 5) {
+                    if (vdata.superHearingLevel < VampireData.superHearingMaxLevel){
+                        vdata.setSuperHearingLevel(vdata.superHearingLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 6) {
+                    if (vdata.bloodSpeedLevel < VampireData.bloodSpeedMaxLevel){
+                        vdata.setBloodSpeedLevel(vdata.bloodSpeedLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 7) {
+                    if (vdata.graftingLevel < VampireData.graftingMaxLevel){
+                        vdata.setGraftingLevel(vdata.graftingLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 8) {
+                    if (vdata.fleshBudLevel < VampireData.fleshBudMaxLevel){
+                        vdata.setFleshBudLevel(vdata.fleshBudLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 9) {
+                    if (vdata.daggerSplatterLevel < VampireData.daggerSplatterMaxLevel){
+                        vdata.setDaggerSplatterLevel(vdata.daggerSplatterLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 10) {
+                    if (vdata.jumpLevel < VampireData.jumpMaxLevel){
+                        vdata.setJumpLevel(vdata.jumpLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 11) {
+                    if (vdata.ripperEyesLevel < VampireData.ripperEyesMaxLevel){
+                        vdata.setRipperEyesLevel(vdata.ripperEyesLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                } else if (data == 12) {
+                    if (vdata.freezeLevel < VampireData.freezeMaxLevel){
+                        vdata.setFreezeLevel(vdata.freezeLevel+1);
+                        S2CPacketUtil.beamVampireData(player);
+                    }
+                }
+            }
         }
     }
     public static void addItem(Player player, ItemStack stack){

@@ -188,53 +188,53 @@ public class VampireFate extends VampiricFate {
                 //Strength
                 if (isSurelyHovering(i + 67, j + 80, 19, 19, mouseX, mouseY)) {
                     if (vdata.strengthLevel < VampireData.strengthMaxLevel){
-
+                        ClientUtil.clickVampireSlot(1);
                     }
                 }
                 //Dexterity
                 if (isSurelyHovering(i + 67, j + 99, 19, 19, mouseX, mouseY)) {
                     if (vdata.dexterityLevel < VampireData.dexterityMaxLevel){
-
+                        ClientUtil.clickVampireSlot(2);
                     }
                 }
                 //Resilience
                 if (isSurelyHovering(i + 67, j + 118, 19, 19, mouseX, mouseY)) {
                     if (vdata.resilienceLevel < VampireData.reslienceMaxLevel){
-
+                        ClientUtil.clickVampireSlot(3);
                     }
                 }
 
 
                 //Hypnotism
                 if (isSurelyHovering(i + 86, j + 80, 19, 19, mouseX, mouseY)) {
-                    if (vdata.bloodSpeedLevel < VampireData.bloodSpeedMaxLevel){
-
+                    if (vdata.hypnotismLevel < VampireData.hypnotismMaxLevel){
+                        ClientUtil.clickVampireSlot(4);
                     }
                 }
                 //Hearing
                 if (isSurelyHovering(i + 86, j + 99, 19, 19, mouseX, mouseY)) {
                     if (vdata.superHearingLevel < VampireData.superHearingMaxLevel){
-
+                        ClientUtil.clickVampireSlot(5);
                     }
                 }
                 //Blood Speed
                 if (isSurelyHovering(i + 86, j + 118, 19, 19, mouseX, mouseY)) {
-                    if (vdata.hypnotismLevel < VampireData.hypnotismMaxLevel){
-
+                    if (vdata.bloodSpeedLevel < VampireData.bloodSpeedMaxLevel){
+                        ClientUtil.clickVampireSlot(6);
                     }
                 }
 
                 //Grafting
                 if (isSurelyHovering(i + 105, j + 80, 19, 19, mouseX, mouseY)) {
                     if (vdata.graftingLevel < VampireData.graftingMaxLevel){
-
+                        ClientUtil.clickVampireSlot(7);
                     }
                 }
                 //Flesh Bud
                 if (isSurelyHovering(i + 105, j + 99, 19, 19, mouseX, mouseY)) {
                     if (vdata.fleshBudLevel < VampireData.fleshBudMaxLevel){
                         if (level >= 4){
-
+                            ClientUtil.clickVampireSlot(8);
                         }
                     }
                 }
@@ -242,8 +242,8 @@ public class VampireFate extends VampiricFate {
                 if (isSurelyHovering(i + 105, j + 118, 19, 19, mouseX, mouseY)) {
 
                     if (vdata.daggerSplatterLevel < VampireData.daggerSplatterMaxLevel){
-                        if (level >= 29){
-
+                        if (level >= 14){
+                            ClientUtil.clickVampireSlot(9);
                         }
                     }
                 }
@@ -251,14 +251,14 @@ public class VampireFate extends VampiricFate {
                 //Jump Boost
                 if (isSurelyHovering(i + 129, j + 80, 19, 19, mouseX, mouseY)) {
                     if (vdata.jumpLevel < VampireData.jumpMaxLevel){
-
+                        ClientUtil.clickVampireSlot(10);
                     }
                 }
                 //Eye
                 if (isSurelyHovering(i + 129, j + 99, 19, 19, mouseX, mouseY)) {
                     if (vdata.ripperEyesLevel < VampireData.ripperEyesMaxLevel){
                         if (level >= 9){
-
+                            ClientUtil.clickVampireSlot(11);
                         }
                     }
                 }
@@ -266,7 +266,7 @@ public class VampireFate extends VampiricFate {
                 if (isSurelyHovering(i + 129, j + 118, 19, 19, mouseX, mouseY)) {
                     if (vdata.freezeLevel < VampireData.freezeMaxLevel){
                         if (level >= 19){
-
+                            ClientUtil.clickVampireSlot(12);
                         }
                     }
                 }
@@ -575,7 +575,7 @@ public class VampireFate extends VampiricFate {
 
     @Override
     public float getSpeedMod(){
-        return 1.5F+(0.1F*getVampireData().bloodSpeedLevel);
+        return 1.7F+(0.1F*getVampireData().bloodSpeedLevel);
     }
     @Override
     /**Stand related things that slow you down or speed you up, override and call super to make
@@ -781,7 +781,7 @@ public class VampireFate extends VampiricFate {
             tring = "ability.roundabout.blood_speed";
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+86,topPos+118,
                 data.bloodSpeedLevel, VampireData.bloodSpeedMaxLevel, tring,
-                "instruction.roundabout.press_skill_crouch", StandIcons.CHEETAH_SPEED,3, 50+(10*data.bloodSpeedLevel),0));
+                "instruction.roundabout.press_skill_crouch", StandIcons.CHEETAH_SPEED,3, 70+(10*data.bloodSpeedLevel),0));
 
         tring = "ability.roundabout.grafting.locked";
         if (data.graftingLevel > 0)
@@ -802,7 +802,7 @@ public class VampireFate extends VampiricFate {
             tring = "ability.roundabout.sacrificial_dagger";
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+105,topPos+118,
                 data.daggerSplatterLevel, VampireData.daggerSplatterMaxLevel, tring,
-                "instruction.roundabout.passive", StandIcons.DAGGER,0, 0,0,29));
+                "instruction.roundabout.passive", StandIcons.DAGGER,0, 0,0,14));
 
         tring = "ability.roundabout.vamp_jump_boost";
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+129,topPos+80,

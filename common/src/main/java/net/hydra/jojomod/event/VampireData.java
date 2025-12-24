@@ -75,7 +75,7 @@ public class VampireData {
         daggerSplatterLevel = (byte) Mth.clamp(level,0,daggerSplatterMaxLevel);
     }
     public void setJumpLevel(int level){
-        jumpMaxLevel = (byte) Mth.clamp(level,0,jumpMaxLevel);
+        jumpLevel = (byte) Mth.clamp(level,0,jumpMaxLevel);
     }
     public void setRipperEyesLevel(int level){
         ripperEyesLevel = (byte) Mth.clamp(level,0,ripperEyesMaxLevel);
