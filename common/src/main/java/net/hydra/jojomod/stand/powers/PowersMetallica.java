@@ -316,12 +316,14 @@ public class PowersMetallica extends NewDashPreset {
         Vec3 reach = eye.add(self.getViewVector(1.0f).scale(4.0));
         BlockPos center = BlockPos.containing(reach);
         boolean anyHarvested = false;
+
         for (BlockPos pos : BlockPos.betweenClosed(center.offset(-1, -1, -1), center.offset(1, 1, 1))) {
             BlockState bs = self.level().getBlockState(pos);
             boolean isIronOre = bs.is(Blocks.IRON_ORE) || bs.is(Blocks.DEEPSLATE_IRON_ORE);
             boolean isFlower = bs.is(BlockTags.FLOWERS) || bs.is(BlockTags.SMALL_FLOWERS) ||
                     bs.getBlock() instanceof net.minecraft.world.level.block.FlowerBlock ||
                     bs.getBlock() instanceof net.minecraft.world.level.block.TallFlowerBlock;
+
             if ((isFlower || isIronOre) && MainUtil.getIsGamemodeApproriateForGrief(self)) {
                 if (isIronOre) {
                     Block replacement = bs.is(Blocks.IRON_ORE) ? Blocks.STONE : Blocks.DEEPSLATE;
@@ -333,7 +335,9 @@ public class PowersMetallica extends NewDashPreset {
                     anyHarvested = true;
                 } else {
                     self.level().destroyBlock(pos, false);
-                    int count = 1 + self.getRandom().nextInt(3);
+
+                    int count = 1 + self.getRandom().nextInt(5);
+
                     spawnMagnetItem(pos, new ItemStack(Items.IRON_NUGGET, count));
                     self.level().playSound(null, pos, SoundEvents.GRASS_BREAK, SoundSource.PLAYERS, 1.0f, 1.0f);
                     if (self.level() instanceof ServerLevel sl) sl.sendParticles(ParticleTypes.HAPPY_VILLAGER, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, 3, 0.2, 0.2, 0.2, 0);
@@ -344,7 +348,6 @@ public class PowersMetallica extends NewDashPreset {
         if (anyHarvested) { setCooldown(PowerIndex.SKILL_2, 10); return true; }
         return false;
     }
-
     private void spawnMagnetItem(BlockPos pos, ItemStack stack) {
         ItemEntity item = new ItemEntity(self.level(), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
         double rx = (self.getRandom().nextDouble() - 0.5) * 0.2;
