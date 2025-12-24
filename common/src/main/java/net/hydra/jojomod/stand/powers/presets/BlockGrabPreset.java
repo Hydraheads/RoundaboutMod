@@ -477,6 +477,8 @@ public class BlockGrabPreset extends NewPunchingStand {
                         }
                     } else {
                         this.setAttackTime(0);
+                        //this.setAttackTimeDuring(-10);
+                        //setActivePower(PowerIndex.NONE);
                         this.setActivePowerPhase(getActivePowerPhaseMax());
                         this.setAttackTimeMax(ClientNetworking.getAppropriateConfig().generalStandSettings.mobThrowRecoilTicks);
                     }

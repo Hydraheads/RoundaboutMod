@@ -587,6 +587,55 @@ public class VampireFate extends VampiricFate {
         super.renderAttackHud(context,playerEntity,scaledWidth,scaledHeight,ticks,vehicleHeartCount,flashAlpha,otherFlashAlpha);
     }
 
+    public AbilityIconInstance drawSingleGUIIconVamp(GuiGraphics context, int size, int startingLeft, int startingTop, int currentLevel, int maxLevel,
+                                                     String nameSTR, String instructionStr, ResourceLocation draw, int extra,
+                                                     int insert1, int insert2){
+        return drawSingleGUIIconVamp(context,size,startingLeft,startingTop,currentLevel,maxLevel,nameSTR,instructionStr,draw,extra,insert1,insert2,-1);
+    }
+    public AbilityIconInstance drawSingleGUIIconVamp(GuiGraphics context, int size, int startingLeft, int startingTop, int currentLevel, int maxLevel,
+                                                     String nameSTR, String instructionStr, ResourceLocation draw, int extra,
+                                                     int insert1, int insert2, int levelReq){
+        Component name;
+        if (currentLevel < maxLevel) {
+            context.blit(StandIcons.UNLOCK_SQUARE_ICON, startingLeft, startingTop, 0, 0,size, size, size, size);
+        } else {
+            context.blit(StandIcons.SQUARE_ICON, startingLeft, startingTop, 0, 0,size, size, size, size);
+        }
+        context.blit(draw, startingLeft+2, startingTop+2, 0, 0,size-4, size-4, size-4, size-4);
+        name = Component.translatable(nameSTR).withStyle(ChatFormatting.BOLD).
+                withStyle(ChatFormatting.DARK_PURPLE);
+        Component instruction;
+        if (extra <= 0) {
+            instruction = Component.translatable(instructionStr).withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.BLUE);
+        } else {
+            instruction = Component.translatable(instructionStr, "" + extra).withStyle(ChatFormatting.ITALIC).
+                    withStyle(ChatFormatting.BLUE);
+
+        }
+        Component description;
+        description = Component.translatable(nameSTR+".desc",insert1,insert2);
+
+        Component desc2 = null;
+        Component desc3 = null;
+        if (currentLevel < maxLevel) {
+            desc2 = Component.translatable("ability.roundabout.vampire_growth_room", maxLevel-currentLevel)
+                    .withStyle(ChatFormatting.LIGHT_PURPLE);
+
+            if (levelReq > getVampireData().vampireLevel){
+                desc3 = Component.translatable(
+                        "ability.roundabout.vampire_level_gate", levelReq+1)
+                        .withStyle(ChatFormatting.RED);
+            } else if (getVampireData().getPoints() >= 1){
+                desc3 = Component.translatable(
+                                "ability.roundabout.vampire_level_ready", levelReq+1)
+                        .withStyle(ChatFormatting.GREEN);
+            }
+        }
+
+        return new AbilityIconInstance(size,startingLeft,startingTop,currentLevel, maxLevel,
+                name,instruction,description,extra,desc2,desc3);
+    }
+
 
     public VampireData getVampireData(){
         if (self instanceof Player pl){
@@ -654,7 +703,7 @@ public class VampireFate extends VampiricFate {
             tring = "ability.roundabout.flesh_bud";
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+105,topPos+99,
                 data.fleshBudLevel, VampireData.fleshBudMaxLevel, tring,
-                "instruction.roundabout.press_skill_crouch", StandIcons.FLESH_BUD,1, 0,0));
+                "instruction.roundabout.press_skill_crouch", StandIcons.FLESH_BUD,1, 0,0, 4));
 
         tring = "ability.roundabout.sacrificial_dagger.locked";
         if (data.daggerSplatterLevel > 0)
@@ -669,21 +718,22 @@ public class VampireFate extends VampiricFate {
                 "instruction.roundabout.passive", StandIcons.VAMP_JUMP_BOOST,0, 3+(2*data.jumpLevel),
                 5+(3*data.jumpLevel)));
 
-        tring = "ability.roundabout.unleash_the_cold.locked";
-        if (data.freezeLevel > 0)
-            tring = "ability.roundabout.unleash_the_cold";
-        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+129,topPos+99,
-                data.freezeLevel, VampireData.freezeMaxLevel, tring,
-                "instruction.roundabout.passive", StandIcons.GRAFTING,0, 0,
-                0));
-
         tring = "ability.roundabout.eye_manipulation.locked";
         if (data.ripperEyesLevel > 0)
             tring = "ability.roundabout.eye_manipulation";
-        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+129,topPos+118,
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+129,topPos+99,
                 data.ripperEyesLevel, VampireData.ripperEyesMaxLevel, tring,
                 "instruction.roundabout.passive", StandIcons.GRAFTING,0, 0,
-                0));
+                0,9));
+
+        tring = "ability.roundabout.unleash_the_cold.locked";
+        if (data.freezeLevel > 0)
+            tring = "ability.roundabout.unleash_the_cold";
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+129,topPos+118,
+                data.freezeLevel, VampireData.freezeMaxLevel, tring,
+                "instruction.roundabout.passive", StandIcons.GRAFTING,0, 0,
+                0,19));
+
 
 
         return $$1;

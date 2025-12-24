@@ -1267,6 +1267,8 @@
   "ability.roundabout.vamp_strength": "Evolved Strength",
   "ability.roundabout.vamp_strength.desc": "Exceed the limits of humanity. +%1$s percent damage for direct melee attacks against mobs, +%2$s against players.",
   "ability.roundabout.vampire_growth_room": "Remaining Growth Levels: %1$s",
+  "ability.roundabout.vampire_level_gate": "Must be level %1$s to unlock.",
+  "ability.roundabout.vampire_level_ready": "Click to upgrade.",
   "ability.roundabout.vamp_dexterity": "Supreme Dexterity",
   "ability.roundabout.vamp_dexterity.desc": "Practice moving your limbs at unnatural speeds. +%1$s percent mining speed, +%2$s percent attack speed.",
   "ability.roundabout.vamp_resilience": "Dark Resilience",

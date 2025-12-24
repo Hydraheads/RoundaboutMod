@@ -3,12 +3,14 @@ package net.hydra.jojomod.fates.powers;
 import net.hydra.jojomod.access.AccessFateFoodData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.ILevelAccess;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -248,43 +250,7 @@ public int speedActivated = 0;
     }
 
 
-    public AbilityIconInstance drawSingleGUIIconVamp(GuiGraphics context, int size, int startingLeft, int startingTop, int currentLevel, int maxLevel,
-                                                     String nameSTR, String instructionStr, ResourceLocation draw, int extra,
-                                                     int insert1, int insert2){
-        return drawSingleGUIIconVamp(context,size,startingLeft,startingTop,currentLevel,maxLevel,nameSTR,instructionStr,draw,extra,insert1,insert2,-1);
-    }
-    public AbilityIconInstance drawSingleGUIIconVamp(GuiGraphics context, int size, int startingLeft, int startingTop, int currentLevel, int maxLevel,
-                                                 String nameSTR, String instructionStr, ResourceLocation draw, int extra,
-                                                     int insert1, int insert2, int levelReq){
-        Component name;
-        if (currentLevel < maxLevel) {
-            context.blit(StandIcons.UNLOCK_SQUARE_ICON, startingLeft, startingTop, 0, 0,size, size, size, size);
-        } else {
-            context.blit(StandIcons.SQUARE_ICON, startingLeft, startingTop, 0, 0,size, size, size, size);
-        }
-        context.blit(draw, startingLeft+2, startingTop+2, 0, 0,size-4, size-4, size-4, size-4);
-        name = Component.translatable(nameSTR).withStyle(ChatFormatting.BOLD).
-                withStyle(ChatFormatting.DARK_PURPLE);
-        Component instruction;
-        if (extra <= 0) {
-            instruction = Component.translatable(instructionStr).withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.BLUE);
-        } else {
-            instruction = Component.translatable(instructionStr, "" + extra).withStyle(ChatFormatting.ITALIC).
-                    withStyle(ChatFormatting.BLUE);
 
-        }
-        Component description;
-        description = Component.translatable(nameSTR+".desc",insert1,insert2);
-
-        Component desc2 = null;
-        if (currentLevel < maxLevel) {
-            desc2 = Component.translatable("ability.roundabout.vampire_growth_room", maxLevel-currentLevel)
-                    .withStyle(ChatFormatting.RED);
-        }
-
-        return new AbilityIconInstance(size,startingLeft,startingTop,currentLevel, maxLevel,
-                name,instruction,description,extra,desc2);
-    }
 
     public float getStepHeightAddon(){
         if (isFast()) {
