@@ -303,7 +303,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                                         PA.lastTick = time;
                                     }
                                     float dT = $$1-PA.lastPartialTick;
-                                    Roundabout.LOGGER.info(time + " && " + $$1 + " - " + PA.lastPartialTick + " | " + dT);
+                                 //TODO: REMOVE LATER   Roundabout.LOGGER.info(time + " && " + $$1 + " - " + PA.lastPartialTick + " | " + dT);
                                     PA.lastPartialTick = $$1;
 
                               /*      float dx =(float) Mth.lerp($$1,pRot.y,rot.y);
@@ -316,7 +316,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                                     P.setYRot(dy);
 
                                     if (extraTicks != 0) {
-                                        Roundabout.LOGGER.info("extra was: " + extraTicks);
+                                        //TODO: REMOVE LATER Roundabout.LOGGER.info("extra was: " + extraTicks);
                                         PA.sum += extraTicks;
                                     }
                                     PA.sum += dT;

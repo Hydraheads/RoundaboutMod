@@ -284,7 +284,7 @@ public class PowersAnubis extends NewDashPreset {
                 Vec3 pRot = memory.rots.get(i - 1);
                 Vec3 fRot = new Vec3(rot.x, rot.y - pRot.y, rot.z - pRot.z);
                 newRots.add(fRot);
-                Roundabout.LOGGER.info(">>" + fRot);
+           //TODO: REMOVE LATER     Roundabout.LOGGER.info(">>" + fRot);
             }
             memory.rots = newRots;
             newRots = new ArrayList<>();
