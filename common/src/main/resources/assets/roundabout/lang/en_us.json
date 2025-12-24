@@ -1263,7 +1263,7 @@
   "ability.roundabout.vampire_vision.desc": "While enabled, allows for passive dark vision as well as a longer jump height while jump is held.",
 
   "ability.roundabout.vamp_jump_boost": "Ultra Athleticism",
-  "ability.roundabout.vamp_jump_boost.desc": "Grants 3 meter jump height and 5 meters while sneaking. Hold down for the longer jumps, and tap for shorter ones. With the power moveset active, grants %1$s meter jump height and %2$s meters while sneaking.",
+  "ability.roundabout.vamp_jump_boost.desc": "Grants 3 meter jump height and 5 meters while sneaking. Hold down for the longer jumps, and tap for shorter ones. With the powers moveset active, grants %1$s meter jump height and %2$s meters while sneaking.",
   "ability.roundabout.vamp_strength": "Evolved Strength",
   "ability.roundabout.vamp_strength.desc": "Exceed the limits of humanity. +%1$s percent damage for direct melee attacks against mobs, +%2$s against players.",
   "ability.roundabout.vampire_growth_room": "Remaining Growth Levels: %1$s",

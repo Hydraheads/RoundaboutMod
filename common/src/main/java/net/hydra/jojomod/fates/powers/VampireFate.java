@@ -203,18 +203,22 @@ public class VampireFate extends VampiricFate {
         if (isHearing()){
             stopHearingClient();
         }
-        if (!onCooldown(PowerIndex.FATE_1_SNEAK) || activePower == HAIR_EXTENDED) {
-            if (activePower != HAIR_EXTENDED) {
-                this.setCooldown(PowerIndex.FATE_1_SNEAK, 44);
+        if (canUseFleshBud()) {
+            if (!onCooldown(PowerIndex.FATE_1_SNEAK) || activePower == HAIR_EXTENDED) {
+                if (activePower != HAIR_EXTENDED) {
+                    this.setCooldown(PowerIndex.FATE_1_SNEAK, 44);
+                }
+                tryPowerPacket(HAIR_EXTENDED);
             }
-            tryPowerPacket(HAIR_EXTENDED);
         }
     }
     public void hypnosis(){
         if (isHearing()){
             stopHearingClient();
         }
-        tryPowerPacket(HYPNOSIS);
+        if (canUseHypnosis()) {
+            tryPowerPacket(HYPNOSIS);
+        }
     }
     public int animationProgress = 0;
     public int getProgressIntoAnimation(){
@@ -260,7 +264,7 @@ public class VampireFate extends VampiricFate {
     public boolean isAttackIneptVisually(byte activeP, int slot){
         if (slot == 3 && isPlantedInWall() && !isHoldingSneak() && !canLatchOntoWall())
             return true;
-        if (slot == 3 && isHoldingSneak() && !canUseBloodSpeed() && !canLatchOntoWall())
+        if (slot == 3 && isHoldingSneak() && !canUseBloodSpeed() && !canLatchOntoWall() && canUseBloodSpeedUnlock())
             return true;
         if (slot == 2 && isHoldingSneak() && !canUseRegen())
             return true;
@@ -490,13 +494,31 @@ public class VampireFate extends VampiricFate {
         return super.inputSpeedModifiers(basis);
     }
 
+    public boolean canUseHypnosis(){
+        return getVampireData().hypnotismLevel > 0;
+    }
+    public boolean canUseFleshBud(){
+        return getVampireData().fleshBudLevel > 0;
+    }
+    public boolean canUseBloodSpeedUnlock(){
+        return getVampireData().bloodSpeedLevel > 0;
+    }
+
     private final TargetingConditions hypnosisTargeting = TargetingConditions.forCombat().range(11);
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         if (isHoldingSneak()) {
-            setSkillIcon(context, x, y, 1, StandIcons.FLESH_BUD, PowerIndex.FATE_1_SNEAK);
+            if (canUseFleshBud()){
+                setSkillIcon(context, x, y, 1, StandIcons.FLESH_BUD, PowerIndex.FATE_1_SNEAK);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.FATE_1_SNEAK,true);
+            }
         } else {
-            setSkillIcon(context, x, y, 1, StandIcons.HYPNOTISM, PowerIndex.FATE_1);
+            if (canUseHypnosis()){
+                setSkillIcon(context, x, y, 1, StandIcons.HYPNOTISM, PowerIndex.FATE_1);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.FATE_1, true);
+            }
         }
 
         if (isHoldingSneak()) {
@@ -508,7 +530,11 @@ public class VampireFate extends VampiricFate {
         if ((canLatchOntoWall() || (isPlantedInWall() && !isHoldingSneak())) && canWallWalkConfig()) {
             setSkillIcon(context, x, y, 3, StandIcons.WALL_WALK_VAMP, PowerIndex.FATE_3);
         } else if (isHoldingSneak()) {
-            setSkillIcon(context, x, y, 3, StandIcons.CHEETAH_SPEED, PowerIndex.FATE_3_SNEAK);
+            if (canUseBloodSpeedUnlock()){
+                setSkillIcon(context, x, y, 3, StandIcons.CHEETAH_SPEED, PowerIndex.FATE_3_SNEAK);
+            } else {
+                setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.FATE_3_SNEAK, true);
+            }
         } else {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         }
