@@ -173,6 +173,7 @@
     "metallica.DamageTrackingMixin",
     "metallica.MetallicaEntityTickMixin",
     "metallica.MetallicaIronDoorMixin",
+    "metallica.MetallicaIronTrapdoorMixin",
     "networking.ZServerGamePacketListenerImpl",
     "piloting.PilotingServerGamePacketListenerImpl",
     "piloting.PilotingServerPlayerGameMode",
