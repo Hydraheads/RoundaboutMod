@@ -1628,8 +1628,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
 
     public void setChargeTicksMult(){
-        this.setChargedTSTicks(this.getChargedTSTicks()*(1+
-                (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksStarPlatinum -100)/100));
+        this.setChargedTSTicks(this.getChargedTSTicks());
     }
     @Override
     public int setCurrentMaxTSTime(int chargedTSSeconds){

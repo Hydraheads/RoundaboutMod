@@ -1,28 +1,36 @@
 package net.hydra.jojomod.fates.powers;
 
+import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
+import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Position;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -41,6 +49,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 public class VampireFate extends VampiricFate {
 
@@ -54,6 +63,11 @@ public class VampireFate extends VampiricFate {
 
     public FatePowers generateFatePowers(LivingEntity entity){
         return new VampireFate(entity);
+    }
+    @Override
+    /**The text name of the fate*/
+    public Component getFateName(){
+        return Component.translatable("text.roundabout.fate.vampire");
     }
     @Override
     public void powerActivate(PowerContext context) {
@@ -89,6 +103,176 @@ public class VampireFate extends VampiricFate {
     public static final byte HAIR_EXTENDED = 51;
 
 
+    @Override
+    public void drawOtherGUIElements(Font font, GuiGraphics context, float delta, int mouseX, int mouseY, int i, int j, ResourceLocation rl){
+        context.blit(rl, i +80, j + 19, 192, 152, 20, 20);
+        int bloodAmt = 100;
+        int bloodLmt = 200;
+        int blt = (int) Math.floor(((double) 20 / bloodLmt) * (bloodAmt));
+        int blt2 = 20-blt;
+        if (blt > 0){
+            context.blit(rl, i +80, j + 19+blt2, 192, 173+blt, 20, blt);
+        }
+
+        context.blit(rl, i +102, j + 19, 214, 152, 20, 20);
+        bloodAmt = 40;
+        blt = (int) Math.floor(((double) 20 / bloodLmt) * (bloodAmt));
+        blt2 = 20-blt;
+        if (blt > 0){
+            context.blit(rl, i +102, j + 19+blt2, 214, 173+blt2, 20, blt);
+        }
+
+        context.blit(rl, i +124, j + 19, 236, 152, 20, 20);
+        bloodAmt = 130;
+        blt = (int) Math.floor(((double) 20 / bloodLmt) * (bloodAmt));
+        blt2 = 20-blt;
+        if (blt > 0){
+            context.blit(rl, i +124, j + 19+blt2, 236, 173+blt2, 20, blt);
+        }
+
+        if (isSurelyHovering(i +147, j + 20,19,18,mouseX,mouseY)){
+            context.blit(rl, i +147, j + 20, 236, 131, 19, 18);
+            List<Component> compList = Lists.newArrayList();
+            compList.add(Component.translatable("text.roundabout.fate.vampire_hair").withStyle(ChatFormatting.WHITE));
+            context.renderTooltip(Minecraft.getInstance().font, compList, Optional.empty(), mouseX, mouseY);
+        } else {
+            context.blit(rl, i +147, j + 20, 236, 112, 19, 18);
+        }
+
+        VampireData vdata =getVampireData();
+
+        Component display = Component.translatable("leveling.roundabout.fate_development_potential_level",
+                vdata.vampireLevel+1);
+        if (vdata.vampireLevel >= 40){
+            display = Component.translatable("leveling.roundabout.fate_maxed");
+        }
+        //display = Component.translatable("leveling.roundabout.disc_maxed",
+        //        0);
+        context.drawString(font, display, i  +80, j+64, 4210752, false);
+
+        int points = vdata.getPoints();
+        if (points > 0){
+            if (points == 1){
+                display = Component.translatable("leveling.roundabout.fate_development_point",
+                        points);
+            } else {
+                display = Component.translatable("leveling.roundabout.fate_development_points",
+                        points);
+            }
+            context.drawString(font, display, i  +80, j+46, 10170412, false);
+        }
+
+        int ss = i + 78;
+        int sss = j + 57;
+        int exp = 100;
+        int maxXP = 200;
+        blt = (int) Math.floor(((double) 92 / maxXP) * (exp));
+        context.blit(rl, ss, sss, 10, 244, 92, 4);
+        context.blit(rl, ss, sss, 10, 248, blt, 4);
+    }
+
+
+    @Override
+
+    public void handleCustomGUIClick(int i, int j, double mouseX, double mouseY){
+        if (self.level().isClientSide()){
+            if (isSurelyHovering(i +147, j + 20,19,18,mouseX,mouseY)){
+                    ClientUtil.openHairspryUI();
+            }
+
+            VampireData vdata = getVampireData();
+            if (vdata.getPoints() > 0) {
+                int level = vdata.vampireLevel;
+
+
+                //Strength
+                if (isSurelyHovering(i + 67, j + 80, 19, 19, mouseX, mouseY)) {
+                    if (vdata.strengthLevel < VampireData.strengthMaxLevel){
+                        ClientUtil.clickVampireSlot(1);
+                    }
+                }
+                //Dexterity
+                if (isSurelyHovering(i + 67, j + 99, 19, 19, mouseX, mouseY)) {
+                    if (vdata.dexterityLevel < VampireData.dexterityMaxLevel){
+                        ClientUtil.clickVampireSlot(2);
+                    }
+                }
+                //Resilience
+                if (isSurelyHovering(i + 67, j + 118, 19, 19, mouseX, mouseY)) {
+                    if (vdata.resilienceLevel < VampireData.reslienceMaxLevel){
+                        ClientUtil.clickVampireSlot(3);
+                    }
+                }
+
+
+                //Hypnotism
+                if (isSurelyHovering(i + 86, j + 80, 19, 19, mouseX, mouseY)) {
+                    if (vdata.hypnotismLevel < VampireData.hypnotismMaxLevel){
+                        ClientUtil.clickVampireSlot(4);
+                    }
+                }
+                //Hearing
+                if (isSurelyHovering(i + 86, j + 99, 19, 19, mouseX, mouseY)) {
+                    if (vdata.superHearingLevel < VampireData.superHearingMaxLevel){
+                        ClientUtil.clickVampireSlot(5);
+                    }
+                }
+                //Blood Speed
+                if (isSurelyHovering(i + 86, j + 118, 19, 19, mouseX, mouseY)) {
+                    if (vdata.bloodSpeedLevel < VampireData.bloodSpeedMaxLevel){
+                        ClientUtil.clickVampireSlot(6);
+                    }
+                }
+
+                //Grafting
+                if (isSurelyHovering(i + 105, j + 80, 19, 19, mouseX, mouseY)) {
+                    if (vdata.graftingLevel < VampireData.graftingMaxLevel){
+                        ClientUtil.clickVampireSlot(7);
+                    }
+                }
+                //Flesh Bud
+                if (isSurelyHovering(i + 105, j + 99, 19, 19, mouseX, mouseY)) {
+                    if (vdata.fleshBudLevel < VampireData.fleshBudMaxLevel){
+                        if (level >= 4){
+                            ClientUtil.clickVampireSlot(8);
+                        }
+                    }
+                }
+                //Dagger
+                if (isSurelyHovering(i + 105, j + 118, 19, 19, mouseX, mouseY)) {
+
+                    if (vdata.daggerSplatterLevel < VampireData.daggerSplatterMaxLevel){
+                        if (level >= 14){
+                            ClientUtil.clickVampireSlot(9);
+                        }
+                    }
+                }
+
+                //Jump Boost
+                if (isSurelyHovering(i + 129, j + 80, 19, 19, mouseX, mouseY)) {
+                    if (vdata.jumpLevel < VampireData.jumpMaxLevel){
+                        ClientUtil.clickVampireSlot(10);
+                    }
+                }
+                //Eye
+                if (isSurelyHovering(i + 129, j + 99, 19, 19, mouseX, mouseY)) {
+                    if (vdata.ripperEyesLevel < VampireData.ripperEyesMaxLevel){
+                        if (level >= 9){
+                            ClientUtil.clickVampireSlot(11);
+                        }
+                    }
+                }
+                //Cold
+                if (isSurelyHovering(i + 129, j + 118, 19, 19, mouseX, mouseY)) {
+                    if (vdata.freezeLevel < VampireData.freezeMaxLevel){
+                        if (level >= 19){
+                            ClientUtil.clickVampireSlot(12);
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     @Override
     public boolean tryPower(int move, boolean forced) {
@@ -111,18 +295,22 @@ public class VampireFate extends VampiricFate {
         if (isHearing()){
             stopHearingClient();
         }
-        if (!onCooldown(PowerIndex.FATE_1_SNEAK) || activePower == HAIR_EXTENDED) {
-            if (activePower != HAIR_EXTENDED) {
-                this.setCooldown(PowerIndex.FATE_1_SNEAK, 44);
+        if (canUseFleshBud()) {
+            if (!onCooldown(PowerIndex.FATE_1_SNEAK) || activePower == HAIR_EXTENDED) {
+                if (activePower != HAIR_EXTENDED) {
+                    this.setCooldown(PowerIndex.FATE_1_SNEAK, 44);
+                }
+                tryPowerPacket(HAIR_EXTENDED);
             }
-            tryPowerPacket(HAIR_EXTENDED);
         }
     }
     public void hypnosis(){
         if (isHearing()){
             stopHearingClient();
         }
-        tryPowerPacket(HYPNOSIS);
+        if (canUseHypnosis()) {
+            tryPowerPacket(HYPNOSIS);
+        }
     }
     public int animationProgress = 0;
     public int getProgressIntoAnimation(){
@@ -168,7 +356,7 @@ public class VampireFate extends VampiricFate {
     public boolean isAttackIneptVisually(byte activeP, int slot){
         if (slot == 3 && isPlantedInWall() && !isHoldingSneak() && !canLatchOntoWall())
             return true;
-        if (slot == 3 && isHoldingSneak() && !canUseBloodSpeed() && !canLatchOntoWall())
+        if (slot == 3 && isHoldingSneak() && !canUseBloodSpeed() && !canLatchOntoWall() && canUseBloodSpeedUnlock())
             return true;
         if (slot == 2 && isHoldingSneak() && !canUseRegen())
             return true;
@@ -282,13 +470,31 @@ public class VampireFate extends VampiricFate {
         return false;
     }
 
+    public int getLevelUpExpCost(){
+        return ClientNetworking.getAppropriateConfig().vampireSettings.expPerVampLevelUp;
+    }
+    @Override
+    public void addBloodExp(int amt, Entity target){
+        VampireData vdata = getVampireData();
+        if (vdata.vampireLevel < 40){
+            int exp = vdata.bloodExp;
+
+
+
+            if (exp >= getLevelUpExpCost()){
+                vdata.bloodExp = 0;
+                vdata.vampireLevel+=1;
+            }
+        }
+    }
+
     @Override
     public float getDamageReduction(DamageSource source, float amt){
         if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)){
-            return 0.15F;
+            return 0.10F + 0.01F*getVampireData().resilienceLevel;
         }
         if (source.is(DamageTypes.ARROW) || source.is(ModDamageTypes.BULLET)){
-            return 0.2F;
+            return 0.1F + 0.02F*getVampireData().resilienceLevel;
         }
         return super.getDamageReduction(source,amt);
     }
@@ -296,9 +502,9 @@ public class VampireFate extends VampiricFate {
     public float getDamageAdd(DamageSource source, float amt, Entity target){
         if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)){
             if (target instanceof Player pl){
-                return 0.2F;
+                return 0.1F + (getVampireData().strengthLevel*0.02F);
             } else {
-                return 0.4F;
+                return 0.2F + (getVampireData().strengthLevel*0.04F);
             }
         }
         return super.getDamageAdd(source,amt,target);
@@ -306,11 +512,11 @@ public class VampireFate extends VampiricFate {
 
     /**For enhancement stands that adjust your normal player attack speed*/
     public float getBonusAttackSpeed() {
-        return 1.15F;
+        return 1.1F+ (0.1F*getVampireData().dexterityLevel);
     }
     /**For enhancement stands that adjust your normal player mining speed*/
     public float getBonusPassiveMiningSpeed(){
-        return 1.4F;
+        return 1.2F+ (0.4F*getVampireData().dexterityLevel);
     }
 
     public boolean canPlantDrink(Entity ent) {
@@ -386,6 +592,10 @@ public class VampireFate extends VampiricFate {
     }
 
     @Override
+    public float getSpeedMod(){
+        return 1.7F+(0.1F*getVampireData().bloodSpeedLevel);
+    }
+    @Override
     /**Stand related things that slow you down or speed you up, override and call super to make
      * any stand ability slow you down*/
     public float inputSpeedModifiers(float basis){
@@ -394,13 +604,31 @@ public class VampireFate extends VampiricFate {
         return super.inputSpeedModifiers(basis);
     }
 
+    public boolean canUseHypnosis(){
+        return getVampireData().hypnotismLevel > 0;
+    }
+    public boolean canUseFleshBud(){
+        return getVampireData().fleshBudLevel > 0;
+    }
+    public boolean canUseBloodSpeedUnlock(){
+        return getVampireData().bloodSpeedLevel > 0;
+    }
+
     private final TargetingConditions hypnosisTargeting = TargetingConditions.forCombat().range(11);
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         if (isHoldingSneak()) {
-            setSkillIcon(context, x, y, 1, StandIcons.FLESH_BUD, PowerIndex.FATE_1_SNEAK);
+            if (canUseFleshBud()){
+                setSkillIcon(context, x, y, 1, StandIcons.FLESH_BUD, PowerIndex.FATE_1_SNEAK);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.FATE_1_SNEAK,true);
+            }
         } else {
-            setSkillIcon(context, x, y, 1, StandIcons.HYPNOTISM, PowerIndex.FATE_1);
+            if (canUseHypnosis()){
+                setSkillIcon(context, x, y, 1, StandIcons.HYPNOTISM, PowerIndex.FATE_1);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.FATE_1, true);
+            }
         }
 
         if (isHoldingSneak()) {
@@ -412,7 +640,11 @@ public class VampireFate extends VampiricFate {
         if ((canLatchOntoWall() || (isPlantedInWall() && !isHoldingSneak())) && canWallWalkConfig()) {
             setSkillIcon(context, x, y, 3, StandIcons.WALL_WALK_VAMP, PowerIndex.FATE_3);
         } else if (isHoldingSneak()) {
-            setSkillIcon(context, x, y, 3, StandIcons.CHEETAH_SPEED, PowerIndex.FATE_3_SNEAK);
+            if (canUseBloodSpeedUnlock()){
+                setSkillIcon(context, x, y, 3, StandIcons.CHEETAH_SPEED, PowerIndex.FATE_3_SNEAK);
+            } else {
+                setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.FATE_3_SNEAK, true);
+            }
         } else {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         }
@@ -430,6 +662,11 @@ public class VampireFate extends VampiricFate {
 
     public int getMaxAttackTimeDuringHair(){
         return hairChargeLength;
+    }
+
+    @Override
+    public float hearingDistance(){
+        return 15+(3*getVampireData().superHearingLevel);
     }
 
     @Override
@@ -458,5 +695,157 @@ public class VampireFate extends VampiricFate {
             }
         }
         super.renderAttackHud(context,playerEntity,scaledWidth,scaledHeight,ticks,vehicleHeartCount,flashAlpha,otherFlashAlpha);
+    }
+
+    public AbilityIconInstance drawSingleGUIIconVamp(GuiGraphics context, int size, int startingLeft, int startingTop, int currentLevel, int maxLevel,
+                                                     String nameSTR, String instructionStr, ResourceLocation draw, int extra,
+                                                     int insert1, int insert2){
+        return drawSingleGUIIconVamp(context,size,startingLeft,startingTop,currentLevel,maxLevel,nameSTR,instructionStr,draw,extra,insert1,insert2,-1);
+    }
+    public AbilityIconInstance drawSingleGUIIconVamp(GuiGraphics context, int size, int startingLeft, int startingTop, int currentLevel, int maxLevel,
+                                                     String nameSTR, String instructionStr, ResourceLocation draw, int extra,
+                                                     int insert1, int insert2, int levelReq){
+        Component name;
+        if (currentLevel < maxLevel) {
+            context.blit(StandIcons.UNLOCK_SQUARE_ICON, startingLeft, startingTop, 0, 0,size, size, size, size);
+        } else {
+            context.blit(StandIcons.SQUARE_ICON, startingLeft, startingTop, 0, 0,size, size, size, size);
+        }
+        context.blit(draw, startingLeft+2, startingTop+2, 0, 0,size-4, size-4, size-4, size-4);
+        name = Component.translatable(nameSTR).withStyle(ChatFormatting.BOLD).
+                withStyle(ChatFormatting.DARK_PURPLE);
+        Component instruction;
+        if (extra <= 0) {
+            instruction = Component.translatable(instructionStr).withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.BLUE);
+        } else {
+            instruction = Component.translatable(instructionStr, "" + extra).withStyle(ChatFormatting.ITALIC).
+                    withStyle(ChatFormatting.BLUE);
+
+        }
+        Component description;
+        description = Component.translatable(nameSTR+".desc",insert1,insert2);
+
+        Component desc2 = null;
+        Component desc3 = null;
+        if (currentLevel < maxLevel) {
+            desc2 = Component.translatable("ability.roundabout.vampire_growth_room", maxLevel-currentLevel)
+                    .withStyle(ChatFormatting.LIGHT_PURPLE);
+
+            if (levelReq > getVampireData().vampireLevel){
+                desc3 = Component.translatable(
+                        "ability.roundabout.vampire_level_gate", levelReq+1)
+                        .withStyle(ChatFormatting.RED);
+            } else if (getVampireData().getPoints() >= 1){
+                desc3 = Component.translatable(
+                                "ability.roundabout.vampire_level_ready", levelReq+1)
+                        .withStyle(ChatFormatting.GREEN);
+            }
+        }
+
+        return new AbilityIconInstance(size,startingLeft,startingTop,currentLevel, maxLevel,
+                name,instruction,description,extra,desc2,desc3);
+    }
+
+
+    public VampireData getVampireData(){
+        if (self instanceof Player pl){
+            return ((IPlayerEntity)pl).rdbt$getVampireData();
+        } else {
+            return new VampireData(self.level());
+        }
+    }
+
+    @Override
+    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
+        List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.vampire_passive",
+                "instruction.roundabout.passive", StandIcons.VAMPIRE,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,0, "ability.roundabout.blood_drink",
+                "instruction.roundabout.press_skill", StandIcons.BLOOD_DRINK,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.roundabout.mass_heal",
+                "instruction.roundabout.press_skill_crouch", StandIcons.REGENERATE,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.dodge",
+                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.wall_walk_vamp",
+                "instruction.roundabout.press_skill_air", StandIcons.WALL_WALK_VAMP,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.vampire_vision",
+                "instruction.roundabout.press_skill_crouch", StandIcons.VAMP_VISION_ON,4,level,bypas));
+
+        VampireData data = getVampireData();
+
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+67,topPos+80,
+                data.strengthLevel, VampireData.strengthMaxLevel, "ability.roundabout.vamp_strength",
+                "instruction.roundabout.passive", StandIcons.VAMPIRE_STRENGTH,0, 20+(data.strengthLevel*4), 10+(data.strengthLevel*2)));
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+67,topPos+99,
+                data.dexterityLevel, VampireData.dexterityMaxLevel, "ability.roundabout.vamp_dexterity",
+                "instruction.roundabout.passive", StandIcons.VAMPIRE_DEXTERITY,0, 20+(data.dexterityLevel*4), 10+(data.dexterityLevel)));
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+67,topPos+118,
+                data.resilienceLevel, VampireData.reslienceMaxLevel, "ability.roundabout.vamp_resilience",
+                "instruction.roundabout.passive", StandIcons.VAMPIRE_RESILIENCE,0, 10+(data.resilienceLevel), 10+(data.resilienceLevel*2)));
+
+        String tring = "ability.roundabout.hypnotism.locked";
+        if (data.hypnotismLevel > 0)
+            tring = "ability.roundabout.hypnotism";
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+86,topPos+80,
+                data.hypnotismLevel, VampireData.hypnotismMaxLevel, tring,
+                "instruction.roundabout.press_skill", StandIcons.HYPNOTISM,1, 0,0));
+
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+86,topPos+99,
+                data.superHearingLevel, VampireData.superHearingMaxLevel, "ability.roundabout.super_hearing",
+                "instruction.roundabout.press_skill", StandIcons.HEARING_MODE,4, 15+(3*data.superHearingLevel),0));
+
+        tring = "ability.roundabout.blood_speed.locked";
+        if (data.bloodSpeedLevel > 0)
+            tring = "ability.roundabout.blood_speed";
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+86,topPos+118,
+                data.bloodSpeedLevel, VampireData.bloodSpeedMaxLevel, tring,
+                "instruction.roundabout.press_skill_crouch", StandIcons.CHEETAH_SPEED,3, 70+(10*data.bloodSpeedLevel),0));
+
+        tring = "ability.roundabout.grafting.locked";
+        if (data.graftingLevel > 0)
+            tring = "ability.roundabout.grafting";
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+105,topPos+80,
+                data.graftingLevel, VampireData.graftingMaxLevel, tring,
+                "instruction.roundabout.passive", StandIcons.GRAFTING,0, 0,0));
+
+        tring = "ability.roundabout.flesh_bud.locked";
+        if (data.fleshBudLevel > 0)
+            tring = "ability.roundabout.flesh_bud";
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+105,topPos+99,
+                data.fleshBudLevel, VampireData.fleshBudMaxLevel, tring,
+                "instruction.roundabout.press_skill_crouch", StandIcons.FLESH_BUD,1, 0,0, 4));
+
+        tring = "ability.roundabout.sacrificial_dagger.locked";
+        if (data.daggerSplatterLevel > 0)
+            tring = "ability.roundabout.sacrificial_dagger";
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+105,topPos+118,
+                data.daggerSplatterLevel, VampireData.daggerSplatterMaxLevel, tring,
+                "instruction.roundabout.passive", StandIcons.DAGGER,0, 0,0,14));
+
+        tring = "ability.roundabout.vamp_jump_boost";
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+129,topPos+80,
+                data.jumpLevel, VampireData.jumpMaxLevel, tring,
+                "instruction.roundabout.passive", StandIcons.VAMP_JUMP_BOOST,0, 3+(2*data.jumpLevel),
+                5+(3*data.jumpLevel)));
+
+        tring = "ability.roundabout.eye_manipulation.locked";
+        if (data.ripperEyesLevel > 0)
+            tring = "ability.roundabout.eye_manipulation";
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+129,topPos+99,
+                data.ripperEyesLevel, VampireData.ripperEyesMaxLevel, tring,
+                "instruction.roundabout.passive", StandIcons.GRAFTING,0, 0,
+                0,9));
+
+        tring = "ability.roundabout.unleash_the_cold.locked";
+        if (data.freezeLevel > 0)
+            tring = "ability.roundabout.unleash_the_cold";
+        $$1.add(drawSingleGUIIconVamp(context,18,leftPos+129,topPos+118,
+                data.freezeLevel, VampireData.freezeMaxLevel, tring,
+                "instruction.roundabout.passive", StandIcons.GRAFTING,0, 0,
+                0,19));
+
+
+
+        return $$1;
     }
 }

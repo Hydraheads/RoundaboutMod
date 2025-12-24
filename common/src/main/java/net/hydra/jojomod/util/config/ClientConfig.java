@@ -169,6 +169,8 @@ public class ClientConfig implements Cloneable {
         public Boolean hideGUI;
         @BooleanOption(group = "inherit", value = true)
         public Boolean vampireVisionMode;
+        @IntOption(group = "inherit", value = 1, min = 1, max = 8)
+        public Integer currentPowerInventoryTab;
     }
     public static class VanillaMCTweaks {
         @BooleanOption(group = "inherit", value = true)

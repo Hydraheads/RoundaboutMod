@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -93,6 +94,16 @@ public class PowersSurvivor extends NewDashPreset {
         if (survivorsSpawned == null) {
             survivorsSpawned = new ArrayList<>();
         }
+    }
+    public StandEntity getStandForHUDIfFake(){
+        if (displayStand == null){
+            displayStand = ModEntities.SURVIVOR.create(this.getSelf().level());
+        }
+            if (this.self instanceof Player PL && ((IPlayerEntity) PL).roundabout$getStandSkin() != displayStand.getSkin()) {
+                displayStand = ModEntities.SURVIVOR.create(this.getSelf().level());
+                displayStand.setSkin(((IPlayerEntity) PL).roundabout$getStandSkin());
+            }
+        return displayStand;
     }
 
     public Component getPosName(byte posID){

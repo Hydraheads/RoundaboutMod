@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.time_stop;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IBlockEntityAccess;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -85,7 +86,7 @@ public class TimeStopWorld implements TimeStop {
             } else {
                 List<TimeStopInstance> $$0 = Lists.newArrayList(this.roundabout$timeStoppingEntitiesClient);
                 List<TimeStopInstance> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntitiesClient);
-                int durationInterpolation = duration;
+                int durationInterpolation = 0;
                 int firstDuration = duration;
                 for (int i = $$0.size() - 1; i >= 0; --i) {
                     if ($$0.get(i).id == id) {
@@ -155,6 +156,7 @@ public class TimeStopWorld implements TimeStop {
                                     TSI.getY(),TSI.getZ(),((StandUser) TSI).roundabout$getStandPowers().getTimestopRange(),
                                     ((StandUser) TSI).roundabout$getStandPowers().getChargedTSTicks(),
                                     ((StandUser) TSI).roundabout$getStandPowers().getMaxChargeTSTime());
+
                         }
                     }
                 }
@@ -226,7 +228,7 @@ public class TimeStopWorld implements TimeStop {
             if (this.roundabout$timeStoppingEntitiesClient != null && !this.roundabout$timeStoppingEntitiesClient.isEmpty()) {
                 List<TimeStopInstance> $$1 = Lists.newArrayList(this.roundabout$timeStoppingEntitiesClient);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
-                    $$1.get(i).durationInterpolation = Math.max(0,$$1.get(i).durationInterpolation-1);
+                    $$1.get(i).durationInterpolation +=1;
                 }
             }
         }

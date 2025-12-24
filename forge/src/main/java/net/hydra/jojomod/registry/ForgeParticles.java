@@ -239,4 +239,24 @@ public class ForgeParticles {
             "road_roller_smoke",
             () -> new SimpleParticleType(true)
     );
+
+    public static final RegistryObject<SimpleParticleType> METALLICA_FIELD_PNG = PARTICLES.register("metallica_field_png", () -> new SimpleParticleType(true));
+
+    public static final RegistryObject<SimpleParticleType> METALLICA_NAIL = PARTICLES.register("nail",
+            () -> new SimpleParticleType(true));
+
+    public static final RegistryObject<SimpleParticleType> METALLICA_RAZOR = PARTICLES.register("razor",
+            () -> new SimpleParticleType(true));
+
+    public static final RegistryObject<SimpleParticleType> METALLICA_SCISSORS = PARTICLES.register("scissors",
+            () -> new SimpleParticleType(true));
+
+    public static final RegistryObject<SimpleParticleType> METALLICA_A = PARTICLES.register(
+            "metallica_a", () -> new SimpleParticleType(false));
+    public static final RegistryObject<SimpleParticleType> METALLICA_B = PARTICLES.register(
+            "metallica_b", () -> new SimpleParticleType(false));
+    public static final RegistryObject<SimpleParticleType> METALLICA_C = PARTICLES.register(
+            "metallica_c", () -> new SimpleParticleType(false));
+    public static final RegistryObject<SimpleParticleType> METALLICA_D = PARTICLES.register(
+            "metallica_d", () -> new SimpleParticleType(false));
 }

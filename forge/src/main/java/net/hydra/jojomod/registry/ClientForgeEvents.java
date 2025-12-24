@@ -80,6 +80,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.BLADED_BOWLER_HAT.get(), BladedBowlerHatRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get(), RoundaboutBulletEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_KNIFE.get(), KnifeRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.METALLICA_KNIFE.get(), MetallicaKnifeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.RATT_DART.get(), RattDartRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_MATCH.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_WATER_BOTTLE.get(), ThrownItemRenderer::new);
@@ -288,6 +289,14 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.EXCLAMATION.get(), ExclamationParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.D4C_LINES.get(), D4CLinesParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.STITCH.get(), StitchParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.METALLICA_NAIL.get(), net.minecraft.client.particle.CritParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.METALLICA_RAZOR.get(), net.minecraft.client.particle.CritParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.METALLICA_SCISSORS.get(), net.minecraft.client.particle.CritParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.METALLICA_A.get(), MetallicaStickParticle.Factory::new);
+        event.registerSpriteSet(ForgeParticles.METALLICA_B.get(), MetallicaStickParticle.Factory::new);
+        event.registerSpriteSet(ForgeParticles.METALLICA_C.get(), MetallicaStickParticle.Factory::new);
+        event.registerSpriteSet(ForgeParticles.METALLICA_D.get(), MetallicaStickParticle.Factory::new);
+        event.registerSpriteSet(ForgeParticles.METALLICA_FIELD_PNG.get(), MetallicaFieldParticle.Factory::new);
         event.registerSpriteSet(ForgeParticles.MOLD.get(), MoldParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.MOLD_DUST.get(), MoldDustParticle.CosyProvider::new);
         event.registerSpriteSet(ForgeParticles.RAGING_LIGHT.get(), AnubisLightParticle.Provider::new);

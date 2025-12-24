@@ -422,8 +422,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     @Override
     public void setChargeTicksMult(){
-        this.setChargedTSTicks(this.getChargedTSTicks()*(1+
-                (ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld -100)/100));
+        this.setChargedTSTicks(this.getChargedTSTicks());
     }
 
     @Override

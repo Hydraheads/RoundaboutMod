@@ -1,15 +1,19 @@
 package net.hydra.jojomod.fates;
 
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
+import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.Options;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -32,6 +36,10 @@ public class FatePowers extends AbilityScapeBasis {
     }
 
 
+    /**The text name of the fate*/
+    public Component getFateName(){
+        return Component.empty();
+    }
 
 
     @Override

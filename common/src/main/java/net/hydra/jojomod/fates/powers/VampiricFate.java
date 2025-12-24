@@ -3,11 +3,14 @@ package net.hydra.jojomod.fates.powers;
 import net.hydra.jojomod.access.AccessFateFoodData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.ILevelAccess;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -20,12 +23,14 @@ import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -244,6 +249,11 @@ public int speedActivated = 0;
         }
     }
 
+
+
+    public void addBloodExp(int amt, Entity target){
+    }
+
     public float getStepHeightAddon(){
         if (isFast()) {
             return 0.4F;
@@ -454,6 +464,9 @@ public int speedActivated = 0;
         xTryPower(PowerIndex.NONE, true);
     }
 
+    public boolean canUseBloodSpeedUnlock(){
+        return true;
+    }
 
     public void packetFinish(){
         if (this.getActivePower() == BLOOD_SUCK){
@@ -495,7 +508,9 @@ public int speedActivated = 0;
                 if (isHearing()){
                     stopHearingClient();
                 }
-                tryPowerPacket(BLOOD_SPEED);
+                if (canUseBloodSpeedUnlock()) {
+                    tryPowerPacket(BLOOD_SPEED);
+                }
             }
         }
     }
@@ -753,7 +768,7 @@ public int speedActivated = 0;
         } else if (getActivePower() == BLOOD_REGEN){
             basis*=0.1F;
         } else if (isFast()){
-            basis*=2F;
+            basis*=getSpeedMod();
         }
 
         return basis;
@@ -884,9 +899,11 @@ public int speedActivated = 0;
     }
 
     public float hearingDistance(){
-        return 20;
+        return 10;
     }
-
+    public float getSpeedMod(){
+        return 1.5F;
+    }
     /**every entity the client renders is checked against this, overrride and use it to see if they can be highlighted
      * for detection or attack highlighting related skills*/
     @Override

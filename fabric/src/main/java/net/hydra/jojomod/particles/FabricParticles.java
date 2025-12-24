@@ -70,6 +70,16 @@ public class FabricParticles {
     public static final SimpleParticleType DUST_CRUMBLE = FabricParticleTypes.simple();
     public static final SimpleParticleType FIRE_CRUMBLE = FabricParticleTypes.simple();
     public static final SimpleParticleType SOUL_FIRE_CRUMBLE = FabricParticleTypes.simple();
+
+    public static final SimpleParticleType METALLICA_A = FabricParticleTypes.simple();
+    public static final SimpleParticleType METALLICA_B = FabricParticleTypes.simple();
+    public static final SimpleParticleType METALLICA_C = FabricParticleTypes.simple();
+    public static final SimpleParticleType METALLICA_D = FabricParticleTypes.simple();
+    public static final SimpleParticleType METALLICA_FIELD_PNG = FabricParticleTypes.simple();
+    public static final SimpleParticleType METALLICA_NAIL = FabricParticleTypes.simple();
+    public static final SimpleParticleType METALLICA_RAZOR = FabricParticleTypes.simple();
+    public static final SimpleParticleType METALLICA_SCISSORS = FabricParticleTypes.simple();
+
     public static void registerParticles(){
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("hit_impact"), HIT_IMPACT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("punch_miss"), PUNCH_MISS);
@@ -133,6 +143,15 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("fire_crumble"), FIRE_CRUMBLE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("soul_fire_crumble"), SOUL_FIRE_CRUMBLE);
 
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("metallica_a"), METALLICA_A);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("metallica_b"), METALLICA_B);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("metallica_c"), METALLICA_C);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("metallica_d"), METALLICA_D);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("metallica_field_png"), METALLICA_FIELD_PNG);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("nail"), METALLICA_NAIL);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("razor"), METALLICA_RAZOR);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("scissors"), METALLICA_SCISSORS);
+
         ModParticles.MELTING = MELTING;
         ModParticles.BLOOD = BLOOD;
         ModParticles.BLUE_BLOOD = BLUE_BLOOD;
@@ -194,5 +213,14 @@ public class FabricParticles {
         ModParticles.DUST_CRUMBLE = DUST_CRUMBLE;
         ModParticles.FIRE_CRUMBLE = FIRE_CRUMBLE;
         ModParticles.SOUL_FIRE_CRUMBLE = SOUL_FIRE_CRUMBLE;
+
+        ModParticles.METALLICA_A = METALLICA_A;
+        ModParticles.METALLICA_B = METALLICA_B;
+        ModParticles.METALLICA_C = METALLICA_C;
+        ModParticles.METALLICA_D = METALLICA_D;
+        ModParticles.METALLICA_FIELD_PNG = METALLICA_FIELD_PNG;
+        ModParticles.METALLICA_NAIL = METALLICA_NAIL;
+        ModParticles.METALLICA_RAZOR = METALLICA_RAZOR;
+        ModParticles.METALLICA_SCISSORS = METALLICA_SCISSORS;
     }
 }

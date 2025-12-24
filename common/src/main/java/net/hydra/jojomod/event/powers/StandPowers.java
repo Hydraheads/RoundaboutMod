@@ -1096,17 +1096,26 @@ public class StandPowers extends AbilityScapeBasis {
      * But if no stand is out, then it can generate a fake stand. Override to return true like survivor for
      * a fake stand to render.*/
     public boolean returnFakeStandForHud(){
-        return false;
+        return !hasStandActive(self);
     }
 
     /**if the above is true, override this to actually create a fake stand for the power inventory display.*/
     public StandEntity getStandForHUDIfFake(){
         if (displayStand == null){
-            displayStand = ModEntities.SURVIVOR.create(this.getSelf().level());
+            displayStand = getNewStandEntity();
         }
-        if (this.self instanceof Player PL && ((IPlayerEntity)PL).roundabout$getStandSkin() != displayStand.getSkin()){
-            displayStand = ModEntities.SURVIVOR.create(this.getSelf().level());
-            displayStand.setSkin(((IPlayerEntity)PL).roundabout$getStandSkin());
+        if (displayStand != null) {
+            if (this.self instanceof Player PL && ((IPlayerEntity) PL).roundabout$getStandSkin() != displayStand.getSkin()) {
+                displayStand = getNewStandEntity();
+            }
+        }
+        if (displayStand != null) {
+            displayStand.setSkin(((StandUser) self).roundabout$getStandSkin());
+            displayStand.setAnimation(((StandUser) self).roundabout$getStandAnimation());
+            displayStand.setIdleAnimation(((StandUser) self).roundabout$getIdlePos());
+            displayStand.tickCount = self.tickCount;
+            displayStand.setUser(self);
+            displayStand.setupAnimationStates();
         }
         return displayStand;
     }
@@ -2257,8 +2266,10 @@ public class StandPowers extends AbilityScapeBasis {
                 SE.roundabout$setStandSkin((skins.get(skinind)));
             }
             if (!sealed) {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                SE.roundabout$summonStand(this.getSelf().level(), true, false);
+                if (hasStandActive(self)) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                    SE.roundabout$summonStand(this.getSelf().level(), true, false);
+                }
             }
         }
     }

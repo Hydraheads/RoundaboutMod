@@ -7,6 +7,7 @@ import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -1320,6 +1321,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
     }
 
+
+    @Unique
+    public VampireData rdbt$vampireData = new VampireData(level());
+
     @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "TAIL"),
             ordinal = 0, argsOnly = true)
     public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
@@ -1349,7 +1354,39 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         compoundtag.putFloat("hairColorZ",rdbt$getHairColorZ());
         $$0.put("roundabout",compoundtag);
 
+        CompoundTag vampire = $$0.getCompound("roundaboutVampire");
+        vampire.putInt("vampireLevel",rdbt$vampireData.vampireLevel);
+        vampire.putInt("bloodExp",rdbt$vampireData.bloodExp);
+        vampire.putInt("animalExp",rdbt$vampireData.animalExp);
+        vampire.putInt("monsterEXP",rdbt$vampireData.monsterEXP);
+        vampire.putInt("npcExp",rdbt$vampireData.npcExp);
+        vampire.putInt("timeSinceAnimal",rdbt$vampireData.timeSinceAnimal);
+        vampire.putInt("timeSinceNpc",rdbt$vampireData.timeSinceNpc);
+        vampire.putInt("timeSinceMonster",rdbt$vampireData.timeSinceMonster);
+
+
+        vampire.putByte("strengthLevel",rdbt$vampireData.strengthLevel);
+        vampire.putByte("dexterityLevel",rdbt$vampireData.dexterityLevel);
+        vampire.putByte("resilienceLevel",rdbt$vampireData.resilienceLevel);
+        vampire.putByte("hypnotismLevel",rdbt$vampireData.hypnotismLevel);
+        vampire.putByte("superHearingLevel",rdbt$vampireData.superHearingLevel);
+
+        vampire.putByte("bloodSpeedLevel",rdbt$vampireData.bloodSpeedLevel);
+        vampire.putByte("graftingLevel",rdbt$vampireData.graftingLevel);
+        vampire.putByte("fleshBudLevel",rdbt$vampireData.fleshBudLevel);
+        vampire.putByte("daggerSplatterLevel",rdbt$vampireData.daggerSplatterLevel);
+        vampire.putByte("jumpLevel",rdbt$vampireData.jumpLevel);
+
+        vampire.putByte("ripperEyesLevel",rdbt$vampireData.ripperEyesLevel);
+        vampire.putByte("freezeLevel",rdbt$vampireData.freezeLevel);
+        $$0.put("roundaboutVampire",vampire);
+
         return $$0;
+    }
+
+    @Override
+    public VampireData rdbt$getVampireData(){
+        return rdbt$vampireData;
     }
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "TAIL"))
     public void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci){
@@ -1404,6 +1441,70 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
         if (compoundtag2.contains("hairColorZ")) {
             rdbt$setHairColorZ(compoundtag2.getFloat("hairColorZ"));
+        }
+
+
+        CompoundTag vampire = $$0.getCompound("roundaboutVampire");
+        if (vampire.contains("vampireLevel")) {
+            rdbt$vampireData.vampireLevel = vampire.getInt("vampireLevel");
+        }
+        if (vampire.contains("bloodExp")) {
+            rdbt$vampireData.bloodExp = vampire.getInt("bloodExp");
+        }
+        if (vampire.contains("animalExp")) {
+            rdbt$vampireData.animalExp = vampire.getInt("animalExp");
+        }
+        if (vampire.contains("monsterEXP")) {
+            rdbt$vampireData.monsterEXP = vampire.getInt("monsterEXP");
+        }
+        if (vampire.contains("npcExp")) {
+            rdbt$vampireData.npcExp = vampire.getInt("npcExp");
+        }
+        if (vampire.contains("timeSinceAnimal")) {
+            rdbt$vampireData.timeSinceAnimal = vampire.getInt("timeSinceAnimal");
+        }
+        if (vampire.contains("timeSinceNpc")) {
+            rdbt$vampireData.timeSinceNpc = vampire.getInt("timeSinceNpc");
+        }
+        if (vampire.contains("timeSinceMonster")) {
+            rdbt$vampireData.timeSinceMonster = vampire.getInt("timeSinceMonster");
+        }
+
+        if (vampire.contains("strengthLevel")) {
+            rdbt$vampireData.strengthLevel = vampire.getByte("strengthLevel");
+        }
+        if (vampire.contains("dexterityLevel")) {
+            rdbt$vampireData.dexterityLevel = vampire.getByte("dexterityLevel");
+        }
+        if (vampire.contains("resilienceLevel")) {
+            rdbt$vampireData.resilienceLevel = vampire.getByte("resilienceLevel");
+        }
+        if (vampire.contains("hypnotismLevel")) {
+            rdbt$vampireData.hypnotismLevel = vampire.getByte("hypnotismLevel");
+        }
+        if (vampire.contains("superHearingLevel")) {
+            rdbt$vampireData.superHearingLevel = vampire.getByte("superHearingLevel");
+        }
+        if (vampire.contains("bloodSpeedLevel")) {
+            rdbt$vampireData.bloodSpeedLevel = vampire.getByte("bloodSpeedLevel");
+        }
+        if (vampire.contains("graftingLevel")) {
+            rdbt$vampireData.graftingLevel = vampire.getByte("graftingLevel");
+        }
+        if (vampire.contains("fleshBudLevel")) {
+            rdbt$vampireData.fleshBudLevel = vampire.getByte("fleshBudLevel");
+        }
+        if (vampire.contains("daggerSplatterLevel")) {
+            rdbt$vampireData.daggerSplatterLevel = vampire.getByte("daggerSplatterLevel");
+        }
+        if (vampire.contains("jumpLevel")) {
+            rdbt$vampireData.jumpLevel = vampire.getByte("jumpLevel");
+        }
+        if (vampire.contains("ripperEyesLevel")) {
+            rdbt$vampireData.ripperEyesLevel = vampire.getByte("ripperEyesLevel");
+        }
+        if (vampire.contains("freezeLevel")) {
+            rdbt$vampireData.freezeLevel = vampire.getByte("freezeLevel");
         }
 
         //roundabout$maskInventory.addItem()
@@ -1571,6 +1672,13 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     protected void roundabout$Tick(CallbackInfo ci) {
 
         if (this.level().isClientSide()) {
+            if (FateTypes.isVampire(this)){
+                if (rdbt$getVampireData().vampireLevel == -1){
+                    rdbt$getVampireData().vampireLevel = 0;
+                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.QUERY_VAMPIRE_UPDATE);
+                }
+            }
+
             roundabout$setupAnimationStates();
             if (!rdbt$getCooldownQuery()){
                 if (!rdbt$attemptedQuery){

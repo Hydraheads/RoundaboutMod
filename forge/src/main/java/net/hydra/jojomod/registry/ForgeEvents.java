@@ -437,6 +437,14 @@ public class ForgeEvents {
         ModParticles.D4C_LINES = ForgeParticles.D4C_LINES.get();
         ModParticles.STITCH = ForgeParticles.STITCH.get();
         ModParticles.HYPNO_SWIRL = ForgeParticles.HYPNO_SWIRL.get();
+        ModParticles.METALLICA_NAIL = ForgeParticles.METALLICA_NAIL.get();
+        ModParticles.METALLICA_RAZOR = ForgeParticles.METALLICA_RAZOR.get();
+        ModParticles.METALLICA_SCISSORS = ForgeParticles.METALLICA_SCISSORS.get();
+        ModParticles.METALLICA_A = ForgeParticles.METALLICA_A.get();
+        ModParticles.METALLICA_B = ForgeParticles.METALLICA_B.get();
+        ModParticles.METALLICA_C = ForgeParticles.METALLICA_C.get();
+        ModParticles.METALLICA_D = ForgeParticles.METALLICA_D.get();
+        ModParticles.METALLICA_FIELD_PNG = ForgeParticles.METALLICA_FIELD_PNG.get();
         ModParticles.MOLD_DUST = ForgeParticles.MOLD_DUST.get();
         ModParticles.MOLD = ForgeParticles.MOLD.get();
         ModParticles.RAGING_LIGHT = ForgeParticles.RAGING_LIGHT.get();
@@ -497,6 +505,7 @@ public class ForgeEvents {
         ModEntities.BLADED_BOWLER_HAT = ForgeEntities.BLADED_BOWLER_HAT.get();
         ModEntities.ROUNDABOUT_BULLET_ENTITY = ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get();
         ModEntities.THROWN_KNIFE = ForgeEntities.THROWN_KNIFE.get();
+        ModEntities.METALLICA_KNIFE = ForgeEntities.METALLICA_KNIFE.get();
         ModEntities.RATT_DART = ForgeEntities.RATT_DART.get();
         ModEntities.THROWN_MATCH = ForgeEntities.THROWN_MATCH.get();
         ModEntities.THROWN_WATER_BOTTLE = ForgeEntities.THROWN_WATER_BOTTLE.get();

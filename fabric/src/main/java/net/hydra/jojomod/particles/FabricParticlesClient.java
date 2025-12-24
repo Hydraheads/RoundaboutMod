@@ -64,5 +64,14 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.ROAD_ROLLER_SMOKE, RoadRollerSmokeParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.ROAD_ROLLER_EXPLOSION, RoadRollerExplosionParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.ROAD_ROLLER_SCRAP, RoadRollerScrapParticle.Provider::new);
+
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.METALLICA_A, MetallicaStickParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.METALLICA_B, MetallicaStickParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.METALLICA_C, MetallicaStickParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.METALLICA_D, MetallicaStickParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.METALLICA_FIELD_PNG, MetallicaFieldParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.METALLICA_NAIL, CritParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.METALLICA_RAZOR, CritParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.METALLICA_SCISSORS, CritParticle.Provider::new);
     }
 }

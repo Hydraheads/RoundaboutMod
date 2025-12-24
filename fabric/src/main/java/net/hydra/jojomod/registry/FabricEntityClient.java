@@ -133,6 +133,9 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.MONA_LISA_PAINTING, MonaLisaPaintingRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ROAD_ROLLER_ENTITY, RoadRollerEntityRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SEPERATED_LEGS, SeperatedLegsRenderer::new);
+
+        EntityRendererRegistry.register(FabricEntities.METALLICA_KNIFE, KnifeRenderer::new);
+
         /*Models*/
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.WOLF_LAYER, TerrierEntityModel::createBodyLayerTerrier);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);

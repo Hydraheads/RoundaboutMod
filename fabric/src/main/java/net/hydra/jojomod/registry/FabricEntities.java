@@ -640,6 +640,15 @@ public class FabricEntities {
                             sized(1, 1).clientTrackingRange(15).build(Roundabout.MOD_ID+":seperated_legs")
             );
 
+
+    public static final EntityType<MetallicaKnifeEntity> METALLICA_KNIFE =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "metallica_knife"),
+                    EntityType.Builder.<MetallicaKnifeEntity>of(MetallicaKnifeEntity::new, MobCategory.MISC).
+                            sized(0.5f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":metallica_knife")
+            );
+
         public static void register() {
                 /*Common Code Bridge*/
                 ModEntities.THE_WORLD = THE_WORLD;
@@ -731,6 +740,8 @@ public class FabricEntities {
                 ModEntities.VAN_GOUGH_PAINTING = VAN_GOUGH_PAINTING;
                 ModEntities.MONA_LISA_PAINTING = MONA_LISA_PAINTING;
                 ModEntities.BIRTH_OF_VENUS_PAINTING = VENUS_PAINTING;
+
+                ModEntities.METALLICA_KNIFE = METALLICA_KNIFE;
 
                 /*Attributes*/
                 FabricDefaultAttributeRegistry.register(TERRIER_DOG, Wolf.createAttributes());

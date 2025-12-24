@@ -28,6 +28,8 @@ public class StandIcons {
             "textures/gui/move_square_novelty.png");
     public static final ResourceLocation LOCKED_SQUARE_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_square3.png");
+    public static final ResourceLocation UNLOCK_SQUARE_ICON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/move_square5.png");
     public static final ResourceLocation COOLDOWN_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_cooldown.png");
     public static final ResourceLocation FROZEN_COOLDOWN_ICON = new ResourceLocation(Roundabout.MOD_ID,
@@ -44,14 +46,22 @@ public class StandIcons {
 
     public static final ResourceLocation BLOOD_DRINK = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/fates/vampire/drink.png");
+    public static final ResourceLocation VAMPIRE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/fates/vampire/vampire.png");
     public static final ResourceLocation CHEETAH_SPEED = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/vampire/cheetah_speed.png");
+    public static final ResourceLocation GRAFTING = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/grafting.png");
     public static final ResourceLocation REGENERATE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/vampire/regenerate.png");
     public static final ResourceLocation HYPNOTISM = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/vampire/hypnotism.png");
     public static final ResourceLocation FLESH_BUD = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/vampire/flesh_bud.png");
+    public static final ResourceLocation DAGGER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/dagger.png");
+    public static final ResourceLocation VAMP_JUMP_BOOST = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/jump_boost.png");
     public static final ResourceLocation VAMP_VISION_ON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui//icons/fates/vampire/vision_on.png");
     public static final ResourceLocation VAMP_VISION_OFF = new ResourceLocation(Roundabout.MOD_ID,
@@ -60,6 +70,12 @@ public class StandIcons {
             "textures/gui//icons/fates/vampire/hearing_mode.png");
     public static final ResourceLocation WALL_WALK_VAMP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/fates/vampire/wall_walk.png");
+    public static final ResourceLocation VAMPIRE_STRENGTH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/strength.png");
+    public static final ResourceLocation VAMPIRE_RESILIENCE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/resilience.png");
+    public static final ResourceLocation VAMPIRE_DEXTERITY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui//icons/fates/vampire/dexterity.png");
 
     public static final ResourceLocation SURVIVOR_ANGER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/survivor_anger.png");
@@ -108,6 +124,29 @@ public class StandIcons {
 
     public static final ResourceLocation CREAM_VOID_ATTACK = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/cream/void_attack.png");
+
+    public static final ResourceLocation METALLICA_NAIL = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/metallica/nail_icon.png");
+    public static final ResourceLocation METALLICA_RAZOR = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/metallica/razor_icon.png");
+    public static final ResourceLocation METALLICA_SCISSORS = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/metallica/scissors_icon.png");
+    public static final ResourceLocation METALLICA_FIELD_ON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/metallica/metallica_field_on.png");
+    public static final ResourceLocation METALLICA_FIELD_OFF = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/metallica/metallica_field_off.png");
+    public static final ResourceLocation METALLICA_KNIFE_RAISE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/metallica/knife_raise.png");
+    public static final ResourceLocation METALLICA_KNIFE_FIRE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/metallica/knife_raise.png");
+    public static final ResourceLocation METALLICA_HARVEST = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/metallica/flower_metal.png");
+    public static final ResourceLocation METALLICA_HEAL = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/metallica/reattatch.png");
+    public static final ResourceLocation METALLICA_INVIS = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/metallica/metallica_invis.png");
+    public static final ResourceLocation METALLICA_REPAIR = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/metallica/fix_tools.png");
 
     public static final ResourceLocation MUSCLE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/other_layers/muscle_full.png");

@@ -28,6 +28,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -36,6 +38,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -103,6 +106,72 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Unique
     public boolean rdbt$canBePickedUp=true;
+
+
+    @Unique
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$MAGNETIC_FIELD = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.BOOLEAN);
+    @Unique
+    private static final EntityDataAccessor<Float> ROUNDABOUT$METAL_METER = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.FLOAT);
+    @Unique
+    private float roundabout$lastDirectDamage = 0;
+    @Unique
+    private byte roundabout$metalMode = 0;
+
+    @Inject(method = "<init>", at = @At("RETURN"))
+    private void roundabout$initData(EntityType<?> type, Level level, CallbackInfo ci) {
+        if (!this.entityData.hasItem(ROUNDABOUT$METAL_METER)) {
+            this.entityData.define(ROUNDABOUT$METAL_METER, 0f);
+        }
+        if (!this.entityData.hasItem(ROUNDABOUT$MAGNETIC_FIELD)) {
+            this.entityData.define(ROUNDABOUT$MAGNETIC_FIELD, false);
+        }
+    }
+
+    @Override
+    public void roundabout$setMetalMeter(float amount) {
+        this.entityData.set(ROUNDABOUT$METAL_METER, amount);
+    }
+
+    @Override
+    public float roundabout$getMetalMeter() {
+        if (this.entityData.hasItem(ROUNDABOUT$METAL_METER)) {
+            return this.entityData.get(ROUNDABOUT$METAL_METER);
+        }
+        return 0f;
+    }
+
+    @Override
+    public void roundabout$setLastDamageTaken(float amount) {
+        this.roundabout$lastDirectDamage = amount;
+    }
+
+    @Override
+    public float roundabout$getLastDamageTaken() {
+        return this.roundabout$lastDirectDamage;
+    }
+
+    @Override
+    public void roundabout$setMetalMode(byte mode) {
+        this.roundabout$metalMode = mode;
+    }
+
+    @Override
+    public byte roundabout$getMetalMode() {
+        return this.roundabout$metalMode;
+    }
+
+    @Override
+    public void roundabout$setMagneticField(boolean active) {
+        this.entityData.set(ROUNDABOUT$MAGNETIC_FIELD, active);
+    }
+
+    @Override
+    public boolean roundabout$isMagneticField() {
+        if (this.entityData.hasItem(ROUNDABOUT$MAGNETIC_FIELD)) {
+            return this.entityData.get(ROUNDABOUT$MAGNETIC_FIELD);
+        }
+        return false;
+    }
 
     @Unique
     @Override

@@ -79,7 +79,7 @@ void main() {
 
     float bubbleRadius = BubbleRadius/BubbleMaxRadius;
     bubbleRadius = 1.-pow(1.-bubbleRadius, 3);
-    bubbleRadius *= 100.;
+    bubbleRadius *= BubbleMaxRadius;
 
     bool camInside = (distance(camPos, BubblePos) <= bubbleRadius);
     if (!camInside)
