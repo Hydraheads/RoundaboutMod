@@ -247,9 +247,15 @@ public int speedActivated = 0;
         }
     }
 
+
+    public AbilityIconInstance drawSingleGUIIconVamp(GuiGraphics context, int size, int startingLeft, int startingTop, int currentLevel, int maxLevel,
+                                                     String nameSTR, String instructionStr, ResourceLocation draw, int extra,
+                                                     int insert1, int insert2){
+        return drawSingleGUIIconVamp(context,size,startingLeft,startingTop,currentLevel,maxLevel,nameSTR,instructionStr,draw,extra,insert1,insert2,-1);
+    }
     public AbilityIconInstance drawSingleGUIIconVamp(GuiGraphics context, int size, int startingLeft, int startingTop, int currentLevel, int maxLevel,
                                                  String nameSTR, String instructionStr, ResourceLocation draw, int extra,
-                                                     int insert1, int insert2){
+                                                     int insert1, int insert2, int levelReq){
         Component name;
         if (currentLevel < maxLevel) {
             context.blit(StandIcons.UNLOCK_SQUARE_ICON, startingLeft, startingTop, 0, 0,size, size, size, size);
@@ -490,6 +496,9 @@ public int speedActivated = 0;
         xTryPower(PowerIndex.NONE, true);
     }
 
+    public boolean canUseBloodSpeedUnlock(){
+        return true;
+    }
 
     public void packetFinish(){
         if (this.getActivePower() == BLOOD_SUCK){
@@ -531,7 +540,7 @@ public int speedActivated = 0;
                 if (isHearing()){
                     stopHearingClient();
                 }
-                if (canUseBloodSpeed()) {
+                if (canUseBloodSpeedUnlock()) {
                     tryPowerPacket(BLOOD_SPEED);
                 }
             }

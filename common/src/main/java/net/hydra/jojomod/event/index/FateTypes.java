@@ -112,7 +112,11 @@ public enum FateTypes {
     public static boolean isDaggerUpgraded(LivingEntity entity){
         if (entity instanceof Player PE){
             Byte fate = ((IPlayerEntity)PE).roundabout$getFate();
-            return fate == VAMPIRE.id;
+            if (fate == VAMPIRE.id){
+                if (((IPlayerEntity) PE).rdbt$getVampireData().daggerSplatterLevel > 0) {
+                    return true;
+                }
+            }
         }
         return false;
     }
