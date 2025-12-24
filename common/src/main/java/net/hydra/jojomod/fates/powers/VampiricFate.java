@@ -531,7 +531,9 @@ public int speedActivated = 0;
                 if (isHearing()){
                     stopHearingClient();
                 }
-                tryPowerPacket(BLOOD_SPEED);
+                if (canUseBloodSpeed()) {
+                    tryPowerPacket(BLOOD_SPEED);
+                }
             }
         }
     }
