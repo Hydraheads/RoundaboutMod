@@ -175,9 +175,101 @@ public class VampireFate extends VampiricFate {
     @Override
 
     public void handleCustomGUIClick(int i, int j, double mouseX, double mouseY){
-        if (isSurelyHovering(i +147, j + 20,19,18,mouseX,mouseY)){
-            if (self.level().isClientSide()){
-                ClientUtil.openHairspryUI();
+        if (self.level().isClientSide()){
+            if (isSurelyHovering(i +147, j + 20,19,18,mouseX,mouseY)){
+                    ClientUtil.openHairspryUI();
+            }
+
+            VampireData vdata = getVampireData();
+            if (vdata.getPoints() > 0) {
+                int level = vdata.vampireLevel;
+
+
+                //Strength
+                if (isSurelyHovering(i + 67, j + 80, 19, 19, mouseX, mouseY)) {
+                    if (vdata.strengthLevel < VampireData.strengthMaxLevel){
+
+                    }
+                }
+                //Dexterity
+                if (isSurelyHovering(i + 67, j + 99, 19, 19, mouseX, mouseY)) {
+                    if (vdata.dexterityLevel < VampireData.dexterityMaxLevel){
+
+                    }
+                }
+                //Resilience
+                if (isSurelyHovering(i + 67, j + 118, 19, 19, mouseX, mouseY)) {
+                    if (vdata.resilienceLevel < VampireData.reslienceMaxLevel){
+
+                    }
+                }
+
+
+                //Hypnotism
+                if (isSurelyHovering(i + 86, j + 80, 19, 19, mouseX, mouseY)) {
+                    if (vdata.bloodSpeedLevel < VampireData.bloodSpeedMaxLevel){
+
+                    }
+                }
+                //Hearing
+                if (isSurelyHovering(i + 86, j + 99, 19, 19, mouseX, mouseY)) {
+                    if (vdata.superHearingLevel < VampireData.superHearingMaxLevel){
+
+                    }
+                }
+                //Blood Speed
+                if (isSurelyHovering(i + 86, j + 118, 19, 19, mouseX, mouseY)) {
+                    if (vdata.hypnotismLevel < VampireData.hypnotismMaxLevel){
+
+                    }
+                }
+
+                //Grafting
+                if (isSurelyHovering(i + 105, j + 80, 19, 19, mouseX, mouseY)) {
+                    if (vdata.graftingLevel < VampireData.graftingMaxLevel){
+
+                    }
+                }
+                //Flesh Bud
+                if (isSurelyHovering(i + 105, j + 99, 19, 19, mouseX, mouseY)) {
+                    if (vdata.fleshBudLevel < VampireData.fleshBudMaxLevel){
+                        if (level >= 4){
+
+                        }
+                    }
+                }
+                //Dagger
+                if (isSurelyHovering(i + 105, j + 118, 19, 19, mouseX, mouseY)) {
+
+                    if (vdata.daggerSplatterLevel < VampireData.daggerSplatterMaxLevel){
+                        if (level >= 29){
+
+                        }
+                    }
+                }
+
+                //Jump Boost
+                if (isSurelyHovering(i + 129, j + 80, 19, 19, mouseX, mouseY)) {
+                    if (vdata.jumpLevel < VampireData.jumpMaxLevel){
+
+                    }
+                }
+                //Eye
+                if (isSurelyHovering(i + 129, j + 99, 19, 19, mouseX, mouseY)) {
+                    if (vdata.ripperEyesLevel < VampireData.ripperEyesMaxLevel){
+                        if (level >= 9){
+
+                        }
+                    }
+                }
+                //Cold
+                if (isSurelyHovering(i + 129, j + 118, 19, 19, mouseX, mouseY)) {
+                    if (vdata.freezeLevel < VampireData.freezeMaxLevel){
+                        if (level >= 19){
+
+                        }
+                    }
+                }
             }
         }
     }
@@ -710,7 +802,7 @@ public class VampireFate extends VampiricFate {
             tring = "ability.roundabout.sacrificial_dagger";
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+105,topPos+118,
                 data.daggerSplatterLevel, VampireData.daggerSplatterMaxLevel, tring,
-                "instruction.roundabout.passive", StandIcons.DAGGER,0, 0,0));
+                "instruction.roundabout.passive", StandIcons.DAGGER,0, 0,0,29));
 
         tring = "ability.roundabout.vamp_jump_boost";
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+129,topPos+80,
