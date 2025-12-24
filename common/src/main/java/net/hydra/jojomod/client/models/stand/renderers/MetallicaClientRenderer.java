@@ -11,11 +11,11 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.Font;
-
 
 public class MetallicaClientRenderer {
 
@@ -23,7 +23,6 @@ public class MetallicaClientRenderer {
             ModParticles.METALLICA_A, ModParticles.METALLICA_B,
             ModParticles.METALLICA_C, ModParticles.METALLICA_D
     };
-
 
     public static void renderMetalMeterBar(LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer) {
         Minecraft mc = Minecraft.getInstance();
@@ -60,28 +59,31 @@ public class MetallicaClientRenderer {
         }
     }
 
-
     public static void tickMetallicaEffects(LivingEntity entity) {
         if (entity instanceof IEntityAndData data && ((StandUser)entity).roundabout$getActive()) {
+            handleMetallicaEffects(entity, entity.level());
         }
     }
+
     private static void handleMetallicaEffects(LivingEntity entity, Level level) {
-        if (entity instanceof IEntityAndData data && ((StandUser)entity).roundabout$getActive()) {
+        float partialTick = Minecraft.getInstance().getFrameTime();
+        double interpX = Mth.lerp(partialTick, entity.xo, entity.getX());
+        double interpY = Mth.lerp(partialTick, entity.yo, entity.getY());
+        double interpZ = Mth.lerp(partialTick, entity.zo, entity.getZ());
 
-            if (entity.tickCount % 17 == 0 && data.roundabout$getTrueInvisibility() <= 0) {
-                String[] types = {"metallica_a", "metallica_b", "metallica_c", "metallica_d"};
-                for (String t : types) {
-                    spawnParticleWithID(entity, t);
-                }
+        if (entity.tickCount % 17 == 0 && ((IEntityAndData)entity).roundabout$getTrueInvisibility() <= 0) {
+            String[] types = {"metallica_a", "metallica_b", "metallica_c", "metallica_d"};
+            for (String t : types) {
+                spawnParticleWithID(entity, t, interpX, interpY, interpZ);
             }
+        }
 
-            if (data.roundabout$isMagneticField()) {
-                spawnMagneticFieldWave(entity, level);
-            }
+        if (((IEntityAndData)entity).roundabout$isMagneticField()) {
+            spawnMagneticFieldWave(entity, level, interpX, interpY, interpZ);
         }
     }
 
-    private static void spawnMagneticFieldWave(LivingEntity entity, Level level) {
+    private static void spawnMagneticFieldWave(LivingEntity entity, Level level, double xBase, double yBase, double zBase) {
         int cycleLength = 50;
         int linesAmount = 8;
         double[] layers = {3.0, 6.0, 9.0};
@@ -92,14 +94,15 @@ public class MetallicaClientRenderer {
         for (double L : layers) {
             for (int i = 0; i < linesAmount; i++) {
                 double phi = (2.0 * Math.PI / linesAmount) * i + (time * 0.02);
+
                 double r = L * Math.pow(Math.sin(theta), 2);
                 double dx = r * Math.sin(theta) * Math.cos(phi);
                 double dy = r * Math.cos(theta);
                 double dz = r * Math.sin(theta) * Math.sin(phi);
 
-                double x = entity.getX() + dx;
-                double y = entity.getY() + (entity.getBbHeight() / 2.0) + dy;
-                double z = entity.getZ() + dz;
+                double x = xBase + dx;
+                double y = yBase + (entity.getBbHeight() / 2.0) + dy;
+                double z = zBase + dz;
 
                 if (hasLineOfSight(entity, x, y, z)) {
                     ResourceLocation loc = new ResourceLocation(Roundabout.MOD_ID, "metallica_field_png");
@@ -111,11 +114,12 @@ public class MetallicaClientRenderer {
         }
     }
 
-    private static void spawnParticleWithID(LivingEntity entity, String type) {
+    private static void spawnParticleWithID(LivingEntity entity, String type, double x, double y, double z) {
         ResourceLocation loc = new ResourceLocation(Roundabout.MOD_ID, type);
         if (BuiltInRegistries.PARTICLE_TYPE.containsKey(loc)) {
             ParticleOptions pOptions = (ParticleOptions) BuiltInRegistries.PARTICLE_TYPE.get(loc);
-            entity.level().addParticle(pOptions, entity.getX(), entity.getY() + 1, entity.getZ(), (double)entity.getId(), 0d, 0d);
+
+            entity.level().addParticle(pOptions, x, y + 1.5, z, (double)entity.getId(), 0d, 0d);
         }
     }
 

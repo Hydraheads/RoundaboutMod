@@ -73,6 +73,11 @@ public class FabricItems {
     public static Item MAX_STAND_DISC_ANUBIS = registerItem("max_anubis_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null)));
 
+    public static Item STAND_DISC_METALLICA = registerItem("metallica_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMetallica(null)));
+    public static Item MAX_STAND_DISC_METALLICA = registerItem("max_metallica_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersMetallica(null)));
+
     public static Item STAND_DISC_SOFT_AND_WET = registerItem("soft_and_wet_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSoftAndWet(null)));
     public static Item MAX_STAND_DISC_SOFT_AND_WET = registerItem("max_soft_and_wet_disc",
@@ -472,6 +477,8 @@ public class FabricItems {
                         //entries.accept(MAX_STAND_DISC_DIVER_DOWN);
                         entries.accept(STAND_DISC_CREAM);
                         entries.accept(MAX_STAND_DISC_CREAM);
+                        entries.accept(STAND_DISC_METALLICA);
+                        entries.accept(MAX_STAND_DISC_METALLICA);
 
 
                     }).build());
@@ -534,6 +541,8 @@ public class FabricItems {
         ModItems.STAND_DISC_ACHTUNG = STAND_DISC_ACHTUNG;
         ModItems.STAND_DISC_WALKING_HEART = STAND_DISC_WALKING_HEART;
         ModItems.MAX_STAND_DISC_WALKING_HEART = MAX_STAND_DISC_WALKING_HEART;
+        ModItems.STAND_DISC_METALLICA = STAND_DISC_METALLICA;
+        ((MaxStandDiscItem)MAX_STAND_DISC_METALLICA).baseDisc = ((StandDiscItem)STAND_DISC_METALLICA);
         ((MaxStandDiscItem)MAX_STAND_DISC_WALKING_HEART).baseDisc = ((StandDiscItem)STAND_DISC_WALKING_HEART);
         ModItems.STAND_DISC_DIVER_DOWN = STAND_DISC_DIVER_DOWN;
         ((MaxStandDiscItem)MAX_STAND_DISC_DIVER_DOWN).baseDisc = ((StandDiscItem)STAND_DISC_DIVER_DOWN);
