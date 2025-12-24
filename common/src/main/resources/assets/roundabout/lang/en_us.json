@@ -1267,6 +1267,8 @@
   "ability.roundabout.vamp_strength": "Evolved Strength",
   "ability.roundabout.vamp_strength.desc": "Exceed the limits of humanity. +%1$s percent damage for direct melee attacks against mobs, +%2$s against players.",
   "ability.roundabout.vampire_growth_room": "Remaining Growth Levels: %1$s",
+  "ability.roundabout.vampire_level_gate": "Must be level %1$s to unlock.",
+  "ability.roundabout.vampire_level_ready": "Click to upgrade.",
   "ability.roundabout.vamp_dexterity": "Supreme Dexterity",
   "ability.roundabout.vamp_dexterity.desc": "Practice moving your limbs at unnatural speeds. +%1$s percent mining speed, +%2$s percent attack speed.",
   "ability.roundabout.vamp_resilience": "Dark Resilience",
@@ -1299,12 +1301,12 @@
   "ability.roundabout.sacrificial_dagger.locked.desc": "Your blood has special healing properties. Maybe you can use that to your advantage...",
 
   "ability.roundabout.unleash_the_cold": "Unleash The Cold",
-  "ability.roundabout.unleash_the_cold.desc": "Grants vaporization freeze to the powers moveset.",
+  "ability.roundabout.unleash_the_cold.desc": "Grants vaporization freeze to the powers moveset. Power it up to make it better.",
   "ability.roundabout.unleash_the_cold.locked": "???",
   "ability.roundabout.unleash_the_cold.locked.desc": "You notice your body temperature is below that of a human. Can you make use of this unique property? (powers moveset)",
 
   "ability.roundabout.eye_manipulation": "Eye Manipulation",
-  "ability.roundabout.eye_manipulation.desc": "Grants space ripper stingy eyes to the powers moveset.",
+  "ability.roundabout.eye_manipulation.desc": "Grants space ripper stingy eyes to the powers moveset. Power it up to make it better.",
   "ability.roundabout.eye_manipulation.locked": "???",
   "ability.roundabout.eye_manipulation.locked.desc": "As you practice your newfound body manipulation skills, you wonder what would happen if you manipulate your eye fluids. (powers moveset)",
 
@@ -2504,6 +2506,10 @@
 
   "config.roundabout.vampireUsesPotionEffectForNightVision.name": "Vampire Uses NV Potion",
   "config.roundabout.vampireUsesPotionEffectForNightVision.desc": "If you have a mod like Bad Optimizations that deletes the vanilla code that scope uses to light things up, turn this on so it works regardless.",
+
+  "config.roundabout.expPerVampLevelUp.name": "Blood Experience Per Level",
+  "config.roundabout.expPerVampLevelUp.desc": "Increase to make leveling take longer, decrease to make shorter.",
+
 
   "config.roundabout.sunDamageUnderwaterReach.name": "Underwater Sun Damage Reach",
   "config.roundabout.sunDamageUnderwaterReach.desc": "Change how far underwater sunlight reaches. Zero makes sunlight not intrude on water.",

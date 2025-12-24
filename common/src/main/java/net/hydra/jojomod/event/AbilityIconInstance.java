@@ -13,6 +13,7 @@ public class AbilityIconInstance {
     public Component instruction;
     public Component description;
     public Component description2 = null;
+    public Component description3 = null;
 
     public int context;
     public int currentLevel = 0;
@@ -32,7 +33,8 @@ public class AbilityIconInstance {
 
     public AbilityIconInstance(int size, int startingLeft, int startingTop, int currentLevel, int maxLevel,
                                Component name, Component instruction, Component description, int context,
-                               Component description2){
+                               Component description2,
+                               Component description3){
         this.size = size;
         this.startingLeft = startingLeft;
         this.startingTop = startingTop;
@@ -44,5 +46,6 @@ public class AbilityIconInstance {
         this.description = description;
         this.context = context;
         this.description2 = description2;
+        this.description3 = description3;
     }
 }

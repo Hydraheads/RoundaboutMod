@@ -61,12 +61,15 @@ public class S2CPacketUtil {
                     data.strengthLevel,
                     data.dexterityLevel,
                     data.resilienceLevel,
+
                     data.hypnotismLevel,
                     data.superHearingLevel,
                     data.bloodSpeedLevel,
+
                     data.graftingLevel,
                     data.fleshBudLevel,
                     data.daggerSplatterLevel,
+
                     data.jumpLevel,
                     data.ripperEyesLevel,
                     data.freezeLevel
