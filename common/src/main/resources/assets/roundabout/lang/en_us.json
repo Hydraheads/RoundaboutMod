@@ -2507,6 +2507,10 @@
   "config.roundabout.vampireUsesPotionEffectForNightVision.name": "Vampire Uses NV Potion",
   "config.roundabout.vampireUsesPotionEffectForNightVision.desc": "If you have a mod like Bad Optimizations that deletes the vanilla code that scope uses to light things up, turn this on so it works regardless.",
 
+  "config.roundabout.expPerVampLevelUp.name": "Blood Experience Per Level",
+  "config.roundabout.expPerVampLevelUp.desc": "Increase to make leveling take longer, decrease to make shorter.",
+
+
   "config.roundabout.sunDamageUnderwaterReach.name": "Underwater Sun Damage Reach",
   "config.roundabout.sunDamageUnderwaterReach.desc": "Change how far underwater sunlight reaches. Zero makes sunlight not intrude on water.",
   "config.roundabout.drownSpeedModifier.name": "Vampire Oxygen Swim Slowdown",

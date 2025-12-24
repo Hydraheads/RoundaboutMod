@@ -251,6 +251,8 @@ public int speedActivated = 0;
 
 
 
+    public void addBloodExp(int amt, Entity target){
+    }
 
     public float getStepHeightAddon(){
         if (isFast()) {

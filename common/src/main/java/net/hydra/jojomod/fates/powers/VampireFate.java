@@ -470,6 +470,24 @@ public class VampireFate extends VampiricFate {
         return false;
     }
 
+    public int getLevelUpExpCost(){
+        return ClientNetworking.getAppropriateConfig().vampireSettings.expPerVampLevelUp;
+    }
+    @Override
+    public void addBloodExp(int amt, Entity target){
+        VampireData vdata = getVampireData();
+        if (vdata.vampireLevel < 40){
+            int exp = vdata.bloodExp;
+
+
+
+            if (exp >= getLevelUpExpCost()){
+                vdata.bloodExp = 0;
+                vdata.vampireLevel+=1;
+            }
+        }
+    }
+
     @Override
     public float getDamageReduction(DamageSource source, float amt){
         if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)){
