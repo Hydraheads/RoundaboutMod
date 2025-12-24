@@ -401,6 +401,19 @@ public class ForgeSounds {
             register(ModSounds.ANUBIS_BARRAGE_1_HIT, ModSounds.ANUBIS_BARRAGE_1_HIT_ID);
     public static final RegistryObject<SoundEvent> ANUBIS_BARRAGE_END =
             register(ModSounds.ANUBIS_BARRAGE_END, ModSounds.ANUBIS_BARRAGE_END_ID);
+    public static final RegistryObject<SoundEvent> ANUBIS_SWING =
+            register(ModSounds.ANUBIS_SWING, ModSounds.ANUBIS_SWING_ID);
+    public static final RegistryObject<SoundEvent> ANUBIS_CROUCH_SWING =
+            register(ModSounds.ANUBIS_CROUCH_SWING, ModSounds.ANUBIS_CROUCH_SWING_ID);
+    public static final RegistryObject<SoundEvent> ANUBIS_DOUBLE_CUT =
+            register(ModSounds.ANUBIS_DOUBLE_CUT, ModSounds.ANUBIS_DOUBLE_CUT_ID);
+    public static final RegistryObject<SoundEvent> ANUBIS_THRUST_CUT =
+            register(ModSounds.ANUBIS_THRUST_CUT, ModSounds.ANUBIS_THRUST_CUT_ID);
+    public static final RegistryObject<SoundEvent> ANUBIS_THRUST_MISS =
+            register(ModSounds.ANUBIS_THRUST_MISS, ModSounds.ANUBIS_THRUST_MISS_ID);
+    public static final RegistryObject<SoundEvent> ANUBIS_UPPERCUT =
+            register(ModSounds.ANUBIS_UPPERCUT, ModSounds.ANUBIS_UPPERCUT_ID);
+
 
 
 

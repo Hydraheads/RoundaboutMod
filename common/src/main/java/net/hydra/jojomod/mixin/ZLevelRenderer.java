@@ -13,6 +13,8 @@ import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.SavedSecond;
+import net.hydra.jojomod.event.index.AnubisMemory;
+import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.core.particles.ParticleTypes;
@@ -277,6 +279,55 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                                             Matrix4f $$7, CallbackInfo ci) {
 
         ClientUtil.mirrorCycles = 0;
+
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player != null) {
+            Player P = mc.player;
+            StandUser SU = (StandUser) P;
+            if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA && P.getUUID().equals(PA.getSelf().getUUID()) ) {
+                if (SU.roundabout$getUniqueStandModeToggle() && PA.lastPartialTick != $$1) {
+
+                    AnubisMemory memory = PA.getUsedMemory();
+                    if (memory.memory_type != AnubisMemory.INPUTS) {
+                        if (!memory.rots.isEmpty()) {
+                            int time = PowersAnubis.MaxPlayTime-PA.playTime;
+                            for (int i=2;i<memory.rots.size();i++) {
+                                Vec3 rot = memory.rots.get(i);
+                                Vec3 pRot = memory.rots.get(i-1);
+                                if ( time == rot.x ) {
+
+                                    float extraTicks = 0;
+                                    if (PA.lastTick < time) {
+                                        extraTicks = (1-PA.lastPartialTick);
+                                        PA.lastPartialTick = 0;
+                                        PA.lastTick = time;
+                                    }
+                                    float dT = $$1-PA.lastPartialTick;
+                                 //TODO: REMOVE LATER   Roundabout.LOGGER.info(time + " && " + $$1 + " - " + PA.lastPartialTick + " | " + dT);
+                                    PA.lastPartialTick = $$1;
+
+                              /*      float dx =(float) Mth.lerp($$1,pRot.y,rot.y);
+                                    float dy = (float) Mth.lerp($$1,pRot.z,rot.z); */
+
+                                    float dx =(float) (P.getXRot()+rot.y*dT + pRot.y*extraTicks );
+                                    float dy =(float) (P.getYRot()+rot.z*dT + pRot.z*extraTicks);
+
+                                    P.setXRot(dx);
+                                    P.setYRot(dy);
+
+                                    if (extraTicks != 0) {
+                                        //TODO: REMOVE LATER Roundabout.LOGGER.info("extra was: " + extraTicks);
+                                        PA.sum += extraTicks;
+                                    }
+                                    PA.sum += dT;
+                                } else if (time < rot.x) {break;}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
 

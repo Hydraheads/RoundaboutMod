@@ -1321,7 +1321,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$leapTicks--;
             if (!this.level().isClientSide && roundabout$leapIntentionally) {
                 Vector3f color = new Vector3f(1f, 0.65f, 0);
-                if (this.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+                if (this.roundabout$getStandPowers() instanceof PowersAnubis) {
                     color = new Vector3f(171F/255F,141F/255F,230F/255F   );
                 }
                 ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(color, 1f), this.getX(), this.getY(), this.getZ(),

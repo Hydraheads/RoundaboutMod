@@ -655,10 +655,11 @@ public class StandHudRender {
         if (SU.roundabout$getUniqueStandModeToggle()) {
             AnubisMemory memory = PA.getUsedMemory();
             if (memory != null) {
-                List<AnubisMoment> moments = memory.moments;
 
-                int sTime = moments.get(0).time;
-                int eTime = moments.get(moments.size()-1).time;
+                int sTime = memory.getFirstTime();
+                int eTime = memory.getLastTime();
+
+
 
                 int time = PowersAnubis.MaxPlayTime-PA.playTime-sTime;
                 int maxTime = eTime-sTime;

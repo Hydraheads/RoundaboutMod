@@ -1,5 +1,7 @@
 package net.hydra.jojomod.event.index;
 
+import net.minecraft.world.phys.Vec3;
+
 public class AnubisMoment {
 
     public static final byte NONE = (byte) 0;
@@ -48,5 +50,12 @@ public class AnubisMoment {
 
     public String toConfig() {
         return type+"_"+time+"_"+(vargs ? 1 : 0)+"_";
+    }
+
+    public static float convertToShorter(double b) {
+        return (float) (b - (b % 0.01));
+    }
+    public static Vec3 convertVec(Vec3 vec3) {
+        return new Vec3(vec3.x,convertToShorter(vec3.y),convertToShorter(vec3.z));
     }
 }
