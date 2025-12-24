@@ -828,7 +828,13 @@
   "sounds.roundabout.anubis_pogo_hit": "Sword Swing",
   "sounds.roundabout.anubis_barrage_1": "Sword Swing",
   "sounds.roundabout.anubis_barrage_1_hit": "Sword Barrage",
-  "sounds.roundabout.anubis_barrage_end": "Sword Click",
+  "sounds.roundabout.anubis_swing": "Sword Click",
+  "sounds.roundabout.anubis_crouch_swing": "Sword Swing",
+  "sounds.roundabout.anubis_double_cut": "Sword Swing",
+  "sounds.roundabout.anubis_thrust_cut": "Sword Crit",
+  "sounds.roundabout.anubis_thrust_miss": "Sword Whiff",
+  "sounds.roundabout.anubis_uppercut": "Sword Swing",
+
 
 
 
@@ -2007,6 +2013,7 @@
   "config.roundabout.rattLeapStrength.name": "Ratt Leap Strength",
   "config.roundabout.rattLeapStrength.desc": "How strong Ratt's leap is",
 
+  "config.roundabout.anubisMemoryOpen.name": "Anubis Memories",
   "config.roundabout.anubisMemories.name": "Anubis Client Settings",
   "config.roundabout.anubisPogoCounter.name": "Anubis Pogo Indicator",
   "config.roundabout.anubisPogoCounter.desc": "Displays a counter showing how many pogos you have done.",

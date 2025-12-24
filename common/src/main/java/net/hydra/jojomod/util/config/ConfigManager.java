@@ -55,6 +55,10 @@ public abstract class ConfigManager {
         loaded = true;
     }
 
+    public static Path getClientConfigPath() {
+        return clientConfigPath;
+    }
+
     public static void loadBlacklists()
     {
         if (getAdvancedConfig().walkingHeartWalkOnBlockBlacklist2 != null)

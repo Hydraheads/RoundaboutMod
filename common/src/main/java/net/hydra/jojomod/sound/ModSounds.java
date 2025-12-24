@@ -754,6 +754,24 @@ public class ModSounds {
     public static final String ANUBIS_BARRAGE_END = "anubis_barrage_end";
     public static final ResourceLocation ANUBIS_BARRAGE_END_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_BARRAGE_END);
     public static SoundEvent ANUBIS_BARRAGE_END_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_BARRAGE_END_ID);
+    public static final String ANUBIS_SWING = "anubis_swing";
+    public static final ResourceLocation ANUBIS_SWING_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_SWING);
+    public static SoundEvent ANUBIS_SWING_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_SWING_ID);
+    public static final String ANUBIS_CROUCH_SWING = "anubis_crouch_swing";
+    public static final ResourceLocation ANUBIS_CROUCH_SWING_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_CROUCH_SWING);
+    public static SoundEvent ANUBIS_CROUCH_SWING_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_CROUCH_SWING_ID);
+    public static final String ANUBIS_DOUBLE_CUT = "anubis_double_cut";
+    public static final ResourceLocation ANUBIS_DOUBLE_CUT_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_DOUBLE_CUT);
+    public static SoundEvent ANUBIS_DOUBLE_CUT_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_DOUBLE_CUT_ID);
+    public static final String ANUBIS_THRUST_CUT = "anubis_thrust_cut";
+    public static final ResourceLocation ANUBIS_THRUST_CUT_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_THRUST_CUT);
+    public static SoundEvent ANUBIS_THRUST_CUT_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_THRUST_CUT_ID);
+    public static final String ANUBIS_THRUST_MISS = "anubis_thrust_miss";
+    public static final ResourceLocation ANUBIS_THRUST_MISS_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_THRUST_MISS);
+    public static SoundEvent ANUBIS_THRUST_MISS_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_THRUST_MISS_ID);
+    public static final String ANUBIS_UPPERCUT = "anubis_uppercut";
+    public static final ResourceLocation ANUBIS_UPPERCUT_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_UPPERCUT);
+    public static SoundEvent ANUBIS_UPPERCUT_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_UPPERCUT_ID);
 
 
 

@@ -61,10 +61,7 @@ class RunnableSoundGenerator {
 
             }
 
-            System.out.println("Type \"AGAIN\" to print again!");
-            if (!s.nextLine().equalsIgnoreCase("again")) {
-                running = false;
-            }
+
 
         }
         System.out.println("Make sure to:");

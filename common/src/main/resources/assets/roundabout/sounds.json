@@ -1238,6 +1238,42 @@
       "roundabout:anubis_barrage_end"
     ]
   },
+  "anubis_swing": {
+    "subtitle": "sounds.roundabout.anubis_swing",
+    "sounds": [
+      "roundabout:anubis_swing"
+    ]
+  },
+  "anubis_crouch_swing": {
+    "subtitle": "sounds.roundabout.anubis_crouch_swing",
+    "sounds": [
+      "roundabout:anubis_crouch_swing"
+    ]
+  },
+  "anubis_double_cut": {
+    "subtitle": "sounds.roundabout.anubis_double_cut",
+    "sounds": [
+      "roundabout:anubis_double_cut"
+    ]
+  },
+  "anubis_thrust_cut": {
+    "subtitle": "sounds.roundabout.anubis_thrust_cut",
+    "sounds": [
+      "roundabout:anubis_thrust_cut"
+    ]
+  },
+  "anubis_thrust_miss": {
+    "subtitle": "sounds.roundabout.anubis_thrust_miss",
+    "sounds": [
+      "roundabout:anubis_thrust_miss"
+    ]
+  },
+  "anubis_uppercut": {
+    "subtitle": "sounds.roundabout.anubis_uppercut",
+    "sounds": [
+      "roundabout:anubis_uppercut"
+    ]
+  },
 
 
 

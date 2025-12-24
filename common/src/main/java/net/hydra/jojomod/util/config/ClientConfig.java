@@ -25,7 +25,11 @@ public class ClientConfig implements Cloneable {
 
 
 
-
+    @CommentedOption(comment = "FILE FORM OF ANUBIS MEMORIES, SCROLL DOWN")
+    @Hidden
+    @NestedOption(group = "modded")
+    public ClientConfig.AnubisMemories anubisMemories;
+    @CommentedOption(comment = "THE ACTUAL SETTINGS")
     @NestedOption(group = "modded")
     public ClientConfig.GeneralSettings generalSettings;
     @BooleanOption(group = "inherit", value = true)
@@ -89,7 +93,7 @@ public class ClientConfig implements Cloneable {
     @NestedOption(group = "modded")
     public ClientConfig.VanillaMCTweaks vanillaMinecraftTweaks;
     @NestedOption(group = "modded")
-    public ClientConfig.AnubisMemories anubisMemories;
+    public ClientConfig.AnubisSettings anubisSettings;
     @NestedOption(group = "modded")
     public ClientConfig.TimeStopSettings timeStopSettings;
   /*  @NestedOption(group = "modded")
@@ -184,11 +188,11 @@ public class ClientConfig implements Cloneable {
         @BooleanOption(group = "inherit", value = true)
         public Boolean simpleTimeStopShader;
     }
-    public static class AnubisMemories {
-
+    public static class AnubisSettings {
         @BooleanOption(group = "inherit", value = false)
         public Boolean anubisPogoCounter;
-
+    }
+    public static class AnubisMemories {
         @StringOption(group = "inherit", value = "")
         public String mem1;
         @StringOption(group = "inherit", value = "")

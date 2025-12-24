@@ -251,6 +251,13 @@ public class FabricSounds {
         addSound(ModSounds.ANUBIS_BARRAGE_1_ID, ModSounds.ANUBIS_BARRAGE_1_EVENT);
         addSound(ModSounds.ANUBIS_BARRAGE_1_HIT_ID, ModSounds.ANUBIS_BARRAGE_1_HIT_EVENT);
         addSound(ModSounds.ANUBIS_BARRAGE_END_ID, ModSounds.ANUBIS_BARRAGE_END_EVENT);
+        addSound(ModSounds.ANUBIS_SWING_ID, ModSounds.ANUBIS_SWING_EVENT);
+        addSound(ModSounds.ANUBIS_CROUCH_SWING_ID, ModSounds.ANUBIS_CROUCH_SWING_EVENT);
+        addSound(ModSounds.ANUBIS_DOUBLE_CUT_ID, ModSounds.ANUBIS_DOUBLE_CUT_EVENT);
+        addSound(ModSounds.ANUBIS_THRUST_CUT_ID, ModSounds.ANUBIS_THRUST_CUT_EVENT);
+        addSound(ModSounds.ANUBIS_THRUST_MISS_ID, ModSounds.ANUBIS_THRUST_MISS_EVENT);
+        addSound(ModSounds.ANUBIS_UPPERCUT_ID, ModSounds.ANUBIS_UPPERCUT_EVENT);
+
 
 
         addSound(ModSounds.KILLER_QUEEN_BARRAGE_ID, ModSounds.KILLER_QUEEN_BARRAGE_EVENT);
