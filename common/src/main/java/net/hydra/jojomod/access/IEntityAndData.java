@@ -12,6 +12,9 @@ public interface IEntityAndData {
     void roundabout$setMagneticField(boolean active);
     boolean roundabout$isMagneticField();
 
+    int roundabout$getBleedLevel();
+    void roundabout$setBleedLevel(int val);
+
     void roundabout$setMetalMeter(float amount);
     float roundabout$getMetalMeter();
 

@@ -170,6 +170,8 @@
     "justice.JusticeZombie",
     "magicians_red.MagiciansRedAbstractFurnaceBlockEntityMixin",
     "magicians_red.StandFirePortalShapeMixin",
+    "metallica.DamageTrackingMixin",
+    "metallica.MetallicaEntityTickMixin",
     "networking.ZServerGamePacketListenerImpl",
     "piloting.PilotingServerGamePacketListenerImpl",
     "piloting.PilotingServerPlayerGameMode",

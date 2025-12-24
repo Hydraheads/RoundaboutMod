@@ -8,23 +8,20 @@ import org.jetbrains.annotations.Nullable;
 public class MetallicaFieldParticle extends TextureSheetParticle {
 
     private final SpriteSet spriteSet;
-    private final int frameOffset;
 
     protected MetallicaFieldParticle(ClientLevel level, double x, double y, double z, SpriteSet spriteSet) {
         super(level, x, y, z);
         this.spriteSet = spriteSet;
 
-        this.lifetime = 25;
+        this.lifetime = 1;
+
         this.gravity = 0;
         this.hasPhysics = false;
         this.quadSize *= 1.5f;
-
         this.xd = 0;
         this.yd = 0;
         this.zd = 0;
-
-        this.alpha = 0.9f;
-        this.frameOffset = 0;
+        this.alpha = 1.0f;
 
         this.setSpriteFromAge(spriteSet);
     }
@@ -38,13 +35,7 @@ public class MetallicaFieldParticle extends TextureSheetParticle {
         if (this.age++ >= this.lifetime) {
             this.remove();
         } else {
-
-            int totalFrames = 3;
-            int ticksPerFrame = 4;
-            int loopDuration = totalFrames * ticksPerFrame;
-
-            int frameIndex = (this.age / ticksPerFrame) % totalFrames;
-            this.setSprite(spriteSet.get(frameIndex, totalFrames));
+            this.setSpriteFromAge(this.spriteSet);
         }
     }
 

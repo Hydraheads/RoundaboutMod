@@ -440,6 +440,11 @@ public class ForgeEvents {
         ModParticles.METALLICA_NAIL = ForgeParticles.METALLICA_NAIL.get();
         ModParticles.METALLICA_RAZOR = ForgeParticles.METALLICA_RAZOR.get();
         ModParticles.METALLICA_SCISSORS = ForgeParticles.METALLICA_SCISSORS.get();
+        ModParticles.METALLICA_A = ForgeParticles.METALLICA_A.get();
+        ModParticles.METALLICA_B = ForgeParticles.METALLICA_B.get();
+        ModParticles.METALLICA_C = ForgeParticles.METALLICA_C.get();
+        ModParticles.METALLICA_D = ForgeParticles.METALLICA_D.get();
+        ModParticles.METALLICA_FIELD_PNG = ForgeParticles.METALLICA_FIELD_PNG.get();
         ModParticles.MOLD_DUST = ForgeParticles.MOLD_DUST.get();
         ModParticles.MOLD = ForgeParticles.MOLD.get();
         ModParticles.RAGING_LIGHT = ForgeParticles.RAGING_LIGHT.get();

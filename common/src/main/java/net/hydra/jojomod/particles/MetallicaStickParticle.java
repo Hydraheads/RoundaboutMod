@@ -18,7 +18,6 @@ public class MetallicaStickParticle extends TextureSheetParticle {
         this.targetEntity = target;
         this.spriteSet = spriteSet;
 
-
         if (target != null) {
             this.relativeX = x - target.getX();
             this.relativeY = y - target.getY();
@@ -32,7 +31,7 @@ public class MetallicaStickParticle extends TextureSheetParticle {
         this.gravity = 0;
         this.hasPhysics = false;
         this.setSpriteFromAge(spriteSet);
-        this.alpha = 1.0f;
+
     }
 
     @Override
@@ -51,19 +50,23 @@ public class MetallicaStickParticle extends TextureSheetParticle {
 
             if (targetEntity.isAlive()) {
                 this.setPos(targetEntity.getX() + relativeX, targetEntity.getY() + relativeY, targetEntity.getZ() + relativeZ);
-
                 this.setSpriteFromAge(this.spriteSet);
 
-                Minecraft mc = Minecraft.getInstance();
-                boolean isMeInFirstPerson = (targetEntity == mc.player && mc.options.getCameraType().isFirstPerson());
-                if (isMeInFirstPerson) {
-                    this.setAlpha(0.25f);
-                } else {
-                    this.setAlpha(1.0f);
-                }
+                updateAlphaForView();
             } else {
                 this.remove();
             }
+        }
+    }
+
+    private void updateAlphaForView() {
+        Minecraft mc = Minecraft.getInstance();
+        boolean isMeInFirstPerson = (targetEntity == mc.player && mc.options.getCameraType().isFirstPerson());
+
+        if (isMeInFirstPerson) {
+            this.setAlpha(0.15f);
+        } else {
+            this.setAlpha(1.0f);
         }
     }
 
@@ -83,13 +86,22 @@ public class MetallicaStickParticle extends TextureSheetParticle {
         @Override
         public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             int entityId = (int) xSpeed;
+            float targetAlpha = (float) ySpeed;
 
-            Entity target = null;
-            if (entityId > 0) {
-                target = level.getEntity(entityId);
+            net.minecraft.world.entity.Entity target = (entityId > 0) ? level.getEntity(entityId) : null;
+
+            MetallicaStickParticle p = new MetallicaStickParticle(level, x, y, z, target, spriteSet);
+
+            Minecraft mc = Minecraft.getInstance();
+            boolean isMeInFirstPerson = (target == mc.player && mc.options.getCameraType().isFirstPerson());
+
+            if (isMeInFirstPerson) {
+                p.setAlpha(0.15f);
+            } else {
+                p.setAlpha(targetAlpha);
             }
 
-            return new MetallicaStickParticle(level, x, y, z, target, spriteSet);
+            return p;
         }
     }
 }
