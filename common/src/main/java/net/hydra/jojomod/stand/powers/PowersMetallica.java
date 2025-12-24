@@ -582,7 +582,7 @@ public class PowersMetallica extends NewDashPreset {
 
     private void triggerMetalEffect(LivingEntity victim, IEntityAndData data) {
         float dmg = (getMetalMode() == SCISSORS) ? 12.0f : (getMetalMode() == RAZORS) ? 6.0f : 3.0f;
-        victim.hurt(self.damageSources().magic(), dmg);
+        victim.hurt(self.damageSources().indirectMagic(self, self), dmg);
 
         switch (getMetalMode()) {
             case NAILS:
