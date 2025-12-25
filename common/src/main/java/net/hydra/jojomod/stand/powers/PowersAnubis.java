@@ -69,7 +69,11 @@ public class PowersAnubis extends NewDashPreset {
     public final List<KeyMapping> playKeys = new ArrayList<>();
     public final List<Byte> playBytes = new ArrayList<>();
     @Override
-    public StandPowers generateStandPowers(LivingEntity entity) {return new PowersAnubis(entity);}
+    public StandPowers generateStandPowers(LivingEntity entity) {
+        PowersAnubis PA = new PowersAnubis(entity);
+        ((StandUser)entity).roundabout$setStandSkin((byte) 1);
+        return PA;}
+
 
     public boolean canSummonStandAsEntity(){
         return false;
@@ -124,6 +128,9 @@ public class PowersAnubis extends NewDashPreset {
             int v = this.getBarrageWindup()-this.getBarrageMinimum();
             float scale = Math.min((this.getAttackTimeDuring()-v)/(float)v,1.0F);
             basis *= 1 - (float) 0.7*scale;
+        }
+        if (this.getActivePower() == PowerIndex.RANGED_BARRAGE) {
+            basis *= 0.2F;
         }
         return super.inputSpeedModifiers(basis);
     }
@@ -368,7 +375,7 @@ public class PowersAnubis extends NewDashPreset {
             case PowerIndex.SNEAK_MOVEMENT -> {
                 ///  gives you another pogo
                 enablePogo();
-                this.setAttackTime(0);
+                this.setAttackTimeDuring(0);
                 this.setActivePower(PowerIndex.SNEAK_MOVEMENT);
                 this.setCooldown(PowerIndex.GLOBAL_DASH,260);
                 this.getSelf().level().playSound(null,this.getSelf().blockPosition(), ModSounds.ANUBIS_BACKFLIP_EVENT, SoundSource.PLAYERS,1.0F,1.0F);
@@ -458,7 +465,7 @@ public class PowersAnubis extends NewDashPreset {
             }
         }
 
-       // Roundabout.LOGGER.info(" CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax());
+        Roundabout.LOGGER.info(" CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax());
         StandUser SU = this.getStandUserSelf();
         if (SU.roundabout$getStandSkin() == (byte) 0) {SU.roundabout$setStandSkin((byte)1);}
 
@@ -635,22 +642,24 @@ public class PowersAnubis extends NewDashPreset {
         }
 
         if(SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_MOVEMENT ) {
-            if (this.attackTime > 16) {
-                SU.roundabout$setStandAnimation(PowerIndex.NONE);
-            }
-        }
-        if(SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_ATTACK_CHARGE ) {
-            if (this.getActivePower() == PowerIndex.NONE || this.getSelf().onGround()) {
+            if (this.getAttackTimeDuring() > 16 || this.getActivePower() != PowerIndex.SNEAK_MOVEMENT) {
                 SU.roundabout$setStandAnimation(PowerIndex.NONE);
             }
         }
         if (this.getActivePower() == PowerIndex.SNEAK_MOVEMENT) {
-            if (this.getAttackTime() > 10 && this.getAttackTime() < 20) {
+            if (this.getAttackTimeDuring() > 10 && this.getAttackTimeDuring() < 20) {
                 if(this.getSelf().isCrouching()) {
                     this.addMomentum(0,-0.075F,0);
                 }
-            } else if (this.getAttackTime() > 20) {
+            } else if (this.getAttackTimeDuring() > 20) {
                 this.setPowerNone();
+            }
+        }
+
+
+        if(SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_ATTACK_CHARGE ) {
+            if (this.getActivePower() == PowerIndex.NONE || this.getSelf().onGround()) {
+                SU.roundabout$setStandAnimation(PowerIndex.NONE);
             }
         }
     }
@@ -1412,7 +1421,7 @@ public class PowersAnubis extends NewDashPreset {
             }
             this.targets = entities;
 
-            this.setAttackTimeMax(70);
+            this.setAttackTimeMax(55);
             this.getSelf().teleportTo(bp.getX(),bp.getY(),bp.getZ());
             this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.ANUBIS_BARRAGE_END_EVENT,SoundSource.PLAYERS,1.5F,0.9F);
         } else {
@@ -1524,6 +1533,7 @@ public class PowersAnubis extends NewDashPreset {
 
     @Override
     public boolean setPowerNone() {
+        Roundabout.LOGGER.info(">>> "+this.getActivePower());
         return super.setPowerNone();
     }
 
