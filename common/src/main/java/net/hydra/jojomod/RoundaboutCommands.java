@@ -162,6 +162,12 @@ public class RoundaboutCommands {
                 if (FateTypes.isVampire(LE)){
                     if (LE instanceof Player PL){
                         VampireData vdata = ((IPlayerEntity)PL).rdbt$getVampireData();
+                        vdata.npcExp = 0;
+                        vdata.animalExp = 0;
+                        vdata.monsterEXP = 0;
+                        vdata.timeSinceMonster = 0;
+                        vdata.timeSinceAnimal = 0;
+                        vdata.timeSinceNpc = 0;
                         vdata.strengthLevel = 0;
                         vdata.dexterityLevel = 0;
                         vdata.resilienceLevel = 0;

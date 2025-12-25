@@ -76,6 +76,22 @@ public class S2CPacketUtil {
             );
         }
     }
+    public static void beamVampireData2(Player player){
+        if (player instanceof ServerPlayer SP) {
+            VampireData data = ((IPlayerEntity)player).rdbt$getVampireData();
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData2.value,
+                    data.vampireLevel,
+                    data.bloodExp,
+                    data.animalExp,
+                    data.monsterEXP,
+                    data.npcExp,
+                    data.timeSinceAnimal,
+                    data.timeSinceMonster,
+                    data.timeSinceNpc
+            );
+        }
+    }
     public static void synchGuard(Player player, float guardPoints, boolean guardBroken){
         if (player instanceof ServerPlayer SP) {
             ModMessageEvents.sendToPlayer(SP,

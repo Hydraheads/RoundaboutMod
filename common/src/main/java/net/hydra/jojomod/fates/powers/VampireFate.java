@@ -34,6 +34,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -42,7 +43,11 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.ambient.AmbientCreature;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.npc.Npc;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -106,28 +111,42 @@ public class VampireFate extends VampiricFate {
     @Override
     public void drawOtherGUIElements(Font font, GuiGraphics context, float delta, int mouseX, int mouseY, int i, int j, ResourceLocation rl){
         context.blit(rl, i +80, j + 19, 192, 152, 20, 20);
-        int bloodAmt = 100;
-        int bloodLmt = 200;
+        VampireData vdata = getVampireData();
+
+        int bloodAmt = vdata.animalExp;
+        int bloodLmt = getEXPcap();
         int blt = (int) Math.floor(((double) 20 / bloodLmt) * (bloodAmt));
         int blt2 = 20-blt;
         if (blt > 0){
-            context.blit(rl, i +80, j + 19+blt2, 192, 173+blt, 20, blt);
+            if (bloodAmt >= bloodLmt){
+                context.blit(rl, i +80, j + 19+blt2, 192, 194+blt2, 20, blt);
+            } else {
+                context.blit(rl, i +80, j + 19+blt2, 192, 173+blt2, 20, blt);
+            }
         }
 
         context.blit(rl, i +102, j + 19, 214, 152, 20, 20);
-        bloodAmt = 40;
+        bloodAmt = vdata.monsterEXP;
         blt = (int) Math.floor(((double) 20 / bloodLmt) * (bloodAmt));
         blt2 = 20-blt;
         if (blt > 0){
-            context.blit(rl, i +102, j + 19+blt2, 214, 173+blt2, 20, blt);
+            if (bloodAmt >= bloodLmt){
+                context.blit(rl, i +102, j + 19+blt2, 214, 194+blt2, 20, blt);
+            } else {
+                context.blit(rl, i +102, j + 19+blt2, 214, 173+blt2, 20, blt);
+            }
         }
 
         context.blit(rl, i +124, j + 19, 236, 152, 20, 20);
-        bloodAmt = 130;
+        bloodAmt = vdata.npcExp;
         blt = (int) Math.floor(((double) 20 / bloodLmt) * (bloodAmt));
         blt2 = 20-blt;
         if (blt > 0){
-            context.blit(rl, i +124, j + 19+blt2, 236, 173+blt2, 20, blt);
+            if (bloodAmt >= bloodLmt){
+                context.blit(rl, i +124, j + 19+blt2, 236, 194+blt2, 20, blt);
+            } else {
+                context.blit(rl, i +124, j + 19+blt2, 236, 173+blt2, 20, blt);
+            }
         }
 
         if (isSurelyHovering(i +147, j + 20,19,18,mouseX,mouseY)){
@@ -139,7 +158,6 @@ public class VampireFate extends VampiricFate {
             context.blit(rl, i +147, j + 20, 236, 112, 19, 18);
         }
 
-        VampireData vdata =getVampireData();
 
         Component display = Component.translatable("leveling.roundabout.fate_development_potential_level",
                 vdata.vampireLevel+1);
@@ -164,8 +182,8 @@ public class VampireFate extends VampiricFate {
 
         int ss = i + 78;
         int sss = j + 57;
-        int exp = 100;
-        int maxXP = 200;
+        int exp = vdata.bloodExp;
+        int maxXP = getLevelUpExpCost();
         blt = (int) Math.floor(((double) 92 / maxXP) * (exp));
         context.blit(rl, ss, sss, 10, 244, 92, 4);
         context.blit(rl, ss, sss, 10, 248, blt, 4);
@@ -473,18 +491,68 @@ public class VampireFate extends VampiricFate {
     public int getLevelUpExpCost(){
         return ClientNetworking.getAppropriateConfig().vampireSettings.expPerVampLevelUp;
     }
+    public int getEXPcap(){
+        return ClientNetworking.getAppropriateConfig().vampireSettings.expTypeCapPerDay;
+    }
     @Override
     public void addBloodExp(int amt, Entity target){
         VampireData vdata = getVampireData();
-        if (vdata.vampireLevel < 40){
+        if (vdata.vampireLevel < 40 && self instanceof Player pl){
             int exp = vdata.bloodExp;
 
+            if (target instanceof Npc) {
+                int npcExp = vdata.npcExp;
+                if (npcExp < getEXPcap()){
+                    npcExp = Mth.clamp(npcExp+amt,0,getEXPcap());
+                    int change = npcExp - vdata.npcExp;
+                    if (change > 0){
+                        vdata.bloodExp+=change;
+                        vdata.npcExp = npcExp;
+                        if (vdata.timeSinceNpc == 0){
+                            vdata.timeSinceNpc = 24000;
+                        }
+                    }
+                }
+            } else if (target instanceof Animal || target instanceof WaterAnimal || target instanceof AmbientCreature){
+                int animalExp = vdata.animalExp;
+                if (animalExp < getEXPcap()){
+                    animalExp = Mth.clamp(animalExp+amt,0,getEXPcap());
+                    int change = animalExp - vdata.animalExp;
+                    if (change > 0){
+                        vdata.bloodExp+=change;
+                        vdata.animalExp = animalExp;
+                        if (vdata.timeSinceAnimal == 0){
+                            vdata.timeSinceAnimal = 24000;
+                        }
+                    }
+                }
+            } else {
+                int monsterEXP = vdata.monsterEXP;
+                if (monsterEXP < getEXPcap()){
+                    monsterEXP = Mth.clamp(monsterEXP+amt,0,getEXPcap());
+                    int change = monsterEXP - vdata.monsterEXP;
+                    if (change > 0){
+                        vdata.bloodExp+=change;
+                        vdata.monsterEXP = monsterEXP;
+                        if (vdata.timeSinceMonster == 0){
+                            vdata.timeSinceMonster = 24000;
+                        }
+                    }
+                }
+            }
 
-
-            if (exp >= getLevelUpExpCost()){
+            if (exp >= getLevelUpExpCost() && vdata.vampireLevel < 40){
                 vdata.bloodExp = 0;
                 vdata.vampireLevel+=1;
+                if (vdata.vampireLevel == 40){
+                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.max_levelup.vampire"), true);
+                } else {
+                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.vampire"), true);
+                }
+                S2CPacketUtil.vampireMessage(pl);
+
             }
+            S2CPacketUtil.beamVampireData2(pl);
         }
     }
 

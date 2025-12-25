@@ -593,6 +593,17 @@ public class ClientUtil {
                     vdata.ripperEyesLevel = (byte) vargs[18];
                     vdata.freezeLevel = (byte) vargs[19];
                 }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData2.value)) {
+                    VampireData vdata = ((IPlayerEntity)player).rdbt$getVampireData();
+                    vdata.vampireLevel = (int) vargs[0];
+                    vdata.bloodExp = (int) vargs[1];
+                    vdata.animalExp = (int) vargs[2];
+                    vdata.monsterEXP = (int) vargs[3];
+                    vdata.npcExp = (int) vargs[4];
+                    vdata.timeSinceAnimal = (int) vargs[5];
+                    vdata.timeSinceMonster = (int) vargs[6];
+                    vdata.timeSinceNpc = (int) vargs[7];
+                }
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.GunRecoil.value)) {
                     String sigmaString = (String) vargs[0];
                     ClientUtil.applyClientRecoil(player, sigmaString);

@@ -690,10 +690,11 @@ public int speedActivated = 0;
                             bloodSuckingTarget.getEyePosition().y,
                             bloodSuckingTarget.getEyePosition().z,
                              15, 0.2, 0.2, 0.2, 0.0);
-
+                    addBloodExp(20,bloodSuckingTarget);
                 } else {
                     self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SUCK_DRAIN_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
                     pl.getFoodData().eat(2, 0.0F);
+                    addBloodExp(5,bloodSuckingTarget);
                 }
                 MainUtil.makeBleed(bloodSuckingTarget, 0, 200, null);
                 MainUtil.takeNoKnockback(bloodSuckingTarget);

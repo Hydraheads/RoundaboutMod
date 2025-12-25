@@ -195,6 +195,8 @@ public class Config implements Cloneable {
         public Integer sunDamageUnderwaterReach;
         @IntOption(group = "inherit", value = 200, min = 1, max = 72000)
         public Integer expPerVampLevelUp;
+        @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
+        public Integer expTypeCapPerDay;
         @FloatOption(group = "inherit", value = 0.75F, min = 0, max = 1F)
         public Float drownSpeedModifier;
         @FloatOption(group = "inherit", value = 0.4F, min = 0, max = 100F)

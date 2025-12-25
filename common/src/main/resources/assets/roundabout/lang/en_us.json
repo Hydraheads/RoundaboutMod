@@ -1351,6 +1351,10 @@
   "leveling.roundabout.disc_wip": "Work in Progress, Not Obtainable",
   "leveling.roundabout.disc_wip_2": "Abilities are not complete or ready",
 
+  "leveling.roundabout.levelup.vampire": "You Became Stronger, Skill Point Unlocked!",
+
+  "leveling.roundabout.max_levelup.vampire": "Greatest High, Final Skill Point Unlocked!",
+
   "gamerule.roundaboutStandGriefing": "Stand Griefing",
   "gamerule.roundaboutStandGriefing.description": "Controls whether or not stands can mess with blocks",
   "gamerule.roundaboutMonsterStandFireSpreads": "Monsters Spread Stand Fire",
@@ -2509,6 +2513,8 @@
 
   "config.roundabout.expPerVampLevelUp.name": "Blood Experience Per Level",
   "config.roundabout.expPerVampLevelUp.desc": "Increase to make leveling take longer, decrease to make shorter.",
+  "config.roundabout.expTypeCapPerDay.name": "Blood Experience Per Type",
+  "config.roundabout.expTypeCapPerDay.desc": "Increase to let you get more blood exp from each mob type daily. it is kept low to prevent the need for massive animal farm hording.",
 
 
   "config.roundabout.sunDamageUnderwaterReach.name": "Underwater Sun Damage Reach",
