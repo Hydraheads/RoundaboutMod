@@ -110,6 +110,7 @@ public class ClientUtil {
     public static Matrix4f savedPose;
     public static int checkthis = 0;
     public static int checkthisdat = 0;
+    public static int renderBloodTicks = 0;
     public static boolean skipInterpolation = false;
 
     /**Fallback in case the client exits the range and can't be fed the packet anymore.
@@ -137,6 +138,9 @@ public class ClientUtil {
     public static void tickClientUtilStuff(){
         clientTicker++;
 
+        if (renderBloodTicks > 0){
+            renderBloodTicks--;
+        }
         /**
         Minecraft mc = Minecraft.getInstance();
         if (mc!= null && mc.player != null) {
@@ -290,6 +294,9 @@ public class ClientUtil {
         Connection integratedServerCon = ((IClientNetworking)client).roundabout$getServer();
 
         return (integratedServerCon != null ? integratedServerCon : client.player.connection.getConnection());
+    }
+    public static boolean renderBloodMeter(){
+        return renderBloodTicks > 0;
     }
 
     public static void handleGeneralPackets(String message, Object... vargs) {
@@ -603,6 +610,7 @@ public class ClientUtil {
                     vdata.timeSinceAnimal = (int) vargs[5];
                     vdata.timeSinceMonster = (int) vargs[6];
                     vdata.timeSinceNpc = (int) vargs[7];
+                    renderBloodTicks = 60;
                 }
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.GunRecoil.value)) {
                     String sigmaString = (String) vargs[0];

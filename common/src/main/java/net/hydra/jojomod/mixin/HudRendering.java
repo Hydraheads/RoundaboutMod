@@ -18,6 +18,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.JackalRifleItem;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersCream;
@@ -541,6 +542,7 @@ public abstract class HudRendering implements IHudAccess {
         if (minecraft.player != null && minecraft.level != null) {
 
             StandUser user = ((StandUser) minecraft.player);
+            FatePowers fate = ((IFatePlayer)minecraft.player).rdbt$getFatePowers();
 
             boolean removeNum = false;
             if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && !user.roundabout$getEffectiveCombatMode() &&
@@ -601,6 +603,9 @@ public abstract class HudRendering implements IHudAccess {
                 return true;
             } else if (user.roundabout$getStandPowers() instanceof PowersCream PC && PC.transformTimer > 0){
                 StandHudRender.renderCreamTransformTimerHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PC);
+                return true;
+            } else if (fate.replaceHudActively()){
+                fate.getReplacementHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x);
                 return true;
             } else if (user.roundabout$getStandPowers().replaceHudActively()){
                 user.roundabout$getStandPowers().getReplacementHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x);

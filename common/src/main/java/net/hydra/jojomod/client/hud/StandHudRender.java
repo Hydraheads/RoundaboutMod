@@ -11,12 +11,14 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
+import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.AnubisMemory;
 import net.hydra.jojomod.event.index.AnubisMoment;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersCream;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
@@ -409,6 +411,39 @@ public class StandHudRender {
         int y = 10398321;
         Font renderer = minecraft.font;
         String $$6 = gc2 + "";
+        int $$7 = (scaledWidth - renderer.width($$6)) / 2;
+        int $$8 = scaledHeight - 31 - 4;
+        context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7 - 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8, y, false);
+
+    }
+
+    public static void renderBloodExp(GuiGraphics context, Player playerEntity,
+                                             int scaledWidth, int scaledHeight, int x) {
+
+        int l;
+        VampireData vdata = ((IPlayerEntity)playerEntity).rdbt$getVampireData();
+        int gb = VampireFate.getLevelUpExpCost();
+        int gc = vdata.bloodExp;  gc= Mth.clamp(gc,0,gb);
+        int gc2 = vdata.vampireLevel+1;
+        l = scaledHeight - 32 + 3;
+        StandUser standUser = ((StandUser)playerEntity);
+        int blt = (int) Math.floor(((double) 182 /gb)*(gc));
+        context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 40, 182, 5);
+        if (blt > 0) {
+            context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 45, blt, 5);
+        }
+
+        Minecraft minecraft = Minecraft.getInstance();
+        int y = 11284539;
+        Font renderer = minecraft.font;
+        String $$6 = gc2 + "";
+        if (gc2 >= 41){
+            $$6 = "C";
+        }
         int $$7 = (scaledWidth - renderer.width($$6)) / 2;
         int $$8 = scaledHeight - 31 - 4;
         context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);

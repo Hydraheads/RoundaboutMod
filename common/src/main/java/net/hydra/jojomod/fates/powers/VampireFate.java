@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -189,6 +190,21 @@ public class VampireFate extends VampiricFate {
         context.blit(rl, ss, sss, 10, 248, blt, 4);
     }
 
+    @Override
+    /**An easy way to replace the EXP bar with a stand bar, see the function below this one*/
+    public boolean replaceHudActively(){
+        if (self.level().isClientSide()){
+            if (ClientUtil.renderBloodMeter()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x){
+        StandHudRender.renderBloodExp(context,cameraPlayer,screenWidth,screenHeight,x);
+    }
 
     @Override
 
@@ -488,10 +504,10 @@ public class VampireFate extends VampiricFate {
         return false;
     }
 
-    public int getLevelUpExpCost(){
+    public static int getLevelUpExpCost(){
         return ClientNetworking.getAppropriateConfig().vampireSettings.expPerVampLevelUp;
     }
-    public int getEXPcap(){
+    public static int getEXPcap(){
         return ClientNetworking.getAppropriateConfig().vampireSettings.expTypeCapPerDay;
     }
     @Override
@@ -541,7 +557,7 @@ public class VampireFate extends VampiricFate {
                 }
             }
 
-            if (exp >= getLevelUpExpCost() && vdata.vampireLevel < 40){
+            if (vdata.bloodExp >= getLevelUpExpCost() && vdata.vampireLevel < 40){
                 vdata.bloodExp = 0;
                 vdata.vampireLevel+=1;
                 if (vdata.vampireLevel == 40){

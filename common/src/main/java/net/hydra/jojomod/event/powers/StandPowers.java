@@ -1083,14 +1083,6 @@ public class StandPowers extends AbilityScapeBasis {
         }
     }
 
-    /**An easy way to replace the EXP bar with a stand bar, see the function below this one*/
-    public boolean replaceHudActively(){
-        return false;
-    }
-    /**If the above function is set to true, this will be the code called instead of the exp bar one. Make
-     * a call to another class so too much client code doesn't unnecessarily exist in the standpowers class.*/
-    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x){
-    }
 
     /**In the power inventory, the stand that displays is the one that exists while your powers are active.
      * But if no stand is out, then it can generate a fake stand. Override to return true like survivor for

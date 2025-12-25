@@ -106,6 +106,16 @@ public class AbilityScapeBasis {
 
     }
 
+    /**An easy way to replace the EXP bar with a stand bar, see the function below this one*/
+    public boolean replaceHudActively(){
+        return false;
+    }
+    /**If the above function is set to true, this will be the code called instead of the exp bar one. Make
+     * a call to another class so too much client code doesn't unnecessarily exist in the standpowers class.*/
+    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x){
+    }
+
+
     /**If the cooldown slot is to be controlled by the server, return true. Consider using this if
      * bad TPS makes a stand ability actually overpowered for the client to handle the recharging of.*/
     public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
