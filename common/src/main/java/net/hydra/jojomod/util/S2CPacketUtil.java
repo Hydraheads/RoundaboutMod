@@ -92,6 +92,18 @@ public class S2CPacketUtil {
             );
         }
     }
+
+    public static void beamVampireTimings(Player player){
+        if (player instanceof ServerPlayer SP) {
+            VampireData data = ((IPlayerEntity)player).rdbt$getVampireData();
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData3.value,
+                    data.timeSinceAnimal,
+                    data.timeSinceMonster,
+                    data.timeSinceNpc
+            );
+        }
+    }
     public static void synchGuard(Player player, float guardPoints, boolean guardBroken){
         if (player instanceof ServerPlayer SP) {
             ModMessageEvents.sendToPlayer(SP,

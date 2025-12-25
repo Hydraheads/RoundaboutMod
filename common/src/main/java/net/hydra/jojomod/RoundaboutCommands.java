@@ -187,6 +187,37 @@ public class RoundaboutCommands {
         }
         return targets.size();
     }
+    public static int roundaboutResetVampireData(CommandSourceStack source, Collection<? extends Entity> targets) {
+        for (Entity entity : targets) {
+            if (entity instanceof LivingEntity LE) {
+                    if (LE instanceof Player PL){
+                        VampireData vdata = ((IPlayerEntity)PL).rdbt$getVampireData();
+                        vdata.vampireLevel = 0;
+                        vdata.bloodExp = 0;
+                        vdata.npcExp = 0;
+                        vdata.animalExp = 0;
+                        vdata.monsterEXP = 0;
+                        vdata.timeSinceMonster = 0;
+                        vdata.timeSinceAnimal = 0;
+                        vdata.timeSinceNpc = 0;
+                        vdata.strengthLevel = 0;
+                        vdata.dexterityLevel = 0;
+                        vdata.resilienceLevel = 0;
+                        vdata.hypnotismLevel = 0;
+                        vdata.superHearingLevel = 0;
+                        vdata.bloodSpeedLevel = 0;
+                        vdata.graftingLevel = 0;
+                        vdata.fleshBudLevel = 0;
+                        vdata.daggerSplatterLevel = 0;
+                        vdata.jumpLevel = 0;
+                        vdata.ripperEyesLevel = 0;
+                        vdata.freezeLevel = 0;
+                        S2CPacketUtil.beamVampireData(PL);
+                    }
+            }
+        }
+        return targets.size();
+    }
     public static int roundaboutMaxFateSkills(CommandSourceStack source, Collection<? extends Entity> targets) {
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity LE) {

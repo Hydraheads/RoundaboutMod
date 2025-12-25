@@ -612,6 +612,12 @@ public class ClientUtil {
                     vdata.timeSinceNpc = (int) vargs[7];
                     renderBloodTicks = 60;
                 }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData3.value)) {
+                    VampireData vdata = ((IPlayerEntity)player).rdbt$getVampireData();
+                    vdata.timeSinceAnimal = (int) vargs[0];
+                    vdata.timeSinceMonster = (int) vargs[1];
+                    vdata.timeSinceNpc = (int) vargs[2];
+                }
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.GunRecoil.value)) {
                     String sigmaString = (String) vargs[0];
                     ClientUtil.applyClientRecoil(player, sigmaString);

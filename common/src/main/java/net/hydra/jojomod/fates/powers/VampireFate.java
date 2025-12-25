@@ -108,45 +108,80 @@ public class VampireFate extends VampiricFate {
     public static final byte HYPNOSIS = 50;
     public static final byte HAIR_EXTENDED = 51;
 
+    public static String formatTicks(int ticks) {
+        int totalSeconds = ticks / 20;
+        int minutes = totalSeconds / 60;
+        int seconds = totalSeconds % 60;
 
+        return String.format("%d:%02d", minutes, seconds);
+    }
     @Override
     public void drawOtherGUIElements(Font font, GuiGraphics context, float delta, int mouseX, int mouseY, int i, int j, ResourceLocation rl){
-        context.blit(rl, i +80, j + 19, 192, 152, 20, 20);
+
         VampireData vdata = getVampireData();
 
-        int bloodAmt = vdata.animalExp;
-        int bloodLmt = getEXPcap();
-        int blt = (int) Math.floor(((double) 20 / bloodLmt) * (bloodAmt));
-        int blt2 = 20-blt;
-        if (blt > 0){
-            if (bloodAmt >= bloodLmt){
-                context.blit(rl, i +80, j + 19+blt2, 192, 194+blt2, 20, blt);
-            } else {
-                context.blit(rl, i +80, j + 19+blt2, 192, 173+blt2, 20, blt);
+        int blt = 0;
+        if (vdata.vampireLevel >= 40){
+            context.blit(rl, i +80, j + 19, 126, 194, 20, 20);
+            context.blit(rl, i + 102, j + 19, 148, 194, 20, 20);
+            context.blit(rl, i + 124, j + 19, 170, 194, 20, 20);
+        } else {
+            context.blit(rl, i +80, j + 19, 192, 152, 20, 20);
+            int bloodAmt = vdata.animalExp;
+            int bloodLmt = getEXPcap();
+            blt = (int) Math.floor(((double) 20 / bloodLmt) * (bloodAmt));
+            int blt2 = 20-blt;
+            if (blt > 0) {
+                if (bloodAmt >= bloodLmt) {
+                    context.blit(rl, i + 80, j + 19 + blt2, 192, 194 + blt2, 20, blt);
+                } else {
+                    context.blit(rl, i + 80, j + 19 + blt2, 192, 173 + blt2, 20, blt);
+                }
             }
-        }
-
-        context.blit(rl, i +102, j + 19, 214, 152, 20, 20);
-        bloodAmt = vdata.monsterEXP;
-        blt = (int) Math.floor(((double) 20 / bloodLmt) * (bloodAmt));
-        blt2 = 20-blt;
-        if (blt > 0){
-            if (bloodAmt >= bloodLmt){
-                context.blit(rl, i +102, j + 19+blt2, 214, 194+blt2, 20, blt);
-            } else {
-                context.blit(rl, i +102, j + 19+blt2, 214, 173+blt2, 20, blt);
+            if (vdata.timeSinceAnimal > 0) {
+                if (isSurelyHovering(i + 80, j + 19, 20, 20, mouseX, mouseY)) {
+                    List<Component> compList = Lists.newArrayList();
+                    compList.add(Component.literal("" + formatTicks(vdata.timeSinceAnimal)).withStyle(ChatFormatting.WHITE));
+                    context.renderTooltip(Minecraft.getInstance().font, compList, Optional.empty(), mouseX, mouseY);
+                }
             }
-        }
 
-        context.blit(rl, i +124, j + 19, 236, 152, 20, 20);
-        bloodAmt = vdata.npcExp;
-        blt = (int) Math.floor(((double) 20 / bloodLmt) * (bloodAmt));
-        blt2 = 20-blt;
-        if (blt > 0){
-            if (bloodAmt >= bloodLmt){
-                context.blit(rl, i +124, j + 19+blt2, 236, 194+blt2, 20, blt);
-            } else {
-                context.blit(rl, i +124, j + 19+blt2, 236, 173+blt2, 20, blt);
+            context.blit(rl, i + 102, j + 19, 214, 152, 20, 20);
+            bloodAmt = vdata.monsterEXP;
+            blt = (int) Math.floor(((double) 20 / bloodLmt) * (bloodAmt));
+            blt2 = 20 - blt;
+            if (blt > 0) {
+                if (bloodAmt >= bloodLmt) {
+                    context.blit(rl, i + 102, j + 19 + blt2, 214, 194 + blt2, 20, blt);
+                } else {
+                    context.blit(rl, i + 102, j + 19 + blt2, 214, 173 + blt2, 20, blt);
+                }
+            }
+            if (vdata.timeSinceMonster > 0) {
+                if (isSurelyHovering(i + 102, j + 19, 20, 20, mouseX, mouseY)) {
+                    List<Component> compList = Lists.newArrayList();
+                    compList.add(Component.literal("" + formatTicks(vdata.timeSinceMonster)).withStyle(ChatFormatting.WHITE));
+                    context.renderTooltip(Minecraft.getInstance().font, compList, Optional.empty(), mouseX, mouseY);
+                }
+            }
+
+            context.blit(rl, i + 124, j + 19, 236, 152, 20, 20);
+            bloodAmt = vdata.npcExp;
+            blt = (int) Math.floor(((double) 20 / bloodLmt) * (bloodAmt));
+            blt2 = 20 - blt;
+            if (blt > 0) {
+                if (bloodAmt >= bloodLmt) {
+                    context.blit(rl, i + 124, j + 19 + blt2, 236, 194 + blt2, 20, blt);
+                } else {
+                    context.blit(rl, i + 124, j + 19 + blt2, 236, 173 + blt2, 20, blt);
+                }
+            }
+            if (vdata.timeSinceNpc > 0) {
+                if (isSurelyHovering(i + 124, j + 19, 20, 20, mouseX, mouseY)) {
+                    List<Component> compList = Lists.newArrayList();
+                    compList.add(Component.literal("" + formatTicks(vdata.timeSinceNpc)).withStyle(ChatFormatting.WHITE));
+                    context.renderTooltip(Minecraft.getInstance().font, compList, Optional.empty(), mouseX, mouseY);
+                }
             }
         }
 
@@ -561,9 +596,13 @@ public class VampireFate extends VampiricFate {
                 vdata.bloodExp = 0;
                 vdata.vampireLevel+=1;
                 if (vdata.vampireLevel == 40){
-                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.max_levelup.vampire"), true);
+                    ((ServerPlayer) this.self).displayClientMessage(Component.
+                            translatable("leveling.roundabout.max_levelup.vampire").withStyle(ChatFormatting.DARK_RED)
+                            .withStyle(ChatFormatting.BOLD), true);
                 } else {
-                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.vampire"), true);
+                    ((ServerPlayer) this.self).displayClientMessage(Component.
+                            translatable("leveling.roundabout.levelup.vampire").withStyle(ChatFormatting.DARK_RED).
+                            withStyle(ChatFormatting.BOLD), true);
                 }
                 S2CPacketUtil.vampireMessage(pl);
 
