@@ -33,11 +33,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ShaderLevelRenderer {
     @Shadow @Nullable private ClientLevel level;
 
-    @Inject(method = "renderLevel", at = {
-            @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/Lighting;setupLevel(Lorg/joml/Matrix4f;)V", shift = At.Shift.AFTER),
-            @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/Lighting;setupNetherLevel(Lorg/joml/Matrix4f;)V", shift = At.Shift.AFTER)
-
-    })
+    @Inject(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;renderClouds(Lcom/mojang/blaze3d/vertex/PoseStack;Lorg/joml/Matrix4f;FDDD)V", shift=At.Shift.AFTER))
     private void renderShaders(PoseStack $$0, float partialTick, long $$2, boolean $$3, Camera $$4, GameRenderer $$5, LightTexture $$6, Matrix4f $$7, CallbackInfo ci){
         if (Minecraft.getInstance().player == null)
             return;
