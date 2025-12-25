@@ -147,6 +147,23 @@ public class RoundaboutCom {
                                         )
                                 )
                         ))))))))))));
+        dispatcher.register(Commands.literal("roundaboutSetVampireSkill")
+                .requires(source
+                        -> source.hasPermission(2))
+                .executes(context -> net.hydra.jojomod.RoundaboutCommands.roundaboutSetVampireSkill((CommandSourceStack)context.getSource(),
+                        ImmutableList.of(((CommandSourceStack)context.getSource()).getEntityOrException()),
+                        0,0))
+                .then(Commands.argument("targets", EntityArgument.entities())
+                        .then(Commands.argument("skill_number", IntegerArgumentType.integer())
+                                        .then(Commands.argument("value", IntegerArgumentType.integer())
+                                                .executes(context -> RoundaboutCommands.roundaboutSetVampireSkill((CommandSourceStack)context.getSource(),
+                                                        EntityArgument.getEntities(context, "targets"),
+                                                        IntegerArgumentType.getInteger(context, "skill_number"),
+                                                        IntegerArgumentType.getInteger(context,"value")
+                                                ))
+                                        )
+                                )
+                        ));
 
         dispatcher.register(Commands.literal("roundaboutSetStandExp")
                 .requires(source

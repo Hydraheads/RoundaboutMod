@@ -274,6 +274,46 @@ public class RoundaboutCommands {
         return targets.size();
     }
 
+    public static int roundaboutSetVampireSkill(CommandSourceStack source, Collection<? extends Entity> targets,
+                                                 int number, int value) {
+        for (Entity entity : targets) {
+            if (entity instanceof LivingEntity LE) {
+                if (FateTypes.isVampire(LE)){
+                    if (LE instanceof Player PL){
+                        VampireData vdata = ((IPlayerEntity)PL).rdbt$getVampireData();
+                        if (number == 0){
+                            vdata.setStrengthLevel(value);
+                        } else if (number == 1){
+                            vdata.setDexterityLevel(value);
+                        } else if (number == 2){
+                            vdata.setResilienceLevel(value);
+                        } else if (number == 3){
+                            vdata.setHypnotismLevel(value);
+                        } else if (number == 4){
+                            vdata.setSuperHearingLevel(value);
+                        } else if (number == 5){
+                            vdata.setBloodSpeedLevel(value);
+                        } else if (number == 6){
+                            vdata.setGraftingLevel(value);
+                        } else if (number == 7){
+                            vdata.setFleshBudLevel(value);
+                        } else if (number == 8){
+                            vdata.setDaggerSplatterLevel(value);
+                        } else if (number == 9){
+                            vdata.setJumpLevel(value);
+                        } else if (number == 10){
+                            vdata.setFreezeLevel(value);
+                        } else if (number == 11){
+                            vdata.setDexterityLevel(value);
+                        }
+                        S2CPacketUtil.beamVampireData(PL);
+                    }
+                }
+            }
+        }
+        return targets.size();
+    }
+
 
     public static int roundaboutSetStandLevel(CommandSourceStack source, Collection<? extends Entity> targets, int level) {
         for (Entity entity : targets) {
