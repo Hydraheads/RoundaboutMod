@@ -1908,6 +1908,8 @@
 
   "config.roundabout.enableBowlerHatRender.name": "Enable Bowler Hat Render",
   "config.roundabout.enableBowlerHatRender.desc": "Whether or not the bowler hat renders on your head while holding it.",
+  "config.roundabout.vampireLeveling.name": "Enable Vampire Leveling",
+  "config.roundabout.vampireLeveling.desc": "If this config is set to false, vampires start with everything.",
 
 
   "config.roundabout.cinderellaSpacing.name": "Cinderella Salon Spacing",

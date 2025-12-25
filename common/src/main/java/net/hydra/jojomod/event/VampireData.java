@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event;
 
 
+import net.hydra.jojomod.client.ClientNetworking;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
@@ -90,10 +91,25 @@ public class VampireData {
         -ripperEyesLevel-freezeLevel),0,40);
         return points;
     }
-
     public VampireData(Level lv){
         if (!lv.isClientSide()){
             vampireLevel = 0;
+        }
+
+        if (!ClientNetworking.getAppropriateConfig().vampireSettings.vampireLeveling){
+            vampireLevel = 40;
+            strengthLevel = strengthMaxLevel;
+            dexterityLevel = dexterityMaxLevel;
+            resilienceLevel = reslienceMaxLevel;
+            hypnotismLevel = hypnotismMaxLevel;
+            superHearingLevel = superHearingMaxLevel;
+            bloodSpeedLevel = bloodSpeedMaxLevel;
+            graftingLevel = graftingMaxLevel;
+            fleshBudLevel = fleshBudMaxLevel;
+            daggerSplatterLevel = daggerSplatterMaxLevel;
+            jumpLevel = jumpMaxLevel;
+            ripperEyesLevel = ripperEyesMaxLevel;
+            freezeLevel = freezeMaxLevel;
         }
     }
     public VampireData(byte strengthLevel, byte dexterityLevel, byte resilienceLevel, byte hypnotismLevel,

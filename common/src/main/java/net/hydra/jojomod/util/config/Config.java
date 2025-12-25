@@ -191,6 +191,8 @@ public class Config implements Cloneable {
     public static class VampireSettings {
         @BooleanOption(group = "inherit", value = false)
         public Boolean vampireUsesPotionEffectForNightVision;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean vampireLeveling;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer sunDamageUnderwaterReach;
         @IntOption(group = "inherit", value = 200, min = 1, max = 72000)
