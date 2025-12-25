@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.star_platinum;
 
 import com.mojang.blaze3d.Blaze3D;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.event.index.AnubisMemory;
 import net.hydra.jojomod.event.index.AnubisMoment;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.JackalRifleItem;
@@ -10,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.util.SmoothDouble;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(MouseHandler.class)
-public class MouseHandlerMixin {
+public abstract class MouseHandlerMixin {
 
 
     @Inject(method = "onMove",at = @At(value = "HEAD"))
@@ -33,8 +35,22 @@ public class MouseHandlerMixin {
             StandUser SU = (StandUser) p;
             if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
                 if (PA.isRecording()) {
+                    AnubisMemory AM = PA.getUsedMemory();
+                    Vec3 rot = new Vec3(PowersAnubis.MaxPlayTime-PA.playTime,PA.getSelf().getXRot(),PA.getSelf().getYRot());
+                    if (AM.rots.isEmpty()) {
+                        AM.rots.add(AnubisMoment.convertVec(rot));
+                    } else {
+                        Vec3 pRot = AM.rots.get(AM.rots.size()-1);
+                        rot = AnubisMoment.convertVec(new Vec3(rot.x,AnubisMoment.convertToShorter(rot.y),AnubisMoment.convertToShorter(rot.z)));
+                        if (rot.y != pRot.y || rot.z != pRot.z) {
+                            AM.rots.add(rot);
+                        }
 
-            //        Roundabout.LOGGER.info("{}, {}", $$1, $$2);
+                    }
+                  /*  Vec3 ret = new Vec3(PowersAnubis.MaxPlayTime-PA.playTime,this.xpos()-$$1,this.ypos()-$$2);
+                    if (!AM.rots.contains(ret) && !ret.equals(Vec3.ZERO)) {
+                        AM.rots.add(ret);
+                    } */
                 }
             }
         }
@@ -47,7 +63,7 @@ public class MouseHandlerMixin {
         StandUser SU = (StandUser) p;
         int s = this.minecraft.player.getInventory().selected;
         if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
-            if (PA.isRecording()) {
+            if (PA.isRecording() &&  PA.getUsedMemory().memory_type != AnubisMemory.INPUTS) {
                 List<AnubisMoment> moments = PA.getUsedMemory().moments;
 
                 int lastTime = PowersAnubis.MaxPlayTime-PA.playTime;

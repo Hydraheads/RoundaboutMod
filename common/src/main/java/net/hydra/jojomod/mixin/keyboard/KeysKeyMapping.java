@@ -9,7 +9,6 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -50,6 +49,11 @@ public abstract class KeysKeyMapping implements IKeyMapping {
     }
 
     @Unique
+    public void roundabout$addClick() {
+        this.clickCount += 1;
+    }
+
+    @Unique
     @Override
     public InputConstants.Key roundabout$justTellMeTheKey(){
         return key;
@@ -75,17 +79,16 @@ public abstract class KeysKeyMapping implements IKeyMapping {
 
                             if (key.getName().equals(this.getName())) {
                                 if (PA.isPressed(PA.playBytes.get(i), time)) {
-                                    if (!PA.isPressed(PA.playBytes.get(i),time-1)) {
-                                        this.clickCount ++;
-                                    }
                                     cir.setReturnValue(true);
                                     cir.cancel();
                                 }
-                            } else {/// admittedly a little scuffed, I'll change it if it breaks
-                                if (PA.isPressed(PA.playBytes.get(i), time) && PA.playBytes.get(i) > 20) {
-                                    player.getInventory().selected = ((int) PA.playBytes.get(i)) - 21;
+                            }/* else {
+                                if (PA.isPressed(PA.playBytes.get(i), time)) {
+                                    if (PA.playBytes.get(i) > 20) {
+                                        player.getInventory().selected = ((int) PA.playBytes.get(i)) - 21;
+                                    }
                                 }
-                            }
+                            } */
 
                         }
                     }

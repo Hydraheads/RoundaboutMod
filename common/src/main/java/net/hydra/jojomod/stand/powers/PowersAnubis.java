@@ -2,14 +2,13 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.gui.MemoryRecordScreen;
-import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.projectile.AnubisSlipstreamEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
@@ -169,7 +168,7 @@ public class PowersAnubis extends NewDashPreset {
                     if (this.getStandUserSelf().roundabout$getUniqueStandModeToggle()) {
                         MemoryCancelClient();
                     } else {
-                        MemoryCancelSaveClient();
+                        MemorySaveClient(true);
                     }
                 } else {
                     MemoryRecordClient();
@@ -256,25 +255,57 @@ public class PowersAnubis extends NewDashPreset {
             MemoryRecordScreen MA = (MemoryRecordScreen) Minecraft.getInstance().screen;
             if (MA != null) {
                 byte type = this.memories.get(MA.currentlyHovered).memory_type;
-                this.memories.get(MA.currentlyHovered).memory_type = (byte) ((type + 1) % 3);
+                this.memories.get(MA.currentlyHovered).memory_type = (byte) ((type + 1) % 2);
                 SaveMemories();
             }
         }
     }
 
-    public void MemoryCancelSaveClient() {
+    //TODO: TEMP VAR
+    public float sum = 0;
+
+    public void MemorySaveClient(boolean rotSave) {
        // Roundabout.LOGGER.info(this.memories.get(playSlot).moments.toString());
         this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
 
-
+        AnubisMemory memory = this.getUsedMemory();
+        List<AnubisMoment> moments = memory.moments;
         int time = (PowersAnubis.MaxPlayTime-this.playTime)+1;
         for (Byte playByte : playBytes) {
             if (isPressed(playByte, time)) {
-                AnubisMemory memory = this.getUsedMemory();
-                List<AnubisMoment> moments = memory.moments;
                 moments.add(new AnubisMoment(playByte, Math.min(PowersAnubis.MaxPlayTime, time), false));
             }
         }
+
+        if (rotSave) {
+            List<Vec3> newRots = new ArrayList<>();
+            for (int i = 1; i < memory.rots.size(); i++) {
+                Vec3 rot = memory.rots.get(i);
+                Vec3 pRot = memory.rots.get(i - 1);
+                Vec3 fRot = new Vec3(rot.x, rot.y - pRot.y, rot.z - pRot.z);
+                newRots.add(fRot);
+           //TODO: REMOVE LATER     Roundabout.LOGGER.info(">>" + fRot);
+            }
+            memory.rots = newRots;
+            newRots = new ArrayList<>();
+            for (Vec3 vec3 : memory.rots ) {
+                if (newRots.isEmpty() || newRots.get(newRots.size()-1).x != vec3.x) {
+                    newRots.add(vec3);
+                } else {
+                    Vec3 rot = newRots.get(newRots.size()-1);
+                    newRots.set(newRots.size()-1,new Vec3(rot.x,rot.y+vec3.y,rot.z+vec3.z) );
+                }
+            }
+            memory.rots = newRots;
+
+            double ysum = 0;
+            for (Vec3 vec : memory.rots) {
+                ysum += vec.z;
+            }
+            Roundabout.LOGGER.info(""+ysum);
+            Roundabout.LOGGER.info(memory.rots.toString());
+        }
+
 
         SaveMemories();
 
@@ -293,7 +324,7 @@ public class PowersAnubis extends NewDashPreset {
 
 
     public void MemoryCancelClient() {
-        if (!this.getStandUserSelf().roundabout$getUniqueStandModeToggle()) {
+        if (!this.getStandUserSelf().roundabout$getUniqueStandModeToggle() && !this.memories.isEmpty() && this.playSlot != -1) {
             this.memories.set(this.playSlot,lastMemory);
             lastMemory = null;
         }
@@ -410,7 +441,6 @@ public class PowersAnubis extends NewDashPreset {
 
     List<Integer> lasthits = new ArrayList<>();
 
-    float slipstreamTimer = 3;
 
     int pogoTime = 0;
     public boolean canPogo() {return pogoTime == 0;}
@@ -420,6 +450,13 @@ public class PowersAnubis extends NewDashPreset {
     int pogoCounter = 0;
     @Override
     public void tickPower() {
+
+        if (isClient()) {
+            if (this.getUsedMemory() != null) {
+             //TODO LEAVE THIS IN FOR NOW   Roundabout.LOGGER.info(">> "+this.sum + " | " + this.getUsedMemory().rots.size());
+
+            }
+        }
 
        // Roundabout.LOGGER.info(" CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax());
         StandUser SU = this.getStandUserSelf();
@@ -443,7 +480,7 @@ public class PowersAnubis extends NewDashPreset {
 
             if (this.isClient()) {
                 if (this.getSelf() instanceof Player P){
-                    if (pogoCounter != 0 && ConfigManager.getClientConfig().anubisMemories.anubisPogoCounter) {
+                    if (pogoCounter != 0 && ConfigManager.getClientConfig().anubisSettings.anubisPogoCounter) {
                         P.displayClientMessage(Component.literal("" + pogoCounter).withStyle(ChatFormatting.RED), true);
                     }
                 }
@@ -468,10 +505,10 @@ public class PowersAnubis extends NewDashPreset {
         super.tickPower();
     }
 
+    float slipstreamTimer = 3;
     public void tickSlipStream() {
         StandUser SU = this.getStandUserSelf();
         if (!this.isClient()) {
-            Level level = this.getSelf().level();
             boolean noSlip = this.getActivePower() == PowerIndex.SNEAK_MOVEMENT || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE;
             if (this.getSelf().isSprinting() && SU.roundabout$getActive() && !noSlip) {
 
@@ -482,11 +519,24 @@ public class PowersAnubis extends NewDashPreset {
 
                 if (slipstreamTimer <= 0) {
                     slipstreamTimer = 3;
-                    AnubisSlipstreamEntity AS = new AnubisSlipstreamEntity(ModEntities.ANUBIS_SLIPSTREAM,level);
-                    AS.setPos(this.getSelf().getPosition(1));
-                    level.addFreshEntity(AS);
+                 //   slipstreams.add(new Pair<Vec3,Integer>(this.getSelf().getPosition(1F),60));
                 }
             }
+/*
+            List<Entity> entities = new ArrayList<>();
+            for (Pair<Vec3, Integer> pair : slipstreams) {
+                entities.addAll(MainUtil.genHitbox(this.getSelf().level()
+                        ,pair.getA().x, pair.getA().y, pair.getA().z,
+                        3,3,3));
+            }
+            for (Entity entity :entities) {
+                if (entity instanceof LivingEntity LE) {
+                    StandUser su = ((StandUser)LE);
+                    if (!(su.roundabout$getStandPowers() instanceof PowersAnubis) ) {
+                        su.roundabout$setSlipstream(Math.min(su.roundabout$getSlipstream()+2,20));
+                    }
+                }
+            } */
         }
     }
 
@@ -494,6 +544,8 @@ public class PowersAnubis extends NewDashPreset {
         if (this.memories.size() != 8 && isClient()) {
             generateMemories(this);
         }
+
+        AnubisMemory memory = this.getUsedMemory();
         if (this.playTime > 0 && isClient()) {
 
 
@@ -546,23 +598,30 @@ public class PowersAnubis extends NewDashPreset {
                 }
             }
 
-
-
-            this.playTime--;
+            /// playback section
             boolean bl = false;
-            AnubisMemory memory = this.getUsedMemory();
             if (this.getStandUserSelf().roundabout$getUniqueStandModeToggle()) {
                 if (memory != null) {
-                    if (!memory.moments.isEmpty()) {
-                        if (PowersAnubis.MaxPlayTime - this.playTime > memory.moments.get(memory.moments.size() - 1).time) {
+                    int time = PowersAnubis.MaxPlayTime-this.playTime;
+                    for (int i=0;i<playBytes.size();i++) {
+                        if (isPressed(playBytes.get(i),time) && !isPressed(playBytes.get(i),time-1)) {
+                            ((IKeyMapping)this.playKeys.get(i)).roundabout$addClick();
+                        }
+                    }
+
+
+
+                    if (memory.canPlayback()) {
+                        if (PowersAnubis.MaxPlayTime - this.playTime > memory.getLastTime() ) {
                             bl = true;
                         }
                     }
                 }
             }
+            this.playTime--;
 
             if (this.playTime <= 0 || bl) {
-                this.MemoryCancelSaveClient();
+                this.MemorySaveClient(!this.getStandUserSelf().roundabout$getUniqueStandModeToggle());
             }
         }
     }
@@ -781,6 +840,10 @@ public class PowersAnubis extends NewDashPreset {
                                 Vec3 look = this.getSelf().getLookAngle().reverse();
                                 look = new Vec3(look.x,-0.2,look.z);
                                 float strength = 1F;
+                                if (isClient()) {
+                                    Options o = Minecraft.getInstance().options;
+                                    strength *=  o.keyDown.isDown() ? 0.8F : 1F;
+                                }
                                 strength *= (this.getSelf().onGround() ? 1F : 0.6F);
                                 MainUtil.takeUnresistableKnockbackWithY(this.getSelf(),strength,look.x,look.y,look.z);
                             }
@@ -843,25 +906,25 @@ public class PowersAnubis extends NewDashPreset {
             } else {
                 final int windup = PogoDelay;
                 /**  Pogo is broken up into 4 stages: Hover, Launch, Attack, and Aftershock */
-                if ( (isClient() && isPacketPlayer())) {
-
-                    if (attackTimeDuring == windup) {
-                        PogoLaunch();
-                    } else if (attackTimeDuring < windup) {
-                        if (isClient()) {
-                            MainUtil.slowTarget(this.getSelf(),0.8F);
-                        }
-                    } else if (attackTimeDuring < windup + 6) {
-                        if (isClient()) {
-                            pogoCheck();
-                        }
-                    } else if (attackTimeDuring < windup + 9) { /// Slows the user after a duration
-                        if (isClient()) {
-                            MainUtil.slowTarget(this.getSelf(),0.7F);
-                            this.getSelf().resetFallDistance();
-                        }
+                if (attackTimeDuring == windup) {
+                    if ((isClient() && isPacketPlayer()))
+                    PogoLaunch();
+                } else if (attackTimeDuring < windup) {
+                    if ((isClient() && isPacketPlayer())) {
+                        MainUtil.slowTarget(this.getSelf(), 0.8F);
+                    } else {
+                        this.getSelf().resetFallDistance();;
                     }
-                    if (this.attackTimeDuring >= windup + 9) {
+                } else if (attackTimeDuring < windup + 6) {
+                    if ((isClient() && isPacketPlayer())) {
+                        pogoCheck();
+                    }
+                } else if (attackTimeDuring < windup + 9) { /// Slows the user after a duration
+                    MainUtil.slowTarget(this.getSelf(), 0.7F);
+                    this.getSelf().resetFallDistance();
+                }
+                if (this.attackTimeDuring >= windup + 9) {
+                    if ((isClient() && isPacketPlayer())) {
                         this.setPowerNone();
                     }
                 }
@@ -874,6 +937,7 @@ public class PowersAnubis extends NewDashPreset {
 
 
     public void PogoLaunch() {
+        this.getSelf().resetFallDistance();
         if (this.getSelf() instanceof Player P) {
             S2CPacketUtil.sendIntPowerDataPacket(P,PowersAnubis.SWING,0);
         }
@@ -916,11 +980,11 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     public void pogoAttack(int id) {
+        this.getStandUserSelf().roundabout$setLeapTicks(20);
+        this.getStandUserSelf().roundabout$setLeapIntentionally(true);
+
         Entity target = this.getSelf().level().getEntity(id);
-        Roundabout.LOGGER.info(target.toString());
         this.setAttackTimeDuring(this.getAttackTimeDuring()+15);
-
-
 
         if (StandDamageEntityAttack(target,4,1,this.getSelf())) {
             if (target instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers().interceptGuard()
@@ -966,8 +1030,11 @@ public class PowersAnubis extends NewDashPreset {
                 Vec3 pos = e.getPosition(0F).add(0,e.getEyeHeight()/2,0);
                 ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.SWEEP_ATTACK, pos.x, pos.y, pos.z, 0, 0, 0.0, 0, 0.0);
                 float pitch = 0.9F+(float)(Math.random()*0.2F);
-                pitch += this.getActivePower() == PowerIndex.SNEAK_ATTACK ? -0.3F : 0;
-                this.getSelf().level().playSound(null,this.getSelf().blockPosition(), SoundEvents.PLAYER_ATTACK_SWEEP,SoundSource.PLAYERS,1F,pitch);
+                SoundEvent event = ModSounds.ANUBIS_SWING_EVENT;
+                if (this.getActivePower()==PowerIndex.SNEAK_ATTACK) {
+                    event = ModSounds.ANUBIS_CROUCH_SWING_EVENT;
+                }
+                this.getSelf().level().playSound(null,this.getSelf().blockPosition(), event,SoundSource.PLAYERS,1F,pitch);
             }
         }
 
@@ -1083,10 +1150,10 @@ public class PowersAnubis extends NewDashPreset {
         this.setAttackTimeDuring(-10);
 
         boolean bl = false;
-        List<Entity> entities =  defaultSwordHitbox(this.getSelf(),4.2, 20,0);
+        List<Entity> entities =  defaultSwordHitbox(this.getSelf(),4, 30,0);
         for (Entity entity : entities) {
             float dist = entity.distanceTo(this.getSelf());
-            boolean range = dist > 3.4;
+            boolean range = dist > 3.1;
             float pow = this.getHeavyPunchStrength(entity);
             if (range) {
                 pow *= 1.4F;
@@ -1094,13 +1161,15 @@ public class PowersAnubis extends NewDashPreset {
             }
             if (range) {bl = true;}
             if (StandDamageEntityAttack(entity,pow,0.0F,this.getSelf())) {
-                int dur = 100;
+                int dur = 200;
+                int amp = 0;
                 if (range) {
                     MainUtil.takeUnresistableKnockbackWithY(entity,0.45,0,-1,0);
-                    dur = 200;
+                    dur = 180;
+                    amp = 1;
                 }
                 if (entity instanceof LivingEntity LE) {
-                    LE.addEffect(new MobEffectInstance(ModEffects.BLEED,dur,0));
+                    LE.addEffect(new MobEffectInstance(ModEffects.BLEED,dur,amp));
                 }
             }
         }
@@ -1203,7 +1272,7 @@ public class PowersAnubis extends NewDashPreset {
                 this.setPowerNone();
 
                 pogoCounter += 1;
-                if (ConfigManager.getClientConfig().anubisMemories.anubisPogoCounter) {
+                if (ConfigManager.getClientConfig().anubisSettings.anubisPogoCounter) {
                     ((Player) this.getSelf()).displayClientMessage(Component.literal("" + pogoCounter).withStyle(ChatFormatting.WHITE), true);
                 }
             }
@@ -1752,19 +1821,29 @@ public class PowersAnubis extends NewDashPreset {
 
         lastMemory = this.memories.get(slot);
         this.memories.get(slot).moments = new ArrayList<>();
+        this.memories.get(slot).rots = new ArrayList<>();
+
+        this.memories.get(slot).rots.add(AnubisMoment.convertVec(new Vec3(0,this.getSelf().getXRot(),this.getSelf().getYRot())));
     }
     public void playbackMemory(byte slot) {
         if (memories.isEmpty()) {return;}
         if (slot == (byte) -1 || slot == 8) {return;}
         AnubisMemory memory = this.memories.get(slot);
-        if (memory != null && !memory.moments.isEmpty()) {
-            List<AnubisMoment> moments = this.memories.get(slot).moments;
+        if (memory != null && memory.canPlayback()) {
+            int time = -1;
+            if (memory.canPlayback()) {
+                time = PowersAnubis.MaxPlayTime - memory.getFirstTime();
+            }
 
             playSlot = slot;
-            setPlayTime(PowersAnubis.MaxPlayTime-moments.get(0).time );
+            setPlayTime(time);
+            lastPartialTick = -1;
+            lastTick = -1;
             //Roundabout.LOGGER.info("{}/{}",moments.get(moments.size()-1).time,moments.get(0).time);
             this.getStandUserSelf().roundabout$setUniqueStandModeToggle(true);
 
+
+            sum = 0;
         }
 
 
@@ -1786,8 +1865,17 @@ public class PowersAnubis extends NewDashPreset {
                 for(AnubisMoment am : moments) {
                     ret = ret + am.toConfig();
                 }
-                ret = ret.substring(0,ret.length()-1) + "}";
 
+                ret = ret + "}";
+
+
+                ret = ret + "/[";
+                for (Vec3 v3 : AM.rots) {
+                    String v3String = v3.x + "_" + AnubisMoment.convertToShorter(v3.y) + "_" + AnubisMoment.convertToShorter(v3.z) + "_";
+                    ret = ret + v3String;
+                }
+
+                ret = ret + "]";
             } else {/*Roundabout.LOGGER.warn("Null Memory Item: " + i);*/}
         } else {/*Roundabout.LOGGER.warn("Null Memory: " + i);*/}
         return ret;
@@ -1799,8 +1887,9 @@ public class PowersAnubis extends NewDashPreset {
         if (cf.equals("nothing yet :P")) {cf = "";ConfigManager.getClientConfig().anubisMemories.saveToMemory(slot,"");}
 
         Item item = null;
-        byte Mode = (byte)0;
+        byte Mode = (byte)-1;
         List<AnubisMoment> moments = new ArrayList<>();
+        List<Vec3> rots = new ArrayList<>();
 
 
         if (!cf.isEmpty()) {
@@ -1829,6 +1918,7 @@ public class PowersAnubis extends NewDashPreset {
                             while (memScanner.hasNext()) {
                                 String o = memScanner.next();
                                 try {
+                                    if(o.equals("}")) {break;}
                                     memBytes.add((byte)Integer.parseInt(o));
                                 } catch (NumberFormatException e) {
                                     Roundabout.LOGGER.warn("Invalid Memory Token??  " + o);
@@ -1843,6 +1933,29 @@ public class PowersAnubis extends NewDashPreset {
                                 Roundabout.LOGGER.warn("Invalid Memory Length");
                             }
 
+                            if (cf.contains("[") && cf.contains("]")) {
+                                List<Float> memrots = new ArrayList<>();
+                                String rotString = cf.substring(cf.indexOf("[")+1,cf.indexOf("]"));
+                                Scanner rotScanner = new Scanner(rotString);
+                                rotScanner.useDelimiter("_");
+                                while(rotScanner.hasNext()) {
+                                    String o = rotScanner.next();
+                                    if (o.equals("]")) {break;}
+                                    try {
+                                        memrots.add(Float.parseFloat(o));
+                                    } catch (NumberFormatException e) {
+                                        Roundabout.LOGGER.warn("Invalid Rotation Token??  " + o);
+                                    }
+                                }
+
+                                if (memrots.size() % 3 == 0) {
+                                    for (int i = 0; i < memrots.size(); i += 3) {
+                                        rots.add(new Vec3(memrots.get(i),memrots.get(i+1),memrots.get(i+2)));
+                                    }
+                                }
+
+                            }
+
                         } else {
                            // Roundabout.LOGGER.warn("Invalid Memory");
                         }
@@ -1851,10 +1964,11 @@ public class PowersAnubis extends NewDashPreset {
                 }
             }
         } else {/*Roundabout.LOGGER.warn("Received Empty String from anubisMemories");*/}
-        if (!moments.isEmpty()) {
+        if (Mode != (byte)-1) {
             AnubisMemory AM = new AnubisMemory(item, new ArrayList<>());
             AM.memory_type = Mode;
             AM.moments = moments;
+            AM.rots = rots;
             return AM;
         } else {
      //       Roundabout.LOGGER.warn("Invalid Memory Item");
@@ -1901,6 +2015,8 @@ public class PowersAnubis extends NewDashPreset {
             PA.playKeys.add(o.keyHotbarSlots[i]);PA.playBytes.add(AnubisMoment.HOTBAR[i]);
         }
     }
+    public float lastPartialTick = 0;
+    public float lastTick = 0;
     public AnubisMemory getUsedMemory() {
         if (this.playSlot != -1) {
             if (!this.memories.isEmpty()) {
