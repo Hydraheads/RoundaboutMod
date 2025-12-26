@@ -143,7 +143,6 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                     this.animate(ipe.roundabout$getColtRecoilLeft(), Poses.SNUBNOSE_RECOIL_LEFT.ad, partialTicks, 1f);
                 }
             }
-
             EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
             EntityRenderer<? super T> P = $$7.getRenderer(player);
             if (P instanceof PlayerRenderer PR){
@@ -243,6 +242,55 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                     );
                 }
                 poseStack.popPose();
+
+                if (rightSleeve != null) {
+                    if (bt == LocacacaCurseIndex.RIGHT_HAND) {
+                        poseStack.pushPose();
+
+                        this.transform.translateAndRotate(poseStack);
+                        this.rform.translateAndRotate(poseStack);
+                        this.right_arm.translateAndRotate(poseStack);
+
+                        VertexConsumer consumerX = bufferSource.getBuffer
+                                (RenderType.entityTranslucent(StandIcons.STONE_RIGHT_ARM));
+                        rightSleeve.xScale += 0.04f;
+                        rightSleeve.zScale += 0.04f;
+                        rightSleeve.render(
+                                poseStack,
+                                consumerX,
+                                light,
+                                OverlayTexture.NO_OVERLAY,
+                                r, g, b, 1.0F
+                        );
+                        rightSleeve.xScale -= 0.04f;
+                        rightSleeve.zScale -= 0.04f;
+                        poseStack.popPose();
+                    }
+                }
+                if (leftSleeve != null) {
+                    if (bt == LocacacaCurseIndex.LEFT_HAND) {
+                        poseStack.pushPose();
+
+                        this.transform.translateAndRotate(poseStack);
+                        this.lform.translateAndRotate(poseStack);
+                        this.left_arm.translateAndRotate(poseStack);
+
+                        VertexConsumer consumerX = bufferSource.getBuffer
+                                (RenderType.entityTranslucent(StandIcons.STONE_LEFT_ARM));
+                        leftSleeve.xScale += 0.04f;
+                        leftSleeve.zScale += 0.04f;
+                        leftSleeve.render(
+                                poseStack,
+                                consumerX,
+                                light,
+                                OverlayTexture.NO_OVERLAY,
+                                r, g, b, 1.0F
+                        );
+                        leftSleeve.xScale -= 0.04f;
+                        leftSleeve.zScale -= 0.04f;
+                        poseStack.popPose();
+                    }
+                }
 
             }
 //            Roundabout.LOGGER.info("Is Aiming:"+ipe.roundabout$getSnubnoseAim().isStarted());
