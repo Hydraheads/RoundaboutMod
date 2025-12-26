@@ -6,6 +6,7 @@ package net.hydra.jojomod.client.models.visages.parts;// Made with Blockbench 5.
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.access.IPlayerRenderer;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
@@ -160,6 +161,7 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                 ModelPart leftArm = plm.leftArm;
                 ModelPart leftSleeve = plm.leftSleeve;
                 byte bt = ((StandUser)LE).roundabout$getLocacacaCurse();
+                int muscle = ((StandUser)LE).roundabout$getZappedToID();
 
                 Mob shapeShift = ((IPlayerRenderer)PR).roundabout$getShapeShift(player);
                 if (shapeShift != null && $$7.getRenderer(shapeShift) instanceof HumanoidMobRenderer hr){
@@ -265,6 +267,40 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                         rightSleeve.xScale -= 0.04f;
                         rightSleeve.zScale -= 0.04f;
                         poseStack.popPose();
+                    } else {
+                        if (muscle > -1) {
+                            float scale = 1.055F;
+                            float alpha = 0.6F;
+                            float oscillation = Math.abs(((player.tickCount % 10) + (partialTicks % 1)) - 5) * 0.04F;
+                            alpha += oscillation;
+                            if (player.getMainArm() == HumanoidArm.RIGHT) {
+
+                                poseStack.pushPose();
+                                this.transform.translateAndRotate(poseStack);
+                                this.rform.translateAndRotate(poseStack);
+                                this.right_arm.translateAndRotate(poseStack);
+                                rightSleeve.xScale += 0.04f;
+                                rightSleeve.zScale += 0.04f;
+                                VertexConsumer consumerX;
+                                if (((IPlayerModel) plm).roundabout$getSlim()) {
+                                    consumerX = bufferSource.getBuffer
+                                            (RenderType.entityTranslucent(StandIcons.MUSCLE_SLIM));
+                                } else {
+                                    consumerX = bufferSource.getBuffer
+                                            (RenderType.entityTranslucent(StandIcons.MUSCLE));
+                                }
+                                rightSleeve.render(
+                                        poseStack,
+                                        consumerX,
+                                        light,
+                                        OverlayTexture.NO_OVERLAY,
+                                        r, g, b, alpha
+                                );
+                                rightSleeve.xScale -= 0.04f;
+                                rightSleeve.zScale -= 0.04f;
+                                poseStack.popPose();
+                            }
+                        }
                     }
                 }
                 if (leftSleeve != null) {
@@ -289,6 +325,40 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                         leftSleeve.xScale -= 0.04f;
                         leftSleeve.zScale -= 0.04f;
                         poseStack.popPose();
+                    } else {
+                        if (muscle > -1) {
+                            float scale = 1.055F;
+                            float alpha = 0.6F;
+                            float oscillation = Math.abs(((player.tickCount % 10) + (partialTicks % 1)) - 5) * 0.04F;
+                            alpha += oscillation;
+                            if (player.getMainArm() == HumanoidArm.LEFT) {
+
+                                poseStack.pushPose();
+                                this.transform.translateAndRotate(poseStack);
+                                this.lform.translateAndRotate(poseStack);
+                                this.left_arm.translateAndRotate(poseStack);
+                                rightSleeve.xScale += 0.04f;
+                                rightSleeve.zScale += 0.04f;
+                                VertexConsumer consumerX;
+                                if (((IPlayerModel) plm).roundabout$getSlim()) {
+                                    consumerX = bufferSource.getBuffer
+                                            (RenderType.entityTranslucent(StandIcons.MUSCLE_SLIM));
+                                } else {
+                                    consumerX = bufferSource.getBuffer
+                                            (RenderType.entityTranslucent(StandIcons.MUSCLE));
+                                }
+                                rightSleeve.render(
+                                        poseStack,
+                                        consumerX,
+                                        light,
+                                        OverlayTexture.NO_OVERLAY,
+                                        r, g, b, alpha
+                                );
+                                rightSleeve.xScale -= 0.04f;
+                                rightSleeve.zScale -= 0.04f;
+                                poseStack.popPose();
+                            }
+                        }
                     }
                 }
 
