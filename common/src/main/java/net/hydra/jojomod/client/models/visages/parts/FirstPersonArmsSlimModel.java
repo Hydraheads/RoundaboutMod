@@ -8,6 +8,8 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.access.IPlayerRenderer;
+import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
@@ -17,6 +19,7 @@ import net.hydra.jojomod.item.ColtRevolverItem;
 import net.hydra.jojomod.item.JackalRifleItem;
 import net.hydra.jojomod.item.SnubnoseRevolverItem;
 import net.hydra.jojomod.item.TommyGunItem;
+import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
@@ -299,6 +302,42 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                                 rightSleeve.xScale -= 0.04f;
                                 rightSleeve.zScale -= 0.04f;
                                 poseStack.popPose();
+                            }
+                        }
+
+                        StandUser user = ((StandUser) player);
+                        boolean hasMandom = (user.roundabout$getStandPowers() instanceof PowersMandom);
+                        boolean hasMandomOut = (user.roundabout$getActive() && hasMandom);
+                        if (hasMandom) {
+                            byte style = ipe.roundabout$getWatchStyle();
+                            if (style != PowersMandom.WATCHLESS) {
+
+                                poseStack.pushPose();
+                                this.transform.translateAndRotate(poseStack);
+                                this.rform.translateAndRotate(poseStack);
+                                this.right_arm.translateAndRotate(poseStack);
+                                VertexConsumer consumerX;
+                                if (((IPlayerModel) plm).roundabout$getSlim()) {
+                                    ModStrayModels.MANDOM_WATCH_SMALL.render(
+                                            player,partialTicks,
+                                            poseStack,
+                                            bufferSource,
+                                            light,
+                                            r, g, b, 1,
+                                            style
+                                    );
+                                } else {
+                                    ModStrayModels.MANDOM_WATCH.render(
+                                            player,partialTicks,
+                                            poseStack,
+                                            bufferSource,
+                                            light,
+                                            r, g, b, 1,
+                                            style
+                                    );
+                                }
+                                poseStack.popPose();
+
                             }
                         }
                     }
