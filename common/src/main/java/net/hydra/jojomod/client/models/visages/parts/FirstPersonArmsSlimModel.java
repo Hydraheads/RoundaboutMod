@@ -6,12 +6,19 @@ package net.hydra.jojomod.client.models.visages.parts;// Made with Blockbench 5.
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPlayerRenderer;
+import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
+import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.Poses;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ColtRevolverItem;
 import net.hydra.jojomod.item.JackalRifleItem;
 import net.hydra.jojomod.item.SnubnoseRevolverItem;
 import net.hydra.jojomod.item.TommyGunItem;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -19,12 +26,17 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 
 public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchicalModel {
@@ -95,6 +107,7 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
         root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
     }
+    PartPose pp = PartPose.ZERO;
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
                        int light) {
         if (context instanceof LivingEntity LE) {
@@ -130,7 +143,108 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                     this.animate(ipe.roundabout$getColtRecoilLeft(), Poses.SNUBNOSE_RECOIL_LEFT.ad, partialTicks, 1f);
                 }
             }
-            root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+
+            EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
+            EntityRenderer<? super T> P = $$7.getRenderer(player);
+            if (P instanceof PlayerRenderer PR){
+
+                boolean isHurt = LE.hurtTime > 0;
+                float r = isHurt ? 1.0F : 1.0F;
+                float g = isHurt ? 0.6F : 1.0F;
+                float b = isHurt ? 0.6F : 1.0F;
+                PlayerModel plm = PR.getModel();
+
+
+                byte shift = ((IPlayerEntity)player).roundabout$getShapeShift();
+                ModelPart rightArm = plm.rightArm;
+                ModelPart rightSleeve = plm.rightSleeve;
+                ModelPart leftArm = plm.leftArm;
+                ModelPart leftSleeve = plm.leftSleeve;
+                byte bt = ((StandUser)LE).roundabout$getLocacacaCurse();
+
+                Mob shapeShift = ((IPlayerRenderer)PR).roundabout$getShapeShift(player);
+                if (shapeShift != null && $$7.getRenderer(shapeShift) instanceof HumanoidMobRenderer hr){
+                    consumer = bufferSource.getBuffer(RenderType.entityTranslucent(hr.getTextureLocation(shapeShift)));
+                    if (hr.getModel() instanceof HumanoidModel<?> hm){
+                        rightArm = hm.rightArm;
+                        leftArm = hm.leftArm;
+                        rightSleeve = null;
+                        leftSleeve = null;
+                    }
+                } else if (player instanceof AbstractClientPlayer acp){
+                    consumer = bufferSource.getBuffer(RenderType.entityTranslucent(PR.getTextureLocation(acp)));
+
+                }
+
+
+                poseStack.pushPose();
+                // Apply the full bone chain in order
+                this.transform.translateAndRotate(poseStack);
+                this.rform.translateAndRotate(poseStack);
+                this.right_arm.translateAndRotate(poseStack);
+
+                rightArm.loadPose(pp);
+                if (rightSleeve != null) {
+                    rightSleeve.loadPose(pp);
+                }
+
+                rightArm.visible = true;
+                if (rightSleeve != null) {
+                    rightSleeve.visible = true;
+                }
+                rightArm.render(
+                        poseStack,
+                        consumer,
+                        light,
+                        OverlayTexture.NO_OVERLAY,
+                        r, g, b, 1.0F
+                );
+                if (rightSleeve != null) {
+                    rightSleeve.render(
+                            poseStack,
+                            consumer,
+                            light,
+                            OverlayTexture.NO_OVERLAY,
+                            r, g, b, 1.0F
+                    );
+                }
+                poseStack.popPose();
+
+
+                poseStack.pushPose();
+                // Apply the full bone chain in order
+                this.transform.translateAndRotate(poseStack);
+                this.lform.translateAndRotate(poseStack);
+                this.left_arm.translateAndRotate(poseStack);
+
+                leftArm.loadPose(pp);
+                if (leftSleeve != null) {
+                    leftSleeve.loadPose(pp);
+                }
+
+                leftArm.visible = true;
+                if (leftSleeve != null) {
+                    leftSleeve.visible = true;
+                }
+                leftArm.render(
+                        poseStack,
+                        consumer,
+                        light,
+                        OverlayTexture.NO_OVERLAY,
+                        r, g, b, 1.0F
+                );
+                if (leftSleeve != null) {
+                    leftSleeve.render(
+                            poseStack,
+                            consumer,
+                            light,
+                            OverlayTexture.NO_OVERLAY,
+                            r, g, b, 1.0F
+                    );
+                }
+                poseStack.popPose();
+
+            }
 //            Roundabout.LOGGER.info("Is Aiming:"+ipe.roundabout$getSnubnoseAim().isStarted());
 //            Roundabout.LOGGER.info("is Recoiling"+ipe.roundabout$getSnubnoseRecoil().isStarted());
         }

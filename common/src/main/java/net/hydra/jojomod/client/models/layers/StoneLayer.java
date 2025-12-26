@@ -78,13 +78,14 @@ public class StoneLayer<T extends LivingEntity, M extends HumanoidModel<T>, A ex
             } else if (curse == LocacacaCurseIndex.HEART){
                 rl = StandIcons.STONE_HEART;
             }
-            renderPart(poseStack,multiBufferSource,integ,this.transformedModel,1,1,1,null,
+            renderPart(poseStack,multiBufferSource,integ,this.transformedModel,1,1,1,
                     rl);
         }
     }
 
-    private void renderPart(
-           PoseStack poseStack, MultiBufferSource multiBufferSource, int integ, HumanoidModel<T> $$4,float $$6, float $$7, float $$8, @Nullable String $$9,
+    public static<T extends LivingEntity, M extends HumanoidModel<T>, A extends HumanoidModel<T>> void renderPart(
+           PoseStack poseStack, MultiBufferSource multiBufferSource, int integ, HumanoidModel<T> $$4,
+           float $$6, float $$7, float $$8,
            ResourceLocation RL
     ) {
         if (RL != null) {

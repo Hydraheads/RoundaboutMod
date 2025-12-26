@@ -641,8 +641,11 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
     }
     @Unique
+    @Override
     public Mob roundabout$getShapeShift(Player pe){
         if (pe instanceof AbstractClientPlayer lpe){
+            rdbt$loadModel(ShapeShifts.getShiftFromByte(((IPlayerEntity)pe).roundabout$getShapeShift()),
+                    lpe,((IPlayerEntity)pe));
             return ((IPlayerEntityAbstractClient)lpe).roundabout$getShapeShiftTemp();
         }
         return null;
@@ -686,6 +689,36 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
         return null;
     }
+
+    public void rdbt$loadModel(ShapeShifts shift, AbstractClientPlayer acl, IPlayerEntity ipe){
+
+        Mob shapeTemp = ((IPlayerEntityAbstractClient)ipe).roundabout$getShapeShiftTemp();
+        if (shift != ShapeShifts.PLAYER && shift != ShapeShifts.EERIE && shift != ShapeShifts.OVA) {
+            if (shift == ShapeShifts.ZOMBIE) {
+                if (Minecraft.getInstance().level != null && (!(shapeTemp instanceof Zombie))) {
+                    roundabout$setShapeShift(acl, EntityType.ZOMBIE.create(Minecraft.getInstance().level));
+                }
+            } else if (shift == ShapeShifts.VILLAGER) {
+                if (Minecraft.getInstance().level != null && (!(shapeTemp instanceof Villager))) {
+                    roundabout$setShapeShift(acl, roundabout$getVillager(Minecraft.getInstance().level, ipe));
+                }
+            } else if (shift == ShapeShifts.SKELETON) {
+                if (Minecraft.getInstance().level != null && (!(shapeTemp instanceof Skeleton))) {
+                    roundabout$setShapeShift(acl, roundabout$getSkeleton(Minecraft.getInstance().level, ipe));
+                }
+            } else if (shift == ShapeShifts.WITHER_SKELETON) {
+                if (Minecraft.getInstance().level != null && (!(shapeTemp instanceof WitherSkeleton))) {
+                    roundabout$setShapeShift(acl, roundabout$getWither(Minecraft.getInstance().level, ipe));
+                }
+            } else if (shift == ShapeShifts.STRAY) {
+                if (Minecraft.getInstance().level != null && (!(shapeTemp instanceof Stray))) {
+                    roundabout$setShapeShift(acl, roundabout$getStray(Minecraft.getInstance().level, ipe));
+                }
+            }
+        }
+    }
+
+
     @Unique
     private <T extends LivingEntity, M extends EntityModel<T>>boolean roundabout$renderHandX(PoseStack stack,
                                                                                           MultiBufferSource buffer,
