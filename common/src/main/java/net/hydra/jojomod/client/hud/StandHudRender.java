@@ -103,7 +103,7 @@ public class StandHudRender {
                 //context.drawTexture(ARROW_ICON,x,y-2,0, 0, textureWidth, textureHeight, textureWidth, textureHeight);
 
 
-                if (standOn){
+                if (standOn || FateTypes.isHuman(playerEntity)){
                     ((StandUser) playerEntity).roundabout$getStandPowers().renderIcons(context, x, y);
                 } else {
                     ((IFatePlayer) playerEntity).rdbt$getFatePowers().renderIcons(context, x, y);
