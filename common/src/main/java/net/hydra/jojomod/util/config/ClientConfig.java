@@ -189,7 +189,7 @@ public class ClientConfig implements Cloneable {
         public Boolean advancedTimeStopShader;
         @BooleanOption(group = "inherit", value = true)
         public Boolean simpleTimeStopShader;
-        @BooleanOption(group = "inherit", value = false)
+        @BooleanOption(group = "inherit", value = true)
         public Boolean alternateShaderEntry;
     }
     public static class AnubisSettings {

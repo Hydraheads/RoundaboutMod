@@ -2714,7 +2714,7 @@
   "config.roundabout.advancedTimeStopShader.desc": "Whether or not stopping time renders a bubble shader. Overrides simple shader when on.",
 
   "config.roundabout.alternateShaderEntry.name": "Alternate Shader Entry",
-  "config.roundabout.alternateShaderEntry.desc": "If the time stop shader does not work in your modpack, try turning this on, in case other mods break the other entry point. Note this does cause some visual oddities with the shader's ground lines and entities.",
+  "config.roundabout.alternateShaderEntry.desc": "If the time stop shader does not work in your modpack, try turning this on/off, in case other mods break the other entry point. Note this with this enabled, ground lines sweep through entities, otherwise they go underneath them.",
 
 
   "config.roundabout.walkingHeartMaxHits.name": "Max Planted Hits",
