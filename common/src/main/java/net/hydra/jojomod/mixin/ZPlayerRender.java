@@ -903,18 +903,10 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             if (visage.getItem() instanceof MaskItem MI) {
                 if (MI.visageData.isCharacterVisage()) {
                     if (((IPlayerModel)this.model).roundabout$getSlim() != MI.visageData.isSlim()){
-                        if (!((IPlayerEntityAbstractClient)player).roundabout$getSwitched()) {
-                            ((IPlayerEntityAbstractClient)player).roundabout$setOGModel(this.model);
-                            ((IPlayerEntityAbstractClient)player).roundabout$setSwitched(true);
+                        if (MI.visageData.isSlim() != originalArms){
                             model = roundabout$otherModel;
                         } else {
-                            ((IPlayerEntityAbstractClient)player).roundabout$setSwitched(false);
-                            PlayerModel imodel = ((IPlayerEntityAbstractClient)player).roundabout$getOGModel();
-                            if (imodel != null && ((IPlayerModel)this.model).roundabout$getSlim() == originalArms){
-                                model = imodel;
-                            } else {
-                                model = roundabout$mainModel;
-                            }
+                            model = roundabout$mainModel;
                         }
                     }
                     return;
@@ -922,13 +914,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             }
         }
         if (((IPlayerModel)this.model).roundabout$getSlim() != originalArms) {
-            ((IPlayerEntityAbstractClient)player).roundabout$setSwitched(false);
-            PlayerModel imodel = ((IPlayerEntityAbstractClient)player).roundabout$getOGModel();
-            if (imodel != null && ((IPlayerModel)this.model).roundabout$getSlim() == originalArms){
-                model = imodel;
-            } else {
-                model = roundabout$mainModel;
-            }
+            model = roundabout$mainModel;
         }
     }
     @Inject(method = "render(Lnet/minecraft/client/player/AbstractClientPlayer;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
