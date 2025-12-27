@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersMetallica;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.particles.ParticleOptions;
@@ -71,7 +72,7 @@ public class MetallicaClientRenderer {
         double interpY = Mth.lerp(partialTick, entity.yo, entity.getY());
         double interpZ = Mth.lerp(partialTick, entity.zo, entity.getZ());
 
-        if (entity.tickCount % 17 == 0 && ((IEntityAndData)entity).roundabout$getTrueInvisibility() <= 0) {
+        if (entity.tickCount % 17 == 0 && MainUtil.isUsingMetallica(entity)) {
             String[] types = {"metallica_a", "metallica_b", "metallica_c", "metallica_d"};
             for (String t : types) {
                 spawnParticleWithID(entity, t, interpX, interpY, interpZ);
