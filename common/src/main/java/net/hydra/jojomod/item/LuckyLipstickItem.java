@@ -33,6 +33,7 @@ public class LuckyLipstickItem extends Item implements Vanishable {
 
         if (!$$0.isClientSide) {
             if (!$$1.hasEffect(ModEffects.FACELESS)) {
+                ((StandUser) $$1).roundabout$setGlow((byte) 2);
                 ((LivingEntity) $$1).addEffect(new MobEffectInstance(ModEffects.CAPTURING_LOVE, 3600, 0, false, true), null);
             }
         }

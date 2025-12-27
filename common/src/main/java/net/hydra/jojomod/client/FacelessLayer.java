@@ -40,7 +40,8 @@ public class FacelessLayer<T extends LivingEntity, M extends HumanoidModel<T>, A
         if (var4 instanceof Zombie || var4 instanceof Player) {
             if (((IEntityAndData)var4).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
                 return;
-            if (var4.hasEffect(ModEffects.FACELESS)) {
+            byte glow = ((StandUser) var4).roundabout$getGlow();
+            if (glow == 1) {
                 ResourceLocation rl = StandIcons.NO_FACE_LAYER;
                 renderPart(poseStack, multiBufferSource, integ, livingEntityRenderer.getModel(), 1, 1, 1, null,
                         rl);

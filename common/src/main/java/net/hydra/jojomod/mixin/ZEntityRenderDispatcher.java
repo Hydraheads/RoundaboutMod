@@ -66,28 +66,31 @@ public abstract class ZEntityRenderDispatcher {
         }
 
         if (entity instanceof LivingEntity LE && !roundabout$recurse){
+            byte bt =  ((StandUser)LE).roundabout$getGlow();
+            if (bt > 0) {
                 int light2 = light;
-                if (LE.hasEffect(ModEffects.FACELESS)){
+                if (bt == 1) {
                     if (entity instanceof Zombie || entity instanceof Player) {
                         light2 = Math.min(light2, 11010048);
                     } else {
-                        light2 = (int)(((float)light2)/2);
+                        light2 = (int) (((float) light2) / 2);
                     }
                     /**
                      * Unfortunately, the light value decrease never seems to never work with ANY amount of variance, just /2
                      *
-                    Roundabout.LOGGER.info("1:"+light2);
-                    Roundabout.LOGGER.info("2:"+((float)light2));
-                    Roundabout.LOGGER.info("3:"+(((float)light2)*0.7F));
-                    Roundabout.LOGGER.info("4:"+Mth.floor(((float)light2)*0.7F));
+                     Roundabout.LOGGER.info("1:"+light2);
+                     Roundabout.LOGGER.info("2:"+((float)light2));
+                     Roundabout.LOGGER.info("3:"+(((float)light2)*0.7F));
+                     Roundabout.LOGGER.info("4:"+Mth.floor(((float)light2)*0.7F));
                      **/
-                } else if (LE.hasEffect(ModEffects.CAPTURING_LOVE)){
+                } else if (bt == 2){
                     light2 = 15728880;
                 }
                 roundabout$recurse = true;
-                render(entity,$$1,$$2,$$3,$$4,$$5,$$6,$$7,light2);
+                render(entity, $$1, $$2, $$3, $$4, $$5, $$6, $$7, light2);
                 roundabout$recurse = false;
                 ci.cancel();
+            }
         }
     }
 

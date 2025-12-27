@@ -44,7 +44,8 @@ public interface StandUser {
     void roundabout$setEmulator(LivingEntity le);
     boolean rdbt$tickEffectsBleedEdition(boolean grav);
     void rdbt$setRemoveLoveSafety(boolean yup);
-
+    void roundabout$setGlow(byte glow);
+    byte roundabout$getGlow();
     void roundabout$updateStandOutPosition(FollowingStandEntity passenger);
 
     int roundabout$increaseAirSupply(int $$0);
