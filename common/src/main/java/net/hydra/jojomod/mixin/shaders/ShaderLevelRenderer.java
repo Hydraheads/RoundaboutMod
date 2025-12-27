@@ -38,17 +38,19 @@ public class ShaderLevelRenderer {
         if (Minecraft.getInstance().player == null)
             return;
 
-        if (TimestopShaderManager.TIMESTOP_DEPTH_BUFFER != null) {
-            TimestopShaderManager.TIMESTOP_DEPTH_BUFFER.clear(Minecraft.ON_OSX);
-            TimestopShaderManager.TIMESTOP_DEPTH_BUFFER.copyDepthFrom(Minecraft.getInstance().getMainRenderTarget());
-            Minecraft.getInstance().getMainRenderTarget().bindWrite(false);
-        }
 
         ClientConfig clientConfig = ConfigManager.getClientConfig();
         if (clientConfig != null && clientConfig.timeStopSettings != null) {
             if (ConfigManager.getClientConfig().timeStopSettings.advancedTimeStopShader) {
                 ImmutableList<TimeStopInstance> listTs = ImmutableList.copyOf(((TimeStop) Minecraft.getInstance().player.level()).rdbt$getTimeStoppingEntitiesClient());
                 if (!listTs.isEmpty()) {
+
+                    if (TimestopShaderManager.TIMESTOP_DEPTH_BUFFER != null) {
+                        TimestopShaderManager.TIMESTOP_DEPTH_BUFFER.clear(Minecraft.ON_OSX);
+                        TimestopShaderManager.TIMESTOP_DEPTH_BUFFER.copyDepthFrom(Minecraft.getInstance().getMainRenderTarget());
+                        Minecraft.getInstance().getMainRenderTarget().bindWrite(false);
+                    }
+
                     for (int i = listTs.size() - 1; i >= 0; --i) {
                         TimeStopInstance tinstance = listTs.get(i);
                         if (tinstance != null) {
