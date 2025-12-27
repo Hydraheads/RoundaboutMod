@@ -31,7 +31,7 @@ public abstract class CinderellaVillager extends AbstractVillager implements Rep
             if (mi != null) {
                 int amp = mi.getAmplifier();
                 for (MerchantOffer $$5 : this.getOffers()) {
-                    double $$6 = 0.15 + 0.1 * (double) amp;
+                    double $$6 = 0.12 + 0.1 * (double) amp;
                     int $$7 = (int) Math.floor($$6 * (double) $$5.getBaseCostA().getCount());
                     $$5.addToSpecialPriceDiff(Math.max($$7, 1));
                 }
@@ -41,7 +41,7 @@ public abstract class CinderellaVillager extends AbstractVillager implements Rep
             if (mi != null) {
                 int amp = mi.getAmplifier();
                 for (MerchantOffer $$5 : this.getOffers()) {
-                    double $$6 = 0.15 + 0.1 * (double) amp;
+                    double $$6 = 0.12 + 0.1 * (double) amp;
                     int $$7 = (int) Math.floor($$6 * (double) $$5.getBaseCostA().getCount());
                     $$5.addToSpecialPriceDiff(-Math.max($$7, 1));
                 }
