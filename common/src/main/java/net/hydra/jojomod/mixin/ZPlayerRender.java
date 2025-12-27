@@ -71,11 +71,14 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         super($$0, $$1, $$2);
     }
 
+    public boolean originalArms;
+
     @Inject(method="<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Z)V", at = @At(value = "RETURN"))
-    private void roundaboutRenderKnives(EntityRendererProvider.Context $$0, boolean $$1, CallbackInfo ci) {
+    private void roundabout$initRend(EntityRendererProvider.Context $$0, boolean $$1, CallbackInfo ci) {
         /**Access to slim and not slim models simultaneously*/
         roundabout$otherModel = new PlayerModel<>($$0.bakeLayer($$1 ? ModelLayers.PLAYER : ModelLayers.PLAYER_SLIM), !$$1);
         roundabout$mainModel = this.model;
+        originalArms = $$1;
     }
     @Unique
     protected PlayerModel roundabout$otherModel;
@@ -906,16 +909,26 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                             model = roundabout$otherModel;
                         } else {
                             ((IPlayerEntityAbstractClient)player).roundabout$setSwitched(false);
-                            model = ((IPlayerEntityAbstractClient)player).roundabout$getOGModel();
+                            PlayerModel imodel = ((IPlayerEntityAbstractClient)player).roundabout$getOGModel();
+                            if (imodel != null && ((IPlayerModel)this.model).roundabout$getSlim() == originalArms){
+                                model = imodel;
+                            } else {
+                                model = roundabout$mainModel;
+                            }
                         }
                     }
                     return;
                 }
             }
         }
-        if (((IPlayerEntityAbstractClient)player).roundabout$getSwitched()) {
+        if (((IPlayerModel)this.model).roundabout$getSlim() != originalArms) {
             ((IPlayerEntityAbstractClient)player).roundabout$setSwitched(false);
-            model = ((IPlayerEntityAbstractClient)player).roundabout$getOGModel();
+            PlayerModel imodel = ((IPlayerEntityAbstractClient)player).roundabout$getOGModel();
+            if (imodel != null && ((IPlayerModel)this.model).roundabout$getSlim() == originalArms){
+                model = imodel;
+            } else {
+                model = roundabout$mainModel;
+            }
         }
     }
     @Inject(method = "render(Lnet/minecraft/client/player/AbstractClientPlayer;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
