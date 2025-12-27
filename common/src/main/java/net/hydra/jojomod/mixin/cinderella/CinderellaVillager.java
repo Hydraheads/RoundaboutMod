@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin.cinderella;
 import net.hydra.jojomod.event.ModEffects;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ReputationEventHandler;
 import net.minecraft.world.entity.ai.gossip.GossipContainer;
@@ -26,24 +27,26 @@ public abstract class CinderellaVillager extends AbstractVillager implements Rep
 
     @Inject(method = "updateSpecialPrices(Lnet/minecraft/world/entity/player/Player;)V", at = @At(value = "TAIL"),cancellable = true)
     private void roundabout$updateSpecialPrices(Player $$0, CallbackInfo ci) {
-        if ($$0.hasEffect(ModEffects.FACELESS)) {
-            MobEffectInstance mi = $$0.getEffect(ModEffects.FACELESS);
-            if (mi != null) {
-                int amp = mi.getAmplifier();
-                for (MerchantOffer $$5 : this.getOffers()) {
-                    double $$6 = 0.12 + 0.1 * (double) amp;
-                    int $$7 = (int) Math.floor($$6 * (double) $$5.getBaseCostA().getCount());
-                    $$5.addToSpecialPriceDiff(Math.max($$7, 1));
+        if (!$$0.hasEffect(MobEffects.HERO_OF_THE_VILLAGE)) {
+            if ($$0.hasEffect(ModEffects.FACELESS)) {
+                MobEffectInstance mi = $$0.getEffect(ModEffects.FACELESS);
+                if (mi != null) {
+                    int amp = mi.getAmplifier();
+                    for (MerchantOffer $$5 : this.getOffers()) {
+                        double $$6 = 0.14 + 0.1 * (double) amp;
+                        int $$7 = (int) Math.floor($$6 * (double) $$5.getBaseCostA().getCount());
+                        $$5.addToSpecialPriceDiff(Math.max($$7, 1));
+                    }
                 }
-            }
-        } else if ($$0.hasEffect(ModEffects.CAPTURING_LOVE)) {
-            MobEffectInstance mi = $$0.getEffect(ModEffects.CAPTURING_LOVE);
-            if (mi != null) {
-                int amp = mi.getAmplifier();
-                for (MerchantOffer $$5 : this.getOffers()) {
-                    double $$6 = 0.12 + 0.1 * (double) amp;
-                    int $$7 = (int) Math.floor($$6 * (double) $$5.getBaseCostA().getCount());
-                    $$5.addToSpecialPriceDiff(-Math.max($$7, 1));
+            } else if ($$0.hasEffect(ModEffects.CAPTURING_LOVE)) {
+                MobEffectInstance mi = $$0.getEffect(ModEffects.CAPTURING_LOVE);
+                if (mi != null) {
+                    int amp = mi.getAmplifier();
+                    for (MerchantOffer $$5 : this.getOffers()) {
+                        double $$6 = 0.14 + 0.1 * (double) amp;
+                        int $$7 = (int) Math.floor($$6 * (double) $$5.getBaseCostA().getCount());
+                        $$5.addToSpecialPriceDiff(-Math.max($$7, 1));
+                    }
                 }
             }
         }
