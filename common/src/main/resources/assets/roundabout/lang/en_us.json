@@ -2713,6 +2713,10 @@
   "config.roundabout.advancedTimeStopShader.name": "Advanced Shader",
   "config.roundabout.advancedTimeStopShader.desc": "Whether or not stopping time renders a bubble shader. Overrides simple shader when on.",
 
+  "config.roundabout.alternateShaderEntry.name": "Alternate Shader Entry",
+  "config.roundabout.alternateShaderEntry.desc": "If the time stop shader does not work in your modpack, try turning this on, in case other mods break the other entry point. Note this does cause some visual oddities with the shader's ground lines and entities.",
+
+
   "config.roundabout.walkingHeartMaxHits.name": "Max Planted Hits",
   "config.roundabout.walkingHeartMaxHits.desc": "How many hits can you take in heel planted/wall walking mode before you are knocked out of that state.",
   "config.roundabout.walkingHeartCooldownPerHit.name": "Cooldown Per Hit",
