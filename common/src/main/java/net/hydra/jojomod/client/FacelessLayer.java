@@ -27,13 +27,11 @@ public class FacelessLayer<T extends LivingEntity, M extends HumanoidModel<T>, A
 
     private final LivingEntityRenderer<T, M> livingEntityRenderer;
 
-    private M transformedModel;
 
     public FacelessLayer(EntityRendererProvider.Context context, LivingEntityRenderer<T, M> livingEntityRenderer) {
         super(livingEntityRenderer);
         this.dispatcher = context.getEntityRenderDispatcher();
         this.livingEntityRenderer = livingEntityRenderer;
-        this.transformedModel = livingEntityRenderer.getModel();
     }
     @Override
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int integ, T var4,
@@ -44,7 +42,7 @@ public class FacelessLayer<T extends LivingEntity, M extends HumanoidModel<T>, A
                 return;
             if (var4.hasEffect(ModEffects.FACELESS)) {
                 ResourceLocation rl = StandIcons.NO_FACE_LAYER;
-                renderPart(poseStack, multiBufferSource, integ, this.transformedModel, 1, 1, 1, null,
+                renderPart(poseStack, multiBufferSource, integ, livingEntityRenderer.getModel(), 1, 1, 1, null,
                         rl);
             }
 

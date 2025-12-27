@@ -38,7 +38,6 @@ public class StoneLayer<T extends LivingEntity, M extends HumanoidModel<T>, A ex
         super(livingEntityRenderer);
         this.dispatcher = context.getEntityRenderDispatcher();
         this.livingEntityRenderer = livingEntityRenderer;
-        this.transformedModel = livingEntityRenderer.getModel();
     }
 
 
