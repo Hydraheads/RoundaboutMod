@@ -32,16 +32,17 @@ public class ScopeGameRenderer {
             FatePowers fp = ((IFatePlayer)player).rdbt$getFatePowers();
             float zoomMod = fp.zoomMod();
 
+
+            float zoomMod2 = zoomMod - 1;
+            zoomMod2*=Minecraft.getInstance().options.fovEffectScale().get();
+            zoomMod = 1+zoomMod2;
+
             if (player.getUseItem().getItem() instanceof JackalRifleItem) {
                 AbstractClientPlayer abstractclientplayer = (AbstractClientPlayer) this.minecraft.getCameraEntity();
                 if (abstractclientplayer != null && Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
                     zoomMod *= 0.2F;
                 }
             }
-
-            float zoomMod2 = zoomMod - 1;
-            zoomMod2*=Minecraft.getInstance().options.fovEffectScale().get();
-            zoomMod = 1+zoomMod2;
             if (SP.scopeLevel > 0 || zoomMod != 1) {
                 ci.cancel();
 
