@@ -23,7 +23,7 @@
     },
     "S":
     {
-      "item": "minecraft:oak_stairs"
+      "tag": "minecraft:wooden_stairs"
     }
   },
   "pattern": [
