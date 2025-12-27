@@ -14,7 +14,6 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
@@ -520,7 +519,7 @@ public class PowersMetallica extends NewDashPreset {
 
             if (clientFieldExpansion > 0.0f) {
                 boolean shouldRenderParticles = false;
-                Player localPlayer = Minecraft.getInstance().player;
+                Player localPlayer = ClientUtil.getPlayer();
                 if (localPlayer == self) shouldRenderParticles = true;
                 else if (localPlayer != null && localPlayer.distanceTo(self) < 6.0) shouldRenderParticles = true;
 
