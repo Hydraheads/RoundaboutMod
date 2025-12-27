@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IHumanoidModelAccess;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -41,8 +42,7 @@ public class FacelessLayer<T extends LivingEntity, M extends HumanoidModel<T>, A
         if (var4 instanceof Zombie || var4 instanceof Player) {
             if (((IEntityAndData)var4).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
                 return;
-            byte glow = ((StandUser) var4).roundabout$getGlow();
-            if (glow == 1) {
+            if (var4.hasEffect(ModEffects.FACELESS)) {
                 ResourceLocation rl = StandIcons.NO_FACE_LAYER;
                 renderPart(poseStack, multiBufferSource, integ, this.transformedModel, 1, 1, 1, null,
                         rl);

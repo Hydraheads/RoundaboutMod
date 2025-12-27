@@ -278,9 +278,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private static final EntityDataAccessor<Byte> ROUNDABOUT$ON_STAND_FIRE = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.BYTE);
     @Unique
-    private static final EntityDataAccessor<Byte> ROUNDABOUT$GLOW = SynchedEntityData.defineId(LivingEntity.class,
-            EntityDataSerializers.BYTE);
-    @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$BLEED_LEVEL = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.INT);
     @Unique
@@ -527,16 +524,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 this.roundabout$setOnlyBleeding(onlyBleeding);
             }
 
-            byte glow = 0;
-            if (this.hasEffect(ModEffects.FACELESS)) {
-                glow = 1;
-            } else if (this.hasEffect(ModEffects.CAPTURING_LOVE)) {
-                glow = 2;
-            }
-            if (this.roundabout$getGlow() != glow) {
-                this.roundabout$setGlow(glow);
-            }
-
             if (this.getHealth() > this.getMaxHealth()) {
                 this.setHealth(this.getMaxHealth());
             }
@@ -563,7 +550,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         );
             }
         }
-        if (this.roundabout$getGlow() == 2){
+        if (this.hasEffect(ModEffects.CAPTURING_LOVE)){
             if (this.tickCount %2 == 0) {
                 this.level().addParticle(ModParticles.CINDERELLA_GLOW, this.getRandomX(0.6D), this.getRandomY(), this.getRandomZ(0.6D), 0.0D, 0.0D, 0.0D);
             }
@@ -799,7 +786,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         if (roundabout$prepUglyFace) {
             roundabout$prepUglyFace = false;
-            roundabout$setGlow((byte) 2);
             this.removeEffect(ModEffects.CAPTURING_LOVE);
             this.addEffect(new MobEffectInstance(ModEffects.FACELESS, 3600, 0, false, true));
         }
@@ -1790,26 +1776,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
-    /**Not to be confused with glowing, this is for the cinderella lipstick and lets
-     * entities render with different brightness, 1= darker and 2 = brighter
-     * This data can later be reused if something else needs to render and can
-     * overtake this*/
-    @Unique
-    @Override
-    public void roundabout$setGlow(byte glow) {
-        if (!(this.level().isClientSide)) {
-            this.getEntityData().set(ROUNDABOUT$GLOW, glow);
-        }
-    }
-    @Unique
-    @Override
-    public byte roundabout$getGlow() {
-        if (getEntityData().hasItem(ROUNDABOUT$GLOW)) {
-            return this.getEntityData().get(ROUNDABOUT$GLOW);
-        } else {
-            return 0;
-        }
-    }
     @Unique
     @Override
     public boolean roundabout$getOnlyBleeding() {
@@ -2897,7 +2863,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$LOCACACA_CURSE, (byte) -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ON_STAND_FIRE, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$BLEED_LEVEL, -1);
-            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GLOW, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BUBBLE_ENCASED, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$POSSESSION_TIME, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BOUND_TO, -1);

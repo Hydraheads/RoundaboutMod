@@ -923,7 +923,6 @@ public class MainUtil {
                     return;
                 }
             }
-            ((StandUser)entity).roundabout$setGlow((byte) 1);
             ((LivingEntity)entity).addEffect(new MobEffectInstance(ModEffects.FACELESS, ticks, power), user);
         }
     }

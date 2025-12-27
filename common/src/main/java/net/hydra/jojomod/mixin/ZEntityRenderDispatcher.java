@@ -9,6 +9,7 @@ import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.NoHitboxRendering;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.SavedSecond;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.StandFireType;
@@ -65,10 +66,8 @@ public abstract class ZEntityRenderDispatcher {
         }
 
         if (entity instanceof LivingEntity LE && !roundabout$recurse){
-            byte bt =  ((StandUser)LE).roundabout$getGlow();
-            if (bt > 0){
                 int light2 = light;
-                if (bt ==1){
+                if (LE.hasEffect(ModEffects.FACELESS)){
                     if (entity instanceof Zombie || entity instanceof Player) {
                         light2 = Math.min(light2, 11010048);
                     } else {
@@ -82,14 +81,13 @@ public abstract class ZEntityRenderDispatcher {
                     Roundabout.LOGGER.info("3:"+(((float)light2)*0.7F));
                     Roundabout.LOGGER.info("4:"+Mth.floor(((float)light2)*0.7F));
                      **/
-                } else if (bt == 2){
+                } else if (LE.hasEffect(ModEffects.CAPTURING_LOVE)){
                     light2 = 15728880;
                 }
                 roundabout$recurse = true;
                 render(entity,$$1,$$2,$$3,$$4,$$5,$$6,$$7,light2);
                 roundabout$recurse = false;
                 ci.cancel();
-            }
         }
     }
 
