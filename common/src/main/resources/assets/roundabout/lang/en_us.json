@@ -2606,7 +2606,7 @@
   "config.roundabout.miscellaneousSettings.name": "Miscellaneous",
   "config.roundabout.vampireSettings.name": "Vampire",
   "config.roundabout.standLevelingSettings.name": "Stand Leveling",
-  "config.roundabout.generalStandSettings.name": "General Stand",
+  "config.roundabout.anubisSettings.name": "Anubis",
   "config.roundabout.softAndWetSettings.name": "Soft And Wet",
   "config.roundabout.magiciansRedSettings.name": "Magician's Red",
   "config.roundabout.walkingHeartSettings.name": "Walking Heart",
@@ -2712,6 +2712,10 @@
   "config.roundabout.simpleTimeStopShader.desc": "Whether or not stopping time renders a simple shader.",
   "config.roundabout.advancedTimeStopShader.name": "Advanced Shader",
   "config.roundabout.advancedTimeStopShader.desc": "Whether or not stopping time renders a bubble shader. Overrides simple shader when on.",
+
+  "config.roundabout.alternateShaderEntry.name": "Alternate Shader Entry",
+  "config.roundabout.alternateShaderEntry.desc": "If the time stop shader does not work in your modpack, try turning this on/off, in case other mods break the other entry point. Note this with this enabled, ground lines sweep through entities, otherwise they go underneath them.",
+
 
   "config.roundabout.walkingHeartMaxHits.name": "Max Planted Hits",
   "config.roundabout.walkingHeartMaxHits.desc": "How many hits can you take in heel planted/wall walking mode before you are knocked out of that state.",

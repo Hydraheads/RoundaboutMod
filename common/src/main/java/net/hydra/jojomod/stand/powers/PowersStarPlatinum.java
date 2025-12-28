@@ -9,10 +9,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.RattDartEntity;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
-import net.hydra.jojomod.entity.stand.JusticeEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumBaseballEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
@@ -871,6 +868,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public Vec3 getTSColor(){
         byte skin = ((StandUser) self).roundabout$getStandSkin();
+        if (skin == StarPlatinumEntity.OVA_SKIN)
+            return new Vec3(1.7f, 0.4f, 0.4f);
         if (skin == StarPlatinumEntity.ARCADE || skin == StarPlatinumEntity.ARCADE_2)
             return Vec3.ZERO;
         if (skin == StarPlatinumEntity.MANGA_SKIN || skin == StarPlatinumEntity.MANGA_PURPLE_SKIN

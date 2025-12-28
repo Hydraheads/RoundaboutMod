@@ -163,6 +163,8 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
                     ipe.roundabout$setFate(((IPlayerEntity) $$0).roundabout$getFate());
                 }
             }
+
+            ipe.rdbt$setVampireData(((IPlayerEntity) $$0).rdbt$getVampireData());
         }
     }
 

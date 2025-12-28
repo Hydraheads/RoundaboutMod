@@ -126,7 +126,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public Vec3 getTSColor(){
         byte skin = ((StandUser) self).roundabout$getStandSkin();
         if (skin == TheWorldEntity.OVA_SKIN)
-            return new Vec3(1.5f, 0.5f, 0.5f);
+            return new Vec3(1.7f, 0.4f, 0.4f);
         if (skin == TheWorldEntity.THE_NETHER)
             return new Vec3(1.5f, 1.0f, 0.5f);
         if (skin == TheWorldEntity.OVER_HEAVEN)

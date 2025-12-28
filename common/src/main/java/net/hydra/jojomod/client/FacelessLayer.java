@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IHumanoidModelAccess;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -26,13 +27,11 @@ public class FacelessLayer<T extends LivingEntity, M extends HumanoidModel<T>, A
 
     private final LivingEntityRenderer<T, M> livingEntityRenderer;
 
-    private M transformedModel;
 
     public FacelessLayer(EntityRendererProvider.Context context, LivingEntityRenderer<T, M> livingEntityRenderer) {
         super(livingEntityRenderer);
         this.dispatcher = context.getEntityRenderDispatcher();
         this.livingEntityRenderer = livingEntityRenderer;
-        this.transformedModel = livingEntityRenderer.getModel();
     }
     @Override
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int integ, T var4,
@@ -44,7 +43,7 @@ public class FacelessLayer<T extends LivingEntity, M extends HumanoidModel<T>, A
             byte glow = ((StandUser) var4).roundabout$getGlow();
             if (glow == 1) {
                 ResourceLocation rl = StandIcons.NO_FACE_LAYER;
-                renderPart(poseStack, multiBufferSource, integ, this.transformedModel, 1, 1, 1, null,
+                renderPart(poseStack, multiBufferSource, integ, livingEntityRenderer.getModel(), 1, 1, 1, null,
                         rl);
             }
 

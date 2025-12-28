@@ -19,6 +19,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersMetallica;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -63,14 +64,14 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
     @Inject(method = "isBodyVisible", at = @At("HEAD"), cancellable = true)
     private void roundabout$forceBodyVisible(T entity, CallbackInfoReturnable<Boolean> cir) {
-        if (entity instanceof IEntityAndData data && data.roundabout$getTrueInvisibility() > 0) {
+        if (entity instanceof IEntityAndData data && MainUtil.isUsingMetallica(entity)) {
             cir.setReturnValue(true);
         }
     }
 
     @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$applyInvisibilityFade(T entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight, CallbackInfo ci) {
-        if (entity instanceof IEntityAndData data && data.roundabout$getTrueInvisibility() > 0) {
+        if (entity instanceof IEntityAndData data && MainUtil.isUsingMetallica(entity)) {
             Minecraft mc = Minecraft.getInstance();
             if (mc.cameraEntity != null) {
                 double dist = entity.distanceTo(mc.cameraEntity);
@@ -89,7 +90,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
     @Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
     private void roundabout$forceTranslucent(T entity, boolean bodyVisible, boolean translucent, boolean glowing, CallbackInfoReturnable<RenderType> cir) {
-        if (entity instanceof IEntityAndData data && data.roundabout$getTrueInvisibility() > 0) {
+        if (entity instanceof IEntityAndData data && MainUtil.isUsingMetallica(entity)) {
             ResourceLocation texture = this.getTextureLocation(entity);
             cir.setReturnValue(RenderType.entityTranslucentCull(texture));
         }
@@ -111,7 +112,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
             return;
         }
 
-        if (entity instanceof IEntityAndData data && data.roundabout$getTrueInvisibility() > 0) {
+        if (entity instanceof IEntityAndData data && MainUtil.isUsingMetallica(entity)) {
             if (!ClientUtil.getInvisibilityVision()) {
                 cir.setReturnValue(false);
                 cir.cancel();

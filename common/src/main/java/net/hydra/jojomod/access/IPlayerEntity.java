@@ -57,6 +57,7 @@ public interface IPlayerEntity {
     void rdbt$setCooldownQuery(boolean query);
 
 
+    void rdbt$setVampireData(VampireData vdata);
     VampireData rdbt$getVampireData();
     void roundabout$setShapeShiftExtraData(byte level);
     byte roundabout$getShapeShift();

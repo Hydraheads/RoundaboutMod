@@ -33,6 +33,7 @@ import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersMetallica;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -915,6 +916,15 @@ public class MainUtil {
         return !level.noCollision(player, headSpace);
     }
 
+    public static boolean isUsingMetallica(Entity ent){
+        if (ent instanceof LivingEntity LE && ((StandUser)ent).roundabout$getStandPowers() instanceof PowersMetallica PM){
+            if (PM.hasStandActive(LE)){
+                return true;
+            }
+        }
+
+        return false;
+    }
     public static void makeFaceless(Entity entity, int ticks, int power, Entity user){
         if (entity instanceof LivingEntity LE){
             if (((LivingEntity)entity).hasEffect(ModEffects.FACELESS)){

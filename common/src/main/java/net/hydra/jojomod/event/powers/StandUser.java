@@ -44,7 +44,8 @@ public interface StandUser {
     void roundabout$setEmulator(LivingEntity le);
     boolean rdbt$tickEffectsBleedEdition(boolean grav);
     void rdbt$setRemoveLoveSafety(boolean yup);
-
+    void roundabout$setGlow(byte glow);
+    byte roundabout$getGlow();
     void roundabout$updateStandOutPosition(FollowingStandEntity passenger);
 
     int roundabout$increaseAirSupply(int $$0);
@@ -91,8 +92,6 @@ public interface StandUser {
     int roundabout$getAttackTimeDuring();
     void roundabout$setBleedLevel(int bleedLevel);
     int roundabout$getBleedLevel();
-    byte roundabout$getGlow();
-    void roundabout$setGlow(byte glowingSkin);
     boolean roundabout$getOnlyBleeding();
     void roundabout$setOnlyBleeding(boolean only);
     byte roundabout$getActivePowerPhase();

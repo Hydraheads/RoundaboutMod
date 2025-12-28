@@ -71,11 +71,14 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         super($$0, $$1, $$2);
     }
 
+    public boolean originalArms;
+
     @Inject(method="<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Z)V", at = @At(value = "RETURN"))
-    private void roundaboutRenderKnives(EntityRendererProvider.Context $$0, boolean $$1, CallbackInfo ci) {
+    private void roundabout$initRend(EntityRendererProvider.Context $$0, boolean $$1, CallbackInfo ci) {
         /**Access to slim and not slim models simultaneously*/
         roundabout$otherModel = new PlayerModel<>($$0.bakeLayer($$1 ? ModelLayers.PLAYER : ModelLayers.PLAYER_SLIM), !$$1);
         roundabout$mainModel = this.model;
+        originalArms = $$1;
     }
     @Unique
     protected PlayerModel roundabout$otherModel;
@@ -641,8 +644,11 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
     }
     @Unique
+    @Override
     public Mob roundabout$getShapeShift(Player pe){
         if (pe instanceof AbstractClientPlayer lpe){
+            rdbt$loadModel(ShapeShifts.getShiftFromByte(((IPlayerEntity)pe).roundabout$getShapeShift()),
+                    lpe,((IPlayerEntity)pe));
             return ((IPlayerEntityAbstractClient)lpe).roundabout$getShapeShiftTemp();
         }
         return null;
@@ -686,6 +692,36 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
         return null;
     }
+
+    public void rdbt$loadModel(ShapeShifts shift, AbstractClientPlayer acl, IPlayerEntity ipe){
+
+        Mob shapeTemp = ((IPlayerEntityAbstractClient)ipe).roundabout$getShapeShiftTemp();
+        if (shift != ShapeShifts.PLAYER && shift != ShapeShifts.EERIE && shift != ShapeShifts.OVA) {
+            if (shift == ShapeShifts.ZOMBIE) {
+                if (Minecraft.getInstance().level != null && (!(shapeTemp instanceof Zombie))) {
+                    roundabout$setShapeShift(acl, EntityType.ZOMBIE.create(Minecraft.getInstance().level));
+                }
+            } else if (shift == ShapeShifts.VILLAGER) {
+                if (Minecraft.getInstance().level != null && (!(shapeTemp instanceof Villager))) {
+                    roundabout$setShapeShift(acl, roundabout$getVillager(Minecraft.getInstance().level, ipe));
+                }
+            } else if (shift == ShapeShifts.SKELETON) {
+                if (Minecraft.getInstance().level != null && (!(shapeTemp instanceof Skeleton))) {
+                    roundabout$setShapeShift(acl, roundabout$getSkeleton(Minecraft.getInstance().level, ipe));
+                }
+            } else if (shift == ShapeShifts.WITHER_SKELETON) {
+                if (Minecraft.getInstance().level != null && (!(shapeTemp instanceof WitherSkeleton))) {
+                    roundabout$setShapeShift(acl, roundabout$getWither(Minecraft.getInstance().level, ipe));
+                }
+            } else if (shift == ShapeShifts.STRAY) {
+                if (Minecraft.getInstance().level != null && (!(shapeTemp instanceof Stray))) {
+                    roundabout$setShapeShift(acl, roundabout$getStray(Minecraft.getInstance().level, ipe));
+                }
+            }
+        }
+    }
+
+
     @Unique
     private <T extends LivingEntity, M extends EntityModel<T>>boolean roundabout$renderHandX(PoseStack stack,
                                                                                           MultiBufferSource buffer,
@@ -867,22 +903,18 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             if (visage.getItem() instanceof MaskItem MI) {
                 if (MI.visageData.isCharacterVisage()) {
                     if (((IPlayerModel)this.model).roundabout$getSlim() != MI.visageData.isSlim()){
-                        if (!((IPlayerEntityAbstractClient)player).roundabout$getSwitched()) {
-                            ((IPlayerEntityAbstractClient)player).roundabout$setOGModel(this.model);
-                            ((IPlayerEntityAbstractClient)player).roundabout$setSwitched(true);
+                        if (MI.visageData.isSlim() != originalArms){
                             model = roundabout$otherModel;
                         } else {
-                            ((IPlayerEntityAbstractClient)player).roundabout$setSwitched(false);
-                            model = ((IPlayerEntityAbstractClient)player).roundabout$getOGModel();
+                            model = roundabout$mainModel;
                         }
                     }
                     return;
                 }
             }
         }
-        if (((IPlayerEntityAbstractClient)player).roundabout$getSwitched()) {
-            ((IPlayerEntityAbstractClient)player).roundabout$setSwitched(false);
-            model = ((IPlayerEntityAbstractClient)player).roundabout$getOGModel();
+        if (((IPlayerModel)this.model).roundabout$getSlim() != originalArms) {
+            model = roundabout$mainModel;
         }
     }
     @Inject(method = "render(Lnet/minecraft/client/player/AbstractClientPlayer;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",

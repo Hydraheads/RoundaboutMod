@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -1353,7 +1354,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         compoundtag.putFloat("hairColorY",rdbt$getHairColorY());
         compoundtag.putFloat("hairColorZ",rdbt$getHairColorZ());
         $$0.put("roundabout",compoundtag);
-        if (!ClientNetworking.getAppropriateConfig().vampireSettings.vampireLeveling) {
+        if (ClientNetworking.getAppropriateConfig().vampireSettings.vampireLeveling) {
             CompoundTag vampire = $$0.getCompound("roundaboutVampire");
             vampire.putInt("vampireLevel", rdbt$vampireData.vampireLevel);
             vampire.putInt("bloodExp", rdbt$vampireData.bloodExp);
@@ -1388,6 +1389,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Override
     public VampireData rdbt$getVampireData(){
         return rdbt$vampireData;
+    }
+    @Override
+    public void rdbt$setVampireData(VampireData vdata){
+        rdbt$vampireData = vdata;
     }
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "TAIL"))
     public void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci){
@@ -1445,7 +1450,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
 
 
-        if (!ClientNetworking.getAppropriateConfig().vampireSettings.vampireLeveling) {
+        if (ClientNetworking.getAppropriateConfig().vampireSettings.vampireLeveling) {
             CompoundTag vampire = $$0.getCompound("roundaboutVampire");
             if (vampire.contains("vampireLevel")) {
                 rdbt$vampireData.vampireLevel = vampire.getInt("vampireLevel");

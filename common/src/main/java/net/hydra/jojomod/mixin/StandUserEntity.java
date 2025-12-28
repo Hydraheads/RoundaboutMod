@@ -310,6 +310,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$COMBAT_MODE = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.BOOLEAN);
 
+
     @Unique
     private StandPowers roundabout$Powers;
     @Unique
@@ -898,6 +899,26 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     }
                 }
             }
+        }
+    }
+    /**Not to be confused with glowing, this is for the cinderella lipstick and lets
+     * entities render with different brightness, 1= darker and 2 = brighter
+     * This data can later be reused if something else needs to render and can
+     * overtake this*/
+    @Unique
+    @Override
+    public void roundabout$setGlow(byte glow) {
+        if (!(this.level().isClientSide)) {
+            this.getEntityData().set(ROUNDABOUT$GLOW, glow);
+        }
+    }
+    @Unique
+    @Override
+    public byte roundabout$getGlow() {
+        if (getEntityData().hasItem(ROUNDABOUT$GLOW)) {
+            return this.getEntityData().get(ROUNDABOUT$GLOW);
+        } else {
+            return 0;
         }
     }
     @Unique
@@ -1790,26 +1811,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
-    /**Not to be confused with glowing, this is for the cinderella lipstick and lets
-     * entities render with different brightness, 1= darker and 2 = brighter
-     * This data can later be reused if something else needs to render and can
-     * overtake this*/
-    @Unique
-    @Override
-    public void roundabout$setGlow(byte glow) {
-        if (!(this.level().isClientSide)) {
-            this.getEntityData().set(ROUNDABOUT$GLOW, glow);
-        }
-    }
-    @Unique
-    @Override
-    public byte roundabout$getGlow() {
-        if (getEntityData().hasItem(ROUNDABOUT$GLOW)) {
-            return this.getEntityData().get(ROUNDABOUT$GLOW);
-        } else {
-            return 0;
-        }
-    }
     @Unique
     @Override
     public boolean roundabout$getOnlyBleeding() {
