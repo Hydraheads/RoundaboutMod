@@ -309,8 +309,8 @@ public class PowersAnubis extends NewDashPreset {
             for (Vec3 vec : memory.rots) {
                 ysum += vec.z;
             }
-            Roundabout.LOGGER.info(""+ysum);
-            Roundabout.LOGGER.info(memory.rots.toString());
+        //    Roundabout.LOGGER.info(""+ysum);
+       //     Roundabout.LOGGER.info(memory.rots.toString());
         }
 
 
@@ -465,7 +465,7 @@ public class PowersAnubis extends NewDashPreset {
             }
         }
 
-        Roundabout.LOGGER.info(" CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax());
+    //    Roundabout.LOGGER.info(" CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax());
         StandUser SU = this.getStandUserSelf();
         if (SU.roundabout$getStandSkin() == (byte) 0) {SU.roundabout$setStandSkin((byte)1);}
 
@@ -1533,7 +1533,6 @@ public class PowersAnubis extends NewDashPreset {
 
     @Override
     public boolean setPowerNone() {
-        Roundabout.LOGGER.info(">>> "+this.getActivePower());
         return super.setPowerNone();
     }
 
