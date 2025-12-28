@@ -21,29 +21,27 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
 public enum PowerTypes {
-    NONE((byte) 0, new GeneralPowers()),
-    STAND((byte) 1, new GeneralPowers()),
-    VAMPIRE((byte) 2, new GeneralPowers()),
-    HAMON((byte) 3, new GeneralPowers()),
-    SPIN((byte) 4, new GeneralPowers());
+    NONE(new GeneralPowers()),
+    STAND(new GeneralPowers()),
+    VAMPIRE(new GeneralPowers()),
+    HAMON(new GeneralPowers()),
+    SPIN(new GeneralPowers());
 
-    public final byte id;
     public final GeneralPowers generalPowers;
 
     public static PowerTypes getPowerFromByte(byte bt){
-        if (bt == VAMPIRE.id)
+        if (bt == VAMPIRE.ordinal())
             return VAMPIRE;
-        if (bt == HAMON.id)
+        if (bt == HAMON.ordinal())
             return HAMON;
-        if (bt == SPIN.id)
+        if (bt == SPIN.ordinal())
             return SPIN;
-        if (bt == STAND.id)
+        if (bt == STAND.ordinal())
             return STAND;
         return NONE;
     }
 
-    private PowerTypes(byte $$0, GeneralPowers $$1) {
-        this.id = $$0;
+    private PowerTypes(GeneralPowers $$1) {
         this.generalPowers = $$1;
     }
 
@@ -56,21 +54,21 @@ public enum PowerTypes {
 
     public static void initializeStandPower(Entity ent){
         if (ent instanceof Player pl){
-            if (getPowerType(pl) == NONE.id)
-                ((IPlayerEntity)pl).roundabout$setPower(STAND.id);
+            if (getPowerType(pl) == NONE.ordinal())
+                ((IPlayerEntity)pl).roundabout$setPower((byte) STAND.ordinal());
         }
     }
     public static void forceInitializeStandPower(Entity ent){
         if (ent instanceof Player pl){
-            if (getPowerType(pl) == NONE.id)
-                ((IPlayerEntity)pl).roundabout$setPower(STAND.id);
+            if (getPowerType(pl) == NONE.ordinal())
+                ((IPlayerEntity)pl).roundabout$setPower((byte) STAND.ordinal());
         }
     }
 
     public static boolean hasStandActive(Entity entity){
         if (entity instanceof LivingEntity LE){
             if (entity instanceof Player PL){
-                if (getPowerType(PL) != STAND.id)
+                if (getPowerType(PL) != STAND.ordinal())
                     return false;
             }
             return ((StandUser)LE).roundabout$getActive();

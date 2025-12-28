@@ -20,7 +20,7 @@ public abstract class PowersPlayer extends LivingEntity implements IPowersPlayer
     @Unique
     public GeneralPowers rdbt$powers = null;
     @Unique
-    public byte rdbt$lastPower = PowerTypes.NONE.id;
+    public byte rdbt$lastPower = (byte) PowerTypes.NONE.ordinal();
     @Unique
     @Override
     public GeneralPowers rdbt$getPowers(){

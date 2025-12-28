@@ -321,8 +321,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$POWERS)) {
             byte pows = this.entityData.get(ROUNDABOUT$POWERS);
             if (!level().isClientSide()) {
-                if (pows == PowerTypes.NONE.id && ((StandUser) this).roundabout$hasAStand()) {
-                    this.entityData.set(ROUNDABOUT$POWERS, PowerTypes.STAND.id);
+                if (pows == PowerTypes.NONE.ordinal() && ((StandUser) this).roundabout$hasAStand()) {
+                    this.entityData.set(ROUNDABOUT$POWERS, (byte)PowerTypes.STAND.ordinal());
                     return this.entityData.get(ROUNDABOUT$POWERS);
                 }
             }
