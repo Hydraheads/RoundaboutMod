@@ -30,6 +30,18 @@ public enum PowerTypes {
     public final byte id;
     public final GeneralPowers generalPowers;
 
+    public static PowerTypes getPowerFromByte(byte bt){
+        if (bt == VAMPIRE.id)
+            return VAMPIRE;
+        if (bt == HAMON.id)
+            return HAMON;
+        if (bt == SPIN.id)
+            return SPIN;
+        if (bt == STAND.id)
+            return STAND;
+        return NONE;
+    }
+
     private PowerTypes(byte $$0, GeneralPowers $$1) {
         this.id = $$0;
         this.generalPowers = $$1;

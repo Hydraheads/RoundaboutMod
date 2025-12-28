@@ -1,5 +1,6 @@
 package net.hydra.jojomod.powers;
 
+import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.server.level.ServerPlayer;
@@ -12,7 +13,9 @@ public class GeneralPowers extends AbilityScapeBasis {
     public GeneralPowers() {
         super(null);
     }
-
+    public GeneralPowers generatePowers(LivingEntity entity){
+        return new GeneralPowers(entity);
+    }
 
     @Override
     public void syncActivePower(){
