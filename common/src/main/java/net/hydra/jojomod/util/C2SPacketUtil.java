@@ -136,6 +136,55 @@ public class C2SPacketUtil {
     }
 
 
+    public static void tryPowerPacketP(byte packet){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.TryPowerP.value,
+                packet
+        );
+    }
+
+    public static void tryIntPowerPacketP(byte packet, int integer){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.TryIntPowerP.value,
+                packet,
+                integer
+        );
+    }
+
+    public static void tryTripleIntPacketP(byte packet, int in1, int in2, int in3){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.TryTripleIntPowerP.value,
+                packet,
+                in1,
+                in2,
+                in3
+        );
+    }
+
+    public static void tryBlockPosPowerPPacket(byte packet, BlockPos pos){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.TryBlockPosPowerP.value,
+                packet,
+                pos
+        );
+    }
+    public static void tryBlockPosPowerPPacket(byte packet, BlockPos pos, HitResult hitResult){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.TryHitResultPosPowerP.value,
+                packet,
+                pos,
+                hitResult
+        );
+    }
+    public static void tryPosPowerPPacket(byte packet, Vec3 pos){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.TryPosPowerP.value,
+                packet,
+                pos.toVector3f()
+        );
+    }
+
+
     public static void trySingleBytePacket(byte packet){
         ModMessageEvents.sendToServer(
                 ClientToServerPackets.StandPowerPackets.MESSAGES.SingleByteToServer.value,

@@ -2518,6 +2518,50 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
 
+    @Unique
+    @Override
+    public void roundabout$tryPowerP(int move, boolean forced){
+        if (rdbt$this() instanceof Player pl){
+            ((IPowersPlayer)pl).rdbt$getPowers().tryPower(move, forced);
+            rdbt$tryPowerPowerStuff();
+        }
+    }
+    @Unique
+    @Override
+    public void roundabout$tryIntPowerP(int move, boolean forced, int chargeTime){
+        if (rdbt$this() instanceof Player pl){
+            ((IPowersPlayer)pl).rdbt$getPowers().tryIntPower(move, forced, chargeTime);
+            rdbt$tryPowerPowerStuff();
+        }
+    }
+    @Unique
+    @Override
+    public void roundabout$tryIntPowerP(int move,  boolean forced, int chargeTime,int move2, int move3){
+
+        if (rdbt$this() instanceof Player pl){
+            ((IPowersPlayer)pl).rdbt$getPowers().tryTripleIntPower(move, forced, chargeTime, move2, move3);
+            rdbt$tryPowerPowerStuff();
+        }
+    }
+    @Unique
+    @Override
+    public void roundabout$tryBlockPosPowerP(int move, boolean forced, BlockPos blockPos){
+        if (rdbt$this() instanceof Player pl){
+            ((IPowersPlayer)pl).rdbt$getPowers().tryBlockPosPower(move, forced, blockPos);
+            rdbt$tryPowerPowerStuff();
+        }
+    }
+    @Unique
+    @Override
+    public void roundabout$tryPosPowerP(int move, boolean forced, Vec3 pos){
+        if (rdbt$this() instanceof Player pl){
+            ((IPowersPlayer)pl).rdbt$getPowers().tryPosPower(move, forced, pos);
+            rdbt$tryPowerPowerStuff();
+        }
+    }
+
+
+
 
     public void rdbt$tryPowerStuff(){
         this.roundabout$getStandPowers().syncActivePower();
@@ -2531,6 +2575,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ifp.rdbt$getFatePowers().syncActivePower();
             if (this.level().isClientSide) {
                 ifp.rdbt$getFatePowers().kickStarted = false;
+            }
+        }
+    }
+    public void rdbt$tryPowerPowerStuff(){
+        if (rdbt$this() instanceof Player pl){
+            IPowersPlayer ifp = ((IPowersPlayer) pl);
+            ifp.rdbt$getPowers().syncActivePower();
+            if (this.level().isClientSide) {
+                ifp.rdbt$getPowers().kickStarted = false;
             }
         }
     }
@@ -2673,6 +2726,24 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         roundabout$sealedTicks = ticks;
     }
 
+    @Override
+    public void roundabout$tryBlockPosPowerF(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit){
+        if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
+            if (rdbt$this() instanceof Player pl){
+                ((IFatePlayer)pl).rdbt$getFatePowers().tryBlockPosPower(move, forced, blockPos, blockHit);
+                rdbt$tryPowerFateStuff();
+            }
+        }
+    }
+    @Override
+    public void roundabout$tryBlockPosPowerP(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit){
+        if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
+            if (rdbt$this() instanceof Player pl){
+                ((IPowersPlayer)pl).rdbt$getPowers().tryBlockPosPower(move, forced, blockPos, blockHit);
+                rdbt$tryPowerPowerStuff();
+            }
+        }
+    }
     @Override
     public void roundabout$tryBlockPosPower(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit){
         if (!this.roundabout$isClashing() || move == PowerIndex.CLASH_CANCEL) {
@@ -3415,6 +3486,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             if (roundabout$isBubbleEncased()){
                                 this.setDeltaMovement($$0.x*0.91, (double) this.getJumpPower(), $$0.z*0.91);
                             } else {
+                                float curve = getSpeed();
+
                                 curr = roundabout$getBigJumpCurrentProgress();
                                 this.setDeltaMovement($$0.x,
                                         (double) this.getJumpPower()*FateTypes.getJumpHeightPower(
