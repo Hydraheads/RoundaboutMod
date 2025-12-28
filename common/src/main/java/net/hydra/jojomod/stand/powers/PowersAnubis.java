@@ -362,6 +362,9 @@ public class PowersAnubis extends NewDashPreset {
 
         StandUser SU = (StandUser) this.getSelf();
         switch (move) {
+            case PowerIndex.SNEAK_ATTACK_CHARGE -> {
+                disablePogo();
+            }
             case PowerIndex.POWER_1 ->  {
                 this.getSelf().level().playSound(null,this.getSelf().blockPosition(), ModSounds.ANUBIS_ALLURING_EVENT, SoundSource.PLAYERS,1.0F,1.0F);
             }
@@ -451,7 +454,7 @@ public class PowersAnubis extends NewDashPreset {
 
     int pogoTime = 0;
     public boolean canPogo() {return pogoTime == 0;}
-    public void enablePogo() {pogoTime = 0;}
+    public void enablePogo() {pogoTime = 0;Roundabout.LOGGER.info("why?");}
     public void disablePogo() {pogoTime = -1;}
     public void setPogo(int i) {pogoTime = i;}
     int pogoCounter = 0;
@@ -675,25 +678,21 @@ public class PowersAnubis extends NewDashPreset {
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (keyIsDown) {
-            if (this.canAttack()) {
+            if (this.isHoldingSneak() && !this.getSelf().onGround() && canPogo() && this.getAttackTime() > 5) {
+                this.tryPower(PowerIndex.SNEAK_ATTACK_CHARGE);
+                tryPowerPacket(PowerIndex.SNEAK_ATTACK_CHARGE);
+            } else if (this.canAttack()) {
 
                 byte index = PowerIndex.ATTACK;
                 if (this.isHoldingSneak()) {
-                    if (!this.getSelf().onGround() && canPogo()) {
-                        disablePogo();
-                        index = PowerIndex.SNEAK_ATTACK_CHARGE;
-                    } else {
-                        index = PowerIndex.SNEAK_ATTACK;
-                    }
+                    index = PowerIndex.SNEAK_ATTACK;
                 }
-                if (index != PowerIndex.SNEAK_ATTACK_CHARGE) {
-                    lasthits.add((index == PowerIndex.SNEAK_ATTACK ? -1 : 1));
-                }
+                lasthits.add((index == PowerIndex.SNEAK_ATTACK ? -1 : 1));
                 if (lasthits.size() == 3) {
                     index = determineThird(lasthits);
                 }
 
-                if (index != PowerIndex.SNEAK_ATTACK_CHARGE && index != PowersAnubis.DOUBLE && index != PowersAnubis.UPPERCUT) {
+                if (index != PowersAnubis.DOUBLE && index != PowersAnubis.UPPERCUT) {
                     this.getSelf().swing(InteractionHand.MAIN_HAND);
                 }
                 this.tryPower(index);
@@ -748,6 +747,8 @@ public class PowersAnubis extends NewDashPreset {
             case PowerIndex.RANGED_BARRAGE -> {
                 if (this.getAttackTime() < quickdrawDelay) {
                     scopeLevel = 1;
+                    this.getSelf().resetFallDistance();
+                    MainUtil.slowTarget(this.getSelf(),0.6F);
                 } else if (this.getAttackTime() == quickdrawDelay) {
                     if(!isClient()) {
                         StartQuickdraw(8);
@@ -1287,6 +1288,7 @@ public class PowersAnubis extends NewDashPreset {
             }
             /// canPogo syncing
             case PowerIndex.EXTRA -> {
+                Roundabout.LOGGER.info("tf is this: "+data);
                 if (data == 1) {
                     enablePogo();
                 } else {
