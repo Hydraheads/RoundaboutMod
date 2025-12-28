@@ -36,6 +36,8 @@ public interface IPlayerEntity {
     void roundabout$shapeShift();
     void rdbt$setRespawnStrategy(byte strat);
     byte rdbt$getRespawnStrategy();
+    void roundabout$setPower(byte style);
+    byte roundabout$getPower();
 
     /// bypasses the combat mode overrides
     ItemStack roundabout$getForRealMainHand();

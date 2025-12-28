@@ -25,9 +25,6 @@ public class FatePowers extends AbilityScapeBasis {
     public FatePowers() {
         super(null);
     }
-    public void tick(){
-    }
-
 
     /**This is imporant, on every fate class, override this and do something like
      *     return new VampireFate(entity); */

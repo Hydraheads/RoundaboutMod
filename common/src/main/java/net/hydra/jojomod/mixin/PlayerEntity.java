@@ -24,6 +24,7 @@ import net.hydra.jojomod.item.WorthyArrowItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.PlayerMaskSlots;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
@@ -106,6 +107,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             EntityDataSerializers.BYTE);
     @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT$FATE = SynchedEntityData.defineId(Player.class,
+            EntityDataSerializers.BYTE);
+    @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$POWERS = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.BYTE);
 
     @Unique
@@ -301,6 +305,28 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public byte roundabout$getFate(){
         if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$FATE)) {
             return this.entityData.get(ROUNDABOUT$FATE);
+        }
+        return 0;
+    }
+    @Unique
+    @Override
+    public void roundabout$setPower(byte style){
+        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$POWERS)) {
+            this.getEntityData().set(ROUNDABOUT$POWERS, style);
+        }
+    }
+    @Unique
+    @Override
+    public byte roundabout$getPower(){
+        if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$POWERS)) {
+            byte pows = this.entityData.get(ROUNDABOUT$POWERS);
+            if (!level().isClientSide()) {
+                if (pows == PowerTypes.NONE.id && ((StandUser) this).roundabout$hasAStand()) {
+                    this.entityData.set(ROUNDABOUT$POWERS, PowerTypes.STAND.id);
+                    return this.entityData.get(ROUNDABOUT$POWERS);
+                }
+            }
+            return pows;
         }
         return 0;
     }
@@ -1350,6 +1376,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         compoundtag.putByte("teamColor",roundabout$getTeamColor());
         compoundtag.putByte("watchStyle",roundabout$getWatchStyle());
         compoundtag.putByte("fate",roundabout$getFate());
+        compoundtag.putByte("power",roundabout$getPower());
         compoundtag.putFloat("hairColorX",rdbt$getHairColorX());
         compoundtag.putFloat("hairColorY",rdbt$getHairColorY());
         compoundtag.putFloat("hairColorZ",rdbt$getHairColorZ());
@@ -1439,6 +1466,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (compoundtag2.contains("fate")) {
             roundabout$setFate(compoundtag2.getByte("fate"));
         }
+        if (compoundtag2.contains("power")) {
+            roundabout$setFate(compoundtag2.getByte("power"));
+        }
         if (compoundtag2.contains("hairColorX")) {
             rdbt$setHairColorX(compoundtag2.getFloat("hairColorX"));
         }
@@ -1515,6 +1545,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             }
         }
 
+        PowerTypes.initializeStandPower(this);
         //roundabout$maskInventory.addItem()
     }
 
@@ -1848,6 +1879,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$TEAM_COLOR, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$WATCH_STYLE, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$FATE, (byte) 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$POWERS, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BLINDED, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$HAIR_COLOR, new Rotations(rdbt$hairColorX,rdbt$hairColorY,rdbt$hairColorZ));
         }

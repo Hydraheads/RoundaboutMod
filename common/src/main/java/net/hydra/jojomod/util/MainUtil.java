@@ -2306,6 +2306,7 @@ public class MainUtil {
         } else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_POWER_INVENTORY) {
             StandUser standUser = ((StandUser) player);
             standUser.roundabout$getStandPowers().setCooldown(context,-1);
+            PowerTypes.initializeStandPower(player);
             IPlayerEntity iplay = ((IPlayerEntity) player);
             byte unlocked = 0;
             if (iplay.roundabout$getUnlockedBonusSkin()){
