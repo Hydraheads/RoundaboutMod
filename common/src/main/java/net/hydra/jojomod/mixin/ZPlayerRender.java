@@ -278,21 +278,20 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     }
 
 
+    @Inject(method = "renderHand",at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/player/PlayerRenderer;setModelProperties(Lnet/minecraft/client/player/AbstractClientPlayer;)V",shift = At.Shift.AFTER))
+    private void roundabout$hideAnubisArm(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, ModelPart $$4, ModelPart $$5, CallbackInfo ci) {
+        if ( AnubisLayer.shouldRender($$3) == HumanoidArm.RIGHT) {
+            this.getModel().rightArm.visible = false;
+            this.getModel().rightSleeve.visible = false;
+        } else if (AnubisLayer.shouldRender($$3) == HumanoidArm.LEFT)  {
+            this.getModel().leftArm.visible = false;
+            this.getModel().leftSleeve.visible = false;
+        }
+    }
+
     ///  hides the arms if you're holding anubis
     @Inject(method = "setModelProperties", at = @At(value = "TAIL"))
     private void roundabout$setModelProperties(AbstractClientPlayer $$0, CallbackInfo ci) {
-        if (ClientUtil.checkIfIsFirstPerson($$0))  {
-            if (AnubisLayer.shouldRender($$0) != null) {
-                PlayerModel<AbstractClientPlayer> playerModel = (PlayerModel)this.getModel();
-                if (AnubisLayer.shouldRender($$0) == HumanoidArm.RIGHT) {
-                    playerModel.rightArm.visible = false;
-                    playerModel.rightSleeve.visible = false;
-                } else {
-                    playerModel.leftArm.visible = false;
-                    playerModel.leftSleeve.visible = false;
-                }
-            }
-        }
         if ($$0 instanceof StandUser standUser) {
             if (standUser.roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
                       PlayerModel<AbstractClientPlayer> playerModel = this.getModel();

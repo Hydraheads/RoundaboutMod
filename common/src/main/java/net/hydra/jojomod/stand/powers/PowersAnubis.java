@@ -452,9 +452,11 @@ public class PowersAnubis extends NewDashPreset {
     List<Integer> lasthits = new ArrayList<>();
 
 
+    int fallTime = 0;
+
     int pogoTime = 0;
     public boolean canPogo() {return pogoTime == 0;}
-    public void enablePogo() {pogoTime = 0;Roundabout.LOGGER.info("why?");}
+    public void enablePogo() {pogoTime = 0;}
     public void disablePogo() {pogoTime = -1;}
     public void setPogo(int i) {pogoTime = i;}
     int pogoCounter = 0;
@@ -464,13 +466,11 @@ public class PowersAnubis extends NewDashPreset {
         if (isClient()) {
             if (this.getUsedMemory() != null) {
              //TODO LEAVE THIS IN FOR NOW   Roundabout.LOGGER.info(">> "+this.sum + " | " + this.getUsedMemory().rots.size());
-
             }
         }
 
-    //    Roundabout.LOGGER.info(" CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax());
+        //    Roundabout.LOGGER.info(" CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax());
         StandUser SU = this.getStandUserSelf();
-        if (SU.roundabout$getStandSkin() == (byte) 0) {SU.roundabout$setStandSkin((byte)1);}
 
         if (SU.roundabout$isSealed()) {MemoryCancelClient();}
 
@@ -665,6 +665,13 @@ public class PowersAnubis extends NewDashPreset {
                 SU.roundabout$setStandAnimation(PowerIndex.NONE);
             }
         }
+
+
+        if (this.getSelf().onGround()) {
+            this.fallTime = 0;
+        } else {
+            this.fallTime += 1;
+        }
     }
 
 
@@ -673,12 +680,21 @@ public class PowersAnubis extends NewDashPreset {
         return super.canAttack() || this.getActivePower() == PowerIndex.SNEAK_MOVEMENT;
     }
 
+
+    public boolean pogoChecks() {
+        return this.isHoldingSneak()
+                && !this.getSelf().onGround()
+                && canPogo()
+                && this.getAttackTime() > 5
+                && this.fallTime > 4;
+    }
+
     @Override
     public boolean interceptAttack(){return true;}
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (keyIsDown) {
-            if (this.isHoldingSneak() && !this.getSelf().onGround() && canPogo() && this.getAttackTime() > 5) {
+            if (pogoChecks()) {
                 this.tryPower(PowerIndex.SNEAK_ATTACK_CHARGE);
                 tryPowerPacket(PowerIndex.SNEAK_ATTACK_CHARGE);
             } else if (this.canAttack()) {
@@ -996,7 +1012,7 @@ public class PowersAnubis extends NewDashPreset {
         Entity target = this.getSelf().level().getEntity(id);
         this.setAttackTimeDuring(this.getAttackTimeDuring()+15);
 
-        if (StandDamageEntityAttack(target,4,1,this.getSelf())) {
+        if (StandDamageEntityAttack(target,this.getPunchStrength(target),1,this.getSelf())) {
             if (target instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers().interceptGuard()
                     && LE.isBlocking() && !((StandUser) LE).roundabout$isGuarding()){
                 knockShield2(target, 30);
@@ -1222,7 +1238,7 @@ public class PowersAnubis extends NewDashPreset {
                     }
                     Vec3 look = this.getSelf().getLookAngle().normalize();
                     look = new Vec3(look.x,0,look.z).normalize().reverse().scale(this.getSelf().isSprinting() ? 1.3 : 1);
-                    MainUtil.takeKnockbackWithY(e,0.8F,look.x,-3,look.z);
+                    MainUtil.takeUnresistableKnockbackWithY(e,0.8F,look.x,-3,look.z);
                     MainUtil.takeUnresistableKnockbackWithY(this.getSelf(),0.9F,0,-4,0);
 
 
@@ -1288,7 +1304,6 @@ public class PowersAnubis extends NewDashPreset {
             }
             /// canPogo syncing
             case PowerIndex.EXTRA -> {
-                Roundabout.LOGGER.info("tf is this: "+data);
                 if (data == 1) {
                     enablePogo();
                 } else {
@@ -1350,6 +1365,8 @@ public class PowersAnubis extends NewDashPreset {
         }
     }
 
+    @Override
+    public boolean canCombatModeUse(Item item) {return true;}
 
     List<Entity> targets = new ArrayList<>();
     @Override

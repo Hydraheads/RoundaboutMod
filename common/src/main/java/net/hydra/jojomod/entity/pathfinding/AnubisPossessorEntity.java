@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 public class AnubisPossessorEntity extends GroundPathfindingStandAttackEntity {
 
 
-    class KillEverythingGoal
+    static class KillEverythingGoal
             extends NearestAttackableTargetGoal<LivingEntity> {
         public KillEverythingGoal(AnubisPossessorEntity e) {
             super(e, LivingEntity.class, 0, true, true, livingEntity -> !((StandUser)livingEntity).roundabout$isPossessed() );
@@ -33,7 +33,7 @@ public class AnubisPossessorEntity extends GroundPathfindingStandAttackEntity {
                 .add(Attributes.MOVEMENT_SPEED, 0.8F)
                 .add(Attributes.MAX_HEALTH, 20.0)
                 .add(Attributes.JUMP_STRENGTH,3.0)
-                .add(Attributes.FOLLOW_RANGE,24.0);
+                .add(Attributes.FOLLOW_RANGE,50.0);
     }
 
 
@@ -52,7 +52,7 @@ public class AnubisPossessorEntity extends GroundPathfindingStandAttackEntity {
     @Override
     protected void registerGoals() {
         addBehaviourGoals();
-        this.targetSelector.addGoal(4,new KillEverythingGoal(this) );
+        this.targetSelector.addGoal(4, new KillEverythingGoal(this));
     }
 
 
