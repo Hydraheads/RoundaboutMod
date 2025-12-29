@@ -22,6 +22,7 @@ import net.hydra.jojomod.item.ScissorItem;
 import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.item.WorthyArrowItem;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.PlayerMaskSlots;
@@ -1950,6 +1951,16 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public void roundabout$hasLineOfSight(ServerLevel $$0, LivingEntity $$1, CallbackInfoReturnable<Boolean> cir) {
         if (((StandUser)this).roundabout$getStandPowers().onKilledEntity($$0,$$1)){
             cir.setReturnValue(false);
+        }
+    }
+
+    @Inject(method = "die",at = @At(value = "HEAD"))
+    public void roundabout$onDeath(DamageSource $$0, CallbackInfo ci) {
+        StandUser SU = (StandUser) this;
+        if (SU.roundabout$getStandPowers() instanceof PowersRatt PR) {
+            if (PR.active) {
+                PR.active = false;
+            }
         }
     }
 

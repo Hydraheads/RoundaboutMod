@@ -335,7 +335,6 @@ public class PowersRatt extends NewDashPreset {
     public void blipStand(Vec3 pos) {
         StandEntity stand = getNewStandEntity();
         if (stand instanceof RattEntity RE) {
-            StandUser user = getStandUserSelf();
             RE.setMaster(this.self);
             RE.absMoveTo(pos.x(),pos.y(),pos.z());
             RE.setSavedSkin( ((StandUser)this.getSelf()).roundabout$getStandSkin() );
