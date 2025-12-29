@@ -3172,7 +3172,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "addEffect(Lnet/minecraft/world/effect/MobEffectInstance;)Z", at = @At(value = "HEAD"))
     public void roundabout$carryEffects(MobEffectInstance $$0, CallbackInfoReturnable<Boolean> cir) {
         if (this.roundabout$isPossessed()) {
-            LivingEntity poss = (LivingEntity) this.roundabout$getPossessor();
+            LivingEntity poss = this.roundabout$getPossessor();
             if (poss != null) {
                 poss.addEffect($$0);
             }

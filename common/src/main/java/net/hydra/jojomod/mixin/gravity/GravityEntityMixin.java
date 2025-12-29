@@ -547,6 +547,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
                                 dr = Direction.UP;
                             }
                         }
+                        if ( ((StandUser)LE).roundabout$isPossessed() ) {dr = Direction.DOWN;}
                     }
                     roundabout$setGravityDirection(dr);
                 }
