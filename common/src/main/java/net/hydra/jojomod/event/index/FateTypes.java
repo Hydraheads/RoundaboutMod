@@ -18,58 +18,56 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
 public enum FateTypes {
-    HUMAN((byte) 0, new FatePowers()),
-    VAMPIRE((byte) 1, new VampireFate()),
-    ZOMBIE((byte) 2, new FatePowers()),
-    SHADOW_CREATURE((byte) 3, new FatePowers()),
-    PILLAR_MAN((byte) 4, new FatePowers()),
-    ULTIMATE_LIFEFORM((byte) 5, new FatePowers()),
-    ROCK_HUMAN((byte) 6, new FatePowers()),
-    GHOST((byte) 7, new FatePowers()),
-    DOG((byte) 8, new FatePowers()),
-    RAT((byte) 9, new FatePowers()),
-    FALCON((byte) 10, new FatePowers()),
-    PLANKTON_COLONY((byte) 11, new FatePowers());
+    HUMAN(new FatePowers()),
+    VAMPIRE(new VampireFate()),
+    ZOMBIE(new FatePowers()),
+    SHADOW_CREATURE(new FatePowers()),
+    PILLAR_MAN(new FatePowers()),
+    ULTIMATE_LIFEFORM(new FatePowers()),
+    ROCK_HUMAN(new FatePowers()),
+    GHOST(new FatePowers()),
+    DOG(new FatePowers()),
+    RAT(new FatePowers()),
+    FALCON(new FatePowers()),
+    PLANKTON_COLONY(new FatePowers());
 
-    public final byte id;
     public final FatePowers fatePowers;
 
-    private FateTypes(byte $$0, FatePowers $$1) {
-        this.id = $$0;
+    private FateTypes(FatePowers $$1) {
         this.fatePowers = $$1;
     }
     public static FateTypes getFateFromByte(byte bt){
-        if (bt == VAMPIRE.id)
+        if (bt == VAMPIRE.ordinal())
             return VAMPIRE;
-        if (bt == SHADOW_CREATURE.id)
+        if (bt == SHADOW_CREATURE.ordinal())
             return SHADOW_CREATURE;
-        if (bt == PILLAR_MAN.id)
+        if (bt == PILLAR_MAN.ordinal())
             return PILLAR_MAN;
-        if (bt == ULTIMATE_LIFEFORM.id)
+        if (bt == ULTIMATE_LIFEFORM.ordinal())
             return ULTIMATE_LIFEFORM;
-        if (bt == ROCK_HUMAN.id)
+        if (bt == ROCK_HUMAN.ordinal())
             return ROCK_HUMAN;
-        if (bt == GHOST.id)
+        if (bt == GHOST.ordinal())
             return GHOST;
-        if (bt == DOG.id)
+        if (bt == DOG.ordinal())
             return DOG;
-        if (bt == RAT.id)
+        if (bt == RAT.ordinal())
             return RAT;
-        if (bt == FALCON.id)
+        if (bt == FALCON.ordinal())
             return FALCON;
-        if (bt == PLANKTON_COLONY.id)
+        if (bt == PLANKTON_COLONY.ordinal())
             return PLANKTON_COLONY;
         return HUMAN;
     }
     public static boolean isHuman(LivingEntity entity){
         if (entity instanceof Player PE){
-            return ((IPlayerEntity)PE).roundabout$getFate() <= HUMAN.id;
+            return ((IPlayerEntity)PE).roundabout$getFate() <= HUMAN.ordinal();
         }
         return false;
     }
     public static boolean isVampire(LivingEntity entity){
         if (entity instanceof Player PE){
-            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.id;
+            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal();
         }
         if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire())
             return true;
@@ -105,14 +103,14 @@ public enum FateTypes {
     public static boolean isEvil(LivingEntity entity){
         if (entity instanceof Player PE){
             Byte fate = ((IPlayerEntity)PE).roundabout$getFate();
-            return fate == VAMPIRE.id || fate == ZOMBIE.id || fate == PILLAR_MAN.id || fate == ULTIMATE_LIFEFORM.id;
+            return fate == VAMPIRE.ordinal() || fate == ZOMBIE.ordinal() || fate == PILLAR_MAN.ordinal() || fate == ULTIMATE_LIFEFORM.ordinal();
         }
         return false;
     }
     public static boolean isDaggerUpgraded(LivingEntity entity){
         if (entity instanceof Player PE){
             Byte fate = ((IPlayerEntity)PE).roundabout$getFate();
-            if (fate == VAMPIRE.id){
+            if (fate == VAMPIRE.ordinal()){
                 if (((IPlayerEntity) PE).rdbt$getVampireData().daggerSplatterLevel > 0) {
                     return true;
                 }
@@ -122,19 +120,19 @@ public enum FateTypes {
     }
     public static boolean isScary(LivingEntity entity){
         if (entity instanceof Player PE){
-            return ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.id;
+            return ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.ordinal();
         }
         return false;
     }
     public static boolean isVampireStrong(LivingEntity entity){
         if (entity instanceof Player PE){
-            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.id;
+            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal();
         }
         return false;
     }
     public static boolean hasBloodHunger(LivingEntity entity){
         if (entity instanceof Player PE){
-            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.id;
+            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal();
         }
         if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire())
             return true;
@@ -149,7 +147,7 @@ public enum FateTypes {
     }
     public static boolean takesSunlightDamage(LivingEntity entity){
         if (entity instanceof Player PE){
-            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.id;
+            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal();
         }
         if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire())
             return true;
@@ -163,12 +161,12 @@ public enum FateTypes {
     }
     public static void setVampire(LivingEntity entity){
         if (entity instanceof Player PE){
-            ((IPlayerEntity)PE).roundabout$setFate(VAMPIRE.id);
+            ((IPlayerEntity)PE).roundabout$setFate((byte) VAMPIRE.ordinal());
         }
     }
     public static void setHuman(LivingEntity entity){
         if (entity instanceof Player PE){
-            ((IPlayerEntity)PE).roundabout$setFate(HUMAN.id);
+            ((IPlayerEntity)PE).roundabout$setFate((byte) HUMAN.ordinal());
         }
     }
     public static float getJumpHeightAddon(LivingEntity entity){

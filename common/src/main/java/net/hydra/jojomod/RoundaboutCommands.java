@@ -128,7 +128,7 @@ public class RoundaboutCommands {
             if (entity instanceof LivingEntity LE) {
                 if (fate.equalsIgnoreCase("vampire")){
                     if (LE instanceof Player PL){
-                        ((IPlayerEntity)PL).roundabout$setFate(FateTypes.VAMPIRE.id);
+                        ((IPlayerEntity)PL).roundabout$setFate((byte) FateTypes.VAMPIRE.ordinal());
                         ((IPlayerEntity)PL).rdbt$getVampireData().vampireLevel = Mth.clamp(level,0,40);
                         ((IPlayerEntity)PL).rdbt$getVampireData().bloodExp = experience;
                         S2CPacketUtil.beamVampireData(PL);
@@ -137,7 +137,7 @@ public class RoundaboutCommands {
                     }
                 } else if (fate.equalsIgnoreCase("human") || fate.equalsIgnoreCase("none")){
                     if (LE instanceof Player PL){
-                        ((IPlayerEntity)PL).roundabout$setFate(FateTypes.HUMAN.id);
+                        ((IPlayerEntity)PL).roundabout$setFate((byte) FateTypes.HUMAN.ordinal());
                     } else if (LE instanceof Mob mb){
                         ((IMob)mb).roundabout$setVampire(false);
                     }
