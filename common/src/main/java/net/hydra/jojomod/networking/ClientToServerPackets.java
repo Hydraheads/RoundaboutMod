@@ -48,6 +48,12 @@ public class ClientToServerPackets {
             TryHitResultPosPowerF("try_hit_result_pos_power_f"),
             TryIntPowerF("try_int_power_f"),
             TryTripleIntPowerF("try_triple_int_power_f"),
+            TryPowerP("try_power_p"),
+            TryPosPowerP("try_pos_power_p"),
+            TryBlockPosPowerP("try_block_pos_power_p"),
+            TryHitResultPosPowerP("try_hit_result_pos_power_p"),
+            TryIntPowerP("try_int_power_p"),
+            TryTripleIntPowerP("try_triple_int_power_p"),
             IntToServer("int_to_server"),
             FloatToServer("float_to_server"),
             ByteToServer("byte_to_server"),
@@ -203,6 +209,63 @@ public class ClientToServerPackets {
                         int d = (int) vargs[2];
                         int e = (int) vargs[3];
                         powers.roundabout$tryIntPowerF(b, true, c, d, e);
+                    });
+                }
+
+
+                if (message.equals(MESSAGES.TryPowerP.value)) {
+                    server.execute(() -> {
+                        StandUser powers = basicChecks(sender);
+                        byte b = (byte) vargs[0];
+                        powers.roundabout$tryPowerP(b, true);
+                    });
+                }
+                /**Try Power Packet*/
+                if (message.equals(MESSAGES.TryPosPowerP.value)) {
+                    server.execute(() -> {
+                        StandUser powers = basicChecks(sender);
+                        byte b = (byte) vargs[0];
+                        Vector3f c = (Vector3f) vargs[1];
+                        powers.roundabout$tryPosPowerP(b, true, new Vec3(c.x, c.y, c.z));
+                    });
+                }
+                /**Try Block Pos Power Packet*/
+                if (message.equals(MESSAGES.TryBlockPosPowerP.value)) {
+                    server.execute(() -> {
+                        StandUser powers = basicChecks(sender);
+                        byte b = (byte) vargs[0];
+                        BlockPos c = (BlockPos) vargs[1];
+                        powers.roundabout$tryBlockPosPowerP(b, true, c);
+                    });
+                }
+                /**Try Block Pos Power Packet*/
+                if (message.equals(MESSAGES.TryHitResultPosPowerP.value)) {
+                    server.execute(() -> {
+                        StandUser powers = basicChecks(sender);
+                        byte b = (byte) vargs[0];
+                        BlockPos c = (BlockPos) vargs[1];
+                        BlockHitResult d = (BlockHitResult) vargs[2];
+                        powers.roundabout$tryBlockPosPowerP(b, true, c, d);
+                    });
+                }
+                /**Try Power Packet*/
+                if (message.equals(MESSAGES.TryIntPowerP.value)) {
+                    server.execute(() -> {
+                        StandUser powers = basicChecks(sender);
+                        byte b = (byte) vargs[0];
+                        int c = (int) vargs[1];
+                        powers.roundabout$tryIntPowerP(b, true, c);
+                    });
+                }
+                /**Try Triple Int Power Packet*/
+                if (message.equals(MESSAGES.TryTripleIntPowerP.value)) {
+                    server.execute(() -> {
+                        StandUser powers = basicChecks(sender);
+                        byte b = (byte) vargs[0];
+                        int c = (int) vargs[1];
+                        int d = (int) vargs[2];
+                        int e = (int) vargs[3];
+                        powers.roundabout$tryIntPowerP(b, true, c, d, e);
                     });
                 }
 

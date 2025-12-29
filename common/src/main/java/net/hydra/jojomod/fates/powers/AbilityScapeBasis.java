@@ -347,13 +347,17 @@ public class AbilityScapeBasis {
 
 
 
-    public void xTryPower(byte index, boolean forced){
-    }
     public void tryPowerStuff(){
         syncActivePower();
         if (this.self.level().isClientSide) {
             kickStarted = false;
         }
+    }
+
+
+    public void xTryPower(byte index, boolean forced){
+        tryPower(index, forced);
+        tryPowerStuff();
     }
 
     /**Stuff that happens every tick while possessing the stand in general.

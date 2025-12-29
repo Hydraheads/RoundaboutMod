@@ -178,6 +178,7 @@
     "networking.ZServerGamePacketListenerImpl",
     "piloting.PilotingServerGamePacketListenerImpl",
     "piloting.PilotingServerPlayerGameMode",
+    "powers.PowersPlayer",
     "soft_and_wet.EncasementAbstractHorse",
     "soft_and_wet.SoftAndWetAllaySounds",
     "soft_and_wet.SoftAndWetBowItem",

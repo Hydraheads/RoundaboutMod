@@ -29,6 +29,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampiricFate;
+import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -2306,6 +2307,7 @@ public class MainUtil {
         } else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_POWER_INVENTORY) {
             StandUser standUser = ((StandUser) player);
             standUser.roundabout$getStandPowers().setCooldown(context,-1);
+            PowerTypes.initializeStandPower(player);
             IPlayerEntity iplay = ((IPlayerEntity) player);
             byte unlocked = 0;
             if (iplay.roundabout$getUnlockedBonusSkin()){
@@ -2769,6 +2771,19 @@ public class MainUtil {
     public static void syncActivePowerPowers(Player pl, byte activePower){
 
         //FILL THIS IN FOR POWERS
+
+        GeneralPowers powers = ((IPowersPlayer) pl).rdbt$getPowers();
+
+        if (powers.activePower != activePower){
+            if (activePower == PowerIndex.NONE){
+                powers.setAttackTimeDuring(-1);
+            } else {
+                powers.setAttackTimeDuring(0);
+            }
+        }
+        powers.updateMovesFromPacket(activePower);
+        powers.setActivePower(activePower);
+        powers.kickStartClient();
 
     }
     public static void syncCooldownsForAttacks(int attackTime, int attackTimeMax, int attackTimeDuring,

@@ -29,6 +29,7 @@ public interface StandUser {
     boolean roundabout$hasStandOut();
     void roundabout$tryBlockPosPower(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit);
     void roundabout$tryBlockPosPowerF(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit);
+    void roundabout$tryBlockPosPowerP(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit);
     Vec3 roundabout$frictionSave();
     void roundabout$deeplyRemoveAttackTarget();
     boolean roundabout$getQueForTargetDeletion();
@@ -174,6 +175,11 @@ public interface StandUser {
     void roundabout$tryIntPowerF(int move,boolean forced, int chargeTime, int move2, int move3);
     void roundabout$tryBlockPosPowerF(int move, boolean forced, BlockPos blockPos);
     void roundabout$tryPosPowerF(int move, boolean forced, Vec3 blockPos);
+    void roundabout$tryPowerP(int move, boolean forced);
+    void roundabout$tryIntPowerP(int move, boolean forced, int chargeTime);
+    void roundabout$tryIntPowerP(int move,boolean forced, int chargeTime, int move2, int move3);
+    void roundabout$tryBlockPosPowerP(int move, boolean forced, BlockPos blockPos);
+    void roundabout$tryPosPowerP(int move, boolean forced, Vec3 blockPos);
     void roundabout$addFollower(FollowingStandEntity $$0);
     void roundabout$removeFollower(FollowingStandEntity $$0);
 
