@@ -1468,7 +1468,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             roundabout$setFate(compoundtag2.getByte("fate"));
         }
         if (compoundtag2.contains("power")) {
-            roundabout$setFate(compoundtag2.getByte("power"));
+            roundabout$setPower(compoundtag2.getByte("power"));
         }
         if (compoundtag2.contains("hairColorX")) {
             rdbt$setHairColorX(compoundtag2.getFloat("hairColorX"));
