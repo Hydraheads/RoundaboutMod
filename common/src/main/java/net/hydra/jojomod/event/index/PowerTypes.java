@@ -12,6 +12,7 @@ import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.StandGeneralPowers;
+import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
@@ -28,7 +29,7 @@ import java.util.List;
 public enum PowerTypes {
     NONE(new GeneralPowers()),
     STAND(new StandGeneralPowers()),
-    VAMPIRE(new GeneralPowers()),
+    VAMPIRE(new VampireGeneralPowers()),
     HAMON(new GeneralPowers()),
     SPIN(new GeneralPowers());
 

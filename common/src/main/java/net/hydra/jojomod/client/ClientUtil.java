@@ -41,6 +41,7 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -59,6 +60,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.TooltipFlag;
 import net.zetalasis.client.shader.D4CShaderFX;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.entity.D4CCloneEntity;
@@ -633,7 +635,9 @@ public class ClientUtil {
             }
         });
     }
-
+    public static List<Component> getTooltipFromItem(Minecraft p_281881_, ItemStack p_282833_) {
+        return p_282833_.getTooltipLines(p_281881_.player, p_281881_.options.advancedItemTooltips ? TooltipFlag.Default.ADVANCED : TooltipFlag.Default.NORMAL);
+    }
     public static boolean getDirectionRight(LivingEntity self){
 
         Direction rightAxis = Direction.DOWN;

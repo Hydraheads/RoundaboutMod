@@ -82,8 +82,6 @@ public class PowerInventoryScreen
     public boolean shouldRenderPowersTab(Player player){
         List<PowerTypes> powerList = PowerTypes.getAvailablePowers(player);
         if (!powerList.isEmpty()){
-            if (powerList.contains(PowerTypes.STAND) && powerList.size() == 1)
-                return false;
             return true;
         }
         return false;
@@ -581,6 +579,7 @@ public class PowerInventoryScreen
 
 
                 drawIcons(context,mouseX,mouseY);
+                context.drawString(this.font, gp.getPowerTagName(), this.titleLabelX + 25 + leftPos, this.titleLabelY + 18 + topPos, 16777215, false);
 
             }
         }

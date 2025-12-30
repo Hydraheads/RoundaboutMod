@@ -34,6 +34,9 @@ public class GeneralPowers extends AbilityScapeBasis {
     public Component getPowerName(){
         return Component.empty();
     }
+    public Component getPowerTagName(){
+        return Component.empty();
+    }
 
 
     //The Power inventory icon coords

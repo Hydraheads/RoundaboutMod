@@ -9,10 +9,15 @@
   "text.roundabout.warn_unnamed_trap_triggered": "A fog trap has been triggered!",
 
   "text.roundabout.powers.stand": "Stand User",
+  "text.roundabout.powers.stand_select": "Yuhamon",
   "text.roundabout.powers.vampire": "Vampire Powers",
-  "text.roundabout.powers.hamon": "Hamon",
-  "text.roundabout.powers.spin": "Spin",
+  "text.roundabout.powers.vampire_select": "Vampire",
+  "text.roundabout.powers.hamon": "Hamon Powers",
+  "text.roundabout.powers.hamon_select": "Hamon",
+  "text.roundabout.powers.spin": "Spin Arts",
+  "text.roundabout.powers.spin_select": "Spin",
   "text.roundabout.powers.martial_arts": "Martial Arts",
+  "text.roundabout.powers.martial_arts_select": "MA",
 
   "text.roundabout.fate.vampire": "Vampire",
   "text.roundabout.fate.vampire_hair": "Change Hair Color",
@@ -1027,6 +1032,7 @@
   "instruction.roundabout.press_2_skill": "Press Skill %1$s While Using Skill %2$s",
   "instruction.roundabout.passive": "Passive",
   "instruction.roundabout.shop_item": "Shop Item",
+  "instruction.roundabout.use_item": "Item Interaction",
 
   "ability.roundabout.punch": "Punch",
   "ability.roundabout.punch.desc": "Throws a punch directly in front of you. Hold it down for a 3 hit-combo!",
@@ -1039,6 +1045,11 @@
 
   "ability.roundabout.forward_barrage": "Forward Barrage",
   "ability.roundabout.forward_barrage.desc": "While barraging, your stand starts to float forward slowly.",
+
+  "ability.roundabout.disc_imprint": "Disc Imprint",
+  "ability.roundabout.disc_imprint.desc": "Use a stand disc with no stand on it to remove your current stand and store its data on the disc.",
+  "ability.roundabout.disc_swap": "Disc Swap",
+  "ability.roundabout.disc_swap.desc": "Use a different stand disc with a stand on it to swap stands. No materials are lost in the process.",
 
   "ability.roundabout.impale": "Impale",
   "ability.roundabout.impale.desc": "Winds up a deadly attack that may inflict level 3 bleed. You have to get within close range to land it.",

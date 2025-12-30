@@ -50,6 +50,10 @@ public class StandIcons {
             "textures/gui/icons/powers/stand/stand_summon.png");
     public static final ResourceLocation STAND_VISION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/powers/stand/stand_vision.png");
+    public static final ResourceLocation DISC_SWAP = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/stand/disc_swap.png");
+    public static final ResourceLocation DISC_IMPRINT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/stand/disc_imprint.png");
     public static final ResourceLocation BLOOD_DRINK = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/fates/vampire/drink.png");
     public static final ResourceLocation VAMPIRE = new ResourceLocation(Roundabout.MOD_ID,
