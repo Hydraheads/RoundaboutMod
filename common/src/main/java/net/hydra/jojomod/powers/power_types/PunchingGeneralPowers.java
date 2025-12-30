@@ -7,6 +7,9 @@ public class PunchingGeneralPowers extends GeneralPowers {
     public PunchingGeneralPowers(LivingEntity self) {
         super(self);
     }
+    public boolean isBrawling(){
+        return true;
+    }
     public PunchingGeneralPowers() {
         super(null);
     }

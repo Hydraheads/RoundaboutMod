@@ -1832,6 +1832,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     @Override
     public boolean roundabout$getEffectiveCombatMode() {
+        if (PowerTypes.isBrawling(rdbt$this())){
+            return true;
+        }
         if (getEntityData().hasItem(ROUNDABOUT$COMBAT_MODE)) {
             return this.getEntityData().get(ROUNDABOUT$COMBAT_MODE) && (((StandUser)this).roundabout$hasAStand() &&
                     this.roundabout$getStandPowers().hasStandActive(((LivingEntity) (Object)this)));

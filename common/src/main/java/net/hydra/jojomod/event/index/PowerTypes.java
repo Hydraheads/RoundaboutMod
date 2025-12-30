@@ -3,6 +3,7 @@ package net.hydra.jojomod.event.index;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -69,6 +70,33 @@ public enum PowerTypes {
             if (getPowerType(pl) == NONE.ordinal())
                 ((IPlayerEntity)pl).roundabout$setPower((byte) STAND.ordinal());
         }
+    }
+
+    public static boolean isBrawling(Entity ent){
+        if (ent instanceof Player pl){
+            if (isUsingPower(ent)){
+                return ((IPowersPlayer)pl).rdbt$getPowers().isBrawling();
+            }
+        }
+        return false;
+    }
+    public static boolean isUsingPower(Entity ent){
+        if (ent instanceof Player pl){
+            if (((StandUser)pl).roundabout$getActive()){
+                return (getPowerFromByte(getPowerType(ent)) != PowerTypes.STAND);
+            }
+        }
+        return false;
+    }
+    public static boolean isUsingStand(Entity ent){
+        if (ent instanceof Player pl){
+            if (((StandUser)pl).roundabout$getActive()){
+                return (getPowerFromByte(getPowerType(ent)) == PowerTypes.STAND);
+            }
+        } else if (ent instanceof LivingEntity LE){
+            return ((StandUser)LE).roundabout$getActive();
+        }
+        return false;
     }
 
     public static List<PowerTypes> getAvailablePowers(Player pl){

@@ -12,6 +12,8 @@ import net.hydra.jojomod.client.models.stand.renderers.JusticeBaseRenderer;
 import net.hydra.jojomod.client.models.stand.renderers.JusticeRenderer;
 import net.hydra.jojomod.client.models.stand.renderers.StandRenderer;
 import net.hydra.jojomod.entity.stand.*;
+import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.*;
@@ -175,15 +177,32 @@ public abstract class ZItemInHandRenderer {
         if (abstractClientPlayer != null && ((StandUser)abstractClientPlayer).roundabout$getEffectiveCombatMode() && !abstractClientPlayer.isUsingItem() ||
                 AnubisLayer.shouldRender(abstractClientPlayer) != null) {
 
-            ClientUtil.pushPoseAndCooperate(poseStack,4);
-            boolean $$10 = interactionHand == InteractionHand.MAIN_HAND;
-            HumanoidArm humarm = $$10 ? abstractClientPlayer.getMainArm() : abstractClientPlayer.getMainArm().getOpposite();
-            if ($$10 && !abstractClientPlayer.isInvisible()) {
-                this.renderPlayerArm(poseStack, multiBufferSource, j, i, h, humarm);
+            if (PowerTypes.isBrawling(abstractClientPlayer)){
+                boolean $$10 = interactionHand == InteractionHand.MAIN_HAND;
+                if ($$10){
+                    poseStack.pushPose();
+                    HumanoidArm $$11 = $$10 ? abstractClientPlayer.getMainArm() : abstractClientPlayer.getMainArm().getOpposite();
+                    this.renderPlayerArm(poseStack, multiBufferSource, j, i, h, $$11);
+                    abstractClientPlayer.setMainArm(abstractClientPlayer.getMainArm().getOpposite());
+                    poseStack.popPose();
+
+                    poseStack.pushPose();
+                    this.renderPlayerArm(poseStack, multiBufferSource, j, i, h, $$11.getOpposite());
+                    abstractClientPlayer.setMainArm(abstractClientPlayer.getMainArm().getOpposite());
+                    ci.cancel();
+                    poseStack.popPose();
+                }
+            } else {
+                ClientUtil.pushPoseAndCooperate(poseStack,4);
+                boolean $$10 = interactionHand == InteractionHand.MAIN_HAND;
+                HumanoidArm humarm = $$10 ? abstractClientPlayer.getMainArm() : abstractClientPlayer.getMainArm().getOpposite();
+                if ($$10 && !abstractClientPlayer.isInvisible()) {
+                    this.renderPlayerArm(poseStack, multiBufferSource, j, i, h, humarm);
+                }
+                ClientUtil.popPoseAndCooperate(poseStack,4);
+                ci.cancel();
+                return;
             }
-            ClientUtil.popPoseAndCooperate(poseStack,4);
-            ci.cancel();
-            return;
         }
 
 

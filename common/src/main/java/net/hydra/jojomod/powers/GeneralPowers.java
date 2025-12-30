@@ -37,7 +37,9 @@ public class GeneralPowers extends AbilityScapeBasis {
     public Component getPowerTagName(){
         return Component.empty();
     }
-
+    public boolean isBrawling(){
+        return false;
+    }
 
     //The Power inventory icon coords
     public Vector2i getCoords(){
