@@ -1287,7 +1287,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (isInWater())
                 MainUtil.clearStoneMask(rdbt$this());
 
-            if (this.roundabout$getActive() &&this.roundabout$getStandPowers().canSummonStand()&&this.roundabout$getStandPowers().canSummonStandAsEntity()  && (this.roundabout$getStand() == null ||
+            if (PowerTypes.hasStandActive(rdbt$this()) &&this.roundabout$getStandPowers().canSummonStand()&&this.roundabout$getStandPowers().canSummonStandAsEntity()  && (this.roundabout$getStand() == null ||
                     (this.roundabout$getStand().level().dimensionTypeId() != this.level().dimensionTypeId() &&
                             this.roundabout$getStand() instanceof FollowingStandEntity FE && OffsetIndex.OffsetStyle(FE.getOffsetType()) == OffsetIndex.FOLLOW_STYLE))){
                 this.roundabout$summonStand(this.level(),true,false);
@@ -2807,74 +2807,81 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             return;
         }
         boolean active;
-        if (!this.roundabout$getActive() || forced) {
+        if (!roundabout$getActive() || forced) {
             //world.getEntity
-            StandPowers thispowers = this.roundabout$getStandPowers();
-            if (thispowers.canSummonStand()) {
-                thispowers.playSummonEffects(forced);
 
-                if (thispowers.canSummonStandAsEntity()) {
+            if (PowerTypes.hasStandActivelyEquipped(rdbt$this())){
 
-                    StandEntity stand = thispowers.getNewStandEntity();
-                    if (stand != null) {
-                        InteractionHand hand = roundabout$User.getUsedItemHand();
-                        if (hand == InteractionHand.OFF_HAND) {
-                            ItemStack itemStack = roundabout$User.getUseItem();
-                            Item item = itemStack.getItem();
-                            if (item.getUseAnimation(itemStack) == UseAnim.BLOCK) {
-                                roundabout$User.releaseUsingItem();
+                StandPowers thispowers = this.roundabout$getStandPowers();
+                if (thispowers.canSummonStand()) {
+
+                    thispowers.playSummonEffects(forced);
+
+                    if (thispowers.canSummonStandAsEntity()) {
+
+                        StandEntity stand = thispowers.getNewStandEntity();
+                        if (stand != null) {
+                            InteractionHand hand = roundabout$User.getUsedItemHand();
+                            if (hand == InteractionHand.OFF_HAND) {
+                                ItemStack itemStack = roundabout$User.getUseItem();
+                                Item item = itemStack.getItem();
+                                if (item.getUseAnimation(itemStack) == UseAnim.BLOCK) {
+                                    roundabout$User.releaseUsingItem();
+                                }
                             }
-                        }
-                        if (stand instanceof FollowingStandEntity FE) {
-                            Vec3 spos = FE.getStandOffsetVector(roundabout$User);
-                        stand.absMoveTo(spos.x(), spos.y(), spos.z());
-                        } else {
-                            Vec3 yes = this.getPosition(1F).add(stand.getBonusOffset());
-                            stand.absMoveTo(yes.x,yes.y,yes.z);
-                        }
-
-                        stand.setSkin(roundabout$getStandSkin());
-                        stand.setIdleAnimation(roundabout$getIdlePos());
-
-                        if (((LivingEntity) (Object) this) instanceof Player PE) {
-                            stand.playerSetProperties(PE);
                             if (stand instanceof FollowingStandEntity FE) {
-                                FE.setDistanceOut(((IPlayerEntity) PE).roundabout$getDistanceOut());
-                                FE.setAnchorPlace(((IPlayerEntity) PE).roundabout$getAnchorPlace());
-                                FE.setAnchorPlaceAttack(((IPlayerEntity) PE).roundabout$getAnchorPlaceAttack());
-                                FE.setSizePercent(((IPlayerEntity) PE).roundabout$getSizePercent());
-                                FE.setIdleRotation(((IPlayerEntity) PE).roundabout$getIdleRotation());
-                                FE.setIdleYOffset(((IPlayerEntity) PE).roundabout$getIdleYOffset());
+                                Vec3 spos = FE.getStandOffsetVector(roundabout$User);
+                                stand.absMoveTo(spos.x(), spos.y(), spos.z());
+                            } else {
+                                Vec3 yes = this.getPosition(1F).add(stand.getBonusOffset());
+                                stand.absMoveTo(yes.x,yes.y,yes.z);
                             }
-                            if (!this.level().isClientSide()) {
-                                IPlayerEntity ipe = ((IPlayerEntity) this);
-                                S2CPacketUtil.sendPowerInventorySettings(
-                                        ((ServerPlayer) ((Player) (Object) this)), ipe.roundabout$getAnchorPlace(),
-                                        ipe.roundabout$getDistanceOut(),
-                                        ipe.roundabout$getSizePercent(),
-                                        ipe.roundabout$getIdleRotation(),
-                                        ipe.roundabout$getIdleYOffset(),
-                                        ipe.roundabout$getAnchorPlaceAttack());
-                            }
-                        }
 
-                        theWorld.addFreshEntity(stand);
+                            stand.setSkin(roundabout$getStandSkin());
+                            stand.setIdleAnimation(roundabout$getIdlePos());
+
+                            if (((LivingEntity) (Object) this) instanceof Player PE) {
+                                stand.playerSetProperties(PE);
+                                if (stand instanceof FollowingStandEntity FE) {
+                                    FE.setDistanceOut(((IPlayerEntity) PE).roundabout$getDistanceOut());
+                                    FE.setAnchorPlace(((IPlayerEntity) PE).roundabout$getAnchorPlace());
+                                    FE.setAnchorPlaceAttack(((IPlayerEntity) PE).roundabout$getAnchorPlaceAttack());
+                                    FE.setSizePercent(((IPlayerEntity) PE).roundabout$getSizePercent());
+                                    FE.setIdleRotation(((IPlayerEntity) PE).roundabout$getIdleRotation());
+                                    FE.setIdleYOffset(((IPlayerEntity) PE).roundabout$getIdleYOffset());
+                                }
+                                if (!this.level().isClientSide()) {
+                                    IPlayerEntity ipe = ((IPlayerEntity) this);
+                                    S2CPacketUtil.sendPowerInventorySettings(
+                                            ((ServerPlayer) ((Player) (Object) this)), ipe.roundabout$getAnchorPlace(),
+                                            ipe.roundabout$getDistanceOut(),
+                                            ipe.roundabout$getSizePercent(),
+                                            ipe.roundabout$getIdleRotation(),
+                                            ipe.roundabout$getIdleYOffset(),
+                                            ipe.roundabout$getAnchorPlaceAttack());
+                                }
+                            }
+
+                            theWorld.addFreshEntity(stand);
+
+                            if (sound && !((TimeStop) this.level()).CanTimeStopEntity(this)) {
+                                thispowers.playSummonSound();
+                            }
+
+                            this.roundabout$standMount(stand);
+                        }
+                    } else {
 
                         if (sound && !((TimeStop) this.level()).CanTimeStopEntity(this)) {
                             thispowers.playSummonSound();
                         }
-
-                        this.roundabout$standMount(stand);
                     }
+                    active=true;
                 } else {
-
-                    if (sound && !((TimeStop) this.level()).CanTimeStopEntity(this)) {
-                        thispowers.playSummonSound();
-                    }
+                    active=false;
                 }
-                active=true;
             } else {
-                active=false;
+                active = true;
             }
 
         } else {
@@ -4614,7 +4621,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         /**hey ya fade ticks*/
-        boolean active = roundabout$getActive();
+        boolean active = PowerTypes.hasStandActive(rdbt$this());
         if (roundabout$getStandPowers() instanceof PowersHeyYa && active){
             roundabout$setHeyYaVanishTicks(roundabout$getHeyYaVanishTicks()+1);
         } else {
@@ -4627,7 +4634,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setMandomVanishTicks(roundabout$getMandomVanishTicks()-1);
         }
         /** RattShoulder fade ticks*/
-        if (roundabout$getActive() && roundabout$getStandPowers() instanceof PowersRatt &&
+        if (PowerTypes.hasStandActive(rdbt$this()) && roundabout$getStandPowers() instanceof PowersRatt &&
                 !((PowersRatt)roundabout$getStandPowers()).isPlaced()
         ){
             roundabout$setRattShoulderVanishTicks(roundabout$getRattShoulderVanishTicks()+1);
@@ -4709,7 +4716,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     protected void roundabout$decreaseAirSupply(int $$0, CallbackInfoReturnable<Integer> cir) {
         boolean $$0P = ((LivingEntity)(Object)this) instanceof Player;
             int air = roundabout$getStandPowers().getAirAmount();
-            if (air > 0 && roundabout$getActive()) {
+            if (air > 0 && PowerTypes.hasStandActive(rdbt$this())) {
                 if (this.isEyeInFluid(FluidTags.WATER)
                         && !this.level().getBlockState(BlockPos.containing(this.getX(), this.getEyeY(), this.getZ())).is(Blocks.BUBBLE_COLUMN)) {
                     boolean $$3 = !this.canBreatheUnderwater() && !MobEffectUtil.hasWaterBreathing((LivingEntity) (Object)this) &&

@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.C2SPacketUtil;
@@ -22,20 +23,40 @@ public class KeyInputs {
     public static int roundaboutClickCount = 0;
 
     public static void summonKey(Player player, Minecraft client){
-        StandUser user = ((StandUser) player);
-        if (user.roundabout$getStandPowers().canSummonStand() && !user.roundabout$isSealed() && !user.roundabout$isPossessed()) {
-            if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0) {
-                if (user.roundabout$getActive()) {
-                    user.roundabout$setSummonCD(8);
-                    user.roundabout$setActive(false);
-                    user.roundabout$tryPower(PowerIndex.NONE, true);
-                } else {
-                    user.roundabout$setActive(true);
-                    user.roundabout$setSummonCD(2);
+        if (PowerTypes.hasStandActivelyEquipped(player)){
+            StandUser user = ((StandUser) player);
+            if (user.roundabout$getStandPowers().canSummonStand() && !user.roundabout$isSealed() && !user.roundabout$isPossessed()) {
+                if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0) {
+                    if (user.roundabout$getActive()) {
+                        user.roundabout$setSummonCD(8);
+                        user.roundabout$setActive(false);
+                        user.roundabout$tryPower(PowerIndex.NONE, true);
+                    } else {
+                        user.roundabout$setActive(true);
+                        user.roundabout$setSummonCD(2);
+                    }
+                    C2SPacketUtil.standSummonPacket();
                 }
-                C2SPacketUtil.standSummonPacket();
+                roundaboutClickCount = 2;
             }
-            roundaboutClickCount = 2;
+        } else {
+            if (PowerTypes.getPowerType(player) != PowerTypes.NONE.ordinal()){
+                StandUser user = ((StandUser) player);
+                if (!user.roundabout$isPossessed()){
+                    if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0) {
+                        if (user.roundabout$getActive()) {
+                            user.roundabout$setSummonCD(8);
+                            user.roundabout$setActive(false);
+                            user.roundabout$tryPowerP(PowerIndex.NONE, true);
+                        } else {
+                            user.roundabout$setActive(true);
+                            user.roundabout$setSummonCD(2);
+                        }
+                        C2SPacketUtil.standSummonPacket();
+                    }
+                    roundaboutClickCount = 2;
+                }
+            }
         }
     }
 

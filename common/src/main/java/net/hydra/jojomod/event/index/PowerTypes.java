@@ -114,6 +114,16 @@ public enum PowerTypes {
         return powerList;
     }
 
+    public static boolean hasStandActivelyEquipped(Entity entity){
+        if (entity instanceof LivingEntity LE){
+            if (entity instanceof Player PL){
+                return getPowerType(PL) == STAND.ordinal();
+            }
+            return ((StandUser)LE).roundabout$hasAStand();
+        }
+        return false;
+    }
+
     public static boolean hasStandActive(Entity entity){
         if (entity instanceof LivingEntity LE){
             if (entity instanceof Player PL){
