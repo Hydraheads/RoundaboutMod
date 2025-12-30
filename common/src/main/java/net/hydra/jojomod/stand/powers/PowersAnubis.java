@@ -1574,9 +1574,13 @@ public class PowersAnubis extends NewDashPreset {
             WOODEN = 3,
             STONE = 4,
             AQUAMARINE = 5,
-            GILDED = 6,
+            TIMEKEEPER = 6,
             DIAMOND = 7,
-            ANCIENT = 8;
+            ANCIENT = 8,
+            GRASS = 9,
+            GRAY_WAGON = 10,
+            CHORUS = 11;
+
 
     @Override
     public List<Byte> getSkinList() {
@@ -1585,10 +1589,14 @@ public class PowersAnubis extends NewDashPreset {
                 EVIL,
                 WOODEN,
                 STONE,
+                GRASS,
                 AQUAMARINE,
-                GILDED,
+                GRAY_WAGON,
+                TIMEKEEPER,
                 DIAMOND,
+                CHORUS,
                 ANCIENT
+
         );
     }
 
@@ -1598,9 +1606,12 @@ public class PowersAnubis extends NewDashPreset {
             case PowersAnubis.EVIL -> Component.translatable("skins.roundabout.anubis.evil");
             case PowersAnubis.WOODEN -> Component.translatable("skins.roundabout.anubis.wooden");
             case PowersAnubis.STONE -> Component.translatable("skins.roundabout.anubis.stone");
+            case PowersAnubis.GRASS -> Component.translatable("skins.roundabout.anubis.grass");
             case PowersAnubis.AQUAMARINE -> Component.translatable("skins.roundabout.anubis.aquamarine");
-            case PowersAnubis.GILDED -> Component.translatable("skins.roundabout.anubis.golden");
+            case PowersAnubis.GRAY_WAGON -> Component.translatable("skins.roundabout.anubis.gray_wagon");
+            case PowersAnubis.TIMEKEEPER -> Component.translatable("skins.roundabout.anubis.timekeeper");
             case PowersAnubis.DIAMOND -> Component.translatable("skins.roundabout.anubis.diamond");
+            case PowersAnubis.CHORUS -> Component.translatable("skins.roundabout.anubis.chorus");
             case PowersAnubis.ANCIENT -> Component.translatable("skins.roundabout.anubis.ancient");
             default -> Component.translatable("skins.roundabout.anubis.anime");
         };

@@ -1631,6 +1631,11 @@
   "skins.roundabout.anubis.golden" : "Gilded",
   "skins.roundabout.anubis.diamond" : "Diamond",
   "skins.roundabout.anubis.ancient" : "Ancient",
+  "skins.roundabout.anubis.grass": "The Mower",
+  "skins.roundabout.anubis.gray_wagon": "Gray Wagon",
+  "skins.roundabout.anubis.timekeeper": "Timekeeper",
+  "skins.roundabout.anubis.chorus": "Chorus",
+
 
 
   "roundabout.anubis.playback_title": "Replay Memories",
