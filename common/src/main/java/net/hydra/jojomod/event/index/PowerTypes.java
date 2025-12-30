@@ -12,6 +12,7 @@ import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.StandGeneralPowers;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -20,6 +21,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public enum PowerTypes {
     NONE(new GeneralPowers()),
@@ -64,6 +68,21 @@ public enum PowerTypes {
             if (getPowerType(pl) == NONE.ordinal())
                 ((IPlayerEntity)pl).roundabout$setPower((byte) STAND.ordinal());
         }
+    }
+
+    public static List<PowerTypes> getAvailablePowers(Player pl){
+        List<PowerTypes> powerList = new ArrayList<>();
+        if (pl != null) {
+            if (FateTypes.isVampire(pl)) {
+                powerList.add(VAMPIRE);
+            }
+            StandUser user = ((StandUser) pl);
+            boolean hasStand = user.roundabout$hasAStand();
+            if (hasStand){
+                powerList.add(STAND);
+            }
+        }
+        return powerList;
     }
 
     public static boolean hasStandActive(Entity entity){

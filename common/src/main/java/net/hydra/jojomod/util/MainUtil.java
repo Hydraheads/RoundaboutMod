@@ -2403,6 +2403,39 @@ public class MainUtil {
             if (player != null) {
                 S2CPacketUtil.beamVampireData(player);
             }
+        } else if (context == PacketDataIndex.SINGLE_BYTE_LEFT_POWERS) {
+            List<PowerTypes> powerTypes = PowerTypes.getAvailablePowers(player);
+            int queryNumber = 0;
+            int powerNumber = ((IPlayerEntity)player).roundabout$getPower();
+            for (var i = 0; i < powerTypes.size(); i++){
+                PowerTypes pt = powerTypes.get(i);
+                if (powerNumber == pt.ordinal()){
+                    queryNumber = i;
+                }
+            }
+
+            queryNumber++;
+            if (queryNumber > powerTypes.size()-1){
+                queryNumber = 0;
+            }
+            ((IPlayerEntity)player).roundabout$setPower((byte)powerTypes.get(queryNumber).ordinal());
+
+        } else if (context == PacketDataIndex.SINGLE_BYTE_RIGHT_POWERS) {
+            List<PowerTypes> powerTypes = PowerTypes.getAvailablePowers(player);
+            int queryNumber = 0;
+            int powerNumber = ((IPlayerEntity) player).roundabout$getPower();
+            for (var i = 0; i < powerTypes.size(); i++) {
+                PowerTypes pt = powerTypes.get(i);
+                if (powerNumber == pt.ordinal()) {
+                    queryNumber = i;
+                }
+            }
+
+            queryNumber--;
+            if (queryNumber < 0) {
+                queryNumber = powerTypes.size()-1;
+            }
+            ((IPlayerEntity) player).roundabout$setPower((byte)powerTypes.get(queryNumber).ordinal());
         }
     }
 

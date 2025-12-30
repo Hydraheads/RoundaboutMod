@@ -24,8 +24,8 @@ public abstract class PowersPlayer extends LivingEntity implements IPowersPlayer
     @Unique
     @Override
     public GeneralPowers rdbt$getPowers(){
-        if (rdbt$lastPower != ((IPlayerEntity)this).roundabout$getFate()){
-            rdbt$lastPower = ((IPlayerEntity)this).roundabout$getFate();
+        if (rdbt$lastPower != ((IPlayerEntity)this).roundabout$getPower()){
+            rdbt$lastPower = ((IPlayerEntity)this).roundabout$getPower();
             rdbt$powers = null;
         }
         if (rdbt$powers == null){

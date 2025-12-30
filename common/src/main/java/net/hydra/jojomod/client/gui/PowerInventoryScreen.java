@@ -17,6 +17,7 @@ import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
@@ -79,7 +80,10 @@ public class PowerInventoryScreen
     public List<AbilityIconInstance> abilityList = ImmutableList.of();
 
     public boolean shouldRenderPowersTab(Player player){
-        if (FateTypes.isVampire(player)){
+        List<PowerTypes> powerList = PowerTypes.getAvailablePowers(player);
+        if (!powerList.isEmpty()){
+            if (powerList.contains(PowerTypes.STAND) && powerList.size() == 1)
+                return false;
             return true;
         }
         return false;
@@ -547,6 +551,7 @@ public class PowerInventoryScreen
 
             } else if (tab == 3 && shouldPowers) {
                 GeneralPowers gp = ((IPowersPlayer)pl).rdbt$getPowers();
+                context.blit(gp.getSource(), i +85, j + 19, gp.getCoords().x, gp.getCoords().y, 78, 17);
                 boolean bypass = false;
                 if (pl.isCreative()) {
                     bypass = true;
@@ -554,7 +559,29 @@ public class PowerInventoryScreen
                 gp.drawOtherGUIElements(this.font, context, delta, mouseX, mouseY, i, j, POWER_INVENTORY_LOCATION);
                 abilityList = gp.drawGUIIcons(context, delta, mouseX, mouseY, i, j,
                         ((IPlayerEntity) pl).roundabout$getStandLevel(), bypass);
+
+                int lefXPos = leftPos + 77;
+                int rightXPos = leftPos + 164;
+                int topYPos = topPos + 22;
+                List<PowerTypes> powerList = PowerTypes.getAvailablePowers(pl);
+
+                if (powerList.size() > 1) {
+                    if (isSurelyHovering(rightXPos, topYPos, 7, 13, mouseX, mouseY)) {
+                        context.blit(POWER_INVENTORY_LOCATION, rightXPos, topYPos, 177, 31, 7, 11);
+                    } else {
+                        context.blit(POWER_INVENTORY_LOCATION, rightXPos, topYPos, 177, 19, 7, 11);
+                    }
+
+                    if (isSurelyHovering(lefXPos, topYPos, 7, 13, mouseX, mouseY)) {
+                        context.blit(POWER_INVENTORY_LOCATION, lefXPos, topYPos, 185, 31, 7, 11);
+                    } else {
+                        context.blit(POWER_INVENTORY_LOCATION, lefXPos, topYPos, 185, 19, 7, 11);
+                    }
+                }
+
+
                 drawIcons(context,mouseX,mouseY);
+
             }
         }
 
@@ -920,6 +947,10 @@ public class PowerInventoryScreen
             boolean shouldPowers = shouldRenderPowersTab(pl);
             tab = ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab;
 
+            StandUser standUser = ((StandUser) pl);
+            StandPowers sp = standUser.roundabout$getStandPowers();
+            StandUserClientPlayer scp = ((StandUserClientPlayer) pl);
+            int menuTicks = scp.roundabout$getMenuTicks();
             if (hasFate){
                 if (tab != 1) {
                     if (isSurelyHovering(i - 25 + (25 * slot), j - 24, 24, 26, mouseX, mouseY)) {
@@ -942,6 +973,56 @@ public class PowerInventoryScreen
                         SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
                         soundmanager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                     }
+                } else {
+
+                    int lefXPos = leftPos + 77;
+                    int rightXPos = leftPos + 164;
+                    int topYPos = topPos + 22;
+                    int bottomYPos = topPos + 40;
+                    stand = standUser.roundabout$getStandPowers().getStandForHUD();
+                    if (sp.hasMoreThanOneSkin()) {
+                        if (isSurelyHovering(rightXPos, topYPos, 7, 13, mouseX, mouseY)) {
+                            if (menuTicks <= -1) {
+                                scp.roundabout$setMenuTicks(5);
+                                scp.roundabout$setMenuTicks(5);
+                                if (standUser.roundabout$isSealed()) {
+                                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT_SEALED);
+                                } else {
+                                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT);
+                                }
+                            }
+                            return true;
+                        }
+
+                        if (isSurelyHovering(lefXPos, topYPos, 7, 13, mouseX, mouseY)) {
+                            if (menuTicks <= -1) {
+                                scp.roundabout$setMenuTicks(5);
+                                if (standUser.roundabout$isSealed()) {
+                                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SKIN_LEFT_SEALED);
+                                } else {
+                                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SKIN_LEFT);
+                                }
+                            }
+                            return true;
+                        }
+                    }
+                    if (sp.hasMoreThanOnePos()) {
+                        if (isSurelyHovering(rightXPos, bottomYPos, 7, 13, mouseX, mouseY)) {
+                            if (menuTicks <= -1) {
+                                scp.roundabout$setMenuTicks(5);
+                                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_IDLE_RIGHT);
+                            }
+                            return true;
+                        }
+
+                        if (isSurelyHovering(lefXPos, bottomYPos, 7, 13, mouseX, mouseY)) {
+                            if (menuTicks <= -1) {
+                                scp.roundabout$setMenuTicks(5);
+                                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_IDLE_LEFT);
+                            }
+                            return true;
+                        }
+                    }
                 }
                 slot++;
             }
@@ -952,6 +1033,29 @@ public class PowerInventoryScreen
                         ConfigManager.saveClientConfig();
                         SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
                         soundmanager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                    }
+                } else {
+                    int lefXPos = leftPos + 77;
+                    int rightXPos = leftPos + 164;
+                    int topYPos = topPos + 22;
+                    List<PowerTypes> powerList = PowerTypes.getAvailablePowers(pl);
+
+                    if (powerList.size() > 1) {
+                        if (isSurelyHovering(rightXPos, topYPos, 7, 13, mouseX, mouseY)) {
+                            if (menuTicks <= -1) {
+                                scp.roundabout$setMenuTicks(5);
+                                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_RIGHT_POWERS);
+                            }
+                            return true;
+                        }
+
+                        if (isSurelyHovering(lefXPos, topYPos, 7, 13, mouseX, mouseY)) {
+                            if (menuTicks <= -1) {
+                                scp.roundabout$setMenuTicks(5);
+                                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_LEFT_POWERS);
+                            }
+                            return true;
+                        }
                     }
                 }
                 slot++;
@@ -1001,60 +1105,11 @@ public class PowerInventoryScreen
                 return true;
             }
 
-            int lefXPos = leftPos + 77;
-            int rightXPos = leftPos + 164;
-            int topYPos = topPos + 22;
-            int bottomYPos = topPos + 40;
-            StandUser standUser = ((StandUser) pl);
-            StandPowers sp = standUser.roundabout$getStandPowers();
-            StandUserClientPlayer scp = ((StandUserClientPlayer) pl);
-            int menuTicks = scp.roundabout$getMenuTicks();
-            stand = standUser.roundabout$getStandPowers().getStandForHUD();
-            if (sp.hasMoreThanOneSkin()) {
-                if (isSurelyHovering(rightXPos, topYPos, 7, 13, mouseX, mouseY)) {
-                    if (menuTicks <= -1) {
-                        scp.roundabout$setMenuTicks(5);
-                        scp.roundabout$setMenuTicks(5);
-                        if (standUser.roundabout$isSealed()) {
-                            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT_SEALED);
-                        } else {
-                            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT);
-                        }
-                    }
-                    return true;
-                }
-
-                if (isSurelyHovering(lefXPos, topYPos, 7, 13, mouseX, mouseY)) {
-                    if (menuTicks <= -1) {
-                        scp.roundabout$setMenuTicks(5);
-                        if (standUser.roundabout$isSealed()) {
-                            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SKIN_LEFT_SEALED);
-                        } else {
-                            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SKIN_LEFT);
-                        }
-                    }
-                    return true;
-                }
-            }
 
 
-            if (sp.hasMoreThanOnePos()) {
-                if (isSurelyHovering(rightXPos, bottomYPos, 7, 13, mouseX, mouseY)) {
-                    if (menuTicks <= -1) {
-                        scp.roundabout$setMenuTicks(5);
-                        C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_IDLE_RIGHT);
-                    }
-                    return true;
-                }
 
-                if (isSurelyHovering(lefXPos, bottomYPos, 7, 13, mouseX, mouseY)) {
-                    if (menuTicks <= -1) {
-                        scp.roundabout$setMenuTicks(5);
-                        C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_IDLE_LEFT);
-                    }
-                    return true;
-                }
-            }
+
+
         }
         /**
         if (this.recipeBookComponent.mouseClicked($$0, $$1, $$2)) {

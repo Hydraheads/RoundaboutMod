@@ -71,6 +71,8 @@ public class PacketDataIndex {
     public static final byte QUERY_STAND_UPDATE = 33;
     public static final byte QUERY_STAND_UPDATE_2 = 34;
     public static final byte QUERY_VAMPIRE_UPDATE = 35;
+    public static final byte SINGLE_BYTE_LEFT_POWERS = 36;
+    public static final byte SINGLE_BYTE_RIGHT_POWERS = 37;
 
     /**Byte packets*/
     public static final byte BYTE_CHANGE_MORPH = 6;

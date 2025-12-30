@@ -1,13 +1,13 @@
 package net.hydra.jojomod.powers.power_types;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
+import org.joml.Vector2i;
 
 import java.util.List;
 
@@ -37,4 +37,8 @@ public class StandGeneralPowers extends GeneralPowers {
         return $$1;
     }
 
+    @Override
+    public Vector2i getCoords(){
+        return new Vector2i(0,239);
+    }
 }

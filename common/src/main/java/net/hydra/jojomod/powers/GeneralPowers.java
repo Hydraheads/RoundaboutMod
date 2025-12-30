@@ -1,15 +1,17 @@
 package net.hydra.jojomod.powers;
 
-import net.hydra.jojomod.fates.FatePowers;
+import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector2i;
 
 public class GeneralPowers extends AbilityScapeBasis {
     public GeneralPowers(LivingEntity self) {
@@ -31,6 +33,15 @@ public class GeneralPowers extends AbilityScapeBasis {
     /**The text name of the power*/
     public Component getPowerName(){
         return Component.empty();
+    }
+
+
+    //The Power inventory icon coords
+    public Vector2i getCoords(){
+        return new Vector2i(0,222);
+    }
+    public ResourceLocation getSource(){
+        return StandIcons.JOJO_ICONS_2;
     }
 
     @Override
