@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersJustice;
@@ -100,7 +101,7 @@ public class RoundaboutCommands {
                     user.roundabout$setStandSkin(skin);
                     user.roundabout$setIdlePosX(pose);
 
-                    if (user.roundabout$getActive()){
+                    if (PowerTypes.hasStandActive(entity)){
                         ((StandUser) entity).roundabout$summonStand(entity.level(), true,false);
                     }
                 }

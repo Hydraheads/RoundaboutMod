@@ -91,6 +91,9 @@ public class StandPowers extends AbilityScapeBasis {
 
 
 
+    public boolean hasPassiveCombatMode(){
+        return false;
+    }
 
     // -----------------------------------------------------------------------------------------
     // FUNCTIONS TO OVERRIDE (Excluding hud stuff, see next section for that)

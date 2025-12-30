@@ -501,7 +501,6 @@ public class PowersAnubis extends NewDashPreset {
                 if (P.isCreative()) { enablePogo();}
             }
         }
-        SU.roundabout$setCombatMode(SU.roundabout$getActive());
 
         tickSlipStream();
 
@@ -550,6 +549,12 @@ public class PowersAnubis extends NewDashPreset {
         }
     }
 
+    @Override
+    public boolean hasPassiveCombatMode(){
+        return true;
+    }
+
+
     public void tickMemories() {
         if (this.memories.size() != 8 && isClient()) {
             generateMemories(this);
@@ -585,7 +590,7 @@ public class PowersAnubis extends NewDashPreset {
                     boolean bl2 = true;
                     if (id == AnubisMoment.ABILITY_2 || id == AnubisMoment.ABILITY_3) {
 
-                        if(this.getStandUserSelf().roundabout$getActive()) {
+                        if(PowerTypes.hasStandActive(self)) {
                             bl2 = false;
                         }
                     }

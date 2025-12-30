@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.core.BlockPos;
@@ -69,7 +70,7 @@ public abstract class ForgePlayer extends LivingEntity {
 
 
 
-        boolean standActive = ((StandUser) this).roundabout$getActive();
+        boolean standActive = PowerTypes.hasStandActive(this);
         if (standActive){
             float bpow = ((StandUser)this).roundabout$getStandPowers().getBonusPassiveMiningSpeed();
                     if (bpow != 1){
@@ -141,7 +142,7 @@ public abstract class ForgePlayer extends LivingEntity {
     /**stand mining intercepts mining speed as well*/
     @Inject(method = "getDigSpeed", at = @At(value = "HEAD"), cancellable = true, remap = false)
     protected void roundabout$getForgeDestroySpeed2(BlockState $$0, BlockPos pos, CallbackInfoReturnable<Float> cir) {
-        boolean standActive = ((StandUser) this).roundabout$getActive();
+        boolean standActive = PowerTypes.hasStandActive(this);
         StandPowers powers = ((StandUser) this).roundabout$getStandPowers();
         if (standActive) {
             if (((StandUser) this).roundabout$getStandPowers().canUseMiningStand()) {

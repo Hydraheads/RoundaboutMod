@@ -314,7 +314,7 @@ public class MainUtil {
         if (ent instanceof LivingEntity LE){
             StandUser SU = ((StandUser) LE);
             if (SU.roundabout$getStandPowers() instanceof PowersWalkingHeart PW && (PW.hasExtendedHeelsForWalking()
-            || (SU.roundabout$getActive() && ent instanceof Mob mb && mb.onGround()))){
+            || (PowerTypes.hasStandActive(ent) && ent instanceof Mob mb && mb.onGround()))){
                 return true;
             }
 
@@ -2381,7 +2381,7 @@ public class MainUtil {
         } else if (context == PacketDataIndex.SINGLE_BYTE_DESUMMON) {
             if (player != null) {
                 StandUser user = ((StandUser) player);
-                if (user.roundabout$getActive()){
+                if (PowerTypes.hasStandActive(player)){
                     user.roundabout$summonStand(player.level(), false, false);
                 }
             }
