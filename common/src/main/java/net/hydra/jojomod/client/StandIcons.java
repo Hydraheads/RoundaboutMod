@@ -44,6 +44,12 @@ public class StandIcons {
     public static final ResourceLocation CREAM_ICONS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/cream_icons.png");
 
+    public static final ResourceLocation STAND_PASSIVES = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/stand/stand_passives.png");
+    public static final ResourceLocation STAND_SUMMON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/stand/stand_summon.png");
+    public static final ResourceLocation STAND_VISION = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/stand/stand_vision.png");
     public static final ResourceLocation BLOOD_DRINK = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/fates/vampire/drink.png");
     public static final ResourceLocation VAMPIRE = new ResourceLocation(Roundabout.MOD_ID,

@@ -7,6 +7,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -23,6 +24,7 @@ import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -76,6 +78,13 @@ public class PowerInventoryScreen
     private StandEntity stand = null;
     public List<AbilityIconInstance> abilityList = ImmutableList.of();
 
+    public boolean shouldRenderPowersTab(Player player){
+        if (FateTypes.isVampire(player)){
+            return true;
+        }
+        return false;
+    }
+
     public PowerInventoryScreen(Player player, PowerInventoryMenu pim) {
         super(pim, player.getInventory(), ((StandUser)player).roundabout$getStandPowers().getStandName());
         this.titleLabelX = 80;
@@ -96,6 +105,13 @@ public class PowerInventoryScreen
                     tab2 = 2;
                 } else {
                     tab2 = 2;
+                }
+            }
+            if (tab == 3 && !shouldRenderPowersTab(player)){
+                if (hasFate){
+                    tab2 = 1;
+                } else {
+                    tab = 3;
                 }
             }
             if (tab != tab2){
@@ -162,6 +178,7 @@ public class PowerInventoryScreen
             boolean hasFate = !FateTypes.isHuman(pl);
             boolean hasStand =standUser.roundabout$hasAStand();
             tab = ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab;
+            boolean shouldPowers = shouldRenderPowersTab(pl);
 
             if (hasFate){
                 renderTabChosen(slot,tab == 1, context, i, j, ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem().getDefaultInstance(),
@@ -171,6 +188,11 @@ public class PowerInventoryScreen
             if (hasStand){
                 renderTabChosen(slot,tab == 2, context, i, j, ModItems.STAND_DISC.getDefaultInstance(),
                         mouseX,mouseY,"power_inventory.roundabout.tabs.stand");
+                slot++;
+            }
+            if (shouldPowers){
+                renderTabChosen(slot,tab == 3, context, i, j, ModItems.METEORITE.getDefaultInstance(),
+                        mouseX,mouseY,"power_inventory.roundabout.tabs.powers");
                 slot++;
             }
 
@@ -247,6 +269,10 @@ public class PowerInventoryScreen
                 int blt = (int) Math.floor(((double) 92 / maxXP) * (exp));
                 context.blit(POWER_INVENTORY_LOCATION, ss, sss, 10, 244, 92, 4);
                 context.blit(POWER_INVENTORY_LOCATION, ss, sss, 10, 240, blt, 4);
+            } else if (shouldPowers && tab == 3) {
+                renderEntityInInventoryFollowsMouse2(
+                        context, i + 51, j + 75, 30, (float) (i + 51) - this.xMouse, (float) (j + 75 - 50) - this.yMouse, this.minecraft.player
+                );
             }
 
             int leftGearPos = leftPos + 5;
@@ -487,6 +513,7 @@ public class PowerInventoryScreen
             boolean hasFate = !FateTypes.isHuman(pl);
             StandUser user = ((StandUser) pl);
             boolean hasStand =user.roundabout$hasAStand();
+            boolean shouldPowers = shouldRenderPowersTab(pl);
             tab = ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab;
             if (tab == 1 && hasFate) {
                 FatePowers fp = ((IFatePlayer)pl).rdbt$getFatePowers();
@@ -498,7 +525,7 @@ public class PowerInventoryScreen
                 abilityList = fp.drawGUIIcons(context, delta, mouseX, mouseY, i, j,
                         ((IPlayerEntity) pl).roundabout$getStandLevel(), bypass);
                 drawIcons(context,mouseX,mouseY);
-            } if (tab == 2 && hasStand) {
+            } else if (tab == 2 && hasStand) {
                 context.blit(POWER_INVENTORY_LOCATION, i +85, j + 19, 178, 221, 78, 35);
                 StandUser standUser = ((StandUser) pl);
                 boolean bypass = false;
@@ -518,6 +545,16 @@ public class PowerInventoryScreen
                 context.drawString(this.font, sp.getSkinName(((StandUser) pl).roundabout$getStandSkin()), this.titleLabelX + 11 + leftPos, this.titleLabelY + 18 + topPos, 16777215, false);
                 context.drawString(this.font, sp.getPosName(standUser.roundabout$getIdlePos()), this.titleLabelX + 11 + leftPos, this.titleLabelY + 36 + topPos, 16777215, false);
 
+            } else if (tab == 3 && shouldPowers) {
+                GeneralPowers gp = ((IPowersPlayer)pl).rdbt$getPowers();
+                boolean bypass = false;
+                if (pl.isCreative()) {
+                    bypass = true;
+                }
+                gp.drawOtherGUIElements(this.font, context, delta, mouseX, mouseY, i, j, POWER_INVENTORY_LOCATION);
+                abilityList = gp.drawGUIIcons(context, delta, mouseX, mouseY, i, j,
+                        ((IPlayerEntity) pl).roundabout$getStandLevel(), bypass);
+                drawIcons(context,mouseX,mouseY);
             }
         }
 
@@ -585,6 +622,13 @@ public class PowerInventoryScreen
             if (tab == 1 && hasFate){
                 $$0.drawString(this.font,
                         ((IFatePlayer)pl).rdbt$getFatePowers().getFateName().getString(),
+                        this.titleLabelX, this.titleLabelY, 4210752, false);
+                return;
+            }
+            boolean shouldPowers = shouldRenderPowersTab(pl);
+            if (tab == 3 && shouldPowers){
+                $$0.drawString(this.font,
+                        ((IPowersPlayer)pl).rdbt$getPowers().getPowerName().getString(),
                         this.titleLabelX, this.titleLabelY, 4210752, false);
                 return;
             }
@@ -873,6 +917,7 @@ public class PowerInventoryScreen
             boolean hasFate = !FateTypes.isHuman(pl);
             StandUser user = ((StandUser) pl);
             boolean hasStand =user.roundabout$hasAStand();
+            boolean shouldPowers = shouldRenderPowersTab(pl);
             tab = ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab;
 
             if (hasFate){
@@ -893,6 +938,17 @@ public class PowerInventoryScreen
                 if (tab != 2) {
                     if (isSurelyHovering(i - 25 + (25 * slot), j - 24, 24, 26, mouseX, mouseY)) {
                         tab = ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab = 2;
+                        ConfigManager.saveClientConfig();
+                        SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
+                        soundmanager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                    }
+                }
+                slot++;
+            }
+            if (shouldPowers){
+                if (tab != 3) {
+                    if (isSurelyHovering(i - 25 + (25 * slot), j - 24, 24, 26, mouseX, mouseY)) {
+                        tab = ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab = 3;
                         ConfigManager.saveClientConfig();
                         SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
                         soundmanager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));

@@ -5,6 +5,7 @@ import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.HitResult;
@@ -26,6 +27,10 @@ public class GeneralPowers extends AbilityScapeBasis {
         if (!this.self.level().isClientSide && this.self instanceof ServerPlayer SP){
             S2CPacketUtil.sendActivePowerPowersPacket(SP,activePower);
         }
+    }
+    /**The text name of the power*/
+    public Component getPowerName(){
+        return Component.empty();
     }
 
     @Override
