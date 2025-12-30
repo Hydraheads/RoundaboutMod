@@ -8,6 +8,12 @@
   "text.roundabout.warn_trap_triggered": " has been triggered!",
   "text.roundabout.warn_unnamed_trap_triggered": "A fog trap has been triggered!",
 
+  "text.roundabout.powers.stand": "Stand User",
+  "text.roundabout.powers.vampire": "Vampire Powers",
+  "text.roundabout.powers.hamon": "Hamon",
+  "text.roundabout.powers.spin": "Spin",
+  "text.roundabout.powers.martial_arts": "Martial Arts",
+
   "text.roundabout.fate.vampire": "Vampire",
   "text.roundabout.fate.vampire_hair": "Change Hair Color",
 
@@ -1229,6 +1235,14 @@
   "ability.roundabout.target_zap": "Rage Cupid",
   "ability.roundabout.target_zap.desc": "Lets you select which mobs fight each other! Enter selection mode, use your attack key to select an activated survivor, then one target, and then another. They will then fight! Press the ability key again to cancel or redo selection. While this mode is active, your survivors will not automatically zap mobs together.",
 
+  "ability.roundabout.stand_vision": "Stand Sight",
+  "ability.roundabout.stand_vision.desc": "Allows you to see stands and ghost phenomenon passively. This ability applies even when using other powers, so long as you have a stand.",
+  "ability.roundabout.stand_passives": "Stand Passives",
+  "ability.roundabout.stand_passives.desc": "Some stand abilities like passive fall damage reduction or furnace activation apply even when using other powers, so long as you have the corresponding stands equipped.",
+  "ability.roundabout.stand_summon": "Stand Summon",
+  "ability.roundabout.stand_summon.desc": "Allows you to summon and use your stand, and all of its abilities seen in the stand disc tab.",
+
+
   "ability.roundabout.invisivision": "Invisi-Vision",
   "ability.roundabout.invisivision.desc": "Turn on and off the able to see see-through versions of blocks and entities that you turn invisible with your power. Turning it off is useful to get the perspective of someone without the stand, and to see through invisible blocks better.",
   "ability.roundabout.invisiburst": "Invisiburst",
@@ -1754,6 +1768,7 @@
 
   "power_inventory.roundabout.tabs.fate": "Fate",
   "power_inventory.roundabout.tabs.stand": "Stand",
+  "power_inventory.roundabout.tabs.powers": "Powers",
 
   "roundabout.warden_ts_movement": "It did not stop?!",
 

@@ -51,7 +51,7 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
     public FatePowers rdbt$fatePowers = null;
 
     @Unique
-    public byte rdbt$lastFate = FateTypes.HUMAN.id;
+    public byte rdbt$lastFate = (byte) FateTypes.HUMAN.ordinal();
 
     @Unique
     @Override

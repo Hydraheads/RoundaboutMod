@@ -437,6 +437,36 @@
       "roundabout:dio_hoho_2"
     ]
   },
+  "melee_guard": {
+    "subtitle": "sounds.roundabout.melee_guard",
+    "sounds": [
+      "roundabout:melee_guard"
+    ]
+  },
+  "timestop_resume_theworld2": {
+    "subtitle": "sounds.roundabout.timestop_resume_theworld2",
+    "sounds": [
+      "roundabout:timestop_resume_theworld2"
+    ]
+  },
+  "diego_kono_diego": {
+    "subtitle": "sounds.roundabout.diego_kono_diego",
+    "sounds": [
+      "roundabout:diego_kono_diego"
+    ]
+  },
+  "diego_hoho": {
+    "subtitle": "sounds.roundabout.diego_hoho",
+    "sounds": [
+      "roundabout:diego_hoho"
+    ]
+  },
+  "diego_hoho_2": {
+    "subtitle": "sounds.roundabout.diego_hoho_2",
+    "sounds": [
+      "roundabout:diego_hoho_2"
+    ]
+  },
   "bubble_hover_over": {
     "subtitle": "sounds.roundabout.bubble_hover_over",
     "sounds": [

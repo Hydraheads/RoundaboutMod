@@ -228,15 +228,15 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Unique
     @Override
     public boolean roundabout$isVampire(){
-        return roundabout$getFate() == FateTypes.VAMPIRE.id;
+        return roundabout$getFate() == FateTypes.VAMPIRE.ordinal();
     }
     @Unique
     @Override
     public void roundabout$setVampire(boolean vampire){
         if (vampire){
-            roundabout$setFate(FateTypes.VAMPIRE.id);
+            roundabout$setFate((byte) FateTypes.VAMPIRE.ordinal());
         } else {
-            roundabout$setFate(FateTypes.HUMAN.id);
+            roundabout$setFate((byte) FateTypes.HUMAN.ordinal());
         }
     }
     @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
