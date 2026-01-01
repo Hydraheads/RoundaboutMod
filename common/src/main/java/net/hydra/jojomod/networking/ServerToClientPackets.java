@@ -48,7 +48,8 @@ public class ServerToClientPackets {
             UpdateVampireData("update_vampire_data"),
             UpdateVampireData2("update_vampire_data_2"),
             UpdateVampireData3("update_vampire_data_3"),
-            GunRecoil("gun_recoil");
+            GunRecoil("gun_recoil"),
+            SyncPossessor("sync_possessor");
 
             public final String value;
 

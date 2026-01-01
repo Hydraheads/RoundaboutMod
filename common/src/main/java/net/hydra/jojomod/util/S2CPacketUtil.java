@@ -368,4 +368,13 @@ public class S2CPacketUtil {
             );
         }
     }
+
+    public static void syncPossessor(Player player, int i) {
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SyncPossessor.value,
+                    i
+            );
+        }
+    }
 }

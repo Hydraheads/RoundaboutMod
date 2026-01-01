@@ -9,6 +9,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
@@ -670,18 +671,21 @@ public class StandHudRender {
     public static void renderPossessionHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                       int scaledWidth, int scaledHeight, int x) {
         int l = scaledHeight - 32 + 3;
-        int k = (int)(((float) 182 / PowersAnubis.MaxPossesionTime) * (float) ((StandUser)playerEntity).roundabout$getPossessionTime() );
+        AnubisPossessorEntity poss = (AnubisPossessorEntity) ((StandUser)playerEntity).roundabout$getPossessor();
+        if (poss != null && poss.getTarget() != null) {
+            int k = (int) ((182.0F / poss.getTarget().getMaxHealth()) * poss.getTarget().getHealth()) ;
 
-        context.blit(StandIcons.JOJO_ICONS, x, l, 0, 161, 182, 5);
+            context.blit(StandIcons.JOJO_ICONS, x, l, 0, 161, 182, 5);
 
-        if (k > 0) {
-            context.blit(StandIcons.JOJO_ICONS, x, l, 0, 166, k, 5);
+            if (k > 0) {
+                context.blit(StandIcons.JOJO_ICONS, x, l, 0, 166, k, 5);
+            }
+
+            int iconX = scaledWidth / 2 - 5;
+            int iconY = scaledHeight - 32 - 4;
+
+            context.blit(StandIcons.JOJO_ICONS, iconX, iconY, 182, 161, 11, 9);
         }
-
-        int iconX = scaledWidth / 2 - 5;
-        int iconY = scaledHeight - 32 - 4;
-
-        context.blit(StandIcons.JOJO_ICONS, iconX, iconY, 182, 161, 11, 9);
     }
     public static void renderRecordingHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                            int scaledWidth, int scaledHeight, int x) {
