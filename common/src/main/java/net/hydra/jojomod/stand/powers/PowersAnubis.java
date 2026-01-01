@@ -1122,7 +1122,7 @@ public class PowersAnubis extends NewDashPreset {
             MainUtil.takeUnresistableKnockbackWithY(this.getSelf(),-0.5,look.x,look.y,look.z);
         }
 
-        float knockbackStrength = 0.6F + (this.getSelf().isSprinting() ? 0.1F : 0F);
+        float knockbackStrength = 0.85F + (this.getSelf().isSprinting() ? 0.1F : 0F);
         if (first) {knockbackStrength = 0.2F;}
 
         List<Entity> entities = defaultSwordHitbox(this.getSelf(),4, 35,0.03);
@@ -1199,13 +1199,21 @@ public class PowersAnubis extends NewDashPreset {
                 int dur = 200;
                 int amp = 0;
                 if (range) {
-                    MainUtil.takeUnresistableKnockbackWithY(entity,0.45,0,-1,0);
                     dur = 180;
                     amp = 1;
+
+                    Vec3 v = entity.getPosition(1F).subtract(this.getSelf().getPosition(1F));
+                    v = v.normalize();
+                    MainUtil.takeUnresistableKnockbackWithY(entity,0.5,v.x,v.y+0.22,v.z);
+                    ((StandUser)this.getSelf()).roundabout$setMeleeImmunity(10);
+                } else {
+                    MainUtil.takeUnresistableKnockbackWithY(entity,0.4,0,-1,0);
                 }
-                if (entity instanceof LivingEntity LE) {
-                    LE.addEffect(new MobEffectInstance(ModEffects.BLEED,dur,amp));
-                }
+                if (entity instanceof LivingEntity LE) {LE.addEffect(new MobEffectInstance(ModEffects.BLEED,dur,amp));}
+
+
+
+
             }
         }
 
@@ -1249,7 +1257,7 @@ public class PowersAnubis extends NewDashPreset {
                     Vec3 look = this.getSelf().getLookAngle().normalize();
                     look = new Vec3(look.x,0,look.z).normalize().reverse().scale(this.getSelf().isSprinting() ? 1.3 : 1);
                     MainUtil.takeUnresistableKnockbackWithY(e,0.8F,look.x,-3,look.z);
-                    MainUtil.takeUnresistableKnockbackWithY(this.getSelf(),0.9F,0,-4,0);
+                    MainUtil.takeUnresistableKnockbackWithY(this.getSelf(),this.getSelf().isCrouching() ? 0.5 : 0.9F,0,-1,0);
 
 
                 } else {
@@ -1590,7 +1598,9 @@ public class PowersAnubis extends NewDashPreset {
             ANCIENT = 8,
             GRASS = 9,
             GRAY_WAGON = 10,
-            CHORUS = 11;
+            CHORUS = 11,
+            RAGING = 12,
+            ALLURING = 13;
 
 
     @Override
@@ -1598,6 +1608,8 @@ public class PowersAnubis extends NewDashPreset {
         return Arrays.asList(
                 ANIME,
                 EVIL,
+                ALLURING,
+                RAGING,
                 WOODEN,
                 STONE,
                 GRASS,
@@ -1615,6 +1627,8 @@ public class PowersAnubis extends NewDashPreset {
         return switch (skinId)
         {
             case PowersAnubis.EVIL -> Component.translatable("skins.roundabout.anubis.evil");
+            case PowersAnubis.ALLURING -> Component.translatable("skins.roundabout.anubis.alluring");
+            case PowersAnubis.RAGING -> Component.translatable("skins.roundabout.anubis.raging");
             case PowersAnubis.WOODEN -> Component.translatable("skins.roundabout.anubis.wooden");
             case PowersAnubis.STONE -> Component.translatable("skins.roundabout.anubis.stone");
             case PowersAnubis.GRASS -> Component.translatable("skins.roundabout.anubis.grass");

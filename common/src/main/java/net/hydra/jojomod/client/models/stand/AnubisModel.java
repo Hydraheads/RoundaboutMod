@@ -76,6 +76,8 @@ public class AnubisModel extends PsuedoHierarchicalModel {
 
     public static ResourceLocation item = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/anime_item.png");
     public static ResourceLocation anime = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/anime.png");
+    public static ResourceLocation raging = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/raging_katana.png");
+    public static ResourceLocation alluring = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/alluring_katana.png");
     public static ResourceLocation evil = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/evil.png");
     public static ResourceLocation wooden = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/wooden.png");
     public static ResourceLocation stone = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/stone.png");
@@ -104,6 +106,8 @@ public class AnubisModel extends PsuedoHierarchicalModel {
             case 9 -> {return grass;}
             case 10 -> {return gray_wagon;}
             case 11 -> {return chorus;}
+            case 12 -> {return raging;}
+            case 13 -> {return alluring;}
 
             default -> {return anime;}
         }
