@@ -1,9 +1,12 @@
 package net.hydra.jojomod.powers;
 
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.minecraft.client.Options;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -83,6 +86,45 @@ public class GeneralPowers extends AbilityScapeBasis {
     public void tryPosPowerPacket(byte packet, Vec3 pos){
         if (this.self.level().isClientSide()) {
             C2SPacketUtil.tryPosPowerPPacket(packet, pos);
+        }
+    }
+
+    @Override
+    public void preButtonInput4(boolean keyIsDown, Options options){
+        if (hasActive(this.getSelf())) {
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()  ) {
+                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
+                buttonInput4(keyIsDown, options);
+            }
+        }
+    }
+    @Override
+    public void preButtonInput3(boolean keyIsDown, Options options){
+        if (hasActive(this.getSelf())) {
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()  ) {
+                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
+                buttonInput3(keyIsDown, options);
+            }
+        }
+    }
+
+    @Override
+    public void preButtonInput2(boolean keyIsDown, Options options){
+        if (hasActive(this.getSelf())) {
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()   ) {
+                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
+                buttonInput2(keyIsDown, options);
+            }
+        }
+    }
+
+    @Override
+    public void preButtonInput1(boolean keyIsDown, Options options){
+        if (hasActive(this.getSelf())) {
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()   ) {
+                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
+                buttonInput1(keyIsDown, options);
+            }
         }
     }
 }
