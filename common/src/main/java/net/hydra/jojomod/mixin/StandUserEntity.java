@@ -20,7 +20,6 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.*;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
-import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
@@ -43,7 +42,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -84,7 +82,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
@@ -296,7 +293,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private static final EntityDataAccessor<Byte> ROUNDABOUT$IS_BUBBLE_ENCASED = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.BYTE);
     @Unique
-    private static final EntityDataAccessor<Integer> ROUNDABOUT$POSSESSION_TIME = SynchedEntityData.defineId(LivingEntity.class,
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$POSSESSOR = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.INT);
     @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$ONLY_BLEEDING = SynchedEntityData.defineId(LivingEntity.class,
@@ -1064,38 +1061,27 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         return 0;
     }
-    @Unique
-    @Override
-    public void roundabout$setPossessionTime(int adj) {
-        if (this.entityData.hasItem(ROUNDABOUT$POSSESSION_TIME)) {
-            this.getEntityData().set(ROUNDABOUT$POSSESSION_TIME, adj);
-        }
-    }
-    @Unique
-    @Override
-    public int roundabout$getPossessionTime() {
-        if (this.entityData.hasItem(ROUNDABOUT$POSSESSION_TIME)) {
-            return this.getEntityData().get(ROUNDABOUT$POSSESSION_TIME);
-        }
-        return 0;
-    }
-
-    @Unique
-    @Override
-    public boolean roundabout$isPossessed() {
-        return this.getEntityData().get(ROUNDABOUT$POSSESSION_TIME) > 0;
-    }
 
 
-    PathfinderMob roundabout$possessor = null;
+
+
     @Override
     public PathfinderMob roundabout$getPossessor() {
-        return roundabout$possessor;
+        if (this.getEntityData().get(ROUNDABOUT$POSSESSOR) != -1) {
+            return (PathfinderMob) this.level().getEntity(this.entityData.get(ROUNDABOUT$POSSESSOR));
+        }
+        return null;
     }
     @Override
     public void roundabout$setPossessor(PathfinderMob e) {
-        roundabout$possessor = e;
+        this.getEntityData().set(ROUNDABOUT$POSSESSOR,e != null ? e.getId() : -1);
     }
+    @Unique
+    @Override
+    public boolean roundabout$isPossessed() {
+        return this.level().getEntity(this.getEntityData().get(ROUNDABOUT$POSSESSOR)) != null;
+    }
+
 
     @Unique
     @Override
@@ -1253,22 +1239,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 roundabout$zappedTicks--;
             }
 
-            /** Possesion ticking */
-            int possesionTime = this.roundabout$getPossessionTime();
-            if (possesionTime > 0) {
+            if (this.roundabout$getPossessor() instanceof AnubisPossessorEntity APE) {
                 if (rdbt$this() instanceof Player P && P.isCreative()) {
-                    this.roundabout$setPossessionTime(-1);
+                    APE.discard();
                 }
 
                 if (this.roundabout$getActive()) {
                     this.roundabout$setActive(false);
                 }
 
-                int npt = possesionTime - 1;
-                this.roundabout$setPossessionTime(npt);
                 if (rdbt$this() instanceof Player P) {
 
-                    if (npt == 0) {
+                    if (APE.getLifeSpan() == 1) {
                         if (this.roundabout$getPossessor() != null) {
                             this.roundabout$getPossessor().discard();
                             this.roundabout$setPossessor(null);
@@ -2990,7 +2972,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$BLEED_LEVEL, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GLOW, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BUBBLE_ENCASED, (byte) 0);
-            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$POSSESSION_TIME, -1);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$POSSESSOR, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BOUND_TO, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_ZAPPED_TO_ATTACK, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$TRUE_INVISIBILITY, -1);
@@ -4473,7 +4455,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
 
-        if (!level().isClientSide && this.roundabout$getPossessionTime() < PowersAnubis.MaxPossesionTime-2) {
+        if (!level().isClientSide && this.roundabout$getPossessor() instanceof AnubisPossessorEntity APE && APE.getLifeSpan() < PowersAnubis.MaxPossessionTime -2) {
             AnubisPossessorEntity poss = (AnubisPossessorEntity) this.roundabout$getPossessor();
             if (poss != null) {
                 if (this.roundabout$getPossessor().isRemoved()) {
@@ -4498,11 +4480,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             if (target.hurtTime == 0 && !this.roundabout$isDazed() && roundabout$anubisAttackDelay >= 0) {
                                 if (P.getPosition(0.5F).distanceTo(target.getPosition(1)) < 2) {
                                     P.swing(InteractionHand.MAIN_HAND,true);
-                                    if (target.hurt(ModDamageTypes.of(P.level(), ModDamageTypes.ANUBIS_POSSESS,this), 5.0F)) {
-                                        roundabout$anubisAttackDelay = 20;
+                                    if (target.hurt(ModDamageTypes.of(P.level(), ModDamageTypes.ANUBIS_POSSESS,this), 7.5F)) {
+                                        roundabout$anubisAttackDelay = 12;
                                     } else {
                                         if (target.isBlocking()) {
-                                            roundabout$anubisAttackDelay = 25;
+                                            roundabout$anubisAttackDelay = 40;
                                         }
                                     }
                                     P.crit(target);

@@ -625,6 +625,10 @@ public class ClientUtil {
                     String sigmaString = (String) vargs[0];
                     ClientUtil.applyClientRecoil(player, sigmaString);
                 }
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPossessor.value)) {
+                    int i = (int) vargs[0];
+                    ((StandUser)player).roundabout$getPossessor().setTarget((LivingEntity) player.level().getEntity(i));
+                }
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();
                 //        ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));

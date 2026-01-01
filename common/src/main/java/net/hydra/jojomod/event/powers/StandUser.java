@@ -309,8 +309,6 @@ public interface StandUser {
 
     /**Anubis Possesion */
     boolean roundabout$isPossessed();
-    void roundabout$setPossessionTime(int adj);
-    int roundabout$getPossessionTime();
     PathfinderMob roundabout$getPossessor();
     void roundabout$setPossessor(PathfinderMob e);
 

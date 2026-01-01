@@ -59,7 +59,7 @@ public class PowersAnubis extends NewDashPreset {
     }
 
 
-    public static final int MaxPossesionTime = 100;
+    public static final int MaxPossessionTime = 500;
     public static final int MaxPlayTime = 100;
     public static final int PogoDelay = 8;
     public static final byte SWING = 50;
@@ -842,6 +842,7 @@ public class PowersAnubis extends NewDashPreset {
                     if (this.getActivePower() == PowerIndex.SNEAK_ATTACK ||
                             this.getActivePower() == PowerIndex.ATTACK) {
 
+                        ((StandUser)this.getSelf()).roundabout$setBubbleEncased((byte)(0));
                         if (getActivePower() == PowerIndex.SNEAK_ATTACK) {
                             SAttack();
                         } else {
@@ -1011,6 +1012,7 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     public void pogoAttack(int id) {
+        ((StandUser)this.getSelf()).roundabout$setBubbleEncased((byte)(0));
         this.getStandUserSelf().roundabout$setLeapTicks(20);
         this.getStandUserSelf().roundabout$setLeapIntentionally(true);
 
@@ -1102,6 +1104,7 @@ public class PowersAnubis extends NewDashPreset {
 
 
     public void DoubleCut(boolean first) {
+        ((StandUser)this.getSelf()).roundabout$setBubbleEncased((byte)(0));
         if (this.getSelf() instanceof Player P) {
             S2CPacketUtil.sendIntPowerDataPacket(P,PowersAnubis.SWING,0);
         }
@@ -1177,7 +1180,7 @@ public class PowersAnubis extends NewDashPreset {
 
 
     public void ThrustCut() {
-
+        ((StandUser)this.getSelf()).roundabout$setBubbleEncased((byte)(0));
 
         this.setAttackTimeDuring(-10);
 
@@ -1223,6 +1226,7 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     public void Uppercut() {
+        ((StandUser)this.getSelf()).roundabout$setBubbleEncased((byte)(0));
         this.getSelf().resetFallDistance();
         if (this.getSelf() instanceof Player P) {
             S2CPacketUtil.sendIntPowerDataPacket(P,PowersAnubis.SWING,0);
@@ -1462,6 +1466,7 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     public void UpdateQuickdraw() {
+        ((StandUser)this.getSelf()).roundabout$setBubbleEncased((byte)(0));
         this.getStandUserSelf().roundabout$setMeleeImmunity(3);
         int duration = 15;
         if (!this.isClient()) {
@@ -1494,7 +1499,7 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     public void BarrageSlash() {
-
+        ((StandUser)this.getSelf()).roundabout$setBubbleEncased((byte)(0));
         if (this.getSelf() instanceof Player P) {
             S2CPacketUtil.sendIntPowerDataPacket(P,PowersAnubis.SWING,0);
         }
