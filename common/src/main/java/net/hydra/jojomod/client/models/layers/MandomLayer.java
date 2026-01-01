@@ -9,6 +9,7 @@ import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersMandom;
@@ -45,7 +46,7 @@ public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                 return;
             StandUser user = ((StandUser) entity);
             boolean hasMandom = (user.roundabout$getStandPowers() instanceof PowersMandom);
-            boolean hasMandomOut = (user.roundabout$getActive() && hasMandom);
+            boolean hasMandomOut = (PowerTypes.hasStandActive(entity) && hasMandom);
             if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
                 if (!entity.isInvisible()) {
                     int mandomTicks = user.roundabout$getMandomVanishTicks();
@@ -132,7 +133,6 @@ public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
         if (entity != null && handarm.visible) {
             StandUser user = ((StandUser) entity);
             boolean hasMandom = (user.roundabout$getStandPowers() instanceof PowersMandom);
-            boolean hasMandomOut = (user.roundabout$getActive() && hasMandom);
             if (hasMandom && entity instanceof Player PL) {
                 byte style = ((IPlayerEntity) PL).roundabout$getWatchStyle();
                 if (style != PowersMandom.WATCHLESS) {

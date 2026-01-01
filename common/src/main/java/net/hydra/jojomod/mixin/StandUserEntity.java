@@ -2727,7 +2727,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     @Unique
     public void roundabout$setSealedTicks(int ticks){
-        if (roundabout$getActive()){
+        if (PowerTypes.hasStandActive(rdbt$this())){
             roundabout$setSummonCD(8);
             roundabout$setActive(false);
             roundabout$tryPower(PowerIndex.NONE, true);

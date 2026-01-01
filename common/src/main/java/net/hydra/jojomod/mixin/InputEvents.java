@@ -21,6 +21,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.FirearmItem;
@@ -233,7 +234,7 @@ public abstract class InputEvents implements IInputEvents {
             if (standComp.roundabout$isDazed() || ((TimeStop) player.level()).CanTimeStopEntity(player)) {
                 ci.setReturnValue(true);
                 return;
-            } else if ((standComp.roundabout$getActive() && standComp.roundabout$getStandPowers().interceptAttack())
+            } else if ((PowerTypes.hasStandActive(player) && standComp.roundabout$getStandPowers().interceptAttack())
             || (((IFatePlayer)player).rdbt$getFatePowers().interceptAttack())) {
                 if (this.hitResult != null) {
                     boolean $$1 = false;
@@ -592,9 +593,13 @@ public abstract class InputEvents implements IInputEvents {
             if (standComp.roundabout$isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
                 ci.cancel();
                 return;
-            } else if (standComp.roundabout$getActive()) {
-                if (standComp.roundabout$isGuarding() || standComp.roundabout$isBarraging() || standComp.roundabout$isClashing() || standComp.roundabout$getStandPowers().cancelItemUse()
-                || ((IFatePlayer)this.player).rdbt$getFatePowers().cancelItemUse()) {
+            } else if (PowerTypes.hasStandActive(this.player)) {
+                if (standComp.roundabout$isGuarding() || standComp.roundabout$isBarraging() || standComp.roundabout$isClashing() || standComp.roundabout$getStandPowers().cancelItemUse()) {
+                    ci.cancel();
+                    return;
+                }
+            } else {
+                if (((IFatePlayer)this.player).rdbt$getFatePowers().cancelItemUse()){
                     ci.cancel();
                     return;
                 }
@@ -971,7 +976,7 @@ public abstract class InputEvents implements IInputEvents {
 
                 /*If you have a stand out, update the stand leaning attributes.
                  * Currently, strafe is reported, but unused.*/
-                if (((StandUser) player).roundabout$getActive()) {
+                if (PowerTypes.hasStandActive(player)) {
                     StandEntity stand = ((StandUser) player).roundabout$getStand();
                     if (stand instanceof FollowingStandEntity FE) {
                         var mf = FE.getMoveForward();

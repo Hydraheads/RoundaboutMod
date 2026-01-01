@@ -1807,8 +1807,8 @@ public class StandPowers extends AbilityScapeBasis {
             if (sauce != null){
                 if (interrupter instanceof LivingEntity LE){
                     StandUser user = ((StandUser) LE);
-                    if (user.roundabout$hasAStand()){
-                        if (!user.roundabout$getActive()){
+                    if (PowerTypes.hasStandActivelyEquipped(LE)){
+                        if (!PowerTypes.hasStandActive(LE)){
                             return false;
                         }
                     }

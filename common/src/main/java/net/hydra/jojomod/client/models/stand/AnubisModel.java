@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.ModItemModels;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.AnubisAnimations;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.ModItems;
@@ -128,7 +129,7 @@ public class AnubisModel extends PsuedoHierarchicalModel {
             } else {
                 user.roundabout$getWornStandIdleAnimation().stop();
             }
-            if (user.roundabout$getStandPowers() instanceof PowersAnubis PA && user.roundabout$getActive()) {
+            if (user.roundabout$getStandPowers() instanceof PowersAnubis PA && PowerTypes.hasStandActive(LE)) {
                 boolean start = false;
                 AnimationDefinition anim = null;
                 switch (user.roundabout$getStandAnimation()) {
