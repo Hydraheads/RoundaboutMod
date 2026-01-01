@@ -14,6 +14,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.Poses;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ColtRevolverItem;
 import net.hydra.jojomod.item.JackalRifleItem;
@@ -307,7 +308,7 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
 
                         StandUser user = ((StandUser) player);
                         boolean hasMandom = (user.roundabout$getStandPowers() instanceof PowersMandom);
-                        boolean hasMandomOut = (user.roundabout$getActive() && hasMandom);
+                        boolean hasMandomOut = (PowerTypes.hasStandActive(player)  && hasMandom);
                         if (hasMandom) {
                             byte style = ipe.roundabout$getWatchStyle();
                             if (style != PowersMandom.WATCHLESS) {

@@ -369,7 +369,7 @@ public class AbilityScapeBasis {
                 impactSlowdown--;
             }
             if (impactBrace) {
-                if (((StandUser) this.getSelf()).roundabout$getActive()) {
+                if (PowerTypes.hasStandActive(self)) {
                     if (this.getSelf().onGround()) {
                         impactBrace = false;
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.FALL_BRACE_FINISH, true);
@@ -963,7 +963,9 @@ public class AbilityScapeBasis {
     } public boolean hasStandEntity(LivingEntity User){
         return this.getUserData(User).roundabout$hasStandOut();
     } public boolean hasStandActive(LivingEntity User){
-        return this.getUserData(User).roundabout$getActive();
+        return PowerTypes.hasStandActive(User);
+    } public boolean hasActive(LivingEntity User){
+        return ((StandUser)User).roundabout$getActive();
     }
 
     /**set an ability on cooldown*/
@@ -1259,7 +1261,7 @@ public class AbilityScapeBasis {
     }
 
     public void preButtonInput4(boolean keyIsDown, Options options){
-        if (!hasStandActive(this.getSelf())) {
+        if (!hasActive(this.getSelf())) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()  ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
                 buttonInput4(keyIsDown, options);
@@ -1267,7 +1269,7 @@ public class AbilityScapeBasis {
         }
     }
     public void preButtonInput3(boolean keyIsDown, Options options){
-        if (!hasStandActive(this.getSelf())) {
+        if (!hasActive(this.getSelf())) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()  ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
                 buttonInput3(keyIsDown, options);
@@ -1276,7 +1278,7 @@ public class AbilityScapeBasis {
     }
 
     public void preButtonInput2(boolean keyIsDown, Options options){
-        if (!hasStandActive(this.getSelf())) {
+        if (!hasActive(this.getSelf())) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()   ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
                 buttonInput2(keyIsDown, options);
@@ -1285,7 +1287,7 @@ public class AbilityScapeBasis {
     }
 
     public void preButtonInput1(boolean keyIsDown, Options options){
-        if (!hasStandActive(this.getSelf())) {
+        if (!hasActive(this.getSelf())) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()   ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
                 buttonInput1(keyIsDown, options);

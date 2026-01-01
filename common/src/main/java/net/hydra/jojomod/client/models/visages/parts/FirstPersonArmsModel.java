@@ -17,6 +17,7 @@ import net.hydra.jojomod.client.models.layers.animations.FirearmFirstPersonAnima
 import net.hydra.jojomod.client.models.layers.animations.HeyYaAnimations;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.Poses;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ColtRevolverItem;
@@ -316,7 +317,7 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
 
                         StandUser user = ((StandUser) player);
                         boolean hasMandom = (user.roundabout$getStandPowers() instanceof PowersMandom);
-                        boolean hasMandomOut = (user.roundabout$getActive() && hasMandom);
+                        boolean hasMandomOut = (PowerTypes.hasStandActive(player) && hasMandom);
                         if (hasMandom) {
                             byte style = ipe.roundabout$getWatchStyle();
                             if (style != PowersMandom.WATCHLESS) {

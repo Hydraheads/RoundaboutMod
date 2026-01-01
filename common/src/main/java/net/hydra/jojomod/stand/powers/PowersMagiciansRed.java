@@ -1158,7 +1158,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 }
             }
             if (move == PowerIndex.GUARD ||
-                    !((StandUser)this.self).roundabout$getActive()) {
+                    !PowerTypes.hasStandActive(self)) {
                 clearLeaded();
             }
         }

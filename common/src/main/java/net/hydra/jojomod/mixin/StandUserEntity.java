@@ -2124,15 +2124,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return listE;
     }
 
-    /**returns if the mob has a stand. For now, returns if stand is active, but in the future will be more
-     * complicated**/
-    @Unique
-    public boolean roundabout$isStandUser(){
-        return this.roundabout$getActive();
-    }
-
-
-
     @Override
     public boolean roundabout$isRestrained(){
         return (this.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted());
@@ -2709,7 +2700,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     @Unique
     public void roundabout$setSealedTicks(int ticks){
-        if (roundabout$getActive()){
+        if (PowerTypes.hasStandActive(rdbt$this())){
             roundabout$setSummonCD(8);
             roundabout$setActive(false);
             roundabout$tryPower(PowerIndex.NONE, true);

@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
@@ -39,7 +40,7 @@ public class HeyYaLayer<T extends LivingEntity, A extends HumanoidModel<T>> exte
                 if (entity != null) {
                     StandUser user = ((StandUser) livent);
                     int heyTicks = user.roundabout$getHeyYaVanishTicks();
-                    boolean hasHeyYaOut = (user.roundabout$getActive() && user.roundabout$getStandPowers() instanceof PowersHeyYa);
+                    boolean hasHeyYaOut = (PowerTypes.hasStandActive(livent) && user.roundabout$getStandPowers() instanceof PowersHeyYa);
 
 
                     if (heyTicks > 0 || hasHeyYaOut) {

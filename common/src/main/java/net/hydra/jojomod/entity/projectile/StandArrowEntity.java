@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.item.WorthyArrowItem;
@@ -123,7 +124,7 @@ public class StandArrowEntity extends AbstractArrow {
         }
         if (this.getArrow().getItem() instanceof WorthyArrowItem WI && ($$1 instanceof Mob || $$1 instanceof Player)) {
             if (this.getOwner() instanceof Player PE && PE.isCreative() && !((StandUser)$$1).roundabout$getStandDisc().isEmpty()){
-                if (((StandUser)$$1).roundabout$getActive()){
+                if (PowerTypes.hasStandActive($$1)){
                     ((StandUser)$$1).roundabout$setActive(false);
                 }
                 ((StandUser)$$1).roundabout$setStandDisc(ItemStack.EMPTY);

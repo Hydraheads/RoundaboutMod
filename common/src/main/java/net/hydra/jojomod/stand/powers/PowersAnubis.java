@@ -119,7 +119,7 @@ public class PowersAnubis extends NewDashPreset {
 
     @Override
     public float inputSpeedModifiers(float basis) {
-        if ( ((StandUser)this.getSelf()).roundabout$getActive()
+        if ( PowerTypes.hasStandActive(self)
                 && this.getActivePower() != PowerIndex.GUARD
                 && this.getActivePower() != PowerIndex.BARRAGE_CHARGE) {
             basis *= this.getSelf().isSprinting() ? 1.6F : 1F;
@@ -137,7 +137,7 @@ public class PowersAnubis extends NewDashPreset {
 
     @Override
     public int getJumpHeightAddon() {
-        if (this.getStandUserSelf().roundabout$getActive() && !(this.getActivePower() == PowerIndex.BARRAGE_CHARGE)) {
+        if (PowerTypes.hasStandActive(self) && !(this.getActivePower() == PowerIndex.BARRAGE_CHARGE)) {
             return 1;
         }
         return super.getJumpHeightAddon();
@@ -519,7 +519,7 @@ public class PowersAnubis extends NewDashPreset {
         StandUser SU = this.getStandUserSelf();
         if (!this.isClient()) {
             boolean noSlip = this.getActivePower() == PowerIndex.SNEAK_MOVEMENT || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE;
-            if (this.getSelf().isSprinting() && SU.roundabout$getActive() && !noSlip) {
+            if (this.getSelf().isSprinting() && PowerTypes.hasStandActive(self) && !noSlip) {
 
                 float dif = this.getSelf().walkDist-this.getSelf().walkDistO;
                 if (dif != 0) {
@@ -1726,7 +1726,7 @@ public class PowersAnubis extends NewDashPreset {
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
         StandUser standUser = ((StandUser) playerEntity);
-        boolean standOn = standUser.roundabout$getActive();
+        boolean standOn = PowerTypes.hasStandActive(playerEntity);
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
 
@@ -1816,7 +1816,7 @@ public class PowersAnubis extends NewDashPreset {
 
     }
     public void renderMoment(GuiGraphics context, Byte[] moments,int offset, int time) {
-        int Offset = offset + 4 + ( (this.getStandUserSelf().roundabout$getActive() || !FateTypes.isHuman(this.getSelf())) ? 24 : 0);
+        int Offset = offset + 4 + ( (PowerTypes.hasStandActive(self) || !FateTypes.isHuman(this.getSelf())) ? 24 : 0);
         int xoff = 1;
         for (Byte moment : moments) {
             int xIcon = 7 * switch (moment) {

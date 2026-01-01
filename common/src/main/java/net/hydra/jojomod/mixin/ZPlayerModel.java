@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.models.layers.animations.FirearmFirstPersonAnima
 import net.hydra.jojomod.client.models.layers.animations.FirstPersonLayerAnimations;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.*;
@@ -206,7 +207,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
                 if ($$0.getUseItem().is(ModItems.ANUBIS_ITEM)
                         || (SU.roundabout$getStandPowers() instanceof PowersAnubis
-                        && SU.roundabout$getActive()
+                        && PowerTypes.hasStandActive(P)
                         && SU.roundabout$getStandAnimation() != PowerIndex.NONE) ) {
 
                     this.rightArm.xRot = 0;this.rightArm.yRot = 0;
@@ -224,7 +225,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     ipe.roundabout$getAnubisUnsheath().stop();
                 }
                 this.roundabout$animate(ipe.roundabout$getThirdPersonAnubisUnsheath(), AnubisAnimations.ThirdPersonUnsheathe,$$3,1F);
-                if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA && SU.roundabout$getActive()) {
+                if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA && PowerTypes.hasStandActive(P)) {
                     boolean start = false;
                     AnimationDefinition anim = null;
                     switch (SU.roundabout$getStandAnimation()) {

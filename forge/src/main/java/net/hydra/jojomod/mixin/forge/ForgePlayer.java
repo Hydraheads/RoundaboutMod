@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.forge;
 
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
@@ -71,16 +72,22 @@ public abstract class ForgePlayer extends LivingEntity {
 
 
         boolean standActive = PowerTypes.hasStandActive(this);
-        if (standActive){
+        if (standActive && PowerTypes.hasStandActivelyEquipped(this)){
             float bpow = ((StandUser)this).roundabout$getStandPowers().getBonusPassiveMiningSpeed();
                     if (bpow != 1){
                         f*= bpow;
                         overwrite = true;
                     }
+        } else if (standActive){
+            float bpow = ((IPowersPlayer)this).rdbt$getPowers().getBonusPassiveMiningSpeed();
+            if (bpow != 1){
+                f*= bpow;
+                overwrite = true;
+            }
         }
 
         StandPowers powers = ((StandUser) this).roundabout$getStandPowers();
-        if (!(standActive && ((((StandUser) this).roundabout$getStandPowers().canUseMiningStand())))) {
+        if (!(standActive && PowerTypes.hasStandActivelyEquipped(this) && ((((StandUser) this).roundabout$getStandPowers().canUseMiningStand())))) {
             float bpow = ((IFatePlayer) this).rdbt$getFatePowers().getBonusPassiveMiningSpeed();
             if (bpow != 1) {
                 f *= bpow;

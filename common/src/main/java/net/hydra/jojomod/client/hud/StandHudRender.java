@@ -6,6 +6,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
@@ -16,6 +17,7 @@ import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.AnubisMemory;
 import net.hydra.jojomod.event.index.AnubisMoment;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -79,8 +81,9 @@ public class StandHudRender {
             Minecraft mc = Minecraft.getInstance();
             float tickDelta = mc.getDeltaFrameTime();
 
-            boolean standOn = ((StandUser) playerEntity).roundabout$getActive();
-            boolean renderIcons = (standOn || !FateTypes.isHuman(playerEntity)) && !ConfigManager.getClientConfig().dynamicSettings.hideGUI
+            boolean powerOn = ((StandUser) playerEntity).roundabout$getActive();
+            boolean standOn = PowerTypes.hasStandActive(playerEntity);
+            boolean renderIcons = (powerOn || !FateTypes.isHuman(playerEntity)) && !ConfigManager.getClientConfig().dynamicSettings.hideGUI
                     && !(ConfigManager.getClientConfig().enablePickyIconRendering && !((StandUser) playerEntity).roundabout$getStandPowers().hasCooldowns());
             if (renderIcons || presentX > 0.1){
                 if (!renderIcons){
@@ -104,8 +107,10 @@ public class StandHudRender {
                 //context.drawTexture(ARROW_ICON,x,y-2,0, 0, textureWidth, textureHeight, textureWidth, textureHeight);
 
 
-                if (standOn || FateTypes.isHuman(playerEntity)){
+                if ((standOn || FateTypes.isHuman(playerEntity)) && PowerTypes.hasStandActivelyEquipped(playerEntity)) {
                     ((StandUser) playerEntity).roundabout$getStandPowers().renderIcons(context, x, y);
+                }else if ((powerOn || FateTypes.isHuman(playerEntity)) && !PowerTypes.hasStandActivelyEquipped(playerEntity)){
+                    ((IPowersPlayer) playerEntity).rdbt$getPowers().renderIcons(context, x, y);
                 } else {
                     ((IFatePlayer) playerEntity).rdbt$getFatePowers().renderIcons(context, x, y);
                 }
