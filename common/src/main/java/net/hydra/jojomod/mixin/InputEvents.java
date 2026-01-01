@@ -339,7 +339,7 @@ public abstract class InputEvents implements IInputEvents {
                         this.gameMode.stopDestroyBlock();
                     }
                     ci.cancel();
-                } else if ((standComp.roundabout$getActive() && standComp.roundabout$getStandPowers().interceptAttack())|| (((IFatePlayer)player).rdbt$getFatePowers().interceptAttack())){
+                } else if ((PowerTypes.hasStandActive(player) && standComp.roundabout$getStandPowers().interceptAttack())|| (((IFatePlayer)player).rdbt$getFatePowers().interceptAttack())){
                     if (isMining) {
                         if (!this.player.isUsingItem()) {
                             if ($$0 && this.hitResult != null && this.hitResult.getType() == HitResult.Type.BLOCK) {
@@ -409,7 +409,7 @@ public abstract class InputEvents implements IInputEvents {
                     fireArmCancel =  true;
                 }
             }
-            if (!fireArmCancel && standComp.roundabout$getActive() && standComp.roundabout$getStandPowers().interceptGuard()) {
+            if (!fireArmCancel && PowerTypes.hasStandActive(player) && standComp.roundabout$getStandPowers().interceptGuard()) {
                 return standComp.roundabout$getStandPowers().preCheckButtonInputGuard(this.options.keyUse.isDown(), this.options);
             }
             return false;

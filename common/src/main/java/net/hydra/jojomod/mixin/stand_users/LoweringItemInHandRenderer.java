@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin.stand_users;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.GasolineCanItem;
 import net.minecraft.client.Minecraft;
@@ -32,7 +33,7 @@ public class LoweringItemInHandRenderer {
         if (this.minecraft.player != null) {
             LocalPlayer clientPlayerEntity2 = this.minecraft.player;
             if (!clientPlayerEntity2.isHandsBusy()) {
-                if (((StandUser) clientPlayerEntity2).roundabout$getActive() && ((StandUser) clientPlayerEntity2).roundabout$getStandPowers().isMiningStand() &&
+                if (PowerTypes.hasStandActive(clientPlayerEntity2) && ((StandUser) clientPlayerEntity2).roundabout$getStandPowers().isMiningStand() &&
                         !((StandUser)clientPlayerEntity2).roundabout$getEffectiveCombatMode()) {
                     ItemStack itemStack3 = clientPlayerEntity2.getMainHandItem();
                     ItemStack itemStack4 = clientPlayerEntity2.getOffhandItem();

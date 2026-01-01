@@ -369,7 +369,7 @@ public class AbilityScapeBasis {
                 impactSlowdown--;
             }
             if (impactBrace) {
-                if (((StandUser) this.getSelf()).roundabout$getActive()) {
+                if (PowerTypes.hasStandActive(self)) {
                     if (this.getSelf().onGround()) {
                         impactBrace = false;
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.FALL_BRACE_FINISH, true);
@@ -963,7 +963,7 @@ public class AbilityScapeBasis {
     } public boolean hasStandEntity(LivingEntity User){
         return this.getUserData(User).roundabout$hasStandOut();
     } public boolean hasStandActive(LivingEntity User){
-        return this.getUserData(User).roundabout$getActive();
+        return PowerTypes.hasStandActive(User);
     }
 
     /**set an ability on cooldown*/
