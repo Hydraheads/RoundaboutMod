@@ -104,10 +104,9 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
 
 
 
-    /** At some point I'm gonna go and make the villager hold and inspect it for a sec, then drop the disc but whatever */
     @Inject(method = "mobInteract", at = @At(value = "HEAD"), cancellable = true)
     private void villagerAnubisInteraction(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
-        if (!isClientSide()) {
+        if (!isClientSide() &&  this.entityData.get(ROUNDABOUT$ANUBIS_TICKS) <= 0  ) {
             Villager This = (Villager) (Object) this;
             if (This.getVillagerData().getProfession() == VillagerProfession.CLERIC) {
                 if($$0.getMainHandItem().getItem() instanceof AnubisItem ) {

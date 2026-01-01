@@ -1145,12 +1145,13 @@ public class PowersAnubis extends NewDashPreset {
                 }
                 if (StandDamageEntityAttack(e, pow, 0, this.self)) {
 
-                    if (e instanceof LivingEntity) {
+                    if (e instanceof LivingEntity L) {
                         addEXP(2);
+                        if (first) {
+                            ((StandUser)L).roundabout$setDazed((byte)3);
+                        }
                     }
-                    if (first) {
-                        ((StandUser)e).roundabout$setDazed((byte)3);
-                    }
+
                     this.takeDeterminedKnockback(this.getSelf(), e, knockbackStrength);
 
                 } else if (!first) {
@@ -1229,7 +1230,7 @@ public class PowersAnubis extends NewDashPreset {
         this.setAttackTimeDuring(-10);
 
 
-        List<Entity> entities = defaultSwordHitbox(this.getSelf(),3, 55,0.02);
+        List<Entity> entities = defaultSwordHitbox(this.getSelf(),3, 55,0.01);
         if (!entities.isEmpty()) {
             this.getSelf().level().playSound(null,this.getSelf().blockPosition(),SoundEvents.PLAYER_ATTACK_KNOCKBACK,SoundSource.PLAYERS,1F,0.4F + (float)(Math.random()*0.2));
         }
