@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersMetallica;
 import net.hydra.jojomod.util.MainUtil;
@@ -61,7 +62,7 @@ public class MetallicaClientRenderer {
     }
 
     public static void tickMetallicaEffects(LivingEntity entity) {
-        if (entity instanceof IEntityAndData data && ((StandUser)entity).roundabout$getActive()) {
+        if (entity instanceof IEntityAndData data && PowerTypes.hasStandActive(entity)) {
             handleMetallicaEffects(entity, entity.level());
         }
     }

@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -770,9 +771,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 modifier = 0.6F;
             }
         }
-        boolean standActive = ((StandUser) this).roundabout$getActive();
-        if (standActive){
+        boolean active = ((StandUser) this).roundabout$getActive();
+        if (active && PowerTypes.hasStandActivelyEquipped(this)){
             modifier*= ((StandUser)this).roundabout$getStandPowers().getBonusAttackSpeed();
+        } else if (active){
+            modifier*= ((IPowersPlayer)this).rdbt$getPowers().getBonusAttackSpeed();
         }
         float bpow = ((IFatePlayer)this).rdbt$getFatePowers().getBonusAttackSpeed();
         if (bpow != 1){
@@ -809,12 +812,14 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 dSpeed *= 0.6F;
             }
 
-            boolean standActive = ((StandUser) this).roundabout$getActive();
-            if (standActive){
+            boolean active = ((StandUser) this).roundabout$getActive();
+            if (active && PowerTypes.hasStandActivelyEquipped(this)){
                 dSpeed*= ((StandUser)this).roundabout$getStandPowers().getBonusPassiveMiningSpeed();
+            } else if (active){
+                dSpeed*= ((IPowersPlayer)this).rdbt$getPowers().getBonusPassiveMiningSpeed();
             }
 
-            if (!(((StandUser) this).roundabout$getActive() && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()
+            if (!(((StandUser) this).roundabout$getActive() && PowerTypes.hasStandActivelyEquipped(this) && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()
             )) {
                 float bpow = ((IFatePlayer) this).rdbt$getFatePowers().getBonusPassiveMiningSpeed();
                 if (bpow != 1){

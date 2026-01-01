@@ -14,6 +14,7 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
@@ -504,7 +505,7 @@ public abstract class HudRendering implements IHudAccess {
         if (minecraft.player != null && minecraft.level != null){
             int oxygenBonus = ((StandUser)minecraft.player).roundabout$getStandPowers().getAirAmount();
             int maxOxygenBonus = ((StandUser)minecraft.player).roundabout$getStandPowers().getMaxAirAmount();
-            if (oxygenBonus > -1 && ((StandUser)minecraft.player).roundabout$getActive()) {
+            if (oxygenBonus > -1 && PowerTypes.hasStandActive(minecraft.player)) {
                 int $$28 = minecraft.player.getMaxAirSupply();
                 int $$29 = Math.min(minecraft.player.getAirSupply(), $$28);
                 if (minecraft.player.isEyeInFluid(FluidTags.WATER) || $$29 < $$28 || oxygenBonus < maxOxygenBonus) {

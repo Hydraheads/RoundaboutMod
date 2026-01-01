@@ -1654,7 +1654,7 @@ public class StandPowers extends AbilityScapeBasis {
                 if (!this.self.level().isClientSide) {
 
                     if ((this.getClashDone() && ((StandUser) entity).roundabout$getStandPowers().getClashDone())
-                            || !((StandUser) this.self).roundabout$getActive() || !((StandUser) entity).roundabout$getActive()) {
+                            || !PowerTypes.hasStandActive(self) || !PowerTypes.hasStandActive(entity)) {
                         this.updateClashing2();
                     } else {
                         playBarrageNoise(this.attackTimeDuring+ clashStarter, entity);
@@ -1683,8 +1683,8 @@ public class StandPowers extends AbilityScapeBasis {
 
     private void updateClashing2(){
         if (this.getClashOp() != null) {
-            boolean thisActive = ((StandUser) this.self).roundabout$getActive();
-            boolean opActive = ((StandUser) this.getClashOp()).roundabout$getActive();
+            boolean thisActive = PowerTypes.hasStandActive(self);
+            boolean opActive = PowerTypes.hasStandActive(this.getClashOp());
             if (thisActive && !opActive){
                 breakClash(this.self, this.getClashOp());
             } else if (!thisActive && opActive){

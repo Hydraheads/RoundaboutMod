@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.projectile.MetallicaKnifeEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
@@ -499,7 +500,7 @@ public class PowersMetallica extends NewDashPreset {
         if (self.level().isClientSide()) {
             long time = self.tickCount;
 
-            if (((StandUser)self).roundabout$getActive() && !isInvisible() && time % 2 == 0) {
+            if (PowerTypes.hasStandActive(self) && !isInvisible() && time % 2 == 0) {
                 net.minecraft.core.particles.SimpleParticleType[] bodyVariants = {
                         ModParticles.METALLICA_A, ModParticles.METALLICA_B,
                         ModParticles.METALLICA_C, ModParticles.METALLICA_D
