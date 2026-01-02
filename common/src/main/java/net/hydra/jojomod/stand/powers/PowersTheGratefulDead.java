@@ -6,11 +6,14 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import java.util.List;
@@ -52,6 +55,8 @@ public class PowersTheGratefulDead extends NewPunchingStand {
             return 4.0F;
         }
     }
+
+    //GUI things
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
@@ -97,6 +102,21 @@ public class PowersTheGratefulDead extends NewPunchingStand {
         return Component.literal("K4traik").withStyle(ChatFormatting.DARK_PURPLE);
     }
 
+    @Override
+    protected Byte getSummonSound() {return SoundIndex.SUMMON_SOUND;
+    }
+
+    @Override
+    public SoundEvent getSoundFromByte(byte soundChoice){
+        switch (soundChoice)
+        {
+            case SoundIndex.SUMMON_SOUND -> {
+                return ModSounds.SUMMON_GRATEFUL_EVENT;
+            }
+        }
+        return super.getSoundFromByte(soundChoice);
+    }
+
     public static final byte
             ANIME_THE_GRATEFUL_DEAD = 0,
             MANGA_THE_GRATEFUL_DEAD = 1;
@@ -117,10 +137,6 @@ public class PowersTheGratefulDead extends NewPunchingStand {
             return Component.translatable("skins.roundabout.the_grateful_dead.anime");
         }
     }
-
-
-
-    // UI things (?)
 
     @Override
     public List<Byte> getPosList(){

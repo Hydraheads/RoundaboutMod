@@ -748,6 +748,10 @@ public class ModSounds {
     public static final ResourceLocation SUMMON_DIVER_DOWN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_DIVER_DOWN);
     public static SoundEvent SUMMON_DIVER_DOWN_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_DIVER_DOWN_ID);
 
+    public static final String SUMMON_GRATEFUL = "summon_grateful";
+    public static final ResourceLocation SUMMON_GRATEFUL_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_GRATEFUL);
+    public static SoundEvent SUMMON_GRATEFUL_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_GRATEFUL_ID);
+
 
     public static final String EXTEND_SPIKES = "extend_spikes";
     public static final ResourceLocation EXTEND_SPIKES_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EXTEND_SPIKES);

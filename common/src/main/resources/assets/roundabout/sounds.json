@@ -5,6 +5,12 @@
       "roundabout:summon_stand"
     ]
   },
+  "summon_grateful": {
+    "subtitle": "sounds.roundabout.summon_grateful",
+    "sounds": [
+      "roundabout:summon_grateful"
+    ]
+  },
   "summon_diver_down": {
     "subtitle": "sounds.roundabout.summon_diver_down",
     "sounds": [
