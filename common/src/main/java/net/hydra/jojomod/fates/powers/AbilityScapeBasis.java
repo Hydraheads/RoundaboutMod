@@ -19,6 +19,7 @@ import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
+import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
@@ -2272,5 +2273,64 @@ public class AbilityScapeBasis {
             return ((IPlayerEntity) self).roundabout$GetPos2();
         }
         return 0;
+    }
+
+    /**If a power can be interrupted, that means you can hit the person using the power to cancel it,
+     * like when someone charging a barrage gets their barrage canceled to damage*/
+    public boolean canInterruptPower(){
+        return false;
+    }
+
+    /**This value prevents you from resummoning/blocking to cheese the 3 hit combo's last hit faster*/
+
+    public int getMobRecoilTime(){
+        return -30;
+    }
+
+    /**While you can override this, it might be more sensible to just edit this base function,
+     * also veeery conditional use canInterruptPower instead*/
+    public boolean preCanInterruptPower(DamageSource sauce, Entity interrupter, boolean isStandDamage){
+        if (ClientNetworking.getAppropriateConfig().generalStandSettings.spiritOutInterruption){
+            if (sauce != null){
+                if (interrupter instanceof LivingEntity LE){
+                    StandUser user = ((StandUser) LE);
+                    if (PowerTypes.hasStandActivelyEquipped(LE)){
+                        if (!PowerTypes.hasStandActive(LE)){
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
+        boolean interrupt = false;
+        if (interrupter != null){
+            if (this.isBarraging() && ClientNetworking.getAppropriateConfig().generalStandSettings.barragesAreAlwaysInterruptable) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                return true;
+            } else if (isStandDamage && ClientNetworking.getAppropriateConfig().generalStandSettings.standsInterruptSomeStandAttacks){
+                interrupt = true;
+            } else if (this instanceof TWAndSPSharedPowers && this.getActivePower() == PowerIndex.SPECIAL &&
+                    ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopIsAlwaysInterruptable){
+                interrupt = true;
+            } else if (interrupter instanceof Player && ClientNetworking.getAppropriateConfig().generalStandSettings.playersInterruptSomeStandAttacks){
+                interrupt = true;
+            } else if (interrupter instanceof Mob && ClientNetworking.getAppropriateConfig().generalStandSettings.mobsInterruptSomeStandAttacks){
+                interrupt = true;
+            }
+        } else {
+            interrupt = true;
+        }
+
+        if (interrupt){
+            return canInterruptPower();
+        } else {
+            return false;
+        }
+    }
+
+
+    public boolean isBarraging(){
+        return (this.activePower == PowerIndex.BARRAGE || this.activePower == PowerIndex.BARRAGE_CHARGE);
     }
 }
