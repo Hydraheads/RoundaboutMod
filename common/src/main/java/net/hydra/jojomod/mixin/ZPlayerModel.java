@@ -332,6 +332,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
     public void roundabout$SetupAnim3(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
         if ($$0 instanceof Player P) {
             IPlayerEntity ipe = ((IPlayerEntity) $$0);
+            StandUser SU = (StandUser) P;
 
 
             if (ipe.roundabout$GetPoseEmote() != Poses.NONE.id) {
@@ -392,6 +393,15 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
                 }
             }
+
+            if ( SU.roundabout$isPossessed()  ) {
+                PathfinderMob poss = SU.roundabout$getPossessor();
+                if (poss != null && poss.getTarget() != null) {
+                    this.head.xRot = (float) Math.toRadians(MainUtil.getLookAtEntityPitch(P,poss.getTarget()));
+                    //   $$0.setYRot(MainUtil.getLookAtEntityYaw(P,poss.getTarget()));
+                }
+            }
+
         }
     }
     @Unique

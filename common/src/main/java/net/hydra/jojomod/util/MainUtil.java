@@ -1701,7 +1701,7 @@ public class MainUtil {
     }
 
 
-    /**Returns the vertical angle between two mobs*/
+    /**Returns the vertical angle between two mobs in degrees*/
     public static float getLookAtEntityPitch(Entity user, Entity targetEntity) {
         double f;
         double d = targetEntity.getEyePosition().x - user.getEyePosition().x;
@@ -1729,7 +1729,7 @@ public class MainUtil {
         return new Vec2(xRot, yRot); // Vec2 is (xRot, yRot)
     }
 
-    /**Returns the horizontal angle between two mobs*/
+    /**Returns the horizontal angle between two mobs in degrees*/
     public static float getLookAtEntityYaw(Entity user, Entity targetEntity) {
         double d = targetEntity.getX() - user.getX();
         double e = targetEntity.getZ() - user.getZ();

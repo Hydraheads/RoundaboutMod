@@ -10,10 +10,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
-import net.hydra.jojomod.entity.projectile.FleshPileEntity;
-import net.hydra.jojomod.entity.projectile.MatchEntity;
-import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
-import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
+import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -63,6 +60,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
@@ -3721,6 +3719,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
+        List<AnubisSlipstreamEntity> slipstreams = rdbt$this().level().getEntitiesOfClass(AnubisSlipstreamEntity.class,this.getBoundingBox().inflate(3));
+        if (!slipstreams.isEmpty() &&
+                ( (this.roundabout$getStandPowers() instanceof PowersAnubis && !PowerTypes.hasStandActive(this) || !(this.roundabout$getStandPowers() instanceof PowersAnubis)  )  )
+        ) {
+            basis *= 1.5F;
+        }
 
         return basis;
     }
@@ -4427,20 +4431,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         ((IEntityAndData)this).roundabout$tickQVec();
         roundabout$tickString();
 
-        if (rdbt$this() instanceof Player P && this.roundabout$isPossessed()) {
-            Level level = this.level();
+        if (rdbt$this() instanceof Player && this.roundabout$isPossessed()) {
+
             PathfinderMob poss = roundabout$getPossessor();
            // Roundabout.LOGGER.info(level.isClientSide() + " | " + this.entityData.get(ROUNDABOUT$POSSESSOR) + " | " + poss);
             if (poss != null) {
              //   Roundabout.LOGGER.info("HO");
                 if (poss.getTarget() != null) {
-                  /*
-                    Vec3 tpos = poss.getPosition(1);
-                    Vec3 pos = P.getPosition(1);
-                    float f = (float) tpos.subtract(pos).length();
+                    float f = (float)Mth.length(poss.getX() - poss.xo, 0.0, poss.getZ() - poss.zo);
                     float g = Math.min(f * 4.0f, 1.0f);
                     this.walkAnimation.update(g, 0.4f);
-                    P.calculateEntityAnimation(true); */
                 }
             }
         }

@@ -171,6 +171,9 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
     }
 
     public void renderHumanoidAnubis(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float partialTicks, float alpha) {
+        if (true) {return;}
+        /// I'm going to come back to this goober later
+
         this.getParentModel().body.translateAndRotate(poseStack);
         poseStack.translate(-0.55,-0.1,0.5);
 

@@ -545,7 +545,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "anubis_slipstream"),
                     EntityType.Builder.<AnubisSlipstreamEntity>of(AnubisSlipstreamEntity::new, MobCategory.MISC).
-                            sized(3F, 3F).clientTrackingRange(10).build(Roundabout.MOD_ID+":anubis_slipstream")
+                            sized(0.1F, 0.1F).clientTrackingRange(10).build(Roundabout.MOD_ID+":anubis_slipstream")
             );
         public static final EntityType<GroundHurricaneEntity> GROUND_HURRICANE =
                 Registry.register(
