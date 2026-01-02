@@ -400,7 +400,7 @@ public int speedActivated = 0;
                 if (bloodSuckingTarget instanceof LivingEntity LE && FateTypes.isVampire(LE)){
                     endSuckingVamp();
                 } else {
-                    Entity TE = getTargetEntity(self, 3, 15);
+                    Entity TE = getTargetEntity(self, 4, 30);
                     if (TE != null && MainUtil.canDrinkBloodFair(TE, self)
                             && self.hurtTime <= 0 && bloodSuckingTarget.is(TE)) {
                         if (TE instanceof LivingEntity LE) {
@@ -439,7 +439,7 @@ public int speedActivated = 0;
             }
         } else {
             if (bloodSuckingTarget != null) {
-                Entity TE = getTargetEntity(self, 3, 15);
+                Entity TE = getTargetEntity(self, 4, 30);
                 if (TE != null && MainUtil.canDrinkBloodFair(TE, self)
                         && self.hurtTime <= 0 && bloodSuckingTarget.is(TE)) {
                     //safe
@@ -830,7 +830,12 @@ public int speedActivated = 0;
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8 - 1;
         if (!standOn){
-            Entity TE = getTargetEntity(playerEntity, 3, 15);
+            Entity TE;
+            if (bloodSuckingTarget != null) {
+                TE = getTargetEntity(playerEntity, 4, 40);
+            } else {
+                TE = getTargetEntity(playerEntity, 3, 15);
+            }
             if (TE != null && MainUtil.canDrinkBloodFair(TE, self)){
 
                 if (getActivePower() == BLOOD_SUCK){
