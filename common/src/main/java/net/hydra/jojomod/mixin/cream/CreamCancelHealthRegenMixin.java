@@ -16,24 +16,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = FoodData.class, priority = 100)
-public class CreamCancelHealthRegenMixin implements IFoodData {
+public class CreamCancelHealthRegenMixin {
     /**Bleed limits natural regen*/
 
-    @Unique
-    @Override
-    public void roundabout$setFoodLevel(int food){
-        foodLevel = food;
-    }
-    @Unique
-    @Override
-    public void roundabout$setExhaustionLevel(float exhaustion){
-        exhaustionLevel = exhaustion;
-    }
-    @Unique
-    @Override
-    public void roundabout$setSaturationLevel(float saturation){
-        saturationLevel = saturation;
-    }
     @Inject(method = "tick", at = @At(value = "HEAD"),cancellable = true)
     private void CreamCancelHealthRegen(Player $$0, CallbackInfo ci) {
         if ($$0 instanceof StandUser) {
@@ -47,11 +32,4 @@ public class CreamCancelHealthRegenMixin implements IFoodData {
     /**Shadows, ignore
      * -------------------------------------------------------------------------------------------------------------
      * */
-
-    @Shadow
-    private int foodLevel;
-    @Shadow
-    private float saturationLevel;
-    @Shadow
-    private float exhaustionLevel;
 }
