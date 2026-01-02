@@ -91,6 +91,7 @@ public class AnubisPossessorEntity extends GroundPathfindingStandAttackEntity {
         this.setUser(user);
         this.targets = targets;
         this.lifeSpan = PowersAnubis.MaxPossessionTime;
+        this.setMaxUpStep(1.5F);
     }
     public AnubisPossessorEntity(EntityType<? extends GroundPathfindingStandAttackEntity> $$0, Level $$1) {
         super($$0,$$1);

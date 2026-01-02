@@ -9,6 +9,8 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.gui.MemoryRecordScreen;
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.projectile.AnubisSlipstreamEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
@@ -528,24 +530,11 @@ public class PowersAnubis extends NewDashPreset {
 
                 if (slipstreamTimer <= 0) {
                     slipstreamTimer = 3;
-                 //   slipstreams.add(new Pair<Vec3,Integer>(this.getSelf().getPosition(1F),60));
+                    AnubisSlipstreamEntity ASE = new AnubisSlipstreamEntity(ModEntities.ANUBIS_SLIPSTREAM,this.getSelf().level(),60);
+                    ASE.setPos(this.getSelf().getPosition(1F));
+                    this.getSelf().level().addFreshEntity(ASE);
                 }
             }
-/*
-            List<Entity> entities = new ArrayList<>();
-            for (Pair<Vec3, Integer> pair : slipstreams) {
-                entities.addAll(MainUtil.genHitbox(this.getSelf().level()
-                        ,pair.getA().x, pair.getA().y, pair.getA().z,
-                        3,3,3));
-            }
-            for (Entity entity :entities) {
-                if (entity instanceof LivingEntity LE) {
-                    StandUser su = ((StandUser)LE);
-                    if (!(su.roundabout$getStandPowers() instanceof PowersAnubis) ) {
-                        su.roundabout$setSlipstream(Math.min(su.roundabout$getSlipstream()+2,20));
-                    }
-                }
-            } */
         }
     }
 
@@ -686,12 +675,13 @@ public class PowersAnubis extends NewDashPreset {
     }
 
 
+    /// CLIENT CHECK BEWARE
     public boolean pogoChecks() {
         return this.isHoldingSneak()
                 && !this.getSelf().onGround()
                 && canPogo()
                 && this.getAttackTime() > 5
-                && this.fallTime > 4;
+                && (this.fallTime > 4 || Minecraft.getInstance().options.keyJump.isDown());
     }
 
     @Override
@@ -1384,7 +1374,7 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     @Override
-    public boolean canCombatModeUse(Item item) {return true;}
+    public boolean canCombatModeUse(Item item) {return !item.equals(ModItems.ANUBIS_ITEM);}
 
     List<Entity> targets = new ArrayList<>();
     @Override
