@@ -91,9 +91,9 @@ public class TheGratefulDeadModel<T extends TheGratefulDeadEntity> extends Stand
 
         PartDefinition cube_r6 = pipes.addOrReplaceChild("cube_r6", CubeListBuilder.create().texOffs(0, 16).addBox(-3.5F, -3.0F, 0.0F, 7.0F, 6.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 7.0F, 0.0F, 0.0F, -0.2618F, 0.0F));
 
-        PartDefinition BAM = stand2.addOrReplaceChild("BAM", CubeListBuilder.create(), PartPose.offset(1.0F, -13.5F, -4.0F));
+        PartDefinition BAM = stand2.addOrReplaceChild("BAM", CubeListBuilder.create(), PartPose.offset(0.0F, -12.75F, -4.0F));
 
-        PartDefinition RightArmBAM = BAM.addOrReplaceChild("RightArmBAM", CubeListBuilder.create(), PartPose.offset(-13.5F, -7.25F, 0.0F));
+        PartDefinition RightArmBAM = BAM.addOrReplaceChild("RightArmBAM", CubeListBuilder.create(), PartPose.offset(-12.5F, -11.0F, 1.75F));
 
         PartDefinition cube_r7 = RightArmBAM.addOrReplaceChild("cube_r7", CubeListBuilder.create().texOffs(31, 40).mirror().addBox(-1.0F, -0.5F, -2.0F, 2.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(4.0F, 0.0F, -4.25F, -1.5708F, 0.0F, 1.5708F));
 
@@ -103,7 +103,7 @@ public class TheGratefulDeadModel<T extends TheGratefulDeadEntity> extends Stand
 
         PartDefinition cube_r10 = RightArmBAM.addOrReplaceChild("cube_r10", CubeListBuilder.create().texOffs(29, 26).addBox(-2.0F, -5.0F, -2.0F, 4.0F, 10.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.25F, -1.5708F, 0.0F, 0.0F));
 
-        PartDefinition RightArmBAM2 = BAM.addOrReplaceChild("RightArmBAM2", CubeListBuilder.create(), PartPose.offset(-17.5F, -0.25F, 0.0F));
+        PartDefinition RightArmBAM2 = BAM.addOrReplaceChild("RightArmBAM2", CubeListBuilder.create(), PartPose.offset(-16.5F, -4.0F, 1.75F));
 
         PartDefinition cube_r11 = RightArmBAM2.addOrReplaceChild("cube_r11", CubeListBuilder.create().texOffs(29, 26).addBox(-2.0F, -5.0F, -2.0F, 4.0F, 10.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.25F, -1.5708F, 0.0F, 0.0F));
 
@@ -113,7 +113,7 @@ public class TheGratefulDeadModel<T extends TheGratefulDeadEntity> extends Stand
 
         PartDefinition cube_r14 = RightArmBAM2.addOrReplaceChild("cube_r14", CubeListBuilder.create().texOffs(31, 40).mirror().addBox(-1.0F, -0.5F, -2.0F, 2.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(4.0F, 0.0F, -4.25F, -1.5708F, 0.0F, 1.5708F));
 
-        PartDefinition RightArmBAM3 = BAM.addOrReplaceChild("RightArmBAM3", CubeListBuilder.create(), PartPose.offset(-13.5F, 6.75F, 0.0F));
+        PartDefinition RightArmBAM3 = BAM.addOrReplaceChild("RightArmBAM3", CubeListBuilder.create(), PartPose.offset(-12.5F, 3.0F, 1.75F));
 
         PartDefinition cube_r15 = RightArmBAM3.addOrReplaceChild("cube_r15", CubeListBuilder.create().texOffs(29, 26).addBox(-2.0F, -5.0F, -2.0F, 4.0F, 10.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.25F, -1.5708F, 0.0F, 0.0F));
 
@@ -123,7 +123,7 @@ public class TheGratefulDeadModel<T extends TheGratefulDeadEntity> extends Stand
 
         PartDefinition cube_r18 = RightArmBAM3.addOrReplaceChild("cube_r18", CubeListBuilder.create().texOffs(31, 40).mirror().addBox(-1.0F, -0.5F, -2.0F, 2.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(4.0F, 0.0F, -4.25F, -1.5708F, 0.0F, 1.5708F));
 
-        PartDefinition LeftArmBAM = BAM.addOrReplaceChild("LeftArmBAM", CubeListBuilder.create(), PartPose.offset(-2.0F, 0.0F, 0.0F));
+        PartDefinition LeftArmBAM = BAM.addOrReplaceChild("LeftArmBAM", CubeListBuilder.create(), PartPose.offset(-1.0F, -3.75F, 1.75F));
 
         PartDefinition cube_r19 = LeftArmBAM.addOrReplaceChild("cube_r19", CubeListBuilder.create().texOffs(31, 40).addBox(-1.0F, -0.5F, -2.0F, 2.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(9.5F, -7.25F, -4.25F, -1.5708F, 0.0F, -1.5708F));
 
@@ -133,7 +133,7 @@ public class TheGratefulDeadModel<T extends TheGratefulDeadEntity> extends Stand
 
         PartDefinition cube_r22 = LeftArmBAM.addOrReplaceChild("cube_r22", CubeListBuilder.create().texOffs(29, 26).mirror().addBox(-2.0F, -5.0F, -2.0F, 4.0F, 10.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(13.5F, -7.25F, 0.25F, -1.5708F, 0.0F, 0.0F));
 
-        PartDefinition LeftArmBAM4 = BAM.addOrReplaceChild("LeftArmBAM4", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition LeftArmBAM4 = BAM.addOrReplaceChild("LeftArmBAM4", CubeListBuilder.create(), PartPose.offset(1.0F, -3.75F, 1.75F));
 
         PartDefinition cube_r23 = LeftArmBAM4.addOrReplaceChild("cube_r23", CubeListBuilder.create().texOffs(29, 26).mirror().addBox(-2.0F, -5.0F, -2.0F, 4.0F, 10.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(15.5F, -0.25F, 0.25F, -1.5708F, 0.0F, 0.0F));
 
@@ -143,7 +143,7 @@ public class TheGratefulDeadModel<T extends TheGratefulDeadEntity> extends Stand
 
         PartDefinition cube_r26 = LeftArmBAM4.addOrReplaceChild("cube_r26", CubeListBuilder.create().texOffs(31, 40).addBox(-1.0F, -0.5F, -2.0F, 2.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(11.5F, -0.25F, -4.25F, -1.5708F, 0.0F, -1.5708F));
 
-        PartDefinition LeftArmBAM3 = BAM.addOrReplaceChild("LeftArmBAM3", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition LeftArmBAM3 = BAM.addOrReplaceChild("LeftArmBAM3", CubeListBuilder.create(), PartPose.offset(1.0F, -3.75F, 1.75F));
 
         PartDefinition cube_r27 = LeftArmBAM3.addOrReplaceChild("cube_r27", CubeListBuilder.create().texOffs(29, 26).mirror().addBox(-2.0F, -5.0F, -2.0F, 4.0F, 10.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(11.5F, 6.75F, 0.25F, -1.5708F, 0.0F, 0.0F));
 

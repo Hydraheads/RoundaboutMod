@@ -11,6 +11,7 @@ import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import java.util.List;
 
@@ -44,6 +45,15 @@ public class PowersTheGratefulDead extends NewPunchingStand {
     }
 
     @Override
+    public float getPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return 1.45F;
+        } else {
+            return 4.0F;
+        }
+    }
+
+    @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         ClientUtil.fx.roundabout$onGUI(context);
 
@@ -61,10 +71,18 @@ public class PowersTheGratefulDead extends NewPunchingStand {
 
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
 
+        if(!isDisguised()){
+            setSkillIcon(context, x, y, 4, StandIcons.AGE_DISGUISE_1, PowerIndex.SKILL_4);
+        }else{
+            setSkillIcon(context, x, y, 4, StandIcons.AGE_DISGUISE_2, PowerIndex.SKILL_4);
+        }
+
         super.renderIcons(context, x, y);
     }
 
     public boolean isMiasmaActive() {return false;}
+
+    public boolean isDisguised() {return false;}
 
     @Override
     public boolean isWip(){
@@ -89,6 +107,15 @@ public class PowersTheGratefulDead extends NewPunchingStand {
                 ANIME_THE_GRATEFUL_DEAD,
                 MANGA_THE_GRATEFUL_DEAD
         );
+    }
+
+    @Override
+    public Component getSkinName(byte skinId){
+        if(skinId==MANGA_THE_GRATEFUL_DEAD){
+            return Component.translatable("skins.roundabout.the_grateful_dead.manga");
+        }else{
+            return Component.translatable("skins.roundabout.the_grateful_dead.anime");
+        }
     }
 
 

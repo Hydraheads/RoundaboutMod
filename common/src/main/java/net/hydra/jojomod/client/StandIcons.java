@@ -395,6 +395,10 @@ public class StandIcons {
             "textures/gui/icons/the_grateful_dead/miasma_toggle_inactive.png");
     public static final ResourceLocation SNEAK_X = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_grateful_dead/sneak_x.png");
+    public static final ResourceLocation AGE_DISGUISE_1 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_grateful_dead/age_disguise.png");
+    public static final ResourceLocation AGE_DISGUISE_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_grateful_dead/age_disguise_2.png");
 
     public static final ResourceLocation EERIE_SKIN = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/eerie_shift.png");
