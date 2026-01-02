@@ -1,4 +1,12 @@
+/*
+This shader is licensed under CC BY-SA 4.0 (see here: https://creativecommons.org/licenses/by-sa/4.0/deed.en)
+Made by GoldenGate9 for Roundabout in 2025
+*/
+
 #version 330
+
+// See lib/worldspace.fsh for the origin of this line
+const float _near=.1;const float _far=1000.;float linearizeDepth(float b){float c=b*2.-1.;return(_near*_far)/(_far+_near-c*(_far-_near));}vec3 rotateByQuat(vec3 d,vec4 e){vec3 f=2.*cross(e.xyz,d);return d+e.w*f+cross(e.xyz,f);}vec3 getWorldCoord(vec2 g,float h,float i,vec3 j,vec4 k,sampler2D l,out vec3 m,out float n){vec2 o=vec2(g.x*2.-1.,1.-g.y*2.);float p=tan(radians(i)/2.);vec3 q=normalize(rotateByQuat(vec3(0.,0.,1.),k));vec3 s=normalize(rotateByQuat(vec3(0.,1.,0.),k));vec3 t=normalize(cross(q,s));m=normalize(q+t*o.x*p*h+s*(-o.y)*p);float u=linearizeDepth(texture(l,g).r);n=length(vec3(1.,(2.*g-1.)*vec2(h,1.)*tan(radians(i/2.)))*u);return j+m*n;}
 
 // The multiplier to the color desaturation. From 0.0 (not desaturated) to 1.0 (completely desaturated).
 #define DESATURATION 0.8
@@ -19,22 +27,6 @@ uniform float GroundLinesOpacity;
 in vec2 texCoord;
 out vec4 fragColor;
 
-// These are from 1.21, might require tweaking depending on the version!
-const float _near = 0.1;
-const float _far = 1000.;
-
-float linearizeDepth(float depth)
-{
-    float z = depth * 2.0 - 1.0;
-    return (_near * _far) / (_far + _near - z * (_far - _near));
-}
-
-vec3 rotateByQuat(vec3 v, vec4 q)
-{
-    vec3 t = 2.0 * cross(q.xyz, v);
-    return v + q.w * t + cross(q.xyz, t);
-}
-
 vec4 generic_desaturate(vec3 color, float factor)
 {
     vec3 lum = vec3(0.299, 0.587, 0.114);
@@ -48,38 +40,20 @@ void main() {
 
     vec4 col = texture(DiffuseSampler, texCoord);
 
-    vec3 camPos = CameraPos.xyz;
-
     bool desaturateAll = (DesaturateAllInside > 0.5);
 
-    vec2 ndc = vec2(
-        texCoord.x * 2.0 - 1.0,
-        1.0 - texCoord.y * 2.0
-    );
-
+    vec3 camPos = CameraPos.xyz;
     float FOV = CameraPos.w;
-    float fovTan = tan(radians(FOV)/2.);
-    vec3 forward = normalize(rotateByQuat(vec3(0., 0., 1.), CameraRot));
-    vec3 up = normalize(rotateByQuat(vec3(0., 1., 0.), CameraRot));
-    vec3 right = normalize(cross(forward, up));
-
-    vec3 rayDir = normalize(
-        forward +
-        right * ndc.x * fovTan * aspect +
-        up * (-ndc.y) * fovTan
-    );
-
-    vec3 rayPos = camPos;
-    bool hit = false;
-
-    float depth = linearizeDepth(texture(MainDepthSampler, texCoord).r);
-    float worldDist = length(vec3(1., (2.*texCoord - 1.) * vec2(aspect, 1.) * tan(radians(FOV / 2.))) * depth);
-    // Cast a ray from our camera to pixel, see where it lands in the world. Not a perfect replication of screenspace -> worldspace, but a good enough one at that! (and also cheap!)
-    vec3 worldPos = camPos+rayDir*worldDist;
+    vec3 rayDir;
+    float worldDist;
+    vec3 worldPos = getWorldCoord(texCoord, aspect, FOV, camPos, CameraRot, MainDepthSampler, rayDir, worldDist);
 
     float bubbleRadius = BubbleRadius/BubbleMaxRadius;
     bubbleRadius = 1.-pow(1.-bubbleRadius, 3);
     bubbleRadius *= BubbleMaxRadius;
+
+    vec3 rayPos = camPos;
+    bool hit = false;
 
     bool camInside = (distance(camPos, BubblePos) <= bubbleRadius);
     if (!camInside)
