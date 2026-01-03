@@ -42,10 +42,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Mixin(PlayerModel.class)
 public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel<T> implements IPlayerModel {
@@ -398,7 +395,17 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 PathfinderMob poss = SU.roundabout$getPossessor();
                 if (poss != null && poss.getTarget() != null) {
                     this.head.xRot = (float) Math.toRadians(MainUtil.getLookAtEntityPitch(P,poss.getTarget()));
-                    //   $$0.setYRot(MainUtil.getLookAtEntityYaw(P,poss.getTarget()));
+                /*    this.bodyParts().forEach(
+                            part -> {
+                             float rot = (float) Math.toRadians(MainUtil.getLookAtEntityPitch(P,poss.getTarget()));
+                             part.yRot = rot;
+                             float dist = new Vec2(part.x,part.z).distanceToSqr(Vec2.ZERO);
+                             part.x = (float) ( dist*Math.cos(Math.toRadians(rot)) );
+                             part.z = (float) ( dist*Math.sin(Math.toRadians(rot)) );
+
+                            }
+                    ); */
+                   // $$0.setYRot(MainUtil.getLookAtEntityYaw(P,poss.getTarget()));
                 }
             }
 

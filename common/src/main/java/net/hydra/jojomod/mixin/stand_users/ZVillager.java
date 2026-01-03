@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.stand_users;
 
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.IVillagerAccess;
@@ -71,12 +72,13 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
     @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$ANUBIS_TICKS = SynchedEntityData.defineId(Villager.class,
             EntityDataSerializers.INT);
-    @Inject(method = "defineSynchedData",at=@At(value = "HEAD"))
+    @Inject(method = "defineSynchedData",at=@At(value = "TAIL"))
     public void roundabout$addVillagerSynched(CallbackInfo ci) {
-        if (!this.getEntityData().hasItem(ROUNDABOUT$ANUBIS_TICKS) ) {
-            this.getEntityData().define(ROUNDABOUT$ANUBIS_TICKS, -1);
+        if (!((Villager)(Object)this).getEntityData().hasItem(ROUNDABOUT$ANUBIS_TICKS) ) {
+            ((Villager)(Object)this).getEntityData().define(ROUNDABOUT$ANUBIS_TICKS, -1);
         }
     }
+    /// currently broken, unsure why
 
 
     @Inject(method = "tick", at = @At(value = "HEAD"))

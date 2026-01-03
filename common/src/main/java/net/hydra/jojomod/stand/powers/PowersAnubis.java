@@ -61,7 +61,7 @@ public class PowersAnubis extends NewDashPreset {
     }
 
 
-    public static final int MaxPossessionTime = 500;
+    public static final int MaxPossessionTime = 200;
     public static final int MaxPlayTime = 100;
     public static final int PogoDelay = 8;
     public static final byte SWING = 50;

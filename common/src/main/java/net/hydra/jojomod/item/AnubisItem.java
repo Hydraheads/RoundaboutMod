@@ -43,7 +43,7 @@ public class AnubisItem extends Item {
 
 
                 List<LivingEntity> targets = new ArrayList<>();
-                for (LivingEntity target : $$2.level().getNearbyEntities(LivingEntity.class, TargetingConditions.DEFAULT.selector(LE -> !LE.isInWater()),$$2,$$2.getBoundingBox().inflate(20))) {
+                for (LivingEntity target : $$2.level().getNearbyEntities(LivingEntity.class, TargetingConditions.DEFAULT.selector(LE -> true),$$2,$$2.getBoundingBox().inflate(20))) {
                     if (!target.equals($$2) && target.isAlive() && target.attackable()) {
                         targets.add(target);
                     }
