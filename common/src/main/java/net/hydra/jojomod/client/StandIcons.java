@@ -387,16 +387,24 @@ public class StandIcons {
     public static final ResourceLocation DIVER_SELECTION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/diver_down/diver_selection.png");
 
+    public static final ResourceLocation THE_GRATEFUL_DEAD_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_grateful_dead/punch.png");
+    public static final ResourceLocation THE_GRATEFUL_DEAD_GUARD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_grateful_dead/guard.png");
+    public static final ResourceLocation THE_GRATEFUL_DEAD_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_grateful_dead/barrage.png");
+    public static final ResourceLocation THE_GRATEFUL_DEAD_DOUBLE_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_grateful_dead/double_punch.png");
     public static final ResourceLocation AGE_GRAB = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_grateful_dead/age_grab.png");
-    public static final ResourceLocation MIASMA_TOGGLE_ACTIVE = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/the_grateful_dead/miasma_toggle_active.png");
-    public static final ResourceLocation MIASMA_TOGGLE_INACTIVE = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/the_grateful_dead/miasma_toggle_inactive.png");
-    public static final ResourceLocation SNEAK_X = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/the_grateful_dead/sneak_x.png");
+    public static final ResourceLocation MIASMA_ACTIVE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_grateful_dead/miasma_active.png");
+    public static final ResourceLocation MIASMA_INACTIVE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_grateful_dead/miasma_inactive.png");
+    public static final ResourceLocation AGE_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_grateful_dead/age_punch.png");
     public static final ResourceLocation AGE_DISGUISE_1 = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/the_grateful_dead/age_disguise.png");
+            "textures/gui/icons/the_grateful_dead/age_disguise_1.png");
     public static final ResourceLocation AGE_DISGUISE_2 = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_grateful_dead/age_disguise_2.png");
 

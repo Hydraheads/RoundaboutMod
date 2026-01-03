@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -63,15 +64,15 @@ public class PowersTheGratefulDead extends NewPunchingStand {
         ClientUtil.fx.roundabout$onGUI(context);
 
         if(!isMiasmaActive()){
-            setSkillIcon(context, x, y ,1, StandIcons.MIASMA_TOGGLE_ACTIVE, PowerIndex.SKILL_1);
+            setSkillIcon(context, x, y ,1, StandIcons.MIASMA_ACTIVE, PowerIndex.SKILL_1);
         }else{
-            setSkillIcon(context, x, y, 1, StandIcons.MIASMA_TOGGLE_INACTIVE, PowerIndex.SKILL_1);
+            setSkillIcon(context, x, y, 1, StandIcons.MIASMA_INACTIVE, PowerIndex.SKILL_1);
         }
 
         if(!isHoldingSneak()){
             setSkillIcon(context, x, y, 2, StandIcons.AGE_GRAB, PowerIndex.SKILL_2);
         }else{
-            setSkillIcon(context, x, y, 2, StandIcons.SNEAK_X, PowerIndex.SKILL_2);
+            setSkillIcon(context, x, y, 2, StandIcons.AGE_PUNCH, PowerIndex.SKILL_2);
         }
 
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
@@ -83,6 +84,29 @@ public class PowersTheGratefulDead extends NewPunchingStand {
         }
 
         super.renderIcons(context, x, y);
+    }
+
+    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas) {
+        List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos+20, topPos+80, 0, "ability.roundabout.punch",
+                "instruction.roundabout.press_attack", StandIcons.THE_GRATEFUL_DEAD_PUNCH,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,0, "ability.roundabout.guard",
+                "instruction.roundabout.hold_block", StandIcons.THE_GRATEFUL_DEAD_GUARD,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.roundabout.final_punch",
+                "instruction.roundabout.hold_attack_crouch", StandIcons.THE_GRATEFUL_DEAD_DOUBLE_PUNCH,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.barrage",
+                "instruction.roundabout.barrage", StandIcons.THE_GRATEFUL_DEAD_BARRAGE,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.miasma",
+                "instruction.roundabout.miasma", StandIcons.MIASMA_ACTIVE,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.age_grab",
+                "instruction.roundabout.age_grab", StandIcons.AGE_GRAB,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.age_punch",
+                "instruction.roundabout.age_punch", StandIcons.AGE_PUNCH,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.dodge",
+                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.age_disguise",
+                "instruction.roundabout.age_disguise", StandIcons.AGE_DISGUISE_2,4,level,bypas));
+        return $$1;
     }
 
     public boolean isMiasmaActive() {return false;}
