@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.event.index.Corpses;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.*;
@@ -522,7 +523,11 @@ public class ClientToServerPackets {
                 if (message.equals(MESSAGES.GuardCancel.value)) {
                     if (((StandUser) sender).roundabout$isGuarding() || ((StandUser) sender).roundabout$isBarraging()
                             || ((StandUser) sender).roundabout$getStandPowers().clickRelease()) {
-                        ((StandUser) sender).roundabout$tryPower(PowerIndex.NONE, true);
+                        if (PowerTypes.hasPowerActivelyEquipped(sender)) {
+                            ((StandUser) sender).roundabout$tryPowerP(PowerIndex.NONE, true);
+                        } else {
+                            ((StandUser) sender).roundabout$tryPower(PowerIndex.NONE, true);
+                        }
                     }
                 }
                 /**Release right click to stop guarding*/

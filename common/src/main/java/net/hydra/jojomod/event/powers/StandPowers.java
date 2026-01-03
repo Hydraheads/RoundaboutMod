@@ -128,18 +128,11 @@ public class StandPowers extends AbilityScapeBasis {
 
 
 
-    /**If the standard right click input should usually be canceled while your stand is active*/
-    public boolean interceptGuard(){
-        return false;
-    }
+
     /**The above, but for canceling all right click interactions like villager interactions etc*/
     public boolean interceptAllInteractions(){
         return false;
     }
-    public boolean buttonInputGuard(boolean keyIsDown, Options options) {
-        return false;
-    }
-
 
 
     /**Override this if you need ultra specific timing on tickpower after other entity functions are called,
@@ -163,11 +156,7 @@ public class StandPowers extends AbilityScapeBasis {
     /** Called per client tick, use for particle FX and such */
     public void visualFrameTick() {};
 
-    /**Override this to determine how many points of damage your stand's guard can take before it breaks,
-     * generally hooks into config settings.*/
-    public int getMaxGuardPoints(){
-        return 10;
-    }
+
 
     /**Runs this code while switching out of your stand with a disc*/
     public void onStandSwitch(){
@@ -243,16 +232,7 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    /**Guard + Attack to use a barrage*/
-    public void buttonInputBarrage(boolean keyIsDown, Options options){
-        if (keyIsDown) {
-            if (this.getAttackTime() >= this.getAttackTimeMax() ||
-                    (this.getActivePowerPhase() != this.getActivePowerPhaseMax())) {
-                this.tryPower(PowerIndex.BARRAGE_CHARGE, true);
-                tryPowerPacket(PowerIndex.BARRAGE_CHARGE);
-            }
-        }
-    }
+
 
     /**This gets set to true when you begin using a forward barrage, not many stands will use this mechanic likely*/
     public boolean forwardBarrage = false;
@@ -262,11 +242,6 @@ public class StandPowers extends AbilityScapeBasis {
         return false;
     }
 
-    /**The Guard Variation is prioritized over this for most stands but it may find niche uses*/
-    public void buttonInputUse(boolean keyIsDown, Options options) {
-        if (keyIsDown) {
-        }
-    }
 
 
 
@@ -739,10 +714,7 @@ public class StandPowers extends AbilityScapeBasis {
                 generalStandSettings.barrageRecoilCooldown;
     }
 
-    /**returns if you are using stand guard*/
-    public boolean isGuarding(){
-        return this.activePower == PowerIndex.GUARD;
-    }
+
 
     public int getKickBarrageWindup(){
         return ClientNetworking.getAppropriateConfig().generalStandSettings.kickBarrageWindup;
@@ -1834,27 +1806,6 @@ public class StandPowers extends AbilityScapeBasis {
 
 
 
-    public void preCheckButtonInputAttack(boolean keyIsDown, Options options) {
-        if (hasStandActive(this.getSelf()) && !this.isGuarding()) {
-            buttonInputAttack(keyIsDown, options);
-        }
-    }
-    public void preCheckButtonInputUse(boolean keyIsDown, Options options) {
-        if (hasStandActive(this.getSelf())) {
-            buttonInputUse(keyIsDown, options);
-        }
-    }
-    public void preCheckButtonInputBarrage(boolean keyIsDown, Options options) {
-        if (hasStandActive(this.getSelf())) {
-            buttonInputBarrage(keyIsDown, options);
-        }
-    }
-    public boolean preCheckButtonInputGuard(boolean keyIsDown, Options options) {
-        if (hasStandActive(this.getSelf())) {
-            return buttonInputGuard(keyIsDown, options);
-        }
-        return false;
-    }
 
 
 

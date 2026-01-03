@@ -22,4 +22,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public Component getPowerTagName(){
         return Component.translatable("text.roundabout.powers.vampire_select");
     }
+    public int getMaxGuardPoints(){
+        return 13;
+    }
 }

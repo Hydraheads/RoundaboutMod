@@ -1358,6 +1358,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.roundabout$getStandPowers().tickPower();
         if (rdbt$this() instanceof Player PL){
             ((IFatePlayer)PL).rdbt$getFatePowers().tickPower();
+            ((IPowersPlayer)PL).rdbt$getPowers().tickPower();
         }
         this.rdbt$tickCooldowns();
         this.roundabout$tickGuard();
@@ -2219,7 +2220,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     public float roundabout$getMaxGuardPoints(){
-        return (float) (roundabout$getStandPowers().getMaxGuardPoints()*(ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardMultiplier*0.01));
+        if (PowerTypes.hasStandActivelyEquipped(rdbt$this())){
+            return (float) (roundabout$getStandPowers().getMaxGuardPoints()*(ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardMultiplier*0.01));
+        } else if (PowerTypes.hasPowerActivelyEquipped(rdbt$this()) && rdbt$this() instanceof Player pl){
+            return ((IPowersPlayer)pl).rdbt$getPowers().getMaxGuardPoints();
+        }
+        return 9F;
     }
 
     @Unique
@@ -2321,6 +2327,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     public float roundabout$getGuardPoints(){
+        if (roundabout$GuardPoints > roundabout$getMaxGuardPoints()){
+            roundabout$setGuardPoints(roundabout$getMaxGuardPoints());
+        }
         return this.roundabout$GuardPoints;
     }
     @Unique
@@ -2664,7 +2673,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return this.roundabout$getStandPowers().getReach();
     }
     public boolean roundabout$isGuarding(){
-        return this.roundabout$getStandPowers().isGuarding();
+        return this.roundabout$getStandPowers().isGuarding() ||
+                (rdbt$this() instanceof Player pl && ((IPowersPlayer)pl).rdbt$getPowers().isGuarding());
     }
     public boolean roundabout$isBarraging(){
         return this.roundabout$getStandPowers().isBarraging();
@@ -2677,7 +2687,24 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return this.roundabout$isGuardingEffectively2();
     }
     public boolean roundabout$isGuardingEffectively2(){
-        return (this.roundabout$shieldNotDisabled() && this.roundabout$getStandPowers().isGuarding() && this.roundabout$getStandPowers().getAttackTimeDuring() >= ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardDelayTicks);
+
+        Roundabout.LOGGER.info("1: "+(PowerTypes.hasPowerActive(rdbt$this()))+
+                " 2: "+
+                (rdbt$this() instanceof Player pl &&
+                ((IPowersPlayer)pl).rdbt$getPowers().getAttackTimeDuring() >= ClientNetworking.getAppropriateConfig().vampireSettings.powerGuardDelayTicks)
+        + " 3: "+((IPowersPlayer)rdbt$this()).rdbt$getPowers().getActivePower()
+                + " 4: "+((IPowersPlayer)rdbt$this()).rdbt$getPowers().getAttackTimeDuring());
+
+        return (this.roundabout$shieldNotDisabled() && roundabout$isGuarding() &&
+                (
+                        (PowerTypes.hasStandActive(rdbt$this()) &&
+                                this.roundabout$getStandPowers().getAttackTimeDuring() >= ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardDelayTicks)
+                ||
+                        (PowerTypes.hasPowerActive(rdbt$this()) && rdbt$this() instanceof Player pl &&
+                        ((IPowersPlayer)pl).rdbt$getPowers().getAttackTimeDuring() >= ClientNetworking.getAppropriateConfig().vampireSettings.powerGuardDelayTicks)
+                )
+
+        );
     }
 
     public boolean roundabout$shieldNotDisabled(){

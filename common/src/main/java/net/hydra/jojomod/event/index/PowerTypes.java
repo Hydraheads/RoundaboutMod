@@ -80,6 +80,25 @@ public enum PowerTypes {
         }
         return false;
     }
+    public static boolean isBrawlAttacking(Entity ent){
+        if (ent instanceof Player pl){
+            if (isUsingPower(ent)){
+                return ((IPowersPlayer)pl).rdbt$getPowers().isBrawling() &&
+                        ((IPowersPlayer)pl).rdbt$getPowers().getActivePower() != PowerIndex.NONE;
+            }
+        }
+        return false;
+    }
+    public static boolean isBrawlButNotAttacking(Entity ent){
+        if (ent instanceof Player pl){
+            if (isUsingPower(ent)){
+                return ((IPowersPlayer)pl).rdbt$getPowers().isBrawling() &&
+                        ((IPowersPlayer)pl).rdbt$getPowers().getActivePower() == PowerIndex.NONE;
+            }
+        }
+        return false;
+    }
+
 
     public static boolean isUsingPower(Entity ent){
         if (ent instanceof Player pl){
@@ -140,6 +159,16 @@ public enum PowerTypes {
         if (entity instanceof LivingEntity LE){
             if (entity instanceof Player PL){
                 if (getPowerType(PL) != STAND.ordinal())
+                    return false;
+            }
+            return ((StandUser)LE).roundabout$getActive();
+        }
+        return false;
+    }
+    public static boolean hasPowerActive(Entity entity){
+        if (entity instanceof LivingEntity LE){
+            if (entity instanceof Player PL){
+                if (getPowerType(PL) == STAND.ordinal() || getPowerType(PL) == NONE.ordinal())
                     return false;
             }
             return ((StandUser)LE).roundabout$getActive();

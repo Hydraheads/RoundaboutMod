@@ -1,6 +1,8 @@
 package net.hydra.jojomod.powers;
 
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
@@ -156,4 +158,33 @@ public class GeneralPowers extends AbilityScapeBasis {
             }
         }
     }
+
+    @Override
+    public boolean tryPower(int move, boolean forced){
+        if (!this.self.level().isClientSide && (this.isBarraging()) && (move != PowerIndex.BARRAGE && move != PowerIndex.BARRAGE_CLASH
+                && move != PowerIndex.BARRAGE_CHARGE && move != PowerIndex.GUARD) && this.attackTimeDuring  > -1){
+            this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
+        }
+
+        if (canChangePower(move, forced)) {
+            if (move == PowerIndex.NONE || move == PowerIndex.CLASH_CANCEL) {
+                this.setPowerNone();
+            } else if (move == PowerIndex.GUARD) {
+                this.setPowerGuard();
+            } else if (move == PowerIndex.MOVEMENT) {
+                this.setPowerMovement(move);
+            } else {
+                this.setPowerOther(move, this.getActivePower());
+            }
+
+        }
+        return false;
+    }
+
+    public boolean setPowerGuard() {
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.GUARD);
+        return true;
+    }
+
 }

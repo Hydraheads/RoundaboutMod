@@ -201,6 +201,8 @@ public class Config implements Cloneable {
         public Integer expTypeCapPerDay;
         @FloatOption(group = "inherit", value = 0.75F, min = 0, max = 1F)
         public Float drownSpeedModifier;
+        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        public Integer powerGuardDelayTicks;
         @FloatOption(group = "inherit", value = 0.4F, min = 0, max = 100F)
         public Float sunDamagePercentPerDamageTick;
         @BooleanOption(group = "inherit", value = true)
