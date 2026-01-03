@@ -36,9 +36,11 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundAnimatePacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -640,6 +642,52 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (rdbt$tickEffectsBleedEdition(false)){
             ci.cancel();
             ((StandUser)rdbt$this()).rdbt$setRemoveLoveSafety(true);
+        }
+    }
+
+
+    // Vampire swing speed in vampire power, how fast the arms move
+    @Inject(method = "getCurrentSwingDuration()I", at = @At(value = "HEAD"), cancellable = true)
+    public void rdbt$getCurrentSwingDurationBrawl(CallbackInfoReturnable<Integer> cir) {
+        if (PowerTypes.isBrawling(rdbt$this())){
+            int amt = 0;
+            if (MobEffectUtil.hasDigSpeed(rdbt$this())) {
+                amt = 6 - (1 + MobEffectUtil.getDigSpeedAmplification(rdbt$this()));
+            } else {
+                amt = this.hasEffect(MobEffects.DIG_SLOWDOWN) ? 6 + (1 + this.getEffect(MobEffects.DIG_SLOWDOWN).getAmplifier()) * 2 : 6;
+            }
+            cir.setReturnValue((int) (amt*1.4));
+        }
+    }
+
+    @Inject(method = "swing(Lnet/minecraft/world/InteractionHand;Z)V", at = @At(value = "HEAD"), cancellable = true)
+    public void rdbt$swingBrawl (InteractionHand hand, boolean $$1,CallbackInfo ci) {
+        if (PowerTypes.isBrawling(rdbt$this()) && level().isClientSide()){
+            ci.cancel();
+            if (!this.swinging || this.swingTime >= this.getCurrentSwingDuration() / 2 || this.swingTime < 0) {
+                if (swingingArm != null) {
+                    if (swingingArm == InteractionHand.MAIN_HAND) {
+                        hand = InteractionHand.OFF_HAND;
+                    } else {
+                        hand = InteractionHand.MAIN_HAND;
+                    }
+                }
+
+
+
+                this.swingTime = -1;
+                this.swinging = true;
+                this.swingingArm = hand;
+                if (this.level() instanceof ServerLevel) {
+                    ClientboundAnimatePacket $$2 = new ClientboundAnimatePacket(this, hand == InteractionHand.MAIN_HAND ? 0 : 3);
+                    ServerChunkCache $$3 = ((ServerLevel)this.level()).getChunkSource();
+                    if ($$1) {
+                        $$3.broadcastAndSend(this, $$2);
+                    } else {
+                        $$3.broadcast(this, $$2);
+                    }
+                }
+            }
         }
     }
 
@@ -4924,6 +4972,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Shadow public abstract boolean isUsingItem();
 
+    @Shadow public boolean swinging;
+    @Shadow public int swingTime;
+
+    @Shadow protected abstract int getCurrentSwingDuration();
+
+    @Shadow public InteractionHand swingingArm;
     @Unique private boolean roundabout$isPRunning = false;
 
     @Override

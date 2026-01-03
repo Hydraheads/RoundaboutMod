@@ -214,21 +214,21 @@ public abstract class InputEvents implements IInputEvents {
                 return;
             }
 
+            if (standComp.roundabout$getCombatMode()){
+                ci.setReturnValue(false);
+                return;
+            }
+            if (powers.isPiloting()){
+                ci.setReturnValue(false);
+                powers.pilotInputAttack();
+                return;
+            }
             if (itemStack.getItem() != null && itemStack.getItem() instanceof FirearmItem && ((FirearmItem) itemStack.getItem()).interceptAttack(itemStack, player) && !player.getCooldowns().isOnCooldown(itemStack.getItem())) {
                 ci.setReturnValue(false);
                 C2SPacketUtil.gunShot();
                 return;
             }
 
-            if (powers.isPiloting()){
-                ci.setReturnValue(false);
-                powers.pilotInputAttack();
-                return;
-            }
-            if (standComp.roundabout$getCombatMode()){
-                ci.setReturnValue(false);
-                return;
-            }
 
             boolean isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING);
             if (standComp.roundabout$isDazed() || ((TimeStop) player.level()).CanTimeStopEntity(player)) {
@@ -317,7 +317,7 @@ public abstract class InputEvents implements IInputEvents {
                     return;
                 }
 
-                if (standComp.roundabout$getCombatMode()){
+                if (standComp.roundabout$getCombatMode() && !PowerTypes.isBrawling(player)){
                     ci.cancel();
                     return;
                 }
@@ -1052,7 +1052,7 @@ public abstract class InputEvents implements IInputEvents {
                 if (player != null) {
                     if (roundabout$sameKeyTwo(KeyInputRegistry.guardKey) && !player.isUsingItem()) {
 
-                        if (((StandUser) player).roundabout$getActive() && ((StandUser) player).roundabout$getStandPowers().interceptGuard()) {
+                        if (PowerTypes.hasStandActive(player) && ((StandUser) player).roundabout$getStandPowers().interceptGuard()) {
                             if (roundabout$sameKeyTwo(KeyInputRegistry.guardKey)) {
                                 roundabout$TryGuard();
                             }
@@ -1099,7 +1099,7 @@ public abstract class InputEvents implements IInputEvents {
                 }
             }
 
-            if (standComp.roundabout$getCombatMode()){
+            if (standComp.roundabout$getCombatMode() && !PowerTypes.isBrawling(player)){
                 if (roundabout$activeMining || Minecraft.getInstance().gameMode.isDestroying()) {
                     roundabout$activeMining = false;
                     Minecraft.getInstance().gameMode.stopDestroyBlock();
@@ -1108,7 +1108,7 @@ public abstract class InputEvents implements IInputEvents {
                     powers.tryPowerPacket(PowerIndex.NONE);
                 }
             }
-            if (standComp.roundabout$getActive() && !((TimeStop)player.level()).CanTimeStopEntity(player)) {
+            if (PowerTypes.hasStandActive(player) && !((TimeStop)player.level()).CanTimeStopEntity(player)) {
                 isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING)
                         || this.gameMode.isDestroying();
                 if (this.options.keyAttack.isDown() && !player.isUsingItem() && !standComp.roundabout$getCombatMode()) {

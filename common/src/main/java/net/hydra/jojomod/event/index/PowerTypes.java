@@ -80,6 +80,7 @@ public enum PowerTypes {
         }
         return false;
     }
+
     public static boolean isUsingPower(Entity ent){
         if (ent instanceof Player pl){
             if (((StandUser)pl).roundabout$getActive()){
@@ -88,6 +89,7 @@ public enum PowerTypes {
         }
         return false;
     }
+
     public static boolean isUsingStand(Entity ent){
         if (ent instanceof Player pl){
             if (((StandUser)pl).roundabout$getActive()){

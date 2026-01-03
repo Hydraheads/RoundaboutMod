@@ -819,7 +819,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 dSpeed*= ((IPowersPlayer)this).rdbt$getPowers().getBonusPassiveMiningSpeed();
             }
 
-            if (!(((StandUser) this).roundabout$getActive() && PowerTypes.hasStandActivelyEquipped(this) && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()
+            if (!(PowerTypes.hasStandActive(this) && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()
             )) {
                 float bpow = ((IFatePlayer) this).rdbt$getFatePowers().getBonusPassiveMiningSpeed();
                 if (bpow != 1){
@@ -1603,7 +1603,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Inject(method = "getDestroySpeed(Lnet/minecraft/world/level/block/state/BlockState;)F", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$getDestroySpeed2(BlockState $$0, CallbackInfoReturnable<Float> cir) {
         StandPowers powers = ((StandUser) this).roundabout$getStandPowers();
-        if (((StandUser) this).roundabout$getActive() && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()) {
+        if (PowerTypes.hasStandActive(this) && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()) {
 
             cir.setReturnValue(rdbt$mutualMiningSpeedFunction($$0,powers));
         }
