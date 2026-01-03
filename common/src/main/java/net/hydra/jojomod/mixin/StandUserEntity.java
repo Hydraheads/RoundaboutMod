@@ -3149,10 +3149,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if ($$0.getDirectEntity() != null && !$$0.is(ModDamageTypes.STAND_FIRE)) {
-           if (this.roundabout$getStandPowers().preCanInterruptPower($$0,$$0.getDirectEntity(),MainUtil.isStandDamage($$0))) {
-                this.roundabout$tryPower(PowerIndex.NONE, true);
-                if (!(((LivingEntity)(Object)this) instanceof Player)){
-                    this.roundabout$setAttackTimeDuring(this.roundabout$getStandPowers().getMobRecoilTime());
+            if (PowerTypes.hasStandActivelyEquipped(rdbt$this())){
+                if (this.roundabout$getStandPowers().preCanInterruptPower($$0,$$0.getDirectEntity(),MainUtil.isStandDamage($$0))) {
+                    this.roundabout$tryPower(PowerIndex.NONE, true);
+                    if (!(((LivingEntity)(Object)this) instanceof Player)){
+                        this.roundabout$setAttackTimeDuring(this.roundabout$getStandPowers().getMobRecoilTime());
+                    }
+                }
+            } else if (PowerTypes.hasPowerActivelyEquipped(rdbt$this()) &&  rdbt$this() instanceof Player pl){
+                if (((IPowersPlayer)pl).rdbt$getPowers().preCanInterruptPower($$0,$$0.getDirectEntity(),MainUtil.isStandDamage($$0))) {
+                    this.roundabout$tryPowerP(PowerIndex.NONE, true);
+                    if (!(((LivingEntity)(Object)this) instanceof Player)){
+                        ((IPowersPlayer)pl).rdbt$getPowers().setAttackTimeDuring(((IPowersPlayer)pl).rdbt$getPowers().getMobRecoilTime());
+                    }
                 }
             }
             this.roundabout$setIdleTime(-1);

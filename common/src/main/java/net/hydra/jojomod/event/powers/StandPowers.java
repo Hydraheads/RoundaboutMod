@@ -236,21 +236,10 @@ public class StandPowers extends AbilityScapeBasis {
 
     public int getJumpHeightAddon() {return 0;}
 
-    /**If a power can be interrupted, that means you can hit the person using the power to cancel it,
-     * like when someone charging a barrage gets their barrage canceled to damage*/
-    public boolean canInterruptPower(){
-        return false;
-    }
 
     /**Probably will only apply to magician's red but leaving it in here just in case*/
     public boolean canLightFurnace(){
         return false;
-    }
-
-    /**This value prevents you from resummoning/blocking to cheese the 3 hit combo's last hit faster*/
-
-    public int getMobRecoilTime(){
-        return -30;
     }
 
 
@@ -1746,9 +1735,6 @@ public class StandPowers extends AbilityScapeBasis {
     public boolean isBarrageCharging(){
         return (this.activePower == PowerIndex.BARRAGE_CHARGE);
     }
-    public boolean isBarraging(){
-        return (this.activePower == PowerIndex.BARRAGE || this.activePower == PowerIndex.BARRAGE_CHARGE);
-    }
     public boolean isBarrageAttacking(){
         return this.activePower == PowerIndex.BARRAGE;
     }
@@ -1800,47 +1786,7 @@ public class StandPowers extends AbilityScapeBasis {
     private int clashMod =0;
 
 
-    /**While you can override this, it might be more sensible to just edit this base function,
-     * also veeery conditional use canInterruptPower instead*/
-    public boolean preCanInterruptPower(DamageSource sauce, Entity interrupter, boolean isStandDamage){
-        if (ClientNetworking.getAppropriateConfig().generalStandSettings.spiritOutInterruption){
-            if (sauce != null){
-                if (interrupter instanceof LivingEntity LE){
-                    StandUser user = ((StandUser) LE);
-                    if (PowerTypes.hasStandActivelyEquipped(LE)){
-                        if (!PowerTypes.hasStandActive(LE)){
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
 
-        boolean interrupt = false;
-        if (interrupter != null){
-            if (this.isBarraging() && ClientNetworking.getAppropriateConfig().generalStandSettings.barragesAreAlwaysInterruptable) {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                return true;
-            } else if (isStandDamage && ClientNetworking.getAppropriateConfig().generalStandSettings.standsInterruptSomeStandAttacks){
-                interrupt = true;
-            } else if (this instanceof TWAndSPSharedPowers && this.getActivePower() == PowerIndex.SPECIAL &&
-                    ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopIsAlwaysInterruptable){
-                interrupt = true;
-            } else if (interrupter instanceof Player && ClientNetworking.getAppropriateConfig().generalStandSettings.playersInterruptSomeStandAttacks){
-                interrupt = true;
-            } else if (interrupter instanceof Mob && ClientNetworking.getAppropriateConfig().generalStandSettings.mobsInterruptSomeStandAttacks){
-                interrupt = true;
-            }
-        } else {
-            interrupt = true;
-        }
-
-        if (interrupt){
-            return canInterruptPower();
-        } else {
-            return false;
-        }
-    }
 
     @Override
     public void preButtonInput4(boolean keyIsDown, Options options){

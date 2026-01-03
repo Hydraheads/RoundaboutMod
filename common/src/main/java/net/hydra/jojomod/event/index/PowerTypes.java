@@ -124,6 +124,15 @@ public enum PowerTypes {
         return false;
     }
 
+    public static boolean hasPowerActivelyEquipped(Entity entity){
+        if (entity instanceof LivingEntity LE){
+            if (entity instanceof Player PL){
+                return getPowerType(PL) != STAND.ordinal() && getPowerType(PL) != NONE.ordinal();
+            }
+        }
+        return false;
+    }
+
     public static boolean hasStandActive(Entity entity){
         if (entity instanceof LivingEntity LE){
             if (entity instanceof Player PL){
