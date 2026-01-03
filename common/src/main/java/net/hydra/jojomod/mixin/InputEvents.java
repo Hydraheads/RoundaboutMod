@@ -202,6 +202,47 @@ public abstract class InputEvents implements IInputEvents {
         }
 
 
+        @Unique
+        public boolean rdbt$stopBreakingBlock(){
+            if (this.missTime > 0) {
+                return false;
+            } else if (this.hitResult == null) {
+                if (this.gameMode.hasMissTime()) {
+                    this.missTime = 10;
+                }
+
+                return false;
+            } else if (this.player.isHandsBusy()) {
+                return false;
+            } else {
+                ItemStack $$0 = this.player.getItemInHand(InteractionHand.MAIN_HAND);
+                if (!$$0.isItemEnabled(this.level.enabledFeatures())) {
+                    return false;
+                } else {
+                    boolean $$1 = false;
+                    switch (this.hitResult.getType()) {
+                        case ENTITY:
+                            return false;
+                        case BLOCK:
+                            BlockHitResult $$2 = (BlockHitResult)this.hitResult;
+                            BlockPos $$3 = $$2.getBlockPos();
+                            if (!this.level.getBlockState($$3).isAir()) {
+                                this.gameMode.startDestroyBlock($$3, $$2.getDirection());
+                                if (this.level.getBlockState($$3).isAir()) {
+                                    $$1 = true;
+                                }
+                                break;
+                            }
+                        case MISS:
+                            return false;
+                    }
+
+                    this.player.swing(InteractionHand.MAIN_HAND);
+                    return $$1;
+                }
+            }
+        }
+
     @Inject(method = "startAttack", at = @At("HEAD"), cancellable = true)
     public void roundabout$Attack(CallbackInfoReturnable<Boolean> ci) {
         if (player != null) {
@@ -215,7 +256,11 @@ public abstract class InputEvents implements IInputEvents {
             }
 
             if (standComp.roundabout$getCombatMode()){
-                ci.setReturnValue(false);
+                if (PowerTypes.isBrawling(player)){
+                    ci.setReturnValue(rdbt$stopBreakingBlock());
+                } else {
+                    ci.setReturnValue(false);
+                }
                 return;
             }
             if (powers.isPiloting()){
