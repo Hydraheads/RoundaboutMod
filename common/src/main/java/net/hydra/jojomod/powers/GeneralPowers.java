@@ -51,7 +51,7 @@ public class GeneralPowers extends AbilityScapeBasis {
     }
     /**How fast does the block mine blocks that require pickaxes?*/
     public float getPickMiningSpeed() {
-        return 6.5F;
+        return 7F;
     }
     /**How fast does the block mine blocks that require axes?*/
     public float getAxeMiningSpeed() {
