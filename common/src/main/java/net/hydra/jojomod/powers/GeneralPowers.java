@@ -44,6 +44,35 @@ public class GeneralPowers extends AbilityScapeBasis {
         return false;
     }
 
+    /**Adjust this function to enable the below minin functions, and intercept your mining when not holding
+     * a mining tool*/
+    public boolean isMining() {
+        return false;
+    }
+    /**How fast does the block mine blocks that require pickaxes?*/
+    public float getPickMiningSpeed() {
+        return 6.5F;
+    }
+    /**How fast does the block mine blocks that require axes?*/
+    public float getAxeMiningSpeed() {
+        return 5F;
+    }
+    /**How fast does the block mine blocks that require swords like cobwebs?*/
+    public float getSwordMiningSpeed() {
+        return 5F;
+    }
+    /**How fast does the block mine blocks that require shovels?*/
+    public float getShovelMiningSpeed() {
+        return 5F;
+    }
+    /**A general multiplier to apply across the board*/
+    public float getMiningMultiplier() {
+        return 1F;
+    }
+    /**Override with config options for your stand to be able to mine blocks*/
+    public int getMiningLevel() {
+        return 0;
+    }
     //The Power inventory icon coords
     public Vector2i getCoords(){
         return new Vector2i(0,222);

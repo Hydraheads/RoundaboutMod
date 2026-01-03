@@ -84,7 +84,8 @@ public enum PowerTypes {
     public static boolean isUsingPower(Entity ent){
         if (ent instanceof Player pl){
             if (((StandUser)pl).roundabout$getActive()){
-                return (getPowerFromByte(getPowerType(ent)) != PowerTypes.STAND);
+                return (getPowerFromByte(getPowerType(ent)) != PowerTypes.STAND
+                && getPowerFromByte(getPowerType(ent)) != PowerTypes.NONE);
             }
         }
         return false;

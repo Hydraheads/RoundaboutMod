@@ -8,6 +8,7 @@ import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.powers.GeneralPowers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
@@ -149,13 +150,16 @@ public abstract class ForgePlayer extends LivingEntity {
     /**stand mining intercepts mining speed as well*/
     @Inject(method = "getDigSpeed", at = @At(value = "HEAD"), cancellable = true, remap = false)
     protected void roundabout$getForgeDestroySpeed2(BlockState $$0, BlockPos pos, CallbackInfoReturnable<Float> cir) {
-        boolean standActive = PowerTypes.hasStandActive(this);
-        if (standActive) {
-            StandPowers powers = ((StandUser) this).roundabout$getStandPowers();
-            if (((StandUser) this).roundabout$getStandPowers().canUseMiningStand()) {
+        StandPowers powers = ((StandUser) this).roundabout$getStandPowers();
+        GeneralPowers gp = ((IPowersPlayer)this).rdbt$getPowers();
+        if (PowerTypes.hasStandActive(this) && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()) {
 
-                cir.setReturnValue(((IPlayerEntity)this).rdbt$mutualMiningSpeedFunction($$0,powers));
-            }
+            cir.setReturnValue(((IPlayerEntity)this).rdbt$mutualMiningSpeedFunction($$0,powers));
+            return;
+        }
+        if (PowerTypes.isUsingPower(this) && ((IPowersPlayer)this).rdbt$getPowers().isMining()){
+            cir.setReturnValue(((IPlayerEntity)this).rdbt$mutualMiningSpeedFunction2($$0,gp));
+            return;
         }
     }
 

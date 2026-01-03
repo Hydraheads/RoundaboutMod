@@ -16,4 +16,9 @@ public class PunchingGeneralPowers extends GeneralPowers {
     public GeneralPowers generatePowers(LivingEntity entity){
         return new PunchingGeneralPowers(entity);
     }
+
+    @Override
+    public boolean isMining() {
+        return true;
+    }
 }

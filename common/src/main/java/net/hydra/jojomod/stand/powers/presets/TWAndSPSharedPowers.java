@@ -87,7 +87,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     @Override
     public float getPickMiningSpeed() {
-        return 12F;
+        return 14F;
     }
     @Override
     public float getAxeMiningSpeed() {
