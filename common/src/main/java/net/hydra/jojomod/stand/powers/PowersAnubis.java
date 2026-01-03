@@ -724,7 +724,7 @@ public class PowersAnubis extends NewDashPreset {
         } else {
             this.activePowerPhase++;
             if (this.activePowerPhase == 3) {
-                this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown;
+                this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown-6;
             } else {
                 this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchCooldown;
             }
@@ -1115,7 +1115,7 @@ public class PowersAnubis extends NewDashPreset {
         float knockbackStrength = 0.85F + (this.getSelf().isSprinting() ? 0.1F : 0F);
         if (first) {knockbackStrength = 0.2F;}
 
-        List<Entity> entities = defaultSwordHitbox(this.getSelf(),4, 35,0.03);
+        List<Entity> entities = defaultSwordHitbox(this.getSelf(),4, 35,0.015);
         entities = doAttackChecks(entities);
 
         if (!entities.isEmpty()) {
@@ -1232,7 +1232,7 @@ public class PowersAnubis extends NewDashPreset {
         this.setAttackTimeDuring(-10);
 
 
-        List<Entity> entities = defaultSwordHitbox(this.getSelf(),3, 55,0.01);
+        List<Entity> entities = defaultSwordHitbox(this.getSelf(),3, 60,0.01);
         if (!entities.isEmpty()) {
             this.getSelf().level().playSound(null,this.getSelf().blockPosition(),SoundEvents.PLAYER_ATTACK_KNOCKBACK,SoundSource.PLAYERS,1F,0.4F + (float)(Math.random()*0.2));
         }
@@ -1508,7 +1508,7 @@ public class PowersAnubis extends NewDashPreset {
         this.setPowerNone();
         float knockbackStrength = 1.25F + (this.getSelf().isSprinting() ? 0.1F : 0F);
 
-        List<Entity> entities = defaultSwordHitbox(this.getSelf(),4, 45,0.1);
+        List<Entity> entities = defaultSwordHitbox(this.getSelf(),4, 45,0.05);
         if (!entities.isEmpty()) {
             this.getSelf().level().playSound(null,this.getSelf().blockPosition(),SoundEvents.PLAYER_ATTACK_KNOCKBACK,SoundSource.PLAYERS,1F,0.4F + (float)(Math.random()*0.2));
         }
@@ -1654,9 +1654,9 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     public List<Entity> getBasicSwordHitBox(boolean crouching) {
-        List<Entity> entities = defaultSwordHitbox(this.getSelf(),4.5, 45,0.1);
+        List<Entity> entities = defaultSwordHitbox(this.getSelf(),4.5, 45,0.01);
         if (crouching) {
-            entities = defaultSwordHitbox(this.getSelf(),3, 60,0.02);
+            entities = defaultSwordHitbox(this.getSelf(),3, 60,0.01);
         }
         return entities;
     }
@@ -1721,6 +1721,23 @@ public class PowersAnubis extends NewDashPreset {
             return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
+    }
+
+    @Override
+    public float getPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.75F));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(5F));
+        }
+    }
+    @Override
+    public float getHeavyPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.5F));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(6F));
+        }
     }
 
     public List<Pair<List<Byte>,Integer>> visualValues = new ArrayList<>();
