@@ -23,6 +23,10 @@ public class TheGratefulDeadEntity extends FollowingStandEntity{
 
     public final AnimationState idleAnimationState2 = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
+    public final AnimationState openHands = new AnimationState();
+    public final AnimationState closeHands = new AnimationState();
+    public final AnimationState closeRight = new AnimationState();
+    public final AnimationState closeLeft = new AnimationState();
 
     @Override
     public void setupAnimationStates() {
@@ -33,6 +37,26 @@ public class TheGratefulDeadEntity extends FollowingStandEntity{
                 this.hideFists.startIfStopped(this.tickCount);
             }else{
                 this.hideFists.stop();
+            }
+            if(animation==BARRAGE || animation==MINING_BARRAGE){
+                this.closeHands.startIfStopped(this.tickCount);
+            }else{
+                this.closeHands.stop();
+            }
+            if(animation!=BARRAGE && animation!=MINING_BARRAGE && animation!=FIRST_PUNCH && animation!=SECOND_PUNCH && animation!=THIRD_PUNCH){
+                this.openHands.startIfStopped(this.tickCount);
+            }else{
+                this.openHands.stop();
+            }
+            if(animation==FIRST_PUNCH || animation==THIRD_PUNCH){
+                this.closeRight.startIfStopped(this.tickCount);
+            }else{
+                this.closeRight.stop();
+            }
+            if(animation==SECOND_PUNCH){
+                this.closeLeft.startIfStopped(this.tickCount);
+            }else{
+                this.closeLeft.stop();
             }
             super.setupAnimationStates();
         }
@@ -54,7 +78,7 @@ public class TheGratefulDeadEntity extends FollowingStandEntity{
     public boolean getGrounded(){
         if (this.getUser() == null){
             return false;
-        }else{
+        }else{ //check try on level
             BlockPos blockBelowPosStand = this.blockPosition().below();
             Block blockBelowStand = this.level().getBlockState(blockBelowPosStand).getBlock();
             BlockPos blockBelowPos = this.getUser().blockPosition().below();

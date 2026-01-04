@@ -31,10 +31,6 @@ public class PowersTheGratefulDead extends NewPunchingStand {
         return new PowersTheGratefulDead(entity);
     }
     @Override
-    public boolean canSummonStandAsEntity(){
-        return true;
-    }
-    @Override
     public StandEntity getNewStandEntity(){
         return ModEntities.THE_GRATEFUL_DEAD.create(this.getSelf().level());
     }
