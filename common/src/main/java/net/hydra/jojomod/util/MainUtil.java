@@ -1692,7 +1692,11 @@ public class MainUtil {
         return false;
     }
     public static boolean isArmorBypassingButNotShieldBypassing(DamageSource sauce){
-        if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.CORPSE) || sauce.is(ModDamageTypes.EXPLOSIVE_STAND)  || sauce.is(ModDamageTypes.HEEL_SPIKE)  ||
+        if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.CORPSE)
+                || sauce.is(ModDamageTypes.VAMPIRE)
+                || sauce.is(ModDamageTypes.HAMON)
+                || sauce.is(ModDamageTypes.MARTIAL_ARTS)
+                || sauce.is(ModDamageTypes.EXPLOSIVE_STAND)  || sauce.is(ModDamageTypes.HEEL_SPIKE)  ||
                 sauce.is(ModDamageTypes.CORPSE_ARROW) ||  sauce.is(ModDamageTypes.STAND_RUSH) ||  sauce.is(ModDamageTypes.CROSSFIRE) ||
                 sauce.is(ModDamageTypes.CORPSE_EXPLOSION)) {
             return true;

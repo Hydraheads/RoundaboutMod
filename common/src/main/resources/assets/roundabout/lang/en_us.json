@@ -570,8 +570,12 @@
   "death.attack.stand_virus.item": "%1$s was turned into tomato sauce",
   "death.attack.disintegration": "%1$s disintegrated",
   "death.attack.disintegration.player": "%1$s was disintegrated by %$2s",
+  "death.attack.disintegration.item": "%1$s disintegrated",
+  "death.attack.disintegration.player.item": "%1$s was disintegrated by %$2s",
   "death.attack.kick": "%1$s was ran over",
   "death.attack.kick.player": "%$2s trampled %1$s",
+  "death.attack.kick.item": "%1$s was ran over",
+  "death.attack.kick.player.item": "%$2s trampled %1$s",
   "death.attack.melting": "%1$s became a fluid",
   "death.attack.melting.player":"%1$s was reduced to a puddle by %2$s",
   "death.attack.dagger": "%1$s became a human sacrifice",
@@ -590,6 +594,12 @@
   "death.attack.bullet.item": "%1$s was shot through the heart.",
   "death.attack.bullet.player": "%1$s was shot through the heart.",
   "death.attack.bullet.player.item": "%1$s was shot through the heart.",
+  "death.attack.vampire": "%1$s was pulverized by %2$s.",
+  "death.attack.vampire.item": "%1$s was pulverized by %2$s.",
+  "death.attack.hamon": "%1$s saw the light while fighting %2$s.",
+  "death.attack.hamon.item": "%1$s saw the light while fighting %2$s.",
+  "death.attack.martial_arts": "%1$s was shown no mercy by %2$s.",
+  "death.attack.martial_arts.item": "%1$s was shown no mercy by %2$s.",
 
   "item.glaive.charge_power": "Charge Attack",
 
@@ -2153,7 +2163,7 @@
   "config.roundabout.mem7.name": "Memory 7",
   "config.roundabout.mem7.desc": "Memory 7",
   "config.roundabout.mem8.name": "Memory 8",
-  "config.roundabout.mem8.desc": "Memory 8",
+  "config.roundabout.mem8.desc": "Memory 9",
 
 
 
