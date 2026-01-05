@@ -993,8 +993,8 @@ public class MainUtil {
             iplayer.rdbt$setHairColorY(green);
             iplayer.rdbt$setHairColorZ(blue);
         }
-
     }
+
     private static double clampVertical(double $$0) {
         return Mth.clamp($$0, -2.0E7, 2.0E7);
     }

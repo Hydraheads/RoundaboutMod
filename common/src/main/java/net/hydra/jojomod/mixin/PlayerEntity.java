@@ -300,8 +300,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Override
     public void roundabout$setFate(byte style){
         if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$FATE)) {
-            roundabout$SetPos2(PlayerPosIndex.NONE);
-            this.getEntityData().set(ROUNDABOUT$FATE, style);
+            if (roundabout$getFate() != style) {
+                roundabout$SetPos2(PlayerPosIndex.NONE);
+                this.getEntityData().set(ROUNDABOUT$FATE, style);
+            }
         }
     }
     @Unique
@@ -1799,6 +1801,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
             }
         } else {
+            PowerTypes.fixPowers(this);
             roundabout$qmessageTick();
         }
         if (!(this.getVehicle() != null && this.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted())) {

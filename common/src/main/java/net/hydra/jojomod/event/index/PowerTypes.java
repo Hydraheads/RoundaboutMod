@@ -58,6 +58,12 @@ public enum PowerTypes {
         }
         return 0;
     }
+    public static void setPowerType(Entity ent, byte type){
+        if (ent instanceof Player pl){
+            ((IPlayerEntity)pl).roundabout$setPower(type);
+        }
+    }
+
 
     public static void initializeStandPower(Entity ent){
         if (ent instanceof Player pl){
@@ -174,5 +180,23 @@ public enum PowerTypes {
             return ((StandUser)LE).roundabout$getActive();
         }
         return false;
+    }
+
+    //When you switch out of vampire, you should lose vampire powers for instance
+    public static void fixPowers(Entity entity){
+        if (entity instanceof Player pl) {
+            byte bt = getPowerType(pl);
+            if (bt == STAND.ordinal()){
+                if (!((StandUser)entity).roundabout$hasAStand()){
+                    ((StandUser)entity).roundabout$setActive(false);
+                    setPowerType(entity, (byte) NONE.ordinal());
+                }
+            } else if (bt == VAMPIRE.ordinal()){
+                if (!FateTypes.isVampire(pl)){
+                    ((StandUser)entity).roundabout$setActive(false);
+                    setPowerType(entity, (byte) NONE.ordinal());
+                }
+            }
+        }
     }
 }
