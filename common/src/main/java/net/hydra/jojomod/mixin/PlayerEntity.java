@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
@@ -819,7 +820,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 dSpeed*= ((IPowersPlayer)this).rdbt$getPowers().getBonusPassiveMiningSpeed();
             }
 
-            if (!(((StandUser) this).roundabout$getActive() && PowerTypes.hasStandActivelyEquipped(this) && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()
+            if (!(PowerTypes.hasStandActive(this) && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()
             )) {
                 float bpow = ((IFatePlayer) this).rdbt$getFatePowers().getBonusPassiveMiningSpeed();
                 if (bpow != 1){
@@ -1603,10 +1604,77 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Inject(method = "getDestroySpeed(Lnet/minecraft/world/level/block/state/BlockState;)F", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$getDestroySpeed2(BlockState $$0, CallbackInfoReturnable<Float> cir) {
         StandPowers powers = ((StandUser) this).roundabout$getStandPowers();
-        if (((StandUser) this).roundabout$getActive() && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()) {
-
+        GeneralPowers gp = ((IPowersPlayer)this).rdbt$getPowers();
+        if (PowerTypes.hasStandActive(this) && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()) {
             cir.setReturnValue(rdbt$mutualMiningSpeedFunction($$0,powers));
+            return;
         }
+        if (PowerTypes.isUsingPower(this) && ((IPowersPlayer)this).rdbt$getPowers().isMining()){
+            cir.setReturnValue(rdbt$mutualMiningSpeedFunction2($$0,gp));
+            return;
+        }
+    }
+
+
+    @Override
+    @Unique
+    public float rdbt$mutualMiningSpeedFunction2(BlockState $$0, GeneralPowers powers){
+        float mspeed;
+        if (!$$0.is(BlockTags.MINEABLE_WITH_PICKAXE)){
+            if ($$0.is(BlockTags.MINEABLE_WITH_SHOVEL)) {
+                mspeed = powers.getShovelMiningSpeed() / 2;
+            } else if ($$0.is(BlockTags.MINEABLE_WITH_AXE)){
+                mspeed = powers.getAxeMiningSpeed() / 2;
+            } else {
+                mspeed= powers.getSwordMiningSpeed()/4;
+            }
+        } else {
+            mspeed= powers.getPickMiningSpeed()*3;
+        }
+
+
+        if (this.isEyeInFluid(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(this)) {
+            mspeed /= 5.0F;
+        }
+
+        if (!this.onGround()) {
+            mspeed /= 5.0F;
+        }
+
+        if (this.isCrouching() && $$0.getBlock() instanceof DropExperienceBlock && ClientNetworking.getAppropriateConfig().generalStandSettings.crouchingStopsStandsFromMiningOres) {
+            mspeed = 0.0F;
+        }
+
+        if ($$0.is(Blocks.COBWEB)){
+            mspeed *= 5.0F;
+        }
+
+        if (MobEffectUtil.hasDigSpeed(this)) {
+            mspeed *= 1.0F + (float)(MobEffectUtil.getDigSpeedAmplification(this) + 1) * 0.2F;
+        }
+
+        if (this.hasEffect(MobEffects.DIG_SLOWDOWN)) {
+            float f1;
+            switch (this.getEffect(MobEffects.DIG_SLOWDOWN).getAmplifier()) {
+                case 0:
+                    f1 = 0.3F;
+                    break;
+                case 1:
+                    f1 = 0.09F;
+                    break;
+                case 2:
+                    f1 = 0.0027F;
+                    break;
+                case 3:
+                default:
+                    f1 = 8.1E-4F;
+            }
+
+            mspeed *= f1;
+        }
+
+        mspeed *= powers.getMiningMultiplier();
+        return  mspeed;
     }
 
     @Override

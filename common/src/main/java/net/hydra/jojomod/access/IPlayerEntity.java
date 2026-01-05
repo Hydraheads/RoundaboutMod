@@ -4,6 +4,7 @@ import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
+import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.util.PlayerMaskSlots;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Mob;
@@ -16,6 +17,7 @@ public interface IPlayerEntity {
     boolean roundabout$getBlinded();
     byte roundabout$getModChest();
     float rdbt$mutualMiningSpeedFunction(BlockState $$0, StandPowers powers);
+    float rdbt$mutualMiningSpeedFunction2(BlockState $$0, GeneralPowers powers);
     void roundabout$setModChest(byte chestType);
     void roundabout$setBlinded(boolean blinded);
     void roundabout$SetPos(byte Pos);

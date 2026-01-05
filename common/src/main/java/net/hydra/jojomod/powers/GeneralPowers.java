@@ -1,6 +1,8 @@
 package net.hydra.jojomod.powers;
 
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
@@ -44,6 +46,35 @@ public class GeneralPowers extends AbilityScapeBasis {
         return false;
     }
 
+    /**Adjust this function to enable the below minin functions, and intercept your mining when not holding
+     * a mining tool*/
+    public boolean isMining() {
+        return false;
+    }
+    /**How fast does the block mine blocks that require pickaxes?*/
+    public float getPickMiningSpeed() {
+        return 7F;
+    }
+    /**How fast does the block mine blocks that require axes?*/
+    public float getAxeMiningSpeed() {
+        return 5F;
+    }
+    /**How fast does the block mine blocks that require swords like cobwebs?*/
+    public float getSwordMiningSpeed() {
+        return 5F;
+    }
+    /**How fast does the block mine blocks that require shovels?*/
+    public float getShovelMiningSpeed() {
+        return 5F;
+    }
+    /**A general multiplier to apply across the board*/
+    public float getMiningMultiplier() {
+        return 1F;
+    }
+    /**Override with config options for your stand to be able to mine blocks*/
+    public int getMiningLevel() {
+        return 0;
+    }
     //The Power inventory icon coords
     public Vector2i getCoords(){
         return new Vector2i(0,222);
@@ -127,4 +158,33 @@ public class GeneralPowers extends AbilityScapeBasis {
             }
         }
     }
+
+    @Override
+    public boolean tryPower(int move, boolean forced){
+        if (!this.self.level().isClientSide && (this.isBarraging()) && (move != PowerIndex.BARRAGE && move != PowerIndex.BARRAGE_CLASH
+                && move != PowerIndex.BARRAGE_CHARGE && move != PowerIndex.GUARD) && this.attackTimeDuring  > -1){
+            this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
+        }
+
+        if (canChangePower(move, forced)) {
+            if (move == PowerIndex.NONE || move == PowerIndex.CLASH_CANCEL) {
+                this.setPowerNone();
+            } else if (move == PowerIndex.GUARD) {
+                this.setPowerGuard();
+            } else if (move == PowerIndex.MOVEMENT) {
+                this.setPowerMovement(move);
+            } else {
+                this.setPowerOther(move, this.getActivePower());
+            }
+
+        }
+        return false;
+    }
+
+    public boolean setPowerGuard() {
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.GUARD);
+        return true;
+    }
+
 }

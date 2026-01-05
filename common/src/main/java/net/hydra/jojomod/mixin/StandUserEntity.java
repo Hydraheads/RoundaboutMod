@@ -36,9 +36,11 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundAnimatePacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -640,6 +642,52 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (rdbt$tickEffectsBleedEdition(false)){
             ci.cancel();
             ((StandUser)rdbt$this()).rdbt$setRemoveLoveSafety(true);
+        }
+    }
+
+
+    // Vampire swing speed in vampire power, how fast the arms move
+    @Inject(method = "getCurrentSwingDuration()I", at = @At(value = "HEAD"), cancellable = true)
+    public void rdbt$getCurrentSwingDurationBrawl(CallbackInfoReturnable<Integer> cir) {
+        if (PowerTypes.isBrawling(rdbt$this())){
+            int amt = 0;
+            if (MobEffectUtil.hasDigSpeed(rdbt$this())) {
+                amt = 6 - (1 + MobEffectUtil.getDigSpeedAmplification(rdbt$this()));
+            } else {
+                amt = this.hasEffect(MobEffects.DIG_SLOWDOWN) ? 6 + (1 + this.getEffect(MobEffects.DIG_SLOWDOWN).getAmplifier()) * 2 : 6;
+            }
+            cir.setReturnValue((int) (amt*1.4));
+        }
+    }
+
+    @Inject(method = "swing(Lnet/minecraft/world/InteractionHand;Z)V", at = @At(value = "HEAD"), cancellable = true)
+    public void rdbt$swingBrawl (InteractionHand hand, boolean $$1,CallbackInfo ci) {
+        if (PowerTypes.isBrawling(rdbt$this()) && level().isClientSide()){
+            ci.cancel();
+            if (!this.swinging || this.swingTime >= this.getCurrentSwingDuration() / 2 || this.swingTime < 0) {
+                if (swingingArm != null) {
+                    if (swingingArm == InteractionHand.MAIN_HAND) {
+                        hand = InteractionHand.OFF_HAND;
+                    } else {
+                        hand = InteractionHand.MAIN_HAND;
+                    }
+                }
+
+
+
+                this.swingTime = -1;
+                this.swinging = true;
+                this.swingingArm = hand;
+                if (this.level() instanceof ServerLevel) {
+                    ClientboundAnimatePacket $$2 = new ClientboundAnimatePacket(this, hand == InteractionHand.MAIN_HAND ? 0 : 3);
+                    ServerChunkCache $$3 = ((ServerLevel)this.level()).getChunkSource();
+                    if ($$1) {
+                        $$3.broadcastAndSend(this, $$2);
+                    } else {
+                        $$3.broadcast(this, $$2);
+                    }
+                }
+            }
         }
     }
 
@@ -1310,6 +1358,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.roundabout$getStandPowers().tickPower();
         if (rdbt$this() instanceof Player PL){
             ((IFatePlayer)PL).rdbt$getFatePowers().tickPower();
+            ((IPowersPlayer)PL).rdbt$getPowers().tickPower();
         }
         this.rdbt$tickCooldowns();
         this.roundabout$tickGuard();
@@ -2171,7 +2220,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     public float roundabout$getMaxGuardPoints(){
-        return (float) (roundabout$getStandPowers().getMaxGuardPoints()*(ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardMultiplier*0.01));
+        if (PowerTypes.hasStandActivelyEquipped(rdbt$this())){
+            return (float) (roundabout$getStandPowers().getMaxGuardPoints()*(ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardMultiplier*0.01));
+        } else if (PowerTypes.hasPowerActivelyEquipped(rdbt$this()) && rdbt$this() instanceof Player pl){
+            return ((IPowersPlayer)pl).rdbt$getPowers().getMaxGuardPoints();
+        }
+        return 9F;
     }
 
     @Unique
@@ -2273,6 +2327,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     public float roundabout$getGuardPoints(){
+        if (roundabout$GuardPoints > roundabout$getMaxGuardPoints()){
+            roundabout$setGuardPoints(roundabout$getMaxGuardPoints());
+        }
         return this.roundabout$GuardPoints;
     }
     @Unique
@@ -2616,7 +2673,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return this.roundabout$getStandPowers().getReach();
     }
     public boolean roundabout$isGuarding(){
-        return this.roundabout$getStandPowers().isGuarding();
+        return this.roundabout$getStandPowers().isGuarding() ||
+                (rdbt$this() instanceof Player pl && ((IPowersPlayer)pl).rdbt$getPowers().isGuarding());
     }
     public boolean roundabout$isBarraging(){
         return this.roundabout$getStandPowers().isBarraging();
@@ -2629,7 +2687,24 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return this.roundabout$isGuardingEffectively2();
     }
     public boolean roundabout$isGuardingEffectively2(){
-        return (this.roundabout$shieldNotDisabled() && this.roundabout$getStandPowers().isGuarding() && this.roundabout$getStandPowers().getAttackTimeDuring() >= ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardDelayTicks);
+
+        Roundabout.LOGGER.info("1: "+(PowerTypes.hasPowerActive(rdbt$this()))+
+                " 2: "+
+                (rdbt$this() instanceof Player pl &&
+                ((IPowersPlayer)pl).rdbt$getPowers().getAttackTimeDuring() >= ClientNetworking.getAppropriateConfig().vampireSettings.powerGuardDelayTicks)
+        + " 3: "+((IPowersPlayer)rdbt$this()).rdbt$getPowers().getActivePower()
+                + " 4: "+((IPowersPlayer)rdbt$this()).rdbt$getPowers().getAttackTimeDuring());
+
+        return (this.roundabout$shieldNotDisabled() && roundabout$isGuarding() &&
+                (
+                        (PowerTypes.hasStandActive(rdbt$this()) &&
+                                this.roundabout$getStandPowers().getAttackTimeDuring() >= ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardDelayTicks)
+                ||
+                        (PowerTypes.hasPowerActive(rdbt$this()) && rdbt$this() instanceof Player pl &&
+                        ((IPowersPlayer)pl).rdbt$getPowers().getAttackTimeDuring() >= ClientNetworking.getAppropriateConfig().vampireSettings.powerGuardDelayTicks)
+                )
+
+        );
     }
 
     public boolean roundabout$shieldNotDisabled(){
@@ -4924,6 +4999,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Shadow public abstract boolean isUsingItem();
 
+    @Shadow public boolean swinging;
+    @Shadow public int swingTime;
+
+    @Shadow protected abstract int getCurrentSwingDuration();
+
+    @Shadow public InteractionHand swingingArm;
     @Unique private boolean roundabout$isPRunning = false;
 
     @Override

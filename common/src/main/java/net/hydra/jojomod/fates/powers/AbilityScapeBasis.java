@@ -203,6 +203,7 @@ public class AbilityScapeBasis {
         return false;
     }
 
+
     /**How far do the basic attacks of your stand travel if it is a humanoid stand and overrides the above?
      * (default is 5, 3 minecraft block range +2 meters extra from stand)*/
     public float getReach(){
@@ -1085,12 +1086,19 @@ public class AbilityScapeBasis {
 
 
 
-
+    /**If the standard right click input should usually be canceled while your stand is active*/
+    public boolean interceptGuard(){
+        return false;
+    }
     /**returns if you are using stand guard*/
     public boolean isGuarding(){
         return this.activePower == PowerIndex.GUARD;
     }
-
+    /**Override this to determine how many points of damage your stand's guard can take before it breaks,
+     * generally hooks into config settings.*/
+    public int getMaxGuardPoints(){
+        return 10;
+    }
 
 
     public void powerActivate(PowerContext context) {
@@ -1312,6 +1320,49 @@ public class AbilityScapeBasis {
             return this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax;
         }
         return false;
+    }
+
+    /**The Guard Variation is prioritized over this for most stands but it may find niche uses*/
+    public void buttonInputUse(boolean keyIsDown, Options options) {
+        if (keyIsDown) {
+        }
+    }
+
+    public void preCheckButtonInputAttack(boolean keyIsDown, Options options) {
+        if (hasStandActive(this.getSelf()) && !this.isGuarding()) {
+            buttonInputAttack(keyIsDown, options);
+        }
+    }
+    public void preCheckButtonInputUse(boolean keyIsDown, Options options) {
+        if (hasStandActive(this.getSelf())) {
+            buttonInputUse(keyIsDown, options);
+        }
+    }
+    public void preCheckButtonInputBarrage(boolean keyIsDown, Options options) {
+        if (hasStandActive(this.getSelf())) {
+            buttonInputBarrage(keyIsDown, options);
+        }
+    }
+    public boolean preCheckButtonInputGuard(boolean keyIsDown, Options options) {
+        if (hasStandActive(this.getSelf())) {
+            return buttonInputGuard(keyIsDown, options);
+        }
+        return false;
+    }
+    public boolean buttonInputGuard(boolean keyIsDown, Options options) {
+        return false;
+    }
+
+
+    /**Guard + Attack to use a barrage*/
+    public void buttonInputBarrage(boolean keyIsDown, Options options){
+        if (keyIsDown) {
+            if (this.getAttackTime() >= this.getAttackTimeMax() ||
+                    (this.getActivePowerPhase() != this.getActivePowerPhaseMax())) {
+                this.tryPower(PowerIndex.BARRAGE_CHARGE, true);
+                tryPowerPacket(PowerIndex.BARRAGE_CHARGE);
+            }
+        }
     }
 
     @SuppressWarnings("deprecation")

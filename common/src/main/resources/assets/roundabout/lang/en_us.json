@@ -1998,6 +1998,8 @@
   "config.roundabout.standPunchesGoThroughDoorsAndCorners.desc": "Turn on if you want the legacy feature (that was unintended) of stands punching through corners and doors. Off by default. Very easy cheesing, and also may make other things go through walls like go beyond highlighting.",
   "config.roundabout.standGuardDelayTicks.name": "Guard Delay Ticks",
   "config.roundabout.standGuardDelayTicks.desc": "The amount of ticks before your stand guard starts working. Vanilla shields take 5 ticks to start registering blocking, so stand guard takes 3 ticks by default.",
+  "config.roundabout.powerGuardDelayTicks.name": "Power Guard Ticks",
+  "config.roundabout.powerGuardDelayTicks.desc": "The amount of ticks before your powers guard starts working. Vanilla shields take 5 ticks to start registering blocking, so vampire power guard takes 1 tick by default.",
   "config.roundabout.standGuardMultiplier.name": "Stand Guard Multiplier",
   "config.roundabout.standGuardMultiplier.desc": "Buff stand guard across the board if you're playing a harder modpack.",
   "config.roundabout.crouchingStopsStandsFromMiningOres.name": "Crouch Mining Cancel",
