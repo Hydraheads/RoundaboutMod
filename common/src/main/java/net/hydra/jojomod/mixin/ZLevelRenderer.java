@@ -303,23 +303,15 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                                         PA.lastTick = time;
                                     }
                                     float dT = $$1-PA.lastPartialTick;
-                                 //TODO: REMOVE LATER   Roundabout.LOGGER.info(time + " && " + $$1 + " - " + PA.lastPartialTick + " | " + dT);
                                     PA.lastPartialTick = $$1;
 
-                              /*      float dx =(float) Mth.lerp($$1,pRot.y,rot.y);
-                                    float dy = (float) Mth.lerp($$1,pRot.z,rot.z); */
 
                                     float dx =(float) (P.getXRot()+rot.y*dT + pRot.y*extraTicks );
                                     float dy =(float) (P.getYRot()+rot.z*dT + pRot.z*extraTicks);
 
                                     P.setXRot(dx);
-                                    P.setYRot(dy);
+                                    P.setYRot(dy < -360 ? 720+dy : dy%720);
 
-                                    if (extraTicks != 0) {
-                                        //TODO: REMOVE LATER Roundabout.LOGGER.info("extra was: " + extraTicks);
-                                        PA.sum += extraTicks;
-                                    }
-                                    PA.sum += dT;
                                 } else if (time < rot.x) {break;}
                             }
                         }

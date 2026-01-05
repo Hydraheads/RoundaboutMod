@@ -394,7 +394,9 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             if ( SU.roundabout$isPossessed()  ) {
                 PathfinderMob poss = SU.roundabout$getPossessor();
                 if (poss != null && poss.getTarget() != null) {
-                    this.head.xRot = (float) Math.toRadians(MainUtil.getLookAtEntityPitch(P,poss.getTarget()));
+                    float xRot = (float) Math.toRadians(MainUtil.getLookAtEntityPitch(P,poss.getTarget()));
+                    this.head.xRot = xRot;
+                    this.hat.xRot = xRot;
                 /*    this.bodyParts().forEach(
                             part -> {
                              float rot = (float) Math.toRadians(MainUtil.getLookAtEntityPitch(P,poss.getTarget()));
