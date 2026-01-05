@@ -327,7 +327,7 @@ public class VampireFate extends VampiricFate {
                 //Eye
                 if (isSurelyHovering(i + 129, j + 99, 19, 19, mouseX, mouseY)) {
                     if (vdata.ripperEyesLevel < VampireData.ripperEyesMaxLevel){
-                        if (level >= 9){
+                        if (level >= ripperEyeLevel){
                             ClientUtil.clickVampireSlot(11);
                         }
                     }
@@ -343,6 +343,7 @@ public class VampireFate extends VampiricFate {
             }
         }
     }
+    public static final int ripperEyeLevel = 2;
 
     @Override
     public boolean tryPower(int move, boolean forced) {
@@ -958,7 +959,7 @@ public class VampireFate extends VampiricFate {
         $$1.add(drawSingleGUIIconVamp(context,18,leftPos+129,topPos+99,
                 data.ripperEyesLevel, VampireData.ripperEyesMaxLevel, tring,
                 "instruction.roundabout.passive", StandIcons.GRAFTING,0, 0,
-                0,9));
+                0,ripperEyeLevel));
 
         tring = "ability.roundabout.unleash_the_cold.locked";
         if (data.freezeLevel > 0)
