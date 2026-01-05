@@ -404,8 +404,8 @@ public int speedActivated = 0;
                     if (TE != null && MainUtil.canDrinkBloodFair(TE, self)
                             && self.hurtTime <= 0 && bloodSuckingTarget.is(TE)) {
                         if (TE instanceof LivingEntity LE) {
-                            ((StandUser) LE).roundabout$setDazed((byte) 3);
                             LE.setDeltaMovement(0, -0.1F, 0);
+                            ((StandUser) LE).roundabout$setDazed((byte) 3);
                         }
 
                         if (self.tickCount % 2 == 0) {
