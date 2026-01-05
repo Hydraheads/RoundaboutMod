@@ -123,6 +123,14 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
             }
         }
     }
+
+    @Override
+    public double getMyRidingOffset() {
+        if (!getActivated()){
+            return super.getMyRidingOffset()+0.2F;
+        }
+        return super.getMyRidingOffset();
+    }
     protected float getEquipmentDropChance(EquipmentSlot $$0) {
         return 0;
     }
