@@ -7,9 +7,7 @@ import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.animations.AnubisAnimations;
 import net.hydra.jojomod.client.models.layers.animations.FirstPersonLayerAnimations;
-import net.hydra.jojomod.event.index.Poses;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.*;
@@ -100,6 +98,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             two.xRot = 0.0F;
             boolean change = false;
             float yes = $$0.tickCount;
+           boolean offsetCorrect = true;
             if (!ClientUtil.checkIfGamePaused() && !((TimeStop)$$0.level()).CanTimeStopEntity($$0)){
                 yes+=ClientUtil.getFrameTime();
             }
@@ -118,6 +117,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             } else {
                 ipe.roundabout$getBubbleAim().stop();
                 ipe.roundabout$getBubbleShotAim().stop();
+
             }
 
             if (SE.roundabout$getStandPowers() instanceof PowersAnubis PA) {
@@ -141,9 +141,26 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 ipe.roundabout$getAnubisUnsheath().stop();
             }
 
+
+            if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.GUARD) {
+                this.rightArm.yRot = 0.1F;
+                this.leftArm.yRot = -0.1F;
+
+                //yrot = arm spinny, zrot = arm go up and down
+
+                this.rightArm.xRot = -1F;
+                this.leftArm.xRot = -1F;
+                offsetCorrect = false;
+                change = true;
+            }
+
             if (change){
-                ipe.roundabout$getOffsetCorrect().startIfStopped($$0.tickCount);
-                this.roundabout$animate(ipe.roundabout$getOffsetCorrect(), FirstPersonLayerAnimations.offsetCorrect, yes, 1f);
+                if (offsetCorrect) {
+                    ipe.roundabout$getOffsetCorrect().startIfStopped($$0.tickCount);
+                    this.roundabout$animate(ipe.roundabout$getOffsetCorrect(), FirstPersonLayerAnimations.offsetCorrect, yes, 1f);
+                } else {
+                    ipe.roundabout$getOffsetCorrect().stop();
+                }
                 this.rightSleeve.copyFrom(this.rightArm);
                 this.leftSleeve.copyFrom(this.leftArm);
                 one.render(ps, mb.getBuffer(RenderType.entityTranslucentCull($$0.getSkinTextureLocation())), packedLight, OverlayTexture.NO_OVERLAY);
@@ -278,6 +295,12 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         this.leftArm.xRot = 0F;
                         this.rightArm.yRot = 0F;
                         this.leftArm.yRot = 0F;
+                    } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.GUARD) {
+                        float curve = ((float) (-Math.PI / 2) + this.head.xRot) / 3;
+                        this.rightArm.yRot = -0.9F;
+                        this.rightArm.xRot = -1.1F + curve;
+                        this.leftArm.yRot = 0.9F;
+                        this.leftArm.xRot = -1.4F + curve;
                     }
                 } else if (MainUtil.isHoldingRoadRoller($$0)) {
                     boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;

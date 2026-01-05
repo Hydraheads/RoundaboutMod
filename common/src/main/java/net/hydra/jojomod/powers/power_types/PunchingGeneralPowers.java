@@ -1,5 +1,7 @@
 package net.hydra.jojomod.powers.power_types;
 
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -80,6 +82,36 @@ public class PunchingGeneralPowers extends GeneralPowers {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void tickPower(){
+        if (!self.level().isClientSide()) {
+            if (getActivePower() != PowerIndex.GUARD && getPlayerPos2() == PlayerPosIndex.GUARD) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            }
+        }
+        super.tickPower();
+    }
+
+    @Override
+    public boolean tryPower(int move, boolean forced) {
+        if (!self.level().isClientSide()) {
+            if (move != PowerIndex.GUARD && getPlayerPos2() == PlayerPosIndex.GUARD) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            }
+        }
+        return super.tryPower(move,forced);
+    }
+
+    @Override
+    public boolean setPowerGuard(){
+        if (!self.level().isClientSide()) {
+            if (getPlayerPos2() != PlayerPosIndex.GUARD) {
+                setPlayerPos2(PlayerPosIndex.GUARD);
+            }
+        }
+        return super.setPowerGuard();
     }
 
 

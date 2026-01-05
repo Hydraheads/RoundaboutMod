@@ -300,6 +300,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Override
     public void roundabout$setFate(byte style){
         if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$FATE)) {
+            roundabout$SetPos2(PlayerPosIndex.NONE);
             this.getEntityData().set(ROUNDABOUT$FATE, style);
         }
     }
@@ -315,6 +316,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Override
     public void roundabout$setPower(byte style){
         if (((Player)(Object)this).getEntityData().hasItem(ROUNDABOUT$POWERS)) {
+            roundabout$SetPos2(PlayerPosIndex.NONE);
             this.getEntityData().set(ROUNDABOUT$POWERS, style);
         }
     }
