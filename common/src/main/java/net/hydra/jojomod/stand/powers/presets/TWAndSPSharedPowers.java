@@ -478,7 +478,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                             MainUtil.makeMobBleed(entity);
                     }
                 }
-                this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                takeDeterminedKnockback(this.self, entity, knockbackStrength);
             } else {
                 knockShield2(entity, 100);
             }
@@ -1076,10 +1076,10 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public void kickBarrageImpact2(Entity entity, boolean lastHit, float knockbackStrength){
         if (entity instanceof LivingEntity){
             if (lastHit) {
-                this.takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
+                takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
             } else {
 
-                this.takeKnockbackWithY(entity, knockbackStrength,
+                takeKnockbackWithY(entity, knockbackStrength,
                         Mth.sin(this.getSelf().getYRot() * ((float) Math.PI / 180)),
                         Mth.sin(-15 * ((float) Math.PI / 180)),
                         -Mth.cos(this.getSelf().getYRot() * ((float) Math.PI / 180)));
@@ -1835,7 +1835,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         addEXP(5, LE);
                     }
                 }
-                this.takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
+                takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
             } else {
                 if (chargedFinal >= maxSuperHitTime) {
                     knockShield2(entity, getFinalAttackKnockShieldTime());

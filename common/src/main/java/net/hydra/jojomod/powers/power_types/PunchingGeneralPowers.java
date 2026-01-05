@@ -3,13 +3,16 @@ package net.hydra.jojomod.powers.power_types;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -34,11 +37,13 @@ public class PunchingGeneralPowers extends GeneralPowers {
     }
 
     public void buttonInputAttack(boolean keyIsDown, Options options) {
-        if (keyIsDown) { if (this.canAttack()) {
-            this.tryPower(PowerIndex.ATTACK);
-            tryPowerPacket(PowerIndex.ATTACK);
-        }}
+        if (keyIsDown) {
+            if (activePowerPhase == 0){
+                this.tryPower(PowerIndex.ATTACK);
+            }
+        }
     }
+
     @Override
     /**Stand related things that slow you down or speed you up, override and call super to make
      * any stand ability slow you down*/
@@ -100,6 +105,17 @@ public class PunchingGeneralPowers extends GeneralPowers {
     }
 
     @Override
+    public boolean tryIntPower(int move, boolean forced, int chargeTime) {
+        if (!self.level().isClientSide()) {
+            if (move == PowerIndex.ATTACK) {
+                attackTargetId = chargeTime;
+            }
+        }
+        return super.tryPower(move,forced);
+    }
+
+
+    @Override
     public boolean tryPower(int move, boolean forced) {
         if (!self.level().isClientSide()) {
             if (move != PowerIndex.GUARD && getPlayerPos2() == PlayerPosIndex.GUARD) {
@@ -108,6 +124,39 @@ public class PunchingGeneralPowers extends GeneralPowers {
         }
         return super.tryPower(move,forced);
     }
+
+    public int attackTargetId = -1;
+
+    @Override
+    /**Override this to set the special move*/
+    public boolean setPowerOther(int move, int lastMove) {
+        if (move == PowerIndex.ATTACK) {
+            setAttack();
+        }
+
+        return super.setPowerOther(move,lastMove);
+    }
+    public void setAttack(){
+        this.attackTimeMax= 7;
+        this.attackTimeDuring = 0;
+        this.setAttackTime(0);
+        setActivePowerPhase((byte) 1);
+        if (!self.level().isClientSide()) {
+            Entity target = null;
+            if (attackTargetId > 0) {
+                target = self.level().getEntity(attackTargetId);
+            }
+            punchImpact(target);
+        } else {
+            Entity TE = getTargetEntity(self, 3, getPunchAngle());
+            int id = 0;
+            if (TE != null){
+                id = TE.getId();
+            }
+            tryIntPowerPacket(PowerIndex.ATTACK,id);
+        }
+    }
+
 
     @Override
     public boolean setPowerGuard(){
@@ -120,10 +169,35 @@ public class PunchingGeneralPowers extends GeneralPowers {
     }
 
 
+    public void punchImpact(Entity entity) {
+        self.swing(InteractionHand.MAIN_HAND,true);
+        if (entity != null) {
+            float pow;
+            float knockbackStrength;
+            pow = getPunchStrength(entity);
+            knockbackStrength = 0.10F;
+
+            if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
+                takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
+            } else {
+
+            }
+        }
+    }
+    public float getPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return 0.75F;
+        } else {
+            return 2.0F;
+        }
+    }
+
     @Override
     public boolean interceptAttack(){
+
         return true;
     }
+
 
     @Override
     /**If the standard right click input should usually be canceled while your stand is active*/
@@ -132,7 +206,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
     }
 
     public float getPunchAngle(){
-        return ClientNetworking.getAppropriateConfig().generalStandSettings.basePunchAngle;
+        return 5;
     }
 
     @Override

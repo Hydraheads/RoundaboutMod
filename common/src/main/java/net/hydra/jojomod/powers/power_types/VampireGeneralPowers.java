@@ -3,11 +3,13 @@ package net.hydra.jojomod.powers.power_types;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
@@ -46,6 +48,20 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             }
         }
     };
+
+    @Override
+
+    public float getPunchStrength(Entity entity){
+        if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
+            if (this.getReducedDamage(entity)){
+                return 0.75F * (1+ (vp.getVampireData().strengthLevel * 0.1F));
+            } else {
+                return 2.15F * (1+ (vp.getVampireData().strengthLevel * 0.1F));
+            }
+        } else {
+            return super.getPunchStrength(entity);
+        }
+    }
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {

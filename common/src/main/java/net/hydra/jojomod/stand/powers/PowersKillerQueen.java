@@ -150,7 +150,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 knockbackStrength = 0.2F;
             }
             if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
-                this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                takeDeterminedKnockback(this.self, entity, knockbackStrength);
             } else {
                 if (this.activePowerPhase >= this.activePowerPhaseMax) {
                     knockShield2(entity, 40);

@@ -1217,8 +1217,6 @@ public abstract class InputEvents implements IInputEvents {
                     if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {
                         if (rdbt$isInitialized(player)) {
                             powers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
-                            ((IFatePlayer) player).rdbt$getFatePowers().buttonInputAttack(this.options.keyAttack.isDown(), this.options);
-                            generalPowers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
                         }
                     }
                 }
@@ -1229,6 +1227,16 @@ public abstract class InputEvents implements IInputEvents {
                             powers.preCheckButtonInputBarrage(this.options.keyAttack.isDown(), this.options);
                             generalPowers.preCheckButtonInputBarrage(this.options.keyAttack.isDown(), this.options);
                         }
+                    }
+                }
+            }
+
+
+            if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
+                if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {
+                    if (rdbt$isInitialized(player)) {
+                        ((IFatePlayer) player).rdbt$getFatePowers().buttonInputAttack(this.options.keyAttack.isDown(), this.options);
+                        generalPowers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
                     }
                 }
             }

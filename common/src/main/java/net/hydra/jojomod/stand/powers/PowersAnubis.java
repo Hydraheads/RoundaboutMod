@@ -1103,7 +1103,7 @@ public class PowersAnubis extends NewDashPreset {
                     if (e instanceof LivingEntity) {
                         addEXP(1);
                     }
-                    this.takeDeterminedKnockback(this.getSelf(), e, knockbackStrength);
+                    takeDeterminedKnockback(this.getSelf(), e, knockbackStrength);
                 }
 
             }
@@ -1206,7 +1206,7 @@ public class PowersAnubis extends NewDashPreset {
                         }
                     }
 
-                    this.takeDeterminedKnockback(this.getSelf(), e, knockbackStrength);
+                    takeDeterminedKnockback(this.getSelf(), e, knockbackStrength);
 
                 } else if (!first) {
                     if (e instanceof LivingEntity LE) {
@@ -1587,7 +1587,7 @@ public class PowersAnubis extends NewDashPreset {
                     if (e instanceof LivingEntity) {
                         addEXP(2);
                     }
-                    this.takeDeterminedKnockback(this.getSelf(), e, knockbackStrength);
+                    takeDeterminedKnockback(this.getSelf(), e, knockbackStrength);
 /*
                     /// knocks you back slightly if you hit it
                     Options o = Minecraft.getInstance().options;

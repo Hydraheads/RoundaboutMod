@@ -107,11 +107,6 @@ public class NewPunchingStand extends NewDashPreset {
 
     @Override
     public boolean setPowerAttack(){
-        if (((StandUser)this.getSelf()).roundabout$isParallelRunning())
-        {
-            return false;
-        }
-
         if (this.activePowerPhase >= 3){
             this.activePowerPhase = 1;
         } else {
@@ -176,7 +171,7 @@ public class NewPunchingStand extends NewDashPreset {
                     if (lasthit){addEXP(2,LE);} else {addEXP(1,LE);}
                 }
 
-                this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                takeDeterminedKnockback(this.self, entity, knockbackStrength);
             } else {
                 if (this.activePowerPhase >= this.activePowerPhaseMax) {
                     if (entity instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers().interceptGuard()
@@ -317,7 +312,7 @@ public class NewPunchingStand extends NewDashPreset {
             if (throwPunch) {
                 this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
                 if (StandDamageEntityAttack(this.getSelf(), pow, 0, this.self)) {
-                    this.takeDeterminedKnockback(this.self, this.getSelf(), kbs);
+                    takeDeterminedKnockback(this.self, this.getSelf(), kbs);
                     if ((kbs *= (float) (1.0 - ((LivingEntity)this.getSelf()).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
                         return;
                     }

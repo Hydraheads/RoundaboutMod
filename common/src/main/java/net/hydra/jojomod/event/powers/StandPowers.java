@@ -1278,78 +1278,6 @@ public class StandPowers extends AbilityScapeBasis {
         return false;
     }
 
-
-    /**Inflict knockback*/
-    public void takeKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
-
-        if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
-            return;
-        }
-        if (MainUtil.isKnockbackImmune(entity)){
-            return;
-        }
-        entity.hurtMarked = true;
-        Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
-        entity.setDeltaMovement(- vec3d2.x,
-                -vec3d2.y,
-                - vec3d2.z);
-        entity.hasImpulse = true;
-    }
-
-
-    /**Inflict knockback with push upwards*/
-    public void takeKnockbackUp(Entity entity, double strength) {
-        if (entity instanceof LivingEntity && (strength *= (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
-            return;
-        }
-        if (MainUtil.isKnockbackImmune(entity)){
-            return;
-        }
-        entity.hasImpulse = true;
-
-        Vec3 vec3d2 = new Vec3(0, strength, 0).normalize().scale(strength);
-        entity.setDeltaMovement(vec3d2.x,
-                vec3d2.y,
-                vec3d2.z);
-    }
-
-    /**Look at where these are called for context*/
-    public void takeDeterminedKnockbackWithY(LivingEntity user, Entity target, float knockbackStrength){
-        float xRot; if (!target.onGround()){xRot=user.getXRot();} else {xRot = -15;}
-        this.takeKnockbackWithY(target, knockbackStrength,
-                Mth.sin(user.getYRot() * ((float) Math.PI / 180)),
-                Mth.sin(xRot * ((float) Math.PI / 180)),
-                -Mth.cos(user.getYRot() * ((float) Math.PI / 180)));
-
-    }
-
-    public Vec3 defaultKnockbackAngle(LivingEntity user,Entity target,float knockbackStrength) {
-        Vec3 vec3d2 = new Vec3(Mth.sin(
-                user.getYRot() * ((float) Math.PI / 180)),
-                0,
-                -Mth.cos(user.getYRot() * ((float) Math.PI / 180))).normalize().scale(knockbackStrength);
-        vec3d2 = new Vec3(-vec3d2.x,
-                target.onGround() ? 0.28 : 0,
-                -vec3d2.z);
-        return vec3d2;
-    }
-
-    public void takeDeterminedKnockback(LivingEntity user, Entity target, float knockbackStrength){
-
-        if (target instanceof LivingEntity && (knockbackStrength *= (float) (1.0 - ((LivingEntity)target).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
-            return;
-        }
-
-        if (MainUtil.isKnockbackImmune(target)){
-            return;
-        }
-        Vec3 vec3d2 = defaultKnockbackAngle(user,target,knockbackStrength);
-        target.setDeltaMovement(vec3d2);
-        target.hasImpulse = true;
-    }
-
-
-
     /**Multiply damage by this to add compatibility for stand levelup config*/
     public float levelupDamageMod(float damage){
         int percent = ClientNetworking.getAppropriateConfig().
@@ -1570,7 +1498,7 @@ public class StandPowers extends AbilityScapeBasis {
             ((StandUser)winner).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
             ((StandUser)loser).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
             ((StandUser)winner).roundabout$getStandPowers().playBarrageEndNoise(0, loser);
-            this.takeDeterminedKnockbackWithY(winner, loser, this.getBarrageFinisherKnockback());
+            takeDeterminedKnockbackWithY(winner, loser, this.getBarrageFinisherKnockback());
             ((StandUser)winner).roundabout$getStandPowers().animateStand(StandEntity.BARRAGE_FINISHER);
             ((StandUser)loser).roundabout$tryPower(PowerIndex.NONE,true);
         }
@@ -1986,9 +1914,9 @@ public class StandPowers extends AbilityScapeBasis {
     public void barrageImpact2(Entity entity, boolean lastHit, float knockbackStrength){
         if (entity instanceof LivingEntity){
             if (lastHit) {
-                this.takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
+                takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
             } else {
-                this.takeKnockbackUp(entity,knockbackStrength);
+                takeKnockbackUp(entity,knockbackStrength);
             }
         }
     }

@@ -732,7 +732,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 if (entity instanceof LivingEntity LE) {
                     addEXP(1, LE);
                 }
-                this.takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
+                takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
                 entity.setDeltaMovement(entity.getDeltaMovement().add(0,0.3,0));
             } else {
                 knockShield2(entity, 30);
@@ -930,7 +930,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         hitParticlesCenter(entity);
         if(ticksForFinger < 26){
             if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
-                this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                takeDeterminedKnockback(this.self, entity, knockbackStrength);
                 if (entity instanceof LivingEntity LE){
                     addEXP(1, LE);
                     if (ticksForFinger >13){
@@ -940,7 +940,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             }
         } else {
             if (StarFingerDamageEntityAttack(entity, pow, 0, this.self)) {
-                this.takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                takeDeterminedKnockback(this.self, entity, knockbackStrength);
                 if (entity instanceof LivingEntity LE){
                     addEXP(2, LE);
                     MainUtil.makeBleed(LE,1,200,this.self);

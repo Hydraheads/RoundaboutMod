@@ -3088,7 +3088,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "getDamageAfterArmorAbsorb", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$ApplyArmorToDamage(DamageSource $$0, float $$1, CallbackInfoReturnable<Float> ci){
-        if (MainUtil.isArmorBypassingButNotShieldBypassing($$0)) {
+        if (MainUtil.isArmorBypassingButNotShieldBypassing($$0,rdbt$this())) {
             float yeah = rdbt$mutuallyGetDamageAfterArmorAbsorb($$0,$$1);
             if (yeah != 1){
                 ci.setReturnValue(yeah);

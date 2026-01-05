@@ -1691,11 +1691,19 @@ public class MainUtil {
         }
         return false;
     }
-    public static boolean isArmorBypassingButNotShieldBypassing(DamageSource sauce){
+
+
+    public static boolean getReducedDamage(Entity entity){
+        return (entity instanceof Player || entity instanceof StandEntity ||
+                ((entity instanceof LivingEntity LE && !((StandUser)LE).roundabout$getStandDisc().isEmpty()) &&
+                        ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.standUserMobsTakePlayerDamageMultipliers)
+        );
+    }
+
+    public static boolean isArmorBypassingButNotShieldBypassing(DamageSource sauce, Entity target){
         if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.CORPSE)
-                || sauce.is(ModDamageTypes.VAMPIRE)
-                || sauce.is(ModDamageTypes.HAMON)
-                || sauce.is(ModDamageTypes.MARTIAL_ARTS)
+                || sauce.is(ModDamageTypes.VAMPIRE) || sauce.is(ModDamageTypes.HAMON) ||
+                (sauce.is(ModDamageTypes.MARTIAL_ARTS) && getReducedDamage(target))
                 || sauce.is(ModDamageTypes.EXPLOSIVE_STAND)  || sauce.is(ModDamageTypes.HEEL_SPIKE)  ||
                 sauce.is(ModDamageTypes.CORPSE_ARROW) ||  sauce.is(ModDamageTypes.STAND_RUSH) ||  sauce.is(ModDamageTypes.CROSSFIRE) ||
                 sauce.is(ModDamageTypes.CORPSE_EXPLOSION)) {
