@@ -6,7 +6,6 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.animations.AnubisAnimations;
-import net.hydra.jojomod.client.models.layers.animations.FirearmFirstPersonAnimations;
 import net.hydra.jojomod.client.models.layers.animations.FirstPersonLayerAnimations;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -223,29 +222,10 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 }
                 this.roundabout$animate(ipe.roundabout$getThirdPersonAnubisUnsheath(), AnubisAnimations.ThirdPersonUnsheathe,$$3,1F);
                 if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA && PowerTypes.hasStandActive(P)) {
-                    boolean start = false;
-                    AnimationDefinition anim = null;
-                    switch (SU.roundabout$getStandAnimation()) {
-                        case PowerIndex.SNEAK_MOVEMENT -> {
-                            start = true;
-                            if (PA.getAttackTime() < 16) {
-                                anim = AnubisAnimations.Backflip;
-                            }
-                        }
-                        case PowerIndex.GUARD -> {
-                            start = true;
-                            anim = AnubisAnimations.ThirdPersonBlock;
-                        }
-                        case PowerIndex.SNEAK_ATTACK_CHARGE -> {
-                            start = true;
-                            anim = AnubisAnimations.PogoReady;
-                        }
-                    }
-                    if (start) {
+                    AnimationDefinition anim = PowersAnubis.getAnimation(SU);
+                    if (anim != null) {
                         SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);
-                        if (anim != null) {
-                            this.roundabout$animate(SU.roundabout$getWornStandAnimation(), anim, $$3, 1F);
-                        }
+                        this.roundabout$animate(SU.roundabout$getWornStandAnimation(), AnubisAnimations.TEST, $$3, 1F);
                     } else {
                         SU.roundabout$getWornStandAnimation().stop();
                     }
@@ -351,6 +331,14 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 }
 
                 this.roundabout$animate(ipe.roundabout$getThirdPersonAnubisUnsheath(), AnubisAnimations.ThirdPersonUnsheathe,$$3,1F);
+
+                AnimationDefinition anim = PowersAnubis.getAnimation(SU);
+                if (anim != null) {
+                    SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);
+                    this.roundabout$animate(SU.roundabout$getWornStandIdleAnimation(),anim,$$3,1F);
+                } else {
+                    SU.roundabout$getWornStandAnimation().stop();
+                }
 
                 if ($$0.getItemBySlot(EquipmentSlot.CHEST).isEmpty()) {
                         this.cloak.z += 0.0F;

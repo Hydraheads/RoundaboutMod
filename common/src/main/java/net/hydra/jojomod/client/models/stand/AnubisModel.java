@@ -144,8 +144,6 @@ public class AnubisModel extends PsuedoHierarchicalModel {
                 }
                 if (start) {
                     this.animate(user.roundabout$getWornStandAnimation(),anim,partialTicks,1F);
-                } else {
-                    user.roundabout$getWornStandAnimation().stop();
                 }
             }
 
