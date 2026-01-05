@@ -32,7 +32,20 @@ public class PunchingGeneralPowers extends GeneralPowers {
             tryPowerPacket(PowerIndex.ATTACK);
         }}
     }
+    @Override
+    /**Stand related things that slow you down or speed you up, override and call super to make
+     * any stand ability slow you down*/
+    public float inputSpeedModifiers(float basis){
+        StandUser standUser = ((StandUser) this.getSelf());
+        if (isGuarding() && this.getSelf().getVehicle() == null) {
+            basis*=0.2f;
+        }
+        return basis;
+    }
 
+    public boolean cancelSprintJump(){
+        return this.isGuarding();
+    }
 
     public void preCheckButtonInputAttack(boolean keyIsDown, Options options) {
         if (PowerTypes.hasPowerActive(this.getSelf()) && !this.isGuarding()) {

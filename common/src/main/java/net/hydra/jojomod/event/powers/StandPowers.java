@@ -204,7 +204,7 @@ public class StandPowers extends AbilityScapeBasis {
         if (standUser.roundabout$isDazed()) {
             basis = 0;
         } else if (!(this.getSelf().getVehicle() != null && this.getSelf().getControlledVehicle() == null) &&
-                (standUser.roundabout$isGuarding() && this.getSelf().getVehicle() == null)) {
+                (isGuarding() && this.getSelf().getVehicle() == null)) {
             basis*=0.3f;
         } else if (this.isBarrageAttacking() || standUser.roundabout$isClashing()) {
             basis*=0.2f;

@@ -3553,6 +3553,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         roundabout$setBigJumpCurrentProgress(curr + 0.68F);
                     }
                     Vec3 $$0 = this.getDeltaMovement();
+                    Float sped = roundabout$mutualGetSpeed(1F);
+                    if (sped < 1){
+                        $$0 = $$0.scale(sped);
+                    }
+                    if (roundabout$cancelsprintJump()){
+                        $$0 = $$0.scale(0.6F);
+                    }
 
 
                     if (!onGround()){
@@ -3765,6 +3772,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
+
         if (hand.getItem() instanceof RoadRollerItem || offHand.getItem() instanceof RoadRollerItem) {
             if (!FateTypes.isVampireStrong(rdbt$this())) {
                 basis = (basis * 0.50F);
@@ -3808,6 +3816,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 ( (this.roundabout$getStandPowers() instanceof PowersAnubis && !PowerTypes.hasStandActive(this) || !(this.roundabout$getStandPowers() instanceof PowersAnubis)  )  )
         ) {
             basis *= 1.5F;
+        }
+
+
+        if (!((StandUser)this).roundabout$getStandDisc().isEmpty()){
+            basis = ((StandUser)this).roundabout$getStandPowers().inputSpeedModifiers(basis);
+        }
+        if (rdbt$this() instanceof Player pl) {
+            basis = ((IFatePlayer) this).rdbt$getFatePowers().inputSpeedModifiers(basis);
+            basis = ((IPowersPlayer) this).rdbt$getPowers().inputSpeedModifiers(basis);
         }
 
         return basis;
@@ -4893,7 +4910,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "jumpFromGround", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$jumpFromGround(CallbackInfo ci) {
         if (this.roundabout$getStandPowers().cancelSprintJump() || roundabout$cancelsprintJump()
-        || (rdbt$this() instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers().cancelSprintJump())) {
+        || (rdbt$this() instanceof Player pl && (((IFatePlayer)pl).rdbt$getFatePowers().cancelSprintJump() ||
+                ((IPowersPlayer)pl).rdbt$getPowers().cancelSprintJump()))) {
             Vec3 $$0 = this.getDeltaMovement();
             this.setDeltaMovement($$0.x, (double) this.getJumpPower(), $$0.z);
             this.hasImpulse = true;
@@ -4921,7 +4939,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 cir.setReturnValue((float) 0);
                 return;
             }
-            basis = roundabout$getStandPowers().inputSpeedModifiers(basis);
         }
 
         basis = roundabout$mutualGetSpeed(basis);

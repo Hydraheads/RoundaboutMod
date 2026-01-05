@@ -1324,10 +1324,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Inject(method = "getSpeed", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$getSpeed(CallbackInfoReturnable<Float> cir) {
         float basis = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED);
-        if (!((StandUser)this).roundabout$getStandDisc().isEmpty()){
-            basis = ((StandUser)this).roundabout$getStandPowers().inputSpeedModifiers(basis);
-        }
-        basis = ((IFatePlayer)this).rdbt$getFatePowers().inputSpeedModifiers(basis);
         basis = ((StandUser)this).roundabout$mutualGetSpeed(basis);
 
         cir.setReturnValue(basis);
