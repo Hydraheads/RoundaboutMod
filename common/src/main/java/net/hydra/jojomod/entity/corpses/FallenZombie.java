@@ -122,6 +122,9 @@ public class FallenZombie extends FallenMob{
 
     @Override
     public double getMyRidingOffset() {
+        if (!getActivated()){
+            return (this.isBaby() ? 0.0 : -0.45) +0.65F;
+        }
         return this.isBaby() ? 0.0 : -0.45;
     }
     @Override
