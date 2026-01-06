@@ -20,6 +20,7 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampireFate;
@@ -30,6 +31,7 @@ import net.hydra.jojomod.networking.ClientToServerPackets;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.gravity.GravityAPI;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
@@ -1520,6 +1522,22 @@ public class ClientUtil {
 
                 stack.popPose();
             }
+        }
+        if (cameraEnt instanceof Player play && ((IPlayerEntity)play).roundabout$GetPos2() == PlayerPosIndex.BARRAGE){
+            stack.pushPose();
+
+            boolean isHurt = play.hurtTime > 0;
+            float r = isHurt ? 1.0F : 1.0F;
+            float g = isHurt ? 0.6F : 1.0F;
+            float b = isHurt ? 0.6F : 1.0F;
+            Direction gravityDirection = GravityAPI.getGravityDirection(cameraEnt);
+            Vec3 gtranslation = new Vec3(0,-0.3,0);
+            //gtranslation = RotationUtil.vecPlayerToWorld(gtranslation,gravityDirection);
+            stack.translate(gtranslation.x,gtranslation.y,gtranslation.z);
+
+            ModStrayModels.barrageArmsPart.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light,
+                    r,g,b,0.6F);
+            stack.popPose();
         }
 
         if (cameraEnt instanceof Player play) {

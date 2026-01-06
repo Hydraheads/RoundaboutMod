@@ -468,7 +468,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ClientUtil.pushPoseAndCooperate(poseStack,43);
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.barrageArmsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
-                r, g, b, 1);
+                r, g, b, 0.8F);
         ClientUtil.popPoseAndCooperate(poseStack,43);
     }
     public void renderPlayerBreastPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,

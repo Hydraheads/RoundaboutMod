@@ -50,7 +50,6 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
     private final ModelPart LeftArmBAM4;
     private final ModelPart LeftArmBAM3;
 
-    public static final float barrageAlpha = 0.8F;
     public BarrageArmsPart() {
         super(RenderType::entityTranslucent);
 
@@ -146,6 +145,7 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
     PartPose pp = PartPose.ZERO;
     public<T extends Entity> void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
                        int light, float r, float g, float b, float alph) {
+        float barrageAlpha = alph;
         if (context instanceof LivingEntity LE) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
             if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
