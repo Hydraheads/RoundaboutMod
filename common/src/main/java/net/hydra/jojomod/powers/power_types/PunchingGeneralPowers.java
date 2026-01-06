@@ -3,16 +3,15 @@ package net.hydra.jojomod.powers.power_types;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
-import net.hydra.jojomod.event.index.OffsetIndex;
-import net.hydra.jojomod.event.index.PlayerPosIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -97,11 +96,39 @@ public class PunchingGeneralPowers extends GeneralPowers {
         return false;
     }
 
+    public int comboAmt = 0;
+    public int comboExpireTicks = 0;
+
+    public int getComboAmt(){
+        return comboAmt;
+    }
+    public void setComboAmt(int comboAmt){
+        this.comboAmt = comboAmt;
+        if (!self.level().isClientSide() && self instanceof ServerPlayer sp){
+            S2CPacketUtil.sendGenericIntToClientPacket(sp, PacketDataIndex.S2C_INT_COMBO_AMT,getComboAmt());
+        }
+    }
+    public int getComboExpireTicks(){
+        return comboExpireTicks;
+    }
+    public void setComboExpireTicks(int expireTicks){
+        this.comboExpireTicks = expireTicks;
+        if (!self.level().isClientSide() && self instanceof ServerPlayer sp){
+            S2CPacketUtil.sendGenericIntToClientPacket(sp, PacketDataIndex.S2C_INT_COMBO_SEC_LEFT,getComboExpireTicks());
+        }
+    }
     @Override
     public void tickPower(){
         if (!self.level().isClientSide()) {
             if (getActivePower() != PowerIndex.GUARD && getPlayerPos2() == PlayerPosIndex.GUARD) {
                 setPlayerPos2(PlayerPosIndex.NONE);
+            }
+
+            if (getComboExpireTicks() > 0){
+                setComboExpireTicks(getComboExpireTicks()-1);
+                if (getComboExpireTicks() <= 0){
+                    setComboAmt(0);
+                }
             }
         }
         super.tickPower();
@@ -171,23 +198,36 @@ public class PunchingGeneralPowers extends GeneralPowers {
         return super.setPowerGuard();
     }
 
+    public int getComboTier(){
+        if (comboAmt <= 7){
+            return 1;
+        } else if (comboAmt <= 19){
+            return 2;
+        } else if (comboAmt <= 40){
+            return 3;
+        }
+        return 4;
+    }
 
     public void punchImpact(Entity entity) {
-        self.swing(InteractionHand.MAIN_HAND,true);
-        if (entity != null) {
-            float pow;
-            float knockbackStrength;
-            pow = getPunchStrength(entity);
-            knockbackStrength = 0.10F;
+        if (!this.self.level().isClientSide()) {
+            self.swing(InteractionHand.MAIN_HAND, true);
+            if (entity != null) {
+                float pow;
+                float knockbackStrength;
+                pow = getPunchStrength(entity);
+                knockbackStrength = 0.10F;
 
-            if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
-                takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
-                if (!this.self.level().isClientSide()) {
-                    this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float)(0.95f+Math.random()*0.1f));
-                }
-            } else {
-                if (!this.self.level().isClientSide()) {
-                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F,(float) (0.95f+Math.random()*0.1f));
+                if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
+                    takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
+                    this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                    int comboAmt = getComboAmt();
+                    setComboAmt(comboAmt+1);
+                    setComboExpireTicks(100);
+                } else {
+                    if (!this.self.level().isClientSide()) {
+                        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                    }
                 }
             }
         }

@@ -101,6 +101,8 @@ public class PacketDataIndex {
     public static final byte S2C_INT_STAND_MODE = 10;
     public static final byte S2C_INT_FLESH_BUD = 11;
     public static final byte S2C_INT_CORNER_CUT = 12;
+    public static final byte S2C_INT_COMBO_AMT = 13;
+    public static final byte S2C_INT_COMBO_SEC_LEFT = 14;
 
     /**S2C BUNDLE packets*/
     public static final byte S2C_BUNDLE_POWER_INV = 1;

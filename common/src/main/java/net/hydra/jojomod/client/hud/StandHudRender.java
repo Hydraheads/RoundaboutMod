@@ -22,6 +22,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.VampireFate;
+import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersCream;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
@@ -525,6 +526,51 @@ public class StandHudRender {
         }
     }
 
+    private static final ResourceLocation FIRE_0 =
+            new ResourceLocation("minecraft", "textures/block/fire_0.png");
+    public static void renderComboHudNumber(GuiGraphics context, Minecraft client, Player playerEntity,
+                                                      int scaledWidth, int scaledHeight, int x,
+                                                      PunchingGeneralPowers pgp) {
+
+        int l;
+        int k;
+        k = scaledWidth/2 - 5;
+        l = scaledHeight - 31 - 5;
+
+        int comboAmt = pgp.getComboAmt();
+        int comboTime = pgp.getComboExpireTicks();
+
+        int locX = - 1;
+        int locY = - 9;
+        int comboTier = pgp.getComboTier();
+
+
+        if (comboTier == 1) {
+            RenderSystem.enableBlend();
+            context.blit(StandIcons.JOJO_ICONS_2, k + locX, l+locY, 223, 153, 13, 15);
+        } else if (comboTier == 2){
+            RenderSystem.enableBlend();
+            context.blit(StandIcons.JOJO_ICONS_2, k + locX, l+locY, 223, 135, 13, 15);
+        } else if (comboTier == 3){
+            RenderSystem.enableBlend();
+            context.blit(StandIcons.JOJO_ICONS_2, k + locX, l+locY, 240, 135, 13, 15);
+        } else {
+            RenderSystem.enableBlend();
+            context.blit(StandIcons.JOJO_ICONS_2, k + locX, l+locY, 240, 153, 13, 15);
+        }
+
+        int y = 16766790;
+        Font renderer = client.font;
+        String $$6 = comboAmt + "";
+        int $$7 = (scaledWidth - renderer.width($$6)) / 2;
+        int $$8 = scaledHeight - 31 - 4;
+        context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7 - 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8, y, false);
+    }
+
     public static void renderExpHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                            int scaledWidth, int scaledHeight, int ticks, int x,
                                            float flashAlpha, float otherFlashAlpha, boolean removeNum) {
@@ -647,7 +693,7 @@ public class StandHudRender {
     }
     public static void renderGuardHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                       int scaledWidth, int scaledHeight, int ticks, int x,
-                                      float flashAlpha, float otherFlashAlpha) {
+                                      float flashAlpha, float otherFlashAlpha, boolean removeThing) {
         int l;
         int k;
         int v;
@@ -667,7 +713,9 @@ public class StandHudRender {
         int u = 183;
         k = scaledWidth/2 - 5;
         l = scaledHeight - 31 - 5;
-        context.blit(StandIcons.JOJO_ICONS, k, l, u, v, 9, 9);
+        if (!removeThing) {
+            context.blit(StandIcons.JOJO_ICONS, k, l, u, v, 9, 9);
+        }
     }
 
     public static void renderPossessionHud(GuiGraphics context, Minecraft client, Player playerEntity,

@@ -27,6 +27,7 @@ import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
 import net.hydra.jojomod.networking.ClientToServerPackets;
+import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.minecraft.client.gui.GuiGraphics;
@@ -705,6 +706,14 @@ public class ClientUtil {
             Entity target = player.level().getEntity(data);
             if (target != null && !target.isRemoved() && target.isAlive()) {
                 playSound(ModSounds.FLESH_BUD_EVENT,target,1,1);
+            }
+        } else if (context == PacketDataIndex.S2C_INT_COMBO_AMT){
+            if (((IPowersPlayer) player).rdbt$getPowers() instanceof PunchingGeneralPowers pgp){
+                pgp.setComboAmt(data);
+            }
+        } else if (context == PacketDataIndex.S2C_INT_COMBO_SEC_LEFT){
+            if (((IPowersPlayer) player).rdbt$getPowers() instanceof PunchingGeneralPowers pgp){
+                pgp.setComboExpireTicks(data);
             }
         }
     }
