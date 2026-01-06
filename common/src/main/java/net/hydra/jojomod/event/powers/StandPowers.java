@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.entity.ModEntities;
@@ -21,6 +22,7 @@ import net.hydra.jojomod.item.HarpoonItem;
 import net.hydra.jojomod.item.KnifeItem;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
@@ -922,6 +924,13 @@ public class StandPowers extends AbilityScapeBasis {
     } //Plays the Summon sound. Happens when stand is summoned with summon key.
 
     public float getBarrageChargePitch(){
+        //Scales to hamon/vampire barrage length if the player has those equipped instead of a stand
+        if (self instanceof Player pe && PowerTypes.hasPowerActive(pe) && ((IPowersPlayer)pe).rdbt$getPowers()
+        instanceof PunchingGeneralPowers pgp){
+            return 1/((float) pgp.getBarrageWindup() /20);
+        }
+
+        //Scales to barrage length otherwise
         return 1/((float) this.getBarrageWindup() /20);
     }
 

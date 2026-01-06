@@ -343,9 +343,6 @@ public class PunchingGeneralPowers extends GeneralPowers {
     /**If you override this for any reason, you should probably call the super(). Although SP and TW override
      * this, you can probably do better*/
     public void barrageImpact(Entity entity, int hitNumber){
-        if (hitNumber % 3 == 0){
-            self.swing(InteractionHand.MAIN_HAND, true);
-        }
         if (this.isBarrageAttacking()) {
             if (bonusBarrageConditions()) {
                 boolean sideHit = false;
@@ -357,6 +354,10 @@ public class PunchingGeneralPowers extends GeneralPowers {
                     sideHit = true;
                 }
                 boolean lastHit = (hitNumber >= this.getBarrageLength());
+
+                if (hitNumber % 3 == 0 || lastHit){
+                    self.swing(InteractionHand.MAIN_HAND, true);
+                }
                 if (entity != null) {
                         hitParticles(entity);
 
@@ -503,7 +504,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
     }
 
     public int getBarrageRecoilTime(){
-        return 35;
+        return 40;
     }
 
     @Override
