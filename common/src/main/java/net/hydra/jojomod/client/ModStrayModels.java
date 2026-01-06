@@ -42,6 +42,7 @@ public class ModStrayModels {
     public static JosukeDecalsPart JosukeDecalsPart;
     public static TasselHatPart TasselHatPart;
     public static LegCloakPart LegCloakPart;
+    public static BarrageArmsPart barrageArmsPart;
     public static PlayerChestPart PlayerChestPart;
     public static PlayerSmallChestPart PlayerSmallChestPart;
     public static ChestPart Body;

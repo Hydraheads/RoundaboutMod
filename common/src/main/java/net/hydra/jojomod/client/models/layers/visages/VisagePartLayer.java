@@ -210,7 +210,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
                 if (entity instanceof Player play) {
                     IPlayerEntity pl = ((IPlayerEntity) play);
-                    if (pl.roundabout$GetPos2() == PlayerPosIndex.HAIR_EXTENSION){
+                    if (pl.roundabout$GetPos2() == PlayerPosIndex.BARRAGE) {
+                        renderBarrageArmsPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
+                                r, g, b);
+                    } else if (pl.roundabout$GetPos2() == PlayerPosIndex.HAIR_EXTENSION){
                         if (!isHurt){
                             r = pl.rdbt$getHairColorX();
                             g = pl.rdbt$getHairColorY();
@@ -458,6 +461,15 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ModStrayModels.RightHeel.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,45);
+    }
+    public void renderBarrageArmsPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                                       float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,43);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.barrageArmsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1);
+        ClientUtil.popPoseAndCooperate(poseStack,43);
     }
     public void renderPlayerBreastPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
                                    float r, float g, float b) {

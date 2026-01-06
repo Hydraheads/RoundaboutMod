@@ -93,6 +93,7 @@ public interface IPlayerEntity {
     void roundabout$setStandSkin(byte level);
     void roundabout$setIdlePos(byte level);
     byte roundabout$getIdlePos();
+    AnimationState roundabout$getBarrageArms();
     byte roundabout$getTeam();
     void roundabout$setTeamColor(byte color);
     byte roundabout$getTeamColor();

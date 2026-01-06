@@ -217,6 +217,7 @@ public class ClientForgeEvents {
         ModStrayModels.JosukeDecalsPart = new JosukeDecalsPart();
         ModStrayModels.TasselHatPart = new TasselHatPart();
         ModStrayModels.LegCloakPart = new LegCloakPart();
+        ModStrayModels.barrageArmsPart = new BarrageArmsPart();
         ModStrayModels.PlayerChestPart = new PlayerChestPart();
         ModStrayModels.PlayerSmallChestPart = new PlayerSmallChestPart();
         ModStrayModels.RightArm = new RightArmPart();

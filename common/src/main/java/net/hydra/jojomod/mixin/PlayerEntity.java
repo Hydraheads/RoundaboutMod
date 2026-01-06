@@ -913,6 +913,14 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public AnimationState roundabout$getOffsetCorrect(){
         return roundabout$OffsetCorrect;
     }
+    @Unique
+    public final AnimationState roundabout$barrageArms = new AnimationState();
+    @Unique
+    @Override
+    public AnimationState roundabout$getBarrageArms(){
+        return roundabout$barrageArms;
+    }
+
 
     @Unique
     public final AnimationState roundabout$anubishUnsheath = new AnimationState();
@@ -1201,6 +1209,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             this.roundabout$JONATHAN.startIfStopped(this.tickCount);
         } else {
             this.roundabout$JONATHAN.stop();
+        }
+        if (roundabout$GetPos2() == PlayerPosIndex.BARRAGE) {
+            this.roundabout$barrageArms.startIfStopped(this.tickCount);
+        } else {
+            this.roundabout$barrageArms.stop();
         }
         if (roundabout$GetPoseEmote() == Poses.JOTARO.id) {
             this.roundabout$JOTARO.startIfStopped(this.tickCount);
