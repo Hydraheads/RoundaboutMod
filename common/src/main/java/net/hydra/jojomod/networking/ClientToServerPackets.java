@@ -70,6 +70,7 @@ public class ClientToServerPackets {
             MoveSync("thread_hop_moving_sync"),
             StandPunch("stand_punch"),
             StandBarrageHit("stand_barrage_hit"),
+            PowersBarrageHit("general_powers_barrage_hit"),
             BarrageClashUpdate("barrage_clash_update"),
             Handshake("thread_hop_handshake"),
             Inventory("inventory"),
@@ -488,6 +489,15 @@ public class ClientToServerPackets {
                     int hitNumber = (int)vargs[1];
                     Entity TE = sender.level().getEntity(targetID);
                     ((StandUser) sender).roundabout$getStandPowers().barrageImpact(TE, hitNumber);
+                }
+                /**Basic powers barrage hit packet*/
+                if (message.equals(MESSAGES.PowersBarrageHit.value)) {
+                    int targetID = (int)vargs[0];
+                    int hitNumber = (int)vargs[1];
+                    Entity TE = sender.level().getEntity(targetID);
+                    if (((IPowersPlayer) sender).rdbt$getPowers() instanceof PunchingGeneralPowers pgp){
+                        pgp.barrageImpact(TE, hitNumber);
+                    }
                 }
                 /**Barrage Clash packet*/
                 if (message.equals(MESSAGES.BarrageClashUpdate.value)) {

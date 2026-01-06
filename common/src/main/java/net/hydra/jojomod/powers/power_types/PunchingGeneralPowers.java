@@ -265,12 +265,12 @@ public class PunchingGeneralPowers extends GeneralPowers {
     public void standBarrageHit(){
         if (this.self instanceof Player){
             if (isPacketPlayer()){
-                List<Entity> listE = getTargetEntityList(this.self,-1);
+                List<Entity> listE = getTargetEntityList(this.self,3);
                 int id = -1;
                 if (storeEnt != null){
                     id = storeEnt.getId();
                 }
-                C2SPacketUtil.standBarrageHitPacket(id, this.attackTimeDuring);
+                C2SPacketUtil.powersBarrageHitPacket(id, this.attackTimeDuring);
                 if (!listE.isEmpty() && ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect){
                     for (int i = 0; i< listE.size(); i++){
                         if (!(storeEnt != null && listE.get(i).is(storeEnt))) {

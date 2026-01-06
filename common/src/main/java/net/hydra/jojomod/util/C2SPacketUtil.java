@@ -244,6 +244,13 @@ public class C2SPacketUtil {
                 attackTimeDuring
         );
     }
+    public static void powersBarrageHitPacket(int targetID, int attackTimeDuring){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.PowersBarrageHit.value,
+                targetID,
+                attackTimeDuring
+        );
+    }
     /**During a clash, updates the progress of your clash bar in real time.*/
     public static void barrageClashUpdatePacket(float clashProgress, boolean clashDone){
         ModMessageEvents.sendToServer(
