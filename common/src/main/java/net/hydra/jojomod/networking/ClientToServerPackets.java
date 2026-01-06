@@ -2,6 +2,7 @@ package net.hydra.jojomod.networking;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
+import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.advancement.criteria.ModCriteria;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
@@ -13,6 +14,7 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
@@ -522,6 +524,8 @@ public class ClientToServerPackets {
                 /**Release right click to stop guarding*/
                 if (message.equals(MESSAGES.GuardCancel.value)) {
                     if (((StandUser) sender).roundabout$isGuarding() || ((StandUser) sender).roundabout$isBarraging()
+                            || (((IPowersPlayer)sender).rdbt$getPowers() instanceof PunchingGeneralPowers pgp &&
+                            pgp.isBarraging())
                             || ((StandUser) sender).roundabout$getStandPowers().clickRelease()) {
                         if (PowerTypes.hasPowerActivelyEquipped(sender)) {
                             ((StandUser) sender).roundabout$tryPowerP(PowerIndex.NONE, true);

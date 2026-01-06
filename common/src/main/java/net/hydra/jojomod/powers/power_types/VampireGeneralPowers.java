@@ -57,7 +57,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (this.getReducedDamage(entity)){
                 return 0.75F * (1+ (vp.getVampireData().strengthLevel * 0.1F));
             } else {
-                return 2.2F * (1+ (vp.getVampireData().strengthLevel * 0.1F));
+                return 2.1F * (1+ (vp.getVampireData().strengthLevel * 0.1F));
             }
         } else {
             return super.getPunchStrength(entity);

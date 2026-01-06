@@ -235,7 +235,6 @@ public abstract class InputEvents implements IInputEvents {
                             return false;
                     }
 
-                    this.player.swing(InteractionHand.MAIN_HAND);
                     return $$1;
                 }
             }
@@ -1234,14 +1233,16 @@ public abstract class InputEvents implements IInputEvents {
 
 
             if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
-                if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {
+                if (!isMining && !roundabout$activeMining && generalPowers.getInterruptCD()) {
                     if (rdbt$isInitialized(player)) {
-                        ((IFatePlayer) player).rdbt$getFatePowers().buttonInputAttack(this.options.keyAttack.isDown(), this.options);
-                        generalPowers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
+                        if (!generalPowers.isBarraging()) {
+                            ((IFatePlayer) player).rdbt$getFatePowers().buttonInputAttack(this.options.keyAttack.isDown(), this.options);
+                            generalPowers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
+                        }
                     }
                 }
                 if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
-                    if (!isMining && standComp.roundabout$isGuarding() && !standComp.roundabout$isBarraging()) {
+                    if (!isMining && standComp.roundabout$isGuarding() && !generalPowers.isBarraging()) {
                         if (rdbt$isInitialized(player)) {
                             generalPowers.preCheckButtonInputBarrage(this.options.keyAttack.isDown(), this.options);
                         }

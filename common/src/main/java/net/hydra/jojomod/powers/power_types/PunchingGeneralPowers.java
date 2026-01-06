@@ -61,12 +61,17 @@ public class PunchingGeneralPowers extends GeneralPowers {
         StandUser standUser = ((StandUser) this.getSelf());
         if (isGuarding() && this.getSelf().getVehicle() == null) {
             basis*=0.2f;
+        } else if (this.isBarrageAttacking() || standUser.roundabout$isClashing()) {
+            basis*=0.2f;
+        } else if (this.isBarrageCharging()) {
+            basis*=0.3f;
         }
         return basis;
     }
 
     public boolean cancelSprintJump(){
-        return this.isGuarding();
+        return this.isGuarding() || getActivePower() == PowerIndex.BARRAGE_CHARGE ||
+                getActivePower() == PowerIndex.BARRAGE;
     }
 
     public void preCheckButtonInputAttack(boolean keyIsDown, Options options) {
@@ -172,6 +177,12 @@ public class PunchingGeneralPowers extends GeneralPowers {
             if (move != PowerIndex.GUARD && getPlayerPos2() == PlayerPosIndex.GUARD) {
                 setPlayerPos2(PlayerPosIndex.NONE);
             }
+        }
+
+        if (!this.self.level().isClientSide && this.isBarraging()  && (move != PowerIndex.BARRAGE && move != PowerIndex.BARRAGE_CLASH
+                && move != PowerIndex.BARRAGE_CHARGE && move != PowerIndex.GUARD) && this.attackTimeDuring  > -1){
+            this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
+
         }
         return super.tryPower(move,forced);
     }
