@@ -2393,14 +2393,26 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
     @Unique
+    public int rdbt$ticksUntilGuardRegen = 0;
+    @Unique
     public void roundabout$tickGuard(){
+            if (!this.roundabout$GuardBroken && this.roundabout$isGuarding() && this.roundabout$shieldNotDisabled()) {
+                rdbt$ticksUntilGuardRegen = 14;
+            } else {
+                if (rdbt$ticksUntilGuardRegen > 0) {
+                    rdbt$ticksUntilGuardRegen--;
+                }
+            }
+
         if (this.roundabout$GuardPoints < this.roundabout$getMaxGuardPoints()) {
             if (this.roundabout$GuardBroken){
                 float guardRegen = this.roundabout$getMaxGuardPoints() / 100;
                 this.roundabout$regenGuard(guardRegen);
             } else if (!this.roundabout$isGuarding() && this.roundabout$shieldNotDisabled()){
-                float guardRegen = this.roundabout$getMaxGuardPoints() / 200;
-                this.roundabout$regenGuard(guardRegen);
+                if (rdbt$ticksUntilGuardRegen <= 0) {
+                    float guardRegen = this.roundabout$getMaxGuardPoints() / 220;
+                    this.roundabout$regenGuard(guardRegen);
+                }
             }
             if (this.roundabout$isGuarding() && !roundabout$shieldNotDisabled()){
                 this.roundabout$setAttackTimeDuring(0);
@@ -2687,14 +2699,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return this.roundabout$isGuardingEffectively2();
     }
     public boolean roundabout$isGuardingEffectively2(){
-
-        Roundabout.LOGGER.info("1: "+(PowerTypes.hasPowerActive(rdbt$this()))+
-                " 2: "+
-                (rdbt$this() instanceof Player pl &&
-                ((IPowersPlayer)pl).rdbt$getPowers().getAttackTimeDuring() >= ClientNetworking.getAppropriateConfig().vampireSettings.powerGuardDelayTicks)
-        + " 3: "+((IPowersPlayer)rdbt$this()).rdbt$getPowers().getActivePower()
-                + " 4: "+((IPowersPlayer)rdbt$this()).rdbt$getPowers().getAttackTimeDuring());
-
         return (this.roundabout$shieldNotDisabled() && roundabout$isGuarding() &&
                 (
                         (PowerTypes.hasStandActive(rdbt$this()) &&
