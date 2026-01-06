@@ -357,8 +357,10 @@ public class PunchingGeneralPowers extends GeneralPowers {
 
                 if (hitNumber % 3 == 0 || lastHit){
                     self.swing(InteractionHand.MAIN_HAND, true);
-                    if (getPlayerPos2() == PlayerPosIndex.BARRAGE) {
-                        setPlayerPos2(PlayerPosIndex.NONE);
+                    if (lastHit) {
+                        if (getPlayerPos2() == PlayerPosIndex.BARRAGE) {
+                            setPlayerPos2(PlayerPosIndex.NONE);
+                        }
                     }
                 }
                 if (entity != null) {
