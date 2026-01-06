@@ -678,6 +678,10 @@
   "sounds.roundabout.hypnosis":  "Hypnosis",
   "sounds.roundabout.blood_regen":  "Flesh",
   "sounds.roundabout.blood_regen_finish":  "Healed",
+  "sounds.roundabout.combat_punch_1":  "Punch",
+  "sounds.roundabout.combat_punch_2":  "Punch",
+  "sounds.roundabout.combat_punch_3":  "Punch",
+  "sounds.roundabout.combat_punch_4":  "Punch",
 
   "sounds.roundabout.bubble_hover_over":  "Bubble",
   "sounds.roundabout.bubble_pop":  "Bubble popping",

@@ -1280,6 +1280,18 @@ public class ModSounds {
     public static SoundEvent HAIR_TOGGLE_EVENT = SoundEvent.createVariableRangeEvent(HAIR_TOGGLE_ID);
 
 
+    public static final String COMBAT_PUNCH_1 = "combat_punch_1";
+    public static final ResourceLocation COMBAT_PUNCH_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+COMBAT_PUNCH_1);
+    public static SoundEvent COMBAT_PUNCH_1_EVENT = SoundEvent.createVariableRangeEvent(COMBAT_PUNCH_1_ID);
+    public static final String COMBAT_PUNCH_2 = "combat_punch_2";
+    public static final ResourceLocation COMBAT_PUNCH_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+COMBAT_PUNCH_2);
+    public static SoundEvent COMBAT_PUNCH_2_EVENT = SoundEvent.createVariableRangeEvent(COMBAT_PUNCH_2_ID);
+    public static final String COMBAT_PUNCH_3 = "combat_punch_3";
+    public static final ResourceLocation COMBAT_PUNCH_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+COMBAT_PUNCH_3);
+    public static SoundEvent COMBAT_PUNCH_3_EVENT = SoundEvent.createVariableRangeEvent(COMBAT_PUNCH_3_ID);
+    public static final String COMBAT_PUNCH_4 = "combat_punch_4";
+    public static final ResourceLocation COMBAT_PUNCH_4_ID = new ResourceLocation(Roundabout.MOD_ID+":"+COMBAT_PUNCH_4);
+    public static SoundEvent COMBAT_PUNCH_4_EVENT = SoundEvent.createVariableRangeEvent(COMBAT_PUNCH_4_ID);
 
     public static final String VSONG_SILENT_REVERIES = "vsong_silent_reveries";
     public static final ResourceLocation VSONG_SILENT_REVERIES_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VSONG_SILENT_REVERIES);

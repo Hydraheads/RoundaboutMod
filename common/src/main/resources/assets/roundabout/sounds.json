@@ -2201,6 +2201,30 @@
       "roundabout:fog_clone"
     ]
   },
+  "combat_punch_1": {
+    "subtitle": "sounds.roundabout.combat_punch_1",
+    "sounds": [
+      "roundabout:combat_punch_1"
+    ]
+  },
+  "combat_punch_2": {
+    "subtitle": "sounds.roundabout.combat_punch_2",
+    "sounds": [
+      "roundabout:combat_punch_2"
+    ]
+  },
+  "combat_punch_3": {
+    "subtitle": "sounds.roundabout.combat_punch_3",
+    "sounds": [
+      "roundabout:combat_punch_3"
+    ]
+  },
+  "combat_punch_4": {
+    "subtitle": "sounds.roundabout.combat_punch_4",
+    "sounds": [
+      "roundabout:combat_punch_4"
+    ]
+  },
   "hallelujah": {
     "subtitle": "sounds.roundabout.hallelujah",
     "sounds": [

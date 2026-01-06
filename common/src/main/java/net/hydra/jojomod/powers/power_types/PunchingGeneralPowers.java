@@ -10,8 +10,11 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.powers.GeneralPowers;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -179,8 +182,13 @@ public class PunchingGeneralPowers extends GeneralPowers {
 
             if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
                 takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
+                if (!this.self.level().isClientSide()) {
+                    this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float)(0.95f+Math.random()*0.1f));
+                }
             } else {
-
+                if (!this.self.level().isClientSide()) {
+                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F,(float) (0.95f+Math.random()*0.1f));
+                }
             }
         }
     }
@@ -207,6 +215,18 @@ public class PunchingGeneralPowers extends GeneralPowers {
 
     public float getPunchAngle(){
         return 5;
+    }
+
+    public SoundEvent getPunchSound(){
+        double rand = Math.random();
+        if (rand < 0.25){
+            return ModSounds.COMBAT_PUNCH_1_EVENT;
+        } else if (rand < 0.5){
+            return ModSounds.COMBAT_PUNCH_2_EVENT;
+        } else if (rand < 0.75){
+            return ModSounds.COMBAT_PUNCH_3_EVENT;
+        }
+        return ModSounds.COMBAT_PUNCH_4_EVENT;
     }
 
     @Override
