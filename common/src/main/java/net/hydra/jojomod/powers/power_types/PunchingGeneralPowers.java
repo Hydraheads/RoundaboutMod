@@ -14,6 +14,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -203,10 +204,23 @@ public class PunchingGeneralPowers extends GeneralPowers {
             return 1;
         } else if (comboAmt <= 19){
             return 2;
-        } else if (comboAmt <= 40){
+        } else if (comboAmt <= 39){
             return 3;
         }
         return 4;
+    }
+
+    public float applyComboDamage(float dmg){
+        //Every combo hit is 1% more damage
+        float curve = 1 + ((float) comboAmt * 0.01F);
+        //Every combo level is 20% more damage
+        curve += ((float) getComboTier() * 0.2F);
+        //max of 3x damage
+        curve = Mth.clamp(curve,0,3F);
+
+        dmg*=curve;
+
+        return dmg;
     }
 
     public void punchImpact(Entity entity) {
@@ -216,6 +230,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
                 float pow;
                 float knockbackStrength;
                 pow = getPunchStrength(entity);
+                pow = applyComboDamage(pow);
                 knockbackStrength = 0.10F;
 
                 if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
