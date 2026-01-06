@@ -236,9 +236,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
                 if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
                     takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
                     this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
-                    int comboAmt = getComboAmt();
-                    setComboAmt(comboAmt+1);
-                    setComboExpireTicks(100);
+                    addToCombo();
                 } else {
                     if (!this.self.level().isClientSide()) {
                         this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
@@ -246,6 +244,12 @@ public class PunchingGeneralPowers extends GeneralPowers {
                 }
             }
         }
+    }
+
+    public void addToCombo(){
+        int comboAmt = getComboAmt();
+        setComboAmt(comboAmt+1);
+        setComboExpireTicks(70);
     }
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
