@@ -32,6 +32,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
@@ -449,7 +450,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                                     }
                                     if (!this.getSelf().level().isClientSide) {
                                         if (ent instanceof NeutralMob NE && !(ent instanceof Animal) && !((ServerPlayer) this.getSelf()).isCreative()) {
-                                            if (!(ent instanceof IronGolem ig && ig.isPlayerCreated())) {
+                                            if (!(ent instanceof IronGolem ig && ig.isPlayerCreated()) && self.level().getDifficulty() != Difficulty.PEACEFUL) {
                                                 NE.setTarget(this.getSelf());
                                             }
                                         }

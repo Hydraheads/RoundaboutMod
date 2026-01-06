@@ -195,6 +195,13 @@ public class PunchingGeneralPowers extends GeneralPowers {
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
         playBarrageCrySound();
     }
+    @Override
+    public void updateMovesFromPacket(byte activePower){
+        if (activePower == PowerIndex.BARRAGE){
+            this.setActivePowerPhase(this.activePowerPhaseMax);
+        }
+        super.updateMovesFromPacket(activePower);
+    }
     public void setPowerBarrageCharge() {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE_CHARGE);
@@ -355,7 +362,6 @@ public class PunchingGeneralPowers extends GeneralPowers {
                                     setDazed((LivingEntity) entity, (byte) 0);
 
                                     if (!sideHit) {
-                                        ((StandUser)LE).roundabout$setDestructionTrailTicks(80);
                                         playBarrageEndNoise(0, entity);
                                     }
                                 } else {
@@ -387,10 +393,10 @@ public class PunchingGeneralPowers extends GeneralPowers {
                     this.attackTimeDuring = -10;
                 }
             } else {
-                ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
+                ((StandUser) this.self).roundabout$tryPowerP(PowerIndex.NONE, true);
             }
         } else {
-            ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
+            ((StandUser) this.self).roundabout$tryPowerP(PowerIndex.NONE, true);
         }
     }
     public float getBarrageDamagePlayer(){
@@ -469,7 +475,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
     }
 
     public int getBarrageRecoilTime(){
-        return 30;
+        return 35;
     }
 
     @Override
@@ -598,7 +604,10 @@ public class PunchingGeneralPowers extends GeneralPowers {
                 float attackTime = getAttackTime();
                 float finalATime = attackTime / attackTimeMax;
                 if (finalATime <= 1) {
-                    if (TE != null) {
+
+                    if (getActivePowerPhase() == getActivePowerPhaseMax()) {
+                        barTexture = 24;
+                    } else if (TE != null) {
                         barTexture = 12;
                     } else {
                         barTexture = 18;
