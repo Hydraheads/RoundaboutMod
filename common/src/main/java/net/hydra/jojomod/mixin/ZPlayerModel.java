@@ -141,8 +141,8 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 ipe.roundabout$getAnubisUnsheath().stop();
             }
 
-
-            if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.GUARD) {
+            byte posByte = ((IPlayerEntity) $$0).roundabout$GetPos2();
+            if (posByte == PlayerPosIndex.GUARD) {
                 this.rightArm.yRot = 0.1F;
                 this.leftArm.yRot = -0.1F;
 
@@ -150,6 +150,13 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
                 this.rightArm.xRot = -1F;
                 this.leftArm.xRot = -1F;
+                offsetCorrect = false;
+                change = true;
+            } else if (posByte == PlayerPosIndex.BARRAGE_CHARGE){
+                this.rightArm.yRot = 0.1F;
+                this.leftArm.yRot = -0.1F;
+                this.rightArm.xRot = -0.4F;
+                this.leftArm.xRot = -0.4F;
                 offsetCorrect = false;
                 change = true;
             }
@@ -301,6 +308,12 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         this.rightArm.xRot = -1.1F + curve;
                         this.leftArm.yRot = 0.9F;
                         this.leftArm.xRot = -1.4F + curve;
+                    } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.BARRAGE_CHARGE) {
+                        float curve = ((float) (-Math.PI / 2) + this.head.xRot) / 3;
+                        this.rightArm.yRot = 0.4F;
+                        this.rightArm.xRot = -0F + curve;
+                        this.leftArm.yRot = -0.4F;
+                        this.leftArm.xRot = -0F + curve;
                     }
                 } else if (MainUtil.isHoldingRoadRoller($$0)) {
                     boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;

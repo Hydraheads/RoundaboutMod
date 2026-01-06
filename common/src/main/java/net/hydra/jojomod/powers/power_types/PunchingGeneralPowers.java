@@ -269,7 +269,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
         return 30;
     }
     public int getBarrageWindup(){
-        return 21;
+        return 23;
     }
     public void updateBarrageCharge(){
         if (this.attackTimeDuring >= this.getBarrageWindup()) {
