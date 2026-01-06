@@ -644,7 +644,7 @@ public class Config implements Cloneable {
         public Integer rattMaxDespawnRange;
         @IntOption(group = "inherit", value = 30, min = 0, max = 100)
         public Integer rattChargePerHit;
-        @IntOption(group = "inherit", value = 2, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 4, min = 0, max = 72000)
         public Integer rattManualChargeRate;
         @IntOption(group = "inherit", value = 150, min = 0, max = 72000)
         public Integer rattLeapCooldown;
