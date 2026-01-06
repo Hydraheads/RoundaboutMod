@@ -181,6 +181,11 @@ public class GeneralPowers extends AbilityScapeBasis {
         return false;
     }
 
+    /**Releasing right click normally stops guarding but that's something you can adjust*/
+    public boolean clickRelease(){
+        return false;
+    }
+
     public boolean setPowerGuard() {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.GUARD);

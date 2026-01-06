@@ -3,14 +3,18 @@ package net.hydra.jojomod.powers.power_types;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -19,6 +23,9 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.List;
 
 public class PunchingGeneralPowers extends GeneralPowers {
     public PunchingGeneralPowers(LivingEntity self) {
@@ -73,6 +80,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
         }
     }
     public void preCheckButtonInputBarrage(boolean keyIsDown, Options options) {
+
         if (PowerTypes.hasPowerActive(this.getSelf())) {
             buttonInputBarrage(keyIsDown, options);
         }
@@ -120,6 +128,17 @@ public class PunchingGeneralPowers extends GeneralPowers {
     }
     @Override
     public void tickPower(){
+        if (this.isBarraging()) {
+            if (bonusBarrageConditions()) {
+                if (this.isBarrageCharging()) {
+                    this.updateBarrageCharge();
+                } else {
+                    this.updateBarrage();
+                }
+            } else {
+                ((StandUser) this.self).roundabout$tryPowerP(PowerIndex.NONE, true);
+            }
+        }
         if (!self.level().isClientSide()) {
             if (getActivePower() != PowerIndex.GUARD && getPlayerPos2() == PlayerPosIndex.GUARD) {
                 setPlayerPos2(PlayerPosIndex.NONE);
@@ -148,6 +167,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
 
     @Override
     public boolean tryPower(int move, boolean forced) {
+
         if (!self.level().isClientSide()) {
             if (move != PowerIndex.GUARD && getPlayerPos2() == PlayerPosIndex.GUARD) {
                 setPlayerPos2(PlayerPosIndex.NONE);
@@ -157,12 +177,27 @@ public class PunchingGeneralPowers extends GeneralPowers {
     }
 
     public int attackTargetId = -1;
-
+    public void setPowerBarrage() {
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.BARRAGE);
+        this.setAttackTimeMax(this.getBarrageRecoilTime());
+        this.setActivePowerPhase(this.getActivePowerPhaseMax());
+        playBarrageCrySound();
+    }
+    public void setPowerBarrageCharge() {
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.BARRAGE_CHARGE);
+        playBarrageChargeSound();
+    }
     @Override
     /**Override this to set the special move*/
     public boolean setPowerOther(int move, int lastMove) {
         if (move == PowerIndex.ATTACK) {
             setAttack();
+        } else if (move == PowerIndex.BARRAGE_CHARGE) {
+            this.setPowerBarrageCharge();
+        } else if (move == PowerIndex.BARRAGE) {
+            this.setPowerBarrage();
         }
 
         return super.setPowerOther(move,lastMove);
@@ -188,6 +223,243 @@ public class PunchingGeneralPowers extends GeneralPowers {
         }
     }
 
+    @Override
+    public int getBarrageLength(){
+        return 30;
+    }
+    public int getBarrageWindup(){
+        return 21;
+    }
+    public void updateBarrageCharge(){
+        if (this.attackTimeDuring >= this.getBarrageWindup()) {
+            ((StandUser) this.self).roundabout$tryPowerP(PowerIndex.BARRAGE, true);
+        }
+    }
+    public void updateBarrage(){
+            if (this.attackTimeDuring > this.getBarrageLength()) {
+                this.attackTimeDuring = -20;
+            } else {
+                if (this.attackTimeDuring > 0) {
+                    this.setAttackTime((getBarrageRecoilTime() - 1) -
+                            Math.round(((float) this.attackTimeDuring / this.getBarrageLength())
+                                    * (getBarrageRecoilTime() - 1)));
+
+                    standBarrageHit();
+                }
+            }
+    }
+
+    /**This happens every time a stand barrage hits, generally you dont want to override this unless
+     * your stand's barrage operates very differently*/
+    public void standBarrageHit(){
+        if (this.self instanceof Player){
+            if (isPacketPlayer()){
+                List<Entity> listE = getTargetEntityList(this.self,-1);
+                int id = -1;
+                if (storeEnt != null){
+                    id = storeEnt.getId();
+                }
+                C2SPacketUtil.standBarrageHitPacket(id, this.attackTimeDuring);
+                if (!listE.isEmpty() && ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect){
+                    for (int i = 0; i< listE.size(); i++){
+                        if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
+                            if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
+                                C2SPacketUtil.standBarrageHitPacket(listE.get(i).getId(), this.attackTimeDuring + 1000);
+                            }
+                        }
+                    }
+                }
+
+                if (this.attackTimeDuring == this.getBarrageLength()){
+                    this.attackTimeDuring = -10;
+                }
+            }
+        } else {
+            /*Caps how far out the barrage hit goes*/
+            Entity targetEntity = getTargetEntity(this.self,-1);
+
+            List<Entity> listE = getTargetEntityList(this.self,-1);
+            barrageImpact(storeEnt, this.attackTimeDuring);
+            if (!listE.isEmpty()){
+                for (int i = 0; i< listE.size(); i++){
+                    if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
+                        if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
+                            barrageImpact(listE.get(i), this.attackTimeDuring + 1000);
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+
+    public float getBarrageFinisherKnockback(){
+        return 1.0F;
+    }
+
+    /**If you override this for any reason, you should probably call the super(). Although SP and TW override
+     * this, you can probably do better*/
+    public void barrageImpact(Entity entity, int hitNumber){
+        if (this.isBarrageAttacking()) {
+            if (bonusBarrageConditions()) {
+                boolean sideHit = false;
+                if (hitNumber > 1000){
+                    if (!(ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect)){
+                        return;
+                    }
+                    hitNumber-=1000;
+                    sideHit = true;
+                }
+                boolean lastHit = (hitNumber >= this.getBarrageLength());
+                if (entity != null) {
+                        hitParticles(entity);
+
+                        float pow;
+                        float knockbackStrength = 0;
+                        /**By saving the velocity before hitting, we can let people approach barraging foes
+                         * through shields.*/
+                        Vec3 prevVelocity = entity.getDeltaMovement();
+                        if (lastHit) {
+                            pow = this.getBarrageFinisherStrength(entity);
+                            knockbackStrength = this.getBarrageFinisherKnockback();
+                        } else {
+                            pow = this.getBarrageHitStrength(entity);
+                            float mn = this.getBarrageLength() - hitNumber;
+                            if (mn == 0) {
+                                mn = 0.015F;
+                            } else {
+                                mn = ((0.015F / (mn)));
+                            }
+                            knockbackStrength = 0.014F - mn;
+                        }
+
+                        if (sideHit){
+                            pow/=4;
+                            knockbackStrength/=6;
+                        }
+
+                        if (StandRushDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
+                            if (entity instanceof LivingEntity LE) {
+                                if (lastHit) {
+                                    setDazed((LivingEntity) entity, (byte) 0);
+
+                                    if (!sideHit) {
+                                        ((StandUser)LE).roundabout$setDestructionTrailTicks(80);
+                                        playBarrageEndNoise(0, entity);
+                                    }
+                                } else {
+                                    setDazed((LivingEntity) entity, (byte) 3);
+                                    if (!sideHit) {
+                                        playBarrageNoise(hitNumber, entity);
+                                    }
+                                }
+                            }
+                            barrageImpact2(entity, lastHit, knockbackStrength);
+                        } else {
+                            if (lastHit) {
+                                knockShield2(entity, 200);
+                                if (!sideHit) {
+                                    playBarrageBlockEndNoise(0, entity);
+                                }
+                            } else {
+                                entity.setDeltaMovement(prevVelocity);
+                                playBarrageBlockNoise();
+                            }
+                        }
+                } else {
+                    if (!sideHit) {
+                        playBarrageMissNoise(hitNumber);
+                    }
+                }
+
+                if (lastHit) {
+                    this.attackTimeDuring = -10;
+                }
+            } else {
+                ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
+            }
+        } else {
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
+        }
+    }
+    public float getBarrageDamagePlayer(){
+        return applyComboDamage(6);
+    }
+    public float getBarrageDamageMob(){
+        return applyComboDamage(10);
+    }
+    public float getBarrageFinisherStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return applyComboDamage(2);
+        } else {
+            return applyComboDamage(4);
+        }
+    }
+    public float getBarrageHitStrength(Entity entity){
+        float barrageLength = this.getBarrageLength();
+        float power;
+        if (this.getReducedDamage(entity)){
+            power = getBarrageDamagePlayer()/barrageLength;
+        } else {
+            power = getBarrageDamageMob()/barrageLength;
+        }
+        /*Barrage hits are incapable of killing their target until the last hit.*/
+        if (entity instanceof LivingEntity){
+            if (power >= ((LivingEntity) entity).getHealth() && ClientNetworking.getAppropriateConfig().generalStandSettings.barragesOnlyKillOnLastHit){
+                if (entity instanceof Player) {
+                    power = 0.00001F;
+                } else {
+                    power = 0F;
+                }
+            }
+        }
+        return power;
+    }
+
+
+    public void playBarrageMissNoise(int hitNumber){
+        if (!this.self.level().isClientSide()) {
+            if (hitNumber%2==0) {
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_MISS_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
+            }
+        }
+    }
+    public void playBarrageNoise(int hitNumber, Entity entity){
+        if (!this.self.level().isClientSide()) {
+            if (hitNumber % 2 == 0) {
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
+            }
+        }
+    }
+
+    public void playBarrageEndNoise(float mod, Entity entity){
+        if (!this.self.level().isClientSide()) {
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_END_EVENT, SoundSource.PLAYERS, 0.95F+mod, 1f);
+        }
+    }
+    public void playBarrageBlockEndNoise(float mod, Entity entity){
+        if (!this.self.level().isClientSide()) {
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_END_BLOCK_EVENT, SoundSource.PLAYERS, 0.88F+mod, 1.7f);
+        }
+    }
+    public void playBarrageBlockNoise(){
+        if (!this.self.level().isClientSide()) {
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_BLOCK_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
+        }
+    }
+    public void barrageImpact2(Entity entity, boolean lastHit, float knockbackStrength){
+        if (entity instanceof LivingEntity){
+            if (lastHit) {
+                takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
+            } else {
+                takeKnockbackUp(entity,knockbackStrength);
+            }
+        }
+    }
+
+    public int getBarrageRecoilTime(){
+        return 30;
+    }
 
     @Override
     public boolean setPowerGuard(){
@@ -292,19 +564,18 @@ public class PunchingGeneralPowers extends GeneralPowers {
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
-        StandUser standUser = ((StandUser) playerEntity);
         boolean powerOn = PowerTypes.hasPowerActive(playerEntity);
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
 
-        float attackTimeDuring = standUser.roundabout$getAttackTimeDuring();
-        if (powerOn && standUser.roundabout$getStandPowers().isBarrageAttacking() && attackTimeDuring > -1) {
-            int ClashTime = 15 - Math.round((attackTimeDuring / standUser.roundabout$getStandPowers().getBarrageLength()) * 15);
+        float attackTimeDuring = getAttackTimeDuring();
+        if (powerOn && isBarrageAttacking() && attackTimeDuring > -1) {
+            int ClashTime = 15 - Math.round((attackTimeDuring / getBarrageLength()) * 15);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
 
-        } else if (powerOn && standUser.roundabout$getStandPowers().isBarrageCharging()) {
-            int ClashTime = Math.round((attackTimeDuring / standUser.roundabout$getStandPowers().getBarrageWindup()) * 15);
+        } else if (powerOn && isBarrageCharging()) {
+            int ClashTime = Math.round((attackTimeDuring / getBarrageWindup()) * 15);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
 

@@ -14,6 +14,7 @@ import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.ModItems;
@@ -34,10 +35,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -167,11 +170,86 @@ public class AbilityScapeBasis {
         return false;
     }
 
+    public boolean isBarrageCharging(){
+        return (this.activePower == PowerIndex.BARRAGE_CHARGE);
+    }
+    public boolean isBarrageAttacking(){
+        return this.activePower == PowerIndex.BARRAGE;
+    }
+
     public boolean getReducedDamage(Entity entity){
         return (entity instanceof Player || entity instanceof StandEntity ||
                 ((entity instanceof LivingEntity LE && !((StandUser)LE).roundabout$getStandDisc().isEmpty()) &&
                         ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.standUserMobsTakePlayerDamageMultipliers)
         );
+    }
+
+    public int getBarrageLength(){
+        return 60;
+    }
+
+
+
+
+    public void hitParticles(Entity entity){
+        Vec3 vec = getRandPos(entity);
+        ((ServerLevel) this.self.level()).sendParticles(
+                getImpactParticle(),
+                vec.x,vec.y,vec.z,
+                1, 0.0, 0.0, 0.0, 1);
+    }
+    public Vec3 getRandPos(Entity ent){
+        Vec3 funnyVec = new Vec3(0,(ent.getBbHeight()*0.65),0);
+        Direction gd = ((IGravityEntity)ent).roundabout$getGravityDirection();
+        if (gd != Direction.DOWN){
+            funnyVec = RotationUtil.vecPlayerToWorld(funnyVec,gd);
+        }
+        return new Vec3(
+                ent.getRandomX(1)+funnyVec.x,
+                getRandomY(ent,0.33)+funnyVec.y,
+                ent.getRandomZ(1)+funnyVec.z
+        );
+    }
+
+    public double getRandomY(Entity ent, double $$0) {
+        return ent.getY((2.0 * Math.random() - 1.0) * $$0);
+    }
+
+
+    public SimpleParticleType getImpactParticle(){
+        SimpleParticleType punchpart;
+        float random = (float) (Math.random()*3);
+        if (random > 2){
+            punchpart = ModParticles.PUNCH_IMPACT_A;
+        } else if (random > 1){
+            punchpart = ModParticles.PUNCH_IMPACT_B;
+        } else {
+            punchpart = ModParticles.PUNCH_IMPACT_C;
+        }
+        return punchpart;
+    }
+
+    public SoundEvent getBarrageChargeSound(){
+        return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
+    }
+    public void playBarrageChargeSound(){
+        if (!this.self.level().isClientSide()) {
+            SoundEvent barrageChargeSound = this.getBarrageChargeSound();
+            if (barrageChargeSound != null) {
+                playSoundsIfNearby(SoundIndex.BARRAGE_CHARGE_SOUND, 27, false);
+            }
+        }
+    }
+    public void hitParticlesCenter(Entity entity){
+        Vec3 funnyVec = new Vec3(0,(entity.getBbHeight()*0.65),0);
+        Direction gd = ((IGravityEntity)entity).roundabout$getGravityDirection();
+        if (gd != Direction.DOWN){
+            funnyVec = RotationUtil.vecPlayerToWorld(funnyVec,gd);
+        }
+        ((ServerLevel) this.self.level()).sendParticles(
+                getImpactParticle(),
+                entity.getX()+funnyVec.x,entity.getY()+funnyVec.y,entity.getZ()+funnyVec.z,
+                1, 0.0, 0.0, 0.0, 1);
     }
 
     /**If your character is in a position to change abilities. By default, you are locked into clashing while clashing

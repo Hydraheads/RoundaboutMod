@@ -1144,14 +1144,16 @@ public abstract class InputEvents implements IInputEvents {
                         }
 
                     }
+
+
                 }
                 if (PowerTypes.hasPowerActivelyEquipped(player)){
-                    if (standComp.roundabout$isGuarding() || standComp.roundabout$isBarraging()) {
+                    if (standComp.roundabout$isGuarding() || generalPowers.isBarraging()) {
                         /*This code makes it so there is a slight delay between blocking and subsequent punch chain attacks.
                          * This delay exists so you can't right click left click chain for instant full power punches.*/
                             standComp.roundabout$tryPowerP(PowerIndex.NONE,true);
                             if (generalPowers.getActivePowerPhase() > 0) {
-                                standComp.roundabout$setInterruptCD(3);
+                                generalPowers.setInterruptCD(3);
                             }
                             C2SPacketUtil.guardCancelPacket();
                     }
@@ -1225,7 +1227,6 @@ public abstract class InputEvents implements IInputEvents {
                     if (!isMining && standComp.roundabout$isGuarding() && !standComp.roundabout$isBarraging()) {
                         if (rdbt$isInitialized(player)) {
                             powers.preCheckButtonInputBarrage(this.options.keyAttack.isDown(), this.options);
-                            generalPowers.preCheckButtonInputBarrage(this.options.keyAttack.isDown(), this.options);
                         }
                     }
                 }
@@ -1237,6 +1238,13 @@ public abstract class InputEvents implements IInputEvents {
                     if (rdbt$isInitialized(player)) {
                         ((IFatePlayer) player).rdbt$getFatePowers().buttonInputAttack(this.options.keyAttack.isDown(), this.options);
                         generalPowers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
+                    }
+                }
+                if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
+                    if (!isMining && standComp.roundabout$isGuarding() && !standComp.roundabout$isBarraging()) {
+                        if (rdbt$isInitialized(player)) {
+                            generalPowers.preCheckButtonInputBarrage(this.options.keyAttack.isDown(), this.options);
+                        }
                     }
                 }
             }

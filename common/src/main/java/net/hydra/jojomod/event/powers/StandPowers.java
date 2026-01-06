@@ -722,9 +722,7 @@ public class StandPowers extends AbilityScapeBasis {
     public int getBarrageWindup(){
         return ClientNetworking.getAppropriateConfig().generalStandSettings.barrageWindup;
     }
-    public int getBarrageLength(){
-        return 60;
-    }
+
 
     public boolean setPowerAttack(){
         return false;
@@ -931,9 +929,7 @@ public class StandPowers extends AbilityScapeBasis {
     public ResourceLocation getBarrageCryID(){
         return ModSounds.STAND_THEWORLD_MUDA1_SOUND_ID;
     }
-    public SoundEvent getBarrageChargeSound(){
-        return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
-    }
+
 
     public ResourceLocation getBarrageChargeID(){
         return ModSounds.STAND_BARRAGE_WINDUP_ID;
@@ -961,14 +957,7 @@ public class StandPowers extends AbilityScapeBasis {
         if (!this.self.level().isClientSide()) {
         }
     }
-    public void playBarrageChargeSound(){
-        if (!this.self.level().isClientSide()) {
-            SoundEvent barrageChargeSound = this.getBarrageChargeSound();
-            if (barrageChargeSound != null) {
-                playSoundsIfNearby(SoundIndex.BARRAGE_CHARGE_SOUND, 27, false);
-            }
-        }
-    }
+
 
 
 
@@ -1632,13 +1621,6 @@ public class StandPowers extends AbilityScapeBasis {
         return this.activePower == PowerIndex.BARRAGE_CLASH && this.attackTimeDuring > -1;
     }
 
-    public boolean isBarrageCharging(){
-        return (this.activePower == PowerIndex.BARRAGE_CHARGE);
-    }
-    public boolean isBarrageAttacking(){
-        return this.activePower == PowerIndex.BARRAGE;
-    }
-
     public void updateBarrageCharge(){
         if (this.attackTimeDuring >= this.getBarrageWindup()) {
             ((StandUser) this.self).roundabout$tryPower(PowerIndex.BARRAGE, true);
@@ -1767,57 +1749,6 @@ public class StandPowers extends AbilityScapeBasis {
         return Math.max(0.0f, Math.min(1.0f, normalized)) * maxOverlay;
     }
 
-
-
-    public Vec3 getRandPos(Entity ent){
-        Vec3 funnyVec = new Vec3(0,(ent.getBbHeight()*0.65),0);
-        Direction gd = ((IGravityEntity)ent).roundabout$getGravityDirection();
-        if (gd != Direction.DOWN){
-            funnyVec = RotationUtil.vecPlayerToWorld(funnyVec,gd);
-        }
-        return new Vec3(
-                ent.getRandomX(1)+funnyVec.x,
-                getRandomY(ent,0.33)+funnyVec.y,
-                ent.getRandomZ(1)+funnyVec.z
-        );
-    }
-
-    public double getRandomY(Entity ent, double $$0) {
-        return ent.getY((2.0 * Math.random() - 1.0) * $$0);
-    }
-
-
-    public SimpleParticleType getImpactParticle(){
-        SimpleParticleType punchpart;
-        float random = (float) (Math.random()*3);
-        if (random > 2){
-            punchpart = ModParticles.PUNCH_IMPACT_A;
-        } else if (random > 1){
-            punchpart = ModParticles.PUNCH_IMPACT_B;
-        } else {
-            punchpart = ModParticles.PUNCH_IMPACT_C;
-        }
-        return punchpart;
-    }
-
-    public void hitParticles(Entity entity){
-        Vec3 vec = getRandPos(entity);
-        ((ServerLevel) this.self.level()).sendParticles(
-                getImpactParticle(),
-                vec.x,vec.y,vec.z,
-                1, 0.0, 0.0, 0.0, 1);
-    }
-    public void hitParticlesCenter(Entity entity){
-        Vec3 funnyVec = new Vec3(0,(entity.getBbHeight()*0.65),0);
-        Direction gd = ((IGravityEntity)entity).roundabout$getGravityDirection();
-        if (gd != Direction.DOWN){
-            funnyVec = RotationUtil.vecPlayerToWorld(funnyVec,gd);
-        }
-        ((ServerLevel) this.self.level()).sendParticles(
-                getImpactParticle(),
-                entity.getX()+funnyVec.x,entity.getY()+funnyVec.y,entity.getZ()+funnyVec.z,
-                1, 0.0, 0.0, 0.0, 1);
-    }
 
     /**If you override this for any reason, you should probably call the super(). Although SP and TW override
      * this, you can probably do better*/
