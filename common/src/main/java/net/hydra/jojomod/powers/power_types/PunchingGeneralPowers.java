@@ -200,11 +200,11 @@ public class PunchingGeneralPowers extends GeneralPowers {
     }
 
     public int getComboTier(){
-        if (comboAmt <= 7){
+        if (comboAmt <= 9){
             return 1;
-        } else if (comboAmt <= 19){
+        } else if (comboAmt <= 24){
             return 2;
-        } else if (comboAmt <= 39){
+        } else if (comboAmt <= 49){
             return 3;
         }
         return 4;
@@ -214,7 +214,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
         //Every combo hit is 1% more damage
         float curve = 1 + ((float) comboAmt * 0.01F);
         //Every combo level is 20% more damage
-        curve += ((float) getComboTier() * 0.2F);
+        curve += ((float) (getComboTier()-1) * 0.2F);
         //max of 3x damage
         curve = Mth.clamp(curve,0,3F);
 
