@@ -17,6 +17,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.*;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
@@ -655,6 +656,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 amt = 6 - (1 + MobEffectUtil.getDigSpeedAmplification(rdbt$this()));
             } else {
                 amt = this.hasEffect(MobEffects.DIG_SLOWDOWN) ? 6 + (1 + this.getEffect(MobEffects.DIG_SLOWDOWN).getAmplifier()) * 2 : 6;
+            }
+            //While barraging their arms move faster
+            if (rdbt$this() instanceof Player pl && ((IPlayerEntity)pl).roundabout$GetPos2() == PlayerPosIndex.BARRAGE){
+                cir.setReturnValue((int) (amt*0.8));
+                return;
             }
             cir.setReturnValue((int) (amt*1.4));
         }

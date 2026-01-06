@@ -131,8 +131,9 @@ public class PunchingGeneralPowers extends GeneralPowers {
             S2CPacketUtil.sendGenericIntToClientPacket(sp, PacketDataIndex.S2C_INT_COMBO_SEC_LEFT,getComboExpireTicks());
         }
     }
+
     @Override
-    public void tickPower(){
+    public void updateUniqueMoves(){
         if (this.isBarraging()) {
             if (bonusBarrageConditions()) {
                 if (this.isBarrageCharging()) {
@@ -144,8 +145,18 @@ public class PunchingGeneralPowers extends GeneralPowers {
                 ((StandUser) this.self).roundabout$tryPowerP(PowerIndex.NONE, true);
             }
         }
+        super.updateUniqueMoves();
+    }
+    @Override
+    public void tickPower(){
         if (!self.level().isClientSide()) {
             if (getActivePower() != PowerIndex.GUARD && getPlayerPos2() == PlayerPosIndex.GUARD) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            }
+            if (getActivePower() != PowerIndex.BARRAGE_CHARGE && getPlayerPos2() == PlayerPosIndex.BARRAGE_CHARGE) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            }
+            if (getActivePower() != PowerIndex.BARRAGE && getPlayerPos2() == PlayerPosIndex.BARRAGE) {
                 setPlayerPos2(PlayerPosIndex.NONE);
             }
 
@@ -177,6 +188,12 @@ public class PunchingGeneralPowers extends GeneralPowers {
             if (move != PowerIndex.GUARD && getPlayerPos2() == PlayerPosIndex.GUARD) {
                 setPlayerPos2(PlayerPosIndex.NONE);
             }
+            if (move != PowerIndex.BARRAGE_CHARGE && getPlayerPos2() == PlayerPosIndex.BARRAGE_CHARGE) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            }
+            if (move != PowerIndex.BARRAGE && getPlayerPos2() == PlayerPosIndex.BARRAGE) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            }
         }
 
         if (!this.self.level().isClientSide && this.isBarraging()  && (move != PowerIndex.BARRAGE && move != PowerIndex.BARRAGE_CLASH
@@ -194,6 +211,9 @@ public class PunchingGeneralPowers extends GeneralPowers {
         this.setAttackTimeMax(this.getBarrageRecoilTime());
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
         playBarrageCrySound();
+        if (getPlayerPos2() != PlayerPosIndex.BARRAGE) {
+            setPlayerPos2(PlayerPosIndex.BARRAGE);
+        }
     }
     @Override
     public void updateMovesFromPacket(byte activePower){
@@ -206,6 +226,9 @@ public class PunchingGeneralPowers extends GeneralPowers {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE_CHARGE);
         playBarrageChargeSound();
+        if (getPlayerPos2() != PlayerPosIndex.BARRAGE_CHARGE) {
+            setPlayerPos2(PlayerPosIndex.BARRAGE_CHARGE);
+        }
     }
     @Override
     /**Override this to set the special move*/
@@ -278,6 +301,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
                     id = storeEnt.getId();
                 }
                 C2SPacketUtil.powersBarrageHitPacket(id, this.attackTimeDuring);
+                /**
                 if (!listE.isEmpty() && ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect){
                     for (int i = 0; i< listE.size(); i++){
                         if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
@@ -287,6 +311,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
                         }
                     }
                 }
+                 **/
 
                 if (this.attackTimeDuring == this.getBarrageLength()){
                     this.attackTimeDuring = -10;
@@ -294,9 +319,9 @@ public class PunchingGeneralPowers extends GeneralPowers {
             }
         } else {
             /*Caps how far out the barrage hit goes*/
-            Entity targetEntity = getTargetEntity(this.self,-1);
+            Entity targetEntity = getTargetEntity(this.self,3);
 
-            List<Entity> listE = getTargetEntityList(this.self,-1);
+            List<Entity> listE = getTargetEntityList(this.self,3);
             barrageImpact(storeEnt, this.attackTimeDuring);
             if (!listE.isEmpty()){
                 for (int i = 0; i< listE.size(); i++){
@@ -318,6 +343,9 @@ public class PunchingGeneralPowers extends GeneralPowers {
     /**If you override this for any reason, you should probably call the super(). Although SP and TW override
      * this, you can probably do better*/
     public void barrageImpact(Entity entity, int hitNumber){
+        if (hitNumber % 3 == 0){
+            self.swing(InteractionHand.MAIN_HAND, true);
+        }
         if (this.isBarrageAttacking()) {
             if (bonusBarrageConditions()) {
                 boolean sideHit = false;

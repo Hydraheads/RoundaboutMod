@@ -13,6 +13,8 @@ public class PlayerPosIndex {
     public static final byte BLOOD_SUCK = 1;
     public static final byte HAIR_EXTENSION = 3;
     public static final byte GUARD = 4;
+    public static final byte BARRAGE_CHARGE = 5;
+    public static final byte BARRAGE = 6;
 
     public static final byte SNUBNOSE_AIM = 3;
 
