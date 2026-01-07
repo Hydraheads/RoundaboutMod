@@ -18,12 +18,16 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
+import net.minecraftforge.client.gui.overlay.GuiOverlayManager;
+import net.minecraftforge.client.gui.overlay.NamedGuiOverlay;
+import org.checkerframework.checker.units.qual.A;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ForgeGui.class)
 public abstract class ForgeForgeGui extends Gui {
@@ -93,6 +97,17 @@ public abstract class ForgeForgeGui extends Gui {
                 }
             }
         }
+    }
+
+    @Inject(method = "pre",at = @At(value = "HEAD"),remap = false, cancellable = true )
+    private void roundabout$stopGuiCancelling(NamedGuiOverlay overlay, GuiGraphics guiGraphics, CallbackInfoReturnable<Boolean> cir) {
+        /// this should allow for specifically stopping cancellations, but it doesn't seem to want to cooperate
+        if (overlay.id().getNamespace().equals("epicfight")) {
+            cir.setReturnValue(false);
+            return;
+        }
+        cir.setReturnValue(false);
+
     }
 
     @Unique
