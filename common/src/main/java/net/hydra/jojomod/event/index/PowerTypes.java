@@ -197,6 +197,14 @@ public enum PowerTypes {
                     setPowerType(entity, (byte) NONE.ordinal());
                 }
             }
+
+            if (bt == NONE.ordinal()){
+                if (((StandUser)entity).roundabout$hasAStand()){
+                    setPowerType(entity, (byte) STAND.ordinal());
+                } else if (FateTypes.isVampire(pl)){
+                    setPowerType(entity, (byte) VAMPIRE.ordinal());
+                }
+            }
         }
     }
 }

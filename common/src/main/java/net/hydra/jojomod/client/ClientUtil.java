@@ -1535,8 +1535,12 @@ public class ClientUtil {
             //gtranslation = RotationUtil.vecPlayerToWorld(gtranslation,gravityDirection);
             stack.translate(gtranslation.x,gtranslation.y,gtranslation.z);
 
+            float opacity = 0.5F;
+            if (ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().opacitySettings != null){
+                opacity = ConfigManager.getClientConfig().opacitySettings.opacityOfPlayerBarrageArms;
+            }
             ModStrayModels.barrageArmsPart.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light,
-                    r,g,b,0.6F);
+                    r,g,b,opacity);
             stack.popPose();
         }
 

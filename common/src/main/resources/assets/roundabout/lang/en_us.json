@@ -1949,6 +1949,9 @@
   "config.roundabout.enablePickyIconRendering.desc": "Hides ability icons when all of your cooldowns are off.",
 
 
+  "config.roundabout.opacityOfPlayerBarrageArms.name": "Player Skin Barrage Arms",
+  "config.roundabout.opacityOfPlayerBarrageArms.desc": "The opacity of first person barrage arms coming from the player (as in vampirism or hamon rushes).",
+
   "config.roundabout.spiritOutInterruption.name": "Full Spirit Interrupt",
   "config.roundabout.spiritOutInterruption.desc": "By default, you need your powers activated (or to be powerless) to interrupt attacks. This mechanic is called full spirit interrupt, and serves to make the interrupting mechanic more satisfying. Turn off this setting for classic roundabout interrupts.",
   "config.roundabout.standThrownEntityFallDamageImmmunityTicks.name": "Thrown Fall Prot Ticks",

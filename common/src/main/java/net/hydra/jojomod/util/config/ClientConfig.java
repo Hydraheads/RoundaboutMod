@@ -160,6 +160,8 @@ public class ClientConfig implements Cloneable {
         public Float opacityWhileAttacking;
         @FloatOption(group = "inherit", value = 100, min = 0, max = 100)
         public Float opacityOfOthers;
+        @FloatOption(group = "inherit", value = 0.5F, min = 0, max = 1)
+        public Float opacityOfPlayerBarrageArms;
 
     }
     public static class DynamicSettings {
