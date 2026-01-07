@@ -2,19 +2,18 @@ package net.hydra.jojomod.powers.power_types;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -167,7 +166,22 @@ public class PunchingGeneralPowers extends GeneralPowers {
                 }
             }
         }
+        if (this.getSelf().onGround()) {
+            this.fallTime = 0;
+        } else {
+            this.fallTime += 1;
+        }
         super.tickPower();
+    }
+    int fallTime = 0;
+    // Client code taken from Anubis
+    public boolean canUseAirAttack() {
+        if (self.level().isClientSide()) {
+            return this.isHoldingSneak()
+                    && !this.getSelf().onGround()
+                    && (this.fallTime > 4 || ClientUtil.isJumpKeyHeld());
+        }
+        return false;
     }
 
     @Override

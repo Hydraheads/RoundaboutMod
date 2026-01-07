@@ -1141,7 +1141,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
     }
 
     public boolean inShootingMode(){
-        return getStandUserSelf().roundabout$getCombatMode();
+        return getStandUserSelf().roundabout$getCombatMode() && PowerTypes.hasStandActivelyEquipped(self);
     }
     public boolean shootExplosiveBubble(){
         this.setCooldown(PowerIndex.SKILL_4, 3);

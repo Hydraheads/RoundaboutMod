@@ -483,7 +483,7 @@ public class PowersWalkingHeart extends NewDashPreset {
         return super.inputSpeedModifiers(basis);
     }
     public boolean inCombatMode(){
-        return getStandUserSelf().roundabout$getCombatMode();
+        return getStandUserSelf().roundabout$getCombatMode() && PowerTypes.hasStandActivelyEquipped(self);
     }
 
     public boolean canCornerCutConfig(){

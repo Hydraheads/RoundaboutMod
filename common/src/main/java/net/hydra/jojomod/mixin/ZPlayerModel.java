@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.animations.AnubisAnimations;
 import net.hydra.jojomod.client.models.layers.animations.FirstPersonLayerAnimations;
 import net.hydra.jojomod.event.index.*;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.*;
@@ -104,7 +105,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             }
             IPlayerEntity ipe = ((IPlayerEntity) $$0);
             StandUser SE = ((StandUser) $$0);
-            if (SE.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && SE.roundabout$getEffectiveCombatMode()) {
+            if (SE.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && SE.roundabout$getEffectiveCombatMode() && PowerTypes.hasStandActivelyEquipped($$0)) {
                 if (ipe.roundabout$getBubbleShotAimPoints() > 0){
                     ipe.roundabout$getBubbleShotAim().startIfStopped($$0.tickCount); change = true;
                     this.roundabout$animate(ipe.roundabout$getBubbleShotAim(), FirstPersonLayerAnimations.bubble_aim_recoil, yes, 1f);
@@ -262,7 +263,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             /**Shoot mode aiming*/
             StandUser user = ((StandUser)$$0);
             if (rdbt$isNotPosing($$0)) {
-                if (user.roundabout$getEffectiveCombatMode() && !$$0.isUsingItem() ) {
+                if (user.roundabout$getEffectiveCombatMode() && !$$0.isUsingItem()) {
                     if (user.roundabout$rotateArmToShoot()) {
                         boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
                         if ($$9) {
@@ -272,7 +273,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                             this.leftArm.yRot = 0.1F + this.head.yRot;
                             this.leftArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
                         }
-                    } else if (user.roundabout$getStandPowers() instanceof PowersWalkingHeart) {
+                    } else if (user.roundabout$getStandPowers() instanceof PowersWalkingHeart && PowerTypes.hasStandActivelyEquipped($$0)) {
                         boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
                         if ($$9) {
                             this.rightLeg.yRot = -0.1F + this.head.yRot;

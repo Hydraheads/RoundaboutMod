@@ -1719,6 +1719,9 @@ public class ClientUtil {
         pl.roundabout$getSnubnoseAimLeft().stop();
         pl.roundabout$getSnubnoseRecoilLeft().stop();
     }
+    public static boolean isJumpKeyHeld(){
+        return Minecraft.getInstance().options.keyJump.isDown();
+    }
     public static void tommyRenderCleanupHelper(Entity cameraEnt) {
         IPlayerEntity pl = ((IPlayerEntity) cameraEnt);
         pl.roundabout$getTommyModelAim().stop();

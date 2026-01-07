@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.minecraft.client.model.HumanoidModel;
@@ -37,7 +38,7 @@ public class ShootingArmLayer <T extends LivingEntity, A extends HumanoidModel<T
             if (!entity.isInvisible()) {
                 if (entity!= null) {
                     StandUser user = ((StandUser)livent);
-                    if (user.roundabout$getCombatMode()) {
+                    if (user.roundabout$getCombatMode() && PowerTypes.hasStandActivelyEquipped(entity)) {
                         if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
                             ClientUtil.pushPoseAndCooperate(poseStack,47);
 
@@ -75,7 +76,7 @@ public class ShootingArmLayer <T extends LivingEntity, A extends HumanoidModel<T
             if (!entity.isInvisible()) {
                 if (entity!= null) {
                     StandUser user = ((StandUser)entity);
-                    if (user.roundabout$getCombatMode()) {
+                    if (user.roundabout$getCombatMode() && PowerTypes.hasStandActivelyEquipped(entity)) {
                         if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
                             ClientUtil.pushPoseAndCooperate(poseStack,48);
 
