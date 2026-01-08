@@ -2769,6 +2769,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$setActive(boolean active){
         if (!active){
             roundabout$tryPower(PowerIndex.NONE, true);
+            roundabout$tryPowerP(PowerIndex.NONE, true);
         }
         roundabout$getStandPowers().onStandSummon(!active);
 
