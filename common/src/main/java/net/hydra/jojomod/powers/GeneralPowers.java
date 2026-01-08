@@ -1,6 +1,7 @@
 package net.hydra.jojomod.powers;
 
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -14,6 +15,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector2i;
@@ -179,6 +181,24 @@ public class GeneralPowers extends AbilityScapeBasis {
 
         }
         return false;
+    }
+
+    @Override
+    public void tickPower() {
+        if (!self.level().isClientSide()) {
+            if (getActivePower() != PowerIndex.GUARD && getPlayerPos2() == PlayerPosIndex.GUARD) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            }
+            if (getActivePower() != PowerIndex.BARRAGE_CHARGE && getPlayerPos2() == PlayerPosIndex.BARRAGE_CHARGE) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            }
+            if (getActivePower() != PowerIndex.BARRAGE && getPlayerPos2() == PlayerPosIndex.BARRAGE) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            }
+            if (this.self instanceof Player PE && PE.isSpectator()) {
+                ((StandUser) this.getSelf()).roundabout$setActive(false);
+            }
+        }
     }
 
     /**Releasing right click normally stops guarding but that's something you can adjust*/

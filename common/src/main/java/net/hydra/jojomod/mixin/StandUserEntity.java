@@ -2942,6 +2942,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         } else {
             this.roundabout$tryPower(PowerIndex.NONE,true);
+            this.roundabout$tryPowerP(PowerIndex.NONE,true);
             active=false;
         }
         this.roundabout$setActive(active);

@@ -149,16 +149,6 @@ public class PunchingGeneralPowers extends GeneralPowers {
     @Override
     public void tickPower(){
         if (!self.level().isClientSide()) {
-            if (getActivePower() != PowerIndex.GUARD && getPlayerPos2() == PlayerPosIndex.GUARD) {
-                setPlayerPos2(PlayerPosIndex.NONE);
-            }
-            if (getActivePower() != PowerIndex.BARRAGE_CHARGE && getPlayerPos2() == PlayerPosIndex.BARRAGE_CHARGE) {
-                setPlayerPos2(PlayerPosIndex.NONE);
-            }
-            if (getActivePower() != PowerIndex.BARRAGE && getPlayerPos2() == PlayerPosIndex.BARRAGE) {
-                setPlayerPos2(PlayerPosIndex.NONE);
-            }
-
             if (getComboExpireTicks() > 0){
                 setComboExpireTicks(getComboExpireTicks()-1);
                 if (getComboExpireTicks() <= 0){

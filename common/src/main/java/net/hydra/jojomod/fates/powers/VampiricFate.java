@@ -228,7 +228,7 @@ public int speedActivated = 0;
             }
         } else {
 
-            if (hasStandActive(self) && getActivePower() == SUPER_HEARING){
+            if ((hasStandActive(self) || PowerTypes.hasPowerActive(self)) && getActivePower() == SUPER_HEARING){
                 xTryPower(PowerIndex.NONE,true);
             }
 
