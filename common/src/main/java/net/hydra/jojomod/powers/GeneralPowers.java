@@ -199,6 +199,7 @@ public class GeneralPowers extends AbilityScapeBasis {
                 ((StandUser) this.getSelf()).roundabout$setActive(false);
             }
         }
+        super.tickPower();
     }
 
     /**Releasing right click normally stops guarding but that's something you can adjust*/

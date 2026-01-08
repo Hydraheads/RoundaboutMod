@@ -24,6 +24,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         return new VampireGeneralPowers(entity);
     }
 
+
+    public static final byte POWER_DIVE = PowerIndex.SNEAK_ATTACK_CHARGE;
+    public static final byte POWER_SWEEP = PowerIndex.SNEAK_ATTACK;
+
     /**The text name of the fate*/
     public Component getPowerName(){
         return Component.translatable("text.roundabout.powers.vampire");
@@ -73,5 +77,20 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
             }
         }
+    }
+
+
+    @Override
+    /**Override this to set the special move*/
+    public boolean setPowerOther(int move, int lastMove) {
+        if (move == POWER_DIVE) {
+            doDive();
+        }
+
+        return super.setPowerOther(move,lastMove);
+    }
+
+    public void doDive(){
+
     }
 }
