@@ -361,10 +361,7 @@ public class StandPowers extends AbilityScapeBasis {
     /**Similar to above but less strict on damage source and doesn't outright cancel*/
     public void onActuallyHurt(DamageSource $$0, float $$1){
     }
-    /**When damage is dealt to you, intercept or run code based off of it, or potentially cancel it*/
-    public boolean interceptDamageEvent(DamageSource $$0, float $$1){
-        return false;
-    }
+
     /**When you eat food, intercept or run code based off of it*/
     public void eatEffectIntercept(ItemStack $$0, Level $$1, LivingEntity $$2){
     }

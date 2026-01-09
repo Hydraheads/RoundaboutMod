@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.powers.GeneralPowers;
@@ -15,6 +16,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -176,6 +179,14 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             }
             diveImpact(target);
         }
+    }
+
+    @Override
+    public boolean interceptDamageEvent(DamageSource $$0, float $$1) {
+        if (getActivePower() == POWER_DIVE && $$0.is(DamageTypes.MOB_ATTACK)){
+            return true;
+        }
+        return false;
     }
 
 

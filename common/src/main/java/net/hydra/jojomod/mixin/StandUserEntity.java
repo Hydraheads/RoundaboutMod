@@ -4481,6 +4481,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     ci.setReturnValue(false);
                     return;
                 }
+                if (living instanceof Player pl && ((IPowersPlayer)pl).rdbt$getPowers().interceptDamageEvent(damageSource, $$1)) {
+                    ci.setReturnValue(false);
+                    return;
+                }
             }
 
 

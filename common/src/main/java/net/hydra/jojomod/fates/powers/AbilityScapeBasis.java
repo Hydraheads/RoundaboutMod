@@ -1035,7 +1035,10 @@ public class AbilityScapeBasis {
         }
         this.getUserData(entity).roundabout$setDazed(dazeTime);
     }
-
+    /**When damage is dealt to you, intercept or run code based off of it, or potentially cancel it*/
+    public boolean interceptDamageEvent(DamageSource $$0, float $$1){
+        return false;
+    }
 
     /**If you have a stand entity summoned, get that*/
     public StandEntity getStandEntity(LivingEntity User){
