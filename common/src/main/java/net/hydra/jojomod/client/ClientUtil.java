@@ -1532,7 +1532,7 @@ public class ClientUtil {
             float g = isHurt ? 0.6F : 1.0F;
             float b = isHurt ? 0.6F : 1.0F;
             Direction gravityDirection = GravityAPI.getGravityDirection(cameraEnt);
-            Vec3 gtranslation = new Vec3(0,0.15,0);
+            Vec3 gtranslation = new Vec3(0,-0.4,0);
 
             //gtranslation = RotationUtil.vecPlayerToWorld(gtranslation,gravityDirection);
             stack.translate(gtranslation.x,gtranslation.y,gtranslation.z);
@@ -1542,6 +1542,7 @@ public class ClientUtil {
                 opacity = ConfigManager.getClientConfig().opacitySettings.opacityOfPlayerBarrageArms;
             }
             stack.mulPose(Axis.ZP.rotationDegrees(180f));
+            stack.mulPose(Axis.XP.rotationDegrees(-22));
             ModStrayModels.barrageArmsPart.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light,
                     r,g,b,opacity);
             stack.popPose();
