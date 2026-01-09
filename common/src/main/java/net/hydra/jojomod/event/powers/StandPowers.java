@@ -1406,7 +1406,6 @@ public class StandPowers extends AbilityScapeBasis {
 
     /**Preloads guard points*/
     public StandPowers generateStandPowersPre(LivingEntity entity){
-        ((StandUser)entity).roundabout$setGuardPoints(getMaxGuardPoints());
         StandPowers powers = generateStandPowers(entity);
 
         // If the stand powers are enabled, return them. Otherwise, return empty powers.

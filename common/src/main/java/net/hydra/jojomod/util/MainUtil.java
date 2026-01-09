@@ -2243,6 +2243,7 @@ public class MainUtil {
     public static void handShakeCooldowns(ServerPlayer player){
         ((StandUser)player).roundabout$getStandPowers().syncAllCooldowns();
         S2CPacketUtil.affirmCooldownsS2C(player);
+        ((StandUser)player).roundabout$syncGuard();
     }
 
 

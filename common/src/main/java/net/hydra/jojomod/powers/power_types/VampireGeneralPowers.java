@@ -218,7 +218,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 attackTargetId = 0;
                 float pow;
                 float knockbackStrength;
-                pow = getPunchStrength(entity);
+                pow = getPunchStrength(entity)*1.2F;
                 pow = applyComboDamage(pow);
                 knockbackStrength = 0.10F;
 

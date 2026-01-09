@@ -79,6 +79,7 @@ public interface StandUser {
     float roundabout$getMaxGuardPoints();
     void roundabout$setGuardPoints(float GuardPoints);
     boolean roundabout$getGuardBroken();
+    void roundabout$syncGuard();
     void roundabout$setGuardBroken(boolean guardBroken);
     void roundabout$fixGuard();
     void roundabout$regenGuard(float regen);
