@@ -1,6 +1,7 @@
 package net.hydra.jojomod.powers.power_types;
 
 import net.hydra.jojomod.access.IFatePlayer;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
@@ -11,10 +12,15 @@ import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -83,7 +89,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         super.tickPower();
         if (self.level().isClientSide()) {
             if (getActivePower() == POWER_DIVE){
-                if (!self.onGround()) {
+                if (attackTimeDuring > 20 || self.isInWater()){
+                    xTryPower(PowerIndex.NONE,false);
+                    tryPowerPacket(NONE);
+                } else if (!self.onGround()) {
                     Entity hit = DamageHandler.damageMobBelow(self, 1.5, 1);
                     if (hit != null) {
                         //set cooldown
@@ -161,6 +170,23 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         setActivePowerPhase((byte) 1);
         setActivePower(POWER_DIVE);
         if (!self.level().isClientSide()) {
+            for (int i = 0; i < 3; i++){
+
+
+                Vec3 cvec = new Vec3(Math.random()*0.2 - 0.1,1,Math.random()*0.2 - 0.1);
+                Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                if (gravD != Direction.DOWN){
+                    cvec = RotationUtil.vecPlayerToWorld(cvec,gravD);
+                }
+
+                ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
+                        this.getSelf().getX()+cvec.x, this.getSelf().getY()+cvec.y, this.getSelf().getZ()+cvec.z,
+                        0,
+                        cvec.x,
+                        cvec.y,
+                        cvec.z,
+                        0.8);
+            }
             this.self.level().playSound(null, this.self.blockPosition(),ModSounds.VAMPIRE_DIVE_EVENT, SoundSource.PLAYERS, 1F, (float) (0.96f + Math.random() * 0.08f));
         } else {
             Vec3 lower = self.getDeltaMovement();
@@ -200,6 +226,13 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     if (entity instanceof LivingEntity livingEntity){
                         ((StandUser)livingEntity).roundabout$setDazed((byte) 10);
                     }
+                    ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CRIT,
+                            entity.getEyePosition().x,entity.getEyePosition().y,entity.getEyePosition().z,
+                            10,
+                            0.2,
+                            0.2,
+                            0.2,
+                            0.01);
                     takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
                     this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.7f + Math.random() * 0.1f));
                     addToCombo();

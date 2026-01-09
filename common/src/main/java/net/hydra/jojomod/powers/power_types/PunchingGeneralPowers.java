@@ -172,6 +172,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
         if (self.level().isClientSide()) {
             return this.isHoldingSneak()
                     && !this.getSelf().onGround()
+                    && !self.isInWater()
                     && (this.fallTime > 0)
                     && (this.airTime > 6);
         }
@@ -569,6 +570,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
                     takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
                     this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
                     addToCombo();
+                    hitParticles(entity);
                 } else {
                     if (!this.self.level().isClientSide()) {
                         this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
