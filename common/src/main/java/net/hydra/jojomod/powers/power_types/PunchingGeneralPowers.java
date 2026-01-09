@@ -44,7 +44,6 @@ public class PunchingGeneralPowers extends GeneralPowers {
     public boolean isMining() {
         return true;
     }
-
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (keyIsDown) {
             if (activePowerPhase == 0){

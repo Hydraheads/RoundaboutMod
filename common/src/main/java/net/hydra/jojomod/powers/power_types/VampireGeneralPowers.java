@@ -7,6 +7,7 @@ import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
@@ -52,6 +53,19 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             }
         }
     };
+
+    @Override
+    public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (self.isCrouching() && canUseAirAttack()) {
+            if (keyIsDown) {
+                if (activePowerPhase == 0){
+                    this.tryPower(PowerIndex.SNEAK_ATTACK_CHARGE);
+                }
+            }
+        } else {
+            super.buttonInputAttack(keyIsDown,options);
+        }
+    }
 
 
     public float getPunchStrength(Entity entity){

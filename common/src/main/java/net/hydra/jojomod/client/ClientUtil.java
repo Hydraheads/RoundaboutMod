@@ -3,6 +3,7 @@ package net.hydra.jojomod.client;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.gui.*;
@@ -1531,7 +1532,8 @@ public class ClientUtil {
             float g = isHurt ? 0.6F : 1.0F;
             float b = isHurt ? 0.6F : 1.0F;
             Direction gravityDirection = GravityAPI.getGravityDirection(cameraEnt);
-            Vec3 gtranslation = new Vec3(0,-0.3,0);
+            Vec3 gtranslation = new Vec3(0,0.15,0);
+
             //gtranslation = RotationUtil.vecPlayerToWorld(gtranslation,gravityDirection);
             stack.translate(gtranslation.x,gtranslation.y,gtranslation.z);
 
@@ -1539,6 +1541,7 @@ public class ClientUtil {
             if (ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().opacitySettings != null){
                 opacity = ConfigManager.getClientConfig().opacitySettings.opacityOfPlayerBarrageArms;
             }
+            stack.mulPose(Axis.ZP.rotationDegrees(180f));
             ModStrayModels.barrageArmsPart.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light,
                     r,g,b,opacity);
             stack.popPose();
