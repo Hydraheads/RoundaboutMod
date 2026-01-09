@@ -161,11 +161,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         setActivePowerPhase((byte) 1);
         setActivePower(POWER_DIVE);
         if (!self.level().isClientSide()) {
-            Entity target = null;
-            if (attackTargetId > 0) {
-                target = self.level().getEntity(attackTargetId);
-            }
-            punchImpact(target);
+            this.self.level().playSound(null, this.self.blockPosition(),ModSounds.VAMPIRE_DIVE_EVENT, SoundSource.PLAYERS, 1F, (float) (0.96f + Math.random() * 0.08f));
         } else {
             Vec3 lower = self.getDeltaMovement();
             self.setDeltaMovement(lower.x(),-1.8,lower.z());

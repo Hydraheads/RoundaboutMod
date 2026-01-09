@@ -1751,6 +1751,12 @@
       "roundabout:stand_guard"
     ]
   },
+  "vampire_dive": {
+    "subtitle": "sounds.roundabout.vampire_dive",
+    "sounds": [
+      "roundabout:vampire_dive"
+    ]
+  },
   "timestop_the_world": {
     "subtitle": "sounds.roundabout.timestop_the_world",
     "sounds": [
