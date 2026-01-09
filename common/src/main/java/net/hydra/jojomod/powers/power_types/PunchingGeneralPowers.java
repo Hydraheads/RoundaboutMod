@@ -157,18 +157,23 @@ public class PunchingGeneralPowers extends GeneralPowers {
         }
         if (this.getSelf().onGround()) {
             this.fallTime = 0;
+            this.airTime = 0;
         } else {
-            this.fallTime += 1;
+            if (self.getDeltaMovement().y < 0) {
+                this.fallTime += 1;
+            }
+            airTime+=1;
         }
         super.tickPower();
     }
     int fallTime = 0;
-    // Client code taken from Anubis
+    int airTime = 0;
     public boolean canUseAirAttack() {
         if (self.level().isClientSide()) {
             return this.isHoldingSneak()
                     && !this.getSelf().onGround()
-                    && (this.fallTime > 4 || ClientUtil.isJumpKeyHeld());
+                    && (this.fallTime > 0)
+                    && (this.airTime > 6);
         }
         return false;
     }
@@ -551,6 +556,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
 
     public void punchImpact(Entity entity) {
         if (!this.self.level().isClientSide()) {
+            attackTargetId = 0;
             self.swing(InteractionHand.MAIN_HAND, true);
             if (entity != null) {
                 float pow;

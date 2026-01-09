@@ -1,11 +1,16 @@
 package net.hydra.jojomod.event.powers;
 
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.Comparator;
 import java.util.List;
 
 public class DamageHandler {
@@ -89,5 +94,38 @@ public class DamageHandler {
             return true;
         }
         return false;
+    }
+
+    public static Entity damageMobBelow(Entity player, double horizontalRange, double verticalRange) {
+        Level level = player.level();
+        Roundabout.LOGGER.info("1");
+
+        Vec3 playerPos = player.position();
+
+        // Define search area
+        AABB box = new AABB(
+                playerPos.x - horizontalRange,
+                playerPos.y - verticalRange,
+                playerPos.z - horizontalRange,
+                playerPos.x + horizontalRange,
+                playerPos.y,
+                playerPos.z + horizontalRange
+        );
+
+        // Get all mobs below
+        List<LivingEntity> mobs = level.getEntitiesOfClass(LivingEntity.class, box, e -> (e != player
+        && !(e instanceof StandEntity)));
+
+        if (mobs.isEmpty()) return null;
+
+        // Choose closest
+        LivingEntity closest = mobs.stream()
+                .min(Comparator.comparingDouble(m -> m.distanceTo(player)))
+                .orElse(null);
+
+        if (closest != null) {
+            return closest;
+        }
+        return null;
     }
 }

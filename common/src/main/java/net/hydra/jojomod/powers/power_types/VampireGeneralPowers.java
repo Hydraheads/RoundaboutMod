@@ -3,16 +3,22 @@ package net.hydra.jojomod.powers.power_types;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.powers.DamageHandler;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.powers.GeneralPowers;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 
 public class VampireGeneralPowers extends PunchingGeneralPowers {
     public VampireGeneralPowers(LivingEntity self) {
@@ -27,6 +33,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
 
     public static final byte POWER_DIVE = PowerIndex.SNEAK_ATTACK_CHARGE;
+    public static final byte HIT = PowerIndex.SPECIAL_CHARGED;
     public static final byte POWER_SWEEP = PowerIndex.SNEAK_ATTACK;
 
     /**The text name of the fate*/
@@ -59,12 +66,50 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         if (self.isCrouching() && canUseAirAttack()) {
             if (keyIsDown) {
                 if (activePowerPhase == 0){
-                    this.tryPower(PowerIndex.SNEAK_ATTACK_CHARGE);
+                    this.tryPower(POWER_DIVE);
+                    tryPowerPacket(POWER_DIVE);
                 }
             }
         } else {
             super.buttonInputAttack(keyIsDown,options);
         }
+    }
+
+    @Override
+    public void tickPower() {
+        super.tickPower();
+        if (self.level().isClientSide()) {
+            if (getActivePower() == POWER_DIVE){
+                if (!self.onGround()) {
+                    Entity hit = DamageHandler.damageMobBelow(self, 1.5, 1);
+                    if (hit != null) {
+                        //set cooldown
+
+                        tryIntPowerPacket(HIT, hit.getId());
+                        xTryPower(PowerIndex.NONE,false);
+                        tryPowerPacket(NONE);
+                        Vec3 lower = self.getDeltaMovement();
+                        self.setDeltaMovement(lower.x(), 0, lower.z());
+                    } else {
+                        Vec3 lower = self.getDeltaMovement();
+                        self.setDeltaMovement(lower.x(), -1.8, lower.z());
+                    }
+                } else {
+                    xTryPower(PowerIndex.NONE,false);
+                    tryPowerPacket(NONE);
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean tryIntPower(int move, boolean forced, int chargeTime) {
+        if (!self.level().isClientSide()) {
+            if (move == HIT) {
+                attackTargetId = chargeTime;
+            }
+        }
+        return super.tryIntPower(move,forced,chargeTime);
     }
 
 
@@ -99,12 +144,64 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public boolean setPowerOther(int move, int lastMove) {
         if (move == POWER_DIVE) {
             doDive();
+        }if (move == HIT) {
+            doDiveHit();
         }
 
         return super.setPowerOther(move,lastMove);
     }
 
     public void doDive(){
+        this.attackTimeMax= 5;
+        this.attackTimeDuring = 0;
+        this.setAttackTime(0);
+        setActivePowerPhase((byte) 1);
+        setActivePower(POWER_DIVE);
+        if (!self.level().isClientSide()) {
+            Entity target = null;
+            if (attackTargetId > 0) {
+                target = self.level().getEntity(attackTargetId);
+            }
+            punchImpact(target);
+        } else {
+            Vec3 lower = self.getDeltaMovement();
+            self.setDeltaMovement(lower.x(),-1.8,lower.z());
+        }
+    }
+    public void doDiveHit(){
+        if (!self.level().isClientSide()) {
+            Entity target = null;
+            if (attackTargetId > 0) {
+                target = self.level().getEntity(attackTargetId);
+            }
+            diveImpact(target);
+        }
+    }
 
+
+    public void diveImpact(Entity entity) {
+        if (!this.self.level().isClientSide()) {
+            if (entity != null) {
+                attackTargetId = 0;
+                float pow;
+                float knockbackStrength;
+                pow = getPunchStrength(entity);
+                pow = applyComboDamage(pow);
+                knockbackStrength = 0.10F;
+
+                if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
+                    if (entity instanceof LivingEntity livingEntity){
+                        ((StandUser)livingEntity).roundabout$setDazed((byte) 10);
+                    }
+                    takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
+                    this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.7f + Math.random() * 0.1f));
+                    addToCombo();
+                } else {
+                    if (!this.self.level().isClientSide()) {
+                        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                    }
+                }
+            }
+        }
     }
 }

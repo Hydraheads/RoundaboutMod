@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
@@ -21,6 +22,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.util.MainUtil;
@@ -447,19 +449,34 @@ public class VampireFate extends VampiricFate {
     }
     @Override
     public float getJumpHeightAddonMax(){
-        return 4;
+        return 5;
     }
     public float getAddon(){
         if (activePower == BLOOD_REGEN)
             return 0;
 
-        if (self.isCrouching() && rechargeJump){
-            return 4;
+
+        if (self instanceof Player pl && PowerTypes.hasPowerActivelyEquipped(self) &&
+                ((IPowersPlayer)pl).rdbt$getPowers() instanceof VampireGeneralPowers vgp &&
+        getVampireData().jumpLevel > 0){
+            if (self.isCrouching() && rechargeJump){
+                return 7;
+            } else {
+                if (jumpedOffWall)
+                    return 0;
+                return 4;
+            }
         } else {
-            if (jumpedOffWall)
-                return 0;
-            return 2;
+
+            if (self.isCrouching() && rechargeJump){
+                return 4;
+            } else {
+                if (jumpedOffWall)
+                    return 0;
+                return 2;
+            }
         }
+
     }
     public boolean rechargeJump = false;
 
