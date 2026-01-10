@@ -11,7 +11,10 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersStarPlatinum;
+import net.hydra.jojomod.stand.powers.PowersTheWorld;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Options;
@@ -410,7 +413,22 @@ public class NewPunchingStand extends NewDashPreset {
             if (standOn) {
                 if (TE != null) {
                     if (barTexture == 0) {
-                        context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+                        boolean converted = false;
+                        // Mob Grab range shows green
+                        if (this instanceof BlockGrabPreset bgp && (this instanceof PowersStarPlatinum || this instanceof PowersTheWorld)){
+                            Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(), 2.1F);
+                            Entity targetEntity2 = MainUtil.getTargetEntity(this.getSelf(), 5F);
+                            if (targetEntity2 != null && bgp.canGrab(targetEntity2)) {
+                                if (targetEntity != null && bgp.canGrab(targetEntity)) {
+                                    converted = true;
+                                }
+                            }
+                        }
+                        if (!converted) {
+                            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+                        } else {
+                            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 82, 15, 6);
+                        }
                     }
                 }
             }
