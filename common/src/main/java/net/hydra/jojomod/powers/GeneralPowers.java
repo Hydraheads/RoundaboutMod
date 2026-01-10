@@ -195,6 +195,9 @@ public class GeneralPowers extends AbilityScapeBasis {
             if (getActivePower() != PowerIndex.BARRAGE && getPlayerPos2() == PlayerPosIndex.BARRAGE) {
                 setPlayerPos2(PlayerPosIndex.NONE);
             }
+            if (getActivePower() != PowerIndex.SNEAK_ATTACK && getPlayerPos2() == PlayerPosIndex.SWEEP_KICK) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            }
             if (this.self instanceof Player PE && PE.isSpectator()) {
                 ((StandUser) this.getSelf()).roundabout$setActive(false);
             }

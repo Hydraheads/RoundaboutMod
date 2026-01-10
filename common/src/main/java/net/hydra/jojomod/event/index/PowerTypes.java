@@ -1,28 +1,14 @@
 package net.hydra.jojomod.event.index;
 
-import net.hydra.jojomod.access.IFatePlayer;
-import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
-import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.fates.FatePowers;
-import net.hydra.jojomod.fates.powers.VampireFate;
-import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.StandGeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
-import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;

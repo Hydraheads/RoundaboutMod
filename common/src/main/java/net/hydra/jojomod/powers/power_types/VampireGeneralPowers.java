@@ -3,10 +3,10 @@ package net.hydra.jojomod.powers.power_types;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.powers.GeneralPowers;
@@ -20,8 +20,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
@@ -71,12 +69,29 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     };
 
     @Override
+    public boolean tryPower(int move, boolean forced) {
+        if (!self.level().isClientSide()) {
+            if (move != POWER_SWEEP && getPlayerPos2() == PlayerPosIndex.SWEEP_KICK) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            }
+        }
+        return super.tryPower(move,forced);
+    }
+
+    @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (self.isCrouching() && canUseAirAttack()) {
             if (keyIsDown) {
-                if (activePowerPhase == 0){
+                if (activePowerPhase == 0) {
                     this.tryPower(POWER_DIVE);
                     tryPowerPacket(POWER_DIVE);
+                }
+            }
+        } else if (self.onGround() && isHoldingSneak()){
+            if (keyIsDown) {
+                if (activePowerPhase == 0) {
+                    this.tryPower(POWER_SWEEP);
+                    tryPowerPacket(POWER_SWEEP);
                 }
             }
         } else {
@@ -110,6 +125,15 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     xTryPower(PowerIndex.NONE,false);
                     tryPowerPacket(NONE);
                 }
+            } else if (getActivePower() == POWER_SWEEP){
+                if (attackTimeDuring > 4){
+                    xTryPower(PowerIndex.NONE,false);
+                    tryPowerPacket(NONE);
+
+                    if (getPlayerPos2() != POWER_SWEEP) {
+                        setPlayerPos2(POWER_SWEEP);
+                    }
+                }
             }
         }
     }
@@ -118,6 +142,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public boolean tryIntPower(int move, boolean forced, int chargeTime) {
         if (!self.level().isClientSide()) {
             if (move == HIT) {
+                attackTargetId = chargeTime;
+            } if (move == POWER_SWEEP) {
                 attackTargetId = chargeTime;
             }
         }
@@ -158,9 +184,33 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             doDive();
         }if (move == HIT) {
             doDiveHit();
+        }if (move == POWER_SWEEP) {
+            sweepAttack();
         }
 
         return super.setPowerOther(move,lastMove);
+    }
+
+    public void sweepAttack(){
+        this.attackTimeMax= 5;
+        this.attackTimeDuring = 0;
+        this.setAttackTime(0);
+        setActivePowerPhase((byte) 1);
+        setActivePower(POWER_SWEEP);
+        if (!self.level().isClientSide()) {
+
+            if (getPlayerPos2() != PlayerPosIndex.SWEEP_KICK) {
+                setPlayerPos2(PlayerPosIndex.SWEEP_KICK);
+            }
+        } else {
+
+            Entity TE = getTargetEntity(self, 1.5F, getPunchAngle());
+            int id = 0;
+            if (TE != null){
+                id = TE.getId();
+            }
+            tryIntPowerPacket(POWER_SWEEP,id);
+        }
     }
 
     public void doDive(){

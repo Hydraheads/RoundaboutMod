@@ -1,9 +1,11 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
+import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.animations.AnubisAnimations;
 import net.hydra.jojomod.client.models.layers.animations.FirstPersonLayerAnimations;
@@ -12,6 +14,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
@@ -57,6 +60,10 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
     @Shadow @Final public ModelPart rightSleeve;
 
     @Shadow @Final public ModelPart leftSleeve;
+
+    @Shadow @Final public ModelPart rightPants;
+
+    @Shadow @Final public ModelPart leftPants;
 
     public ZPlayerModel(ModelPart $$0) {
         super($$0);
@@ -160,6 +167,21 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 this.leftArm.xRot = -0.4F;
                 offsetCorrect = false;
                 change = true;
+            } else if (posByte == PlayerPosIndex.SWEEP_KICK){
+                boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
+                GeneralPowers gp = ((IPowersPlayer)$$0).rdbt$getPowers();
+                int amt = Mth.clamp(gp.attackTimeDuring,0,10);
+                if ($$9){
+                    this.rightLeg.copyFrom(one);
+                    this.rightPants.copyFrom(one);
+                    ps.pushPose();
+                    ps.translate(0.05,0,-0.1);
+                    ps.mulPose(Axis.XP.rotationDegrees(90-(36*amt)-(ClientUtil.getFrameTime()*36)));
+                    rightLeg.render(ps, mb.getBuffer(RenderType.entityTranslucentCull($$0.getSkinTextureLocation())), packedLight, OverlayTexture.NO_OVERLAY);
+                    rightPants.render(ps, mb.getBuffer(RenderType.entityTranslucent($$0.getSkinTextureLocation())), packedLight, OverlayTexture.NO_OVERLAY);
+                    ps.popPose();
+                }
+                return true;
             }
 
             if (change){
@@ -315,6 +337,17 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         this.rightArm.xRot = -0F + curve;
                         this.leftArm.yRot = -0.4F;
                         this.leftArm.xRot = -0F + curve;
+                    } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.SWEEP_KICK) {
+                        this.rightLeg.yRot = -0.1F + this.head.yRot;
+                        this.rightLeg.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+
+                        this.rightLeg.xRot = Math.max(this.rightLeg.xRot, -2.5f);
+                        this.rightLeg.xRot -= 0.2f;
+
+
+                        this.leftLeg.yRot = 0;
+                        this.leftLeg.xRot = 0;
+                        this.leftLeg.zRot = 0;
                     }
                 } else if (MainUtil.isHoldingRoadRoller($$0)) {
                     boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
