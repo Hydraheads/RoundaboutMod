@@ -274,7 +274,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
                 if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
                     if (entity instanceof LivingEntity livingEntity){
-                        ((StandUser)livingEntity).roundabout$setDazed((byte) 10);
+                        ((StandUser)livingEntity).roundabout$setDazed((byte) 12);
                     }
                     ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CRIT,
                             entity.getEyePosition().x,entity.getEyePosition().y,entity.getEyePosition().z,
