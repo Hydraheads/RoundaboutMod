@@ -634,6 +634,8 @@ public class PowersAnubis extends NewDashPreset {
     int visualDuration = 0;
     public void tickExtras() {
         StandUser SU = this.getStandUserSelf();
+
+
         if (!this.isClient()) {
             /// guard
             if (isGuarding()) {
@@ -728,19 +730,20 @@ public class PowersAnubis extends NewDashPreset {
 
     @Override
     public boolean interceptDamageEvent(DamageSource $$0, float $$1) {
+        Roundabout.LOGGER.info("{} + {}",this.getActivePower(),this.getAttackTimeDuring());
         if ( ($$0.is(DamageTypes.MOB_ATTACK)
                 || $$0.is(DamageTypes.PLAYER_ATTACK)
                 || $$0.is(ModDamageTypes.STAND)) && $$0.getEntity() != null ) {
 
             if (this.getActivePower() == PowersAnubis.UPPERCUT && this.attackTimeDuring < 8
-                    || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE && this.attackTimeDuring > PowersAnubis.PogoDelay && this.attackTimeDuring < PowersAnubis.PogoDelay+6
+                    || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE && this.attackTimeDuring > PowersAnubis.PogoDelay && this.attackTimeDuring < PowersAnubis.PogoDelay+9
                     || this.getActivePower() == PowersAnubis.SPIN & this.getAttackTimeDuring() < 8
                     || this.getActivePower() == PowerIndex.RANGED_BARRAGE
             ) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -755,7 +758,7 @@ public class PowersAnubis extends NewDashPreset {
                 && !this.getSelf().onGround()
                 && canPogo()
                 && this.getAttackTime() > 5
-                && (this.fallTime > 4 || Minecraft.getInstance().options.keyJump.isDown());
+                && (this.fallTime > 3 || Minecraft.getInstance().options.keyJump.isDown());
     }
 
     @Override
@@ -778,7 +781,7 @@ public class PowersAnubis extends NewDashPreset {
                 }
 
                 if (index != PowersAnubis.DOUBLE && index != PowersAnubis.UPPERCUT) {
-                  //  this.getSelf().swing(InteractionHand.MAIN_HAND);
+                    this.getSelf().swing(InteractionHand.MAIN_HAND);
                 }
                 this.tryPower(index);
                 tryPowerPacket(index);
@@ -1098,10 +1101,8 @@ public class PowersAnubis extends NewDashPreset {
             }
         }
 
-        this.setActivePower(PowersAnubis.POGO_AFTER);
-        if (this.getSelf() instanceof Player P) {
-            S2CPacketUtil.sendActivePowerPacket(P,this.getActivePower());
-        }
+
+
         this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.ANUBIS_POGO_HIT_EVENT,SoundSource.PLAYERS,1F,0.9F+(float)Math.random()*0.2F);
     }
 
@@ -1151,8 +1152,7 @@ public class PowersAnubis extends NewDashPreset {
     public static final byte
             DOUBLE = 52,
             UPPERCUT = 54,
-            SPIN = 55,
-            POGO_AFTER = 57;
+            SPIN = 55;
 
 
 
@@ -1376,7 +1376,7 @@ public class PowersAnubis extends NewDashPreset {
         switch (activePower) {
             ///  basic swing, will probably be vanished at some point
             case PowersAnubis.SWING -> {
-          //      this.getSelf().swing(InteractionHand.MAIN_HAND);
+                this.getSelf().swing(InteractionHand.MAIN_HAND);
             }
             /// pogo counter syncing
             case PowerIndex.SNEAK_ATTACK_CHARGE -> {
