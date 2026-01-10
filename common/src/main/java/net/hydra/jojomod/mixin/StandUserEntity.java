@@ -1313,9 +1313,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
 
-            if (this.roundabout$isMeleeImmune()) {
-                this.roundabout$setMeleeImmunity(this.roundabout$getMeleeImmunity()- 1 );
-            }
+
 
             //**Stone Mask Clearing*/
             if (isInWater())
@@ -3061,7 +3059,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_SKIN, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_ANIMATION, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$UNIQUE_STAND_MODE_TOGGLE, false);
-            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$MELEE_IMMUNITY, (byte)0 );
         }
     }
 
@@ -3128,17 +3125,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
-        //melee immunity ticks
-        if (this.roundabout$isMeleeImmune() && !((TimeStop)this.level()).isTimeStoppingEntity(this.rdbt$this()) ) {
-            if ( ($$0.is(DamageTypes.MOB_ATTACK)
-                    || $$0.is(DamageTypes.PLAYER_ATTACK)
-                    || $$0.is(ModDamageTypes.STAND)) && $$0.getEntity() != null ) {
-                ci.cancel();
-                return;
-            } else {
-                this.roundabout$setMeleeImmunity(-1);
-            }
-        }
+
 
         if ($$0.getEntity() instanceof Player pe && !$$0.isIndirect()
         && !$$0.is(DamageTypes.THORNS)&& !$$0.is(ModDamageTypes.CORPSE) &&
@@ -4273,29 +4260,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
 
-    @Unique
-    private static final EntityDataAccessor<Byte> ROUNDABOUT$MELEE_IMMUNITY = SynchedEntityData.defineId(LivingEntity.class,
-            EntityDataSerializers.BYTE);
-    @Unique
-    @Override
-    public byte roundabout$getMeleeImmunity() {
-        return this.getEntityData().get(ROUNDABOUT$MELEE_IMMUNITY);
-    }
-    @Unique
-    @Override
-    public boolean roundabout$isMeleeImmune() {
-        return this.getEntityData().get(ROUNDABOUT$MELEE_IMMUNITY) > 0;
-    }
-    @Unique
-    @Override
-    public void roundabout$setMeleeImmunity(int i) {
-        this.getEntityData().set(ROUNDABOUT$MELEE_IMMUNITY,(byte)i);
-    }
-    @Unique
-    @Override
-    public void roundabout$setMeleeImmunity(byte i) {
-        this.getEntityData().set(ROUNDABOUT$MELEE_IMMUNITY,i);
-    }
 
         @SuppressWarnings("deprecation")
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
