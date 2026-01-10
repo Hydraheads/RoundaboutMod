@@ -1400,6 +1400,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         compoundtag.putFloat("hairColorX",rdbt$getHairColorX());
         compoundtag.putFloat("hairColorY",rdbt$getHairColorY());
         compoundtag.putFloat("hairColorZ",rdbt$getHairColorZ());
+
+
+        compoundtag.putFloat("guard",((StandUser)this).roundabout$getGuardPoints());
+        compoundtag.putBoolean("guard_break",((StandUser)this).roundabout$getGuardBroken());
+
         $$0.put("roundabout",compoundtag);
         if (ClientNetworking.getAppropriateConfig().vampireSettings.vampireLeveling) {
             CompoundTag vampire = $$0.getCompound("roundaboutVampire");
@@ -1566,6 +1571,14 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
 
         PowerTypes.initializeStandPower(this);
+
+        PowerTypes.fixPowers(this);
+        if (compoundtag2.contains("guard")){
+            ((StandUser)this).roundabout$setGuardPoints(compoundtag2.getFloat("guard"));
+            if (compoundtag2.contains("guard_break")) {
+                ((StandUser) this).roundabout$setGuardBroken(compoundtag2.getBoolean("guard_break"));
+            }
+        }
         //roundabout$maskInventory.addItem()
     }
 
@@ -1796,7 +1809,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$Tick(CallbackInfo ci) {
-
         if (this.level().isClientSide()) {
             if (FateTypes.isVampire(this)){
                 if (rdbt$getVampireData().vampireLevel == -1){

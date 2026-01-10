@@ -1,7 +1,9 @@
 package net.hydra.jojomod.event.powers;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -97,19 +99,24 @@ public class DamageHandler {
     }
 
     public static Entity damageMobBelow(Entity player, double horizontalRange, double verticalRange) {
+        if (player == null)
+            return null;
         Level level = player.level();
-        Roundabout.LOGGER.info("1");
 
         Vec3 playerPos = player.position();
 
+
+         AABB shiftBox = RotationUtil.boxPlayerToWorld(
+                 new AABB(-horizontalRange,-verticalRange,-horizontalRange,horizontalRange,0,horizontalRange),
+                 ((IGravityEntity)player).roundabout$getGravityDirection());
         // Define search area
         AABB box = new AABB(
-                playerPos.x - horizontalRange,
-                playerPos.y - verticalRange,
-                playerPos.z - horizontalRange,
-                playerPos.x + horizontalRange,
-                playerPos.y,
-                playerPos.z + horizontalRange
+                playerPos.x + shiftBox.minX,
+                playerPos.y + shiftBox.minY,
+                playerPos.z + shiftBox.minZ,
+                playerPos.x + shiftBox.maxX,
+                playerPos.y + shiftBox.maxY,
+                playerPos.z + shiftBox.maxZ
         );
 
         // Get all mobs below

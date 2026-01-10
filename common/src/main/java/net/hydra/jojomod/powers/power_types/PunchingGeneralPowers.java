@@ -172,6 +172,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
         if (self.level().isClientSide()) {
             return this.isHoldingSneak()
                     && !this.getSelf().onGround()
+                    && !self.isInWater()
                     && (this.fallTime > 0)
                     && (this.airTime > 6);
         }
@@ -569,6 +570,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
                     takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
                     this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
                     addToCombo();
+                    hitParticles(entity);
                 } else {
                     if (!this.self.level().isClientSide()) {
                         this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
@@ -667,7 +669,11 @@ public class PunchingGeneralPowers extends GeneralPowers {
             if (powerOn) {
                 if (TE != null) {
                     if (barTexture == 0) {
-                        context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+                        if (this instanceof VampireGeneralPowers vgp && getTargetEntity(playerEntity, 1.5F, getPunchAngle()) != null){
+                            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 75, 15, 6);
+                        } else {
+                            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+                        }
                     }
                 }
             }

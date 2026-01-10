@@ -411,6 +411,7 @@ public class FabricSounds {
         addSound(ModSounds.FEMALE_ZOMBIE_HURT_ID, ModSounds.FEMALE_ZOMBIE_HURT_EVENT);
         addSound(ModSounds.FEMALE_ZOMBIE_DEATH_ID, ModSounds.FEMALE_ZOMBIE_DEATH_EVENT);
         addSound(ModSounds.AESTHETICIAN_EXHALE_ID, ModSounds.AESTHETICIAN_EXHALE_EVENT);
+        addSound(ModSounds.VAMPIRE_DIVE_ID, ModSounds.VAMPIRE_DIVE_EVENT);
 
         addSound(ModSounds.TORTURE_DANCE_ID, ModSounds.TORTURE_DANCE_EVENT);
         addSound(ModSounds.HALLELUJAH_ID, ModSounds.HALLELUJAH_EVENT);

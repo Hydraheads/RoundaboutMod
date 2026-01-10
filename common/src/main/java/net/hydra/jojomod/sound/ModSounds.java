@@ -1261,6 +1261,10 @@ public class ModSounds {
     public static final ResourceLocation AESTHETICIAN_EXHALE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+AESTHETICIAN_EXHALE);
     public static SoundEvent AESTHETICIAN_EXHALE_EVENT = SoundEvent.createVariableRangeEvent(AESTHETICIAN_EXHALE_ID);
 
+    public static final String VAMPIRE_DIVE = "vampire_dive";
+    public static final ResourceLocation VAMPIRE_DIVE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VAMPIRE_DIVE);
+    public static SoundEvent VAMPIRE_DIVE_EVENT = SoundEvent.createVariableRangeEvent(VAMPIRE_DIVE_ID);
+
 
     public static final String TORTURE_DANCE = "torture_dance";
     public static final ResourceLocation TORTURE_DANCE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TORTURE_DANCE);

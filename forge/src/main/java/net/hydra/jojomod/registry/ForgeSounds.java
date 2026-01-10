@@ -687,6 +687,9 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> DIEGO_INTERESTING =
             register(ModSounds.DIEGO_INTERESTING, ModSounds.DIEGO_INTERESTING_ID);
 
+    public static final RegistryObject<SoundEvent> VAMPIRE_DIVE =
+            register(ModSounds.VAMPIRE_DIVE, ModSounds.VAMPIRE_DIVE_ID);
+
     public static final RegistryObject<SoundEvent> JOTARO_HURT_1 =
             register(ModSounds.JOTARO_HURT_1, ModSounds.JOTARO_HURT_1_ID);
     public static final RegistryObject<SoundEvent> JOTARO_HURT_2 =

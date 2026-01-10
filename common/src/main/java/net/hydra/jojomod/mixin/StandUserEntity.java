@@ -2331,7 +2331,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Unique
     public float roundabout$getGuardPoints(){
-        if (roundabout$GuardPoints > roundabout$getMaxGuardPoints()){
+        if (level().isClientSide() && rdbt$this() instanceof Player pl &&
+                !((IPlayerEntity)pl).rdbt$getCooldownQuery()){
+            return roundabout$getMaxGuardPoints();
+        }
+        if (roundabout$GuardPoints > roundabout$getMaxGuardPoints() && !level().isClientSide()){
             roundabout$setGuardPoints(roundabout$getMaxGuardPoints());
         }
         return this.roundabout$GuardPoints;
@@ -2443,6 +2447,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Unique
+    @Override
     public void roundabout$syncGuard(){
         if (((LivingEntity) (Object) this) instanceof Player pl && !((LivingEntity) (Object) this).level().isClientSide){
             S2CPacketUtil.synchGuard(pl,this.roundabout$getGuardPoints(),this.roundabout$getGuardBroken());
