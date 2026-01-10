@@ -12,6 +12,7 @@ import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
@@ -20,6 +21,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
@@ -91,7 +93,6 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (keyIsDown) {
                 if (activePowerPhase == 0) {
                     this.tryPower(POWER_SWEEP);
-                    tryPowerPacket(POWER_SWEEP);
                 }
             }
         } else {
@@ -126,12 +127,14 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     tryPowerPacket(NONE);
                 }
             } else if (getActivePower() == POWER_SWEEP){
+                self.swingTime = 0;
+                self.swinging = false;
                 if (attackTimeDuring > 4){
                     xTryPower(PowerIndex.NONE,false);
                     tryPowerPacket(NONE);
 
-                    if (getPlayerPos2() != POWER_SWEEP) {
-                        setPlayerPos2(POWER_SWEEP);
+                    if (getPlayerPos2() != PlayerPosIndex.SWEEP_KICK) {
+                        setPlayerPos2(PlayerPosIndex.SWEEP_KICK);
                     }
                 }
             }
@@ -202,6 +205,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (getPlayerPos2() != PlayerPosIndex.SWEEP_KICK) {
                 setPlayerPos2(PlayerPosIndex.SWEEP_KICK);
             }
+            doSweepHit();
         } else {
 
             Entity TE = getTargetEntity(self, 1.5F, getPunchAngle());
@@ -252,6 +256,15 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             diveImpact(target);
         }
     }
+    public void doSweepHit(){
+        if (!self.level().isClientSide()) {
+            Entity target = null;
+            if (attackTargetId > 0) {
+                target = self.level().getEntity(attackTargetId);
+            }
+            sweepImpact(target);
+        }
+    }
 
     @Override
     public boolean interceptDamageEvent(DamageSource $$0, float $$1) {
@@ -261,6 +274,34 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         return false;
     }
 
+    public void sweepImpact(Entity entity) {
+        if (!this.self.level().isClientSide()) {
+            attackTargetId = 0;
+            self.swing(InteractionHand.MAIN_HAND, true);
+            if (entity != null) {
+                float pow;
+                float knockbackStrength;
+                pow = getPunchStrength(entity);
+                pow = applyComboDamage(pow);
+                knockbackStrength = 2.0F;
+                if (entity instanceof LivingEntity LE && LE.isBlocking()){
+                    knockShield2(LE,120);
+                    knockbackStrength = 0.20F;
+                }
+
+                if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
+                    takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
+                    this.self.level().playSound(null, this.self.blockPosition(), getPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.15f + Math.random() * 0.1f));
+                    addToCombo();
+                    hitParticles(entity);
+                } else {
+                    if (!this.self.level().isClientSide()) {
+                        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                    }
+                }
+            }
+        }
+    }
 
     public void diveImpact(Entity entity) {
         if (!this.self.level().isClientSide()) {
