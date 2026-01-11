@@ -730,7 +730,6 @@ public class PowersAnubis extends NewDashPreset {
 
     @Override
     public boolean interceptDamageEvent(DamageSource $$0, float $$1) {
-        Roundabout.LOGGER.info("{} + {}",this.getActivePower(),this.getAttackTimeDuring());
         if ( ($$0.is(DamageTypes.MOB_ATTACK)
                 || $$0.is(DamageTypes.PLAYER_ATTACK)
                 || $$0.is(ModDamageTypes.STAND)) && $$0.getEntity() != null ) {
