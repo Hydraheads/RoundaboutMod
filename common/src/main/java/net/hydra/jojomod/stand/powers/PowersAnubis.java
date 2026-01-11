@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.projectile.AnubisSlipstreamEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
@@ -40,6 +41,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
@@ -632,6 +634,8 @@ public class PowersAnubis extends NewDashPreset {
     int visualDuration = 0;
     public void tickExtras() {
         StandUser SU = this.getStandUserSelf();
+
+
         if (!this.isClient()) {
             /// guard
             if (isGuarding()) {
@@ -725,6 +729,23 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     @Override
+    public boolean interceptDamageEvent(DamageSource $$0, float $$1) {
+        if ( ($$0.is(DamageTypes.MOB_ATTACK)
+                || $$0.is(DamageTypes.PLAYER_ATTACK)
+                || $$0.is(ModDamageTypes.STAND)) && $$0.getEntity() != null ) {
+
+            if (this.getActivePower() == PowersAnubis.UPPERCUT && this.attackTimeDuring < 8
+                    || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE && this.attackTimeDuring > PowersAnubis.PogoDelay && this.attackTimeDuring < PowersAnubis.PogoDelay+9
+                    || this.getActivePower() == PowersAnubis.SPIN & this.getAttackTimeDuring() < 8
+                    || this.getActivePower() == PowerIndex.RANGED_BARRAGE
+            ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public boolean canAttack() {
         return super.canAttack() || this.getActivePower() == PowerIndex.SNEAK_MOVEMENT;
     }
@@ -736,7 +757,7 @@ public class PowersAnubis extends NewDashPreset {
                 && !this.getSelf().onGround()
                 && canPogo()
                 && this.getAttackTime() > 5
-                && (this.fallTime > 4 || Minecraft.getInstance().options.keyJump.isDown());
+                && (this.fallTime > 3 || Minecraft.getInstance().options.keyJump.isDown());
     }
 
     @Override
@@ -759,7 +780,7 @@ public class PowersAnubis extends NewDashPreset {
                 }
 
                 if (index != PowersAnubis.DOUBLE && index != PowersAnubis.UPPERCUT) {
-                  //  this.getSelf().swing(InteractionHand.MAIN_HAND);
+                    this.getSelf().swing(InteractionHand.MAIN_HAND);
                 }
                 this.tryPower(index);
                 tryPowerPacket(index);
@@ -787,9 +808,7 @@ public class PowersAnubis extends NewDashPreset {
         }
         this.attackTimeDuring = 0;
         this.setAttackTime(0);
-        if (move == PowersAnubis.UPPERCUT) {
-            ((StandUser)this.getSelf()).roundabout$setMeleeImmunity(8);
-        }
+
         setActivePower(move);
     }
 
@@ -842,9 +861,7 @@ public class PowersAnubis extends NewDashPreset {
             case PowerIndex.POWER_1_BONUS -> {
                 MainUtil.slowTarget(this.getSelf(),chargeTime/100F);
             }
-            case PowerIndex.POWER_2_BONUS -> {
-                this.getStandUserSelf().roundabout$setMeleeImmunity(chargeTime);
-            }
+
         }
         return super.tryIntPower(move, forced, chargeTime);
     }
@@ -1032,8 +1049,6 @@ public class PowersAnubis extends NewDashPreset {
         if (lookAngle.y < -0) {
             power *= 0.5F;
         }
-        this.getStandUserSelf().roundabout$setMeleeImmunity((byte)6);
-        this.tryIntPowerPacket(PowerIndex.POWER_2_BONUS,6);
         MainUtil.takeUnresistableKnockbackWithY(this.getSelf(),power,lookAngle.x,lookAngle.y,lookAngle.z);
 
     }
@@ -1085,8 +1100,9 @@ public class PowersAnubis extends NewDashPreset {
             }
         }
 
+
+
         this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.ANUBIS_POGO_HIT_EVENT,SoundSource.PLAYERS,1F,0.9F+(float)Math.random()*0.2F);
-        ((StandUser)this.getSelf()).roundabout$setMeleeImmunity((byte) (this.getSelf().isCrouching() ? 10 : 5) );
     }
 
     @Override
@@ -1244,7 +1260,6 @@ public class PowersAnubis extends NewDashPreset {
             float pow = this.getHeavyPunchStrength(entity);
             if (range) {
                 pow *= 1.4F;
-                ((StandUser)this.getSelf()).roundabout$setMeleeImmunity(10);
             }
             if (range) {bl = true;}
             if (StandDamageEntityAttack(entity,pow,0.0F,this.getSelf())) {
@@ -1257,7 +1272,6 @@ public class PowersAnubis extends NewDashPreset {
                     Vec3 v = entity.getPosition(1F).subtract(this.getSelf().getPosition(1F));
                     v = v.normalize();
                     MainUtil.takeUnresistableKnockbackWithY(entity,0.5,v.x,v.y+0.22,v.z);
-                    ((StandUser)this.getSelf()).roundabout$setMeleeImmunity(10);
                 } else {
                     MainUtil.takeUnresistableKnockbackWithY(entity,0.4,0,-1,0);
                 }
@@ -1361,7 +1375,7 @@ public class PowersAnubis extends NewDashPreset {
         switch (activePower) {
             ///  basic swing, will probably be vanished at some point
             case PowersAnubis.SWING -> {
-          //      this.getSelf().swing(InteractionHand.MAIN_HAND);
+                this.getSelf().swing(InteractionHand.MAIN_HAND);
             }
             /// pogo counter syncing
             case PowerIndex.SNEAK_ATTACK_CHARGE -> {
@@ -1528,7 +1542,6 @@ public class PowersAnubis extends NewDashPreset {
 
     public void UpdateQuickdraw() {
         ((StandUser)this.getSelf()).roundabout$setBubbleEncased((byte)(0));
-        this.getStandUserSelf().roundabout$setMeleeImmunity(3);
         int duration = 15;
         if (!this.isClient()) {
             for (Entity entity : this.targets) {

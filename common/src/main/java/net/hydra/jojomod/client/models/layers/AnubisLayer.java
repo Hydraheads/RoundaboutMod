@@ -59,7 +59,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
         if (((IEntityAndData) entity).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
             return;
         if (!entity.isInvisible()) {
-            if (entity != null && AnubisLayer.shouldRender(entity) != null) {
+            if (AnubisLayer.shouldRender(entity) != null) {
 
                 ClientUtil.pushPoseAndCooperate(poseStack,25);
 
@@ -86,13 +86,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                 renderAnubis(poseStack, bufferSource, packedLight, entity, partialTicks);
                 ClientUtil.popPoseAndCooperate(poseStack,25);
 
-                ClientUtil.pushPoseAndCooperate(poseStack,47);
-                if (SU.roundabout$isPossessed()) {
-                    renderHumanoidAnubis(poseStack,bufferSource,packedLight,entity,partialTicks,0.6F);
-                } else if (SU.roundabout$getStandPowers()  instanceof PowersAnubis AP && PowerTypes.hasStandActive(entity) && SU.roundabout$getIdlePos() == 1) {
-                    renderHumanoidAnubis(poseStack,bufferSource,packedLight,entity,partialTicks,SU.roundabout$getAnubisVanishTicks()/10F*0.7F );
-                }
-                ClientUtil.popPoseAndCooperate(poseStack,47);
+
 
             }
         }
@@ -167,19 +161,6 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                     1, 1, 1, 1F, (byte) 0);
         }
 
-
-    }
-
-    public void renderHumanoidAnubis(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float partialTicks, float alpha) {
-        if (true) {return;}
-        /// I'm going to come back to this goober later
-
-        this.getParentModel().body.translateAndRotate(poseStack);
-        poseStack.translate(-0.55,-0.1,0.5);
-
-        poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,-15),0,0,0);
-
-        ModStrayModels.ANUBIS_HUMAN.render(entity,partialTicks,poseStack,bufferSource,packedLight,1.0F,1.0F,1.0F,alpha  );
 
     }
 

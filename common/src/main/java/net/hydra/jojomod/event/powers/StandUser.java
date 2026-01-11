@@ -234,11 +234,6 @@ public interface StandUser {
 
     byte roundabout$getStoredDamageByte();
 
-    byte roundabout$getMeleeImmunity();
-    boolean roundabout$isMeleeImmune();
-    void roundabout$setMeleeImmunity(int i);
-    void roundabout$setMeleeImmunity(byte i);
-
     void roundabout$UniversalTick();
     void roundabout$startAutoSpinAttack(int p_204080_);
 
