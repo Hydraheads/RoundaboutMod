@@ -2,9 +2,12 @@ package net.hydra.jojomod.powers.power_types;
 
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampireFate;
@@ -12,7 +15,9 @@ import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
@@ -20,6 +25,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
@@ -85,8 +91,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         if (self.isCrouching() && canUseAirAttack()) {
             if (keyIsDown) {
                 if (activePowerPhase == 0) {
-                    this.tryPower(POWER_DIVE);
-                    tryPowerPacket(POWER_DIVE);
+                    if (!onCooldown(PowerIndex.GENERAL_1)) {
+                        this.tryPower(POWER_DIVE);
+                        tryPowerPacket(POWER_DIVE);
+                    }
                 }
             }
         } else if (self.onGround() && isHoldingSneak()){
@@ -169,6 +177,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampiricFate vp) {
+
+            setSkillIcon(context, x, y, 1, StandIcons.DODGE, PowerIndex.GENERAL_1);
+            setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.GENERAL_2);
             if ((vp.canLatchOntoWall() || (vp.isPlantedInWall() && !isHoldingSneak())) && vp.canWallWalkConfig()) {
                 setSkillIcon(context, x, y, 3, StandIcons.WALL_WALK_VAMP, PowerIndex.FATE_3);
             } else if (isHoldingSneak()) {
@@ -192,6 +203,13 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         }
 
         return super.setPowerOther(move,lastMove);
+    }
+
+    public boolean isServerControlledCooldown(CooldownInstance ci, byte num){
+        if (num == PowerIndex.GENERAL_1) {
+            return true;
+        }
+        return super.isServerControlledCooldown(ci, num);
     }
 
     public void sweepAttack(){
@@ -312,6 +330,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 pow = getPunchStrength(entity)*1.2F;
                 pow = applyComboDamage(pow);
                 knockbackStrength = 0.10F;
+                setCooldown(PowerIndex.GENERAL_1,60);
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
+                        PowerIndex.GENERAL_1, 60);
 
                 if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
                     if (entity instanceof LivingEntity livingEntity){

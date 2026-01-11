@@ -5282,6 +5282,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (roundabout$getStandPowers().isServerControlledCooldown(ci,num)){
             return true;
         }
+        if (rdbt$this() instanceof Player pl && ((IPowersPlayer)pl).rdbt$getPowers().isServerControlledCooldown(ci,num)){
+            return true;
+        }
         return false;
     }
 

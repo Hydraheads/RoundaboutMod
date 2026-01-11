@@ -81,6 +81,16 @@ public class PowerIndex {
     public static final byte FATE_EXTRA = 18;
     public static final byte FATE_EXTRA_2 = 19;
 
+    public static final byte GENERAL_1 = 20;
+    public static final byte GENERAL_2 = 21;
+    public static final byte GENERAL_3 = 22;
+    public static final byte GENERAL_4 = 23;
+    public static final byte GENERAL_1_SNEAK = 24;
+    public static final byte GENERAL_2_SNEAK = 25;
+    public static final byte GENERAL_3_SNEAK = 26;
+    public static final byte GENERAL_4_SNEAK = 27;
+    public static final byte GENERAL_EXTRA = 28;
+    public static final byte GENERAL_EXTRA_2 = 29;
 
 
     /**You can define any other number after 51 in your own stand's clas if you don't want to use
