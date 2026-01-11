@@ -286,6 +286,11 @@ public interface StandUser {
     void roundabout$setTrueInvis(int bound);
     int roundabout$getTrueInvis();
 
+
+    /**Metallica*/
+    void roundabout$setMetallicaInvis(int invis);
+    int roundabout$getMetallicaInvis();
+
     /**Gravity Direction*/
 
     /**Soft and Wet Bubble Encasing**/

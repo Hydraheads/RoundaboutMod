@@ -24,6 +24,9 @@ public interface IEntityAndData {
     void roundabout$setMetalMode(byte mode);
     byte roundabout$getMetalMode();
 
+    void roundabout$setMetallicaInvisibility(int fade);
+    int roundabout$getMetallicaInvisibility();
+
     float roundabout$getPreTSTick();
     void roundabout$setExclusiveLayers(boolean exclusive);
     boolean roundabout$getExclusiveLayers();

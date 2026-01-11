@@ -21,8 +21,10 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
+import net.hydra.jojomod.stand.powers.PowersMetallica;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -226,6 +228,34 @@ public abstract class EntityAndData implements IEntityAndData {
         }
     }
 
+    @Unique
+    public int roundabout$metallicaInvisibility = -1;
+
+    @Unique
+    @Override
+    public int roundabout$getMetallicaInvisibility() {
+        if (((Entity)(Object)this) instanceof LivingEntity LE) {
+            return ((StandUser)LE).roundabout$getMetallicaInvis();
+        }
+        return roundabout$metallicaInvisibility;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setMetallicaInvisibility(int invis) {
+        if (((Entity)(Object)this) instanceof LivingEntity LE) {
+            ((StandUser)LE).roundabout$setMetallicaInvis(invis);
+        } else {
+            roundabout$metallicaInvisibility = invis;
+            if (!this.level().isClientSide()) {
+                MainUtil.spreadRadialClientPacket(((Entity) (Object) this), 120, false,
+                        "METALLICA_INVISIBILITY",
+                        getId(), invis
+                );
+            }
+        }
+    }
+
 
     /**Mandom Time Queue, not sure if it will have any other use*/
     @Unique
@@ -271,7 +301,7 @@ public abstract class EntityAndData implements IEntityAndData {
     }
     @Unique
     public void roundabout$resetSecondQueue(){
-         roundabout$secondQue = new ArrayDeque<>();
+        roundabout$secondQue = new ArrayDeque<>();
     }
 
 
@@ -387,6 +417,27 @@ public abstract class EntityAndData implements IEntityAndData {
             cir.setReturnValue(true);
             return;
         }
+
+        if (roundabout$getMetallicaInvisibility() > -1) {
+            if (this.level().isClientSide()){
+
+                if (ClientUtil.isPlayer((Entity)(Object)this)){
+
+                    if (ClientUtil.getFirstPerson()){
+                        cir.setReturnValue(false);
+                        return;
+                    }
+                }
+                double dist = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().distanceTo(((Entity)(Object)this).position());
+                float alpha = PowersMetallica.getMetallicaInvisibilityAlpha((LivingEntity)(Object)this, dist);
+
+                if (alpha > 0.05f) {
+                    cir.setReturnValue(false);
+                    return;
+                }
+            }
+            cir.setReturnValue(true);
+        }
     }
 
 
@@ -394,9 +445,12 @@ public abstract class EntityAndData implements IEntityAndData {
     public void roundabout$isInvisibleTo(Player pl, CallbackInfoReturnable<Boolean> cir){
         if (roundabout$getTrueInvisibility() > -1){
             if (pl != null && ((StandUser)pl).roundabout$getStandPowers() instanceof PowersAchtungBaby PA
-            && PA.invisibleVisionOn()){
+                    && PA.invisibleVisionOn()){
                 cir.setReturnValue(false);
             }
+            return;
+        }
+        if (roundabout$getMetallicaInvisibility() > -1) {
             return;
         }
     }
@@ -410,7 +464,7 @@ public abstract class EntityAndData implements IEntityAndData {
         ){
             if (this.onGround() && ((Entity)(Object)this) instanceof LivingEntity LE) {
                 if (!((StandUser)LE).roundabout$frictionSave().equals(Vec3.ZERO)) {
-                        ci.cancel();
+                    ci.cancel();
                 }
             }
         }
@@ -418,7 +472,7 @@ public abstract class EntityAndData implements IEntityAndData {
     @Inject(method = "walkingStepSound(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V", at = @At("HEAD"), cancellable = true)
     public void roundabout$walkingStepSound(BlockPos $$0, BlockState $$1, CallbackInfo ci){
         if(((ILevelAccess)this.level()).roundabout$isFrictionPlundered($$0) ||
-        ((ILevelAccess)this.level()).roundabout$isFrictionPlunderedEntity(((Entity)(Object)this))){
+                ((ILevelAccess)this.level()).roundabout$isFrictionPlunderedEntity(((Entity)(Object)this))){
             ci.cancel();
         }
     }
@@ -464,23 +518,23 @@ public abstract class EntityAndData implements IEntityAndData {
     private void roundabout$changeDim(ServerLevel $$0, CallbackInfoReturnable<Boolean> ci) {
         if (((Entity)(Object)this) instanceof LivingEntity LE){
             if (this.level() instanceof ServerLevel && !this.isRemoved()) {
-                 if (((StandUser)this).roundabout$getStand() != null){
-                     StandEntity stand = ((StandUser)this).roundabout$getStand();
-                     if (!stand.getHeldItem().isEmpty()) {
+                if (((StandUser)this).roundabout$getStand() != null){
+                    StandEntity stand = ((StandUser)this).roundabout$getStand();
+                    if (!stand.getHeldItem().isEmpty()) {
 
-                         if (stand.canAcquireHeldItem) {
-                             double $$3 = stand.getEyeY() - 0.3F;
-                             ItemEntity $$4 = new ItemEntity(this.level(), stand.getX(), $$3, stand.getZ(), stand.getHeldItem().copy());
-                             $$4.setPickUpDelay(40);
-                             $$4.setThrower(stand.getUUID());
-                             this.level().addFreshEntity($$4);
-                             stand.setHeldItem(ItemStack.EMPTY);
-                         }
-                         if (!stand.getPassengers().isEmpty()){
-                             stand.ejectPassengers();
-                         }
-                     }
-                 }
+                        if (stand.canAcquireHeldItem) {
+                            double $$3 = stand.getEyeY() - 0.3F;
+                            ItemEntity $$4 = new ItemEntity(this.level(), stand.getX(), $$3, stand.getZ(), stand.getHeldItem().copy());
+                            $$4.setPickUpDelay(40);
+                            $$4.setThrower(stand.getUUID());
+                            this.level().addFreshEntity($$4);
+                            stand.setHeldItem(ItemStack.EMPTY);
+                        }
+                        if (!stand.getPassengers().isEmpty()){
+                            stand.ejectPassengers();
+                        }
+                    }
+                }
             }
         }
     }

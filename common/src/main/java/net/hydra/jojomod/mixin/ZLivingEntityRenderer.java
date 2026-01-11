@@ -41,6 +41,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArgs; // Importante
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args; // Importante
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -64,41 +66,35 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
     @Inject(method = "isBodyVisible", at = @At("HEAD"), cancellable = true)
     private void roundabout$forceBodyVisible(T entity, CallbackInfoReturnable<Boolean> cir) {
-        if (entity instanceof IEntityAndData data && MainUtil.isUsingMetallica(entity)) {
+        if (entity instanceof IEntityAndData data && data.roundabout$getMetallicaInvisibility() > -1) {
             cir.setReturnValue(true);
         }
     }
 
-    @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$applyInvisibilityFade(T entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight, CallbackInfo ci) {
-        if (entity instanceof IEntityAndData data && MainUtil.isUsingMetallica(entity)) {
+    @ModifyArgs(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/EntityModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V"))
+    private void roundabout$modifyRenderAlpha(Args args, T entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+        if (entity instanceof IEntityAndData data && data.roundabout$getMetallicaInvisibility() > -1) {
             Minecraft mc = Minecraft.getInstance();
             if (mc.cameraEntity != null) {
                 double dist = entity.distanceTo(mc.cameraEntity);
-                float alpha = PowersMetallica.getMetallicaInvisibilityAlpha(entity, dist);
+                float alpha = PowersMetallica.getMetallicaInvisibilityAlpha(entity, dist, partialTicks);
 
-                if (alpha <= 0.02f) {
-                    ci.cancel();
-                    return;
-                }
-
-                RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, alpha);
-                ClientUtil.setThrowFadeToTheEther(alpha);
+                args.set(7, alpha);
             }
         }
     }
 
     @Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
     private void roundabout$forceTranslucent(T entity, boolean bodyVisible, boolean translucent, boolean glowing, CallbackInfoReturnable<RenderType> cir) {
-        if (entity instanceof IEntityAndData data && MainUtil.isUsingMetallica(entity)) {
+        if (entity instanceof IEntityAndData data && data.roundabout$getMetallicaInvisibility() > -1) {
             ResourceLocation texture = this.getTextureLocation(entity);
-            cir.setReturnValue(RenderType.entityTranslucentCull(texture));
+            cir.setReturnValue(RenderType.itemEntityTranslucentCull(texture));
         }
     }
 
     @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "TAIL"))
     private void roundabout$renderTail(T entity, float $$1, float $$2, PoseStack matrixStack, MultiBufferSource buffer, int $$5, CallbackInfo ci) {
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         ClientUtil.setThrowFadeToTheEther(1.0F);
         MetallicaClientRenderer.renderMetalMeterBar(entity, matrixStack, buffer);
     }
