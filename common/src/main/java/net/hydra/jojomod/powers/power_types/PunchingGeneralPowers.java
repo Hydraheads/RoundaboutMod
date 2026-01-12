@@ -256,6 +256,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
         this.attackTimeMax= 7;
         this.attackTimeDuring = 0;
         this.setAttackTime(0);
+        setActivePower(PowerIndex.NONE);
         setActivePowerPhase((byte) 1);
         if (!self.level().isClientSide()) {
             Entity target = null;

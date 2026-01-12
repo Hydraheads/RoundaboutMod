@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
+import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.Options;
@@ -196,6 +197,9 @@ public class GeneralPowers extends AbilityScapeBasis {
                 setPlayerPos2(PlayerPosIndex.NONE);
             }
             if (getActivePower() != PowerIndex.SNEAK_ATTACK && getPlayerPos2() == PlayerPosIndex.SWEEP_KICK) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            }
+            if (getActivePower() != VampireGeneralPowers.POWER_SPIKE && getPlayerPos2() == PlayerPosIndex.HAIR_SPIKE) {
                 setPlayerPos2(PlayerPosIndex.NONE);
             }
             if (this.self instanceof Player PE && PE.isSpectator()) {

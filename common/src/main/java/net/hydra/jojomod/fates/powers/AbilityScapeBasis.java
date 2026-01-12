@@ -1403,6 +1403,12 @@ public class AbilityScapeBasis {
         return false;
     }
 
+    public boolean canAttack2(){
+        if (this.attackTimeDuring <= -1) {
+            return this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax;
+        }
+        return getActivePower() == PowerIndex.NONE;
+    }
     /**The Guard Variation is prioritized over this for most stands but it may find niche uses*/
     public void buttonInputUse(boolean keyIsDown, Options options) {
         if (keyIsDown) {

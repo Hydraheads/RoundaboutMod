@@ -16,6 +16,7 @@ public class PlayerPosIndex {
     public static final byte BARRAGE_CHARGE = 5;
     public static final byte BARRAGE = 6;
     public static final byte SWEEP_KICK = 7;
+    public static final byte HAIR_SPIKE = 8;
 
     public static final byte SNUBNOSE_AIM = 3;
 

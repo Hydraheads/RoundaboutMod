@@ -234,6 +234,24 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                 r, g, b);
                         renderVampireHairFleshBud(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
                                 r, g, b);
+                    } else if (pl.roundabout$GetPos2() == PlayerPosIndex.HAIR_SPIKE){
+                        if (!isHurt){
+                            r = pl.rdbt$getHairColorX();
+                            g = pl.rdbt$getHairColorY();
+                            b = pl.rdbt$getHairColorZ();
+
+                            if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
+                                VisageData vd = ME.visageData;
+                                if (vd != null && vd.isCharacterVisage()) {
+                                    r = ((float) vd.getHairColor().getX()) / 255;
+                                    g = ((float) vd.getHairColor().getY()) / 255;
+                                    b = ((float) vd.getHairColor().getZ()) / 255;
+                                }
+                            }
+                        }
+
+                        renderBodySpike(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
+                                r, g, b);
                     }
                 }
 
@@ -316,6 +334,14 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         getParentModel().body.translateAndRotate(poseStack);
         ModStrayModels.SmallChestPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,33);
+    }
+    public void renderBodySpike(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                                  float r, float g, float b) {
+        ClientUtil.pushPoseAndCooperate(poseStack,33);
+        getParentModel().body.translateAndRotate(poseStack);
+        ModStrayModels.bodySpikePart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1);
         ClientUtil.popPoseAndCooperate(poseStack,33);
     }
     public void renderPonytail(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
