@@ -6,6 +6,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
@@ -16,6 +17,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -113,30 +115,44 @@ public class BodySpikePart extends PsuedoHierarchicalModel {
             //The number at the end is inversely proportional so 2 is half speed
 
             if (context instanceof Player pl && ((IPowersPlayer)pl).rdbt$getPowers() instanceof VampireGeneralPowers gp){
+                boolean tier2 = gp.extended && gp.getPlayerPos2() == PlayerPosIndex.HAIR_SPIKE_2;
                 float partial = partialTicks % 1;
-                partial = Math.min(gp.spikeTimeDuring+partial,maxSize);
-                modifySpike(spike1,partial);
-                modifySpike(spike2,partial);
-                modifySpike(spike3,partial);
-                modifySpike(spike4,partial);
-                modifySpike(spike5,partial);
-                modifySpike(spike6,partial);
-                modifySpike(spike7,partial);
-                modifySpike(spike8,partial);
-                modifySpike(spike9,partial);
+                if (tier2){
+                    if (gp.retract){
+                        partial*= -((float) VampireGeneralPowers.maxSpike2 /3);
+                        partial = Math.max(gp.spikeTimeDuring+partial,0);
+                    } else {
+                        partial*= ((float) VampireGeneralPowers.maxSpike2 /3);
+                        partial = Math.min(gp.spikeTimeDuring+partial,VampireGeneralPowers.maxSpike2);
+                    }
+                } else {
+                    partial = Math.min(gp.spikeTimeDuring+partial,VampireGeneralPowers.maxSpike);
+                }
+                modifySpike(spike1,partial,tier2);
+                modifySpike(spike2,partial,tier2);
+                modifySpike(spike3,partial,tier2);
+                modifySpike(spike4,partial,tier2);
+                modifySpike(spike5,partial,tier2);
+                modifySpike(spike6,partial,tier2);
+                modifySpike(spike7,partial,tier2);
+                modifySpike(spike8,partial,tier2);
+                modifySpike(spike9,partial,tier2);
             }
 
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
         }
     }
-    public static float maxSize = 20;
     public static float maxSize2 = 48;
 
-    public void modifySpike(ModelPart spike, float partial){
+    public void modifySpike(ModelPart spike, float partial, boolean tier2){
         if (spike != null){
                 spike.xScale = 0.4F;
                 spike.yScale = 0.4F;
-                spike.zScale = (partial)/3;
+                if (!tier2){
+                    spike.zScale = (partial)/3;
+                } else {
+                    spike.zScale = partial;
+                }
         }
     }
 

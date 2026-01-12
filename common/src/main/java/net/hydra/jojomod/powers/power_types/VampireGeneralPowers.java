@@ -49,6 +49,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public static final byte HIT = PowerIndex.SPECIAL_CHARGED;
     public static final byte POWER_SWEEP = PowerIndex.SNEAK_ATTACK;
     public static final byte POWER_SPIKE = PowerIndex.POWER_1;
+    public static final byte POWER_SPIKE_HIT = PowerIndex.POWER_1_BONUS;
 
     /**The text name of the fate*/
     public Component getPowerName(){
@@ -111,10 +112,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     @Override
     public boolean tryPower(int move, boolean forced) {
         if (!self.level().isClientSide()) {
-            if (move != POWER_SWEEP && getPlayerPos2() == PlayerPosIndex.SWEEP_KICK) {
+            byte pos2 = getPlayerPos2();
+            if (move != POWER_SWEEP && pos2 == PlayerPosIndex.SWEEP_KICK) {
                 setPlayerPos2(PlayerPosIndex.NONE);
-            }
-            if (move != POWER_SPIKE && getPlayerPos2() == PlayerPosIndex.HAIR_SPIKE) {
+            } else if (move != POWER_SPIKE && (pos2 == PlayerPosIndex.HAIR_SPIKE || pos2 == PlayerPosIndex.HAIR_SPIKE_2)) {
                 setPlayerPos2(PlayerPosIndex.NONE);
             }
         }
@@ -152,7 +153,6 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         //Client only
         if (self.level().isClientSide()) {
 
-
             if (isPacketPlayer()) {
                 if (getActivePower() == POWER_DIVE) {
                     if (attackTimeDuring > 20 || self.isInWater()) {
@@ -188,15 +188,34 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         }
                     }
                 } else if (getActivePower() == POWER_SPIKE) {
-                    setAttackTimeDuring(-10);
+                    if (attackTimeDuring >= 22) {
+                        setAttackTimeDuring(-10);
+                        xTryPower(POWER_SPIKE_HIT, false);
+                        tryPowerPacket(POWER_SPIKE_HIT);
+                    }
                 }
             }
 
 
-            if (getPlayerPos2() == PlayerPosIndex.HAIR_SPIKE) {
-                spikeTimeDuring++;
+            byte pos2 = getPlayerPos2();
+            if (pos2 == PlayerPosIndex.HAIR_SPIKE) {
+                if (spikeTimeDuring < maxSpike) {
+                    spikeTimeDuring++;
+                }
+            } else if (pos2 == PlayerPosIndex.HAIR_SPIKE_2){
+                if (!extended){
+                    extended = true;
+                }
+                if (spikeTimeDuring < maxSpike2 && !retract) {
+                    spikeTimeDuring = Math.min(spikeTimeDuring+(maxSpike/3),maxSpike2);
+                } else {
+                    retract = true;
+                    spikeTimeDuring = Math.max(spikeTimeDuring-(maxSpike2/3),0);
+                }
             } else {
                 spikeTimeDuring=0;
+                retract = false;
+                extended = false;
             }
 
         } else {
@@ -214,6 +233,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             }
         }
     }
+    public boolean retract = false;
+    public boolean extended = false;
+    public static int maxSpike= 20;
+    public static int maxSpike2= 48;
 
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime) {
@@ -266,15 +289,26 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public boolean setPowerOther(int move, int lastMove) {
         if (move == POWER_DIVE) {
             doDive();
-        }if (move == HIT) {
+        }else if (move == HIT) {
             doDiveHit();
-        }if (move == POWER_SWEEP) {
+        }else if (move == POWER_SWEEP) {
             sweepAttack();
-        }if (move == POWER_SPIKE) {
+        }else if (move == POWER_SPIKE) {
             spikeAttack();
+        }else if (move == POWER_SPIKE_HIT){
+            spikeHit();
         }
 
         return super.setPowerOther(move,lastMove);
+    }
+
+    public void spikeHit(){
+        setAttackTimeDuring(-10);
+        if (!self.level().isClientSide()){
+            if (getPlayerPos2() != PlayerPosIndex.HAIR_SPIKE_2) {
+                setPlayerPos2(PlayerPosIndex.HAIR_SPIKE_2);
+            }
+        }
     }
 
     public boolean isServerControlledCooldown(CooldownInstance ci, byte num){

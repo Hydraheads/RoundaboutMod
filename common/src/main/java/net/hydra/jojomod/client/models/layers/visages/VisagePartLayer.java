@@ -210,10 +210,11 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
                 if (entity instanceof Player play) {
                     IPlayerEntity pl = ((IPlayerEntity) play);
-                    if (pl.roundabout$GetPos2() == PlayerPosIndex.BARRAGE) {
+                    byte pos2 = pl.roundabout$GetPos2();
+                    if (pos2 == PlayerPosIndex.BARRAGE) {
                         renderBarrageArmsPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
                                 r, g, b);
-                    } else if (pl.roundabout$GetPos2() == PlayerPosIndex.HAIR_EXTENSION){
+                    } else if (pos2 == PlayerPosIndex.HAIR_EXTENSION){
                         if (!isHurt){
                             r = pl.rdbt$getHairColorX();
                             g = pl.rdbt$getHairColorY();
@@ -234,7 +235,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                 r, g, b);
                         renderVampireHairFleshBud(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
                                 r, g, b);
-                    } else if (pl.roundabout$GetPos2() == PlayerPosIndex.HAIR_SPIKE){
+                    } else if (pos2 == PlayerPosIndex.HAIR_SPIKE || pos2 == PlayerPosIndex.HAIR_SPIKE_2){
                         if (!isHurt){
                             r = pl.rdbt$getHairColorX();
                             g = pl.rdbt$getHairColorY();
