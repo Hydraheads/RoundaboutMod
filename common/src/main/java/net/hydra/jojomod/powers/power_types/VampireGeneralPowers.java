@@ -178,7 +178,11 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public void renderIcons(GuiGraphics context, int x, int y) {
         if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampiricFate vp) {
 
-            setSkillIcon(context, x, y, 1, StandIcons.DODGE, PowerIndex.GENERAL_1);
+            if (isHoldingSneak()) {
+                setSkillIcon(context, x, y, 1, StandIcons.DODGE, PowerIndex.GENERAL_1_SNEAK);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.HAIR_SPIKE, PowerIndex.GENERAL_1);
+            }
             setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.GENERAL_2);
             if ((vp.canLatchOntoWall() || (vp.isPlantedInWall() && !isHoldingSneak())) && vp.canWallWalkConfig()) {
                 setSkillIcon(context, x, y, 3, StandIcons.WALL_WALK_VAMP, PowerIndex.FATE_3);
@@ -253,11 +257,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
                 ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
                         this.getSelf().getX()+cvec.x, this.getSelf().getY()+cvec.y, this.getSelf().getZ()+cvec.z,
-                        0,
-                        cvec.x,
-                        cvec.y,
-                        cvec.z,
-                        0.8);
+                        0, cvec.x, cvec.y, cvec.z, 0.8);
             }
             this.self.level().playSound(null, this.self.blockPosition(),ModSounds.VAMPIRE_DIVE_EVENT, SoundSource.PLAYERS, 1F, (float) (0.96f + Math.random() * 0.08f));
         } else {

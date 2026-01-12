@@ -175,6 +175,8 @@ public class StandIcons {
 
     public static final ResourceLocation DODGE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/dodge.png");
+    public static final ResourceLocation HAIR_SPIKE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/powers/vampire/hair_spike.png");
     public static final ResourceLocation STAND_LEAP_WORLD = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/stand_leap.png");
     public static final ResourceLocation STAND_LEAP_REBOUND_WORLD = new ResourceLocation(Roundabout.MOD_ID,
