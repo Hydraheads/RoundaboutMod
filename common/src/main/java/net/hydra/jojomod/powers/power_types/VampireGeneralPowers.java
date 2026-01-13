@@ -357,7 +357,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                                 value.setDeltaMovement(0,0,0);
                                 if (value instanceof Player pl){
                                     ((StandUser)pl).roundabout$setDazed((byte) 20);
-                                } else if (value instanceof LivingEntity livingEntity){
+                                } else if (value instanceof LivingEntity livingEntity && !MainUtil.isBossMob(livingEntity)){
                                     ((StandUser)livingEntity).roundabout$setDazed((byte) 16);
                                 }
                                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SPIKE_HIT_EVENT, SoundSource.PLAYERS, 1F, (float) (1.0f + Math.random() * 0.05f));
