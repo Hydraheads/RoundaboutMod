@@ -186,7 +186,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
                 attackTargetId = chargeTime;
             }
         }
-        return super.tryPower(move,forced);
+        return super.tryIntPower(move,forced,chargeTime);
     }
 
 
@@ -210,6 +210,11 @@ public class PunchingGeneralPowers extends GeneralPowers {
             this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
         }
         return super.tryPower(move,forced);
+    }
+
+
+    public boolean bigJumpBlocker(){
+        return isBarraging() || super.bigJumpBlocker();
     }
 
     public int attackTargetId = -1;

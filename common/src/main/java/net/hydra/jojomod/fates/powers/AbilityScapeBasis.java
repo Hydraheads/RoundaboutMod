@@ -252,6 +252,10 @@ public class AbilityScapeBasis {
                 1, 0.0, 0.0, 0.0, 1);
     }
 
+    public boolean bigJumpBlocker(){
+        return getStandUserSelf().roundabout$isGuarding();
+    }
+
     /**If your character is in a position to change abilities. By default, you are locked into clashing while clashing
      * unless you forfeit the clash by desummoning your stand*/
     public boolean canChangePower(int move, boolean forced){

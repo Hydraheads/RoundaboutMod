@@ -86,6 +86,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public float inputSpeedModifiers(float basis){
         if (getActivePower() == POWER_SPIKE) {
             basis*=0.2f;
+        } else if (isSweeping() && !self.isCrouching()){
+            basis*=0.1f;
         }
         return super.inputSpeedModifiers(basis);
     }
@@ -147,6 +149,12 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         } else {
             super.buttonInputAttack(keyIsDown,options);
         }
+    }
+
+
+
+    public boolean isSweeping(){
+        return getActivePower() == POWER_SWEEP;
     }
 
     public int spikeTimeDuring = 0;
@@ -241,7 +249,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public boolean retract = false;
     public boolean extended = false;
     public static int maxSpike= 20;
-    public static int maxSpike2= 48;
+    public static int maxSpike2= 56;
 
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime) {
@@ -288,6 +296,13 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         }
     }
 
+    public boolean isSpiking(){
+        return getActivePower() == POWER_SPIKE;
+    }
+
+    public boolean bigJumpBlocker(){
+        return isSpiking() || super.bigJumpBlocker();
+    }
 
     @Override
     /**Override this to set the special move*/
