@@ -1500,7 +1500,7 @@ public class ClientUtil {
                 Vec3 gtranslation = new Vec3(0, -0.5, 0);
                 stack.translate(gtranslation.x, gtranslation.y, gtranslation.z);
                 stack.mulPose(Axis.ZP.rotationDegrees(180f));
-                stack.mulPose(Axis.XP.rotationDegrees(-2));
+                stack.mulPose(Axis.XP.rotationDegrees(1));
 
                 ModStrayModels.VampireHairFlesh.render(cameraEnt, $$4, stack, source, poggers, r, g, b, 1);
 

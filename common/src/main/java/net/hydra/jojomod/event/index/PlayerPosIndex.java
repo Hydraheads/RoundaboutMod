@@ -18,6 +18,7 @@ public class PlayerPosIndex {
     public static final byte SWEEP_KICK = 7;
     public static final byte HAIR_SPIKE = 8;
     public static final byte HAIR_SPIKE_2 = 9;
+    public static final byte HAIR_EXTENSION_2 = 10;
 
     public static final byte SNUBNOSE_AIM = 3;
 

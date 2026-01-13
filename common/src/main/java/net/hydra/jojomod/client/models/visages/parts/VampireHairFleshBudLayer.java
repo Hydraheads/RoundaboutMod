@@ -4,8 +4,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
+import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
+import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.util.gravity.GravityAPI;
@@ -25,12 +28,20 @@ public class VampireHairFleshBudLayer extends PsuedoHierarchicalModel {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
    private final ModelPart hair;
     private final ModelPart Root;
+    private final ModelPart right_flesh_bud;
+    private final ModelPart right_bud;
+    private final ModelPart left_flesh_bud;
+    private final ModelPart left_bud;
 
     public VampireHairFleshBudLayer() {
         super(RenderType::entityTranslucent);
 
         this.Root = createBodyLayer().bakeRoot();
         this.hair = Root.getChild("hair");
+        this.right_flesh_bud = this.hair.getChild("right_flesh_bud");
+        this.right_bud = this.right_flesh_bud.getChild("right_bud");
+        this.left_flesh_bud = this.hair.getChild("left_flesh_bud");
+        this.left_bud = this.left_flesh_bud.getChild("left_bud");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -43,17 +54,21 @@ public class VampireHairFleshBudLayer extends PsuedoHierarchicalModel {
 
         PartDefinition left_flesh_bud_strand_r1 = right_flesh_bud.addOrReplaceChild("left_flesh_bud_strand_r1", CubeListBuilder.create().texOffs(-17, 0).mirror().addBox(-4.625F, -0.024F, -26.0F, 8.0F, 0.0F, 26.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-4.625F, 0.0F, 0.0F, 0.0F, 0.0F, -3.1416F));
 
-        PartDefinition right_flesh_bud_r1 = right_flesh_bud.addOrReplaceChild("right_flesh_bud_r1", CubeListBuilder.create().texOffs(30, 0).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 3.0F, new CubeDeformation(-0.3F)), PartPose.offsetAndRotation(-2.5F, 0.0F, -23.0F, 0.0F, 0.0F, 0.7854F));
+        PartDefinition right_bud = right_flesh_bud.addOrReplaceChild("right_bud", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition right_incomplete_bud_r1 = right_flesh_bud.addOrReplaceChild("right_incomplete_bud_r1", CubeListBuilder.create().texOffs(30, 6).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 3.0F, new CubeDeformation(-0.5F)), PartPose.offsetAndRotation(-4.5F, 0.0F, -19.0F, 0.0F, 0.0F, 0.7854F));
+        PartDefinition right_flesh_bud_r1 = right_bud.addOrReplaceChild("right_flesh_bud_r1", CubeListBuilder.create().texOffs(30, 0).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 3.0F, new CubeDeformation(-0.3F)), PartPose.offsetAndRotation(-2.5F, 0.0F, -23.0F, 0.0F, 0.0F, 0.7854F));
+
+        PartDefinition right_incomplete_bud_r1 = right_bud.addOrReplaceChild("right_incomplete_bud_r1", CubeListBuilder.create().texOffs(30, 6).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 3.0F, new CubeDeformation(-0.5F)), PartPose.offsetAndRotation(-4.5F, 0.0F, -19.0F, 0.0F, 0.0F, 0.7854F));
 
         PartDefinition left_flesh_bud = hair.addOrReplaceChild("left_flesh_bud", CubeListBuilder.create().texOffs(-17, 0).mirror().addBox(0.0F, 0.0F, -26.0F, 8.0F, 0.0F, 26.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition right_flesh_bud_strand_r1 = left_flesh_bud.addOrReplaceChild("right_flesh_bud_strand_r1", CubeListBuilder.create().texOffs(-17, 0).addBox(-4.0F, 0.001F, -26.0F, 8.0F, 0.0F, 26.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.0F, 0.025F, 0.0F, 0.0F, 0.0F, -3.1416F));
+        PartDefinition left_flesh_bud_strand_r2 = left_flesh_bud.addOrReplaceChild("left_flesh_bud_strand_r2", CubeListBuilder.create().texOffs(-17, 0).addBox(-4.0F, 0.001F, -26.0F, 8.0F, 0.0F, 26.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.0F, 0.025F, 0.0F, 0.0F, 0.0F, -3.1416F));
 
-        PartDefinition left_flesh_bud_r1 = left_flesh_bud.addOrReplaceChild("left_flesh_bud_r1", CubeListBuilder.create().texOffs(30, 0).mirror().addBox(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 3.0F, new CubeDeformation(-0.3F)).mirror(false), PartPose.offsetAndRotation(3.5F, 0.0F, -23.0F, 0.0F, 0.0F, -0.7854F));
+        PartDefinition left_bud = left_flesh_bud.addOrReplaceChild("left_bud", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition left_incomplete_bud_r1 = left_flesh_bud.addOrReplaceChild("left_incomplete_bud_r1", CubeListBuilder.create().texOffs(30, 6).mirror().addBox(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 3.0F, new CubeDeformation(-0.5F)).mirror(false), PartPose.offsetAndRotation(4.5F, 0.0F, -19.0F, 0.0F, 0.0F, -0.7854F));
+        PartDefinition left_flesh_bud_r1 = left_bud.addOrReplaceChild("left_flesh_bud_r1", CubeListBuilder.create().texOffs(30, 0).mirror().addBox(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 3.0F, new CubeDeformation(-0.3F)).mirror(false), PartPose.offsetAndRotation(3.5F, 0.0F, -23.0F, 0.0F, 0.0F, -0.7854F));
+
+        PartDefinition left_incomplete_bud_r1 = left_bud.addOrReplaceChild("left_incomplete_bud_r1", CubeListBuilder.create().texOffs(30, 6).mirror().addBox(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 3.0F, new CubeDeformation(-0.5F)).mirror(false), PartPose.offsetAndRotation(4.5F, 0.0F, -19.0F, 0.0F, 0.0F, -0.7854F));
 
         return LayerDefinition.create(meshdefinition, 48, 26);
     }
@@ -77,6 +92,12 @@ public class VampireHairFleshBudLayer extends PsuedoHierarchicalModel {
 
     public ResourceLocation getTextureLocation(Entity context, int poggers){
         return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/hair/vampire_3/vampire_hair_white_"+(poggers)+".png");
+    }
+
+    public boolean getAlternateStyle(Player pl){
+        if (pl != null && ((IPlayerEntity)pl).roundabout$GetPos2() == PlayerPosIndex.HAIR_EXTENSION_2)
+            return true;
+        return false;
     }
 
     public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light) {
@@ -110,6 +131,13 @@ public class VampireHairFleshBudLayer extends PsuedoHierarchicalModel {
                     Direction gravityDirection = GravityAPI.getGravityDirection(player);
 
 
+                    if (getAlternateStyle(player)){
+                        right_bud.visible = false;
+                        left_bud.visible = false;
+                    } else {
+                        right_bud.visible = true;
+                        left_bud.visible = true;
+                    }
 
                     root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
                 }

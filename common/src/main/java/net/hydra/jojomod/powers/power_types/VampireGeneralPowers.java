@@ -8,6 +8,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.DamageHandler;
@@ -55,6 +56,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public static final byte POWER_SWEEP = PowerIndex.SNEAK_ATTACK;
     public static final byte POWER_SPIKE = PowerIndex.POWER_1;
     public static final byte POWER_SPIKE_HIT = PowerIndex.POWER_1_BONUS;
+
+    public static final byte POWER_HAIR_GRAB = PowerIndex.POWER_1_SNEAK;
 
     /**The text name of the fate*/
     public Component getPowerName(){
@@ -128,6 +131,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (move != POWER_SWEEP && pos2 == PlayerPosIndex.SWEEP_KICK) {
                 setPlayerPos2(PlayerPosIndex.NONE);
             } else if (move != POWER_SPIKE && (pos2 == PlayerPosIndex.HAIR_SPIKE || pos2 == PlayerPosIndex.HAIR_SPIKE_2)) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            } else if (move != POWER_HAIR_GRAB && (pos2 == PlayerPosIndex.HAIR_EXTENSION_2)) {
                 setPlayerPos2(PlayerPosIndex.NONE);
             }
         }
@@ -286,7 +291,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampiricFate vp) {
 
             if (isHoldingSneak()) {
-                setSkillIcon(context, x, y, 1, StandIcons.DODGE, PowerIndex.GENERAL_1_SNEAK);
+                setSkillIcon(context, x, y, 1, StandIcons.HAIR_GRAB, PowerIndex.GENERAL_1_SNEAK);
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.HAIR_SPIKE, PowerIndex.GENERAL_1);
             }
@@ -307,6 +312,25 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
     public boolean bigJumpBlocker(){
         return isSpiking() || super.bigJumpBlocker();
+    }
+
+    @Override
+    public void renderAttackHud(GuiGraphics context, Player playerEntity,
+                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+                                float flashAlpha, float otherFlashAlpha) {
+        super.renderAttackHud(context,playerEntity,scaledWidth,scaledHeight,ticks,vehicleHeartCount,flashAlpha,otherFlashAlpha);
+        boolean powerOn = PowerTypes.hasPowerActive(playerEntity);
+        int j = scaledHeight / 2 - 7 - 4;
+        int k = scaledWidth / 2 - 8;
+
+        float attackTimeDuring = getAttackTimeDuring();
+        Entity TE2 = getTargetEntity(playerEntity, 5, getPunchAngle());
+        if (powerOn && !hasRendered && (getActivePower() == NONE || attackTimeDuring <= -1)  &&
+                TE2 != null && TE2.isAlive()) {
+            int barTexture = 89;
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, barTexture, 15, 6);
+            hasRendered = true;
+        }
     }
 
     @Override
