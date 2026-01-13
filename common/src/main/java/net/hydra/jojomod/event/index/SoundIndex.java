@@ -13,6 +13,7 @@ public class SoundIndex {
     public static final byte TOMMY_RELOAD = -26;
     public static final byte BOWLER_HAT_AIM_SOUND = -22;
     public static final byte BLOOD_REGEN = -6;
+    public static final byte HAIR_SPIKE_CHARGE = -7;
     public static final byte STAND_ARROW_CHARGE = -21;
     public static final byte CACKLE = -4;
     public static final byte BARRAGE_CHARGE_SOUND = 1;

@@ -164,13 +164,13 @@ public class BodySpikePart extends PsuedoHierarchicalModel {
 
     public void modifySpike(ModelPart spike, float partial, boolean tier2){
         if (spike != null){
-                spike.xScale = 0.01F;
-                spike.yScale = 0.5F;
-                if (!tier2){
-                    spike.zScale = (partial)/3;
-                } else {
-                    spike.zScale = partial;
-                }
+            spike.xScale = 0.01F;
+            spike.yScale = 0.5F;
+            if (!tier2){
+                spike.zScale = (partial)/3;
+            } else {
+                spike.zScale = partial;
+            }
         }
     }
     public void modifySpike2(ModelPart spike, float partial, boolean tier2){

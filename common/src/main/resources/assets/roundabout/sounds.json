@@ -83,6 +83,12 @@
       "roundabout:tommy_gun_fire"
     ]
   },
+  "hair_sharpen": {
+    "subtitle": "sounds.roundabout.hair_sharpen",
+    "sounds": [
+      "roundabout:hair_sharpen"
+    ]
+  },
   "tommy_reload": {
     "subtitle": "sounds.roundabout.tommy_reload",
     "sounds": [

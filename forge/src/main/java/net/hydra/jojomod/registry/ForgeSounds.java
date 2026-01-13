@@ -760,6 +760,8 @@ public class ForgeSounds {
             register(ModSounds.FLESH_BUD_REMOVAL, ModSounds.FLESH_BUD_REMOVAL_ID);
     public static final RegistryObject<SoundEvent> HAIR_TOGGLE =
             register(ModSounds.HAIR_TOGGLE, ModSounds.HAIR_TOGGLE_ID);
+    public static final RegistryObject<SoundEvent> HAIR_SHARPEN =
+            register(ModSounds.HAIR_SHARPEN, ModSounds.HAIR_SHARPEN_ID);
     public static final RegistryObject<SoundEvent> HALLELUJAH =
             register(ModSounds.HALLELUJAH, ModSounds.HALLELUJAH_ID);
     public static final RegistryObject<SoundEvent> TORTURE_DANCE =

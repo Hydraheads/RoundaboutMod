@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -104,6 +105,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         setActivePower(POWER_SPIKE);
         if (!self.level().isClientSide()) {
             if (getPlayerPos2() != PlayerPosIndex.HAIR_SPIKE) {
+                playSoundsIfNearby(SoundIndex.HAIR_SPIKE_CHARGE, 100, true);
                 setPlayerPos2(PlayerPosIndex.HAIR_SPIKE);
             }
         }
@@ -112,6 +114,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     @Override
     public boolean tryPower(int move, boolean forced) {
         if (!self.level().isClientSide()) {
+            if (move != POWER_SPIKE && move != POWER_SPIKE_HIT){
+                this.stopSoundsIfNearby(SoundIndex.HAIR_SPIKE_CHARGE, 100,false);
+            }
             byte pos2 = getPlayerPos2();
             if (move != POWER_SWEEP && pos2 == PlayerPosIndex.SWEEP_KICK) {
                 setPlayerPos2(PlayerPosIndex.NONE);

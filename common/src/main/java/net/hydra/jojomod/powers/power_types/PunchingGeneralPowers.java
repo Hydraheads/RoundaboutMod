@@ -208,7 +208,6 @@ public class PunchingGeneralPowers extends GeneralPowers {
         if (!this.self.level().isClientSide && this.isBarraging()  && (move != PowerIndex.BARRAGE && move != PowerIndex.BARRAGE_CLASH
                 && move != PowerIndex.BARRAGE_CHARGE && move != PowerIndex.GUARD) && this.attackTimeDuring  > -1){
             this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
-
         }
         return super.tryPower(move,forced);
     }
