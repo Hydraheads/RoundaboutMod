@@ -356,7 +356,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                             if (DamageHandler.VampireDamageEntity(value, getSpikeStrength(value), this.self)) {
                                 value.setDeltaMovement(0,0,0);
                                 if (value instanceof Player pl){
-                                    ((StandUser)pl).roundabout$setDazed((byte) 20);
+                                    ((StandUser)pl).roundabout$setDazed((byte) 16);
                                 } else if (value instanceof LivingEntity livingEntity && !MainUtil.isBossMob(livingEntity)){
                                     ((StandUser)livingEntity).roundabout$setDazed((byte) 16);
                                 }
