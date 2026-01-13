@@ -313,6 +313,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (getPlayerPos2() != PlayerPosIndex.HAIR_SPIKE_2) {
                 setPlayerPos2(PlayerPosIndex.HAIR_SPIKE_2);
             }
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXTEND_SPIKES_EVENT, SoundSource.PLAYERS, 1F, (float) (1.05f + Math.random() * 0.05f));
+
+
         }
     }
 
