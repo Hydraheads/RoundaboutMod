@@ -1524,28 +1524,64 @@ public class ClientUtil {
                 stack.popPose();
             }
         }
-        if (cameraEnt instanceof Player play && ((IPlayerEntity)play).roundabout$GetPos2() == PlayerPosIndex.BARRAGE){
-            stack.pushPose();
+        if (cameraEnt instanceof Player play){
+            byte bt = ((IPlayerEntity)play).roundabout$GetPos2();
+            if (bt == PlayerPosIndex.BARRAGE) {
+                stack.pushPose();
 
-            boolean isHurt = play.hurtTime > 0;
-            float r = isHurt ? 1.0F : 1.0F;
-            float g = isHurt ? 0.6F : 1.0F;
-            float b = isHurt ? 0.6F : 1.0F;
-            Direction gravityDirection = GravityAPI.getGravityDirection(cameraEnt);
-            Vec3 gtranslation = new Vec3(0,-0.4,0);
+                boolean isHurt = play.hurtTime > 0;
+                float r = isHurt ? 1.0F : 1.0F;
+                float g = isHurt ? 0.6F : 1.0F;
+                float b = isHurt ? 0.6F : 1.0F;
+                Direction gravityDirection = GravityAPI.getGravityDirection(cameraEnt);
+                Vec3 gtranslation = new Vec3(0, -0.4, 0);
 
-            //gtranslation = RotationUtil.vecPlayerToWorld(gtranslation,gravityDirection);
-            stack.translate(gtranslation.x,gtranslation.y,gtranslation.z);
+                //gtranslation = RotationUtil.vecPlayerToWorld(gtranslation,gravityDirection);
+                stack.translate(gtranslation.x, gtranslation.y, gtranslation.z);
 
-            float opacity = 0.5F;
-            if (ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().opacitySettings != null){
-                opacity = ConfigManager.getClientConfig().opacitySettings.opacityOfPlayerBarrageArms;
+                float opacity = 0.5F;
+                if (ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().opacitySettings != null) {
+                    opacity = ConfigManager.getClientConfig().opacitySettings.opacityOfPlayerBarrageArms;
+                }
+                stack.mulPose(Axis.ZP.rotationDegrees(180f));
+                stack.mulPose(Axis.XP.rotationDegrees(-22));
+                ModStrayModels.barrageArmsPart.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light,
+                        r, g, b, opacity);
+                stack.popPose();
+            } else if (bt == PlayerPosIndex.HAIR_SPIKE_2 || bt == PlayerPosIndex.HAIR_SPIKE) {
+                stack.pushPose();
+                boolean isHurt = play.hurtTime > 0;
+
+                IPlayerEntity pl = ((IPlayerEntity) cameraEnt);
+                float r = pl.rdbt$getHairColorX();
+                float g = pl.rdbt$getHairColorY();
+                float b = pl.rdbt$getHairColorZ();
+
+
+                ItemStack visage = pl.roundabout$getMaskSlot();
+                if (isHurt){
+                    r = isHurt ? 1.0F : 1.0F;
+                    g = isHurt ? 0.6F : 1.0F;
+                    b = isHurt ? 0.6F : 1.0F;
+                } else {
+                    if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
+                        VisageData vd = ME.visageData;
+                        if (vd != null && vd.isCharacterVisage()) {
+                            r = ((float) vd.getHairColor().getX()) / 255;
+                            g = ((float) vd.getHairColor().getY()) / 255;
+                            b = ((float) vd.getHairColor().getZ()) / 255;
+                        }
+                    }
+                }
+                Vec3 gtranslation = new Vec3(0, 0.1, 0);
+                stack.translate(gtranslation.x, gtranslation.y, gtranslation.z);
+
+                stack.mulPose(Axis.ZP.rotationDegrees(180f));
+                stack.mulPose(Axis.XP.rotationDegrees(-22));
+                ModStrayModels.bodySpikePart.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light,
+                        r, g, b, 1);
+                stack.popPose();
             }
-            stack.mulPose(Axis.ZP.rotationDegrees(180f));
-            stack.mulPose(Axis.XP.rotationDegrees(-22));
-            ModStrayModels.barrageArmsPart.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light,
-                    r,g,b,opacity);
-            stack.popPose();
         }
 
         if (cameraEnt instanceof Player play) {
