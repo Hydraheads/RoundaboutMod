@@ -2202,7 +2202,7 @@ public class AbilityScapeBasis {
         return StandGrabHitbox(User,entities,maxDistance,25);
     }
     public List<Entity> StandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, float angle){
-        return StandGrabHitbox(User,entities,maxDistance,25,false);
+        return StandGrabHitbox(User,entities,maxDistance,angle,false);
     }
     public List<Entity> StandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, float angle, boolean throughWalls){
         List<Entity> hitEntities = new ArrayList<>(entities) {
