@@ -515,10 +515,15 @@ public int speedActivated = 0;
         }
     }
     public void dashOrWallWalk(){
-        if (canLatchOntoWall() && canWallWalkConfig())
+        if (canLatchOntoWall() && canWallWalkConfig()) {
             doWallLatchClient();
-        else if (!isPlantedInWall())
-            dash();
+        } else if (!isPlantedInWall()) {
+            if (self.onGround()){
+                dash();
+            } else {
+                airDash();
+            }
+        }
     }
     public void doWallLatchClient(){
         if (!this.onCooldown(PowerIndex.FATE_3)) {
