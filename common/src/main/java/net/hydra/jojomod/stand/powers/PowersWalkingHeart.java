@@ -740,7 +740,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public boolean replaceHudActively(){
-        return inCombatMode() || getShootTicks() > 0;
+        return (inCombatMode() || getShootTicks() > 0) && PowerTypes.hasStandActivelyEquipped(self);
     }
     public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x){
         StandHudRender.renderWalkingHeartHud(context,cameraPlayer,screenWidth,screenHeight,x);

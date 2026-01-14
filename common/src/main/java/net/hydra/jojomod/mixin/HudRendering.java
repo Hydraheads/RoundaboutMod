@@ -546,7 +546,7 @@ public abstract class HudRendering implements IHudAccess {
 
             boolean removeNum = false;
             boolean showComboAmt = false;
-                    boolean displayCombatTicks = (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && !user.roundabout$getEffectiveCombatMode() &&
+                    boolean displayCombatTicks = (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && !user.roundabout$getEffectiveCombatMode() && PowerTypes.hasStandActivelyEquipped(minecraft.player) &&
                             (PW.getShootTicks() > 0));
             if (displayCombatTicks) {
                 removeNum = true;
@@ -608,7 +608,7 @@ public abstract class HudRendering implements IHudAccess {
                     StandHudRender.renderDistanceHUDJustice(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, ((StandUser) minecraft.player).roundabout$getStandPowers().getPilotingStand());
                 }
                 return true;
-            } else if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && user.roundabout$getEffectiveCombatMode()){
+            } else if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && user.roundabout$getEffectiveCombatMode() &&  PowerTypes.hasStandActivelyEquipped(minecraft.player)){
                 StandHudRender.renderShootModeSoftAndWet(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PW);
                 return true;
             } else if (user.roundabout$getStandPowers() instanceof PowersCream PC && PC.insideVoidInt > 0){
