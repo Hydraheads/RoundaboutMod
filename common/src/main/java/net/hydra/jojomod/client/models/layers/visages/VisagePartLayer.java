@@ -233,10 +233,8 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                 r, g, b);
                         renderVampireHairTwo(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
                                 r, g, b);
-                        if (pos2 == PlayerPosIndex.HAIR_EXTENSION) {
-                            renderVampireHairFleshBud(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
-                                    r, g, b);
-                        }
+                        renderVampireHairFleshBud(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
+                                r, g, b);
                     } else if (pos2 == PlayerPosIndex.HAIR_SPIKE || pos2 == PlayerPosIndex.HAIR_SPIKE_2){
                         if (!isHurt){
                             r = pl.rdbt$getHairColorX();

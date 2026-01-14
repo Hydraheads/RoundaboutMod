@@ -107,6 +107,16 @@ public class VampireHairFleshBudLayer extends PsuedoHierarchicalModel {
                 poggers -= 16;
                 hair.zScale = 2.5f;
                 VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(context,poggers)));
+
+
+
+                if (getAlternateStyle(PL)){
+                    right_bud.visible = false;
+                    left_bud.visible = false;
+                } else {
+                    right_bud.visible = true;
+                    left_bud.visible = true;
+                }
                 root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
             }
         }

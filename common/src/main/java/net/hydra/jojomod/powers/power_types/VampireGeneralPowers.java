@@ -77,6 +77,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 case SKILL_1_NORMAL -> {
                     clientSpikeAttack();
                 }
+                case SKILL_1_CROUCH -> {
+                    clientHairGrab();
+                }
                 case SKILL_3_NORMAL -> {
                     vp.dashOrWallWalk();
                 }
@@ -86,6 +89,12 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             }
         }
     };
+
+    public void clientHairGrab(){
+        if (canAttack2() && !onCooldown(PowerIndex.GENERAL_1_SNEAK)){
+            this.tryPower(POWER_HAIR_GRAB);
+        }
+    }
 
     @Override
     /**Stand related things that slow you down or speed you up, override and call super to make
@@ -216,6 +225,11 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         xTryPower(POWER_SPIKE_HIT, false);
                         tryPowerPacket(POWER_SPIKE_HIT);
                     }
+                } else if (getActivePower() == POWER_HAIR_GRAB) {
+                    if (attackTimeDuring > 10) {
+                        xTryPower(PowerIndex.NONE, false);
+                        tryPowerPacket(NONE);
+                    }
                 }
             }
 
@@ -268,10 +282,32 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 attackTargetId = chargeTime;
             } if (move == POWER_SWEEP) {
                 attackTargetId = chargeTime;
+            } if (move == POWER_HAIR_GRAB) {
+                attackTargetId = chargeTime;
             }
         }
         return super.tryIntPower(move,forced,chargeTime);
     }
+
+
+    public void doHairGrab(){
+        if (!self.level().isClientSide()) {
+            Entity target = null;
+            if (attackTargetId > 0) {
+                target = self.level().getEntity(attackTargetId);
+            }
+            hairPullEntity(target);
+        }
+    }
+
+    public void hairPullEntity(Entity entity) {
+        if (!this.self.level().isClientSide()) {
+            if (entity != null) {
+                entity.setDeltaMovement(self.getEyePosition().subtract(entity.position()).normalize().scale(1));
+            }
+        }
+    }
+
 
 
     public float getPunchStrength(Entity entity){
@@ -346,9 +382,31 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             spikeAttack();
         }else if (move == POWER_SPIKE_HIT){
             spikeHit();
+        }else if (move == POWER_HAIR_GRAB){
+            hairGrab();
         }
 
         return super.setPowerOther(move,lastMove);
+    }
+
+    public void hairGrab(){
+        this.attackTimeDuring = 0;
+        setActivePower(POWER_HAIR_GRAB);
+        if (!self.level().isClientSide()) {
+
+            if (getPlayerPos2() != PlayerPosIndex.HAIR_EXTENSION_2) {
+                setPlayerPos2(PlayerPosIndex.HAIR_EXTENSION_2);
+            }
+            doHairGrab();
+        } else {
+
+            Entity TE = getTargetEntity(self, 5F, getPunchAngle());
+            int id = 0;
+            if (TE != null){
+                id = TE.getId();
+            }
+            tryIntPowerPacket(POWER_HAIR_GRAB,id);
+        }
     }
 
     public float getSpikeStrength(Entity entity){
