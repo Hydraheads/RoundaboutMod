@@ -28,8 +28,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
@@ -487,6 +485,12 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             if (getPlayerPos2() != PlayerPosIndex.SWEEP_KICK) {
                 setPlayerPos2(PlayerPosIndex.SWEEP_KICK);
             }
+
+            Vec3 pos = self.getPosition(1f).add(self.getLookAngle().scale(0.75f));
+
+            ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.SWEEP_ATTACK,
+                    pos.x, pos.y+0.5F, pos.z,
+                    0, 0, 0, 0, 0.8);
             doSweepHit();
         } else {
 
