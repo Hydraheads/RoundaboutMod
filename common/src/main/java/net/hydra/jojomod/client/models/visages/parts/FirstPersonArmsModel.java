@@ -177,7 +177,8 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                 int muscle = ((StandUser)LE).roundabout$getZappedToID();
 
                 Mob shapeShift = ((IPlayerRenderer)PR).roundabout$getShapeShift(player);
-                if (shapeShift != null && $$7.getRenderer(shapeShift) instanceof HumanoidMobRenderer hr){
+                if (shapeShift != null && (ShapeShifts.isSkeleton(ShapeShifts.getShiftFromByte(shift)) ||
+                        ShapeShifts.isZombie(ShapeShifts.getShiftFromByte(shift))) && $$7.getRenderer(shapeShift) instanceof HumanoidMobRenderer hr){
                     consumer = bufferSource.getBuffer(RenderType.entityTranslucent(hr.getTextureLocation(shapeShift)));
                     if (hr.getModel() instanceof HumanoidModel<?> hm){
                         rightArm = hm.rightArm;

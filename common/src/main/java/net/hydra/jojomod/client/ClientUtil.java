@@ -1574,7 +1574,8 @@ public class ClientUtil {
                 slimBoolean = ipm.roundabout$getSlim();
             }
 
-            if (play.getUseItem().getItem() instanceof SnubnoseRevolverItem && !play.getCooldowns().isOnCooldown(play.getUseItem().getItem())) {
+            if (play.getUseItem().getItem() instanceof SnubnoseRevolverItem &&
+                    !play.getCooldowns().isOnCooldown(play.getUseItem().getItem())) {
                 stack.pushPose();
 
                 FirstPersonArmsModel.player = play;
