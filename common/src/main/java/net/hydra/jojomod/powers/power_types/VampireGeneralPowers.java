@@ -446,6 +446,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         if (!(value instanceof StandEntity SE1 && SE1.getUser() != null && SE1.getUser().is(self))) {
                             if (DamageHandler.VampireDamageEntity(value, getSpikeStrength(value), this.self)) {
                                 value.setDeltaMovement(0,0,0);
+                                if (value instanceof LivingEntity LE){
+                                    MainUtil.makeBleed(LE,1,300,this.self);
+                                }
+
                                 if (value instanceof Player pl){
                                     ((StandUser)pl).roundabout$setDazed((byte) 16);
                                 } else if (value instanceof LivingEntity livingEntity && !MainUtil.isBossMob(livingEntity)){
