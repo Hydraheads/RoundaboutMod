@@ -15,6 +15,7 @@ import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ColtRevolverItem;
 import net.hydra.jojomod.item.JackalRifleItem;
@@ -168,7 +169,8 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                 int muscle = ((StandUser)LE).roundabout$getZappedToID();
 
                 Mob shapeShift = ((IPlayerRenderer)PR).roundabout$getShapeShift(player);
-                if (shapeShift != null && $$7.getRenderer(shapeShift) instanceof HumanoidMobRenderer hr){
+                if (shapeShift != null && (ShapeShifts.isSkeleton(ShapeShifts.getShiftFromByte(shift)) ||
+                        ShapeShifts.isZombie(ShapeShifts.getShiftFromByte(shift))) && $$7.getRenderer(shapeShift) instanceof HumanoidMobRenderer hr){
                     consumer = bufferSource.getBuffer(RenderType.entityTranslucent(hr.getTextureLocation(shapeShift)));
                     if (hr.getModel() instanceof HumanoidModel<?> hm){
                         rightArm = hm.rightArm;
