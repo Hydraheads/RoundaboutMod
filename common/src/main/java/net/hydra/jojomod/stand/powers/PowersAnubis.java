@@ -12,6 +12,7 @@ import net.hydra.jojomod.client.gui.MemoryRecordScreen;
 import net.hydra.jojomod.client.models.layers.animations.AnubisAnimations;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.AnubisSlipstreamEntity;
+import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
@@ -64,6 +65,52 @@ public class PowersAnubis extends NewDashPreset {
         super(self);
     }
 
+
+
+    @Override
+    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
+        List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.anubis_attack",
+                "instruction.roundabout.press_attack", StandIcons.RED_LASH,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,0, "ability.roundabout.anubis_sneak_attack",
+                "instruction.roundabout.press_attack_crouch", StandIcons.STAR_PLATINUM_PUNCH,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.roundabout.anubis_pogo",
+                "instruction.roundabout.press_skill_air_crouch", StandIcons.MAGICIANS_FLAME_KICK,1,level,bypas));
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.anubis_double_cut",
+                "instruction.roundabout.anubis_normal", StandIcons.STAR_PLATINUM_FINAL_PUNCH,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.anubis_uppercut",
+                "instruction.roundabout.anubis_one", StandIcons.ENCASEMENT_STRIKE,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.anubis_thrust",
+                "instruction.roundabout.anubis_two", StandIcons.MAGICIANS_FLAME_KICK,1,level,bypas));
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80, 0, "ability.roundabout.anubis_quickdraw",
+                "instruction.roundabout.barrage", StandIcons.FIREBALL_BARRAGE,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99, 0, "ability.roundabout.anubis_shieldbreak",
+                "instruction.roundabout.kick_barrage", StandIcons.FLAMETHROWER,1,level,bypas));
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.roundabout.anubis_alluring_light",
+                "instruction.roundabout.press_skill", StandIcons.ANUBIS_ALLURING_LIGHT,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,0, "ability.roundabout.anubis_raging_light",
+                "instruction.roundabout.press_skill_crouch", StandIcons.ANUBIS_RAGING_LIGHT,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,0, "ability.roundabout.anubis_backflip",
+                "instruction.roundabout.press_skill_crouch", StandIcons.ANUBIS_BACKFLIP,3,level,bypas));
+
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,4, "ability.roundabout.anubis_record",
+                "instruction.roundabout.press_skill", StandIcons.ANUBIS_RECORD,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.roundabout.anubis_replay",
+                "instruction.roundabout.press_skill", StandIcons.ANUBIS_REPLAY,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118,0, "ability.roundabout.anubis_mouse",
+                "instruction.roundabout.press_skill_memory", StandIcons.ANUBIS_DMOUSE,2,level,bypas));
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+80,0, "ability.roundabout.anubis_exp",
+                "instruction.roundabout.passive", StandIcons.FURNACE_ABILITY,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99,2, "ability.roundabout.anubis_speed",
+                "instruction.roundabout.passive", StandIcons.FIRM_SWING,3,level,bypas));
+
+        return $$1;
+    }
 
     public static final int MaxPossessionTime = 200;
     public static final int MaxPlayTime = 100;
@@ -1283,8 +1330,6 @@ public class PowersAnubis extends NewDashPreset {
                 if (entity instanceof LivingEntity LE) {LE.addEffect(new MobEffectInstance(ModEffects.BLEED,dur,amp));}
 
 
-
-
             }
         }
 
@@ -1313,7 +1358,7 @@ public class PowersAnubis extends NewDashPreset {
         this.setAttackTimeDuring(-10);
 
 
-        List<Entity> entities = defaultSwordHitbox(this.getSelf(),3, 60,0.01);
+        List<Entity> entities = defaultSwordHitbox(this.getSelf(),3, 55,0.015);
         if (!entities.isEmpty()) {
             this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.ANUBIS_UPPERCUT_EVENT,SoundSource.PLAYERS,1F,0.9F + (float)(Math.random()*0.2));
         }
