@@ -676,12 +676,25 @@ public class PunchingGeneralPowers extends GeneralPowers {
             if (powerOn) {
                 if (TE != null) {
                     if (barTexture == 0) {
-                        if (this instanceof VampireGeneralPowers vgp && getTargetEntity(playerEntity, 1.5F, getPunchAngle()) != null){
-                            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 75, 15, 6);
+                        if (this instanceof VampireGeneralPowers vgp){
+                            if (isHoldingSneak()){
+                                if (getTargetEntity(playerEntity, 1.5F, getPunchAngle()) != null){
+                                    context.blit(StandIcons.JOJO_ICONS, k, j, 193, 75, 15, 6);
+                                    hasRendered = true;
+                                }
+                            } else {
+                                if (getTargetEntity(playerEntity, 1.5F, getPunchAngle()) != null){
+                                    context.blit(StandIcons.JOJO_ICONS, k, j, 193, 75, 15, 6);
+                                    hasRendered = true;
+                                } else {
+                                    context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+                                    hasRendered = true;
+                                }
+                            }
                         } else {
                             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+                            hasRendered = true;
                         }
-                        hasRendered = true;
                     }
                 }
             }
