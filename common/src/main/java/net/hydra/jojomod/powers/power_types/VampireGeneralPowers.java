@@ -378,6 +378,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         if (!this.self.level().isClientSide()) {
             if (entity != null) {
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.LASSO_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5f + Math.random() * 0.05f));
+
+                entity.hurtMarked = true;
+                entity.hasImpulse = true;
                 entity.setDeltaMovement(self.getEyePosition().subtract(entity.position()).normalize().scale(1));
             } else {
                 this.self.level().playSound(null, this.self.blockPosition(),ModSounds.VAMPIRE_DIVE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5f + Math.random() * 0.08f));
@@ -516,7 +519,11 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     if (!value.isInvulnerable() && value.isAlive() && value.getUUID() != self.getUUID() && (MainUtil.isStandPickable(value) || value instanceof StandEntity)) {
                         if (!(value instanceof StandEntity SE1 && SE1.getUser() != null && SE1.getUser().is(self))) {
                             if (DamageHandler.VampireDamageEntity(value, getSpikeStrength(value), this.self)) {
+
+                                value.hurtMarked = true;
+                                value.hasImpulse = true;
                                 value.setDeltaMovement(0,0,0);
+
                                 if (value instanceof LivingEntity LE){
                                     MainUtil.makeBleed(LE,1,300,this.self);
                                 }
