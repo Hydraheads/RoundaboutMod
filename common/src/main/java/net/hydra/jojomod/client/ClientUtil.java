@@ -1502,7 +1502,7 @@ public class ClientUtil {
                 stack.mulPose(Axis.ZP.rotationDegrees(180f));
                 stack.mulPose(Axis.XP.rotationDegrees(1));
 
-                ModStrayModels.VampireHairFlesh.render(cameraEnt, $$4, stack, source, poggers, r, g, b, 1);
+                ModStrayModels.VampireHairFlesh.render(cameraEnt, $$4, stack, source, light, r, g, b, 1);
 
                 stack.popPose();
             }
